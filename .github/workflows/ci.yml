@@ -13,7 +13,7 @@ concurrency:
 jobs:
   backend-and-contracts:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -25,9 +25,13 @@ jobs:
           uv sync --project backend --frozen --extra dev
           echo "$GITHUB_WORKSPACE/backend/.venv/bin" >> "$GITHUB_PATH"
       - name: Lint Python
-        run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts
+        run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
+      - name: Check SHACL query work budget before full suite
+        timeout-minutes: 2
+        run: pytest backend/tests/test_validation_queries.py -q
       - name: Test backend
-        run: pytest backend/tests -n 2 --dist loadfile --max-worker-restart=0 --durations=30
+        timeout-minutes: 18
+        run: pytest backend/tests -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
       - name: Test deployment contracts
         run: python -m unittest discover -s deploy -p 'test_*.py'
       - name: Validate RDF and SHACL contract

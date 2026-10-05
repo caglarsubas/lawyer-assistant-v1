@@ -1,15 +1,49 @@
 # Verification record — 5 October 2026
 
-## CI runtime controls
+## CI root-cause optimization
 
-The complete backend suite with two workers on the same machine passed **2,058
-tests, with eight PostgreSQL cases skipped and 28 existing warnings, in 336.83
-seconds (5m36s)**. The separate PostgreSQL CI job still executes those eight cases.
-Project-wide Ruff, actionlint and frozen offline dependency synchronization passed.
-PR workflow duplication is removed; main pushes retain post-merge verification.
-No production validation or ontology content changed. See [CI controls](CI.md) for
-the measured old hosted run, worker isolation, runtime limits and the distinction
-between local timing and verified hosted savings.
+Profiling identified repeated SPARQL parsing inside each fresh SHACL validation,
+amplified by required publication/authorization checks. The new invocation-local
+prepared-query cache reduces the representative fixture from **186 parses to 10**
+while retaining **all 186 query executions**. Seven alternating warm measurements
+on the complete 2,374-triple schema and 130-triple synthetic fixture gave median
+validation times of **0.37177s before / 0.15019s after (59.6% lower)**. This is a
+bounded validator benchmark, not a full-suite or hosted billing claim.
+
+- **23 regression tests passed in 5.93s.** They compare valid and invalid SHACL
+  reports, verify production-path wiring, equal query execution counts, fresh
+  evidence/bindings, unchanged caller graphs, namespace/base behavior, bounded
+  caches, fallbacks and parallel isolation. CI executes these before the full
+  suite to catch a parsing-work regression early.
+- The complete local suite with two workers and file grouping passed **2,081 tests,
+  eight PostgreSQL cases skipped, 28 existing warnings, in 255.81s (4m15s)**,
+  compared with **2,058 passed in 336.83s (5m36s)** before the optimization.
+  The additional 23 tests remain part of the suite; no test coverage was removed.
+- The final CI command with **two workers, work stealing and `--maxfail=1`**
+  passed **2,081 tests, eight PostgreSQL skips and 28 existing warnings in
+  241.73s (4m01s)**. This includes the synchronized relay test and is **28.2% less
+  local wall time** than the pre-optimization run, with 23 additional regressions.
+  All 42 fixtures use function scope; the serial PostgreSQL job is unchanged.
+- The preceding hosted two-worker run completed in **1,178.94s (19m38s)** but failed
+  a relay test that checked upstream closure before the server thread's cleanup.
+  Tests now synchronize on a completion event and still require actual closure;
+  seven focused cases passed across three bounded trials. No provider code changed.
+- All fingerprinted ontology files are byte-identical. Signed release identity,
+  source rereads and live authorization/revocation checks remain unchanged; no
+  validation result is cached. Independent review found no blocking issue.
+- Project-wide Ruff (now including ontology code), actionlint, eight deployment
+  tests, ontology validation and the R01 dossier check passed. No provider calls,
+  live state changes or running-application deployment occurred.
+
+The [CI controls](CI.md) retain a single PR workflow, separate main verification,
+two workers on one runner, failure-based early exit and no automatic retries.
+Backend tests are capped at 18 minutes inside a 20-minute job; the other jobs
+retain five-minute caps. PostgreSQL's eight tests remain mandatory in their
+separate serial job. Hosted speed and billing must be measured independently.
+
+Local evidence: `.data/verification/ci-prepared-query-benchmark.json`,
+`ci-prepared-full.log`, `ci-prepared-balanced.log`,
+`ci-two-worker-hosted-failed.log` and `ci-query-tests.log`.
 
 ## R02 foundation: consistent review of multiple sources
 
@@ -33,9 +67,9 @@ authorization.
 - **253 existing review/mapping/authorization/publication tests passed in 219.27
   seconds.** Additional focused runs passed 175 snapshot/preparation tests and 104
   snapshot/CLI/evidence-reader tests. These suites overlap; their counts are not
-  an aggregate full-suite result. The final backend collection is **2,066**, with
-  the PostgreSQL cases skipped unless explicitly configured. No full 2,066-test
-  local run is claimed.
+  an aggregate full-suite result. At this milestone the backend collection was
+  **2,066**, with PostgreSQL cases skipped unless explicitly configured. Subsequent
+  complete local runs are recorded in the CI section above.
 - Repository-wide Ruff, the R01 dossier check, and eight deployment tests passed.
   Python test runs reported the existing Starlette/httpx deprecation warning.
   No frontend behavior changed. A dedicated CI PostgreSQL job now executes the
