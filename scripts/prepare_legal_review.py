@@ -34,6 +34,7 @@ MAX_EVIDENCE = 128
 MAX_EVIDENCE_FILE = 8 * 1024 * 1024
 MAX_EVIDENCE_TOTAL = 32 * 1024 * 1024
 RESERVED = {"manifest.json", "manifest.sha256", "manifest.hmac"}
+PACKET_SCHEMAS = {"legal-review-packet-v1", "legal-review-source-set-packet-v1"}
 
 
 def canonical(value):
@@ -114,14 +115,18 @@ def _inventory(files):
     return {name: {"sha256": digest(raw), "bytes": len(raw)} for name, raw in sorted(files.items())}
 
 
-def sealed_files(files, store):
-    manifest = canonical({"schema_version": "legal-review-packet-v1", "confidentiality": "firm_confidential",
+def sealed_files(files, store, *, schema_version="legal-review-packet-v1"):
+    if schema_version not in PACKET_SCHEMAS:
+        raise ValueError("Unsupported review packet")
+    manifest = canonical({"schema_version": schema_version, "confidentiality": "firm_confidential",
                           "signed": False, "publication_eligible": False, "files": _inventory(files)})
     return {**files, "manifest.json": manifest, "manifest.sha256": (digest(manifest) + "\n").encode(),
             "manifest.hmac": (store.preparation_mac(manifest) + "\n").encode()}
 
 
-def read_packet(directory, store):
+def read_packet(directory, store, *, schema_version="legal-review-packet-v1"):
+    if schema_version not in PACKET_SCHEMAS:
+        raise ValueError("Unsupported review packet")
     root = checked_path(directory)
     if not root.is_dir():
         raise ValueError("Packet directory is missing")
@@ -133,7 +138,7 @@ def read_packet(directory, store):
         raise ValueError("Packet inventory digest mismatch")
     manifest = parse_json(raw)
     if (set(manifest) != {"schema_version", "confidentiality", "signed", "publication_eligible", "files"}
-            or manifest["schema_version"] != "legal-review-packet-v1"
+            or manifest["schema_version"] != schema_version
             or manifest["confidentiality"] != "firm_confidential" or manifest["signed"] is not False
             or manifest["publication_eligible"] is not False or not isinstance(manifest["files"], dict)
             or len(manifest["files"]) > MAX_FILES):
@@ -182,6 +187,7 @@ def atomic_packet(output, files):
     fd = os.open(reservation, os.O_CREAT | os.O_EXCL | os.O_WRONLY | os.O_NOFOLLOW, 0o600)
     os.close(fd)
     stage = None
+    identity = None
     try:
         if destination.exists():
             raise ValueError("Output already exists")
@@ -209,13 +215,20 @@ def atomic_packet(output, files):
             finally:
                 os.close(descriptor)
         result = stage.stat()
+        identity = (result.st_dev, result.st_ino)
         _rename_exclusive(stage, destination)
         stage = None
-        return (result.st_dev, result.st_ino)
+        return identity
     finally:
-        if stage is not None:
-            shutil.rmtree(stage)
-        reservation.unlink()
+        try:
+            if stage is not None:
+                shutil.rmtree(stage)
+            reservation.unlink()
+        except BaseException:
+            # The rename can succeed before cleanup fails. In that case callers
+            # never receive the inode and cannot discard the incomplete output.
+            _remove_own_output(destination, identity)
+            raise
 
 
 def _rename_exclusive(source, destination):

@@ -7,7 +7,7 @@ documents on 5 October 2026. See the [data and knowledge strategy](docs/DATA_KNO
 for source packs, freshness and retrieval qualification, and the
 [decision record](docs/PLAN_RECONCILIATION_2026-10-05.md) for adopted proposals,
 conflicts and unresolved claims. Source/asset/semantic qualification remains open.
-Its implemented contracts now support the bounded R02 snapshot foundation below;
+Its implemented contracts now support the bounded R02 review preparation below;
 real-source qualification and combined publication still require their own gates.
 
 The same-day [legal analysis and BYOK amendment](docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md)
@@ -29,7 +29,10 @@ and declared source identities, and reports real and synthetic coverage separate
 The [R02 source-set inspector](docs/RELEASE_SNAPSHOT_SET.md) checks 2–8 existing
 reviewed sources together, with exact revisions, per-source rights and deterministic
 PostgreSQL locks. It emits a confidential summary after complete revalidation.
-Combined graph preparation and publication remain future work.
+The [multi-source preparation command](docs/RELEASE_SET_PREPARATION.md) composes a
+private review packet with explicit identities, exact evidence and cross-source
+version/conflict checks. Blockers withhold both graph candidates. Multi-source
+publication and independent legal approval remain separate, unfinished gates.
 
 ## Run the working demonstration
 

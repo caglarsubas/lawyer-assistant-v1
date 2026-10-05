@@ -1,5 +1,64 @@
 # Verification record — 5 October 2026
 
+## R02 engineering milestone: combined private review preparation
+
+The [multi-source preparation command](RELEASE_SET_PREPARATION.md) now composes
+current locked source snapshots into a sealed, confidential review packet. Explicit
+identity/version conflicts remain blockers, private proof files have a separate
+inventory, and existing publication readers reject the new packet format.
+
+- **34 new compiler tests passed in 2.14s.** Cases cover deterministic ordering,
+  source-local mapping ID collisions, exact Unicode quotes, compatible finite
+  versions at different offsets, text/date/role/parent conflicts, overlapping and
+  open-ended intervals, acquisition conflicts, snapshot tampering, exact evidence
+  membership, aggregate bounds, real SHACL validation and publication rejection.
+- **36 new CLI tests passed in 1.37s.** Both blocked and graph-producing two-source
+  workflows use actual isolated source-review APIs and SQLite review ledgers.
+  Successful preparation/revalidation leaves ledger counts unchanged; subsequent
+  rights revocation rejects revalidation. Additional cases cover schema without
+  configuration, early input rejection, safe diagnostics, packet tampering,
+  changed inputs/ontology, context-exit failure and replacement preservation.
+- Independent review found a shared-writer failure path after the final rename:
+  reservation cleanup could raise before the caller received the output inode.
+  The writer now removes only its own output in that case. Two new regression
+  cases cover both cleanup and preservation of an unrelated replacement; seven
+  focused existing/new I/O checks passed in 0.33s.
+- A focused compiler/existing packet-I/O/publication regression run passed **144
+  tests in 6.10s**, before the two new writer cases were added. Test selections
+  overlap; these counts are not additive.
+- The complete local backend suite passed **2,153 tests, eight PostgreSQL skips
+  and 28 existing warnings in 247.12s (4m07s)** with the unchanged two-worker,
+  work-stealing CI command. Owned temporary directories were used. The eight
+  opt-in PostgreSQL cases were not rerun locally; they remain a separate hosted
+  CI job. No test coverage was removed.
+- All eight deployment-contract tests and ontology validation passed. Ruff with
+  the repository's explicit configuration and `git diff --check` passed.
+  Independent compiler and CLI reviews found no remaining actionable issue.
+- A local **linux/arm64** image, `lawyer-assistant-api:r02-combined-review`, was
+  assembled without network access from the previously built pinned-dependency
+  image `sha256:8dd7ee38d4d0c81c1921a5f48f58390b41e5e7e361be108676af431f85dce827`.
+  Result: `sha256:12b61f543bc824d75ed1fdcb13596528a0243d903d78ed2caf20e2863d337561`.
+  A fresh standard Dockerfile build could not run offline because its OS-package
+  layer was absent from the build cache; the derivative image reused that layer.
+  Schema output matches the local CLI. Linux packet read/write, mode 0700/0600,
+  exclusive rename, v1 schema rejection and owned-output cleanup passed as UID
+  10001 with `--network none`, a read-only root and all capabilities dropped.
+  This is a CLI packaging/I/O check, not application deployment or a full Linux
+  source-review workflow qualification.
+
+PR #4's merged main revision `4bb944a6ebdb24cf23214902533043e0fb98bf04`
+[passed hosted CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37320317438):
+backend/contracts **13m50s**, frontend **18s**, PostgreSQL concurrency **40s**.
+This packet adds no CI job, worker, trigger or dependency. Its tests run under the
+existing bounded two-worker backend job. New-branch hosted checks are separate
+from that verified baseline.
+
+Evidence is synthetic and engineering-only. R01 actual source/legal/privacy review,
+multi-source signing, audience/expiry/renewal, publication authorization/revocation
+and full research-job capacity remain open. No live source, provider, credential,
+graph release or running application was changed. Local logs are under gitignored
+`.data/verification/r02-combined-*`.
+
 ## CI root-cause optimization
 
 Profiling identified repeated SPARQL parsing inside each fresh SHACL validation,
