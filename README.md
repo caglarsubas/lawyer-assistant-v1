@@ -21,6 +21,9 @@ extraction calibration](docs/R01_QUALIFICATION.md). The tools check source/asset
 research dossiers, verify saved evidence hashes, and compare extraction output with
 an independent transcription, including dates, amounts, identifiers and negation.
 They report measured discrepancies and remaining evidence gaps without granting approval.
+The [calibration study workflow](docs/R01_QUALIFICATION.md#run-a-reproducible-multi-sample-study)
+recomputes multiple samples from their original artifacts, rejects repeated originals
+and declared source identities, and reports real and synthetic coverage separately.
 
 ## Run the working demonstration
 
