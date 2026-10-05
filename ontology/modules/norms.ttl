@@ -1,0 +1,212 @@
+@prefix la: <https://lawyer-assistant.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+la:InstrumentType a owl:Class ; rdfs:label "Hukuki düzenleme türü"@tr, "Legal instrument type"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:LegalInstrument a owl:Class ; rdfs:label "Hukuki düzenleme kimliği"@tr, "Legal instrument identity"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:InstrumentVersion a owl:Class ; rdfs:label "Hukuki düzenleme sürümü"@tr, "Legal instrument version"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:Provision a owl:Class ; rdfs:label "Hüküm kimliği"@tr, "Stable provision identity"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:ProvisionVersion a owl:Class ; rdfs:label "Hüküm metni sürümü"@tr, "Provision text version"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:TextSubdivision a owl:Class ; rdfs:label "Metin bölümü"@tr, "Textual subdivision"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:Article a owl:Class ; rdfs:label "Madde"@tr, "Article subdivision"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:TextSubdivision .
+
+la:Paragraph a owl:Class ; rdfs:label "Fıkra"@tr, "Paragraph subdivision"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:TextSubdivision .
+
+la:Subparagraph a owl:Class ; rdfs:label "Bent"@tr, "Subparagraph subdivision"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:TextSubdivision .
+
+la:PublicationEvent a owl:Class ; rdfs:label "Yayımlanma olayı"@tr, "Publication event"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Event .
+
+la:EnactmentEvent a owl:Class ; rdfs:label "Kabul olayı"@tr, "Enactment event"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Event .
+
+la:AmendmentEvent a owl:Class ; rdfs:label "Değişiklik olayı"@tr, "Amendment event"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Event .
+
+la:RepealEvent a owl:Class ; rdfs:label "Yürürlükten kaldırma olayı"@tr, "Repeal event"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Event .
+
+la:AnnulmentEvent a owl:Class ; rdfs:label "İptal olayı"@tr, "Annulment event"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Event .
+
+la:TransitionalRule a owl:Class ; rdfs:label "Geçiş hükmü"@tr, "Transitional rule"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:LegislativeProposal a owl:Class ; rdfs:label "Kanun teklifi"@tr, "Legislative proposal"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:LegislativeProceeding a owl:Class ; rdfs:label "Yasama süreci"@tr, "Legislative proceeding"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:LegislativeReason a owl:Class ; rdfs:label "Yasama gerekçesi"@tr, "Legislative reason"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:Consolidation a owl:Class ; rdfs:label "Birleştirilmiş metin gösterimi"@tr, "Consolidated representation"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:TreatyInstrument a owl:Class ; rdfs:label "Uluslararası antlaşma"@tr, "Treaty instrument"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalInstrument .
+
+la:HistoricalPredecessor a owl:Class ; rdfs:label "Tarihsel öncül"@tr, "Continuity-relevant predecessor"@en ;
+  la:module "norms" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:containsProvision a owl:ObjectProperty ; rdfs:label "Hükmü içerir"@tr, "containsProvision"@en ;
+  rdfs:domain la:LegalInstrument ; rdfs:range la:Provision ;
+  rdfs:comment "Stable provision containment."@en ; la:module "norms" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:hasInstrumentVersion a owl:ObjectProperty ; rdfs:label "Düzenleme sürümü vardır"@tr, "hasInstrumentVersion"@en ;
+  rdfs:domain la:LegalInstrument ; rdfs:range la:InstrumentVersion ;
+  rdfs:comment "Instrument-to-version identity link."@en ; la:module "norms" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:hasProvisionVersion a owl:ObjectProperty ; rdfs:label "Hüküm sürümü vardır"@tr, "hasProvisionVersion"@en ;
+  rdfs:domain la:Provision ; rdfs:range la:ProvisionVersion ;
+  rdfs:comment "Provision-to-version identity link; does not select latest."@en ; la:module "norms" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:versionOf a owl:ObjectProperty ; rdfs:label "Sürümüdür"@tr, "versionOf"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:LegalEntity ;
+  rdfs:comment "Version identity, distinct from legal succession."@en ; la:module "norms" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:hasSubdivision a owl:ObjectProperty ; rdfs:label "Metin alt bölümü vardır"@tr, "hasSubdivision"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:TextSubdivision ;
+  rdfs:comment "Text structure, not normative hierarchy."@en ; la:module "norms" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:publishedIn a owl:ObjectProperty ; rdfs:label "Yayımlanma olayına bağlıdır"@tr, "publishedIn"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:PublicationEvent ;
+  rdfs:comment "Publication event, distinct from commencement."@en ; la:module "norms" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:enactedBy a owl:ObjectProperty ; rdfs:label "Organ tarafından kabul edilmiştir"@tr, "enactedBy"@en ;
+  rdfs:domain la:LegalInstrument ; rdfs:range la:Institution ;
+  rdfs:comment "Enacting authority based on source evidence."@en ; la:module "norms" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:amends a owl:ObjectProperty ; rdfs:label "Hükmü değiştirir"@tr, "amends"@en ;
+  rdfs:domain la:AmendmentEvent ; rdfs:range la:Provision ;
+  rdfs:comment "An amendment event affects a provision."@en ; la:module "norms" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:createsVersion a owl:ObjectProperty ; rdfs:label "Sürümü oluşturur"@tr, "createsVersion"@en ;
+  rdfs:domain la:AmendmentEvent ; rdfs:range la:ProvisionVersion ;
+  rdfs:comment "An amendment creates an evidenced text version."@en ; la:module "norms" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:repeals a owl:ObjectProperty ; rdfs:label "Yürürlükten kaldırır"@tr, "repeals"@en ;
+  rdfs:domain la:RepealEvent ; rdfs:range la:LegalEntity ;
+  rdfs:comment "Repeal with separately evidenced legal effect dates."@en ; la:module "norms" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:annuls a owl:ObjectProperty ; rdfs:label "İptal eder"@tr, "annuls"@en ;
+  rdfs:domain la:AnnulmentEvent ; rdfs:range la:LegalEntity ;
+  rdfs:comment "Annulment with separately evidenced scope and effect dates."@en ; la:module "norms" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:replaces a owl:ObjectProperty ; rdfs:label "Hukuken yerine geçer"@tr, "replaces"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:LegalEntity ;
+  rdfs:comment "Legal replacement is distinct from textual similarity."@en ; la:module "norms" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:renumbers a owl:ObjectProperty ; rdfs:label "Hükmü yeniden numaralandırır"@tr, "renumbers"@en ;
+  rdfs:domain la:Provision ; rdfs:range la:Provision ;
+  rdfs:comment "Continuity under a changed provision number."@en ; la:module "norms" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:splitsFrom a owl:ObjectProperty ; rdfs:label "Hükümden ayrılmıştır"@tr, "splitsFrom"@en ;
+  rdfs:domain la:Provision ; rdfs:range la:Provision ;
+  rdfs:comment "A provision originates from part of another."@en ; la:module "norms" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:mergesFrom a owl:ObjectProperty ; rdfs:label "Hükümden birleştirilmiştir"@tr, "mergesFrom"@en ;
+  rdfs:domain la:Provision ; rdfs:range la:Provision ;
+  rdfs:comment "A provision combines earlier provisions."@en ; la:module "norms" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:hasTransitionRule a owl:ObjectProperty ; rdfs:label "Geçiş hükmüne bağlıdır"@tr, "hasTransitionRule"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:TransitionalRule ;
+  rdfs:comment "Transition applicability requires rule interpretation."@en ; la:module "norms" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:hasLegislativeReason a owl:ObjectProperty ; rdfs:label "Yasama gerekçesi vardır"@tr, "hasLegislativeReason"@en ;
+  rdfs:domain la:Provision ; rdfs:range la:LegislativeReason ;
+  rdfs:comment "Linked legislative history is not enacted text."@en ; la:module "norms" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:consolidates a owl:ObjectProperty ; rdfs:label "Sürümü birleştirilmiş olarak gösterir"@tr, "consolidates"@en ;
+  rdfs:domain la:Consolidation ; rdfs:range la:InstrumentVersion ;
+  rdfs:comment "Consolidated representation of a specified version."@en ; la:module "norms" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:predecessorOf a owl:ObjectProperty ; rdfs:label "Tarihsel öncülüdür"@tr, "predecessorOf"@en ;
+  rdfs:domain la:HistoricalPredecessor ; rdfs:range la:LegalEntity ;
+  rdfs:comment "Earlier material retained for continuity or applicable law."@en ; la:module "norms" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:influencedBy a owl:ObjectProperty ; rdfs:label "Tarihsel olarak etkilenmiştir"@tr, "influencedBy"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:LegalEntity ;
+  rdfs:comment "Historical influence does not create present authority."@en ; la:module "norms" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .

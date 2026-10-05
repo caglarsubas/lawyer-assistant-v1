@@ -1,0 +1,22 @@
+@prefix fuseki: <http://jena.apache.org/fuseki#> .
+@prefix ja: <http://jena.hpl.hp.com/2005/11/Assembler#> .
+# Reference empty-release configuration. runtime.py generates equivalent
+# query-only services over verified temporary TDB2 indexes when a release exists.
+
+[] a fuseki:Server ; fuseki:services ( <#structural> <#jurisprudence> ) .
+
+<#structural> a fuseki:Service ;
+    fuseki:name "structural" ;
+    fuseki:serviceQuery "query", "sparql" ;
+    fuseki:dataset <#structural-data> .
+
+<#structural-data> a ja:MemoryDataset ;
+    ja:context [ ja:cxtName "arq:queryTimeout" ; ja:cxtValue "10000,30000" ] .
+
+<#jurisprudence> a fuseki:Service ;
+    fuseki:name "jurisprudence" ;
+    fuseki:serviceQuery "query", "sparql" ;
+    fuseki:dataset <#jurisprudence-data> .
+
+<#jurisprudence-data> a ja:MemoryDataset ;
+    ja:context [ ja:cxtName "arq:queryTimeout" ; ja:cxtValue "10000,30000" ] .

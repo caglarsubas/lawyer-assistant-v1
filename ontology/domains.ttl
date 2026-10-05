@@ -1,0 +1,213 @@
+@prefix la: <https://lawyer-assistant.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+la:TurkeyLegalDomains a skos:ConceptScheme ; rdfs:label "Türkiye legal domains — engineering taxonomy, UNREVIEWED"@en .
+
+<https://lawyer-assistant.local/ontology/domain/law> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Hukuk"@tr, "Law"@en ;
+  la:reviewStatus "unreviewed" .
+
+<https://lawyer-assistant.local/ontology/domain/private_law> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Özel hukuk"@tr, "Private law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/public_law> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Kamu hukuku"@tr, "Public law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/international> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Uluslararası hukuk"@tr, "International law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/procedural> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Usul hukuku"@tr, "Procedural law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/civil> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Medeni hukuk"@tr, "Civil law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/private_law> .
+
+<https://lawyer-assistant.local/ontology/domain/contracts> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Sözleşmeler hukuku"@tr, "Contract law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/civil> .
+
+<https://lawyer-assistant.local/ontology/domain/obligations> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Borçlar hukuku"@tr, "Law of obligations"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/civil> .
+
+<https://lawyer-assistant.local/ontology/domain/property> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Eşya hukuku"@tr, "Property law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/civil> .
+
+<https://lawyer-assistant.local/ontology/domain/family> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Aile hukuku"@tr, "Family law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/civil> .
+
+<https://lawyer-assistant.local/ontology/domain/inheritance> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Miras hukuku"@tr, "Inheritance law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/civil> .
+
+<https://lawyer-assistant.local/ontology/domain/persons> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Kişiler hukuku"@tr, "Law of persons"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/civil> .
+
+<https://lawyer-assistant.local/ontology/domain/commercial> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Ticaret hukuku"@tr, "Commercial law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/private_law> .
+
+<https://lawyer-assistant.local/ontology/domain/company> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Şirketler hukuku"@tr, "Company law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/commercial> .
+
+<https://lawyer-assistant.local/ontology/domain/negotiable_instruments> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Kıymetli evrak hukuku"@tr, "Negotiable instruments"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/commercial> .
+
+<https://lawyer-assistant.local/ontology/domain/insurance> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Sigorta hukuku"@tr, "Insurance law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/commercial> .
+
+<https://lawyer-assistant.local/ontology/domain/maritime> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Deniz ticareti hukuku"@tr, "Maritime commercial law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/commercial> .
+
+<https://lawyer-assistant.local/ontology/domain/employment> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "İş hukuku"@tr, "Employment law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/social_security> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Sosyal güvenlik hukuku"@tr, "Social security law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/public_law> .
+
+<https://lawyer-assistant.local/ontology/domain/consumer> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Tüketici hukuku"@tr, "Consumer law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/intellectual_property> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Fikri mülkiyet hukuku"@tr, "Intellectual property law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/private_law> .
+
+<https://lawyer-assistant.local/ontology/domain/real_estate> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Taşınmaz hukuku"@tr, "Real estate law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/constitutional> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Anayasa hukuku"@tr, "Constitutional law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/public_law> .
+
+<https://lawyer-assistant.local/ontology/domain/administrative> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "İdare hukuku"@tr, "Administrative law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/public_law> .
+
+<https://lawyer-assistant.local/ontology/domain/tax> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Vergi hukuku"@tr, "Tax law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/public_law> .
+
+<https://lawyer-assistant.local/ontology/domain/criminal> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Ceza hukuku"@tr, "Criminal law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/public_law> .
+
+<https://lawyer-assistant.local/ontology/domain/criminal_enforcement> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Ceza infaz hukuku"@tr, "Criminal enforcement law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/public_law> .
+
+<https://lawyer-assistant.local/ontology/domain/human_rights> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "İnsan hakları hukuku"@tr, "Human rights law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/data_protection> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Kişisel verilerin korunması"@tr, "Data protection law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/competition> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Rekabet hukuku"@tr, "Competition law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/public_law> .
+
+<https://lawyer-assistant.local/ontology/domain/public_procurement> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Kamu ihale hukuku"@tr, "Public procurement law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/public_law> .
+
+<https://lawyer-assistant.local/ontology/domain/public_finance> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Kamu mali hukuku"@tr, "Public finance law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/public_law> .
+
+<https://lawyer-assistant.local/ontology/domain/banking> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Bankacılık hukuku"@tr, "Banking law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/capital_markets> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Sermaye piyasası hukuku"@tr, "Capital markets law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/energy> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Enerji hukuku"@tr, "Energy law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/environment> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Çevre hukuku"@tr, "Environmental law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/health> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Sağlık hukuku"@tr, "Health law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/immigration> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Yabancılar ve göç hukuku"@tr, "Immigration law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/public_law> .
+
+<https://lawyer-assistant.local/ontology/domain/citizenship> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Vatandaşlık hukuku"@tr, "Citizenship law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/public_law> .
+
+<https://lawyer-assistant.local/ontology/domain/customs_trade> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Gümrük ve dış ticaret hukuku"@tr, "Customs and foreign trade"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/technology> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Bilişim hukuku"@tr, "Information technology law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/transport> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Taşıma hukuku"@tr, "Transport law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .
+
+<https://lawyer-assistant.local/ontology/domain/zoning> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "İmar hukuku"@tr, "Planning and zoning law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/administrative> .
+
+<https://lawyer-assistant.local/ontology/domain/civil_procedure> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Medeni usul hukuku"@tr, "Civil procedure"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/procedural> .
+
+<https://lawyer-assistant.local/ontology/domain/criminal_procedure> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Ceza muhakemesi hukuku"@tr, "Criminal procedure"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/procedural> .
+
+<https://lawyer-assistant.local/ontology/domain/administrative_procedure> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "İdari yargılama hukuku"@tr, "Administrative judicial procedure"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/procedural> .
+
+<https://lawyer-assistant.local/ontology/domain/enforcement_bankruptcy> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "İcra ve iflas hukuku"@tr, "Enforcement and bankruptcy"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/procedural> .
+
+<https://lawyer-assistant.local/ontology/domain/dispute_resolution> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Alternatif uyuşmazlık çözümü"@tr, "Alternative dispute resolution"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/procedural> .
+
+<https://lawyer-assistant.local/ontology/domain/international_private> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Milletlerarası özel hukuk"@tr, "Private international law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/international> .
+
+<https://lawyer-assistant.local/ontology/domain/international_public> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Devletler umumi hukuku"@tr, "Public international law"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/international> .
+
+<https://lawyer-assistant.local/ontology/domain/legal_profession> a skos:Concept, la:LegalDomain ;
+  skos:inScheme la:TurkeyLegalDomains ; skos:prefLabel "Avukatlık ve meslek kuralları"@tr, "Legal profession and professional rules"@en ;
+  la:reviewStatus "unreviewed" ; skos:broader <https://lawyer-assistant.local/ontology/domain/law> .

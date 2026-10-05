@@ -1,0 +1,112 @@
+@prefix la: <https://lawyer-assistant.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+la:ProcedureType a owl:Class ; rdfs:label "Usul türü"@tr, "Procedure type"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:Procedure a owl:Class ; rdfs:label "Usul tanımı"@tr, "Procedure definition"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:ProceduralStage a owl:Class ; rdfs:label "Usul aşaması"@tr, "Procedural stage"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:ProceduralRequirement a owl:Class ; rdfs:label "Usuli gereklilik"@tr, "Procedural requirement"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:ProceduralAct a owl:Class ; rdfs:label "Usul işlemi"@tr, "Procedural act"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Event .
+
+la:DeadlineRule a owl:Class ; rdfs:label "Koşullu süre kuralı"@tr, "Conditional deadline rule"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:DeadlineTrigger a owl:Class ; rdfs:label "Süreyi başlatan olay"@tr, "Deadline trigger"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:TimeComputationRule a owl:Class ; rdfs:label "Süre hesaplama kuralı"@tr, "Time computation rule"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:ProofBurden a owl:Class ; rdfs:label "İspat yükü"@tr, "Burden of proof"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:ProofStandard a owl:Class ; rdfs:label "İspat ölçüsü"@tr, "Standard of proof"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:AdmissibilityCondition a owl:Class ; rdfs:label "Kabul edilebilirlik koşulu"@tr, "Admissibility condition"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalCondition .
+
+la:EvidenceCategory a owl:Class ; rdfs:label "Delil kategorisi"@tr, "Evidence category"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:AlternativeDisputeResolution a owl:Class ; rdfs:label "Alternatif uyuşmazlık çözüm usulü"@tr, "Alternative dispute resolution procedure"@en ;
+  la:module "procedures" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Procedure .
+
+la:hasStage a owl:ObjectProperty ; rdfs:label "Usul aşaması vardır"@tr, "hasStage"@en ;
+  rdfs:domain la:Procedure ; rdfs:range la:ProceduralStage ;
+  rdfs:comment "Stage within a procedural definition."@en ; la:module "procedures" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:requiresStep a owl:ObjectProperty ; rdfs:label "Usuli adımı gerektirir"@tr, "requiresStep"@en ;
+  rdfs:domain la:ProceduralStage ; rdfs:range la:ProceduralRequirement ;
+  rdfs:comment "Procedural prerequisite."@en ; la:module "procedures" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:triggeredBy a owl:ObjectProperty ; rdfs:label "Olayla başlar"@tr, "triggeredBy"@en ;
+  rdfs:domain la:DeadlineRule ; rdfs:range la:DeadlineTrigger ;
+  rdfs:comment "Deadline trigger, not an assumed matter date."@en ; la:module "procedures" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:computedBy a owl:ObjectProperty ; rdfs:label "Kuralla hesaplanır"@tr, "computedBy"@en ;
+  rdfs:domain la:DeadlineRule ; rdfs:range la:TimeComputationRule ;
+  rdfs:comment "Reviewed time computation rule."@en ; la:module "procedures" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:subjectToDeadline a owl:ObjectProperty ; rdfs:label "Süreye tabidir"@tr, "subjectToDeadline"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:DeadlineRule ;
+  rdfs:comment "Applicable deadline relationship."@en ; la:module "procedures" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:requiresProofOf a owl:ObjectProperty ; rdfs:label "Unsurun ispatını gerektirir"@tr, "requiresProofOf"@en ;
+  rdfs:domain la:ProofBurden ; rdfs:range la:LegalElement ;
+  rdfs:comment "An element requiring proof."@en ; la:module "procedures" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:usesProofStandard a owl:ObjectProperty ; rdfs:label "İspat ölçüsünü kullanır"@tr, "usesProofStandard"@en ;
+  rdfs:domain la:ProofBurden ; rdfs:range la:ProofStandard ;
+  rdfs:comment "Qualified standard rather than an unconditional rule."@en ; la:module "procedures" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:hasAdmissibilityCondition a owl:ObjectProperty ; rdfs:label "Kabul edilebilirlik koşulu vardır"@tr, "hasAdmissibilityCondition"@en ;
+  rdfs:domain la:Procedure ; rdfs:range la:AdmissibilityCondition ;
+  rdfs:comment "Condition for procedural admissibility."@en ; la:module "procedures" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .

@@ -1,0 +1,199 @@
+@prefix la: <https://lawyer-assistant.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+la:SourceArtifact a owl:Class ; rdfs:label "Değişmez kaynak dosyası"@tr, "Immutable source artifact"@en ;
+  la:module "evidence" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:SourceRepresentation a owl:Class ; rdfs:label "Kaynak metin gösterimi"@tr, "Source representation"@en ;
+  la:module "evidence" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:EvidencePassage a owl:Class ; rdfs:label "Kesin kaynak bölümü"@tr, "Exact evidence passage"@en ;
+  la:module "evidence" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:Assertion a owl:Class ; rdfs:label "Kaynağa dayalı ilişki iddiası"@tr, "Evidenced relationship assertion"@en ;
+  la:module "evidence" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:LegalReview a owl:Class ; rdfs:label "Hukukçu inceleme kaydı"@tr, "Legal review record"@en ;
+  la:module "evidence" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:Derivation a owl:Class ; rdfs:label "Çıkarım dayanağı"@tr, "Inference derivation"@en ;
+  la:module "evidence" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:ExtractionRun a owl:Class ; rdfs:label "Metin çıkarma çalıştırması"@tr, "Extraction run"@en ;
+  la:module "evidence" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:GraphSnapshot a owl:Class ; rdfs:label "Değişmez graf anlık görüntüsü"@tr, "Immutable graph snapshot"@en ;
+  la:module "evidence" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:SourceCollection a owl:Class ; rdfs:label "Kaynak koleksiyonu"@tr, "Source collection"@en ;
+  la:module "evidence" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:CoverageRecord a owl:Class ; rdfs:label "Kapsam gözlemi"@tr, "Coverage observation"@en ;
+  la:module "evidence" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:RightsRecord a owl:Class ; rdfs:label "Kullanım hakları kaydı"@tr, "Rights and permitted-use record"@en ;
+  la:module "evidence" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:representedBy a owl:ObjectProperty ; rdfs:label "Kaynak gösterimi vardır"@tr, "representedBy"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:SourceRepresentation ;
+  rdfs:comment "Representation distinct from canonical legal identity."@en ; la:module "evidence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:derivedFrom a owl:ObjectProperty ; rdfs:label "Veriden türetilmiştir"@tr, "derivedFrom"@en ;
+  rdfs:domain la:Entity ; rdfs:range la:Entity ;
+  rdfs:comment "Data provenance does not establish legal authority."@en ; la:module "evidence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:supportedBy a owl:ObjectProperty ; rdfs:label "Kaynak bölümüyle desteklenir"@tr, "supportedBy"@en ;
+  rdfs:domain la:Assertion ; rdfs:range la:EvidencePassage ;
+  rdfs:comment "Evidence for a specific assertion, not blanket document support."@en ; la:module "evidence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:inArtifact a owl:ObjectProperty ; rdfs:label "Kaynak dosyasındadır"@tr, "inArtifact"@en ;
+  rdfs:domain la:EvidencePassage ; rdfs:range la:SourceArtifact ;
+  rdfs:comment "Exact source artifact of a passage."@en ; la:module "evidence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:belongsToCollection a owl:ObjectProperty ; rdfs:label "Koleksiyona aittir"@tr, "belongsToCollection"@en ;
+  rdfs:domain la:SourceArtifact ; rdfs:range la:SourceCollection ;
+  rdfs:comment "Source collection membership."@en ; la:module "evidence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:reviewedBy a owl:ObjectProperty ; rdfs:label "İnceleme kaydı vardır"@tr, "reviewedBy"@en ;
+  rdfs:domain la:Assertion ; rdfs:range la:LegalReview ;
+  rdfs:comment "Review record scoped to an assertion."@en ; la:module "evidence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:hasDerivation a owl:ObjectProperty ; rdfs:label "Çıkarım dayanağı vardır"@tr, "hasDerivation"@en ;
+  rdfs:domain la:Assertion ; rdfs:range la:Derivation ;
+  rdfs:comment "Explicit inference derivation."@en ; la:module "evidence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:supersedesAssertion a owl:ObjectProperty ; rdfs:label "Sistem bilgisini düzeltir"@tr, "supersedesAssertion"@en ;
+  rdfs:domain la:Assertion ; rdfs:range la:Assertion ;
+  rdfs:comment "Correction of system knowledge, not repeal of law."@en ; la:module "evidence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:hasRightsRecord a owl:ObjectProperty ; rdfs:label "Kullanım hakları kaydı vardır"@tr, "hasRightsRecord"@en ;
+  rdfs:domain la:SourceArtifact ; rdfs:range la:RightsRecord ;
+  rdfs:comment "Permitted use must be established separately."@en ; la:module "evidence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:reviewStatus a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:claimStatus a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:scope a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:graphFamily a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:module a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:requiresLegalReview a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+
+la:synthetic a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+
+la:canonicalId a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:validFrom a owl:DatatypeProperty ; rdfs:range xsd:date .
+
+la:validTo a owl:DatatypeProperty ; rdfs:range xsd:date .
+
+la:validityStatus a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:recordedAt a owl:DatatypeProperty ; rdfs:range xsd:dateTime .
+
+la:supersededAt a owl:DatatypeProperty ; rdfs:range xsd:dateTime .
+
+la:publishedAt a owl:DatatypeProperty ; rdfs:range xsd:dateTime .
+
+la:decisionDate a owl:DatatypeProperty ; rdfs:range xsd:date .
+
+la:effectiveDate a owl:DatatypeProperty ; rdfs:range xsd:date .
+
+la:finalityDate a owl:DatatypeProperty ; rdfs:range xsd:date .
+
+la:finalityStatus a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:fetchedAt a owl:DatatypeProperty ; rdfs:range xsd:dateTime .
+
+la:reviewedAt a owl:DatatypeProperty ; rdfs:range xsd:dateTime .
+
+la:reviewer a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:extractionMethod a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:extractorVersion a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:confidence a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+
+la:contentHash a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:locator a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:quotedText a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:rightsStatus a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:legalBasis a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:versionResolution a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:unresolvedReason a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:reviewNote a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:knownDenominator a owl:DatatypeProperty ; rdfs:range xsd:integer .
+
+la:observedCount a owl:DatatypeProperty ; rdfs:range xsd:integer .
+
+la:cutoffDate a owl:DatatypeProperty ; rdfs:range xsd:date .
+
+la:matterId a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:startOffset a owl:DatatypeProperty ; rdfs:range xsd:integer .
+
+la:endOffset a owl:DatatypeProperty ; rdfs:range xsd:integer .
+
+la:locatorMapHash a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+la:subject a owl:ObjectProperty .
+
+la:predicate a owl:ObjectProperty .
+
+la:object a owl:ObjectProperty .
+
+la:evidence a owl:ObjectProperty .
+
+la:artifact a owl:ObjectProperty .
+
+la:snapshot a owl:ObjectProperty .
+
+la:textRepresentation a owl:ObjectProperty .

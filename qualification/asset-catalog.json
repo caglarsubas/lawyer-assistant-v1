@@ -1,0 +1,2597 @@
+{
+  "schema_version": "qualification-asset-catalog-v1",
+  "authority": "none",
+  "references": [
+    {
+      "id": "asset-strategy",
+      "kind": "repository_document",
+      "locator": "docs/DATA_KNOWLEDGE_STRATEGY.md",
+      "description": "Planning asset evaluation requirements, not asset licence evidence.",
+      "sha256": null
+    },
+    {
+      "id": "pypdf-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://pypdf.readthedocs.io/",
+      "description": "pypdf candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    },
+    {
+      "id": "python-docx-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://python-docx.readthedocs.io/",
+      "description": "python-docx candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    },
+    {
+      "id": "openpyxl-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://openpyxl.readthedocs.io/",
+      "description": "openpyxl candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    },
+    {
+      "id": "pillow-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://pillow.readthedocs.io/",
+      "description": "Pillow candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    },
+    {
+      "id": "tesseract-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://tesseract-ocr.github.io/",
+      "description": "Tesseract OCR and Turkish language data candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    },
+    {
+      "id": "zemberek-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://github.com/ahmetaa/zemberek-nlp",
+      "description": "Zemberek Turkish NLP candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    },
+    {
+      "id": "bge-m3-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://huggingface.co/BAAI/bge-m3",
+      "description": "BGE-M3 local embedding candidate candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    },
+    {
+      "id": "skos-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://www.w3.org/2004/02/skos/",
+      "description": "SKOS interoperability vocabulary candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    },
+    {
+      "id": "prov-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://www.w3.org/TR/prov-o/",
+      "description": "PROV interoperability vocabulary candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    },
+    {
+      "id": "shacl-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://www.w3.org/TR/shacl/",
+      "description": "SHACL validation vocabulary candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    },
+    {
+      "id": "web-annotation-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://www.w3.org/TR/annotation-model/",
+      "description": "Web Annotation interoperability vocabulary candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    },
+    {
+      "id": "owl-time-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://www.w3.org/TR/owl-time/",
+      "description": "OWL-Time interoperability vocabulary candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    },
+    {
+      "id": "eli-candidate-1",
+      "kind": "candidate_url",
+      "locator": "https://eur-lex.europa.eu/eli-register/about.html",
+      "description": "ELI interoperability vocabulary candidate reference; exact artifact and rights require qualification.",
+      "sha256": null
+    }
+  ],
+  "assets": [
+    {
+      "id": "pypdf",
+      "label": "pypdf",
+      "asset_type": "parser",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "pypdf-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "PDF text and structure; scanned pages require a separately qualified OCR path. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "python-docx",
+      "label": "python-docx",
+      "asset_type": "parser",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "python-docx-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "DOCX paragraphs, tables and comments/omissions require fidelity qualification. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "openpyxl",
+      "label": "openpyxl",
+      "asset_type": "parser",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "openpyxl-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "XLSX formulas, cached values, sheets and hidden/unprocessed content require qualification. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "pillow",
+      "label": "Pillow",
+      "asset_type": "parser",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "pillow-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Image decode, orientation and metadata stripping need bounded-resource review. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "office-parsers",
+      "label": "Legacy Office, RTF and presentation parsers",
+      "asset_type": "parser",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Evaluate existing python-pptx, xlrd, olefile, striprtf and defusedxml components individually before qualification. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "tesseract",
+      "label": "Tesseract OCR and Turkish language data",
+      "asset_type": "ocr",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "tesseract-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Qualify engine and Turkish trained-data versions separately; citation digits, tables and negation fidelity critical. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "zemberek",
+      "label": "Zemberek Turkish NLP",
+      "asset_type": "morphology",
+      "owner_roles": [
+        "retrieval_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "zemberek-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Original evidence text preserved; Turkish morphology may populate derived search fields only. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "turkish-legal-ner",
+      "label": "Turkish legal NER candidates",
+      "asset_type": "ner",
+      "owner_roles": [
+        "retrieval_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Exact corpus/model owner and licence unresolved; no unverified research asset assumed installed or rights-cleared. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "berturk-legal",
+      "label": "BERTurk-Legal investigation",
+      "asset_type": "embedding",
+      "owner_roles": [
+        "retrieval_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Candidate label from research input; canonical artifact, owner, licence and task suitability unresolved. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "hukukbert",
+      "label": "HukukBERT investigation",
+      "asset_type": "embedding",
+      "owner_roles": [
+        "retrieval_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Candidate label from research input; canonical artifact, owner, licence and task suitability unresolved. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "bge-m3",
+      "label": "BGE-M3 local embedding candidate",
+      "asset_type": "embedding",
+      "owner_roles": [
+        "retrieval_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "bge-m3-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Benchmark on exact Turkish legal identifiers, long passages and historical spelling; model-card claims do not establish suitability. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "local-cross-encoder",
+      "label": "Local cross-encoder candidates",
+      "asset_type": "reranker",
+      "owner_roles": [
+        "retrieval_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Select exact artifact and pin version before evaluating factual fit, adverse recall and five-job throughput. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "skos",
+      "label": "SKOS interoperability vocabulary",
+      "asset_type": "vocabulary",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "skos-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Reviewed concept classification only; mapping does not establish Turkish legal equivalence. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "prov",
+      "label": "PROV interoperability vocabulary",
+      "asset_type": "vocabulary",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "prov-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Assertion provenance and derivation; exact imported terms and licence require review. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "shacl",
+      "label": "SHACL validation vocabulary",
+      "asset_type": "vocabulary",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "shacl-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Structural validation does not establish legal truth or authority. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "web-annotation",
+      "label": "Web Annotation interoperability vocabulary",
+      "asset_type": "vocabulary",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "web-annotation-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Exact source passage locators; imported terminology must preserve stable local IDs. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "owl-time",
+      "label": "OWL-Time interoperability vocabulary",
+      "asset_type": "vocabulary",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "owl-time-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Temporal representation must distinguish publication, decision, effect, validity and acquisition dates. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "eli",
+      "label": "ELI interoperability vocabulary",
+      "asset_type": "vocabulary",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy",
+        "eli-candidate-1"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Selective mapping cannot create an official Turkish legal identifier. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "legal-document-models",
+      "label": "Legal document model candidates",
+      "asset_type": "vocabulary",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Selective identity/representation mapping; full Akoma Ntoso conversion and LegalRuleML engines are deferred. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "development-benchmark",
+      "label": "Lawyer-adjudicated development benchmark",
+      "asset_type": "evaluation_dataset",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Planned 360 tasks across three launch practices; no collected or adjudicated dataset is claimed. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    },
+    {
+      "id": "heldout-benchmark",
+      "label": "Independent held-out qualification benchmark",
+      "asset_type": "evaluation_dataset",
+      "owner_roles": [
+        "platform_engineer",
+        "legal_editor"
+      ],
+      "reference_ids": [
+        "asset-strategy"
+      ],
+      "version": null,
+      "artifact_sha256": null,
+      "licence_identifier": null,
+      "related_source_family_ids": [
+        "resmi-gazete",
+        "mevzuat",
+        "tbmm",
+        "yargitay",
+        "employment-agencies"
+      ],
+      "language_scope": "Turkish-first; historical orthography and any additional languages require measured qualification.",
+      "hardware_and_limits": "Planned approximately 1000 tasks and at least 3000 claims; leakage controls, sampling and actual adjudication pending. Exact hardware, memory, concurrency and artifact limits remain unmeasured.",
+      "maintenance_plan": "Record pinned artifact, upstream maintenance/security cadence and offline update process after owner review.",
+      "replacement_plan": "Retain originals and reproducible derived artifacts; re-run frozen fidelity/retrieval/privacy evaluations before replacement.",
+      "suitability": "unmeasured",
+      "suitability_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "licence_review": {
+        "status": "pending",
+        "reviewer_id": null,
+        "reviewed_on": null,
+        "evidence_reference_ids": [],
+        "rationale": "Qualification pending; this planning observation grants no permission."
+      },
+      "use_observations": {
+        "storage": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_processing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "internal_display": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "indexing": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "local_inference": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "export": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "embedding": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "offline_distribution": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "external_research": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        },
+        "training": {
+          "status": "pending",
+          "reviewer_id": null,
+          "reviewed_on": null,
+          "evidence_reference_ids": [],
+          "rationale": "Qualification pending; this planning observation grants no permission."
+        }
+      },
+      "qualification_gaps": [
+        "Resolve exact version, digest, licence and audience/use conditions.",
+        "Measure suitability on representative legally obtained samples with protected reviewer time.",
+        "Confirm offline dependencies and replacement/revalidation cost."
+      ]
+    }
+  ]
+}

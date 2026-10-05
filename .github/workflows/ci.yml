@@ -1,0 +1,61 @@
+name: Local application checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-and-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: |
+          python -m pip install uv==0.8.15
+          uv sync --project backend --frozen --extra dev
+          echo "$GITHUB_WORKSPACE/backend/.venv/bin" >> "$GITHUB_PATH"
+      - name: Check Python
+        run: |
+          ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts
+          pytest backend/tests
+          python -m unittest discover -s deploy -p 'test_*.py'
+      - name: Validate RDF and SHACL contract
+        run: python scripts/validate_ontology.py
+      - name: Validate R01 planning contracts (not legal or runtime approval)
+        run: python scripts/qualify_roadmap.py check qualification
+      - name: Compare actual synthetic extraction with independent reference
+        run: |
+          python scripts/build_calibration_fixture.py "$RUNNER_TEMP/r01-calibration"
+          python scripts/qualify_roadmap.py calibrate "$RUNNER_TEMP/r01-calibration"
+      - name: Validate Compose without reading a local env file
+        env:
+          LA_POSTGRES_PASSWORD: ci-placeholder-not-a-real-secret
+          LA_ENCRYPTION_KEY: ci-placeholder-not-a-real-secret
+          LA_BOOTSTRAP_USERNAME: ci-operator
+          LA_BOOTSTRAP_PASSWORD: ci-placeholder-not-a-real-secret
+          LA_GATEWAY_TOKEN: ci-placeholder-not-a-real-secret
+          LA_EXTRACTION_TOKEN: ci-placeholder-not-a-real-secret-at-least-32
+        run: docker compose --env-file /dev/null --profile research --profile native-provider config --quiet
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+      - run: npm run build
+        working-directory: frontend
+      - run: npm test
+        working-directory: frontend

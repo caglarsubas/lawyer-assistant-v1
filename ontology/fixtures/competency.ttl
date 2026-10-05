@@ -1,0 +1,53 @@
+@prefix la: <https://lawyer-assistant.local/ontology/> .
+@prefix fx: <urn:synthetic:lawyer-assistant:> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# SYNTHETIC TEST RECORDS. No actual Turkish law, institution, case or holding.
+# This directory is NEVER loaded by GraphService or the Fuseki seed process.
+fx:artifact a la:SourceArtifact ; rdfs:label "SYNTHETIC source artifact" ;
+  la:synthetic true ; la:scope "public" ; la:rightsStatus "synthetic" ;
+  la:contentHash "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ;
+  la:fetchedAt "2026-01-01T00:00:00Z"^^xsd:dateTime .
+fx:passage a la:EvidencePassage ; la:artifact fx:artifact ; la:scope "public" ;
+  la:textRepresentation fx:text-representation ; la:startOffset 0 ; la:endOffset 87 ;
+  la:locator "SYNTHETIC page 1 paragraph 1" ;
+  la:quotedText "SYNTHETIC: version A lasts through 2023, version B starts in 2024. This is a test only." .
+fx:text-representation a la:SourceRepresentation ; la:artifact fx:artifact ; la:scope "public" ; la:synthetic true ;
+  la:contentHash "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" ;
+  la:locatorMapHash "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" ;
+  la:extractionMethod "synthetic_fixture" ; la:extractorVersion "1" .
+fx:provision a la:Provision ; rdfs:label "SYNTHETIC provision identity" ; la:scope "public" .
+fx:version-a a la:ProvisionVersion ; rdfs:label "SYNTHETIC version A" ;
+  la:versionOf fx:provision ; la:versionResolution "resolved" ;
+  la:validFrom "1920-01-01"^^xsd:date ; la:validTo "2024-01-01"^^xsd:date ; la:scope "public" .
+fx:version-b a la:ProvisionVersion ; rdfs:label "SYNTHETIC version B" ;
+  la:versionOf fx:provision ; la:versionResolution "resolved" ;
+  la:validFrom "2024-01-01"^^xsd:date ; la:validTo "2030-01-01"^^xsd:date ; la:scope "public" .
+fx:decision a la:JudicialDecision ; rdfs:label "SYNTHETIC decision — not real case law" ; la:scope "public" .
+fx:institution a la:Institution ; rdfs:label "SYNTHETIC institution" ; la:scope "public" .
+fx:institution-successor a la:Institution ; rdfs:label "SYNTHETIC successor" ; la:scope "public" .
+fx:unknown a la:UnresolvedReference ; rdfs:label "SYNTHETIC unresolved provision citation" ;
+  la:versionResolution "unresolved" ; la:unresolvedReason "SYNTHETIC version not known; do not substitute version B." .
+fx:citation a la:CitationOccurrence ; rdfs:label "SYNTHETIC citation occurrence" ; la:scope "public" .
+
+fx:version-link-a a la:Assertion ; la:subject fx:provision ; la:predicate la:hasProvisionVersion ; la:object fx:version-a ;
+  la:evidence fx:passage ; la:claimStatus "unreviewed" ; la:scope "public" ; la:graphFamily "structure" ; la:synthetic true ;
+  la:validityStatus "known" ; la:validFrom "1920-01-01"^^xsd:date ; la:validTo "2024-01-01"^^xsd:date ;
+  la:recordedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ; la:extractionMethod "synthetic_fixture" ; la:extractorVersion "1" .
+fx:version-link-b a la:Assertion ; la:subject fx:provision ; la:predicate la:hasProvisionVersion ; la:object fx:version-b ;
+  la:evidence fx:passage ; la:claimStatus "unreviewed" ; la:scope "public" ; la:graphFamily "structure" ; la:synthetic true ;
+  la:validityStatus "known" ; la:validFrom "2024-01-01"^^xsd:date ; la:validTo "2030-01-01"^^xsd:date ;
+  la:recordedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ; la:extractionMethod "synthetic_fixture" ; la:extractorVersion "1" .
+fx:cites-a a la:Assertion ; la:subject fx:decision ; la:predicate la:cites ; la:object fx:version-a ;
+  la:evidence fx:passage ; la:claimStatus "source_verified" ; la:scope "public" ; la:graphFamily "jurisprudence" ; la:synthetic true ;
+  la:validityStatus "known" ; la:validFrom "2023-01-01"^^xsd:date ; la:validTo "2030-01-01"^^xsd:date ;
+  la:recordedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ; la:extractionMethod "synthetic_fixture" ; la:extractorVersion "1" .
+fx:unknown-link a la:Assertion ; la:subject fx:citation ; la:predicate la:hasUnresolvedReference ; la:object fx:unknown ;
+  la:evidence fx:passage ; la:claimStatus "unreviewed" ; la:scope "public" ; la:graphFamily "jurisprudence" ; la:synthetic true ;
+  la:validityStatus "unknown" ; la:unresolvedReason "SYNTHETIC unresolved citation." ;
+  la:recordedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ; la:extractionMethod "synthetic_fixture" ; la:extractorVersion "1" .
+fx:succession a la:Assertion ; la:subject fx:institution-successor ; la:predicate la:successorOf ; la:object fx:institution ;
+  la:evidence fx:passage ; la:claimStatus "unreviewed" ; la:scope "public" ; la:graphFamily "structure" ; la:synthetic true ;
+  la:validityStatus "known" ; la:validFrom "2024-01-01"^^xsd:date ; la:validTo "2030-01-01"^^xsd:date ;
+  la:recordedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ; la:extractionMethod "synthetic_fixture" ; la:extractorVersion "1" .

@@ -1,0 +1,9 @@
+@prefix la: <https://lawyer-assistant.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Engineering observation metadata; none of these properties infers current law.
+la:validityEndStatus a owl:DatatypeProperty ; rdfs:range xsd:string .
+la:validityCheckedThrough a owl:DatatypeProperty ; rdfs:range xsd:date .
+la:validityEvidence a owl:ObjectProperty ; rdfs:range la:EvidencePassage .

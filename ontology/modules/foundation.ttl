@@ -1,0 +1,166 @@
+@prefix la: <https://lawyer-assistant.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+la:Entity a owl:Class ; rdfs:label "Varlık"@tr, "Entity"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" .
+
+la:LegalEntity a owl:Class ; rdfs:label "Hukuki varlık"@tr, "Legal entity"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:SchemaCategory a owl:Class ; rdfs:label "Şema kategorisi"@tr, "Schema category"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:LegalDomain a owl:Class ; rdfs:label "Hukuk alanı"@tr, "Legal domain"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:LegalConcept a owl:Class ; rdfs:label "Hukuki kavram"@tr, "Legal concept"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:DefinedTerm a owl:Class ; rdfs:label "Tanımlanmış terim"@tr, "Defined term"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalConcept .
+
+la:RoleType a owl:Class ; rdfs:label "Rol türü"@tr, "Role type"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:AgentType a owl:Class ; rdfs:label "Özne türü"@tr, "Agent type"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:EventType a owl:Class ; rdfs:label "Olay türü"@tr, "Event type"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:FactPattern a owl:Class ; rdfs:label "Soyut olay örüntüsü"@tr, "Abstract fact pattern"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:Identifier a owl:Class ; rdfs:label "Tanımlayıcı"@tr, "Identifier"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:TimeInterval a owl:Class ; rdfs:label "Zaman aralığı"@tr, "Time interval"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:Jurisdiction a owl:Class ; rdfs:label "Yargı yetki alanı"@tr, "Jurisdiction"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:TerritorialArea a owl:Class ; rdfs:label "Coğrafi alan"@tr, "Territorial area"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:Agent a owl:Class ; rdfs:label "Özne"@tr, "Agent instance"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:NaturalPerson a owl:Class ; rdfs:label "Gerçek kişi"@tr, "Natural person"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Agent .
+
+la:LegalPerson a owl:Class ; rdfs:label "Tüzel kişi"@tr, "Legal person"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Agent .
+
+la:ParticipantRole a owl:Class ; rdfs:label "Katılımcı rolü"@tr, "Participant role instance"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:Event a owl:Class ; rdfs:label "Olay"@tr, "Event instance"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:MonetaryAmount a owl:Class ; rdfs:label "Parasal tutar"@tr, "Monetary amount"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:ReferenceTable a owl:Class ; rdfs:label "Sürümlü referans tablosu"@tr, "Versioned reference table"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:ReferenceValue a owl:Class ; rdfs:label "Yürürlük dönemine bağlı referans değeri"@tr, "Effective reference value"@en ;
+  la:module "foundation" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:instanceOf a owl:ObjectProperty ; rdfs:label "Türüne aittir"@tr, "instanceOf"@en ;
+  rdfs:domain la:Entity ; rdfs:range la:SchemaCategory ;
+  rdfs:comment "An instance belongs to a category; never a subclass assertion."@en ; la:module "foundation" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:inDomain a owl:ObjectProperty ; rdfs:label "Hukuk alanına aittir"@tr, "inDomain"@en ;
+  rdfs:domain la:Entity ; rdfs:range la:LegalDomain ;
+  rdfs:comment "Categorized within an engineering legal-domain taxonomy."@en ; la:module "foundation" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:hasRole a owl:ObjectProperty ; rdfs:label "Katılımcı rolü vardır"@tr, "hasRole"@en ;
+  rdfs:domain la:Agent ; rdfs:range la:ParticipantRole ;
+  rdfs:comment "Participation role in a qualified context."@en ; la:module "foundation" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:roleType a owl:ObjectProperty ; rdfs:label "Rol türüdür"@tr, "roleType"@en ;
+  rdfs:domain la:ParticipantRole ; rdfs:range la:RoleType ;
+  rdfs:comment "Type of a particular participant role."@en ; la:module "foundation" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:hasParticipant a owl:ObjectProperty ; rdfs:label "Katılımcısı vardır"@tr, "hasParticipant"@en ;
+  rdfs:domain la:Event ; rdfs:range la:Agent ;
+  rdfs:comment "An event participant, with roles qualified separately."@en ; la:module "foundation" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:occursIn a owl:ObjectProperty ; rdfs:label "Yerde gerçekleşir"@tr, "occursIn"@en ;
+  rdfs:domain la:Event ; rdfs:range la:TerritorialArea ;
+  rdfs:comment "Location of an event, not a jurisdiction conclusion."@en ; la:module "foundation" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:patternOf a owl:ObjectProperty ; rdfs:label "Olay türünün örüntüsüdür"@tr, "patternOf"@en ;
+  rdfs:domain la:FactPattern ; rdfs:range la:EventType ;
+  rdfs:comment "Reviewed abstraction of an event pattern."@en ; la:module "foundation" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:definedBy a owl:ObjectProperty ; rdfs:label "Hükümle tanımlanır"@tr, "definedBy"@en ;
+  rdfs:domain la:DefinedTerm ; rdfs:range la:ProvisionVersion ;
+  rdfs:comment "A term definition in an exact text version."@en ; la:module "foundation" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:conceptRelatedTo a owl:ObjectProperty ; rdfs:label "Kavramla ilişkilidir"@tr, "conceptRelatedTo"@en ;
+  rdfs:domain la:LegalConcept ; rdfs:range la:LegalConcept ;
+  rdfs:comment "Conceptual relationship, not identity or precedence."@en ; la:module "foundation" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:hasReferenceValue a owl:ObjectProperty ; rdfs:label "Referans değeri vardır"@tr, "hasReferenceValue"@en ;
+  rdfs:domain la:ReferenceTable ; rdfs:range la:ReferenceValue ;
+  rdfs:comment "A structured value whose effective interval is separately evidenced."@en ; la:module "foundation" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .

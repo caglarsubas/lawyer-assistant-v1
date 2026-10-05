@@ -1,0 +1,519 @@
+{
+  "schema_version": "research-qualification-v1",
+  "dossier_id": "r01-research-plan-2026-10-05",
+  "recorded_on": "2026-10-05",
+  "owner_role": "product_owner",
+  "providers": [
+    {
+      "provider": "openai",
+      "dispatch_enabled": false,
+      "runtime_qualification": "unqualified",
+      "account_configuration": "not_supplied",
+      "documentation": [
+        {
+          "url": "https://developers.openai.com/api/docs/guides/tools-web-search",
+          "checked_on": "2026-10-05",
+          "evidence_scope": "documentary_only"
+        },
+        {
+          "url": "https://developers.openai.com/api/docs/guides/deep-research",
+          "checked_on": "2026-10-05",
+          "evidence_scope": "documentary_only"
+        },
+        {
+          "url": "https://developers.openai.com/api/docs/guides/your-data",
+          "checked_on": "2026-10-05",
+          "evidence_scope": "documentary_only"
+        }
+      ],
+      "gates": [
+        {
+          "gate": "account_entitlement",
+          "owner_role": "application_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "privacy_transfer",
+          "owner_role": "privacy_legal_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "retention_deletion",
+          "owner_role": "privacy_legal_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "tools",
+          "owner_role": "security_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "key_isolation",
+          "owner_role": "security_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "legal_fidelity",
+          "owner_role": "legal_ontology_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "spend_retry",
+          "owner_role": "operations_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "returned_evidence",
+          "owner_role": "source_rights_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "training_terms",
+          "owner_role": "privacy_legal_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "region_processors",
+          "owner_role": "privacy_legal_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "attribution",
+          "owner_role": "source_rights_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "incident_handling",
+          "owner_role": "security_owner",
+          "status": "pending",
+          "evidence_ids": []
+        }
+      ]
+    },
+    {
+      "provider": "anthropic",
+      "dispatch_enabled": false,
+      "runtime_qualification": "unqualified",
+      "account_configuration": "not_supplied",
+      "documentation": [
+        {
+          "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool",
+          "checked_on": "2026-10-05",
+          "evidence_scope": "documentary_only"
+        },
+        {
+          "url": "https://platform.claude.com/docs/en/manage-claude/api-and-data-retention",
+          "checked_on": "2026-10-05",
+          "evidence_scope": "documentary_only"
+        }
+      ],
+      "gates": [
+        {
+          "gate": "account_entitlement",
+          "owner_role": "application_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "privacy_transfer",
+          "owner_role": "privacy_legal_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "retention_deletion",
+          "owner_role": "privacy_legal_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "tools",
+          "owner_role": "security_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "key_isolation",
+          "owner_role": "security_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "legal_fidelity",
+          "owner_role": "legal_ontology_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "spend_retry",
+          "owner_role": "operations_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "returned_evidence",
+          "owner_role": "source_rights_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "training_terms",
+          "owner_role": "privacy_legal_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "region_processors",
+          "owner_role": "privacy_legal_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "attribution",
+          "owner_role": "source_rights_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "incident_handling",
+          "owner_role": "security_owner",
+          "status": "pending",
+          "evidence_ids": []
+        }
+      ]
+    },
+    {
+      "provider": "gemini",
+      "dispatch_enabled": false,
+      "runtime_qualification": "unqualified",
+      "account_configuration": "not_supplied",
+      "documentation": [
+        {
+          "url": "https://ai.google.dev/gemini-api/docs/deep-research",
+          "checked_on": "2026-10-05",
+          "evidence_scope": "documentary_only"
+        },
+        {
+          "url": "https://ai.google.dev/gemini-api/docs/zdr",
+          "checked_on": "2026-10-05",
+          "evidence_scope": "documentary_only"
+        }
+      ],
+      "gates": [
+        {
+          "gate": "account_entitlement",
+          "owner_role": "application_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "privacy_transfer",
+          "owner_role": "privacy_legal_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "retention_deletion",
+          "owner_role": "privacy_legal_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "tools",
+          "owner_role": "security_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "key_isolation",
+          "owner_role": "security_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "legal_fidelity",
+          "owner_role": "legal_ontology_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "spend_retry",
+          "owner_role": "operations_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "returned_evidence",
+          "owner_role": "source_rights_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "training_terms",
+          "owner_role": "privacy_legal_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "region_processors",
+          "owner_role": "privacy_legal_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "attribution",
+          "owner_role": "source_rights_owner",
+          "status": "pending",
+          "evidence_ids": []
+        },
+        {
+          "gate": "incident_handling",
+          "owner_role": "security_owner",
+          "status": "pending",
+          "evidence_ids": []
+        }
+      ]
+    }
+  ],
+  "evaluation": {
+    "development": {
+      "dataset_id": "development-legal-360",
+      "purpose": "development",
+      "target_tasks": 360,
+      "target_substantive_claims": null,
+      "practice_task_targets": {
+        "contracts": 120,
+        "commercial": 120,
+        "employment": 120
+      },
+      "task_inventory_status": "not_populated"
+    },
+    "held_out": {
+      "dataset_id": "held-out-legal-1000",
+      "purpose": "held_out_release",
+      "target_tasks": 1000,
+      "target_substantive_claims": 3000,
+      "practice_task_targets": {
+        "contracts": 334,
+        "commercial": 333,
+        "employment": 333
+      },
+      "task_inventory_status": "not_populated"
+    },
+    "split_by_source_proceeding_and_duplicate_family": true,
+    "independent_annotators": 2,
+    "adjudication_required": true,
+    "slices": [
+      {
+        "slice_id": "slice-citation-temporal",
+        "category": "citation_temporal",
+        "owner_role": "evaluation_owner",
+        "development_target": null,
+        "held_out_target": null,
+        "provider_ids": [],
+        "minimum_per_provider": null,
+        "sample_size_status": "pending"
+      },
+      {
+        "slice_id": "slice-adverse-authority",
+        "category": "adverse_authority",
+        "owner_role": "evaluation_owner",
+        "development_target": null,
+        "held_out_target": null,
+        "provider_ids": [],
+        "minimum_per_provider": null,
+        "sample_size_status": "pending"
+      },
+      {
+        "slice_id": "slice-evidence-roles",
+        "category": "evidence_roles",
+        "owner_role": "evaluation_owner",
+        "development_target": null,
+        "held_out_target": null,
+        "provider_ids": [],
+        "minimum_per_provider": null,
+        "sample_size_status": "pending"
+      },
+      {
+        "slice_id": "slice-correction",
+        "category": "correction",
+        "owner_role": "evaluation_owner",
+        "development_target": null,
+        "held_out_target": null,
+        "provider_ids": [],
+        "minimum_per_provider": null,
+        "sample_size_status": "pending"
+      },
+      {
+        "slice_id": "slice-standard-deep",
+        "category": "standard_deep",
+        "owner_role": "evaluation_owner",
+        "development_target": null,
+        "held_out_target": null,
+        "provider_ids": [],
+        "minimum_per_provider": null,
+        "sample_size_status": "pending"
+      },
+      {
+        "slice_id": "slice-privacy-direct",
+        "category": "privacy_direct",
+        "owner_role": "privacy_legal_owner",
+        "development_target": null,
+        "held_out_target": null,
+        "provider_ids": [
+          "openai",
+          "anthropic",
+          "gemini"
+        ],
+        "minimum_per_provider": null,
+        "sample_size_status": "pending"
+      },
+      {
+        "slice_id": "slice-privacy-contextual",
+        "category": "privacy_contextual",
+        "owner_role": "privacy_legal_owner",
+        "development_target": null,
+        "held_out_target": null,
+        "provider_ids": [
+          "openai",
+          "anthropic",
+          "gemini"
+        ],
+        "minimum_per_provider": null,
+        "sample_size_status": "pending"
+      },
+      {
+        "slice_id": "slice-legal-fidelity",
+        "category": "legal_fidelity",
+        "owner_role": "evaluation_owner",
+        "development_target": null,
+        "held_out_target": null,
+        "provider_ids": [
+          "openai",
+          "anthropic",
+          "gemini"
+        ],
+        "minimum_per_provider": null,
+        "sample_size_status": "pending"
+      },
+      {
+        "slice_id": "slice-key-authorization-spend",
+        "category": "key_authorization_spend",
+        "owner_role": "evaluation_owner",
+        "development_target": null,
+        "held_out_target": null,
+        "provider_ids": [
+          "openai",
+          "anthropic",
+          "gemini"
+        ],
+        "minimum_per_provider": null,
+        "sample_size_status": "pending"
+      },
+      {
+        "slice_id": "slice-returned-evidence",
+        "category": "returned_evidence",
+        "owner_role": "evaluation_owner",
+        "development_target": null,
+        "held_out_target": null,
+        "provider_ids": [
+          "openai",
+          "anthropic",
+          "gemini"
+        ],
+        "minimum_per_provider": null,
+        "sample_size_status": "pending"
+      },
+      {
+        "slice_id": "slice-disconnected-operations",
+        "category": "disconnected_operations",
+        "owner_role": "evaluation_owner",
+        "development_target": null,
+        "held_out_target": null,
+        "provider_ids": [],
+        "minimum_per_provider": null,
+        "sample_size_status": "pending"
+      }
+    ],
+    "comparisons": [
+      {
+        "comparison_id": "paired-correction",
+        "kind": "correction",
+        "baseline": "single_pass",
+        "candidate": "bounded_correction",
+        "same_tasks": true,
+        "pinned_inputs_and_snapshot": true,
+        "includes_verification_and_correction_time": true,
+        "target_pairs": null,
+        "owner_role": "evaluation_owner"
+      },
+      {
+        "comparison_id": "paired-standard-deep",
+        "kind": "standard_deep",
+        "baseline": "standard",
+        "candidate": "deep",
+        "same_tasks": true,
+        "pinned_inputs_and_snapshot": true,
+        "includes_verification_and_correction_time": true,
+        "target_pairs": null,
+        "owner_role": "evaluation_owner"
+      },
+      {
+        "comparison_id": "paired-privacy-fidelity",
+        "kind": "privacy_fidelity",
+        "baseline": "original_private_local",
+        "candidate": "sanitized_scenario_local",
+        "same_tasks": true,
+        "pinned_inputs_and_snapshot": true,
+        "includes_verification_and_correction_time": true,
+        "target_pairs": null,
+        "owner_role": "evaluation_owner"
+      }
+    ]
+  },
+  "calibration_plan": {
+    "target_units": {
+      "pages": 100,
+      "amendment_chains": 10,
+      "decisions": 30
+    },
+    "population_denominators": {
+      "pages": null,
+      "amendment_chains": null,
+      "decisions": null
+    },
+    "practices": [
+      "contracts",
+      "commercial",
+      "employment"
+    ],
+    "owner_role": "evaluation_owner"
+  },
+  "evidence_records": [],
+  "measurements": [],
+  "capacity": {
+    "status": "provisional",
+    "baseline_weeks_min": 30,
+    "baseline_weeks_max": 36,
+    "baseline_fte": 8.0,
+    "reestimate_owner_role": "product_owner",
+    "added_workstreams": [
+      "local_analysis",
+      "sanitizer_fidelity",
+      "provider_adapters",
+      "evaluation",
+      "operations"
+    ]
+  }
+}
