@@ -126,6 +126,9 @@ cd frontend
 npm run build
 ```
 
+See [CI runtime and cost controls](docs/CI.md) for the full-suite two-worker command,
+PR/main trigger policy and timeout limits.
+
 Fixtures are conspicuously synthetic and excluded from application legal retrieval. The automated suite covers matter isolation, CSRF, encrypted content, extraction failure visibility, evidence validation, review restrictions, stale work, Turkish exports, historical graph semantics, gateway controls and safe restoration boundaries. These checks do not establish the roadmap's legal quality, recall, load or pilot targets.
 
 ## Current release boundary

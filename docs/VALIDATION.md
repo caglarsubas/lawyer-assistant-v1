@@ -1,5 +1,16 @@
 # Verification record — 5 October 2026
 
+## CI runtime controls
+
+The complete backend suite with two workers on the same machine passed **2,058
+tests, with eight PostgreSQL cases skipped and 28 existing warnings, in 336.83
+seconds (5m36s)**. The separate PostgreSQL CI job still executes those eight cases.
+Project-wide Ruff, actionlint and frozen offline dependency synchronization passed.
+PR workflow duplication is removed; main pushes retain post-merge verification.
+No production validation or ontology content changed. See [CI controls](CI.md) for
+the measured old hosted run, worker isolation, runtime limits and the distinction
+between local timing and verified hosted savings.
+
 ## R02 foundation: consistent review of multiple sources
 
 The [source-set inspector](RELEASE_SNAPSHOT_SET.md) reuses each source's existing
