@@ -273,3 +273,46 @@ assert not {'app.config', 'app.db', 'app.provider', 'app.public_sources', 'app.a
                    cwd=tmp_path, env={"PATH": os.environ.get("PATH", ""), "LA_DATABASE_URL": "invalid",
                                      "LLM_PROVIDER_API_KEY": "synthetic-never-read"},
                    check=True, capture_output=True, timeout=15)
+
+
+@pytest.mark.parametrize("checkpoint", ["after_mkdir", "before_open"])
+@pytest.mark.parametrize("original_mode", [0o755, 0o700])
+def test_replaced_directory_never_adopted_chmodded_or_cleaned_up(
+    tmp_path, monkeypatch, checkpoint, original_mode,
+):
+    parent = tmp_path.resolve()
+    destination = parent / "generated"
+    victim = parent / "preexisting"
+    victim.mkdir(mode=original_mode)
+    victim.chmod(original_mode)
+    (victim / "preserve.txt").write_text("unrelated private contents")
+    original_identity = builder._identity(victim.stat())
+    original_mkdir, original_open = builder.os.mkdir, builder.os.open
+    swapped = False
+
+    def swap():
+        nonlocal swapped
+        destination.rename(parent / "displaced-new-directory")
+        victim.rename(destination)
+        swapped = True
+
+    def mkdir(name, *values, **kwargs):
+        result = original_mkdir(name, *values, **kwargs)
+        if checkpoint == "after_mkdir" and name == "generated" and not swapped:
+            swap()
+        return result
+
+    def opened(name, *values, **kwargs):
+        if checkpoint == "before_open" and name == "generated" and not swapped:
+            swap()
+        return original_open(name, *values, **kwargs)
+
+    monkeypatch.setattr(builder.os, "mkdir", mkdir)
+    monkeypatch.setattr(builder.os, "open", opened)
+    with pytest.raises(builder.FixtureError, match="destination_changed"):
+        builder.build_fixture(destination)
+    assert swapped
+    assert builder._identity(destination.stat()) == original_identity
+    assert stat.S_IMODE(destination.stat().st_mode) == original_mode
+    assert {entry.name for entry in destination.iterdir()} == {"preserve.txt"}
+    assert (destination / "preserve.txt").read_text() == "unrelated private contents"

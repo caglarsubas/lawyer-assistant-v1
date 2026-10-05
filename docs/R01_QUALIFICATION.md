@@ -178,9 +178,81 @@ dossier, approves a source or publishes a graph. CI runs this same generated sam
 through comparison. Use the schemas to prepare separately reviewed real samples;
 no real examples or inferred approvals are committed by this packet.
 
+## Run a reproducible multi-sample study
+
+The study command recomputes every extraction comparison from original artifacts,
+bound to the exact five-file dossier fingerprint. It never trusts an uploaded
+comparison report or treats an operator's review declarations as authenticated.
+
+```sh
+backend/.venv/bin/python scripts/qualify_roadmap.py study-schemas
+backend/.venv/bin/python scripts/qualify_roadmap.py study /absolute/study-manifest \
+  --dossier-dir /absolute/dossier-copy --artifacts-dir /absolute/study-artifacts
+```
+
+The manifest directory contains only `study.json`; the separate artifact directory
+contains exactly the `<sha256>.bin` files referenced by its entries. Each entry
+identifies four artifacts: sample metadata, original bytes, extraction and independent
+reference. Their contents use the same single-sample contracts above. The manifest
+also records a declared source-identity digest, sample kind/practice, source family,
+layout, workload unit/count and nullable reviewer timing/assessment counts.
+Real samples require a source family from the bound dossier's catalog; synthetic
+samples use no real source family. Catalog membership does not grant rights.
+
+Use one entry per independently selected original source. Repeated sample metadata,
+raw-original or declared source-identity hashes fail, including repetitions across
+real and synthetic cohorts. Distinct PDF/HTML manifestations of one judgment must
+use the same declared identity and cannot both count in one study. Byte hashes
+cannot discover an undeclared common origin: sample independence, source identity
+and reference authorship still need review. Paired parser benchmarking on one source
+belongs in separately identified studies; it must not inflate sample counts.
+
+Limits are **100 entries**, **256 KiB manifest**, **128 MiB total unique artifacts**,
+and the existing per-role 64 KiB/20 MiB/9 MiB/9 MiB limits. Shared artifacts use
+the strictest role limit. The CLI captures all three exact directory inventories,
+revalidates models/hashes, and recaptures inputs before printing. The report includes
+`study_sha256`, `dossier_sha256` and per-sample fingerprints for reproducibility.
+Its exit is **0** for passing declared comparisons, **1** for comparison failures,
+and **2** for invalid, duplicated, changed or mismatched inputs. An empty study is
+invalid. A subset pass remains distinct from `all_full_reference_comparisons_passed`.
+
+Results separate **real and synthetic** cohorts and aggregate by practice, file
+format, declared layout and workload unit. Exact-passage and critical-span rates
+divide summed matches by summed expected counts; they do not average percentages.
+Missing practices/layouts/target units, partial/empty references, warnings and
+unannotated critical categories stay visible. Empty rates are null, and an absent
+format is not a tested format. Warning counts and declared page-count disagreements
+are reported for review; a comparison pass does not adjudicate them.
+
+Reported extraction/reviewer times and assessed-item/disagreement counts remain
+**declarations**, distinct from recomputed extraction statistics. Missing values
+are not zero; aggregate time/count is unknown if any included value is missing.
+Extraction differences are not reviewer disagreements. The separate `documents`
+unit supports text samples without inventing pages, decisions or amendment chains.
+No population fraction, representative throughput or delivery estimate is produced.
+Treat reports and identity fingerprints as confidential operational metadata even
+though source text, locators, submitted family/identity labels and paths are omitted.
+
+To exercise the complete path with three independent invented Turkish TXT sources:
+
+```sh
+backend/.venv/bin/python scripts/build_calibration_study_fixture.py /absolute/new-study \
+  --dossier-dir qualification
+backend/.venv/bin/python scripts/qualify_roadmap.py study /absolute/new-study/study \
+  --dossier-dir qualification --artifacts-dir /absolute/new-study/artifacts
+```
+
+The destination must be new under an existing non-symlink parent. The generator
+uses the actual bounded parser, compares each result with independently authored
+literal passages, and records measured parser-call time. Its three practices and
+critical tokens exercise software contracts; they do not establish legal-domain
+accuracy. Reviewer measurements stay null, real sample count stays zero and the
+bound dossier stays unchanged. CI exercises this path as well as the single-sample
+fixture. The study reader itself makes no parser, network, provider or database call.
+
 ## Delivery boundary and next work
 
-R01's engineering contracts, inspection, physical verification and comparison tools
+R01's engineering contracts, inspection, physical verification, comparison and study tools
 are implemented. Its exit remains open
 for accountable source/access/rights and semantic review, lawful representative samples,
 actual extraction/reviewer measurements, legal/privacy fixture adjudication, provider

@@ -237,7 +237,7 @@ Dependencies refer to completion of the relevant gate, not just code availabilit
 
 | ID / priority | Delivery packet | Dependencies / accountable lead | Exit evidence |
 |---|---|---|---|
-| **R01 / P0, in progress** | Source, asset and semantic qualification: offline catalogs, legal-analysis/scenario contracts, provider/evaluation dossier, physical evidence verifier and extraction comparator implemented; representative calibration and review pending | Legal ontology owner + data/source lead with application/security owners; source/provider dependencies documented | Source uses and routes reviewed; sample errors/reviewer time measured; argument/scenario fixtures adjudicated; provider processing/spend controls qualified; added effort estimated. Passing the dossier validator grants no approval |
+| **R01 / P0, in progress** | Source, asset and semantic qualification: offline catalogs, legal-analysis/scenario contracts, provider/evaluation dossier, physical evidence verifier, extraction comparator and reproducible calibration studies implemented; representative calibration and review pending | Legal ontology owner + data/source lead with application/security owners; source/provider dependencies documented | Source uses and routes reviewed; sample errors/reviewer time measured; argument/scenario fixtures adjudicated; provider processing/spend controls qualified; added effort estimated. Passing the dossier validator grants no approval |
 | **R02 / P0** | Bounded multi-source preparation/publication: per-source revisions, rights, audience, expiry and renewal; canonical identity conflicts; deterministic locks; exact public/private manifests; five simultaneous research jobs | R01 contracts; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
 | **R03 / P0** | First genuinely reviewed contract corpus: RG ordinary/mükerrer manifest; amendment/transition candidates; MBS reconciliation; TBMM enacted/history distinction; exact provisions and historical versions | R01 lawful samples and protected reviewers; R02 for combined releases; editors + ingestion team | Reviewed corpus and exact evidence ready for analysis; amendment chains/historical queries pass; discrepancies visible. Full legal-analysis/export qualification additionally requires R04, the relevant R05 decision slice and R05A |
 | **R04 / P1** | Turkish lexical/citation normalization, local embedding and reranker evaluation, structured context packing; pinned model/index versions | R01 development benchmark; R03 representative approved corpus; retrieval/ML + legal adjudicators | Exact identifiers and original quotes preserved; hybrid and graph/metadata/rerank ablations on one snapshot; thresholds, error slices and resource budgets reported; no private-data or adverse-recall regression |
@@ -326,6 +326,29 @@ call time. CI covers this synthetic path; its timing is not real-corpus throughp
 No real source sample, lawyer review, corpus admission or provider call was added.
 The next qualification work remains lawful representative samples, independent
 transcriptions and review/error measurements, followed by capacity re-estimation.
+
+### R01 engineering milestone — reproducible calibration studies
+
+Multi-sample studies now bind the exact five-file dossier fingerprint and every
+original, extraction, reference and sample metadata artifact. The offline CLI
+recomputes comparisons, rejects duplicate raw originals, metadata records and
+declared source identities, and verifies unchanged captures before reporting.
+Byte deduplication and operator-declared identities do not establish independent
+selection across differently represented or unidentified sources.
+
+Results separate real/synthetic cohorts and practice, format, layout and unit
+strata. Aggregate rates sum numerators and denominators; missing strata, partial
+references, unannotated critical categories and missing timings remain visible.
+Parser comparisons and declared reviewer disagreements are separate. Document
+counts never substitute for the 100-page/10-chain/30-decision planning sample.
+No automated capacity estimate or source-use permission is inferred.
+
+The milestone's engineering acceptance is a reproducible three-practice synthetic
+study through the actual bounded parser, adversarial duplicate/change checks, CLI
+and CI integration, and isolated Docker verification. This delivers the tool for
+the next qualification cycle; R01's real sample, rights, legal/privacy review and
+capacity gates remain pending. See [operator usage](R01_QUALIFICATION.md) and
+[verification](VALIDATION.md). R02 has not been promoted by these engineering checks.
 
 ## Two-graph specification
 
