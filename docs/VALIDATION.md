@@ -1,5 +1,57 @@
 # Verification record — 5 October 2026
 
+## R02 foundation: consistent review of multiple sources
+
+The [source-set inspector](RELEASE_SNAPSHOT_SET.md) reuses each source's existing
+rights, assignment, revision and ledger checks in one transaction. It captures and
+revalidates the complete set, bounds source bytes/mappings, and emits a confidential
+summary only after successful exit. It produces no combined graph or publication
+authorization.
+
+- **87 new snapshot-set/CLI tests passed in 12.15 seconds.** Cases include strict
+  source selection, per-source rights/ownership, mixed/stale/corrupt reviews,
+  initial and final revalidation races, caller mutation, aggregate limits, request
+  replacement, safe errors, no writes and rejection by the v1 preparation contract.
+- **8 real PostgreSQL tests passed in 8.73 seconds** against the Compose-pinned
+  PostgreSQL 16.10 image in a dedicated disposable container. Observed database
+  lock waits cover same-owner mapping changes and a different administrator's
+  source reassignment. Two/five concurrent reversed-order sets agree; queued
+  committed revisions/revocation reject; a real five-second lock timeout fails
+  safely; partial failure releases acquired locks. Every test uses a unique child
+  database. Zero children remained, and the container was removed afterward.
+- **253 existing review/mapping/authorization/publication tests passed in 219.27
+  seconds.** Additional focused runs passed 175 snapshot/preparation tests and 104
+  snapshot/CLI/evidence-reader tests. These suites overlap; their counts are not
+  an aggregate full-suite result. The final backend collection is **2,066**, with
+  the PostgreSQL cases skipped unless explicitly configured. No full 2,066-test
+  local run is claimed.
+- Repository-wide Ruff, the R01 dossier check, and eight deployment tests passed.
+  Python test runs reported the existing Starlette/httpx deprecation warning.
+  No frontend behavior changed. A dedicated CI PostgreSQL job now executes the
+  concurrency tests independently of the normal backend suite.
+- Built `lawyer-assistant-api:r02-snapshot-offline`, linux/arm64, image ID
+  `sha256:8dd7ee38d4d0c81c1921a5f48f58390b41e5e7e361be108676af431f85dce827`,
+  by copying final application/scripts over the cached R01 validation image with
+  network disabled. This is not a fresh dependency/base-image rebuild. A read-only,
+  network-disabled container with dropped capabilities, resource limits and
+  **UID 10001** emitted the byte-identical host request schema. Missing input exited
+  2 with empty stdout and a fixed diagnostic. This Docker smoke check covers CLI
+  loading/schema/rejection; successful inspections and concurrency were tested
+  separately against isolated SQLite and PostgreSQL fixtures.
+
+Independent review found no blocking issue and requested the additional different-
+administrator lock test, which passed. These checks qualify the engineering slice
+only: R01 actual rights/legal/privacy review and R02 combined publication, identity
+conflicts, expiry/renewal, cancellation and measured research-job capacity remain
+open. No real-source acquisition, provider request, credential change or deployment
+of the running application was performed.
+
+Local evidence in `.data/verification/`: `r02-new-tests.log`, `r02-pg.log`,
+`r02-boundaries.log`, `r02-collection.log`, `r02-r01-contracts.json`,
+`r02-docker-build.log`, `r02-schema-host.json`, `r02-schema-docker.json` and
+`r02-docker-rejected.{stdout,stderr}`. GitHub check status and deployment status
+must be verified separately.
+
 ## R01 milestone: reproducible multi-sample calibration studies
 
 The study CLI recomputes comparisons from content-addressed artifacts bound to the
