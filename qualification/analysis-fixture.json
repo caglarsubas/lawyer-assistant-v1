@@ -1,0 +1,148 @@
+{
+  "schema_version": "analysis-contract.v1",
+  "data_classification": "synthetic_fixture",
+  "purpose": "offline_preparation",
+  "artifact_state": "Needs review",
+  "legal_approval": "not_granted",
+  "actors": [
+    {
+      "id": "actor-supplier",
+      "role": "supplier"
+    },
+    {
+      "id": "actor-buyer",
+      "role": "buyer"
+    }
+  ],
+  "issues": [
+    {
+      "id": "issue-payment",
+      "question": "Synthetic fixture: is a payment argument supportable?",
+      "posture": "Preparation only; invented example and invented rule, not Turkish law."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-allegation",
+      "source_id": "synthetic-statement",
+      "source_version": "synthetic-v1",
+      "passage_id": "synthetic-p1",
+      "start": 0,
+      "end": 25,
+      "role": "private_document"
+    },
+    {
+      "id": "evidence-rule",
+      "source_id": "synthetic-rule",
+      "source_version": "synthetic-v1",
+      "passage_id": "synthetic-p2",
+      "start": 0,
+      "end": 30,
+      "role": "norm_passage"
+    }
+  ],
+  "premises": [
+    {
+      "id": "premise-delivery",
+      "text": "The fictional supplier alleges delivery; the buyer disputes conformity.",
+      "role": "allegation",
+      "actor_ids": [
+        "actor-supplier",
+        "actor-buyer"
+      ],
+      "evidence_ids": [
+        "evidence-allegation"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "id": "rule-fixture",
+      "authority_id": "synthetic-authority",
+      "provision_version_id": "synthetic-rule-v1",
+      "text": "Invented testing rule: conforming delivery is a prerequisite. Not legal authority.",
+      "evidence_ids": [
+        "evidence-rule"
+      ],
+      "conditions": [
+        {
+          "id": "condition-conformity",
+          "text": "Conforming delivery occurred.",
+          "kind": "element",
+          "required_status": "met"
+        }
+      ],
+      "valid_from": "2020-01-01",
+      "valid_to": null,
+      "checked_through": "2025-01-01"
+    }
+  ],
+  "applications": [
+    {
+      "id": "application-payment",
+      "issue_id": "issue-payment",
+      "rule_id": "rule-fixture",
+      "premise_ids": [
+        "premise-delivery"
+      ],
+      "rationale": "The allegation alone does not establish conformity under the invented testing rule.",
+      "event_date": "2024-01-01",
+      "temporal_status": "within_recorded_interval",
+      "conditions": [
+        {
+          "condition_id": "condition-conformity",
+          "status": "unknown",
+          "premise_ids": [
+            "premise-delivery"
+          ]
+        }
+      ]
+    }
+  ],
+  "alternatives": [
+    {
+      "id": "alternative-gap",
+      "issue_id": "issue-payment",
+      "kind": "search_gap",
+      "text": "Adverse-authority research has not been performed for this synthetic fixture.",
+      "evidence_ids": []
+    }
+  ],
+  "conclusions": [
+    {
+      "id": "conclusion-payment",
+      "issue_id": "issue-payment",
+      "application_ids": [
+        "application-payment"
+      ],
+      "alternative_ids": [
+        "alternative-gap"
+      ],
+      "disposition": "withheld",
+      "text": "Withhold an unconditional payment conclusion.",
+      "uncertainty": [
+        "Conformity remains disputed and the invented rule is not legal authority."
+      ],
+      "next_step": "Obtain authorized evidence and reviewed legal authorities."
+    }
+  ],
+  "defects": [
+    {
+      "id": "defect-conformity",
+      "target_id": "application-payment",
+      "severity": "critical",
+      "status": "unresolved",
+      "description": "A required element has not been established."
+    }
+  ],
+  "corrections": [],
+  "limits": {
+    "mode": "standard",
+    "max_revisions": 2,
+    "max_retrieval_calls": 8,
+    "max_context_tokens": 8192,
+    "max_generated_tokens": 2048,
+    "max_elapsed_seconds": 120,
+    "stop_reason": "not_started"
+  }
+}

@@ -1,0 +1,262 @@
+@prefix la: <https://lawyer-assistant.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+la:Proceeding a owl:Class ; rdfs:label "Yargılama kimliği"@tr, "Proceeding identity"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:ProceedingStage a owl:Class ; rdfs:label "Somut yargılama aşaması"@tr, "Actual proceeding stage"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:JudicialDecision a owl:Class ; rdfs:label "Yargı kararı kimliği"@tr, "Judicial decision identity"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:DecisionVersion a owl:Class ; rdfs:label "Karar metni sürümü"@tr, "Decision text version"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:DecisionType a owl:Class ; rdfs:label "Karar türü"@tr, "Decision type"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:Panel a owl:Class ; rdfs:label "Karar veren heyet"@tr, "Deciding panel"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Agent .
+
+la:Opinion a owl:Class ; rdfs:label "Görüş"@tr, "Opinion"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:Dissent a owl:Class ; rdfs:label "Karşıoy"@tr, "Dissenting opinion"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Opinion .
+
+la:LegalIssue a owl:Class ; rdfs:label "Hukuki mesele"@tr, "Legal issue"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:PartyArgument a owl:Class ; rdfs:label "Taraf iddiası veya savunması"@tr, "Party argument"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:AllegedFact a owl:Class ; rdfs:label "İleri sürülen vakıa"@tr, "Alleged fact"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:JudicialFinding a owl:Class ; rdfs:label "Mahkemenin maddi vakıa tespiti"@tr, "Judicial factual finding"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:Holding a owl:Class ; rdfs:label "Kararda benimsenen hukuki görüş"@tr, "Judicial legal proposition"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:Disposition a owl:Class ; rdfs:label "Hüküm sonucu"@tr, "Disposition"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:CitationOccurrence a owl:Class ; rdfs:label "Metindeki atıf"@tr, "Textual citation occurrence"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:UnresolvedReference a owl:Class ; rdfs:label "Çözümlenemeyen atıf veya sürüm"@tr, "Unresolved citation or version"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:AuthorityTreatment a owl:Class ; rdfs:label "Kaynağın değerlendirilme biçimi"@tr, "Qualified authority treatment"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:ApplicabilityAssessment a owl:Class ; rdfs:label "Koşullu uygulanabilirlik değerlendirmesi"@tr, "Qualified applicability assessment"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:ConflictAssessment a owl:Class ; rdfs:label "İçtihat çelişkisi değerlendirmesi"@tr, "Qualified conflict assessment"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:TrendHypothesis a owl:Class ; rdfs:label "İçtihat eğilimi varsayımı"@tr, "Jurisprudential trend hypothesis"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:EditorialAnnotation a owl:Class ; rdfs:label "Editoryal açıklama"@tr, "Editorial annotation"@en ;
+  la:module "jurisprudence" ; la:graphFamily "jurisprudence" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:decidedIn a owl:ObjectProperty ; rdfs:label "Yargılamada karara bağlanmıştır"@tr, "decidedIn"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:Proceeding ;
+  rdfs:comment "Decision-to-proceeding identity."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:issuedBy a owl:ObjectProperty ; rdfs:label "Merci tarafından verilmiştir"@tr, "issuedBy"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:Institution ;
+  rdfs:comment "Issuing body, distinct from appellate status."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:decidedByPanel a owl:ObjectProperty ; rdfs:label "Heyet tarafından karara bağlanmıştır"@tr, "decidedByPanel"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:Panel ;
+  rdfs:comment "Recorded deciding panel."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:issuedAtStage a owl:ObjectProperty ; rdfs:label "Yargılama aşamasında verilmiştir"@tr, "issuedAtStage"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:ProceedingStage ;
+  rdfs:comment "Actual proceeding stage."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:hasDecisionVersion a owl:ObjectProperty ; rdfs:label "Karar metni sürümü vardır"@tr, "hasDecisionVersion"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:DecisionVersion ;
+  rdfs:comment "Decision-to-source-version identity."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:hasOpinion a owl:ObjectProperty ; rdfs:label "Görüş içerir"@tr, "hasOpinion"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:Opinion ;
+  rdfs:comment "Opinion is not necessarily the court holding."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:addressesIssue a owl:ObjectProperty ; rdfs:label "Hukuki meseleyi ele alır"@tr, "addressesIssue"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:LegalIssue ;
+  rdfs:comment "Legal issue addressed by a decision."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:recordsArgument a owl:ObjectProperty ; rdfs:label "Taraf iddiasını veya savunmasını kaydeder"@tr, "recordsArgument"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:PartyArgument ;
+  rdfs:comment "Recorded party argument, not a finding."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:allegesFact a owl:ObjectProperty ; rdfs:label "Vakıayı ileri sürer"@tr, "allegesFact"@en ;
+  rdfs:domain la:PartyArgument ; rdfs:range la:AllegedFact ;
+  rdfs:comment "Allegation is not adjudicated fact."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:findsFact a owl:ObjectProperty ; rdfs:label "Maddi vakıayı tespit eder"@tr, "findsFact"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:JudicialFinding ;
+  rdfs:comment "Finding attributed to the deciding body."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:adoptsHolding a owl:ObjectProperty ; rdfs:label "Hukuki görüşü benimser"@tr, "adoptsHolding"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:Holding ;
+  rdfs:comment "Holding distinct from dicta or editorial summary."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:hasDisposition a owl:ObjectProperty ; rdfs:label "Hüküm sonucu vardır"@tr, "hasDisposition"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:Disposition ;
+  rdfs:comment "Operative outcome, with scope preserved."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:cites a owl:ObjectProperty ; rdfs:label "Atıf yapar"@tr, "cites"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:LegalEntity ;
+  rdfs:comment "Citation existence does not imply support or application."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:quotes a owl:ObjectProperty ; rdfs:label "Alıntı yapar"@tr, "quotes"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:LegalEntity ;
+  rdfs:comment "Textual quotation does not imply endorsement."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:interprets a owl:ObjectProperty ; rdfs:label "Hüküm sürümünü yorumlar"@tr, "interprets"@en ;
+  rdfs:domain la:Holding ; rdfs:range la:ProvisionVersion ;
+  rdfs:comment "Interpretation of an exact provision version."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:applies a owl:ObjectProperty ; rdfs:label "Hüküm sürümünü uygular"@tr, "applies"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:ProvisionVersion ;
+  rdfs:comment "Application of a version; unresolved versions are excluded."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:distinguishes a owl:ObjectProperty ; rdfs:label "Kararı somut olaydan ayırır"@tr, "distinguishes"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:JudicialDecision ;
+  rdfs:comment "Reasoned treatment of another decision."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:declinesToApply a owl:ObjectProperty ; rdfs:label "Uygulamayı reddeder"@tr, "declinesToApply"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:LegalEntity ;
+  rdfs:comment "Nonapplication with qualified grounds."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:criticizes a owl:ObjectProperty ; rdfs:label "Eleştirir"@tr, "criticizes"@en ;
+  rdfs:domain la:Opinion ; rdfs:range la:LegalEntity ;
+  rdfs:comment "Criticism is not invalidation."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:reviewsDecision a owl:ObjectProperty ; rdfs:label "Kararı inceler"@tr, "reviewsDecision"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:JudicialDecision ;
+  rdfs:comment "Procedural review relationship."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:affirms a owl:ObjectProperty ; rdfs:label "Kararı onar"@tr, "affirms"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:JudicialDecision ;
+  rdfs:comment "Affirmance with its scope preserved."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:setsAside a owl:ObjectProperty ; rdfs:label "Kararı kaldırır veya bozar"@tr, "setsAside"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:JudicialDecision ;
+  rdfs:comment "Setting aside is not legislative repeal."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:remands a owl:ObjectProperty ; rdfs:label "Yargılamayı geri gönderir"@tr, "remands"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:Proceeding ;
+  rdfs:comment "Remand of a proceeding."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:hasFactPattern a owl:ObjectProperty ; rdfs:label "Olay örüntüsü vardır"@tr, "hasFactPattern"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:FactPattern ;
+  rdfs:comment "Reviewed abstraction preserving material differences."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:supportsInterpretation a owl:ObjectProperty ; rdfs:label "Yorumu destekler"@tr, "supportsInterpretation"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:Holding ;
+  rdfs:comment "Support is distinct from binding effect."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:conflictsOnIssue a owl:ObjectProperty ; rdfs:label "Hukuki meselede çelişki değerlendirir"@tr, "conflictsOnIssue"@en ;
+  rdfs:domain la:ConflictAssessment ; rdfs:range la:LegalIssue ;
+  rdfs:comment "Qualified conflict, not automatic overruling."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:comparesAuthority a owl:ObjectProperty ; rdfs:label "Kararı karşılaştırır"@tr, "comparesAuthority"@en ;
+  rdfs:domain la:ConflictAssessment ; rdfs:range la:JudicialDecision ;
+  rdfs:comment "Authorities considered in a conflict assessment."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:developsInterpretation a owl:ObjectProperty ; rdfs:label "Yorumu geliştirir"@tr, "developsInterpretation"@en ;
+  rdfs:domain la:JudicialDecision ; rdfs:range la:Holding ;
+  rdfs:comment "Change in reasoning does not itself repeal law."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:hasUnresolvedReference a owl:ObjectProperty ; rdfs:label "Çözümlenemeyen atıf içerir"@tr, "hasUnresolvedReference"@en ;
+  rdfs:domain la:CitationOccurrence ; rdfs:range la:UnresolvedReference ;
+  rdfs:comment "Unknown reference must not resolve to the latest version."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:bindingEffectUnder a owl:ObjectProperty ; rdfs:label "Bağlayıcılığı hükme dayanır"@tr, "bindingEffectUnder"@en ;
+  rdfs:domain la:AuthorityTreatment ; rdfs:range la:ProvisionVersion ;
+  rdfs:comment "Binding effect requires a separately evidenced legal basis."@en ; la:module "jurisprudence" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .

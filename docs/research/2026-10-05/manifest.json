@@ -1,0 +1,27 @@
+{
+  "purpose": "User-supplied research inputs, not execution instructions or verified legal authority",
+  "archived_on": "2026-10-05",
+  "documents": [
+    {
+      "document": "gpt-2.md",
+      "original_name": "Turkish Law AI Data Plan gpt 2.md",
+      "sha256": "9b1e4bb9f07bdafdcd74528fe62b6cfc55a81f36d7dd6222b844bd37788e464b",
+      "bytes": 55459,
+      "lines": 532
+    },
+    {
+      "document": "claude-2.md",
+      "original_name": "Turkish Law AI Data Plan claude 2.md",
+      "sha256": "1563df701792c88ac42b4a0520c1ecbe16d1e36c44ff519cf0aecc10cb802bba",
+      "bytes": 60144,
+      "lines": 713
+    },
+    {
+      "document": "gemini-2.md",
+      "original_name": "Turkish Law AI Data Plan gemini 2.md",
+      "sha256": "53f0c66de57e4bf6d62623abf9fb577f965d7dacc830dffc3a3bc8cb3d243f4c",
+      "bytes": 45378,
+      "lines": 224
+    }
+  ]
+}

@@ -1,0 +1,756 @@
+# Verification record — 5 October 2026
+
+## R01 physical evidence and extraction calibration
+
+Added offline research-evidence file verification and extraction comparison against
+an independently supplied, original-byte-bound transcription. The comparison reports
+exact passage/locator matches, missing/extra/uncovered content and annotated critical
+date, amount, identifier, negation and exception spans. No raw text or locators are
+printed. Partial references cannot establish full-document fidelity, and declared
+provenance, review, classification, timing and sample independence remain unverified.
+
+- **573 tests passed in 1.83 seconds**, with one existing Starlette/httpx deprecation
+  warning, across qualification, calibration, extractor/worker, evaluation,
+  provider-policy and source-gateway suites. This is a focused regression run, not
+  the complete backend suite. Project-wide Python Ruff passed.
+- Adversarial cases cover corrupt/missing/linked/special/oversized files, exact
+  inventories, changed file and ancestor bindings, duplicate/malformed/nonfinite
+  JSON, depth and total-node work limits, source/reference hash mismatches, altered
+  dates/amounts/negation, order/locator changes, partial and empty references, and
+  confidential data in diagnostics. Both old `check` and new file-reading commands
+  now use the shared descriptor-based capture; `check` requires exactly five files.
+- Independent review identified a wide-JSON allocation risk and the legacy
+  ancestor-link race. Both were fixed with regression tests. Final review found no
+  remaining material issue in the inspected tools and their documented boundaries.
+- Built separate **`lawyer-assistant-api:r01-calibration`**, linux/arm64, image ID
+  `sha256:ab662a3cdb5fe7a43c18e3e3c881e3520a010c4d078d54c7de2dd12a62a20641`.
+  Disposable non-root containers ran with networking disabled, read-only root,
+  capabilities dropped, no new privileges, bounded memory/processes and `/tmp`.
+  No credentials or application data volumes were supplied.
+- Host/container dossier, existing schema, calibration schema and sample comparison
+  outputs were **byte-identical**. Only the invented sample directory was mounted
+  read-only for comparison, under the host's non-root UID. The dossier fingerprint
+  remains `f0912c6dddc17f97d43366e226861ab3717c48df4cae410823350d9dc7355e7b`.
+- A separate container running as image UID **10001**, with no host mounts, generated
+  a synthetic package through the actual bounded TXT parser. All **three passages**
+  and **four critical spans** matched the independent literal reference. The exception
+  category was unannotated and remained null. Changed negation with an updated
+  extraction hash exited **1**; corrupted evidence exited **2**. Empty evidence
+  returned `no_records`, and matching synthetic evidence returned `hashes_verified`
+  without authenticating reviews or granting permission.
+
+The generator records real elapsed time for its invented parser call including
+startup; this is not representative legal-corpus throughput or lawyer-review time.
+It creates new private files only and never edits the seed dossier. CI now includes
+generation and comparison. These engineering checks leave R01 partial: representative
+lawful samples, independent review and rights/privacy/provider decisions remain open.
+No graph publication, real-source acquisition, BYOK call, application runtime/UI or
+credential change was made. The running Compose service was not rebuilt or requalified.
+
+Evidence in `.data/verification/`: `test-r01-calibration.txt`,
+`build-r01-calibration.txt`, `r01-calibration-generation.json`,
+`r01-calibration-host-*.json`, `r01-calibration-docker-*.json`, and the private
+`r01-calibration-sample/` synthetic package. See
+[operator commands and limits](R01_QUALIFICATION.md).
+
+## R01 offline qualification contracts
+
+Implemented five strict planning components and a read-only inspection/schema CLI.
+The seed catalogs contain 27 source families and 21 assets, with 480 use observations,
+81 source reviews and 42 asset reviews all pending. All three BYOK provider plans
+remain disabled/unqualified. Analysis and scenario examples are synthetic; the
+scenario is preparation-only, privacy-unassessed and non-dispatchable.
+
+- **384 tests passed in 0.72 seconds** across the four new contract/CLI suites and
+  existing evaluation, provider-policy and source-gateway regressions. This is a
+  focused run, not a rerun of the full backend suite. Project-wide Python Ruff passed.
+- Adversarial checks cover duplicate/dangling references, malformed/oversized/deep
+  JSON, coercion, linked/special files, changed captures, confidential-value omission,
+  non-authorizing output, unknown temporal validity, explicit condition polarity,
+  critical evidence defects, unrelated corrections, scenario role/date/threshold
+  preservation, disabled providers, and separation of real/synthetic calibration.
+- Independent review reproduced and then verified fixes for catalog-identifier
+  echoing and exception polarity. The final review found no remaining material issue.
+- Built **`lawyer-assistant-api:r01-qualification`**, linux/arm64, image ID
+  `sha256:c3044529b8a0304fe9cf6f0c0b82873653de5617eac1b480c2ea349ff9f7356a`.
+  Disposable non-root containers with networking disabled, a read-only filesystem,
+  no capabilities, no deployment volumes and no supplied credentials ran both CLI
+  commands successfully. Report and schema output match the macOS outputs byte-for-byte.
+- Dossier input fingerprint:
+  `f0912c6dddc17f97d43366e226861ab3717c48df4cae410823350d9dc7355e7b`.
+  This identifies the five seed inputs, not legal authenticity or a trusted signature.
+
+R01 is partial: no real sample measurements, rights/legal/privacy approvals, source
+publication, corpus population, BYOK calls or legal-analysis runtime were added.
+The container rehearsal used a separate image tag; the running Compose application,
+its credentials and its data were not changed or requalified. No frontend behavior
+changed, so browser checks and frontend rebuilds were not repeated. CI now validates
+the seed dossier without treating a successful check as a release gate.
+
+Evidence in `.data/verification/`: `test-r01.txt`, `build-r01.txt`, `r01-report.json`,
+`r01-schemas.json`, `r01-docker-report.json` and `r01-docker-schemas.json`.
+See [R01 operator usage and remaining gates](R01_QUALIFICATION.md).
+
+## Evidenced open-ended legal validity
+
+The mapping review now distinguishes a finite end, an unknown end and an explicitly
+reviewed open-ended status. The last requires a known start, an inclusive
+checked-through date and a separately inspected exact supporting passage from the
+same immutable source representation. A missing end alone remains unknown. UTC
+review/recording dates bound the cutoff; it cannot be projected into the future.
+
+- The full backend/backup run passed **1,483 tests** in 594.00 seconds, with 27
+  existing dependency warnings. Seven search-prefilter cases added after that
+  run's collection passed within the final 58-case focused temporal suite;
+  current collection is **1,490**. The separate 151-case graph/runtime/search
+  regression also passed. These focused counts overlap the full suite and must
+  not be added together. Project-configured Ruff and ontology validation passed;
+  the ontology remains legally unreviewed with no published historical records.
+- Preparation and independently signed publication retain the validity passage
+  separately from provision text. SHACL, physical-source validation and runtime
+  checks reject absent, private, changed or mismatched proof; overlapping versions
+  are rejected across graph families. An open interval remains unbounded for
+  conflict detection, including at `date.max`.
+- Retrieval includes an open-ended version through its cutoff, then excludes it
+  from dated applicability results. History and `get_evidence` can still expose
+  the original passages with applicability explicitly unestablished. Unknown or
+  malformed intervals do not become eligible through history. Search projects
+  temporal metadata from signed RDF, never from untrusted index metadata.
+- **Four end-to-end publication tests** passed in 60.52 seconds with disposable
+  source ledgers and test signatures, covering preparation, guarded installation
+  and activation, runtime graph checks, search and invalidation after review change.
+  None of these signatures, source reviews or releases entered the live corpus.
+- **Six real-Jena checks** passed on the rebuilt Fuseki image: two edges on the
+  checked-through day, zero the following day, one historical result, one evidence
+  inspection result and the exact separate proof. The container had no network,
+  capabilities or persistent volumes; its TDB was temporary and removed.
+- **83 frontend tests** and the production build passed. Browser acceptance used a
+  dedicated synthetic source and local demo: the save action stayed disabled until
+  separate proof preview; the stored review preserved cutoff `2025-12-31` and proof
+  span `0..58`, distinct from provision body `60..125`. The saved record displayed
+  the re-review requirement. Demo processes were stopped after verification.
+- Docker API/extractor, Fuseki and web were rebuilt and deployed. All eight
+  services are healthy; API/Fuseki module hashes match the workspace and served
+  web assets match the production build. App/health return 200 and protected
+  readiness returns 401 without authentication. The real source retains 94
+  passages with rights/legal review pending; review/mapping ledgers, private
+  authorizations and both public graphs remain empty, with no active release or
+  publication epoch. Production login was not retested or reset.
+- Provider metadata initially returned unavailable during final verification.
+  Subsequent relay/models checks and the final authenticated metadata probe
+  succeeded without changing credentials, routing or engine settings. No generation
+  or client-matter transmission was performed for this packet. This recovered
+  observation does not establish sustained tunnel availability.
+
+Finite-date mapping serialization and identities are retained. The ontology digest
+has changed: old preparation packets must be prepared and independently reviewed
+against the new digest before publication. This work does not rewrite sealed
+history, provide real legal approval, or establish corpus completeness. Publication
+remains limited to single-source provisions; bounded multi-source authorization
+and five-job performance qualification are next in the roadmap.
+
+Evidence in `.data/verification/`: `test-validity-full.txt`, `lint-validity.txt`,
+`validate-validity-ontology.txt`, `test-validity-frontend.txt`,
+`build-validity-frontend.txt`, `open-validity-publication.json`,
+`validity-jena/results.json`, `validity-browser-result.json`,
+`validity-deployment.json`, and the `build-validity-*` / `deploy-validity.txt` logs.
+
+## Explicit laptop-tunnel exception
+
+The user authorized the existing laptop tunnel as a narrowly scoped exception.
+The deployed API keeps its fixed private relay route; the relay alone can use
+one approved HTTPS hostname and startup-pinned public IPv4. Exact approval,
+TLS hostname verification, request-route fingerprint checks before upstream
+forwarding and relay-generated response metadata prevent silent route changes.
+Native mode remains the default with blank URL/host and `false` approval.
+Arbitrary external providers, redirects, administration routes, model substitution
+and cloud fallback remain prohibited.
+
+- **289 focused backend tests** passed (one existing dependency warning), including
+  provider, relay, readiness and workspace tests. Project-configured Ruff passed.
+  **80 frontend tests** and the production build passed. The transport label is
+  tested inside the existing collapsed readiness details. This packet did not
+  rerun the full legal-publication suite or production browser login.
+- Fresh, secret-free native checks matched the existing API key to the active
+  `lawyer-assistant-v1` / `org-lawyer` / `lawyer-assistant-v1-primary` identity.
+  Authenticated model metadata identifies local `ministral-3:8b` on Ollama with
+  `max_model_len=32768`; the app uses an 8192 context budget. Effective process
+  environment and startup configuration show cloud fallback disabled. This is
+  configuration evidence, not a signed runtime attestation or forced-failure test.
+- Local tunnel-agent metadata maps the approved hostname to the same native
+  engine at `127.0.0.1:8080`. The malformed `/v1.` configuration was corrected to
+  `/v1`, the exact exception enabled, and independently verified identity/fallback
+  attestations set. The API key and all unrelated credentials were preserved.
+- Docker API, web and relay images were rebuilt. All eight services are healthy.
+  Deployed provider/config/readiness/research/preflight and relay/entrypoint hashes
+  match the workspace; served web index matches the new production build. App and
+  health return 200; unauthenticated readiness returns 401. Web was recreated after
+  API replacement to refresh its firewall destination.
+- Live `Provider.probe()` through the approved HTTPS tunnel returns ready. One
+  synthetic generation returned one exact source quote with the correct evidence
+  identifier. No client document or legal matter was used. This establishes
+  bounded connectivity and quote behavior, not Turkish legal accuracy.
+- Missing and incorrect route fingerprints return 409 before upstream access;
+  admin access returns 404. Direct public TCP from the API is blocked. Fifteen
+  relay isolation checks passed: process UID/GID 10003, no effective capabilities,
+  no provider credentials or persistent mounts, no published port, only dedicated
+  provider networks, exact pinned-IP TCP443 egress and blocked other addresses,
+  ports and post-bootstrap DNS. Health remains a process-only check.
+
+This mode uses internet transport and is **not air-gapped**. Tunnel request
+inspection was observed enabled; zero-retention qualification is not established.
+The tunnel and engine's inspection, retention and telemetry controls require
+separate qualification before client-matter use. No shared engine settings were
+changed, no real legal review or publication occurred, and production login
+credentials were not reset or tested.
+
+Evidence in `.data/verification/`: `provider-activation-metadata-2026-10-05.json`
+(pre-configuration observation), `tunnel-native-preflight.json`,
+`tunnel-live-provider.json`, `tunnel-relay-isolation.json`, `tunnel-deployment.json`,
+`test-tunnel-backend.txt`, `test-tunnel-frontend-full.txt`, `lint-tunnel.txt`, and
+`build-tunnel-*` / `deploy-tunnel.txt`. This section supersedes the blocked-provider
+checkpoint below; earlier graph/publication evidence retains its original scope.
+
+## Freshness-bound publication and retrieval
+
+The full backend/backup regression passed **1,257 tests** in 475.03 seconds
+(27 existing warnings and 8 subtests). Final focused runs after the last edits
+passed 25 CLI/conversion/restore tests, 59 search/real-authorization integration tests
+and 29 retained-work/workspace tests. These runs overlap; current collection is
+1,262 tests. Project-configured Ruff passed. No frontend source changed.
+
+- External test signatures exercise the complete private packet → reviewed graph
+  → signed bundle → private authorization → installation → activation path. Missing
+  or forged authorizations, changed source/rights/mapping/owner state, changed epoch,
+  expired scope, extra signed private files and mismatched public bytes are rejected.
+- Four disposable PostgreSQL publication races prove writers wait during guarded
+  activation, old authorization fails after the writer commits, and a writer-first
+  revision prevents pointer creation. Eighteen snapshot races also passed with
+  verified 5-second row-lock and 15-second statement limits. Containers were removed.
+- Network-none Linux rehearsal against the rebuilt API image accepted only isolated
+  test signatures, installed/activated the synthetic source, verified runtime
+  authorization, rejected missing guards and blocked reuse after epoch removal.
+  Public-file canary scans found no private review identity, proof hash or notes.
+  A separate disposable-volume test verified UID 10001/GID 10002 publication writes
+  after initialization by UID 10002. The temporary volume was removed.
+- Graph/search use, final research saving, review and export enforce continuing
+  authorization. Search rejects fabricated or differently chunked evidence despite
+  a matching release label and projects metadata only from the signed graph.
+  Post-commit guard failures preserve a pending revalidation marker and return
+  truthful saved-product/review receipts; they do not claim an actual rollback.
+- Restore invalidates the historical epoch while retaining review records. No real
+  source review, signing key, deployment permission or graph activation was created.
+  Initial publication remains limited to closed-date, single-source provisions.
+
+Evidence: `.data/verification/test-publication-full.txt`,
+`test-publication-final-root.txt`, `runtime-authorization-final-results.json`,
+`publication-postgres-results.json`, `publication-runtime-result.json`,
+`publication-permissions-result.json`, and `publication-test-inventory.txt`.
+See [publication contract and limits](PUBLICATION_AUTHORIZATION.md).
+
+Final Docker verification: all eight services are healthy; API/Fuseki module and
+CLI hashes match the workspace, and the unchanged web assets match the previous
+frontend build. App and health return 200, protected mapping access returns 401.
+The publisher runs as UID 10001/GID 10002 with read-only private/source mounts and
+no provider credentials. Graph-volume permissions were initialized without an
+active release. The live source still has zero review/mapping heads or events,
+zero private authorizations and no publication epoch; no legal release is active.
+Evidence: `publication-live-result.json`, `publication-publisher-runtime.txt`,
+`publication-graph-initialize.txt`, and the build/deploy publication logs.
+
+
+At this 4 October checkpoint, provider readiness differed from the earlier preparation checkpoint below:
+`.env` was changed outside this packet (observed file modification 2026-10-04
+15:23:15 UTC). It now points to a public tunnel, leaves the model unset and lacks
+identity/fallback attestations. The final probe reports `ready=false` with
+`provider_model_missing`, `provider_origin_prohibited`,
+`provider_identity_unverified` and `provider_cloud_fallback_unverified`. The app
+fails closed; root `.env` and credentials were not changed by this packet.
+
+
+## Revision-bound graph review preparation
+
+The offline preparation CLI and the draft-publication guard are deployed. All
+eight services are healthy at `http://127.0.0.1:8081`. Deployed snapshot/compiler
+modules, CLI and API/Fuseki release-validator hashes match the final workspace.
+The web image is unchanged and its served asset references still match the prior
+verified production build. The web service was recreated after the API.
+
+- The full regression run passed **1,136 tests** (156.17 seconds,27 existing
+  warnings). After adding the RDF expansion cap, the final affected compiler/CLI
+  suites passed **137 tests** (7.10 seconds), including the new boundary case.
+  Current collection is **1,137** backend/backup tests; do not sum the overlapping
+  runs. New suites comprise64 compiler,42 snapshot,73 CLI/integration and37
+  publication-gate tests. Project-configured Ruff and final Docker API/Fuseki builds
+  passed. No frontend source changed; its previous79-test/build result is retained.
+- The compiler validates explicit registry types/parents, source/version/span
+  bindings, exact current events and required proof bytes. Unknown acquisition,
+  either validity endpoint, unresolved identities and unsupported text roles block
+  RDF; nothing silently defaults to current law. Conflicting intervals and collapsed
+  version identities reject preparation. Evidence splits preserve Turkish Unicode,
+  CRLF and original locator boundaries, including clipped multi-passage spans.
+- Rights and identity evidence are retained privately with hash-match-only status;
+  they are not automatically legally authenticated. Candidate RDF excludes private
+  canaries, reviewer names/notes, firm/operator IDs and reference strings. Its event
+  timestamp remains private workflow provenance within the confidential packet;
+  later publication must independently review that provenance. Registry entries
+  and generated assertions are proposals, never automatically legally reviewed.
+- Tests reject forged identities with recomputed unsigned inventories, changed
+  evidence, wrong deployment seals, ontology drift, traversal, symlinks, hard links,
+  special files, extra files and simultaneous output creation. Output files are
+  mode0600 in mode0700 directories. No-replace rename is atomic on tested macOS and
+  Linux. Post-output checks remove only the newly created inode on failure and
+  preserve unrelated replacement data. Private exception details never reach CLI
+  output. Expansion beyond25,000 assertion/evidence links fails before RDF allocation.
+- An isolated PostgreSQL **16.13** rehearsal covered18 races. Nine snapshot-first
+  cases used `pg_blocking_pids` to prove source changes, mapping rejection or owner
+  deactivation waited on a different connection; validation rejected old bindings
+  after those writes. Nine writer-first cases rejected preparation immediately.
+  The disposable container was removed. The reader performs no schema bootstrap,
+  key/account creation, review/audit writes or commits.
+- A real CLI rehearsal used conspicuous synthetic records and physical test proof.
+  Host macOS and the final Linux API image produced byte-identical sealed packets
+  with two candidate assertions, split evidence and unchanged originals. A second
+  Linux preparation was deterministic; existing-output replacement was rejected.
+  The Linux runs used `--network none` and no production data or credentials.
+- Publication tests reject the preparation predicate regardless of value or graph
+  family, including false/string/IRI forms. A valid exact Ed25519 approval cannot
+  admit an intact marked draft, even after hashes and partitions are recomputed.
+  Both final API and Fuseki images independently passed the marker rejection check.
+  These tests do not create actual legal approval. Privileged removal of the marker
+  followed by a newly authorized signature is a separate manual publication act;
+  the future promotion contract must enforce live freshness there.
+- Deployed no-write checks confirmed that the single TBMM enacted6101 source is
+  still staged with94 verified passages and unchanged raw/text hashes. Rights and
+  legal review are pending, and all four source-review/mapping tables remain empty.
+  The snapshot helper correctly rejects that unreviewed live source. No active
+  graph release is present. Web/health returned200; the unauthenticated mapping
+  route returned401. The deployed provider probe remains ready for local
+  `ministral-3:8b`; no inference was repeated for this packet.
+
+| Deployed image | Image ID |
+|---|---|
+| api | `sha256:62bacac03de47e82ebbddbc3e24be31e258d7ea63fc7e214f43f443bc311e9c4` |
+| web (unchanged) | `sha256:0fc37c15958f53a6b310334027c78200ce9fbded989534a4ce6285fe6e038ff1` |
+| fuseki | `sha256:c8e57a47345149b1140577ed6760be38d6d9aa1404912ddb136418896b5a53a5` |
+
+Evidence under gitignored `.data/verification/`: `test-preparation-final.txt`,
+`test-preparation-final-additions.txt`, `preparation-test-inventory.txt`,
+`preparation-postgres-results.json`, `preparation-runtime-result.json`,
+`preparation-live-result.json`, and final build/deploy logs. The synthetic
+`preparation-demo/` directory is separate from live volumes and contains no real
+legal approvals. Disposable rehearsal containers are removed; no browser/UI
+acceptance claim is added because this packet introduces an offline operator CLI.
+
+Preparation is complete; promotion, trusted legal signing and freshness checks
+at installation/activation/rollback remain the next milestone. Real legal review,
+source rights, national ontology signoff and legal model qualification are still
+required. No credentials or provider configuration were changed.
+
+## Exact provision mapping and corrected provider activation
+
+The new provision-mapping workspace is deployed at `http://127.0.0.1:8081`, under
+**Kaynak kapsamı → Kaynağı incele → Madde eşleştirmelerini aç** for active
+admins/curators. All eight Compose services are healthy. Eight relevant deployed
+API module hashes and the served web asset references match the tested workspace.
+The web service was recreated after the API to refresh its pinned network target.
+
+- **915 backend tests plus six backup contract tests passed** (921 total,
+  142.85 seconds), including 57 candidate, 83 mapping and 69 source-review tests.
+  **79 frontend tests**, strict TypeScript/Vite build, project-configured Ruff
+  and Docker API/web builds passed. Existing Starlette/RDFLib warnings remain.
+- Candidate extraction preserves exact Unicode text, CRLF and ambiguous/repeated
+  headings; it separates ordinary, temporary and additional articles. It nominates
+  spans only. Acceptance requires verified non-whitespace passage coverage,
+  explicit identity/version references, evidence and four current source reviews
+  with the required local-use permissions. Unknown dates remain null.
+- Encrypted mapping heads/events bind firm, source, revision and event identity.
+  Both ledgers reconstruct their latest decisions from bounded histories, rejecting
+  older-approval substitution, hidden newer events and replayed head revisions.
+  Every mapping write requires the source-review owner and both current revisions.
+  Source changes make accepted mappings stale without rewriting prior decisions.
+- Isolated PostgreSQL **16.13** testing used two real database sessions in each
+  of 15 scenarios. Five proposal races and five review races each returned one200
+  and one409. In three acceptance-first races, the later source change made the
+  accepted mapping stale. In two source-change-first races, acceptance returned409.
+  All source-change results blocked handoff. The disposable container was removed.
+- Isolated browser QA covered 25-heading pagination, temporary-article selection,
+  proposal creation, acceptance blocked before source prerequisites, exact-span
+  correction and preview, separate references/role and unknown dates. A concurrent
+  source change produced a visible conflict, preserved the draft, marked the
+  mapping stale and required explicit reaffirmation. The resulting saved span was
+  `[1569,1630)` at mapping revision3/source-review revision6. Full-screen and normal
+  three-panel views rendered correctly. No real legal assessment was entered.
+- The isolated export returned the exact current state as an unsigned,
+  firm-confidential, non-publication-eligible JSON attachment with `no-store`.
+  HTTP export is verified; browser file-save completion was not tested for this
+  packet. Its temporary API, Vite process and browser tab were closed.
+- Live read-only checks found one staged TBMM enacted6101 source, its unchanged
+  raw/text hashes and all94 verified line passages. The adapter found14 headings;
+  these remain machine candidates. All four source-review/mapping tables contain
+  **zero records**. Rights and legal review remain pending; no source promotion,
+  indexing, graph release or fabricated approval occurred.
+- Live web/health returned200 and all four new unauthenticated mapping/candidate/
+  span/export endpoints returned401. Signed-in production browser acceptance still
+  requires the existing account credentials: the current bootstrap password does
+  not match the stored account hash. No password was changed or bypassed.
+
+The user-corrected provider key now passes local native-engine registry binding
+for tenant `lawyer-assistant-v1`, organization `org-lawyer`, key ID
+`lawyer-assistant-v1-primary`, and authenticated `/v1/models` checks. The deployed
+restricted relay reports local `ministral-3:8b` (`ollama_http`), advertised
+context32768 with client budget8192. A real deployed-adapter completion reproduced
+one supplied synthetic Turkish sentence with its exact evidence ID in2.62 seconds;
+no private documents were used. Readiness passed again after this deployment.
+
+Native startup-file/environment inspection found cloud fallback disabled; the
+configuration predates the running process and no overriding process variable
+was present. This is configuration evidence, not signed runtime attestation.
+No credentials, provider settings or attestations were changed by this packet.
+Turkish legal accuracy, representative context/load behavior and robust synthesis
+remain unqualified. The historical credential-mismatch observations below are
+superseded by this current provider verification.
+
+| Deployed image | Image ID |
+|---|---|
+| api | `sha256:01dc68281147600cfe57f1ff85396783116563ac13cecb46322c7048753cee11` |
+| web | `sha256:0fc37c15958f53a6b310334027c78200ce9fbded989534a4ce6285fe6e038ff1` |
+| fuseki (unchanged) | `sha256:6af8efbc57fef8f1dbb271ffa91adaecdd44d21e27f7cc20ebd42818a9b77b92` |
+
+Gitignored evidence: `test-provision-final.txt`, `provision-postgres-results.json`,
+`provision-browser-http-results.json`, `provision-live-result.json`,
+`provision-http-result.json`, `provision-deployed-images.json`,
+`provider-config-recheck.json`, `provider-grounded-completion.json`,
+`provision-mapping-ui.png`, `provision-mapping-exact-span-ui.png`, and the final
+Docker build/deploy logs under `.data/verification/`.
+
+Next is explicit identity resolution and a deterministic mapping-to-publication
+review adapter. Human review, trusted signing and first-corpus qualification
+remain separate gates; this packet does not establish ontology completeness.
+
+## Accountable source-review follow-up
+
+The new source-review workspace is deployed at `http://127.0.0.1:8081` under
+**Kaynak kapsamı → Kaynağı incele** for active admins/curators. All eight Compose
+services are healthy. Core deployed API module hashes match the workspace, and
+the served web asset references match the final local production build.
+
+- **772 backend tests plus six backup contract tests passed** (778 total,
+  135.91 seconds), including 66 source-review cases. The independently rerun
+  source/source-review suite passed 160 cases. **49 frontend tests**, strict
+  TypeScript/Vite build, project-configured Ruff and final Docker builds passed.
+  Existing Starlette/RDFLib warnings remain; no failing test remains.
+- An isolated PostgreSQL **16.13** rehearsal forced five competing initial claims
+  and five same-revision assessment pairs onto two actual database connections.
+  Every pair returned exactly one200 and one409. Five heads and ten events
+  remained, with no lost or duplicate writes. Same-revision cross-firm ciphertext
+  swaps and missing-event corruption returned409 for both read and export.
+  The disposable database/container was removed; production data was not used.
+- Review payloads bind their encrypted firm, source, head and revision context.
+  History requires contiguous expected revisions; latest assessments still
+  resolve their immutable event even outside the 50-event response window.
+  Tests cover ownership, CSRF, account/session/firm revocation, accepted evidence
+  requirements, source tampering, unsigned handoff and absence of public writes.
+- The isolated synthetic browser test exercised catalog navigation, exact escaped
+  Turkish passage text, 20-item pagination, local guidance, assignment, four
+  assessment categories, scoped uses and extraction passage selection. A negative
+  reassessment removed handoff readiness. A concurrent change produced a visible
+  conflict, preserved the unsaved note and required explicit retry. Releasing
+  ownership disabled further assessments. Full-screen review rendered correctly.
+- Original bytes and the confidential JSON dossier passed actual HTTP checks in
+  that isolated harness, including attachment headers, unsigned status and exact
+  original-byte equality. The browser download observer timed out, so an actual
+  browser file-save completion is **not confirmed**. This is distinct from the
+  verified download response and the UI's completed click.
+- On the deployed application, both new review tables contain **zero records**.
+  The single staged TBMM enacted6101 source still verifies all94 passages and
+  remains `staged`, `rights_pending`, `legal_review_pending`. No real legal or
+  rights assessment, source promotion, search indexing or graph publication was
+  performed. Public source packages remain read-only.
+- Deployed web and health routes return 200; unauthenticated passage, original,
+  review and dossier routes return401. Signed-in production browser acceptance
+  remains pending the existing account credentials; the prior password mismatch
+  was not bypassed or reset. Synthetic browser acceptance is recorded separately.
+- The read-only provider preflight again maps the configured key to
+  `domain-trajectory-data-generation` / `org-trajdata`, not the lawyer tenant.
+  No key, password or attestation was changed; no inference was performed.
+
+| Deployed image | Image ID |
+|---|---|
+| api | `sha256:3e48fa2080650b1d88a37753c19df77edb7424c2cf0e649f67edbbfcad26d68d` |
+| web | `sha256:f291b5a45ab79243726ce31e4b4fc666baeadf44edabedcf4940b3b77b8d1b0b` |
+| fuseki (unchanged) | `sha256:6af8efbc57fef8f1dbb271ffa91adaecdd44d21e27f7cc20ebd42818a9b77b92` |
+
+Gitignored evidence under `.data/verification/`: `test-source-review-final.txt`,
+`source-review-postgres-results.json`, `source-review-live-result.json`,
+`source-review-http-result.json`, `source-review-deployed-images.json`,
+`source-review-ui.png` and final Docker build/deploy logs. Synthetic UI data is
+isolated in `source-review-demo/`; it is not part of the live source volume or a
+qualified legal corpus. Its temporary API and Vite processes were stopped.
+
+This packet supplies accountable review tooling. It does not establish national
+ontology signoff, legal correctness, source rights, a reviewed corpus or evaluated
+model synthesis. Provision mapping and independently approved release preparation
+remain the next development steps.
+
+## Immutable graph serving and public-source staging follow-up
+
+The final application/API and Fuseki images were rebuilt and deployed. All eight
+Compose services are healthy at `http://127.0.0.1:8081`; core deployed source hashes
+match the workspace. API graph/source/trust mounts and the Fuseki release/trust
+mounts are read-only. No live graph release or review trust key was installed.
+
+- Final regression result: **661 backend tests plus six backup contract tests
+  passed** (667 total, 126.44 seconds). Frontend: **32 tests** and strict
+  TypeScript/Vite production build passed. Project-configured Ruff,
+  RDF/SHACL and both optional Compose profiles validated. Existing Starlette and
+  RDFLib deprecation warnings remain; no test failure remains.
+- Isolated real-Jena rehearsals compiled both signed test families, rejected
+  mutation/admin routes, kept publication locked while the JVM ran, and returned
+  a nonlegal citation's exact quote/hash/offsets across shared family resources.
+  Publisher UID 10002 and API reader UID10001 succeeded with normal image/volume
+  permissions. Temporary keys, releases, containers, networks and volumes were
+  removed; these rehearsals do not constitute legal review or corpus publication.
+- Signed-source checks independently enforce identity, scope, rights, temporal
+  eligibility, provision resolution and bounded paths. Copied bytes are checked
+  before parsing/compilation; active-pointer/trust changes close readers and prevent
+  mixed-snapshot research publication. Restrictive umask and cross-UID access pass.
+- The registered-source adapter acquired TBMM's **enacted 6101 text**, 17,537 bytes,
+  raw SHA256 `dbc85863a7a5b93aab7736b1fcf19d13180bbc6ecdb7252b619cc4c68d84b064`.
+  Its first attempt failed without diagnostic detail; a bounded repeat through
+  the same isolated path succeeded. Fixed diagnostic categories and confirmed
+  worker removal now distinguish future failures without exposing source content.
+- Mandatory local ClamAV returned clean with signature version28142. Network-none
+  extraction strictly decoded the explicit Windows-1254 declaration; original
+  bytes were unchanged, UTF-8 text contains no replacement characters, and **94
+  exact Unicode line spans** validated. These are extracted line spans, not reviewed
+  provision identities. Reading order, omissions and source fidelity still require
+  review. The source explicitly excludes later amendments and is not current
+  consolidated law.
+- A network-disabled UID10001 importer admitted one package to the separate
+  public-source volume. The API container independently verified every artifact
+  and span. Its states remain `staged`, `rights_pending`, `legal_review_pending`;
+  no rights/identity approval was fabricated. Source ID:
+  `2500cfa4099821e7f1ab1dd044f51ecd2037cd03a2841d4a09128eac7a27c264`.
+- Actual runtime graph queries return zero triples for both datasets. Update and
+  admin routes return404; API graph reads remain unavailable without a reviewed
+  active release. The web/health endpoints return 200 and unauthenticated
+  source/coverage requests return401. The public runtime gateway remains disabled.
+- Signed-in browser verification is **pending**: the existing active account's
+  stored password differs from the current `.env` bootstrap password. Both browser
+  and normal API sign-in returned401; a read-only password-hash comparison confirmed
+  the mismatch. No password, session, account or credential was reset to bypass it.
+  The user was asked to sign in with their current credentials. Container/store
+  integration and automated authorization tests are distinct from that UI check.
+
+The local provider preflight still maps the configured key to a different tenant;
+identity and fallback attestations remain false, and no generation was performed.
+The full roadmap, licensed source acquisition, legal-owner approval, adjudicated
+retrieval/synthesis evaluation and customer pilot remain incomplete.
+
+The encrypted cold archive is now v2 with five roots, including public-source
+staging. Six archive contract tests cover fresh-target validation and harmless
+empty Fuseki scaffolding; a full encrypted restore drill remains unqualified.
+Operators must quiesce standalone publishers/importers as well as Compose services.
+Independent trust keys and scanner signature bind mounts need separate protected
+recovery copies. Root `.env` remains gitignored and mode0600.
+
+| Deployed image | Image ID |
+|---|---|
+| api | `sha256:aa0365a611e1657f526a75d7a346a0a56843694146929147b85ddd72a0aa332b` |
+| web | `sha256:6c22fae24e4a50018ae08f90a550d6ddab66c0eda278169497b4f634e3aec69f` |
+| fuseki | `sha256:6af8efbc57fef8f1dbb271ffa91adaecdd44d21e27f7cc20ebd42818a9b77b92` |
+
+Local evidence (gitignored): `deployed-images.json`, `release-live-result.json`,
+`public-source-admission.json`, `public-source-import.json`,
+`fuseki-serving-rehearsal.json`, `fuseki-serving-nonempty-rehearsal.json` and
+`test-final.txt` under `.data/verification/`. Acquisition/raw/admission inputs are
+retained under `.data/public-staging/`; these host-side receipts are separate from
+the immutable staged package and should be retained with the operator review archive.
+
+## Local intake, provider boundary and readiness follow-up
+
+Current deployed engineering verification supersedes the earlier scanner-unavailable
+state below. Eight Compose services (including the optional native-provider relay)
+are healthy; the app remains at `http://127.0.0.1:8081`.
+
+- **484 backend tests pass**, including scanner protocol/signature admission,
+  provider metadata/relay, failed intake and session revocation during extraction.
+  **20 frontend tests**, strict TypeScript/Vite build, full Ruff, four archive-tool
+  tests and RDF/SHACL validation pass. One existing Starlette test-client warning remains.
+- Official signed CVDs verified before publication: main 63, daily 28142
+  (2026-10-03T06:24:16Z), bytecode 339. Runtime scanner has a read-only signature
+  mount, only the internal scanning network, no credentials and 3 GiB memory/no swap.
+  No runtime updater or internet route was enabled for it.
+- Actual authenticated production-mode API: clean synthetic TXT returned 201,
+  two exact passages, no extraction warnings and byte-identical original retrieval.
+  The standard in-memory EICAR test returned 422 without a document record;
+  an evidence-linked fact was saved. No client data was used. Two clearly labeled
+  technical fixture workspaces were reversibly archived after testing; the first
+  used malformed test bytes and was replaced before the successful EICAR check.
+- Browser: explicit timestamped service check reports intake ready and inference
+  blocked. Both extracted passages were visible. Stopping the scanner disabled
+  upload controls with actionable diagnostics while existing passages remained
+  readable; restarting and rechecking restored upload controls. Scanner is healthy again.
+- Native relay: PID 1 UID/GID 10003, zero effective/permitted/inheritable
+  capabilities, no-new-privileges, read-only root, no mounts/secrets/published ports.
+  Native host TCP8080 was reachable; public HTTPS, other native ports and Docker
+  DNS were denied in bounded probes. API-to-relay health returned 200, unauthenticated
+  model listing 401 and admin route 404. API direct public TCP443 was blocked.
+  These probes are not comprehensive network or hostile-code qualification.
+
+The actual root `.env` key, read through the application's Settings loader, still
+mapped to a different tenant in the protected native registry. Its value was never
+printed or changed. The local route and `ministral-3:8b`/8192-context configuration
+are staged, but identity and cloud-fallback attestations remain false. The engine
+file/process/startup evidence supports fallback disabled for that inspected
+deployment; it is not an API runtime guarantee. No authenticated lawyer-tenant
+completion or private inference was performed. Credential correction, effective
+fallback revalidation and grounded completion remain open.
+
+Local artifacts are gitignored: `.data/verification/intake-live-result.json`,
+`readiness-live.png` and `readiness-summary-live.png`. Root `.env` remains mode 0600;
+only nonsecret scanner/provider route settings were changed. The research gateway
+remains disabled. Public corpus population, legal review and legal accuracy metrics
+remain unqualified; this packet does not complete the 30–36 week roadmap.
+
+| Deployed image | Image ID |
+|---|---|
+| API/extractor | `sha256:0386b2a0c7522275b485417f6921a352f2b86f22e6f762bf998ce7c452e66bd0` |
+| Web | `sha256:bd0d21f58cfdb1d1cd53d5997e96d13aedd956a720da85de9818261aa407943e` |
+| Scanner | `sha256:f5e27bb0523b586350f123763246debbfef9b18e7c6f50f0fde76b1ac7582222` |
+| Native provider relay | `sha256:7a206fda41e32e389f5502fe7be16ac460c3191914560220f6050f64ad4b6cca` |
+
+## Customer/workspace workbench follow-up
+
+Implemented private customer-to-workspace many-to-many tags, permission-scoped
+customer/date filters, workspace files and append-only comments. Existing matter
+IDs and legal workflows remain compatible. The three-panel workbench provides
+independent collapse/focus, pointer and keyboard resizing, mobile panel selection,
+contextual guidance and on-demand portfolio summaries using Turkey calendar dates.
+
+- Backend regression suite: **369 passed**. The final bounded summary-display
+  adjustment was followed by **23 assistant tests** and a clean full Ruff check.
+- Frontend: **14 passed** and production TypeScript/Vite build passed.
+- Browser, isolated synthetic data: created a customer and tagged workspace,
+  saved a comment, uploaded/read a synthetic TXT file, verified its workspace
+  tree placement, applied customer/date filters and read scoped daily/weekly
+  summaries. Prior answers display staleness after saved changes.
+- Browser layout: all three panels collapsed/restored and entered/exited focus;
+  Escape restored the prior view. Keyboard resizing changed the left panel from
+  286 to 310 pixels; pointer dragging changed the right panel from 350 to 430.
+  A 700-pixel viewport supported panel switching and contextual guidance.
+- Docker: rebuilt API/web images and started all six default services healthy.
+  Authenticated browser verification at `http://127.0.0.1:8081` rendered the new
+  workbench and completed a daily summary against the actual empty portfolio.
+
+No synthetic customer/workspace records were inserted into the configured Docker
+database. Local screenshot evidence is gitignored under `.data/verification/`:
+`three-panel-workbench-demo.png` and `three-panel-workbench-live.png`.
+
+Provider configuration was inspected without exposing or changing secrets.
+Authentication success alone did not establish the required tenant binding;
+provider activation remains blocked. Readiness diagnostics disclose missing model,
+unverified identity and invalid private-origin configuration without returning
+credentials or the configured address. No public-tunnel inference was attempted.
+Local guidance and deterministic summaries work without inference. Configured
+document uploads still require the mandatory malware scanner; successful browser
+upload verification used the explicitly synthetic, isolated demo only.
+
+## Docker runtime startup follow-up
+
+The six default Compose services are running and healthy on Docker Desktop
+29.5.2, linux/arm64. The frontend is published only at `127.0.0.1:8081`.
+HTTP checks passed for the home page, health, authenticated sign-in, status,
+matter listing, graph coverage and sign-out. Bootstrap credentials and storage
+keys were initialized in a new gitignored, mode-0600 root `.env`; no provider
+API key was generated or configured.
+
+Startup fixes quote tmpfs specifications correctly, put all nginx temporary
+directories on writable tmpfs, and provide a loopback ingress network with a
+default-deny web OUTPUT firewall. The running nginx process was verified as
+UID/GID 101 with zero effective capabilities and no-new-privileges enabled.
+A direct outbound HTTP probe timed out and increased the firewall DROP counter.
+This is a bounded network check, not comprehensive security qualification.
+The web build used host networking after Docker build-network DNS failed;
+runtime services retain their configured network restrictions.
+
+Provider inference, malware-scanned uploads and a populated, reviewed legal
+corpus remain unavailable. This startup does not qualify the production roadmap,
+backup restoration, concurrency, physical air-gap deployment or legal accuracy.
+
+## Docker Compose build follow-up
+
+Docker became available after the initial verification below (engine 29.5.2). Compose successfully built all three application images for **linux/arm64**. API, extractor and gateway share the API image. The build used `/dev/null` as its env file and temporary interpolation values; it neither read nor changed the user-managed root `.env`.
+
+| Image | Verified image ID |
+|---|---|
+| `lawyer-assistant-api:0.1.0` | `sha256:89542e9189818a04b566d61ff6661aabda2206749b0e9d67a145cbe6683ff4c0` |
+| `lawyer-assistant-web:0.1.0` | `sha256:3c7d633447c383fc2ef27218173c17c449d5675b23da4747684a029a64affe62` |
+| `lawyer-assistant-fuseki:5.3.0` | `sha256:aa5b68a8eae3e8d1e778890379d3431b8011bbac07e23b3f2bc6106b06156bab` |
+
+Disposable, network-disabled containers passed application/extractor imports and ontology loading (135 classes), frontend-bundle presence, and Fuseki configuration/entrypoint/Java checks. The Apache archive checksum passed during the build. These checks supersede the earlier Docker-unavailable observation for image building only: the Compose stack was **not started**, and database/service integration, hostile-parser containment, full offline installation and recovery remain unverified.
+
+## Initial application verification
+
+This records the local implementation checks for v0.1.0. Tests use synthetic fixtures and temporary stores. They are engineering evidence, not legal review, a populated national corpus, a measured hallucination rate or customer acceptance. The approved delivery scope and unresolved work remain in [ROADMAP.md](ROADMAP.md).
+
+## Results
+
+| Check | Observed result |
+|---|---|
+| Full backend suite, Python 3.12 | **316 passed**, 18.69 seconds |
+| Python lint, application/tests/deployment/scripts | Passed |
+| Frontend strict TypeScript and Vite production build | Passed; main JavaScript 317.73 kB / 95.89 kB gzip |
+| Frontend client-contract tests | **9 passed** |
+| npm production dependency audit | **0 reported vulnerabilities** at verification time |
+| Backup/restore archive contract tests | **4 passed** |
+| RDF/SHACL validation | Conforms; 135 classes, 109 relations, 51 domain entries, 2,368 schema triples |
+| Ontology evidence boundary | Five synthetic fixture assertions; 12 competency questions; **zero historical records published, no legal review performed** |
+| Compose schema, including optional research profile | Passed using placeholder settings and `/dev/null` env file; user `.env` not read |
+| Shell syntax | Development, backup and restore launchers passed |
+| Secret/generated-file exclusion | Root `.env`, `.data`, Python environment, frontend dependencies and build output are gitignored |
+| Docker runtime | **Unavailable**: final server-info attempt timed out after eight seconds |
+
+The backend suite emits one Starlette test-client deprecation warning concerning its httpx integration. It did not fail the suite; this is not a runtime qualification claim. npm's advisory result is time-dependent and does not establish freedom from vulnerabilities.
+
+## Behaviors checked
+
+- Firm and matter isolation, including same-firm administrators without membership; CSRF/origin controls, encrypted records/originals, and active-user/membership rechecks before consequential work.
+- Required malware scanning and isolated production extraction, no local production fallback, bounded inputs/results, malformed Unicode rejection, process cleanup, visible extraction omissions, and no orphan original when authorization is revoked during intake.
+- Source identifiers and exact quotation support; invented model claims fail without publication. Long passages retain excerpt offsets; Turkish characters survive DOCX/PDF export.
+- Per-claim review, immutable draft versions, version-pinned exports, optimistic conflicts, source/practice changes and stale work; scenario assumptions never mutate established facts.
+- Playbook curation/adoption boundaries, firm preferences separated from legal authority, legal holds, archive/restore, preserved review contents and scoped source/assertion/release invalidation.
+- Local provider destinations and model pinning; provider, graph, search and parser response limits/deadlines; strict graph tool identifiers and temporal/authority distinctions; no arbitrary query or mutation endpoint.
+- Gateway payload binding, exact single-use approval, denial of private destinations/identifiers, source quarantine, and no automatic promotion to legal authority.
+- Offline user management, password entry outside command arguments, no existing-password resets, explicit membership, last-member protection and deactivation/session revocation.
+- Immutable graph bundle validation with external reviewer-key verification and source/text/span integrity. Runtime graph publication and release activation remain unqualified.
+- Release-metric calculation rejects empty/small samples, duplicate tasks, nonfinite numbers and incomplete snapshots rather than falsely reporting acceptance.
+
+## Browser observations
+
+Source-preview verification on 4 October 2026: the local Compose web service was
+rebuilt and updated. Both existing uploaded PDFs (13 pages and one page) rendered
+from their original bytes, including visible branding, formatting and signature
+areas. Next-page navigation, a jump to page 13, disabled boundary controls, zoom,
+file switching and the separate extracted-text/warnings view passed browser checks.
+An isolated synthetic preview harness verified DOCX headers, footers, table and
+embedded image rendering, an original PNG, escaped HTML source text, and the
+explicit unsupported-format fallback. The temporary harness and fixtures were
+removed. Frontend tests passed **32/32**; the backend workspace tests passed
+**19/19**. The production web image build passed. These checks do not establish
+fidelity for every accepted format or validate document signatures.
+
+The local React/FastAPI demo ran on loopback with synthetic matter data, no live provider, no public corpus and no external research access. The in-app browser rendered the Turkish workspace and graph explorer at its normal narrow viewport. Login/session restoration, document passage inspection, research quotes and claim review were exercised.
+
+The completed practice UI saved a separate scenario while the fact count remained zero; saved a lawyer-authored draft; appended version two; and displayed both immutable historical versions. Opening the prior research visibly showed **“Yeniden inceleme gerekli”** while preserving the previous claim review. The graph explorer displayed schema categories and explicit unreviewed/empty-corpus limitations.
+
+The browser download-event observer timed out while checking the Word control, so completion of a browser file save is **not confirmed**. HTTP export responses, immutable-version selection, authorization, text content and Turkish encoding passed backend tests. The synthetic workspace screenshot is retained locally in `.data/verification/workspace.jpg` and is excluded from Git.
+
+## Required external and later engineering gates
+
+No claim is made that the 30–36 week roadmap is complete. Remaining work includes national legal-owner approval, licensed source acquisition/backfill, verified immutable serving releases, representative extraction and UDF qualification, local embeddings and evaluated multi-step legal synthesis, advanced Turkish PII/ethics detection, live provider binding/capability/context checks, production migrations/SSO/key management, physical erasure and backup retention, hostile-parser containment, target-host container/network/offline/restore/load tests, the held-out legal evaluation and lawyer pilot.
+
+In particular, the constrained extraction worker has no matter/database mount or provider credentials, but concurrent parser processes share a UID/container. Adversarial isolation between parser jobs has not been demonstrated. Compose validation cannot substitute for that test or for actual PostgreSQL/OpenSearch/Jena runtime validation.
+
+The provider API key remains user-managed in the gitignored root `.env`. This implementation did not read, generate or modify a real provider credential. Development preview data is isolated from configured customer storage. No repository commit, push or production deployment was performed.

@@ -1,0 +1,147 @@
+@prefix la: <https://lawyer-assistant.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+la:NormativeRule a owl:Class ; rdfs:label "Koşullu hukuk kuralı"@tr, "Conditional normative rule"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:LegalPosition a owl:Class ; rdfs:label "Hukuki konum"@tr, "Legal position"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:Right a owl:Class ; rdfs:label "Hak"@tr, "Right"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalPosition .
+
+la:Obligation a owl:Class ; rdfs:label "Yükümlülük"@tr, "Obligation"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalPosition .
+
+la:Prohibition a owl:Class ; rdfs:label "Yasak"@tr, "Prohibition"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalPosition .
+
+la:Permission a owl:Class ; rdfs:label "İzin"@tr, "Permission"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalPosition .
+
+la:LegalPower a owl:Class ; rdfs:label "Hukuki yetki"@tr, "Legal power"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalPosition .
+
+la:Immunity a owl:Class ; rdfs:label "Bağışıklık"@tr, "Immunity"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalPosition .
+
+la:Liability a owl:Class ; rdfs:label "Sorumluluk"@tr, "Liability"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalPosition .
+
+la:LegalCondition a owl:Class ; rdfs:label "Hukuki koşul"@tr, "Legal condition"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:LegalElement a owl:Class ; rdfs:label "Hukuki unsur"@tr, "Legal element"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalCondition .
+
+la:Exception a owl:Class ; rdfs:label "İstisna"@tr, "Exception"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalCondition .
+
+la:Consequence a owl:Class ; rdfs:label "Hukuki sonuç"@tr, "Legal consequence"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:Remedy a owl:Class ; rdfs:label "Hukuki giderim yolu"@tr, "Remedy"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Consequence .
+
+la:Sanction a owl:Class ; rdfs:label "Yaptırım"@tr, "Sanction"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Consequence .
+
+la:ContractType a owl:Class ; rdfs:label "Sözleşme türü"@tr, "Contract type"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:ClauseType a owl:Class ; rdfs:label "Sözleşme şartı türü"@tr, "Contract clause type"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:ContractualPosition a owl:Class ; rdfs:label "Sözleşmesel hukuki konum"@tr, "Contractual legal position"@en ;
+  la:module "legal_positions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalPosition .
+
+la:createdBy a owl:ObjectProperty ; rdfs:label "Hükümle oluşturulmuştur"@tr, "createdBy"@en ;
+  rdfs:domain la:LegalPosition ; rdfs:range la:ProvisionVersion ;
+  rdfs:comment "Legal basis of a conditional position."@en ; la:module "legal_positions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:heldByRole a owl:ObjectProperty ; rdfs:label "Rol tarafından taşınır"@tr, "heldByRole"@en ;
+  rdfs:domain la:LegalPosition ; rdfs:range la:RoleType ;
+  rdfs:comment "Abstract holder role, not an identified client."@en ; la:module "legal_positions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:owedByRole a owl:ObjectProperty ; rdfs:label "Yükümlülüğü rol taşır"@tr, "owedByRole"@en ;
+  rdfs:domain la:Obligation ; rdfs:range la:RoleType ;
+  rdfs:comment "Abstract obliged role with conditions separately recorded."@en ; la:module "legal_positions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:requiresCondition a owl:ObjectProperty ; rdfs:label "Koşulu gerektirir"@tr, "requiresCondition"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:LegalCondition ;
+  rdfs:comment "A condition required for applicability."@en ; la:module "legal_positions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:hasElement a owl:ObjectProperty ; rdfs:label "Hukuki unsuru vardır"@tr, "hasElement"@en ;
+  rdfs:domain la:NormativeRule ; rdfs:range la:LegalElement ;
+  rdfs:comment "Element of a normative rule."@en ; la:module "legal_positions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:subjectToException a owl:ObjectProperty ; rdfs:label "İstisnaya tabidir"@tr, "subjectToException"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:Exception ;
+  rdfs:comment "Exception whose scope requires interpretation."@en ; la:module "legal_positions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:hasConsequence a owl:ObjectProperty ; rdfs:label "Hukuki sonucu vardır"@tr, "hasConsequence"@en ;
+  rdfs:domain la:NormativeRule ; rdfs:range la:Consequence ;
+  rdfs:comment "Conditional legal consequence."@en ; la:module "legal_positions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:remediedBy a owl:ObjectProperty ; rdfs:label "Giderim yoluyla korunur"@tr, "remediedBy"@en ;
+  rdfs:domain la:LegalPosition ; rdfs:range la:Remedy ;
+  rdfs:comment "Potential remedy, not a guaranteed result."@en ; la:module "legal_positions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:expressedBy a owl:ObjectProperty ; rdfs:label "Hükümde ifade edilir"@tr, "expressedBy"@en ;
+  rdfs:domain la:NormativeRule ; rdfs:range la:ProvisionVersion ;
+  rdfs:comment "Interpretive representation of a source provision."@en ; la:module "legal_positions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:hasClauseType a owl:ObjectProperty ; rdfs:label "Sözleşme şartı türü içerir"@tr, "hasClauseType"@en ;
+  rdfs:domain la:ContractType ; rdfs:range la:ClauseType ;
+  rdfs:comment "Schema-level contract clause classification."@en ; la:module "legal_positions" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .

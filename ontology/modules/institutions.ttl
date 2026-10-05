@@ -1,0 +1,167 @@
+@prefix la: <https://lawyer-assistant.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+la:InstitutionType a owl:Class ; rdfs:label "Kurum türü"@tr, "Institution type"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:SchemaCategory .
+
+la:Institution a owl:Class ; rdfs:label "Kurum"@tr, "Institution instance"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Agent .
+
+la:OrganizationalUnit a owl:Class ; rdfs:label "Teşkilat birimi"@tr, "Organizational unit instance"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Institution .
+
+la:Court a owl:Class ; rdfs:label "Mahkeme"@tr, "Court instance"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Institution .
+
+la:CourtChamber a owl:Class ; rdfs:label "Mahkeme dairesi"@tr, "Court chamber instance"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:OrganizationalUnit .
+
+la:JudicialCouncil a owl:Class ; rdfs:label "Yargı kurulu"@tr, "Judicial council instance"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Institution .
+
+la:LegislativeBody a owl:Class ; rdfs:label "Yasama organı"@tr, "Legislative body instance"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Institution .
+
+la:ExecutiveBody a owl:Class ; rdfs:label "Yürütme organı"@tr, "Executive body instance"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Institution .
+
+la:AdministrativeAuthority a owl:Class ; rdfs:label "İdari makam"@tr, "Administrative authority instance"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Institution .
+
+la:Regulator a owl:Class ; rdfs:label "Düzenleyici kurum"@tr, "Regulator instance"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:AdministrativeAuthority .
+
+la:ProfessionalBody a owl:Class ; rdfs:label "Meslek kuruluşu"@tr, "Professional body instance"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Institution .
+
+la:EnforcementOffice a owl:Class ; rdfs:label "İcra dairesi"@tr, "Enforcement office instance"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Institution .
+
+la:DisputeResolutionBody a owl:Class ; rdfs:label "Uyuşmazlık çözüm mercii"@tr, "Dispute resolution body instance"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Institution .
+
+la:InstitutionalChange a owl:Class ; rdfs:label "Kurumsal değişiklik olayı"@tr, "Institutional change event"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Event .
+
+la:CompetenceAssignment a owl:Class ; rdfs:label "Koşullu görev ve yetki tanımı"@tr, "Qualified competence assignment"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:CompetenceRestriction a owl:Class ; rdfs:label "Görev ve yetki sınırlaması"@tr, "Competence restriction"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:JurisdictionRule a owl:Class ; rdfs:label "Görev ve yetki kuralı"@tr, "Jurisdiction rule"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:ReviewRoute a owl:Class ; rdfs:label "İnceleme veya kanun yolu"@tr, "Review or appeal route"@en ;
+  la:module "institutions" ; la:graphFamily "structure" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:LegalEntity .
+
+la:organizationalPartOf a owl:ObjectProperty ; rdfs:label "Teşkilatın parçasıdır"@tr, "organizationalPartOf"@en ;
+  rdfs:domain la:Institution ; rdfs:range la:Institution ;
+  rdfs:comment "Organization only, not appeal or legal superiority."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:establishedBy a owl:ObjectProperty ; rdfs:label "Hükümle kurulmuştur"@tr, "establishedBy"@en ;
+  rdfs:domain la:Institution ; rdfs:range la:ProvisionVersion ;
+  rdfs:comment "Legal basis for institution establishment."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:renamedFrom a owl:ObjectProperty ; rdfs:label "Önceki adından yeniden adlandırılmıştır"@tr, "renamedFrom"@en ;
+  rdfs:domain la:Institution ; rdfs:range la:Institution ;
+  rdfs:comment "Institutional naming continuity."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:successorOf a owl:ObjectProperty ; rdfs:label "Kurumsal halefidir"@tr, "successorOf"@en ;
+  rdfs:domain la:Institution ; rdfs:range la:Institution ;
+  rdfs:comment "Institutional succession, not identical powers."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:abolishedBy a owl:ObjectProperty ; rdfs:label "Olayla kaldırılmıştır"@tr, "abolishedBy"@en ;
+  rdfs:domain la:Institution ; rdfs:range la:InstitutionalChange ;
+  rdfs:comment "Institution abolition event."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:heldBy a owl:ObjectProperty ; rdfs:label "Yetkiyi kurum kullanır"@tr, "heldBy"@en ;
+  rdfs:domain la:CompetenceAssignment ; rdfs:range la:Institution ;
+  rdfs:comment "Holder of a qualified competence."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:authorizedBy a owl:ObjectProperty ; rdfs:label "Yetkisini hükümden alır"@tr, "authorizedBy"@en ;
+  rdfs:domain la:LegalEntity ; rdfs:range la:ProvisionVersion ;
+  rdfs:comment "Exact legal basis of authority."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:coversSubject a owl:ObjectProperty ; rdfs:label "Konuyu kapsar"@tr, "coversSubject"@en ;
+  rdfs:domain la:CompetenceAssignment ; rdfs:range la:LegalConcept ;
+  rdfs:comment "Subject-matter competence qualifier."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:coversTerritory a owl:ObjectProperty ; rdfs:label "Coğrafi alanı kapsar"@tr, "coversTerritory"@en ;
+  rdfs:domain la:CompetenceAssignment ; rdfs:range la:TerritorialArea ;
+  rdfs:comment "Territorial competence qualifier."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:coversProcedure a owl:ObjectProperty ; rdfs:label "Usulü kapsar"@tr, "coversProcedure"@en ;
+  rdfs:domain la:CompetenceAssignment ; rdfs:range la:Procedure ;
+  rdfs:comment "Procedural competence qualifier."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:restrictedBy a owl:ObjectProperty ; rdfs:label "Sınırlamaya tabidir"@tr, "restrictedBy"@en ;
+  rdfs:domain la:CompetenceAssignment ; rdfs:range la:CompetenceRestriction ;
+  rdfs:comment "Restriction on competence."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:routeFrom a owl:ObjectProperty ; rdfs:label "İnceleme yolunun çıkış merciidir"@tr, "routeFrom"@en ;
+  rdfs:domain la:ReviewRoute ; rdfs:range la:Institution ;
+  rdfs:comment "Origin of a qualified review route."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:routeTo a owl:ObjectProperty ; rdfs:label "İnceleme yolunun varış merciidir"@tr, "routeTo"@en ;
+  rdfs:domain la:ReviewRoute ; rdfs:range la:Institution ;
+  rdfs:comment "Destination of a qualified review route."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:supervisedBy a owl:ObjectProperty ; rdfs:label "Kurumun gözetimine tabidir"@tr, "supervisedBy"@en ;
+  rdfs:domain la:Institution ; rdfs:range la:Institution ;
+  rdfs:comment "Supervision is not appellate review."@en ; la:module "institutions" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .

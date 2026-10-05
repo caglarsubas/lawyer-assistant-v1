@@ -1,0 +1,103 @@
+{
+  "schema_version": "scenario-contract.v1",
+  "data_classification": "synthetic_fixture",
+  "purpose": "offline_preparation",
+  "release_state": "preparation_only",
+  "dispatchable": false,
+  "privacy_assessment": "not_performed",
+  "fidelity_assessment": "structural_only",
+  "outbound_candidate": {
+    "jurisdiction": "TR",
+    "scenario_kind": "actual_abstraction",
+    "actors": [
+      {
+        "id": "actor-supplier",
+        "role": "supplier"
+      },
+      {
+        "id": "actor-buyer",
+        "role": "buyer"
+      }
+    ],
+    "relationships": [
+      {
+        "id": "relationship-supply",
+        "from_actor": "actor-supplier",
+        "to_actor": "actor-buyer",
+        "kind": "supplies_to"
+      }
+    ],
+    "facts": [
+      {
+        "id": "fact-delivery",
+        "actor_ids": [
+          "actor-supplier",
+          "actor-buyer"
+        ],
+        "text": "Synthetic fixture: the supplier alleges delivery and the buyer disputes conformity.",
+        "attributes": {
+          "role": "allegation",
+          "polarity": "affirmed",
+          "material_date": null,
+          "threshold_comparison": null,
+          "event_order": 1
+        }
+      }
+    ],
+    "research_questions": [
+      "Which elements would require proof before assessing payment in this fictional scenario?"
+    ],
+    "uncertainty": [
+      "Delivery conformity remains disputed. No privacy or legal-fidelity assessment has occurred."
+    ],
+    "requested_authority_types": [
+      "legislation",
+      "decision"
+    ]
+  },
+  "private_preparation": {
+    "actor_mappings": [
+      {
+        "actor_id": "actor-supplier",
+        "private_actor_ref": "synthetic-private-supplier"
+      },
+      {
+        "actor_id": "actor-buyer",
+        "private_actor_ref": "synthetic-private-buyer"
+      }
+    ],
+    "source_facts": [
+      {
+        "id": "synthetic-source-fact",
+        "private_evidence_ref": "synthetic-private-passage",
+        "private_actor_refs": [
+          "synthetic-private-supplier",
+          "synthetic-private-buyer"
+        ],
+        "is_material": true,
+        "attributes": {
+          "role": "allegation",
+          "polarity": "affirmed",
+          "material_date": null,
+          "threshold_comparison": null,
+          "event_order": 1
+        }
+      }
+    ],
+    "transformations": [
+      {
+        "source_fact_id": "synthetic-source-fact",
+        "proposed_fact_id": "fact-delivery",
+        "transformation": "generalized",
+        "reason": "Synthetic role abstraction for contract structure testing only.",
+        "fidelity_evidence_refs": [
+          "synthetic-fidelity-reference"
+        ]
+      }
+    ],
+    "omissions": [],
+    "fidelity_reference_ids": [
+      "synthetic-fidelity-reference"
+    ]
+  }
+}

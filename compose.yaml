@@ -1,0 +1,301 @@
+name: ${LA_STACK_NAME:-lawyer-assistant-v1}
+
+x-restricted: &restricted
+  restart: unless-stopped
+  security_opt: [no-new-privileges:true]
+  cap_drop: [ALL]
+  networks: [private]
+  logging:
+    driver: json-file
+    options: {max-size: "10m", max-file: "3"}
+
+services:
+  api:
+    <<: *restricted
+    image: ${LA_API_IMAGE:-lawyer-assistant-api:0.1.0}
+    build: {context: ., dockerfile: deploy/backend.Dockerfile}
+    read_only: true
+    tmpfs: ["/tmp:size=256m,mode=1777"]
+    networks: [private, extraction, scanning, provider]
+    sysctls: {net.ipv4.ip_forward: "0", net.ipv6.conf.all.forwarding: "0"}
+    environment:
+      LA_DEMO_MODE: "false"
+      LA_DATABASE_URL: ${LA_DATABASE_URL:-postgresql+psycopg://lawyer:${LA_POSTGRES_PASSWORD:?Set LA_POSTGRES_PASSWORD in .env}@postgres:5432/lawyer}
+      LA_DATA_DIR: /data
+      LA_ENCRYPTION_KEY: ${LA_ENCRYPTION_KEY:?Set LA_ENCRYPTION_KEY in .env}
+      LA_BOOTSTRAP_USERNAME: ${LA_BOOTSTRAP_USERNAME:?Set LA_BOOTSTRAP_USERNAME in .env}
+      LA_BOOTSTRAP_PASSWORD: ${LA_BOOTSTRAP_PASSWORD:?Set LA_BOOTSTRAP_PASSWORD in .env}
+      LA_ALLOWED_ORIGINS: ${LA_ALLOWED_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
+      LA_COOKIE_SECURE: ${LA_COOKIE_SECURE:-false}
+      LA_GRAPH_URL: http://fuseki:3030
+      LA_GRAPH_RELEASE_DIR: /graph-releases
+      LA_GRAPH_TRUSTED_REVIEW_KEY: ${LA_GRAPH_TRUSTED_REVIEW_KEY:-}
+      LA_PUBLIC_SOURCE_DIR: /public-sources
+      LA_OPENSEARCH_URL: http://opensearch:9200
+      LA_SEARCH_RELEASE_ID: ${LA_SEARCH_RELEASE_ID:-}
+      LA_CLAMAV_HOST: ${LA_CLAMAV_HOST:-}
+      LA_CLAMAV_PORT: ${LA_CLAMAV_PORT:-3310}
+      LA_SCANNER_TIMEOUT_SECONDS: ${LA_SCANNER_TIMEOUT_SECONDS:-30}
+      LA_SCANNER_MAX_SIGNATURE_AGE_DAYS: ${LA_SCANNER_MAX_SIGNATURE_AGE_DAYS:-7}
+      LA_EXTRACTION_URL: http://extractor:8002
+      LA_EXTRACTION_TOKEN: ${LA_EXTRACTION_TOKEN:?Set a distinct LA_EXTRACTION_TOKEN in .env}
+      LA_GATEWAY_URL: http://gateway:8001
+      LA_GATEWAY_TOKEN: ${LA_GATEWAY_TOKEN:-}
+      LA_GATEWAY_ENABLED: ${LA_GATEWAY_ENABLED:-false}
+      LA_GATEWAY_ALLOWLIST: ${LA_GATEWAY_ALLOWLIST:-www.mevzuat.gov.tr,mevzuat.gov.tr,www.resmigazete.gov.tr,resmigazete.gov.tr}
+      LLM_PROVIDER_BASE_URL: ${LLM_PROVIDER_BASE_URL:-}
+      LLM_PROVIDER_API_KEY: ${LLM_PROVIDER_API_KEY:-}
+      LLM_PROVIDER_TENANT_ID: ${LLM_PROVIDER_TENANT_ID:-lawyer-assistant-v1}
+      LLM_PROVIDER_ORG_ID: ${LLM_PROVIDER_ORG_ID:-org-lawyer}
+      LLM_PROVIDER_KEY_ID: ${LLM_PROVIDER_KEY_ID:-lawyer-assistant-v1-primary}
+      LLM_PROVIDER_MODEL: ${LLM_PROVIDER_MODEL:-}
+      LLM_PROVIDER_CONTEXT_LIMIT: ${LLM_PROVIDER_CONTEXT_LIMIT:-8192}
+      LLM_PROVIDER_IDENTITY_VERIFIED: ${LLM_PROVIDER_IDENTITY_VERIFIED:-false}
+      LLM_PROVIDER_ALLOW_PLAIN_HTTP: ${LLM_PROVIDER_ALLOW_PLAIN_HTTP:-false}
+      LLM_PROVIDER_CLOUD_FALLBACK_DISABLED: ${LLM_PROVIDER_CLOUD_FALLBACK_DISABLED:-false}
+      LLM_PROVIDER_TUNNEL_URL: ${LLM_PROVIDER_TUNNEL_URL:-}
+      LLM_PROVIDER_TUNNEL_APPROVED: ${LLM_PROVIDER_TUNNEL_APPROVED:-false}
+      LLM_PROVIDER_TUNNEL_APPROVED_HOST: ${LLM_PROVIDER_TUNNEL_APPROVED_HOST:-}
+    volumes:
+      - documents:/data
+      - graphs:/graph-releases:ro
+      - ${LA_GRAPH_TRUST_DIRECTORY:-./.data/graph-trust}:/graph-trust:ro
+      - public_sources:/public-sources:ro
+    depends_on:
+      postgres: {condition: service_healthy}
+      opensearch: {condition: service_healthy}
+      fuseki: {condition: service_healthy}
+      extractor: {condition: service_healthy}
+      # Scanner failures block each upload, not access to existing work/readiness.
+      scanner: {condition: service_started}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=5)"]
+      interval: 15s
+      timeout: 6s
+      retries: 5
+      start_period: 30s
+
+  publisher:
+    <<: *restricted
+    profiles: [publication]
+    image: ${LA_API_IMAGE:-lawyer-assistant-api:0.1.0}
+    # Trusted one-shot coordinator: private review state stays outside Fuseki.
+    user: "10001:10002"
+    restart: "no"
+    read_only: true
+    tmpfs: ["/tmp:size=256m,mode=1777,noexec,nosuid,nodev"]
+    entrypoint: [python, /app/scripts/graph_releases.py]
+    command: [--help]
+    environment:
+      LA_DEMO_MODE: "false"
+      LA_DATABASE_URL: ${LA_DATABASE_URL:-postgresql+psycopg://lawyer:${LA_POSTGRES_PASSWORD:?Set LA_POSTGRES_PASSWORD in .env}@postgres:5432/lawyer}
+      LA_DATA_DIR: /data
+      LA_ENCRYPTION_KEY: ${LA_ENCRYPTION_KEY:?Set LA_ENCRYPTION_KEY in .env}
+      LA_PUBLIC_SOURCE_DIR: /public-sources
+      LA_GRAPH_RELEASE_DIR: /graph-publication
+      LA_GRAPH_TRUSTED_REVIEW_KEY: ${LA_GRAPH_TRUSTED_REVIEW_KEY:-}
+    volumes:
+      - documents:/data:ro
+      - graphs:/graph-publication
+      - ${LA_GRAPH_TRUST_DIRECTORY:-./.data/graph-trust}:/graph-trust:ro
+      - public_sources:/public-sources:ro
+    depends_on:
+      postgres: {condition: service_healthy}
+
+  extractor:
+    <<: *restricted
+    image: ${LA_API_IMAGE:-lawyer-assistant-api:0.1.0}
+    build: {context: ., dockerfile: deploy/backend.Dockerfile}
+    command: [python, -m, app.extraction_worker]
+    init: true
+    read_only: true
+    tmpfs: ["/tmp:size=256m,mode=1777,noexec,nosuid,nodev"]
+    networks: [extraction]
+    cpus: "2.0"
+    mem_limit: 1536m
+    memswap_limit: 1536m
+    pids_limit: 96
+    ulimits: {nofile: {soft: 512, hard: 512}}
+    # No matter volume, database route, provider route, or broader application secret.
+    environment:
+      LA_EXTRACTION_TOKEN: ${LA_EXTRACTION_TOKEN:?Set a distinct LA_EXTRACTION_TOKEN in .env}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 4
+
+  scanner:
+    <<: *restricted
+    image: ${LA_SCANNER_IMAGE:-lawyer-assistant-scanner:1.4.6}
+    build: {context: ., dockerfile: deploy/scanner/Dockerfile}
+    read_only: true
+    tmpfs: ["/tmp:size=256m,mode=1777,noexec,nosuid,nodev"]
+    networks: [scanning]
+    cpus: "2.0"
+    mem_limit: 3g
+    memswap_limit: 3g
+    pids_limit: 64
+    environment:
+      TZ: UTC
+      LA_SCANNER_MAX_SIGNATURE_AGE_DAYS: ${LA_SCANNER_MAX_SIGNATURE_AGE_DAYS:-7}
+    volumes:
+      - ${LA_SCANNER_DATABASE_DIR:-./.data/clamav-signatures}:/var/lib/clamav:ro
+    healthcheck:
+      test: [CMD, python3, /opt/scanner/control.py, health]
+      interval: 30s
+      timeout: 8s
+      retries: 5
+      start_period: 90s
+
+  provider-relay:
+    <<: *restricted
+    profiles: [native-provider]
+    image: ${LA_PROVIDER_RELAY_IMAGE:-lawyer-assistant-provider-relay:0.1.0}
+    build: {context: ., dockerfile: deploy/provider/Dockerfile}
+    cap_add: [NET_ADMIN, SETUID, SETGID]
+    read_only: true
+    tmpfs: ["/tmp:size=16m,mode=1777,noexec,nosuid,nodev"]
+    networks:
+      provider: {ipv4_address: 172.30.240.2}
+      provider_egress: {}
+    sysctls:
+      net.ipv4.ip_forward: "0"
+      net.ipv6.conf.all.disable_ipv6: "1"
+    cpus: "1.0"
+    mem_limit: 128m
+    memswap_limit: 128m
+    pids_limit: 32
+    environment:
+      PROVIDER_NATIVE_HOST: ${LLM_PROVIDER_NATIVE_HOST:-host.docker.internal}
+      PROVIDER_PINNED_MODEL: ${LLM_PROVIDER_MODEL:-}
+      PROVIDER_TUNNEL_URL: ${LLM_PROVIDER_TUNNEL_URL:-}
+      PROVIDER_TUNNEL_APPROVED: ${LLM_PROVIDER_TUNNEL_APPROVED:-false}
+      PROVIDER_TUNNEL_APPROVED_HOST: ${LLM_PROVIDER_TUNNEL_APPROVED_HOST:-}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8083/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 4
+
+  web:
+    <<: *restricted
+    # Only the startup wrapper uses these capabilities to install egress rules
+    # and drop to nginx. The running server is non-root with no effective caps.
+    cap_add: [NET_ADMIN, SETUID, SETGID]
+    networks: [private, ingress]
+    image: ${LA_WEB_IMAGE:-lawyer-assistant-web:0.1.0}
+    build: {context: ., dockerfile: deploy/frontend.Dockerfile}
+    read_only: true
+    tmpfs: ["/tmp:size=64m,mode=1777"]
+    ports: ["127.0.0.1:${LA_HTTP_PORT:-8080}:80"]
+    sysctls:
+      net.ipv4.ip_unprivileged_port_start: "0"
+      net.ipv4.ip_forward: "0"
+      net.ipv6.conf.all.disable_ipv6: "1"
+    depends_on:
+      api: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, wget, -q, --spider, http://127.0.0.1/]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  postgres:
+    <<: *restricted
+    image: postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74
+    # The vendor entrypoint starts as root to set new-volume ownership, then drops to postgres.
+    cap_add: [CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+    environment:
+      POSTGRES_DB: lawyer
+      POSTGRES_USER: lawyer
+      POSTGRES_PASSWORD: ${LA_POSTGRES_PASSWORD:?Set LA_POSTGRES_PASSWORD in .env}
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256 --auth-local=scram-sha-256
+    volumes: [postgres:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U lawyer -d lawyer"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  opensearch:
+    <<: *restricted
+    image: opensearchproject/opensearch:2.19.3@sha256:e96cc6ae1500a073d973c0906f30f7cf4d9c461f32f855f9242a2da933660cdd
+    environment:
+      discovery.type: single-node
+      bootstrap.memory_lock: "true"
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+      DISABLE_INSTALL_DEMO_CONFIG: "true"
+      DISABLE_SECURITY_PLUGIN: "true"
+    ulimits:
+      memlock: {soft: -1, hard: -1}
+      nofile: {soft: 65536, hard: 65536}
+    volumes: [opensearch:/usr/share/opensearch/data]
+    healthcheck:
+      test: [CMD-SHELL, "curl -fsS 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s' >/dev/null"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  fuseki:
+    <<: *restricted
+    image: ${LA_FUSEKI_IMAGE:-lawyer-assistant-fuseki:5.3.0}
+    build: {context: ., dockerfile: deploy/fuseki/Dockerfile}
+    read_only: true
+    tmpfs: ["/tmp:size=1024m,mode=1777,noexec,nosuid,nodev"]
+    mem_limit: 2g
+    memswap_limit: 2g
+    environment:
+      LA_GRAPH_TRUSTED_REVIEW_KEY: ${LA_GRAPH_TRUSTED_REVIEW_KEY:-}
+    volumes:
+      - graphs:/fuseki:ro
+      - ${LA_GRAPH_TRUST_DIRECTORY:-./.data/graph-trust}:/graph-trust:ro
+    healthcheck:
+      test: [CMD-SHELL, "curl -fsS -G --data-urlencode 'query=ASK {}' http://localhost:3030/structural/query >/dev/null && curl -fsS -G --data-urlencode 'query=ASK {}' http://localhost:3030/jurisprudence/query >/dev/null"]
+      interval: 15s
+      timeout: 10s
+      retries: 8
+      start_period: 30s
+
+  gateway:
+    <<: *restricted
+    profiles: [research]
+    image: ${LA_API_IMAGE:-lawyer-assistant-api:0.1.0}
+    build: {context: ., dockerfile: deploy/backend.Dockerfile}
+    command: [python, -m, app.gateway_worker]
+    read_only: true
+    tmpfs: ["/tmp:size=64m,mode=1777"]
+    networks: [private, research]
+    # No matter volume, database URL, encryption key, bootstrap secret, or provider key.
+    environment:
+      LA_GATEWAY_TOKEN: ${LA_GATEWAY_TOKEN:-}
+      LA_GATEWAY_ENABLED: ${LA_GATEWAY_ENABLED:-false}
+      LA_GATEWAY_ALLOWLIST: ${LA_GATEWAY_ALLOWLIST:-www.mevzuat.gov.tr,mevzuat.gov.tr,www.resmigazete.gov.tr,resmigazete.gov.tr}
+
+networks:
+  provider:
+    name: ${LA_STACK_NAME:-lawyer-assistant-v1}-provider
+    internal: true
+    # Keep in sync with deploy/provider/entrypoint.sh; check host subnet conflicts.
+    ipam:
+      config: [{subnet: 172.30.240.0/28}]
+  provider_egress: {}
+  scanning:
+    name: ${LA_STACK_NAME:-lawyer-assistant-v1}-scanning
+    internal: true
+  extraction:
+    name: ${LA_STACK_NAME:-lawyer-assistant-v1}-extraction
+    internal: true
+  private:
+    name: ${LA_STACK_NAME:-lawyer-assistant-v1}-private
+    internal: true
+  research: {}
+  ingress: {}
+
+volumes:
+  public_sources:
+  documents:
+  postgres:
+  opensearch:
+  graphs:

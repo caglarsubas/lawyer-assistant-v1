@@ -1,0 +1,17 @@
+{
+  "notice": "SYNTHETIC test cases only; no reviewed or actual Turkish legal records.",
+  "cases": [
+    {"id":"CQ-01","question":"Which exact synthetic provision version applies in 2023?","expected":"version-a, never version-b","tool":"resolve_authority"},
+    {"id":"CQ-02","question":"Which version applies on the boundary 2024-01-01?","expected":"version-b; exclusive validTo excludes version-a","tool":"resolve_authority"},
+    {"id":"CQ-03","question":"Does a synthetic citation prove application?","expected":"No; cites cannot entail applies","tool":"expand_authorities"},
+    {"id":"CQ-04","question":"Can an unresolved citation select the latest version?","expected":"No; retain unresolved reference and insufficient-evidence state","tool":"resolve_authority"},
+    {"id":"CQ-05","question":"Does institutional succession prove transfer of competence?","expected":"No; a separately evidenced competence assertion is required","tool":"trace_institution_history"},
+    {"id":"CQ-06","question":"What did the graph know before the assertions were recorded?","expected":"None of the synthetic assertions before 2026-01-01","tool":"trace_norm_history"},
+    {"id":"CQ-07","question":"Can class Institution also represent an individual court?","expected":"SHACL rejects type/instance conflation","tool":"locate_issues"},
+    {"id":"CQ-08","question":"Can a public assertion point at a private client?","expected":"SHACL and read templates reject private endpoints","tool":"expand_authorities"},
+    {"id":"CQ-09","question":"Does schema breadth prove historical corpus completeness?","expected":"No; separate schema, registry, corpus and assertion coverage","tool":"get_coverage"},
+    {"id":"CQ-10","question":"Can an unreviewed ontology support a reviewed legal conclusion?","expected":"No; legal-use gate remains closed","tool":"get_evidence"},
+    {"id":"CQ-11","question":"May an agent request arbitrary SPARQL or ten-hop exploration?","expected":"Reject unknown tools, payload keys and hop counts above two","tool":"expand_authorities"},
+    {"id":"CQ-12","question":"Is earlier material automatically excluded because it predates 1920?","expected":"No; predecessors can be modeled when continuity/applicable-law need is evidenced","tool":"trace_norm_history"}
+  ]
+}

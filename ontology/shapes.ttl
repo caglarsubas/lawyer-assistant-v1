@@ -1,0 +1,186 @@
+@prefix la: <https://lawyer-assistant.local/ontology/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# These constraints check engineering integrity. Conformance is NOT legal review.
+la:AssertionShape a sh:NodeShape ; sh:targetClass la:Assertion ;
+  sh:property [ sh:path la:subject ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+  sh:property [ sh:path la:predicate ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ; sh:class owl:ObjectProperty ] ;
+  sh:property [ sh:path la:object ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+  sh:property [ sh:path la:evidence ; sh:minCount 1 ; sh:class la:EvidencePassage ] ;
+  sh:property [ sh:path la:claimStatus ; sh:minCount 1 ; sh:maxCount 1 ;
+    sh:in ("unreviewed" "source_verified" "legally_reviewed" "contested" "superseded") ] ;
+  sh:property [ sh:path la:scope ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ("public" "private") ] ;
+  sh:property [ sh:path la:graphFamily ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ("structure" "jurisprudence" "matter") ] ;
+  sh:property [ sh:path la:synthetic ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
+  sh:property [ sh:path la:recordedAt ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:dateTime ; sh:lessThan la:supersededAt ] ;
+  sh:property [ sh:path la:supersededAt ; sh:maxCount 1 ; sh:datatype xsd:dateTime ] ;
+  sh:property [ sh:path la:validFrom ; sh:maxCount 1 ; sh:datatype xsd:date ; sh:lessThan la:validTo ] ;
+  sh:property [ sh:path la:validTo ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+  sh:property [ sh:path la:extractionMethod ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path la:extractorVersion ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path la:confidence ; sh:maxCount 1 ; sh:datatype xsd:decimal ; sh:minInclusive 0 ; sh:maxInclusive 1 ] ;
+  sh:property [ sh:path la:reviewer ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ] ;
+  sh:or (
+    [ sh:property [ sh:path la:validityStatus ; sh:hasValue "known" ] ;
+      sh:property [ sh:path la:validFrom ; sh:minCount 1 ] ]
+    [ sh:property [ sh:path la:validityStatus ; sh:hasValue "unknown" ] ;
+      sh:property [ sh:path la:unresolvedReason ; sh:minCount 1 ; sh:datatype xsd:string ] ]
+  ) ;
+  sh:property [ sh:path la:validityStatus ; sh:maxCount 1 ] ;
+  sh:sparql [ sh:message "Legally reviewed assertions require a reviewer and review timestamp." ;
+    sh:select """
+      PREFIX la: <https://lawyer-assistant.local/ontology/>
+      SELECT $this WHERE {
+        $this la:claimStatus "legally_reviewed" .
+        FILTER NOT EXISTS { $this la:reviewer ?reviewer ; la:reviewedAt ?reviewedAt . }
+      }
+    """ ] ;
+  sh:sparql [ sh:message "A public assertion must not expose a private node." ;
+    sh:select """
+      PREFIX la: <https://lawyer-assistant.local/ontology/>
+      SELECT $this WHERE {
+        $this la:scope "public" ; (la:subject|la:object) ?node .
+        ?node la:scope "private" .
+      }
+    """ ] ;
+  sh:sparql [ sh:message "Private assertions require a matter ID and the matter graph family." ;
+    sh:select """
+      PREFIX la: <https://lawyer-assistant.local/ontology/>
+      SELECT $this WHERE {
+        $this la:scope "private" .
+        FILTER NOT EXISTS { $this la:matterId ?id ; la:graphFamily "matter" . }
+      }
+    """ ] ;
+  sh:sparql [ sh:message "Application or interpretation must name a resolved exact provision version, never latest or a logical provision." ;
+    sh:select """
+      PREFIX la: <https://lawyer-assistant.local/ontology/>
+      SELECT $this WHERE {
+        $this la:predicate ?p ; la:object ?target .
+        FILTER (?p IN (la:applies, la:interprets))
+        FILTER NOT EXISTS {
+          ?target a la:ProvisionVersion ; la:versionResolution "resolved" ; la:versionOf ?provision .
+          ?provision a la:Provision .
+        }
+      }
+    """ ] ;
+  sh:sparql [ sh:message "Assertion subject and object must satisfy the declared relation domain and range." ;
+    sh:select """
+      PREFIX la: <https://lawyer-assistant.local/ontology/>
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      SELECT $this WHERE {
+        $this la:subject ?s ; la:predicate ?p ; la:object ?o .
+        ?p rdfs:domain ?domain ; rdfs:range ?range .
+        FILTER (NOT EXISTS { ?s a ?domain } || NOT EXISTS { ?o a ?range })
+      }
+    """ ] .
+
+la:EvidencePassageShape a sh:NodeShape ; sh:targetClass la:EvidencePassage ;
+  sh:property [ sh:path la:scope ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ("public" "private") ] ;
+  sh:property [ sh:path la:artifact ; sh:minCount 1 ; sh:maxCount 1 ; sh:class la:SourceArtifact ] ;
+  sh:property [ sh:path la:textRepresentation ; sh:minCount 1 ; sh:maxCount 1 ; sh:class la:SourceRepresentation ] ;
+  sh:property [ sh:path la:startOffset ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:lessThan la:endOffset ] ;
+  sh:property [ sh:path la:endOffset ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 1 ] ;
+  sh:property [ sh:path la:locator ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ] ;
+  sh:property [ sh:path la:quotedText ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ] .
+
+la:SourceRepresentationShape a sh:NodeShape ; sh:targetClass la:SourceRepresentation ;
+  sh:property [ sh:path la:artifact ; sh:minCount 1 ; sh:maxCount 1 ; sh:class la:SourceArtifact ] ;
+  sh:property [ sh:path la:scope ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ("public" "private") ] ;
+  sh:property [ sh:path la:synthetic ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
+  sh:property [ sh:path la:contentHash ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] ;
+  sh:property [ sh:path la:locatorMapHash ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] ;
+  sh:property [ sh:path la:extractionMethod ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path la:extractorVersion ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+la:SourceArtifactShape a sh:NodeShape ; sh:targetClass la:SourceArtifact ;
+  sh:property [ sh:path la:scope ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ("public" "private") ] ;
+  sh:property [ sh:path la:contentHash ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] ;
+  sh:property [ sh:path la:rightsStatus ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ("unknown" "permitted" "restricted" "revoked" "synthetic") ] ;
+  sh:property [ sh:path la:synthetic ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
+  sh:property [ sh:path la:fetchedAt ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:dateTime ] .
+
+la:ProvisionVersionShape a sh:NodeShape ; sh:targetClass la:ProvisionVersion ;
+  sh:property [ sh:path la:versionOf ; sh:minCount 1 ; sh:maxCount 1 ; sh:class la:Provision ] ;
+  sh:property [ sh:path la:versionResolution ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue "resolved" ] ;
+  sh:property [ sh:path la:validFrom ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:date ; sh:lessThan la:validTo ] ;
+  sh:property [ sh:path la:validTo ; sh:maxCount 1 ; sh:datatype xsd:date ] .
+
+la:UnresolvedReferenceShape a sh:NodeShape ; sh:targetClass la:UnresolvedReference ;
+  sh:property [ sh:path la:unresolvedReason ; sh:minCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path la:versionResolution ; sh:hasValue "unresolved" ; sh:maxCount 1 ] .
+
+la:NoTypeInstanceConflationShape a sh:NodeShape ; sh:targetClass owl:Class ;
+  sh:sparql [ sh:message "An ontology class cannot also be a populated legal entity instance." ;
+    sh:select """
+      PREFIX la: <https://lawyer-assistant.local/ontology/>
+      SELECT $this WHERE { $this a la:Entity . }
+    """ ] .
+
+la:ReviewedTimestampShape a sh:NodeShape ; sh:targetSubjectsOf la:reviewedAt ;
+  sh:property [ sh:path la:reviewedAt ; sh:datatype xsd:dateTime ; sh:maxCount 1 ] .
+
+# Missing ends remain unknown. Only a separate evidenced declaration can be open.
+la:ValidityEndShape a sh:NodeShape ; sh:targetClass la:Assertion, la:ProvisionVersion ;
+  sh:property [ sh:path la:validityEndStatus ; sh:maxCount 1 ; sh:datatype xsd:string ;
+    sh:in ("closed" "open_ended" "unknown") ] ;
+  sh:property [ sh:path la:validityCheckedThrough ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+  sh:property [ sh:path la:validityEvidence ; sh:nodeKind sh:IRI ; sh:class la:EvidencePassage ] ;
+  sh:sparql [ sh:message "Open-ended validity requires known ordered observation dates, evidence and no closing date." ;
+    sh:select """
+      PREFIX la: <https://lawyer-assistant.local/ontology/>
+      SELECT $this WHERE {
+        $this la:validityEndStatus "open_ended" .
+        FILTER (EXISTS { $this la:validTo ?end } || NOT EXISTS {
+          $this la:validFrom ?start ; la:validityCheckedThrough ?through ; la:validityEvidence ?proof .
+          FILTER (?start <= ?through)
+        })
+      }
+    """ ] ;
+  sh:sparql [ sh:message "Open-ended metadata cannot be attached to a closed or unknown interval." ;
+    sh:select """
+      PREFIX la: <https://lawyer-assistant.local/ontology/>
+      SELECT $this WHERE {
+        { $this la:validityCheckedThrough ?v } UNION { $this la:validityEvidence ?v }
+        FILTER NOT EXISTS { $this la:validityEndStatus "open_ended" }
+      }
+    """ ] ;
+  sh:sparql [ sh:message "An explicit closed end requires an end date; unknown/open ends cannot carry one." ;
+    sh:select """
+      PREFIX la: <https://lawyer-assistant.local/ontology/>
+      SELECT $this WHERE {
+        { $this la:validityEndStatus "closed" . FILTER NOT EXISTS { $this la:validTo ?end } }
+        UNION { $this la:validTo ?end ; la:validityEndStatus ?status . FILTER (?status != "closed") }
+      }
+    """ ] .
+
+la:ValidityEvidenceShape a sh:NodeShape ; sh:targetObjectsOf la:validityEvidence ;
+  sh:class la:EvidencePassage ;
+  sh:property [ sh:path la:scope ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue "public" ] ;
+  sh:sparql [ sh:message "Validity evidence must reference one permitted public artifact and its public text representation." ;
+    sh:select """
+      PREFIX la: <https://lawyer-assistant.local/ontology/>
+      SELECT $this WHERE {
+        FILTER NOT EXISTS {
+          $this la:artifact ?artifact ; la:textRepresentation ?representation .
+          ?artifact la:scope "public" ; la:synthetic false ; la:rightsStatus "permitted" .
+          ?representation a la:SourceRepresentation ; la:scope "public" ; la:synthetic false ; la:artifact ?artifact .
+        }
+      }
+    """ ] .
+
+la:OpenVersionLinkShape a sh:NodeShape ; sh:targetClass la:Assertion ;
+  sh:sparql [ sh:message "Open-ended version and linking assertion must have identical dates and validity evidence." ;
+    sh:select """
+      PREFIX la: <https://lawyer-assistant.local/ontology/>
+      SELECT $this WHERE {
+        $this la:predicate la:hasProvisionVersion ; la:object ?version .
+        FILTER (EXISTS { $this la:validityEndStatus "open_ended" } || EXISTS { ?version la:validityEndStatus "open_ended" })
+        FILTER (?property IN (la:validFrom, la:validTo, la:validityEndStatus, la:validityCheckedThrough, la:validityEvidence))
+        { $this ?property ?value . FILTER NOT EXISTS { ?version ?property ?value } }
+        UNION { ?version ?property ?value . FILTER NOT EXISTS { $this ?property ?value } }
+      }
+    """ ] .

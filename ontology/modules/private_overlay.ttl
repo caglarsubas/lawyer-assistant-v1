@@ -1,0 +1,102 @@
+@prefix la: <https://lawyer-assistant.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+la:Matter a owl:Class ; rdfs:label "Hukuki çalışma dosyası"@tr, "Private legal matter"@en ;
+  la:module "private_overlay" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:MatterDocument a owl:Class ; rdfs:label "Dosyaya ait özel belge"@tr, "Private matter document"@en ;
+  la:module "private_overlay" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:MatterFact a owl:Class ; rdfs:label "Dosyaya ait vakıa"@tr, "Private matter fact"@en ;
+  la:module "private_overlay" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:MatterEvent a owl:Class ; rdfs:label "Dosyaya ait olay"@tr, "Private matter event"@en ;
+  la:module "private_overlay" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Event .
+
+la:MatterAssertion a owl:Class ; rdfs:label "Dosyaya ait ilişki iddiası"@tr, "Private matter assertion"@en ;
+  la:module "private_overlay" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Assertion .
+
+la:MatterParty a owl:Class ; rdfs:label "Dosya tarafı"@tr, "Private matter party"@en ;
+  la:module "private_overlay" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Agent .
+
+la:WorkProduct a owl:Class ; rdfs:label "Özel çalışma ürünü"@tr, "Private work product"@en ;
+  la:module "private_overlay" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:WorkProductVersion a owl:Class ; rdfs:label "Çalışma ürünü sürümü"@tr, "Work product version"@en ;
+  la:module "private_overlay" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:Claim a owl:Class ; rdfs:label "Çalışma ürünündeki önerme"@tr, "Work-product claim"@en ;
+  la:module "private_overlay" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:LawyerCorrection a owl:Class ; rdfs:label "Dosyaya özgü avukat düzeltmesi"@tr, "Scoped lawyer correction"@en ;
+  la:module "private_overlay" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:ReviewDecision a owl:Class ; rdfs:label "Çalışma ürünü inceleme kararı"@tr, "Work-product review decision"@en ;
+  la:module "private_overlay" ; la:graphFamily "shared" ;
+  la:reviewStatus "unreviewed" ;
+  rdfs:subClassOf la:Entity .
+
+la:aboutMatter a owl:ObjectProperty ; rdfs:label "Özel dosyayla ilgilidir"@tr, "aboutMatter"@en ;
+  rdfs:domain la:Entity ; rdfs:range la:Matter ;
+  rdfs:comment "Private matter scope; never materialized in public graphs."@en ; la:module "private_overlay" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:hasMatterDocument a owl:ObjectProperty ; rdfs:label "Dosyaya ait belge içerir"@tr, "hasMatterDocument"@en ;
+  rdfs:domain la:Matter ; rdfs:range la:MatterDocument ;
+  rdfs:comment "Private authorized document membership."@en ; la:module "private_overlay" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:hasMatterFact a owl:ObjectProperty ; rdfs:label "Dosyaya ait vakıa içerir"@tr, "hasMatterFact"@en ;
+  rdfs:domain la:Matter ; rdfs:range la:MatterFact ;
+  rdfs:comment "Private fact may remain alleged or disputed."@en ; la:module "private_overlay" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:referencesAuthority a owl:ObjectProperty ; rdfs:label "Hukuki kaynağa gönderme yapar"@tr, "referencesAuthority"@en ;
+  rdfs:domain la:MatterAssertion ; rdfs:range la:LegalEntity ;
+  rdfs:comment "Private-to-public reference with no public inverse."@en ; la:module "private_overlay" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:supportsClaim a owl:ObjectProperty ; rdfs:label "Önermeyi destekler"@tr, "supportsClaim"@en ;
+  rdfs:domain la:MatterAssertion ; rdfs:range la:Claim ;
+  rdfs:comment "Support scoped to the matter and work-product version."@en ; la:module "private_overlay" ;
+  la:requiresLegalReview true ; la:reviewStatus "unreviewed" .
+
+la:dependsOn a owl:ObjectProperty ; rdfs:label "Veriye bağımlıdır"@tr, "dependsOn"@en ;
+  rdfs:domain la:WorkProductVersion ; rdfs:range la:Entity ;
+  rdfs:comment "Dependency used for stale-work-product review."@en ; la:module "private_overlay" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:corrects a owl:ObjectProperty ; rdfs:label "Dosya iddiasını düzeltir"@tr, "corrects"@en ;
+  rdfs:domain la:LawyerCorrection ; rdfs:range la:MatterAssertion ;
+  rdfs:comment "Scoped correction must not update public authority automatically."@en ; la:module "private_overlay" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
+
+la:reviewsWorkProduct a owl:ObjectProperty ; rdfs:label "Çalışma ürünü sürümünü inceler"@tr, "reviewsWorkProduct"@en ;
+  rdfs:domain la:ReviewDecision ; rdfs:range la:WorkProductVersion ;
+  rdfs:comment "Review scoped to an immutable product version."@en ; la:module "private_overlay" ;
+  la:requiresLegalReview false ; la:reviewStatus "unreviewed" .
