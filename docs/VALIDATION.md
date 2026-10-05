@@ -1,5 +1,69 @@
 # Verification record — 5 October 2026
 
+## R01 milestone: reproducible multi-sample calibration studies
+
+The study CLI recomputes comparisons from content-addressed artifacts bound to the
+exact five-component dossier. Duplicate raw bytes, sample metadata and declared
+source identities reject across real/synthetic cohorts. Reports separate recomputed
+comparison statistics from declared source labels, units, times and reviewer counts;
+unknown values and unrepresented strata remain visible. Studies grant no legal,
+source-use, publication or provider authority.
+
+- A complete backend run passed **1,955 tests in 597.82 seconds**, with 27 existing
+  Starlette/httpx and rdflib deprecation warnings. After collection, sixteen
+  directory-replacement regressions were added; the final focused qualification/
+  calibration run passed **481 tests in 7.35 seconds**, including those additions
+  and the final generator changes. Current collection is **1,971**. These runs
+  overlap and must not be added together or described as a single 1,971-test run.
+- Project-wide Ruff passed. The initial-project verification also passed the
+  frontend production build, **83 frontend tests**, **8 deployment/backup tests**
+  and ontology validation. The ontology remains legally unreviewed, with no
+  published historical records. This milestone changes no frontend behavior.
+- The first full run used a stripped environment that placed temporary files on
+  macOS `/tmp`, where an inherited group unavailable to the user caused setgid
+  bits to be stripped: **1,854 passed, 2 failed**. Both affected filesystem tests
+  then passed in an owned temporary directory, followed by the clean full run
+  above using owned pytest and worker temp directories. No product permission
+  workaround was introduced.
+- Independent review reproduced a generator race in which a directory replaced
+  between creation and opening could be adopted and have its permissions changed.
+  Both generators now avoid directory chmod, validate owner/private mode/emptiness
+  and inode bindings before adoption, and preserve rejected replacements during
+  cleanup. Sixteen root/child replacement cases passed. These controls detect
+  ordinary replacement; they do not claim protection against a privileged or
+  malicious same-UID actor controlling the host filesystem.
+- Built **`lawyer-assistant-api:r01-study-offline`**, linux/arm64, image ID
+  `sha256:e5034810ea99c737a224edcc4572a9b0cc630afc6907b1cb3ebc776acdf802e2`.
+  The build copied final application/scripts and the five seed files over the
+  existing `r01-calibration` validation image, with networking disabled. A fresh
+  dependency/base-image rebuild was not claimed: a Docker Hub metadata lookup
+  stalled, so the final rehearsal reused the already available local base.
+- Read-only, network-disabled containers with dropped capabilities, bounded
+  resources and no credentials produced **byte-identical host/container study,
+  schema and dossier reports**. The parity check mounted only the invented sample
+  package read-only using the host's non-root UID. A separate **UID 10001** run
+  used no host mounts, generated three independent TXT samples through the actual
+  bounded parser, and matched **9 passages and 15 critical spans** across the
+  three practices. A duplicate study exited **2**. Real sample count remained zero,
+  documents were not counted as pages, and reviewer time remained unknown.
+- CLI tests also change a negation and recompute both extraction and sample hashes;
+  the genuine comparison then exits **1**, with two of three negation spans matching.
+  Extra artifacts, changed dossiers, unsafe paths and changing captures exit **2**
+  without partial output or submitted text/paths in diagnostics.
+
+This completes the **R01 calibration study tooling** engineering milestone, not
+R01 legal/product qualification. Lawful representative samples, independent
+transcriptions, actual reviewer measurements, rights/privacy decisions and capacity
+re-estimation are still required. No real-source acquisition, graph publication,
+BYOK call, credential change or running-application deployment was performed.
+
+Evidence in `.data/verification/`: `pr-study-full-tests.log`,
+`pr-study-full-tests-summary.json`, `pr-baseline-environment-note.txt`,
+`test-r01-study.txt`, `build-r01-study-offline.txt`, `r01-study-generation.json`,
+`r01-study-host-*.json`, `r01-study-docker-*.json` and the private synthetic
+`r01-study-sample/` directory. CI now includes the multi-sample generator and study
+command; local results do not imply that a GitHub run or deployment has completed.
+
 ## R01 physical evidence and extraction calibration
 
 Added offline research-evidence file verification and extraction comparison against

@@ -23,8 +23,8 @@ sys.path.insert(0, str(ROOT / "backend"))
 # These literal paragraphs and their expected locators are authored independently
 # of parser output. Never replace this oracle with output-derived transcription.
 GOLD_PASSAGES = (
-    ("Paragraf 1", "SENTETİK TEKNİK ÖRNEK — Türkçe karakterler: ı İ ş Ş ğ Ğ ü Ü ö Ö ç Ç. "
-     "Bu metin hukuk kuralı değildir."),
+    ("Paragraf 1", ("SENTETİK TEKNİK ÖRNEK — Türkçe karakterler: ı İ ş Ş ğ Ğ ü Ü ö Ö ç Ç. "
+                    "Bu metin hukuk kuralı değildir.")),
     ("Paragraf 2", "Deneme kaydı: 14.06.2020 tarihinde 1.234,56 TL tutarında bir değer yazıldı; ödeme yapılmadı."),
     ("Paragraf 3", "Tamamı uydurma test verisidir. Belge kimliği TEST-KAYIT-0042; taraf veya gerçek dava içermez."),
 )
@@ -154,6 +154,41 @@ def _write_new_file(directory_fd, name, content):
         raise
 
 
+def _create_private_directory(parent_fd, name):
+    """Adopt only a fresh empty private directory, without changing its permissions.
+
+    mkdir does not return an inode handle. These checks detect ordinary replacement
+    and refuse existing contents; they cannot authenticate creation against a
+    privileged or malicious same-UID process controlling the destination tree.
+    """
+    os.mkdir(name, 0o700, dir_fd=parent_fd)
+    created = os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
+    if (not stat.S_ISDIR(created.st_mode) or stat.S_IMODE(created.st_mode) != 0o700
+            or created.st_uid != os.geteuid()):
+        raise FixtureError("destination_changed_during_generation")
+    descriptor = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_NONBLOCK,
+                         dir_fd=parent_fd)
+    try:
+        opened = os.fstat(descriptor)
+        if (_identity(opened) != _identity(created) or not stat.S_ISDIR(opened.st_mode)
+                or stat.S_IMODE(opened.st_mode) != 0o700 or opened.st_uid != os.geteuid()):
+            raise FixtureError("destination_changed_during_generation")
+        with os.scandir(descriptor) as entries:
+            if next(entries, None) is not None:
+                raise FixtureError("destination_changed_during_generation")
+        _check_binding(parent_fd, name, descriptor)
+        return descriptor
+    except BaseException:
+        os.close(descriptor)
+        raise
+
+
+def _check_binding(parent_fd, name, descriptor):
+    linked = os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
+    if not stat.S_ISDIR(linked.st_mode) or _identity(linked) != _identity(os.fstat(descriptor)):
+        raise FixtureError("destination_changed_during_generation")
+
+
 def build_fixture(destination: Path) -> dict:
     """Create a new fixture directory; no arbitrary input or overwrite option exists."""
     parent_fd, name = _open_parent(destination)
@@ -164,11 +199,9 @@ def build_fixture(destination: Path) -> dict:
     try:
         files, elapsed = _prepare_package()
         # mkdirat is exclusive: a destination created during parsing is preserved.
-        os.mkdir(name, 0o700, dir_fd=parent_fd)
+        directory_fd = _create_private_directory(parent_fd, name)
         created = True
-        directory_fd = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent_fd)
         directory_identity = _identity(os.fstat(directory_fd))
-        os.fchmod(directory_fd, 0o700)
         for filename in FIXED_FILES:
             written[filename] = _write_new_file(directory_fd, filename, files[filename])
         os.fsync(directory_fd)
