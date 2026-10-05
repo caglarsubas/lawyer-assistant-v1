@@ -14,6 +14,11 @@ TRANSFORMATION = "reviewed-provision-promotion-v1"
 
 
 def promoted_graphs(files: dict[str, bytes], public_reviewer: str, reviewed_at: str) -> dict[str, bytes]:
+    return _promoted_graphs(files, public_reviewer, reviewed_at)
+
+
+def _promoted_graphs(files, public_reviewer, reviewed_at, *, expected_markers=None):
+    """Shared transformation; the public v1 entry point remains single-source."""
     if (not isinstance(public_reviewer, str) or not public_reviewer.strip()
             or len(public_reviewer) > 160 or any(ord(c) < 32 for c in public_reviewer)):
         raise ValueError("Supply an intentional bounded public reviewer identity")
@@ -29,10 +34,14 @@ def promoted_graphs(files: dict[str, bytes], public_reviewer: str, reviewed_at: 
             raise ValueError("Complete unblocked preparation graphs are required")
         graph = Graph().parse(data=raw, format="turtle")
         markers = list(graph.triples((None, LA.reviewPreparationOnly, None)))
-        if len(markers) != 1 or markers[0][2] != Literal(True):
-            raise ValueError("Only marked preparation graphs may be converted")
-        marker_subjects.add(markers[0][0])
-        graph.remove(markers[0])
+        if expected_markers is None:
+            if len(markers) != 1 or markers[0][2] != Literal(True):
+                raise ValueError("Only marked preparation graphs may be converted")
+        elif set(markers) != {(subject, LA.reviewPreparationOnly, Literal(True)) for subject in expected_markers}:
+            raise ValueError("Preparation markers do not match the exact reviewed source set")
+        for marker in markers:
+            marker_subjects.add(marker[0])
+            graph.remove(marker)
         # The public review must occur on/after the independently checked UTC
         # day. Preserve the legal dates and horizon exactly; neither becomes a
         # repeal date or an assertion of perpetual validity during promotion.
@@ -63,7 +72,7 @@ def promoted_graphs(files: dict[str, bytes], public_reviewer: str, reviewed_at: 
                 graph.set((node, predicate, value))
         output[family] = ("\n".join(sorted(line for line in graph.serialize(format="nt").splitlines()
                                           if line.strip())) + "\n").encode()
-    if len(marker_subjects) != 1 or not assertions:
+    if (expected_markers is None and len(marker_subjects) != 1) or not assertions:
         raise ValueError("A single-source provision preparation is required")
     return output
 

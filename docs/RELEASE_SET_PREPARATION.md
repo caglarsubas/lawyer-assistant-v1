@@ -116,8 +116,10 @@ An unblocked packet also includes `candidate/structure.ttl` and
 ontology and SHACL contract, physical artifact inventory and exact Unicode quote
 locations. This provision slice adds structural assertions; it does not populate
 decisions. Every assertion remains unreviewed and both graphs retain every source's
-preparation-only marker. Existing single-source packet readers, promotion and release
-validation reject these packets/graphs.
+preparation-only marker. Existing single-source packet readers and promotion reject
+these packets. Release validation rejects the unchanged preparation graphs. Only
+the separate [source-set review workflow](SOURCE_SET_PUBLICATION.md) may transform
+them for external signatures and independently verify continuing permission.
 
 **The entire packet, including its candidate subdirectory, is firm-confidential.**
 Selecting public authorities is private workflow metadata; generated assertions also
@@ -150,8 +152,10 @@ fixed `review_source_set_preparation_failed` diagnostic without partial stdout.
 
 ## Next R02 gates
 
-Independent multi-source signatures, publication-safe metadata, audience constraints,
-expiry/renewal, source-set authorization and revocation remain unimplemented. R01
-actual legal/privacy/source review and full research-job cancellation, throughput
-and capacity qualification remain open. The existing single-source publication
-workflow is unchanged.
+The [source-set publication workflow](SOURCE_SET_PUBLICATION.md) now implements
+external public/private signatures, public attribution, per-source deployment-wide
+audience and expiry constraints, and live authorization/revocation. Renewal uses
+a fresh reviewed release rather than overwriting permission. Restricted audience
+serving, same-release renewal, R01 actual legal/privacy/source review and full
+research-job cancellation, throughput and capacity qualification remain open.
+Preparation itself still grants no publication permission.

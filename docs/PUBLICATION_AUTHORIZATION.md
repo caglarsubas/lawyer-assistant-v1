@@ -7,6 +7,10 @@ certify the national ontology, review a licence, resolve an unknown validity end
 date, or populate a real corpus.
 All legal decisions and signing keys remain outside the application.
 
+For 2–8 sources, use the separate [source-set publication contract](SOURCE_SET_PUBLICATION.md).
+The runtime guard recognizes both strict signed formats; this document describes
+the existing single-source format and commands.
+
 ## Two approvals and a current review
 
 A public Ed25519 attestation approves the exact ontology and transformed graph
@@ -19,7 +23,8 @@ strict, distinct signing envelopes. Keys embedded in input files are never trust
 Private authorization is valid for at most 90 days. The audience is explicitly
 `deployment_shared`; a firm's source-use acceptance alone is insufficient. The
 reviewer must establish that all conditions of this audience permission are met.
-Conditional, restricted-audience or multi-source publication is not implemented.
+Conditional and restricted-audience publication is not implemented. Multi-source
+publication has its own format with a proof-backed grant for every selected source.
 Proof-file hashes establish byte identity, not the legal meaning of a licence.
 
 The accepted private record lives under `/data/release-authorizations/<release_id>`.
@@ -172,6 +177,7 @@ outside this tool must invalidate the epoch before starting services.
 
 Full reconstruction and signature/SHACL checks run at each gate in this initial
 implementation. This prioritizes correctness for the small initial corpus; large
-corpus latency, authorization renewal, multi-source locking and five simultaneous
-research jobs still need qualification. A valid signature establishes the configured
+corpus latency, same-release authorization renewal and five simultaneous research
+jobs still need qualification. The source-set path reuses deterministic locks and
+requires a fresh reviewed release for renewal. A valid signature establishes the configured
 signer's approval, not their professional qualification or universal legal truth.

@@ -31,8 +31,11 @@ reviewed sources together, with exact revisions, per-source rights and determini
 PostgreSQL locks. It emits a confidential summary after complete revalidation.
 The [multi-source preparation command](docs/RELEASE_SET_PREPARATION.md) composes a
 private review packet with explicit identities, exact evidence and cross-source
-version/conflict checks. Blockers withhold both graph candidates. Multi-source
-publication and independent legal approval remain separate, unfinished gates.
+version/conflict checks. Blockers withhold both graph candidates. The
+[source-set publication workflow](docs/SOURCE_SET_PUBLICATION.md) now accepts two
+external approvals, requires a bounded sharing grant for every source, and checks
+all sources again at installation, activation, rollback and use. Real independent
+legal/source approval and operational qualification remain open.
 
 ## Run the working demonstration
 
@@ -111,7 +114,10 @@ The [publication authorization workflow](docs/PUBLICATION_AUTHORIZATION.md) now
 requires independent public and private signatures plus live review checks at
 installation, activation, rollback and retrieval. Initial promotion supports
 single-source provision snapshots with finite validity or explicitly reviewed
-open-ended validity through an evidenced checked-through date; real legal review
+open-ended validity through an evidenced checked-through date. The separate
+source-set format extends this to 2–8 unblocked sources with exact public evidence,
+per-source audience permission and expiry. Renewal requires a freshly reviewed
+release and new signatures; accepted approvals are immutable. Real legal review
 remains pending.
 
 Matter content remains in the authorized encrypted store. Membership is checked before document reads, research, reviews, exports and outbound requests. Public graph traversal has typed, bounded tools; the API exposes no raw SPARQL, update or federation operation. Public graph counts do not include matter usage.

@@ -254,6 +254,28 @@ def test_cleanup_removes_only_the_exact_owned_inode(tmp_path, files, store):
     assert not output.exists()
 
 
+def test_enclosing_authorization_can_explicitly_store_five_levels_but_packets_stay_at_four(tmp_path, store):
+    record = {"packet/candidate/sources/" + "a" * 64 + "/raw.bin": b"SYNTHETIC TEST ONLY"}
+    with pytest.raises(ValueError, match="Unsafe packet-relative path"):
+        cli.atomic_packet(tmp_path / "default-depth", record)
+    assert not (tmp_path / "default-depth").exists()
+    output = tmp_path / "private-authorization"
+    cli._inventory(record, max_depth=5)
+    identity = cli.atomic_packet(output, record, max_depth=5)
+    assert (output / next(iter(record))).read_bytes() == b"SYNTHETIC TEST ONLY"
+    with pytest.raises(ValueError, match="Unsafe packet-relative path"):
+        cli.sealed_files(record, store)
+    cli._remove_own_output(output, identity)
+    assert not output.exists()
+
+
+@pytest.mark.parametrize("depth", [3, 6, True, "5"])
+def test_authorization_path_exception_cannot_expand_arbitrarily(tmp_path, depth):
+    with pytest.raises(ValueError, match="Unsupported packet path depth"):
+        cli.atomic_packet(tmp_path / "output", {"a": b"b"}, max_depth=depth)
+    assert not (tmp_path / "output").exists()
+
+
 def test_existing_reservation_is_not_removed_by_another_preparer(tmp_path, files, store):
     reservation = tmp_path / ".packet.preparation-lock"
     reservation.write_text("Another invocation owns this")

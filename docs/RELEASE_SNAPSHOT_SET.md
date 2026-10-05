@@ -98,8 +98,10 @@ candidate inventories and bounded aggregate compilation. This inspector remains
 read-only and neither deduplicates nor joins assertions. Matching source-version
 labels never establish matching legal identities.
 
-Audience restrictions, expiry/renewal, multi-source publication/revocation,
-cancellation and full research-job capacity qualification remain subsequent packets.
+The [source-set publication contract](SOURCE_SET_PUBLICATION.md) now enforces
+external approvals, per-source shared-audience grants/expiry and live revocation.
+Renewal uses a freshly reviewed release. Restricted-audience serving, same-release
+renewal, cancellation and full research-job capacity qualification remain open.
 
 Real PostgreSQL tests use only an explicitly selected disposable local test service.
 `LA_TEST_POSTGRES_URL` must name `lawyer_snapshot_test` on loopback or the CI

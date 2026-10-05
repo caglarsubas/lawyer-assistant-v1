@@ -97,19 +97,21 @@ def evidence_files(directory):
     return evidence
 
 
-def _relative(name):
+def _relative(name, *, max_depth=4):
+    if type(max_depth) is not int or max_depth not in {4, 5}:
+        raise ValueError("Unsupported packet path depth")
     if (not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._/-]{0,239}", name)
-            or len(name.split("/")) > 4
+            or len(name.split("/")) > max_depth
             or Path(name).is_absolute() or any(part in {"", ".", ".."} for part in name.split("/"))):
         raise ValueError("Unsafe packet-relative path")
     return name
 
 
-def _inventory(files):
+def _inventory(files, *, max_depth=4):
     if len(files) > MAX_FILES or sum(len(raw) for raw in files.values()) > MAX_PACKET:
         raise ValueError("Review packet exceeds its budget")
     for name, raw in files.items():
-        _relative(name)
+        _relative(name, max_depth=max_depth)
         if type(raw) is not bytes or len(raw) > MAX_FILE or name in RESERVED:
             raise ValueError("Invalid review packet content")
     return {name: {"sha256": digest(raw), "bytes": len(raw)} for name, raw in sorted(files.items())}
@@ -177,7 +179,11 @@ def read_packet(directory, store, *, schema_version="legal-review-packet-v1"):
     return files, digest(raw)
 
 
-def atomic_packet(output, files):
+def atomic_packet(output, files, *, max_depth=4):
+    # Only an enclosing private authorization record needs the fifth component
+    # (packet/candidate/sources/<source-id>/raw.bin). Packet readers stay at four.
+    if type(max_depth) is not int or max_depth not in {4, 5}:
+        raise ValueError("Unsupported packet path depth")
     destination = checked_path(output)
     if destination.exists() or not destination.parent.is_dir():
         raise ValueError("Output must be new and its parent must already exist")
@@ -194,7 +200,7 @@ def atomic_packet(output, files):
         stage = Path(tempfile.mkdtemp(prefix=".legal-review-", dir=destination.parent))
         os.chmod(stage, 0o700)
         for name, raw in files.items():
-            _relative(name)
+            _relative(name, max_depth=max_depth)
             path = stage / name
             path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
             for parent in path.parents:
