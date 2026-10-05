@@ -86,6 +86,11 @@ def main(argv=None):
     comparison = commands.add_parser("calibrate", help="Compare exported extraction with independent reference")
     comparison.add_argument("directory", type=Path)
     commands.add_parser("calibration-schemas", help="Print calibration input schemas")
+    study = commands.add_parser("study", help="Recompute a dossier-bound multi-sample extraction study")
+    study.add_argument("directory", type=Path)
+    study.add_argument("--dossier-dir", type=Path, required=True)
+    study.add_argument("--artifacts-dir", type=Path, required=True)
+    commands.add_parser("study-schemas", help="Print study manifest schema")
     args = parser.parse_args(argv)
     try:
         if args.command == "schemas":
@@ -96,6 +101,17 @@ def main(argv=None):
             result = inspect_evidence(args.directory, args.evidence_dir)
         elif args.command == "calibrate":
             result = calibrate(args.directory)
+        elif args.command == "study":
+            from app.calibration_study_io import inspect_study
+
+            result = inspect_study(args.directory, args.dossier_dir, args.artifacts_dir)
+        elif args.command == "study-schemas":
+            from app.calibration_study import StudyManifest
+
+            result = {"schema_version": "extraction-calibration-study-schemas-v1",
+                      "runtime_authorization": "none", "production_qualified": False,
+                      "validation_note": "Physical hashes and Python cross-record checks are also required.",
+                      "components": {"study.json": StudyManifest.model_json_schema()}}
         else:
             result = inspect_dossier(args.directory)
         output = json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True, allow_nan=False)
@@ -107,6 +123,8 @@ def main(argv=None):
         return 2
     print(output)
     if args.command == "calibrate" and not result["comparison"]["all_declared_checks_passed"]:
+        return 1
+    if args.command == "study" and not result["all_declared_checks_passed"]:
         return 1
     return 0
 
