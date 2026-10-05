@@ -240,7 +240,7 @@ Dependencies refer to completion of the relevant gate, not just code availabilit
 | ID / priority | Delivery packet | Dependencies / accountable lead | Exit evidence |
 |---|---|---|---|
 | **R01 / P0, in progress** | Source, asset and semantic qualification: offline catalogs, legal-analysis/scenario contracts, provider/evaluation dossier, physical evidence verifier, extraction comparator and reproducible calibration studies implemented; representative calibration and review pending | Legal ontology owner + data/source lead with application/security owners; source/provider dependencies documented | Source uses and routes reviewed; sample errors/reviewer time measured; argument/scenario fixtures adjudicated; provider processing/spend controls qualified; added effort estimated. Passing the dossier validator grants no approval |
-| **R02 / P0, partial** | Read-only multi-source snapshots implemented with per-source revisions/rights and deterministic locks; combined preparation/publication, audience, expiry/renewal, canonical identity conflicts, exact public/private manifests and five-job qualification remain | R01 contracts; actual source reviews remain mandatory; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
+| **R02 / P0, partial** | Multi-source snapshots and confidential combined review preparation implemented with per-source revisions/rights, explicit identities, conflict blockers and separate proof/candidate inventories; independent multi-source publication, audience, expiry/renewal, revocation and five-job qualification remain | R01 contracts; actual source reviews remain mandatory; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
 | **R03 / P0** | First genuinely reviewed contract corpus: RG ordinary/mükerrer manifest; amendment/transition candidates; MBS reconciliation; TBMM enacted/history distinction; exact provisions and historical versions | R01 lawful samples and protected reviewers; R02 for combined releases; editors + ingestion team | Reviewed corpus and exact evidence ready for analysis; amendment chains/historical queries pass; discrepancies visible. Full legal-analysis/export qualification additionally requires R04, the relevant R05 decision slice and R05A |
 | **R04 / P1** | Turkish lexical/citation normalization, local embedding and reranker evaluation, structured context packing; pinned model/index versions | R01 development benchmark; R03 representative approved corpus; retrieval/ML + legal adjudicators | Exact identifiers and original quotes preserved; hybrid and graph/metadata/rerank ablations on one snapshot; thresholds, error slices and resource budgets reported; no private-data or adverse-recall regression |
 | **R05 / P1** | Decision population and research: proceeding/decision/manifestation identity; allegation/finding/reasoning/result/dissent roles; citation ambiguity queue; reviewed authority-treatment events; independent contrary-authority branch | R01 judicial source/effect contracts, R02, R04; knowledge engineers + domain editors | Supporting and adverse passages are inspectable with role, version, institution epoch and scope; treatment is not inferred from citation; missing courts/periods and unknown finality remain explicit |
@@ -364,12 +364,34 @@ remain confidential. SQLite demo mode is explicitly optimistic.
 
 This packet delivers the snapshot/inspection foundation, with PostgreSQL race tests,
 while leaving **R02 partial**. It creates no combined graph or publication authorization.
-Next are canonical identity/version conflict handling and public/private multi-source
-manifest composition, followed by independently enforced audience/expiry/renewal and
-publication revocation. Full research-job cancellation, throughput and lock-latency
+The subsequent preparation packet below adds canonical identity/version conflict
+handling and public/private candidate inventories. Independently enforced
+audience/expiry/renewal and publication revocation remain next. Full research-job cancellation, throughput and lock-latency
 qualification remain open; five simultaneous test inspections establish concurrency
 behavior only. R01 lawful samples, actual legal/privacy review and capacity estimates
 are still required before product qualification.
+
+### R02 engineering milestone — combined independent-review preparation
+
+The [combined preparation command](RELEASE_SET_PREPARATION.md) composes the locked
+source set into a deterministic, confidential review packet with source-qualified
+mapping resolutions, a shared explicit identity registry, exact evidence and
+cross-source identity/version conflicts. Unknowns and conflicts withhold both graph
+candidates. Compatible finite versions may share identities across different source
+offsets; repeated open-ended versions require explicit proof reconciliation. Private
+proofs stay outside the source-candidate inventory. The generated graph retains
+unreviewed assertions and preparation-only markers.
+
+Preparation and revalidation bind current source revisions, operator state, physical
+bytes and ontology. A final-check failure discards only newly created output. The
+distinct packet format is rejected by existing single-source publication readers.
+See the [verification record](VALIDATION.md) for the synthetic engineering evidence;
+no source approval, release or live deployment is created by this work.
+
+**R02 remains partial.** The next engineering packet is independent multi-source
+publication authorization, including public/private attribution, audience and
+expiry/renewal constraints, and revocation of any required source. Full research-job
+capacity/cancellation and R01 actual source/legal/privacy qualification remain open.
 
 ## Two-graph specification
 

@@ -209,6 +209,43 @@ def test_cleanup_never_deletes_a_replacement_created_after_rename(tmp_path, file
     assert (relocated / "manifest.json").is_file()
 
 
+@pytest.mark.parametrize("replacement", [False, True], ids=["owned-output", "unrelated-replacement"])
+def test_reservation_cleanup_failure_after_rename_discards_only_owned_output(
+    tmp_path, files, store, monkeypatch, replacement,
+):
+    output = tmp_path / "packet"
+    reservation = tmp_path / ".packet.preparation-lock"
+    relocated = tmp_path / "relocated-own-packet"
+    original_unlink = Path.unlink
+    reached_cleanup = []
+
+    def fail_reservation_cleanup(path, *args, **kwargs):
+        if path == reservation:
+            reached_cleanup.append(True)
+            # The directory has already been renamed, but atomic_packet has not
+            # returned its inode to the caller's created variable yet.
+            assert (output / "manifest.json").is_file()
+            if replacement:
+                output.rename(relocated)
+                output.mkdir()
+                (output / "unrelated.txt").write_bytes(b"Do not delete replacement")
+            original_unlink(path, *args, **kwargs)
+            raise OSError("TEST ONLY reservation unlink failed after rename")
+        return original_unlink(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "unlink", fail_reservation_cleanup)
+    with pytest.raises(OSError, match="reservation unlink failed"):
+        cli.atomic_packet(output, cli.sealed_files(files, store))
+    assert reached_cleanup == [True]
+    assert not list(tmp_path.glob(".legal-review-*"))
+    assert not reservation.exists()
+    if replacement:
+        assert (output / "unrelated.txt").read_bytes() == b"Do not delete replacement"
+        assert (relocated / "manifest.json").is_file()
+    else:
+        assert not output.exists()
+
+
 def test_cleanup_removes_only_the_exact_owned_inode(tmp_path, files, store):
     output, identity = materialize(tmp_path, files, store)
     cli._remove_own_output(output, (identity[0], identity[1] + 1))

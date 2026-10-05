@@ -92,11 +92,14 @@ interface accepts no untrusted SQL or source query language.
 
 ## Remaining R02 work
 
-Canonical identity/version conflicts across sources, public/private manifest
-composition, audience restrictions, expiry/renewal, aggregate compilation,
-publication/revocation, cancellation and full research-job capacity qualification
-remain subsequent packets. Matching source-version labels do not establish matching
-legal identities. This inspection neither deduplicates nor joins their assertions.
+The separate [multi-source preparation command](RELEASE_SET_PREPARATION.md) now
+adds explicit canonical identities, cross-source conflict blockers, private/public
+candidate inventories and bounded aggregate compilation. This inspector remains
+read-only and neither deduplicates nor joins assertions. Matching source-version
+labels never establish matching legal identities.
+
+Audience restrictions, expiry/renewal, multi-source publication/revocation,
+cancellation and full research-job capacity qualification remain subsequent packets.
 
 Real PostgreSQL tests use only an explicitly selected disposable local test service.
 `LA_TEST_POSTGRES_URL` must name `lawyer_snapshot_test` on loopback or the CI
