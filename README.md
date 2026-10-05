@@ -6,8 +6,9 @@ The [product roadmap](docs/ROADMAP.md) was reconciled with the three new researc
 documents on 5 October 2026. See the [data and knowledge strategy](docs/DATA_KNOWLEDGE_STRATEGY.md)
 for source packs, freshness and retrieval qualification, and the
 [decision record](docs/PLAN_RECONCILIATION_2026-10-05.md) for adopted proposals,
-conflicts and unresolved claims. Source/asset/semantic qualification is the current
-packet, before multi-source implementation; its review and measurement gates remain open.
+conflicts and unresolved claims. Source/asset/semantic qualification remains open.
+Its implemented contracts now support the bounded R02 snapshot foundation below;
+real-source qualification and combined publication still require their own gates.
 
 The same-day [legal analysis and BYOK amendment](docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md)
 adds cited argument construction, bounded consistency/correction and deeper research
@@ -24,6 +25,11 @@ They report measured discrepancies and remaining evidence gaps without granting 
 The [calibration study workflow](docs/R01_QUALIFICATION.md#run-a-reproducible-multi-sample-study)
 recomputes multiple samples from their original artifacts, rejects repeated originals
 and declared source identities, and reports real and synthetic coverage separately.
+
+The [R02 source-set inspector](docs/RELEASE_SNAPSHOT_SET.md) checks 2–8 existing
+reviewed sources together, with exact revisions, per-source rights and deterministic
+PostgreSQL locks. It emits a confidential summary after complete revalidation.
+Combined graph preparation and publication remain future work.
 
 ## Run the working demonstration
 
@@ -119,6 +125,9 @@ backend/.venv/bin/python -m unittest discover -s deploy -p 'test_*.py'
 cd frontend
 npm run build
 ```
+
+See [CI runtime and cost controls](docs/CI.md) for the full-suite two-worker command,
+PR/main trigger policy and timeout limits.
 
 Fixtures are conspicuously synthetic and excluded from application legal retrieval. The automated suite covers matter isolation, CSRF, encrypted content, extraction failure visibility, evidence validation, review restrictions, stale work, Turkish exports, historical graph semantics, gateway controls and safe restoration boundaries. These checks do not establish the roadmap's legal quality, recall, load or pilot targets.
 

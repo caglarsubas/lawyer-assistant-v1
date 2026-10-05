@@ -217,16 +217,19 @@ def mock_upstream(monkeypatch, status=200, payload=None):
 
     class Connection:
         def __init__(self, upstream, timeout):
-            calls.append({"upstream": upstream, "timeout": timeout})
+            self.call = {"upstream": upstream, "timeout": timeout,
+                         "closed": False, "close_complete": threading.Event()}
+            calls.append(self.call)
 
         def request(self, method, path, body, headers):
-            calls[-1].update(method=method, path=path, body=body, headers=headers)
+            self.call.update(method=method, path=path, body=body, headers=headers)
 
         def getresponse(self):
             return Response()
 
         def close(self):
-            calls[-1]["closed"] = True
+            self.call["closed"] = True
+            self.call["close_complete"].set()
 
     monkeypatch.setattr(relay, "PinnedHTTPSConnection", Connection)
     return calls
@@ -246,6 +249,9 @@ def test_exact_tunnel_paths_fixed_headers_and_relay_generated_transport(monkeypa
     assert response.status_code == 200
     assert response.json()["relay_transport"] == relay.Upstream(PIN, HOST).metadata
     assert len(calls) == 1 and calls[0]["upstream"] == relay.Upstream(PIN, HOST)
+    # A complete HTTP response can reach the client before the handler's finally
+    # block runs. Observe cleanup explicitly rather than assume thread ordering.
+    assert calls[0]["close_complete"].wait(timeout=5), "Upstream connection did not close"
     assert calls[0]["method"] == method and calls[0]["path"] == path and calls[0]["closed"]
     assert calls[0]["headers"] == {
         "Authorization": "Bearer fixture-only", "Content-Type": "application/json", "Accept-Encoding": "identity",
@@ -257,6 +263,8 @@ def test_exact_tunnel_paths_fixed_headers_and_relay_generated_transport(monkeypa
 def test_redirects_are_not_followed(monkeypatch, running_relay, status):
     calls = mock_upstream(monkeypatch, status=status)
     response = running_relay.get("/v1/models", headers=headers())
+    assert len(calls) == 1
+    assert calls[0]["close_complete"].wait(timeout=5), "Upstream connection did not close"
     assert response.status_code == 502 and len(calls) == 1 and calls[0]["closed"]
     assert "unapproved" not in response.text
 

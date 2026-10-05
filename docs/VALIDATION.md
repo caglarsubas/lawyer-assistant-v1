@@ -1,5 +1,102 @@
 # Verification record — 5 October 2026
 
+## CI root-cause optimization
+
+Profiling identified repeated SPARQL parsing inside each fresh SHACL validation,
+amplified by required publication/authorization checks. The new invocation-local
+prepared-query cache reduces the representative fixture from **186 parses to 10**
+while retaining **all 186 query executions**. Seven alternating warm measurements
+on the complete 2,374-triple schema and 130-triple synthetic fixture gave median
+validation times of **0.37177s before / 0.15019s after (59.6% lower)**. This is a
+bounded validator benchmark, not a full-suite or hosted billing claim.
+
+- **23 regression tests passed in 5.93s.** They compare valid and invalid SHACL
+  reports, verify production-path wiring, equal query execution counts, fresh
+  evidence/bindings, unchanged caller graphs, namespace/base behavior, bounded
+  caches, fallbacks and parallel isolation. CI executes these before the full
+  suite to catch a parsing-work regression early.
+- The complete local suite with two workers and file grouping passed **2,081 tests,
+  eight PostgreSQL cases skipped, 28 existing warnings, in 255.81s (4m15s)**,
+  compared with **2,058 passed in 336.83s (5m36s)** before the optimization.
+  The additional 23 tests remain part of the suite; no test coverage was removed.
+- The final CI command with **two workers, work stealing and `--maxfail=1`**
+  passed **2,081 tests, eight PostgreSQL skips and 28 existing warnings in
+  241.73s (4m01s)**. This includes the synchronized relay test and is **28.2% less
+  local wall time** than the pre-optimization run, with 23 additional regressions.
+  All 42 fixtures use function scope; the serial PostgreSQL job is unchanged.
+- The preceding hosted two-worker run completed in **1,178.94s (19m38s)** but failed
+  a relay test that checked upstream closure before the server thread's cleanup.
+  Tests now synchronize on a completion event and still require actual closure;
+  seven focused cases passed across three bounded trials. No provider code changed.
+- All fingerprinted ontology files are byte-identical. Signed release identity,
+  source rereads and live authorization/revocation checks remain unchanged; no
+  validation result is cached. Independent review found no blocking issue.
+- Project-wide Ruff (now including ontology code), actionlint, eight deployment
+  tests, ontology validation and the R01 dossier check passed. No provider calls,
+  live state changes or running-application deployment occurred.
+
+The [CI controls](CI.md) retain a single PR workflow, separate main verification,
+two workers on one runner, failure-based early exit and no automatic retries.
+Backend tests are capped at 18 minutes inside a 20-minute job; the other jobs
+retain five-minute caps. PostgreSQL's eight tests remain mandatory in their
+separate serial job. Hosted speed and billing must be measured independently.
+
+Local evidence: `.data/verification/ci-prepared-query-benchmark.json`,
+`ci-prepared-full.log`, `ci-prepared-balanced.log`,
+`ci-two-worker-hosted-failed.log` and `ci-query-tests.log`.
+
+## R02 foundation: consistent review of multiple sources
+
+The [source-set inspector](RELEASE_SNAPSHOT_SET.md) reuses each source's existing
+rights, assignment, revision and ledger checks in one transaction. It captures and
+revalidates the complete set, bounds source bytes/mappings, and emits a confidential
+summary only after successful exit. It produces no combined graph or publication
+authorization.
+
+- **87 new snapshot-set/CLI tests passed in 12.15 seconds.** Cases include strict
+  source selection, per-source rights/ownership, mixed/stale/corrupt reviews,
+  initial and final revalidation races, caller mutation, aggregate limits, request
+  replacement, safe errors, no writes and rejection by the v1 preparation contract.
+- **8 real PostgreSQL tests passed in 8.73 seconds** against the Compose-pinned
+  PostgreSQL 16.10 image in a dedicated disposable container. Observed database
+  lock waits cover same-owner mapping changes and a different administrator's
+  source reassignment. Two/five concurrent reversed-order sets agree; queued
+  committed revisions/revocation reject; a real five-second lock timeout fails
+  safely; partial failure releases acquired locks. Every test uses a unique child
+  database. Zero children remained, and the container was removed afterward.
+- **253 existing review/mapping/authorization/publication tests passed in 219.27
+  seconds.** Additional focused runs passed 175 snapshot/preparation tests and 104
+  snapshot/CLI/evidence-reader tests. These suites overlap; their counts are not
+  an aggregate full-suite result. At this milestone the backend collection was
+  **2,066**, with PostgreSQL cases skipped unless explicitly configured. Subsequent
+  complete local runs are recorded in the CI section above.
+- Repository-wide Ruff, the R01 dossier check, and eight deployment tests passed.
+  Python test runs reported the existing Starlette/httpx deprecation warning.
+  No frontend behavior changed. A dedicated CI PostgreSQL job now executes the
+  concurrency tests independently of the normal backend suite.
+- Built `lawyer-assistant-api:r02-snapshot-offline`, linux/arm64, image ID
+  `sha256:8dd7ee38d4d0c81c1921a5f48f58390b41e5e7e361be108676af431f85dce827`,
+  by copying final application/scripts over the cached R01 validation image with
+  network disabled. This is not a fresh dependency/base-image rebuild. A read-only,
+  network-disabled container with dropped capabilities, resource limits and
+  **UID 10001** emitted the byte-identical host request schema. Missing input exited
+  2 with empty stdout and a fixed diagnostic. This Docker smoke check covers CLI
+  loading/schema/rejection; successful inspections and concurrency were tested
+  separately against isolated SQLite and PostgreSQL fixtures.
+
+Independent review found no blocking issue and requested the additional different-
+administrator lock test, which passed. These checks qualify the engineering slice
+only: R01 actual rights/legal/privacy review and R02 combined publication, identity
+conflicts, expiry/renewal, cancellation and measured research-job capacity remain
+open. No real-source acquisition, provider request, credential change or deployment
+of the running application was performed.
+
+Local evidence in `.data/verification/`: `r02-new-tests.log`, `r02-pg.log`,
+`r02-boundaries.log`, `r02-collection.log`, `r02-r01-contracts.json`,
+`r02-docker-build.log`, `r02-schema-host.json`, `r02-schema-docker.json` and
+`r02-docker-rejected.{stdout,stderr}`. GitHub check status and deployment status
+must be verified separately.
+
 ## R01 milestone: reproducible multi-sample calibration studies
 
 The study CLI recomputes comparisons from content-addressed artifacts bound to the

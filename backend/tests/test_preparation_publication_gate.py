@@ -39,7 +39,7 @@ def test_marker_presence_blocks_every_family_before_shacl(family, marker, verifi
     def forbidden_shacl(*args, **kwargs):
         pytest.fail("Review-only publication rejection must run before SHACL")
 
-    monkeypatch.setattr(release, "validate", forbidden_shacl)
+    monkeypatch.setattr(release._validation, "validate_graph", forbidden_shacl)
     with pytest.raises(ValueError, match="(?i)preparation|review.only"):
         release.check_data(graphs, ONTOLOGY, {"verified": verified})
 

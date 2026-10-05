@@ -16,7 +16,6 @@ from pathlib import Path
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
-from pyshacl import validate
 from rdflib import RDF, BNode, Graph, Literal, Namespace
 from rdflib.compare import isomorphic
 
@@ -25,6 +24,9 @@ FAMILIES = ("structure", "jurisprudence")
 _temporal_spec = importlib.util.spec_from_file_location("lawyer_release_temporal", Path(__file__).with_name("temporal.py"))
 _temporal = importlib.util.module_from_spec(_temporal_spec)
 _temporal_spec.loader.exec_module(_temporal)
+_validation_spec = importlib.util.spec_from_file_location("lawyer_release_validation", Path(__file__).with_name("validation.py"))
+_validation = importlib.util.module_from_spec(_validation_spec)
+_validation_spec.loader.exec_module(_validation)
 
 
 def canonical(value) -> bytes:
@@ -154,8 +156,8 @@ def check_data(graphs: dict[str, Graph], ontology_root: Path, review: dict) -> d
             if (representation, LA.synthetic, Literal(False)) not in combined or (representation, LA.scope, Literal("public")) not in combined:
                 raise ValueError("Text representations must be explicitly public and nonsynthetic")
     _temporal.validate_graph_temporality(combined)
-    conforms, _, report = validate(combined, shacl_graph=Graph().parse(ontology_root / "shapes.ttl", format="turtle"),
-                                    ont_graph=load_schema(ontology_root), inference="rdfs", advanced=True)
+    conforms, _, report = _validation.validate_graph(
+        combined, Graph().parse(ontology_root / "shapes.ttl", format="turtle"), load_schema(ontology_root))
     if not conforms:
         raise ValueError("Snapshot violates SHACL: " + str(report))
     return {"partitions": partitions, "assertions": sum(len(p[s]) for p in partitions.values() for s in ("proposed", "reviewed")),

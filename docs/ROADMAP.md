@@ -229,16 +229,18 @@ corpus. See [verification evidence](VALIDATION.md).
 
 ### Next development sequence — attachments and legal-analysis/BYOK amendment
 
-**R01 is in progress; it precedes the formerly next multi-source implementation.**
-Its offline contract/dossier tooling is implemented as recorded below; the remaining
-rows and R01 review/evidence gates are pending. Existing source/mapping/publication code is reused; the
+**R01 qualification remains in progress; its engineering contracts are implemented.**
+The first R02 engineering slice now uses those contracts to inspect synthetic multi-source
+fixtures and existing independently reviewed sources without preparing or publishing a release.
+R01 real-source review/evidence gates and the remaining roadmap gates are pending.
+Existing source/mapping/publication code is reused; the
 research does not authorize real approvals, vendor contact or bulk acquisition.
 Dependencies refer to completion of the relevant gate, not just code availability.
 
 | ID / priority | Delivery packet | Dependencies / accountable lead | Exit evidence |
 |---|---|---|---|
 | **R01 / P0, in progress** | Source, asset and semantic qualification: offline catalogs, legal-analysis/scenario contracts, provider/evaluation dossier, physical evidence verifier, extraction comparator and reproducible calibration studies implemented; representative calibration and review pending | Legal ontology owner + data/source lead with application/security owners; source/provider dependencies documented | Source uses and routes reviewed; sample errors/reviewer time measured; argument/scenario fixtures adjudicated; provider processing/spend controls qualified; added effort estimated. Passing the dossier validator grants no approval |
-| **R02 / P0** | Bounded multi-source preparation/publication: per-source revisions, rights, audience, expiry and renewal; canonical identity conflicts; deterministic locks; exact public/private manifests; five simultaneous research jobs | R01 contracts; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
+| **R02 / P0, partial** | Read-only multi-source snapshots implemented with per-source revisions/rights and deterministic locks; combined preparation/publication, audience, expiry/renewal, canonical identity conflicts, exact public/private manifests and five-job qualification remain | R01 contracts; actual source reviews remain mandatory; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
 | **R03 / P0** | First genuinely reviewed contract corpus: RG ordinary/mükerrer manifest; amendment/transition candidates; MBS reconciliation; TBMM enacted/history distinction; exact provisions and historical versions | R01 lawful samples and protected reviewers; R02 for combined releases; editors + ingestion team | Reviewed corpus and exact evidence ready for analysis; amendment chains/historical queries pass; discrepancies visible. Full legal-analysis/export qualification additionally requires R04, the relevant R05 decision slice and R05A |
 | **R04 / P1** | Turkish lexical/citation normalization, local embedding and reranker evaluation, structured context packing; pinned model/index versions | R01 development benchmark; R03 representative approved corpus; retrieval/ML + legal adjudicators | Exact identifiers and original quotes preserved; hybrid and graph/metadata/rerank ablations on one snapshot; thresholds, error slices and resource budgets reported; no private-data or adverse-recall regression |
 | **R05 / P1** | Decision population and research: proceeding/decision/manifestation identity; allegation/finding/reasoning/result/dissent roles; citation ambiguity queue; reviewed authority-treatment events; independent contrary-authority branch | R01 judicial source/effect contracts, R02, R04; knowledge engineers + domain editors | Supporting and adverse passages are inspectable with role, version, institution epoch and scope; treatment is not inferred from citation; missing courts/periods and unknown finality remain explicit |
@@ -348,7 +350,26 @@ study through the actual bounded parser, adversarial duplicate/change checks, CL
 and CI integration, and isolated Docker verification. This delivers the tool for
 the next qualification cycle; R01's real sample, rights, legal/privacy review and
 capacity gates remain pending. See [operator usage](R01_QUALIFICATION.md) and
-[verification](VALIDATION.md). R02 has not been promoted by these engineering checks.
+[verification](VALIDATION.md). Those checks alone do not qualify R02.
+
+### R02 engineering foundation — consistent multi-source review snapshots
+
+The [source-set inspector](RELEASE_SNAPSHOT_SET.md) captures 2–8 explicitly selected
+sources in one session. Each independently satisfies its current owner, firm, rights,
+source-review and accepted-mapping contract. PostgreSQL locks the operator and source
+heads deterministically; all source bytes, reviews and account state are revalidated
+before use and on exit. The aggregate caps are 64 MiB of source artifacts and 400
+mappings. Safe summary output follows successful exit; source selection and hashes
+remain confidential. SQLite demo mode is explicitly optimistic.
+
+This packet delivers the snapshot/inspection foundation, with PostgreSQL race tests,
+while leaving **R02 partial**. It creates no combined graph or publication authorization.
+Next are canonical identity/version conflict handling and public/private multi-source
+manifest composition, followed by independently enforced audience/expiry/renewal and
+publication revocation. Full research-job cancellation, throughput and lock-latency
+qualification remain open; five simultaneous test inspections establish concurrency
+behavior only. R01 lawful samples, actual legal/privacy review and capacity estimates
+are still required before product qualification.
 
 ## Two-graph specification
 
