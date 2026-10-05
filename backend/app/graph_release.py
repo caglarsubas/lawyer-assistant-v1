@@ -7,6 +7,7 @@ import json
 import re
 from contextlib import contextmanager
 from datetime import datetime, timezone
+from functools import lru_cache
 from pathlib import Path
 
 from rdflib import RDF, RDFS, Graph, Literal, Namespace, URIRef
@@ -20,7 +21,10 @@ _temporal_spec.loader.exec_module(temporal)
 
 
 
+@lru_cache(maxsize=1)
 def _load_serving():
+    # Import executable code once, like a regular Python import. All release
+    # files, trust keys and live authorization state are still read per call.
     spec = importlib.util.spec_from_file_location('lawyer_ontology_serving', ROOT / 'ontology' / 'serving.py')
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

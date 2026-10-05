@@ -319,10 +319,13 @@ def test_source_bundle_rejects_blank_nodes_before_partitioning(tmp_path):
     assert not (tmp_path / "bundle").exists()
 
 
-def test_payload_regeneration_rejects_post_verification_source_change(tmp_path, trust):
+@pytest.mark.parametrize("relative", ["inputs/structure.ttl", "ontology/domains.ttl",
+                                      "ontology/modules/foundation.ttl"])
+def test_payload_regeneration_rejects_post_verification_source_change(tmp_path, trust, relative):
     source = bundle(tmp_path, trust)
     result = release.validate_bundle(source, trust[1])
-    changed = source / "inputs" / "structure.ttl"
+    serving._payload(source, result, "structure")  # Warm any syntax cache first.
+    changed = source / relative
     changed.chmod(0o644)
     changed.write_text('<urn:test-only:changed> <urn:test-only:label> "changed" .')
     with pytest.raises(ValueError, match="changed after bundle validation"):

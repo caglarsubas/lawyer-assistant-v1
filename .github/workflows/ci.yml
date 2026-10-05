@@ -26,9 +26,9 @@ jobs:
           echo "$GITHUB_WORKSPACE/backend/.venv/bin" >> "$GITHUB_PATH"
       - name: Lint Python
         run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
-      - name: Check SHACL query work budget before full suite
+      - name: Check ontology parsing and SHACL work budgets before full suite
         timeout-minutes: 2
-        run: pytest backend/tests/test_validation_queries.py -q
+        run: pytest backend/tests/test_validation_queries.py backend/tests/test_ontology_syntax.py -q
       - name: Test backend
         timeout-minutes: 18
         run: pytest backend/tests -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30

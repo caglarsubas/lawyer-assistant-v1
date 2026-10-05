@@ -1,4 +1,45 @@
-# Verification record — 5 October 2026
+# Verification record — 6 October 2026
+
+## PR #6 CI timeout repair — 6 October 2026 (Asia/Shanghai)
+
+[Run 37337320919](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37337320919)
+failed because the backend step exceeded its 18-minute cap at 99% completion;
+the log reports no preceding assertion failure. Frontend and PostgreSQL checks
+passed. Profiling found repeated ontology Turtle parsing across release validation
+and reconstruction of both serving families, despite the earlier SPARQL fix.
+
+The repair reuses only bounded, immutable ontology syntax keyed by current bytes
+and base URIs, and imports serving code once per process. Full inference, SHACL,
+file reads/hashes, signature verification, source reconstruction and live
+authorization remain active. See [CI controls](CI.md) for bounds and exclusions.
+
+- The same profiled real-application/two-source-revocation test made **1,272 Turtle
+  parses before / 413 after**, while retaining **all 38 SHACL validations**.
+  Profiled elapsed time was 27.83s before / 21.43s after; profiler overhead makes
+  this a diagnostic comparison, not a hosted performance estimate.
+- Seven alternating warm measurements of `validate_prepared` against the same
+  TEST-ONLY signed artifact produced before this patch gave medians **0.26882s
+  before / 0.21071s after (21.6% lower)**. Both implementations independently
+  accepted the existing manifest and byte-identical serving payloads.
+- **40 focused cases passed in 7.38s**, including the existing 23 SPARQL regressions,
+  14 ontology-syntax checks and three post-verification tampering cases. They cover
+  same-size/same-mtime edits, changed schema/shape enforcement, failed reads,
+  relative IRIs, namespace and blank-node isolation, cache bounds, concurrent
+  readers, fresh source parsing and warm-cache manifest checks.
+- Ruff, actionlint and `git diff --check` passed. Fingerprinted ontology definition
+  files are byte-identical. Workflow triggers, job count, workers, dependencies,
+  retries and time caps are unchanged.
+- The complete backend suite passed **2,252 tests, nine PostgreSQL skips and 28
+  existing warnings in 273.52s (4m33s)** with the unchanged two-worker command.
+  The previous PR #6 local run took 314.37s for 2,236 tests. This comparison is
+  local evidence; runner hardware and hosted billing must be measured separately.
+- All eight deployment contracts, ontology validation, the R01 dossier contract
+  and Compose configuration with placeholder settings passed. No local `.env`
+  was used for Compose validation.
+
+Local evidence: `.data/verification/pr6-ci-fix/` (profiles, comparison JSON and
+test logs). No deployment, credentials, provider calls or live legal data changed.
+The new hosted run is separate evidence from these local results.
 
 ## R02 engineering milestone: independent source-set publication
 

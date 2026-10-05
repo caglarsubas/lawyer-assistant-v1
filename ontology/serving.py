@@ -139,20 +139,23 @@ def _payload(bundle: Path, result: dict, family: str) -> tuple[bytes, dict]:
         raise ValueError("Source manifest changed after signature validation")
     manifest = json.loads(manifest_raw)
 
-    def parse_verified(relative: str) -> Graph:
+    def read_verified(relative: str) -> tuple[str, bytes]:
         path = safe_file(bundle, relative)
         raw = path.read_bytes()
         if hashlib.sha256(raw).hexdigest() != manifest["files"][relative]:
             raise ValueError("Source graph changed after bundle validation")
-        return Graph().parse(data=raw, format="turtle", publicID=path.as_uri())
+        return path.as_uri(), raw
 
-    inputs = {name: parse_verified(f"inputs/{name}.ttl") for name in FAMILIES}
+    inputs = {}
+    for name in FAMILIES:
+        uri, raw = read_verified(f"inputs/{name}.ttl")
+        inputs[name] = Graph().parse(data=raw, format="turtle", publicID=uri)
     assertions = {subject for graph in inputs.values() for subject in graph.subjects(RDF.type, _release.LA.Assertion)}
-    graph = Graph()
-    schema_paths = ["ontology/domains.ttl", *sorted(path for path in manifest["files"]
-                                                  if path.startswith("ontology/modules/") and path.endswith(".ttl"))]
-    for path in schema_paths:
-        graph += parse_verified(path)
+    schema_paths = [*sorted(path for path in manifest["files"]
+                           if path.startswith("ontology/modules/") and path.endswith(".ttl")), "ontology/domains.ttl"]
+    # Every file is read and checked against the signed manifest even on a warm
+    # parse. Reuse only ontology syntax, never the source assertions or payload.
+    graph = _release._validation.parse_ontology_graph([read_verified(path) for path in schema_paths])
     for name, source in inputs.items():
         for triple in source:
             # Shared resource/evidence context is required for cross-family links;
