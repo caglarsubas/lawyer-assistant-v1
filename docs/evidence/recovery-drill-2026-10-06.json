@@ -1,0 +1,125 @@
+{
+  "api_source": {
+    "files": 87,
+    "sha256": "852eeb92e830f06ede7301f52bfc13e4fb27fae4d1b0ae3612faae35aa34bdaf"
+  },
+  "archive": {
+    "bytes": 6685800,
+    "sha256": "3449eeb163654a3d8656604ed1a4722a190f22557df10c8ee119289d8c3f3aa0"
+  },
+  "checkout_commit": "ef1aec4ec4f4e64e6d4bceae4f6ae0516a8ea85e",
+  "checkout_dirty": false,
+  "checks": {
+    "authenticated": true,
+    "backup_restarts_only_previously_running_services": true,
+    "completed_job_unchanged": true,
+    "completed_product_unchanged": true,
+    "encrypted_records_decoded": 9,
+    "five_volume_bytes_and_metadata_match_except_epoch": true,
+    "fuseki_empty_datasets_available": 2,
+    "historical_epoch_absent": true,
+    "interrupted_without_replay": 3,
+    "nonempty_target_rejected_without_changes": true,
+    "opensearch_document_restored": true,
+    "original_document_decrypted": true,
+    "private_review_bytes_retained": true,
+    "truncated_archive_rejected_without_writes": true
+  },
+  "cleanup": {
+    "complete": true,
+    "remaining_projects": []
+  },
+  "finished_at": "2026-10-06T03:13:20.645859+00:00",
+  "host": {
+    "architecture": "arm64",
+    "docker": {
+      "architecture": "aarch64",
+      "cpus": 16,
+      "memory_bytes": 105280155648,
+      "os": "linux",
+      "server_version": "29.5.2"
+    },
+    "system": "Darwin"
+  },
+  "host_backup_tool_sha256": "77d2393cb1a6b8d845d463485e5d4fc1737513aaf7f3ce560f3b9d22bd5e6c19",
+  "images": {
+    "api": "sha256:714e25e3bf9558e1a22bb52aa92366c651a3db8c25e74353c9e1be6c1b203049",
+    "fuseki": "sha256:d2898479061093879e3bca2a0b00f6ebf700b957d947a1a94d6f98163abe8d75",
+    "opensearch": "sha256:e96cc6ae1500a073d973c0906f30f7cf4d9c461f32f855f9242a2da933660cdd",
+    "postgres": "sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"
+  },
+  "not_qualified": [
+    "production RPO/RTO",
+    "five-job throughput",
+    "ingestion overlap",
+    "populated graph rollback",
+    "real source rights or legal review",
+    "real process crash or power-loss recovery"
+  ],
+  "resource_limits": {
+    "api": {
+      "cpus": "2.0",
+      "mem_limit": "1g",
+      "pids_limit": 256
+    },
+    "fuseki": {
+      "cpus": "2.0",
+      "mem_limit": "1g",
+      "pids_limit": 256
+    },
+    "opensearch": {
+      "cpus": "2.0",
+      "mem_limit": "1536m",
+      "pids_limit": 256
+    },
+    "postgres": {
+      "cpus": "2.0",
+      "mem_limit": "1g",
+      "pids_limit": 256
+    }
+  },
+  "schema_version": "lawyer-recovery-drill-v1",
+  "scope": "encrypted five-volume cold restore; empty Fuseki corpus; fixture-only research without inference",
+  "seed": {
+    "authenticated": true,
+    "completed_research": 1,
+    "opensearch_documents": 1,
+    "simulated_unfinished_records": 3,
+    "uploaded_document": true
+  },
+  "started_at": "2026-10-06T03:12:35.397225+00:00",
+  "status": "passed",
+  "synthetic_only": true,
+  "timings_seconds": {
+    "cold_backup": 3.613,
+    "restore": 0.98,
+    "restored_startup": 6.812
+  },
+  "volume_inventory": {
+    "documents": {
+      "bytes": 641,
+      "files": 3,
+      "sha256": "f020572ae8aceb56e314a59c833de3a84a51a51e32124ca803230578015c0b17"
+    },
+    "graphs": {
+      "bytes": 66,
+      "files": 2,
+      "sha256": "dde939a6a26e70c7bd41e4cf2145909c5e36e844058f21299f7b92bd52cda513"
+    },
+    "opensearch": {
+      "bytes": 160591,
+      "files": 70,
+      "sha256": "ec24073b7e5386d10f17cc711c14696c7dce812e88b87a0b20f5296e6b5118a4"
+    },
+    "postgres": {
+      "bytes": 48219764,
+      "files": 1316,
+      "sha256": "f744f7ef18481998029660cef68ea9dd052cc7beb242906a42d07bb0c52c7bd6"
+    },
+    "public_sources": {
+      "bytes": 66,
+      "files": 1,
+      "sha256": "eb22f48dd65156123050f9c163037fb691b62a1173a2cbf63b5dcdb1b805bd59"
+    }
+  }
+}

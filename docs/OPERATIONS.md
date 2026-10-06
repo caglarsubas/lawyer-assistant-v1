@@ -414,6 +414,20 @@ separately, and admit an unexpired release before restoring intake. The archive
 does contain account/session database state: treat
 it as confidential even when encrypted.
 
+The helper selects exactly five distinct **named** volumes from the selected
+containers, rather than inheriting every service mount. Read-only service mounts
+(notably graphs and public sources) receive a direct writable mount only in the
+offline restore helper. Host bind mounts are not accepted as archive roots; trust,
+configuration and scanner mounts are excluded. Backup respects each container's
+configured shutdown grace (240 seconds for the API) instead of overriding it with
+a shorter stop timeout.
+
+Both scripts accept `--project-name NAME`, repeated `--compose-file PATH` and
+`--env-file PATH`. Pass the same explicit configuration used to create the target;
+`--env-file /dev/null` prevents root `.env` loading for a fully specified drill
+configuration. With these flags omitted, the repository Compose configuration and
+its normal environment behavior are preserved.
+
 The v2 archive includes public-source staging and immutable graph bundles, receipts
 and activation history. Preserve the independent graph-review public trust key
 and trust-directory configuration separately; neither is restored from the archive.
@@ -423,6 +437,56 @@ the v2 tool deliberately rejects them instead of silently omitting source stagin
 This is a downtime-based baseline, not an online backup, PITR system or proven
 RPO/RTO. Custom PostgreSQL tablespaces/symlinks are not supported. The export
 refuses links and special files rather than producing an incomplete backup.
+
+### Disposable synthetic recovery drill
+
+Run this opt-in engineering drill after building/loading the images. It is not a
+routine CI job. The pinned PostgreSQL/OpenSearch images must already be available;
+the drill refuses pulls. Build the API from the current checkout: its copied source
+and dependency-input fingerprint must match before any stack is created.
+
+```sh
+docker build -f deploy/backend.Dockerfile -t lawyer-assistant-api:recovery-check .
+docker build -f deploy/fuseki/Dockerfile -t lawyer-assistant-fuseki:5.3.0 .
+mkdir -p .data/verification
+python3 scripts/qualify_recovery.py \
+  --api-image lawyer-assistant-api:recovery-check \
+  --output .data/verification/recovery-report.json
+```
+
+Choose a new report filename per run. The runner generates two fresh project names,
+an internal network for each, five independent volumes per project and ephemeral
+encryption/database/age keys. It loads no live `.env`, mounts no existing host data, publishes
+no ports and makes no provider calls. API/Fuseki/PostgreSQL each have a 1 GiB cap;
+OpenSearch has 1.5 GiB, with two CPUs and 256 PIDs per service. Allow roughly 10 GiB
+of free Docker memory for both stacks and overhead. These are drill limits, not
+production sizing guidance.
+
+The drill uploads/extracts a synthetic text file through the authenticated API,
+saves a fixture research product, stores an OpenSearch sentinel and seeds three
+durable unfinished research states. After a cold backup it rejects a truncated
+encrypted archive without writes, restores into a fresh target and compares all
+five inventories (bytes, paths, owner/group and mode), except the publication epoch
+that must be removed. It rejects another restore into that nonempty target, starts
+the recovered services, checks login/document decryption/all encrypted records,
+unchanged completed work, interruption without replay, search persistence and both
+empty Fuseki endpoints. A second backup checks that three running source services
+restart while a deliberately stopped Fuseki stays stopped.
+
+The JSON report contains image IDs, source fingerprints, hardware/limits, timings,
+counts and check outcomes, with no credentials or document payloads. Normal success
+or failure removes disposable containers, volumes, networks, archives and keys;
+cleanup failure is an explicit failed result listing remaining project names.
+A host crash or forced termination can require cleanup of those `lawyer-recovery-*`
+projects. The retained report cannot itself restore data; the ephemeral keys are
+intentionally discarded.
+
+This covers small synthetic cold recovery with an empty legal corpus. It does not
+qualify signed populated-graph rollback, inference, malware/OCR qualification,
+power-loss recovery, five-job throughput or production RPO/RTO. Seeded unfinished
+records test startup recovery; they do not simulate killing a working provider.
+Real deployment qualification must repeat the drill with its reviewed corpus,
+actual retained keys and declared hardware under the operator's recovery procedure.
 
 ## Restore into a new stack
 

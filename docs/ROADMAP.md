@@ -417,8 +417,8 @@ expired or revoked rollback targets remain denied. The single-source format and
 commands retain their strict boundary. Synthetic engineering tests do not establish
 real legal rights, qualified human review or a populated national corpus.
 
-**R02 remains partial.** Research job controls are delivered in the engineering
-milestone below. The next packet is the declared five-job operational baseline:
+**R02 remains partial.** Research job controls and a synthetic encrypted recovery
+rehearsal are delivered in the engineering milestones below. The next packet is the declared five-job operational baseline:
 representative throughput and lock wait, resource ceilings, ingestion overlap,
 and restore/rollback/failure recovery. Restricted-audience serving and same-release
 renewal remain unsupported. R01 actual source/legal/privacy qualification continues
@@ -453,6 +453,27 @@ production throughput, legal review or corpus qualification.
 acknowledgement. The budget is not a hard process-interruption deadline and does not
 prove upstream inference stopped. Large-corpus resource limits, full restore/rollback
 and production five-job throughput remain R02/R07 gates; R02 is not complete.
+
+### R02 engineering milestone — isolated recovery rehearsal (6 October 2026)
+
+After merged PR #7, an opt-in, disposable Docker drill exercises the existing
+encrypted five-volume cold backup. It records backup/restore/startup times and
+verifies PostgreSQL records, document decryption, OpenSearch persistence,
+graph/source bytes, interrupted-job recovery and publication-epoch invalidation.
+Corrupt archives and nonempty restore targets are rejected without changes. Exact
+images, source fingerprints, hardware and the synthetic workload appear in its
+report; the drill stays outside routine CI. It also verifies restoration of the
+previously running service set. See [operator instructions](OPERATIONS.md#disposable-synthetic-recovery-drill)
+and [measured verification](VALIDATION.md).
+
+The drill exposed and fixed inherited read-only mounts preventing graph restore.
+The helper now mounts exactly five verified named volumes directly, excludes
+unrelated host binds and preserves the API's configured shutdown grace.
+
+This packet establishes a repeatable engineering recovery baseline. Empty-corpus
+Fuseki startup and synthetic documents do not qualify populated graph rollback,
+real legal permissions, production RPO/RTO or five-job throughput. Representative
+load, ingestion overlap, lock waits and resource ceilings remain the next R02 gates.
 
 ## Two-graph specification
 

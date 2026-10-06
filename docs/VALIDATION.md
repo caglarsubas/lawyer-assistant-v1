@@ -1,5 +1,52 @@
 # Verification record — 6 October 2026
 
+## R02 isolated encrypted recovery — 6 October 2026 (Asia/Shanghai)
+
+The opt-in Docker rehearsal passed on clean commit `ef1aec4ec4f4e64e6d4bceae4f6ae0516a8ea85e`.
+Its [machine-readable evidence](evidence/recovery-drill-2026-10-06.json) retains exact
+image IDs, the matching 87-file API source/dependency-input fingerprint, host backup
+tool digest, declared hardware/limits and individual outcomes. The application code
+and CI workflow are unchanged in this packet.
+
+The drill exposed a real restore failure: `--volumes-from container:rw` retained
+Fuseki's read-only graph mount. Direct mounts of exactly five verified, distinct
+named volumes now permit offline restore and exclude unrelated host binds. Backup
+also respects the configured API shutdown grace instead of forcing a 60-second stop.
+
+- **19 deployment-contract tests passed**; repository Python lint and diff checks
+  passed. The fast contracts cover target selection, mount isolation, invalid volume
+  names/aliases/binds, fingerprint drift, failure cleanup and prior-service restart.
+- **Real Docker recovery passed** using PostgreSQL 16.10, OpenSearch 2.19.3 and
+  Fuseki 5.3.0. All five volume inventories matched byte content, paths, owner/group
+  and permissions, apart from the deliberately removed publication epoch.
+- The restored API accepted login, decrypted the uploaded synthetic document and
+  all **nine encrypted records**, preserved the completed product/job and marked
+  **three seeded unfinished jobs interrupted without replay**. Search retained its
+  sentinel; both empty Fuseki query endpoints responded. Private review sentinel
+  bytes remained while the old publication epoch was absent.
+- A truncated encrypted archive was rejected before any target writes. A repeated
+  restore into the nonempty target left its inventory unchanged. A second backup
+  restarted the three previously running services and left Fuseki stopped.
+- On this small fixture: **3.613s cold backup, 0.980s restore, 6.812s restored
+  startup**; the encrypted archive was 6,685,800 bytes. These separate measurements
+  exclude some drill setup/verification work and are not an end-to-end RTO claim.
+  Docker Desktop reported 16 CPUs and about 98 GiB of VM memory; per-service limits
+  are recorded in the report. Other local containers were also running.
+
+Both generated projects and their volumes/networks were removed, and ephemeral
+archives/keys discarded. The live application and repository `.env` were not used.
+The drill remains outside normal GitHub Actions; the existing three jobs, workers,
+timeouts and triggers are unchanged. Merged PR #7's exact-main
+[run 37406356589](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37406356589)
+passed (backend/contracts 15m57s); this is baseline evidence, not this PR's CI.
+
+R02 remains partial. This fixture uses local demo extraction and no inference or
+qualified public corpus. It does not establish real source/legal approval,
+populated signed-graph rollback, crash/power-loss recovery, production RPO/RTO,
+five-job throughput, ingestion overlap or resource ceilings for realistic corpora.
+See the [operator drill](OPERATIONS.md#disposable-synthetic-recovery-drill) and
+[next roadmap gates](ROADMAP.md).
+
 ## R02 research admission and cancellation — 6 October 2026 (Asia/Shanghai)
 
 The next engineering packet after merged PR #6 retains five research workers and
