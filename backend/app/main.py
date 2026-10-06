@@ -245,7 +245,8 @@ def create_app(settings=None):
                     trusted_review_key=Path(settings.graph_trusted_review_key) if settings.graph_trusted_review_key else None,
                     authorization_guard=authorization_guard,
                 )
-                app.state.search = PublicSearchService(settings.opensearch_url, release_id=settings.search_release_id,
+                app.state.search = PublicSearchService(settings.opensearch_url, index=settings.search_index,
+                                                     release_id=settings.search_release_id,
                                                      graph_release=app.state.graph.release)
                 recover_runs(store)
                 if settings.demo_mode:

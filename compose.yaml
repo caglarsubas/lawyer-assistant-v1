@@ -35,6 +35,7 @@ services:
       LA_PUBLIC_SOURCE_DIR: /public-sources
       LA_OPENSEARCH_URL: http://opensearch:9200
       LA_SEARCH_RELEASE_ID: ${LA_SEARCH_RELEASE_ID:-}
+      LA_SEARCH_INDEX: ${LA_SEARCH_INDEX:-law-public-passages}
       LA_CLAMAV_HOST: ${LA_CLAMAV_HOST:-}
       LA_CLAMAV_PORT: ${LA_CLAMAV_PORT:-3310}
       LA_SCANNER_TIMEOUT_SECONDS: ${LA_SCANNER_TIMEOUT_SECONDS:-30}
@@ -96,6 +97,7 @@ services:
       LA_PUBLIC_SOURCE_DIR: /public-sources
       LA_GRAPH_RELEASE_DIR: /graph-publication
       LA_GRAPH_TRUSTED_REVIEW_KEY: ${LA_GRAPH_TRUSTED_REVIEW_KEY:-}
+      LA_OPENSEARCH_URL: http://opensearch:9200
     volumes:
       - documents:/data:ro
       - graphs:/graph-publication

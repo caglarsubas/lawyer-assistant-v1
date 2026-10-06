@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     public_source_dir: Path = ROOT / ".public-sources"
     opensearch_url: str = ""
     search_release_id: str = ""
+    search_index: str = "law-public-passages"
     gateway_url: str = ""
     gateway_token: str = Field(default="", repr=False)
     gateway_enabled: bool = False

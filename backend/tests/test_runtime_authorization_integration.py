@@ -2,6 +2,8 @@
 
 import json
 
+import httpx
+import test_search_index
 from fastapi.testclient import TestClient
 from rdflib import RDF, Literal
 from test_release_authorization import authorized as authorized_fixture
@@ -13,6 +15,7 @@ from test_source_reviews import assess
 
 from app.graph_release import LA, _load_serving
 from app.main import create_app
+from app.search_index import IndexBuildError, build_index
 
 authorized = authorized_fixture
 mapping = mapping_fixture
@@ -93,6 +96,20 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         else:
             raise AssertionError('Unverified authority identity was accepted')
         assert (assertion, LA.claimStatus, Literal('legally_reviewed')) in graph
+        # Reuse this costly signed/private-ledger fixture for index admission.
+        # Only HTTP is simulated; source projection, publication locks and the
+        # application's live private authorization dispatcher remain real.
+        server = test_search_index.Server()
+        index_name = f"law-public-passages-{installed['release_id']}-{'b' * 32}"
+        original_http = httpx.Client
+        with monkeypatch.context() as patch:
+            patch.setattr(test_search_index, 'INDEX', index_name)
+            patch.setattr('app.search_index.secrets.token_hex', lambda _: 'b' * 32)
+            patch.setattr(httpx, 'Client', lambda **kwargs: original_http(transport=httpx.MockTransport(server.response), **kwargs))
+            built = build_index(app.state.graph.release, 'http://opensearch:9200', installed['release_id'])
+            assert built['document_count'] == len(server.docs) > 0
+            assert all(row['source_url'] is None and row['assertion_id'] for row in server.docs.values())
+            assert 'PRIVATE' not in json.dumps(server.docs)
         changed = assess(restarted, base + '/review', 6, 'rights', decision='needs_changes')
         assert changed.status_code == 200
         assert app.state.graph.release_status()['status'] == 'unavailable'
@@ -102,3 +119,7 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         response = app.state.search.search('SYNTHETIC TEST ONLY')
         assert response['hits'] == [] and response['coverage']['status'] == 'unavailable'
         assert 'PRIVATE' not in json.dumps(response)
+        import pytest
+        with pytest.raises(IndexBuildError) as denied:
+            build_index(app.state.graph.release, 'http://opensearch:9200', installed['release_id'])
+        assert denied.value.stage == 'authorization'
