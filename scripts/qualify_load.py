@@ -129,6 +129,7 @@ def main():
             project = "lawyer-load-" + secrets.token_hex(6)
             compose = compose_command(project, [config], Path("/dev/null"))
             fresh_project(project)
+            report["cleanup"] = {"complete": False, "remaining_project": project}
             sampler = None
             try:
                 stage = "startup"
@@ -167,6 +168,8 @@ def main():
     except Exception as error:
         report.update(status="failed", failure_stage=stage, failure_type=type(error).__name__)
     finally:
+        if report.get("cleanup", {}).get("complete") is not True:
+            report["status"] = "failed"
         report["finished_at"] = datetime.now(timezone.utc).isoformat()
         args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     print(f"Synthetic five-job drill {report['status']}: {args.output}")
