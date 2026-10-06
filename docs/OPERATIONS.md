@@ -138,6 +138,64 @@ metadata remain encrypted, matter-authorized records. No private provider respon
 exception text is retained in failure messages. Stop intent may be visible before
 acknowledgement; never report it as proof that compute has already stopped.
 
+### Disposable signed-graph lifecycle drill
+
+This opt-in drill exercises the actual immutable publication functions and
+Fuseki/TDB2 runtime with three invented, test-signed releases. It uses **no real
+legal assertions or permissions**. An explicit synthetic authorization guard is
+confined to the fixture process; private authorization, revocation, legal review
+and production publication remain separate gates. Never admit the drill's test
+key or artifacts to a real deployment.
+
+```sh
+docker build -f deploy/backend.Dockerfile -t lawyer-assistant-api:r02-graph .
+docker build -f deploy/fuseki/Dockerfile -t lawyer-assistant-fuseki:r02-graph .
+mkdir -p .data/verification
+python3 scripts/qualify_graph.py \
+  --api-image lawyer-assistant-api:r02-graph \
+  --fuseki-image lawyer-assistant-fuseki:r02-graph \
+  --output .data/verification/graph-drill.json
+```
+
+The runner claims a new output file before creating resources and verifies both
+images against the checkout. It generates a fresh project, two empty named volumes
+and an internal-only network, with no host ports, bind mounts, Docker socket or
+`.env` access. The ephemeral private test key is never written. Runtime graph and
+fixture mounts are read-only; only the isolated fixture writes them. The bootstrap
+can change ownership only after both volumes are empty. Preload the images for
+disconnected execution; the runner never builds or pulls them. Kernel resource
+measurement requires cgroup v2 with `memory.peak` and `pids.peak`; missing metrics
+fail the drill instead of producing estimated values.
+
+Each release has 128 invented linked resources per family, plus the ontology
+snapshot (the schema is not thereby legally approved). Both named-graph
+inventories and release-specific sentinels must match. The sequence exercises:
+
+1. Start A and repeatedly query both datasets while installing B. At least one
+   complete query round must occur within the measured install interval. A remains
+   active; activation while Fuseki holds its reader lock must fail.
+2. Pause the C importer after the first staged file, kill that fixture container
+   with SIGKILL, and prove no C release/pointer was published. Retry the same import;
+   the partial stage remains visible for inspection until drill cleanup.
+3. Recreate Fuseki with empty tmpfs and compare the regenerated TDB2 inventories
+   to A. Stop it, activate B, recreate, and verify B without mixed-release graphs.
+4. Stop it, corrupt B's canonical payload, and require startup to exit specifically
+   for integrity failure without fallback. Roll back to A with sequence 3 and
+   reconstruct/verify A. Refuse a stale sequence and the corrupted rollback target.
+
+The report records source/image fingerprints, hardware/caps, query-round/install
+and startup-to-health timings, runtime kernel memory/PID peaks after startup and import phases, and cleanup. Startup
+measurements include Compose overhead; query rounds contain four sequential SPARQL
+requests. These are small-fixture observations, not production latency or RTO.
+TDB2 rebuilding occurs while service is unavailable; concurrent OpenSearch
+reindexing, model research and representative corpus load are not exercised.
+
+Ordinary success/failure and Ctrl-C paths clean up only the generated project,
+including the deliberately killed container. A passing report requires confirmed
+cleanup. A host crash or SIGKILL of the runner can leave disposable resources;
+inspect the exact `lawyer-graph-*` project before removing it. Never prune unrelated
+volumes. This drill is intentionally outside routine GitHub Actions.
+
 ### Five-job application baseline
 
 The opt-in load drill exercises the actual HTTP API, coordinator, encryption,

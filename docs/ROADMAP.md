@@ -242,7 +242,7 @@ Dependencies refer to completion of the relevant gate, not just code availabilit
 | ID / priority | Delivery packet | Dependencies / accountable lead | Exit evidence |
 |---|---|---|---|
 | **R01 / P0, in progress** | Source, asset and semantic qualification: offline catalogs, legal-analysis/scenario contracts, provider/evaluation dossier, physical evidence verifier, extraction comparator and reproducible calibration studies implemented; representative calibration and review pending | Legal ontology owner + data/source lead with application/security owners; source/provider dependencies documented | Source uses and routes reviewed; sample errors/reviewer time measured; argument/scenario fixtures adjudicated; provider processing/spend controls qualified; added effort estimated. Passing the dossier validator grants no approval |
-| **R02 / P0, partial** | Multi-source snapshots, private preparation, exact public evidence, external public/private approvals, per-source deployment-wide grants/expiry and live revocation implemented; renewal requires a freshly reviewed release. Bounded cooperative research admission/cancellation, publication races and coordinator/restart controls implemented. Restricted-audience serving, same-release renewal and representative five-job/resource qualification remain | R01 contracts; actual source reviews remain mandatory; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
+| **R02 / P0, partial** | Multi-source snapshots, private preparation, exact public evidence, external public/private approvals, per-source deployment-wide grants/expiry and live revocation implemented; renewal requires a freshly reviewed release. Bounded cooperative research admission/cancellation, publication races and coordinator/restart controls implemented; synthetic application/recovery and signed-graph lifecycle drills measured. Restricted-audience serving, same-release renewal and representative five-job/resource qualification remain | R01 contracts; actual source reviews remain mandatory; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
 | **R03 / P0** | First genuinely reviewed contract corpus: RG ordinary/mükerrer manifest; amendment/transition candidates; MBS reconciliation; TBMM enacted/history distinction; exact provisions and historical versions | R01 lawful samples and protected reviewers; R02 for combined releases; editors + ingestion team | Reviewed corpus and exact evidence ready for analysis; amendment chains/historical queries pass; discrepancies visible. Full legal-analysis/export qualification additionally requires R04, the relevant R05 decision slice and R05A |
 | **R04 / P1** | Turkish lexical/citation normalization, local embedding and reranker evaluation, structured context packing; pinned model/index versions | R01 development benchmark; R03 representative approved corpus; retrieval/ML + legal adjudicators | Exact identifiers and original quotes preserved; hybrid and graph/metadata/rerank ablations on one snapshot; thresholds, error slices and resource budgets reported; no private-data or adverse-recall regression |
 | **R05 / P1** | Decision population and research: proceeding/decision/manifestation identity; allegation/finding/reasoning/result/dissent roles; citation ambiguity queue; reviewed authority-treatment events; independent contrary-authority branch | R01 judicial source/effect contracts, R02, R04; knowledge engineers + domain editors | Supporting and adverse passages are inspectable with role, version, institution epoch and scope; treatment is not inferred from citation; missing courts/periods and unknown finality remain explicit |
@@ -417,8 +417,8 @@ expired or revoked rollback targets remain denied. The single-source format and
 commands retain their strict boundary. Synthetic engineering tests do not establish
 real legal rights, qualified human review or a populated national corpus.
 
-**R02 remains partial.** Research job controls and a synthetic encrypted recovery
-rehearsal, followed by a five-job application baseline, are delivered in the
+**R02 remains partial.** Research job controls, synthetic encrypted recovery,
+five-job application and signed-graph lifecycle baselines are delivered in the
 engineering milestones below. Production qualification still requires representative
 inference/corpus throughput and lock wait, resource ceilings, public-source ingestion
 overlap, and populated graph rollback/failure recovery. Restricted-audience serving and same-release
@@ -495,6 +495,26 @@ The fixture covers private document ingestion and a deliberately induced row-loc
 wait, not concurrent public-graph import/reindexing or ordinary production lock
 latency. The latter scenarios, sustained-load qualification and populated graph
 rollback remain the next operational packets. R02 is not complete.
+
+### R02 engineering milestone — signed graph lifecycle drill (6 October 2026)
+
+After merged PR #9, a repeatable Docker drill passed against the existing immutable
+publication functions and real Fuseki/TDB2 runtime with invented RDF and disposable
+trust. Both datasets continued serving A while B installed. SIGKILL during a
+partial C import left A unchanged and the partial stage inspectable; retry installed
+C without activating it. Recreated containers rebuilt matching A/B graph inventories.
+Corrupted active B failed startup without fallback; rollback restored A with a
+new sequence. Live activation, stale sequences and corrupted rollback targets
+were refused. The [evidence record](VALIDATION.md) binds exact image/source identities,
+small-fixture timings, resource peaks and confirmed cleanup. The workload remains
+opt-in outside routine CI; ten fast isolation/failure contracts join the existing
+deployment step. See the [operator profile](OPERATIONS.md#disposable-signed-graph-lifecycle-drill).
+
+This packet does not grant real publication permission or qualify a legal corpus.
+Its test-only authorization guard is separate from the application's private
+review/revocation ledger. Sustained representative load, OpenSearch reindexing,
+five research jobs during public ingestion, encrypted populated-graph restoration
+and production recovery objectives remain open R02/R07 gates.
 
 ## Two-graph specification
 

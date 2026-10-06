@@ -1,5 +1,52 @@
 # Verification record — 6 October 2026
 
+## R02 signed-graph lifecycle baseline — 6 October 2026 (Asia/Shanghai)
+
+The isolated Docker drill passed on clean code commit
+`adf62166b08c76e998aca072a3faaa5f06ed2d72`. Its
+[complete report](evidence/graph-lifecycle-drill-2026-10-06.json) records both image
+IDs, matching source fingerprints (93 API files; 23 Fuseki runtime/ontology files),
+hardware, declared limits, release IDs, named-graph inventories, checks and cleanup.
+Production application/graph code, dependencies and the CI workflow are unchanged.
+
+**38 deployment-contract tests passed** in 0.293s, including ten new isolation,
+source-drift, failure-reason, mixed-graph, no-overwrite and cleanup contracts.
+Repository Python lint and diff checks passed. The new workload is outside routine
+CI; no additional hosted job, matrix, retry or timeout increase was introduced.
+
+Three ephemeral test-signed releases each contain 128 invented linked resources per
+input family, plus ontology context. Each served family has 3,142 data triples and
+five metadata triples; shared context includes both inputs. There are **no real
+legal assertions, qualified legal reviewers or rights approvals**. The fixture
+uses an explicit synthetic guard, not the private authorization/revocation ledger.
+This tests the publication filesystem and Fuseki runtime, not application permission
+or legal correctness.
+
+- Five complete query rounds across both datasets finished during B's 0.983s
+  installation while A stayed active; zero query errors, round median 91.442ms and
+  maximum 204.537ms. Each round contains four sequential SPARQL requests.
+- Live activation was denied by the actual JVM-held reader lock. SIGKILL stopped
+  C's importer after one staged file; no complete C release or pointer was published.
+  Retrying installed C, retained the incomplete stage, and continued serving A.
+- New containers rebuilt TDB2 on empty tmpfs and reproduced A/B inventories and
+  sentinels. Active B corruption caused an integrity-specific exit, without serving
+  an empty or earlier release. Rollback restored A at sequence 3; stale-sequence
+  activation and rollback to corrupted B were refused without changing the pointer.
+- Five normal startup-to-health measurements were 4.688–5.217s, including Compose
+  overhead. After the import phases, Fuseki's kernel peaks were **148.5 MiB and
+  27 PIDs**, under two CPUs, 1 GiB and 256 PIDs. Startup/probe overhead is included;
+  these are small-fixture observations, not sustained-load limits or production RTO.
+
+All generated containers (including the killed importer), two volumes and network
+were removed. The live stack remained healthy with unchanged uptime; `.env`,
+provider credentials and client data were not used. PR #9's checks had passed
+before this packet; that baseline evidence is separate from this PR's CI.
+
+R02 remains partial: reviewed public corpus and real authorization, representative
+load, model research during public ingestion, OpenSearch reindexing, encrypted
+populated-graph restore and production recovery objectives remain open. See the
+[operator profile](OPERATIONS.md#disposable-signed-graph-lifecycle-drill).
+
 ## R02 five-job application baseline — 6 October 2026 (Asia/Shanghai)
 
 The isolated Docker load drill passed on clean code commit
