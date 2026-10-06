@@ -163,7 +163,9 @@ and an internal-only network, with no host ports, bind mounts, Docker socket or
 `.env` access. The ephemeral private test key is never written. Runtime graph and
 fixture mounts are read-only; only the isolated fixture writes them. The bootstrap
 can change ownership only after both volumes are empty. Preload the images for
-disconnected execution; the runner never builds or pulls them.
+disconnected execution; the runner never builds or pulls them. Kernel resource
+measurement requires cgroup v2 with `memory.peak` and `pids.peak`; missing metrics
+fail the drill instead of producing estimated values.
 
 Each release has 128 invented linked resources per family, plus the ontology
 snapshot (the schema is not thereby legally approved). Both named-graph

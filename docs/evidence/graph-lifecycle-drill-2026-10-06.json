@@ -1,0 +1,364 @@
+{
+  "checkout_commit": "adf62166b08c76e998aca072a3faaa5f06ed2d72",
+  "checkout_dirty": false,
+  "checks": {
+    "activated_b": {
+      "format_version": 1,
+      "previous_release_id": "7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace",
+      "release_id": "dae9d0aee28b57753e2350d8da93a052d7b8382d4527a1a4ca6d494714d35fb8",
+      "sequence": 2,
+      "serving_sha256": "133ebafd2ca56d13b93e68266f0841721944b96a5b469cb8c2c3b4a18f2e574d"
+    },
+    "corrupt_active_fails_closed_without_fallback": true,
+    "corrupt_rollback_target_denied": {
+      "denied": true,
+      "pointer_unchanged": true
+    },
+    "fresh_tdb2_rebuild_matches": true,
+    "install_overlap": {
+      "active_pointer_unchanged": true,
+      "install_seconds": 0.983,
+      "query_errors": 0,
+      "query_round_ms": {
+        "max": 204.537,
+        "median": 91.442,
+        "min": 37.92,
+        "p95_nearest_rank": 204.537,
+        "samples": 5
+      },
+      "query_rounds_wholly_during_install": 5
+    },
+    "interrupted_install": {
+      "active_pointer_unchanged": true,
+      "incomplete_stage_retained": true,
+      "retry_installed_release_id": "638e6a3dca7d202fe11cf5315b39dc8ed48d955fd9a9af9c33e248b2a2d135e6",
+      "unpublished_after_sigkill": true
+    },
+    "live_activation_denied": {
+      "denied": true,
+      "pointer_unchanged": true
+    },
+    "rolled_back_a": {
+      "format_version": 1,
+      "previous_release_id": "dae9d0aee28b57753e2350d8da93a052d7b8382d4527a1a4ca6d494714d35fb8",
+      "release_id": "7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace",
+      "sequence": 3,
+      "serving_sha256": "319a87d6ea954c5c6936badf85de2479cb57ddad4ca88044097895ffdadd3b57"
+    },
+    "stale_sequence_denied": {
+      "denied": true,
+      "pointer_unchanged": true
+    }
+  },
+  "cleanup": {
+    "complete": true
+  },
+  "finished_at": "2026-10-06T07:13:07.883508+00:00",
+  "fixture": {
+    "marker": "lawyer-graph-drill-v1",
+    "nodes_per_family_per_release": 128,
+    "releases": {
+      "a": {
+        "graphs": {
+          "jurisprudence": {
+            "file": "jurisprudence.nq",
+            "graph_iri": "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:jurisprudence",
+            "sha256": "7589ac1feee01895ab8e2f92aab32b2eba16a49f7e6b6e6ead882f3eb91e004a",
+            "triple_count": 3142
+          },
+          "structure": {
+            "file": "structure.nq",
+            "graph_iri": "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:structure",
+            "sha256": "14289849f3ceeb17772edf1a8ae3949764a14109e64c9ab7fbf1585aa248112b",
+            "triple_count": 3142
+          }
+        },
+        "metadata_graph_iri": "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:metadata",
+        "release_id": "7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace",
+        "serving_sha256": "319a87d6ea954c5c6936badf85de2479cb57ddad4ca88044097895ffdadd3b57"
+      },
+      "b": {
+        "graphs": {
+          "jurisprudence": {
+            "file": "jurisprudence.nq",
+            "graph_iri": "urn:la:release:dae9d0aee28b57753e2350d8da93a052d7b8382d4527a1a4ca6d494714d35fb8:jurisprudence",
+            "sha256": "a722f4f878aa81b0e64e233c4bfe4fc1bd38f1bc1ee8b3102488ec64f9c221ce",
+            "triple_count": 3142
+          },
+          "structure": {
+            "file": "structure.nq",
+            "graph_iri": "urn:la:release:dae9d0aee28b57753e2350d8da93a052d7b8382d4527a1a4ca6d494714d35fb8:structure",
+            "sha256": "180d5c27369d657b39839392b0e42bcd6aaa31e2b5ba41ac46b26affc5540d5b",
+            "triple_count": 3142
+          }
+        },
+        "metadata_graph_iri": "urn:la:release:dae9d0aee28b57753e2350d8da93a052d7b8382d4527a1a4ca6d494714d35fb8:metadata",
+        "release_id": "dae9d0aee28b57753e2350d8da93a052d7b8382d4527a1a4ca6d494714d35fb8",
+        "serving_sha256": "133ebafd2ca56d13b93e68266f0841721944b96a5b469cb8c2c3b4a18f2e574d"
+      },
+      "c": {
+        "graphs": {
+          "jurisprudence": {
+            "file": "jurisprudence.nq",
+            "graph_iri": "urn:la:release:638e6a3dca7d202fe11cf5315b39dc8ed48d955fd9a9af9c33e248b2a2d135e6:jurisprudence",
+            "sha256": "b523ce793a5ae33e54bf7e2f2eaf5d3caa9bc54dc856410b903344c3348b2433",
+            "triple_count": 3142
+          },
+          "structure": {
+            "file": "structure.nq",
+            "graph_iri": "urn:la:release:638e6a3dca7d202fe11cf5315b39dc8ed48d955fd9a9af9c33e248b2a2d135e6:structure",
+            "sha256": "6e619934145c2518cc44264ee747b452516c9214025024352e1955d501a0382e",
+            "triple_count": 3142
+          }
+        },
+        "metadata_graph_iri": "urn:la:release:638e6a3dca7d202fe11cf5315b39dc8ed48d955fd9a9af9c33e248b2a2d135e6:metadata",
+        "release_id": "638e6a3dca7d202fe11cf5315b39dc8ed48d955fd9a9af9c33e248b2a2d135e6",
+        "serving_sha256": "141d1ed68a32a8d671c1eecf1470f63bfd33d72966610eb6bbf5a788bce0831e"
+      }
+    }
+  },
+  "host": {
+    "architecture": "arm64",
+    "docker": {
+      "architecture": "aarch64",
+      "cpus": 16,
+      "memory_bytes": 105280155648,
+      "os": "linux",
+      "server_version": "29.5.2"
+    },
+    "system": "Darwin"
+  },
+  "images": {
+    "api": "sha256:486bf0ca24c8440b173c85f33654ae156b29f017a9e469d68a470a8d3b3d415f",
+    "fuseki": "sha256:c737c901cb3a4a00b89de9019abbc6417b593216c90f735a91758bb38d8bb888"
+  },
+  "not_qualified": [
+    "real legal/rights/private publication authorization",
+    "legal assertion applicability",
+    "production corpus or sustained load",
+    "OpenSearch reindex or inference overlap",
+    "encrypted populated graph restore",
+    "power-loss durability or production RTO"
+  ],
+  "resource_limits": {
+    "bootstrap": {
+      "cpus": "2.0",
+      "mem_limit": "1g",
+      "pids_limit": 256
+    },
+    "fixture": {
+      "cpus": "2.0",
+      "mem_limit": "1g",
+      "pids_limit": 256
+    },
+    "fuseki": {
+      "cpus": "2.0",
+      "mem_limit": "1g",
+      "pids_limit": 256
+    }
+  },
+  "runtime_after_imports": {
+    "cpu_since_container_start": {
+      "burst_usec": 0,
+      "nice_usec": 0,
+      "nr_bursts": 0,
+      "nr_periods": 54,
+      "nr_throttled": 8,
+      "system_usec": 207778,
+      "throttled_usec": 50659,
+      "usage_usec": 4554981,
+      "user_usec": 4347203
+    },
+    "memory_limit_bytes": 1073741824,
+    "memory_peak_bytes": 155742208,
+    "pids_limit": 256,
+    "pids_peak": 27,
+    "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+  },
+  "schema_version": "lawyer-graph-drill-v1",
+  "source": {
+    "api": {
+      "files": 93,
+      "sha256": "cc934af02749cee8d3dba10ebc87183e10becb690a4f89679c36b5cdc6bb579b"
+    },
+    "fuseki": {
+      "files": 23,
+      "sha256": "1c2361af34c5f9dc457505ea79129209edf49d5ad0d33123cadbf92c27a0524b"
+    }
+  },
+  "started_at": "2026-10-06T07:12:17.947301+00:00",
+  "startups": {
+    "activated_b": {
+      "compose_ready_seconds": 4.724,
+      "kernel": {
+        "cpu_since_container_start": {
+          "burst_usec": 0,
+          "nice_usec": 0,
+          "nr_bursts": 0,
+          "nr_periods": 32,
+          "nr_throttled": 7,
+          "system_usec": 168888,
+          "throttled_usec": 105775,
+          "usage_usec": 4179726,
+          "user_usec": 4010837
+        },
+        "memory_limit_bytes": 1073741824,
+        "memory_peak_bytes": 156012544,
+        "pids_limit": 256,
+        "pids_peak": 26,
+        "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+      },
+      "verified": {
+        "named_graph_counts": {
+          "jurisprudence": {
+            "urn:la:release:dae9d0aee28b57753e2350d8da93a052d7b8382d4527a1a4ca6d494714d35fb8:jurisprudence": 3142,
+            "urn:la:release:dae9d0aee28b57753e2350d8da93a052d7b8382d4527a1a4ca6d494714d35fb8:metadata": 5
+          },
+          "structure": {
+            "urn:la:release:dae9d0aee28b57753e2350d8da93a052d7b8382d4527a1a4ca6d494714d35fb8:metadata": 5,
+            "urn:la:release:dae9d0aee28b57753e2350d8da93a052d7b8382d4527a1a4ca6d494714d35fb8:structure": 3142
+          }
+        },
+        "release_id": "dae9d0aee28b57753e2350d8da93a052d7b8382d4527a1a4ca6d494714d35fb8"
+      }
+    },
+    "final_a": {
+      "compose_ready_seconds": 4.728,
+      "kernel": {
+        "cpu_since_container_start": {
+          "burst_usec": 0,
+          "nice_usec": 0,
+          "nr_bursts": 0,
+          "nr_periods": 30,
+          "nr_throttled": 5,
+          "system_usec": 173726,
+          "throttled_usec": 29018,
+          "usage_usec": 4186599,
+          "user_usec": 4012873
+        },
+        "memory_limit_bytes": 1073741824,
+        "memory_peak_bytes": 155856896,
+        "pids_limit": 256,
+        "pids_peak": 26,
+        "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+      },
+      "verified": {
+        "named_graph_counts": {
+          "jurisprudence": {
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:jurisprudence": 3142,
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:metadata": 5
+          },
+          "structure": {
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:metadata": 5,
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:structure": 3142
+          }
+        },
+        "release_id": "7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace"
+      }
+    },
+    "initial_a": {
+      "compose_ready_seconds": 4.688,
+      "kernel": {
+        "cpu_since_container_start": {
+          "burst_usec": 0,
+          "nice_usec": 0,
+          "nr_bursts": 0,
+          "nr_periods": 31,
+          "nr_throttled": 8,
+          "system_usec": 184278,
+          "throttled_usec": 50659,
+          "usage_usec": 4177977,
+          "user_usec": 3993699
+        },
+        "memory_limit_bytes": 1073741824,
+        "memory_peak_bytes": 155742208,
+        "pids_limit": 256,
+        "pids_peak": 26,
+        "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+      },
+      "verified": {
+        "named_graph_counts": {
+          "jurisprudence": {
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:jurisprudence": 3142,
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:metadata": 5
+          },
+          "structure": {
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:metadata": 5,
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:structure": 3142
+          }
+        },
+        "release_id": "7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace"
+      }
+    },
+    "recreated_a": {
+      "compose_ready_seconds": 5.217,
+      "kernel": {
+        "cpu_since_container_start": {
+          "burst_usec": 0,
+          "nice_usec": 0,
+          "nr_bursts": 0,
+          "nr_periods": 33,
+          "nr_throttled": 8,
+          "system_usec": 170700,
+          "throttled_usec": 119966,
+          "usage_usec": 4175136,
+          "user_usec": 4004435
+        },
+        "memory_limit_bytes": 1073741824,
+        "memory_peak_bytes": 162623488,
+        "pids_limit": 256,
+        "pids_peak": 26,
+        "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+      },
+      "verified": {
+        "named_graph_counts": {
+          "jurisprudence": {
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:jurisprudence": 3142,
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:metadata": 5
+          },
+          "structure": {
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:metadata": 5,
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:structure": 3142
+          }
+        },
+        "release_id": "7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace"
+      }
+    },
+    "rollback_a": {
+      "compose_ready_seconds": 4.732,
+      "kernel": {
+        "cpu_since_container_start": {
+          "burst_usec": 0,
+          "nice_usec": 0,
+          "nr_bursts": 0,
+          "nr_periods": 35,
+          "nr_throttled": 8,
+          "system_usec": 193989,
+          "throttled_usec": 96507,
+          "usage_usec": 4156204,
+          "user_usec": 3962214
+        },
+        "memory_limit_bytes": 1073741824,
+        "memory_peak_bytes": 155312128,
+        "pids_limit": 256,
+        "pids_peak": 26,
+        "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+      },
+      "verified": {
+        "named_graph_counts": {
+          "jurisprudence": {
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:jurisprudence": 3142,
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:metadata": 5
+          },
+          "structure": {
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:metadata": 5,
+            "urn:la:release:7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace:structure": 3142
+          }
+        },
+        "release_id": "7b0aff931d69130c6ba444b14e30ffe491cdfc152a21a646e5c181ea435ecace"
+      }
+    }
+  },
+  "status": "passed",
+  "synthetic_only": true
+}
