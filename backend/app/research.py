@@ -9,6 +9,7 @@ from .db import Record, User, now, uid
 from .graph import GraphBackendError
 from .policy import POLICY_VERSION
 from .provider import ProviderError
+from .research_jobs import JobStopped, checkpoint, ensure_active, finish_run
 
 
 class GeneratedClaim(BaseModel):
@@ -137,24 +138,65 @@ def select_passages(question, passages, byte_budget=4000):
 
 
 def run_research(app, run_id):
-    store, provider = app.state.store, app.state.provider
+    try:
+        _run_research(app, run_id)
+    except JobStopped as exc:
+        finish_run(app.state.store, run_id, exc.outcome)
+    except Exception as exc:
+        finish_run(app.state.store, run_id, error_code=type(exc).__name__)
+
+
+def publish_product(app, run_id, product, matter_version):
+    """Commit output and completion together, serialized against cancellation.
+
+    Matter-before-run matches archive's lock order. SQLite relies on the Record
+    revision CAS to roll back the entire transaction if cancellation wins.
+    The caller holds the graph publication authorization guard.
+    """
+    app.state.research_owner()
+    store = app.state.store
     with store.session() as session:
         run = session.get(Record, run_id)
+        user = session.get(User, run.owner_id)
+        if not user or not user.active:
+            raise ValueError("Research access revoked")
+        matter = require_matter(session, run.matter_id, user)
+        session.refresh(matter, with_for_update=True)
+        require_matter(session, run.matter_id, user)
+        session.refresh(run, with_for_update=True)
         state = store.decode(run)
+        ensure_active(state)
+        if matter.revision != matter_version:
+            product["status"] = "stale"
+        product["version"] = 1 + session.scalar(
+            select(func.count()).select_from(Record)
+            .where(Record.kind == "product", Record.matter_id == matter.id)
+        )
+        record = store.add(session, "product", user, product, run.matter_id)
+        state.update(status="completed", product_id=record.id, phase="finished", finished_at=now())
+        store.update(run, state)
+        session.commit()
+        return record.id, record.revision
+
+
+def _run_research(app, run_id):
+    app.state.research_owner()
+    store, provider = app.state.store, app.state.provider
+    with store.session() as session:
+        run = session.get(Record, run_id, with_for_update=True)
+        if run is None:
+            return
+        state = store.decode(run)
+        if state["status"] in {"cancelling", "queued"}:
+            ensure_active(state)
         if state["status"] != "queued":
             return
-        state["status"] = "running"
+        state.update(status="running", phase="evidence", started_at=now())
         store.update(run, state)
         user = session.get(User, run.owner_id)
-        try:
-            if not user or not user.active:
-                raise ValueError("Research access revoked")
-            matter = require_matter(session, run.matter_id, user)
-        except Exception:
-            state.update(status="failed", error="Dosya erişimi sona erdi; araştırma durduruldu.")
-            store.update(run, state)
-            session.commit()
-            return
+        if not user or not user.active:
+            raise ValueError("Research access revoked")
+        matter = require_matter(session, run.matter_id, user)
         matter_version = matter.revision
         brief = store.decode(matter)
         documents = session.scalars(
@@ -210,7 +252,7 @@ def run_research(app, run_id):
             )
         session.commit()
     question = state["question"]
-    graph_pin = state.get("graph_release_pin", app.state.graph.release_pin())
+    graph_pin = state.get("graph_release_pin") or app.state.graph.release_pin()
     selected = select_passages(question, passages)
     if len(selected) != len(passages):
         gaps.append(
@@ -233,6 +275,7 @@ def run_research(app, run_id):
         # Graph retrieval is additive and stays local. A missing path cannot remove document evidence.
         graph_paths = []
         for family in ("structure", "jurisprudence"):
+            checkpoint(app, run_id, "graph_" + family)
             try:
                 located = app.state.graph.tool(
                     "locate_issues",
@@ -248,27 +291,15 @@ def run_research(app, run_id):
                 graph_paths.append(located)
             except (GraphBackendError, ValueError):
                 gaps.append(f"{family}: graf kaynağı okunamadı; belge araması korundu.")
-        with store.session() as session:
-            current = session.get(Record, run_id)
-            if store.decode(current)["status"] == "cancelled":
-                return
-            current_user = session.get(User, current.owner_id)
-            if not current_user or not current_user.active:
-                raise ValueError("Research access revoked")
-            require_matter(session, current.matter_id, current_user)
+        checkpoint(app, run_id, "public_search")
         public_candidates = app.state.search.search(question, as_of=state.get("as_of"), limit=20)
         if public_candidates["coverage"]["status"] != "available":
             gaps.append("Kamu kaynak araması tamamlanmadı veya nitelikli korpus yapılandırılmadı.")
-        with store.session() as session:
-            current = session.get(Record, run_id)
-            if store.decode(current)["status"] == "cancelled":
-                return
-            current_user = session.get(User, current.owner_id)
-            if not current_user or not current_user.active:
-                raise ValueError("Research access revoked")
-            require_matter(session, current.matter_id, current_user)
+        checkpoint(app, run_id, "synthesis")
         if provider.configured and selected:
-            answer = GeneratedAnswer.model_validate_json(provider.generate(question, selected))
+            response = provider.generate(question, selected)
+            checkpoint(app, run_id, "verification")
+            answer = GeneratedAnswer.model_validate_json(response)
             available = {p["id"]: p for p in selected}
             for candidate in answer.claims:
                 if any(e not in available for e in candidate.evidence_ids):
@@ -347,48 +378,22 @@ def run_research(app, run_id):
         }
         if app.state.graph.release_pin() != graph_pin:
             raise GraphBackendError("Graph publication changed during research")
+        checkpoint(app, run_id, "publication")
         with guard_product_graph(product, app.state.graph):
             mark_authorization_pending(product, 'research')
-            with store.session() as session:
-                run = session.get(Record, run_id)
-                state = store.decode(run)
-                if state["status"] == "cancelled":
-                    return
-                user = session.get(User, run.owner_id)
-                if not user or not user.active:
-                    raise ValueError("Research access revoked")
-                matter = require_matter(session, run.matter_id, user)
-                session.refresh(matter, with_for_update=True)
-                if matter.revision != matter_version:
-                    product["status"] = "stale"
-                product["version"] = 1 + session.scalar(
-                    select(func.count())
-                    .select_from(Record)
-                    .where(Record.kind == "product", Record.matter_id == matter.id)
-                )
-                record = store.add(session, "product", user, product, run.matter_id)
-                state.update(status="completed", product_id=record.id)
-                store.update(run, state)
-                session.commit()
-                committed_product = (record.id, record.revision)
+            committed_product = publish_product(app, run_id, product, matter_version)
         finalize_product_authorization(store, *committed_product)
-    except Exception as exc:
+    except Exception:
+        if committed_product is None:
+            raise
         with store.session() as session:
-            run = session.get(Record, run_id)
+            run = session.get(Record, run_id, with_for_update=True)
             state = store.decode(run)
-            if state["status"] != "cancelled":
-                if committed_product is not None:
-                    state.pop('error', None)
-                    state.pop('error_code', None)
-                    state.update(status='completed', product_id=committed_product[0],
-                                 product_revision=committed_product[1],
-                                 outcome='committed_needs_revalidation', needs_revalidation=True,
-                                 warning='Çıktı kaydedildi; son yayın izni kontrolü tamamlanamadı. Kaydedilen sürümü inceleyip yeni araştırma başlatın.')
-                else:
-                    state.update(
-                        status="failed",
-                        error="Çıktı doğrulanamadı; sonuç yayımlanmadı.",
-                        error_code=type(exc).__name__,
-                    )
-                store.update(run, state)
-                session.commit()
+            state.pop('error', None)
+            state.pop('error_code', None)
+            state.update(status='completed', product_id=committed_product[0],
+                         product_revision=committed_product[1],
+                         outcome='committed_needs_revalidation', needs_revalidation=True,
+                         warning='Çıktı kaydedildi; son yayın izni kontrolü tamamlanamadı. Kaydedilen sürümü inceleyip yeni araştırma başlatın.')
+            store.update(run, state)
+            session.commit()

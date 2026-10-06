@@ -106,6 +106,7 @@ export interface Product {
   authority_candidates?: AuthorityCandidates; created_at: string;
 }
 export interface ResearchRun {
+  deadline_at?: string; budget_seconds?: number; phase?: string; cancel_requested_at?: string; finished_at?: string;
   id: string; status: string; question: string; created_at: string; product_id?: string | null; error?: string;
 }
 export interface Matter {

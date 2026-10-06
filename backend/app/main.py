@@ -6,11 +6,9 @@ import subprocess
 import sys
 import tempfile
 import time
-from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager, contextmanager
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from threading import BoundedSemaphore
 from typing import Literal
 
 import httpx
@@ -51,6 +49,15 @@ from .research import (
     guard_product_graph,
     mark_authorization_pending,
     run_research,
+)
+from .research_jobs import (
+    QueueUnavailable,
+    ResearchJobs,
+    coordinator_lease,
+    finish_run,
+    recover_runs,
+    request_stop,
+    submission,
 )
 from .scanner import MalwareDetected, ScannerUnavailable, scan_document
 from .search import PublicSearchService
@@ -221,39 +228,40 @@ def create_app(settings=None):
     @asynccontextmanager
     async def lifespan(app):
         store = Store(settings)
-        bootstrap(store, settings)
-        app.state.store = store
-        app.state.provider = Provider(settings)
-        app.state.extractor = (
-            ExtractionClient(settings.extraction_url, settings.extraction_token)
-            if not settings.demo_mode and settings.extraction_url
-            else None
-        )
-        app.state.graph = GraphService(
-            ROOT / "ontology", settings.graph_url, settings.graph_user, settings.graph_password,
-            release_root=Path(settings.graph_release_dir) if settings.graph_release_dir else None,
-            trusted_review_key=Path(settings.graph_trusted_review_key) if settings.graph_trusted_review_key else None,
-            authorization_guard=authorization_guard,
-        )
-        app.state.search = PublicSearchService(settings.opensearch_url, release_id=settings.search_release_id,
-                                             graph_release=app.state.graph.release)
-        app.state.executor = ThreadPoolExecutor(max_workers=5, thread_name_prefix="research")
-        app.state.research_slots = BoundedSemaphore(10)
-        with store.session() as session:
-            for record in session.scalars(select(Record).where(Record.kind == "research")):
-                data = store.decode(record)
-                if data["status"] in ("queued", "running"):
-                    data.update(
-                        status="failed",
-                        error="İşlem sunucu yeniden başlatıldığında kesildi; yeniden başlatılabilir.",
-                    )
-                    store.update(record, data)
-            session.commit()
-        if settings.demo_mode:
-            seed_demo(store)
-        yield
-        app.state.executor.shutdown(wait=False, cancel_futures=True)
-        store.engine.dispose()
+        try:
+            with coordinator_lease(store) as verify_owner:
+                app.state.research_owner = verify_owner
+                bootstrap(store, settings)
+                app.state.store = store
+                app.state.provider = Provider(settings)
+                app.state.extractor = (
+                    ExtractionClient(settings.extraction_url, settings.extraction_token)
+                    if not settings.demo_mode and settings.extraction_url
+                    else None
+                )
+                app.state.graph = GraphService(
+                    ROOT / "ontology", settings.graph_url, settings.graph_user, settings.graph_password,
+                    release_root=Path(settings.graph_release_dir) if settings.graph_release_dir else None,
+                    trusted_review_key=Path(settings.graph_trusted_review_key) if settings.graph_trusted_review_key else None,
+                    authorization_guard=authorization_guard,
+                )
+                app.state.search = PublicSearchService(settings.opensearch_url, release_id=settings.search_release_id,
+                                                     graph_release=app.state.graph.release)
+                recover_runs(store)
+                if settings.demo_mode:
+                    seed_demo(store)
+                app.state.research_jobs = ResearchJobs(
+                    lambda ident: run_research(app, ident),
+                    lambda ident: request_stop(store, ident, "service_shutdown"),
+                    lambda ident: finish_run(store, ident),
+                    verify_owner=verify_owner,
+                )
+                try:
+                    yield
+                finally:
+                    app.state.research_jobs.close()
+        finally:
+            store.engine.dispose()
 
     app = FastAPI(
         title="Türkiye Legal Assistant",
@@ -633,36 +641,28 @@ def create_app(settings=None):
         store = app.state.store
         with store.session() as session:
             require_matter(session, matter_id, user)
-            active = [
-                r
-                for r in session.scalars(
-                    select(Record).where(Record.kind == "research", Record.firm_id == user.firm_id)
-                )
-                if store.decode(r)["status"] in ("queued", "running")
-            ]
-            if len(active) >= 10:
-                raise HTTPException(429, "Araştırma kuyruğu dolu")
-            rec = store.add(session, "research", user, {**body.model_dump(), "status": "queued",
-                            "graph_release_pin": app.state.graph.release_pin()}, matter_id)
-            audit(session, user, "research_started", rec.id, matter_id)
-            session.commit()
-            result = store.view(rec)
-        if not app.state.research_slots.acquire(blocking=False):
-            with store.session() as session:
-                rejected = session.get(Record, rec.id)
-                store.update(
-                    rejected,
-                    {**store.decode(rejected), "status": "failed", "error": "Araştırma kuyruğu dolu"},
-                )
-                session.commit()
-            raise HTTPException(429, "Araştırma kuyruğu dolu")
         try:
-            future = app.state.executor.submit(run_research, app, rec.id)
-            future.add_done_callback(lambda completed: app.state.research_slots.release())
-        except RuntimeError:
-            app.state.research_slots.release()
-            raise HTTPException(503, "Araştırma hizmeti durduruluyor") from None
-        return result
+            with app.state.research_jobs.reserve() as ident:
+                with store.session() as session:
+                    # Recheck access after admission; a rejected request leaves no job or audit record.
+                    matter = require_matter(session, matter_id, user)
+                    session.refresh(matter, with_for_update=True)
+                    require_matter(session, matter_id, user)
+                    rec = store.add(session, "research", user, {
+                        **body.model_dump(), **submission(settings.research_budget_seconds),
+                        "graph_release_pin": app.state.graph.release_pin(),
+                    }, matter_id, record_id=ident)
+                    audit(session, user, "research_started", rec.id, matter_id)
+                    session.commit()
+                    result = store.view(rec)
+                try:
+                    app.state.research_jobs.submit(ident)
+                except QueueUnavailable:
+                    finish_run(store, ident, "interrupted")
+                    raise HTTPException(503, "Araştırma hizmeti durduruluyor") from None
+                return result
+        except QueueUnavailable as exc:
+            raise HTTPException(503 if exc.closed else 429, "Araştırma hizmeti şu anda yeni çalışma kabul edemiyor") from None
 
     @app.post("/api/v1/matters/{matter_id}/authorities/search")
     def search_authorities(matter_id: str, body: AuthoritySearch, user=Depends(authenticate)):
@@ -685,13 +685,11 @@ def create_app(settings=None):
     @app.post("/api/v1/matters/{matter_id}/research/{run_id}/cancel")
     def cancel(matter_id: str, run_id: str, user=Depends(authenticate)):
         store = app.state.store
+        request_stop(store, run_id, authorize=lambda session: require_child(
+            session, run_id, "research", matter_id, user))
+        app.state.research_jobs.cancel(run_id)
         with store.session() as session:
-            record = require_child(session, run_id, "research", matter_id, user)
-            data = store.decode(record)
-            if data["status"] in ("queued", "running"):
-                store.update(record, {**data, "status": "cancelled"})
-                session.commit()
-            return store.view(record)
+            return store.view(require_child(session, run_id, "research", matter_id, user))
 
     @app.get("/api/v1/matters/{matter_id}/products/{product_id}")
     def product(matter_id: str, product_id: str, user=Depends(authenticate)):

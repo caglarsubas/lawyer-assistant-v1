@@ -10,7 +10,7 @@ import os
 import re
 import time
 from concurrent.futures import ThreadPoolExecutor
-from contextlib import contextmanager
+from contextlib import closing, contextmanager
 from threading import Barrier, Event, Lock
 from uuid import uuid4
 
@@ -182,7 +182,8 @@ def test_mapping_writer_waits_for_whole_set_then_invalidates_old_selection(postg
 
 def test_different_admin_release_waits_for_source_head_not_operator(postgres_sources):
     app, sources, operator, _ = postgres_sources
-    with another_client(app, username="reassigning-admin", role="admin") as other:
+    # The fixture already owns the application lifespan; this is a second login, not a second API.
+    with closing(another_client(app, username="reassigning-admin", role="admin")) as other:
         with app.state.store.session() as session:
             assert session.scalar(select(User.id).where(User.username == "reassigning-admin")) != operator
         with ThreadPoolExecutor(max_workers=1) as pool:

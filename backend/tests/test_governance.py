@@ -154,6 +154,7 @@ def test_archive_restore_preserves_bytes_reviews_and_cancels_jobs(workspace):
         doc = store.add(
             session, "document", user, {"sha256": "synthetic", "original_path": original.name}, matter
         )
+        # No executing worker owns this synthetic record, so only stop intent can be asserted.
         job = store.add(session, "research", user, {"status": "running", "question": "Synthetic"}, matter)
         session.commit()
         old_matter = store.decode(session.get(Record, matter))
@@ -171,7 +172,7 @@ def test_archive_restore_preserves_bytes_reviews_and_cancels_jobs(workspace):
     assert client.get("/api/v1/governance/archived-matters").json()[0]["id"] == matter
     with store.session() as session:
         assert store.decode(session.get(Record, product_id)) == product
-        assert store.decode(session.get(Record, job.id))["status"] == "cancelled"
+        assert store.decode(session.get(Record, job.id))["status"] == "cancelling"
         assert store.decode(session.get(Record, matter)) == old_matter
         assert session.get(Record, body["tombstone_id"]).kind == "matter_tombstone"
     restore_url = f"/api/v1/governance/archived-matters/{matter}/restore"
@@ -188,7 +189,7 @@ def test_archive_restore_preserves_bytes_reviews_and_cancels_jobs(workspace):
     assert client.get("/api/v1/governance/archived-matters").json() == []
     with store.session() as session:
         assert store.decode(session.get(Record, product_id)) == product
-        assert store.decode(session.get(Record, job.id))["status"] == "cancelled"
+        assert store.decode(session.get(Record, job.id))["status"] == "cancelling"
         assert session.get(Record, body["tombstone_id"])
 
 

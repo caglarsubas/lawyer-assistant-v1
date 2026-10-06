@@ -28,7 +28,7 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
 }
 export function Mark({ large = false }: { large?: boolean }) { return <span className={`brand-mark ${large ? 'large' : ''}`} aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M12 10v20m16-20v20M12 20h16M17 7h6m-6 26h6" /></svg></span>; }
 export function Badge({ status, children }: { status?: string; children?: ReactNode }) {
-  const tone = ['approved', 'reviewed', 'completed', 'ready', 'extracted', 'documented'].includes(status || '') ? 'positive' : ['rejected', 'failed', 'stale', 'invalidated', 'disputed'].includes(status || '') ? 'warning' : '';
+  const tone = ['approved', 'reviewed', 'completed', 'ready', 'extracted', 'documented'].includes(status || '') ? 'positive' : ['rejected', 'failed', 'timed_out', 'interrupted', 'stale', 'invalidated', 'disputed'].includes(status || '') ? 'warning' : '';
   return <span className={`badge ${tone}`}>{children || statusLabel(status)}</span>;
 }
 export function Notice({ children, error = false }: { children: ReactNode; error?: boolean }) { return <div className={`notice ${error ? 'error' : ''}`} role={error ? 'alert' : 'status'}>{children}</div>; }
