@@ -19,7 +19,7 @@ from manage_backup import compose_command  # noqa: E402
 from qualify_recovery import OPENSEARCH, POSTGRES, cleanup_project, command, fresh_project  # noqa: E402
 from recovery_fixture import code_fingerprint  # noqa: E402
 
-MARKER = "lawyer-search-index-drill-v3"
+MARKER = "lawyer-search-index-drill-v4"
 
 
 def tests_fingerprint(root):
@@ -116,6 +116,13 @@ def main():
                 report["turkish_retrieval"] = json.loads(retrieval[0])
                 if report["turkish_retrieval"].get("status") != "passed":
                     raise ValueError("Incomplete Turkish retrieval workload")
+                citations = [line.removeprefix("CITATION_RETRIEVAL_DRILL_REPORT=") for line in result.stdout.splitlines()
+                             if line.startswith("CITATION_RETRIEVAL_DRILL_REPORT=")]
+                if len(citations) != 1:
+                    raise ValueError("Missing literal citation workload")
+                report["citation_retrieval"] = json.loads(citations[0])
+                if report["citation_retrieval"].get("status") != "passed":
+                    raise ValueError("Incomplete literal citation workload")
                 report["status"] = "passed"
             finally:
                 try:

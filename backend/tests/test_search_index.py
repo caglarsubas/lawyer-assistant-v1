@@ -8,12 +8,15 @@ import httpx
 import pytest
 
 from app import search_index
+from app.citation_occurrences import derived_fields as citation_fields
 from app.search import PublicSearchService, SearchUnavailable
 from app.search_index import IndexBuildError, build_index
 from app.search_index_contract import (
     CHANNELS,
     FIELDS,
     LEGACY_SCHEMA,
+    NORMALIZED_CHANNELS,
+    NORMALIZED_SCHEMA,
     SCHEMA,
     canonical,
     document_id,
@@ -142,7 +145,7 @@ def test_build_is_create_only_sealed_verified_and_never_selected(case):
     result = build_index(release, "http://opensearch:9200", RELEASE)
     assert result["status"] == "ready" and result["selected_for_search"] is False
     assert result["document_count"] == 1 and server.blocked
-    assert server.docs == {document_id(source()): {**source(), **derived_fields(source())}}
+    assert server.docs == {document_id(source()): {**source(), **derived_fields(source()), **citation_fields(source())}}
     assert all(request.url.path.startswith("/" + INDEX) for request in server.calls)
     assert not any(request.method == "DELETE" or "_aliases" in request.url.path for request in server.calls)
     body = json.loads(server.calls[0].content)
@@ -273,7 +276,7 @@ def test_new_channels_use_the_same_prefilters_and_bounded_total_without_returnin
     assert [query["query"]["bool"]["must"][0]["multi_match"]["query"] for query in queries] == [
         "SÖZLEŞMELER", "SÖZLEŞMELER", "sözleşmeler", "sozlesmeler"]
     hit = result["hits"][0]
-    assert hit["channels"] == CHANNELS
+    assert hit["channels"] == NORMALIZED_CHANNELS
     assert "text_normalized" not in hit and "text_folded" not in hit
     assert hit["text"] == source()["text"]
     span = hit["matches"]["spans"][0]
@@ -357,9 +360,115 @@ def test_exact_authority_route_does_not_expand_or_normalize_identity(case):
 def test_duplicate_evidence_is_deduplicated_and_large_derived_records_are_byte_batched(case, monkeypatch):
     release, server = case
     release.rows = [source(), source(), source("urn:test:assertion:2")]
-    size = len(canonical({"create": {"_id": document_id(source())}})) + len(canonical({**source(), **derived_fields(source())})) + 2
+    size = len(canonical({"create": {"_id": document_id(source())}})) + len(canonical({**source(), **derived_fields(source()), **citation_fields(source())})) + 2
     monkeypatch.setattr(search_index, "MAX_BATCH_BYTES", size)
     result = build_index(release, "http://opensearch:9200", RELEASE)
     assert result["document_count"] == 2
     bulks = [call for call in server.calls if call.url.path.endswith("/_bulk")]
     assert len(bulks) == 2 and all(len(call.content) <= size for call in bulks)
+
+
+def test_literal_citation_channel_uses_exact_typed_terms_and_rechecks_signed_occurrences(case):
+    release, server = case
+    release.rows = [{**source(), "text": "Esas Sayısı: 2099/0012"},
+                    {**source("urn:test:assertion:2"), "text": "Karar Sayısı: 2099/0012"}]
+    build_index(release, "http://opensearch:9200", RELEASE)
+    server.calls.clear()
+    result = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release).search("E. 2099/0012", as_of="2011-01-01")
+    bodies = [json.loads(call.content) for call in server.calls if call.url.path.endswith("/_search")]
+    assert len(bodies) == 5 and sum(body["size"] for body in bodies) <= 200
+    original_filters = bodies[0]["query"]["bool"]["filter"]
+    assert bodies[-1]["query"]["bool"]["filter"] == [*original_filters, {"terms": {"citation_keys": ["esas:2099:0012"]}}]
+    right, wrong = sorted(result["hits"], key=lambda hit: hit["assertion_id"])
+    assert "literal_citation" in right["channels"] and "literal_citation" not in wrong["channels"]
+    assert right["literal_citations"]["resolution"] == "unresolved"
+    assert right["literal_citations"]["occurrences"][0]["literal"] == "Esas Sayısı: 2099/0012"
+    assert wrong["literal_citations"]["occurrences"] == []
+    assert result["coverage"]["rejected_hits"] == 1  # Mock intentionally ignores the terms filter.
+    assert "citation_keys" not in right and result["coverage"]["literal_citations"]["authority_resolution"] == "not_performed"
+
+
+@pytest.mark.parametrize("mutation", ["profile", "mapping"])
+def test_changed_citation_recipe_is_refused_before_search(case, mutation):
+    release, server = case
+    build_index(release, "http://opensearch:9200", RELEASE)
+    if mutation == "profile":
+        server.mapping["_meta"]["citation_profile"] = "unknown"
+    else:
+        server.mapping["properties"]["citation_keys"]["type"] = "text"
+    server.calls.clear()
+    result = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release).search("E. 2099/1")
+    assert result["coverage"]["status"] == "unavailable" and not result["hits"]
+    assert [call.method for call in server.calls] == ["GET"]
+
+
+def test_v2_remains_readable_without_citation_requests_or_resolution_claims(case):
+    release, server = case
+    build_index(release, "http://opensearch:9200", RELEASE)
+    server.mapping["properties"] = properties(NORMALIZED_SCHEMA)
+    server.mapping["_meta"].update(schema=NORMALIZED_SCHEMA, channels=NORMALIZED_CHANNELS)
+    server.mapping["_meta"].pop("citation_profile")
+    server.calls.clear()
+    result = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release).search("E. 2099/1")
+    assert result["coverage"]["status"] == "available"
+    assert result["snapshot"]["index_schema"] == NORMALIZED_SCHEMA
+    assert "literal_citations" not in result["hits"][0]
+    assert sum(call.url.path.endswith("/_search") for call in server.calls) == 4
+
+
+def test_citation_limits_fail_explicitly_without_losing_index_inventory_or_query_numbers(case):
+    release, server = case
+    release.rows = [{**source(), "text": "E. 2099/1; " * 65}]
+    with pytest.raises(IndexBuildError) as caught:
+        build_index(release, "http://opensearch:9200", RELEASE)
+    assert caught.value.stage == "prepare" and not server.calls
+    release.rows = [source()]
+    build_index(release, "http://opensearch:9200", RELEASE)
+    server.calls.clear()
+    search = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release)
+    result = search.search("; ".join(f"E. 2099/{n}" for n in range(17)))
+    assert result["hits"] and result["coverage"]["status"] == "partial"
+    assert result["coverage"]["channels"]["literal_citation"] == "unavailable"
+    assert result["coverage"]["literal_citations"] == {
+        "recognized_query_keys": None, "query_budget_exceeded": True, "authority_resolution": "not_performed",
+    }
+    assert any("Split the query" in message for message in result["limitations"])
+    requests = [json.loads(call.content) for call in server.calls if call.url.path.endswith("/_search")]
+    assert len(requests) == 4
+    assert not any("terms" in clause for body in requests for clause in body["query"]["bool"]["filter"])
+    assert "literal_citations" not in result["hits"][0]
+
+
+def test_failed_citation_channel_preserves_other_candidates_and_budget_includes_vector(case, monkeypatch):
+    release, server = case
+    build_index(release, "http://opensearch:9200", RELEASE)
+    search = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release)
+    original = search._request
+    bodies = []
+    def request(body, deadline):
+        bodies.append(body)
+        if any("terms" in clause for clause in body["query"].get("bool", {}).get("filter", [])):
+            raise SearchUnavailable("search_http_error")
+        return original(body, deadline)
+    monkeypatch.setattr(search, "_request", request)
+    result = search.search("E. 2099/1", vector=[1.0], limit=50)
+    assert result["hits"] and result["coverage"]["status"] == "partial"
+    assert result["coverage"]["channels"]["literal_citation"] == "unavailable"
+    assert len(bodies) == 6 and sum(body["size"] for body in bodies) <= 200
+    assert bodies[-1]["query"]["knn"]["embedding"]["k"] == bodies[-1]["size"]
+
+
+def test_revocation_after_citation_response_discards_every_channel(case, monkeypatch):
+    release, server = case
+    release.rows = [{**source(), "text": "E. 2099/1"}]
+    build_index(release, "http://opensearch:9200", RELEASE)
+    search = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release)
+    original = search._request
+    def revoked(body, deadline):
+        result = original(body, deadline)
+        if any("terms" in clause for clause in body["query"].get("bool", {}).get("filter", [])):
+            release.active = False
+        return result
+    monkeypatch.setattr(search, "_request", revoked)
+    result = search.search("E. 2099/1")
+    assert not result["hits"] and result["coverage"]["status"] == "unavailable"
