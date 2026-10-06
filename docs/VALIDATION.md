@@ -1,5 +1,61 @@
 # Verification record — 6 October 2026
 
+## R02 research admission and cancellation — 6 October 2026 (Asia/Shanghai)
+
+The next engineering packet after merged PR #6 retains five research workers and
+ten admitted jobs, reserves before persistence, removes queued cancellations and
+acknowledges a running stop only after execution unwinds. It captures a cooperative
+deadline, serializes cancellation with private product publication, checks exclusive
+coordinator ownership, and recovers unfinished jobs as interrupted after restart.
+The [roadmap](ROADMAP.md) and [operator contract](OPERATIONS.md#research-job-lifecycle)
+keep production workload/restore/resource qualification open.
+
+Local verification on macOS / Python 3.12.11:
+
+- Full backend suite: **2,275 passed, 15 skipped, 28 existing warnings in 287.24s
+  (4m47s)** with the unchanged two-worker/work-stealing command. The 15 skips are
+  opt-in PostgreSQL tests, exercised separately below.
+- Real PostgreSQL 16.10: **15 passed in 13.58s** in randomly named disposable child
+  databases. Six new tests observe both cancellation/publication lock orderings,
+  five concurrent version allocations, archival ordering, second-coordinator
+  exclusion and a terminated coordinator session refusing reacquisition/publication.
+- Frontend: **87 tests passed**, production build passed. A separate local synthetic
+  browser run showed `Çalışıyor` → `Durduruluyor` with a disabled stop button and an
+  explanation → `İptal edildi` after a controlled local dependency returned. No
+  product was created. This did not call a real provider or load client data.
+- Ruff, **8 deployment-contract tests**, ontology validation, R01 planning contracts,
+  independent synthetic extraction comparison, dossier-bound calibration study and
+  Compose configuration with a null env file/dummy placeholders all passed.
+
+Event/barrier-controlled tests cover five occupied workers/ten admissions, rejected
+submissions leaving no records/audits, repeated queued replacement without queue
+accumulation, running cancellation retaining capacity, expired queue/inference,
+revoked membership, archive, startup recovery, shutdown and failure sanitization.
+SQLite's cancellation-versus-product-write race rolls back the product. Existing
+post-commit public authorization failures still retain a stale/uncertain saved
+product rather than falsely reporting that no output was committed.
+
+The initial full run exposed integration fixtures starting a second API on an
+already-owned database. They now stop the original lifespan before a configuration
+restart, or open a second login without starting a second lifespan. Their signed
+publication and live-revocation assertions remain intact. A subsequent local run
+stalled in macOS `openat` while descriptor-walking the Desktop ancestor. It was
+stopped, and the successful full run used a byte-identical temporary repository copy
+outside Desktop, excluding ignored credentials/runtime data. Application, test,
+deployment and CI file digests were compared back to the working tree. Local logs,
+copy manifest and synthetic UI screenshots are retained under ignored
+`.data/verification/r02-research-jobs/`. Temporary preview services and the disposable
+PostgreSQL container were stopped and removed.
+
+The existing three CI jobs, two backend workers, and 18-minute test/20-minute job
+caps are unchanged; the new database races join the existing PostgreSQL job.
+The merged baseline's [main run 37401696595](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37401696595)
+passed (backend/contracts 16m41s). That is baseline evidence, not this branch's hosted
+CI or a deployed revision. No application deployment or real legal/source/privacy
+qualification was performed for this packet. Hard interruption, upstream model
+cancellation, production five-job throughput and full recovery drills remain open.
+
+
 ## PR #6 CI timeout repair — 6 October 2026 (Asia/Shanghai)
 
 [Run 37337320919](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37337320919)

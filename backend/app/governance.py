@@ -506,8 +506,9 @@ def governance_router():
             cancelled = []
             for record in _children(session, matter, "research", lock=True):
                 run = store.decode(record)
-                if run.get("status") in {"queued", "running"}:
-                    store.update(record, {**run, "status": "cancelled", "cancel_reason": "matter_archived"})
+                if run.get("status") in {"queued", "running", "cancelling"}:
+                    store.update(record, {**run, "status": "cancelling", "stop_reason": "matter_archived",
+                                          "cancel_requested_at": run.get("cancel_requested_at") or now()})
                     cancelled.append(record.id)
             matter.kind = "archived_matter"
             _touch(store, matter)
@@ -519,12 +520,14 @@ def governance_router():
                 "matter_archived",
                 {
                     "tombstone_id": tombstone.id,
-                    "cancelled_research_ids": cancelled,
+                    "stop_requested_research_ids": cancelled,
                     "reason": body.reason,
                     "physical_erasure": False,
                 },
             )
             _commit(session)
+            for ident in cancelled:
+                request.app.state.research_jobs.cancel(ident)
             return {
                 "matter_id": matter.id,
                 "revision": matter.revision,

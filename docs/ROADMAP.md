@@ -242,7 +242,7 @@ Dependencies refer to completion of the relevant gate, not just code availabilit
 | ID / priority | Delivery packet | Dependencies / accountable lead | Exit evidence |
 |---|---|---|---|
 | **R01 / P0, in progress** | Source, asset and semantic qualification: offline catalogs, legal-analysis/scenario contracts, provider/evaluation dossier, physical evidence verifier, extraction comparator and reproducible calibration studies implemented; representative calibration and review pending | Legal ontology owner + data/source lead with application/security owners; source/provider dependencies documented | Source uses and routes reviewed; sample errors/reviewer time measured; argument/scenario fixtures adjudicated; provider processing/spend controls qualified; added effort estimated. Passing the dossier validator grants no approval |
-| **R02 / P0, partial** | Multi-source snapshots, private preparation, exact public evidence, external public/private approvals, per-source deployment-wide grants/expiry and live revocation implemented; renewal requires a freshly reviewed release. Restricted-audience serving, same-release renewal and five-job/cancellation qualification remain | R01 contracts; actual source reviews remain mandatory; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
+| **R02 / P0, partial** | Multi-source snapshots, private preparation, exact public evidence, external public/private approvals, per-source deployment-wide grants/expiry and live revocation implemented; renewal requires a freshly reviewed release. Bounded cooperative research admission/cancellation, publication races and coordinator/restart controls implemented. Restricted-audience serving, same-release renewal and representative five-job/resource qualification remain | R01 contracts; actual source reviews remain mandatory; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
 | **R03 / P0** | First genuinely reviewed contract corpus: RG ordinary/mükerrer manifest; amendment/transition candidates; MBS reconciliation; TBMM enacted/history distinction; exact provisions and historical versions | R01 lawful samples and protected reviewers; R02 for combined releases; editors + ingestion team | Reviewed corpus and exact evidence ready for analysis; amendment chains/historical queries pass; discrepancies visible. Full legal-analysis/export qualification additionally requires R04, the relevant R05 decision slice and R05A |
 | **R04 / P1** | Turkish lexical/citation normalization, local embedding and reranker evaluation, structured context packing; pinned model/index versions | R01 development benchmark; R03 representative approved corpus; retrieval/ML + legal adjudicators | Exact identifiers and original quotes preserved; hybrid and graph/metadata/rerank ablations on one snapshot; thresholds, error slices and resource budgets reported; no private-data or adverse-recall regression |
 | **R05 / P1** | Decision population and research: proceeding/decision/manifestation identity; allegation/finding/reasoning/result/dissent roles; citation ambiguity queue; reviewed authority-treatment events; independent contrary-authority branch | R01 judicial source/effect contracts, R02, R04; knowledge engineers + domain editors | Supporting and adverse passages are inspectable with role, version, institution epoch and scope; treatment is not inferred from citation; missing courts/periods and unknown finality remain explicit |
@@ -288,7 +288,7 @@ staffing/calendar without measurement.
 | Source and corpus operations | Partial | Two registered TBMM acquisition representations; immutable staging, human source/mapping review and single-source publication; R01 offline source/use/asset catalog and inspection | Actual R01 qualification, lawful RG/MBS/judicial/domain adapters, multi-source publication, separate observation/review/import freshness, archive gaps and per-source watermarks |
 | Boundary gateway | Partial | Default disconnected mode, limited public query policy, exact-digest approvals, DNS-bound fetch, registered TBMM staging and immutable quarantine catalog | Advanced local PII/entity/secret detectors, ethics rules, broader source adapters, qualified incoming content/rights verification, measured false positives |
 | Revalidation | Partial | Source/fact/practice changes mark work stale; exact source/assertion/release impact and operator invalidation preserve content and snapshots | Automatic verified publication triggers, scalable dependency index and re-review queues |
-| Operations | Partial | Restricted Compose, persistent stores, CI, five-volume encrypted backup tooling, fresh-target restore checks and isolated graph runtime rehearsals | Target-host builds, full recovery/rollback drill, signed offline distribution, quotas, five-job load, interrupted imports, cancellation and concurrency qualification |
+| Operations | Partial | Restricted Compose, persistent stores, CI, five-volume encrypted backup tooling, fresh-target restore checks, isolated graph runtime rehearsals and bounded cooperative research jobs | Target-host builds, full recovery/rollback drill, signed offline distribution, quotas, representative five-job load, interrupted imports and hard interruption/resource qualification |
 | Retention and governance | Partial | Scoped legal holds, append-only policy/events, dry-run erasure inventory, revision-checked archive/restore, minimal audit metadata | Legally qualified retention schedules, physical deletion across derived stores/caches/backups, audit anchoring and key rotation |
 | Product/legal qualification | Pending | Test harness, acceptance specification and R01 provider/evaluation/calibration dossier contracts | Actual development/held-out tasks and adjudication, source/role/adverse ablations, KVKK/TBB firm-policy mapping, funded reviewers, statistical reporting, pilot and time-savings measurement |
 
@@ -417,11 +417,42 @@ expired or revoked rollback targets remain denied. The single-source format and
 commands retain their strict boundary. Synthetic engineering tests do not establish
 real legal rights, qualified human review or a populated national corpus.
 
-**R02 remains partial.** Next is bounded research-job cancellation and the declared
-five-job operational baseline: throughput, lock wait, restore/rollback, resource
-limits and failure recovery. Restricted-audience serving and same-release renewal
-remain unsupported. R01 actual source/legal/privacy qualification continues to gate
-real corpus publication; it cannot be replaced by synthetic approvals.
+**R02 remains partial.** Research job controls are delivered in the engineering
+milestone below. The next packet is the declared five-job operational baseline:
+representative throughput and lock wait, resource ceilings, ingestion overlap,
+and restore/rollback/failure recovery. Restricted-audience serving and same-release
+renewal remain unsupported. R01 actual source/legal/privacy qualification continues
+to gate real corpus publication; it cannot be replaced by synthetic approvals.
+
+### R02 engineering milestone — research admission and cancellation (6 October 2026)
+
+After merged PR #6, the coordinator retains five workers and ten admitted jobs,
+reserves capacity before persistence, and physically removes queued cancellations.
+Running work records `cancelling` until its next checkpoint; occupied capacity stays
+reserved until the worker exits. Deadlines include queue time and are checked before
+retrieval/inference stages and publication. Stop intent and product publication
+serialize on the same record; completed products remain intact when publication
+commits first. Archiving requests a stop and blocks later private publication.
+
+One coordinator owns the database; a second startup cannot recover live work.
+PostgreSQL ownership is checked during admission and research, including publication;
+lost ownership fails closed and requires restart. Shutdown records stop intent and
+joins workers; startup records unfinished work as `interrupted` without replaying it.
+The UI continues polling while stopping and distinguishes interruption, cancellation
+and an expired budget. See [operator contract](OPERATIONS.md#research-job-lifecycle)
+and [verification evidence](VALIDATION.md).
+
+Synthetic qualification covers five occupied workers/ten admissions, cancellation
+replacement without accumulating queue entries, provider-stage cancellation,
+revocation/archive/deadline checkpoints, SQLite optimistic rollback and real
+PostgreSQL cancellation/publication ordering, five concurrent publication versions,
+archive ordering and coordinator loss. These are engineering checks, not evidence of
+production throughput, legal review or corpus qualification.
+
+**Cancellation remains cooperative:** an in-flight dependency must return before
+acknowledgement. The budget is not a hard process-interruption deadline and does not
+prove upstream inference stopped. Large-corpus resource limits, full restore/rollback
+and production five-job throughput remain R02/R07 gates; R02 is not complete.
 
 ## Two-graph specification
 

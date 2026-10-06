@@ -5,7 +5,8 @@ export const FACT_LABELS = { documented: 'Belgelenmiş', alleged: 'Beyan', dispu
 const STATUS_LABELS: Record<string, string> = {
   active: 'Açık', draft: 'Taslak', reviewed: 'İncelendi', approved: 'Uygun bulundu', rejected: 'Düzeltme gerekli',
   pending: 'Bekliyor', unreviewed: 'İncelenmedi', pending_review: 'İnceleme bekliyor', requires_review: 'İnceleme gerekli',
-  stale: 'Yeniden inceleme gerekli', invalidated: 'Yeniden inceleme gerekli', queued: 'Sırada', running: 'Çalışıyor',
+  stale: 'Yeniden inceleme gerekli', invalidated: 'Yeniden inceleme gerekli', queued: 'Sırada', running: 'Çalışıyor', cancelling: 'Durduruluyor',
+  timed_out: 'Süre doldu', interrupted: 'Kesildi',
   processing: 'İşleniyor', completed: 'Tamamlandı', succeeded: 'Tamamlandı', failed: 'Tamamlanamadı', cancelled: 'İptal edildi',
   ready: 'Hazır', extracted: 'Metin çıkarıldı', unsupported: 'Desteklenmiyor', needs_review: 'İnceleme gerekli',
   blocked: 'Kurulum tamamlanmalı', unavailable: 'Hizmete ulaşılamadı', healthy: 'Erişilebilir', not_checked: 'Denetlenmedi',
@@ -33,5 +34,5 @@ export function locatorText(locator: Passage['locator']) {
   return Object.entries(locator || {}).map(([key, value]) => `${({ page: 'Sayfa', paragraph: 'Paragraf', sheet: 'Sayfa', cell: 'Hücre', line: 'Satır' } as Record<string, string>)[key] || key}: ${String(value)}`).join(' · ') || 'Konum belirtilmedi';
 }
 export function messageOf(error: unknown) { return error instanceof Error ? error.message : 'Beklenmeyen bir hata oluştu.'; }
-export function isRunning(status: string) { return ['queued', 'running', 'processing', 'pending'].includes(status); }
+export function isRunning(status: string) { return ['queued', 'running', 'cancelling', 'processing', 'pending'].includes(status); }
 export function slugId(value: string) { return value.replace(/[^a-zA-Z0-9_-]/g, '-'); }

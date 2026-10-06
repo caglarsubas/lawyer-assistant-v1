@@ -36,8 +36,13 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
     })
     assert authorized['root'] == settings.data_dir / 'release-authorizations'
     assert authorized['epoch_path'] == settings.data_dir / 'publication-epoch'
+    # Stop the fixture API before restarting with its signed serving configuration.
+    # Two independent coordinators must never share this private database.
+    client.__exit__(None, None, None)
     app = create_app(settings)
-    with TestClient(app):
+    with TestClient(app) as restarted:
+        restarted.cookies.update(client.cookies)
+        restarted.headers['X-CSRF-Token'] = client.headers['X-CSRF-Token']
         assert app.state.graph.release_status()['status'] == 'verified'
         assert app.state.graph.release.require_current()['release_id'] == installed['release_id']
         pin = app.state.graph.release_pin()
@@ -88,7 +93,7 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         else:
             raise AssertionError('Unverified authority identity was accepted')
         assert (assertion, LA.claimStatus, Literal('legally_reviewed')) in graph
-        changed = assess(client, base + '/review', 6, 'rights', decision='needs_changes')
+        changed = assess(restarted, base + '/review', 6, 'rights', decision='needs_changes')
         assert changed.status_code == 200
         assert app.state.graph.release_status()['status'] == 'unavailable'
         assert app.state.graph.legal_review_status == 'unreviewed'

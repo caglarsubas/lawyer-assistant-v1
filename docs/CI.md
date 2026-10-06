@@ -21,7 +21,9 @@ ports. A test failure stops scheduling further tests (`--maxfail=1`); the requir
 check stays failed. Successful runs still execute the entire suite. All test
 fixtures are function-scoped; splitting files does not share mutable fixtures
 between workers. PostgreSQL concurrency tests remain in their separate serial job
-with an explicit disposable database; they skip in the normal backend job.
+with an explicit disposable database; they skip in the normal backend job. Research
+publication/cancellation and coordinator-loss races join that existing serial job;
+no additional hosted job, matrix runner, retry or higher time cap is introduced.
 
 The backend test step has a **18-minute hard limit**, inside a **20-minute job
 limit**; frontend and PostgreSQL jobs each have a **five-minute limit**. Exceeding

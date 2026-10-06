@@ -342,8 +342,15 @@ def test_real_app_dispatch_search_and_second_source_revocation(authorized_set, t
     settings = fixture["app"].state.settings.model_copy(update={
         "graph_release_dir": str(root), "graph_trusted_review_key": str(fixture["public_key"]),
         "opensearch_url": "http://opensearch:9200", "search_release_id": info["release_id"]})
+    # A configuration restart replaces the original API; it cannot double workers.
+    previous = fixture["mappings"][0][1]
+    previous.__exit__(None, None, None)
     app = create_app(settings)
-    with TestClient(app):
+    with TestClient(app) as restarted:
+        restarted.cookies.update(previous.cookies)
+        restarted.headers["X-CSRF-Token"] = previous.headers["X-CSRF-Token"]
+        fixture["mappings"] = [(app, restarted, *mapping[2:]) for mapping in fixture["mappings"]]
+        fixture["app"] = app
         assert app.state.graph.release_status()["status"] == "verified"
         graph = app.state.graph.release._graphs["structure"]
         hits = []

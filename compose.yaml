@@ -12,6 +12,7 @@ x-restricted: &restricted
 services:
   api:
     <<: *restricted
+    stop_grace_period: 240s
     image: ${LA_API_IMAGE:-lawyer-assistant-api:0.1.0}
     build: {context: ., dockerfile: deploy/backend.Dockerfile}
     read_only: true
@@ -27,6 +28,7 @@ services:
       LA_BOOTSTRAP_PASSWORD: ${LA_BOOTSTRAP_PASSWORD:?Set LA_BOOTSTRAP_PASSWORD in .env}
       LA_ALLOWED_ORIGINS: ${LA_ALLOWED_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
       LA_COOKIE_SECURE: ${LA_COOKIE_SECURE:-false}
+      LA_RESEARCH_BUDGET_SECONDS: ${LA_RESEARCH_BUDGET_SECONDS:-300}
       LA_GRAPH_URL: http://fuseki:3030
       LA_GRAPH_RELEASE_DIR: /graph-releases
       LA_GRAPH_TRUSTED_REVIEW_KEY: ${LA_GRAPH_TRUSTED_REVIEW_KEY:-}

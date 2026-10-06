@@ -37,6 +37,7 @@ class Settings(BaseSettings):
     extraction_url: str = ""
     extraction_token: str = Field(default="", repr=False)
     extraction_timeout_seconds: int = 60
+    research_budget_seconds: int = Field(default=300, ge=10, le=1800)
     session_hours: int = 8
     provider_base_url: str = Field(default="", validation_alias="LLM_PROVIDER_BASE_URL")
     provider_api_key: str = Field(default="", validation_alias="LLM_PROVIDER_API_KEY", repr=False)

@@ -90,6 +90,56 @@ health and every upload enforce that policy. A missing, stale, unavailable or
 invalid scanner blocks intake, not application login or reading existing
 documents. A clean scan alone does not establish parser safety.
 
+### Research job lifecycle
+
+Run **one API process/worker per database**, as in the supplied Compose image. Five
+research threads share ten admission slots (running, queued and reserved combined).
+Authorization precedes admission; capacity exhaustion returns HTTP 429 without
+creating a job or audit record. Closed admission returns 503. Requests accepted just
+before shutdown have an explicit interrupted outcome rather than an orphaned queue
+entry. A cancelled running call keeps its slot until the worker actually exits.
+
+`LA_RESEARCH_BUDGET_SECONDS` defaults to **300**, accepts 10–1800 seconds, and is
+captured with `deadline_at` for each submission, including queue time. Checkpoints
+before graph/search/inference work, after inference, and during publication check
+access, stop intent and the deadline. An expired queued job performs no retrieval
+when dequeued. There is no timer promising immediate expiry while a dependency is
+still running; this is a cooperative budget, not a hard CPU/network kill deadline.
+
+- `queued` → `running` → `completed`, or `failed`/`timed_out`.
+- A user stop or archive writes `cancelling`; queued work is removed and acknowledged
+  immediately, while running work reaches `cancelled` after it unwinds. The UI keeps
+  polling and explains that an in-flight operation must finish first.
+- Cancellation and product creation lock the same research record. If cancellation
+  commits first, no product is saved. If publication commits first, cancellation
+  returns the completed record and preserves its product. The publication transaction
+  locks the matter before the run, matching archival order. Existing final public
+  authorization checks and stale-product markers still apply.
+- Shutdown stops admission, persists stop intent, removes queued work and joins
+  workers before releasing database resources. It records `interrupted` for stopped
+  unfinished work. Compose allows **240 seconds** before forcibly terminating the
+  API; this grace period does not prove that an upstream model call was cancelled.
+- On startup, only unfinished `queued`/`running`/`cancelling` records become
+  `interrupted`; completed products remain intact. Recovery never auto-retries an
+  inference or external request. Start a fresh research job explicitly.
+
+The PostgreSQL coordinator holds a database-scoped advisory lock on a dedicated
+connection; SQLite demonstrations use an adjacent OS lock file. Another API startup
+fails before recovery. Ownership is rechecked during admission and worker stages;
+a lost PostgreSQL connection/lease latches a failure and must not silently reconnect
+as owner. Stop the old API and restart it after database maintenance. This mechanism
+is not a distributed HA scheduler or a rolling-upgrade/failover qualification.
+A database error persisting a terminal outcome disables admission; restore database
+access and restart so recovery can classify unfinished records. `/health` remains a
+process check, not proof that the research coordinator is admitting work.
+
+All queue entries contain record IDs only. Questions, job phases, deadlines and stop
+metadata remain encrypted, matter-authorized records. No private provider response or
+exception text is retained in failure messages. Stop intent may be visible before
+acknowledgement; never report it as proof that compute has already stopped.
+
+### Readiness checks
+
 Use **Bağlantıları denetle** on the system page for an authenticated, timestamped
 `GET /api/v1/readiness` report. Provider checks validate configuration,
 authenticated model metadata and the selected local model's context limit; they
