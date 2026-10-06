@@ -71,7 +71,9 @@ change their worker count or timeout.
 query program once within a single validation. Every focus-node query still
 executes against the current data and bindings. The key includes the query,
 effective namespace mapping and base URI. There is no shared cache of results,
-validation verdicts, schemas, authorization decisions or release contents.
+validation verdicts, inferred facts, authorization decisions or release contents.
+The separate bounded Turtle syntax cache described below retains only parsed
+ontology definitions; it never retains validation results.
 
 Each invocation owns its memory graph and bounded cache: at most 128 programs,
 64 Ki characters per query/base/namespace mapping, 128 namespace entries and
@@ -81,7 +83,7 @@ in-place inference; caller-owned graphs stay unchanged. RDF, SHACL and catalog
 files remain byte-identical, preserving ontology fingerprints and existing signed
 packet compatibility. All live integrity and authorization checks remain active.
 
-CI runs `test_validation_queries.py` before the expensive full suite. Its work
+CI runs `test_validation_queries.py` and `test_ontology_syntax.py` before the expensive full suite. Their work
 budget is deterministic rather than a fragile timing threshold: query parsing
 must scale with distinct programs while the number of query executions remains
 unchanged. It also tests the real release entry point, equal valid/invalid reports,
@@ -104,3 +106,34 @@ References: [GitHub triggers and timeouts](https://docs.github.com/en/actions/re
 
 [RDFLib prepared queries](https://rdflib.readthedocs.io/en/7.1.0/intro_to_sparql.html),
 [pySHACL validation options](https://github.com/RDFLib/pySHACL).
+
+## PR #6 timeout: repeated ontology parsing
+
+[Run 37337320919](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37337320919)
+hit the existing 18-minute backend-step limit at 99% completion. The log contains
+no test assertion failure before timeout. The previous SPARQL optimization did
+not eliminate repeated Turtle parsing: validation and serving reconstruction
+each parsed the same ontology, including once for each serving graph family.
+The application also re-imported the serving module on every guard call.
+
+Serving code is now imported once per process. A four-entry LRU retains immutable
+Turtle syntax keyed by **exact freshly read bytes and each file's base URI**.
+Each entry is limited to 32 files, 512 KiB of source bytes plus URI text, and
+10,000 triples. Larger inputs parse normally without retention. Each caller gets
+a separate graph with fresh blank nodes; caller mutations and inference cannot
+alter cached syntax. Access to the LRU is synchronized. Source assertions, matter
+data, query results, signatures, permissions and validation verdicts are not cached.
+
+Every invocation still reads source files. Serving reconstruction verifies their
+hashes against the signed manifest before consulting cached syntax, then recreates
+both payloads. Full RDFS/SHACL validation and entry/exit authorization checks still
+run. Changes with identical file size and timestamps invalidate syntax by content;
+missing, unreadable or malformed files still fail. Ontology definition bytes and
+signed release formats are unchanged.
+
+Regression checks enforce parsing-work counts, source-record reparsing, changed
+schema and shape behavior, graph/blank-node isolation, base-URI handling, eviction,
+oversize fallback, concurrent readers and warm-cache tampering rejection. They run
+in the short preflight step and remain in the full backend suite. No jobs, workers,
+dependencies, retries or time-limit increases were added. The verification record
+contains local measurements and, separately, observed hosted results.

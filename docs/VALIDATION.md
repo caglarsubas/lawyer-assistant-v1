@@ -1,4 +1,104 @@
-# Verification record — 5 October 2026
+# Verification record — 6 October 2026
+
+## PR #6 CI timeout repair — 6 October 2026 (Asia/Shanghai)
+
+[Run 37337320919](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37337320919)
+failed because the backend step exceeded its 18-minute cap at 99% completion;
+the log reports no preceding assertion failure. Frontend and PostgreSQL checks
+passed. Profiling found repeated ontology Turtle parsing across release validation
+and reconstruction of both serving families, despite the earlier SPARQL fix.
+
+The repair reuses only bounded, immutable ontology syntax keyed by current bytes
+and base URIs, and imports serving code once per process. Full inference, SHACL,
+file reads/hashes, signature verification, source reconstruction and live
+authorization remain active. See [CI controls](CI.md) for bounds and exclusions.
+
+- The same profiled real-application/two-source-revocation test made **1,272 Turtle
+  parses before / 413 after**, while retaining **all 38 SHACL validations**.
+  Profiled elapsed time was 27.83s before / 21.43s after; profiler overhead makes
+  this a diagnostic comparison, not a hosted performance estimate.
+- Seven alternating warm measurements of `validate_prepared` against the same
+  TEST-ONLY signed artifact produced before this patch gave medians **0.26882s
+  before / 0.21071s after (21.6% lower)**. Both implementations independently
+  accepted the existing manifest and byte-identical serving payloads.
+- **40 focused cases passed in 7.38s**, including the existing 23 SPARQL regressions,
+  14 ontology-syntax checks and three post-verification tampering cases. They cover
+  same-size/same-mtime edits, changed schema/shape enforcement, failed reads,
+  relative IRIs, namespace and blank-node isolation, cache bounds, concurrent
+  readers, fresh source parsing and warm-cache manifest checks.
+- Ruff, actionlint and `git diff --check` passed. Fingerprinted ontology definition
+  files are byte-identical. Workflow triggers, job count, workers, dependencies,
+  retries and time caps are unchanged.
+- The complete backend suite passed **2,252 tests, nine PostgreSQL skips and 28
+  existing warnings in 273.52s (4m33s)** with the unchanged two-worker command.
+  The previous PR #6 local run took 314.37s for 2,236 tests. This comparison is
+  local evidence; runner hardware and hosted billing must be measured separately.
+- All eight deployment contracts, ontology validation, the R01 dossier contract
+  and Compose configuration with placeholder settings passed. No local `.env`
+  was used for Compose validation.
+
+Local evidence: `.data/verification/pr6-ci-fix/` (profiles, comparison JSON and
+test logs). No deployment, credentials, provider calls or live legal data changed.
+The new hosted run is separate evidence from these local results.
+
+## R02 engineering milestone: independent source-set publication
+
+The [source-set publication contract](SOURCE_SET_PUBLICATION.md) now binds two
+external approvals to the complete reviewed source set. Every source needs a
+current source-specific audience proof and bounded grant. A stale or revoked member
+denies the entire release at install, activation, rollback and application reads.
+
+- **35 promotion tests passed in 7.93s** in independent review. They cover exact
+  markers in both graphs, candidate inventories, public-evidence deduplication,
+  ontology binding, private canaries, preserved quotes/dates/open-ended evidence,
+  byte budgets and strict single-source compatibility.
+- **43 new authorization/CLI cases** cover actual isolated two-source review
+  ledgers and TEST-ONLY external Ed25519 approvals. Cases include per-source
+  proof/audience binding, second-source revocation/reassignment/tampering, firm and
+  operator changes, canonical permissions, expiry during final validation, exact
+  public/private bytes, real application search, guarded rollback, external approval
+  acceptance, immutable records and failure cleanup. They passed focused runs;
+  the full-suite result below is the non-overlapping aggregate.
+- **Nine real PostgreSQL tests passed in 12.48s** against the CI-pinned PostgreSQL
+  **16.10** image in a disposable loopback-only container with tmpfs data. The new
+  runtime test uses the public authorization dispatcher, observes a blocked
+  second-source rights writer through `pg_blocking_pids`, then rejects use after
+  that writer commits revocation. Each test creates/drops only its random child
+  database; the disposable container was removed afterward.
+- Legacy authorization checks passed **49 tests in 108.24s**; an overlapping
+  existing I/O/publication selection passed **80 tests in 22.41s**. Five additional
+  I/O regressions cover the explicit fifth-level private-record path exception
+  while ordinary packet readers retain the four-level limit.
+- The complete local backend suite passed **2,236 tests, nine PostgreSQL skips
+  and 28 existing warnings in 314.37s (5m14s)** with two workers and work stealing.
+  The nine database cases passed separately above. All existing tests remain.
+- Ruff, actionlint, `git diff --check`, eight deployment-contract tests and ontology
+  validation passed. Independent reviews of promotion, authorization and CLI
+  lifecycle boundaries found no remaining actionable finding.
+- An offline **linux/arm64** rehearsal passed using image
+  `lawyer-assistant-api:r02-set-authorization`,
+  `sha256:f79fdfe8ffdc4b3e717fe5e9be4e8e115191ee2e684e744d2c03773cab59fbff`.
+  The derivative image reused pinned dependencies and copied the current app/CLI
+  code. It ran as UID 10001 with no network, a read-only root, all capabilities
+  dropped, no host mounts and tmpfs working storage. Actual candidate → request →
+  accept commands matched an existing TEST-ONLY external signature; runtime
+  authorization, five-level packet paths and 0700/0600 permissions passed. A
+  second-source rights change through the isolated review API denied subsequent
+  reads. The container exited successfully and was removed. Its synthetic SQLite
+  fixture does not replace PostgreSQL concurrency evidence above.
+
+PR #5's merged revision `ab13250bdcf30c72cf5c304eaff969ed7d583e03`
+[passed post-merge CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37333286536):
+backend/contracts **13m54s**, frontend **21s**, PostgreSQL **39s**. The new race joins
+the existing PostgreSQL job. No job, dependency, worker, retry or timeout increase
+was added. New-branch hosted checks remain separate evidence.
+
+This is synthetic engineering validation, not real source/legal/privacy approval.
+Conditional/restricted audiences, same-release permission replacement and full
+five-job/cancellation qualification remain open. Renewal requires fresh external
+review and a new signed release. No live deployment, credentials, provider call,
+acquired source, accepted legal review or active graph release was changed.
+Local evidence is under gitignored `.data/verification/r02-set-authorization-*`.
 
 ## R02 engineering milestone: combined private review preparation
 

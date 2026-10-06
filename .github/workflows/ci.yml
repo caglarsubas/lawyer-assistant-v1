@@ -26,9 +26,9 @@ jobs:
           echo "$GITHUB_WORKSPACE/backend/.venv/bin" >> "$GITHUB_PATH"
       - name: Lint Python
         run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
-      - name: Check SHACL query work budget before full suite
+      - name: Check ontology parsing and SHACL work budgets before full suite
         timeout-minutes: 2
-        run: pytest backend/tests/test_validation_queries.py -q
+        run: pytest backend/tests/test_validation_queries.py backend/tests/test_ontology_syntax.py -q
       - name: Test backend
         timeout-minutes: 18
         run: pytest backend/tests -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
@@ -83,7 +83,7 @@ jobs:
       - name: Test real PostgreSQL review races in isolated child databases
         env:
           LA_TEST_POSTGRES_URL: postgresql+psycopg://snapshot_test:disposable-ci-snapshot-only@127.0.0.1:${{ job.services.postgres.ports['5432'] }}/lawyer_snapshot_test
-        run: backend/.venv/bin/pytest backend/tests/test_snapshot_set_postgres.py
+        run: backend/.venv/bin/pytest backend/tests/test_snapshot_set_postgres.py backend/tests/test_set_authorization_postgres.py
 
   frontend:
     runs-on: ubuntu-latest

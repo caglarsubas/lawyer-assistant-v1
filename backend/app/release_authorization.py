@@ -195,6 +195,22 @@ class ReleaseAuthorization:
     def guard(self, info, action):
         try:
             tools = _packet_tools()
+            # Routing is not authorization: each exact schema independently
+            # verifies its signature, packet and live source state. Never retry a
+            # rejected source-set authorization through the legacy policy.
+            if (self.root and isinstance(info, dict) and isinstance(info.get("release_id"), str)
+                    and tools.HASH.fullmatch(info["release_id"])):
+                envelope = tools.parse_json(tools.read_file(
+                    self.root / info["release_id"] / "authorization.json", MAX_AUTHORIZATION))
+                if (isinstance(envelope, dict) and isinstance(envelope.get("body"), dict)
+                        and envelope["body"].get("schema_version") == "legal-release-source-set-authorization-v1"):
+                    from .release_set_authorization import ReleaseSetAuthorization
+
+                    guard = ReleaseSetAuthorization(self.store, self.source_store, self.root, self.trusted_key,
+                                                    self.ontology_root, self.epoch_path)
+                    with guard.guard(info, action) as receipt:
+                        yield receipt
+                    return
             current = self._load(info, action, tools)
             binding = current["body"]["source_binding"]
             with locked_snapshot(self.store, self.source_store, operator_id=binding["operator_id"],

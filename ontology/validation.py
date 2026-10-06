@@ -1,18 +1,84 @@
-"""Fresh SHACL validation with per-call reuse of parsed SPARQL programs.
+"""Fresh SHACL validation with bounded reuse of syntax, never verdicts.
 
 Only query syntax/algebra is reused, never query results or validation decisions.
 The memory graph and its bounded cache belong to a single validation invocation.
+Ontology Turtle syntax is keyed by freshly read bytes and base URIs; each caller
+receives an independent graph with fresh blank nodes, without inferred triples.
 """
 from __future__ import annotations
 
+from collections import OrderedDict
+from threading import Lock
+
 from pyshacl import validate
-from rdflib import Graph
+from rdflib import BNode, Graph
 from rdflib.plugins.sparql import prepareQuery
 
 _MAX_QUERIES = 128
 _MAX_QUERY_LENGTH = 64 * 1024
 _MAX_NAMESPACES = 128
 _MAX_CACHE_CHARACTERS = 1024 * 1024
+_MAX_GRAPH_CACHE_ENTRIES = 4
+_MAX_GRAPH_SOURCE_BYTES = 512 * 1024
+_MAX_GRAPH_FILES = 32
+_MAX_GRAPH_TRIPLES = 10_000
+
+
+class _OntologySyntaxCache:
+    """Only used for local ontology definitions, never matter or release records."""
+
+    def __init__(self):
+        self._entries = OrderedDict()
+        self._lock = Lock()
+
+    def load(self, paths):
+        # Read on EVERY invocation. A pathname, mtime, signature or previous
+        # success is not evidence that these are still the same source bytes.
+        sources = tuple((path.absolute().as_uri(), path.read_bytes()) for path in paths)
+        return self.parse(sources)
+
+    def parse(self, sources):
+        """Consume captured ontology bytes; callers retain all integrity checks."""
+        cacheable = (len(sources) <= _MAX_GRAPH_FILES
+                     and sum(len(uri.encode()) + len(raw) for uri, raw in sources) <= _MAX_GRAPH_SOURCE_BYTES)
+        frozen = None
+        if cacheable:
+            with self._lock:
+                frozen = self._entries.get(sources)
+                if frozen is not None:
+                    self._entries.move_to_end(sources)
+        if frozen is None:
+            graph = Graph()
+            for uri, raw in sources:
+                graph.parse(data=raw, publicID=uri, format="turtle")
+            if cacheable and len(graph) <= _MAX_GRAPH_TRIPLES:
+                frozen = (tuple(graph), tuple(graph.namespaces()))
+                with self._lock:
+                    self._entries[sources] = frozen
+                    self._entries.move_to_end(sources)
+                    while len(self._entries) > _MAX_GRAPH_CACHE_ENTRIES:
+                        self._entries.popitem(last=False)
+            return graph
+        # Never return a mutable graph held by the cache. Remap anonymous nodes
+        # just as a fresh parse would, including nodes shared by RDF lists.
+        graph, blank_nodes = Graph(), {}
+        for prefix, namespace in frozen[1]:
+            graph.bind(prefix, namespace, override=True, replace=True)
+        for triple in frozen[0]:
+            graph.add(tuple(blank_nodes.setdefault(term, BNode()) if isinstance(term, BNode) else term
+                            for term in triple))
+        return graph
+
+
+_ontology_syntax = _OntologySyntaxCache()
+
+
+def load_ontology_graph(paths):
+    return _ontology_syntax.load(paths)
+
+
+def parse_ontology_graph(sources):
+    return _ontology_syntax.parse(tuple(sources))
 
 
 class _ValidationGraph(Graph):

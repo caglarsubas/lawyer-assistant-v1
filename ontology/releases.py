@@ -51,10 +51,7 @@ def ontology_digest(root: Path) -> str:
 
 
 def load_schema(root: Path) -> Graph:
-    graph = Graph()
-    for path in sorted((root / "modules").glob("*.ttl")):
-        graph.parse(path, format="turtle")
-    return graph.parse(root / "domains.ttl", format="turtle")
+    return _validation.load_ontology_graph([*sorted((root / "modules").glob("*.ttl")), root / "domains.ttl"])
 
 
 def check_review_attestation(path: Path | None, trusted_key: Path | None, expected: dict) -> dict:
@@ -157,7 +154,7 @@ def check_data(graphs: dict[str, Graph], ontology_root: Path, review: dict) -> d
                 raise ValueError("Text representations must be explicitly public and nonsynthetic")
     _temporal.validate_graph_temporality(combined)
     conforms, _, report = _validation.validate_graph(
-        combined, Graph().parse(ontology_root / "shapes.ttl", format="turtle"), load_schema(ontology_root))
+        combined, _validation.load_ontology_graph([ontology_root / "shapes.ttl"]), load_schema(ontology_root))
     if not conforms:
         raise ValueError("Snapshot violates SHACL: " + str(report))
     return {"partitions": partitions, "assertions": sum(len(p[s]) for p in partitions.values() for s in ("proposed", "reviewed")),
