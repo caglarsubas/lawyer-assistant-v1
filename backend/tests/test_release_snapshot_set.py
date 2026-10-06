@@ -115,9 +115,9 @@ def test_all_sources_use_one_session_and_deterministic_lock_order(source_set, mo
     original = batch._load
     loaded = []
 
-    def load(store, session, package, *args):
+    def load(store, session, package, *args, **kwargs):
         loaded.append((id(session), package.detail["id"]))
-        return original(store, session, package, *args)
+        return original(store, session, package, *args, **kwargs)
 
     monkeypatch.setattr(batch, "_load", load)
     with snapshot_set(list(reversed(source_set))):
@@ -300,9 +300,9 @@ def test_initial_capture_races_are_rejected_before_any_snapshot_is_yielded(sourc
     ordered = sorted(source_set, key=lambda item: item[3])
     changed = False
 
-    def load(*args):
+    def load(*args, **kwargs):
         nonlocal changed
-        result = original(*args)
+        result = original(*args, **kwargs)
         if not changed and args[2].detail["id"] == ordered[-1][3]:
             changed = True
             mapping = ordered[0]
@@ -327,9 +327,9 @@ def test_account_change_during_last_revalidation_read_is_detected(source_set, mo
     calls = 0
     target = 4 if when == "before_yield" else 6
 
-    def load(*args):
+    def load(*args, **kwargs):
         nonlocal calls
-        result = original(*args)
+        result = original(*args, **kwargs)
         calls += 1
         if calls == target:
             revoke(source_set[0][0], "inactive")

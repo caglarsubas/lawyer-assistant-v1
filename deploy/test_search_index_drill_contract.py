@@ -13,19 +13,23 @@ import qualify_search_index as drill  # noqa: E402
 
 
 class SearchIndexDrillContracts(unittest.TestCase):
-    def test_internal_network_named_volume_and_no_driver_credentials(self):
-        definition = drill.compose_definition({"test": "sha256:test", "opensearch": "sha256:search"})
+    def test_internal_network_named_volumes_and_only_generated_test_credentials(self):
+        definition = drill.compose_definition({"test": "sha256:test", "opensearch": "sha256:search", "postgres": "sha256:postgres"}, "generated-test-only")
         self.assertEqual(definition["networks"], {"isolated": {"internal": True}})
-        self.assertEqual(set(definition["volumes"]), {"opensearch"})
+        self.assertEqual(set(definition["volumes"]), {"opensearch", "postgres"})
         for service in definition["services"].values():
             for field in ("ports", "env_file", "network_mode", "privileged", "build"):
                 self.assertNotIn(field, service)
             self.assertEqual(service["networks"], ["isolated"])
             self.assertEqual(service["pull_policy"], "never")
             self.assertTrue(all(mount.split(":")[0] in definition["volumes"] for mount in service.get("volumes", [])))
+        self.assertEqual(definition["services"]["postgres"]["cap_add"],
+                         ["CHOWN", "DAC_OVERRIDE", "FOWNER", "SETGID", "SETUID"])
         driver = definition["services"]["driver"]
+        self.assertNotIn("cap_add", driver)
         self.assertNotIn("volumes", driver)
-        self.assertEqual(driver["environment"], {"LA_SEARCH_INDEX_DRILL": drill.MARKER, "LA_PUBLIC_SOURCE_DIR": "/tmp/public-only"})
+        self.assertEqual(driver["environment"], {"LA_SEARCH_INDEX_DRILL": drill.MARKER, "LA_PUBLIC_SOURCE_DIR": "/tmp/public-only",
+            "LA_TEST_POSTGRES_URL": "postgresql+psycopg://snapshot_test:generated-test-only@postgres:5432/lawyer_snapshot_test"})
         self.assertTrue(driver["read_only"])
 
     def test_test_fingerprint_binds_added_changed_and_removed_fixtures(self):

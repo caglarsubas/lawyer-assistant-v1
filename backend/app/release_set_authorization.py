@@ -254,7 +254,8 @@ class ReleaseSetAuthorization(ReleaseAuthorization):
             body, files = current["body"], current["files"]
             request = _selection(body["source_binding"], tools)
             with locked_snapshot_set(self.store, self.source_store,
-                                     operator_id=body["source_binding"]["operator_id"], request=request) as snapshot:
+                                     operator_id=body["source_binding"]["operator_id"], request=request,
+                                     shared=action == "read") as snapshot:
                 validate_source_permissions(body, snapshot)
                 evidence = {Path(name).stem: raw for name, raw in files.items() if name.startswith("private-evidence/")}
                 rebuilt, summary = compile_review_set(snapshot, tools.parse_json(files["registry.json"]),

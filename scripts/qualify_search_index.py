@@ -16,10 +16,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT / "deploy"))
 from manage_backup import compose_command  # noqa: E402
-from qualify_recovery import OPENSEARCH, cleanup_project, command, fresh_project  # noqa: E402
+from qualify_recovery import OPENSEARCH, POSTGRES, cleanup_project, command, fresh_project  # noqa: E402
 from recovery_fixture import code_fingerprint  # noqa: E402
 
-MARKER = "lawyer-search-index-drill-v1"
+MARKER = "lawyer-search-index-drill-v2"
 
 
 def tests_fingerprint(root):
@@ -28,10 +28,19 @@ def tests_fingerprint(root):
     return {"files": len(files), "sha256": hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()}
 
 
-def compose_definition(images):
+def compose_definition(images, password):
     restricted = {"restart": "no", "networks": ["isolated"], "cap_drop": ["ALL"],
                   "security_opt": ["no-new-privileges:true"], "pids_limit": 256, "cpus": "2.0", "pull_policy": "never"}
     return {"services": {
+        "postgres": {**restricted, "image": images["postgres"], "mem_limit": "512m",
+            # Match production: vendor entrypoint owns the new volume, then drops UID.
+            "cap_add": ["CHOWN", "DAC_OVERRIDE", "FOWNER", "SETGID", "SETUID"],
+            "volumes": ["postgres:/var/lib/postgresql/data"],
+            "environment": {"POSTGRES_DB": "lawyer_snapshot_test", "POSTGRES_USER": "snapshot_test",
+                            "POSTGRES_PASSWORD": password,
+                            "POSTGRES_INITDB_ARGS": "--auth-host=scram-sha-256 --auth-local=scram-sha-256"},
+            "healthcheck": {"test": ["CMD-SHELL", "pg_isready -U snapshot_test -d lawyer_snapshot_test"],
+                            "interval": "3s", "timeout": "3s", "retries": 30}},
         "opensearch": {**restricted, "image": images["opensearch"], "mem_limit": "1536m",
             "volumes": ["opensearch:/usr/share/opensearch/data"],
             "environment": {"discovery.type": "single-node", "DISABLE_INSTALL_DEMO_CONFIG": "true",
@@ -40,10 +49,12 @@ def compose_definition(images):
                             "interval": "3s", "timeout": "5s", "retries": 40}},
         "driver": {**restricted, "image": images["test"], "profiles": ["driver"], "read_only": True,
             "mem_limit": "1g", "tmpfs": ["/tmp:size=256m,mode=1777"],
-            "environment": {"LA_SEARCH_INDEX_DRILL": MARKER, "LA_PUBLIC_SOURCE_DIR": "/tmp/public-only"},
-            "command": ["python", "-m", "pytest", "tests/test_search_index_opensearch.py", "-q", "-s", "-p", "no:cacheprovider",
+            "environment": {"LA_SEARCH_INDEX_DRILL": MARKER, "LA_PUBLIC_SOURCE_DIR": "/tmp/public-only",
+                            "LA_TEST_POSTGRES_URL": f"postgresql+psycopg://snapshot_test:{password}@postgres:5432/lawyer_snapshot_test"},
+            "command": ["python", "-m", "pytest", "tests/test_search_index_opensearch.py", "tests/test_snapshot_set_postgres.py",
+                        "tests/test_set_authorization_postgres.py", "tests/test_research_jobs_postgres.py", "-q", "-s", "-p", "no:cacheprovider",
                         "--basetemp=/tmp/search-fixture", "--disable-warnings"]}},
-        "volumes": {"opensearch": {}}, "networks": {"isolated": {"internal": True}}}
+        "volumes": {"opensearch": {}, "postgres": {}}, "networks": {"isolated": {"internal": True}}}
 
 
 def main():
@@ -57,11 +68,11 @@ def main():
     report = {"schema_version": MARKER, "status": "failed", "synthetic_only": True,
               "started_at": datetime.now(timezone.utc).isoformat(),
               "not_qualified": ["real legal/source rights", "production capacity", "retrieval recall or adverse authority coverage",
-                                "embedding/reranker quality", "five model jobs during reindexing", "PostgreSQL lock performance"]}
+                                "embedding/reranker quality", "five model jobs during reindexing", "representative PostgreSQL lock latency or production revocation SLA"]}
     stage = "preflight"
     try:
         images = {name: command(["docker", "image", "inspect", "--format", "{{.Id}}", value])
-                  for name, value in {"test": args.test_image, "opensearch": OPENSEARCH}.items()}
+                  for name, value in {"test": args.test_image, "opensearch": OPENSEARCH, "postgres": POSTGRES}.items()}
         script = ("import sys,json,hashlib; from pathlib import Path; sys.path.insert(0,'/app/scripts'); "
                   "from recovery_fixture import code_fingerprint; root=Path('/app'); "
                   "files={p.relative_to(root).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() "
@@ -77,7 +88,7 @@ def main():
                       host={"system": platform.system(), "architecture": platform.machine()})
         with tempfile.TemporaryDirectory(prefix="lawyer-search-") as directory:
             config = Path(directory) / "compose.json"
-            definition = compose_definition(images)
+            definition = compose_definition(images, secrets.token_hex(24))
             config.write_text(json.dumps(definition))
             report["resource_limits"] = {name: {key: service[key] for key in ("cpus", "mem_limit", "pids_limit")}
                                          for name, service in definition["services"].items()}
@@ -86,8 +97,8 @@ def main():
             fresh_project(project)
             report["cleanup"] = {"complete": False, "remaining_project": project}
             try:
-                stage = "opensearch_startup"
-                command([*compose, "up", "-d", "--wait", "--wait-timeout", "150", "opensearch"], timeout=180)
+                stage = "database_startup"
+                command([*compose, "up", "-d", "--wait", "--wait-timeout", "150", "postgres", "opensearch"], timeout=180)
                 stage = "workload"
                 result = subprocess.run([*compose, "run", "--rm", "--no-deps", "-T", "driver"],
                                         capture_output=True, text=True, timeout=240)

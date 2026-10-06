@@ -155,9 +155,22 @@ docker compose --profile publication run --rm --no-deps \
 
 The publisher uses its existing private database/review configuration and the
 internal OpenSearch service. It holds the graph publication read lock before the
-live source-review locks, keeping the source snapshot stable and the prior index intact. Holding private
-review locks can delay other authorized operations, particularly on PostgreSQL;
-representative lock-wait and production concurrency qualification remains open. Every output row comes from a legally reviewed assertion and its exact
+live source-review locks, keeping the source snapshot stable and the prior index intact.
+Runtime read authorization takes PostgreSQL `FOR SHARE` locks on the operator,
+source-review heads and mapping heads, in the existing deterministic order.
+Verified readers can overlap, including searches against the prior index during a
+rebuild. Preparation, installation, activation and rollback retain exclusive row
+locks. Both modes retain full entry/exit validation and the existing database
+lock/statement timeouts; permission decisions are not cached.
+
+Shared locks still exclude account, rights and mapping updates. A pending
+revocation can wait for an in-flight build, and queued writers can delay later
+readers; a timeout fails closed. This change does not promise immediate revocation
+or lock-free reads. Callers must not upgrade shared locks or mutate rows within a
+read guard. SQLite demo mode remains optimistic. See PostgreSQL's
+[row-lock compatibility rules](https://www.postgresql.org/docs/16/explicit-locking.html#LOCKING-ROWS).
+Representative lock-wait and production concurrency qualification remains open.
+Every output row comes from a legally reviewed assertion and its exact
 signed evidence passage, authority, historical interval and original source hash.
 Unknown or unsupported intervals and invalid/oversized fields are never guessed or
 truncated. URLs remain absent where the signed graph has no authoritative URL.
@@ -218,13 +231,25 @@ python3 scripts/qualify_search_index.py \
 
 The second image contains pinned test dependencies and fixtures; never deploy it as
 the API. The runner verifies both application and fixture fingerprints, uses a
-fresh internal-only Docker network and named OpenSearch volume, and publishes no
-host ports or bind mounts. The driver keeps synthetic source/review data in tmpfs;
-no `.env`, existing database or provider key is used. It exercises exact signed
-passage retrieval, historical filtering, search during a paused rebuild, write
-blocks, an actual per-item bulk failure and second-source revocation. This fixture
-uses the actual private-review implementation on SQLite; it does not qualify
-PostgreSQL lock behavior during rebuilding. Cleanup must
+fresh internal-only Docker network and named PostgreSQL/OpenSearch volumes, and
+publishes no host ports or bind mounts. Both pinned database images must already
+be loaded. PostgreSQL gets a new generated test-only password; the driver creates
+and drops random child databases under the dedicated test database. The driver
+keeps synthetic source files and test keys in tmpfs; no `.env`, existing database
+or provider key is used. Each service is limited to two CPUs and 256 PIDs; memory
+caps are 512 MiB for PostgreSQL, 1.5 GiB for OpenSearch and 1 GiB for the driver.
+
+The v2 workload exercises exact signed passage retrieval, historical filtering,
+five concurrent searches during a guarded rebuild, write blocks, an actual
+per-item bulk failure and second-source revocation. It observes the revocation
+writer's real PostgreSQL lock wait, releases the build, then verifies that committed
+revocation blocks every retained index and further builds before search traffic.
+The report records those synthetic search timings and writer wait-plus-commit time;
+they are not production latency targets. The same isolated run executes the
+PostgreSQL snapshot, authorization and research-job race suites, including five
+simultaneous guards, protection of every selected source/mapping row, exclusive
+publication actions and denial after a waiting reader encounters revocation.
+Cleanup must
 be confirmed for a passing report. Host crashes/SIGKILL can leave resources; inspect
 only the recorded generated project before cleanup. The workload stays outside
 routine CI; its test is explicitly skipped unless the isolated drill marker is set.

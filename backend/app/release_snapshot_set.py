@@ -108,7 +108,7 @@ def _budget(artifact_bytes, mapping_count):
         raise SnapshotError("The source set exceeds the total mapping limit")
 
 
-def _capture(store, source_store, session, operator, selections):
+def _capture(store, source_store, session, operator, selections, *, shared=False):
     snapshots, originals, fingerprints = [], [], []
     artifact_bytes, mapping_count = 0, 0
     for source in selections:
@@ -116,7 +116,7 @@ def _capture(store, source_store, session, operator, selections):
         artifact_bytes += sum(len(raw) for raw in package.artifacts.values())
         _budget(artifact_bytes, mapping_count)
         snapshot = _load(store, session, package, operator,
-                         source.expected_source_review_revision, source.expected_mapping_revision)
+                         source.expected_source_review_revision, source.expected_mapping_revision, shared=shared)
         mapping_count += len(snapshot["state"]["items"])
         _budget(artifact_bytes, mapping_count)
         snapshots.append(snapshot)
@@ -125,8 +125,8 @@ def _capture(store, source_store, session, operator, selections):
     return snapshots, originals, fingerprints, artifact_bytes, mapping_count
 
 
-def _revalidate(store, source_store, session, operator_id, identity, selections, originals, fingerprints):
-    operator = _operator(session, operator_id)
+def _revalidate(store, source_store, session, operator_id, identity, selections, originals, fingerprints, *, shared=False):
+    operator = _operator(session, operator_id, shared=shared)
     if _identity(operator) != identity:
         raise SnapshotError("The operator identity or role changed during inspection")
     artifact_bytes, mapping_count = 0, 0
@@ -137,26 +137,30 @@ def _revalidate(store, source_store, session, operator_id, identity, selections,
         artifact_bytes += sum(len(raw) for raw in package.artifacts.values())
         _budget(artifact_bytes, mapping_count)
         current = _load(store, session, package, operator,
-                        source.expected_source_review_revision, source.expected_mapping_revision)
+                        source.expected_source_review_revision, source.expected_mapping_revision, shared=shared)
         mapping_count += len(current["state"]["items"])
         _budget(artifact_bytes, mapping_count)
         if _snapshot_fingerprint(current) != fingerprint:
             raise SnapshotError("Review state changed during inspection")
     # The final package or ledger read may itself have crossed an account change
     # in explicit SQLite demo mode, where FOR UPDATE does not acquire row locks.
-    if _identity(_operator(session, operator_id)) != identity:
+    if _identity(_operator(session, operator_id, shared=shared)) != identity:
         raise SnapshotError("The operator identity or role changed during inspection")
 
 
 @contextmanager
-def locked_snapshot_set(store, source_store, *, operator_id, request: SnapshotSetRequest):
+def locked_snapshot_set(store, source_store, *, operator_id, request: SnapshotSetRequest, shared=False):
     """Hold all selected current reviews through one bounded caller operation.
 
     Acquisition order is account, then source-review and mapping heads for each
     source ID in ascending order. All locks remain in one transaction until exit.
+    Runtime read authorization may request shared row locks; ordinary preparation
+    keeps exclusive locks. Shared callers may not mutate rows or upgrade locks.
     The returned set and its hash are private inspection material, not a prepared
     packet, legal signature or publication authorization. No rows are written.
     """
+    if type(shared) is not bool:
+        raise SnapshotError("Invalid snapshot lock mode")
     selections = _selection(operator_id, request)
     backend = store.engine.dialect.name
     if backend not in {"postgresql", "sqlite"}:
@@ -164,11 +168,11 @@ def locked_snapshot_set(store, source_store, *, operator_id, request: SnapshotSe
     mode = "postgresql_transaction_locks" if backend == "postgresql" else "sqlite_demo_optimistic_revalidation"
     try:
         with store.session() as session:
-            operator = _operator(session, operator_id)
+            operator = _operator(session, operator_id, shared=shared)
             identity = _identity(operator)
             snapshots, originals, fingerprints, artifact_bytes, mapping_count = _capture(
-                store, source_store, session, operator, selections)
-            _revalidate(store, source_store, session, operator_id, identity, selections, originals, fingerprints)
+                store, source_store, session, operator, selections, shared=shared)
+            _revalidate(store, source_store, session, operator_id, identity, selections, originals, fingerprints, shared=shared)
             binding = {
                 "schema_version": "legal-review-snapshot-set-v1", "firm_id": identity[1],
                 "operator_id": identity[0], "sources": [_copy(item["binding"]) for item in snapshots],
@@ -185,7 +189,7 @@ def locked_snapshot_set(store, source_store, *, operator_id, request: SnapshotSe
             yield value
             if _result_fingerprint(value) != retained:
                 raise SnapshotError("Returned snapshot content changed during inspection")
-            _revalidate(store, source_store, session, operator_id, identity, selections, originals, fingerprints)
+            _revalidate(store, source_store, session, operator_id, identity, selections, originals, fingerprints, shared=shared)
             if _result_fingerprint(value) != retained:
                 raise SnapshotError("Returned snapshot content changed during inspection")
             # Session close rolls back; no commit, review event, audit or mutation.
