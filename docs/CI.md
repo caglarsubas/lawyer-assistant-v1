@@ -25,6 +25,11 @@ with an explicit disposable database; they skip in the normal backend job. Resea
 publication/cancellation and coordinator-loss races join that existing serial job;
 no additional hosted job, matrix runner, retry or higher time cap is introduced.
 
+The isolated Docker recovery and five-job load drills are explicit operator
+commands, outside routine CI. Only their fast boundary/measurement tests join the
+existing deployment-contract step. See the [load profile](OPERATIONS.md#five-job-application-baseline)
+and [recovery drill](OPERATIONS.md#disposable-synthetic-recovery-drill).
+
 The backend test step has a **18-minute hard limit**, inside a **20-minute job
 limit**; frontend and PostgreSQL jobs each have a **five-minute limit**. Exceeding
 a limit fails/cancels the check rather than marking partial work successful. Lint, backend tests and deployment tests are

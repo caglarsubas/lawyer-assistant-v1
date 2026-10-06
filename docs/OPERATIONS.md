@@ -138,6 +138,64 @@ metadata remain encrypted, matter-authorized records. No private provider respon
 exception text is retained in failure messages. Stop intent may be visible before
 acknowledgement; never report it as proof that compute has already stopped.
 
+### Five-job application baseline
+
+The opt-in load drill exercises the actual HTTP API, coordinator, encryption,
+bounded demo parser subprocesses and PostgreSQL under an explicitly synthetic
+provider. It uses a separate driver container, no live `.env` or host data, no
+published ports and a fresh internal network/two volumes. The production entrypoint
+has no load-control routes; only the guarded test factory exposes them, with a
+per-run token. The fixture ignores inherited provider settings and requires the
+dedicated `lawyer_load_drill` database.
+
+```sh
+docker build -f deploy/backend.Dockerfile -t lawyer-assistant-api:load-check .
+mkdir -p .data/verification
+python3 scripts/qualify_load.py --api-image lawyer-assistant-api:load-check \
+  --output .data/verification/five-job-report.json
+```
+
+Choose a new report filename. The pinned PostgreSQL image must already be loaded;
+no pulls occur during the drill. The API image's copied source and dependency-input
+fingerprint must match the checkout. Docker must expose cgroup v2 `memory.peak`,
+`memory.max`, `pids.peak`, `pids.max` and CPU accounting. Missing/incomplete resource
+measurements fail the drill. API and PostgreSQL each have two CPUs, 1 GiB memory
+and 256 PIDs; the separate driver has one CPU, 768 MiB and 128 PIDs. Allow about
+4 GiB free Docker memory plus image/data storage. These limits describe the fixture.
+
+The fixed profile creates five workspaces and uploads 20 files: TXT, DOCX, XLSX
+and text PDF, each containing 64 synthetic paragraphs/rows. Five research jobs
+wait at a controlled provider gate while five more queue. An eleventh request must
+return 429 without a new record/audit. Queued jobs cancel without execution; a
+running cancellation waits behind an observed PostgreSQL row lock and retains
+capacity until the provider returns. Five additional TXT uploads must finish while
+the first five jobs remain active. The cancelled job publishes nothing; the other
+four results must be stale. Three fresh five-job waves must finish with current
+evidence dependencies and exact quoted passages, then all workers must drain.
+
+The payload-free JSON report records the profile, uploaded byte hashes, image/source
+identities, hardware, checks, request timings, 15 fresh-job timings, observed lock
+wait and resource data. Nearest-rank p95 values describe only those small samples.
+The lock is deliberately held for 250ms after PostgreSQL reports the wait: that
+duration is injected contention, not an estimate of normal lock latency. Fresh-wave
+throughput excludes the deliberate gate/lock phases and uses an immediate synthetic
+quote response; it is **not LLM throughput**.
+
+Docker samples report cache-adjusted memory and CPU; kernel high-water marks cover
+short bursts and include startup plus small measurement-process overhead. The driver
+is excluded from API/database measurements. CPU accounting includes throttling under
+the configured cap. Passing means this bounded fixture completed with no observed
+OOM/service failure; it does not establish a sustained stress ceiling or a latency
+SLO. No malware scanner, production extractor service, OCR, Fuseki corpus, OpenSearch
+retrieval or real inference is qualified by this drill.
+
+The driver has a 240-second outer timeout, 30-second HTTP timeouts and a 60-second
+provider gate/terminal-wait limit. Cleanup removes only the generated project and
+its volumes/network; a cleanup failure reports the remaining project explicitly.
+Keep this drill outside routine CI. Repeat representative tests on the intended
+hardware with the reviewed corpus, production intake and evaluated local model
+before qualifying five simultaneous production research jobs.
+
 ### Readiness checks
 
 Use **Bağlantıları denetle** on the system page for an authenticated, timestamped

@@ -418,9 +418,10 @@ commands retain their strict boundary. Synthetic engineering tests do not establ
 real legal rights, qualified human review or a populated national corpus.
 
 **R02 remains partial.** Research job controls and a synthetic encrypted recovery
-rehearsal are delivered in the engineering milestones below. The next packet is the declared five-job operational baseline:
-representative throughput and lock wait, resource ceilings, ingestion overlap,
-and restore/rollback/failure recovery. Restricted-audience serving and same-release
+rehearsal, followed by a five-job application baseline, are delivered in the
+engineering milestones below. Production qualification still requires representative
+inference/corpus throughput and lock wait, resource ceilings, public-source ingestion
+overlap, and populated graph rollback/failure recovery. Restricted-audience serving and same-release
 renewal remain unsupported. R01 actual source/legal/privacy qualification continues
 to gate real corpus publication; it cannot be replaced by synthetic approvals.
 
@@ -474,6 +475,26 @@ This packet establishes a repeatable engineering recovery baseline. Empty-corpus
 Fuseki startup and synthetic documents do not qualify populated graph rollback,
 real legal permissions, production RPO/RTO or five-job throughput. Representative
 load, ingestion overlap, lock waits and resource ceilings remain the next R02 gates.
+
+### R02 engineering milestone — five-job application baseline (6 October 2026)
+
+After merged PR #8, an opt-in isolated load drill uses five workspaces and mixed
+synthetic document formats. It observes five occupied workers, ten admitted jobs,
+capacity rejection, queued/running cancellation, a PostgreSQL row-lock wait,
+document ingestion during research, stale-result handling and fresh research waves.
+It records request/job timings, sampled container CPU/memory/PID use and kernel
+memory/process high-water marks under declared limits. The driver runs separately
+from the measured API/database. The drill stays outside routine CI and leaves the
+live deployment untouched. See [operator profile](OPERATIONS.md#five-job-application-baseline)
+and [verification evidence](VALIDATION.md).
+
+The provider is a controlled synthetic dependency. These results establish an
+application baseline only; real inference latency, reviewed public corpus retrieval,
+large-volume source ingestion and production capacity remain separate R02 gates.
+The fixture covers private document ingestion and a deliberately induced row-lock
+wait, not concurrent public-graph import/reindexing or ordinary production lock
+latency. The latter scenarios, sustained-load qualification and populated graph
+rollback remain the next operational packets. R02 is not complete.
 
 ## Two-graph specification
 
