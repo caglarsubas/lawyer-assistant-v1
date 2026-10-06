@@ -1,6 +1,58 @@
 # Verification record — 6 October 2026
 
 
+## R01 scoped analysis and privacy scoring — 6 October 2026 (Asia/Shanghai)
+
+PR #12 merged as `a75c6743f134af1af870058a8e013d816522d7f9`; all three PR checks
+and its [post-merge main run](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37456575518)
+passed. This packet adds offline quantitative scoring contracts for local analysis
+and separately scoped OpenAI, Anthropic or Gemini evaluation. It neither runs legal
+analysis nor implements/enables the optional BYOK adapters.
+
+- **579 relevant tests passed in 7.99s** across evaluation, qualification catalogs,
+  analysis/research contracts, physical evidence, CLI, extraction calibration and
+  calibration-study suites. The complete backend suite was not rerun locally for
+  this isolated scorer change; GitHub Actions retains its mandatory complete suite.
+- **41 deployment contract tests passed in 0.400s**. Repository-wide Ruff and diff
+  checks passed. No workflow, dependency, job, retry, worker or timeout changed.
+- Standalone generator → CLI checks passed for **local plus all three provider
+  scopes**. Each generated four explicitly synthetic records with unknown sample
+  minima; each scorer invocation correctly exited **1**, with no complete quantitative
+  pass and `runtime_authorization: none`. Invented provider environment values were
+  unused and absent from output. Generated inputs/reports remain under the ignored
+  `.data/verification/r01-scoring/` directory; no actual provider key or `.env` was read.
+
+Tests exercise the complete numerical-pass path with invented, in-memory labels
+explicitly simulating a 1,000-task/3,000-claim cohort. These are software fixtures,
+not a real held-out dataset; no such passing cohort is exported or admitted as
+qualification evidence. Separate tests deny synthetic top-ups, unknown/omitted or
+weakened minima, empty denominators, unresolved adjudication, duplicate tasks/inputs,
+development-family overlap, mismatched provider/configuration/snapshot/rubric,
+naive/pre-registration timestamps and unmatched comparison inputs/modes.
+
+Critical inference, fact, omission and role errors fail independently of aggregate
+claim support. One failed or unassessed privacy, fidelity, authorization, returned-
+evidence or operations check fails its slice. Comparison tests cover citation/support/
+adverse/argument regressions, unresolved or introduced defects, missing review-time
+accounting and quality floors. They report descriptive changes without claiming
+statistical improvement. Direct and contextual privacy remain separate, and safe
+local completion counts toward usefulness without requiring outbound transmission.
+
+CLI tests cover duplicate JSON fields, nonfinite/count coercion, final symlinks,
+size/row limits, changed inputs, malformed roots and invalid arguments. Errors expose
+no submitted values, private paths or partial reports. Success reports bind captured
+files by hash; extended reports omit task IDs, annotator names and evidence text.
+
+The legacy score command deliberately remains core-only: it now exposes
+`core_quantitative_gates_pass` separately and cannot set the complete
+`quantitative_gates_pass` flag or exit 0 without a frozen extended protocol.
+[Migration and schema instructions](EVALUATION.md) document this compatibility change.
+No live deployment, client-data operation, graph/index mutation, provider request,
+source/legal review or approval was performed. Authenticating judgments, approving
+sample sizes, actual privacy/legal experiments, confidence intervals and production
+qualification remain open R01/R08 dependencies.
+
+
 ## R02 concurrent authorization reads — 6 October 2026 (Asia/Shanghai)
 
 PR #11 merged as `41ce736510d78e0899204d12cbabbc08a59326ac` with all three PR

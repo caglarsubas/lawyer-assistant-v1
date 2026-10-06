@@ -241,7 +241,7 @@ Dependencies refer to completion of the relevant gate, not just code availabilit
 
 | ID / priority | Delivery packet | Dependencies / accountable lead | Exit evidence |
 |---|---|---|---|
-| **R01 / P0, in progress** | Source, asset and semantic qualification: offline catalogs, legal-analysis/scenario contracts, provider/evaluation dossier, physical evidence verifier, extraction comparator and reproducible calibration studies implemented; representative calibration and review pending | Legal ontology owner + data/source lead with application/security owners; source/provider dependencies documented | Source uses and routes reviewed; sample errors/reviewer time measured; argument/scenario fixtures adjudicated; provider processing/spend controls qualified; added effort estimated. Passing the dossier validator grants no approval |
+| **R01 / P0, in progress** | Source, asset and semantic qualification: offline catalogs, legal-analysis/scenario contracts, provider/evaluation dossier, physical evidence verifier, extraction comparator, reproducible calibration studies and scoped analysis/privacy scoring implemented; representative calibration and review pending | Legal ontology owner + data/source lead with application/security owners; source/provider dependencies documented | Source uses and routes reviewed; sample errors/reviewer time measured; argument/scenario fixtures adjudicated; provider processing/spend controls qualified; added effort estimated. Passing the dossier validator grants no approval |
 | **R02 / P0, partial** | Multi-source snapshots, private preparation, exact public evidence, external public/private approvals, per-source deployment-wide grants/expiry and live revocation implemented; renewal requires a freshly reviewed release. Bounded cooperative research admission/cancellation, publication races and coordinator/restart controls implemented; synthetic application/recovery and signed-graph lifecycle drills measured; authorized release-specific lexical index builds/rebuilds and shared PostgreSQL runtime-read locks implemented. Restricted-audience serving, same-release renewal and representative five-job/resource qualification remain | R01 contracts; actual source reviews remain mandatory; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
 | **R03 / P0** | First genuinely reviewed contract corpus: RG ordinary/mükerrer manifest; amendment/transition candidates; MBS reconciliation; TBMM enacted/history distinction; exact provisions and historical versions | R01 lawful samples and protected reviewers; R02 for combined releases; editors + ingestion team | Reviewed corpus and exact evidence ready for analysis; amendment chains/historical queries pass; discrepancies visible. Full legal-analysis/export qualification additionally requires R04, the relevant R05 decision slice and R05A |
 | **R04 / P1** | Turkish lexical/citation normalization, local embedding and reranker evaluation, structured context packing; pinned model/index versions | R01 development benchmark; R03 representative approved corpus; retrieval/ML + legal adjudicators | Exact identifiers and original quotes preserved; hybrid and graph/metadata/rerank ablations on one snapshot; thresholds, error slices and resource budgets reported; no private-data or adverse-recall regression |
@@ -353,6 +353,23 @@ and CI integration, and isolated Docker verification. This delivers the tool for
 the next qualification cycle; R01's real sample, rights, legal/privacy review and
 capacity gates remain pending. See [operator usage](R01_QUALIFICATION.md) and
 [verification](VALIDATION.md). Those checks alone do not qualify R02.
+
+### R01 engineering milestone — scoped legal-analysis and privacy scoring
+
+After merged PR #12, the offline release scorer accepts a frozen local or single-provider
+protocol and independently supplied task judgments. It checks premise/authority grounding,
+critical inference/fact/omission/role errors, adverse retrieval, paired correction/depth,
+privacy/fidelity, approval/key/spend isolation, returned evidence and operations. Unknown
+slice/metric/pair minima, incomplete assessments and synthetic records cannot produce a
+complete quantitative pass. The older score format remains core-only with a non-passing
+complete-qualification flag. No runtime permissions or providers are activated.
+
+This R01/R08 engineering dependency proceeds alongside the remaining R02 operational
+gates; it does not replace their representative latency/inference qualification. The
+next source, analysis and BYOK evaluations can use executable contracts rather than
+unimplemented acceptance prose. Real evidence, sufficient reviewed sample sizes, confidence
+intervals and actual R05A/R05B execution remain pending. See [scorer guide](EVALUATION.md)
+and [verification](VALIDATION.md).
 
 ### R02 engineering foundation — consistent multi-source review snapshots
 
@@ -650,18 +667,23 @@ ontology or temporal/provenance foundations.
 The [analysis/BYOK qualification matrix](LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md#8-delivery-and-measurable-gates)
 adds zero critical unsupported deductions or scenario fact mutations, zero seeded prohibited
 outbound disclosures, bounded correction/depth comparisons, cumulative disclosure tests,
-key/job isolation and per-provider evidence checks. These new gates need scorer/schema and
-test implementation; the current scorer below does not yet enforce them. Keep privacy and
+key/job isolation and per-provider evidence checks. The [extended scorer](EVALUATION.md) now
+enforces their declared observation, sample and paired-comparison gates per mode/provider.
+Real experiments, authenticated adjudication and independent qualification remain pending. Keep privacy and
 legal-fidelity evaluations separate, and do not achieve safety merely by blocking useful work.
 
-The executable scoring contract is `backend/app/evaluation.py`. Supply one independently adjudicated held-out `TaskScore` per JSONL row and a separate snapshot JSON containing ontology/graphs/corpus/model/policy IDs:
+The executable extended scoring contract is `backend/app/qualification_scoring.py`. Supply
+one independently adjudicated held-out task per JSONL row, a complete pinned snapshot and
+a frozen mode/provider protocol with explicit sample minima. See [input contracts and
+migration](EVALUATION.md); legacy `TaskScore` files now produce core metrics only:
 
 ```sh
 backend/.venv/bin/python scripts/evaluate_release.py /evaluation/adjudicated-tasks.jsonl \
-  --snapshot /evaluation/snapshot.json
+  --snapshot /evaluation/snapshot.json --protocol /evaluation/protocol.json
 ```
 
-This emits aggregate metrics and domain/period/relationship breakdowns, and exits nonzero on unmet quantitative gates. Empty denominators remain unknown, duplicate tasks are rejected, small perfect samples cannot pass the sample gates, and preparation-time measurements must include verification/correction. Even passing quantitative results do not automatically certify production or replace the independent legal/security/operations gates.
+This emits aggregate core/analysis metrics, practice breakdowns, slice coverage and paired
+quality/time/cost measurements, and exits nonzero on unmet or unknown quantitative gates. Empty denominators remain unknown, duplicate tasks are rejected, small perfect samples cannot pass the sample gates, and preparation-time measurements must include verification/correction. Even passing quantitative results do not automatically certify production or replace the independent legal/security/operations gates.
 
 Graph release requires all mandatory catalog categories legally reviewed; no blocking SHACL/identity/time/cross-link errors; evidence for every substantive assertion; no critical invented competence/history/treatment/version; explicit unresolved references and gaps; reproducible snapshots; no matter leakage; and a controlled graph-versus-no-graph discovery/reviewer-time comparison without reduced correctness.
 

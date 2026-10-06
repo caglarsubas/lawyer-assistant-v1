@@ -1,7 +1,7 @@
 # R01 qualification, evidence verification and extraction calibration
 
 R01 provides **offline planning contracts, evidence-file verification and extraction
-comparison**. These tools turn the roadmap's source, asset, analysis, scenario and
+comparison and scoped evaluation scoring**. These tools turn the roadmap's source, asset, analysis, scenario and
 research requirements into inspectable records and measure extraction discrepancies.
 They do not populate the law corpus, perform legal analysis, sanitize text, approve
 rights or enable an external provider.
@@ -279,3 +279,11 @@ This uses the separately built validation image tag, not a running application s
 CI also checks the seed contracts and synthetic parser comparison; green checks are
 not release qualification. No API/UI or application deployment change is required
 for these offline engineering tools.
+
+## Score legal-analysis and provider-specific qualification
+
+The [extended evaluation guide](EVALUATION.md) defines frozen protocols, strict task
+judgments, paired correction/depth/abstraction measurements and separate local or
+single-provider reports. Unknown sample minima and synthetic evidence remain unpassed.
+The dossier seed remains unchanged: no real sample targets, approvals or measurements
+were invented to exercise the scorer.

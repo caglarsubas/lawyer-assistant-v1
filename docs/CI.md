@@ -153,3 +153,10 @@ oversize fallback, concurrent readers and warm-cache tampering rejection. They r
 in the short preflight step and remain in the full backend suite. No jobs, workers,
 dependencies, retries or time-limit increases were added. The verification record
 contains local measurements and, separately, observed hosted results.
+
+## Offline evaluation scoring
+
+The versioned analysis/privacy scorer is covered by fast synthetic Python tests in
+the existing backend suite, including provider separation and CLI refusal cases.
+It performs no provider requests or Docker workload. No job, matrix, dependency,
+retry, worker or timeout is added for this milestone.
