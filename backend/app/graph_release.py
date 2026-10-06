@@ -254,6 +254,51 @@ class RuntimeGraphRelease:
             })
         return result
 
+    def _search_document(self, family, assertion, evidence, authority):
+        resources, one = self._resources, self._one
+        graph = self._graphs[family]
+        artifact = one(resources, evidence, LA.artifact)
+        representation = one(resources, evidence, LA.textRepresentation)
+        return {
+            'assertion_id': str(assertion), 'passage_id': str(evidence), 'document_id': str(artifact),
+            'source_version_id': str(representation),
+            'source_sha256': str(one(resources, artifact, LA.contentHash)),
+            'text': str(one(resources, evidence, LA.quotedText)),
+            'locator': str(one(resources, evidence, LA.locator)),
+            'title': 'Doğrulanmış kaynak pasajı', 'source_url': None,
+            'authority_id': authority, 'release_id': self.info['release_id'],
+            'visibility': 'public', 'rights_status': 'permitted',
+            'review_status': 'legally_reviewed',
+            'valid_from': str(one(graph, assertion, LA.validFrom)),
+            'valid_to': (str(one(graph, assertion, LA.validTo))
+            if one(graph, assertion, LA.validTo) is not None else None),
+            'validity_end_status': temporal.interval_state(graph, assertion, evidence_graph=resources)['kind'],
+            'validity_checked_through': (str(one(graph, assertion, LA.validityCheckedThrough))
+            if one(graph, assertion, LA.validityCheckedThrough) is not None else None),
+            'validity_evidence_ids': sorted(str(value) for value in graph.objects(assertion, LA.validityEvidence)),
+            'validity_evidence': self.validity_evidence(family, assertion),
+        }
+
+    def iter_search_documents(self):
+        """Caller holds current_guard; enumerate exact eligible evidence links only.
+
+        Bounds on the returned documents/bytes are enforced by the index builder.
+        No quarantined source, private overlay or index-supplied metadata is read.
+        """
+        if not self.info:
+            raise ValueError('A verified release is required')
+        for family, graph in self._graphs.items():
+            for assertion in graph.subjects(RDF.type, LA.Assertion):
+                if (self._one(graph, assertion, LA.claimStatus) != Literal('legally_reviewed')
+                        or not self._eligible(family, assertion)):
+                    continue
+                authorities = {self._one(graph, assertion, prop) for prop in (LA.subject, LA.object)}
+                for evidence in graph.objects(assertion, LA.evidence):
+                    if not self._evidence_eligible(self._resources, evidence):
+                        continue
+                    for authority in sorted(authorities, key=str):
+                        yield self._search_document(family, assertion, evidence, str(authority))
+
     def project_search_hit(self, candidate: dict, *, as_of=None, authority_id=None) -> dict:
         """Admit exact signed evidence only; index labels are not source authority.
 
@@ -280,7 +325,6 @@ class RuntimeGraphRelease:
                         or str(one(resources, evidence, LA.locator)) != candidate.get('locator')
                         or str(one(resources, evidence, LA.quotedText)) != candidate.get('text')):
                     continue
-                representation = one(resources, evidence, LA.textRepresentation)
                 for family, graph in self._graphs.items():
                     for assertion in graph.subjects(LA.evidence, evidence):
                         visited += 1
@@ -291,25 +335,10 @@ class RuntimeGraphRelease:
                                 or one(graph, assertion, LA.claimStatus) != Literal('legally_reviewed')
                                 or not self._eligible(family, assertion, as_of=as_of)):
                             continue
-                        matches.append((str(evidence), str(assertion), {
-                            'passage_id': str(evidence), 'document_id': str(artifact),
-                            'source_version_id': str(representation),
-                            'source_sha256': str(one(resources, artifact, LA.contentHash)),
-                            'text': str(one(resources, evidence, LA.quotedText)),
-                            'locator': str(one(resources, evidence, LA.locator)),
-                            'title': 'Doğrulanmış kaynak pasajı', 'source_url': None,
-                            'authority_id': requested, 'release_id': self.info['release_id'],
-                            'visibility': 'public', 'rights_status': 'permitted',
-                            'review_status': 'legally_reviewed',
-                            'valid_from': str(one(graph, assertion, LA.validFrom)),
-                            'valid_to': (str(one(graph, assertion, LA.validTo))
-                                         if one(graph, assertion, LA.validTo) is not None else None),
-                            'validity_end_status': temporal.interval_state(graph, assertion, evidence_graph=resources)['kind'],
-                            'validity_checked_through': (str(one(graph, assertion, LA.validityCheckedThrough))
-                                                        if one(graph, assertion, LA.validityCheckedThrough) is not None else None),
-                            'validity_evidence_ids': sorted(str(value) for value in graph.objects(assertion, LA.validityEvidence)),
-                            'validity_evidence': self.validity_evidence(family, assertion),
-                        }))
+                        if candidate.get('assertion_id') is not None and candidate['assertion_id'] != str(assertion):
+                            continue
+                        matches.append((str(evidence), str(assertion),
+                                        self._search_document(family, assertion, evidence, requested)))
         if not matches:
             raise ValueError('Search candidate is outside the signed evidence and authority scope')
         # A search nomination cannot select arbitrary index metadata when a quote

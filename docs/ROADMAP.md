@@ -516,6 +516,24 @@ review/revocation ledger. Sustained representative load, OpenSearch reindexing,
 five research jobs during public ingestion, encrypted populated-graph restoration
 and production recovery objectives remain open R02/R07 gates.
 
+
+### R02 engineering packet — release-bound public search indexes (in progress)
+
+After merged PR #10, the next product packet closes the missing path from approved
+signed evidence to a usable public lexical index. The trusted operator builds a
+new concrete index from the active graph under the publication read lock and
+current private source-set authorization. Exact passage/assertion/authority
+identities preserve historical alternatives. A failed rebuild must leave the
+selected index intact; complete readback, a write block and ready metadata are
+required before a new index can be selected explicitly.
+
+The builder performs no source acquisition, legal approval, automatic selection,
+index deletion or embedding inference. A dedicated opt-in Docker test exercises
+real OpenSearch with synthetic signed sources and the actual private authorization
+ledger, outside routine CI. Representative recall, ranking, adverse-authority
+coverage, production scale and five model jobs during public ingestion remain
+R02/R04/R07 qualification gates.
+
 ## Two-graph specification
 
 Graph A covers legal classification; norms/provision versions; institutions and their units; conditional competence/jurisdiction; actors/roles/positions; objects/transactions; procedures/remedies; evidence/burdens/presumptions; time/calculation rules; and sources/governance. National fields include constitutional, administrative, tax, criminal, civil, commercial, employment/social security, family, succession, property, enforcement/insolvency, consumer, competition, IP, data protection, finance, procurement, environment, migration and international/conflict subjects.

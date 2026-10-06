@@ -138,6 +138,97 @@ metadata remain encrypted, matter-authorized records. No private provider respon
 exception text is retained in failure messages. Stop intent may be visible before
 acknowledgement; never report it as proof that compute has already stopped.
 
+### Build or rebuild a public search index
+
+The trusted publisher can build a new **lexical-only** OpenSearch index from the
+currently active, independently signed and privately authorized graph. Complete
+source/rights/mapping review and graph activation first; see
+[publication authorization](PUBLICATION_AUTHORIZATION.md). The builder does not
+create a corpus or approvals. It reads no private matter data and never calls an
+inference provider.
+
+```sh
+docker compose --profile publication run --rm --no-deps \
+  --entrypoint python publisher /app/scripts/build_search_index.py \
+  --expected-release FULL_ACTIVE_GRAPH_RELEASE_SHA256
+```
+
+The publisher uses its existing private database/review configuration and the
+internal OpenSearch service. It holds the graph publication read lock before the
+live source-review locks, keeping the source snapshot stable and the prior index intact. Holding private
+review locks can delay other authorized operations, particularly on PostgreSQL;
+representative lock-wait and production concurrency qualification remains open. Every output row comes from a legally reviewed assertion and its exact
+signed evidence passage, authority, historical interval and original source hash.
+Unknown or unsupported intervals and invalid/oversized fields are never guessed or
+truncated. URLs remain absent where the signed graph has no authoritative URL.
+
+Each build uses a fresh name bound to the release and a random generation. Existing
+indexes and aliases are untouched. The builder uses create-only bulk operations,
+checks every item, blocks writes, refreshes, verifies the complete inventory by
+count and exact document readback, then records ready metadata. A receipt is emitted
+only after the private authorization exit check. It reports the index name, release,
+recipe, candidate count and inventory digest; it contains no passage text or private
+review metadata. See the OpenSearch [Bulk API](https://docs.opensearch.org/latest/api-reference/document-apis/bulk/)
+for the per-item failure behavior checked here; the implementation is tested against
+our pinned OpenSearch 2.19.3 image.
+
+A successful build is **not selected automatically**. Set `LA_SEARCH_INDEX` to the
+returned concrete index and `LA_SEARCH_RELEASE_ID` to its exact active graph release
+in the deployment's private configuration, then recreate the API through the normal
+operator deployment process. Verify readiness and representative searches before
+using it for work. Roll back an index selection only to an intact index for the
+same currently authorized graph release. A different graph release requires the
+existing stopped-service activation/rollback workflow and renewed validation.
+The legacy fixed `law-public-passages` configuration remains compatible; its name
+alone does not establish qualification, and this builder never writes to it.
+
+Managed-index readers reject building, writable, aliased, foreign-release or
+incompatible indexes before search and recheck the receipt/write block afterward.
+They continue to verify returned passages
+against signed source evidence and current private permission. The ready marker
+and write block are operational safeguards, not independent legal authority or
+protection against a privileged OpenSearch administrator. Original text/identifiers
+are preserved; the pinned recipe uses Turkish text analysis and keyword identity
+fields. Embeddings/reranking and measured Turkish/adverse recall remain unqualified.
+
+The initial build budget is 2,000 candidate records, 32 MiB of source JSON, batches
+of 50, bounded HTTP responses and a cooperative 60-second build budget. Source
+validation/guard checks and in-flight calls can extend elapsed time; this is not a
+hard process deadline or production capacity estimate. One passage can produce
+multiple assertion/authority records, so the count is not a corpus-completeness
+measure. Larger workloads fail visibly rather than silently truncating the index.
+
+On error, retain the reported index for inspection. It may be partially written or
+already sealed if acknowledgement or the final permission check failed. Never select
+it based only on its name, blindly retry the same writes, or delete another index.
+The builder performs no automatic rollback/deletion; a deliberate new invocation
+creates a separate generation. Current source revocation disables retrieval even
+from previously completed indexes. Retention and removal remain operator-managed.
+
+#### Isolated OpenSearch qualification
+
+```sh
+docker build -f deploy/backend.Dockerfile -t lawyer-assistant-api:r02-search .
+docker build -f deploy/search-index-test.Dockerfile -t lawyer-assistant-search-test:r02-search .
+mkdir -p .data/verification
+python3 scripts/qualify_search_index.py \
+  --test-image lawyer-assistant-search-test:r02-search \
+  --output .data/verification/search-index-drill.json
+```
+
+The second image contains pinned test dependencies and fixtures; never deploy it as
+the API. The runner verifies both application and fixture fingerprints, uses a
+fresh internal-only Docker network and named OpenSearch volume, and publishes no
+host ports or bind mounts. The driver keeps synthetic source/review data in tmpfs;
+no `.env`, existing database or provider key is used. It exercises exact signed
+passage retrieval, historical filtering, search during a paused rebuild, write
+blocks, an actual per-item bulk failure and second-source revocation. This fixture
+uses the actual private-review implementation on SQLite; it does not qualify
+PostgreSQL lock behavior during rebuilding. Cleanup must
+be confirmed for a passing report. Host crashes/SIGKILL can leave resources; inspect
+only the recorded generated project before cleanup. The workload stays outside
+routine CI; its test is explicitly skipped unless the isolated drill marker is set.
+
 ### Disposable signed-graph lifecycle drill
 
 This opt-in drill exercises the actual immutable publication functions and

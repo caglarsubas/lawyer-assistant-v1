@@ -14,16 +14,14 @@ from urllib.parse import urlsplit
 
 import httpx
 
+from .search_index_contract import FIELDS, MANAGED, document_id, ready_metadata
+
 ALLOWED_INDEXES = frozenset({"law-public-passages"})
 PRIVATE_NETWORKS = tuple(ipaddress.ip_network(value) for value in (
     "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "fc00::/7",
 ))
 IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}\Z")
-SOURCE_FIELDS = (
-    "passage_id", "document_id", "source_version_id", "source_sha256", "text", "title",
-    "source_url", "locator", "authority_id", "release_id", "visibility", "rights_status",
-    "review_status", "valid_from", "valid_to", "validity_end_status", "validity_checked_through",
-)
+SOURCE_FIELDS = FIELDS
 MAX_RESPONSE_BYTES = 1024 * 1024
 MAX_CANDIDATES = 200
 
@@ -97,7 +95,8 @@ def _validate_origin(base_url):
 
 class PublicSearchService:
     def __init__(self, base_url="", index="law-public-passages", release_id="", graph_release=None):
-        if index not in ALLOWED_INDEXES:
+        self.managed = MANAGED.fullmatch(index)
+        if index not in ALLOWED_INDEXES and (not self.managed or self.managed[1] != release_id):
             raise ValueError("Index is not in the public-corpus allowlist")
         if release_id and not _identifier(release_id):
             raise ValueError("Invalid corpus release identifier")
@@ -138,13 +137,13 @@ class PublicSearchService:
             ])
         return filters
 
-    def _request(self, body, deadline):
+    def _read_json(self, method, suffix, body, deadline):
         if time.monotonic() >= deadline:
             raise SearchUnavailable("retrieval_deadline")
         try:
             with httpx.Client(timeout=httpx.Timeout(5, connect=2), follow_redirects=False,
                               trust_env=False) as client:
-                with client.stream("POST", f"{self.base_url}/{self.index}/_search", json=body,
+                with client.stream(method, f"{self.base_url}/{self.index}{suffix}", json=body,
                                    headers={"Accept-Encoding": "identity"}) as response:
                     if response.status_code != 200:
                         raise SearchUnavailable("search_http_error")
@@ -159,6 +158,13 @@ class PublicSearchService:
                         raw.extend(chunk)
             result = json.loads(raw)
             _bounded_structure(result)
+            return result
+        except (httpx.HTTPError, ValueError, TypeError, AttributeError, RecursionError) as error:
+            raise SearchUnavailable("search_transport_or_payload_invalid") from error
+
+    def _request(self, body, deadline):
+        try:
+            result = self._read_json("POST", "/_search", body, deadline)
             if not isinstance(result, dict) or result.get("timed_out") is not False:
                 raise SearchUnavailable("incomplete_search_response")
             shards = result.get("_shards")
@@ -185,16 +191,20 @@ class PublicSearchService:
         for key in ("passage_id", "document_id", "source_version_id", "authority_id"):
             if not _entity_id(source.get(key)):
                 raise ValueError("Missing immutable source identity")
-        if hit.get("_id") != source["passage_id"]:
+        if self.managed and not _entity_id(source.get("assertion_id")):
+            raise ValueError("Missing assertion identity")
+        if hit.get("_id") != (document_id(source) if self.managed else source["passage_id"]):
             raise ValueError("Passage identity mismatch")
         if not isinstance(source.get("source_sha256"), str) or not re.fullmatch(r"[a-f0-9]{64}", source["source_sha256"]):
             raise ValueError("Missing physical-source hash")
         for key, maximum in (("text", 12000), ("title", 500), ("locator", 400), ("source_url", 2048)):
             value = source.get(key)
+            if key == "source_url" and self.managed and value is None:
+                continue  # Signed source RDF currently has no authoritative URL.
             if not isinstance(value, str) or not value.strip() or len(value) > maximum:
                 raise ValueError("Invalid projected field")
-        url = urlsplit(source["source_url"])
-        if (url.scheme != "https" or not url.hostname or url.username or url.password
+        url = urlsplit(source["source_url"] or "")
+        if source["source_url"] is not None and (url.scheme != "https" or not url.hostname or url.username or url.password
                 or any(ord(char) < 32 for char in source["source_url"])):
             raise ValueError("Invalid public source URL")
         start, end = source.get("valid_from"), source.get("valid_to")
@@ -274,6 +284,16 @@ class PublicSearchService:
                 "vector": vector, "k": candidate_limit, "filter": {"bool": {"filter": filters}},
             }}}}
         deadline = time.monotonic() + 12
+        if self.managed:
+            try:
+                meta = ready_metadata(self.index, self._read_json("GET", "", None, deadline), self.release_id)
+                snapshot["index_schema"] = meta["schema"]
+                snapshot["documents_sha256"] = meta["documents_sha256"]
+                coverage["indexed_candidates"] = meta["document_count"]
+            except (SearchUnavailable, ValueError, KeyError, TypeError, AttributeError):
+                coverage["status"] = "unavailable"
+                limitations.append("The selected public index is not a sealed, ready release index; no search was sent.")
+                return {"hits": [], "coverage": coverage, "snapshot": snapshot, "limitations": limitations}
         combined, conflicts = {}, set()
         for channel, body in requests.items():
             if not self._authorized():
@@ -292,7 +312,7 @@ class PublicSearchService:
                 except (ValueError, TypeError):
                     coverage["rejected_hits"] += 1
                     continue
-                identity = (item["passage_id"], item["authority_id"])
+                identity = (item["passage_id"], item["authority_id"], item.get("assertion_id") if self.managed else None)
                 if identity in seen:
                     coverage["rejected_hits"] += 1
                     continue
@@ -316,9 +336,18 @@ class PublicSearchService:
         if coverage["status"] == "available" and coverage["rejected_hits"]:
             coverage["status"] = "partial"
         ranked = sorted(combined.values(), key=lambda item: (
-            -item["score"], item["source"]["passage_id"], item["source"]["authority_id"]))
+            -item["score"], item["source"]["passage_id"], item["source"]["authority_id"], item["source"].get("assertion_id", "")))
         hits = [{**item["source"], "score": item["score"], "channels": item["channels"]}
                 for item in ranked[:limit]]
+        if self.managed:
+            try:
+                if ready_metadata(self.index, self._read_json("GET", "", None, deadline), self.release_id) != meta:
+                    raise ValueError("Index receipt changed")
+            except (SearchUnavailable, ValueError, KeyError, TypeError, AttributeError):
+                hits = []
+                coverage["status"] = "unavailable"
+                channels.update({name: "unavailable" for name in requests})
+                limitations.append("The selected index changed or could not be revalidated; all candidates were discarded.")
         if not self._authorized():
             hits = []
             coverage['status'] = 'unavailable'
