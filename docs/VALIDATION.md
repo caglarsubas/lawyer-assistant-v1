@@ -1,5 +1,63 @@
 # Verification record — 6 October 2026
 
+## R02 five-job application baseline — 6 October 2026 (Asia/Shanghai)
+
+The isolated Docker load drill passed on clean code commit
+`2c2d62dcc0fbcdae3136d47921dba0d463dd558e`. Its
+[complete report](evidence/five-job-drill-2026-10-06.json) binds image IDs, the
+91-file source/dependency-input fingerprint, fixed profile, uploaded hashes,
+hardware, limits, timings and cleanup. Production application source, dependency
+versions and CI workflow are unchanged in this packet.
+
+**28 deployment-contract tests passed**, along with repository Python lint and
+diff checks. The nine new fast tests cover isolated configuration, inherited
+provider-secret exclusion, the bounded controlled dependency, quote integrity,
+measurement validation and absence of test control routes from the production API.
+No load or recovery workload is added to routine GitHub Actions.
+
+The actual API/parser/encryption/PostgreSQL path handled 20 uploaded TXT, DOCX,
+XLSX and text-PDF files across five measured workspaces, followed by five TXT
+uploads while five research jobs remained active. The provider was a gated exact-
+quote fixture, with no model inference, external request or qualified legal corpus.
+
+- Five workers and ten admitted jobs were observed. The eleventh request returned
+  429 without a new record/audit; five queued cancellations never entered execution.
+- PostgreSQL reported a real row-lock blocker for a running cancellation. The stop
+  remained `cancelling` and retained capacity until the controlled provider exited.
+- The cancelled job published nothing. Four completed results became stale after
+  overlapping ingestion. Three fresh five-job waves used the current evidence
+  dependencies and exact quotes, then the coordinator drained completely.
+
+| Small-fixture observation | Result |
+|---|---:|
+| Admission nearest-rank p95, 25 requests | 32.878 ms |
+| Queued cancellation maximum, 5 requests | 25.218 ms |
+| Overlapping upload maximum, 5 requests | 334.438 ms |
+| Fresh deterministic-quote job p95, 15 jobs | 178.227 ms |
+| Induced lock: observed wait until release | 258.668 ms |
+| Induced lock: release until cancellation response | 7.165 ms |
+| API kernel peak memory / peak PIDs | 186.8 MiB / 21 |
+| PostgreSQL kernel peak memory / peak PIDs | 94.0 MiB / 19 |
+
+Both measured services had two CPUs, 1 GiB memory and 256 PIDs. Neither stopped or
+reported OOM. Three periodic Docker samples per service had no collection errors;
+kernel high-water marks additionally capture short bursts and include startup plus
+small measurement-process overhead. CPU/throttling counters are retained. Docker
+Desktop reported 16 CPUs and about 98 GiB VM memory with other local services active;
+the capped driver ran in a separate container and is excluded from API/DB metrics.
+
+The lock delay was deliberately injected; the provider returned immediately once
+released. These small-sample timings and batch throughput are not production SLOs
+or LLM capacity. The fixed workload does not qualify sustained stress, production
+malware/extraction services, OCR, populated graph/search retrieval, public-source
+import/reindex overlap or evaluated local-model performance. R02 remains partial.
+
+The generated project, containers, volumes and network were removed. No live
+deployment or `.env` was used. PR #8's [checks](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37408103015)
+passed before this work; that is baseline evidence, separate from this PR's CI.
+See the [operator profile](OPERATIONS.md#five-job-application-baseline) for repeatable
+execution and the [roadmap](ROADMAP.md) for remaining operational gates.
+
 ## R02 isolated encrypted recovery — 6 October 2026 (Asia/Shanghai)
 
 The opt-in Docker rehearsal passed on clean commit `ef1aec4ec4f4e64e6d4bceae4f6ae0516a8ea85e`.

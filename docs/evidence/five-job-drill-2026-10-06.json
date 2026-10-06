@@ -1,0 +1,343 @@
+{
+  "api_source": {
+    "files": 91,
+    "sha256": "b32801b4b4e3ef01df445cbe3d280fdc68dd13cffbda27d9fe2ebdc7743cfb3f"
+  },
+  "checkout_commit": "2c2d62dcc0fbcdae3136d47921dba0d463dd558e",
+  "checkout_dirty": false,
+  "cleanup": {
+    "complete": true
+  },
+  "finished_at": "2026-10-06T04:15:07.006457+00:00",
+  "host": {
+    "architecture": "arm64",
+    "docker": {
+      "architecture": "aarch64",
+      "cpus": 16,
+      "memory_bytes": 105280155648,
+      "os": "linux",
+      "server_version": "29.5.2"
+    },
+    "system": "Darwin"
+  },
+  "images": {
+    "api": "sha256:58552768c665766a54c5e34c62a6837e7aca593b3337648164469bb9733a3395",
+    "postgres": "sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"
+  },
+  "not_qualified": [
+    "real model latency or throughput",
+    "reviewed public corpus retrieval",
+    "public source ingestion",
+    "malware or OCR qualification",
+    "production capacity or latency SLOs",
+    "sustained soak or stress ceiling"
+  ],
+  "resource_limits": {
+    "api": {
+      "cpus": "2.0",
+      "mem_limit": "1g",
+      "pids_limit": 256
+    },
+    "driver": {
+      "cpus": "1.0",
+      "mem_limit": "768m",
+      "pids_limit": 128
+    },
+    "postgres": {
+      "cpus": "2.0",
+      "mem_limit": "1g",
+      "pids_limit": 256
+    }
+  },
+  "resources": {
+    "method": "docker stats --no-stream plus 1s pause; sampled peaks may miss short bursts; driver excluded",
+    "sampling_errors": 0,
+    "services": {
+      "api": {
+        "kernel": {
+          "cpu_since_container_start": {
+            "burst_usec": 0,
+            "nice_usec": 0,
+            "nr_bursts": 0,
+            "nr_periods": 88,
+            "nr_throttled": 3,
+            "system_usec": 607061,
+            "throttled_usec": 735864,
+            "usage_usec": 8742904,
+            "user_usec": 8135842
+          },
+          "memory_limit_bytes": 1073741824,
+          "memory_peak_bytes": 195887104,
+          "pids_limit": 256,
+          "pids_peak": 21,
+          "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+        },
+        "memory_limit_bytes": 1073741824,
+        "sampled_peak_cpu_percent": 109.82,
+        "sampled_peak_memory_bytes": 137468313,
+        "sampled_peak_pids": 13,
+        "samples": 3
+      },
+      "postgres": {
+        "kernel": {
+          "cpu_since_container_start": {
+            "burst_usec": 0,
+            "nice_usec": 0,
+            "nr_bursts": 0,
+            "nr_periods": 74,
+            "nr_throttled": 0,
+            "system_usec": 300121,
+            "throttled_usec": 0,
+            "usage_usec": 758415,
+            "user_usec": 458293
+          },
+          "memory_limit_bytes": 1073741824,
+          "memory_peak_bytes": 98562048,
+          "pids_limit": 256,
+          "pids_peak": 19,
+          "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+        },
+        "memory_limit_bytes": 1073741824,
+        "sampled_peak_cpu_percent": 11.07,
+        "sampled_peak_memory_bytes": 39415971,
+        "sampled_peak_pids": 12,
+        "samples": 3
+      }
+    },
+    "valid": true
+  },
+  "schema_version": "lawyer-five-job-drill-v1",
+  "services_running_without_oom": true,
+  "started_at": "2026-10-06T04:14:52.407785+00:00",
+  "status": "passed",
+  "synthetic_only": true,
+  "workload": {
+    "checks": {
+      "cancellation_blocks_output_and_changed_evidence_marks_outputs_stale": true,
+      "five_uploads_complete_while_five_jobs_active": true,
+      "five_workers_ten_admissions_and_clean_overflow": true,
+      "fresh_waves_use_current_evidence_and_exact_quotes": true,
+      "queued_cancellations_removed_without_execution": true,
+      "running_cancellation_retains_capacity_until_unwind": true,
+      "worker_concurrency_never_exceeds_five": true
+    },
+    "corpus": {
+      "files": [
+        {
+          "bytes": 6452,
+          "format": "txt",
+          "sha256": "3022b85e8f03a79c5243db985ec0037aa478056a1741bca4fa457ad8e31d0304"
+        },
+        {
+          "bytes": 36876,
+          "format": "docx",
+          "sha256": "a9401dae542bcbfa64bf088cea8305ac05b374586a5e32d512e21f5ffde5a130"
+        },
+        {
+          "bytes": 5918,
+          "format": "xlsx",
+          "sha256": "9bf0575400a448b6594dae01f403ab2c9a1f9e34e0cd5a3817db16b6f377eba7"
+        },
+        {
+          "bytes": 2255,
+          "format": "pdf",
+          "sha256": "3407c611dd8b40686756160c842e11b7188d79a4c1655de79dc8c17159bf4434"
+        },
+        {
+          "bytes": 6452,
+          "format": "txt",
+          "sha256": "849aea3bd2b91bf115710ee6b1f92ef4a25fbfc7b6c3d6280066a1c0d899ec7e"
+        },
+        {
+          "bytes": 36876,
+          "format": "docx",
+          "sha256": "0ff970fc99a815825df072cfc6738f95f5b07d2fb0b17bc01aabdc00585c16f8"
+        },
+        {
+          "bytes": 5917,
+          "format": "xlsx",
+          "sha256": "8e02cd56b73099e54211de56538239e4e30e7b1099189e9b01ffd0e61967d44b"
+        },
+        {
+          "bytes": 2254,
+          "format": "pdf",
+          "sha256": "45343422d2c0fbba5f29044da302364149f3d6b1083a651bd28d1d23f7fc2d62"
+        },
+        {
+          "bytes": 6452,
+          "format": "txt",
+          "sha256": "8f4417cf3a12669268810cb05dc7f9d82d832191886c581e8d8bc5845934719f"
+        },
+        {
+          "bytes": 36876,
+          "format": "docx",
+          "sha256": "f049dc571fb0c145b6e5f07f8b283bee2ddfc83538e18bf13701d307f480c413"
+        },
+        {
+          "bytes": 5917,
+          "format": "xlsx",
+          "sha256": "9c39b911916b9d54c68af04bafd3c04fd440d608082f34edb07c9b97c5dc7742"
+        },
+        {
+          "bytes": 2254,
+          "format": "pdf",
+          "sha256": "cf0219a470beac9c2be918791f9e48dec0c053dc5c01e3f33f9b35e4688badcb"
+        },
+        {
+          "bytes": 6452,
+          "format": "txt",
+          "sha256": "c78d01c94bb5840684ef9501395db2b211c72db11ef9f766c029d344409af0c6"
+        },
+        {
+          "bytes": 36876,
+          "format": "docx",
+          "sha256": "f502e86245200893083a38f47324f8dd9f38f7c918032f5366e100b2cd45785c"
+        },
+        {
+          "bytes": 5917,
+          "format": "xlsx",
+          "sha256": "ef0f4c9fa5a5d5a4a3bcd3ba30c895069e414e09f1ff0219f7c86bd6e623385d"
+        },
+        {
+          "bytes": 2253,
+          "format": "pdf",
+          "sha256": "4de56eb5d3f61f54f06745d63c2f2f66ce8f64c3534a36050e1a96e0932a908b"
+        },
+        {
+          "bytes": 6452,
+          "format": "txt",
+          "sha256": "796c041525a0b5d4d6288ea9302b961c8db13b719358a0fdfd167f33f4cc8096"
+        },
+        {
+          "bytes": 36876,
+          "format": "docx",
+          "sha256": "4bfb4593a1a280af6a748ec794d8cfed4bf1e9507e7c7f57a3ae9279b472d9df"
+        },
+        {
+          "bytes": 5917,
+          "format": "xlsx",
+          "sha256": "360b6018bb7e7a42699a5d7177dd9d9ca1811751572a192cd9b17a289ce225dd"
+        },
+        {
+          "bytes": 2253,
+          "format": "pdf",
+          "sha256": "9d9a326d3fac146969e1b2bf33840d1d271905be99d87c03fcbb172f4a282b0b"
+        }
+      ],
+      "seed_seconds": 5.223626
+    },
+    "final_counters": {
+      "jobs": {
+        "admitted": 0,
+        "queued": 0,
+        "running": 0
+      },
+      "provider": {
+        "active": 0,
+        "calls": 20,
+        "held": false,
+        "peak": 5
+      }
+    },
+    "fresh_jobs": {
+      "count": 15,
+      "execution_seconds": {
+        "max": 0.162422,
+        "median": 0.139076,
+        "min": 0.125125,
+        "p95_nearest_rank": 0.162422,
+        "samples": 15
+      },
+      "job_seconds": {
+        "max": 0.178227,
+        "median": 0.152302,
+        "min": 0.133424,
+        "p95_nearest_rank": 0.178227,
+        "samples": 15
+      },
+      "jobs_per_second": 24.722585,
+      "queue_seconds": {
+        "max": 0.026269,
+        "median": 0.010018,
+        "min": 0.005028,
+        "p95_nearest_rank": 0.026269,
+        "samples": 15
+      },
+      "wave_seconds": [
+        0.19847249999293126,
+        0.20611416699830443,
+        0.20214600002509542
+      ]
+    },
+    "lock_wait": {
+      "observed_wait_to_release_seconds": 0.258668,
+      "real_postgres_blocker_observed": true,
+      "release_to_cancel_response_seconds": 0.007165,
+      "request_to_observed_wait_seconds": 0.022414
+    },
+    "profile": {
+      "admission_capacity": 10,
+      "concurrency": 5,
+      "formats": [
+        "txt",
+        "docx",
+        "xlsx",
+        "pdf"
+      ],
+      "fresh_waves": 3,
+      "gate_timeout_seconds": 60,
+      "http_timeout_seconds": 30,
+      "id": "synthetic-mixed-office-five-jobs-v1",
+      "induced_lock_hold_seconds": 0.25,
+      "paragraphs_per_document": 64,
+      "provider": "controlled exact-quote fixture; no inference",
+      "terminal_wait_seconds": 60,
+      "workspaces": 5
+    },
+    "request_seconds": {
+      "admission_seconds": {
+        "max": 0.036291,
+        "median": 0.021477,
+        "min": 0.013401,
+        "p95_nearest_rank": 0.032878,
+        "samples": 25
+      },
+      "overlapping_upload_seconds": {
+        "max": 0.334438,
+        "median": 0.332877,
+        "min": 0.273201,
+        "p95_nearest_rank": 0.334438,
+        "samples": 5
+      },
+      "queued_cancel_seconds": {
+        "max": 0.025218,
+        "median": 0.023617,
+        "min": 0.022263,
+        "p95_nearest_rank": 0.025218,
+        "samples": 5
+      },
+      "rejection_seconds": {
+        "max": 0.002802,
+        "median": 0.002802,
+        "min": 0.002802,
+        "p95_nearest_rank": 0.002802,
+        "samples": 1
+      },
+      "running_cancel_with_induced_lock_seconds": {
+        "max": 0.288134,
+        "median": 0.288134,
+        "min": 0.288134,
+        "p95_nearest_rank": 0.288134,
+        "samples": 1
+      },
+      "seed_upload_seconds": {
+        "max": 0.36726,
+        "median": 0.26549,
+        "min": 0.132948,
+        "p95_nearest_rank": 0.362386,
+        "samples": 20
+      }
+    },
+    "status": "passed"
+  }
+}
