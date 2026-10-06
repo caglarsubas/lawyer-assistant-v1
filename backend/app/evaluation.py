@@ -7,13 +7,13 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class ClaimScore(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", strict=True)
     supported: bool
     citation_resolves: bool
 
 
 class TaskScore(BaseModel):
-    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+    model_config = ConfigDict(extra="forbid", strict=True, allow_inf_nan=False)
     task_id: str = Field(min_length=1)
     adjudicator: str = Field(min_length=1)
     held_out: bool
@@ -60,6 +60,10 @@ def metrics(tasks):
         "claim_support": fraction([c.supported for c in claims]),
         "recall_at_20": fraction(recalls),
         "retrieval_tasks": len(recalls),
+        "exact_identifier_tasks": sum(t.exact_identifier_success is not None for t in tasks),
+        "abstention_tasks": sum(not t.answerable for t in tasks),
+        "answerable_tasks": sum(t.answerable for t in tasks),
+        "sensitive_tasks": sum(t.legitimate_sensitive_task_passed is not None for t in tasks),
         "exact_identifier_retrieval": fraction(
             [t.exact_identifier_success for t in tasks if t.exact_identifier_success is not None]
         ),
@@ -118,10 +122,13 @@ def evaluate_release(rows, snapshot):
         "metrics": result,
         "thresholds": requirements,
         "gates": gates,
-        "quantitative_gates_pass": all(gates.values()),
+        "scope": "core_metrics_only",
+        "core_quantitative_gates_pass": all(gates.values()),
+        "quantitative_gates_pass": False,
         "breakdown": breakdown,
         "production_qualified": False,
         "limitations": [
+            "A frozen protocol and extended analysis/privacy evidence are required for complete quantitative scoring.",
             "Observed metrics are not a universal negligible-error guarantee.",
             "Adjudicator qualification, sample representativeness, source rights and statistical confidence require separate review.",
             "Legal, graph, confidentiality, operational and pilot gates remain independent.",

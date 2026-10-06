@@ -269,7 +269,10 @@ error-slice sample sizes before evaluating. Numbers below are release targets, n
 
 Qualification reports distinguish software checks, privacy evaluation, legal adjudication,
 provider API readiness and customer acceptance. Extend the executable evaluation schema and
-tests in the relevant packets; the current release scorer does not yet enforce these new gates.
+tests in the relevant packets. The [offline extended scorer](EVALUATION.md) now checks
+supplied judgments, frozen sample targets and paired measurements for these gates. It does
+not perform the experiments, authenticate adjudication or qualify a provider; actual
+legal/privacy evaluation and paired confidence intervals remain pending.
 Neither self-correction nor a high observed support rate establishes a universal negligible-error
 guarantee. Preserve the ≥30% median preparation-time benefit including verification/correction.
 
