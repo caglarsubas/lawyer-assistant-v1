@@ -14,6 +14,7 @@ import httpx
 from .graph_release import _load_serving
 from .search import PublicSearchService, _bounded_structure, _validate_origin
 from .search_index_contract import (
+    CHANNELS,
     FIELDS,
     HASH,
     MAX_BYTES,
@@ -24,8 +25,10 @@ from .search_index_contract import (
     properties,
     ready_metadata,
 )
+from .search_normalization import derived_fields, normalization_metadata
 
 BATCH_SIZE = 50
+MAX_BATCH_BYTES = 1024 * 1024
 BUILD_SECONDS = 60
 
 
@@ -73,7 +76,7 @@ def inventory(release, index, deadline):
         source = {name: projected.get(name) for name in FIELDS}
         ident = document_id(source)
         if ident in rows:
-            if rows[ident] != source:
+            if {name: rows[ident][name] for name in FIELDS} != source:
                 raise ValueError("Conflicting signed search identity")
             continue
         if len(rows) >= MAX_DOCUMENTS:
@@ -83,10 +86,11 @@ def inventory(release, index, deadline):
         verified = validator._project({"_index": index, "_id": ident, "_source": source}, None, source["authority_id"])
         if source != {name: verified.get(name) for name in FIELDS}:
             raise ValueError("Search projection differs from signed evidence")
-        total += len(canonical(source))
+        indexed = {**source, **derived_fields(source)}
+        total += len(canonical(indexed))
         if total > MAX_BYTES:
             raise ValueError("Index byte budget exceeded")
-        rows[ident] = source
+        rows[ident] = indexed
     if not rows:
         raise ValueError("No eligible signed public evidence to index")
     return dict(sorted(rows.items()))
@@ -95,6 +99,22 @@ def inventory(release, index, deadline):
 def _ack(response):
     if response.get("acknowledged") is not True:
         raise ValueError("Index operation was not acknowledged")
+
+
+def batches(entries):
+    """Bound derived-field writes and their larger per-document readback envelope."""
+    batch, size = [], 0
+    for ident, source in entries:
+        length = len(canonical({"create": {"_id": ident}})) + len(canonical(source)) + 2
+        if length > MAX_BATCH_BYTES:
+            raise ValueError("Search document exceeds bulk budget")
+        if batch and (len(batch) == BATCH_SIZE or size + length > MAX_BATCH_BYTES):
+            yield batch
+            batch, size = [], 0
+        batch.append((ident, source))
+        size += length
+    if batch:
+        yield batch
 
 
 def build_index(release, base_url, expected_release):
@@ -111,7 +131,8 @@ def build_index(release, base_url, expected_release):
                 raise ValueError("Active graph release differs from operator expectation")
             stage = "prepare"
             documents = inventory(release, index, deadline)
-            meta = {"schema": SCHEMA, "release_id": expected_release, "status": "building", "channels": ["lexical"],
+            meta = {"schema": SCHEMA, "release_id": expected_release, "status": "building", "channels": CHANNELS,
+                    "normalization": normalization_metadata(),
                     "document_count": len(documents), "documents_sha256": hashlib.sha256(canonical(documents)).hexdigest()}
             stage = "create"
             # Create-only, unique concrete index. A collision is an error, never
@@ -120,8 +141,7 @@ def build_index(release, base_url, expected_release):
                 "mappings": {"dynamic": "strict", "_meta": meta, "properties": properties()}}))
             entries = list(documents.items())
             stage = "write"
-            for offset in range(0, len(entries), BATCH_SIZE):
-                batch = entries[offset:offset + BATCH_SIZE]
+            for batch in batches(entries):
                 raw = b"".join(canonical({"create": {"_id": ident}}) + b"\n" + canonical(source) + b"\n" for ident, source in batch)
                 result = transport.request("POST", "/_bulk", ndjson=raw)
                 items = result.get("items")
@@ -142,8 +162,7 @@ def build_index(release, base_url, expected_release):
             count = transport.request("POST", "/_count", body={"query": {"match_all": {}}})
             if type(count.get("count")) is not int or count["count"] != len(documents) or count.get("_shards", {}).get("failed") != 0:
                 raise ValueError("Index inventory is incomplete")
-            for offset in range(0, len(entries), BATCH_SIZE):
-                batch = entries[offset:offset + BATCH_SIZE]
+            for batch in batches(entries):
                 result = transport.request("POST", "/_mget", body={"ids": [ident for ident, _ in batch]})
                 docs = result.get("docs")
                 if not isinstance(docs, list) or len(docs) != len(batch):

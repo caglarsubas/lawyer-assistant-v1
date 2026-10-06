@@ -8,9 +8,18 @@ import httpx
 import pytest
 
 from app import search_index
-from app.search import PublicSearchService
+from app.search import PublicSearchService, SearchUnavailable
 from app.search_index import IndexBuildError, build_index
-from app.search_index_contract import FIELDS, SCHEMA, canonical, document_id, properties
+from app.search_index_contract import (
+    CHANNELS,
+    FIELDS,
+    LEGACY_SCHEMA,
+    SCHEMA,
+    canonical,
+    document_id,
+    properties,
+)
+from app.search_normalization import derived_fields
 
 RELEASE = "a" * 64
 INDEX = f"law-public-passages-{RELEASE}-{'b' * 32}"
@@ -50,7 +59,10 @@ class Release:
     def project_search_hit(self, candidate, **kwargs):
         # Isolate index transport here. Real signed evidence and private guards
         # are exercised by the separate runtime integration and opt-in drill.
-        return copy.deepcopy(candidate)
+        projected = {name: candidate.get(name) for name in FIELDS}
+        if projected not in self.rows:
+            raise ValueError("Not a synthetic authorized passage")
+        return copy.deepcopy(projected)
 
 
 class Server:
@@ -130,7 +142,7 @@ def test_build_is_create_only_sealed_verified_and_never_selected(case):
     result = build_index(release, "http://opensearch:9200", RELEASE)
     assert result["status"] == "ready" and result["selected_for_search"] is False
     assert result["document_count"] == 1 and server.blocked
-    assert server.docs == {document_id(source()): source()}
+    assert server.docs == {document_id(source()): {**source(), **derived_fields(source())}}
     assert all(request.url.path.startswith("/" + INDEX) for request in server.calls)
     assert not any(request.method == "DELETE" or "_aliases" in request.url.path for request in server.calls)
     body = json.loads(server.calls[0].content)
@@ -248,3 +260,106 @@ def test_index_changed_after_retrieval_discards_even_valid_passages(case, monkey
     monkeypatch.setattr(search, "_request", changed)
     result = search.search("sözleşme")
     assert not result["hits"] and result["coverage"]["status"] == "unavailable"
+
+
+def test_new_channels_use_the_same_prefilters_and_bounded_total_without_returning_derived_text(case):
+    release, server = case
+    build_index(release, "http://opensearch:9200", RELEASE)
+    server.calls.clear()
+    result = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release).search("SÖZLEŞMELER", as_of="2011-01-01", limit=50)
+    queries = [json.loads(call.content) for call in server.calls if call.url.path.endswith("/_search")]
+    assert len(queries) == 4 and sum(query["size"] for query in queries) <= 200
+    assert all(query["query"]["bool"]["filter"] == queries[0]["query"]["bool"]["filter"] for query in queries)
+    assert [query["query"]["bool"]["must"][0]["multi_match"]["query"] for query in queries] == [
+        "SÖZLEŞMELER", "SÖZLEŞMELER", "sözleşmeler", "sozlesmeler"]
+    hit = result["hits"][0]
+    assert hit["channels"] == CHANNELS
+    assert "text_normalized" not in hit and "text_folded" not in hit
+    assert hit["text"] == source()["text"]
+    span = hit["matches"]["spans"][0]
+    assert hit[span["field"]][span["start"]:span["end"]] == "Sözleşmeler"
+    assert span["channels"] == ["lexical_normalized", "lexical_folded"]
+
+
+def test_old_sealed_recipe_is_read_only_compatible_without_new_channels_or_spans(case):
+    release, server = case
+    build_index(release, "http://opensearch:9200", RELEASE)
+    server.mapping["_meta"].update(schema=LEGACY_SCHEMA, channels=["lexical"])
+    server.mapping["_meta"].pop("normalization")
+    server.mapping["properties"] = properties(LEGACY_SCHEMA)
+    server.calls.clear()
+    result = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release).search("Sözleşme")
+    assert result["coverage"]["status"] == "available"
+    assert result["snapshot"]["index_schema"] == LEGACY_SCHEMA
+    assert "matches" not in result["hits"][0]
+    assert sum(call.url.path.endswith("/_search") for call in server.calls) == 1
+
+
+@pytest.mark.parametrize("change", ["profile", "unicode", "derived_mapping", "channels", "analyzer_override"])
+def test_mismatched_normalization_recipe_is_denied_before_search(case, monkeypatch, change):
+    release, server = case
+    build_index(release, "http://opensearch:9200", RELEASE)
+    if change == "profile":
+        server.mapping["_meta"]["normalization"]["profile"] = "unknown"
+    elif change == "unicode":
+        server.mapping["_meta"]["normalization"]["unicode_version"] = "unknown"
+    elif change == "derived_mapping":
+        server.mapping["properties"]["text_normalized"]["analyzer"] = "turkish"
+    elif change == "channels":
+        server.mapping["_meta"]["channels"] = ["lexical"]
+    else:
+        original = server.metadata
+        def metadata():
+            value = original()
+            value[INDEX]["settings"]["index"]["analysis"] = {"analyzer": {"whitespace": {"type": "standard"}}}
+            return value
+        monkeypatch.setattr(server, "metadata", metadata)
+    server.calls.clear()
+    result = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release).search("sözleşme")
+    assert result["coverage"]["status"] == "unavailable" and not result["hits"]
+    assert [call.method for call in server.calls] == ["GET"]
+
+
+def test_new_channel_failure_preserves_independent_candidates_but_revocation_discards_all(case, monkeypatch):
+    release, server = case
+    build_index(release, "http://opensearch:9200", RELEASE)
+    search = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release)
+    original = search._request
+    def failed(body, deadline):
+        if body["query"]["bool"]["must"][0]["multi_match"]["fields"] == ["text_folded", "title_folded"]:
+            raise SearchUnavailable("search_http_error")
+        return original(body, deadline)
+    monkeypatch.setattr(search, "_request", failed)
+    result = search.search("sözleşme")
+    assert result["hits"] and result["coverage"]["status"] == "partial"
+    assert result["coverage"]["channels"]["lexical_folded"] == "unavailable"
+    def revoked(body, deadline):
+        result = original(body, deadline)
+        release.active = False
+        return result
+    monkeypatch.setattr(search, "_request", revoked)
+    assert not search.search("sözleşme")["hits"]
+
+
+def test_exact_authority_route_does_not_expand_or_normalize_identity(case):
+    release, server = case
+    release.rows = [{**source(), "authority_id": "urn:test:İŞÇİ:IŞIK"}]
+    build_index(release, "http://opensearch:9200", RELEASE)
+    server.calls.clear()
+    result = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release).search(
+        "unrelated", authority_id="urn:test:İŞÇİ:IŞIK", vector=[1.0])
+    assert result["hits"][0]["authority_id"] == "urn:test:İŞÇİ:IŞIK"
+    assert "matches" not in result["hits"][0]
+    assert sum(call.url.path.endswith("/_search") for call in server.calls) == 1
+    assert all(result["coverage"]["channels"][channel] == "not_requested" for channel in CHANNELS[1:])
+
+
+def test_duplicate_evidence_is_deduplicated_and_large_derived_records_are_byte_batched(case, monkeypatch):
+    release, server = case
+    release.rows = [source(), source(), source("urn:test:assertion:2")]
+    size = len(canonical({"create": {"_id": document_id(source())}})) + len(canonical({**source(), **derived_fields(source())})) + 2
+    monkeypatch.setattr(search_index, "MAX_BATCH_BYTES", size)
+    result = build_index(release, "http://opensearch:9200", RELEASE)
+    assert result["document_count"] == 2
+    bulks = [call for call in server.calls if call.url.path.endswith("/_bulk")]
+    assert len(bulks) == 2 and all(len(call.content) <= size for call in bulks)
