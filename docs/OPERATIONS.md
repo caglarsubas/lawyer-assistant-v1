@@ -201,11 +201,16 @@ They continue to verify returned passages
 against signed source evidence and current private permission. The ready marker
 and write block are operational safeguards, not independent legal authority or
 protection against a privileged OpenSearch administrator. Original text/identifiers
-are preserved; the pinned recipe uses Turkish text analysis and keyword identity
-fields. Embeddings/reranking and measured Turkish/adverse recall remain unqualified.
+are preserved. The v2 recipe retains Turkish text analysis and adds independent
+original-token, normalized and folded fields, with keyword identity fields unchanged.
+Existing v1 indexes retain their lexical-only reader path. See
+[Turkish retrieval and migration](TURKISH_RETRIEVAL.md) for pinned profiles, bounded
+candidate fusion and exact source-span hints. Embeddings/reranking and measured
+Turkish/adverse recall remain unqualified.
 
-The initial build budget is 2,000 candidate records, 32 MiB of source JSON, batches
-of 50, bounded HTTP responses and a cooperative 60-second build budget. Source
+The initial build budget is 2,000 candidate records, 32 MiB of original-plus-derived
+JSON, batches of at most 50 records/1 MiB, bounded HTTP responses and a cooperative
+60-second build budget. Source
 validation/guard checks and in-flight calls can extend elapsed time; this is not a
 hard process deadline or production capacity estimate. One passage can produce
 multiple assertion/authority records, so the count is not a corpus-completeness
@@ -239,7 +244,9 @@ keeps synthetic source files and test keys in tmpfs; no `.env`, existing databas
 or provider key is used. Each service is limited to two CPUs and 256 PIDs; memory
 caps are 512 MiB for PostgreSQL, 1.5 GiB for OpenSearch and 1 GiB for the driver.
 
-The v2 workload exercises exact signed passage retrieval, historical filtering,
+The v3 workload adds targeted synthetic Turkish case/Unicode/apostrophe/alias,
+negation/number and original-offset matching. Those cases use a fixture projection;
+the separate lifecycle workload exercises exact signed passage retrieval, historical filtering,
 five concurrent searches during a guarded rebuild, write blocks, an actual
 per-item bulk failure and second-source revocation. It observes the revocation
 writer's real PostgreSQL lock wait, releases the build, then verifies that committed
@@ -557,13 +564,14 @@ table without password or matter-content logging.
 ## Qualified public search
 
 The baseline public corpus is empty. Leave `LA_SEARCH_RELEASE_ID` empty until an
-approved publisher has loaded and qualified an immutable release in the sole
-admitted index, `law-public-passages`. Merely setting a release identifier is not
+approved publisher has loaded and qualified an immutable release in the
+legacy fixed index, `law-public-passages`, or a sealed release-bound managed index
+from the builder above. Merely setting a release identifier is not
 qualification. The read-only adapter does not create indexes, import documents,
 promote gateway downloads or put matter documents into public search. Missing
 configuration returns `no_qualified_corpus`; source completeness remains unknown.
 
-Each indexed passage needs exact `passage_id` (also the OpenSearch `_id`),
+Each indexed passage needs exact `passage_id`,
 `document_id`, `source_version_id`, `authority_id`, lowercase `source_sha256`,
 `release_id`, `text`, `title`, `source_url` and `locator`. Graph-linked entity IDs
 may be bounded absolute RDF IRIs or local IDs; release identifiers use a separate
@@ -574,11 +582,15 @@ status fields as exact keyword fields. These labels require a separately reviewe
 publication process; the adapter cannot establish their truth from index content.
 It independently rechecks returned metadata, projects only admitted fields and
 rejects conflicting passage versions.
+The fixed legacy route uses `passage_id` as OpenSearch `_id`; managed indexes add
+`assertion_id` and hash the release/passage/assertion/authority tuple, preserving
+distinct evidenced relationships for the same passage.
 
 `valid_from` and optional exclusive `valid_to` are version intervals. An `as_of`
 request requires a known interval containing that date; interval membership alone
 does not establish which law applies to the matter. Text search uses a lexical
-channel. Optional vectors from a qualified local embedding model use a separate
+channel, with independent original/normalized/folded channels for v2 managed
+indexes. Optional vectors from a qualified local embedding model use a separate
 channel and reciprocal-rank fusion, with identical qualification filters inside
 the kNN query. A supported Lucene/Faiss mapping, embedding model/version/dimension
 compatibility and Turkish retrieval recall must be qualified before enabling

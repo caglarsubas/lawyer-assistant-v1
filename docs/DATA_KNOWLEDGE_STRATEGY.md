@@ -177,6 +177,12 @@ Turkish-aware i/İ and ı/I casing, diacritic-insensitive aliases, apostrophe no
 and morphology live in separate search fields with mappings back to exact passage spans.
 Do not stem quotations or overwrite the evidence with generated contextual descriptions.
 
+The [R04 retrieval baseline](TURKISH_RETRIEVAL.md) implements independent original,
+Turkish-normalized and accent-folded token fields alongside the existing Turkish
+stemming channel. It preserves source text/identifiers and returns bounded exact
+token spans. Citation identity resolution, qualified morphology/aliases and the
+representative development benchmark remain pending.
+
 Segment statutes into instrument/article/paragraph/subparagraph, additional/temporary
 provisions and editorial notes. Segment decisions into submissions, allegations, findings,
 reasoning, disposition and separate opinions; unknown roles remain unknown. Preserve tables,

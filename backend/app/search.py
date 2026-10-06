@@ -14,7 +14,8 @@ from urllib.parse import urlsplit
 
 import httpx
 
-from .search_index_contract import FIELDS, MANAGED, document_id, ready_metadata
+from .search_index_contract import FIELDS, MANAGED, SCHEMA, document_id, ready_metadata
+from .search_normalization import match_spans, terms
 
 ALLOWED_INDEXES = frozenset({"law-public-passages"})
 PRIVATE_NETWORKS = tuple(ipaddress.ip_network(value) for value in (
@@ -265,25 +266,8 @@ class PublicSearchService:
             return {"hits": [], "coverage": coverage, "snapshot": snapshot, "limitations": limitations}
         if as_of is None:
             limitations.append("No historical version interval was requested; currency is not established.")
-        filters = self._filters(as_of, authority_id)
-        candidate_limit = min(MAX_CANDIDATES, limit * 4)
-        common = {"size": candidate_limit, "timeout": "3s", "track_total_hits": False,
-                  "_source": list(SOURCE_FIELDS)}
-        lexical_query = ({"match_all": {}} if authority_id is not None else
-                         {"multi_match": {"query": query, "fields": ["text", "title"]}})
-        requests = {"lexical": {**common, "query": {"bool": {
-            "filter": filters, "must": [lexical_query],
-        }}}}
-        if authority_id is not None:
-            snapshot["resolution"] = "exact_authority_identifier"
-            channels["vector"] = "not_requested"
-        if vector is not None and authority_id is None:
-            # Native filtered kNN requires a qualified Lucene/Faiss vector mapping.
-            # A bool post-filter is insufficient: it can lose authorized candidates.
-            requests["vector"] = {**common, "query": {"knn": {"embedding": {
-                "vector": vector, "k": candidate_limit, "filter": {"bool": {"filter": filters}},
-            }}}}
         deadline = time.monotonic() + 12
+        meta = None
         if self.managed:
             try:
                 meta = ready_metadata(self.index, self._read_json("GET", "", None, deadline), self.release_id)
@@ -294,6 +278,44 @@ class PublicSearchService:
                 coverage["status"] = "unavailable"
                 limitations.append("The selected public index is not a sealed, ready release index; no search was sent.")
                 return {"hits": [], "coverage": coverage, "snapshot": snapshot, "limitations": limitations}
+        normalized_index = meta is not None and meta["schema"] == SCHEMA
+        if normalized_index:
+            snapshot["normalization"] = meta["normalization"]
+            limitations.append("Folded aliases can conflate distinct Turkish terms; they nominate candidates, never authority identities or equivalent legal concepts.")
+        filters = self._filters(as_of, authority_id)
+        candidate_limit = min(MAX_CANDIDATES, limit * 4)
+        common = {"size": candidate_limit, "timeout": "3s", "track_total_hits": False,
+                  "_source": list(SOURCE_FIELDS)}
+        lexical_query = ({"match_all": {}} if authority_id is not None else
+                         {"multi_match": {"query": query, "fields": ["text", "title"]}})
+        requests = {"lexical": {**common, "query": {"bool": {
+            "filter": filters, "must": [lexical_query],
+        }}}}
+        if normalized_index:
+            for variant, text in terms(query).items():
+                channel = "lexical_" + variant
+                channels[channel] = "not_requested" if authority_id is not None else "not_run"
+                if authority_id is None:
+                    query_clause = ({"multi_match": {"query": text, "fields": [f"text_{variant}", f"title_{variant}"]}}
+                                    if text else {"match_none": {}})
+                    requests[channel] = {**common, "query": {"bool": {"filter": filters, "must": [query_clause]}}}
+        if authority_id is not None:
+            snapshot["resolution"] = "exact_authority_identifier"
+            channels["vector"] = "not_requested"
+        if vector is not None and authority_id is None:
+            # Native filtered kNN requires a qualified Lucene/Faiss vector mapping.
+            # A bool post-filter is insufficient: it can lose authorized candidates.
+            requests["vector"] = {**common, "query": {"knn": {"embedding": {
+                "vector": vector, "k": candidate_limit, "filter": {"bool": {"filter": filters}},
+            }}}}
+        if normalized_index:
+            # Extra channels share one candidate budget, not one budget each.
+            candidate_limit = min(candidate_limit, MAX_CANDIDATES // len(requests))
+            for body in requests.values():
+                body["size"] = candidate_limit
+                if "knn" in body["query"]:
+                    body["query"]["knn"]["embedding"]["k"] = candidate_limit
+            snapshot["candidate_budget"] = {"total": MAX_CANDIDATES, "per_channel": candidate_limit}
         combined, conflicts = {}, set()
         for channel, body in requests.items():
             if not self._authorized():
@@ -339,6 +361,9 @@ class PublicSearchService:
             -item["score"], item["source"]["passage_id"], item["source"]["authority_id"], item["source"].get("assertion_id", "")))
         hits = [{**item["source"], "score": item["score"], "channels": item["channels"]}
                 for item in ranked[:limit]]
+        if normalized_index and authority_id is None:
+            for hit in hits:
+                hit["matches"] = match_spans(hit, query)
         if self.managed:
             try:
                 if ready_metadata(self.index, self._read_json("GET", "", None, deadline), self.release_id) != meta:

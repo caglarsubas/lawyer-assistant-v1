@@ -160,3 +160,8 @@ The versioned analysis/privacy scorer is covered by fast synthetic Python tests 
 the existing backend suite, including provider separation and CLI refusal cases.
 It performs no provider requests or Docker workload. No job, matrix, dependency,
 retry, worker or timeout is added for this milestone.
+
+The R04 Turkish retrieval fields add fast normalization, recipe-compatibility and
+channel-boundary tests to the existing backend suite. Real OpenSearch Turkish
+matching remains in the opt-in isolated index drill, outside GitHub Actions.
+No CI job, dependency, worker, retry or timeout was added.

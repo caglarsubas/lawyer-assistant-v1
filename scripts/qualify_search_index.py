@@ -19,7 +19,7 @@ from manage_backup import compose_command  # noqa: E402
 from qualify_recovery import OPENSEARCH, POSTGRES, cleanup_project, command, fresh_project  # noqa: E402
 from recovery_fixture import code_fingerprint  # noqa: E402
 
-MARKER = "lawyer-search-index-drill-v2"
+MARKER = "lawyer-search-index-drill-v3"
 
 
 def tests_fingerprint(root):
@@ -109,6 +109,13 @@ def main():
                 report["workload"] = json.loads(lines[0])
                 if report["workload"].get("status") != "passed":
                     raise ValueError("Incomplete workload")
+                retrieval = [line.removeprefix("TURKISH_RETRIEVAL_DRILL_REPORT=") for line in result.stdout.splitlines()
+                             if line.startswith("TURKISH_RETRIEVAL_DRILL_REPORT=")]
+                if len(retrieval) != 1:
+                    raise ValueError("Missing Turkish retrieval workload")
+                report["turkish_retrieval"] = json.loads(retrieval[0])
+                if report["turkish_retrieval"].get("status") != "passed":
+                    raise ValueError("Incomplete Turkish retrieval workload")
                 report["status"] = "passed"
             finally:
                 try:

@@ -4,6 +4,7 @@ All sources, reviewers, signatures and private ledgers are synthetic test fixtur
 No real-law qualification or existing deployment access is performed.
 """
 
+import hashlib
 import json
 import os
 import time
@@ -12,6 +13,8 @@ from threading import Event
 
 import pytest
 from test_release_set_authorization import change_second, guard_set
+from test_search_index import Release as SyntheticRelease
+from test_search_index import source as synthetic_source
 from test_set_authorization_postgres import postgres_authorized_set as postgres_authorized_set_fixture
 from test_snapshot_set_postgres import observe_identity_lock, wait_until_blocked
 from test_snapshot_set_postgres import postgres_database as postgres_database_fixture
@@ -19,13 +22,73 @@ from test_snapshot_set_postgres import postgres_database as postgres_database_fi
 from app.graph_release import RuntimeGraphRelease, _load_serving
 from app.search import PublicSearchService
 from app.search_index import IndexBuildError, IndexTransport, build_index
+from app.search_normalization import normalization_metadata
 
 postgres_authorized_set = postgres_authorized_set_fixture
 postgres_database = postgres_database_fixture
-MARKER = "lawyer-search-index-drill-v2"
+MARKER = "lawyer-search-index-drill-v3"
 URL = "http://opensearch:9200"
 pytestmark = pytest.mark.skipif(os.environ.get("LA_SEARCH_INDEX_DRILL") != MARKER,
                                 reason="Opt-in disposable OpenSearch qualification only")
+
+
+def test_real_turkish_fields_channels_and_exact_offsets(tmp_path):
+    """Real index transport with an explicit fixture projection; no legal review.
+
+    The separate lifecycle test below exercises actual signed-source projection
+    and PostgreSQL private authorization, including source revocation.
+    """
+    (tmp_path / "publication.lock").touch()
+    texts = {"uppercase": "İŞÇİ ücret talep eder.", "decomposed": "I\u0307S\u0327C\u0327I\u0307 beyanı.",
+             "dotless": "IŞIK altında kayıt.", "apostrophe": "İŞÇİ’NİN beyanı.",
+             "accent": "SÖZLEŞME ihlali.", "negative": "Sorumlu değildir; ödeme yapmadı.",
+             "numbers": "E. 2020/00123 K. 2021/09 -1.250,50",
+             "plain": "kar birikimi", "circumflex": "kâr oranı", "title": "Başka bir örnek.",
+             "expired": "İŞÇİ tarihsel örnek."}
+    rows = []
+    for ident, text in texts.items():
+        row = {**synthetic_source("urn:test:assertion:" + ident), "text": text,
+               "passage_id": "urn:test:passage:" + ident, "source_sha256": hashlib.sha256(text.encode()).hexdigest(),
+               "title": "ÇALIŞMA" if ident == "title" else "SENTETİK"}
+        if ident == "expired":
+            row.update(valid_from="1999-01-01", valid_to="2001-01-01")
+        rows.append(row)
+    release = SyntheticRelease(tmp_path, rows)
+    built = build_index(release, URL, release.info["release_id"])
+    search = PublicSearchService(URL, built["index"], release.info["release_id"], release)
+    cases = [("İŞÇİ", "uppercase", "lexical_original"), ("işçi", "uppercase", "lexical_normalized"),
+             ("işçi", "decomposed", "lexical_normalized"), ("ışık", "dotless", "lexical_normalized"),
+             ("işçi'nin", "apostrophe", "lexical_normalized"), ("sozlesme", "accent", "lexical_folded"),
+             ("değildir", "negative", "lexical_normalized"), ("2020/00123", "numbers", "lexical_original"),
+             ("-1.250,50", "numbers", "lexical_normalized"), ("calisma", "title", "lexical_folded")]
+    for query, ident, channel in cases:
+        result = search.search(query, as_of="2011-01-01")
+        assert result["coverage"]["status"] == "available"
+        candidates = {hit["passage_id"].rsplit(":", 1)[-1]: hit for hit in result["hits"]}
+        assert ident in candidates and channel in candidates[ident]["channels"]
+        assert "expired" not in candidates
+        assert candidates[ident]["text"] == texts[ident]
+        assert candidates[ident]["matches"]["spans"]
+        assert all(hit["text"] == texts[key] for key, hit in candidates.items())
+        for hit in candidates.values():
+            for span in hit["matches"]["spans"]:
+                assert hit[span["field"]][span["start"]:span["end"]]
+        if ident == "decomposed":
+            hit = candidates[ident]
+            span = hit["matches"]["spans"][0]
+            assert hit["text"][span["start"]:span["end"]] == "I\u0307S\u0327C\u0327I\u0307"
+        if ident == "accent":
+            assert candidates[ident]["channels"] == ["lexical_folded"]
+    aliases = search.search("kar", as_of="2011-01-01")["hits"]
+    assert {hit["text"] for hit in aliases} == {"kar birikimi", "kâr oranı"}
+    assert len({hit["assertion_id"] for hit in aliases}) == 2
+    print("\nTURKISH_RETRIEVAL_DRILL_REPORT=" + json.dumps({
+        "status": "passed", "synthetic_only": True, "projection": "explicit_fixture_only",
+        "normalization": normalization_metadata(), "index_schema": built["schema"],
+        "document_count": len(rows), "targeted_cases_passed": len(cases),
+        "checks": {name: True for name in ("independent_channels", "folded_only_discovery", "original_text_unchanged",
+            "decomposed_exact_offsets", "negative_and_numeric_tokens", "title_matches", "historical_prefilters",
+            "folded_collisions_do_not_merge_identities")}}, sort_keys=True))
 
 
 def test_real_index_build_rebuild_failure_and_revocation(postgres_authorized_set, tmp_path, monkeypatch):
@@ -157,4 +220,4 @@ def test_real_index_build_rebuild_failure_and_revocation(postgres_authorized_set
                   "five_searches_during_locked_rebuild", "revocation_wait_observed_in_postgres", "building_index_denied", "same_inventory_new_index", "write_block_enforced",
                   "writable_index_denied", "real_bulk_item_error_denied", "old_index_preserved_on_failure",
                   "second_source_revocation_blocks_all_indexes_and_rebuild")}}
-    print("SEARCH_INDEX_DRILL_REPORT=" + json.dumps(report, sort_keys=True))
+    print("\nSEARCH_INDEX_DRILL_REPORT=" + json.dumps(report, sort_keys=True))

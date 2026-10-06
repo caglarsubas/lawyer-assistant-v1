@@ -1,6 +1,54 @@
 # Verification record — 6 October 2026
 
 
+## R04 Turkish retrieval fields — 6 October 2026 (Asia/Shanghai)
+
+PR #13 merged as `7b7b341173fd8068519294cdcdcfa5d39b4f658c`, with all PR checks
+and [post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37478777544)
+passing. This packet adds v2 managed indexes with separately versioned original,
+Turkish-normalized and folded fields, bounded independent channels and exact
+source-span hints. The existing Turkish stemming channel and v1 reader remain.
+
+- **222 relevant tests passed in 43.89s** across normalization, index/search
+  boundaries, signed runtime graph releases, graph tools and research jobs.
+- **41 deployment contract tests passed in 0.293s**; repository-wide Ruff and
+  diff checks passed. The full backend suite remains mandatory in CI; it was not
+  rerun locally. No CI job, dependency, worker, retry or timeout was added.
+- **19 isolated Docker tests passed in 78.36s**, including ten targeted Turkish
+  query cases against 11 invented passages. Exact casing, canonical decomposition,
+  apostrophes, folded-only discovery, negation, numeric spelling, title matches,
+  historical filters and separate identities for colliding aliases were observed.
+  These language cases use an explicit fixture projection. The accompanying
+  lifecycle test uses actual signed-source projection/private PostgreSQL guards.
+- The signed lifecycle workload built three generations from eight synthetic
+  assertion/authority records, kept the old index readable through a paused
+  rebuild, rejected incomplete/writable indexes and a real bulk-item failure,
+  and blocked all reads/builds after second-source revocation. Five simultaneous
+  **authority reads**, not inference jobs, completed in 11.331–12.515s during
+  rebuild; first build took 0.924s, induced revocation wait/commit 0.410s. These
+  small-fixture measurements are not representative latency or capacity targets.
+
+The [retained report](evidence/turkish-retrieval-drill-2026-10-06.json) binds exact
+application/test fingerprints, image identities, declared resource limits and
+successful cleanup. It records the merge base and a dirty working tree because
+the drill ran before this packet was committed; both fingerprints were checked
+against the final source/tests before saving the evidence. Two earlier attempts
+failed report collection: pytest's progress dot preceded the second marker despite
+passing workload tests. Both markers now start on their own line; the final
+end-to-end runner returned success. All disposable resources were removed.
+
+The normal Dockerfile build stalled resolving registry metadata for the pinned
+Python base and was stopped. Validation used the preloaded `r02-shared` test runtime
+with matching `pyproject.toml`/`uv.lock` digests and current source copied into a new
+image using `--network none`. The runner independently verified its source/test
+fingerprints. This does not claim a fresh production-image build or deployment.
+No live `.env`, client data, provider credentials, existing indexes or app containers
+were used or changed. OpenSearch/PostgreSQL ran on a fresh internal network with no
+host ports or binds. Real source reviews, legal retrieval/adverse recall, the
+development benchmark, reranking and representative workload qualification remain
+open. See [retrieval and migration details](TURKISH_RETRIEVAL.md).
+
+
 ## R01 scoped analysis and privacy scoring — 6 October 2026 (Asia/Shanghai)
 
 PR #12 merged as `a75c6743f134af1af870058a8e013d816522d7f9`; all three PR checks
