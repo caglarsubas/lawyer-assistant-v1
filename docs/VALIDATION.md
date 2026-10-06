@@ -1,5 +1,54 @@
 # Verification record — 6 October 2026
 
+## R02 public search index builder — 6 October 2026 (Asia/Shanghai)
+
+The real OpenSearch drill passed on clean code commit
+`1fcd0612c024eae51a5198b5ff8c53081bb39124`. The
+[complete report](evidence/search-index-drill-2026-10-06.json) records the exact
+OpenSearch/test image IDs, matching fingerprints for 97 application/source-input
+files and 64 test files, declared resource limits, outcomes and cleanup.
+The test image contains pinned development dependencies and is separate from the
+production API image. No dependency versions or GitHub Actions jobs were added.
+
+- Full backend run: **2,298 passed, 16 skipped, 28 existing warnings in 284.53s**
+  using two workers. The skips were the existing PostgreSQL cases and the new opt-in
+  OpenSearch workload. The suite ran from a tracked/unignored-file snapshot outside
+  macOS Desktop to avoid its known descriptor-walk stall; backend/test hashes were
+  reconciled to the checkout. No `.env`, runtime data or existing credentials were copied.
+- After that run, the final managed-index receipt recheck and its race regression
+  were added; **all 82 focused search tests passed** on the resulting code. The
+  clean-commit Docker drill below also includes that final check. The full-suite
+  count is not presented as a second complete run of the final revision.
+- **41 deployment contracts passed** in 0.348s. Repository Ruff, diff checks and
+  Compose schema validation passed; Compose used placeholders and `/dev/null`,
+  without loading the user-managed `.env`.
+- PR #10's merge commit `b1c70f9a193c29bab256bf9b6e018f1cc1858e29` passed its
+  [post-merge CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37448499120).
+  This baseline result is separate from the new PR's CI.
+
+The Docker workload uses two invented source fixtures, test-only independent
+signatures, the actual sealed private-review implementation on SQLite and real
+OpenSearch 2.19.3. It built two separate indexes with the same inventory of **eight
+passage/assertion/authority records**; the first small-fixture build took 0.997s.
+It returned exact signed quotes, respected the historical interval and exercised a
+Turkish lexical query. The eight records are not eight legal sources or a corpus
+coverage denominator, and the timing is not a production throughput claim.
+
+Old-index search succeeded while rebuilding paused after creating the new index;
+the incomplete index was unavailable. The server rejected writes to the completed
+index, and the reader refused it when the write block was deliberately removed.
+A duplicate create caused a real per-item bulk error despite HTTP success; the
+partial index stayed unusable and both prior indexes remained intact. Revoking
+the second source then blocked retrieval from both ready indexes and prevented
+another build before any OpenSearch request.
+
+The runner removed its generated containers, network and sole named volume. The
+existing application stack remained healthy with unchanged uptime. No real legal
+approval, source acquisition, model inference, live deployment or index selection
+was performed. This does not qualify PostgreSQL lock waits during builds, production
+capacity, retrieval/adverse recall, embeddings or five model jobs during ingestion.
+R02 and R04 remain partial. See the [operator guide](OPERATIONS.md#build-or-rebuild-a-public-search-index).
+
 ## R02 signed-graph lifecycle baseline — 6 October 2026 (Asia/Shanghai)
 
 The isolated Docker drill passed on clean code commit

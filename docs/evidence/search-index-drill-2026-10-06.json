@@ -1,0 +1,73 @@
+{
+  "checkout_commit": "1fcd0612c024eae51a5198b5ff8c53081bb39124",
+  "checkout_dirty": false,
+  "cleanup": {
+    "complete": true
+  },
+  "finished_at": "2026-10-06T10:37:46.111011+00:00",
+  "host": {
+    "architecture": "arm64",
+    "system": "Darwin"
+  },
+  "images": {
+    "opensearch": "sha256:e96cc6ae1500a073d973c0906f30f7cf4d9c461f32f855f9242a2da933660cdd",
+    "test": "sha256:3487b8d5a1feb01832b42b11a15f77ff6a249d0ff448b68cd81af045956cb574"
+  },
+  "not_qualified": [
+    "real legal/source rights",
+    "production capacity",
+    "retrieval recall or adverse authority coverage",
+    "embedding/reranker quality",
+    "five model jobs during reindexing",
+    "PostgreSQL lock performance"
+  ],
+  "resource_limits": {
+    "driver": {
+      "cpus": "2.0",
+      "mem_limit": "1g",
+      "pids_limit": 256
+    },
+    "opensearch": {
+      "cpus": "2.0",
+      "mem_limit": "1536m",
+      "pids_limit": 256
+    }
+  },
+  "schema_version": "lawyer-search-index-drill-v1",
+  "source": {
+    "application": {
+      "files": 97,
+      "sha256": "2e78408dc5145494a0a3db0cb1906be76943ea8d710e7677d3ee1e66ef29b347"
+    },
+    "tests": {
+      "files": 64,
+      "sha256": "a8f2f2a8346fc87ecb3c00be0eda41ec37f63bda960de691fe834527b3bbd2f9"
+    }
+  },
+  "started_at": "2026-10-06T10:37:06.984459+00:00",
+  "status": "passed",
+  "synthetic_only": true,
+  "workload": {
+    "checks": {
+      "building_index_denied": true,
+      "exact_signed_passages": true,
+      "historical_interval_filter": true,
+      "lexical_query": true,
+      "old_index_preserved_on_failure": true,
+      "old_search_during_rebuild": true,
+      "real_bulk_item_error_denied": true,
+      "same_inventory_new_index": true,
+      "second_source_revocation_blocks_both_indexes_and_rebuild": true,
+      "writable_index_denied": true,
+      "write_block_enforced": true
+    },
+    "document_count": 8,
+    "documents_sha256": "a84a1d9b2570871d378f9e6f38fd7220f0db30e75658be07a4ab13a597680101",
+    "first_build_seconds": 0.997,
+    "indexes_built": 2,
+    "partial_indexes_retained_until_cleanup": 1,
+    "release_id": "28ed3a03c940621545b3f89efd3ecd2c21d621080c87c7ec456c5c624d5d0733",
+    "status": "passed",
+    "synthetic_only": true
+  }
+}
