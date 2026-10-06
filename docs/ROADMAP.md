@@ -496,6 +496,22 @@ wait, not concurrent public-graph import/reindexing or ordinary production lock
 latency. The latter scenarios, sustained-load qualification and populated graph
 rollback remain the next operational packets. R02 is not complete.
 
+### R02 engineering packet — signed graph lifecycle drill (in progress)
+
+After merged PR #9, the next bounded packet qualifies the existing immutable
+publication and real Fuseki/TDB2 runtime with invented RDF and disposable trust.
+It covers queries during installation, SIGKILL during a partial import, fresh
+index reconstruction, stopped-service activation, corruption failure and rollback.
+Exact image/source identities and isolated cleanup are required for a passing
+report. The workload remains opt-in outside routine CI; fast isolation/failure
+contracts run in the existing deployment step.
+
+This packet does not grant real publication permission or qualify a legal corpus.
+Its test-only authorization guard is separate from the application's private
+review/revocation ledger. Sustained representative load, OpenSearch reindexing,
+five research jobs during public ingestion, encrypted populated-graph restoration
+and production recovery objectives remain open R02/R07 gates.
+
 ## Two-graph specification
 
 Graph A covers legal classification; norms/provision versions; institutions and their units; conditional competence/jurisdiction; actors/roles/positions; objects/transactions; procedures/remedies; evidence/burdens/presumptions; time/calculation rules; and sources/governance. National fields include constitutional, administrative, tax, criminal, civil, commercial, employment/social security, family, succession, property, enforcement/insolvency, consumer, competition, IP, data protection, finance, procurement, environment, migration and international/conflict subjects.
