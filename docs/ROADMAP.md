@@ -242,7 +242,7 @@ Dependencies refer to completion of the relevant gate, not just code availabilit
 | ID / priority | Delivery packet | Dependencies / accountable lead | Exit evidence |
 |---|---|---|---|
 | **R01 / P0, in progress** | Source, asset and semantic qualification: offline catalogs, legal-analysis/scenario contracts, provider/evaluation dossier, physical evidence verifier, extraction comparator and reproducible calibration studies implemented; representative calibration and review pending | Legal ontology owner + data/source lead with application/security owners; source/provider dependencies documented | Source uses and routes reviewed; sample errors/reviewer time measured; argument/scenario fixtures adjudicated; provider processing/spend controls qualified; added effort estimated. Passing the dossier validator grants no approval |
-| **R02 / P0, partial** | Multi-source snapshots, private preparation, exact public evidence, external public/private approvals, per-source deployment-wide grants/expiry and live revocation implemented; renewal requires a freshly reviewed release. Bounded cooperative research admission/cancellation, publication races and coordinator/restart controls implemented; synthetic application/recovery and signed-graph lifecycle drills measured; authorized release-specific lexical index builds/rebuilds implemented. Restricted-audience serving, same-release renewal and representative five-job/resource qualification remain | R01 contracts; actual source reviews remain mandatory; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
+| **R02 / P0, partial** | Multi-source snapshots, private preparation, exact public evidence, external public/private approvals, per-source deployment-wide grants/expiry and live revocation implemented; renewal requires a freshly reviewed release. Bounded cooperative research admission/cancellation, publication races and coordinator/restart controls implemented; synthetic application/recovery and signed-graph lifecycle drills measured; authorized release-specific lexical index builds/rebuilds and shared PostgreSQL runtime-read locks implemented. Restricted-audience serving, same-release renewal and representative five-job/resource qualification remain | R01 contracts; actual source reviews remain mandatory; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
 | **R03 / P0** | First genuinely reviewed contract corpus: RG ordinary/mükerrer manifest; amendment/transition candidates; MBS reconciliation; TBMM enacted/history distinction; exact provisions and historical versions | R01 lawful samples and protected reviewers; R02 for combined releases; editors + ingestion team | Reviewed corpus and exact evidence ready for analysis; amendment chains/historical queries pass; discrepancies visible. Full legal-analysis/export qualification additionally requires R04, the relevant R05 decision slice and R05A |
 | **R04 / P1** | Turkish lexical/citation normalization, local embedding and reranker evaluation, structured context packing; pinned model/index versions | R01 development benchmark; R03 representative approved corpus; retrieval/ML + legal adjudicators | Exact identifiers and original quotes preserved; hybrid and graph/metadata/rerank ablations on one snapshot; thresholds, error slices and resource budgets reported; no private-data or adverse-recall regression |
 | **R05 / P1** | Decision population and research: proceeding/decision/manifestation identity; allegation/finding/reasoning/result/dissent roles; citation ambiguity queue; reviewed authority-treatment events; independent contrary-authority branch | R01 judicial source/effect contracts, R02, R04; knowledge engineers + domain editors | Supporting and adverse passages are inspectable with role, version, institution epoch and scope; treatment is not inferred from citation; missing courts/periods and unknown finality remain explicit |
@@ -694,3 +694,28 @@ unqualified embedding compression and separate private graph infrastructure unle
 a later measured need justifies them. No proxy/CAPTCHA/WAF evasion or unrestricted
 remote MCP/federation is planned. Nationwide ontology maintenance continues;
 additional validated practices and historical population follow the first three.
+
+
+### R02 engineering milestone — concurrent authorized readers (6 October 2026)
+
+After merged PR #11, runtime authorization uses shared PostgreSQL row locks for
+both single-source and source-set releases. Five verified readers can hold guards
+at once; an index rebuild can coexist with search on the previous sealed index.
+Preparation and publication actions remain exclusive. Account, source-review and
+mapping writes remain excluded through guard exit; entry/exit integrity, expiry,
+revocation and final result checks are unchanged. No authorization cache is added.
+
+The opt-in search drill now uses real PostgreSQL as well as OpenSearch. It tests
+five searches during a paused rebuild, a database-observed rights-writer wait,
+committed revocation disabling all index generations and rejection before network
+use. Both authorization schemas have row-by-row writer and concurrent-reader
+regressions in the existing PostgreSQL CI job. Heavy Docker qualification remains
+outside routine CI; no job, dependency, retry or time-limit increase is introduced.
+See [operator contract](OPERATIONS.md#build-or-rebuild-a-public-search-index) and
+[verification evidence](VALIDATION.md).
+
+**R02 remains partial.** Long builds still delay review/revocation writes, and
+queued writers may delay new readers. Representative capacity, revocation latency,
+five actual inference jobs during public ingestion, restricted-audience serving
+and same-release renewal remain open. Real source/legal approval and legal-retrieval
+quality require their separate R01/R03/R04 gates.

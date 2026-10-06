@@ -1,5 +1,70 @@
 # Verification record — 6 October 2026
 
+
+## R02 concurrent authorization reads — 6 October 2026 (Asia/Shanghai)
+
+PR #11 merged as `41ce736510d78e0899204d12cbabbc08a59326ac` with all three PR
+checks passing. This packet removes read/read serialization in PostgreSQL private
+release authorization. Both single-source and source-set runtime reads use
+`FOR SHARE` on the operator and every selected review/mapping head. Preparation
+and publication actions retain exclusive locks, and all source, signature,
+revision, expiry, scope and exit checks remain in place.
+
+- **2,299 backend tests passed**, 18 skipped and 28 existing warnings, in **344.11s**
+  with the existing two-worker command. The skips are 17 PostgreSQL race cases and
+  the opt-in OpenSearch workload; all 18 passed in the separate real-database run.
+  The backend suite used a tracked/unignored source snapshot outside macOS Desktop,
+  without `.env`, runtime data or credentials. Backend and test-file hashes were
+  reconciled with the checkout after completion.
+- **41 deployment contract tests passed** in 0.478s; repository Ruff and diff checks
+  passed. The first deployment-test invocation used system Python and failed on
+  missing dependencies; it was rerun using the existing pinned backend environment.
+  A pytest launch was also corrected to create its temporary parent before collection.
+- **18 real PostgreSQL/OpenSearch cases passed** in **114.59s**, including the
+  existing snapshot and research-job race suites. Five readers enter authorization
+  concurrently before any can exit, for each signature schema. Direct writes to
+  each protected row independently block, preventing the common operator lock
+  from masking a missing source/mapping lock. Installation, activation and rollback
+  remain exclusive. A waiting reader observes committed account revocation and
+  releases its acquired locks on failure. Source-rights revocation is also tested
+  through the real API.
+
+The [v2 drill report](evidence/search-postgres-concurrency-2026-10-06.json) records
+pinned PostgreSQL 16.10 and OpenSearch 2.19.3 image IDs, a separate test-image ID,
+resource limits and matching fingerprints for **97 application/input files** and
+**64 test files**. It was measured before committing these changes, so its checkout
+is correctly marked dirty and its commit field identifies the PR #11 baseline.
+The recorded source/test fingerprints were verified against the completed working
+tree; the report is preserved without rewriting that provenance.
+
+The test builds three ready generations from eight synthetic candidate records,
+keeps a fourth failed partial index unavailable and verifies exact signed passages
+and historical filtering. Five searches complete against the old sealed index
+while a rebuild remains paused inside the real PostgreSQL authorization guard.
+A rights writer is observed in `pg_blocking_pids`, waits for a later build to
+finish, then commits revocation. All three completed indexes and future builds
+are subsequently denied before OpenSearch traffic.
+
+The first build took **1.963s**; the five overlapping searches took **21.851–24.305s**.
+Observed rights-write wait plus completion was **0.498s**, after the test deliberately
+released the build as soon as the database wait was observed. Each service had two
+CPU and 256-PID caps; memory limits were 512 MiB PostgreSQL, 1.5 GiB OpenSearch and
+1 GiB driver. The full backend suite was running on the host concurrently. These
+are small synthetic correctness measurements, not production throughput, a latency
+SLO or an immediate-revocation guarantee. Repeated full authorization/integrity work
+still needs representative performance qualification; no verdict cache was introduced.
+
+An initial drill stopped at database startup: the new PostgreSQL service lacked
+the pinned image's volume-initialization capabilities. The runner now matches the
+existing production/recovery capability set. Both attempts cleaned up their owned
+resources; the passing run removed all generated containers, two named volumes and
+its internal network. No host ports or bind mounts were used. No live deployment,
+index selection, client data, provider calls, real source approval or acquisition
+occurred. There are no new CI jobs, dependencies, retries or increased timeouts;
+the two new database cases join the existing PostgreSQL job, and the Docker drill
+remains opt-in. R02 remains partial, with representative latency/capacity, actual
+inference overlap, restricted audiences and same-release renewal still open.
+
 ## R02 public search index builder — 6 October 2026 (Asia/Shanghai)
 
 The real OpenSearch drill passed on clean code commit

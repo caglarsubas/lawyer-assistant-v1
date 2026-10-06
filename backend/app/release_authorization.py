@@ -216,7 +216,7 @@ class ReleaseAuthorization:
             with locked_snapshot(self.store, self.source_store, operator_id=binding["operator_id"],
                                  source_id=binding["source_id"],
                                  expected_source_review_revision=binding["source_review_revision"],
-                                 expected_mapping_revision=binding["mapping_revision"]) as snapshot:
+                                 expected_mapping_revision=binding["mapping_revision"], shared=action == "read") as snapshot:
                 if snapshot["binding"] != binding:
                     raise _fail()
                 approved = _instant(current["body"]["approved_at"])

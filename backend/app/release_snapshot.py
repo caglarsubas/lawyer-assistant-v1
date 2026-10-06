@@ -127,8 +127,8 @@ def readonly_store(settings):
             engine.dispose()
 
 
-def _operator(session, operator_id):
-    operator = session.scalar(select(User).where(User.id == operator_id).with_for_update()
+def _operator(session, operator_id, *, shared=False):
+    operator = session.scalar(select(User).where(User.id == operator_id).with_for_update(read=shared)
                               .execution_options(populate_existing=True))
     if operator is None or not operator.active or operator.role not in {"admin", "curator"}:
         raise SnapshotError("An existing active administrator or curator operator is required")
@@ -142,10 +142,10 @@ def _package(source_store, source_id):
         raise SnapshotError("The source package is unavailable or failed integrity validation") from None
 
 
-def _load(store, session, package, operator, expected_source_revision, expected_mapping_revision):
+def _load(store, session, package, operator, expected_source_revision, expected_mapping_revision, *, shared=False):
     source_head = session.scalar(select(SourceReviewHead).where(
         SourceReviewHead.firm_id == operator.firm_id, SourceReviewHead.source_id == package.detail["id"])
-        .with_for_update().execution_options(populate_existing=True))
+        .with_for_update(read=shared).execution_options(populate_existing=True))
     if source_head is None or source_head.revision != expected_source_revision:
         raise SnapshotError("The source review revision changed or is unavailable")
     source_review = reviews._projection(store, source_head, package)
@@ -159,7 +159,7 @@ def _load(store, session, package, operator, expected_source_revision, expected_
         raise SnapshotError("Source rights do not cover the required preparation and corpus uses")
     mapping_head = session.scalar(select(ProvisionMappingHead).where(
         ProvisionMappingHead.firm_id == operator.firm_id, ProvisionMappingHead.source_id == package.detail["id"])
-        .with_for_update().execution_options(populate_existing=True))
+        .with_for_update(read=shared).execution_options(populate_existing=True))
     if mapping_head is None or mapping_head.revision != expected_mapping_revision:
         raise SnapshotError("The mapping revision changed or is unavailable")
     projection, history = mappings._projection(store, session, mapping_head, package)
@@ -182,36 +182,38 @@ def _load(store, session, package, operator, expected_source_revision, expected_
 
 @contextmanager
 def locked_snapshot(store, source_store, *, operator_id, source_id,
-                    expected_source_review_revision, expected_mapping_revision):
+                    expected_source_review_revision, expected_mapping_revision, shared=False):
     """Hold a validated local snapshot stable through a caller's bounded atomic output.
 
 The caller must discard its newly written output if context exit raises. On
 PostgreSQL account and ledger locks prevent concurrent authorization/review edits;
 the final byte read separately detects changes to filesystem source artifacts.
+Internal runtime reads may share row locks; preparation remains exclusive by default.
+Shared readers must never mutate rows or upgrade locks inside this context.
 """
-    if (not isinstance(operator_id, str) or not 1 <= len(operator_id) <= 64
+    if (type(shared) is not bool or not isinstance(operator_id, str) or not 1 <= len(operator_id) <= 64
             or not isinstance(source_id, str) or re.fullmatch(r"[0-9a-f]{64}", source_id) is None
             or any(type(value) is not int or not 1 <= value <= 1000
                    for value in (expected_source_review_revision, expected_mapping_revision))):
         raise SnapshotError("Supply exact source, operator and positive review revisions")
     try:
         with store.session() as session:
-            operator = _operator(session, operator_id)
+            operator = _operator(session, operator_id, shared=shared)
             identity = (operator.id, operator.firm_id, operator.role)
             package = _package(source_store, source_id)
             snapshot = _load(store, session, package, operator,
-                             expected_source_review_revision, expected_mapping_revision)
+                             expected_source_review_revision, expected_mapping_revision, shared=shared)
             original_binding = _canonical(snapshot["binding"])
             original_bytes = {name: bytes(content) for name, content in package.artifacts.items()}
             yield snapshot
-            operator = _operator(session, operator_id)
+            operator = _operator(session, operator_id, shared=shared)
             if (operator.id, operator.firm_id, operator.role) != identity:
                 raise SnapshotError("The operator identity or role changed during preparation")
             verified_package = _package(source_store, source_id)
             if verified_package.artifacts != original_bytes:
                 raise SnapshotError("The source package changed during preparation")
             final = _load(store, session, verified_package, operator,
-                          expected_source_review_revision, expected_mapping_revision)
+                          expected_source_review_revision, expected_mapping_revision, shared=shared)
             if _canonical(final["binding"]) != original_binding:
                 raise SnapshotError("Review state changed during preparation")
             # Session context closes with rollback. No COMMIT, audit or mutation.

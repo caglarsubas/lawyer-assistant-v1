@@ -33,7 +33,11 @@ and [recovery drill](OPERATIONS.md#disposable-synthetic-recovery-drill), plus th
 [graph lifecycle drill](OPERATIONS.md#disposable-signed-graph-lifecycle-drill) and
 [OpenSearch qualification](OPERATIONS.md#isolated-opensearch-qualification). The latter
 uses the pinned development dependencies in a separate test image; it is skipped in
-routine backend runs unless the explicit isolated-drill marker is set.
+routine backend runs unless the explicit isolated-drill marker is set. Its v2
+workload uses disposable PostgreSQL and OpenSearch. Two new PostgreSQL cases reuse
+one fixture per authorization schema to check five simultaneous read guards,
+every protected row, exclusive publication actions and queued revocation. They
+run in the existing serial PostgreSQL job without changing its five-minute cap.
 
 The backend test step has a **18-minute hard limit**, inside a **20-minute job
 limit**; frontend and PostgreSQL jobs each have a **five-minute limit**. Exceeding

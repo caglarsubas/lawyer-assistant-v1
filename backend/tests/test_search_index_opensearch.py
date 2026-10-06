@@ -11,26 +11,26 @@ from concurrent.futures import ThreadPoolExecutor
 from threading import Event
 
 import pytest
-from test_release_set_authorization import authorized_set as authorized_set_fixture
 from test_release_set_authorization import change_second, guard_set
-from test_release_set_authorization import source as source_fixture
-from test_release_set_authorization import workspace as workspace_fixture
+from test_set_authorization_postgres import postgres_authorized_set as postgres_authorized_set_fixture
+from test_snapshot_set_postgres import observe_identity_lock, wait_until_blocked
+from test_snapshot_set_postgres import postgres_database as postgres_database_fixture
 
 from app.graph_release import RuntimeGraphRelease, _load_serving
 from app.search import PublicSearchService
 from app.search_index import IndexBuildError, IndexTransport, build_index
 
-authorized_set = authorized_set_fixture
-source = source_fixture
-workspace = workspace_fixture
-MARKER = "lawyer-search-index-drill-v1"
+postgres_authorized_set = postgres_authorized_set_fixture
+postgres_database = postgres_database_fixture
+MARKER = "lawyer-search-index-drill-v2"
 URL = "http://opensearch:9200"
 pytestmark = pytest.mark.skipif(os.environ.get("LA_SEARCH_INDEX_DRILL") != MARKER,
                                 reason="Opt-in disposable OpenSearch qualification only")
 
 
-def test_real_index_build_rebuild_failure_and_revocation(authorized_set, tmp_path, monkeypatch):
-    fixture = authorized_set
+def test_real_index_build_rebuild_failure_and_revocation(postgres_authorized_set, tmp_path, monkeypatch):
+    fixture = postgres_authorized_set
+    assert fixture["app"].state.store.engine.dialect.name == "postgresql"
     serving = _load_serving()
     root = tmp_path / "runtime"
 
@@ -74,8 +74,17 @@ def test_real_index_build_rebuild_failure_and_revocation(authorized_set, tmp_pat
         future = pool.submit(build_index, runtime, URL, release)
         try:
             assert ready.wait(30)
-            during = search.search("term", as_of="2011-06-01", authority_id=authority)
-            assert during["hits"] == initial["hits"]
+            def query():
+                start = time.monotonic()
+                result = search.search("term", as_of="2011-06-01", authority_id=authority)
+                assert result["coverage"]["status"] == "available"
+                assert result["hits"] == initial["hits"]
+                return round(time.monotonic() - start, 3)
+
+            with ThreadPoolExecutor(max_workers=5) as readers:
+                futures = [readers.submit(query) for _ in range(5)]
+                query_seconds = [item.result(timeout=25) for item in futures]
+            assert not future.done()  # All five complete while rebuild still holds its guard.
             incomplete = PublicSearchService(URL, rebuilding[0], release, runtime).search("Birinci")
             assert incomplete["coverage"]["status"] == "unavailable" and not incomplete["hits"]
         finally:
@@ -108,20 +117,44 @@ def test_real_index_build_rebuild_failure_and_revocation(authorized_set, tmp_pat
     assert partial["coverage"]["status"] == "unavailable"
     assert search.search("term", as_of="2011-06-01", authority_id=authority)["hits"] == initial["hits"]
 
-    change_second(fixture, "rights")
+    # A writer remains excluded through the whole build. Observe PostgreSQL's
+    # actual wait, then release the build and wait for the revocation to commit.
+    # Searches after that commit must reject all three completed generations.
+    ready.clear()
+    proceed.clear()
+    with monkeypatch.context() as patch, ThreadPoolExecutor(max_workers=2) as pool:
+        patch.setattr(IndexTransport, "request", hold)
+        future = pool.submit(build_index, runtime, URL, release)
+        try:
+            assert ready.wait(30)
+            with observe_identity_lock(fixture["app"].state.store.engine) as observed:
+                start = time.monotonic()
+                writer = pool.submit(change_second, fixture, "rights")
+                assert observed[0].wait(5)
+                assert wait_until_blocked(fixture["app"].state.store.engine, observed[1][0])
+                assert not writer.done()
+                proceed.set()
+                third = future.result(timeout=30)
+                writer.result(timeout=10)
+                revocation_seconds = round(time.monotonic() - start, 3)
+        finally:
+            proceed.set()
     with monkeypatch.context() as patch:
         patch.setattr(PublicSearchService, "_read_json", lambda *args: pytest.fail("Revoked release contacted OpenSearch"))
         assert search.search("Birinci")["coverage"]["status"] == "unavailable"
-        assert not PublicSearchService(URL, second["index"], release, runtime).search("Birinci")["hits"]
+        for built in (second, third):
+            assert not PublicSearchService(URL, built["index"], release, runtime).search("Birinci")["hits"]
         patch.setattr(IndexTransport, "request", lambda *args, **kwargs: pytest.fail("Revoked build contacted OpenSearch"))
         with pytest.raises(IndexBuildError) as revoked:
             build_index(runtime, URL, release)
         assert revoked.value.stage == "authorization"
     report = {"status": "passed", "synthetic_only": True, "release_id": release,
               "document_count": first["document_count"], "documents_sha256": first["documents_sha256"],
-              "first_build_seconds": build_seconds, "indexes_built": 2, "partial_indexes_retained_until_cleanup": 1,
+              "first_build_seconds": build_seconds, "indexes_built": 3,
+              "private_ledger": "postgresql", "concurrent_searches": 5, "search_seconds_during_rebuild": query_seconds,
+              "revocation_wait_and_commit_seconds": revocation_seconds, "partial_indexes_retained_until_cleanup": 1,
               "checks": {name: True for name in ("exact_signed_passages", "historical_interval_filter", "lexical_query",
-                  "old_search_during_rebuild", "building_index_denied", "same_inventory_new_index", "write_block_enforced",
+                  "five_searches_during_locked_rebuild", "revocation_wait_observed_in_postgres", "building_index_denied", "same_inventory_new_index", "write_block_enforced",
                   "writable_index_denied", "real_bulk_item_error_denied", "old_index_preserved_on_failure",
-                  "second_source_revocation_blocks_both_indexes_and_rebuild")}}
+                  "second_source_revocation_blocks_all_indexes_and_rebuild")}}
     print("SEARCH_INDEX_DRILL_REPORT=" + json.dumps(report, sort_keys=True))

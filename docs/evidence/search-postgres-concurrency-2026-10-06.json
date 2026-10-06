@@ -1,0 +1,90 @@
+{
+  "checkout_commit": "41ce736510d78e0899204d12cbabbc08a59326ac",
+  "checkout_dirty": true,
+  "cleanup": {
+    "complete": true
+  },
+  "finished_at": "2026-10-06T11:07:42.671711+00:00",
+  "host": {
+    "architecture": "arm64",
+    "system": "Darwin"
+  },
+  "images": {
+    "opensearch": "sha256:e96cc6ae1500a073d973c0906f30f7cf4d9c461f32f855f9242a2da933660cdd",
+    "postgres": "sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "test": "sha256:129df5d096cbe584caa73587d23d6a6630b33f5e842255e8a2d94ef10afbc3d0"
+  },
+  "not_qualified": [
+    "real legal/source rights",
+    "production capacity",
+    "retrieval recall or adverse authority coverage",
+    "embedding/reranker quality",
+    "five model jobs during reindexing",
+    "representative PostgreSQL lock latency or production revocation SLA"
+  ],
+  "resource_limits": {
+    "driver": {
+      "cpus": "2.0",
+      "mem_limit": "1g",
+      "pids_limit": 256
+    },
+    "opensearch": {
+      "cpus": "2.0",
+      "mem_limit": "1536m",
+      "pids_limit": 256
+    },
+    "postgres": {
+      "cpus": "2.0",
+      "mem_limit": "512m",
+      "pids_limit": 256
+    }
+  },
+  "schema_version": "lawyer-search-index-drill-v2",
+  "source": {
+    "application": {
+      "files": 97,
+      "sha256": "491639b54d8a2ed69845f4db35010b7d7a918a26e8f36399248ce06c6d5bd582"
+    },
+    "tests": {
+      "files": 64,
+      "sha256": "e3fbee50715e0d3ca4b6dd2f996e748a51dc30f38ba5327149ea0506a43734e8"
+    }
+  },
+  "started_at": "2026-10-06T11:05:35.145190+00:00",
+  "status": "passed",
+  "synthetic_only": true,
+  "workload": {
+    "checks": {
+      "building_index_denied": true,
+      "exact_signed_passages": true,
+      "five_searches_during_locked_rebuild": true,
+      "historical_interval_filter": true,
+      "lexical_query": true,
+      "old_index_preserved_on_failure": true,
+      "real_bulk_item_error_denied": true,
+      "revocation_wait_observed_in_postgres": true,
+      "same_inventory_new_index": true,
+      "second_source_revocation_blocks_all_indexes_and_rebuild": true,
+      "writable_index_denied": true,
+      "write_block_enforced": true
+    },
+    "concurrent_searches": 5,
+    "document_count": 8,
+    "documents_sha256": "66560a9b63226bdb50b96d36823673152e7d69ae9d17346b431418571dbeca6b",
+    "first_build_seconds": 1.963,
+    "indexes_built": 3,
+    "partial_indexes_retained_until_cleanup": 1,
+    "private_ledger": "postgresql",
+    "release_id": "082eb40565268c122eb3555d518053e3b554ff1d3d4e23ee073e24936f0f8622",
+    "revocation_wait_and_commit_seconds": 0.498,
+    "search_seconds_during_rebuild": [
+      24.303,
+      21.851,
+      24.305,
+      24.295,
+      24.301
+    ],
+    "status": "passed",
+    "synthetic_only": true
+  }
+}
