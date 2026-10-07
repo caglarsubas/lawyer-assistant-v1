@@ -1,5 +1,66 @@
 # Verification record — 7 October 2026
 
+## R05A opt-in review-informed proposals — 7 October 2026 (Asia/Shanghai)
+
+PR #20 merged as `e82e33c9d2d6aff0d416984c1d271ca4eb93adfb`; its PR checks
+and [exact post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37602794917)
+passed. This packet connects up to five explicitly selected immutable review
+findings to bounded local-model proposals, actual permitted edits, manual/unresolved
+responses and accepted-candidate provenance. It grants no finding-resolution or
+legal-review authority. Adoption creates a new unreviewed Needs review version.
+
+- **293 relevant backend checks passed in 34.76s**, covering feedback, existing
+  workbench/proposals/reviews, provider, shared jobs, workspace, governance, research
+  context and assistant. Cases include strict selection bounds, foreign/stale reviews,
+  server-owned prose, exact content/recipe/head/hash pins, no implicit feedback,
+  complete typed responses, actual versus no-op edits, fixed inputs, declared paths,
+  rejected repair-pass lineage, cancellation and in-flight/completed invalidation.
+  Mock HTTP verifies the complete measured envelope and unchanged relay acceptance;
+  one unit below its context bound fails before transport. DOCX includes selected
+  feedback and its original-review lineage; manual revisions preserve provenance.
+- **117 frontend tests passed** and strict TypeScript/Vite build passed. Main JS
+  is 474.59 KB / 135.26 KB gzip. **41 deployment contracts passed in 0.328s**;
+  repository-wide Ruff passed with the CI configuration. No dependency, migration,
+  CI job, timeout, retry or worker was added. Full backend execution remains required
+  in hosted CI rather than being repeated locally.
+- **202 isolated Linux checks passed in 25.18s**, with matching application/test
+  fingerprints. The preloaded development runtime was refreshed offline using
+  unchanged dependency manifests. Its disposable non-root container had no network,
+  ports or host mounts, read-only root, dropped capabilities, no-new-privileges and
+  CPU/memory/PID limits. Cleanup passed. This is not a fresh production-image build
+  or performance/capacity qualification.
+- **Four real PostgreSQL races passed in 1.63s**, using randomly named disposable
+  child databases: competing review decisions, identical review retries, and paired
+  adoption contenders with and without selected feedback. Competitors were observed
+  waiting on the matter lock. One adoption appended version 2; the other returned
+  409, preserving version 1 and its review. Cleanup passed. These cases run in the
+  existing PostgreSQL CI job.
+- The isolated browser rehearsal used invented documents and a mocked local model.
+  It verified no preselected findings, original-passage inspection, selection of two
+  findings, one accounted call, typed response/edit links and explicit adoption.
+  Version 2 remained Needs review/unreviewed with AI and feedback provenance;
+  version 1 retained its original change request and withheld assessment. Default
+  details were collapsed in the 1280 × 720 three-panel view. The final run captured
+  no console errors; the tab and both loopback services closed. HTTP inspection of
+  persisted records and DOCX confirmed the same version/feedback/prompt lineage.
+
+[Retained synthetic verification](evidence/private-analysis-feedback-verification-2026-10-07.json)
+binds application, test and frontend fingerprints, image, checks and cleanup to the
+dirty branch based on PR #20's exact merge, before this packet's commit. Browser QA
+initially caught a null-selection crash after adoption; it was corrected, covered
+by an unreviewed-version component regression test and rechecked in a fresh fixture.
+A later compatibility check found legacy proposal patches lacking feedback fields;
+the optional-field guard and legacy-history rendering regression passed in the
+final frontend suite/build. The verification record separately pins the browser
+rehearsal and final frontend fingerprints. Initial test route/check-selection and
+lint-configuration mistakes were corrected
+before final verification. The existing Starlette/httpx warning is nonblocking.
+Root `.env` and real provider keys were not read or changed. No client data, real
+provider call, source/legal approval, graph activation or live app deployment
+occurred. R05A remains partial: representative semantic/adverse adjudication,
+reviewed public/history synthesis, broader correction, calibrated Standard/Deep
+and measured lawyer benefit remain open. See [feedback contract](ANALYSIS_FEEDBACK.md).
+
 ## R05A immutable private-draft lawyer review — 7 October 2026 (Asia/Shanghai)
 
 PR #19 merged as `c96bbd03ac0e8f79c9ecae7bad132cbf15282cad`; its three PR checks

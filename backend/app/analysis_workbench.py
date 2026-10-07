@@ -379,9 +379,21 @@ def _export_lines(content, snapshot, version, freshness, review=None):
     if content.get("ai_assistance"):
         lines[1] = "GİZLİ — MODEL ÖNERİSİNDEN UYARLANMIŞ KOŞULLU ANALİZ TASLAĞI"
         lines.extend(["Model katkısı (hukuki inceleme değildir): " + json.dumps(
-            {key: value for key, value in content["ai_assistance"].items() if key != "review_notes"}, ensure_ascii=False)])
+            {key: value for key, value in content["ai_assistance"].items()
+             if key not in {"review_notes", "review_feedback", "feedback_responses"}}, ensure_ascii=False)])
         lines.extend(f"Alınan model önerisinin doğrulanmamış inceleme notu, geçiş {item['pass']} / {item['target_id']}: {item['text']}"
                      for item in content["ai_assistance"].get("review_notes", []))
+        feedback = content["ai_assistance"].get("review_feedback")
+        if feedback:
+            lines.extend(["Seçilen inceleme bulguları ve doğrulanmamış model yanıtları; bulgular otomatik giderilmiş sayılmaz.",
+                          f"Kaynak inceleme: {feedback['review_id']} / sürüm: {feedback['source_version_id']} / içerik: {feedback['content_sha256']}"])
+            lines.extend(f"Avukat bulgusu {item['finding_id']} / {item['target_id']} / {item['severity']}: {item['text']} "
+                         f"İstenen değişiklik: {item['suggested_change']} / dayanaklar: {', '.join(item['evidence_ids'])}"
+                         for item in feedback["findings"])
+            labels = {"proposed_change": "Düzenleme adayı", "requires_manual_work": "Elle çalışma gerekli", "unresolved": "Çözülmedi"}
+            lines.extend(f"Model yanıtı {item['finding_id']} / {labels[item['outcome']]}: {item['text']} "
+                         f"Bağlanan düzenlemeler: {', '.join(item['edited_targets']) or 'Yok'} / dayanaklar: {', '.join(item['evidence_ids'])}"
+                         for item in content["ai_assistance"].get("feedback_responses", []))
     if review and review["latest"]:
         event = review["latest"]
         lines.extend(["Avukat incelemesi: " + review["effective_state"] + " / kapsam: " + review["scope"],

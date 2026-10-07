@@ -52,6 +52,12 @@ Open **http://127.0.0.1:5173** and sign in with `demo` / `demo-local-only`. Use 
 
 The demo provides matter creation, file intake and passage inspection, a fact/allegation/assumption ledger, persistent corrections, queued research, independently queried graph catalogs, evidence-linked quotations, claim review, staleness after evidence changes, and DOCX/PDF export. Its lawyer-authored workspace adds separate scenarios, contradiction links, supporting/adverse argument notes, immutable draft versions and curated firm playbooks. The graph explorer exposes ontology categories and honest coverage gaps. The gateway interface evaluates and approves exact outbound requests; execution requires separately configured gateway services.
 
+Private structured analyses now support [version-bound lawyer review](docs/ANALYSIS_REVIEWS.md)
+and [opt-in review-informed local proposals](docs/ANALYSIS_FEEDBACK.md). Lawyers
+select findings, inspect linked candidate edits and explicitly adopt a new Needs
+review draft. Prior findings stay immutable; structural links do not prove a
+legally correct repair.
+
 Governance APIs provide legal holds, retention-policy history, reversible archive/restore, dependency impact and re-review marking. Physical erasure remains disabled. A separate offline operator CLI provisions users and explicit matter memberships without resetting existing credentials. See [governance](docs/GOVERNANCE.md) and [operations](docs/OPERATIONS.md).
 
 No LLM or legal corpus is necessary to try the workflow: extractive mode presents verbatim document evidence and explicitly withholds legal conclusions. Unconfigured capabilities are visible; they are not silently replaced with cloud services.

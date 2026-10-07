@@ -8,6 +8,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import Field
 from sqlalchemy import select
 
+from . import analysis_reviews
+from .analysis_feedback import FeedbackSelection, resolve_feedback
 from .analysis_proposals import (
     RECIPE,
     apply_patch,
@@ -42,6 +44,7 @@ class SuggestionInput(StrictInput):
     version_id: str = Field(min_length=1, max_length=64)
     request_id: str = Field(pattern=r"^[a-f0-9]{32}$")
     mode: Literal["single", "repair"] = "single"
+    review_feedback: FeedbackSelection | None = None
 
 
 class AdoptInput(StrictInput):
@@ -76,11 +79,28 @@ def _source(app, session, matter_id, user, state):
         raise HTTPException(409, "Analiz sürümü değişti; öneri için yeni bir çalışma başlatın.")
     if state.get("source_review_id") != review_pin(store, session, matter_id, row.id, state["source_version_id"], user):
         raise HTTPException(409, "Avukat incelemesi değişti; öneri için yeni bir çalışma başlatın.")
+    if state.get("source_review_id") and state.get("source_review_recipe") != analysis_reviews.RECIPE:
+        raise HTTPException(409, "İnceleme ölçütleri değişti; yeni bir inceleme ve öneri gerekli.")
     freshness = _freshness(store, session, matter_id, user, state["source_content"])
     if freshness["status"] == "stale":
         raise HTTPException(409, "Önerinin özel dayanakları değişti; önce analiz sürümünü yenileyin.")
     if state["provider_pin"] != provider_pin(app):
         raise HTTPException(409, "Model veya öneri politikası değişti; yeni bir öneri başlatın.")
+    if state.get("review_feedback"):
+        feedback = state["review_feedback"]
+        selection = FeedbackSelection(review_id=feedback["review_id"],
+                                      finding_indices=[item["index"] for item in feedback["findings"]])
+        snapshot, checksum = resolve_feedback(store, session, matter_id, row.id, state["source_version_id"], user, selection)
+        if snapshot != feedback or checksum != state.get("review_feedback_sha256"):
+            raise HTTPException(409, "Seçilen inceleme bulgularının sürüm ve içerik bağı doğrulanamadı.")
+        candidate = state.get("candidate")
+        if candidate:
+            selected_pass = state.get("feedback_response_pass")
+            iteration = next((item for item in state["iterations"] if item["pass"] == selected_pass), None)
+            if (selected_pass is None and candidate["revision_comparison"]["changed_sections"]) or (
+                    selected_pass is not None and (not iteration or iteration["outcome"] != "accepted_structural_patch"
+                    or iteration["patch"]["feedback_responses"] != state.get("feedback_responses"))):
+                raise HTTPException(409, "Bulgu yanıtlarının saklanan aday geçişi doğrulanamadı.")
     return row
 
 
@@ -111,7 +131,7 @@ def _require_job(store, session, matter_id, analysis_id, job_id, user):
     return row
 
 
-def _progress(app, job_id, candidate, iterations, notes, *, completed=False):
+def _progress(app, job_id, candidate, iterations, notes, responses, response_pass, *, completed=False):
     app.state.research_owner()
     store = app.state.store
     with store.session() as session:
@@ -124,7 +144,8 @@ def _progress(app, job_id, candidate, iterations, notes, *, completed=False):
         ensure_active(state)
         _source(app, session, row.matter_id, user, state)
         state.update(candidate=candidate, candidate_sha256=digest(canonical(candidate)),
-                     iterations=iterations, review_notes=notes)
+                     iterations=iterations, review_notes=notes,
+                     feedback_responses=responses, feedback_response_pass=response_pass)
         if completed:
             state.update(status="completed", phase="finished", finished_at=now())
         else:
@@ -150,23 +171,25 @@ def run_suggestion(app, job_id):
         store.update(row, state)
         session.commit()
         matter_id = row.matter_id
-    iterations, notes = [], []
+    iterations, notes, responses, response_pass = [], [], [], None
+    feedback = state.get("review_feedback")
     for index in range(state["max_passes"]):
         checkpoint(app, job_id, "suggesting" if index == 0 else "repairing")
         with store.session() as session:
             user = session.get(User, row.owner_id)
             _source(app, session, matter_id, user, state)
-        messages = proposal_messages(best, repair=index > 0)
+        messages = proposal_messages(best, repair=index > 0, review_feedback=feedback)
         measured = prompt_measurement(messages)
         remaining = (datetime.fromisoformat(state["deadline_at"]) - datetime.now(timezone.utc)).total_seconds()
         if remaining <= 0:
             raise JobStopped("timed_out")
         started = time.monotonic()
-        raw = app.state.provider.suggest_analysis(best, repair=index > 0, budget_seconds=min(120, remaining))
+        options = {"review_feedback": feedback} if feedback else {}
+        raw = app.state.provider.suggest_analysis(best, repair=index > 0, budget_seconds=min(120, remaining), **options)
         elapsed = time.monotonic() - started
         checkpoint(app, job_id, "checking")
         patch = parse_patch(raw)
-        body = apply_patch(best, patch)
+        body = apply_patch(best, patch, review_feedback=feedback)
         with store.session() as session:
             user = session.get(User, row.owner_id)
             _source(app, session, matter_id, user, state)
@@ -180,10 +203,12 @@ def run_suggestion(app, job_id):
         notes.extend({**item.model_dump(), "pass": index + 1} for item in patch.review_notes)
         if accepted:
             best = candidate
-        _progress(app, job_id, best, iterations, notes)
+            responses = [item.model_dump() for item in patch.feedback_responses]
+            response_pass = index + 1 if feedback else None
+        _progress(app, job_id, best, iterations, notes, responses, response_pass)
         if not critical_ids(best):
             break
-    _progress(app, job_id, best, iterations, notes, completed=True)
+    _progress(app, job_id, best, iterations, notes, responses, response_pass, completed=True)
 
 
 def suggestion_router():
@@ -213,9 +238,13 @@ def suggestion_router():
                 state = {"purpose": PURPOSE, "analysis_id": row.id, "source_revision": body.expected_revision,
                          "source_version_id": body.version_id, "source_content": content,
                          "source_review_id": review_pin(store, session, matter_id, row.id, body.version_id, user),
+                         "source_review_recipe": analysis_reviews.RECIPE,
                          "provider_pin": provider_pin(app), "mode": body.mode,
                          "max_passes": 2 if body.mode == "repair" else 1}
                 _source(app, session, matter_id, user, state)
+                if body.review_feedback:
+                    state["review_feedback"], state["review_feedback_sha256"] = resolve_feedback(
+                        store, session, matter_id, row.id, body.version_id, user, body.review_feedback)
                 if not content["evidence"] or not content["applications"]:
                     raise HTTPException(422, "Model önerisi için özgün pasaj ve uygulama adımı bağlayın.")
                 if app.state.provider.configuration_issues():
@@ -296,6 +325,10 @@ def suggestion_router():
                 "prompts": [item["prompt"] for item in state["iterations"]],
                 "review_notes": state["review_notes"],
                 "adopted_by": user.id, "scope": "private_structural_proposal_not_legal_review"})
+            if state.get("review_feedback"):
+                content["ai_assistance"].update(
+                    review_feedback=state["review_feedback"], review_feedback_sha256=state["review_feedback_sha256"],
+                    feedback_responses=state["feedback_responses"], feedback_response_pass=state["feedback_response_pass"])
             row = _write_version(store, session, user, "practice_analysis", inputs, content, matter_id, row)
             state["adopted_version_id"] = store.decode(row)["latest_version_id"]
             store.update(job, state)

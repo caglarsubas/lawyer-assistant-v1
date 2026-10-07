@@ -24,7 +24,7 @@ export interface AnalysisContent extends Omit<AnalysisForm, 'evidence'> {
   evidence: (AnalysisSelection & { document_id: string; document_revision: number; document_sha256: string | null; name: string; locator: Passage['locator']; passage_sha256: string; quote_sha256: string; text: string; full_passage_length: number })[];
   fact_snapshots: { id: string; revision: number; text: string; status: string; evidence_id: string | null }[];
   checks: AnalysisChecks; status: 'needs_review' | 'reviewed' | 'stale'; authorship: 'user' | 'user_with_ai_assistance' | 'model_proposal'; legal_authority: false;
-  ai_assistance?: { job_id: string; source_version_id: string; passes: number; provider: { model: string }; review_notes?: { target_id: string; text: string; pass: number }[] };
+  ai_assistance?: { job_id: string; source_version_id: string; passes: number; provider: { model: string }; review_notes?: { target_id: string; text: string; pass: number }[]; review_feedback?: AnalysisFeedback; feedback_responses?: FeedbackResponse[]; feedback_response_pass?: number | null };
   revision_comparison: { previous_version_id: string | null; changed_sections: string[]; changed_dependency_groups: string[]; checks_no_longer_triggered: string[]; new_check_ids: string[]; scope: string };
 }
 export interface AnalysisRecord extends AnalysisContent {
@@ -72,7 +72,14 @@ export interface AnalysisSuggestion {
   candidate?: AnalysisContent; candidate_sha256?: string; can_adopt: boolean; adopted_version_id?: string;
   freshness: AnalysisFreshness; error?: string;
   review_notes?: { target_id: string; text: string; evidence_ids: string[]; pass: number }[];
-  iterations?: { pass: number; provider_seconds: number; prompt: { utf8_bytes: number; messages_sha256: string; completion_tokens: number }; outcome: string; new_critical_check_ids: string[]; checks: AnalysisChecks }[];
+  review_feedback?: AnalysisFeedback; feedback_responses?: FeedbackResponse[]; feedback_response_pass?: number | null;
+  iterations?: { pass: number; provider_seconds: number; prompt: { utf8_bytes: number; messages_sha256: string; completion_tokens: number }; outcome: string; new_critical_check_ids: string[]; checks: AnalysisChecks; patch?: { feedback_responses?: FeedbackResponse[] } }[];
+}
+
+export interface FeedbackResponse { finding_id: string; outcome: 'proposed_change' | 'requires_manual_work' | 'unresolved'; edited_targets: string[]; text: string; evidence_ids: string[] }
+export interface AnalysisFeedback {
+  review_id: string; source_version_id: string; content_sha256: string; review_recipe: string;
+  findings: (AnalysisReviewFinding & { finding_id: string; index: number; editable_targets: string[] })[];
 }
 
 export type ReviewCriterionKey = 'sources' | 'reasoning' | 'fact_roles' | 'limits' | 'ai_contribution';

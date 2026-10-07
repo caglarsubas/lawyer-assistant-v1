@@ -2,6 +2,7 @@
 
 from concurrent.futures import ThreadPoolExecutor
 from threading import Barrier, Event
+from uuid import uuid4
 
 import pytest
 from fastapi.testclient import TestClient
@@ -89,7 +90,6 @@ def test_analysis_revision_conflicts_preserve_one_immutable_history(workspace, m
 
 @pytest.mark.parametrize('replay', [False, True])
 def test_review_head_serializes_competing_decisions_and_identical_replays(workspace, monkeypatch, replay):
-    from uuid import uuid4
 
     from sqlalchemy import func, select
     from test_analysis_reviews import review_request
@@ -139,7 +139,8 @@ def test_review_head_serializes_competing_decisions_and_identical_replays(worksp
     assert len(history) == 1 and history[0]['id'] == record['latest_version_id']
 
 
-def test_proposal_adoption_race_appends_exactly_one_immutable_version(workspace, monkeypatch):
+@pytest.mark.parametrize('feedback', [False, True])
+def test_proposal_adoption_race_appends_exactly_one_immutable_version(workspace, monkeypatch, feedback):
     import json
 
     from sqlalchemy import select
@@ -167,9 +168,25 @@ def test_proposal_adoption_race_appends_exactly_one_immutable_version(workspace,
                'conclusion': {'text': 'SYNTHETIC provisional', 'application_ids': ['a1'],
                               'alternative_ids': ['alt1'], 'next_step': 'SYNTHETIC inspect source'}}
     record, endpoint = prepare((app, client, base, payload), monkeypatch, incomplete=False)
-    monkeypatch.setattr(app.state.provider, 'suggest_analysis', lambda *_a, **_k: json.dumps({
-        'application_updates': [{'id': 'a1', 'rationale': 'SYNTHETIC proposed wording'}]}))
-    queued, _ = start(client, endpoint, record)
+    output = {'application_updates': [{'id': 'a1', 'rationale': 'SYNTHETIC proposed wording'}]}
+    if feedback:
+        from test_analysis_reviews import review_request
+
+        reviews = endpoint.removesuffix('/suggestions') + '/reviews'
+        review_body, _ = review_request(client, reviews, record, decision='changes_requested')
+        review_body['findings'][0]['target_id'] = 'application:a1'
+        reviewed = client.post(reviews, json=review_body)
+        assert reviewed.status_code == 201, reviewed.text
+        event = reviewed.json()
+        output['feedback_responses'] = [{'finding_id': 'finding:0', 'outcome': 'proposed_change',
+                                         'edited_targets': ['application:a1'], 'text': 'SYNTHETIC proposed repair',
+                                         'evidence_ids': ['pg-clause']}]
+    monkeypatch.setattr(app.state.provider, 'suggest_analysis', lambda *_a, **_k: json.dumps(output))
+    if feedback:
+        queued = client.post(endpoint, json={'expected_revision': record['revision'], 'version_id': record['latest_version_id'],
+                            'request_id': uuid4().hex, 'review_feedback': {'review_id': event['id'], 'finding_indices': [0]}}).json()
+    else:
+        queued, _ = start(client, endpoint, record)
     job = finished(client, endpoint, queued['id'])
     assert job['can_adopt']
     locked, release = Event(), Event()
@@ -204,6 +221,11 @@ def test_proposal_adoption_race_appends_exactly_one_immutable_version(workspace,
     assert history[1]['content']['applications'] == record['applications']
     assert history[0]['content']['authorship'] == 'user_with_ai_assistance'
     assert history[0]['content']['status'] == 'needs_review'
+    if feedback:
+        assert history[0]['review']['effective_state'] == 'unreviewed'
+        assert history[1]['review']['latest']['id'] == event['id']
+        assert history[1]['review']['effective_state'] == 'changes_requested'
+        assert history[0]['content']['ai_assistance']['feedback_responses'] == output['feedback_responses']
 
 
 def test_stop_commit_first_blocks_publication(workspace):

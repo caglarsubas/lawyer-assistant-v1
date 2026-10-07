@@ -14,7 +14,10 @@ passes against fixed private inputs, declared-structure checks, job checkpoints 
 human adoption. [Version-bound human review](ANALYSIS_REVIEWS.md) now records
 criteria/findings, conditional private-draft decisions and source/review dependency
 revalidation without changing original text or machine checks. Human change requests
-withhold the conclusion; new versions require fresh review. Full public/historical legal synthesis, semantic/adverse correction,
+withhold the conclusion; new versions require fresh review. [Opt-in review-informed
+proposals](ANALYSIS_FEEDBACK.md) now bind selected findings to actual permitted edits,
+manual-work requirements or unresolved outcomes, preserving review history and
+accepted-pass provenance. They do not establish semantic repair. Full public/historical legal synthesis, semantic/adverse correction,
 qualified Standard/Deep modes and every BYOK adapter remain pending; these goals
 are not satisfied merely by a structurally complete draft or a repeated model call.
 

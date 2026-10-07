@@ -1,0 +1,140 @@
+{
+  "schema": "private-analysis-feedback-verification-v1",
+  "recorded_at": "2026-10-07T10:14:58.816234+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "e82e33c9d2d6aff0d416984c1d271ca4eb93adfb",
+  "source": {
+    "application": {
+      "sha256": "a3ff4a6fe7d3e5448b1b57a00acb8e07c1ffcb093b33b5823bf0192945df55e5",
+      "files": 111
+    },
+    "tests": {
+      "files": 74,
+      "sha256": "2a42ece89ecb1283f0544c6b38fd899e540d1d87da3c4448a1d03107c661066c"
+    }
+  },
+  "frontend_source": {
+    "files": 56,
+    "sha256": "08923a0f0a146effdca8c260a0897b2b757dc70d502a718d83a7434d471bd482"
+  },
+  "host_backend": {
+    "passed": 293,
+    "pytest_seconds": 34.76
+  },
+  "frontend": {
+    "passed": 117,
+    "build": "strict TypeScript and Vite passed",
+    "main_js_kb": 474.59,
+    "main_js_gzip_kb": 135.26
+  },
+  "deployment_contracts": {
+    "passed": 41,
+    "seconds": 0.328
+  },
+  "lint": "repository-wide Ruff passed with CI configuration",
+  "linux": {
+    "schema": "private-analysis-feedback-verification-v1",
+    "recorded_at": "2026-10-07T10:06:40.513291+00:00",
+    "synthetic_only": true,
+    "production_qualified": false,
+    "base_commit": "e82e33c9d2d6aff0d416984c1d271ca4eb93adfb",
+    "checkout_dirty": true,
+    "host": {
+      "system": "Darwin",
+      "architecture": "arm64"
+    },
+    "test_image": "sha256:66628bed4acfec6ee1dc86f1b0969e3076e61396412a8d738218f2915f71ddd5",
+    "source": {
+      "application": {
+        "sha256": "a3ff4a6fe7d3e5448b1b57a00acb8e07c1ffcb093b33b5823bf0192945df55e5",
+        "files": 111
+      },
+      "tests": {
+        "files": 74,
+        "sha256": "2a42ece89ecb1283f0544c6b38fd899e540d1d87da3c4448a1d03107c661066c"
+      }
+    },
+    "limits": {
+      "network": "none",
+      "host_ports": [],
+      "host_mounts": [],
+      "read_only": true,
+      "cpu": 2,
+      "memory_bytes": 805306368,
+      "pids": 128,
+      "tmpfs_bytes": 268435456
+    },
+    "linux_tests": {
+      "exit_code": 0,
+      "passed": 202,
+      "pytest_seconds": 25.18,
+      "container_wall_seconds": 27.854
+    },
+    "cleanup_verified": true,
+    "not_established": [
+      "Turkish legal accuracy or semantic completeness",
+      "real-provider authentication or model performance",
+      "production capacity or latency",
+      "public authority context or adverse recall",
+      "real source/legal approval",
+      "live application deployment"
+    ]
+  },
+  "postgres": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "four real PostgreSQL review-head and proposal-adoption races in randomly named disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 1.901,
+    "passed": 4,
+    "pytest_seconds": 1.63
+  },
+  "browser": {
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "initial_findings_selected": 0,
+    "selected_indices": [
+      0,
+      1
+    ],
+    "mock_calls": 1,
+    "iterations": 1,
+    "exact_prompt_measurement": true,
+    "adopted_version": 2,
+    "adopted_state": "needs_review",
+    "adopted_review": "unreviewed",
+    "previous_version_review": "changes_requested",
+    "feedback_provenance_preserved": true,
+    "original_passage_inspected": true,
+    "default_details_collapsed": true,
+    "final_console_errors": 0,
+    "corrected_initial_issue": "Null selection when a new version has no review; regression test and a fresh end-to-end rehearsal passed.",
+    "screenshot_sha256": "fcd5d2a7af6b30e643bc9863879c3dc90293e2683f5c275b77fdc25ca7c98e01",
+    "docx_sha256": "85384aa987757ced13f617641fb6043820039086b869be901d8bf035cdda28b9",
+    "tab_closed": true,
+    "services_closed": true,
+    "listeners_verified_closed": [
+      18091,
+      15187
+    ],
+    "frontend_source_at_rehearsal": {
+      "files": 56,
+      "sha256": "00c689ffc55afe3ded5acc28644f9918109a5939f874f3307e1b297a98dc6fba"
+    },
+    "subsequent_compatibility_fix": "Optional feedback fields in legacy proposal patches; 117 component tests and strict build passed after the guard. New-feedback adoption behavior unchanged."
+  },
+  "root_environment_read_or_modified": false,
+  "real_provider_calls": 0,
+  "not_established": [
+    "Turkish semantic/legal accuracy or correction adequacy",
+    "real-model capability or preparation-time benefit",
+    "public/historical/adverse corpus qualification",
+    "Standard/Deep or BYOK qualification",
+    "production capacity or live app deployment"
+  ]
+}
