@@ -19,7 +19,7 @@ legal-review authority. Adoption creates a new unreviewed Needs review version.
   one unit below its context bound fails before transport. DOCX includes selected
   feedback and its original-review lineage; manual revisions preserve provenance.
 - **117 frontend tests passed** and strict TypeScript/Vite build passed. Main JS
-  is 474.56 KB / 135.26 KB gzip. **41 deployment contracts passed in 0.328s**;
+  is 474.59 KB / 135.26 KB gzip. **41 deployment contracts passed in 0.328s**;
   repository-wide Ruff passed with the CI configuration. No dependency, migration,
   CI job, timeout, retry or worker was added. Full backend execution remains required
   in hosted CI rather than being repeated locally.
