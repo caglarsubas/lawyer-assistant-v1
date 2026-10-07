@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { AnalysisCheckPanel, AnalysisContentView } from './AnalysisPanel';
+import { AnalysisCheckPanel, AnalysisContentView } from './AnalysisView';
 import { AnalysisEditor } from './AnalysisEditor';
 import { analysisForm, type AnalysisContent } from './analysisTypes';
 import type { Matter } from '../../types';

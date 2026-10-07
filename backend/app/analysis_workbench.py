@@ -301,6 +301,8 @@ def _content(store, session, matter_id, user, body, previous=None):
                    contradiction_snapshots=_contradictions(store, session, matter_id, user.firm_id, fact_ids),
                    schema_version="private-analysis.v1", authorship="user", authored_by=user.id,
                    status="needs_review", legal_authority=False)
+    if (previous or {}).get("ai_assistance"):
+        content.update(authorship="user_with_ai_assistance", ai_assistance=previous["ai_assistance"])
     content["checks"] = check_rationale(content)
     old_checks = {item["id"] for item in (previous or {}).get("checks", {}).get("defects", [])}
     new_checks = {item["id"] for item in content["checks"]["defects"]}
@@ -360,6 +362,12 @@ def _export_lines(content, snapshot, version, freshness):
              f"Oluşturulma: {version.created_at}", f"Güncellik: {freshness['status']}", *freshness["reasons"],
              "Mesele: " + content["issue"], "Süreç: " + content["posture"],
              "Olay tarihi: " + (content["event_date"] or "Bilinmiyor"), "Öncüller"]
+    if content.get("ai_assistance"):
+        lines[1] = "GİZLİ — MODEL ÖNERİSİNDEN UYARLANMIŞ KOŞULLU ANALİZ TASLAĞI"
+        lines.extend(["Model katkısı (hukuki inceleme değildir): " + json.dumps(
+            {key: value for key, value in content["ai_assistance"].items() if key != "review_notes"}, ensure_ascii=False)])
+        lines.extend(f"Alınan model önerisinin doğrulanmamış inceleme notu, geçiş {item['pass']} / {item['target_id']}: {item['text']}"
+                     for item in content["ai_assistance"].get("review_notes", []))
     facts = {item["id"]: item for item in content["fact_snapshots"]}
     for premise in content["premises"]:
         fact = facts.get(premise["fact_id"], {})

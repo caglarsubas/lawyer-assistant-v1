@@ -249,7 +249,8 @@ def portfolio_router():
                               ("product", "products"), ("research", "research_runs")):
                 result[key] = [{key: value for key, value in store.view(row).items()
                                 if key not in {"passages", "evidence", "original_path"}}
-                               for row in children if row.kind == kind]
+                               for row in children if row.kind == kind
+                               and (kind != "research" or store.decode(row).get("purpose") != "private_analysis_suggestion")]
             result["comments"] = [store.view(row) for row in reversed(children)
                                   if row.kind == "workspace_comment"]
             return result

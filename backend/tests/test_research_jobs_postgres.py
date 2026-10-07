@@ -12,9 +12,9 @@ from test_snapshot_set_postgres import (
 )
 from test_snapshot_set_postgres import postgres_database as database_fixture
 
-from app import analysis_workbench
+from app import analysis_suggestions, analysis_workbench
 from app.config import Settings
-from app.db import Record
+from app.db import Record, User, digest
 from app.main import create_app
 from app.research import publish_product
 from app.research_jobs import JobStopped, coordinator_lease, finish_run, request_stop
@@ -85,6 +85,73 @@ def test_analysis_revision_conflicts_preserve_one_immutable_history(workspace, m
     assert [version['version'] for version in history] == [2, 1]
     assert history[1]['id'] == original['latest_version_id']
     assert history[1]['content']['title'] == payload['title']
+
+
+def test_proposal_adoption_race_appends_exactly_one_immutable_version(workspace, monkeypatch):
+    import json
+
+    from sqlalchemy import select
+    from test_analysis_suggestions import finished, prepare, start
+
+    app, client, matter = workspace
+    base = f'/api/v1/matters/{matter}'
+    text = 'SYNTHETIC private clause — payment depends on delivery.'
+    with app.state.store.session() as session:
+        user = session.scalar(select(User).where(User.username == 'demo'))
+        document = app.state.store.add(session, 'document', user, {
+            'name': 'SYNTHETIC.txt', 'status': 'extracted', 'sha256': digest(text),
+            'passages': [{'id': 'pg-clause', 'text': text, 'locator': 'SYNTHETIC §1'}]}, matter)
+        session.commit()
+    payload = {'title': 'SYNTHETIC proposal race', 'issue': 'SYNTHETIC delivery issue',
+               'evidence': [{'evidence_id': 'pg-clause', 'passage_sha256': digest(text),
+                             'document_revision': document.revision, 'start': 0, 'end': len(text)}],
+               'premises': [{'id': 'p1', 'kind': 'assumption', 'text': 'SYNTHETIC delivery assumption'}],
+               'rules': [{'id': 'r1', 'kind': 'contract_clause', 'text': 'SYNTHETIC payment candidate',
+                          'evidence_ids': ['pg-clause'], 'conditions': [{'id': 'c1', 'text': 'SYNTHETIC delivery'}]}],
+               'applications': [{'id': 'a1', 'rule_id': 'r1', 'premise_ids': ['p1'],
+                                 'rationale': 'SYNTHETIC original', 'assessments': [
+                                     {'condition_id': 'c1', 'status': 'unknown', 'premise_ids': ['p1']}]}],
+               'alternatives': [{'id': 'alt1', 'kind': 'search_gap', 'text': 'SYNTHETIC adverse gap'}],
+               'conclusion': {'text': 'SYNTHETIC provisional', 'application_ids': ['a1'],
+                              'alternative_ids': ['alt1'], 'next_step': 'SYNTHETIC inspect source'}}
+    record, endpoint = prepare((app, client, base, payload), monkeypatch, incomplete=False)
+    monkeypatch.setattr(app.state.provider, 'suggest_analysis', lambda *_a, **_k: json.dumps({
+        'application_updates': [{'id': 'a1', 'rationale': 'SYNTHETIC proposed wording'}]}))
+    queued, _ = start(client, endpoint, record)
+    job = finished(client, endpoint, queued['id'])
+    assert job['can_adopt']
+    locked, release = Event(), Event()
+    write = analysis_suggestions._write_version
+
+    def paused(*args, **kwargs):
+        if args[4].change_note == 'SYNTHETIC first adoption':
+            locked.set()
+            assert release.wait(10)
+        return write(*args, **kwargs)
+
+    monkeypatch.setattr(analysis_suggestions, '_write_version', paused)
+    body = {'expected_revision': record['revision'], 'candidate_sha256': job['candidate_sha256'],
+            'change_note': 'SYNTHETIC first adoption'}
+    url = endpoint + '/' + job['id'] + '/adopt'
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, url, json=body)
+        try:
+            assert locked.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, url, json={**body, 'change_note': 'SYNTHETIC competing adoption'})
+                assert observed[0].wait(5)
+                assert wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, rejected = first.result(timeout=5), second.result(timeout=5)
+    assert accepted.status_code == 201, accepted.text
+    assert rejected.status_code == 409, rejected.text
+    history = client.get(base + '/analyses/' + record['id'] + '/versions').json()
+    assert [item['version'] for item in history] == [2, 1]
+    assert history[1]['content']['applications'] == record['applications']
+    assert history[0]['content']['authorship'] == 'user_with_ai_assistance'
+    assert history[0]['content']['status'] == 'needs_review'
 
 
 def test_stop_commit_first_blocks_publication(workspace):

@@ -157,6 +157,18 @@ be linked explicitly. Missing critical structure withholds the dependent conclus
 a clean structural check still grants no legal approval. Preview performs no write
 or model call. See [workbench contract and API](ANALYSIS_WORKBENCH.md).
 
+For a saved current version, **Yerel modelden düzenleme önerisi** starts a separate
+private suggestion job only on explicit request. One pass is bounded to 120 seconds;
+structural repair allows one additional pass, 240 seconds total, and 1,000 output
+tokens per call. Configured research limits may be lower. The existing shared queue,
+provider checks and exact tunnel exception apply; no cloud fallback is enabled.
+Inspect changes, notes and original passages before adopting with a reason. This
+appends a Needs review version with model attribution and retains the earlier draft.
+Changed inputs/policy, cancellation, timeout or interruption block adoption; partial
+output is labelled. Stop intent does not prove immediate upstream compute cessation.
+Request-ID retries recover the same job; after reloading, inspect proposal history
+before starting an intentional rerun. See [proposal bounds and API](ANALYSIS_SUGGESTIONS.md).
+
 Use **Güncelliği kontrol et** to reload matter inputs and draft freshness. A changed
 fact/document/passage/contradiction/check recipe leaves previous text and versions
 intact, projects Stale and requires review in a new version. Changed selections at

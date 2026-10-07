@@ -32,7 +32,7 @@ export default function PracticePanel({ matter, onChange, userRole }: { matter: 
   }, [base]);
   useEffect(() => { void load(); }, [load]);
   async function saved() { setEditor(null); setNotice('Yeni kayıt veya sürüm saklandı. Önceki sürümler korunur; mevcut hazırlık çıktılarını yeniden inceleyin.'); await load(); await onChange(); }
-  return <section><div className="section-heading"><div><h2>Avukatın çalışma defteri</h2><p className="small muted">Bu bölümdeki metinler sizin katkınızdır; model tarafından üretilmiş veya hukuken doğrulanmış sonuç değildir.</p></div><button className="button secondary" onClick={() => void load()}>Yenile</button></div>
+  return <section><div className="section-heading"><div><h2>Avukatın çalışma defteri</h2><p className="small muted">Avukat notları ve ayrı işaretlenmiş model önerileri. Hukuki değerlendirmeyi ve özgün kaynakları inceleyin; öneriyi yeni taslağa almak hukuki onay değildir.</p></div><button className="button secondary" onClick={() => void load()}>Yenile</button></div>
     {notice && <Notice>{notice}</Notice>}
     <AnalysisPanel key={matter.id} matter={matter} onChange={onChange} />
     {loading ? <Loading label="Çalışma notları açılıyor…" /> : KIND_LIST.map((kind) => <Detail key={kind} title={`${LABELS[kind]} (${data[kind].length})`}>

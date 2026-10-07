@@ -19,6 +19,8 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 from sqlalchemy.orm.exc import StaleDataError
 
+from .analysis_suggestions import PURPOSE as ANALYSIS_SUGGESTION_PURPOSE
+from .analysis_suggestions import suggestion_router
 from .analysis_workbench import analysis_router
 from .assistant import assistant_router
 from .auth import (
@@ -276,6 +278,7 @@ def create_app(settings=None):
     )
     app.state.settings = settings
     app.include_router(analysis_router())
+    app.include_router(suggestion_router())
     app.include_router(practice_router())
     app.include_router(governance_router())
     app.include_router(portfolio_router())
@@ -453,7 +456,7 @@ def create_app(settings=None):
                         if k not in ("passages", "evidence", "original_path")
                     }
                     for row in children
-                    if row.kind == kind
+                    if row.kind == kind and (kind != "research" or store.decode(row).get("purpose") != ANALYSIS_SUGGESTION_PURPOSE)
                 ]
             result['products'] = [effective_product(item, app.state.graph) for item in result['products']]
             return result
