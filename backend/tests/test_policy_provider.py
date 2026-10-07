@@ -1,5 +1,6 @@
 """No live provider calls: adversarial edge policy and consumer contract checks."""
 
+import json
 import socket
 from types import SimpleNamespace
 
@@ -171,6 +172,29 @@ def test_provider_requests_exact_model_and_buffered_completion(monkeypatch):
     assert request.headers["x-engine-model-substitution"] == "off"
     assert request.headers["authorization"] == "Bearer fixture-only-key"
     assert b'"stream":false' in request.content
+
+
+def test_minimal_envelope_keeps_nine_portfolio_records_but_excludes_arbitrary_metadata(monkeypatch):
+    seen = mock_provider(monkeypatch, response())
+    passages = [{"id": str(index), "text": "SYNTHETIC saved workspace.",
+                 "document_name": "NEVER DISPATCH", "private_notes": {"secret": "NEVER DISPATCH"}}
+                for index in range(9)]
+    Provider(settings()).generate("fixture", passages)
+    messages = json.loads(seen[0].content)["messages"]
+    evidence = json.loads(messages[1]["content"])["evidence"]
+    assert len(evidence) == 9  # Guide plus eight existing workspace records remain supported.
+    assert all(set(item) == {"id", "text", "partial"} for item in evidence)
+    assert "NEVER DISPATCH" not in json.dumps(messages)
+
+
+@pytest.mark.parametrize("passages", [
+    [{"id": "a", "text": "x"}, {"id": "a", "text": "y"}],
+    [{"id": "a", "text": " \n"}], [None],
+])
+def test_ambiguous_or_empty_quotation_context_never_reaches_the_provider(monkeypatch, passages):
+    monkeypatch.setattr(httpx, "Client", forbid_network)
+    with pytest.raises(ProviderError, match="Invalid private quotation context"):
+        Provider(settings()).generate("fixture", passages)
 
 
 @pytest.mark.parametrize("payload", [

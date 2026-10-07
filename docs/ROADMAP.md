@@ -235,6 +235,10 @@ packets and enforce independently signed multi-source publication permission,
 per-source audience/expiry constraints and live revocation. Actual source/legal
 review and full operational qualification remain separate open gates.
 R01 real-source review/evidence gates and the remaining roadmap gates are pending.
+After merged PR #16, the R04 private-evidence context packet implements exact
+windows, document diversity, full serialized prompt accounting and a retained
+selection/omission record visible in review and export. Public-authority context
+expansion and legal synthesis remain separate work.
 Existing source/mapping/publication code is reused; the
 research does not authorize real approvals, vendor contact or bulk acquisition.
 Dependencies refer to completion of the relevant gate, not just code availability.
@@ -244,7 +248,7 @@ Dependencies refer to completion of the relevant gate, not just code availabilit
 | **R01 / P0, in progress** | Source, asset and semantic qualification: offline catalogs, legal-analysis/scenario contracts, provider/evaluation dossier, physical evidence verifier, extraction comparator, reproducible calibration studies and scoped analysis/privacy scoring implemented; representative calibration and review pending | Legal ontology owner + data/source lead with application/security owners; source/provider dependencies documented | Source uses and routes reviewed; sample errors/reviewer time measured; argument/scenario fixtures adjudicated; provider processing/spend controls qualified; added effort estimated. Passing the dossier validator grants no approval |
 | **R02 / P0, partial** | Multi-source snapshots, private preparation, exact public evidence, external public/private approvals, per-source deployment-wide grants/expiry and live revocation implemented; renewal requires a freshly reviewed release. Bounded cooperative research admission/cancellation, publication races and coordinator/restart controls implemented; synthetic application/recovery and signed-graph lifecycle drills measured; authorized release-specific lexical index builds/rebuilds and shared PostgreSQL runtime-read locks implemented. Restricted-audience serving, same-release renewal and representative five-job/resource qualification remain | R01 contracts; actual source reviews remain mandatory; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
 | **R03 / P0** | First genuinely reviewed contract corpus: RG ordinary/mükerrer manifest; amendment/transition candidates; MBS reconciliation; TBMM enacted/history distinction; exact provisions and historical versions | R01 lawful samples and protected reviewers; R02 for combined releases; editors + ingestion team | Reviewed corpus and exact evidence ready for analysis; amendment chains/historical queries pass; discrepancies visible. Full legal-analysis/export qualification additionally requires R04, the relevant R05 decision slice and R05A |
-| **R04 / P1, partial** | Versioned Turkish fields, literal-citation occurrences and exact spans; frozen-snapshot development capture/scoring with fixed profiles, complete outcome cells and paired family uncertainty implemented. Real benchmark, authority resolution, local embedding/reranker evaluation and context packing pending | R01 development benchmark; R03 representative approved corpus; retrieval/ML + legal adjudicators | Exact identifiers and original quotes preserved; hybrid and graph/metadata/rerank ablations on one snapshot; thresholds, error slices and resource budgets reported; no private-data or adverse-recall regression |
+| **R04 / P1, partial** | Versioned Turkish fields, literal-citation occurrences, frozen-snapshot development capture/scoring and auditable private quotation context implemented. Real benchmark, authority resolution, local embedding/reranker evaluation and public/issue/adverse context packing pending | R01 development benchmark; R03 representative approved corpus; retrieval/ML + legal adjudicators | Exact identifiers and original quotes preserved; hybrid and graph/metadata/rerank ablations on one snapshot; thresholds, error slices and resource budgets reported; no private-data or adverse-recall regression |
 | **R05 / P1** | Decision population and research: proceeding/decision/manifestation identity; allegation/finding/reasoning/result/dissent roles; citation ambiguity queue; reviewed authority-treatment events; independent contrary-authority branch | R01 judicial source/effect contracts, R02, R04; knowledge engineers + domain editors | Supporting and adverse passages are inspectable with role, version, institution epoch and scope; treatment is not inferred from citation; missing courts/periods and unknown finality remain explicit |
 | **R05A / P1, contract milestone** | Local legal analysis: issue/premise/rule/application/alternative artifact, adverse checks, bounded consistency/correction, Standard/Deep budgets, checkpoints and claim dependencies | R01 schemas; R03–R05 representative contract evidence; application/retrieval engineers + legal adjudicators | First contract task reaches reviewable analysis/export; consequential steps traceable; defects repaired or withheld; correction and depth compared with single-pass/Standard baselines |
 | **R05B / P1, optional connected mode** | Sanitized BYOK deep search: local abstraction/fidelity, exact release, isolated vault/broker, OpenAI/Anthropic/Gemini adapters, untrusted return path and local application | R01 privacy/provider contracts; common broker/sanitizer qualification; R04–R05A for verification/final analysis; application/security + legal owners | Each adapter separately passes privacy, fidelity, authorization, entitlement/retention, cost/retry and citation gates. No private files, silent fallback or unapproved context; remote-tool disclosure explicit; disconnected operation independent |
@@ -370,6 +374,25 @@ next source, analysis and BYOK evaluations can use executable contracts rather t
 unimplemented acceptance prose. Real evidence, sufficient reviewed sample sizes, confidence
 intervals and actual R05A/R05B execution remain pending. See [scorer guide](EVALUATION.md)
 and [verification](VALIDATION.md).
+
+### R04 engineering milestone — inspectable private evidence context
+
+After merged PR #16, deterministic packing retains original spans/hashes, rotates
+across documents and exposes scanning, passage, text and complete serialized-prompt
+limits. Every omission is counted; unexamined candidates remain explicit. Long
+sentence/line fragments are labeled and unsplittable tokens omitted. The model
+receives only the question and quotation entries; source metadata and the manifest
+stay in the encrypted matter product. Provider guards and exact-claim checks remain.
+
+Lawyers inspect prepared excerpts and open full original passages; DOCX/PDF exports
+retain limits, ranges and digests. Recipes are invalidation dependencies. Old work
+remains readable without retroactive manifests. See [context contract](CONTEXT_PACKING.md)
+and [validation](VALIDATION.md).
+
+This completes the private quotation context slice. Public parent/exception
+expansion, issue/supporting/adverse allocations, evaluated reranking, reviewed
+decision roles and R05A analysis remain pending. No real source review, legal
+qualification, live provider call or deployment is granted by these tests.
 
 ### R04 engineering milestone — reproducible retrieval comparison
 

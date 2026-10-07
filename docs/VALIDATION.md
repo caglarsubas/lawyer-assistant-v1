@@ -1,5 +1,48 @@
 # Verification record — 7 October 2026
 
+## R04 inspectable private evidence context — 7 October 2026 (Asia/Shanghai)
+
+PR #16 merged as `775fbb55496e48c997bd63b57c91e4781a018f7c`; all PR checks and
+[the exact post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37573080254)
+passed. This packet replaces private quote selection with bounded, exact-span,
+document-diverse packing and complete serialized-prompt accounting. It retains
+an encrypted selection/omission record with code-point ranges, original/excerpt
+hashes and prepared-message digest. Review UI and DOCX/PDF expose that record;
+provider and graph permissions, public retrieval, dependencies and CI topology remain.
+
+- **404 broader backend checks passed in 32.19s** across context, workspace/jobs,
+  assistant/provider, governance, retained graph authorization and practice. After
+  adding four provider-envelope cases and one legacy compatibility case, the final
+  **121 context/provider checks passed in 1.03s**, including mocked HTTP message-digest
+  equality, tight/escaped Unicode budgets, ambiguous IDs, unexamined scan limits,
+  exact quote verification, Turkish DOCX/PDF content and old-product exports.
+- **41 deployment contracts passed in 0.419s**. Repository-wide Ruff with the CI
+  configuration and diff checks passed. **All 93 frontend tests passed** and the
+  strict TypeScript/Vite build passed. Full backend execution remains mandatory
+  in CI; it was not repeated locally. No hosted job, dependency, worker, retry
+  or timeout was increased.
+- **121 Linux Docker checks passed in 1.92s** using the final copied source/test
+  fingerprints. The disposable non-root container had no network, host ports or
+  host mounts; read-only root, dropped capabilities and bounded CPU/memory/PIDs
+  were enforced. A preloaded test image was refreshed without pulls or dependency
+  installation after matching both dependency manifests. It is not a fresh
+  production-image build or capacity/latency qualification. Container cleanup passed.
+- The isolated browser demo showed **8/17 selected, one shortened and nine omitted
+  passages**, collapsed detail controls, original Unicode ranges and model-not-used
+  disclosure. Opening the shortened excerpt displayed the full original passage
+  with the selected source highlighted. The normal three-panel viewport rendered
+  correctly; no console errors were captured. The temporary tab and servers closed.
+
+[Retained synthetic verification](evidence/private-context-verification-2026-10-07.json)
+binds the final application and test fingerprints, image and observations. Records
+were captured on the dirty branch based on the exact PR #16 merge, before this
+packet's commit. The existing Starlette/httpx deprecation warning remains nonblocking.
+No real provider key or root `.env` was read or changed. No live client data,
+provider call, public source review, graph/index activation or live app deployment
+occurred. Public-authority/parent/exception context, adverse allocations, qualified
+reranking, the real development corpus and R05A legal analysis remain open gates.
+See [context contract](CONTEXT_PACKING.md).
+
 ## R04 frozen-snapshot retrieval benchmark — 7 October 2026 (Asia/Shanghai)
 
 PR #15 merged as `95f4ceb8368ba616428f3d639e4497fbc8a8ea08`; its PR checks and

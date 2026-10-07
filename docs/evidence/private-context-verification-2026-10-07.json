@@ -1,0 +1,97 @@
+{
+  "schema": "private-evidence-context-verification-v1",
+  "recorded_at": "2026-10-07T05:13:34.893861+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "775fbb55496e48c997bd63b57c91e4781a018f7c",
+  "checkout_dirty": true,
+  "host": {
+    "system": "Darwin",
+    "architecture": "arm64"
+  },
+  "test_image": "sha256:be346e814b98199bd71b61baf7409f475f63cbc65d91d3c30cead46359ee8b28",
+  "source": {
+    "application": {
+      "sha256": "90fdff5086eed66c7d6a531be0ae9107c85b9be609629955da43ef6ed035ff56",
+      "files": 106
+    },
+    "tests": {
+      "files": 70,
+      "sha256": "80ffaaa193193f4353c9ea8ca88da505907670f3296e05aa97916b9bbb6215b2"
+    }
+  },
+  "limits": {
+    "network": "none",
+    "host_ports": [],
+    "host_mounts": [],
+    "read_only": true,
+    "cpu": 2,
+    "memory_bytes": 805306368,
+    "pids": 128,
+    "tmpfs_bytes": 268435456
+  },
+  "linux_tests": {
+    "exit_code": 0,
+    "passed": 121,
+    "pytest_seconds": 1.92,
+    "container_wall_seconds": 2.899
+  },
+  "cleanup_verified": true,
+  "not_established": [
+    "Turkish legal accuracy or semantic completeness",
+    "real-provider authentication or model performance",
+    "production capacity or latency",
+    "public authority context or adverse recall",
+    "real source/legal approval",
+    "live application deployment"
+  ],
+  "base_main_ci": {
+    "run_id": 37573080254,
+    "head_sha": "775fbb55496e48c997bd63b57c91e4781a018f7c",
+    "conclusion": "success"
+  },
+  "local_checks": {
+    "broader_backend": {
+      "passed": 404,
+      "seconds": 32.19,
+      "scope": "workspace, research jobs, context, provider, assistant, governance, retained release authorization and practice; before four final provider cases and one legacy compatibility case"
+    },
+    "final_context_provider": {
+      "passed": 121,
+      "seconds": 1.03,
+      "scope": "final context packing, research/export integration and provider policy cases"
+    },
+    "deployment_contracts": {
+      "passed": 41,
+      "seconds": 0.419
+    },
+    "frontend": {
+      "passed": 93,
+      "files": 10,
+      "seconds": 0.291,
+      "production_build": "passed"
+    },
+    "ruff": "passed with repository CI configuration",
+    "diff_check": "passed",
+    "full_backend_suite": "mandatory in CI, not repeated locally"
+  },
+  "frontend_source": {
+    "files": 41,
+    "sha256": "43fd7e22ef4f2b67ec210878a8e628150c57c38d1834b287419c19744ca22e7d"
+  },
+  "dependency_manifests_matched_preloaded_parent": true,
+  "test_image_build": "offline source refresh of preloaded test image; network none, pull false, no dependency installation",
+  "browser": {
+    "fixture": "isolated loopback demo with synthetic documents, local provider disabled",
+    "observed_selected_passages": 8,
+    "observed_total_passages": 17,
+    "observed_shortened_passages": 1,
+    "observed_omitted_passages": 9,
+    "collapsed_details": true,
+    "exact_unicode_ranges_visible": true,
+    "full_original_passage_opened_and_highlighted": true,
+    "captured_console_errors": 0,
+    "temporary_tab_and_servers_closed": true,
+    "live_deployment_untouched": true
+  }
+}

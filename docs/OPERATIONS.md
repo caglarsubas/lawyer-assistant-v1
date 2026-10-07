@@ -138,6 +138,17 @@ metadata remain encrypted, matter-authorized records. No private provider respon
 exception text is retained in failure messages. Stop intent may be visible before
 acknowledgement; never report it as proof that compute has already stopped.
 
+### Inspect a research context
+
+New preparation products retain an encrypted, matter-confidential selection record.
+In the research panel, expand **Belge bağlamını ve seçim sınırlarını incele** to
+compare exact prepared excerpts with full original passages. Counts distinguish
+selected, shortened, omitted and unexamined passages; no model call is implied by
+preparation alone. DOCX/PDF exports retain the limitations, ranges and digests.
+See [private context packing](CONTEXT_PACKING.md) for fixed limits and prompt accounting.
+Keep these records out of ordinary logs and public research requests. Public source
+candidates remain separate. Older products are not assigned a new packing record.
+
 ### Build or rebuild a public search index
 
 The trusted publisher can build a new **lexical-only** OpenSearch index from the

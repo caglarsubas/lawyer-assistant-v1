@@ -30,6 +30,7 @@ from .auth import (
     user_view,
 )
 from .config import ROOT, load_settings
+from .context_packing import context_export_lines
 from .db import Audit, LoginSession, Membership, Record, Store, User, digest, now, uid
 from .exports import render_export
 from .extract import SUPPORTED_SUFFIXES, ZIP_SUFFIXES
@@ -767,6 +768,11 @@ def create_app(settings=None):
                     lines.append(
                         "Kaynak SHA-256: " + p.get("document_sha256", "Bu eski çalışma sürümünde kaydedilmedi")
                     )
+                    if "excerpt_start" in p:
+                        lines.append(f"Alıntı Unicode aralığı: [{p['excerpt_start']}, {p['excerpt_end']}) "
+                                     f"/ {p['full_passage_length']}; özgün pasajı ayrıca inceleyin.")
+            if data.get("context_pack"):
+                lines.extend(context_export_lines(data["context_pack"]))
             for issue in data["issues"]:
                 lines.append("İnceleme başlığı: " + issue["label"])
                 lines.extend(issue["missing_facts"])

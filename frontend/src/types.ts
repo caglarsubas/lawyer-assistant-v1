@@ -68,6 +68,28 @@ export interface GraphServingRelease {
   release_id?: string; ontology_sha256?: string; legal_review_verified?: boolean; reason?: string;
 }
 export interface Passage { id: string; locator: string | Record<string, unknown>; text: string }
+export interface ContextSelection {
+  passage_id: string; document_id: string; document_name: string | null;
+  document_revision: number | null; document_sha256: string | null;
+  original_text_sha256: string; excerpt_text_sha256: string;
+  excerpt_start: number; excerpt_end: number; full_passage_length: number;
+  boundary: 'full_passage' | 'punctuation_line_window' | 'token_fragment';
+  utf8_bytes: number; matched_query_terms: number;
+}
+export interface EvidenceContextPack {
+  recipe: string; scope: 'private_document_quotes'; offset_unit: 'unicode_code_points';
+  provider_use: 'prepared_only' | 'validated_quote_response' | 'not_configured' | 'no_selected_evidence';
+  inventory: {
+    input_passages: number; examined_passages: number; unexamined_passages: number;
+    selected_passages: number; omitted_passages: number; shortened_passages: number;
+    selected_documents: number; examined_documents: number; scanned_code_points: number;
+    evidence_utf8_bytes: number;
+  };
+  limits: Record<string, number | null>; prompt: Record<string, string | number>;
+  selected: ContextSelection[];
+  omitted: { passage_id: string; document_id: string; reason: string }[];
+  omission_counts: Record<string, number>;
+}
 export interface DocumentRecord {
   id: string; name: string; status: string; media_type: string; page_count: number | null;
   extraction_warnings: string[]; created_at: string; passages?: Passage[]; synthetic?: boolean; sha256?: string;
@@ -104,6 +126,7 @@ export interface Product {
   claims: Claim[]; issues: { label: string; missing_facts: string[]; counterarguments: string[] }[];
   coverage: { searched: string[]; gaps: string[] }; snapshots: unknown; graph_paths?: unknown;
   authority_candidates?: AuthorityCandidates; created_at: string;
+  evidence?: Passage[]; context_pack?: EvidenceContextPack;
 }
 export interface ResearchRun {
   deadline_at?: string; budget_seconds?: number; phase?: string; cancel_requested_at?: string; finished_at?: string;
