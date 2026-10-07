@@ -26,6 +26,7 @@ IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}\Z")
 SOURCE_FIELDS = FIELDS
 MAX_RESPONSE_BYTES = 1024 * 1024
 MAX_CANDIDATES = 200
+RETRIEVAL_PROFILES = frozenset({"lexical", "turkish", "all"})
 
 
 class SearchUnavailable(Exception):
@@ -238,7 +239,11 @@ class PublicSearchService:
             # escape through candidate text, metadata or diagnostics.
             raise ValueError('Search evidence is outside the authorized signed source') from None
 
-    def search(self, query, as_of=None, limit=20, vector=None, authority_id=None):
+    def search(self, query, as_of=None, limit=20, vector=None, authority_id=None, *, profile="all"):
+        # Internal evaluation selector only. API/agent callers keep the full
+        # default; profiles never bypass source, date or authorization checks.
+        if not isinstance(profile, str) or profile not in RETRIEVAL_PROFILES or (vector is not None and profile != "all"):
+            raise ValueError("Unsupported retrieval profile or vector combination")
         if not isinstance(query, str) or not query.strip() or len(query) > 4000:
             raise ValueError("Search query must contain 1–4000 characters")
         if not isinstance(limit, int) or isinstance(limit, bool) or not 1 <= limit <= 50:
@@ -252,7 +257,7 @@ class PublicSearchService:
                                           or not abs(v) <= 3.4e38 or not math.isfinite(v) for v in vector)):
             raise ValueError("Vector must contain 1–4096 finite numbers from a qualified local model")
         snapshot = {"backend": "opensearch", "index": self.index, "release_id": self.release_id or None,
-                    "as_of": as_of, "fusion": "rrf-k60-v1"}
+                    "as_of": as_of, "fusion": "rrf-k60-v1", "retrieval_profile": profile}
         channels = {"lexical": "not_run", "vector": "not_requested" if vector is None else "not_run"}
         coverage = {"status": "no_qualified_corpus", "channels": channels,
                     "completeness": "unknown", "corpus_size": "unknown", "rejected_hits": 0}
@@ -281,12 +286,17 @@ class PublicSearchService:
                 return {"hits": [], "coverage": coverage, "snapshot": snapshot, "limitations": limitations}
         normalized_index = meta is not None and meta["schema"] in NORMALIZED_SCHEMAS
         citation_index = meta is not None and meta["schema"] == SCHEMA
+        if profile == "turkish" and not normalized_index:
+            coverage["status"] = "unavailable"
+            limitations.append("The selected index does not implement the requested Turkish retrieval profile.")
+            return {"hits": [], "coverage": coverage, "snapshot": snapshot, "limitations": limitations}
+        use_normalized = normalized_index and profile != "lexical"
         citations = []
         citation_limit_exceeded = False
         if citation_index:
             snapshot["citation_profile"] = meta["citation_profile"]
             try:
-                citations = query_keys(query) if authority_id is None else []
+                citations = query_keys(query) if authority_id is None and profile == "all" else []
             except CitationQueryLimit as error:
                 citation_limit_exceeded = True
                 limitations.append(f"Literal citation channel skipped: {error}. Other search channels remain independent.")
@@ -298,6 +308,7 @@ class PublicSearchService:
             limitations.append("Labeled citation numbers identify textual occurrences only; institutions, case pairings, authority targets and historical versions remain unresolved.")
         if normalized_index:
             snapshot["normalization"] = meta["normalization"]
+        if use_normalized:
             limitations.append("Folded aliases can conflate distinct Turkish terms; they nominate candidates, never authority identities or equivalent legal concepts.")
         filters = self._filters(as_of, authority_id)
         candidate_limit = min(MAX_CANDIDATES, limit * 4)
@@ -311,8 +322,8 @@ class PublicSearchService:
         if normalized_index:
             for variant, text in terms(query).items():
                 channel = "lexical_" + variant
-                channels[channel] = "not_requested" if authority_id is not None else "not_run"
-                if authority_id is None:
+                channels[channel] = "not_run" if authority_id is None and use_normalized else "not_requested"
+                if authority_id is None and use_normalized:
                     query_clause = ({"multi_match": {"query": text, "fields": [f"text_{variant}", f"title_{variant}"]}}
                                     if text else {"match_none": {}})
                     requests[channel] = {**common, "query": {"bool": {"filter": filters, "must": [query_clause]}}}
@@ -384,7 +395,7 @@ class PublicSearchService:
             -item["score"], item["source"]["passage_id"], item["source"]["authority_id"], item["source"].get("assertion_id", "")))
         hits = [{**item["source"], "score": item["score"], "channels": item["channels"]}
                 for item in ranked[:limit]]
-        if normalized_index and authority_id is None:
+        if use_normalized and authority_id is None:
             for hit in hits:
                 hit["matches"] = match_spans(hit, query)
                 if citations:

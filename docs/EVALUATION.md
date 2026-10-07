@@ -1,5 +1,10 @@
 # Offline legal-analysis and BYOK qualification scoring
 
+The separate [R04 development retrieval benchmark](RETRIEVAL_BENCHMARK.md) captures
+fixed lexical profiles on one authorized snapshot and reports ranking metrics and
+paired family uncertainty. Its development observations do not replace the held-out
+legal-analysis/privacy qualification described here.
+
 This command scores **supplied adjudications**. It does not run legal analysis,
 inspect the underlying legal evidence, call a provider, certify reviewers, grant
 source rights or enable dispatch. Reports always retain `production_qualified: false`

@@ -42,6 +42,9 @@ all candidates. Real inference and large-corpus concurrency still need qualifica
 
 Exact `authority_id` lookup remains one structured query with the original identifier.
 No normalization, alias expansion or vector request is applied to that identifier.
+The internal [development benchmark](RETRIEVAL_BENCHMARK.md) can select fixed lexical,
+Turkish or default profiles on the same v3 index, with all source and permission
+checks retained. The API and agent workflow continue to use the full default.
 This milestone does not resolve literal statute/decision citations into authorities
 or historical provision versions; those remain explicit R04/R05 work.
 
