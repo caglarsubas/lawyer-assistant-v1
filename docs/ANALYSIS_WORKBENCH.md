@@ -28,8 +28,10 @@ and create a draft for one question.
    gap. A research gap does not constitute an adverse authority.
 6. Link the conclusion's application and alternative dependencies; record uncertainty
    and the next action. Preview checks or save the draft.
-7. Inspect original passages and check details. Revise with a change note, preserving
-   earlier content and checks. Download a selected version as DOCX or PDF.
+7. Inspect original passages and check details. Record a [version-bound lawyer
+   review](ANALYSIS_REVIEWS.md) or change request. Revise with a change note,
+   preserving earlier content and checks; a new version requires fresh review.
+   Download a selected version as DOCX or PDF with its review projection.
 
 Incomplete drafts can be saved. Invalid, duplicate, cross-step or inaccessible
 references cannot. Opening a new version populates missing condition assessments
@@ -53,7 +55,10 @@ Unlinked work is exposed separately rather than suppressing an unrelated branch.
 | A request for `supported_candidate` | Retain the request, cap the effective result at conditional |
 
 Every result retains `legal_approval: not_granted` and a semantic-review requirement.
-No automatic path produces Reviewed. Removing a check by deleting a node or changing
+No automatic path produces Reviewed. An explicit human declaration can project
+Reviewed for the exact conditional private draft while machine legal approval stays
+`not_granted`. Human change requests withhold the effective assessment even when
+structural checks pass. Removing a check by deleting a node or changing
 its type is not proof of correction. Revision comparison records changed sections,
 dependency groups and check identifiers; it does not adjudicate the change.
 
@@ -83,11 +88,11 @@ review and the remaining R03–R05A qualification work.
 - Writes serialize on the matter row and require `expected_revision` for revisions.
   Competing revisions return 409; no losing revision is appended. Writes invalidate
   existing preparation products and add a minimal audit event. The research snapshot
-  records analysis IDs/revisions; authored rationale is not added to the quotation
+  records analysis IDs/revisions and review heads; authored rationale is not added to the quotation
   provider's prompt.
 - Export selects an exact immutable version. Stale exports retain the authored text
   but mark it stale and withhold its assessment. Access and freshness are rechecked
-  after rendering; changes during rendering reject the response. The audit records
+  after rendering, including the selected version's review head; changes during rendering reject the response. The audit records
   preparation of an export, not delivery or legal approval.
 
 ## Runtime API and bounds

@@ -1,5 +1,61 @@
 # Verification record — 7 October 2026
 
+## R05A immutable private-draft lawyer review — 7 October 2026 (Asia/Shanghai)
+
+PR #19 merged as `c96bbd03ac0e8f79c9ecae7bad132cbf15282cad`; its three PR checks
+and [the exact post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37593141044)
+passed. This packet adds immutable encrypted human review events and a separate
+version-specific head, conditional private-draft declarations, findings/change
+requests, source/review dependency revalidation and exact-version export disclosure.
+Human decisions never rewrite text/checks or grant public/machine authority approval.
+Change requests withhold the effective conclusion even when structural checks pass.
+
+- **246 broader backend checks passed in 25.52s**, across review/workbench/proposals,
+  shared jobs, workspace/portfolio, governance, context packing and assistant. After
+  the final export/history freshness, guide, typed-target and human withholding
+  changes, **136 final focused checks passed in 17.59s**. Cases exercise exact
+  revision/version/content/head pins, duplicate receipts, encryption/immutability,
+  five explicit criteria, AI lineage, invalid/foreign references, old/new versions,
+  review supersession, source/recipe changes, membership isolation, in-flight and
+  completed proposal invalidation, and changed review during export rendering.
+- **41 deployment contracts passed in 0.414s**. Repository-wide Ruff with the CI
+  configuration and diff checks passed. **112 frontend tests passed**; strict
+  TypeScript/Vite build passed, with main JS 470.61 KB / 134.22 KB gzip. The full
+  backend suite remains mandatory in hosted CI, rather than being repeated locally.
+  No CI job, retry, timeout, worker, dependency or migration was added.
+- **152 final Linux checks passed in 20.84s**, bound to matching application/test
+  fingerprints. A preloaded development runtime with unchanged dependency manifests
+  was refreshed offline. Its disposable non-root container had no network, ports or
+  host mounts; read-only root, dropped capabilities and CPU/memory/PID limits applied.
+  This is not a fresh production-image build or capacity qualification. Cleanup passed.
+- **Two real PostgreSQL review-head races passed** in randomly named disposable
+  child databases. Both competitors were observed waiting on the matter lock: a
+  distinct request returned 409 after one event, and an identical retry returned the
+  same immutable receipt. Each case retained one review event, one head and one
+  unchanged analysis version. Container/database cleanup passed. These cases use
+  the existing PostgreSQL CI job.
+- The isolated browser rehearsal used invented documents with inference disconnected.
+  It verified no preselected criteria, disabled incomplete save, exact source-range
+  inspection, all five explicit evaluations, explained absence of AI contribution,
+  human Reviewed projection and preserved stored Needs review. Editing a fact through
+  the UI produced Stale while retaining the earlier decision. Acceptance was disabled;
+  a typed/source-linked critical finding and change request appended decision 2 while
+  one original text version remained. The final screen separately withheld human
+  change requests and retained structural checks. The 1280 × 720 three-panel layout
+  rendered, default details remained collapsed, and no console errors were captured.
+  Temporary tabs and both loopback services closed.
+
+[Retained synthetic verification](evidence/private-analysis-reviews-verification-2026-10-07.json)
+binds final source/test/frontend fingerprints, images, checks and cleanup to the
+dirty branch based on PR #19's exact merge, before this packet's commit. An initial
+test placement error during the final withholding check was corrected before both
+final host/Linux runs. The existing Starlette/httpx warning is nonblocking. Root
+`.env` and real provider keys were not read or changed. No client data, real model
+call, real source/legal review, graph/index activation or live app deployment occurred.
+R05A remains partial: reviewed public/history synthesis, semantic/adverse verification,
+broader model feedback/correction, calibrated Standard/Deep and lawyer-adjudicated
+benefit remain open. See [review contract](ANALYSIS_REVIEWS.md).
+
 ## R05A bounded private-analysis proposals — 7 October 2026 (Asia/Shanghai)
 
 PR #18 merged as `1966089b36b4c5a24b59aec7979ca7544ba18ac9`; its three PR checks

@@ -169,8 +169,20 @@ output is labelled. Stop intent does not prove immediate upstream compute cessat
 Request-ID retries recover the same job; after reloading, inspect proposal history
 before starting an intentional rerun. See [proposal bounds and API](ANALYSIS_SUGGESTIONS.md).
 
+For manual review, open **Avukat inceleme kararı kaydet** and load the displayed
+version's source and review bindings. Inspect original documents, then explicitly
+evaluate sources, reasoning, fact roles, limits and model contribution. No criteria
+are preselected. Record explained changes and linked findings, or accept only the
+conditional private draft with all criteria addressed. This is a lawyer declaration,
+not public-authority approval or automated legal verification. Critical/major findings
+block acceptance; a change request withholds the displayed/exported assessment even
+when structural checks pass. New text versions do not inherit the decision.
+If review/revision pins conflict, refresh the exact version and history before
+resubmitting; identical request-ID retries recover the same saved event. Review
+changes invalidate older proposals and prepared work. See [review API and scope](ANALYSIS_REVIEWS.md).
+
 Use **Güncelliği kontrol et** to reload matter inputs and draft freshness. A changed
-fact/document/passage/contradiction/check recipe leaves previous text and versions
+fact/document/passage/contradiction/check or review recipe leaves previous text, decisions and versions
 intact, projects Stale and requires review in a new version. Changed selections at
 save return HTTP 409; refresh the facts and explicitly reselect changed passages.
 When facts refresh during editing, bind their visible new revision explicitly.
