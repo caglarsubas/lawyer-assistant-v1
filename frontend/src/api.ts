@@ -36,7 +36,7 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
     if (response.status === 401 && path !== '/auth/login' && path !== '/auth/me') unauthorizedHandler?.();
     throw new ApiError(errorText(data), response.status);
   }
-  if (!['GET', 'HEAD', 'OPTIONS'].includes(method) && !path.startsWith('/auth/') && !path.startsWith('/assistant/') && !path.startsWith('/public-sources/') && typeof window !== 'undefined') window.dispatchEvent(new Event('portfolio-updated'));
+  if (!['GET', 'HEAD', 'OPTIONS'].includes(method) && !path.startsWith('/auth/') && !path.startsWith('/assistant/') && !path.startsWith('/public-sources/') && !path.endsWith('/analyses/check') && typeof window !== 'undefined') window.dispatchEvent(new Event('portfolio-updated'));
   if (response.status === 204) return undefined as T;
   return response.json() as Promise<T>;
 }
@@ -75,6 +75,21 @@ export async function downloadPracticeDraft(matterId: string, recordId: string, 
   }
   const url = URL.createObjectURL(await response.blob());
   const link = document.createElement('a'); link.href = url; link.download = `avukat-taslagi-${recordId}-${versionId}.${format}`;
+  document.body.append(link); link.click(); link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+export async function downloadAnalysis(matterId: string, recordId: string, versionId: string, format: 'docx' | 'pdf') {
+  const params = new URLSearchParams({ version_id: versionId, format });
+  let response: Response;
+  try { response = await fetch(`${BASE}/matters/${encodeURIComponent(matterId)}/analyses/${encodeURIComponent(recordId)}/export?${params}`, { credentials: 'same-origin' }); }
+  catch { throw new ApiError('Analiz indirilemedi. Yerel hizmete bağlantıyı kontrol edin.', 0); }
+  if (!response.ok) {
+    if (response.status === 401) unauthorizedHandler?.();
+    throw new ApiError(errorText(await response.json().catch(() => null)), response.status);
+  }
+  const url = URL.createObjectURL(await response.blob());
+  const link = document.createElement('a'); link.href = url; link.download = `analiz-taslagi-${recordId}-${versionId}.${format}`;
   document.body.append(link); link.click(); link.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

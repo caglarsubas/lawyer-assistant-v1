@@ -843,6 +843,9 @@ textarea { resize: vertical; }
 .source-review-section > p + p { margin-top: 8px; }
 .source-review-section form, .source-assignment-form { margin-top: 20px; }
 .source-review-fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+.analysis-editor-fields { margin: 0; padding: 0; border: 0; min-width: 0; }
+.analysis-editor-fields > .field { margin: 16px 0; }
+.analysis-editor-fields > h4 { margin: 24px 0 16px; }
 .source-review-fieldset > .button { margin-top: 20px; }
 .source-review-fieldset .field { margin-bottom: 20px; }
 .source-review-fieldset:disabled { opacity: .65; }

@@ -2,8 +2,15 @@
 
 Requirement amendment: **5 October 2026**. This specification evaluates the user's
 legal-analysis, self-correction and external deep-search goals and extends the
-[canonical roadmap](ROADMAP.md). It is planned work, not a deployed capability.
+[canonical roadmap](ROADMAP.md). It specifies the target and qualification gates;
+implementation progress is tracked separately from deployment and legal approval.
 The three research attachments remain inputs to the [data strategy](DATA_KNOWLEDGE_STRATEGY.md).
+
+The first R05A runtime slice now provides [lawyer-authored private analysis drafts](ANALYSIS_WORKBENCH.md),
+source revision/hash binding, declared-structure checks, immutable revisions and
+exact-version exports. It uses no model and no public authority. Full legal
+synthesis, automated correction, Standard/Deep modes and every BYOK adapter remain
+pending; these goals are not satisfied merely by a structurally complete draft.
 
 ## 1. Assessment and product decision
 

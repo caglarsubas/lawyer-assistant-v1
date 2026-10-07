@@ -212,6 +212,7 @@ def _run_research(app, run_id):
                             "practice_contradiction",
                             "practice_argument",
                             "practice_draft",
+                            "practice_analysis",
                             "practice_playbook",
                         ]
                     ),

@@ -1,0 +1,131 @@
+{
+  "schema": "private-analysis-workbench-verification-v1",
+  "recorded_at": "2026-10-07T06:23:08.357174+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "4d9b0d5f867bbf0b7a9db363b02e717cba52a381",
+  "checkout_dirty": true,
+  "host": {
+    "system": "Darwin",
+    "architecture": "arm64"
+  },
+  "test_image": "sha256:d6077b275108f86904ca0273e5d2deddaa884e04d16771a0c7bf821f0b138076",
+  "source": {
+    "application": {
+      "sha256": "d798e1fc7a163470ef9e84bbff386d23cec9cc20faab687d52617eaf477f7842",
+      "files": 107
+    },
+    "tests": {
+      "files": 71,
+      "sha256": "7e88cb4f2f3f71d3d5048adb92d990bae20bb8677e7df97d3f8ee48830dfa0c5"
+    }
+  },
+  "limits": {
+    "network": "none",
+    "host_ports": [],
+    "host_mounts": [],
+    "read_only": true,
+    "cpu": 2,
+    "memory_bytes": 805306368,
+    "pids": 128,
+    "tmpfs_bytes": 268435456
+  },
+  "linux_tests": {
+    "exit_code": 0,
+    "passed": 75,
+    "pytest_seconds": 9.77,
+    "container_wall_seconds": 11.921
+  },
+  "cleanup_verified": true,
+  "not_established": [
+    "Turkish legal accuracy or semantic completeness",
+    "real-provider authentication or model performance",
+    "production capacity or latency",
+    "public authority context or adverse recall",
+    "real source/legal approval",
+    "live application deployment"
+  ],
+  "dependency_manifests": {
+    "sha256": {
+      "pyproject.toml": "1123184183b7e8ac39b3213e3189f728f5df39c4c3c7713d96299aad6fff6545",
+      "uv.lock": "cde13f1ccee8a439e9ddfea7c15dcb26960c2e9bebffec7c2582ac1386b4b23f"
+    },
+    "matched_preloaded_base_image": true
+  },
+  "frontend_source": {
+    "files": 49,
+    "sha256": "3427b08c70d5179ee312764465edad841599d886de5e481da0889243450a1ce3",
+    "algorithm": "sha256 of sorted relative-path to content-sha256 JSON map"
+  },
+  "checks": {
+    "broader_backend": {
+      "passed": 165,
+      "seconds": 18.35,
+      "scope": "analysis, practice, governance, context research, assistant, workspace and research jobs; before the final history identity filter and its regression case"
+    },
+    "final_analysis": {
+      "passed": 57,
+      "seconds": 6.19,
+      "scope": "final private analysis API/structural/revision/auth/freshness/export checks"
+    },
+    "deploy_contracts": {
+      "passed": 41,
+      "seconds": 0.36
+    },
+    "frontend": {
+      "passed": 100,
+      "files": 11,
+      "duration_ms": 276,
+      "strict_typescript_vite_build": "passed",
+      "main_js_kb": 450.23,
+      "main_js_gzip_kb": 129.08
+    },
+    "ruff_ci_configuration": "passed",
+    "diff_check": "passed",
+    "complete_backend": "required in hosted CI; not repeated locally"
+  },
+  "postgres": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "one real PostgreSQL revision race in randomly named disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 0.745,
+    "passed": 1,
+    "pytest_seconds": 0.54
+  },
+  "test_image_build": "Offline source refresh of preloaded test image; pull false, network none, no dependency installation. This is not a production-image build.",
+  "browser": {
+    "fixture": "isolated loopback demo, invented TXT document and fact ledger, explicit empty provider/graph/search/gateway settings, no root env loading",
+    "observed": [
+      "missing exception assessment withholds version 1",
+      "manual condition assessment and preview produce a conditional draft, never legal approval",
+      "saved revisions retain previous versions and original checks",
+      "original source inspection opens the full passage",
+      "final refresh retains version 3 and reloads matter inputs",
+      "three-panel layout, collapsed check/step details, exact quote range and saved-versus-current source note"
+    ],
+    "console_errors": 0,
+    "screenshot": {
+      "local_path": ".data/verification/r05a-analysis/ui.jpg",
+      "sha256": "8ea2a397e33ee21a2684a845925fb51b6d0538123cc921aa76eedf82b1c382c7",
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    "temporary_tab_closed": true,
+    "temporary_ports": [
+      18091,
+      15187
+    ],
+    "temporary_server_listeners_absent": true
+  },
+  "baseline_main_ci": {
+    "head_sha": "4d9b0d5f867bbf0b7a9db363b02e717cba52a381",
+    "run_id": 37577029046,
+    "conclusion": "success"
+  },
+  "credential_handling": "No root .env or provider key read or changed; no real provider request, source review, public release activation or deployment performed"
+}

@@ -4,6 +4,7 @@ import { Badge, Detail, Field, Icon, JsonDetails, Loading, Notice } from '../../
 import type { AuthorityReference, DocumentRecord, Matter, Passage, PracticeKind, PracticeRecord, PracticeVersion } from '../../types';
 import { DOMAIN_LABELS, formatDate, locatorText, messageOf } from '../../utils';
 import { EvidenceViewer } from './FactsPanel';
+import AnalysisPanel from './AnalysisPanel';
 
 const LABELS: Record<PracticeKind, string> = { scenarios: 'Senaryolar', contradictions: 'Çelişki kaydı', arguments: 'Argüman matrisi', drafts: 'Hazırlık taslakları ve inceleme notları' };
 const DESCRIPTIONS: Record<PracticeKind, string> = {
@@ -33,6 +34,7 @@ export default function PracticePanel({ matter, onChange, userRole }: { matter: 
   async function saved() { setEditor(null); setNotice('Yeni kayıt veya sürüm saklandı. Önceki sürümler korunur; mevcut hazırlık çıktılarını yeniden inceleyin.'); await load(); await onChange(); }
   return <section><div className="section-heading"><div><h2>Avukatın çalışma defteri</h2><p className="small muted">Bu bölümdeki metinler sizin katkınızdır; model tarafından üretilmiş veya hukuken doğrulanmış sonuç değildir.</p></div><button className="button secondary" onClick={() => void load()}>Yenile</button></div>
     {notice && <Notice>{notice}</Notice>}
+    <AnalysisPanel key={matter.id} matter={matter} onChange={onChange} />
     {loading ? <Loading label="Çalışma notları açılıyor…" /> : KIND_LIST.map((kind) => <Detail key={kind} title={`${LABELS[kind]} (${data[kind].length})`}>
       <div className="practice-section-intro"><p>{DESCRIPTIONS[kind]}</p><button className="button secondary" onClick={() => { setEditor({ kind }); setNotice(''); }}><Icon name="plus" size={16} />{kind === 'scenarios' ? 'Senaryo ekle' : kind === 'contradictions' ? 'Çelişki bağla' : kind === 'arguments' ? 'Argüman ekle' : 'Taslak yaz'}</button></div>
       {errors[kind] && <Notice error>{errors[kind]}</Notice>}

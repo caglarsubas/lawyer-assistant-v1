@@ -149,6 +149,26 @@ See [private context packing](CONTEXT_PACKING.md) for fixed limits and prompt ac
 Keep these records out of ordinary logs and public research requests. Public source
 candidates remain separate. Older products are not assigned a new packing record.
 
+### Private analysis drafts and stale work
+
+In **Çalışma notları**, open **Yapılandırılmış analiz taslakları** to author and
+check one issue. Source ranges, rule conditions, application and alternatives must
+be linked explicitly. Missing critical structure withholds the dependent conclusion;
+a clean structural check still grants no legal approval. Preview performs no write
+or model call. See [workbench contract and API](ANALYSIS_WORKBENCH.md).
+
+Use **Güncelliği kontrol et** to reload matter inputs and draft freshness. A changed
+fact/document/passage/contradiction/check recipe leaves previous text and versions
+intact, projects Stale and requires review in a new version. Changed selections at
+save return HTTP 409; refresh the facts and explicitly reselect changed passages.
+When facts refresh during editing, bind their visible new revision explicitly.
+Do not resolve a conflict by removing a condition merely to clear its warning.
+
+Choose a specific immutable version for DOCX/PDF. Stale versions can be exported
+as stale, withheld historical drafts; access or dependency changes during rendering
+reject the response. Keep drafts, source selections and revision notes within their
+authorized matter. This workflow adds no provider or external-access permissions.
+
 ### Build or rebuild a public search index
 
 The trusted publisher can build a new **lexical-only** OpenSearch index from the

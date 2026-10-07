@@ -19,6 +19,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 from sqlalchemy.orm.exc import StaleDataError
 
+from .analysis_workbench import analysis_router
 from .assistant import assistant_router
 from .auth import (
     authenticate,
@@ -274,6 +275,7 @@ def create_app(settings=None):
         openapi_url="/openapi.json" if settings.demo_mode else None,
     )
     app.state.settings = settings
+    app.include_router(analysis_router())
     app.include_router(practice_router())
     app.include_router(governance_router())
     app.include_router(portfolio_router())
@@ -573,7 +575,10 @@ def create_app(settings=None):
         store = app.state.store
         with store.session() as session:
             record = require_child(session, document_id, "document", matter_id, user)
-            return {k: v for k, v in store.view(record).items() if k != "original_path"}
+            data = {k: v for k, v in store.view(record).items() if k != "original_path"}
+            data["passages"] = [{**passage, "text_sha256": digest(passage["text"])}
+                                for passage in data.get("passages", [])]
+            return data
 
     @app.get("/api/v1/matters/{matter_id}/documents/{document_id}/original")
     def original_document(matter_id: str, document_id: str, user=Depends(authenticate)):
