@@ -246,6 +246,8 @@ def dependency_ids(product):
                     found["assertion"].update(child)
                 elif key in {"ontology", "model", "policy"} and context == "snapshots":
                     add("release", child)
+                elif key in {"recipe", "prompt_recipe"} and context == "context_pack":
+                    add("release", child)
                 elif key == "ontology_sha256" and context in {"snapshots", "snapshot", "graphs"}:
                     add("release", child)
                 walk(child, key)

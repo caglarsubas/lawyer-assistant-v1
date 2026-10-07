@@ -265,7 +265,7 @@ def test_stage_failure_terminalizes_and_does_not_expose_error(workspace, monkeyp
         raise RuntimeError("SYNTHETIC PRIVATE VALUE")
 
     if where == "evidence":
-        monkeypatch.setattr("app.research.select_passages", fail)
+        monkeypatch.setattr("app.research.pack_private_context", fail)
     elif where == "graph":
         monkeypatch.setattr(app.state.graph, "tool", fail)
     elif where == "search":

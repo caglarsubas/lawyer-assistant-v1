@@ -4,6 +4,7 @@ import { Badge, Detail, Empty, Field, Icon, JsonDetails, Loading, Notice } from 
 import type { AuthorityCandidates, Claim, GatewayEvaluation, Matter, Product, ResearchRun } from '../../types';
 import { formatDate, isRunning, locatorText, messageOf, statusLabel } from '../../utils';
 import { EvidenceViewer } from './FactsPanel';
+import { EvidenceContextPanel } from './EvidenceContextPanel';
 import { ValidityDetails } from '../../ValidityDetails';
 
 export default function ResearchPanel({ matter, onChange, demo }: { matter: Matter; onChange: () => Promise<void>; demo: boolean }) {
@@ -55,6 +56,7 @@ export default function ResearchPanel({ matter, onChange, demo }: { matter: Matt
     <div className="section-heading compact"><h3>İddialar ve dayanaklar</h3><span className="small muted">{product.claims.filter((claim) => claim.review_status === 'approved').length} / {product.claims.length} uygun bulundu</span></div>{product.claims.length ? <div className="claim-list">{product.claims.map((claim, index) => <ClaimReview key={claim.id} claim={claim} index={index} onReview={review} onSource={setSource} stale={['stale', 'invalidated'].includes(product.status)} />)}</div> : <Empty title="İncelenecek iddia oluşturulmadı.">Mevcut veriyle desteklenebilir bir sonuç bulunmamış olabilir. Kapsam ve eksik bilgi bölümünü inceleyin.</Empty>}
     {product.issues.length > 0 && <Detail title={`Hukuki meseleler ve eksik bilgiler (${product.issues.length})`}><div className="issue-list">{product.issues.map((issue, index) => <section key={index}><h4>{issue.label}</h4>{issue.missing_facts.length > 0 && <><span className="small-label">EKSİK OLGULAR</span><ul>{issue.missing_facts.map((item, itemIndex) => <li key={itemIndex}>{item}</li>)}</ul></>}{issue.counterarguments.length > 0 && <><span className="small-label">KARŞI ARGÜMANLAR</span><ul>{issue.counterarguments.map((item, itemIndex) => <li key={itemIndex}>{item}</li>)}</ul></>}</section>)}</div></Detail>}
     <Detail title="Bu çalışmanın kaynak kapsamı" open={product.coverage.gaps.length > 0}><div className="two-column-details"><div><h4>Aranan kaynaklar</h4>{product.coverage.searched.length ? <ul>{product.coverage.searched.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>Aranan kaynak kaydı bulunmuyor.</p>}</div><div><h4>Kapsam ve bilgi eksikleri</h4>{product.coverage.gaps.length ? <ul>{product.coverage.gaps.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>Bildirilen boşluk yok. Bu durum kapsamın eksiksiz olduğunu göstermez.</p>}</div></div></Detail>
+    {product.context_pack && <EvidenceContextPanel pack={product.context_pack} evidence={product.evidence || []} onSource={setSource} />}
     {product.graph_paths !== undefined && <JsonDetails value={product.graph_paths} title="Referans keşfinde kullanılan graf yolları" />}
     {product.authority_candidates && <AuthorityCandidatesPanel candidates={product.authority_candidates} />}
     <JsonDetails value={product.snapshots} title="Çalışmada kullanılan sürümler" />

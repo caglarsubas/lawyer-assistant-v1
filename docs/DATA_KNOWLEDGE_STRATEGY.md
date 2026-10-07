@@ -183,6 +183,13 @@ stemming channel. It preserves source text/identifiers and returns bounded exact
 token spans. Citation identity resolution, qualified morphology/aliases and the
 representative development benchmark remain pending.
 
+The [private context packer](CONTEXT_PACKING.md) now preserves exact document
+spans, source hashes and a confidential selection/omission manifest, with document
+diversity and complete serialized local-provider prompt accounting. Its boundary
+heuristics do not prove semantic completeness. Public authority/parent/exception
+context, adverse allocations and evaluated reranking remain separate R04/R05
+work; public candidates do not enter the private quotation envelope.
+
 Segment statutes into instrument/article/paragraph/subparagraph, additional/temporary
 provisions and editorial notes. Segment decisions into submissions, allegations, findings,
 reasoning, disposition and separate opinions; unknown roles remain unknown. Preserve tables,

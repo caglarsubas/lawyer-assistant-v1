@@ -1,10 +1,10 @@
-import re
 from contextlib import contextmanager
 
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 
 from .auth import require_matter
+from .context_packing import pack_private_context
 from .db import Record, User, now, uid
 from .graph import GraphBackendError
 from .policy import POLICY_VERSION
@@ -104,37 +104,8 @@ def effective_product(data, graph):
 
 
 def select_passages(question, passages, byte_budget=4000):
-    def terms(text):
-        return set(re.findall(r"\w+", text.replace("I", "ı").replace("İ", "i").casefold()))
-
-    query_terms = terms(question) - {"ve", "ile", "için", "bir", "bu", "ne"}
-    ranked = sorted(passages, key=lambda p: len(query_terms & terms(p["text"])), reverse=True)
-    selected, used = [], 0
-    for original in ranked:
-        text = original["text"]
-        start = 0
-        if len(text.encode()) > 1800:
-            match = next((m for m in re.finditer(r"\w+", text) if terms(m.group()) & query_terms), None)
-            start = max(0, match.start() - 150) if match else 0
-        end = min(len(text), start + 1500)
-        while len(text[start:end].encode()) > 1800:
-            end -= 1
-        fragment = text[start:end]
-        size = len(fragment.encode())
-        if fragment and used + size <= byte_budget:
-            selected.append(
-                {
-                    **original,
-                    "text": fragment,
-                    "excerpt_start": start,
-                    "excerpt_end": end,
-                    "full_passage_length": len(text),
-                }
-            )
-            used += size
-        if len(selected) >= 8:
-            break
-    return selected
+    """Compatibility helper; research retains the full packing record below."""
+    return pack_private_context(question, passages, text_byte_budget=byte_budget)["evidence"]
 
 
 def run_research(app, run_id):
@@ -201,6 +172,7 @@ def _run_research(app, run_id):
         brief = store.decode(matter)
         documents = session.scalars(
             select(Record).where(Record.matter_id == matter.id, Record.kind == "document")
+            .order_by(Record.created_at, Record.id)
         ).all()
         facts = session.scalars(
             select(Record).where(Record.matter_id == matter.id, Record.kind == "fact")
@@ -253,7 +225,11 @@ def _run_research(app, run_id):
         session.commit()
     question = state["question"]
     graph_pin = state.get("graph_release_pin") or app.state.graph.release_pin()
-    selected = select_passages(question, passages)
+    packed = pack_private_context(
+        question, passages,
+        context_limit=app.state.settings.provider_context_limit if provider.configured else None,
+    )
+    selected, context_manifest = packed["evidence"], packed["manifest"]
     if len(selected) != len(passages):
         gaps.append(
             f"Bağlama {len(selected)}/{len(passages)} metin bölümü alındı; tam dosya analizi yapılmadı."
@@ -262,6 +238,12 @@ def _run_research(app, run_id):
         gaps.append(
             "Uzun metin bölümlerinden sınırlı alıntı pencereleri seçildi; özgün pasajın tamamını inceleyin."
         )
+    if context_manifest["inventory"]["unexamined_passages"]:
+        gaps.append("Bağlam tarama sınırına ulaşıldı; bazı belge pasajları sıralama için incelenmedi.")
+    if any(item["boundary"] == "token_fragment" for item in context_manifest["selected"]):
+        gaps.append("Bazı alıntılar cümle veya satır parçasıdır; koşul ve istisnalar için özgün bağlamı inceleyin.")
+    if context_manifest["omission_counts"].get("question_exceeds_context"):
+        gaps.append("Çalışma sorusu sağlayıcı bağlam sınırına sığmadı; model çağrısı yapılmadı.")
     gaps.append(
         "Hukuken incelenmiş kamu içtihat/mevzuat korpusu henüz yayımlanmadı; hukuki sonuç üretilmedi."
     )
@@ -318,18 +300,21 @@ def _run_research(app, run_id):
             provider_mode = ("approved-laptop-tunnel-validated-quotes"
                              if provider.transport_mode == 'approved_laptop_tunnel'
                              else "local-provider-validated-quotes")
+            context_manifest["provider_use"] = "validated_quote_response"
         else:
             for p in selected[:6]:
                 claims.append(
                     {
                         "id": uid(),
-                        "text": p["text"][:1200],
+                        "text": p["text"],
                         "evidence_ids": [p["id"]],
                         "kind": "document_quote",
                         "review_status": "pending",
                     }
                 )
-            gaps.append("LLM yapılandırılmadı; yalnızca deterministik belge alıntıları gösteriliyor.")
+            context_manifest["provider_use"] = "not_configured" if not provider.configured else "no_selected_evidence"
+            gaps.append("LLM yapılandırılmadı; yalnızca deterministik belge alıntıları gösteriliyor."
+                        if not provider.configured else "Modele aktarılabilecek belge alıntısı seçilemedi; model çağrısı yapılmadı.")
         if not selected:
             summary = "Bu soruyu yanıtlamak için yeterli işlenmiş belge ve doğrulanmış hukuki kaynak yok."
         domain_issues = {
@@ -370,8 +355,12 @@ def _run_research(app, run_id):
                 "practice_versions": practice_versions,
                 "policy": POLICY_VERSION,
                 "corpus": public_candidates["snapshot"],
+                "context_pack": {"recipe": context_manifest["recipe"],
+                                 "prompt_recipe": context_manifest["prompt"]["recipe"],
+                                 "messages_sha256": context_manifest["prompt"]["messages_sha256"]},
             },
             "evidence": selected,
+            "context_pack": context_manifest,
             "graph_paths": graph_paths,
             "authority_candidates": public_candidates,
             "generated_at": now(),
