@@ -1,5 +1,6 @@
 import { Badge, Detail, Notice } from '../../components';
 import { FACT_LABELS, locatorText } from '../../utils';
+import { FeedbackSummary } from './AnalysisFeedback';
 import { ANALYSIS_LABELS, type AnalysisChecks, type AnalysisContent, type AnalysisFreshness, type AnalysisReviewProjection } from './analysisTypes';
 
 export function AnalysisCheckPanel({ checks, freshness, review }: { checks: AnalysisChecks; freshness?: AnalysisFreshness; review?: AnalysisReviewProjection }) {
@@ -21,6 +22,7 @@ export function AnalysisContentView({ content, freshness, review, onSource, prop
   return <>
     <p className="authored-text"><strong>Mesele:</strong> {content.issue}</p>
     {content.ai_assistance && <Detail title="Model katkısı ve kayıt sınırları"><p>Model: {content.ai_assistance.provider.model} · {content.ai_assistance.passes} geçiş · Hukuki inceleme değildir.</p><p className="reference-id">Öneri: {content.ai_assistance.job_id} · Kaynak sürüm: {content.ai_assistance.source_version_id}</p><p className="small muted">Alınan önerinin doğrulanmamış notları; sonraki avukat değişikliklerini ayrıca inceleyin.</p><ul>{content.ai_assistance.review_notes?.map((note, index) => <li key={index}>{note.target_id} · Geçiş {note.pass}: {note.text}</li>)}</ul></Detail>}
+    {content.ai_assistance?.review_feedback && <FeedbackSummary feedback={content.ai_assistance.review_feedback} responses={content.ai_assistance.feedback_responses} pass={content.ai_assistance.feedback_response_pass} onSource={onSource} />}
     <AnalysisCheckPanel checks={content.checks} freshness={freshness} review={review} />
     <Detail title="Öncül → kural → uygulama → alternatif → geçici sonuç">
       <p className="small muted">{proposed ? 'Modelin onaylanmamış düzenleme önerisi.' : content.authorship === 'user_with_ai_assistance' ? 'Model önerisinden uyarlanmış avukat taslağı.' : 'Avukat tarafından yazılmış gerekçe.'} Otomatik hukuki sonuç veya modelin düşünce kaydı değildir.</p>

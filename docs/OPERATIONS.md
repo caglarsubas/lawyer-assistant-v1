@@ -169,6 +169,15 @@ output is labelled. Stop intent does not prove immediate upstream compute cessat
 Request-ID retries recover the same job; after reloading, inspect proposal history
 before starting an intentional rerun. See [proposal bounds and API](ANALYSIS_SUGGESTIONS.md).
 
+After a current change request, optionally expand **İnceleme bulgularını modele
+ekle** and select up to five findings. No selection is automatic. Only selected
+findings accompany the local proposal; its response must link actual permitted
+edits or disclose manual/unresolved work. Inspect each response and original
+passage. Adoption appends an unreviewed draft, retaining the source review and
+response lineage without closing findings. A new review/head, source change or
+recipe change invalidates the job. The v2 proposal recipe makes earlier v1 jobs
+stale; existing draft history remains inspectable. See [feedback contract](ANALYSIS_FEEDBACK.md).
+
 For manual review, open **Avukat inceleme kararı kaydet** and load the displayed
 version's source and review bindings. Inspect original documents, then explicitly
 evaluate sources, reasoning, fact roles, limits and model contribution. No criteria

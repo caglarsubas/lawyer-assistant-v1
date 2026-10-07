@@ -14,6 +14,11 @@ request a proposal, compare its application/conclusion changes and notes against
 the selected passages, then provide a change reason to adopt. History is loaded
 on request; creating or visiting a draft never starts inference automatically.
 
+After a change request, optionally open **İnceleme bulgularını modele ekle** and
+select up to five findings. No finding is preselected. Compare the selected
+review text, linked candidate edits, manual-work requirements and unresolved
+responses before adoption. See [the feedback contract](ANALYSIS_FEEDBACK.md).
+
 The model may propose application rationale, assessments of existing conditions,
 conclusion text, additional uncertainty, next action and review notes. Issue,
 posture/date, premises and ledger roles, original source selections and ranges,
@@ -88,7 +93,11 @@ contradiction dependencies, the source version's latest human review ID, recipes
 rechecked at checkpoints, final publication and adoption. Changed dependencies
 make completed output stale and ineligible without rewriting its retained text.
 New review findings therefore block older proposals; an adopted new version starts
-unreviewed. Review prose is not automatically supplied as model feedback in this slice.
+unreviewed. Review prose is supplied only for explicitly selected findings in the
+opt-in feedback workflow; quotation research receives no review prose. Review
+recipe changes also invalidate proposals. `private-analysis-proposals-v2` replaces
+the proposal recipe; retained v1 jobs become stale rather than running/adopting
+under a changed policy. Existing immutable draft provenance stays unchanged.
 See [human review binding](ANALYSIS_REVIEWS.md).
 An adoption transaction locks the matter before the job and revalidates source
 bindings, candidate hash and revision. Competing adoptions yield one appended
@@ -107,6 +116,12 @@ source version, model/policy, passes, prompt digests, unverified review notes an
 adopting user. Later manual revisions preserve that lineage; immutable history
 retains earlier contributions. DOCX/PDF and the UI disclose AI assistance. Exports
 still select an exact version and recheck access/freshness after rendering.
+
+Feedback jobs additionally retain the exact review/version/content/recipe snapshot
+and its digest, selected indices, typed responses and their accepted-candidate
+pass. Rejected-pass responses remain in iteration history and cannot replace the
+retained candidate's response lineage. Adoption copies this provenance to the new
+draft, without resolving any finding or inheriting the source review's decision.
 
 ## Qualification boundary
 

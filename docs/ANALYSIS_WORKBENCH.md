@@ -8,7 +8,8 @@ interpretation follows from a passage or that a legal rule applies.
 
 Manual drafting and preview use authorized private documents and the fact ledger
 without inference. A separate [bounded local-model proposal workflow](ANALYSIS_SUGGESTIONS.md)
-now offers fixed-input application/conclusion edits, structural repair and explicit
+now offers fixed-input application/conclusion edits, structural repair, opt-in
+[selected review feedback](ANALYSIS_FEEDBACK.md) and explicit
 adoption into a new Needs review version. Public-authority search and BYOK research
 remain outside this workbench; quotation research remains separate.
 

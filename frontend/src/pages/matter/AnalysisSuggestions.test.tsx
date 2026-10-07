@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { ProposalReview } from './AnalysisSuggestions';
+import { AnalysisSuggestions, ProposalReview } from './AnalysisSuggestions';
 import { AnalysisContentView } from './AnalysisView';
-import { analysisForm, type AnalysisContent, type AnalysisSuggestion } from './analysisTypes';
+import { analysisForm, type AnalysisContent, type AnalysisRecord, type AnalysisSuggestion } from './analysisTypes';
 
 function candidate(): AnalysisContent {
   return {
@@ -27,6 +27,18 @@ function job(): AnalysisSuggestion {
 }
 
 describe('local analysis proposal review', () => {
+  it('renders a new unreviewed version with no review or pending selection after adoption', () => {
+    const record: AnalysisRecord = { ...candidate(), id: 'a1', revision: 2, version: 2, latest_version_id: 'v2', created_at: '2026-10-07T00:00:00Z',
+      freshness: { status: 'current', reasons: [], scope: 'private_draft' },
+      review: { effective_state: 'unreviewed', latest: null, scope: 'conditional_private_draft_only', reasons: [] },
+    };
+    for (const review of [record.review, undefined]) {
+      const html = renderToStaticMarkup(<AnalysisSuggestions matterId="m1" record={{ ...record, review }} onSource={() => {}} onAdopt={async () => {}} />);
+      expect(html).toContain('Yerel model önerisi iste');
+      expect(html).not.toContain('Modele iletilecek bulgular');
+      expect(html).not.toContain('<details open');
+    }
+  });
   it('distinguishes unapproved model text, rejected changes, legal review and bounded work', () => {
     const html = renderToStaticMarkup(<ProposalReview job={job()} onSource={() => {}} />);
     for (const text of ['Modelin onaylanmamış düzenleme önerisi', 'Hukuki onay verilmedi', 'Yeni kritik kontrol nedeniyle', '1/2 saklanan geçiş', '240 saniye', '1.000 çıktı tokenı', 'Otomatik yeniden deneme yapılmaz', 'Kaynak analiz sürümü: v1']) expect(html).toContain(text);

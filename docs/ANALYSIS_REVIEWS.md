@@ -57,8 +57,11 @@ practice dependency and pins future quotation research to its review ID. A propo
 job pins the current review head; changes during execution, inspection or adoption
 make older work ineligible. Completed candidates remain stored as stale, and
 in-flight stale output cannot be adopted. Review text is not automatically added to
-quotation or editing-model prompts; a model-directed semantic feedback loop remains
-future work. Human recording enables no provider or external-access permission.
+quotation or editing-model prompts. The separate [opt-in feedback workflow](ANALYSIS_FEEDBACK.md)
+allows up to five findings from the latest current change request to inform bounded
+local proposals. Typed responses do not resolve findings or inherit a review decision;
+semantic repair qualification remains open. Human recording enables no provider or
+external-access permission.
 
 Exact-version DOCX/PDF includes the latest review projection, declaration, criteria,
 findings, identity, time and content digest. Stale decisions or change requests
