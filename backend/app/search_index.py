@@ -11,6 +11,8 @@ import time
 
 import httpx
 
+from .citation_occurrences import PROFILE as CITATION_PROFILE
+from .citation_occurrences import derived_fields as citation_fields
 from .graph_release import _load_serving
 from .search import PublicSearchService, _bounded_structure, _validate_origin
 from .search_index_contract import (
@@ -86,7 +88,7 @@ def inventory(release, index, deadline):
         verified = validator._project({"_index": index, "_id": ident, "_source": source}, None, source["authority_id"])
         if source != {name: verified.get(name) for name in FIELDS}:
             raise ValueError("Search projection differs from signed evidence")
-        indexed = {**source, **derived_fields(source)}
+        indexed = {**source, **derived_fields(source), **citation_fields(source)}
         total += len(canonical(indexed))
         if total > MAX_BYTES:
             raise ValueError("Index byte budget exceeded")
@@ -133,6 +135,7 @@ def build_index(release, base_url, expected_release):
             documents = inventory(release, index, deadline)
             meta = {"schema": SCHEMA, "release_id": expected_release, "status": "building", "channels": CHANNELS,
                     "normalization": normalization_metadata(),
+                    "citation_profile": CITATION_PROFILE,
                     "document_count": len(documents), "documents_sha256": hashlib.sha256(canonical(documents)).hexdigest()}
             stage = "create"
             # Create-only, unique concrete index. A collision is an error, never

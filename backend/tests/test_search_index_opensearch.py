@@ -22,14 +22,67 @@ from test_snapshot_set_postgres import postgres_database as postgres_database_fi
 from app.graph_release import RuntimeGraphRelease, _load_serving
 from app.search import PublicSearchService
 from app.search_index import IndexBuildError, IndexTransport, build_index
+from app.search_index_contract import document_id
 from app.search_normalization import normalization_metadata
 
 postgres_authorized_set = postgres_authorized_set_fixture
 postgres_database = postgres_database_fixture
-MARKER = "lawyer-search-index-drill-v3"
+MARKER = "lawyer-search-index-drill-v4"
 URL = "http://opensearch:9200"
 pytestmark = pytest.mark.skipif(os.environ.get("LA_SEARCH_INDEX_DRILL") != MARKER,
                                 reason="Opt-in disposable OpenSearch qualification only")
+
+
+def test_real_literal_citations_remain_distinct_unresolved_and_source_backed(tmp_path):
+    (tmp_path / "publication.lock").touch()
+    texts = {"esas_a": "Esas Sayısı: 2099/0007", "esas_b": "E. 2099 / 0007", "karar": "Karar No: 2099/0007",
+             "short_number": "E. 2099/7", "application": "Başvuru Numarası: 2099/0007",
+             "law": "999999 sayılı Kanun", "unlabeled": "2099/0007, m. 7", "expired": "E. 2099/0007"}
+    rows = []
+    for ident, text in texts.items():
+        row = {**synthetic_source("urn:test:assertion:" + ident), "text": text,
+               "passage_id": "urn:test:passage:" + ident, "authority_id": "urn:test:authority:" + ident,
+               "source_sha256": hashlib.sha256(text.encode()).hexdigest(), "title": "SENTETİK"}
+        if ident == "expired":
+            row.update(valid_from="1999-01-01", valid_to="2001-01-01")
+        rows.append(row)
+    release = SyntheticRelease(tmp_path, rows)
+    built = build_index(release, URL, release.info["release_id"])
+    search = PublicSearchService(URL, built["index"], release.info["release_id"], release)
+    cases = [("E. 2099/0007", {"esas_a", "esas_b"}), ("Esas No: 2099 / 0007", {"esas_a", "esas_b"}),
+             ("K. 2099/0007", {"karar"}), ("B. No: 2099/0007", {"application"}),
+             ("E. 2099/7", {"short_number"}), ("Kanun No: 999999", {"law"}),
+             ("E. 2099/0007, K. 2099/0007", {"esas_a", "esas_b", "karar"})]
+    for query, expected in cases:
+        result = search.search(query, as_of="2011-01-01")
+        assert result["coverage"]["status"] == "available"
+        matches = {hit["passage_id"].rsplit(":", 1)[-1]: hit for hit in result["hits"] if "literal_citation" in hit["channels"]}
+        assert set(matches) == expected
+        for ident, hit in matches.items():
+            assert hit["text"] == texts[ident] and hit["literal_citations"]["resolution"] == "unresolved"
+            assert hit["literal_citations"]["occurrences"]
+            assert "citation_keys" not in hit
+            for occurrence in hit["literal_citations"]["occurrences"]:
+                assert hit[occurrence["field"]][occurrence["start"]:occurrence["end"]] == occurrence["literal"]
+    plain = search.search("2099/0007", as_of="2011-01-01")
+    assert plain["coverage"]["channels"]["literal_citation"] == "not_requested"
+    # A privileged index writer can forge derived keys, but cannot cause the
+    # reader to claim a citation occurrence absent from verified source text.
+    transport = IndexTransport(URL, built["index"], time.monotonic() + 30)
+    transport.request("PUT", "/_settings", body={"index.blocks.write": False})
+    transport.request("POST", "/_update/" + document_id(rows[0]), body={"doc": {"citation_keys": ["esas:2099:9999"]}})
+    transport.request("POST", "/_refresh")
+    transport.request("PUT", "/_settings", body={"index.blocks.write": True})
+    poisoned = search.search("E. 2099/9999", as_of="2011-01-01")
+    assert poisoned["coverage"]["rejected_hits"] >= 1
+    assert not any("literal_citation" in hit["channels"] for hit in poisoned["hits"])
+    print("\nCITATION_RETRIEVAL_DRILL_REPORT=" + json.dumps({
+        "status": "passed", "synthetic_only": True, "projection": "explicit_fixture_only",
+        "index_schema": built["schema"], "citation_profile": built["citation_profile"],
+        "document_count": len(rows), "targeted_cases_passed": len(cases),
+        "checks": {name: True for name in ("typed_role_separation", "leading_zeros_preserved", "unresolved_collisions",
+            "original_literal_spans", "historical_prefilters", "unlabeled_numbers_not_resolved",
+            "no_pairing_inference", "forged_keyword_rejected_against_source")}}, sort_keys=True))
 
 
 def test_real_turkish_fields_channels_and_exact_offsets(tmp_path):

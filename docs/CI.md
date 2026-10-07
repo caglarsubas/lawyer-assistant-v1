@@ -165,3 +165,9 @@ The R04 Turkish retrieval fields add fast normalization, recipe-compatibility an
 channel-boundary tests to the existing backend suite. Real OpenSearch Turkish
 matching remains in the opt-in isolated index drill, outside GitHub Actions.
 No CI job, dependency, worker, retry or timeout was added.
+
+The R04 literal-citation slice adds bounded parser, source-recheck and v1/v2
+compatibility cases to the same backend suite. Its real OpenSearch keyword,
+collision and tampering cases run only in the opt-in v4 drill. Exceeding the query
+citation budget preserves other channels; source overflow blocks preparation
+before index writes. The CI topology and deadlines remain unchanged.

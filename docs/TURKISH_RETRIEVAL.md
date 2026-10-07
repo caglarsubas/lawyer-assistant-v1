@@ -1,6 +1,8 @@
 # Turkish retrieval fields — R04 engineering baseline
 
-New managed indexes use `public-search-index-v2`. Original signed text, titles,
+New managed indexes use `public-search-index-v3`, retaining the v2 normalization
+recipe and adding [literal citation discovery](CITATION_RETRIEVAL.md).
+Original signed text, titles,
 identifiers, hashes, locators and dates remain unchanged. Six additional text/title
 fields carry deterministic search terms; they are never substituted for evidence.
 
@@ -66,12 +68,14 @@ records and 1 MiB of bulk bytes; the existing 32 MiB total and 2,000-record caps
 include derived fields. Larger input fails visibly, rather than dropping content.
 
 Existing sealed `public-search-index-v1` indexes remain readable through their
-original lexical channel. The fixed legacy index route remains unchanged. Neither
+original lexical channel; v2 indexes retain all four lexical channels. The fixed
+legacy index route remains unchanged. Neither
 old indexes nor aliases are rewritten, and new indexes are not selected automatically.
 Switch only after checking the new receipt, exact evidence and representative
 queries for the same currently authorized graph release. Revert selection only to
 an intact, authorized prior index. Old clients refuse the new schema, so deploy
-the updated reader before selecting a v2 index.
+the updated reader before selecting a v3 index. Citation discovery requires a new
+v3 index; existing v2 normalization behavior remains available without rebuilding.
 
 The opt-in [isolated OpenSearch drill](OPERATIONS.md#isolated-opensearch-qualification)
 now includes synthetic Turkish matching cases alongside signed-source/publication

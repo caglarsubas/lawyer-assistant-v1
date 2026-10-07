@@ -14,7 +14,8 @@ from urllib.parse import urlsplit
 
 import httpx
 
-from .search_index_contract import FIELDS, MANAGED, SCHEMA, document_id, ready_metadata
+from .citation_occurrences import CitationQueryLimit, matching_occurrences, query_keys
+from .search_index_contract import FIELDS, MANAGED, NORMALIZED_SCHEMAS, SCHEMA, document_id, ready_metadata
 from .search_normalization import match_spans, terms
 
 ALLOWED_INDEXES = frozenset({"law-public-passages"})
@@ -278,7 +279,23 @@ class PublicSearchService:
                 coverage["status"] = "unavailable"
                 limitations.append("The selected public index is not a sealed, ready release index; no search was sent.")
                 return {"hits": [], "coverage": coverage, "snapshot": snapshot, "limitations": limitations}
-        normalized_index = meta is not None and meta["schema"] == SCHEMA
+        normalized_index = meta is not None and meta["schema"] in NORMALIZED_SCHEMAS
+        citation_index = meta is not None and meta["schema"] == SCHEMA
+        citations = []
+        citation_limit_exceeded = False
+        if citation_index:
+            snapshot["citation_profile"] = meta["citation_profile"]
+            try:
+                citations = query_keys(query) if authority_id is None else []
+            except CitationQueryLimit as error:
+                citation_limit_exceeded = True
+                limitations.append(f"Literal citation channel skipped: {error}. Other search channels remain independent.")
+            channels["literal_citation"] = "unavailable" if citation_limit_exceeded else "not_run" if citations else "not_requested"
+            coverage["literal_citations"] = {
+                "recognized_query_keys": None if citation_limit_exceeded else len(citations),
+                "query_budget_exceeded": citation_limit_exceeded, "authority_resolution": "not_performed",
+            }
+            limitations.append("Labeled citation numbers identify textual occurrences only; institutions, case pairings, authority targets and historical versions remain unresolved.")
         if normalized_index:
             snapshot["normalization"] = meta["normalization"]
             limitations.append("Folded aliases can conflate distinct Turkish terms; they nominate candidates, never authority identities or equivalent legal concepts.")
@@ -302,6 +319,10 @@ class PublicSearchService:
         if authority_id is not None:
             snapshot["resolution"] = "exact_authority_identifier"
             channels["vector"] = "not_requested"
+        if citations:
+            requests["literal_citation"] = {**common, "query": {"bool": {
+                "filter": [*filters, {"terms": {"citation_keys": citations}}],
+            }}}
         if vector is not None and authority_id is None:
             # Native filtered kNN requires a qualified Lucene/Faiss vector mapping.
             # A bool post-filter is insufficient: it can lose authorized candidates.
@@ -331,6 +352,8 @@ class PublicSearchService:
             for rank, raw_hit in enumerate(raw_hits, 1):
                 try:
                     item = self._project(raw_hit, as_of, authority_id)
+                    if channel == "literal_citation" and not matching_occurrences(item, citations)["occurrences"]:
+                        raise ValueError("Citation key is absent from the signed original passage")
                 except (ValueError, TypeError):
                     coverage["rejected_hits"] += 1
                     continue
@@ -355,7 +378,7 @@ class PublicSearchService:
             limitations.append("Some returned candidates failed identity, release or qualification checks.")
         completed = sum(channels[name] == "complete" for name in requests)
         coverage["status"] = "available" if completed == len(requests) else "partial" if completed else "unavailable"
-        if coverage["status"] == "available" and coverage["rejected_hits"]:
+        if coverage["status"] == "available" and (coverage["rejected_hits"] or citation_limit_exceeded):
             coverage["status"] = "partial"
         ranked = sorted(combined.values(), key=lambda item: (
             -item["score"], item["source"]["passage_id"], item["source"]["authority_id"], item["source"].get("assertion_id", "")))
@@ -364,6 +387,8 @@ class PublicSearchService:
         if normalized_index and authority_id is None:
             for hit in hits:
                 hit["matches"] = match_spans(hit, query)
+                if citations:
+                    hit["literal_citations"] = matching_occurrences(hit, citations)
         if self.managed:
             try:
                 if ready_metadata(self.index, self._read_json("GET", "", None, deadline), self.release_id) != meta:

@@ -201,11 +201,14 @@ They continue to verify returned passages
 against signed source evidence and current private permission. The ready marker
 and write block are operational safeguards, not independent legal authority or
 protection against a privileged OpenSearch administrator. Original text/identifiers
-are preserved. The v2 recipe retains Turkish text analysis and adds independent
-original-token, normalized and folded fields, with keyword identity fields unchanged.
-Existing v1 indexes retain their lexical-only reader path. See
+are preserved. The v3 recipe retains Turkish text analysis and v2's independent
+original-token, normalized and folded fields, then adds typed literal-citation
+keys. Keyword authority identities remain unchanged. Existing v1/v2 indexes retain
+their previous reader paths. See
 [Turkish retrieval and migration](TURKISH_RETRIEVAL.md) for pinned profiles, bounded
-candidate fusion and exact source-span hints. Embeddings/reranking and measured
+candidate fusion and exact source-span hints, and
+[literal citation discovery](CITATION_RETRIEVAL.md) for supported labels, bounds and
+explicitly unresolved targets. Embeddings/reranking and measured
 Turkish/adverse recall remain unqualified.
 
 The initial build budget is 2,000 candidate records, 32 MiB of original-plus-derived
@@ -244,8 +247,10 @@ keeps synthetic source files and test keys in tmpfs; no `.env`, existing databas
 or provider key is used. Each service is limited to two CPUs and 256 PIDs; memory
 caps are 512 MiB for PostgreSQL, 1.5 GiB for OpenSearch and 1 GiB for the driver.
 
-The v3 workload adds targeted synthetic Turkish case/Unicode/apostrophe/alias,
-negation/number and original-offset matching. Those cases use a fixture projection;
+The v4 workload includes targeted synthetic Turkish case/Unicode/apostrophe/alias,
+negation/number and original-offset matching, plus seven literal-citation cases
+covering role separation, zeros, collisions and forged derived keys. Those matching
+cases use a fixture projection;
 the separate lifecycle workload exercises exact signed passage retrieval, historical filtering,
 five concurrent searches during a guarded rebuild, write blocks, an actual
 per-item bulk failure and second-source revocation. It observes the revocation
@@ -589,8 +594,10 @@ distinct evidenced relationships for the same passage.
 `valid_from` and optional exclusive `valid_to` are version intervals. An `as_of`
 request requires a known interval containing that date; interval membership alone
 does not establish which law applies to the matter. Text search uses a lexical
-channel, with independent original/normalized/folded channels for v2 managed
-indexes. Optional vectors from a qualified local embedding model use a separate
+channel, with independent original/normalized/folded channels for v2/v3 managed
+indexes and source-verified literal citation occurrences for v3. Citation-number
+matching never resolves the target authority or its historical version. Optional
+vectors from a qualified local embedding model use a separate
 channel and reciprocal-rank fusion, with identical qualification filters inside
 the kNN query. A supported Lucene/Faiss mapping, embedding model/version/dimension
 compatibility and Turkish retrieval recall must be qualified before enabling

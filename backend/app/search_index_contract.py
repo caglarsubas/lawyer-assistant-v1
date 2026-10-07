@@ -4,11 +4,15 @@ import hashlib
 import json
 import re
 
+from .citation_occurrences import PROFILE as CITATION_PROFILE
 from .search_normalization import VARIANTS, normalization_metadata
 
 LEGACY_SCHEMA = "public-search-index-v1"
-SCHEMA = "public-search-index-v2"
-CHANNELS = ["lexical", *("lexical_" + variant for variant in VARIANTS)]
+NORMALIZED_SCHEMA = "public-search-index-v2"
+SCHEMA = "public-search-index-v3"
+NORMALIZED_SCHEMAS = frozenset({NORMALIZED_SCHEMA, SCHEMA})
+NORMALIZED_CHANNELS = ["lexical", *("lexical_" + variant for variant in VARIANTS)]
+CHANNELS = [*NORMALIZED_CHANNELS, "literal_citation"]
 MANAGED = re.compile(r"law-public-passages-([a-f0-9]{64})-([a-f0-9]{32})\Z")
 HASH = re.compile(r"[a-f0-9]{64}\Z")
 MAX_DOCUMENTS = 2000
@@ -33,19 +37,21 @@ def document_id(source):
 
 
 def properties(schema=SCHEMA):
-    if schema not in {SCHEMA, LEGACY_SCHEMA}:
+    if schema not in {SCHEMA, NORMALIZED_SCHEMA, LEGACY_SCHEMA}:
         raise ValueError("Unsupported search index schema")
     result = {name: {"type": "keyword"} for name in FIELDS}
     for name in ("text", "title"):
         result[name] = {"type": "text", "analyzer": "turkish"}
     for name in ("valid_from", "valid_to", "validity_checked_through"):
         result[name] = {"type": "date", "format": "strict_date"}
-    if schema == SCHEMA:
+    if schema in NORMALIZED_SCHEMAS:
         for field in ("text", "title"):
             for variant in VARIANTS:
                 # Application-side tokenization/normalization is versioned and
                 # reproducible with original offsets. No second case/stem pass.
                 result[f"{field}_{variant}"] = {"type": "text", "analyzer": "whitespace"}
+    if schema == SCHEMA:
+        result["citation_keys"] = {"type": "keyword"}
     return result
 
 
@@ -62,8 +68,10 @@ def ready_metadata(index, response, release_id):
             or item["settings"]["index"].get("blocks", {}).get("write") != "true"
             or item["settings"]["index"].get("analysis", {}) != {}
             or meta.get("status") != "ready"
-            or meta.get("release_id") != release_id or meta.get("channels") != (CHANNELS if schema == SCHEMA else ["lexical"])
-            or (schema == SCHEMA and meta.get("normalization") != normalization_metadata())
+            or meta.get("release_id") != release_id
+            or meta.get("channels") != (CHANNELS if schema == SCHEMA else NORMALIZED_CHANNELS if schema == NORMALIZED_SCHEMA else ["lexical"])
+            or (schema in NORMALIZED_SCHEMAS and meta.get("normalization") != normalization_metadata())
+            or (schema == SCHEMA and meta.get("citation_profile") != CITATION_PROFILE)
             or type(meta.get("document_count")) is not int or not 1 <= meta["document_count"] <= MAX_DOCUMENTS
             or not isinstance(meta.get("documents_sha256"), str) or not HASH.fullmatch(meta["documents_sha256"])):
         raise ValueError("Search index is incomplete, writable or incompatible")

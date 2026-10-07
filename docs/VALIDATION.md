@@ -1,4 +1,56 @@
-# Verification record — 6 October 2026
+# Verification record — 7 October 2026
+
+## R04 literal citation occurrence retrieval — 7 October 2026 (Asia/Shanghai)
+
+PR #14 merged as `3fdee6d6332bdc80eb01349a0ae06f546bfe6978`; all three PR checks
+and [post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37493591953)
+passed. This packet adds v3 keyword discovery for explicitly labeled esas, karar,
+application and law numbers. Original numeric spelling, source offsets and label
+roles remain separate; citation targets and historical versions remain unresolved.
+Every citation nomination is rechecked against independently projected source text.
+
+- **271 relevant backend tests passed in 50.51s** across parser/normalization,
+  index/search boundaries, signed runtime releases, graph tools and research jobs.
+  Bounds, malformed/unsupported numbers, role/zero distinctions, source offsets,
+  forged keys, v1/v2 compatibility and revocation were exercised. Excess citation
+  query keys skip that channel visibly while retaining other search results;
+  source occurrence overflow blocks preparation before any index write.
+- **41 deployment contract tests passed in 0.363s**. Repository-wide Ruff and
+  diff checks passed. The full backend suite remains mandatory in CI; it was not
+  rerun locally. No job, dependency, worker, retry or timeout was added.
+- **20 isolated Docker tests passed in 86.46s**, including seven literal-citation
+  query cases against eight invented passages and the existing ten Turkish
+  matching cases. The citation workload checked role separation, leading zeros,
+  unresolved number collisions, exact spans, historical filters, unsupported bare
+  numbers and rejection of a deliberately forged OpenSearch keyword. These matching
+  workloads use an explicit fixture projection, not legally reviewed authorities.
+- The accompanying lifecycle workload used actual signed-source projection and
+  private PostgreSQL guards, built three generations from eight synthetic
+  passage/assertion/authority records, preserved reads during a paused rebuild,
+  rejected incomplete/writable indexes and a real bulk-item failure, and blocked
+  all reads/builds after committed second-source revocation. Five simultaneous
+  authority reads completed in **12.384–13.328s** during rebuild; first build took
+  1.108s and induced revocation wait/commit 0.409s. These are small-fixture authority
+  reads, not model jobs or production latency qualification. The retrieval budget
+  is cooperative; guard/projection and in-flight work can extend wall-clock time.
+
+The [retained v4 report](evidence/literal-citation-drill-2026-10-07.json) records
+image IDs, 101-file application/input and 67-file test fingerprints, resource
+limits and successful cleanup. It records the merge base and a dirty tree because
+it ran before commit; fingerprints were checked against the final source/tests.
+An earlier drill also passed; the final run followed the query-overflow and malformed
+numeric-suffix corrections. The preloaded `r04-turkish` test runtime had matching
+`pyproject.toml`/`uv.lock` digests. Current sources were copied into a separate image
+using `--network none`, and the runner independently checked both fingerprints.
+This does not claim a fresh production-image build or application deployment.
+
+No live `.env`, client data, provider credentials, existing index or app container
+was read or changed. All drill services used a fresh internal-only network without
+host ports or bind mounts; generated databases/volumes/network were cleaned up.
+Existing v1/v2 indexes remain readable; v3 requires explicit build and selection.
+R01 source/legal review, R04 authority resolution, the 360-query development set,
+retrieval/adverse recall, model selection and representative performance remain
+open. See [supported syntax and migration](CITATION_RETRIEVAL.md).
 
 
 ## R04 Turkish retrieval fields — 6 October 2026 (Asia/Shanghai)
