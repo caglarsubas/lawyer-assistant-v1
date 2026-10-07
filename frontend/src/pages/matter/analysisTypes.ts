@@ -23,15 +23,16 @@ export interface AnalysisFreshness { status: 'current' | 'stale'; reasons: strin
 export interface AnalysisContent extends Omit<AnalysisForm, 'evidence'> {
   evidence: (AnalysisSelection & { document_id: string; document_revision: number; document_sha256: string | null; name: string; locator: Passage['locator']; passage_sha256: string; quote_sha256: string; text: string; full_passage_length: number })[];
   fact_snapshots: { id: string; revision: number; text: string; status: string; evidence_id: string | null }[];
-  checks: AnalysisChecks; status: 'needs_review' | 'stale'; authorship: 'user' | 'user_with_ai_assistance' | 'model_proposal'; legal_authority: false;
+  checks: AnalysisChecks; status: 'needs_review' | 'reviewed' | 'stale'; authorship: 'user' | 'user_with_ai_assistance' | 'model_proposal'; legal_authority: false;
   ai_assistance?: { job_id: string; source_version_id: string; passes: number; provider: { model: string }; review_notes?: { target_id: string; text: string; pass: number }[] };
   revision_comparison: { previous_version_id: string | null; changed_sections: string[]; changed_dependency_groups: string[]; checks_no_longer_triggered: string[]; new_check_ids: string[]; scope: string };
 }
 export interface AnalysisRecord extends AnalysisContent {
   id: string; revision: number; version: number; latest_version_id: string; created_at: string;
   freshness: AnalysisFreshness;
+  review?: AnalysisReviewProjection;
 }
-export interface AnalysisVersion { id: string; version: number; content: AnalysisContent; change_note: string; created_at: string; freshness: AnalysisFreshness }
+export interface AnalysisVersion { id: string; version: number; content: AnalysisContent; change_note: string; created_at: string; freshness: AnalysisFreshness; review?: AnalysisReviewProjection }
 
 export function analysisForm(record?: AnalysisContent, visibleFacts?: Fact[]): AnalysisForm {
   return record ? {
@@ -72,4 +73,26 @@ export interface AnalysisSuggestion {
   freshness: AnalysisFreshness; error?: string;
   review_notes?: { target_id: string; text: string; evidence_ids: string[]; pass: number }[];
   iterations?: { pass: number; provider_seconds: number; prompt: { utf8_bytes: number; messages_sha256: string; completion_tokens: number }; outcome: string; new_critical_check_ids: string[]; checks: AnalysisChecks }[];
+}
+
+export type ReviewCriterionKey = 'sources' | 'reasoning' | 'fact_roles' | 'limits' | 'ai_contribution';
+export type ReviewOutcome = 'confirmed' | 'needs_change' | 'not_applicable';
+export interface AnalysisReviewCriterion { criterion: ReviewCriterionKey; outcome: ReviewOutcome; note: string }
+export interface AnalysisReviewFinding { target_id: string; severity: 'critical' | 'major' | 'note'; text: string; suggested_change: string; evidence_ids: string[] }
+export interface AnalysisReviewEvent {
+  id: string; version_id: string; created_at: string; sequence: number; content_sha256: string;
+  decision: 'reviewed_conditional' | 'changes_requested'; reviewer_id: string; reviewer_name: string;
+  note: string; criteria: AnalysisReviewCriterion[]; findings: AnalysisReviewFinding[];
+  scope: 'conditional_private_draft_only'; recipe: string;
+}
+export interface AnalysisReviewProjection {
+  effective_state: 'unreviewed' | 'reviewed_conditional' | 'changes_requested' | 'stale';
+  scope: 'conditional_private_draft_only'; latest: AnalysisReviewEvent | null; reasons: string[];
+}
+export interface AnalysisReviewContext {
+  version_id: string; expected_revision: number; content_sha256: string; expected_review_id: string | null;
+  recipe: string; criteria: Record<ReviewCriterionKey, string>; ai_contribution_required: boolean;
+  current_version: boolean; can_record: boolean; can_accept: boolean; critical_count: number;
+  freshness: AnalysisFreshness; review: AnalysisReviewProjection; targets: string[];
+  sources: { evidence_id: string; document_id: string; name: string; locator: Passage['locator']; start: number; end: number; quote_sha256: string }[];
 }

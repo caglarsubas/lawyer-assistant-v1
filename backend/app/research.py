@@ -226,6 +226,10 @@ def _run_research(app, run_id):
                 )
             )
         }
+        from .analysis_reviews import review_pin
+        for ident, entry in practice_versions.items():
+            if entry["kind"] == "practice_analysis":
+                entry["review_id"] = review_pin(store, session, matter.id, ident, entry["version_id"], user)
         if practice_versions:
             gaps.append(
                 "Avukat çalışma kayıtlarının sürümleri kaydedildi; varsayımlar belge olgusuna dönüştürülmedi. Çalışma notlarını ayrıca inceleyin."

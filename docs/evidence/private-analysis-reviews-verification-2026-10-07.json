@@ -1,0 +1,160 @@
+{
+  "schema": "private-analysis-reviews-verification-v1",
+  "recorded_at": "2026-10-07T09:06:48.595372+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "c96bbd03ac0e8f79c9ecae7bad132cbf15282cad",
+  "checkout_dirty": true,
+  "host": {
+    "system": "Darwin",
+    "architecture": "arm64"
+  },
+  "test_image": "sha256:121918a3d5d5e98c2ac2f13f4b52c95529fcc2efd5e2588b34bb3d5767bb77b3",
+  "source": {
+    "application": {
+      "sha256": "23c85d0f413600471f7705c1bbc5797aaff6a1deba5c95796684a393dfedb2b6",
+      "files": 110
+    },
+    "tests": {
+      "files": 73,
+      "sha256": "caaf720c5b60259fd28e4bcbd15645acd82e0b4e77dbc1e8b3d7ed82cf2ff1cb"
+    }
+  },
+  "limits": {
+    "network": "none",
+    "host_ports": [],
+    "host_mounts": [],
+    "read_only": true,
+    "cpu": 2,
+    "memory_bytes": 805306368,
+    "pids": 128,
+    "tmpfs_bytes": 268435456
+  },
+  "linux_tests": {
+    "exit_code": 0,
+    "passed": 152,
+    "pytest_seconds": 20.84,
+    "container_wall_seconds": 23.42
+  },
+  "cleanup_verified": true,
+  "not_established": [
+    "Turkish legal accuracy or semantic completeness",
+    "real-provider authentication or model performance",
+    "production capacity or latency",
+    "public authority context or adverse recall",
+    "real source/legal approval",
+    "live application deployment"
+  ],
+  "baseline": {
+    "pr": 19,
+    "merge_commit": "c96bbd03ac0e8f79c9ecae7bad132cbf15282cad",
+    "pr_checks": "success",
+    "main_ci": {
+      "run_id": 37593141044,
+      "conclusion": "success",
+      "url": "https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37593141044"
+    }
+  },
+  "frontend": {
+    "files": 50,
+    "sha256": "075c52f4e051bbdb5d84ce6e10a2414b395f7e044957e565158def129963d466",
+    "tests": {
+      "passed": 112
+    },
+    "build": {
+      "passed": true,
+      "main_js_kb": 470.61,
+      "main_js_gzip_kb": 134.22
+    }
+  },
+  "host_checks": {
+    "broader_backend": {
+      "passed": 246,
+      "pytest_seconds": 25.52
+    },
+    "final_focused_backend": {
+      "passed": 136,
+      "pytest_seconds": 17.59
+    },
+    "deployment_contracts": {
+      "passed": 41,
+      "seconds": 0.414
+    },
+    "ruff": "passed",
+    "diff_check": "passed",
+    "full_backend_suite": "required_in_hosted_ci_not_repeated_locally"
+  },
+  "postgres": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "two real PostgreSQL review-head races in randomly named disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 1.089,
+    "passed": 2,
+    "pytest_seconds": 0.87
+  },
+  "dependencies": {
+    "pyproject_sha256": "1123184183b7e8ac39b3213e3189f728f5df39c4c3c7713d96299aad6fff6545",
+    "lock_sha256": "cde13f1ccee8a439e9ddfea7c15dcb26960c2e9bebffec7c2582ac1386b4b23f",
+    "reused_test_runtime": "lawyer-assistant-analysis-test:r05a-suggestions",
+    "test_runtime_source_refreshed_offline": true,
+    "fresh_production_image_build": false,
+    "ci_topology_changed": false
+  },
+  "browser": {
+    "scope": "invented private documents, manual human declarations and edited fact; inference disconnected",
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "state": {
+      "synthetic_only": true,
+      "real_inference": false,
+      "immutable_versions": 1,
+      "stored_version_status": "needs_review",
+      "current_projection": "stale",
+      "recorded_decisions": 2,
+      "earlier_review_preserved": true,
+      "new_finding_target": "application:a1",
+      "unqualified_public_authority": true
+    },
+    "screenshots": [
+      {
+        "local_ignored": ".data/verification/r05a-reviews/ui.jpg",
+        "sha256": "380763ef6f13d87fdd0e37af626126da34f9400fb37decd6f92d9adf03e36e15"
+      },
+      {
+        "local_ignored": ".data/verification/r05a-reviews/ui-stale.jpg",
+        "sha256": "7d1a35e1d4b046ead83b49953ea01e91d7a4147677d51c6737cc15f27aaaaf51"
+      },
+      {
+        "local_ignored": ".data/verification/r05a-reviews/ui-current.jpg",
+        "sha256": "4cbc76d41829ddfbc2e1589d51d06b45fa136eb3ca5c0703718127247050c0db"
+      }
+    ],
+    "observations": [
+      "no preselected review criteria and incomplete save disabled",
+      "source button opens exact selected original passage",
+      "five explicit criteria and explained inapplicable AI contribution",
+      "conditional private Reviewed projection with unchanged stored Needs review",
+      "UI fact revision produces Stale while preserving original human declaration",
+      "acceptance disabled for changed dependencies",
+      "typed critical finding with selected source appends second human decision",
+      "one immutable original text version remains",
+      "final assessment withheld separately from original machine checks",
+      "three panels at 1280 by 720 and details collapsed by default"
+    ],
+    "console_errors_observed": [],
+    "temporary_tabs_closed": true,
+    "temporary_api_and_ui_ports_closed": true
+  },
+  "no_root_env_read_or_changed": true,
+  "no_real_provider_key_used": true,
+  "live_application_deployed": false,
+  "verification_repairs": [
+    "export assertion moved to superseding review test rather than invalid-request test before final host and Linux qualification"
+  ],
+  "scope": "R05A immutable exact-version human review of conditional private drafts; public/history synthesis, semantic/adverse verification, model feedback/correction, calibrated Standard/Deep and BYOK remain open"
+}

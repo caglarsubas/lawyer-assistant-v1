@@ -348,14 +348,28 @@ def _freshness(store, session, matter_id, user, content):
             "scope": "selected_private_dependencies_only"}
 
 
+def _effective_freshness(freshness, review):
+    reasons = list(dict.fromkeys([*freshness["reasons"], *review["reasons"]]))
+    return {**freshness, "status": "stale" if reasons else "current", "reasons": reasons}
+
+
 def _view(store, session, matter_id, user, row):
+    from .analysis_reviews import projection
+
     content = store.view(row)
     freshness = _freshness(store, session, matter_id, user, content)
-    return {**content, "stored_status": content["status"], "status": "stale" if freshness["reasons"] else content["status"],
-            "freshness": freshness}
+    version = require_child(session, content["latest_version_id"], "practice_version", matter_id, user)
+    snapshot = store.decode(version)
+    if snapshot.get("entity_id") != row.id or snapshot.get("entity_kind") != "practice_analysis":
+        raise HTTPException(409, "Analizin sürüm bağlantısı doğrulanamadı.")
+    review = projection(store, session, matter_id, row.id, version.id, user, snapshot["content"], freshness)
+    freshness = _effective_freshness(freshness, review)
+    effective = "reviewed" if review["effective_state"] == "reviewed_conditional" else content["status"]
+    return {**content, "stored_status": content["status"], "status": "stale" if freshness["reasons"] else effective,
+            "review": review, "freshness": freshness}
 
 
-def _export_lines(content, snapshot, version, freshness):
+def _export_lines(content, snapshot, version, freshness, review=None):
     lines = [content["title"], "GİZLİ — AVUKAT TARAFINDAN YAZILMIŞ KOŞULLU ANALİZ TASLAĞI",
              "Hukuki onay verilmedi. Kontroller yalnızca beyan edilen yapıyı inceler.",
              f"Sürüm: {snapshot['version']} / {version.id}", f"Yazar kimliği: {snapshot['authored_by']}",
@@ -368,6 +382,17 @@ def _export_lines(content, snapshot, version, freshness):
             {key: value for key, value in content["ai_assistance"].items() if key != "review_notes"}, ensure_ascii=False)])
         lines.extend(f"Alınan model önerisinin doğrulanmamış inceleme notu, geçiş {item['pass']} / {item['target_id']}: {item['text']}"
                      for item in content["ai_assistance"].get("review_notes", []))
+    if review and review["latest"]:
+        event = review["latest"]
+        lines.extend(["Avukat incelemesi: " + review["effective_state"] + " / kapsam: " + review["scope"],
+                      "Bu karar koşullu özel taslakla sınırlıdır; kamu hukuku otoritesi veya makine hukuki onayı değildir.",
+                      f"İnceleme: {event['id']} / sıra {event['sequence']} / {event['created_at']}",
+                      f"İnceleyen: {event['reviewer_name']} / {event['reviewer_id']}",
+                      "İncelenen içerik SHA-256: " + event["content_sha256"], "İnceleme notu: " + event["note"],
+                      *review["reasons"]])
+        lines.extend(f"İnceleme ölçütü {item['criterion']}: {item['outcome']} / {item['note']}" for item in event["criteria"])
+        lines.extend(f"İnceleme bulgusu {item['severity']} / {item['target_id']}: {item['text']} / önerilen değişiklik: {item['suggested_change']} / dayanak: {', '.join(item['evidence_ids'])}"
+                     for item in event["findings"])
     facts = {item["id"]: item for item in content["fact_snapshots"]}
     for premise in content["premises"]:
         fact = facts.get(premise["fact_id"], {})
@@ -385,7 +410,10 @@ def _export_lines(content, snapshot, version, freshness):
     for alternative in content["alternatives"]:
         lines.append(f"Alternatif [{alternative['id']}] ({alternative['kind']}): {alternative['text']} / {', '.join(alternative['evidence_ids'])}")
     conclusion = content["conclusion"]
-    effective = "withheld" if freshness["reasons"] else content["checks"]["effective_disposition"]
+    changes_requested = bool(review and review["latest"] and review["latest"]["decision"] == "changes_requested")
+    effective = "withheld" if freshness["reasons"] or changes_requested else content["checks"]["effective_disposition"]
+    if changes_requested:
+        lines.append("Avukat değişiklik istedi; sonuç değerlendirmesi yeni incelemeye kadar bekletilir. Yapısal kontrollerin özgün sonucu değiştirilmez.")
     lines.extend(["Sonuç değerlendirmesi: " + effective, "Avukatın geçici sonuç metni: " + conclusion["text"],
                   "Bağlı uygulamalar: " + ", ".join(conclusion["application_ids"]),
                   "Bağlı alternatifler: " + ", ".join(conclusion["alternative_ids"]),
@@ -455,9 +483,16 @@ def analysis_router():
                 Record.kind == "practice_version", Record.firm_id == user.firm_id, Record.matter_id == matter_id,
                 Record.id.startswith(record_id + "-", autoescape=True)
             ).order_by(Record.created_at.desc(), Record.id).limit(limit).offset(offset))
-            return [{**store.view(row), "freshness": _freshness(store, session, matter_id, user, store.decode(row)["content"])}
-                    for row in rows if store.decode(row).get("entity_id") == record_id
-                    and store.decode(row).get("entity_kind") == "practice_analysis"]
+            from .analysis_reviews import projection
+            result = []
+            for row in rows:
+                snapshot = store.decode(row)
+                if snapshot.get("entity_id") != record_id or snapshot.get("entity_kind") != "practice_analysis":
+                    continue
+                freshness = _freshness(store, session, matter_id, user, snapshot["content"])
+                review = projection(store, session, matter_id, record_id, row.id, user, snapshot["content"], freshness)
+                result.append({**store.view(row), "freshness": _effective_freshness(freshness, review), "review": review})
+            return result
 
     @router.post("/{record_id}/versions", status_code=201)
     def revise(matter_id: str, record_id: str, body: AnalysisInput, request: Request, user=Depends(authenticate)):
@@ -467,6 +502,7 @@ def analysis_router():
     def export(matter_id: str, record_id: str, request: Request, version_id: str | None = None,
                format: Literal["docx", "pdf"] = "docx", user=Depends(authenticate)):
         store = request.app.state.store
+        from .analysis_reviews import projection
         with store.session() as session:
             row = require_child(session, record_id, "practice_analysis", matter_id, user)
             version = require_child(session, version_id or store.decode(row)["latest_version_id"], "practice_version", matter_id, user)
@@ -475,11 +511,14 @@ def analysis_router():
                 raise HTTPException(404, "Analiz sürümü bulunamadı.")
             content = snapshot["content"]
             freshness = _freshness(store, session, matter_id, user, content)
-            lines = _export_lines(content, snapshot, version, freshness)
+            review = projection(store, session, matter_id, row.id, version.id, user, content, freshness)
+            lines = _export_lines(content, snapshot, version, _effective_freshness(freshness, review), review)
             response = render_export(lines, version.id, format)
             require_child(session, version.id, "practice_version", matter_id, user)
             if _freshness(store, session, matter_id, user, content) != freshness:
                 raise HTTPException(409, "Dışa aktarım sırasında dayanaklar değişti; güncel durumla yeniden deneyin.")
+            if projection(store, session, matter_id, row.id, version.id, user, content, freshness) != review:
+                raise HTTPException(409, "Dışa aktarım sırasında avukat incelemesi değişti; yeniden deneyin.")
             _audit(session, user, "analysis_export_prepared", version.id, matter_id)
             session.commit()
             return response

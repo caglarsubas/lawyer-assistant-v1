@@ -17,6 +17,7 @@ from .analysis_proposals import (
     prompt_measurement,
     proposal_messages,
 )
+from .analysis_reviews import review_pin
 from .analysis_workbench import _content, _freshness, _view
 from .auth import authenticate, require_child, require_matter
 from .db import Record, User, digest, now
@@ -73,6 +74,8 @@ def _source(app, session, matter_id, user, state):
     content = store.view(row)
     if row.revision != state["source_revision"] or content["latest_version_id"] != state["source_version_id"]:
         raise HTTPException(409, "Analiz sürümü değişti; öneri için yeni bir çalışma başlatın.")
+    if state.get("source_review_id") != review_pin(store, session, matter_id, row.id, state["source_version_id"], user):
+        raise HTTPException(409, "Avukat incelemesi değişti; öneri için yeni bir çalışma başlatın.")
     freshness = _freshness(store, session, matter_id, user, state["source_content"])
     if freshness["status"] == "stale":
         raise HTTPException(409, "Önerinin özel dayanakları değişti; önce analiz sürümünü yenileyin.")
@@ -209,6 +212,7 @@ def suggestion_router():
                 content = store.view(row)
                 state = {"purpose": PURPOSE, "analysis_id": row.id, "source_revision": body.expected_revision,
                          "source_version_id": body.version_id, "source_content": content,
+                         "source_review_id": review_pin(store, session, matter_id, row.id, body.version_id, user),
                          "provider_pin": provider_pin(app), "mode": body.mode,
                          "max_passes": 2 if body.mode == "repair" else 1}
                 _source(app, session, matter_id, user, state)

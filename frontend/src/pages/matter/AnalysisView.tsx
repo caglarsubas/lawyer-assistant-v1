@@ -1,12 +1,14 @@
 import { Badge, Detail, Notice } from '../../components';
 import { FACT_LABELS, locatorText } from '../../utils';
-import { ANALYSIS_LABELS, type AnalysisChecks, type AnalysisContent, type AnalysisFreshness } from './analysisTypes';
+import { ANALYSIS_LABELS, type AnalysisChecks, type AnalysisContent, type AnalysisFreshness, type AnalysisReviewProjection } from './analysisTypes';
 
-export function AnalysisCheckPanel({ checks, freshness }: { checks: AnalysisChecks; freshness?: AnalysisFreshness }) {
-  const disposition = freshness?.status === 'stale' ? 'withheld' : checks.effective_disposition;
+export function AnalysisCheckPanel({ checks, freshness, review }: { checks: AnalysisChecks; freshness?: AnalysisFreshness; review?: AnalysisReviewProjection }) {
+  const changesRequested = review?.latest?.decision === 'changes_requested';
+  const disposition = freshness?.status === 'stale' || changesRequested ? 'withheld' : checks.effective_disposition;
   return <div>
     <div className="practice-record-heading"><Badge>{ANALYSIS_LABELS[disposition]}</Badge><span className="small muted">{checks.critical_count} kritik kontrol · Hukuki onay verilmedi</span></div>
     {freshness?.status === 'stale' && <Notice error>Dayanaklar değişti. Önceki metin korunuyor; yeni sürümde inceleyin.{freshness.reasons.map((reason) => <p key={reason}>{reason}</p>)}</Notice>}
+    {changesRequested && <Notice error>Avukat değişiklik istedi; sonuç değerlendirmesi yeniden incelemeye kadar bekletilir. Yapısal kontrollerin özgün sonucu değiştirilmez.</Notice>}
     <Detail title={`Kontrol ayrıntıları (${checks.defects.length})`}>
       <p className="small muted">Kontroller beyan edilen bağlantıları ve koşulları inceler. Pasajın yorumu, çıkarımın doğruluğu ve hukuki uygulanabilirlik avukat incelemesi gerektirir.</p>
       <ul>{checks.defects.map((defect) => <li key={defect.id}><strong>{defect.severity === 'critical' ? 'Kritik' : 'İnceleme'} · {defect.target_id}:</strong> {defect.message}</li>)}</ul>
@@ -14,12 +16,12 @@ export function AnalysisCheckPanel({ checks, freshness }: { checks: AnalysisChec
   </div>;
 }
 
-export function AnalysisContentView({ content, freshness, onSource, proposed = false }: { content: AnalysisContent; freshness?: AnalysisFreshness; onSource: (id: string) => void; proposed?: boolean }) {
+export function AnalysisContentView({ content, freshness, review, onSource, proposed = false }: { content: AnalysisContent; freshness?: AnalysisFreshness; review?: AnalysisReviewProjection; onSource: (id: string) => void; proposed?: boolean }) {
   const facts = new Map(content.fact_snapshots.map((fact) => [fact.id, fact]));
   return <>
     <p className="authored-text"><strong>Mesele:</strong> {content.issue}</p>
     {content.ai_assistance && <Detail title="Model katkısı ve kayıt sınırları"><p>Model: {content.ai_assistance.provider.model} · {content.ai_assistance.passes} geçiş · Hukuki inceleme değildir.</p><p className="reference-id">Öneri: {content.ai_assistance.job_id} · Kaynak sürüm: {content.ai_assistance.source_version_id}</p><p className="small muted">Alınan önerinin doğrulanmamış notları; sonraki avukat değişikliklerini ayrıca inceleyin.</p><ul>{content.ai_assistance.review_notes?.map((note, index) => <li key={index}>{note.target_id} · Geçiş {note.pass}: {note.text}</li>)}</ul></Detail>}
-    <AnalysisCheckPanel checks={content.checks} freshness={freshness} />
+    <AnalysisCheckPanel checks={content.checks} freshness={freshness} review={review} />
     <Detail title="Öncül → kural → uygulama → alternatif → geçici sonuç">
       <p className="small muted">{proposed ? 'Modelin onaylanmamış düzenleme önerisi.' : content.authorship === 'user_with_ai_assistance' ? 'Model önerisinden uyarlanmış avukat taslağı.' : 'Avukat tarafından yazılmış gerekçe.'} Otomatik hukuki sonuç veya modelin düşünce kaydı değildir.</p>
       <p><strong>Süreç:</strong> {content.posture || 'Belirtilmedi'} · <strong>Olay tarihi:</strong> {content.event_date || 'Bilinmiyor'}</p>

@@ -12,7 +12,7 @@ from test_snapshot_set_postgres import (
 )
 from test_snapshot_set_postgres import postgres_database as database_fixture
 
-from app import analysis_suggestions, analysis_workbench
+from app import analysis_reviews, analysis_suggestions, analysis_workbench
 from app.config import Settings
 from app.db import Record, User, digest
 from app.main import create_app
@@ -85,6 +85,58 @@ def test_analysis_revision_conflicts_preserve_one_immutable_history(workspace, m
     assert [version['version'] for version in history] == [2, 1]
     assert history[1]['id'] == original['latest_version_id']
     assert history[1]['content']['title'] == payload['title']
+
+
+@pytest.mark.parametrize('replay', [False, True])
+def test_review_head_serializes_competing_decisions_and_identical_replays(workspace, monkeypatch, replay):
+    from uuid import uuid4
+
+    from sqlalchemy import func, select
+    from test_analysis_reviews import review_request
+
+    app, client, matter = workspace
+    endpoint = f'/api/v1/matters/{matter}/analyses'
+    response = client.post(endpoint, json={
+        'title': 'SYNTHETIC review race', 'issue': 'SYNTHETIC incomplete issue',
+        'conclusion': {'text': 'SYNTHETIC provisional text', 'next_step': 'Collect evidence'}})
+    assert response.status_code == 201, response.text
+    record = response.json()
+    reviews = endpoint + '/' + record['id'] + '/reviews'
+    body, _ = review_request(client, reviews, record)
+    body['decision'] = 'changes_requested'
+    body['criteria'][0].update(outcome='needs_change', note='SYNTHETIC missing sources')
+    competing_body = body if replay else {**body, 'request_id': uuid4().hex}
+    locked, release = Event(), Event()
+    invalidate = analysis_reviews._invalidate
+
+    def paused(*args, **kwargs):
+        locked.set()
+        assert release.wait(10)
+        return invalidate(*args, **kwargs)
+
+    monkeypatch.setattr(analysis_reviews, '_invalidate', paused)
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, reviews, json=body)
+        try:
+            assert locked.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, reviews, json=competing_body)
+                assert observed[0].wait(5)
+                assert wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, competing = first.result(timeout=5), second.result(timeout=5)
+    assert accepted.status_code == 201, accepted.text
+    assert competing.status_code == (201 if replay else 409), competing.text
+    if replay:
+        assert competing.json()['id'] == accepted.json()['id']
+    with app.state.store.session() as session:
+        for kind in (analysis_reviews.KIND, analysis_reviews.HEAD_KIND):
+            assert session.scalar(select(func.count()).select_from(Record).where(
+                Record.kind == kind, Record.matter_id == matter)) == 1
+    history = client.get(endpoint + '/' + record['id'] + '/versions').json()
+    assert len(history) == 1 and history[0]['id'] == record['latest_version_id']
 
 
 def test_proposal_adoption_race_appends_exactly_one_immutable_version(workspace, monkeypatch):

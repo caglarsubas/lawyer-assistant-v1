@@ -84,9 +84,12 @@ network error to make a retry safe. After a page reload, inspect history to reco
 the recorded outcome rather than assume a lost response means no job exists.
 
 Authorization, archive state, analysis version, selected fact/document/passage/
-contradiction dependencies, recipes and provider model/policy/route pins are
+contradiction dependencies, the source version's latest human review ID, recipes and provider model/policy/route pins are
 rechecked at checkpoints, final publication and adoption. Changed dependencies
 make completed output stale and ineligible without rewriting its retained text.
+New review findings therefore block older proposals; an adopted new version starts
+unreviewed. Review prose is not automatically supplied as model feedback in this slice.
+See [human review binding](ANALYSIS_REVIEWS.md).
 An adoption transaction locks the matter before the job and revalidates source
 bindings, candidate hash and revision. Competing adoptions yield one appended
 version and a 409 conflict. Another authorized member may review/adopt a matter's

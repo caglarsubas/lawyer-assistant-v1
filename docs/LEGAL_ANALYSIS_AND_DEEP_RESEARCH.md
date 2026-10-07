@@ -11,7 +11,10 @@ source revision/hash binding, declared-structure checks, immutable revisions and
 exact-version exports. Manual drafting uses no model. A separate
 [local-model proposal slice](ANALYSIS_SUGGESTIONS.md) now provides up to two bounded
 passes against fixed private inputs, declared-structure checks, job checkpoints and
-human adoption. Full public/historical legal synthesis, semantic/adverse correction,
+human adoption. [Version-bound human review](ANALYSIS_REVIEWS.md) now records
+criteria/findings, conditional private-draft decisions and source/review dependency
+revalidation without changing original text or machine checks. Human change requests
+withhold the conclusion; new versions require fresh review. Full public/historical legal synthesis, semantic/adverse correction,
 qualified Standard/Deep modes and every BYOK adapter remain pending; these goals
 are not satisfied merely by a structurally complete draft or a repeated model call.
 
