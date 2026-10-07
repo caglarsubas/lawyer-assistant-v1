@@ -235,16 +235,26 @@ packets and enforce independently signed multi-source publication permission,
 per-source audience/expiry constraints and live revocation. Actual source/legal
 review and full operational qualification remain separate open gates.
 R01 real-source review/evidence gates and the remaining roadmap gates are pending.
-After merged PR #20, this packet connects the existing immutable lawyer reviews
-to opt-in, bounded local proposals for selected findings. Exact review/version/hash
-pins, actual edit links, manual/unresolved outcomes and accepted-pass provenance
-preserve the review/adoption boundary. The next analysis work is representative
-source-linked semantic/adverse adjudication and measured local-model feedback benefit; public/historical
-synthesis still depends on genuinely reviewed R03–R05 evidence. Broader correction
+After merged PR #21, this packet implements optional [source-linked revision
+adjudication](ANALYSIS_ADJUDICATION.md) in the existing human-review workflow:
+exact predecessor/current drafts and quotes, all earlier-finding dispositions,
+semantic/private-counterevidence observations and separately declared review time.
+Actual changed steps, current quotes and targeted meaning/strength observations
+are required for a repair declaration. Source/recipe/review changes invalidate the
+comparison, and unresolved substantial findings prohibit positive review. This is
+evaluation infrastructure; actual
+representative adjudication and measured local-model feedback benefit remain open.
+Public/historical synthesis still depends on genuinely reviewed R03–R05 evidence. Broader correction
 and calibrated Standard/Deep analysis remain separate qualification gates.
 Existing source/mapping/publication code is reused; the
 research does not authorize real approvals, vendor contact or bulk acquisition.
 Dependencies refer to completion of the relevant gate, not just code availability.
+
+The next bounded analysis milestone is capturing reproducible actual local-model
+comparison trials against frozen protocols, with independent source-linked judgments
+and complete preparation/review time accounting. Representative semantic/adverse
+qualification and real R03–R05 source/effect approval remain mandatory; synthetic
+records and declared review seconds cannot establish a gain or qualify a release.
 
 | ID / priority | Delivery packet | Dependencies / accountable lead | Exit evidence |
 |---|---|---|---|
@@ -253,7 +263,7 @@ Dependencies refer to completion of the relevant gate, not just code availabilit
 | **R03 / P0** | First genuinely reviewed contract corpus: RG ordinary/mükerrer manifest; amendment/transition candidates; MBS reconciliation; TBMM enacted/history distinction; exact provisions and historical versions | R01 lawful samples and protected reviewers; R02 for combined releases; editors + ingestion team | Reviewed corpus and exact evidence ready for analysis; amendment chains/historical queries pass; discrepancies visible. Full legal-analysis/export qualification additionally requires R04, the relevant R05 decision slice and R05A |
 | **R04 / P1, partial** | Versioned Turkish fields, literal-citation occurrences, frozen-snapshot development capture/scoring and auditable private quotation context implemented. Real benchmark, authority resolution, local embedding/reranker evaluation and public/issue/adverse context packing pending | R01 development benchmark; R03 representative approved corpus; retrieval/ML + legal adjudicators | Exact identifiers and original quotes preserved; hybrid and graph/metadata/rerank ablations on one snapshot; thresholds, error slices and resource budgets reported; no private-data or adverse-recall regression |
 | **R05 / P1** | Decision population and research: proceeding/decision/manifestation identity; allegation/finding/reasoning/result/dissent roles; citation ambiguity queue; reviewed authority-treatment events; independent contrary-authority branch | R01 judicial source/effect contracts, R02, R04; knowledge engineers + domain editors | Supporting and adverse passages are inspectable with role, version, institution epoch and scope; treatment is not inferred from citation; missing courts/periods and unknown finality remain explicit |
-| **R05A / P1, partial, contract milestone** | Lawyer-authored private issue/premise/rule/application/alternative drafts, revision/hash-bound source selections, deterministic declared-structure checks, immutable revisions, stale projection and exact-version DOCX/PDF implemented. Bounded local-model proposals, up to one structural repair pass, shared job checkpoints, idempotent receipts and human adoption with model provenance implemented. Immutable version-bound lawyer review findings, conditional private-draft decisions, withheld change requests and source/review dependency revalidation implemented. Opt-in selected-finding proposals with actual edit links, manual/unresolved outcomes and accepted-pass provenance implemented. Qualified public synthesis, semantic/adverse checks, Standard/Deep qualification and broader correction remain | R01 schemas; R03–R05 representative contract evidence; application/retrieval engineers + legal adjudicators | First contract task reaches reviewable analysis/export; consequential steps traceable; defects repaired or withheld; correction and depth compared with single-pass/Standard baselines |
+| **R05A / P1, partial, contract milestone** | Lawyer-authored private issue/premise/rule/application/alternative drafts, revision/hash-bound source selections, deterministic declared-structure checks, immutable revisions, stale projection and exact-version DOCX/PDF implemented. Bounded local-model proposals, up to one structural repair pass, shared job checkpoints, idempotent receipts and human adoption with model provenance implemented. Immutable version-bound lawyer review findings, conditional private-draft decisions, withheld change requests and source/review dependency revalidation implemented. Opt-in selected-finding proposals with actual edit links, manual/unresolved outcomes and accepted-pass provenance implemented. Optional source-linked before/after adjudication, all predecessor-finding dispositions, targeted semantic observations and declared review time implemented. Qualified public synthesis, representative semantic/adverse checks, measured benefit, Standard/Deep qualification and broader correction remain | R01 schemas; R03–R05 representative contract evidence; application/retrieval engineers + legal adjudicators | First contract task reaches reviewable analysis/export; consequential steps traceable; defects repaired or withheld; correction and depth compared with single-pass/Standard baselines |
 | **R05B / P1, optional connected mode** | Sanitized BYOK deep search: local abstraction/fidelity, exact release, isolated vault/broker, OpenAI/Anthropic/Gemini adapters, untrusted return path and local application | R01 privacy/provider contracts; common broker/sanitizer qualification; R04–R05A for verification/final analysis; application/security + legal owners | Each adapter separately passes privacy, fidelity, authorization, entitlement/retention, cost/retry and citation gates. No private files, silent fallback or unapproved context; remote-tool disclosure explicit; disconnected operation independent |
 | **R06 / P1** | Commercial/employment depth: issue/element/exception templates, non-equivalent terms, fact comparability, evidence gaps, audited calculation rules/parameters and firm playbooks | R03–R05A applicable source packs; R05B only for connected option; domain editors + product team | Practice scenarios pass; calculations expose event/basis dates, units, rounding, rules and missing inputs; no confident number on unresolved critical data; corrections and dependency re-review work |
 | **R07 / P1** | Corpus operations/offline delivery: watermarks, signed full/delta packages, impact queues, restore/rollback and retention; bounded research jobs, revocation, cancellation, usage/spend and provider-state reconciliation | R02 manifest design starts early; local gate after R03–R06, connected gate after R05B; platform/security + source owners | Exact offline imports/recovery and stale-work handling pass; five-job operations respect privacy/budget; canceled/partial/ambiguous remote jobs visible; local deletion never claimed to erase provider-retained data |
@@ -290,7 +300,7 @@ staffing/calendar without measurement.
 | Graph B jurisprudence | Partial | Proceedings/decisions/opinions/content/citation/treatment types, validated synthetic edge cases | Lawfully acquired decisions, passage roles, duplicate manifestations, institution epochs, historical provision resolution, effect/treatment review, comparable-fact and adverse-authority evaluation |
 | Graph retrieval | Implemented baseline | Eight typed tools, verified immutable serving releases, atomic activation/rollback, independent signed-source checks, bounded traversal, reviewed validity cutoffs with separate evidence and explicit unresolved data | Real-corpus recall, legal-owner-approved serving release, large-corpus startup/indexing/query performance and applicability evaluation |
 | Document intake | Partial | Initial and extended adapters, bounded OCR, isolated scanner/worker, signed offline signatures, live readiness, deployed clean/EICAR checks, encrypted originals and session revalidation | Representative layout/table/header/footnote and legacy-format qualification, full scan handling, sandbox escape testing, supplied UDF before pilot |
-| Preparation/review | Partial | Quotations, issue checklists, corrections, claim review, scenarios, contradiction links, argument notes, playbooks, immutable drafts and DOCX/PDF; lawyer-authored private rationale with exact source pins and deterministic structural checks; bounded local proposals with explicit adoption and immutable provenance; exact-version human review decisions/findings with conditional private-draft scope | Qualified public/legal synthesis, semantic/adverse verification, broader correction, calibrated Standard/Deep budgets, multi-step scenarios and lawyer adjudication |
+| Preparation/review | Partial | Quotations, issue checklists, corrections, claim review, scenarios, contradiction links, argument notes, playbooks, immutable drafts and DOCX/PDF; lawyer-authored private rationale with exact source pins and deterministic structural checks; bounded local proposals with explicit adoption and immutable provenance; exact-version human review decisions/findings and optional source-linked revision adjudication with conditional private-draft scope | Qualified public/legal synthesis, representative semantic/adverse verification, measured correction benefit, calibrated Standard/Deep budgets and multi-step scenarios |
 | Search and reasoning | Partial | Local document excerpt windows and additive graph queries, bounded OpenSearch lexical/vector adapter with release/rights/review prefilters and reciprocal-rank fusion; sealed release-specific index builder, Turkish original/normalized/folded fields, source-verified literal citation occurrences, exact source-span hints and explicit selection | Approved corpus/indexes, citation/alias identity review and Turkish benchmark/ablations, local embedding/reranker qualification, independent adverse search, evaluated issue reasoning and reviewed calculations |
 | Source and corpus operations | Partial | Two registered TBMM acquisition representations; immutable staging, human source/mapping review and single/source-set publication with current private rights; R01 offline source/use/asset catalog and inspection | Actual R01 qualification, lawful RG/MBS/judicial/domain adapters, representative source-set qualification, separate observation/review/import freshness, archive gaps and per-source watermarks |
 | Boundary gateway | Partial | Default disconnected mode, limited public query policy, exact-digest approvals, DNS-bound fetch, registered TBMM staging and immutable quarantine catalog | Advanced local PII/entity/secret detectors, ethics rules, broader source adapters, qualified incoming content/rights verification, measured false positives |
@@ -377,6 +387,38 @@ next source, analysis and BYOK evaluations can use executable contracts rather t
 unimplemented acceptance prose. Real evidence, sufficient reviewed sample sizes, confidence
 intervals and actual R05A/R05B execution remain pending. See [scorer guide](EVALUATION.md)
 and [verification](VALIDATION.md).
+
+### R05A engineering milestone — source-linked private revision adjudication
+
+PR #21 merged as `76055d9622081750182d1ae26d91c86d00c70ab0`; its three PR
+checks and [exact post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37622349199)
+passed. This packet adds an optional human assessment to the existing private review
+workflow. The immediate predecessor/current pair, exact content/source hashes,
+baseline review and all its findings are fixed by the server. Lawyers inspect actual
+typed changes and selected quotations, record six semantic/private-counterevidence
+observations, and separately declare repaired, withheld or unresolved findings.
+
+A repair declaration requires a surviving actual edit, a current quotation and
+affirmative meaning/strength observations on that same changed step. Substantial
+unresolved findings or needs-change observations prohibit positive conditional
+review. Both drafts' dependencies are rechecked before commit, at projection/export
+and in proposals pinned to that review. New reviews, altered snapshots or recipes
+invalidate the comparison without rewriting history. Legacy receipts stay compatible.
+
+The interface begins without affirmative choices; detailed steps, sources and
+historical declarations remain collapsed. Exact-version DOCX/PDF retains the
+comparison, original findings and source text. Optional declared review seconds
+stay separate from full preparation time and model-benefit measurement. No inference
+occurs in adjudication, and assessment text is not automatically added to prompts.
+
+Synthetic host/Linux, browser/export and real PostgreSQL race checks establish
+these engineering bindings only. **R05A remains partial**: real independent
+semantic/adverse adjudication, reviewed public/historical synthesis, measured local
+model benefit, broader correction and calibrated Standard/Deep remain open. The
+next bounded packet is reproducible comparison-trial capture under frozen protocols.
+No dependency, migration, CI job, retry, worker, external permission or live app
+deployment is added. See [adjudication contract](ANALYSIS_ADJUDICATION.md) and
+[verification](VALIDATION.md).
 
 ### R05A engineering milestone — review-informed local proposals
 

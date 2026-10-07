@@ -89,7 +89,8 @@ def test_analysis_revision_conflicts_preserve_one_immutable_history(workspace, m
 
 
 @pytest.mark.parametrize('replay', [False, True])
-def test_review_head_serializes_competing_decisions_and_identical_replays(workspace, monkeypatch, replay):
+@pytest.mark.parametrize('adjudication', [False, True])
+def test_review_head_serializes_competing_decisions_and_identical_replays(workspace, monkeypatch, replay, adjudication):
 
     from sqlalchemy import func, select
     from test_analysis_reviews import review_request
@@ -105,6 +106,29 @@ def test_review_head_serializes_competing_decisions_and_identical_replays(worksp
     body, _ = review_request(client, reviews, record)
     body['decision'] = 'changes_requested'
     body['criteria'][0].update(outcome='needs_change', note='SYNTHETIC missing sources')
+    if adjudication:
+        body['findings'] = [{'target_id': 'conclusion', 'severity': 'critical',
+                             'text': 'SYNTHETIC unsupported conclusion'}]
+        initial = client.post(reviews, json=body)
+        assert initial.status_code == 201, initial.text
+        revised = client.post(endpoint + '/' + record['id'] + '/versions', json={
+            'title': 'SYNTHETIC revised review race', 'issue': 'SYNTHETIC incomplete issue',
+            'conclusion': {'text': 'SYNTHETIC withheld draft', 'next_step': 'Collect evidence'},
+            'expected_revision': record['revision'], 'change_note': 'SYNTHETIC comparison revision'})
+        assert revised.status_code == 201, revised.text
+        record = revised.json()
+        body, context = review_request(client, reviews, record)
+        body['decision'] = 'changes_requested'
+        body['criteria'][0].update(outcome='needs_change', note='SYNTHETIC missing sources')
+        comparison = context['revision_comparison']
+        body['revision_assessment'] = {
+            'comparison_sha256': comparison['comparison_sha256'],
+            'observations': [{'dimension': key, 'outcome': 'not_assessed',
+                              'note': 'SYNTHETIC insufficient evidence', 'target_ids': ['conclusion']}
+                             for key in comparison['dimensions']],
+            'finding_dispositions': [{'finding_index': item['finding_index'], 'outcome': 'unresolved',
+                                     'note': 'SYNTHETIC still insufficient', 'target_ids': ['conclusion']}
+                                    for item in comparison['findings']]}
     competing_body = body if replay else {**body, 'request_id': uuid4().hex}
     locked, release = Event(), Event()
     invalidate = analysis_reviews._invalidate
@@ -134,9 +158,11 @@ def test_review_head_serializes_competing_decisions_and_identical_replays(worksp
     with app.state.store.session() as session:
         for kind in (analysis_reviews.KIND, analysis_reviews.HEAD_KIND):
             assert session.scalar(select(func.count()).select_from(Record).where(
-                Record.kind == kind, Record.matter_id == matter)) == 1
+                Record.kind == kind, Record.matter_id == matter)) == (2 if adjudication else 1)
     history = client.get(endpoint + '/' + record['id'] + '/versions').json()
-    assert len(history) == 1 and history[0]['id'] == record['latest_version_id']
+    assert len(history) == (2 if adjudication else 1) and history[0]['id'] == record['latest_version_id']
+    if adjudication:
+        assert history[0]['review']['latest']['revision_assessment']['comparison_sha256'] == comparison['comparison_sha256']
 
 
 @pytest.mark.parametrize('feedback', [False, True])

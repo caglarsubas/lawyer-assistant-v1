@@ -96,6 +96,15 @@ UTF-8 bytes overall. Explanations require at least three nonblank characters.
 
 ## Qualification boundary
 
+An optional [source-linked revision assessment](ANALYSIS_ADJUDICATION.md) now compares
+the exact predecessor/current drafts, records typed human semantic observations,
+dispositions for all earlier findings and separately declared review time. It is
+stored within the same immutable decision. Current quotes, actual surviving edits
+and targeted meaning/strength observations are required for repair declarations;
+substantial unresolved findings prohibit positive review. Both drafts' dependencies
+and comparison recipes are revalidated. It grants no public/adverse-authority or
+model-benefit qualification. Ordinary pre-upgrade review receipts remain compatible.
+
 Synthetic checks cover immutable content, encryption, exact bindings, history,
 supersession, source/recipe staleness, model-lineage criteria, membership isolation,
 proposal invalidation and export races. Real PostgreSQL checks observe competing

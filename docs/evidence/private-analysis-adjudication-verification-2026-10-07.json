@@ -1,0 +1,175 @@
+{
+  "schema": "private-analysis-adjudication-verification-v1",
+  "recorded_at": "2026-10-07T13:49:59.128562+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "76055d9622081750182d1ae26d91c86d00c70ab0",
+  "checkout_dirty": true,
+  "commit_state": "before packet commit",
+  "base_main_ci": {
+    "run_id": 37622349199,
+    "head_sha": "76055d9622081750182d1ae26d91c86d00c70ab0",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "source": {
+    "application": {
+      "sha256": "e3b38a734f62971e434f88837a0daa80ade14bcdc0b2984dc95192286435878c",
+      "files": 112
+    },
+    "tests": {
+      "files": 75,
+      "sha256": "4f33c408d83696391341ad9bef9d4059f88e564293f72b14df3feb5dc9903c96"
+    }
+  },
+  "frontend_source": {
+    "files": 54,
+    "sha256": "832be16ba07e3233d4272b3d299cfe94a4dfe9f10821d14cfae7b31465607ef0",
+    "scope": "frontend/src files"
+  },
+  "host_backend": {
+    "passed": 468,
+    "pytest_seconds": 40.45,
+    "scope": "relevant subset, complete backend required in hosted CI",
+    "new_focused_cases": 39
+  },
+  "frontend": {
+    "passed": 124,
+    "build": "strict TypeScript and Vite passed",
+    "main_js_kb": 486.95,
+    "main_js_gzip_kb": 138.32
+  },
+  "deployment_contracts": {
+    "passed": 41,
+    "seconds": 0.388
+  },
+  "lint": "repository-wide Ruff passed with CI configuration",
+  "linux": {
+    "schema": "private-analysis-adjudication-verification-v1",
+    "recorded_at": "2026-10-07T13:49:09.132383+00:00",
+    "synthetic_only": true,
+    "production_qualified": false,
+    "base_commit": "76055d9622081750182d1ae26d91c86d00c70ab0",
+    "checkout_dirty": true,
+    "host": {
+      "system": "Darwin",
+      "architecture": "arm64"
+    },
+    "test_image": "sha256:09854f9127cb7efff040f165da679a0cba1c3974426c6ff8a01ef32d22cbe043",
+    "source": {
+      "application": {
+        "sha256": "e3b38a734f62971e434f88837a0daa80ade14bcdc0b2984dc95192286435878c",
+        "files": 112
+      },
+      "tests": {
+        "files": 75,
+        "sha256": "4f33c408d83696391341ad9bef9d4059f88e564293f72b14df3feb5dc9903c96"
+      }
+    },
+    "limits": {
+      "network": "none",
+      "host_ports": [],
+      "host_mounts": [],
+      "read_only": true,
+      "cpu": 2,
+      "memory_bytes": 805306368,
+      "pids": 128,
+      "tmpfs_bytes": 268435456
+    },
+    "linux_tests": {
+      "exit_code": 0,
+      "passed": 241,
+      "pytest_seconds": 33.79,
+      "container_wall_seconds": 37.392
+    },
+    "cleanup_verified": true,
+    "not_established": [
+      "Turkish legal accuracy or semantic completeness",
+      "real-provider authentication or model performance",
+      "production capacity or latency",
+      "public authority context or adverse recall",
+      "real source/legal approval",
+      "live application deployment"
+    ]
+  },
+  "postgres": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "six real PostgreSQL including source-linked adjudication review-head and proposal-adoption races in randomly named disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 3.022,
+    "passed": 6,
+    "pytest_seconds": 2.71
+  },
+  "review_save_rollback": "injected predecessor-only source mutation inside transaction; not a concurrent writer test",
+  "browser": {
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "initial_affirmative_outcomes": 0,
+    "assessment_initially_opted_in": false,
+    "synthetic_only": true,
+    "saved_review_state": "changes_requested",
+    "version_numbers": [
+      1,
+      2
+    ],
+    "baseline_review_and_findings_preserved": true,
+    "comparison_snapshot_matches_current_context": true,
+    "semantic_observations": 6,
+    "finding_dispositions": [
+      "repaired",
+      "unresolved"
+    ],
+    "declared_review_seconds": 90,
+    "actual_mock_provider_calls": 1,
+    "adjudication_provider_calls": 0,
+    "docx_sha256": "84114d7330aabf2ee930f9be9e53ebcda65319a6db066f200e13b51b2f635b91",
+    "export_contains_exact_comparison_and_sources": true,
+    "benefit_established": false,
+    "public_adverse_authority_qualified": false,
+    "original_passage_inspected": true,
+    "positive_review_disabled_with_unresolved_major_finding": true,
+    "default_details_collapsed": true,
+    "final_console_errors": 0,
+    "screenshot_sha256": "882d5e9b19df06ea20497f13affa989a828ce2e07acf84b6a7aa9bddf94b1d08",
+    "tab_closed": true,
+    "services_closed": true,
+    "listeners_verified_closed": [
+      18091,
+      15187
+    ],
+    "temporary_restart_recovery": "An intermediate loopback API restart/hot refresh caused a transient proxy error; reload recovered, final saved view checked against final code.",
+    "application_and_test_source_at_rehearsal": {
+      "application": {
+        "sha256": "164e5377dba3c56e4a043cd5e64058354adaa19405db2f3342dc91dc64b37810",
+        "files": 112
+      },
+      "tests": {
+        "files": 75,
+        "sha256": "c91b1f7038d9725f10a274ae72d646f2a592bcc7690d7834b193e6c4a044acdc"
+      }
+    },
+    "subsequent_compatibility_fix": "Preserved the original 100000-byte allowance for absent/null assessment; exact-limit and oversized legacy inputs covered in final host/Linux tests. Assessed workflow and frontend unchanged."
+  },
+  "logs_sha256": {
+    "backend-tests.log": "5d0fd365b26ed4bb13e840465c4039f5f2f58fd6bd1174c983d310f20a7950d3",
+    "frontend-tests.log": "0933333c1f830ccd43db26a7e1b44a5ff34a7f2afc6ae9767619fa1a129861dd",
+    "frontend-build.log": "34628fb5c17dbce65d46b62f5b575a6355a2393f60560d96fa54817035f39c3f",
+    "linux-tests.log": "3c979a3fd54e9070176a56bd6bd52baba4261f6c97375c69145dc953b0d03b47",
+    "postgres.log": "6a6af057e414ba661fa5854452df24dcfdf166a6bdd1c76bd9fac7b7ee46fe49",
+    "deployment-contracts.log": "c971870fd89fe4eb4e5334d6fc4585637d1a342fd07824ee51d47b979d8e147a"
+  },
+  "root_environment_read_or_modified": false,
+  "real_provider_calls": 0,
+  "not_established": [
+    "Turkish semantic/legal accuracy or correction adequacy",
+    "independent representative review or full preparation-time benefit",
+    "real-model performance or calibrated Standard/Deep",
+    "public/historical/adverse corpus or BYOK qualification",
+    "production capacity or live app deployment"
+  ]
+}
