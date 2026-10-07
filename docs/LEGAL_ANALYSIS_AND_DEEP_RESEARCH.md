@@ -8,9 +8,12 @@ The three research attachments remain inputs to the [data strategy](DATA_KNOWLED
 
 The first R05A runtime slice now provides [lawyer-authored private analysis drafts](ANALYSIS_WORKBENCH.md),
 source revision/hash binding, declared-structure checks, immutable revisions and
-exact-version exports. It uses no model and no public authority. Full legal
-synthesis, automated correction, Standard/Deep modes and every BYOK adapter remain
-pending; these goals are not satisfied merely by a structurally complete draft.
+exact-version exports. Manual drafting uses no model. A separate
+[local-model proposal slice](ANALYSIS_SUGGESTIONS.md) now provides up to two bounded
+passes against fixed private inputs, declared-structure checks, job checkpoints and
+human adoption. Full public/historical legal synthesis, semantic/adverse correction,
+qualified Standard/Deep modes and every BYOK adapter remain pending; these goals
+are not satisfied merely by a structurally complete draft or a repeated model call.
 
 ## 1. Assessment and product decision
 

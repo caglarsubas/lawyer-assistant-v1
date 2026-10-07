@@ -1,0 +1,137 @@
+{
+  "schema": "private-analysis-suggestions-verification-v1",
+  "recorded_at": "2026-10-07T08:05:57.237665+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "1966089b36b4c5a24b59aec7979ca7544ba18ac9",
+  "checkout_dirty": true,
+  "host": {
+    "system": "Darwin",
+    "architecture": "arm64"
+  },
+  "test_image": "sha256:89d9c47012e9055ab00780183901ee1a113b2e2330ad25f4b1a312c886a1bca4",
+  "source": {
+    "application": {
+      "sha256": "fa0e3884b1d76410d996207adc3dd29f68009d4a0b719bbf93558ec1656ac8eb",
+      "files": 109
+    },
+    "tests": {
+      "files": 72,
+      "sha256": "5b59666d2c23972f113151109083162a3351fb9381d82d1946508eb8319b8dba"
+    }
+  },
+  "limits": {
+    "network": "none",
+    "host_ports": [],
+    "host_mounts": [],
+    "read_only": true,
+    "cpu": 2,
+    "memory_bytes": 805306368,
+    "pids": 128,
+    "tmpfs_bytes": 268435456
+  },
+  "linux_tests": {
+    "exit_code": 0,
+    "passed": 128,
+    "pytest_seconds": 16.51,
+    "container_wall_seconds": 19.02
+  },
+  "cleanup_verified": true,
+  "not_established": [
+    "Turkish legal accuracy or semantic completeness",
+    "real-provider authentication or model performance",
+    "production capacity or latency",
+    "public authority context or adverse recall",
+    "real source/legal approval",
+    "live application deployment"
+  ],
+  "baseline": {
+    "pr": 18,
+    "merge_commit": "1966089b36b4c5a24b59aec7979ca7544ba18ac9",
+    "pr_checks": "success",
+    "main_ci": {
+      "run_id": 37586328485,
+      "conclusion": "success",
+      "url": "https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37586328485"
+    }
+  },
+  "frontend": {
+    "files": 48,
+    "sha256": "f65be15e0f821fe08cb93f659d284846fad2f5eaf5ce8b4a578f9f5198743491",
+    "tests": {
+      "passed": 105
+    },
+    "build": {
+      "passed": true,
+      "main_js_kb": 459.36,
+      "main_js_gzip_kb": 131.52
+    }
+  },
+  "host_checks": {
+    "broader_backend": {
+      "passed": 350,
+      "pytest_seconds": 26.2
+    },
+    "final_changed_guide": {
+      "passed": 26,
+      "pytest_seconds": 3.37
+    },
+    "deployment_contracts": {
+      "passed": 41,
+      "seconds": 0.335
+    },
+    "ruff": "passed",
+    "diff_check": "passed",
+    "full_backend_suite": "required_in_hosted_ci_not_repeated_locally"
+  },
+  "postgres": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "one real PostgreSQL proposal adoption race in randomly named disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 1.01,
+    "passed": 1,
+    "pytest_seconds": 0.8
+  },
+  "dependencies": {
+    "pyproject_sha256": "1123184183b7e8ac39b3213e3189f728f5df39c4c3c7713d96299aad6fff6545",
+    "lock_sha256": "cde13f1ccee8a439e9ddfea7c15dcb26960c2e9bebffec7c2582ac1386b4b23f",
+    "reused_test_runtime": "lawyer-assistant-analysis-test:r05a-workbench",
+    "test_runtime_source_refreshed_offline": true,
+    "fresh_production_image_build": false,
+    "ci_topology_changed": false
+  },
+  "browser": {
+    "scope": "invented private documents and mocked local completion, not real inference or legal quality",
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "screenshot_local_ignored": ".data/verification/r05a-suggestions/ui.jpg",
+    "screenshot_sha256": "7f246b76cd2c807125718ffb543931ada3a6015da40e4705f64ed2e44b4b25e1",
+    "observations": [
+      "version 1 remains withheld while proposal is separate",
+      "repair option stops after first pass when no critical structural defects remain",
+      "model notes and proposed sources are collapsed by default",
+      "unapproved model origin and fixed inputs disclosed",
+      "source button opens original selected passage",
+      "reason required for explicit adoption into Needs review version 2",
+      "version 1 retains original withheld checks",
+      "adopted model identity, source version and unverified notes retained",
+      "corrected practice heading distinguishes lawyer notes and model suggestions"
+    ],
+    "console_errors_observed": [],
+    "temporary_tab_closed": true,
+    "temporary_api_and_ui_ports_closed": true,
+    "fixture_repairs": [
+      "mock applied to Provider class before server lifespan, replacing reset instance mock",
+      "Linux harness copied existing provider relay required by provider runtime tests"
+    ]
+  },
+  "no_root_env_read_or_changed": true,
+  "no_real_provider_key_used": true,
+  "live_application_deployed": false,
+  "scope": "R05A bounded private structural proposals with explicit lawyer adoption; qualified public/history synthesis, semantic/adverse correction, Standard/Deep and BYOK remain open"
+}

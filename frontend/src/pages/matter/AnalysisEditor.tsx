@@ -3,7 +3,8 @@ import { post, request } from '../../api';
 import { Detail, Field, Notice } from '../../components';
 import type { DocumentRecord, Matter, Passage } from '../../types';
 import { FACT_LABELS, locatorText, messageOf } from '../../utils';
-import { ANALYSIS_LABELS, AnalysisCheckPanel } from './AnalysisPanel';
+import { AnalysisCheckPanel } from './AnalysisView';
+import { ANALYSIS_LABELS } from './analysisTypes';
 import { analysisForm, type AnalysisContent, type AnalysisForm, type AnalysisRecord, type AnalysisSelection } from './analysisTypes';
 
 type Choice = { id: string; label: string };

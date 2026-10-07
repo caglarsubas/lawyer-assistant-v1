@@ -110,7 +110,14 @@ def select_passages(question, passages, byte_budget=4000):
 
 def run_research(app, run_id):
     try:
-        _run_research(app, run_id)
+        with app.state.store.session() as session:
+            row = session.get(Record, run_id)
+            purpose = app.state.store.decode(row).get("purpose") if row and row.kind == "research" else None
+        if purpose == "private_analysis_suggestion":
+            from .analysis_suggestions import run_suggestion
+            run_suggestion(app, run_id)
+        else:
+            _run_research(app, run_id)
     except JobStopped as exc:
         finish_run(app.state.store, run_id, exc.outcome)
     except Exception as exc:

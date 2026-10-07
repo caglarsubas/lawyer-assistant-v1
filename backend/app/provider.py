@@ -236,6 +236,27 @@ class Provider:
             raise ProviderError("External inference destinations are prohibited")
 
     def generate(self, question, passages):
+        try:
+            messages = quote_messages(question, passages)
+            measured = measure_prompt(question, passages)
+        except (ValueError, TypeError):
+            raise ProviderError("Invalid private quotation context") from None
+        return self._complete(messages, 1000, measured["total_upper_bound_units"])
+
+    def suggest_analysis(self, content, *, repair=False, budget_seconds=120):
+        from .analysis_proposals import COMPLETION_TOKENS, prompt_measurement, proposal_messages
+        try:
+            messages = proposal_messages(content, repair=repair)
+            measured = prompt_measurement(messages)
+        except (ValueError, TypeError, KeyError):
+            raise ProviderError("Invalid private analysis context") from None
+        if not 0 < budget_seconds <= RESPONSE_BUDGET_SECONDS:
+            raise ProviderError("Invalid analysis inference time budget")
+        return self._complete(messages, COMPLETION_TOKENS, measured["total_upper_bound_units"],
+                              budget_seconds=budget_seconds, response_bytes=65536)
+
+    def _complete(self, messages, completion_tokens, context_units, *,
+                  budget_seconds=RESPONSE_BUDGET_SECONDS, response_bytes=MAX_RESPONSE_BYTES):
         s = self.settings
         if not self.configured:
             raise ProviderError("Provider is not configured")
@@ -244,26 +265,25 @@ class Provider:
         if not getattr(s, "provider_cloud_fallback_disabled", False):
             raise ProviderError("Provider cloud fallback isolation has not been attested")
         self.validate_origin()
-        try:
-            messages = quote_messages(question, passages)
-            measured = measure_prompt(question, passages)
-        except (ValueError, TypeError):
-            raise ProviderError("Invalid private quotation context") from None
-        # The packer measures this exact minimal envelope, including JSON escapes.
-        # Retained source metadata and the selection manifest are never dispatched.
-        if measured["total_upper_bound_units"] > s.provider_context_limit:
+        # High-level workflows construct and measure their fixed envelope. Source
+        # metadata and retained private manifests never become arbitrary messages.
+        if context_units > s.provider_context_limit:
             raise ProviderError("Context budget exceeded; reduce selected evidence")
+        started = time.monotonic()
         if not self.probe()["ready"]:
             raise ProviderError("Provider authentication and local model readiness could not be verified")
         headers = {"Authorization": f"Bearer {s.provider_api_key}", "x-engine-model-substitution": "off",
                    "Accept-Encoding": "identity", **self._route_headers()}
         base = self._base()
-        deadline = time.monotonic() + RESPONSE_BUDGET_SECONDS
+        deadline = started + budget_seconds
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise ProviderError("Provider readiness exceeded the total time budget")
         try:
-            with httpx.Client(timeout=httpx.Timeout(90, connect=5), follow_redirects=False, trust_env=False) as client:
+            with httpx.Client(timeout=httpx.Timeout(min(90, remaining), connect=min(5, remaining)), follow_redirects=False, trust_env=False) as client:
                 with client.stream("POST", base + "/chat/completions", headers=headers, json={
                     "model": s.provider_model, "messages": messages, "temperature": 0,
-                    "max_completion_tokens": 1000, "stream": False, "response_format": {"type": "json_object"},
+                    "max_completion_tokens": completion_tokens, "stream": False, "response_format": {"type": "json_object"},
                 }) as response:
                     if response.status_code != 200:
                         raise ProviderError(f"Provider returned HTTP {response.status_code}")
@@ -273,7 +293,7 @@ class Provider:
                     for chunk in response.iter_bytes():
                         if time.monotonic() >= deadline:
                             raise ProviderError("Provider response exceeded the total time budget")
-                        if len(payload) + len(chunk) > MAX_RESPONSE_BYTES:
+                        if len(payload) + len(chunk) > response_bytes:
                             raise ProviderError("Provider response exceeded the bounded response size")
                         payload.extend(chunk)
             if time.monotonic() >= deadline:

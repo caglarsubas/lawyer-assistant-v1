@@ -1,5 +1,59 @@
 # Verification record — 7 October 2026
 
+## R05A bounded private-analysis proposals — 7 October 2026 (Asia/Shanghai)
+
+PR #18 merged as `1966089b36b4c5a24b59aec7979ca7544ba18ac9`; its three PR checks
+and [the exact post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37586328485)
+passed. This packet adds separate encrypted local-model editing proposals against
+fixed private-analysis inputs, a maximum of one structural repair pass and explicit
+lawyer adoption into an immutable Needs review version. Model-origin text and notes
+remain unverified. Shared job admission, cancellation, deadlines, recovery, context
+accounting, provider identity/transport and no-fallback guards apply.
+
+- **350 relevant backend checks passed in 26.20s**, covering proposals, workbench,
+  shared jobs, workspace/portfolio, assistant and provider boundaries. The final
+  product-guide wording change separately passed **26 checks in 3.37s**. Tests
+  exercise fixed-input preservation, strict untrusted patches, duplicate JSON,
+  novel critical defects, at most two passes, exact measured HTTP envelope and relay
+  cap, duplicate-request receipts, safe failed/partial results, cancellation,
+  changed facts/analysis/model/deadline/access, immutable AI lineage and DOCX.
+- **41 deployment contracts passed in 0.335s**. Repository-wide Ruff with the CI
+  configuration and diff checks passed. **105 frontend tests passed** and the strict
+  TypeScript/Vite build passed; main JS is 459.36 KB / 131.52 KB gzip. Full backend
+  execution remains required in hosted CI and was not repeated locally. No CI job,
+  worker, timeout, retry or dependency was increased.
+- **128 final Linux checks passed in 16.51s**, with matching application and test
+  fingerprints. A preloaded development runtime with matching dependency manifests
+  was refreshed offline; the disposable non-root container had no network, host
+  mounts or ports, read-only root, dropped capabilities and CPU/memory/PID limits.
+  This is not a fresh production-image build or capacity qualification. Cleanup
+  passed. An initial harness collection failure was repaired by copying the existing
+  relay module required by provider tests; it introduced no application change.
+- **One real PostgreSQL adoption race passed in 0.80s**. A competing request was
+  observed waiting on the matter lock; one adoption appended version 2 and the other
+  returned 409, with version 1 and its original content retained. Only random
+  disposable child databases were used; container/database cleanup passed. The case
+  runs in the existing PostgreSQL CI job.
+- The isolated browser rehearsal used invented evidence and mocked local completion.
+  It showed a separate completed proposal while version 1 remained withheld, fixed
+  inputs and unverified notes, original passage inspection, explicit adoption with a
+  reason, Needs review version 2, model/source attribution and unchanged history.
+  The repair option stopped after its first pass when no critical structural check
+  remained. Details were collapsed by default, the three-panel layout rendered at
+  1280 × 720, and no console errors were captured. An initial fixture failure exposed
+  lifespan replacement of an instance mock; the mock was moved before server startup.
+  The temporary tab and both loopback servers closed.
+
+[Retained synthetic verification](evidence/private-analysis-suggestions-verification-2026-10-07.json)
+binds final application/test/frontend fingerprints, images, counts and cleanup to
+the dirty branch based on PR #18's exact merge, before this packet's commit. The
+existing Starlette/httpx warning is nonblocking. Root `.env` and real provider keys
+were not read or changed. No client data, real inference, source/legal review,
+graph/index activation or live application deployment occurred. R05A remains partial:
+public/history synthesis, semantic/adverse checks, broader correction, calibrated
+Standard/Deep modes and lawyer-adjudicated benefit remain open. See
+[proposal contract](ANALYSIS_SUGGESTIONS.md).
+
 ## R05A private analysis workbench — 7 October 2026 (Asia/Shanghai)
 
 PR #17 merged as `4d9b0d5f867bbf0b7a9db363b02e717cba52a381`; all PR checks and

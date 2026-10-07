@@ -6,9 +6,11 @@ provisional conclusion**. It produces a reviewable work product and immutable
 revisions. The checks inspect declared structure; they do not prove that an
 interpretation follows from a passage or that a legal rule applies.
 
-This slice uses authorized private documents and the fact ledger. It does not run
-inference, search public authorities, execute a correction loop or dispatch BYOK
-research. The existing quotation research workflow remains separate.
+Manual drafting and preview use authorized private documents and the fact ledger
+without inference. A separate [bounded local-model proposal workflow](ANALYSIS_SUGGESTIONS.md)
+now offers fixed-input application/conclusion edits, structural repair and explicit
+adoption into a new Needs review version. Public-authority search and BYOK research
+remain outside this workbench; quotation research remains separate.
 
 ## Lawyer workflow
 
@@ -119,13 +121,15 @@ The strict R01 offline analysis contract remains a separate qualification artifa
 
 ## Qualification and next work
 
-Synthetic checks exercise exact quotes, source pins, roles, declared conditions,
+Synthetic workbench checks exercise exact quotes, source pins, roles, declared conditions,
 immutable corrections, stale projections, firm/matter isolation, export races and
 real PostgreSQL revision contention. Browser checks use invented documents and
-the model is disabled. See [verification](VALIDATION.md) and
+the model is disabled for manual drafting. The separate proposal rehearsal uses
+invented mocked completions. See [verification](VALIDATION.md) and
 [the roadmap](ROADMAP.md).
 
 R05A remains partial. Qualified public authorities and historical applicability,
-semantic/adverse checks, automated bounded correction, Standard/Deep budgets,
-checkpoints and lawyer-adjudicated benefit comparisons remain pending. This slice
+semantic/adverse checks, broader correction, qualified Standard/Deep budgets
+and lawyer-adjudicated benefit comparisons remain pending. The bounded proposal
+loop and existing shared job checkpoints do not complete those gates. This slice
 does not establish Turkish legal accuracy or the product's negligible-error target.
