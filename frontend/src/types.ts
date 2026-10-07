@@ -67,7 +67,7 @@ export interface GraphServingRelease {
   status: 'unconfigured' | 'verified' | 'unavailable';
   release_id?: string; ontology_sha256?: string; legal_review_verified?: boolean; reason?: string;
 }
-export interface Passage { id: string; locator: string | Record<string, unknown>; text: string }
+export interface Passage { id: string; locator: string | Record<string, unknown>; text: string; text_sha256?: string }
 export interface ContextSelection {
   passage_id: string; document_id: string; document_name: string | null;
   document_revision: number | null; document_sha256: string | null;
@@ -93,6 +93,7 @@ export interface EvidenceContextPack {
 export interface DocumentRecord {
   id: string; name: string; status: string; media_type: string; page_count: number | null;
   extraction_warnings: string[]; created_at: string; passages?: Passage[]; synthetic?: boolean; sha256?: string;
+  revision?: number;
 }
 export interface Fact {
   id: string; text: string; status: FactStatus; evidence_id?: string | null; revision: number; updated_at: string;

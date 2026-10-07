@@ -1,5 +1,55 @@
 # Verification record — 7 October 2026
 
+## R05A private analysis workbench — 7 October 2026 (Asia/Shanghai)
+
+PR #17 merged as `4d9b0d5f867bbf0b7a9db363b02e717cba52a381`; all PR checks and
+[the exact post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37577029046)
+passed. This packet delivers lawyer-authored private rationale drafts with ledger
+premises, rule candidates, conditions/exceptions, application, alternatives and
+provisional conclusions. Deterministic checks withhold critical structural defects;
+all results remain conditional or withheld and grant no legal approval. Exact
+source hashes/document revisions and fact revisions reject stale editor inputs.
+Corrections retain immutable encrypted versions; dependency changes project Stale.
+
+- **165 broader backend checks passed in 18.35s** across analysis, practice,
+  governance, context research, assistant, workspace and jobs. After the final
+  history identity filter and its regression case, **57 final analysis checks
+  passed in 6.19s**. Cases cover exact Unicode/CRLF quotes, lookup/input budgets,
+  roles, conditions, unsupported steps, source pins, corrections, contradictions,
+  membership/firm isolation, stale history, selected-version DOCX/PDF and access or
+  evidence changes during rendering.
+- **41 deployment contracts passed in 0.360s**. Repository-wide Ruff with the CI
+  configuration and diff checks passed. **100 frontend tests passed** and the
+  strict TypeScript/Vite build passed. The main bundle is 450.23 KB / 129.08 KB gzip.
+  The complete backend suite remains mandatory in hosted CI; it was not repeated
+  locally. No CI job, dependency, retry, worker or timeout was increased.
+- **75 final Linux Docker checks passed in 9.77s** using matching final application
+  and test fingerprints. The disposable non-root container had no network, host
+  mounts or ports; read-only root, dropped capabilities and CPU/memory/PID limits
+  applied. A preloaded test image was refreshed offline after matching both
+  dependency manifests. This is not a fresh production build or performance
+  qualification. Its cleanup passed.
+- **One real PostgreSQL revision race passed in 0.54s**: the competing transaction
+  was observed waiting on the matter lock; one revision succeeded and the other
+  returned 409, with exactly two immutable versions. Only randomly named disposable
+  child databases were used. Container/database cleanup passed. This case runs in
+  the existing PostgreSQL CI job.
+- The isolated browser fixture showed a missing exception withholding version 1,
+  an explicit manual assessment producing a conditional revision, retained history,
+  original passage inspection and final refresh of version 3. The normal three-panel
+  layout, collapsed details, exact range and saved-versus-current source note were
+  verified; no console errors were captured. Its temporary tab and servers closed.
+
+[Retained synthetic verification](evidence/private-analysis-verification-2026-10-07.json)
+binds source/test/frontend fingerprints, images, checks and browser observations.
+It was captured on the dirty branch based on PR #17's exact merge, before this
+packet's commit. The existing Starlette/httpx deprecation warning is nonblocking.
+No root `.env` or provider key was read or changed. No client data, model call,
+public source review, corpus activation or live app deployment occurred. R05A
+remains partial: qualified public/history synthesis, semantic/adverse verification,
+bounded automated correction, Standard/Deep budgets and lawyer-adjudicated benefit
+remain open. See [workbench contract](ANALYSIS_WORKBENCH.md).
+
 ## R04 inspectable private evidence context — 7 October 2026 (Asia/Shanghai)
 
 PR #16 merged as `775fbb55496e48c997bd63b57c91e4781a018f7c`; all PR checks and

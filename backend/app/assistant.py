@@ -19,7 +19,7 @@ GUIDE = {
     "overview": "Çalışma alanının amacını, temsil edilen tarafı ve ilgili tarihi kontrol edin. Müvekkil etiketleri erişim yetkisi vermez.",
     "documents": "Dosyaları açık çalışma alanına yükleyin. Dosyayı seçerek çıkarılan pasajları ve çıkarım uyarılarını inceleyin; yüklenemeyen içerik araştırma dayanağı değildir.",
     "facts": "Belgelenmiş olguları, taraf beyanlarını, varsayımları ve çıkarımları ayrı kaydedin. Belgelenmiş olguyu ilgili kaynak pasajına bağlayın.",
-    "practice": "Senaryoları, çelişkileri, destekleyen ve karşıt argümanları çalışma notlarında hazırlayın. Taslakların önceki sürümleri korunur.",
+    "practice": "Senaryoları, çelişkileri, destekleyen ve karşıt argümanları çalışma notlarında hazırlayın. Yapılandırılmış analizde öncül, kural, koşul, uygulama ve alternatifleri bağlayın; kritik kontroller sonucu bekletir. Kontroller hukuki doğrulama değildir. Taslakların önceki sürümleri korunur.",
     "research": "Araştırma sorunuzu ve ilgili tarihi belirtin. Sonuçta her iddianın pasajını ve uygulanabilirliğini kontrol edin; eksik hukuki kaynak yerine kesin sonuç üretmeyin.",
     "comments": "Çalışma alanındaki yorumlara not ekleyin. Yorumlar yazar ve kayıt tarihiyle saklanır; yorum bir hukuki otorite veya doğrulanmış olgu değildir.",
 }

@@ -12,6 +12,7 @@ from test_snapshot_set_postgres import (
 )
 from test_snapshot_set_postgres import postgres_database as database_fixture
 
+from app import analysis_workbench
 from app.config import Settings
 from app.db import Record
 from app.main import create_app
@@ -28,6 +29,7 @@ def postgres_database():
 def workspace(postgres_database, tmp_path):
     app = create_app(Settings.model_construct(
         demo_mode=True, cookie_secure=False, data_dir=tmp_path,
+        public_source_dir=tmp_path / 'public-only',
         database_url=postgres_database.render_as_string(hide_password=False)))
     with TestClient(app) as client:
         login = client.post('/api/v1/auth/login', json={'username': 'demo', 'password': 'demo-local-only'})
@@ -42,6 +44,47 @@ def publish(app, matter, ident):
     # Graph authorization has independent end-to-end tests. This slice exercises
     # the actual private publication transaction with a clearly synthetic product.
     return publish_product(app, ident, {'status': 'needs_review', 'title': 'SYNTHETIC'}, revision)
+
+
+def test_analysis_revision_conflicts_preserve_one_immutable_history(workspace, monkeypatch):
+    app, client, matter = workspace
+    endpoint = f'/api/v1/matters/{matter}/analyses'
+    payload = {'title': 'SYNTHETIC incomplete draft', 'issue': 'SYNTHETIC unresolved issue',
+               'conclusion': {'text': 'SYNTHETIC provisional text', 'next_step': 'Collect evidence'}}
+    created = client.post(endpoint, json=payload)
+    assert created.status_code == 201, created.text
+    original = created.json()
+    versions = endpoint + '/' + original['id'] + '/versions'
+    locked, release = Event(), Event()
+    write = analysis_workbench._write_version
+
+    def paused(*args, **kwargs):
+        body = args[4]
+        if body.change_note == 'SYNTHETIC first revision':
+            locked.set()
+            assert release.wait(10)
+        return write(*args, **kwargs)
+
+    monkeypatch.setattr(analysis_workbench, '_write_version', paused)
+    first = {**payload, 'expected_revision': original['revision'], 'change_note': 'SYNTHETIC first revision'}
+    second = {**first, 'title': 'SYNTHETIC competing revision', 'change_note': 'SYNTHETIC second revision'}
+    with ThreadPoolExecutor(2) as pool:
+        accepted = pool.submit(client.post, versions, json=first)
+        try:
+            assert locked.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                competing = pool.submit(client.post, versions, json=second)
+                assert observed[0].wait(5)
+                assert wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not competing.done()
+        finally:
+            release.set()
+        assert accepted.result(timeout=5).status_code == 201
+        assert competing.result(timeout=5).status_code == 409
+    history = client.get(versions).json()
+    assert [version['version'] for version in history] == [2, 1]
+    assert history[1]['id'] == original['latest_version_id']
+    assert history[1]['content']['title'] == payload['title']
 
 
 def test_stop_commit_first_blocks_publication(workspace):
