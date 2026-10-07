@@ -81,6 +81,13 @@ def _source(app, session, matter_id, user, state):
         raise HTTPException(409, "Avukat incelemesi değişti; öneri için yeni bir çalışma başlatın.")
     if state.get("source_review_id") and state.get("source_review_recipe") != analysis_reviews.RECIPE:
         raise HTTPException(409, "İnceleme ölçütleri değişti; yeni bir inceleme ve öneri gerekli.")
+    if state.get("source_review_id"):
+        reviewed = store.decode(require_child(session, state["source_review_id"], analysis_reviews.KIND, matter_id, user))
+        if reviewed.get("revision_assessment"):
+            _, version = analysis_reviews._version(store, session, matter_id, row.id, state["source_version_id"], user)
+            if analysis_reviews.comparison_reasons(store, session, matter_id, row.id, state["source_version_id"],
+                                                  user, version["content"], reviewed):
+                raise HTTPException(409, "Kaynak incelemenin sürüm değerlendirmesi değişti; yeni inceleme ve öneri gerekli.")
     freshness = _freshness(store, session, matter_id, user, state["source_content"])
     if freshness["status"] == "stale":
         raise HTTPException(409, "Önerinin özel dayanakları değişti; önce analiz sürümünü yenileyin.")

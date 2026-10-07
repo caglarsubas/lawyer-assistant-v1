@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import Field, model_validator
 from sqlalchemy import select
 
+from .analysis_adjudication import RevisionAssessment, comparison_context, validate_assessment
 from .analysis_workbench import _freshness
 from .auth import authenticate, require_child, require_matter
 from .db import Record, digest
@@ -60,6 +61,7 @@ class ReviewInput(StrictInput):
     note: str = Field(min_length=3, max_length=2000)
     criteria: list[ReviewCriterion] = Field(min_length=1, max_length=5)
     findings: list[ReviewFinding] = Field(default_factory=list, max_length=20)
+    revision_assessment: RevisionAssessment | None = None
 
     @model_validator(mode="after")
     def bounded(self):
@@ -68,9 +70,17 @@ class ReviewInput(StrictInput):
         if self.decision == "changes_requested" and not self.findings and not any(
                 item.outcome == "needs_change" for item in self.criteria):
             raise ValueError("A request for changes must identify a finding or unresolved criterion")
-        if len(canonical(self.model_dump()).encode()) > 100000:
+        if len(canonical(_input_value(self, set())).encode()) > 100000:
             raise ValueError("Review input exceeds its byte budget")
         return self
+
+
+def _input_value(body, exclude):
+    value = body.model_dump(exclude=exclude)
+    # Preserve pre-upgrade receipt hashes when the optional assessment is absent.
+    if value.get("revision_assessment") is None:
+        value.pop("revision_assessment", None)
+    return value
 
 
 def _head_id(version_id):
@@ -100,6 +110,19 @@ def review_pin(store, session, matter_id, analysis_id, version_id, user):
     return store.decode(head)["latest_review_id"] if head else None
 
 
+def comparison_reasons(store, session, matter_id, analysis_id, version_id, user, content, data):
+    if not data.get("revision_assessment"):
+        return []
+    comparison = comparison_context(store, session, matter_id, analysis_id, version_id, user, content)
+    reasons = []
+    if (not comparison or comparison != data.get("revision_comparison_snapshot")
+            or comparison["comparison_sha256"] != data["revision_assessment"]["comparison_sha256"]):
+        reasons.append("Sürüm değerlendirmesinin kaynak, inceleme veya karşılaştırma bağı değişti.")
+    if comparison:
+        reasons.extend(comparison["freshness"]["reasons"])
+    return list(dict.fromkeys(reasons))
+
+
 def projection(store, session, matter_id, analysis_id, version_id, user, content, freshness):
     ident = review_pin(store, session, matter_id, analysis_id, version_id, user)
     if not ident:
@@ -113,6 +136,8 @@ def projection(store, session, matter_id, analysis_id, version_id, user, content
         reasons.append("İnceleme ölçütleri değişti; yeni bir avukat incelemesi gerekli.")
     if data["content_sha256"] != digest(canonical(content)):
         reasons.append("İncelenen içerik özeti bu sürümle eşleşmiyor.")
+    reasons.extend(comparison_reasons(store, session, matter_id, analysis_id, version_id, user, content, data))
+    reasons = list(dict.fromkeys(reasons))
     effective = "stale" if reasons else data["decision"]
     return {"effective_state": effective, "scope": SCOPE, "latest": data, "reasons": reasons}
 
@@ -135,6 +160,7 @@ def _context(store, session, matter_id, analysis_id, version_id, user):
         "can_record": current_version,
         "can_accept": current_version and freshness["status"] == "current" and not content["checks"]["critical_count"],
         "review": current,
+        "revision_comparison": comparison_context(store, session, matter_id, analysis_id, version.id, user, content),
         "sources": [{key: item[key] for key in ("evidence_id", "document_id", "name", "locator", "start", "end", "quote_sha256")}
                     for item in content["evidence"]],
         "targets": ["analysis", "conclusion", *(kind + ":" + item["id"] for group, kind in (
@@ -160,6 +186,8 @@ def _validate_decision(body, context, content):
                 or any(item.outcome == "needs_change" for item in body.criteria)
                 or any(item.severity != "note" for item in body.findings)):
             raise HTTPException(422, "Koşullu taslak incelemesi tüm ölçütleri ve çözülmemiş esaslı bulguları ele almalıdır.")
+    if body.revision_assessment:
+        validate_assessment(body.revision_assessment, context["revision_comparison"], content, body.decision)
 
 
 def review_router():
@@ -188,7 +216,7 @@ def review_router():
     @router.post("", status_code=201)
     def record(matter_id: str, analysis_id: str, body: ReviewInput, request: Request, user=Depends(authenticate)):
         store = request.app.state.store
-        request_hash = digest(canonical(body.model_dump(exclude={"request_id"})))
+        request_hash = digest(canonical(_input_value(body, {"request_id"})))
         ident = _head_id(body.version_id) + "-" + digest(user.id + ":" + body.request_id)[:32]
         with store.session() as session:
             matter = require_matter(session, matter_id, user)
@@ -209,11 +237,13 @@ def review_router():
             _validate_decision(body, context, content)
             head = _head(store, session, matter_id, analysis_id, version.id, user)
             sequence = store.decode(head)["sequence"] + 1 if head else 1
-            data = {**body.model_dump(exclude={"request_id", "expected_revision"}),
+            data = {**_input_value(body, {"request_id", "expected_revision"}),
                     "analysis_id": analysis_id, "recipe": RECIPE, "scope": SCOPE, "sequence": sequence,
                     "request_sha256": request_hash, "reviewer_id": user.id, "reviewer_name": user.name,
                     "immutable": True, "source_freshness_at_review": context["freshness"],
                     "source_selections": context["sources"], "machine_legal_approval": "not_granted"}
+            if body.revision_assessment:
+                data["revision_comparison_snapshot"] = context["revision_comparison"]
             event = store.add(session, KIND, user, data, matter_id, record_id=ident)
             pointer = {"analysis_id": analysis_id, "version_id": version.id, "latest_review_id": ident, "sequence": sequence}
             if head:
@@ -225,6 +255,9 @@ def review_router():
             require_matter(session, matter_id, user)
             if body.decision == "reviewed_conditional" and _freshness(store, session, matter_id, user, content)["status"] != "current":
                 raise HTTPException(409, "İnceleme sırasında özel dayanaklar değişti.")
+            if body.revision_assessment and comparison_reasons(
+                    store, session, matter_id, analysis_id, version.id, user, content, data):
+                raise HTTPException(409, "Kayıt sırasında sürüm karşılaştırmasının dayanakları değişti.")
             session.commit()
             return store.view(event)
 

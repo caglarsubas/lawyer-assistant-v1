@@ -17,7 +17,11 @@ revalidation without changing original text or machine checks. Human change requ
 withhold the conclusion; new versions require fresh review. [Opt-in review-informed
 proposals](ANALYSIS_FEEDBACK.md) now bind selected findings to actual permitted edits,
 manual-work requirements or unresolved outcomes, preserving review history and
-accepted-pass provenance. They do not establish semantic repair. Full public/historical legal synthesis, semantic/adverse correction,
+accepted-pass provenance. They do not establish semantic repair. Optional
+[source-linked human revision adjudication](ANALYSIS_ADJUDICATION.md) now compares
+exact drafts and quotes, retains earlier findings and requires targeted observations
+for repair declarations. Declared review seconds do not establish a measured gain.
+Full public/historical legal synthesis, representative semantic/adverse correction,
 qualified Standard/Deep modes and every BYOK adapter remain pending; these goals
 are not satisfied merely by a structurally complete draft or a repeated model call.
 

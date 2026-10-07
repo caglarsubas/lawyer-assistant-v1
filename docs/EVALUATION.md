@@ -11,6 +11,13 @@ source rights or enable dispatch. Reports always retain `production_qualified: f
 and `runtime_authorization: none`. Real evidence belongs in a confidential evaluation
 workspace outside Git; committed/generated examples are synthetic.
 
+The app's [source-linked revision adjudication](ANALYSIS_ADJUDICATION.md) records
+authenticated private observations against exact before/after drafts and quotations.
+It does not automatically produce scorer rows, independent annotators, held-out
+families, adverse gold sets or full trial timings. Its optional declared review time
+is one observation, not the scorer's complete preparation-time accounting. Real
+comparison capture and independent adjudication still require a frozen protocol.
+
 ## Run a scoped evaluation
 
 ```sh

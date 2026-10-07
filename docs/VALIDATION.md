@@ -1,5 +1,72 @@
 # Verification record — 7 October 2026
 
+## R05A source-linked private revision adjudication — 7 October 2026 (Asia/Shanghai)
+
+PR #21 merged as `76055d9622081750182d1ae26d91c86d00c70ab0`; its three PR checks
+and [exact post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37622349199)
+passed. This packet adds optional source-linked human observations to the existing
+review workflow: exact predecessor/current drafts and quotes, every baseline finding,
+typed dispositions, six semantic dimensions and separately declared review time.
+No inference or automatic finding closure occurs in adjudication.
+
+- **468 relevant backend checks passed in 40.45s**, including **39 new focused
+  cases**. They cover server-owned content/review/source pins, encrypted immutable
+  snapshots, strict bounded inputs, all-finding coverage, actual versus no-op edits,
+  current candidate quotes, same-step meaning/strength observations, withheld and
+  unresolved outcomes, old receipt compatibility, missing predecessor/review,
+  membership isolation, stale facts/quotes/recipes/reviews, snapshot substitution,
+  late-save rollback, mixed export rejection and in-flight/completed proposal
+  invalidation. The late-save case injects a predecessor-only source change inside
+  the transaction; it verifies rollback, rather than claiming a concurrent writer.
+- **124 frontend tests passed** and strict TypeScript/Vite build passed. Main JS
+  is 486.95 KB / 138.32 KB gzip. **41 deployment contracts passed**;
+  repository-wide Ruff passed using the CI configuration. No dependency, migration,
+  CI job, timeout, retry or worker was added. The complete backend suite remains
+  required in hosted CI and was not repeated locally.
+- **241 isolated Linux checks passed in 33.79s**, with matching application/test
+  fingerprints. The preloaded development runtime was refreshed offline with
+  unchanged dependency manifests. Its disposable non-root container had no network,
+  ports or host mounts, read-only root, dropped capabilities, no-new-privileges and
+  CPU/memory/PID limits. Cleanup passed. This is not a fresh production-image build
+  or performance/capacity qualification.
+- **Six real PostgreSQL races passed in 2.71s**, using randomly named disposable
+  child databases. Competing and identical review requests were tested with and
+  without adjudication; contenders were observed waiting on the matter lock. A
+  different nonce conflicted, while an identical retry returned one immutable event.
+  Existing proposal-adoption races also passed. Cleanup passed. These cases use
+  the existing PostgreSQL CI job.
+- An isolated browser rehearsal used invented documents and one mocked proposal
+  call. Adjudication made no model call. It verified no preselected affirmative
+  outcomes, exact original-passage inspection, actual before/after steps, six explicit
+  observations and two baseline-finding dispositions. With one finding unresolved,
+  positive review was disabled and a change request saved. Version 2 remained
+  withheld; both original version-1 findings were preserved. Declared 90 seconds
+  remained a synthetic observation, with no gain claimed. The final 1280 × 720
+  three-panel screen showed collapsed details and the original unresolved finding;
+  no console errors were captured. Authenticated HTTP inspection and DOCX confirmed
+  the same saved comparison, quotations/hashes, observations and baseline history.
+  The temporary tab, both loopback services and disposable containers closed.
+
+[Retained synthetic verification](evidence/private-analysis-adjudication-verification-2026-10-07.json)
+binds final source/test/frontend fingerprints, image, checks and cleanup to the
+dirty branch based on PR #21's exact merge, before this packet's commit. Review
+identified two additional dependencies before final verification: proposals must
+revalidate adjudication data, and save must recheck predecessor-only sources after
+validation. Both guards and their regression cases passed the final host/Linux runs.
+An intermediate rollback test initially exercised the existing candidate guard; it
+was corrected to change only predecessor evidence. Temporary API restart/hot-refresh
+errors recovered on reload, and the saved view was rechecked after those guards.
+A final legacy compatibility adjustment preserves the existing request-size
+allowance when the optional field is absent; exact-limit and oversized inputs passed
+the final host/Linux runs. The browser snapshot separately pins its source before
+that adjustment; the assessed workflow and frontend were unchanged.
+The existing Starlette/httpx warning is nonblocking. Root `.env` and real
+provider keys were not read or changed. No client data, real model call, source/legal
+approval, graph/index activation or live application deployment occurred. R05A
+remains partial: independent representative semantic/adverse qualification, reviewed
+public/history synthesis, measured benefit and calibrated Standard/Deep remain open.
+See [adjudication contract](ANALYSIS_ADJUDICATION.md).
+
 ## R05A opt-in review-informed proposals — 7 October 2026 (Asia/Shanghai)
 
 PR #20 merged as `e82e33c9d2d6aff0d416984c1d271ca4eb93adfb`; its PR checks

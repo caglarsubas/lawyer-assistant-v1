@@ -396,6 +396,9 @@ def _export_lines(content, snapshot, version, freshness, review=None):
                          for item in content["ai_assistance"].get("feedback_responses", []))
     if review and review["latest"]:
         event = review["latest"]
+        from .analysis_adjudication import assessment_lines
+
+        lines.extend(assessment_lines(event))
         lines.extend(["Avukat incelemesi: " + review["effective_state"] + " / kapsam: " + review["scope"],
                       "Bu karar koşullu özel taslakla sınırlıdır; kamu hukuku otoritesi veya makine hukuki onayı değildir.",
                       f"İnceleme: {event['id']} / sıra {event['sequence']} / {event['created_at']}",

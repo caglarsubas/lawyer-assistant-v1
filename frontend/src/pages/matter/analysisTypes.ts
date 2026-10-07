@@ -91,6 +91,8 @@ export interface AnalysisReviewEvent {
   decision: 'reviewed_conditional' | 'changes_requested'; reviewer_id: string; reviewer_name: string;
   note: string; criteria: AnalysisReviewCriterion[]; findings: AnalysisReviewFinding[];
   scope: 'conditional_private_draft_only'; recipe: string;
+  revision_assessment?: RevisionAssessment;
+  revision_comparison_snapshot?: RevisionComparison;
 }
 export interface AnalysisReviewProjection {
   effective_state: 'unreviewed' | 'reviewed_conditional' | 'changes_requested' | 'stale';
@@ -102,4 +104,25 @@ export interface AnalysisReviewContext {
   current_version: boolean; can_record: boolean; can_accept: boolean; critical_count: number;
   freshness: AnalysisFreshness; review: AnalysisReviewProjection; targets: string[];
   sources: { evidence_id: string; document_id: string; name: string; locator: Passage['locator']; start: number; end: number; quote_sha256: string }[];
+  revision_comparison?: RevisionComparison | null;
+}
+
+export type SemanticDimension = 'entailment' | 'fact_roles' | 'conditions' | 'chronology' | 'counterevidence' | 'certainty';
+export interface LinkedObservation { note: string; target_ids: string[]; source_refs: string[] }
+export interface SemanticObservation extends LinkedObservation { dimension: SemanticDimension; outcome: 'confirmed' | 'needs_change' | 'not_assessed' }
+export interface FindingDisposition extends LinkedObservation { finding_index: number; outcome: 'repaired' | 'withheld' | 'unresolved' }
+export interface RevisionAssessment {
+  comparison_sha256: string; observations: SemanticObservation[]; finding_dispositions: FindingDisposition[]; review_seconds: number | null;
+}
+export type ComparisonValue = string | number | boolean | null | ComparisonValue[] | { [key: string]: ComparisonValue };
+export interface RevisionComparison {
+  recipe: string; scope: string; comparison_sha256: string; review_recipe: string;
+  base_version_id: string; base_version: number; base_content_sha256: string; base_review_id: string | null;
+  candidate_version_id: string; candidate_version: number; candidate_content_sha256: string;
+  candidate_disposition: 'conditional' | 'withheld'; targets: string[];
+  changes: { target_id: string; before: ComparisonValue; after: ComparisonValue }[];
+  findings: (AnalysisReviewFinding & { finding_index: number })[];
+  sources: (Omit<AnalysisContent['evidence'][number], 'full_passage_length'> & { source_ref: string })[];
+  dimensions: Record<SemanticDimension, string>; freshness: { status: 'current' | 'stale'; reasons: string[] };
+  public_adverse_authority_qualified: false; benefit_established: false;
 }
