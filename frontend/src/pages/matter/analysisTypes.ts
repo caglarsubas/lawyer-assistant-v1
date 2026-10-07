@@ -73,6 +73,7 @@ export interface AnalysisSuggestion {
   freshness: AnalysisFreshness; error?: string;
   review_notes?: { target_id: string; text: string; evidence_ids: string[]; pass: number }[];
   review_feedback?: AnalysisFeedback; feedback_responses?: FeedbackResponse[]; feedback_response_pass?: number | null;
+  comparison_ref?: { id: string; protocol_sha256: string; arm: 'single_pass' | 'bounded_correction' };
   iterations?: { pass: number; provider_seconds: number; prompt: { utf8_bytes: number; messages_sha256: string; completion_tokens: number }; outcome: string; new_critical_check_ids: string[]; checks: AnalysisChecks; patch?: { feedback_responses?: FeedbackResponse[] } }[];
 }
 
@@ -118,7 +119,8 @@ export type ComparisonValue = string | number | boolean | null | ComparisonValue
 export interface RevisionComparison {
   recipe: string; scope: string; comparison_sha256: string; review_recipe: string;
   base_version_id: string; base_version: number; base_content_sha256: string; base_review_id: string | null;
-  candidate_version_id: string; candidate_version: number; candidate_content_sha256: string;
+  candidate_version_id: string; candidate_version: number | null; candidate_content_sha256: string;
+  candidate_kind?: 'unadopted_model_proposal';
   candidate_disposition: 'conditional' | 'withheld'; targets: string[];
   changes: { target_id: string; before: ComparisonValue; after: ComparisonValue }[];
   findings: (AnalysisReviewFinding & { finding_index: number })[];

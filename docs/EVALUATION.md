@@ -18,6 +18,16 @@ families, adverse gold sets or full trial timings. Its optional declared review 
 is one observation, not the scorer's complete preparation-time accounting. Real
 comparison capture and independent adjudication still require a frozen protocol.
 
+[Registered private analysis comparisons](REGISTERED_ANALYSIS_COMPARISONS.md) now
+freeze an actual private source/review/model/rubric context before either job, capture
+same-input single-pass/correction arms, retain two authenticated-account observations
+and append explicit active preparation/verification/correction declarations. This
+development protocol has no held-out cohort, certified independent experts, public
+snapshot/adverse gold set, substantive claim scoring or measured GPU compute time.
+It is not blinded and does not automatically emit qualification rows. Complete
+capture is record completeness; approval and benefit flags remain false. Unknown
+measurements cannot be substituted with zero to satisfy the protocol below.
+
 ## Run a scoped evaluation
 
 ```sh

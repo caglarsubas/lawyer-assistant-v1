@@ -1,5 +1,71 @@
 # Verification record — 7 October 2026
 
+## R05A registered private analysis comparisons — 7 October 2026 (Asia/Shanghai)
+
+PR #22 merged as `806c3f9e24f0e5c4d79878d2df36c01cd1c0e8dd`; its three PR checks
+and [exact post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37634321673)
+passed. This packet registers immutable same-input private comparisons before
+dispatch: exact source/review, rubric, two assigned reviewer accounts, declared
+sample family and model/policy/budgets. Single-pass and bounded-correction arms
+reuse existing jobs and permanent receipts. Trial candidates remain unadopted.
+Separate human observations and explicitly declared active preparation,
+verification and correction time preserve unknowns and unresolved findings.
+
+- **388 relevant backend checks passed in 46.81s**, including **41 focused cases**.
+  They cover frozen inputs, no-call registration, bounded identical first-pass
+  inputs, optional exact feedback, partial admission and retained receipts,
+  cancellation, stale providers/reviews/evidence/recipes/membership, strict timing,
+  source-linked observations, separate permissions, concurrent-head conflicts,
+  record and byte bounds, and authenticated private JSON export. A provider change
+  injected after event/audit creation rolls both back; this verifies a final-save
+  guard, rather than claiming a concurrent writer.
+- **132 frontend tests passed** and strict TypeScript/Vite build passed. **41
+  deployment contracts passed in 0.454s**; repository-wide Ruff and the R01 planning
+  contract check passed. Main JS is 502.60 KB / 142.49 KB gzip; the default 500 KB
+  advisory is retained. No dependency, migration, CI job, timeout, retry or worker
+  was added. The complete backend suite remains required in hosted CI and was not
+  repeated locally. The planning check grants no qualification.
+- **282 isolated Linux checks passed in 53.24s**, with matching final application
+  and test fingerprints. The preloaded development runtime was refreshed offline
+  with unchanged dependency manifests. The disposable non-root container had no
+  network, ports or host mounts, read-only root, dropped capabilities,
+  no-new-privileges and CPU/memory/PID limits. Cleanup passed. This is not a fresh
+  production-image build or capacity qualification.
+- **Ten real PostgreSQL races passed in 6.42s** in randomly named disposable child
+  databases. Four new observation/effort cases observed competing writers waiting
+  on the matter lock: different requests conflicted; identical retries returned
+  one immutable event. Existing source-linked review and proposal-adoption races
+  also passed. These run in the existing PostgreSQL CI job. Write paths were
+  checked before the final read-only export route and remained unchanged afterward.
+  Cleanup passed.
+- An isolated browser rehearsal registered a synthetic protocol before any call,
+  then retained three mocked calls: one single pass and two correction passes.
+  Both arms started from the same original draft. Two assigned accounts each
+  saved six unassessed dimensions and two unresolved findings. Blank timings and
+  unchecked inclusion declarations initially remained unknown; a separate explicit
+  synthetic timing record completed capture without granting qualification or
+  establishing benefit. The original remained version 1 with its change request.
+  Authenticated server attachment download produced 70,402 bytes matching the
+  saved protocol/execution hashes. The final 1280 × 720 screen was rechecked
+  against final source fingerprints, with collapsed details and no captured console
+  warnings/errors. Temporary tabs, loopback services, disposable containers and
+  this rehearsal's copied download files were cleaned up.
+
+[Retained synthetic verification](evidence/private-analysis-comparison-verification-2026-10-07.json)
+binds checks, final fingerprints, browser evidence and cleanup to the dirty branch
+based on PR #22's exact merge, before this packet's commit. See the
+[comparison contract](REGISTERED_ANALYSIS_COMPARISONS.md) for role exclusions,
+same-input budgets, nonoverlapping active effort, history limits and export handling.
+Provider round-trip time is recorded separately from elapsed time; GPU compute,
+failed-call total work and unmeasured costs remain unknown. The approved exact
+laptop-tunnel exception is disclosed before dispatch; no further external access
+was added. Root `.env` and real provider keys were not read or changed. No client
+data, real model call, source/legal approval, graph/index activation or live
+deployment occurred. R05A remains partial: representative legal/semantic/adverse
+qualification, reviewed public/history synthesis, measured benefit, held-out
+release evaluation and calibrated Standard/Deep remain open. Capture completeness
+is record completeness, not a positive assessment or release approval.
+
 ## R05A source-linked private revision adjudication — 7 October 2026 (Asia/Shanghai)
 
 PR #21 merged as `76055d9622081750182d1ae26d91c86d00c70ab0`; its three PR checks
