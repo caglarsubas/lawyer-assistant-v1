@@ -16,16 +16,16 @@
   },
   "frontend_source": {
     "files": 56,
-    "sha256": "00c689ffc55afe3ded5acc28644f9918109a5939f874f3307e1b297a98dc6fba"
+    "sha256": "08923a0f0a146effdca8c260a0897b2b757dc70d502a718d83a7434d471bd482"
   },
   "host_backend": {
     "passed": 293,
     "pytest_seconds": 34.76
   },
   "frontend": {
-    "passed": 116,
+    "passed": 117,
     "build": "strict TypeScript and Vite passed",
-    "main_js_kb": 474.56,
+    "main_js_kb": 474.59,
     "main_js_gzip_kb": 135.26
   },
   "deployment_contracts": {
@@ -121,7 +121,12 @@
     "listeners_verified_closed": [
       18091,
       15187
-    ]
+    ],
+    "frontend_source_at_rehearsal": {
+      "files": 56,
+      "sha256": "00c689ffc55afe3ded5acc28644f9918109a5939f874f3307e1b297a98dc6fba"
+    },
+    "subsequent_compatibility_fix": "Optional feedback fields in legacy proposal patches; 117 component tests and strict build passed after the guard. New-feedback adoption behavior unchanged."
   },
   "root_environment_read_or_modified": false,
   "real_provider_calls": 0,

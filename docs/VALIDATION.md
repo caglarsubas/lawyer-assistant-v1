@@ -18,7 +18,7 @@ legal-review authority. Adoption creates a new unreviewed Needs review version.
   Mock HTTP verifies the complete measured envelope and unchanged relay acceptance;
   one unit below its context bound fails before transport. DOCX includes selected
   feedback and its original-review lineage; manual revisions preserve provenance.
-- **116 frontend tests passed** and strict TypeScript/Vite build passed. Main JS
+- **117 frontend tests passed** and strict TypeScript/Vite build passed. Main JS
   is 474.56 KB / 135.26 KB gzip. **41 deployment contracts passed in 0.328s**;
   repository-wide Ruff passed with the CI configuration. No dependency, migration,
   CI job, timeout, retry or worker was added. Full backend execution remains required
@@ -49,7 +49,11 @@ binds application, test and frontend fingerprints, image, checks and cleanup to 
 dirty branch based on PR #20's exact merge, before this packet's commit. Browser QA
 initially caught a null-selection crash after adoption; it was corrected, covered
 by an unreviewed-version component regression test and rechecked in a fresh fixture.
-Initial test route/check-selection and lint-configuration mistakes were corrected
+A later compatibility check found legacy proposal patches lacking feedback fields;
+the optional-field guard and legacy-history rendering regression passed in the
+final frontend suite/build. The verification record separately pins the browser
+rehearsal and final frontend fingerprints. Initial test route/check-selection and
+lint-configuration mistakes were corrected
 before final verification. The existing Starlette/httpx warning is nonblocking.
 Root `.env` and real provider keys were not read or changed. No client data, real
 provider call, source/legal approval, graph activation or live app deployment

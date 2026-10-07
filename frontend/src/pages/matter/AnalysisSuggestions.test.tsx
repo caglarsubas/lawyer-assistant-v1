@@ -27,6 +27,14 @@ function job(): AnalysisSuggestion {
 }
 
 describe('local analysis proposal review', () => {
+  it('keeps legacy proposal history inspectable when its patches have no feedback fields', () => {
+    const data = job(); data.can_adopt = false;
+    data.freshness = { ...data.freshness, status: 'stale', reasons: ['Öneri politikası değişti.'] };
+    data.iterations![0].patch = {};
+    const html = renderToStaticMarkup(<ProposalReview job={data} onSource={() => {}} />);
+    expect(html).toContain('Öneri politikası değişti'); expect(html).toContain('Yeni kritik kontrol nedeniyle');
+    expect(html).not.toContain('bulgu yanıtları ·');
+  });
   it('renders a new unreviewed version with no review or pending selection after adoption', () => {
     const record: AnalysisRecord = { ...candidate(), id: 'a1', revision: 2, version: 2, latest_version_id: 'v2', created_at: '2026-10-07T00:00:00Z',
       freshness: { status: 'current', reasons: [], scope: 'private_draft' },

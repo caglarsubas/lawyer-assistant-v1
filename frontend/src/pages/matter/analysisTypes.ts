@@ -73,7 +73,7 @@ export interface AnalysisSuggestion {
   freshness: AnalysisFreshness; error?: string;
   review_notes?: { target_id: string; text: string; evidence_ids: string[]; pass: number }[];
   review_feedback?: AnalysisFeedback; feedback_responses?: FeedbackResponse[]; feedback_response_pass?: number | null;
-  iterations?: { pass: number; provider_seconds: number; prompt: { utf8_bytes: number; messages_sha256: string; completion_tokens: number }; outcome: string; new_critical_check_ids: string[]; checks: AnalysisChecks; patch?: { feedback_responses: FeedbackResponse[] } }[];
+  iterations?: { pass: number; provider_seconds: number; prompt: { utf8_bytes: number; messages_sha256: string; completion_tokens: number }; outcome: string; new_critical_check_ids: string[]; checks: AnalysisChecks; patch?: { feedback_responses?: FeedbackResponse[] } }[];
 }
 
 export interface FeedbackResponse { finding_id: string; outcome: 'proposed_change' | 'requires_manual_work' | 'unresolved'; edited_targets: string[]; text: string; evidence_ids: string[] }
