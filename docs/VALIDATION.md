@@ -1,5 +1,63 @@
 # Verification record — 7 October 2026
 
+## R04 frozen-snapshot retrieval benchmark — 7 October 2026 (Asia/Shanghai)
+
+PR #15 merged as `95f4ceb8368ba616428f3d639e4497fbc8a8ea08`; its PR checks and
+[post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37550356673)
+passed. This packet adds fixed lexical/Turkish/default evaluation profiles, a
+bounded capture function using the existing authorized search service, and an
+offline development scorer. Index schema v3, default application retrieval,
+source/rights checks, dependencies and CI topology remain.
+
+- **320 relevant backend tests passed in 50.51s**, including analytical graded
+  nDCG/recall cases, adverse/target denominators, query-family grouping and
+  deterministic paired intervals. Unknown coverage and empty gold stay unmeasured;
+  failed and unexecuted cells remain in aggregate denominators. Complete-cell,
+  frozen-snapshot, duplicate-authority, execution-budget, revocation/activation,
+  file-change and private-diagnostic boundaries passed. The accompanying graph,
+  signed-release and research suites passed.
+- **41 deployment contract tests passed in 0.391s**; repository-wide Ruff and
+  diff checks passed. The full backend suite remains mandatory in CI; it was not
+  repeated locally. No hosted job, dependency, worker, retry or deadline increased.
+- **20 isolated Docker tests passed in 114.80s**. The development workload
+  captured all **nine query/profile cells** for three invented citation queries
+  on one real OpenSearch index, then scored the complete cohort. It uses explicit
+  fixture projection and supplied synthetic relevance labels. A separate **three
+  profile searches** exercised actual signed-source projection and current
+  PostgreSQL private authorization. Neither is the real adjudicated development set.
+- The existing ten Turkish matching and seven literal-citation query cases passed,
+  including forged-key rejection. The signed lifecycle workload built three
+  generations from eight synthetic passage/assertion/authority records, preserved
+  reads during a paused rebuild, rejected incomplete/writable indexes and a real
+  bulk-item failure, and blocked all reads/builds after committed source revocation.
+  Five authority reads during rebuild took **14.287–15.205s**; first build took
+  1.019s and induced revocation wait/commit 0.488s. These local small-fixture readings
+  are not representative capacity, p95 latency or five-model-job qualification.
+  Source/guard/in-flight work can extend the cooperative retrieval budget.
+
+The [retained v5 drill report](evidence/retrieval-benchmark-drill-2026-10-07.json)
+records the benchmark aggregates, declared-family comparisons, separate signed
+capture check, exact image identities, 104-file application/input and 68-file test
+fingerprints, resource limits and successful cleanup. It records the merge base and
+dirty tree because it ran before commit; both fingerprints matched the final tested
+source before retention. The image reused the preloaded `r04-citations` development
+runtime with matching `pyproject.toml`/`uv.lock` digests and current source copied
+using `--network none`. No fresh production-image build or app deployment is claimed.
+
+The standalone fixture generator, offline scoring CLI and schema export completed
+successfully. Its three queries and nine rankings are invented, not retrieved;
+the report retains synthetic origin, pending adjudication, no runtime authorization
+and no production qualification. Query text, query/authority/family IDs and paths
+are excluded from aggregate output. The CLI accepts no provider credentials and
+loads no settings or `.env`.
+
+No live `.env`, client matter, existing index or application container was read or
+changed. The Docker drill used a fresh internal-only network with no host ports or
+bind mounts; generated resources were cleaned up. Real benchmark acquisition and
+two-reviewer adjudication, target/version resolution, embeddings/rerankers,
+independent adverse search, broader ablations and representative hardware samples
+remain open. See [capture, metrics and uncertainty limits](RETRIEVAL_BENCHMARK.md).
+
 ## R04 literal citation occurrence retrieval — 7 October 2026 (Asia/Shanghai)
 
 PR #14 merged as `3fdee6d6332bdc80eb01349a0ae06f546bfe6978`; all three PR checks

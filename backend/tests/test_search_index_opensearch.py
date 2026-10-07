@@ -20,6 +20,7 @@ from test_snapshot_set_postgres import observe_identity_lock, wait_until_blocked
 from test_snapshot_set_postgres import postgres_database as postgres_database_fixture
 
 from app.graph_release import RuntimeGraphRelease, _load_serving
+from app.retrieval_benchmark import RetrievalBenchmark, capture_run, score_run
 from app.search import PublicSearchService
 from app.search_index import IndexBuildError, IndexTransport, build_index
 from app.search_index_contract import document_id
@@ -27,10 +28,25 @@ from app.search_normalization import normalization_metadata
 
 postgres_authorized_set = postgres_authorized_set_fixture
 postgres_database = postgres_database_fixture
-MARKER = "lawyer-search-index-drill-v4"
+MARKER = "lawyer-search-index-drill-v5"
 URL = "http://opensearch:9200"
 pytestmark = pytest.mark.skipif(os.environ.get("LA_SEARCH_INDEX_DRILL") != MARKER,
                                 reason="Opt-in disposable OpenSearch qualification only")
+
+
+def benchmark_fixture(release, built, queries):
+    return RetrievalBenchmark.model_validate({"schema_version": "retrieval-development-benchmark-v1",
+        "dataset_id": "invented-opensearch-benchmark", "purpose": "development", "origin": "synthetic",
+        "adjudication_status": "pending", "adjudication_evidence_sha256": None,
+        "snapshot": {"release_id": release.info["release_id"], "serving_sha256": release.info["serving_sha256"],
+            "activation_sequence": release.info["pointer"]["sequence"], "index": built["index"],
+            "documents_sha256": built["documents_sha256"], "index_schema": built["schema"],
+            "normalization": built["normalization"], "citation_profile": built["citation_profile"], "fusion": "rrf-k60-v1"},
+        "queries": [{"id": f"synthetic-{position}", "query": query, "family_sha256": hashlib.sha256(str(position).encode()).hexdigest(),
+            "practice": ("contracts", "commercial", "employment")[position % 3], "period": "unknown", "slices": ["citation"],
+            "as_of": "2011-06-01", "corpus_coverage": "covered", "exact_target": None,
+            "judgments": [{"authority_id": target, "relevance": 3, "adverse": False} for target in targets]}
+            for position, (query, targets) in enumerate(queries)]})
 
 
 def test_real_literal_citations_remain_distinct_unresolved_and_source_backed(tmp_path):
@@ -66,6 +82,24 @@ def test_real_literal_citations_remain_distinct_unresolved_and_source_backed(tmp
                 assert hit[occurrence["field"]][occurrence["start"]:occurrence["end"]] == occurrence["literal"]
     plain = search.search("2099/0007", as_of="2011-01-01")
     assert plain["coverage"]["channels"]["literal_citation"] == "not_requested"
+    release.info = {**release.info, "serving_sha256": "f" * 64, "pointer": {"sequence": 1}}
+    benchmark = benchmark_fixture(release, built, [
+        ("Kanun No: 999999", ["urn:test:authority:law"]),
+        ("E. 2099/0007", ["urn:test:authority:esas_a", "urn:test:authority:esas_b"]),
+        ("B. No: 2099/0007", ["urn:test:authority:application"])])
+    captured = capture_run(benchmark, search)
+    scored = score_run(benchmark, captured)
+    assert len(captured.observations) == 9 and all(row.status == "available" for row in captured.observations)
+    assert scored["production_qualified"] is False and scored["runtime_authorization"] == "none"
+    assert all(scored["profiles"][profile]["recall_at_20"]["value"] == 1.0 for profile in ("lexical", "turkish", "all"))
+    print("\nRETRIEVAL_BENCHMARK_DRILL_REPORT=" + json.dumps({
+        "status": "passed", "synthetic_only": True, "projection": "explicit_fixture_only",
+        "queries": scored["queries"], "observations": len(captured.observations),
+        "benchmark_sha256": scored["benchmark_sha256"], "paired": scored["paired"],
+        "metrics": {profile: {metric: values[metric] for metric in ("recall_at_20", "ndcg_at_10", "adverse_recall_at_20", "exact_target_hit_at_20")}
+                    for profile, values in scored["profiles"].items()},
+        "checks": {name: True for name in ("same_index_and_snapshot", "all_query_profile_cells",
+            "real_opensearch_profiles", "complete_cohort_denominators", "non_authorizing_report")}}, sort_keys=True))
     # A privileged index writer can forge derived keys, but cannot cause the
     # reader to claim a citation occurrence absent from verified source text.
     transport = IndexTransport(URL, built["index"], time.monotonic() + 30)
@@ -170,6 +204,10 @@ def test_real_index_build_rebuild_failure_and_revocation(postgres_authorized_set
     assert all(row["text"] in {item["text"] for item in expected} and row["source_url"] is None for row in initial["hits"])
     assert not search.search("term", as_of="2013-01-01", authority_id=authority)["hits"]
     assert search.search("Birinci", as_of="2011-06-01")["hits"]
+    benchmark = benchmark_fixture(runtime, first, [("Birinci", sorted({row["authority_id"] for row in expected}))])
+    captured = capture_run(benchmark, search)
+    assert len(captured.observations) == 3 and all(row.status == "available" and row.authority_ids for row in captured.observations)
+    assert score_run(benchmark, captured)["production_qualified"] is False
 
     # A build paused after index creation cannot displace or masquerade as the
     # existing sealed index. Query the actual old index while its rebuild runs.
@@ -270,6 +308,7 @@ def test_real_index_build_rebuild_failure_and_revocation(postgres_authorized_set
               "private_ledger": "postgresql", "concurrent_searches": 5, "search_seconds_during_rebuild": query_seconds,
               "revocation_wait_and_commit_seconds": revocation_seconds, "partial_indexes_retained_until_cleanup": 1,
               "checks": {name: True for name in ("exact_signed_passages", "historical_interval_filter", "lexical_query",
+                  "signed_source_benchmark_capture",
                   "five_searches_during_locked_rebuild", "revocation_wait_observed_in_postgres", "building_index_denied", "same_inventory_new_index", "write_block_enforced",
                   "writable_index_denied", "real_bulk_item_error_denied", "old_index_preserved_on_failure",
                   "second_source_revocation_blocks_all_indexes_and_rebuild")}}

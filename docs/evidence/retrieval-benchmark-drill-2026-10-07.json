@@ -1,0 +1,309 @@
+{
+  "checkout_commit": "95f4ceb8368ba616428f3d639e4497fbc8a8ea08",
+  "checkout_dirty": true,
+  "citation_retrieval": {
+    "checks": {
+      "forged_keyword_rejected_against_source": true,
+      "historical_prefilters": true,
+      "leading_zeros_preserved": true,
+      "no_pairing_inference": true,
+      "original_literal_spans": true,
+      "typed_role_separation": true,
+      "unlabeled_numbers_not_resolved": true,
+      "unresolved_collisions": true
+    },
+    "citation_profile": "tr-literal-citations-v1",
+    "document_count": 8,
+    "index_schema": "public-search-index-v3",
+    "projection": "explicit_fixture_only",
+    "status": "passed",
+    "synthetic_only": true,
+    "targeted_cases_passed": 7
+  },
+  "cleanup": {
+    "complete": true
+  },
+  "finished_at": "2026-10-07T00:22:50.630363+00:00",
+  "host": {
+    "architecture": "arm64",
+    "system": "Darwin"
+  },
+  "images": {
+    "opensearch": "sha256:e96cc6ae1500a073d973c0906f30f7cf4d9c461f32f855f9242a2da933660cdd",
+    "postgres": "sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "test": "sha256:7a7629be2411504241c27368cec805353b3b78c2c4ca854003bc60c1a5dbf46f"
+  },
+  "not_qualified": [
+    "real legal/source rights",
+    "production capacity",
+    "retrieval recall or adverse authority coverage",
+    "embedding/reranker quality",
+    "five model jobs during reindexing",
+    "representative PostgreSQL lock latency or production revocation SLA"
+  ],
+  "resource_limits": {
+    "driver": {
+      "cpus": "2.0",
+      "mem_limit": "1g",
+      "pids_limit": 256
+    },
+    "opensearch": {
+      "cpus": "2.0",
+      "mem_limit": "1536m",
+      "pids_limit": 256
+    },
+    "postgres": {
+      "cpus": "2.0",
+      "mem_limit": "512m",
+      "pids_limit": 256
+    }
+  },
+  "retrieval_benchmark": {
+    "benchmark_sha256": "5467cae454e5118ac30e4c33a4ed03e1c152706501befce1955e5381ff9e739b",
+    "checks": {
+      "all_query_profile_cells": true,
+      "complete_cohort_denominators": true,
+      "non_authorizing_report": true,
+      "real_opensearch_profiles": true,
+      "same_index_and_snapshot": true
+    },
+    "metrics": {
+      "all": {
+        "adverse_recall_at_20": {
+          "queries": 0,
+          "value": null
+        },
+        "exact_target_hit_at_20": {
+          "queries": 0,
+          "value": null
+        },
+        "ndcg_at_10": {
+          "queries": 3,
+          "value": 1.0
+        },
+        "recall_at_20": {
+          "queries": 3,
+          "value": 1.0
+        }
+      },
+      "lexical": {
+        "adverse_recall_at_20": {
+          "queries": 0,
+          "value": null
+        },
+        "exact_target_hit_at_20": {
+          "queries": 0,
+          "value": null
+        },
+        "ndcg_at_10": {
+          "queries": 3,
+          "value": 0.7692972911371474
+        },
+        "recall_at_20": {
+          "queries": 3,
+          "value": 1.0
+        }
+      },
+      "turkish": {
+        "adverse_recall_at_20": {
+          "queries": 0,
+          "value": null
+        },
+        "exact_target_hit_at_20": {
+          "queries": 0,
+          "value": null
+        },
+        "ndcg_at_10": {
+          "queries": 3,
+          "value": 0.7169736432690441
+        },
+        "recall_at_20": {
+          "queries": 3,
+          "value": 1.0
+        }
+      }
+    },
+    "observations": 9,
+    "paired": [
+      {
+        "baseline": "lexical",
+        "candidate": "turkish",
+        "metrics": {
+          "adverse_recall_at_20": {
+            "candidate_minus_baseline": null,
+            "excluded_queries": 3,
+            "improved": 0,
+            "independent_families_declared": 0,
+            "interval_95": null,
+            "paired_queries": 0,
+            "regressed": 0,
+            "unchanged": 0
+          },
+          "exact_target_hit_at_20": {
+            "candidate_minus_baseline": null,
+            "excluded_queries": 3,
+            "improved": 0,
+            "independent_families_declared": 0,
+            "interval_95": null,
+            "paired_queries": 0,
+            "regressed": 0,
+            "unchanged": 0
+          },
+          "ndcg_at_10": {
+            "candidate_minus_baseline": -0.052323647868103264,
+            "excluded_queries": 0,
+            "improved": 1,
+            "independent_families_declared": 3,
+            "interval_95": [
+              -0.22629438553091674,
+              0.06932344192660694
+            ],
+            "paired_queries": 3,
+            "regressed": 1,
+            "unchanged": 1
+          },
+          "recall_at_20": {
+            "candidate_minus_baseline": 0.0,
+            "excluded_queries": 0,
+            "improved": 0,
+            "independent_families_declared": 3,
+            "interval_95": [
+              0.0,
+              0.0
+            ],
+            "paired_queries": 3,
+            "regressed": 0,
+            "unchanged": 3
+          }
+        }
+      },
+      {
+        "baseline": "turkish",
+        "candidate": "all",
+        "metrics": {
+          "adverse_recall_at_20": {
+            "candidate_minus_baseline": null,
+            "excluded_queries": 3,
+            "improved": 0,
+            "independent_families_declared": 0,
+            "interval_95": null,
+            "paired_queries": 0,
+            "regressed": 0,
+            "unchanged": 0
+          },
+          "exact_target_hit_at_20": {
+            "candidate_minus_baseline": null,
+            "excluded_queries": 3,
+            "improved": 0,
+            "independent_families_declared": 0,
+            "interval_95": null,
+            "paired_queries": 0,
+            "regressed": 0,
+            "unchanged": 0
+          },
+          "ndcg_at_10": {
+            "candidate_minus_baseline": 0.28302635673095583,
+            "excluded_queries": 0,
+            "improved": 2,
+            "independent_families_declared": 3,
+            "interval_95": [
+              0.0,
+              0.5
+            ],
+            "paired_queries": 3,
+            "regressed": 0,
+            "unchanged": 1
+          },
+          "recall_at_20": {
+            "candidate_minus_baseline": 0.0,
+            "excluded_queries": 0,
+            "improved": 0,
+            "independent_families_declared": 3,
+            "interval_95": [
+              0.0,
+              0.0
+            ],
+            "paired_queries": 3,
+            "regressed": 0,
+            "unchanged": 3
+          }
+        }
+      }
+    ],
+    "projection": "explicit_fixture_only",
+    "queries": 3,
+    "status": "passed",
+    "synthetic_only": true
+  },
+  "schema_version": "lawyer-search-index-drill-v5",
+  "source": {
+    "application": {
+      "files": 104,
+      "sha256": "327454ad78e6e480a0aacfca0acede64e86e5c767a04f75ee30518e0faf38991"
+    },
+    "tests": {
+      "files": 68,
+      "sha256": "9c4459fd55473157c5899d30a138e2d68a1241944913701dc1e65b10d8eeb582"
+    }
+  },
+  "started_at": "2026-10-07T00:20:46.608026+00:00",
+  "status": "passed",
+  "synthetic_only": true,
+  "turkish_retrieval": {
+    "checks": {
+      "decomposed_exact_offsets": true,
+      "folded_collisions_do_not_merge_identities": true,
+      "folded_only_discovery": true,
+      "historical_prefilters": true,
+      "independent_channels": true,
+      "negative_and_numeric_tokens": true,
+      "original_text_unchanged": true,
+      "title_matches": true
+    },
+    "document_count": 11,
+    "index_schema": "public-search-index-v3",
+    "normalization": {
+      "profile": "turkish-lexical-v1",
+      "unicode_version": "15.0.0"
+    },
+    "projection": "explicit_fixture_only",
+    "status": "passed",
+    "synthetic_only": true,
+    "targeted_cases_passed": 10
+  },
+  "workload": {
+    "checks": {
+      "building_index_denied": true,
+      "exact_signed_passages": true,
+      "five_searches_during_locked_rebuild": true,
+      "historical_interval_filter": true,
+      "lexical_query": true,
+      "old_index_preserved_on_failure": true,
+      "real_bulk_item_error_denied": true,
+      "revocation_wait_observed_in_postgres": true,
+      "same_inventory_new_index": true,
+      "second_source_revocation_blocks_all_indexes_and_rebuild": true,
+      "signed_source_benchmark_capture": true,
+      "writable_index_denied": true,
+      "write_block_enforced": true
+    },
+    "concurrent_searches": 5,
+    "document_count": 8,
+    "documents_sha256": "9fc5297c4fd7574f9b93aef9bcf902bc21d22035e71b88fbaae53035ceb58538",
+    "first_build_seconds": 1.019,
+    "indexes_built": 3,
+    "partial_indexes_retained_until_cleanup": 1,
+    "private_ledger": "postgresql",
+    "release_id": "f0297de4afd4eecd7c2670fb2101080f974c1a2908885fe04ac0482244a5d7cc",
+    "revocation_wait_and_commit_seconds": 0.488,
+    "search_seconds_during_rebuild": [
+      15.179,
+      14.287,
+      15.205,
+      15.191,
+      15.198
+    ],
+    "status": "passed",
+    "synthetic_only": true
+  }
+}

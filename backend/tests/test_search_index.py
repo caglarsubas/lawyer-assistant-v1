@@ -472,3 +472,44 @@ def test_revocation_after_citation_response_discards_every_channel(case, monkeyp
     monkeypatch.setattr(search, "_request", revoked)
     result = search.search("E. 2099/1")
     assert not result["hits"] and result["coverage"]["status"] == "unavailable"
+
+
+@pytest.mark.parametrize("profile,count", [("lexical", 1), ("turkish", 4), ("all", 5)])
+def test_evaluation_profiles_select_channels_without_weakening_filters_or_source_checks(case, profile, count):
+    release, server = case
+    release.rows = [{**source(), "text": "E. 2099/1, SÖZLEŞMELER"}]
+    build_index(release, "http://opensearch:9200", RELEASE)
+    server.calls.clear()
+    result = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release).search(
+        "E. 2099/1", as_of="2011-01-01", limit=50, profile=profile)
+    bodies = [json.loads(call.content) for call in server.calls if call.url.path.endswith("/_search")]
+    assert len(bodies) == count and sum(body["size"] for body in bodies) <= 200
+    assert result["snapshot"]["retrieval_profile"] == profile
+    assert all(body["query"]["bool"]["filter"][:len(bodies[0]["query"]["bool"]["filter"])]
+               == bodies[0]["query"]["bool"]["filter"] for body in bodies)
+    assert result["hits"][0]["text"] == release.rows[0]["text"]
+    assert result["hits"][0]["channels"] == CHANNELS[:count]
+    assert result["coverage"]["status"] == "available"
+
+
+@pytest.mark.parametrize("profile", ["unknown", None, [], {}, 1])
+def test_evaluation_profile_validation_happens_before_network(case, profile):
+    release, server = case
+    with pytest.raises(ValueError):
+        PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release).search("test", profile=profile)
+    assert not server.calls
+
+
+def test_profile_cannot_silently_add_vectors_or_substitute_v1_for_turkish(case):
+    release, server = case
+    search = PublicSearchService("http://opensearch:9200", INDEX, RELEASE, release)
+    with pytest.raises(ValueError):
+        search.search("test", profile="lexical", vector=[1.0])
+    assert not server.calls
+    build_index(release, "http://opensearch:9200", RELEASE)
+    server.mapping["_meta"].update(schema=LEGACY_SCHEMA, channels=["lexical"])
+    server.mapping["properties"] = properties(LEGACY_SCHEMA)
+    server.calls.clear()
+    result = search.search("test", profile="turkish")
+    assert result["coverage"]["status"] == "unavailable" and not result["hits"]
+    assert [call.method for call in server.calls] == ["GET"]

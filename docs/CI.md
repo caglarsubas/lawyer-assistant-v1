@@ -171,3 +171,8 @@ compatibility cases to the same backend suite. Its real OpenSearch keyword,
 collision and tampering cases run only in the opt-in v4 drill. Exceeding the query
 citation budget preserves other channels; source overflow blocks preparation
 before index writes. The CI topology and deadlines remain unchanged.
+
+The R04 development benchmark adds fast ranking, complete-cell, snapshot,
+revocation, file-integrity and grouped-bootstrap cases to that suite. Real profile
+capture is exercised only by the opt-in v5 OpenSearch drill. No hosted Docker
+benchmark, matrix, dependency, job, worker, retry or time-limit increase is added.

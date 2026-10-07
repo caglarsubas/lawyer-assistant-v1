@@ -247,11 +247,14 @@ keeps synthetic source files and test keys in tmpfs; no `.env`, existing databas
 or provider key is used. Each service is limited to two CPUs and 256 PIDs; memory
 caps are 512 MiB for PostgreSQL, 1.5 GiB for OpenSearch and 1 GiB for the driver.
 
-The v4 workload includes targeted synthetic Turkish case/Unicode/apostrophe/alias,
+The v5 workload includes targeted synthetic Turkish case/Unicode/apostrophe/alias,
 negation/number and original-offset matching, plus seven literal-citation cases
 covering role separation, zeros, collisions and forged derived keys. Those matching
-cases use a fixture projection;
-the separate lifecycle workload exercises exact signed passage retrieval, historical filtering,
+cases use a fixture projection. The development benchmark also captures nine profile
+searches on invented citation passages and three through the actual signed-source/
+private-authorization path. See [benchmark capture and scoring](RETRIEVAL_BENCHMARK.md)
+for frozen inputs, complete outcome accounting and uncertainty limits.
+The lifecycle workload exercises exact signed passage retrieval, historical filtering,
 five concurrent searches during a guarded rebuild, write blocks, an actual
 per-item bulk failure and second-source revocation. It observes the revocation
 writer's real PostgreSQL lock wait, releases the build, then verifies that committed
