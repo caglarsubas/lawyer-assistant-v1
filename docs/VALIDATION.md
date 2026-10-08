@@ -1,5 +1,77 @@
 # Verification record — 8 October 2026
 
+## R05A source-bound lawyer authority findings — 8 October 2026 (Asia/Shanghai)
+
+PR #25 merged as `98dee304042006a14b1fbf904b7d0f3c72b60dd4`; its three PR
+checks passed. Exact post-merge main
+[run 37733750369](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37733750369)
+passed frontend/PostgreSQL but timed out in Test backend at 99% after 18 minutes,
+without an earlier assertion failure. This packet adds private observations on
+exact public-authority contexts and reduces repeated inference membership work.
+The base CI failure is retained as evidence; new-branch CI and post-merge recovery
+are separate observations.
+
+- **2,915 backend tests passed in 331.56s**, using the exact two-worker worksteal,
+  no-restart, maxfail-one CI command; **39 PostgreSQL/isolated-drill cases skipped**
+  and 28 existing warnings. The 31 new authority-finding cases cover all selected
+  occurrences/targets and six dimensions, strict unknown/time/bounds handling,
+  role/membership/CSRF, immutable encrypted history, head/nonce conflicts, stale
+  dependencies/reviewer access, withheld notes, pending post-commit receipts,
+  rollback of final-save failures and JSON/DOCX/PDF integrity/late denial. All
+  Supported observations leave real legal-norm blockers and applicability unknown.
+  Final-save/render injections are not concurrent-writer tests.
+- **156 frontend tests and strict TypeScript/Vite build passed.** New review tools
+  load explicitly and keep six dimensions unselected. Failed export clears cached
+  views; denied downloads preserve authenticated, encoded, no-store paths. Main JS
+  is 505.30 KB / 143.13 KB gzip; the lazy findings chunk is 9.73 KB / 3.72 KB gzip.
+  The existing 500 KB advisory remains enabled. **41 deployment contracts passed
+  in 0.437s**; repository-wide Ruff, actionlint, RDF/SHACL and R01 planning checks
+  passed. The ontology remains legally unreviewed with zero published historical
+  records; planning validity grants no qualification.
+- **127 focused offline Linux checks passed in 23.79s**, including source/context
+  findings and the 51 validator preflight cases. Exact final application/test
+  fingerprints matched the branch. The existing locked test runtime was refreshed
+  with unchanged dependencies; non-root container, no network/ports/mounts,
+  read-only root, dropped capabilities, no-new-privileges and CPU/memory/PID limits.
+  Cleanup passed. This is not a fresh production image or capacity qualification.
+- **18 real PostgreSQL races passed in 12.78s**, with random disposable child
+  databases. Three new cases observe competing review saves waiting on the actual
+  workspace row lock: identical replay yields one review; changed nonce payload or
+  competing head conflicts. Existing context, cohort, comparison, review and
+  adoption races pass. Cleanup passed. One preceding local driver invocation
+  imported the original editable checkout instead of this worktree; its path was
+  corrected explicitly. That import failure was not a failing application race.
+- An isolated browser rehearsal used invented law text, a test-only Ed25519 key,
+  simulated rights and actual signed physical bytes. Explicit review opening →
+  current-input capture → six manual observations → save → inspection and actual
+  JSON/DOCX downloads preserved the exact original Unicode quote, all three targets,
+  source/context/review digests and unknown review time. Research date 2011-03-01
+  and event date 2024-03-01 remained different. A later private passage correction
+  produced Stale; simulated rights revocation produced Withheld with `snapshot:
+  null`, hiding potentially quoting review notes as well. All three exports returned
+  HTTP 409 in both negative states. Review ciphertext/seal and the original private
+  analysis version remained unchanged with two legal-norm blockers; no model was
+  called. Browser capture preceded only guide-copy and validator-index changes;
+  that source fingerprint is retained separately from final Linux verification.
+  No console warning/error was captured. Owned tab/listeners and copied downloads
+  were cleaned up; synthetic copies/screenshots remain in ignored verification storage.
+- Profiling retained **all 93 validations and 1,023 query preparations** in the
+  real signed publication test; Memory pattern-iterator calls fell **8,191,380 →
+  3,822,076**. Eight alternating warm validator pairs measured **0.14304s →
+  0.12206s median**, 14.7% lower. The new bounded invocation-local membership index
+  preserves complete native inference/report equivalence and falls back after
+  removal, multiple/quoted contexts or overflow. RDF/SHACL/catalog bytes and
+  signature formats remain unchanged. These local observations are not a hosted
+  runner or billing claim. See [CI controls](CI.md).
+
+Curated [verification metadata](evidence/private-authority-findings-verification-2026-10-08.json)
+contains source/image/test pins, browser phases, checks and limitations. Raw logs
+and fixtures remain under ignored `.data/verification/r05a-authority-findings/`.
+R05A remains partial: actual source/legal review, independent semantic/adverse
+adjudication, public synthesis, held-out qualification and measured benefit are
+open. No credentials, provider policy, external access, public corpus or running
+application deployment changed.
+
 ## R05A explicit public-authority context — 8 October 2026 (Asia/Shanghai)
 
 PR #24 merged as `f9d6c9694b024bf1c6b91a1a99985c24e6c982f6`; its three PR checks

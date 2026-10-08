@@ -1,0 +1,366 @@
+{
+  "schema": "private-authority-findings-verification-v1",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "98dee304042006a14b1fbf904b7d0f3c72b60dd4",
+  "source": {
+    "application": {
+      "sha256": "61a06cd0a6d3a39c46cdd79bc38f5c7eb22bac110b9f2f44028c33e1df2243ee",
+      "files": 116
+    },
+    "tests": {
+      "files": 81,
+      "sha256": "3df2b1a05ed9e8fad64d6624fb3c29994e71530593af3ffcf20910c5638ca4ed"
+    }
+  },
+  "frontend_source": {
+    "sha256": "2cd5eb0cac0475dd3985ae026b15b9434489aa736bcbc18a7cb102a86353c940",
+    "files": 50
+  },
+  "linux": {
+    "schema": "private-analysis-authority-context-verification-v1",
+    "recorded_at": "2026-10-08T06:57:10.656738+00:00",
+    "synthetic_only": true,
+    "production_qualified": false,
+    "base_commit": "98dee304042006a14b1fbf904b7d0f3c72b60dd4",
+    "checkout_dirty": true,
+    "host": {
+      "system": "Darwin",
+      "architecture": "arm64"
+    },
+    "test_image": "sha256:9737d7b9106cb0cace66d895092607a743831dd7f18fdb04eda1cc683297d37e",
+    "source": {
+      "application": {
+        "sha256": "61a06cd0a6d3a39c46cdd79bc38f5c7eb22bac110b9f2f44028c33e1df2243ee",
+        "files": 116
+      },
+      "tests": {
+        "files": 81,
+        "sha256": "3df2b1a05ed9e8fad64d6624fb3c29994e71530593af3ffcf20910c5638ca4ed"
+      }
+    },
+    "limits": {
+      "network": "none",
+      "host_ports": [],
+      "host_mounts": [],
+      "read_only": true,
+      "cpu": 2,
+      "memory_bytes": 805306368,
+      "pids": 128,
+      "tmpfs_bytes": 268435456
+    },
+    "linux_tests": {
+      "exit_code": 0,
+      "passed": 127,
+      "pytest_seconds": 23.79,
+      "container_wall_seconds": 24.726
+    },
+    "cleanup_verified": true,
+    "not_established": [
+      "Turkish legal accuracy or semantic completeness",
+      "real-provider authentication or model performance",
+      "production capacity or latency",
+      "real-corpus retrieval quality or adverse recall",
+      "real source/legal approval",
+      "live application deployment"
+    ]
+  },
+  "postgresql": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "eighteen real PostgreSQL authority review head, public context and cohort freeze/cancel, comparison own-head, review-head and adoption races in randomly named disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 14.049,
+    "passed": 18,
+    "pytest_seconds": 12.78
+  },
+  "host_tests": {
+    "backend": {
+      "passed": 2915,
+      "skipped": 39,
+      "warnings": 28,
+      "seconds": 331.56,
+      "workers": 2,
+      "distribution": "worksteal",
+      "max_worker_restart": 0
+    },
+    "frontend_passed": 156,
+    "deployment_passed": 41,
+    "deployment_seconds": 0.437,
+    "validator_preflight_passed": 51
+  },
+  "static_checks": {
+    "ruff": "passed",
+    "actionlint": "passed",
+    "typescript_vite": "passed",
+    "rdf_shacl": "passed_unreviewed",
+    "r01_plan": "passed_not_qualified"
+  },
+  "browser": {
+    "capture_source": {
+      "sha256": "e57fd0aab32dcc5d8c6e50cf30ab1801448383c7314b9973616b650e11ae43d4",
+      "files": 116
+    },
+    "capture_before": "guide-copy and validator-membership changes only",
+    "review_sha256": "dbe64a6d3729261de7290a29f7ad9e57bab0fb4329b6df0891281ea5af547149",
+    "context_manifest_sha256": "d97e23ed1e51ac07028b0dfcba08a433ecb554e95f38c28bbf0a87d2cb9d08be",
+    "dimensions": 6,
+    "targets": [
+      "rule:r1",
+      "application:a1",
+      "condition:c2"
+    ],
+    "review_seconds": null,
+    "stale": {
+      "status": {
+        "status": "stale",
+        "reasons": [
+          "authority_context_changed"
+        ]
+      },
+      "snapshot_sha256": "dbe64a6d3729261de7290a29f7ad9e57bab0fb4329b6df0891281ea5af547149",
+      "exports": {
+        "json": 409,
+        "docx": 409,
+        "pdf": 409
+      }
+    },
+    "withheld": {
+      "status": {
+        "status": "withheld",
+        "reasons": [
+          "public_context_unavailable"
+        ]
+      },
+      "snapshot": null,
+      "exports": {
+        "json": 409,
+        "docx": 409,
+        "pdf": 409
+      }
+    },
+    "ciphertext_preserved": true,
+    "private_analysis_version_preserved": true,
+    "legal_norm_blockers_preserved": true,
+    "provider_calls": 0,
+    "cleanup": {
+      "owned_tab_closed": true,
+      "owned_listeners_closed": [
+        15191,
+        18096
+      ],
+      "owned_downloads_removed": 2,
+      "retained_copies": true,
+      "console_warnings_errors": 0
+    },
+    "artifacts": {
+      "current-ui.jpg": "a83003a4acb4cba82d139e8426111887200842ef948a9f97373c5068ae0e219c",
+      "stale-ui.jpg": "b33caac91c1886a8e8ee7d90d78e29190d0b27cc77a84b1a7b42d3f8b791ed9a",
+      "withheld-ui.jpg": "005ab133dd120f23b791ced63a4105246390b98567330ccfc2b019a9216a831d",
+      "browser-current.json": "7f882081a5d88aa030ce1a6c922b1476a3ee3e99ba8622ee51e288b982aa6a9d",
+      "browser-current.docx": "2ae731a7ef636fea3d56af238737e3d9be41cd92ca61dd853a0a4762fdd43dfe"
+    }
+  },
+  "ci_cost": {
+    "base_pr25_checks": "passed",
+    "base_pr25_test_seconds": 717.59,
+    "base_main_run": 37733750369,
+    "base_main_backend": "18-minute Test backend timeout at 99 percent",
+    "base_main_frontend": "passed",
+    "base_main_postgresql": "passed",
+    "profile": {
+      "diagnostic_only": true,
+      "profiles": [
+        {
+          "name": "ci-profile.pstats",
+          "profile_elapsed_seconds": 101.04259077800184,
+          "functions": {
+            "triples": {
+              "calls": 16691975,
+              "internal_seconds": 7.938130164,
+              "cumulative_seconds": 39.784382762
+            },
+            "validate_graph": {
+              "calls": 93,
+              "internal_seconds": 0.0009113740000000001,
+              "cumulative_seconds": 65.72955825400001
+            },
+            "prepareQuery": {
+              "calls": 1023,
+              "internal_seconds": 0.002555602,
+              "cumulative_seconds": 13.990646201
+            },
+            "closure": {
+              "calls": 93,
+              "internal_seconds": 0.34633584900000003,
+              "cumulative_seconds": 39.956470085
+            }
+          },
+          "native_memory_pattern_calls": 8191380
+        },
+        {
+          "name": "ci-profile-indexed.pstats",
+          "profile_elapsed_seconds": 45.07800121699893,
+          "functions": {
+            "triples": {
+              "calls": 7953367,
+              "internal_seconds": 1.558336218,
+              "cumulative_seconds": 9.622046880000001
+            },
+            "validate_graph": {
+              "calls": 93,
+              "internal_seconds": 0.00039506400000000004,
+              "cumulative_seconds": 28.492607120000002
+            },
+            "prepareQuery": {
+              "calls": 1023,
+              "internal_seconds": 0.0008281730000000001,
+              "cumulative_seconds": 6.521225901
+            },
+            "closure": {
+              "calls": 93,
+              "internal_seconds": 0.16995508,
+              "cumulative_seconds": 16.108221085
+            }
+          },
+          "native_memory_pattern_calls": 3822076
+        }
+      ]
+    },
+    "validator_benchmark": {
+      "synthetic": true,
+      "before_source": {
+        "base_commit": "98dee304042006a14b1fbf904b7d0f3c72b60dd4",
+        "validation_sha256": "5f966591066ff9586680fa6cb618402c1da11df1c65eeb85ba1efe4d3d0ddb6f"
+      },
+      "after_validation_sha256": "02461f3cb4ff30cc8a4f20f5fa2ad27e07a50d8ea8f644cec33b8e9af5e7c25f",
+      "counts": {
+        "data": 130,
+        "schema": 2374,
+        "shapes": 356
+      },
+      "measurements": [
+        {
+          "trial": 0,
+          "implementation": "before",
+          "seconds": 0.1588990830059629
+        },
+        {
+          "trial": 0,
+          "implementation": "after",
+          "seconds": 0.1218982499995036
+        },
+        {
+          "trial": 1,
+          "implementation": "after",
+          "seconds": 0.1281644579867134
+        },
+        {
+          "trial": 1,
+          "implementation": "before",
+          "seconds": 0.13912791600159835
+        },
+        {
+          "trial": 2,
+          "implementation": "before",
+          "seconds": 0.14773637500184122
+        },
+        {
+          "trial": 2,
+          "implementation": "after",
+          "seconds": 0.12024754099547863
+        },
+        {
+          "trial": 3,
+          "implementation": "after",
+          "seconds": 0.1205684580054367
+        },
+        {
+          "trial": 3,
+          "implementation": "before",
+          "seconds": 0.15090441700886004
+        },
+        {
+          "trial": 4,
+          "implementation": "before",
+          "seconds": 0.13920870899164584
+        },
+        {
+          "trial": 4,
+          "implementation": "after",
+          "seconds": 0.13417583399859723
+        },
+        {
+          "trial": 5,
+          "implementation": "after",
+          "seconds": 0.11863224999979138
+        },
+        {
+          "trial": 5,
+          "implementation": "before",
+          "seconds": 0.1468784580065403
+        },
+        {
+          "trial": 6,
+          "implementation": "before",
+          "seconds": 0.13769595800840762
+        },
+        {
+          "trial": 6,
+          "implementation": "after",
+          "seconds": 0.13043137500062585
+        },
+        {
+          "trial": 7,
+          "implementation": "after",
+          "seconds": 0.12227191601414233
+        },
+        {
+          "trial": 7,
+          "implementation": "before",
+          "seconds": 0.13814408300095238
+        },
+        {
+          "trial": 8,
+          "implementation": "before",
+          "seconds": 0.15022433300327975
+        },
+        {
+          "trial": 8,
+          "implementation": "after",
+          "seconds": 0.12184037500992417
+        }
+      ],
+      "warm_medians": {
+        "before": 0.14304358349909307,
+        "after": 0.12205614551203325
+      },
+      "reduction_percent": 14.672058315144831
+    },
+    "jobs_workers_retries_time_limits_unchanged": true,
+    "hosted_speedup_and_billing_savings": "not_established"
+  },
+  "log_sha256": {
+    "backend-full.log": "c0e2b13ec0f11d1fa95eec840c4790b10c51e6861b5f686e60239af6714a08eb",
+    "frontend-final.log": "19d7a9fca62ab5d4df5793c75b8ef46b9338e2d66347af68ec10b9359e38686e",
+    "build-final.log": "1ece4d142445ea3f180e12c81d6c40606f6450cf7ca92e9526f946052685ea5e",
+    "deployment-final.log": "b6b6ce76fbff3a0b2cffa481102ad3e95b13162e1a35ff599c6af4c662faa823",
+    "ontology-final.log": "7ac5d3623be54d1faf806abe85c63f9dc12820b8c3a45a0a3460315e245c8aab",
+    "linux-tests.log": "fad9e39dbd71f81c5e57bc48291a5e5a165d944c4e6bc4f8cc3a8fe48aea88f8",
+    "postgres.log": "b19f99847a4f2f08049f029cd1a9183e73ee32679175823a3821ec0fc9d85b10",
+    "ci-profile-indexed.log": "9f6ff485957ab927dcd20618ddef9b3fe5c67ea59c3524e968ef67a63518ccab"
+  },
+  "not_established": [
+    "Turkish legal accuracy or semantic completeness",
+    "real-provider authentication or model performance",
+    "production capacity or latency",
+    "real-corpus retrieval quality or adverse recall",
+    "real source/legal approval",
+    "live application deployment",
+    "independent professional human review",
+    "qualification scoring or Standard/Deep benefit",
+    "post-merge main CI recovery"
+  ]
+}

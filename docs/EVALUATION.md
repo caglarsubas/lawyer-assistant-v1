@@ -17,6 +17,16 @@ verdicts, adverse gold set, quality metrics or preparation-time gains, and does 
 clear the draft's legal-norm blocker. Real source review and independent lawyer
 adjudication remain required before any such observation contributes to qualification.
 
+[Source-bound lawyer authority findings](AUTHORITY_FINDINGS.md) additionally retain
+explicit applicability, history, conditions, relationship, adverse and uncertainty
+observations for every selected source. Supported is an attributed human declaration;
+it does not satisfy a substantive-support gate. Reviewer account/role does not prove
+professional qualification or independence. Blank review time remains unknown.
+These records never emit scorer rows, establish adverse completeness, clear legal
+blockers or claim measured preparation-time gains. A later change can make a review
+Stale; revoked public permission withholds both source bytes and potentially quoting
+human notes without rewriting the immutable record.
+
 This command scores **supplied adjudications**. It does not run legal analysis,
 inspect the underlying legal evidence, call a provider, certify reviewers, grant
 source rights or enable dispatch. Reports always retain `production_qualified: false`

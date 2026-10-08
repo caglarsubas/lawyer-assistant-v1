@@ -131,9 +131,9 @@ actual physical source bytes and an Ed25519-signed release with a **test-only ke
 and **simulated permissions**. Its invented text and review-shaped records are not
 actual Turkish authority or human legal/rights approval.
 
-The next bounded packet is version/context-bound lawyer findings on applicability,
-historical/transition conditions, relationship limits and adverse treatment, with
-dependency revalidation. Qualified public synthesis, independent semantic/adverse
+The [source-bound lawyer findings packet](AUTHORITY_FINDINGS.md) now records six
+explicit human observation dimensions against this exact context, with immutable
+history and permission/dependency revalidation. Qualified public synthesis, independent semantic/adverse
 assessment, held-out evaluation, measured benefit and calibrated Standard/Deep
 workflows remain open. See [roadmap](ROADMAP.md), [evaluation](EVALUATION.md) and
 [verification](VALIDATION.md).
