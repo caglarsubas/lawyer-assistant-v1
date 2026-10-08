@@ -254,6 +254,78 @@ def test_proposal_adoption_race_appends_exactly_one_immutable_version(workspace,
         assert history[0]['content']['ai_assistance']['feedback_responses'] == output['feedback_responses']
 
 
+@pytest.mark.parametrize('kind', ['observations', 'effort'])
+@pytest.mark.parametrize('replay', [False, True])
+def test_comparison_own_head_serializes_conflicts_and_identical_replays(workspace, monkeypatch, kind, replay):
+    from sqlalchemy import func, select
+    from test_analysis_comparisons import effort, login, observation, register, run
+
+    from app import analysis_comparisons as comparisons
+
+    app, client, matter = workspace
+    base = f'/api/v1/matters/{matter}'
+    text = 'SYNTHETIC private clause — payment depends on delivery and notice.'
+    with app.state.store.session() as session:
+        user = session.scalar(select(User).where(User.username == 'demo'))
+        document = app.state.store.add(session, 'document', user, {
+            'name': 'SYNTHETIC.txt', 'status': 'extracted', 'sha256': digest(text),
+            'passages': [{'id': 'synthetic-clause', 'text': text, 'locator': 'SYNTHETIC §1'}]}, matter)
+        session.commit()
+    payload = {'title': 'SYNTHETIC comparison race', 'issue': 'SYNTHETIC delivery and notice issue',
+        'evidence': [{'evidence_id': 'synthetic-clause', 'passage_sha256': digest(text),
+                      'document_revision': document.revision, 'start': 0, 'end': len(text)}],
+        'premises': [{'id': 'p1', 'kind': 'assumption', 'text': 'SYNTHETIC unverified delivery'}],
+        'rules': [{'id': 'r1', 'kind': 'contract_clause', 'text': 'SYNTHETIC payment candidate',
+            'evidence_ids': ['synthetic-clause'], 'conditions': [{'id': 'c1', 'text': 'SYNTHETIC delivery'},
+                                                               {'id': 'c2', 'text': 'SYNTHETIC notice'}]}],
+        'applications': [{'id': 'a1', 'rule_id': 'r1', 'premise_ids': ['p1'], 'rationale': 'SYNTHETIC original',
+            'assessments': [{'condition_id': key, 'status': 'unknown', 'premise_ids': ['p1']} for key in ('c1', 'c2')]}],
+        'alternatives': [{'id': 'alt1', 'kind': 'search_gap', 'text': 'SYNTHETIC adverse gap'}],
+        'conclusion': {'text': 'SYNTHETIC provisional', 'application_ids': ['a1'], 'alternative_ids': ['alt1'],
+                       'next_step': 'SYNTHETIC inspect sources'}}
+    _, endpoint, registered, _, calls = register((app, client, base, payload), monkeypatch)
+    view = run(client, endpoint, registered)
+    detail = endpoint + '/' + view['id']
+    if kind == 'observations':
+        login(client, 'SYNTHETIC-reviewer-0')
+    context = client.get(detail).json()
+    body = observation(context) if kind == 'observations' else effort(context)
+    competing_body = body if replay else {**body, 'request_id': uuid4().hex}
+    locked, release = Event(), Event()
+    audit = comparisons._audit
+
+    def paused(*args, **kwargs):
+        audit(*args, **kwargs)
+        locked.set()
+        assert release.wait(10)
+
+    monkeypatch.setattr(comparisons, '_audit', paused)
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, detail + '/' + kind, json=body)
+        try:
+            assert locked.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, detail + '/' + kind, json=competing_body)
+                assert observed[0].wait(5)
+                assert wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, competing = first.result(timeout=5), second.result(timeout=5)
+    assert accepted.status_code == 201, accepted.text
+    assert competing.status_code == (201 if replay else 409), competing.text
+    if replay:
+        assert competing.json()['id'] == accepted.json()['id']
+    with app.state.store.session() as session:
+        assert session.scalar(select(func.count()).select_from(Record).where(
+            Record.kind == (comparisons.JUDGMENT if kind == 'observations' else comparisons.EFFORT),
+            Record.matter_id == matter)) == 1
+    final = client.get(detail).json()
+    history = final['observations' if kind == 'observations' else 'effort_history']
+    assert len(history) == 1 and history[0]['sequence'] == 1 and len(calls) == 3
+    assert client.get(base + '/analyses').json()[0]['version'] == 1
+
+
 def test_stop_commit_first_blocks_publication(workspace):
     app, _, matter = workspace
     ident = seed_run(app, matter, status='running')

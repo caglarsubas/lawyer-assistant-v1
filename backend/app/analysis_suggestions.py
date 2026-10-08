@@ -39,12 +39,19 @@ PURPOSE = "private_analysis_suggestion"
 RECEIPT = "analysis_suggestion_receipt"
 
 
+class ComparisonReference(StrictInput):
+    id: str = Field(min_length=1, max_length=64)
+    protocol_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
+    arm: Literal["single_pass", "bounded_correction"]
+
+
 class SuggestionInput(StrictInput):
     expected_revision: int = Field(ge=1)
     version_id: str = Field(min_length=1, max_length=64)
     request_id: str = Field(pattern=r"^[a-f0-9]{32}$")
     mode: Literal["single", "repair"] = "single"
     review_feedback: FeedbackSelection | None = None
+    comparison_ref: ComparisonReference | None = None
 
 
 class AdoptInput(StrictInput):
@@ -93,6 +100,10 @@ def _source(app, session, matter_id, user, state):
         raise HTTPException(409, "Önerinin özel dayanakları değişti; önce analiz sürümünü yenileyin.")
     if state["provider_pin"] != provider_pin(app):
         raise HTTPException(409, "Model veya öneri politikası değişti; yeni bir öneri başlatın.")
+    if state.get("comparison_ref"):
+        from .analysis_comparisons import validate_job
+
+        validate_job(app, session, matter_id, user, state)
     if state.get("review_feedback"):
         feedback = state["review_feedback"]
         selection = FeedbackSelection(review_id=feedback["review_id"],
@@ -127,7 +138,7 @@ def suggestion_view(app, session, matter_id, user, row):
     return {**data, "freshness": {"status": "stale" if reasons else "current", "reasons": reasons,
                                  "scope": "pinned_private_analysis_and_provider_policy"},
             "can_adopt": data["status"] == "completed" and not reasons and changed
-                         and not data.get("adopted_version_id")}
+                         and not data.get("adopted_version_id") and not data.get("comparison_ref")}
 
 
 def _require_job(store, session, matter_id, analysis_id, job_id, user):
@@ -218,61 +229,69 @@ def run_suggestion(app, job_id):
     _progress(app, job_id, best, iterations, notes, responses, response_pass, completed=True)
 
 
+def start_suggestion(matter_id: str, analysis_id: str, body: SuggestionInput, request: Request, user=Depends(authenticate)):
+    app, store = request.app, request.app.state.store
+    request_value = body.model_dump(exclude={"request_id"})
+    if request_value.get("comparison_ref") is None:
+        request_value.pop("comparison_ref", None)
+    scope = digest(canonical(request_value))
+    receipt_id = analysis_id + "-" + digest(user.id + ":" + body.request_id)[:30]
+    try:
+        with store.session() as session:
+            matter = require_matter(session, matter_id, user)
+            session.refresh(matter, with_for_update=True)
+            require_child(session, analysis_id, "practice_analysis", matter_id, user)
+            receipt = session.get(Record, receipt_id)
+            if receipt:
+                receipt = require_child(session, receipt_id, RECEIPT, matter_id, user)
+                recorded = store.decode(receipt)
+                if recorded["request_sha256"] != scope or receipt.owner_id != user.id:
+                    raise HTTPException(409, "İstek kimliği farklı bir öneri yüküne bağlı.")
+                job = _require_job(store, session, matter_id, analysis_id, recorded["job_id"], user)
+                return suggestion_view(app, session, matter_id, user, job)
+            row = require_child(session, analysis_id, "practice_analysis", matter_id, user)
+            content = store.view(row)
+            state = {"purpose": PURPOSE, "analysis_id": row.id, "source_revision": body.expected_revision,
+                     "source_version_id": body.version_id, "source_content": content,
+                     "source_review_id": review_pin(store, session, matter_id, row.id, body.version_id, user),
+                     "source_review_recipe": analysis_reviews.RECIPE,
+                     "provider_pin": provider_pin(app), "mode": body.mode,
+                     "max_passes": 2 if body.mode == "repair" else 1}
+            _source(app, session, matter_id, user, state)
+            if body.review_feedback:
+                state["review_feedback"], state["review_feedback_sha256"] = resolve_feedback(
+                    store, session, matter_id, row.id, body.version_id, user, body.review_feedback)
+            if body.comparison_ref:
+                state.update(comparison_ref=body.comparison_ref.model_dump(), comparison_request_id=body.request_id)
+                _source(app, session, matter_id, user, state)
+            if not content["evidence"] or not content["applications"]:
+                raise HTTPException(422, "Model önerisi için özgün pasaj ve uygulama adımı bağlayın.")
+            if app.state.provider.configuration_issues():
+                raise HTTPException(503, "Yerel model bağlantısı doğrulanmış değil; elle düzenleme kullanılabilir.")
+            with app.state.research_jobs.reserve() as ident:
+                state.update(submission(min(app.state.settings.research_budget_seconds, 120 * state["max_passes"])))
+                job = store.add(session, "research", user, state, matter_id, record_id=ident)
+                store.add(session, RECEIPT, user, {"job_id": ident, "request_sha256": scope,
+                          "analysis_id": analysis_id}, matter_id, record_id=receipt_id)
+                _audit(session, user, "analysis_suggestion_requested", ident, matter_id)
+                require_matter(session, matter_id, user)
+                session.commit()
+                result = suggestion_view(app, session, matter_id, user, job)
+                try:
+                    app.state.research_jobs.submit(ident)
+                except QueueUnavailable:
+                    finish_run(store, ident, "interrupted")
+                    raise HTTPException(503, "Öneri hizmeti durduruluyor; saklanan isteği kontrol edin.") from None
+                return result
+    except QueueUnavailable as exc:
+        raise HTTPException(503 if exc.closed else 429, "Araştırma kuyruğu yeni öneri kabul edemiyor.") from None
+
+
 def suggestion_router():
     router = APIRouter(prefix="/api/v1/matters/{matter_id}/analyses/{analysis_id}/suggestions",
                        tags=["private-analysis-proposals"])
 
-    @router.post("", status_code=202)
-    def start(matter_id: str, analysis_id: str, body: SuggestionInput, request: Request, user=Depends(authenticate)):
-        app, store = request.app, request.app.state.store
-        scope = digest(canonical(body.model_dump(exclude={"request_id"})))
-        receipt_id = analysis_id + "-" + digest(user.id + ":" + body.request_id)[:30]
-        try:
-            with store.session() as session:
-                matter = require_matter(session, matter_id, user)
-                session.refresh(matter, with_for_update=True)
-                require_child(session, analysis_id, "practice_analysis", matter_id, user)
-                receipt = session.get(Record, receipt_id)
-                if receipt:
-                    receipt = require_child(session, receipt_id, RECEIPT, matter_id, user)
-                    recorded = store.decode(receipt)
-                    if recorded["request_sha256"] != scope or receipt.owner_id != user.id:
-                        raise HTTPException(409, "İstek kimliği farklı bir öneri yüküne bağlı.")
-                    job = _require_job(store, session, matter_id, analysis_id, recorded["job_id"], user)
-                    return suggestion_view(app, session, matter_id, user, job)
-                row = require_child(session, analysis_id, "practice_analysis", matter_id, user)
-                content = store.view(row)
-                state = {"purpose": PURPOSE, "analysis_id": row.id, "source_revision": body.expected_revision,
-                         "source_version_id": body.version_id, "source_content": content,
-                         "source_review_id": review_pin(store, session, matter_id, row.id, body.version_id, user),
-                         "source_review_recipe": analysis_reviews.RECIPE,
-                         "provider_pin": provider_pin(app), "mode": body.mode,
-                         "max_passes": 2 if body.mode == "repair" else 1}
-                _source(app, session, matter_id, user, state)
-                if body.review_feedback:
-                    state["review_feedback"], state["review_feedback_sha256"] = resolve_feedback(
-                        store, session, matter_id, row.id, body.version_id, user, body.review_feedback)
-                if not content["evidence"] or not content["applications"]:
-                    raise HTTPException(422, "Model önerisi için özgün pasaj ve uygulama adımı bağlayın.")
-                if app.state.provider.configuration_issues():
-                    raise HTTPException(503, "Yerel model bağlantısı doğrulanmış değil; elle düzenleme kullanılabilir.")
-                with app.state.research_jobs.reserve() as ident:
-                    state.update(submission(min(app.state.settings.research_budget_seconds, 120 * state["max_passes"])))
-                    job = store.add(session, "research", user, state, matter_id, record_id=ident)
-                    store.add(session, RECEIPT, user, {"job_id": ident, "request_sha256": scope,
-                              "analysis_id": analysis_id}, matter_id, record_id=receipt_id)
-                    _audit(session, user, "analysis_suggestion_requested", ident, matter_id)
-                    require_matter(session, matter_id, user)
-                    session.commit()
-                    result = suggestion_view(app, session, matter_id, user, job)
-                    try:
-                        app.state.research_jobs.submit(ident)
-                    except QueueUnavailable:
-                        finish_run(store, ident, "interrupted")
-                        raise HTTPException(503, "Öneri hizmeti durduruluyor; saklanan isteği kontrol edin.") from None
-                    return result
-        except QueueUnavailable as exc:
-            raise HTTPException(503 if exc.closed else 429, "Araştırma kuyruğu yeni öneri kabul edemiyor.") from None
+    router.post("", status_code=202)(start_suggestion)
 
     @router.get("")
     def listing(matter_id: str, analysis_id: str, request: Request, user=Depends(authenticate),
