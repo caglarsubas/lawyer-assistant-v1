@@ -1,5 +1,71 @@
 # Verification record — 8 October 2026
 
+## R05A source-linked authority revision comparisons — 8 October 2026 (Asia/Shanghai)
+
+PR #26 merged as `4cf95c82d77126660747bc4f10b3544375f66122`; its PR checks and
+the [exact post-merge main run 37751217353](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37751217353)
+passed. This packet compares a later private draft with an exact retained authority
+review. Original findings, signed passages, historical identities and both draft
+versions remain frozen; every original observation receives an explained human
+disposition. Declaring a finding addressed leaves legal blockers unchanged.
+
+- **2,957 backend tests passed in 380.53s** with the exact two-worker worksteal,
+  no-restart, maxfail-one CI command; **42 PostgreSQL/isolated-drill cases skipped**
+  and 28 existing warnings. The **42 focused comparison cases** cover expected
+  original-version/research staleness, original/current dependency separation,
+  complete six-dimension dispositions, actual changed/removed/replaced targets,
+  private quotation linkage, account/role/membership/CSRF, immutable seals,
+  head/nonce conflicts, bounded inputs, pending receipts, rollback and final
+  rendering-time dependency/permission denial. Actual signed synthetic bytes
+  preserve the different historical and event dates; no applicability is inferred.
+- **165 frontend tests and strict TypeScript/Vite build passed.** New tools load
+  explicitly; dispositions, selected links and optional time start blank. Known
+  comparison denial clears its cached payload and ancestor review/context views.
+  Main JS is 505.99 KB / 143.26 KB gzip; the lazy comparison chunk is 13.67 KB /
+  4.65 KB gzip. The existing 500 KB advisory remains enabled. **41 deployment
+  contracts passed in 0.482s**; repository-wide Ruff, actionlint, RDF/SHACL and R01
+  planning checks passed. No dependency, migration, CI job, worker, retry or time
+  limit changed. The national ontology remains legally unreviewed, with zero
+  published historical records; planning validity grants no legal qualification.
+- **169 focused offline Linux checks passed in 35.81s**, with matching final
+  application/test fingerprints. The existing locked test runtime was refreshed
+  with unchanged dependencies: non-root, no network/ports/mounts, read-only root,
+  dropped capabilities, no-new-privileges and CPU/memory/PID limits. Cleanup passed.
+  This does not establish a fresh production image or deployment capacity.
+- **21 real PostgreSQL races passed in 16.52s**, using random disposable child
+  databases. Three new comparison races observe the second writer blocked on the
+  actual workspace row lock: identical replay yields one record; changed nonce
+  payload or competing head conflicts. Existing context, cohort, comparison,
+  review and adoption races also pass. Owned container cleanup passed.
+- An isolated browser rehearsal used invented documents/law, a test-only signing
+  key and simulated rights. Explicit input capture → six manual dispositions →
+  save → reopen → actual JSON/DOCX downloads preserved original observations,
+  public/private quotations, changed targets and exact seals. One addressed
+  declaration coexists with **two unchanged legal-norm blockers**; review time
+  stays unknown. A private passage correction produces Stale and disables UI
+  exports. Simulated source revocation produces Withheld with `snapshot: null`,
+  hides free-text notes and clears cached ancestor views. All three attachment
+  formats return HTTP 409 in both negative states; comparison ciphertext and
+  private draft v2 remain unchanged. No model was called.
+- The development rehearsal exposed Vite font requests outside its default
+  serving allow list because dependencies are linked from the original checkout.
+  A separate fresh synthetic fixture and the **production bundle** then rendered
+  the saved comparison; all **24 locally bundled font assets** returned HTTP 200
+  with exact built bytes. No serving policy was expanded. No browser console
+  warning/error was captured in the production preview. Owned tabs/listeners and
+  downloaded copies were cleaned up; artifacts remain in ignored verification
+  storage. This is local bundle verification, not application deployment.
+
+Curated [verification metadata](evidence/private-authority-comparisons-verification-2026-10-08.json)
+retains source/image/test pins, browser phases, checks and limitations. Raw logs
+and fixtures stay under ignored `.data/verification/r05a-authority-comparisons/`.
+See the [comparison contract](AUTHORITY_COMPARISONS.md). **R05A remains partial**:
+actual rights/history/legal-effect reviews, independent semantic/adverse
+adjudication, qualified public synthesis, held-out qualification and measured
+benefit remain open. Credentials, provider policy, external access, public corpus
+and the running application were unchanged. Hosted CI and billing are separate
+observations; this packet does not claim additional CI savings.
+
 ## R05A source-bound lawyer authority findings — 8 October 2026 (Asia/Shanghai)
 
 PR #25 merged as `98dee304042006a14b1fbf904b7d0f3c72b60dd4`; its three PR

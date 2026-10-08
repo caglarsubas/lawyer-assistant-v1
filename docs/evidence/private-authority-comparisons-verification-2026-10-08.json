@@ -1,0 +1,216 @@
+{
+  "schema": "private-authority-comparisons-verification-v1",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "4cf95c82d77126660747bc4f10b3544375f66122",
+  "base_pr26": {
+    "merged": true,
+    "main_ci_run": 37751217353,
+    "main_ci_head": "4cf95c82d77126660747bc4f10b3544375f66122",
+    "main_ci_conclusion": "success"
+  },
+  "source": {
+    "application": {
+      "sha256": "1cbb276cf12064ff61dcbcefbd39412299786a7d19c80df2015b0b5b5e76e0b4",
+      "files": 117
+    },
+    "tests": {
+      "files": 82,
+      "sha256": "26247c7bbcf03a5f8e2595d9e964cd86339211710087548199faf60b820d789b"
+    }
+  },
+  "frontend_source": {
+    "sha256": "abd7a2e315d7f722ccf39f6ae56228dc0361462697dff7dac71a3fef916b19e3",
+    "files": 74
+  },
+  "host_tests": {
+    "backend": {
+      "passed": 2957,
+      "skipped": 42,
+      "warnings": 28,
+      "seconds": 380.53,
+      "workers": 2,
+      "distribution": "worksteal",
+      "max_worker_restart": 0,
+      "maxfail": 1
+    },
+    "focused_comparison_passed": 42,
+    "frontend_passed": 165,
+    "deployment_passed": 41,
+    "deployment_seconds": 0.482
+  },
+  "linux": {
+    "schema": "private-authority-comparison-verification-v1",
+    "recorded_at": "2026-10-08T09:40:30.341794+00:00",
+    "synthetic_only": true,
+    "production_qualified": false,
+    "base_commit": "4cf95c82d77126660747bc4f10b3544375f66122",
+    "checkout_dirty": true,
+    "host": {
+      "system": "Darwin",
+      "architecture": "arm64"
+    },
+    "test_image": "sha256:293751c491388eaae8123eaf39e4218d3abdb7718686a9655dbd68956ee16437",
+    "source": {
+      "application": {
+        "sha256": "1cbb276cf12064ff61dcbcefbd39412299786a7d19c80df2015b0b5b5e76e0b4",
+        "files": 117
+      },
+      "tests": {
+        "files": 82,
+        "sha256": "26247c7bbcf03a5f8e2595d9e964cd86339211710087548199faf60b820d789b"
+      }
+    },
+    "limits": {
+      "network": "none",
+      "host_ports": [],
+      "host_mounts": [],
+      "read_only": true,
+      "cpu": 2,
+      "memory_bytes": 805306368,
+      "pids": 128,
+      "tmpfs_bytes": 268435456
+    },
+    "linux_tests": {
+      "exit_code": 0,
+      "passed": 169,
+      "pytest_seconds": 35.81,
+      "container_wall_seconds": 36.857
+    },
+    "cleanup_verified": true,
+    "not_established": [
+      "Turkish legal accuracy or semantic completeness",
+      "real-provider authentication or model performance",
+      "production capacity or latency",
+      "real-corpus retrieval quality or adverse recall",
+      "real source/legal approval",
+      "live application deployment"
+    ]
+  },
+  "postgresql": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "twenty-one real PostgreSQL authority comparison and review head, public context and cohort freeze/cancel, comparison own-head, review-head and adoption races in randomly named disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 17.809,
+    "passed": 21,
+    "pytest_seconds": 16.52
+  },
+  "static_checks": {
+    "ruff": "passed",
+    "actionlint": "passed",
+    "typescript_vite": "passed",
+    "rdf_shacl": "passed_unreviewed",
+    "r01_plan": "passed_not_qualified",
+    "diff_whitespace": "passed"
+  },
+  "browser": {
+    "comparison_sha256": "56508ea7357a7329a7fdb71ec6d5a83f311cfd988edf1b2385ec8b06eaad6292",
+    "authority_review_sha256": "97967c3165b5edcf75590c7d2cf67acb2847dd82653a8b2df3cb347803ac2a70",
+    "before_content_sha256": "ddd505444ea08919295b7b708cf4a35a985308ed257bd6edd885c718dadb2b97",
+    "after_content_sha256": "747be318bb75c0836b0c39caafcab9e335053c8de7ec7ee8e59e039c5eaa635b",
+    "dispositions": 6,
+    "original_observations_preserved": true,
+    "changed_targets": 1,
+    "manual_review_seconds": null,
+    "legal_norm_blockers": 2,
+    "provider_calls": 0,
+    "ui_save_reopen_json_docx_downloads": "passed_in_isolated_development_preview",
+    "stale": {
+      "synthetic_only": true,
+      "phase": "stale",
+      "exports": {
+        "json": 409,
+        "docx": 409,
+        "pdf": 409
+      },
+      "snapshot_withheld": false,
+      "ciphertext_unchanged": true,
+      "no_model": true,
+      "critical_count": 2,
+      "analysis_version": 2
+    },
+    "withheld": {
+      "synthetic_only": true,
+      "phase": "withheld",
+      "exports": {
+        "json": 409,
+        "docx": 409,
+        "pdf": 409
+      },
+      "snapshot_withheld": true,
+      "ciphertext_unchanged": true,
+      "no_model": true,
+      "critical_count": 2,
+      "analysis_version": 2
+    },
+    "negative_ui": {
+      "stale_exports_disabled": true,
+      "withheld_comparison_and_ancestor_views_cleared": true,
+      "reopened_original_context_withheld": true
+    },
+    "production_bundle": {
+      "fresh_synthetic_fixture": true,
+      "fixture_seed": "API",
+      "comparison_inspected_in_browser": true,
+      "bundled_font_assets_http_200_and_exact_bytes": 24,
+      "console_warning_error_count": 0,
+      "provider_calls": 0
+    },
+    "development_font_limitation": "Linked worktree dependencies were outside Vite dev fs.allow. Production bundle inspection and exact-byte delivery of all 24 local font assets passed; no serving policy was expanded.",
+    "cleanup": {
+      "owned_listeners_stopped": {
+        "18096": true,
+        "15191": true,
+        "18097": true,
+        "15192": true
+      },
+      "owned_test_containers_running": [],
+      "provider_calls": 0,
+      "production_preview_provider_calls": 0,
+      "synthetic_only": true,
+      "owned_tabs_closed": 2,
+      "owned_downloads_removed": 2,
+      "ignored_artifacts_retained": true
+    },
+    "artifact_sha256": {
+      "browser-current.json": "9b4c89245ee1db26fff4aba653b660d41f3ff44969f1e76f380a16343733d285",
+      "browser-current.docx": "36267e95a73c0f23566704c12dd9b10a5c058102066a6ff6d987b0be5dd28641",
+      "browser-current.png": "a838b2f4ced7a62be6f2881c9d31e607e44e368bb871106b9f88ac023330ba47",
+      "browser-stale.png": "f1a9aa83c378699e08a7908c5589505a167d34d7f6e71cfd1d6ddab7a63ee700",
+      "browser-withheld.png": "ae09c90c927ddd899e7576cfc89c59d75dfdd93decc2b43bb1c49045e41be48f",
+      "production-preview/browser-current.png": "036d4e8d6110861dd58bdf8c69eec98117aaa1cee4f8ce56a5f870658e9e5e63",
+      "production-preview/font-assets.json": "9b114f6bc9f0c7faa07a73ff7b548ae42923cf0dc4b79e3520265128eaec3849"
+    }
+  },
+  "log_sha256": {
+    "backend-final.log": "74647aaa71dfd141424d88cb3d2e3287d343d0ad652232ba8cd9fd60d41363b5",
+    "focused-backend.log": "8ce28f548915c1807059a41489ffc392b72968209a34d81613e8090935aae667",
+    "frontend-final-tests.log": "6c6357e41bff6869b43490fd004d02065e5ae5d744af3564ede9c87510d9754a",
+    "frontend-final-build.log": "ca096ddacee9d7752e710a356933d02578e9dc830d672d7c566949335bf4ee5f",
+    "deploy.log": "4c5201faefe2caccdae01f5f00186f797f33b78263185d1889a3a1242749108d",
+    "ruff.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "actionlint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ontology.log": "7ac5d3623be54d1faf806abe85c63f9dc12820b8c3a45a0a3460315e245c8aab",
+    "planning.log": "aaa2f49ef768a2438ee864b57ca7000f06e0d40687e2316dd4ce398354dc557f",
+    "linux-tests.log": "dbdf06e4aa318901d8dc264b8a7f1abcad37d69c2edb0976aca9c3c8c48488b5",
+    "postgres.log": "9e1d82ee5b9c1d7249c49fd027f9e1b55bfb73fc736b15706acd737b90e67f3f"
+  },
+  "ci_scope": {
+    "workflow_jobs_workers_retries_limits_unchanged": true,
+    "billing_savings": "not_established"
+  },
+  "not_established": [
+    "Turkish legal accuracy or semantic completeness",
+    "real source or legal approval",
+    "independent professional human review",
+    "qualified public synthesis",
+    "real-provider authentication or model performance",
+    "real-corpus retrieval quality or adverse recall",
+    "production capacity or latency",
+    "Standard/Deep qualification or measured benefit",
+    "live application deployment"
+  ]
+}

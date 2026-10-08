@@ -123,6 +123,20 @@ export async function downloadAuthorityReview(matterId: string, analysisId: stri
   document.body.append(link); link.click(); link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+export async function downloadAuthorityComparison(matterId: string, analysisId: string, contextId: string, reviewId: string, comparisonId: string, format: 'json' | 'docx' | 'pdf') {
+  const path = [matterId, analysisId, contextId, reviewId, comparisonId].map(encodeURIComponent);
+  let response: Response;
+  try { response = await fetch(`${BASE}/matters/${path[0]}/analyses/${path[1]}/authority-contexts/${path[2]}/reviews/${path[3]}/comparisons/${path[4]}/export?format=${format}`, { credentials: 'same-origin', cache: 'no-store' }); }
+  catch { throw new ApiError('Karşılaştırma indirilemedi. Yerel hizmete bağlantıyı kontrol edin.', 0); }
+  if (!response.ok) {
+    if (response.status === 401) unauthorizedHandler?.();
+    throw new ApiError(errorText(await response.json().catch(() => null)), response.status);
+  }
+  const url = URL.createObjectURL(await response.blob()); const link = document.createElement('a');
+  link.href = url; link.download = `ozel-dayanak-karsilastirmasi-${comparisonId}.${format}`;
+  document.body.append(link); link.click(); link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 export async function downloadProduct(matterId: string, productId: string, format: 'docx' | 'pdf') {
   let response: Response;
   try {

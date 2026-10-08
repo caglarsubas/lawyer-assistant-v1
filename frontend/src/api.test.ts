@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ApiError, downloadAuthorityContext, downloadAuthorityReview, fetchOriginal, onUnauthorized, post, request, setCsrfToken } from './api';
+import { ApiError, downloadAuthorityComparison, downloadAuthorityContext, downloadAuthorityReview, fetchOriginal, onUnauthorized, post, request, setCsrfToken } from './api';
 
 describe('session and request boundaries', () => {
   const fetchMock = vi.fn<typeof fetch>();
@@ -81,6 +81,12 @@ describe('session and request boundaries', () => {
     fetchMock.mockResolvedValue(new Response(JSON.stringify({ detail: 'İnceleme aktarımı kapalı.' }), { status: 409 }));
     await expect(downloadAuthorityReview('matter/1', 'analysis/2', 'context/3', 'review/4', 'pdf')).rejects.toMatchObject({ status: 409 });
     expect(fetchMock.mock.calls[0]).toEqual(['/api/v1/matters/matter%2F1/analyses/analysis%2F2/authority-contexts/context%2F3/reviews/review%2F4/export?format=pdf', { credentials: 'same-origin', cache: 'no-store' }]);
+  });
+
+  it('revalidates comparison attachments with exact encoded identities and no denied bytes', async () => {
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ detail: 'Karşılaştırma aktarımı kapalı.' }), { status: 409 }));
+    await expect(downloadAuthorityComparison('matter/1', 'analysis/2', 'context/3', 'review/4', 'comparison/5', 'docx')).rejects.toMatchObject({ status: 409 });
+    expect(fetchMock.mock.calls[0]).toEqual(['/api/v1/matters/matter%2F1/analyses/analysis%2F2/authority-contexts/context%2F3/reviews/review%2F4/comparisons/comparison%2F5/export?format=docx', { credentials: 'same-origin', cache: 'no-store' }]);
   });
 
   it('converts an unreachable local service into an actionable error without provider details', async () => {

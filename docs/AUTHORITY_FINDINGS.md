@@ -114,9 +114,10 @@ simulated rights. They establish engineering boundaries, not Turkish legal
 accuracy, professional review, historical completeness or adverse recall. Actual
 R03–R05 source, identity, history and legal-effect reviews remain prerequisites.
 
-The next bounded packet is source-linked comparison of a revised private draft
-against these exact authority findings, retaining explicit human dispositions and
-dependency checks. Independent semantic/adverse adjudication, held-out evaluation,
-qualified public synthesis and measured Standard/Deep benefit remain open. See
+Source-linked comparison of a newer private draft against these exact findings is
+implemented in the [comparison contract](AUTHORITY_COMPARISONS.md). Original findings
+remain immutable; explicit human dispositions do not close them automatically.
+Independent semantic/adverse adjudication, held-out evaluation, qualified public
+synthesis and measured Standard/Deep benefit remain open. See the
 [context contract](ANALYSIS_AUTHORITIES.md), [roadmap](ROADMAP.md),
 [evaluation](EVALUATION.md) and [verification](VALIDATION.md).

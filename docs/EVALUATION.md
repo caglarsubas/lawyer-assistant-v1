@@ -209,3 +209,16 @@ approval, confidence intervals, temporal/relationship error slices, graph and re
 ablations, source freshness, actual provider/privacy/legal/operations qualification
 and customer acceptance. This scoring milestone does not implement R05A analysis or
 R05B adapters and does not complete R01 or R08.
+
+### Source-linked authority-finding revision comparison boundary
+
+[Authority comparisons](AUTHORITY_COMPARISONS.md) freeze one original public-authority
+review and exact before/after private drafts. Every original source/dimension gets
+an attributed human disposition. Addressed links require actual changed candidate
+targets and candidate private evidence, but do not establish legal repair, semantic
+entailment, applicability or score rows. Retained/removed declarations preserve
+exact target existence; unresolved and unassessed concerns remain explicit. Unknown
+manual time remains unknown. Historical research staleness is visible and does not
+refresh research coverage. Dependency/source revocation invalidates export without
+rewriting snapshots. Representative independent legal/adverse adjudication remains
+required before public synthesis or measured benefit; synthetic fixtures grant none.

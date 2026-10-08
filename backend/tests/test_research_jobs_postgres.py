@@ -664,3 +664,43 @@ def test_lost_database_lease_fails_closed_without_reacquisition(workspace):
         verify()
         with pytest.raises(RuntimeError, match='lease lost'):
             app.state.research_owner()
+
+
+@pytest.mark.parametrize('mode', ['identical', 'nonce_conflict', 'head_conflict'])
+def test_authority_comparisons_serialize_retries_and_competing_heads(workspace, monkeypatch, mode):
+    from test_authority_comparisons import request, setup
+    from test_authority_findings import count
+
+    from app import authority_comparisons as comparisons
+
+    app, client, *_ = workspace
+    endpoint, *_ = setup(_cohort_workbench(workspace), monkeypatch)
+    body, _ = request(client, endpoint)
+    competing = body if mode == 'identical' else {**body, 'note': 'SYNTHETIC competing comparison'}
+    if mode == 'head_conflict':
+        competing = {**competing, 'request_id': uuid4().hex}
+    locked, release = Event(), Event()
+    audit = comparisons._audit
+
+    def paused(*args, **kwargs):
+        audit(*args, **kwargs)
+        locked.set()
+        assert release.wait(10)
+
+    monkeypatch.setattr(comparisons, '_audit', paused)
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, endpoint, json=body)
+        try:
+            assert locked.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, endpoint, json=competing)
+                assert observed[0].wait(5) and wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, rejected = first.result(timeout=5), second.result(timeout=5)
+    assert accepted.status_code == 201, accepted.text
+    assert rejected.status_code == (201 if mode == 'identical' else 409), rejected.text
+    if mode == 'identical':
+        assert accepted.json()['id'] == rejected.json()['id']
+    assert count(app, comparisons.KIND) == count(app, comparisons.HEAD) == count(app, comparisons.ADMISSION) == 1
