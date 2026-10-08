@@ -90,6 +90,8 @@ effective namespace mapping and base URI. There is no shared cache of results,
 validation verdicts, inferred facts, authorization decisions or release contents.
 The separate bounded Turtle syntax cache described below retains only parsed
 ontology definitions; it never retains validation results.
+The later PR #27 correction also retains immutable SHACL parser syntax between
+validations, while recreating translated programs independently as described below.
 
 Each invocation owns its memory graph and bounded cache: at most 128 programs,
 64 Ki characters per query/base/namespace mapping, 128 namespace entries and
@@ -99,7 +101,7 @@ in-place inference; caller-owned graphs stay unchanged. RDF, SHACL and catalog
 files remain byte-identical, preserving ontology fingerprints and existing signed
 packet compatibility. All live integrity and authorization checks remain active.
 
-CI runs `test_validation_queries.py` and `test_ontology_syntax.py` before the expensive full suite. Their work
+CI runs the query, membership, ontology-syntax and SHACL-syntax checks before the expensive full suite. Their work
 budget is deterministic rather than a fragile timing threshold: query parsing
 must scale with distinct programs while the number of query executions remains
 unchanged. It also tests the real release entry point, equal valid/invalid reports,
@@ -189,6 +191,52 @@ dependency changes, removed tests or increased limits were introduced. Fresh
 source hashes, signatures, SHACL executions and live authorization remain intact.
 New-branch hosted results and post-merge recovery require separate observation;
 see [verification](VALIDATION.md).
+
+## PR #27 timeout: repeated SHACL program parsing between validations
+
+PR #26 and its exact post-merge main run passed, but PR #27
+[run 37762645204](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37762645204)
+hit the unchanged 18-minute Test backend cap after reporting **2,957 passed,
+42 skipped and 28 warnings in 1,082.79s**. There was no assertion failure; the job
+still failed and downstream contracts did not run. The failed result is retained.
+
+Profiling the real signed-publication/search case reproduced **93 full validations**,
+each translating its own 11 SHACL query programs. Their mutable program caches
+were already local to each graph, but repeated validations parsed those same
+programs again: **1,024 parser calls**, including one ordinary graph query.
+
+Only `validate_graph` now opts into a synchronized LRU of **immutable parser
+syntax**, keyed by exact SHACL query text. Each invocation reconstructs fresh
+parser nodes and blank nodes, then translates with its current namespaces/base.
+Each scratch graph owns its mutable programs, expressions, bindings and query
+results. A cached expression is never executed or shared with another graph.
+Direct/custom graph queries retain the ordinary preparation path. Changed shape
+text parses anew; changed schema/data still run complete inference and validation.
+No data graph, validation verdict, inferred fact, signature or permission is reused.
+
+Retention is capped at **64 programs, 1 MiB of query-text bytes and 32,768 parser
+nodes**, with at most 4,096 nodes per program and the existing 64 Ki-character
+query bound. Eviction adjusts all counters. Unknown parser types/attributes,
+named results with potentially aliased nodes and oversized trees retain freshly
+parsed native behavior. Malformed queries fail and are not retained. The existing
+per-invocation program/namespace/base/text limits remain active.
+
+The representative profile retains **93 validations and 1,024 translations**;
+parser calls fall **1,024 → 12** (11 cold SHACL programs plus the ordinary query).
+Its after profile overlapped the complete suite, so profiled elapsed times are
+diagnostic only. Eight alternating unprofiled warm pairs on the 2,374-triple schema
+measure **0.12383s before / 0.09694s after median (21.7% lower)**. The final local
+two-worker suite passes **2,979 tests in 323.79s**, with 42 documented skips and
+28 warnings; this is not a controlled hosted-runner or invoice comparison.
+
+The short preflight now includes **73 checks**, including all 22 new cache cases:
+fresh evidence/shape verdicts, complete native reports and query work counts,
+namespace/base resolution, rich query syntax, mutation/blank-node/concurrent
+isolation, LRU and aggregate limits, malformed input and native fallback. All
+checks remain in the complete suite. No jobs, workers, dependencies, retries,
+test omissions or time-limit increases were introduced. RDF/SHACL/catalog bytes
+and signed formats remain unchanged. New-head CI and post-merge CI are separate
+observations; see [verification](VALIDATION.md).
 
 ## Offline evaluation scoring
 

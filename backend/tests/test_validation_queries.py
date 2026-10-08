@@ -89,6 +89,7 @@ def test_complete_validation_and_reports_match_without_mutating_inputs(mutation)
 
 def test_parse_work_scales_with_query_programs_and_revalidates_changed_evidence(monkeypatch):
     data, shapes, schema = inputs()
+    monkeypatch.setattr(validation, '_shacl_syntax', validation._SHACLSyntaxCache())
     calls = parse_calls(monkeypatch)
     executions = []
     original_query = Graph.query
@@ -108,11 +109,13 @@ def test_parse_work_scales_with_query_programs_and_revalidates_changed_evidence(
     assert set(calls) == baseline_programs
     assert len(calls) == len(baseline_programs) < baseline_calls
     assert len(executions) == baseline_executions  # Every focus-node query still executes.
-    # The second invocation must compile independently and inspect current data.
+    # Rebuild independent programs from frozen syntax and inspect current data.
     data.remove((FX["version-link-a"], LA.evidence, None))
     calls.clear()
+    executions.clear()
     assert not validation.validate_graph(data, shapes, schema)[0]
-    assert calls and len(calls) == len(set(calls))
+    assert calls == []
+    assert len(executions) == baseline_executions
 
 
 def test_release_check_data_cannot_bypass_prepared_query_validation(monkeypatch):

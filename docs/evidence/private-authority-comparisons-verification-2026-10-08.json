@@ -11,12 +11,12 @@
   },
   "source": {
     "application": {
-      "sha256": "1cbb276cf12064ff61dcbcefbd39412299786a7d19c80df2015b0b5b5e76e0b4",
+      "sha256": "1ca375257b948a0f5154b0103b7478ee5370d00cc60dac8ff5c06f6cbce9f399",
       "files": 117
     },
     "tests": {
-      "files": 82,
-      "sha256": "26247c7bbcf03a5f8e2595d9e964cd86339211710087548199faf60b820d789b"
+      "files": 83,
+      "sha256": "599dcb7727949770a1e63f2b5fa0c9cbb9edae087981275f8e9b86aea1194513"
     }
   },
   "frontend_source": {
@@ -25,10 +25,10 @@
   },
   "host_tests": {
     "backend": {
-      "passed": 2957,
+      "passed": 2979,
       "skipped": 42,
       "warnings": 28,
-      "seconds": 380.53,
+      "seconds": 323.79,
       "workers": 2,
       "distribution": "worksteal",
       "max_worker_restart": 0,
@@ -37,28 +37,29 @@
     "focused_comparison_passed": 42,
     "frontend_passed": 165,
     "deployment_passed": 41,
-    "deployment_seconds": 0.482
+    "deployment_seconds": 0.394,
+    "syntax_preflight_passed": 73
   },
   "linux": {
     "schema": "private-authority-comparison-verification-v1",
-    "recorded_at": "2026-10-08T09:40:30.341794+00:00",
+    "recorded_at": "2026-10-08T11:01:06.927597+00:00",
     "synthetic_only": true,
     "production_qualified": false,
-    "base_commit": "4cf95c82d77126660747bc4f10b3544375f66122",
+    "base_commit": "01bc455c6d91676e35ff7dd1429bff6af618ec27",
     "checkout_dirty": true,
     "host": {
       "system": "Darwin",
       "architecture": "arm64"
     },
-    "test_image": "sha256:293751c491388eaae8123eaf39e4218d3abdb7718686a9655dbd68956ee16437",
+    "test_image": "sha256:d75d61ccdf44083708016e22fc9f49dbf5571f30a4c4669cf37fb6f150568e2c",
     "source": {
       "application": {
-        "sha256": "1cbb276cf12064ff61dcbcefbd39412299786a7d19c80df2015b0b5b5e76e0b4",
+        "sha256": "1ca375257b948a0f5154b0103b7478ee5370d00cc60dac8ff5c06f6cbce9f399",
         "files": 117
       },
       "tests": {
-        "files": 82,
-        "sha256": "26247c7bbcf03a5f8e2595d9e964cd86339211710087548199faf60b820d789b"
+        "files": 83,
+        "sha256": "599dcb7727949770a1e63f2b5fa0c9cbb9edae087981275f8e9b86aea1194513"
       }
     },
     "limits": {
@@ -73,9 +74,9 @@
     },
     "linux_tests": {
       "exit_code": 0,
-      "passed": 169,
-      "pytest_seconds": 35.81,
-      "container_wall_seconds": 36.857
+      "passed": 191,
+      "pytest_seconds": 37.8,
+      "container_wall_seconds": 38.765
     },
     "cleanup_verified": true,
     "not_established": [
@@ -91,12 +92,12 @@
     "synthetic_only": true,
     "production_qualified": false,
     "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
-    "scope": "twenty-one real PostgreSQL authority comparison and review head, public context and cohort freeze/cancel, comparison own-head, review-head and adoption races in randomly named disposable child databases",
+    "scope": "all thirty-nine real PostgreSQL snapshot, authorization and research/adoption/context/review/comparison races from the exact CI selection in random disposable child databases",
     "cleanup_verified": true,
     "exit_code": 0,
-    "wall_seconds": 17.809,
-    "passed": 21,
-    "pytest_seconds": 16.52
+    "wall_seconds": 48.785,
+    "passed": 39,
+    "pytest_seconds": 46.92
   },
   "static_checks": {
     "ruff": "passed",
@@ -183,7 +184,12 @@
       "browser-withheld.png": "ae09c90c927ddd899e7576cfc89c59d75dfdd93decc2b43bb1c49045e41be48f",
       "production-preview/browser-current.png": "036d4e8d6110861dd58bdf8c69eec98117aaa1cee4f8ce56a5f870658e9e5e63",
       "production-preview/font-assets.json": "9b114f6bc9f0c7faa07a73ff7b548ae42923cf0dc4b79e3520265128eaec3849"
-    }
+    },
+    "capture_source": {
+      "sha256": "1cbb276cf12064ff61dcbcefbd39412299786a7d19c80df2015b0b5b5e76e0b4",
+      "files": 117
+    },
+    "capture_before": "Only the SHACL parser-syntax optimization; frontend and comparison workflow unchanged. Final Linux checks cover actual signed comparison sources."
   },
   "log_sha256": {
     "backend-final.log": "74647aaa71dfd141424d88cb3d2e3287d343d0ad652232ba8cd9fd60d41363b5",
@@ -195,12 +201,35 @@
     "actionlint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "ontology.log": "7ac5d3623be54d1faf806abe85c63f9dc12820b8c3a45a0a3460315e245c8aab",
     "planning.log": "aaa2f49ef768a2438ee864b57ca7000f06e0d40687e2316dd4ce398354dc557f",
-    "linux-tests.log": "dbdf06e4aa318901d8dc264b8a7f1abcad37d69c2edb0976aca9c3c8c48488b5",
-    "postgres.log": "9e1d82ee5b9c1d7249c49fd027f9e1b55bfb73fc736b15706acd737b90e67f3f"
+    "linux-tests.log": "0e19e2b4c15b5250c6804a36f4fe3a796b4d2fdbffb4f3f7c817d085814743c4",
+    "postgres.log": "df55dbb76f9892c24bb03dab9fbff21aeff05a35c70db51f4fd6a1e9bc684854",
+    "backend-syntax-final.log": "9b8fb4d2cc362d822be6d1c6fbefaa455ac0b4d5f6c986bcfa77087ba6b388a5",
+    "syntax-preflight.log": "4ba710331dc704751728259040a5a0b83c3c1934726028eb5f338db4f102d9fc",
+    "ontology-syntax.log": "7ac5d3623be54d1faf806abe85c63f9dc12820b8c3a45a0a3460315e245c8aab",
+    "deploy-syntax.log": "df0b4214ae93786a0e4ad7a77077cf483b9c331a50ccbe2ed0f533b51ce90a11",
+    "ruff-syntax.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "actionlint-syntax.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ci-backend-failed.log": "323e7aef200a219b6f4aed5f603897d9f54bab2db385e2f16d08768b3b7a4b8f",
+    "ci-postgres.log": "80887e1f2a3a1e81b9e9023c99f8bf25630f492a6b197336d0f76e0d2ba03b7a",
+    "ci-frontend.log": "4551c79693d71b885c2384493e1e69ad5dea07a8cd2f818719090bde3f364b09"
   },
   "ci_scope": {
     "workflow_jobs_workers_retries_limits_unchanged": true,
-    "billing_savings": "not_established"
+    "billing_savings": "not_established",
+    "initial_run": {
+      "run_id": 37762645204,
+      "head_sha": "01bc455c6d91676e35ff7dd1429bff6af618ec27",
+      "frontend": "success",
+      "postgresql": "success",
+      "postgresql_passed": 39,
+      "backend_conclusion": "failure",
+      "reason": "18-minute Test backend timeout after completed test summary",
+      "backend_passed": 2957,
+      "backend_skipped": 42,
+      "backend_warnings": 28,
+      "backend_seconds": 1082.79
+    },
+    "preflight_test_additions": 22
   },
   "not_established": [
     "Turkish legal accuracy or semantic completeness",
@@ -212,5 +241,205 @@
     "production capacity or latency",
     "Standard/Deep qualification or measured benefit",
     "live application deployment"
-  ]
+  ],
+  "initial_feature_verification": {
+    "head_sha": "01bc455c6d91676e35ff7dd1429bff6af618ec27",
+    "source": {
+      "application": {
+        "sha256": "1cbb276cf12064ff61dcbcefbd39412299786a7d19c80df2015b0b5b5e76e0b4",
+        "files": 117
+      },
+      "tests": {
+        "files": 82,
+        "sha256": "26247c7bbcf03a5f8e2595d9e964cd86339211710087548199faf60b820d789b"
+      }
+    },
+    "backend": {
+      "passed": 2979,
+      "skipped": 42,
+      "warnings": 28,
+      "seconds": 323.79,
+      "workers": 2,
+      "distribution": "worksteal",
+      "max_worker_restart": 0,
+      "maxfail": 1
+    },
+    "linux_passed": 169
+  },
+  "ci_syntax_reuse": {
+    "profile": {
+      "diagnostic_only": true,
+      "after_profile_overlapped_full_suite": true,
+      "profiles": [
+        {
+          "name": "before",
+          "diagnostic_elapsed_seconds": 44.70618152799903,
+          "metrics": {
+            "validate_graph": {
+              "calls": 93,
+              "cumulative_seconds": 28.136674169000003
+            },
+            "parseQuery": {
+              "calls": 1024,
+              "cumulative_seconds": 5.474145374
+            },
+            "translateQuery": {
+              "calls": 1024,
+              "cumulative_seconds": 1.172639073
+            },
+            "_run_pre_inference": {
+              "calls": 93,
+              "cumulative_seconds": 15.859116038000002
+            }
+          }
+        },
+        {
+          "name": "after",
+          "diagnostic_elapsed_seconds": 42.51604229399887,
+          "metrics": {
+            "validate_graph": {
+              "calls": 93,
+              "cumulative_seconds": 24.317469498
+            },
+            "parseQuery": {
+              "calls": 12,
+              "cumulative_seconds": 0.387307707
+            },
+            "translateQuery": {
+              "calls": 1024,
+              "cumulative_seconds": 1.397048813
+            },
+            "_run_pre_inference": {
+              "calls": 93,
+              "cumulative_seconds": 16.837196339000002
+            }
+          }
+        }
+      ]
+    },
+    "validator_benchmark": {
+      "synthetic_only": true,
+      "unprofiled": true,
+      "alternating_warm_pairs": 8,
+      "counts": {
+        "data": 130,
+        "shapes": 356,
+        "schema": 2374
+      },
+      "before_validation_sha256": "02461f3cb4ff30cc8a4f20f5fa2ad27e07a50d8ea8f644cec33b8e9af5e7c25f",
+      "after_validation_sha256": "524d78d8b5ff343eaad330f8d4cdc2ed072cc27e78010a1bb0123a7fa86cccc2",
+      "measurements": [
+        {
+          "trial": 0,
+          "implementation": "before",
+          "seconds": 0.1331136249937117
+        },
+        {
+          "trial": 0,
+          "implementation": "after",
+          "seconds": 0.12111887500213925
+        },
+        {
+          "trial": 1,
+          "implementation": "after",
+          "seconds": 0.1075387910095742
+        },
+        {
+          "trial": 1,
+          "implementation": "before",
+          "seconds": 0.11970937499427237
+        },
+        {
+          "trial": 2,
+          "implementation": "before",
+          "seconds": 0.12794650001160335
+        },
+        {
+          "trial": 2,
+          "implementation": "after",
+          "seconds": 0.0966564159898553
+        },
+        {
+          "trial": 3,
+          "implementation": "after",
+          "seconds": 0.09786912500567269
+        },
+        {
+          "trial": 3,
+          "implementation": "before",
+          "seconds": 0.1193583340063924
+        },
+        {
+          "trial": 4,
+          "implementation": "before",
+          "seconds": 0.1340631250059232
+        },
+        {
+          "trial": 4,
+          "implementation": "after",
+          "seconds": 0.09935100001166575
+        },
+        {
+          "trial": 5,
+          "implementation": "after",
+          "seconds": 0.0961176249984419
+        },
+        {
+          "trial": 5,
+          "implementation": "before",
+          "seconds": 0.1184218339913059
+        },
+        {
+          "trial": 6,
+          "implementation": "before",
+          "seconds": 0.13164845800201874
+        },
+        {
+          "trial": 6,
+          "implementation": "after",
+          "seconds": 0.09669312500045635
+        },
+        {
+          "trial": 7,
+          "implementation": "after",
+          "seconds": 0.095891709002899
+        },
+        {
+          "trial": 7,
+          "implementation": "before",
+          "seconds": 0.1314950000087265
+        },
+        {
+          "trial": 8,
+          "implementation": "before",
+          "seconds": 0.11883687500085216
+        },
+        {
+          "trial": 8,
+          "implementation": "after",
+          "seconds": 0.09718204199452884
+        }
+      ],
+      "warm_medians": {
+        "before": 0.12382793750293786,
+        "after": 0.0969375834974926
+      },
+      "reduction_percent": 21.715902362346363,
+      "not_established": [
+        "hosted speedup",
+        "billing savings",
+        "production capacity"
+      ]
+    },
+    "frozen_syntax_only": true,
+    "mutable_programs_per_invocation": true,
+    "definitions_and_signatures_unchanged": true,
+    "retention_limits": {
+      "entries": 64,
+      "query_bytes": 1048576,
+      "parser_nodes": 32768,
+      "nodes_per_program": 4096
+    },
+    "cached_verdicts": false
+  }
 }
