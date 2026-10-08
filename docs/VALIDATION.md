@@ -1,5 +1,72 @@
 # Verification record — 8 October 2026
 
+## R05A separate-account semantic/adverse observations — 8 October 2026 (Asia/Shanghai)
+
+PR #27 merged as `67297774ac5d5d873f91e53e42280925a39d27ce`. Its PR checks and
+[exact post-merge main run 37774321638](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37774321638)
+passed. This packet lets an account distinct from the candidate author, original
+source reviewer and comparison author retain source-linked observations on an exact
+comparison. Six semantic/logic dimensions and every original finding disposition
+remain explicit; reviewer disagreement has separate heads. Coverage is declared
+assessment coverage, not correctness or legal approval.
+
+- **3,019 backend tests passed in 380.51s**, using the exact two-worker worksteal,
+  no-worker-restart, maxfail-one CI command. **45 PostgreSQL/isolated-drill cases
+  skipped**, 28 existing warnings. Forty new focused cases cover account exclusions,
+  roles, route/seal/head integrity, complete rubrics, exact public/private/target
+  references, selected adverse scope, immutable conflicting opinions, nonce replay,
+  freshness, pending admissions, real signed synthetic bytes, revoked rights and
+  rendering-time dependency/membership/guard failure. No model call or legal blocker
+  clearance is produced.
+- **173 frontend tests and strict TypeScript/Vite build passed.** Inputs load only
+  after interaction; all judgments, links, scope and optional time start blank.
+  Source denial in a child adjudication explicitly bubbles through cached comparison,
+  original findings and public-context views. Main JS is 506.56 KB / 143.34 KB gzip;
+  the existing 500 KB advisory stays enabled. No new dependency or CI job/worker/
+  retry/deadline was introduced. **41 deployment contracts passed in 0.694s**;
+  repository Ruff, actionlint, Compose with `/dev/null` env, RDF/SHACL, R01 planning,
+  actual synthetic extraction and dossier-bound study CLI checks passed.
+- **231 focused offline Linux cases passed in 69.16s**, with matching final backend
+  application/test fingerprints, using the existing locked dependency runtime with
+  refreshed source. Non-root, network disabled, no ports/host mounts, read-only root,
+  dropped capabilities, no-new-privileges and CPU/memory/PID limits remained. The
+  owned container was removed. This is not a production image or capacity benchmark.
+- **42 real PostgreSQL cases passed in 49.12s**, using the exact CI file selection in
+  random disposable child databases on pinned PostgreSQL. Three new races observe
+  the second writer blocked on the actual workspace row lock, then verify identical
+  replay, conflicting nonce and competing reviewer head. The first run exposed a
+  33-character record-kind name exceeding the existing 32-character column, although
+  SQLite accepted it. The kind was shortened to `authority_adjudication`; the schema
+  was preserved and all PostgreSQL cases passed after correction. Initial diagnostic
+  failures remain in ignored verification logs, not converted into successful runs.
+- **Built UI rehearsal used an isolated signed synthetic source and a second test
+  account.** One needs-change semantic observation and one finding disagreement
+  saved/reopened as 1/6 assessed in each rubric; the other judgments stayed explicitly
+  unassessed/unresolved, adverse search stayed absent and time unknown. JSON/DOCX/PDF
+  downloaded. A changed private passage made records Stale and every export HTTP 409.
+  Simulated rights denial made records Withheld, removed the original context/review/
+  comparison/observation from the DOM and unmounted editors. Original ciphertexts,
+  draft v2 and two critical blockers stayed unchanged; no provider calls and no
+  browser console warnings/errors. Current screenshot precedes a callback-only
+  correction; final production bundle reinspection, Stale and Withheld screenshots
+  verify that correction. Owned downloads moved to ignored verification; both
+  preview pairs, the temporary tab and disposable test containers were closed.
+
+[Retained verification metadata](evidence/private-authority-adjudications-verification-2026-10-08.json)
+contains source/log fingerprints and explicit limitations. Raw logs, fixtures, signing
+keys, encryption keys and private exports remain gitignored under
+`.data/verification/r05a-authority-adjudications/`. The original dirty checkout and
+running application/provider configuration were not modified or deployed.
+
+R05A remains partial. Account separation does not establish human/professional
+independence; selected-source observations do not establish corpus-wide adverse
+recall, legal correctness, qualified synthesis or statistical benefit. Actual lawful
+source/legal review, historical identities/effects, representative adjudication,
+held-out qualification and Standard/Deep measurements remain open. Next bounded
+packet: registered same-input public-authority comparison capture with pinned
+independent observations and active effort. The national ontology remains legally
+unreviewed, with zero actual published historical records.
+
 ## R05A source-linked authority revision comparisons — 8 October 2026 (Asia/Shanghai)
 
 PR #26 merged as `4cf95c82d77126660747bc4f10b3544375f66122`; its PR checks and
