@@ -3,7 +3,7 @@ let csrfToken = '';
 let unauthorizedHandler: (() => void) | undefined;
 
 export class ApiError extends Error {
-  constructor(message: string, public status: number) { super(message); this.name = 'ApiError'; }
+  constructor(message: string, public status: number, public data?: unknown) { super(message); this.name = 'ApiError'; }
 }
 export function setCsrfToken(token: string) { csrfToken = token; }
 export function onUnauthorized(handler?: () => void) { unauthorizedHandler = handler; }
@@ -34,7 +34,7 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
   if (!response.ok) {
     const data: unknown = await response.json().catch(() => null);
     if (response.status === 401 && path !== '/auth/login' && path !== '/auth/me') unauthorizedHandler?.();
-    throw new ApiError(errorText(data), response.status);
+    throw new ApiError(errorText(data), response.status, data);
   }
   if (!['GET', 'HEAD', 'OPTIONS'].includes(method) && !path.startsWith('/auth/') && !path.startsWith('/assistant/') && !path.startsWith('/public-sources/') && !path.endsWith('/analyses/check') && typeof window !== 'undefined') window.dispatchEvent(new Event('portfolio-updated'));
   if (response.status === 204) return undefined as T;
@@ -90,6 +90,21 @@ export async function downloadAnalysis(matterId: string, recordId: string, versi
   }
   const url = URL.createObjectURL(await response.blob());
   const link = document.createElement('a'); link.href = url; link.download = `analiz-taslagi-${recordId}-${versionId}.${format}`;
+  document.body.append(link); link.click(); link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+export async function downloadAuthorityContext(matterId: string, analysisId: string, contextId: string, format: 'json' | 'docx' | 'pdf') {
+  const path = [matterId, analysisId, contextId].map(encodeURIComponent);
+  let response: Response;
+  try { response = await fetch(`${BASE}/matters/${path[0]}/analyses/${path[1]}/authority-contexts/${path[2]}/export?format=${format}`, { credentials: 'same-origin', cache: 'no-store' }); }
+  catch { throw new ApiError('Bağlam indirilemedi. Yerel hizmete bağlantıyı kontrol edin.', 0); }
+  if (!response.ok) {
+    if (response.status === 401) unauthorizedHandler?.();
+    throw new ApiError(errorText(await response.json().catch(() => null)), response.status);
+  }
+  const url = URL.createObjectURL(await response.blob());
+  const link = document.createElement('a'); link.href = url; link.download = `ozel-dayanak-baglami-${contextId}.${format}`;
   document.body.append(link); link.click(); link.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

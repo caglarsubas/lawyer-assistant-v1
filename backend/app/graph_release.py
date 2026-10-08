@@ -345,6 +345,51 @@ class RuntimeGraphRelease:
         # has multiple evidenced links. Exact authority/date filters apply above.
         return min(matches, key=lambda item: (item[0], item[1]))[2]
 
+    def authority_context(self, candidate: dict, *, as_of: str) -> dict:
+        """Regenerate a retained nomination from signed evidence, never its labels.
+
+        The caller holds current_guard. Exact identity and temporal metadata must
+        match; an ambiguous/legacy nomination is not silently resolved here.
+        Relationship records describe their source, not matter applicability.
+        """
+        keys = ('assertion_id', 'passage_id', 'document_id', 'source_version_id',
+                'source_sha256', 'authority_id', 'release_id', 'text', 'locator',
+                'valid_from', 'valid_to', 'validity_end_status', 'validity_checked_through')
+        if any(key not in candidate for key in keys):
+            raise ValueError('A complete canonical research nomination is required')
+        projected = self.project_search_hit(candidate, as_of=as_of)
+        if any(candidate[key] != projected[key] for key in keys):
+            raise ValueError('The retained nomination does not match signed evidence')
+        assertion, evidence = URIRef(projected['assertion_id']), URIRef(projected['passage_id'])
+        families = [family for family, graph in self._graphs.items()
+                    if (assertion, RDF.type, LA.Assertion) in graph and (assertion, LA.evidence, evidence) in graph]
+        if len(families) != 1:
+            raise ValueError('The assertion graph identity is ambiguous')
+        graph, resources, one = self._graphs[families[0]], self._resources, self._one
+        representation = one(resources, evidence, LA.textRepresentation)
+        target = one(graph, assertion, LA.object)
+        version = None
+        if (target, RDF.type, LA.ProvisionVersion) in resources:
+            state = temporal.interval_state(resources, target)
+            version = {'id': str(target),
+                       'version_of': str(one(resources, target, LA.versionOf)) if one(resources, target, LA.versionOf) else None,
+                       'resolution': str(one(resources, target, LA.versionResolution)) if one(resources, target, LA.versionResolution) else None,
+                       'validity': {key: sorted(map(str, value)) if key == 'evidence'
+                                    else value.isoformat() if hasattr(value, 'isoformat') else value
+                                    for key, value in state.items()}}
+        return {**projected, 'graph_family': families[0],
+                'subject_id': str(one(graph, assertion, LA.subject)),
+                'predicate': str(one(graph, assertion, LA.predicate)), 'object_id': str(target),
+                'recorded_at': str(one(graph, assertion, LA.recordedAt)),
+                'reviewed_at': str(one(graph, assertion, LA.reviewedAt)),
+                'text_sha256': str(one(resources, representation, LA.contentHash)),
+                'locator_map_sha256': str(one(resources, representation, LA.locatorMapHash)),
+                'start_offset': int(one(resources, evidence, LA.startOffset)),
+                'end_offset': int(one(resources, evidence, LA.endOffset)),
+                'quote_sha256': hashlib.sha256(projected['text'].encode()).hexdigest(),
+                'target_provision_version': version, 'candidate_only': True,
+                'matter_applicability': 'not_assessed', 'binding_effect': 'not_assessed'}
+
     def matches(self, family: str, row: dict, *, as_of=None, known_at=None, history=False,
                 entity_id=None, hops=1, relations=None, identifier=None, assertion_id=None, query=None) -> bool:
         """Compare returned evidence and relationship fields to the signed source graph."""

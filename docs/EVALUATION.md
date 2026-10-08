@@ -5,6 +5,18 @@ fixed lexical profiles on one authorized snapshot and reports ranking metrics an
 paired family uncertainty. Its development observations do not replace the held-out
 legal-analysis/privacy qualification described here.
 
+[Private public-authority context](ANALYSIS_AUTHORITIES.md) records exact
+assertion/passage/authority selections, original quotes, historical version and
+serving pins, private draft targets and lawyer-declared roles. Permission and
+dependency checks can make a record Current, Stale or Withheld. **Current establishes
+technical record availability, not substantive claim support or applicability.**
+A support/adverse role is an unadjudicated research declaration; citation is not
+endorsement or binding effect. Signed synthetic fixtures and successful attachment
+checks are engineering evidence only. This packet produces no scorer rows, semantic
+verdicts, adverse gold set, quality metrics or preparation-time gains, and does not
+clear the draft's legal-norm blocker. Real source review and independent lawyer
+adjudication remain required before any such observation contributes to qualification.
+
 This command scores **supplied adjudications**. It does not run legal analysis,
 inspect the underlying legal evidence, call a provider, certify reviewers, grant
 source rights or enable dispatch. Reports always retain `production_qualified: false`

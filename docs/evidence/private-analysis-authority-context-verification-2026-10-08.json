@@ -1,0 +1,212 @@
+{
+  "schema": "private-analysis-authority-context-verification-v1",
+  "recorded_at": "2026-10-08T05:25:22.096855+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "live_application_deployed": false,
+  "base_commit": "f9d6c9694b024bf1c6b91a1a99985c24e6c982f6",
+  "checkout_dirty": true,
+  "commit_state": "before packet commit",
+  "base_main_ci": {
+    "run_id": 37726028253,
+    "head_sha": "f9d6c9694b024bf1c6b91a1a99985c24e6c982f6",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "source": {
+    "application": {
+      "sha256": "49e451179d4f383ef1d9fc8d4e5c61c5609cf44156827c7fa70313d608292d72",
+      "files": 115
+    },
+    "tests": {
+      "files": 79,
+      "sha256": "b4383b9c120947293fbeda5585c465f24d69ed7a58b2e3b5b9c3ebdd5de90d44"
+    }
+  },
+  "frontend_source": {
+    "files": 63,
+    "sha256": "93aae2637c91f71ebcd1cfb349fb4902d609d711f7dadff98a3e277dfd42cead",
+    "scope": "frontend/src regular files; SHA-256 of JSON path/hash map with sorted keys"
+  },
+  "host_backend": {
+    "passed": 528,
+    "pytest_seconds": 154.11,
+    "workers": 2,
+    "distribution": "worksteal",
+    "max_worker_restart": 0,
+    "new_focused_cases": 45,
+    "scope": "all private analysis modules, runtime graph release, retained-release authorization, private context, search, workspace and assistant; complete backend required in hosted CI"
+  },
+  "frontend": {
+    "passed": 149,
+    "build": "strict TypeScript and Vite passed",
+    "main_js_kb": 504.63,
+    "main_js_gzip_kb": 143.01,
+    "lazy_authorities_js_kb": 15.1,
+    "lazy_authorities_js_gzip_kb": 5.16,
+    "warning": "main JS exceeds the existing default 500 kB advisory; no warning suppressed"
+  },
+  "deployment_contracts": {
+    "passed": 41,
+    "seconds": 1.104
+  },
+  "lint": "repository-wide Ruff passed with the exact CI configuration",
+  "roadmap_check": "R01 planning contract check passed; no qualification granted",
+  "linux": {
+    "schema": "private-analysis-authority-context-verification-v1",
+    "recorded_at": "2026-10-08T05:20:05.982648+00:00",
+    "synthetic_only": true,
+    "production_qualified": false,
+    "base_commit": "f9d6c9694b024bf1c6b91a1a99985c24e6c982f6",
+    "checkout_dirty": true,
+    "host": {
+      "system": "Darwin",
+      "architecture": "arm64"
+    },
+    "test_image": "sha256:63878952f894884d6cca11d5ed2e2bf009c3483282786b3d128a638844f6324b",
+    "source": {
+      "application": {
+        "sha256": "49e451179d4f383ef1d9fc8d4e5c61c5609cf44156827c7fa70313d608292d72",
+        "files": 115
+      },
+      "tests": {
+        "files": 79,
+        "sha256": "b4383b9c120947293fbeda5585c465f24d69ed7a58b2e3b5b9c3ebdd5de90d44"
+      }
+    },
+    "limits": {
+      "network": "none",
+      "host_ports": [],
+      "host_mounts": [],
+      "read_only": true,
+      "cpu": 2,
+      "memory_bytes": 805306368,
+      "pids": 128,
+      "tmpfs_bytes": 268435456
+    },
+    "linux_tests": {
+      "exit_code": 0,
+      "passed": 45,
+      "pytest_seconds": 21.54,
+      "container_wall_seconds": 23.785
+    },
+    "cleanup_verified": true,
+    "not_established": [
+      "Turkish legal accuracy or semantic completeness",
+      "real-provider authentication or model performance",
+      "production capacity or latency",
+      "real-corpus retrieval quality or adverse recall",
+      "real source/legal approval",
+      "live application deployment"
+    ]
+  },
+  "postgres": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "fifteen real PostgreSQL public context and cohort freeze/cancel, comparison own-head, review-head and adoption races in randomly named disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 22.515,
+    "passed": 15,
+    "pytest_seconds": 20.99
+  },
+  "final_save_and_export_checks": "Flushed private evidence/recipe changes injected before commit roll back context and audit. Render-time changes and final publication guard failures discard attachments. These injections are not concurrent-writer tests; the real PostgreSQL tests separately observe competing freezes waiting on the workspace row lock.",
+  "admission_receipts": "Post-commit authorization failures return saved ID with committed_needs_revalidation and no quotes. Pending receipt stays withheld across recovery and identical retry; a new preview and nonce are required.",
+  "browser": {
+    "recorded_at": "2026-10-08T05:05:26.601343+00:00",
+    "synthetic_only": true,
+    "source_for_final_stale_withheld_verification": {
+      "sha256": "49e451179d4f383ef1d9fc8d4e5c61c5609cf44156827c7fa70313d608292d72",
+      "files": 115
+    },
+    "initial_selection_preview_freeze_download_source": {
+      "sha256": "17841326da79c28d8f40536f8b61b12ad98c0bd10d70b320f5b3cdfd1e4b3fca",
+      "files": 115
+    },
+    "final_changes_after_initial_browser_capture": [
+      "nonblank title/purpose/selection reason validation",
+      "2 KiB preview envelope reserve",
+      "local user-guide copy"
+    ],
+    "flow": "explicit research/source/role/three-target selection -> signed-source preview -> immutable freeze -> current inspection -> actual JSON/DOCX downloads -> private passage correction -> stale -> simulated publication revocation -> withheld",
+    "initial_export_manifest_sha256": "a45823ce7ca9cf273d240d28e059cdb6c0ff095b7e325c4e56298d8a69e9509a",
+    "json_docx_original_quote_and_pins_verified": true,
+    "exact_original_unicode_offsets": [
+      40,
+      70
+    ],
+    "private_change_source": "injected correction in the isolated encrypted document record; not a concurrent writer",
+    "stale_frozen_manifest_unchanged": true,
+    "withheld_manifest_null": true,
+    "stale_http_export": 409,
+    "withheld_http_export": 409,
+    "original_analysis_version": 1,
+    "unqualified_legal_norm_still_blocks": true,
+    "encrypted_packet_and_original_analysis_unchanged": true,
+    "recorded_model_calls": 0,
+    "signed_physical_fixture": "invented text, test-only Ed25519 key, simulated permission; not actual legal/rights review",
+    "production_qualified": false,
+    "live_application_deployed": false,
+    "console_warnings_errors": [],
+    "cleanup_verified": true,
+    "cleanup": {
+      "tab_closed": true,
+      "ports_closed": [
+        18095,
+        15190
+      ],
+      "owned_downloads_removed_after_verified_copies": true
+    },
+    "retained_artifact_sha256": {
+      "current-ui.png": "71aff1126394e32cab80aee987a63f3559959d9bf5cfbdbaabb785f7a9e3c02c",
+      "stale-ui.png": "24e40125a76025c1f5b330b32f95cffd9b0f22f82e2b6c3340a172ea248b5263",
+      "withheld-ui.png": "b0f5ff250f6bbedebf6bda168cf0503a9f3c6689e7e94999a134f60c1f9b98dc",
+      "browser-current.json": "623e418794e06a915425c55abc7f05721e9ceeed7db6ae04117dd6951e5ad48e",
+      "browser-current.docx": "6536645eb2bc366f61d59a6d28786afc2e38a57190bcc28d4c0c6658f7e60f39"
+    },
+    "frontend_source": {
+      "files": 63,
+      "sha256": "93aae2637c91f71ebcd1cfb349fb4902d609d711f7dadff98a3e277dfd42cead",
+      "scope": "frontend/src regular files; SHA-256 of JSON path/hash map with sorted keys"
+    }
+  },
+  "scope_isolation": {
+    "method": "created managed worktree from exact verified main; transplanted only 17 owned milestone files by whitelist; original shared checkout left unchanged",
+    "matched_previously_verified_offline_source": true,
+    "root_env_copied": false,
+    "unrelated_provider_context_relay_edits_included": false,
+    "earlier_shared_checkout_attempt": {
+      "passed_before_failure": 424,
+      "failed": 1,
+      "result": "not a pass; concurrent provider/test edits caused an import mismatch during execution",
+      "log_sha256": "cc11426ac5d68a18ddc48cc4e92b56fa37adab3067495fc0ba09969a299838ba",
+      "superseded_for_this_packet_by": "528 passing checks in isolated exact-source worktree"
+    },
+    "harness_configuration_corrections": [
+      "Earlier local lint invocation omitted the repository CI configuration; corrected exact CI invocation passed without source changes.",
+      "Earlier deployment-test invocation used a nonexistent deploy/tests directory; corrected repository deploy discovery passed without source changes."
+    ]
+  },
+  "log_sha256": {
+    "backend-isolated.log": "a4a69406355b1901ff156b92c967be635b8bb3e61cceed3e405eee8a7887cec2",
+    "frontend-tests.log": "89c92739112050c143a40abc9d8202ea5521ad29b2d3f628944afde3643891be",
+    "frontend-build.log": "9eeb091e5b7bb43a1416cc290ea38a5ede2940b46bf75770b2df3b7e19d34ce4",
+    "deployment-configured.log": "df4ecc0895ab5c83c8d091b13c016a082e8e1d6b395f3dfc25ac4694388df2ef",
+    "ruff-configured.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "planning.log": "aaa2f49ef768a2438ee864b57ca7000f06e0d40687e2316dd4ce398354dc557f",
+    "linux-tests.log": "b8dff3336b75aa27e89d3f10ca269f6f41eb13e6ad009675b435955f60d4d758",
+    "postgres.log": "d7c567996ef296d118c0efe6b7199e94a00cc302ebc8d5d02fa9b1eee72fefb0"
+  },
+  "credential_handling": "Repository-root .env and real provider keys were not read or changed; fixture settings disable env loading and inference. Approved exact laptop-tunnel exception unchanged.",
+  "not_established": [
+    "Turkish legal accuracy or complete historical corpus",
+    "real rights, identity, temporal or legal-effect review",
+    "semantic entailment, applicability, binding force or adverse completeness",
+    "negligible universal hallucination probability",
+    "real provider authentication or model performance",
+    "production capacity, latency or measured lawyer benefit",
+    "physical erasure",
+    "live deployment"
+  ]
+}
