@@ -4,6 +4,8 @@ Only query syntax/algebra is reused, never query results or validation decisions
 The memory graph and its bounded cache belong to a single validation invocation.
 Ontology Turtle syntax is keyed by freshly read bytes and base URIs; each caller
 receives an independent graph with fresh blank nodes, without inferred triples.
+Exact triple membership uses a bounded index in the invocation's own Memory
+store. Inference, source reads and every SHACL query still execute afresh.
 """
 from __future__ import annotations
 
@@ -13,6 +15,7 @@ from threading import Lock
 from pyshacl import validate
 from rdflib import BNode, Graph
 from rdflib.plugins.sparql import prepareQuery
+from rdflib.plugins.stores.memory import Memory
 
 _MAX_QUERIES = 128
 _MAX_QUERY_LENGTH = 64 * 1024
@@ -22,6 +25,7 @@ _MAX_GRAPH_CACHE_ENTRIES = 4
 _MAX_GRAPH_SOURCE_BYTES = 512 * 1024
 _MAX_GRAPH_FILES = 32
 _MAX_GRAPH_TRIPLES = 10_000
+_MAX_MEMBERSHIP_TRIPLES = 16_384
 
 
 class _OntologySyntaxCache:
@@ -81,13 +85,55 @@ def parse_ontology_graph(sources):
     return _ontology_syntax.parse(tuple(sources))
 
 
+class _ValidationMemory(Memory):
+    """Exact membership only, for one private scratch graph; no shared state.
+
+    Native RDFS repeatedly probes the same complete triples through RDFLib's
+    pattern iterator. Store-level writes maintain this index, including addN and
+    direct store.add. Removal, quoted/different contexts or the size limit disable
+    it permanently for this invocation, preserving the native fallback.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self._exact = set()
+        self._context = None
+
+    def add(self, triple, context, quoted=False):
+        super().add(triple, context, quoted=quoted)
+        if self._exact is not None:
+            if quoted or self._context is not None and context is not self._context:
+                self._exact = None
+            else:
+                self._context = context
+                self._exact.add(triple)
+                if len(self._exact) > _MAX_MEMBERSHIP_TRIPLES:
+                    self._exact = None
+
+    def remove(self, triple, context=None):
+        self._exact = None
+        super().remove(triple, context=context)
+
+    def contains_exact(self, triple, context):
+        if self._exact is not None and context is self._context and all(term is not None for term in triple):
+            return tuple(triple) in self._exact
+        return None
+
+
 class _ValidationGraph(Graph):
     """Private memory-only scratch graph, not a general store/query adapter."""
 
     def __init__(self):
-        super().__init__(bind_namespaces="core")
+        super().__init__(store=_ValidationMemory(), bind_namespaces="core")
         self._prepared_queries = {}
         self._cache_characters = 0
+
+    def __contains__(self, triple):
+        if len(triple) == 3:
+            result = self.store.contains_exact(triple, self)
+            if result is not None:
+                return result
+        return super().__contains__(triple)
 
     def query(self, query_object, processor="sparql", result="sparql", initNs=None,
               initBindings=None, use_store_provided=True, **kwargs):

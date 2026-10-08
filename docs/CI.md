@@ -154,6 +154,42 @@ in the short preflight step and remain in the full backend suite. No jobs, worke
 dependencies, retries or time-limit increases were added. The verification record
 contains local measurements and, separately, observed hosted results.
 
+## PR #25 post-merge timeout: fresh inference membership work
+
+The PR #25 checks passed, but exact post-merge main
+[run 37733750369](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37733750369)
+reached 99% and hit the unchanged 18-minute backend-step cap. The preceding PR run
+passed 2,870 tests in 717.59s. This variation leaves insufficient margin; a passing
+PR does not establish passing post-merge CI.
+
+Profiling the real signed open-validity publication/search test found 93 full
+SHACL validations and repeated exact-triple probes in RDFS inference. The scratch
+graph now uses a **per-invocation, bounded exact-membership index** in its own
+RDFLib Memory store. This changes lookup work, not inference rules or validation
+policy. Native store writes maintain the index, including bulk/direct additions;
+any removal, quoted/different context or more than 16,384 triples disables it for
+that invocation. Wildcards and unsupported contexts retain native lookup. No
+index, inferred fact or verdict survives into another validation.
+
+Both profiles retained **93 validations and 1,023 query preparations**. Native
+Memory pattern-iterator calls fell from **8,191,380 to 3,822,076**. Profiled elapsed
+time was 101.04s before / 45.08s after; profiler overhead and local machine variation
+make this diagnostic only. Eight alternating warm, unprofiled pairs on the full
+2,374-triple schema and synthetic fixture measured medians **0.14304s before /
+0.12206s after (14.7% lower)**. These are validator measurements, not hosted speedup
+or invoiced savings.
+
+The existing short preflight now also runs `test_validation_membership.py`;
+**51 preflight cases passed**. They retain native inference/report equivalence,
+current data after direct writes/removals, wildcard behavior, bounded fallback and
+parallel isolation. The complete existing two-worker command passed **2,915 tests
+in 331.56s locally**, with 39 documented PostgreSQL/drill skips and 28 warnings.
+PostgreSQL races remain in the mandatory separate job. No jobs, workers, retries,
+dependency changes, removed tests or increased limits were introduced. Fresh
+source hashes, signatures, SHACL executions and live authorization remain intact.
+New-branch hosted results and post-merge recovery require separate observation;
+see [verification](VALIDATION.md).
+
 ## Offline evaluation scoring
 
 The versioned analysis/privacy scorer is covered by fast synthetic Python tests in

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { ApiError, downloadAuthorityContext, post, request } from '../../api';
 import { Badge, Detail, Field, Notice } from '../../components';
 import { ValidityDetails } from '../../ValidityDetails';
@@ -6,6 +6,8 @@ import { formatDate, messageOf } from '../../utils';
 import type { AnalysisRecord } from './analysisTypes';
 import { AUTHORITY_ROLES, committedAuthorityReceipt, occurrence, occurrenceKey } from './authorityTypes';
 import type { AuthorityCandidates, AuthorityContext, AuthorityManifest, AuthorityPreview, AuthorityRole, AuthoritySelection, AuthoritySource, AuthoritySpec, AuthoritySummary, LinkedAuthority } from './authorityTypes';
+
+const AuthorityFindings = lazy(() => import('./AuthorityFindings'));
 
 export function PublicAuthorityPassage({ source }: { source: AuthoritySource }) {
   const version = source.target_provision_version;
@@ -47,11 +49,14 @@ export function AuthorityContextView({ value }: { value: AuthorityContext }) {
 }
 
 function ContextCard({ item, base, matterId, analysisId }: { item: AuthoritySummary; base: string; matterId: string; analysisId: string }) {
+  const [findingsOpen, setFindingsOpen] = useState(false);
   const [view, setView] = useState<AuthorityContext | null>(null); const [busy, setBusy] = useState(false); const [error, setError] = useState('');
   const mounted = useRef(true); useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   async function inspect() { setView(null); setError(''); setBusy(true); try { const value = await request<AuthorityContext>(`${base}/${encodeURIComponent(item.id)}`, { cache: 'no-store' }); if (mounted.current) setView(value); } catch (cause) { if (mounted.current) setError(messageOf(cause)); } finally { if (mounted.current) setBusy(false); } }
   async function download(format: 'json' | 'docx' | 'pdf') { setBusy(true); setError(''); try { await downloadAuthorityContext(matterId, analysisId, item.id, format); } catch (cause) { if (mounted.current) { setView(null); setError(messageOf(cause)); } } finally { if (mounted.current) setBusy(false); } }
-  return <Detail title={item.title}><button className="text-button" disabled={busy} onClick={() => void inspect()}>{busy ? 'Kontrol ediliyor…' : 'Bağlamı aç / güncel izinleri kontrol et'}</button>{view && <><AuthorityContextView value={view} /><div className="practice-record-actions">{(['json', 'docx', 'pdf'] as const).map((format) => <button key={format} className="text-button" disabled={busy || !view.public_source_access || !view.manifest || view.freshness.status !== 'current'} onClick={() => void download(format)}>{format.toUpperCase()} bağlamı indir</button>)}</div></>}{error && <Notice error>{error}</Notice>}</Detail>;
+  return <Detail title={item.title}><button className="text-button" disabled={busy} onClick={() => void inspect()}>{busy ? 'Kontrol ediliyor…' : 'Bağlamı aç / güncel izinleri kontrol et'}</button>{view && <><AuthorityContextView value={view} /><div className="practice-record-actions">{(['json', 'docx', 'pdf'] as const).map((format) => <button key={format} className="text-button" disabled={busy || !view.public_source_access || !view.manifest || view.freshness.status !== 'current'} onClick={() => void download(format)}>{format.toUpperCase()} bağlamı indir</button>)}</div>
+    {view.public_source_access && view.manifest && <><button className="text-button" disabled={busy} onClick={() => setFindingsOpen(old => !old)}>{findingsOpen ? 'Avukat kaynak incelemesini kapat' : 'Avukat kaynak incelemesini aç'}</button>{findingsOpen && <Suspense fallback={<p>İnceleme araçları yükleniyor…</p>}><AuthorityFindings matterId={matterId} analysisId={analysisId} contextId={item.id} /></Suspense>}</>}
+  </>}{error && <Notice error>{error}</Notice>}</Detail>;
 }
 
 type Editable = Omit<AuthoritySelection, 'relationship'> & { relationship: AuthorityRole | '' };
