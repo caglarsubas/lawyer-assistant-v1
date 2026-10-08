@@ -1,0 +1,227 @@
+{
+  "schema": "private-analysis-cohort-verification-v1",
+  "recorded_at": "2026-10-08T03:40:57.510608+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "e427f66f9c7da7273f107d6452e68a3dd9ed47ab",
+  "checkout_dirty": true,
+  "commit_state": "before packet commit",
+  "base_main_ci": {
+    "run_id": 37715917289,
+    "head_sha": "e427f66f9c7da7273f107d6452e68a3dd9ed47ab",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "source": {
+    "application": {
+      "sha256": "6130b095bd555a75a646224f042c1a06e29a7e9f21a688dc3a87f792994d3c36",
+      "files": 114
+    },
+    "tests": {
+      "files": 77,
+      "sha256": "48e1d6e90729445440edc8c058b60f05a6ecc10f2240275888ab0530536bca43"
+    }
+  },
+  "frontend_source": {
+    "files": 60,
+    "sha256": "9fea07022734ec40b27ef8b1c1216ed211e3e6d766401db848fab061166f0fa0",
+    "scope": "frontend/src files"
+  },
+  "host_backend": {
+    "passed": 305,
+    "pytest_seconds": 103.34,
+    "new_focused_cases": 32,
+    "scope": "cohorts, comparisons, adjudication, reviews, suggestions, workbench, governance, provider runtime and shared jobs; complete backend required in hosted CI"
+  },
+  "frontend": {
+    "passed": 140,
+    "build": "strict TypeScript and Vite passed",
+    "main_js_kb": 503.23,
+    "main_js_gzip_kb": 142.76,
+    "lazy_cohort_js_kb": 13.24,
+    "lazy_cohort_js_gzip_kb": 4.78,
+    "warning": "main JS exceeds the default 500 kB advisory; no bundler warning suppressed"
+  },
+  "deployment_contracts": {
+    "passed": 41,
+    "seconds": 1.001
+  },
+  "lint": "repository-wide Ruff passed with CI configuration",
+  "roadmap_check": "R01 planning contract check passed; no qualification granted",
+  "linux": {
+    "schema": "private-analysis-cohort-verification-v1",
+    "recorded_at": "2026-10-08T03:18:03.133122+00:00",
+    "synthetic_only": true,
+    "production_qualified": false,
+    "base_commit": "e427f66f9c7da7273f107d6452e68a3dd9ed47ab",
+    "checkout_dirty": true,
+    "host": {
+      "system": "Darwin",
+      "architecture": "arm64"
+    },
+    "test_image": "sha256:bf9d93f165f944fa20fe71c3e4774680fe09425a87281c0ce1846b131822cc2b",
+    "source": {
+      "application": {
+        "sha256": "6130b095bd555a75a646224f042c1a06e29a7e9f21a688dc3a87f792994d3c36",
+        "files": 114
+      },
+      "tests": {
+        "files": 77,
+        "sha256": "48e1d6e90729445440edc8c058b60f05a6ecc10f2240275888ab0530536bca43"
+      }
+    },
+    "limits": {
+      "network": "none",
+      "host_ports": [],
+      "host_mounts": [],
+      "read_only": true,
+      "cpu": 2,
+      "memory_bytes": 805306368,
+      "pids": 128,
+      "tmpfs_bytes": 268435456
+    },
+    "linux_tests": {
+      "exit_code": 0,
+      "passed": 32,
+      "pytest_seconds": 48.61,
+      "container_wall_seconds": 51.191
+    },
+    "cleanup_verified": true,
+    "not_established": [
+      "Turkish legal accuracy or semantic completeness",
+      "real-provider authentication or model performance",
+      "production capacity or latency",
+      "public authority context or adverse recall",
+      "real source/legal approval",
+      "live application deployment"
+    ]
+  },
+  "linux_broad_attempt": {
+    "recorded_at": "2026-10-08T03:17:11.406700+00:00",
+    "attempt": "broad related private-analysis Linux subset",
+    "timeout_seconds": 90,
+    "passed": null,
+    "result": "verification harness time cap exceeded; not a test assertion result",
+    "affected_container_name": "lawyer-analysis-verify-d3b6f35f66",
+    "cleanup_verified": true,
+    "followup": "focused feature tests with the same time cap; no CI limit change"
+  },
+  "postgres": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "thirteen real PostgreSQL cohort freeze/cancel, comparison own-head, review-head and adoption races in randomly named disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 14.927,
+    "passed": 13,
+    "pytest_seconds": 13.86
+  },
+  "late_save_rollback": "Provider and second already-stale fact/document changes injected after cohort/audit creation roll back; not concurrent-writer tests. PostgreSQL separately verifies actual freeze/nonce/cancel contention.",
+  "browser": {
+    "synthetic_only": true,
+    "cohort_id": "ach-5da66f0106c9461ef874-f4c50f95dbe2e6a4d5912081fe1a85ee",
+    "initial_status": "current",
+    "later_status": "stale",
+    "selected_records": 2,
+    "separate_profiles": 2,
+    "report_counts": {
+      "accounted_effort_records": 2,
+      "complete_capture_records": 2,
+      "current_reviewer_pairs": 2,
+      "current_source_records": 2,
+      "declared_families": 2,
+      "profile_groups": 2,
+      "records_with_outcome_differences": 2,
+      "records_with_unknown_assessments": 2,
+      "records_with_unresolved_findings": 2,
+      "selected_records": 2
+    },
+    "manifest_sha256": "8670070985ec0343a810ca89babfd9924413f98e9ca35ec1971de5c71c449c44",
+    "cohort_sha256": "2fceb1bddba7de1da7a45052859c4fe55654c23b6b9565300d7c692f178a17a5",
+    "immutable_manifest_preserved": true,
+    "encrypted_payload_sha256": "ebd8937537ded8703c3be1b238e89d6dc536a6331cad7244fa278ac470e77006",
+    "encrypted_payload_unchanged": true,
+    "qualification_granted": false,
+    "benefit_established": false,
+    "private_version_remains": 1,
+    "original_review_remains": "changes_requested",
+    "mock_provider_calls_before_reconciliation": 6,
+    "mock_provider_calls_after_reconciliation": 6,
+    "reconciliation_model_calls": 0,
+    "private_attachment_headers": {
+      "content-type": "application/json",
+      "content-disposition": "attachment; filename=\"private-cohort-ach-5da66f0106c9461ef874-f4c50f95dbe2e6a4d5912081fe1a85ee.json\"",
+      "cache-control": "no-store",
+      "x-content-type-options": "nosniff"
+    },
+    "repeated_inputs": 1,
+    "repeated_versions": 1,
+    "cross_family_sources": 1,
+    "reserved_overlaps": 1,
+    "browser_current_attachment_verified": true,
+    "browser_stale_attachment_verified": true,
+    "browser_preview_freeze_refresh_verified": true,
+    "unknown_gpu_and_review_time_rendered": true,
+    "opposed_outcomes_and_unresolved_findings_inspected": true,
+    "original_captured_unicode_quote_inspected": true,
+    "settings_groups_separately_numbered": true,
+    "details_collapsed_in_final_view": true,
+    "console_warnings": 0,
+    "console_errors": 0,
+    "screenshot": {
+      "viewport": [
+        1280,
+        720
+      ],
+      "sha256": "0f0e78d1fd7ce39eddc7b598dac7e7b17f1c70e4a0c1becc13a07087b80009f1"
+    },
+    "download_hashes": {
+      "initial_current_sha256": "3e57b608ac483dff25a868f6223ee730ae127a24b514e41c1313168879c8dda0",
+      "later_stale_sha256": "55887924117d00747ddbc14a5b7af0cd533ddd9b32eaeee5c3cd5b1e811ffe05"
+    },
+    "production_qualified": false,
+    "final_render_source": {
+      "application": {
+        "sha256": "6130b095bd555a75a646224f042c1a06e29a7e9f21a688dc3a87f792994d3c36",
+        "files": 114
+      },
+      "tests": {
+        "files": 77,
+        "sha256": "48e1d6e90729445440edc8c058b60f05a6ecc10f2240275888ab0530536bca43"
+      }
+    },
+    "final_frontend_source": {
+      "files": 60,
+      "sha256": "9fea07022734ec40b27ef8b1c1216ed211e3e6d766401db848fab061166f0fa0",
+      "scope": "frontend/src files"
+    },
+    "final_render_rechecked": true,
+    "temporary_loopback_listeners_closed": {
+      "18094": true,
+      "15189": true
+    },
+    "temporary_tab_closed": true,
+    "temporary_download_copies_removed": 2,
+    "cleanup_verified": true
+  },
+  "root_environment_read_or_modified": false,
+  "real_provider_calls": 0,
+  "logs_sha256": {
+    "backend.log": "67d2464c9d930a2acc925a84d4d79ea3776ba173e7582e9fedd62f17984c01bf",
+    "frontend-tests.log": "972ffd57a84afbbb33f0a701d197504df59459a8ba6a8554b471297b4cca3cc8",
+    "frontend-build.log": "3cb7af51a18cc234fec976643411c68f7ed619c6370f2ac42741f24456363b4b",
+    "deployment.log": "53d8df98328396d2bc811b2f5b7ca193d3fb755453f1c5370d96e60c2ba02113",
+    "planning.log": "aaa2f49ef768a2438ee864b57ca7000f06e0d40687e2316dd4ce398354dc557f",
+    "linux-tests.log": "d63e4ebf0dc05b441ef1bc59cb7264ba81078cb7f235ea03941b286d7aa17b65",
+    "postgres.log": "52b031293f20bdde8590d16af8507fc65aa530f0a1c4180721950607bf46b9ac"
+  },
+  "not_established": [
+    "source or legal approval",
+    "representative independent expert adjudication or held-out qualification",
+    "semantic/legal correctness or measured preparation-time benefit",
+    "public/historical/adverse corpus qualification",
+    "GPU compute measurements or failed-call total work/cost",
+    "production capacity, physical erasure or live application deployment"
+  ]
+}

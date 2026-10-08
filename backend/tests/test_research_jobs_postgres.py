@@ -326,6 +326,113 @@ def test_comparison_own_head_serializes_conflicts_and_identical_replays(workspac
     assert client.get(base + '/analyses').json()[0]['version'] == 1
 
 
+def _cohort_workbench(workspace):
+    from sqlalchemy import select
+
+    app, client, matter = workspace
+    text = 'SYNTHETIC private cohort clause: delivery and notice remain unverified.'
+    with app.state.store.session() as session:
+        user = session.scalar(select(User).where(User.username == 'demo'))
+        document = app.state.store.add(session, 'document', user, {
+            'name': 'SYNTHETIC.txt', 'status': 'extracted', 'sha256': digest(text),
+            'passages': [{'id': 'synthetic-clause', 'text': text, 'locator': 'SYNTHETIC §1'}]}, matter)
+        session.commit()
+    payload = {'title': 'SYNTHETIC cohort lock fixture', 'issue': 'SYNTHETIC pending conditions',
+        'evidence': [{'evidence_id': 'synthetic-clause', 'passage_sha256': digest(text),
+                      'document_revision': document.revision, 'start': 0, 'end': len(text)}],
+        'premises': [{'id': 'p1', 'kind': 'assumption', 'text': 'SYNTHETIC unverified delivery'}],
+        'rules': [{'id': 'r1', 'kind': 'contract_clause', 'text': 'SYNTHETIC selected clause',
+            'evidence_ids': ['synthetic-clause'], 'conditions': [{'id': 'c1', 'text': 'SYNTHETIC delivery'},
+                                                               {'id': 'c2', 'text': 'SYNTHETIC notice'}]}],
+        'applications': [{'id': 'a1', 'rule_id': 'r1', 'premise_ids': ['p1'], 'rationale': 'SYNTHETIC original',
+            'assessments': [{'condition_id': key, 'status': 'unknown', 'premise_ids': ['p1']} for key in ('c1', 'c2')]}],
+        'conclusion': {'text': 'SYNTHETIC provisional', 'application_ids': ['a1'], 'next_step': 'SYNTHETIC inspect'}}
+    return app, client, f'/api/v1/matters/{matter}', payload
+
+
+@pytest.mark.parametrize('replay', [False, True])
+def test_cohort_freeze_serializes_conflicting_nonce_and_identical_retry(workspace, monkeypatch, replay):
+    from test_analysis_cohorts import count, pair
+
+    from app import analysis_cohorts as cohorts
+
+    app, client, *_ = workspace
+    endpoint, spec, _, calls = pair(_cohort_workbench(workspace), monkeypatch)
+    preview = client.post(endpoint + '/preview', json=spec).json()
+    body = {**spec, 'request_id': uuid4().hex, 'expected_preview_sha256': preview['preview_sha256']}
+    competing_body = body if replay else {**body, 'purpose': 'SYNTHETIC competing payload under the same nonce'}
+    locked, release = Event(), Event()
+    audit = cohorts._audit
+
+    def paused(*args, **kwargs):
+        audit(*args, **kwargs)
+        locked.set()
+        assert release.wait(10)
+
+    monkeypatch.setattr(cohorts, '_audit', paused)
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, endpoint, json=body)
+        try:
+            assert locked.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, endpoint, json=competing_body)
+                assert observed[0].wait(5) and wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, competing = first.result(timeout=5), second.result(timeout=5)
+    assert accepted.status_code == 201, accepted.text
+    assert competing.status_code == (201 if replay else 409), competing.text
+    if replay:
+        assert competing.json()['id'] == accepted.json()['id']
+    assert count(app) == 1 and not calls
+
+
+def test_cohort_freeze_locks_selected_jobs_against_actual_cancel_and_retains_snapshot(workspace, monkeypatch):
+    from test_analysis_cohorts import pair
+
+    from app import analysis_cohorts as cohorts
+
+    app, client, *_ = workspace
+    endpoint, spec, comparisons_endpoint, calls = pair(_cohort_workbench(workspace), monkeypatch)
+    monkeypatch.setattr(app.state.research_jobs, 'submit', lambda _ident: None)
+    selected = spec['selections'][0]
+    response = client.post(comparisons_endpoint + '/' + selected['comparison_id'] + '/run')
+    assert response.status_code == 202, response.text
+    job = response.json()['arms']['single_pass']['job']
+    assert job['status'] == 'queued'
+    preview = client.post(endpoint + '/preview', json=spec).json()
+    body = {**spec, 'request_id': uuid4().hex, 'expected_preview_sha256': preview['preview_sha256']}
+    locked, release = Event(), Event()
+    audit = cohorts._audit
+
+    def paused(*args, **kwargs):
+        audit(*args, **kwargs)
+        locked.set()
+        assert release.wait(10)
+
+    monkeypatch.setattr(cohorts, '_audit', paused)
+    cancel_url = comparisons_endpoint.rsplit('/comparisons', 1)[0] + '/suggestions/' + job['id'] + '/cancel'
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, endpoint, json=body)
+        try:
+            assert locked.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, cancel_url)
+                assert observed[0].wait(5) and wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, canceled = first.result(timeout=5), second.result(timeout=5)
+    assert accepted.status_code == 201, accepted.text
+    assert canceled.status_code == 200, canceled.text
+    frozen = accepted.json()['manifest']
+    assert frozen['captures'][0]['capture']['arms']['single_pass']['status'] == 'queued'
+    current = client.get(endpoint + '/' + accepted.json()['id'])
+    assert current.status_code == 200 and current.json()['freshness']['status'] == 'stale'
+    assert current.json()['manifest'] == frozen and not calls
+
+
 def test_stop_commit_first_blocks_publication(workspace):
     app, _, matter = workspace
     ident = seed_run(app, matter, status='running')
