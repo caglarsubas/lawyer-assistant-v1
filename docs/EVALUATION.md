@@ -28,6 +28,16 @@ It is not blinded and does not automatically emit qualification rows. Complete
 capture is record completeness; approval and benefit flags remain false. Unknown
 measurements cannot be substituted with zero to satisfy the protocol below.
 
+[Confidential cohort reconciliation](ANALYSIS_COHORTS.md) freezes 2–12 explicitly
+selected registered captures from one authorized workspace. It partitions exact
+rubric/model/policy/budget and real/synthetic profiles, exposes duplicate inputs,
+declared-family/source overlap and reserved-family conflicts, and retains differing
+reviewer outcomes and unknown measurements. A later change produces a separate
+stale projection without rewriting the frozen report. This selected development
+inventory neither verifies family independence nor substitutes for the held-out
+protocol below. It produces no scorer rows, legal verdict or preparation-time gain;
+all qualification and benefit flags remain false.
+
 ## Run a scoped evaluation
 
 ```sh

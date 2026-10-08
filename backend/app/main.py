@@ -19,6 +19,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 from sqlalchemy.orm.exc import StaleDataError
 
+from .analysis_cohorts import cohort_router
 from .analysis_comparisons import comparison_router
 from .analysis_reviews import review_router
 from .analysis_suggestions import PURPOSE as ANALYSIS_SUGGESTION_PURPOSE
@@ -283,6 +284,7 @@ def create_app(settings=None):
     app.include_router(review_router())
     app.include_router(suggestion_router())
     app.include_router(comparison_router())
+    app.include_router(cohort_router())
     app.include_router(practice_router())
     app.include_router(governance_router())
     app.include_router(portfolio_router())

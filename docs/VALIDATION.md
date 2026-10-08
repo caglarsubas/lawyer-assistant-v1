@@ -1,4 +1,71 @@
-# Verification record — 7 October 2026
+# Verification record — 8 October 2026
+
+## R05A confidential comparison cohorts — 8 October 2026 (Asia/Shanghai)
+
+PR #23 merged as `e427f66f9c7da7273f107d6452e68a3dd9ed47ab`; its three PR checks
+and [exact post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37715917289)
+passed. This packet freezes 2–12 explicitly selected registered private comparisons
+inside one authorized workspace. It preserves incompatible profiles, declared-family
+and source overlap, reserved-family conflicts, opposing reviewer judgments and
+unknown measurements. Reconciliation makes no inference call or legal/benefit score.
+
+- **305 relevant backend checks passed in 103.34s**, including **32 focused cases**.
+  They cover stable actor/clock-independent previews, strict selections, encrypted
+  immutable snapshots, identical retries and changed nonces, current assigned-reviewer
+  outcomes, unassessed dimensions and unresolved findings, private attachment export,
+  current/stale projections, membership/CSRF/workspace boundaries, source relocation,
+  missing records, integrity/substitution rejection, pagination, archive behavior,
+  16 MiB bounds and existing retention inventory inclusion. Provider/source changes
+  injected after cohort/audit creation roll back both. Separate live dependency hashes
+  detect a second change to already-stale facts/documents even when the reported stale
+  reason is unchanged. These injected cases are final-save guards, not concurrent writers.
+- **140 frontend tests passed** and strict TypeScript/Vite build passed. The cohort
+  module loads only after explicit opening; copied trial histories mount only after
+  explicit inspection. Main JS is 503.23 KB / 142.76 KB gzip, with a separate 13.24 KB /
+  4.78 KB gzip cohort chunk. The existing 500 KB advisory remains enabled. **41
+  deployment contracts passed in 1.001s**; repository-wide Ruff and the R01 planning
+  contract check passed. No dependency, migration, CI job, timeout, retry or worker
+  was added. The complete backend suite remains required in hosted CI and was not
+  repeated locally; planning validity grants no qualification.
+- **32 focused isolated Linux cases passed in 48.61s**, with matching final
+  application/test fingerprints. The preloaded development runtime was refreshed
+  offline with unchanged dependency manifests. The disposable non-root container
+  had no network, ports or host mounts, read-only root, dropped capabilities,
+  no-new-privileges and CPU/memory/PID limits. An earlier broad local Linux subset
+  exceeded the verification harness's 90-second cap; it is not recorded as a pass
+  or a failed assertion. The narrowed feature check used the same cap. Cleanup passed.
+  This is not a fresh production-image build or capacity qualification.
+- **Thirteen real PostgreSQL races passed in 13.86s** in randomly named disposable
+  child databases. Three new cases verify competing cohort freezes with changed
+  payloads or identical retries, and an actual selected-job cancellation contender
+  waiting on its job-row lock. The frozen queued snapshot survives later cancellation,
+  with a stale current projection. Existing comparison event, review-head and adoption
+  races also passed. The existing PostgreSQL CI job includes these cases. Cleanup passed.
+- The isolated browser fixture prepared two synthetic protocols with separate rubrics
+  and declared families, six mocked proposal calls, opposing reviewer labels,
+  unassessed dimensions, unresolved findings and explicit synthetic active time.
+  Actual UI selection → preview → freeze verified two separate profiles, repeated
+  inputs/versions, cross-family document overlap and one declared reserved-family
+  conflict. Original Unicode passages, conflicting outcomes and unknown GPU/reviewer
+  time were inspected. Actual current and stale attachment downloads retained the
+  exact manifest and cohort hashes. A later effort entry produced Stale without
+  changing the frozen report or encrypted payload. Reconciliation added **zero** calls;
+  version 1 and its changes-requested review remained unchanged. Final 1280 × 720
+  rendering used numbered settings groups and collapsed details, with no captured
+  console warnings/errors. The tab, both loopback listeners, disposable containers
+  and only this rehearsal's copied download files were cleaned up.
+
+[Retained synthetic verification](evidence/private-analysis-cohort-verification-2026-10-08.json)
+binds final application/test/frontend fingerprints, image, checks, browser evidence
+and cleanup to the dirty branch based on PR #23's exact merge, before this packet's
+commit. Root `.env` and real provider keys were not read or changed. The approved
+exact laptop-tunnel exception remains unchanged. No client data, real provider call,
+source/legal approval, graph/index activation or live application deployment occurred.
+R05A remains partial: representative independent semantic/adverse qualification,
+held-out release protocols, reviewed public/history synthesis, measured benefit and
+calibrated Standard/Deep remain open. Retention inventory inclusion does not establish
+physical erasure. See the [cohort contract](ANALYSIS_COHORTS.md) and
+[evaluation boundaries](EVALUATION.md).
 
 ## R05A registered private analysis comparisons — 7 October 2026 (Asia/Shanghai)
 
