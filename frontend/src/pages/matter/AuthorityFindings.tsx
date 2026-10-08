@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { ApiError, downloadAuthorityReview, post, request } from '../../api';
 import { Badge, Detail, Field, Notice } from '../../components';
 import { formatDate, messageOf } from '../../utils';
@@ -6,6 +6,8 @@ import { LinkedAuthorityView } from './AnalysisAuthorities';
 import { assessmentPayload, committedFindingReceipt, FINDING_DIMENSIONS, FINDING_OUTCOMES } from './authorityFindingTypes';
 import type { EditableAssessment, FindingInputs, FindingOutcome, FindingSummary, FindingView } from './authorityFindingTypes';
 import { occurrence, occurrenceKey } from './authorityTypes';
+
+const AuthorityComparisons = lazy(() => import('./AuthorityComparisons'));
 
 export function FindingViewContent({ value }: { value: FindingView }) {
   const snapshot = value.snapshot;
@@ -26,12 +28,13 @@ export function FindingViewContent({ value }: { value: FindingView }) {
   </>;
 }
 
-function ReviewCard({ item, base, matterId, analysisId, contextId }: { item: FindingSummary; base: string; matterId: string; analysisId: string; contextId: string }) {
+function ReviewCard({ item, base, matterId, analysisId, contextId, onUnavailable }: { item: FindingSummary; base: string; matterId: string; analysisId: string; contextId: string; onUnavailable?: (cause: unknown) => void }) {
+  const [comparisonsOpen, setComparisonsOpen] = useState(false);
   const [view, setView] = useState<FindingView | null>(null); const [busy, setBusy] = useState(false); const [error, setError] = useState('');
   const mounted = useRef(true); useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
-  async function inspect() { setView(null); setError(''); setBusy(true); try { const value = await request<FindingView>(`${base}/${encodeURIComponent(item.id)}`, { cache: 'no-store' }); if (mounted.current) setView(value); } catch (cause) { if (mounted.current) setError(messageOf(cause)); } finally { if (mounted.current) setBusy(false); } }
-  async function download(format: 'json' | 'docx' | 'pdf') { setBusy(true); setError(''); try { await downloadAuthorityReview(matterId, analysisId, contextId, item.id, format); } catch (cause) { if (mounted.current) { setView(null); setError(messageOf(cause)); } } finally { if (mounted.current) setBusy(false); } }
-  return <Detail title={`${item.sequence}. avukat incelemesi · ${item.reviewer_name}`}><button className="text-button" disabled={busy} onClick={() => void inspect()}>İncelemeyi aç / güncel bağları kontrol et</button>{view && <><FindingViewContent value={view} /><div className="practice-record-actions">{(['json', 'docx', 'pdf'] as const).map(format => <button key={format} className="text-button" disabled={busy || !view.public_source_access || !view.snapshot || view.freshness.status !== 'current'} onClick={() => void download(format)}>{format.toUpperCase()} incelemeyi indir</button>)}</div></>}{error && <Notice error>{error}</Notice>}</Detail>;
+  async function inspect() { setView(null); setError(''); setBusy(true); try { const value = await request<FindingView>(`${base}/${encodeURIComponent(item.id)}`, { cache: 'no-store' }); if (mounted.current) { setView(value); if (!value.public_source_access) onUnavailable?.(new Error('Kaynak incelemesi bekletiliyor; özgün bağlamı yeniden açın.')); } } catch (cause) { if (mounted.current) setError(messageOf(cause)); } finally { if (mounted.current) setBusy(false); } }
+  async function download(format: 'json' | 'docx' | 'pdf') { setBusy(true); setError(''); try { await downloadAuthorityReview(matterId, analysisId, contextId, item.id, format); } catch (cause) { if (mounted.current) { setView(null); setError(messageOf(cause)); onUnavailable?.(cause); } } finally { if (mounted.current) setBusy(false); } }
+  return <Detail title={`${item.sequence}. avukat incelemesi · ${item.reviewer_name}`}><button className="text-button" disabled={busy} onClick={() => void inspect()}>İncelemeyi aç / güncel bağları kontrol et</button>{view && <><FindingViewContent value={view} /><div className="practice-record-actions">{(['json', 'docx', 'pdf'] as const).map(format => <button key={format} className="text-button" disabled={busy || !view.public_source_access || !view.snapshot || view.freshness.status !== 'current'} onClick={() => void download(format)}>{format.toUpperCase()} incelemeyi indir</button>)}</div>{view.public_source_access && view.snapshot && <Detail title="Bulgulara bağlı taslak karşılaştırması"><button className="text-button" disabled={busy} onClick={() => setComparisonsOpen(true)}>Yeni taslağı özgün bulgularla karşılaştır</button>{comparisonsOpen && <Suspense fallback={<p>Karşılaştırma yükleniyor…</p>}><AuthorityComparisons matterId={matterId} analysisId={analysisId} contextId={contextId} reviewId={item.id} onUnavailable={cause => { setView(null); setError(messageOf(cause)); onUnavailable?.(cause); }} /></Suspense>}</Detail>}</>}{error && <Notice error>{error}</Notice>}</Detail>;
 }
 
 function FindingEditor({ inputs, base, onSaved, onFailure }: { inputs: FindingInputs; base: string; onSaved: (pending: boolean) => void; onFailure: (cause: unknown) => void }) {
@@ -65,7 +68,7 @@ function FindingEditor({ inputs, base, onSaved, onFailure }: { inputs: FindingIn
   </form>;
 }
 
-export default function AuthorityFindings({ matterId, analysisId, contextId }: { matterId: string; analysisId: string; contextId: string }) {
+export default function AuthorityFindings({ matterId, analysisId, contextId, onUnavailable }: { matterId: string; analysisId: string; contextId: string; onUnavailable?: (cause: unknown) => void }) {
   const base = `/matters/${encodeURIComponent(matterId)}/analyses/${encodeURIComponent(analysisId)}/authority-contexts/${encodeURIComponent(contextId)}/reviews`;
   const [inputs, setInputs] = useState<FindingInputs | null>(null); const [items, setItems] = useState<FindingSummary[]>([]); const [more, setMore] = useState(false); const [loaded, setLoaded] = useState(false);
   const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [notice, setNotice] = useState(''); const mounted = useRef(true); useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
@@ -74,7 +77,7 @@ export default function AuthorityFindings({ matterId, analysisId, contextId }: {
   return <><p className="small">İnceleme bu kaynak bağlamı ve özel taslak sürümüne bağlıdır. Önceki yargılar korunur; yeni inceleme onları silmez. Mesleki yeterlilik veya bağımsız hukuki doğrulama bu kayıtla kanıtlanmaz.</p>
     <div className="practice-record-actions"><button className="text-button" disabled={busy} onClick={() => void load()}>Yeni inceleme için kaynak bağlarını getir</button><button className="text-button" disabled={busy} onClick={() => void history()}>Avukat inceleme geçmişini getir</button></div>
     {notice && <Notice>{notice}</Notice>}{inputs && <FindingEditor inputs={inputs} base={base} onSaved={pending => { setInputs(null); setNotice(pending ? 'İnceleme kaydedildi; son izin kontrolü tamamlanamadı. Saklanan kayıt bekletiliyor; yeni girdilerle ayrı inceleme gerekli.' : 'İnceleme kaydedildi. Güncel bağları kontrol etmek için saklanan kaydı açın.'); void history(); }} onFailure={cause => { setInputs(null); setError(messageOf(cause)); }} />}
-    {items.map(item => <ReviewCard key={item.id} item={item} base={base} matterId={matterId} analysisId={analysisId} contextId={contextId} />)}
+    {items.map(item => <ReviewCard key={item.id} item={item} base={base} matterId={matterId} analysisId={analysisId} contextId={contextId} onUnavailable={onUnavailable} />)}
     {loaded && !items.length && <p>Bu kaynak bağlamında avukat incelemesi yok.</p>}{more && <button className="text-button" disabled={busy} onClick={() => void history(true)}>Önceki incelemeleri getir</button>}{error && <Notice error>{error}</Notice>}
   </>;
 }

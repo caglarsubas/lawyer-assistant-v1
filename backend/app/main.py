@@ -36,6 +36,7 @@ from .auth import (
     require_matter,
     user_view,
 )
+from .authority_comparisons import authority_comparisons_router
 from .authority_findings import authority_findings_router
 from .config import ROOT, load_settings
 from .context_packing import context_export_lines
@@ -289,6 +290,7 @@ def create_app(settings=None):
     app.include_router(cohort_router())
     app.include_router(authority_context_router())
     app.include_router(authority_findings_router())
+    app.include_router(authority_comparisons_router())
     app.include_router(practice_router())
     app.include_router(governance_router())
     app.include_router(portfolio_router())
