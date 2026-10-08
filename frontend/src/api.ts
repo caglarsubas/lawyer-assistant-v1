@@ -168,3 +168,16 @@ export async function downloadAuthorityAdjudication(base: string, id: string, fo
   link.href = url; link.download = `ozel-dayanak-degerlendirmesi-${id}.${format}`;
   document.body.append(link); link.click(); link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+
+export async function downloadAuthorityTrial(base: string, id: string) {
+  let response: Response;
+  try { response = await fetch(`${BASE}${base}/export`, { credentials: 'same-origin', cache: 'no-store' }); }
+  catch { throw new ApiError('Deneme paketi indirilemedi. Yerel bağlantıyı kontrol edin.', 0); }
+  if (!response.ok) {
+    if (response.status === 401) unauthorizedHandler?.();
+    throw new ApiError(errorText(await response.json().catch(() => null)), response.status);
+  }
+  const url = URL.createObjectURL(await response.blob()); const link = document.createElement('a');
+  link.href = url; link.download = `ozel-dayanak-denemesi-${id}.json`;
+  document.body.append(link); link.click(); link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}

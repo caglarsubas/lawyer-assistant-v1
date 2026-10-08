@@ -1,0 +1,115 @@
+{
+  "schema": "registered-authority-trial-verification-v1",
+  "recorded_at": "2026-10-08T16:45:04.092828+00:00",
+  "local_date": "2026-10-09",
+  "base_commit": "86566953c798b3a2af9cb0a42cdee9f370e88d27",
+  "base_main_ci": {
+    "run": 37803944075,
+    "conclusion": "success"
+  },
+  "synthetic_only": true,
+  "production_qualified": false,
+  "source": {
+    "application": {
+      "sha256": "18220c148d226be465293d07cf1effc9ef063aadeacdb66b1561246804afd5e6",
+      "files": 119
+    },
+    "tests": {
+      "files": 85,
+      "sha256": "a160240ed7a1587ecd7cabf7a9307ca324b7f73bc5c1dea8c2d56d68ec3878a9"
+    }
+  },
+  "checks": {
+    "backend": {
+      "passed": 3056,
+      "skipped": 48,
+      "warnings": 28,
+      "seconds": 387.64,
+      "command": "pytest backend/tests -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30"
+    },
+    "frontend": {
+      "passed": 180,
+      "files": 22,
+      "strict_build": "passed",
+      "trial_chunk_kb": 15.86,
+      "trial_chunk_gzip_kb": 5.3
+    },
+    "focused_trial_cases": 37,
+    "postgres": {
+      "passed": 45,
+      "seconds": 83.27,
+      "cleanup_verified": true
+    },
+    "offline_linux": {
+      "exit_code": 0,
+      "passed": 268,
+      "pytest_seconds": 100.35,
+      "container_wall_seconds": 101.583
+    },
+    "linux_cleanup_verified": true,
+    "deployment_contracts": 41,
+    "contract_cli": {
+      "ruff-final": 0,
+      "deployment-final": 0,
+      "ontology-final": 0,
+      "planning-final": 0,
+      "calibration-fixture": 0,
+      "calibration-final": 0,
+      "study-fixture": 0,
+      "study-final": 0,
+      "actionlint-final": 0,
+      "git-diff-final": 0
+    }
+  },
+  "browser": {
+    "synthetic_only": true,
+    "registration_ui_saved": true,
+    "separate_accounts": 2,
+    "partial_capture_ui_saved": true,
+    "explicit_zero_preserved": true,
+    "unknown_effort_preserved": true,
+    "json_download_sha256": "63fd27cf20a1f2ade4a00c14ba481cadff6dbfdc439377aa2a772ea640b40af4",
+    "stale_after_private_change": true,
+    "frozen_capture_unchanged": true,
+    "stale_export_status": 409,
+    "provider_calls": [],
+    "production_qualified": false,
+    "withheld_after_simulated_rights_denial": true,
+    "withheld_protocol_and_capture": true,
+    "withheld_export_status": 409,
+    "cached_trial_notes_hidden": true,
+    "cached_original_review_hidden": true,
+    "cached_source_context_hidden": true,
+    "trial_editor_unmounted": true,
+    "console_warnings_errors": 0,
+    "owned_tab_closed": true,
+    "owned_preview_listeners_closed": true,
+    "owned_download_moved_to_ignored_verification": true
+  },
+  "log_and_screenshot_sha256": {
+    "backend-final.log": "803cb53c30649453d450f49d8222cfaf35be4bec66f41cf0a3ebc27f3ebc753e",
+    "frontend-tests.log": "6e7ea94194cfe2e079652aac618bc5b369d143e71d0ab3ada4d94d3d1aedefc4",
+    "frontend-build.log": "08b7ed9e3ddbc769ef9bc06a1e1bfad46830315cd87da2e9b3db637f2cbcb231",
+    "postgres.log": "2f2cb62873e197c52d5ccc5597ed6c04d75fcd5b9717b3e9b6984b59d3e21d72",
+    "linux-tests.log": "4d87548f097bcbcd89da9d0f9bd37d10a40dec66999abdffb7d0f72b288fae4e",
+    "focused-final.log": "08873fd8c6b07f78f7fedf6279a22c295b1490ff2a43b9019adddb99020592d8",
+    "browser/current.png": "d682f81d8c0a0df75515e5a0f12e8d63c229ab4f719822a76dace6d8527f5244",
+    "browser/stale.png": "d4cd467393a5daad445439b9f170b3cae6ec62d1936eb02763c9aa8088ee5249",
+    "browser/withheld.png": "03413aee68e5342a9b8e6811c3cb5b4f50c04c6f4754fce692f6ce77efef8f5c"
+  },
+  "qualification_limits": [
+    "lawful real source and historical/effect validation",
+    "professional credentials and actual reviewer independence",
+    "representative legal correctness or adverse recall",
+    "held-out model comparisons and Standard/Deep benefit",
+    "production load and deployment"
+  ],
+  "changes_not_made": [
+    "provider calls or credentials",
+    "network or source permissions",
+    "public graph mutations",
+    "schema or dependencies",
+    "CI jobs workers retries or deadlines",
+    "deployment"
+  ]
+}

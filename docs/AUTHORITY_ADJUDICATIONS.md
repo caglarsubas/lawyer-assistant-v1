@@ -90,7 +90,8 @@ needed. There are no new provider calls, graph mutations or network permissions.
 Synthetic observations and simulated source rights test engineering behavior only.
 Representative lawful source packs, actual independent legal adjudicators, historical
 identity/effect review and held-out evaluation remain required. R05A stays partial.
-The next bounded engineering packet is registered same-input public-authority comparisons
-that pin these independent observations and active effort without claiming statistical
-benefit or changing source-use permissions. See [roadmap](ROADMAP.md), [evaluation](EVALUATION.md)
+These observations can now be pinned by [registered fixed-evidence human revision
+trials](REGISTERED_AUTHORITY_TRIALS.md), with registration before revision and explicit
+original/revised work time. No model benchmark, statistical benefit or source-use
+permission is inferred. Next: confidential authority-trial cohort reconciliation. See [roadmap](ROADMAP.md), [evaluation](EVALUATION.md)
 and [verification](VALIDATION.md).

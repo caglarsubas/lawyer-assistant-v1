@@ -1,4 +1,59 @@
-# Verification record — 8 October 2026
+# Verification record — 9 October 2026
+
+## R05A registered fixed-evidence human authority trials — 9 October 2026 (Asia/Shanghai)
+
+PR #28 merged as `86566953c798b3a2af9cb0a42cdee9f370e88d27`; its PR checks and
+[exact post-merge main run 37803944075](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37803944075)
+passed. This packet registers the original case/source/rubric before human revision,
+then retains the exact comparison, assigned-account observations and active workflow
+effort. The original draft predates registration; no model benchmark, blinded/randomized
+trial, professional independence, legal approval or statistical improvement is claimed.
+
+- **3,056 backend tests passed in 387.64s**, using the unchanged two-worker worksteal,
+  no-worker-restart, maxfail-one CI command. **48 PostgreSQL/drill cases skipped**, 28
+  existing warnings. **37 focused trial tests** cover pre-revision registration,
+  fixed case input/chronology, account roles/separation, true-to-scope completion,
+  explicit zero/unknown effort, differing judgments, re-capture after reviewer updates,
+  nonce/head history, sealed/foreign routes, precommit rollback, pending admission,
+  source denial and post-serialization export rejection.
+- **180 frontend tests in 22 files and strict TypeScript/Vite build passed.** Trial
+  tools load a separate lazy chunk (15.86 KB / 5.30 KB gzip); forms start blank,
+  lists/page reads and revalidation are explicit. The existing main-bundle 500 KB
+  advisory remains enabled. **41 deployment contracts**, repository Ruff, actionlint,
+  RDF/SHACL, Compose with `/dev/null` env, R01 planning, actual synthetic extraction
+  and dossier-bound study checks passed. Ontology remains legally unreviewed with
+  **zero actual published historical records**.
+- **268 offline Linux cases passed in 100.35s**, with matching final backend/test
+  fingerprints, no network, ports or host mounts, non-root/read-only runtime,
+  dropped capabilities, no-new-privileges and bounded CPU/memory/PID/tmpfs. The
+  existing locked test dependencies were reused; this is not a production image or
+  throughput qualification. Owned containers were removed.
+- **45 real PostgreSQL cases passed in 83.27s**, using the exact three CI test files
+  and random disposable child databases on pinned PostgreSQL. Three new capture
+  races observe actual second-writer blocking on the workspace row lock, then prove
+  one identical replay, conflicting nonce and competing head. The schema is unchanged.
+- **Built UI rehearsal used invented documents, signed synthetic source bytes and
+  simulated rights.** Registration was saved in the browser before a server-authored
+  v2 comparison and observations from two separately signed-in fixture accounts.
+  The browser selected records and saved/reopened a partial capture: original
+  preparation 10s, verification 20s, correction explicitly 0s; revised times unknown,
+  all inclusion confirmations unchecked, both reviewers' judgments unassessed/unresolved.
+  Confidential JSON downloaded and matched retained capture seals. A changed private
+  passage made it Stale without rewriting the capture; export returned HTTP 409.
+  Simulated rights denial returned Withheld with null protocol/capture, closed export,
+  removed cached trial/source-review/source-context notes from the DOM and unmounted
+  the editor. There were zero provider calls and browser console warnings/errors.
+  The owned preview API/UI listeners and browser tab were closed, and the owned
+  download was moved to ignored verification storage.
+
+[Retained verification metadata](evidence/private-authority-trials-verification-2026-10-09.json)
+contains exact source/log/screenshot fingerprints and synthetic limitations. Ignored
+raw logs, synthetic fixtures/keys and confidential export remain in
+`.data/verification/r05a-authority-trials/`; they are excluded from Git. The original
+checkout, `.env`, source/provider permissions, dependencies, schema, CI job/worker/
+retry/deadline configuration and deployment remain untouched. R05A is still partial;
+[workflow](REGISTERED_AUTHORITY_TRIALS.md) details the engineering and legal boundaries.
+
 
 ## R05A separate-account semantic/adverse observations — 8 October 2026 (Asia/Shanghai)
 
