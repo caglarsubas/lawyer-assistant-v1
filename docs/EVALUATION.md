@@ -222,3 +222,25 @@ manual time remains unknown. Historical research staleness is visible and does n
 refresh research coverage. Dependency/source revocation invalidates export without
 rewriting snapshots. Representative independent legal/adverse adjudication remains
 required before public synthesis or measured benefit; synthetic fixtures grant none.
+
+
+## Separate-account public comparison observations (R05A engineering boundary)
+
+The [adjudication workflow](AUTHORITY_ADJUDICATIONS.md) excludes the candidate draft,
+original authority-review and comparison authors from submitting observations on
+that comparison. This is account separation, not proof of independent people or
+professional qualifications. Six semantic/logic observations and every original
+finding disposition receive explicit outcomes, notes and bounded exact source links.
+Coverage counts include only declared assessed dimensions/findings. Unresolved and
+unassessed entries never become passes. Supported/agree declarations do not establish
+semantic repair, correctness, jurisdiction, binding force or issue completeness.
+
+Adverse scope is explicitly no search or inspection of named selected sources with
+limitations. It cannot establish corpus-wide adverse discovery or recall. Reviewer
+heads retain differing latest opinions without majority voting or automatic consensus.
+Manual review seconds stay separate from full preparation time, model compute and
+registered same-input baseline measurements. Snapshots bind exact sources/drafts,
+recipes, permissions and account eligibility; changes invalidate effective export.
+No score rows, source-use permissions, public graph knowledge, model prompts, qualified
+synthesis or Standard/Deep benefit are automatically produced. R03–R05 actual lawful
+source and independent legal review gates remain open; synthetic records grant none.

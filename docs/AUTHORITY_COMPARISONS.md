@@ -115,8 +115,8 @@ rejected without partial saves. Up to 100 comparisons per retained review; defau
 Synthetic tests use invented law and simulated rights; real signed bytes prove
 engineering bindings only. Actual R03–R05 rights, historical identity and legal-effect
 reviews, representative independent semantic/adverse adjudication, held-out evaluation,
-qualified public synthesis and measured Standard/Deep benefit remain open. The next
-bounded packet is independent semantic/adverse adjudication of source-linked
-comparisons with explicit review coverage, without manufacturing legal approvals or
-qualification scores. See [findings](AUTHORITY_FINDINGS.md), [context](ANALYSIS_AUTHORITIES.md),
+qualified public synthesis and measured Standard/Deep benefit remain open. The follow-up [separate-account adjudication](AUTHORITY_ADJUDICATIONS.md) captures
+semantic/adverse observations with explicit coverage and per-reviewer disagreement.
+It does not manufacture legal approvals or qualification scores. Registered
+same-input public-authority comparisons with pinned observations/effort follow next. See [findings](AUTHORITY_FINDINGS.md), [context](ANALYSIS_AUTHORITIES.md),
 [roadmap](ROADMAP.md), [evaluation](EVALUATION.md) and [verification](VALIDATION.md).

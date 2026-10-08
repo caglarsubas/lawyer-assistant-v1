@@ -1,0 +1,153 @@
+{
+  "schema": "private-authority-adjudication-verification-v1",
+  "recorded_at": "2026-10-08T13:08:32.755325+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "67297774ac5d5d873f91e53e42280925a39d27ce",
+  "base_main_ci": {
+    "run": 37774321638,
+    "conclusion": "success"
+  },
+  "source": {
+    "application": {
+      "sha256": "91755e6fdc37e395f46f4074c34540677c70b8c69d69ff9dff5c69dc4f3b777b",
+      "files": 118
+    },
+    "tests": {
+      "files": 84,
+      "sha256": "aeaf7be39dd746e9bf1124314614ed58934207b1ffdaba9660b65b9618b639a7"
+    }
+  },
+  "frontend_source": {
+    "files": 72,
+    "sha256": "9b9a8128514aeec0751ff57df944f73d59cf1c25a60ae5745811c17af44a0a2c"
+  },
+  "host_backend": {
+    "passed": 3019,
+    "skipped": 45,
+    "seconds": 380.51,
+    "workers": 2,
+    "distribution": "worksteal",
+    "automatic_worker_restarts": 0
+  },
+  "frontend": {
+    "passed": 173,
+    "strict_typescript_build": true,
+    "main_js_kilobytes": 506.56,
+    "main_js_gzip_kilobytes": 143.34,
+    "existing_bundle_advisory_enabled": true
+  },
+  "deployment_contracts": {
+    "passed": 41,
+    "seconds": 0.694
+  },
+  "linux": {
+    "schema": "private-authority-comparison-verification-v1",
+    "recorded_at": "2026-10-08T12:49:27.631683+00:00",
+    "synthetic_only": true,
+    "production_qualified": false,
+    "base_commit": "67297774ac5d5d873f91e53e42280925a39d27ce",
+    "checkout_dirty": true,
+    "host": {
+      "system": "Darwin",
+      "architecture": "arm64"
+    },
+    "test_image": "sha256:e2675c63297426cb237747b097e27053eb1bde9bbb4d38c39a455a944de66e6e",
+    "source": {
+      "application": {
+        "sha256": "91755e6fdc37e395f46f4074c34540677c70b8c69d69ff9dff5c69dc4f3b777b",
+        "files": 118
+      },
+      "tests": {
+        "files": 84,
+        "sha256": "aeaf7be39dd746e9bf1124314614ed58934207b1ffdaba9660b65b9618b639a7"
+      }
+    },
+    "limits": {
+      "network": "none",
+      "host_ports": [],
+      "host_mounts": [],
+      "read_only": true,
+      "cpu": 2,
+      "memory_bytes": 805306368,
+      "pids": 128,
+      "tmpfs_bytes": 268435456
+    },
+    "linux_tests": {
+      "exit_code": 0,
+      "passed": 231,
+      "pytest_seconds": 69.16,
+      "container_wall_seconds": 70.351
+    },
+    "cleanup_verified": true,
+    "not_established": [
+      "Turkish legal accuracy or semantic completeness",
+      "real-provider authentication or model performance",
+      "production capacity or latency",
+      "real-corpus retrieval quality or adverse recall",
+      "real source/legal approval",
+      "live application deployment"
+    ]
+  },
+  "postgres": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "all forty-two real PostgreSQL snapshot, authorization and research/adoption/context/review/comparison races from the exact CI selection in random disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 50.872,
+    "passed": 42,
+    "pytest_seconds": 49.12
+  },
+  "browser": {
+    "built_bundle": true,
+    "isolated_loopback_fixture": true,
+    "blank_outcomes_and_time": true,
+    "saved_and_reopened": true,
+    "semantic_assessed": 1,
+    "semantic_total": 6,
+    "findings_assessed": 1,
+    "findings_total": 6,
+    "adverse_search": "not_searched",
+    "time": null,
+    "download_formats": [
+      "json",
+      "docx",
+      "pdf"
+    ],
+    "private_change": "stale_exports_closed",
+    "source_revocation": "withheld_all_free_text",
+    "cached_ancestor_observations_removed": true,
+    "console_warnings_or_errors": 0,
+    "provider_calls": 0,
+    "draft_version_unchanged": 2,
+    "critical_blockers_unchanged": 2,
+    "original_ciphertexts_unchanged": true,
+    "current_capture_precedes_final_callback_only_correction": true,
+    "final_bundle_stale_and_withheld_verified": true
+  },
+  "cleanup": {
+    "owned_preview_listeners_closed": true,
+    "disposable_test_containers_removed": true,
+    "downloaded_owned_files_copied_to_ignored_verification_then_removed": true
+  },
+  "not_established": [
+    "professional qualifications or independence between people",
+    "actual Turkish legal or semantic correctness",
+    "corpus-wide adverse discovery or recall",
+    "real public source rights or legal approval",
+    "qualified synthesis or held-out release scores",
+    "Standard/Deep benefit or production capacity",
+    "real provider performance or deployment",
+    "GitHub billing savings"
+  ],
+  "log_sha256": {
+    "backend-final.log": "84203a5ccc47d0ca5ef9d2b9aefa25aeb3e3a4ed65ca1e77427a9726fb4c9ca9",
+    "frontend-tests-final.log": "57a285c1540de8bddccf9638b1f079b76e85bb99ce0ee9a1572e4c77d32ce5b0",
+    "frontend-build-final.log": "730c7165a7e4dc2a8e67354ca7e9a4b1a09916610f782db3a264aaaf6eeeb802",
+    "linux-tests.log": "c65928e256531ba0667a50fd6ea575e745988daa4046070c7211ede37847343e",
+    "postgres.log": "de787dc51b9050b35005b6086a414bf9f5a5a00041055f330824de66d8d84e3c",
+    "deploy-tests.log": "d240d3823dd7a148d60796c4e0e2b8dc77433ebefb3de8a7fc83cf499b1fb41e"
+  }
+}
