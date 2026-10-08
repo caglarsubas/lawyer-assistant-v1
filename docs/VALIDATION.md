@@ -1,5 +1,76 @@
 # Verification record — 8 October 2026
 
+## R05A explicit public-authority context — 8 October 2026 (Asia/Shanghai)
+
+PR #24 merged as `f9d6c9694b024bf1c6b91a1a99985c24e6c982f6`; its three PR checks
+and [exact post-merge main CI](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37726028253)
+passed. This packet links explicitly selected public assertion/passage/authority
+occurrences to exact private draft steps. It retains original signed evidence,
+historical provision identity, separate research/event dates and lawyer-declared
+roles without inferring applicability, semantic support or legal approval.
+
+- **528 relevant backend checks passed in 154.11s**, with two worksteal workers and
+  no worker restart, including **45 focused cases**. They cover exact occurrences
+  and targets, historical citation versus target-version intervals, unresolved
+  identities, Unicode offsets, ambiguous/invented evidence rejection, immutable
+  encrypted packets, scope/membership/CSRF, strict selections, nonce conflicts,
+  pending post-commit receipts, archive and pagination bounds, live dependency
+  revalidation, stale snapshots, public revocation/pin failures, and JSON/DOCX/PDF
+  quote/pin preservation. Private changes injected after record/audit creation
+  roll back both; late render/guard failures discard attachment bytes. These
+  injections are final-save/output guards, not concurrent-writer tests.
+- **149 frontend tests passed** and strict TypeScript/Vite build passed. The tools,
+  research candidates and saved contexts load only after explicit opening. Main JS
+  is 504.63 KB / 143.01 KB gzip; the separate authority-context chunk is 15.10 KB /
+  5.16 KB gzip. The existing 500 KB advisory remains enabled. **41 deployment
+  contracts passed in 1.104s**; repository-wide Ruff with the exact CI configuration
+  and the R01 planning check passed. No dependencies, migrations, CI jobs, limits,
+  retries or workers were added. The complete backend suite remains required in
+  hosted CI; planning validity grants no qualification.
+- **45 focused offline Linux cases passed in 21.54s**, with exact final application
+  and test fingerprints matching the isolated branch. An existing locked development
+  runtime was refreshed with unchanged dependencies. The disposable non-root
+  container had no network, ports or host mounts, read-only root, dropped
+  capabilities, no-new-privileges and CPU/memory/PID limits. Cleanup passed. This is
+  not a fresh production-image build or capacity qualification.
+- **Fifteen real PostgreSQL races passed in 20.99s** in randomly named disposable
+  child databases. Two new public-context cases observed competing saves waiting
+  on the workspace row lock: changed requests conflict and identical retries return
+  one packet. Existing cohort cancellation, comparison, review and adoption races
+  also passed. The existing PostgreSQL CI job includes the new cases. Cleanup passed.
+- An isolated browser rehearsal used invented law text, a test-only Ed25519 key and
+  simulated permissions over actual signed physical bytes. Explicit source/role/three
+  draft-target selection → preview → freeze → inspection and actual JSON/DOCX downloads
+  preserved the exact original Unicode quote, source hashes and manifest digest.
+  The research date was 2011-03-01 and private event date 2024-03-01; no applicability
+  was inferred. A private passage correction produced Stale with the frozen manifest
+  unchanged and HTTP 409 export. Simulated revocation produced Withheld, no manifest
+  or public quotes and HTTP 409 export. The original encrypted analysis stayed at
+  version 1 with its unqualified legal-norm blocker; no model was called. Final
+  stale/withheld inspection matched final application source. Initial selection and
+  download capture preceded nonblank-input validation, envelope-reserve and guide-copy
+  hardening; both source fingerprints are recorded. No console warnings/errors were
+  captured. The tab, two loopback listeners and only this rehearsal's copied downloads
+  were cleaned up.
+
+Concurrent provider/context edits appeared in the original shared checkout during
+one late regression run and caused an import mismatch (424 passed, one failed);
+that attempt is not counted as a pass. Only this packet's owned files were copied
+into a managed worktree from the exact verified merge. Its final fingerprints match
+the independently verified offline image and the 528-check regression passed there.
+The unrelated shared edits were preserved and are excluded from this packet.
+
+[Retained synthetic verification](evidence/private-analysis-authority-context-verification-2026-10-08.json)
+binds final source/frontend fingerprints, image, checks, phase-specific browser
+proof and cleanup to the isolated dirty branch before commit. Root `.env` and real
+provider keys were not read or changed. The approved exact laptop-tunnel exception
+is unchanged. No client data, real inference, actual legal/rights approval, shared
+public-graph mutation or live deployment occurred. R05A remains partial: source-bound
+lawyer applicability/relationship findings, representative independent semantic/adverse
+qualification, measured benefit and calibrated Standard/Deep remain open. Current
+means technical availability; it does not clear legal blockers. See the
+[context contract](ANALYSIS_AUTHORITIES.md) and [evaluation boundaries](EVALUATION.md).
+
 ## R05A confidential comparison cohorts — 8 October 2026 (Asia/Shanghai)
 
 PR #23 merged as `e427f66f9c7da7273f107d6452e68a3dd9ed47ab`; its three PR checks

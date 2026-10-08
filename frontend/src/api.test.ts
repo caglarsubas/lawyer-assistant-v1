@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ApiError, fetchOriginal, onUnauthorized, post, request, setCsrfToken } from './api';
+import { ApiError, downloadAuthorityContext, fetchOriginal, onUnauthorized, post, request, setCsrfToken } from './api';
 
 describe('session and request boundaries', () => {
   const fetchMock = vi.fn<typeof fetch>();
@@ -58,6 +58,18 @@ describe('session and request boundaries', () => {
   it('surfaces server-side policy denials and never converts them to success', async () => {
     fetchMock.mockResolvedValue(new Response(JSON.stringify({ detail: 'Dış ağ erişimi kapalı' }), { status: 403 }));
     await expect(post('/matters/m1/gateway/execute', { request_id: 'r1' })).rejects.toMatchObject({ status: 403, message: 'Dış ağ erişimi kapalı' });
+  });
+
+  it('retains a structured committed receipt while keeping the request failed for explicit UI handling', async () => {
+    const data = { detail: 'Kayıt saklandı; son izin denetimi tamamlanamadı.', outcome: 'committed_needs_revalidation', needs_revalidation: true, id: 'aac-' + 'a'.repeat(20) + '-' + 'b'.repeat(32) };
+    fetchMock.mockResolvedValue(new Response(JSON.stringify(data), { status: 409 }));
+    await expect(post('/matters/m1/analyses/a1/authority-contexts', {})).rejects.toMatchObject({ status: 409, message: data.detail, data });
+  });
+
+  it('rechecks attachment access using encoded same-origin paths and never turns a denied export into a download', async () => {
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ detail: 'Kaynak izni bekletiliyor.' }), { status: 409 }));
+    await expect(downloadAuthorityContext('matter/1', 'analysis/2', 'context/3', 'docx')).rejects.toMatchObject({ status: 409 });
+    expect(fetchMock.mock.calls[0]).toEqual(['/api/v1/matters/matter%2F1/analyses/analysis%2F2/authority-contexts/context%2F3/export?format=docx', { credentials: 'same-origin', cache: 'no-store' }]);
   });
 
   it('preserves cancellation instead of reporting a network failure', async () => {

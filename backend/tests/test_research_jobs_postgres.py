@@ -388,6 +388,46 @@ def test_cohort_freeze_serializes_conflicting_nonce_and_identical_retry(workspac
     assert count(app) == 1 and not calls
 
 
+@pytest.mark.parametrize('replay', [False, True])
+def test_public_authority_context_freeze_serializes_conflicting_nonce_and_identical_retry(workspace, monkeypatch, replay):
+    from test_analysis_authorities import count, ready
+
+    from app import analysis_authorities as authorities
+
+    app, client, *_ = workspace
+    endpoint, spec, *_ = ready(_cohort_workbench(workspace), monkeypatch)
+    preview = client.post(endpoint + '/preview', json=spec).json()
+    body = {**spec, 'request_id': uuid4().hex, 'expected_preview_sha256': preview['preview_sha256']}
+    competing_body = body if replay else {**body, 'purpose': 'SYNTHETIC different payload under same nonce'}
+    locked, release = Event(), Event()
+    audit = authorities._audit
+
+    def paused(*args, **kwargs):
+        audit(*args, **kwargs)
+        locked.set()
+        assert release.wait(10)
+
+    monkeypatch.setattr(authorities, '_audit', paused)
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, endpoint, json=body)
+        try:
+            assert locked.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, endpoint, json=competing_body)
+                assert observed[0].wait(5) and wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, competing = first.result(timeout=5), second.result(timeout=5)
+    assert accepted.status_code == 201, accepted.text
+    assert competing.status_code == (201 if replay else 409), competing.text
+    if replay:
+        assert competing.json()['id'] == accepted.json()['id']
+    assert count(app) == count(app, authorities.ADMISSION) == 1
+    shown = client.get(endpoint + '/' + accepted.json()['id']).json()
+    assert shown['freshness']['status'] == 'current' and shown['public_source_access']
+
+
 def test_cohort_freeze_locks_selected_jobs_against_actual_cancel_and_retains_snapshot(workspace, monkeypatch):
     from test_analysis_cohorts import pair
 
