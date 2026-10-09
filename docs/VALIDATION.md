@@ -1,5 +1,82 @@
 # Verification record — 10 October 2026
 
+## R05A registered same-input model-authority trials — 10 October 2026 (Asia/Shanghai)
+
+PR #35 is verified merged at `5ee45d1782da1da7cd36c2b729345d9377719847`;
+exact post-merge main run `37969967765` passed. This next engineering packet adds
+[registered local-model authority trials](REGISTERED_AUTHORITY_MODEL_TRIALS.md)
+and awaits manual merge. Deployment and legal qualification remain separate.
+
+Immutable registration selects current original-review or latest admitted-renewal
+inputs before inference. The full private draft, public passages/human assessment,
+selected open findings, provider/recipe/budget, rubric/family/origin and assigned
+accounts are frozen. Both candidates remain unadopted. Separate source-linked
+semantic/adverse judgments, all-source finding dispositions, explicit active effort,
+immutable disagreements and unknown measurements govern capture completeness;
+no benefit, expertise or qualification is inferred.
+
+Synthetic verification covers both input kinds, exact renewed versus original
+assessment identity, permanent receipts/no adoption, separate accounts, complete
+judgments, unknown effort, evidence requirements for positive/adverse declarations,
+rejected repair provenance, private/source/review/model/account changes, source
+withholding, in-flight revocation, nonce/override/mixed-input rejection, corrupt
+admission, post-commit guard failure and byte-discarding export checks. Registration
+also rolls back a detected changed input before commit. Pending committed records
+cannot be finalized by replay.
+
+Local checks passed:
+
+- Full backend: **3,215 passed, 62 skipped**, 28 existing dependency warnings in
+  **439.54 seconds**, two workers without restarts. Skips are 59 separately executed
+  PostgreSQL cases and three existing opt-in infrastructure drills.
+- Final model-authority/private-comparison/renewal focused regression: **84 passed** in
+  **36.04 seconds**, after fixing the shared polling helper to require two arms.
+  A transient source-publication admission withholds capture; empty arms never
+  establish completion. Final full-suite and restricted-container runs include the guarded renewal-history mapping.
+- Real PostgreSQL: **59 passed** in **145.42 seconds**, disposable child databases;
+  identical observation replay and competing own-head writes serialize under the
+  case lock. A pending replay may conflict and cannot finalize admission. Cleanup
+  was verified. This includes the final no-edit synthetic repair fixture.
+- Restricted offline Linux: **304 passed** in **144.54 seconds**; final application
+  and test fingerprints match the checkout. Network disabled, read-only filesystem,
+  capabilities dropped, two CPUs, 768 MiB, no host mounts/ports. Cleanup verified.
+  An earlier run exposed the polling-helper mistake; it was fixed without weakening
+  source/admission checks, increasing deadlines or adding worker retries.
+- Frontend: production build and **207 tests** passed. Existing main-bundle 500 KB
+  advisory remains; trial components load only by explicit action.
+- **41 deployment contracts**, Ruff, actionlint, ontology/SHACL, R01 planning and
+  synthetic calibration/study contracts, and Compose configuration passed. Compose
+  used `/dev/null` with disposable placeholders and did not read `.env`.
+
+CI retains the same three jobs, one PR event run, 20/5/5-minute job limits, existing
+step deadlines, two workers and no restarts/retries. New trial checks join the
+existing human-review group. Workflow-based collection proves **3,277 unique IDs**:
+89 preflight, 3,018 main, 10 publication, 81 workspace and 79 human-review checks,
+with zero duplicate/missing IDs. Local timing does not establish hosted runtime or
+billing savings; verify the created PR's exact head separately.
+
+The final production frontend was rehearsed on an owned loopback service with
+invented evidence and a mocked local provider. The lawyer explicitly selected one
+renewed historical finding, sample origin and two assigned accounts, registered a
+protocol through the UI, ran both arms and saved synthetic effort declarations.
+Reload retained both completed candidates and effort history while draft version 3
+remained unchanged; capture stayed incomplete with zero observer judgments. Exact
+original public quotations, historical mismatch flags and unresolved renewal
+observations remained inspectable. No console warnings/errors were observed.
+The rehearsal caught and fixed the latest-history dependency projection and strict
+selection mapping; the latter has a frontend regression test. Trial checkboxes and
+action spacing use existing interface styles. Proof: `model-trial-history.jpg` in
+the retained verification directory. Owned browser/server cleanup is recorded in
+the [synthetic evidence report](evidence/authority-model-trials-verification-2026-10-10.json).
+
+Verification logs and disposable rehearsal artifacts are retained in
+`.data/verification/r05a-model-authority-trials/`. No real public-source acquisition
+or approval, local/BYOK provider call, credential change, customer access grant,
+schema migration, shared-graph mutation or live deployment occurred. **R05A remains
+partial**: confidential model-authority cohort reconciliation is next; lawful corpus
+and legal review, representative Turkish semantic/adverse evaluation, measured
+real-model benefit, Standard/Deep qualification and release gates remain open.
+
 ## R05A reviewed retained-source binding renewal — 10 October 2026 (Asia/Shanghai)
 
 PR #34 is verified merged at `f0595702679386f7ccce9d11a5cb4119b3b1552f`;

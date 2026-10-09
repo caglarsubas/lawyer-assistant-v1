@@ -9,6 +9,7 @@ export interface LineagePreview {
 export interface EditableRenewal { dependency_sha256: string; note: string; seconds: string; sources: EditableAssessment[] }
 export interface LineageRecord extends LineageRef {
   version_id: string; snapshot: { sequence: number; version_id: string; reviewer_name: string; recorded_at: string; dimensions: Record<FindingDimension, string>;
+    entries?: { dependency_sha256: string; dependency: { context_id: string; review_id: string; review_sha256: string } }[];
     renewals?: (AuthorityAssessment & { dependency_sha256: string })[] };
 }
 export function pendingLineageReceipt(data: unknown): string | null {

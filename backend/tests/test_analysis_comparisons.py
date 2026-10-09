@@ -87,7 +87,10 @@ def completed(client, endpoint, ident):
         response = client.get(endpoint + '/' + ident)
         assert response.status_code == 200, response.text
         value = response.json()
-        if all(item['status'] not in {'not_started', 'queued', 'running', 'cancelling'} for item in value['arms'].values()):
+        # A public-source job can briefly withhold its capture while its
+        # post-commit admission is pending. Empty arms are not completion.
+        if len(value['arms']) == 2 and all(item['status'] not in {'not_started', 'queued', 'running', 'cancelling'}
+                                         for item in value['arms'].values()):
             return value
         time.sleep(.01)
     pytest.fail('Synthetic comparison did not finish')

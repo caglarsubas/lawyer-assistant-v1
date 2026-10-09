@@ -10,6 +10,11 @@ The scope is selected private evidence. Public/historical law, adverse-authority
 recall, semantic correctness and Standard/Deep analysis remain unqualified. This
 protocol does not replace the held-out release protocol in [EVALUATION.md](EVALUATION.md).
 
+Selected public-review or admitted-renewal inputs now have a separate
+[registered model-authority trial](REGISTERED_AUTHORITY_MODEL_TRIALS.md) protocol.
+Its full public assessment, evidence checks and histories must not be mixed into
+this private comparison capture.
+
 ## Register before running
 
 In **Çalışma notları → Yapılandırılmış analiz taslakları → Protokole bağlı özel

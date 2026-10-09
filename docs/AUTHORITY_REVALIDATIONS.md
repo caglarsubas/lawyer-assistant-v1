@@ -94,8 +94,11 @@ cannot silently discard provenance. Every reference resolves to its sealed human
 record, completed proof and the immutable version it created.
 
 Invented source fixtures, mocked inference, PostgreSQL locks and offline Linux
-checks establish engineering behavior only. Registered same-input local-model
-authority trials remain next. Lawful reviewed corpus acquisition, representative
+checks establish engineering behavior only. The latest admitted renewal can now
+serve as an explicitly identified input to [registered local-model authority
+trials](REGISTERED_AUTHORITY_MODEL_TRIALS.md). It preserves the original review
+dependency and uses the renewed human assessment without rewriting former model
+responses or declaring the original review current. Lawful reviewed corpus acquisition, representative
 Turkish semantic/adverse evaluation, real-model performance, measured lawyer
 benefit, deployment and release qualification remain open. See [roadmap](ROADMAP.md)
 and [validation](VALIDATION.md).

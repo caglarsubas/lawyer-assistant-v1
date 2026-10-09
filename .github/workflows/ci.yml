@@ -13,6 +13,7 @@ env:
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_analysis_cohorts.py
+    backend/tests/test_authority_model_trials.py
   CI_WORKSPACE_SECURITY_TESTS: >-
     backend/tests/test_firm_admin.py
     backend/tests/test_content_scope.py

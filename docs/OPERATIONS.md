@@ -967,3 +967,27 @@ diagnose the incident; do not flip admission bits, strip retained source referen
 or retry to force acceptance. Missing proofs fail closed. There is no administrator
 override/automatic pending-record repair in this packet. Restore and target-host
 acceptance remain independent qualification work.
+
+## R05A registered model-authority trials
+
+[Registered model-authority trials](REGISTERED_AUTHORITY_MODEL_TRIALS.md) use existing
+local research workers and encrypted `authority_model_trial`,
+`authority_model_observation`, `authority_model_effort` and `authority_model_admission`
+case records. Existing retention, holds and deletion apply. No schema/service
+migration or new provider credentials are required. Use existing explicitly assigned
+authorized accounts; protocol registration itself grants no access or reviewer status.
+
+Each pair has permanent job receipts and at most three model calls. A failed or
+stopped arm requires a new protocol; Run cannot replay it. Partial reservation is
+visible. Check Current/Stale/Withheld state, exact original/renewal input seals, source
+permissions and provider settings before diagnosing absent candidates or export.
+Do not infer provider/GPU work from a missing response or treat recorded effort as
+automatic timing, qualification or benefit.
+
+`committed_needs_revalidation` means committed encrypted bytes remain pending.
+Preserve the receipt, event/protocol and admission record. Diagnose final source and
+participant authorization; do not flip completion bits, reseal inputs, strip renewal
+references or retry to force admission. There is no override or automatic repair.
+Source/admission failures clear protocol text, candidates, observations and effort
+history. The metadata list contains opaque IDs/dates/seals only. JSON exports are
+confidential case evidence and remain subject to firm handling after download.

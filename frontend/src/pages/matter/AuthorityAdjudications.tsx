@@ -5,7 +5,7 @@ import { formatDate, messageOf } from '../../utils';
 import { ComparisonEvidence } from './AuthorityComparisons';
 import { DISPOSITIONS } from './authorityComparisonTypes';
 import { adjudicationAssessment, committedAdjudicationReceipt, JUDGMENT_OUTCOMES, SEMANTIC_DIMENSIONS, SEMANTIC_OUTCOMES } from './authorityAdjudicationTypes';
-import type { AdjudicationInputs, AdjudicationLinks, AdjudicationView, AdverseScope, FindingJudgment, SemanticObservation } from './authorityAdjudicationTypes';
+import type { AdjudicationInputs, AdjudicationLinks, AdjudicationView, AdverseScope, AssessmentInputs, FindingJudgment, SemanticObservation } from './authorityAdjudicationTypes';
 import type { FindingSummary } from './authorityFindingTypes';
 
 const blankLinks = (): AdjudicationLinks => ({ note: '', target_refs: [], private_source_refs: [], public_source_indices: [] });
@@ -24,7 +24,7 @@ export function AdjudicationContent({ value }: { value: AdjudicationView }) {
     </>}<Detail title="Değerlendirme kimliği ve güncellik"><p className="reference-id">{value.id} · {value.adjudication_sha256}</p><p>{value.freshness.reasons.join(' · ') || 'Teknik bağlar güncel; hukuki onay verilmez.'}</p></Detail></>;
 }
 
-function LinkFields({ inputs, value, onChange }: { inputs: AdjudicationInputs; value: AdjudicationLinks; onChange: (change: Partial<AdjudicationLinks>) => void }) {
+export function LinkFields({ inputs, value, onChange }: { inputs: AssessmentInputs; value: AdjudicationLinks; onChange: (change: Partial<AdjudicationLinks>) => void }) {
   const comp = inputs.basis.comparison.comparison_snapshot;
   return <><Field label="Açıklama">{id => <textarea id={id} maxLength={2000} value={value.note} onChange={event => onChange({ note: event.target.value })} />}</Field>
     <Field label="İncelenen önceki / yeni adımlar">{id => <select id={id} multiple value={value.target_refs} onChange={event => onChange({ target_refs: Array.from(event.target.selectedOptions, item => item.value) })}>{(['before', 'after'] as const).flatMap(side => Object.keys(comp[`${side}_targets`]).map(key => <option key={`${side}:${key}`} value={`${side}:${key}`}>{side === 'before' ? 'Önceki' : 'Yeni'} · {key}</option>))}</select>}</Field>
