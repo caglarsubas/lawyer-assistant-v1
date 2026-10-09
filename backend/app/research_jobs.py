@@ -18,6 +18,7 @@ from sqlalchemy.orm.exc import StaleDataError
 
 from .auth import require_matter
 from .db import Record, User, now, uid
+from .firm_rbac import guard_job_write, require_permission
 
 ACTIVE = frozenset({"queued", "running", "cancelling"})
 LEASE_KEY = 709706249715316078
@@ -56,6 +57,7 @@ def ensure_active(state):
             raise JobStopped("timed_out")
 
 
+@guard_job_write
 def checkpoint(app, run_id, phase):
     app.state.research_owner()
     store = app.state.store
@@ -68,6 +70,7 @@ def checkpoint(app, run_id, phase):
         user = session.get(User, record.owner_id)
         if not user or not user.active:
             raise ValueError("Research access revoked")
+        require_permission(session, user, "matter.write")
         matter = require_matter(session, record.matter_id, user)
         if store.decode(matter).get("status") == "archived":
             raise JobStopped("cancelled")

@@ -15,7 +15,7 @@ export default function AssistantPanel({ workspaceId, page, section }: { workspa
   useEffect(() => { const abort = new AbortController(); request<SystemStatus>('/status', { signal: abort.signal }).then(setStatus).catch(() => undefined); return () => abort.abort(); }, []);
   const [mode, setMode] = useState<AssistantMode>('chat'); const controller = useRef<AbortController | null>(null); const entryId = useRef(0);
   const activeWorkspace = workspaces.find(workspace => workspace.id === workspaceId);
-  const contextLabel = workspaceId ? `${activeWorkspace?.title || 'Seçili çalışma alanı'} · ${SECTION_LABELS[section] || section}` : page === 'customers' ? 'Müvekkil portföyü' : page === 'graphs' ? 'Hukuk haritası' : page === 'sources' ? 'Kaynak incelemesi · kullanım rehberi' : page === 'coverage' ? 'Kaynak kapsamı' : page === 'system' ? 'Sistem durumu' : 'Çalışma alanı portföyü';
+  const contextLabel = workspaceId ? `${activeWorkspace?.title || 'Seçili çalışma alanı'} · ${SECTION_LABELS[section] || section}` : page === 'customers' ? 'Müvekkil portföyü' : page === 'graphs' ? 'Hukuk haritası' : page === 'sources' ? 'Kaynak incelemesi · kullanım rehberi' : page === 'coverage' ? 'Kaynak kapsamı' : page === 'firm-admin' ? 'Büro yönetimi · kullanım rehberi' : page === 'system' ? 'Sistem durumu' : 'Çalışma alanı portföyü';
   const filterLabel = filters.customer_ids.length ? customers.filter(customer => filters.customer_ids.includes(customer.id)).map(customer => customer.name).join(', ') : 'Tüm yetkili müvekkiller';
   const contextKey = JSON.stringify([workspaceId, page, section, filters]);
   // A late response must not be shown under a different workspace or portfolio filter.

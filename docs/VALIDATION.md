@@ -1,5 +1,76 @@
 # Verification record — 9 October 2026
 
+## W01 firm administration and permission foundation — 9 October 2026 (Asia/Shanghai)
+
+PR #31 is merged at `9db46fd292e80c57fed54a92494ea4a0eccab225`; exact post-merge
+main run `37903786237` passed. The approved firm-access amendment is integrated
+into the canonical roadmap without changing the R01–R08 identifiers. Delivery
+now proceeds W01 → W02 → W03 before the retained R05A source-lineage revalidation
+and registered model authority trials.
+
+W01 adds local employee administration, a zero/one-manager hierarchy, immutable
+starter and supported custom roles, revision conflicts, encrypted configuration
+history and fresh route/action checks. Configuration-only administrators receive
+no client/case access. Existing explicit memberships and credentials are retained;
+reporting creates no content grant. Role or employee edits invalidate affected
+sessions; PostgreSQL firm guards serialize configuration against admitted requests
+and short worker publication checkpoints. Response guards last through file-body
+completion. Inference does not hold a write-blocking guard.
+
+Final local verification:
+
+- **3,148 backend tests passed**, 54 skipped, 28 warnings in 406.14 seconds with
+  two workers. Skips are the 51 separately executed PostgreSQL cases and three
+  existing opt-in infrastructure drills.
+- **51 PostgreSQL cases passed** in 93.49 seconds on the pinned disposable 16.10
+  image. New cases observe actual advisory-lock blocking, independent-firm progress,
+  competing role edits and revoked sessions. Owned containers/databases were removed.
+- **201 exact-source offline Linux cases passed** in 77.61 seconds for administration,
+  authority proposals, offline user management, source reviews and human review groups. Source/test,
+  ontology and locked dependency fingerprints matched. The nonroot container had
+  no network, host ports or mounts, a read-only filesystem, two CPUs, 768 MiB,
+  128 PIDs and 256 MiB tmpfs; cleanup was verified.
+- **193 frontend tests passed** across 25 files; typecheck and production build
+  passed. The existing main-chunk advisory remains; administration is lazy loaded.
+- **41 deployment contracts**, RDF/SHACL, R01 planning/calibration/study contracts,
+  Ruff, actionlint, whitespace and Compose validation passed. Compose used all six
+  disposable placeholders and `/dev/null`, without reading a local `.env`.
+- A production-build browser rehearsal used three invented employees and one custom
+  role, with zero new case grants. The configuration-only account showed no private
+  portfolio controls; its scoped assistant guide used no provider or private records.
+  No console warning/error occurred. Owned tabs and the loopback server were closed.
+
+The first hosted attempt, run `37915720125` on `3d30e72ac635d3b78ad1c9f57975683dd2592516`,
+passed frontend/workspace and PostgreSQL/publication groups, but the backend step
+reached its unchanged 18-minute deadline at 96%. No assertion failure was recorded
+before timeout; the remaining checks were not completed. That head was not rerun.
+
+Profiling one 27-case synthetic review-group file found **110,005 permission lookups**.
+Permission resolution now reuses a parameterized query structure and reads the managed
+account and all role records in one fresh query, rather than two reads per managed
+lookup. No permission results are cached. A query-budget/freshness contract verifies
+three-role union, a subsequent permission change and empty-role denial, with one
+read per lookup. The final full suite and PostgreSQL races passed after this change.
+
+The existing frontend runner also executes the two heavy human-review group files
+with two bounded workers in a new three-minute step. Its five-minute job limit remains.
+Actual workflow collection proves **3,202 = 89 preflight + 2,996 main + 10 publication
++ 48 workspace-security + 59 human-review cases**, with zero overlap, omission or
+extras. The serial security group passed 48 cases in 11.84 seconds and the two-worker
+human-review group passed 59 in 44.30 seconds locally. The same three required job
+names/runners, no retries, backend worker count and existing step/job time limits
+remain. No coverage gate was removed. Hosted capacity and billing savings are not
+established by local timing; checks are reported separately for the final pushed head.
+
+SQLite demo coordination is single-process only. Production lock-loss/network-failure
+behavior and customer migration need target-host qualification. W02 explicit client
+and case responsibilities, supervisors and scoped revocation, and W03 human deadlines,
+tasks and written-opinion review are pending. These synthetic engineering checks do
+not qualify legal/model accuracy, corpus rights, pilot capacity or deployment. No
+live provider call, real employee/access change, credential edit, graph activation or
+production deployment occurred. See [requirements and boundaries](FIRM_RBAC_AND_SUPERVISION.md)
+and [verification metadata](evidence/firm-administration-verification-2026-10-09.json).
+
 ## R05A source-bound local authority proposals — 9 October 2026 (Asia/Shanghai)
 
 PR #30 is merged at `4c77c49aecdf933cc9224292667a8fba5d2f871e`; exact post-merge

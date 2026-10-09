@@ -1,6 +1,6 @@
 export type Domain = 'contracts' | 'commercial' | 'employment';
 export type FactStatus = 'documented' | 'alleged' | 'disputed' | 'assumption' | 'inference';
-export interface User { id: string; name: string; role: string; firm_id: string }
+export interface User { id: string; name: string; role: string; firm_id: string; permissions?: string[] }
 export interface Session { user: User; csrf_token: string; demo_mode: boolean }
 export interface Bootstrap { demo_mode: boolean; version: string }
 export interface SystemStatus {

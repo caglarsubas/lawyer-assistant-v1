@@ -10,7 +10,7 @@ const USES: Record<SourcePermittedUse, string> = { storage: 'Saklama', local_pro
 export interface AssessmentDraft { category: SourceReviewCategory; decision: SourceReviewDecision; rationale: string; reference: string; sha256: string; passage_ids: string[]; permitted_uses: SourcePermittedUse[] }
 export const EMPTY_ASSESSMENT: AssessmentDraft = { category: 'rights', decision: 'needs_changes', rationale: '', reference: '', sha256: '', passage_ids: [], permitted_uses: [] };
 type LoadState<T> = { status: 'loading' } | { status: 'loaded'; value: T } | { status: 'failed'; message: string; code?: number };
-export function canReviewSource(user: User) { return ['admin', 'curator'].includes(user.role); }
+export function canReviewSource(user: User) { return ['admin', 'curator'].includes(user.role) && (!user.permissions || user.permissions.includes('source.curate')); }
 export function sourceReviewPath(sourceId: string) {
   if (!/^[a-f0-9]{64}$/.test(sourceId)) throw new Error('Kaynak kimliği geçersiz.');
   return `/public-sources/${sourceId}`;
@@ -95,7 +95,7 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
   }, [loadReview, loadPassages]);
   const state = review.status === 'loaded' ? review.value : null;
   const owns = state?.assigned_to?.id === user.id;
-  const canRelease = state?.assigned_to && (owns || user.role === 'admin');
+  const canRelease = state?.assigned_to && (owns || (user.permissions ? user.permissions.includes('source.assign') : user.role === 'admin'));
   async function mutate(action: 'assignment' | 'assessments', payload: unknown) {
     if (busy) return; setBusy(true); setError(''); setMessage('');
     const controller = new AbortController(); mutationController.current = controller;

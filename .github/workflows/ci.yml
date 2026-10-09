@@ -10,6 +10,12 @@ concurrency:
   group: checks-${{ github.ref }}
   cancel-in-progress: true
 env:
+  CI_HUMAN_REVIEW_GROUP_TESTS: >-
+    backend/tests/test_authority_trial_cohorts.py
+    backend/tests/test_analysis_cohorts.py
+  CI_WORKSPACE_SECURITY_TESTS: >-
+    backend/tests/test_firm_admin.py
+    backend/tests/test_authority_proposals.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_open_validity_publication.py
     backend/tests/test_runtime_authorization_integration.py
@@ -48,8 +54,10 @@ jobs:
         run: |
           read -r -a preflight_tests <<< "$CI_ONTOLOGY_PREFLIGHT_TESTS"
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
+          read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
+          read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
           ignore_args=()
-          for path in "${preflight_tests[@]}" "${publication_tests[@]}"; do
+          for path in "${preflight_tests[@]}" "${publication_tests[@]}" "${workspace_tests[@]}" "${human_review_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
@@ -126,3 +134,21 @@ jobs:
         working-directory: frontend
       - run: npm test
         working-directory: frontend
+      # Use the existing runner's spare capacity; groups are disjoint and budgets unchanged.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install workspace contract dependencies
+        run: |
+          python -m pip install uv==0.8.15
+          uv sync --project backend --frozen --extra dev
+      - name: Test workspace permission and proposal contracts
+        timeout-minutes: 2
+        run: |
+          read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
+          backend/.venv/bin/pytest "${workspace_tests[@]}" -q --maxfail=1 --durations=10
+      - name: Test confidential human review groups
+        timeout-minutes: 3
+        run: |
+          read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
+          backend/.venv/bin/pytest "${human_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10

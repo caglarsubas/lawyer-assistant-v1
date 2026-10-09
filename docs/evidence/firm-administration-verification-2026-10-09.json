@@ -1,0 +1,202 @@
+{
+  "schema": "firm-administration-verification-v1",
+  "recorded_at": "2026-10-09T10:45:06.377573+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "9db46fd292e80c57fed54a92494ea4a0eccab225",
+  "checkout_dirty": true,
+  "host": {
+    "system": "Darwin",
+    "architecture": "arm64"
+  },
+  "test_image": "sha256:6d7e8b552ea07bf82977544e66b751f559646757caebec8a835d7895900ae1a5",
+  "source": {
+    "ontology_runtime": {
+      "ontology/build_catalog.py": "60cfdd479eac4a3175e0ac566377c42f80f8ee686a40f391558fe6da23de0914",
+      "ontology/rdfs_identifiers.py": "3a1879c70bf18fee0e21ff8ba7e91d78e855aef7c547fa777ff86e6827f12095",
+      "ontology/releases.py": "270e8de7352169075e8e8e9819e35db0820777cb7e0afa10d3ebd2d877bebb88",
+      "ontology/serving.py": "777eaf7bb1e98a7a678294506b2cb23ae67589642dac077aaeba217be9c00e15",
+      "ontology/temporal.py": "e14241239a580dcf997e3c9fbf785df05ca035d9fcc6a7feb01bb5e398d7548c",
+      "ontology/validation.py": "465eb0d099e3b2a38a3b41ee137e43f49dcbb723bfd9e7cab35b94cf9cb0de30"
+    },
+    "dependencies": {
+      "pyshacl": "0.40.1",
+      "owlrl": "7.6.2",
+      "rdflib": "7.6.0"
+    },
+    "application": {
+      "sha256": "1fb108bc92f7e286436436fe0fcebff7252f67e4efd35c311f7a20bc8345ad77",
+      "files": 124
+    },
+    "tests": {
+      "files": 89,
+      "sha256": "5d89187703661dadd6be0ab199bc1b49b9ddb7f83a24ef7cebdbf53399179bd3"
+    }
+  },
+  "limits": {
+    "network": "none",
+    "host_ports": [],
+    "host_mounts": [],
+    "read_only": true,
+    "cpu": 2,
+    "memory_bytes": 805306368,
+    "pids": 128,
+    "tmpfs_bytes": 268435456
+  },
+  "linux_tests": {
+    "exit_code": 0,
+    "passed": 201,
+    "pytest_seconds": 77.61,
+    "container_wall_seconds": 78.517
+  },
+  "cleanup_verified": true,
+  "not_established": [
+    "Turkish legal accuracy or semantic completeness",
+    "real-provider authentication or model performance",
+    "production capacity or latency",
+    "real-corpus retrieval quality or adverse recall",
+    "real source/legal approval",
+    "live application deployment",
+    "W02 client and case responsibilities or W03 human workflow delivery",
+    "SQLite multi-process coordination",
+    "production lock-loss or network-failure qualification",
+    "hosted CI speedup or billing savings"
+  ],
+  "baseline": {
+    "pr": 31,
+    "merge_commit": "9db46fd292e80c57fed54a92494ea4a0eccab225",
+    "post_merge_main_ci_run": 37903786237,
+    "post_merge_main_ci_conclusion": "success"
+  },
+  "native_backend": {
+    "passed": 3148,
+    "skipped": 54,
+    "warnings": 28,
+    "pytest_seconds": 406.14,
+    "skip_scope": "51 PostgreSQL cases executed separately; three existing opt-in infrastructure drills remain skipped"
+  },
+  "postgres": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "all fifty-one real PostgreSQL snapshot, authorization and research/adoption/context/review/comparison races from the exact CI selection in random disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 95.994,
+    "passed": 51,
+    "pytest_seconds": 93.49
+  },
+  "frontend": {
+    "passed": 193,
+    "files": 25,
+    "typecheck_build_exit_code": 0,
+    "existing_main_chunk_warning": true
+  },
+  "contracts": {
+    "deployment_cases": 41,
+    "rdf_shacl": "passed; structural engineering only",
+    "r01_planning_calibration_study": "passed; synthetic only",
+    "ruff": "passed",
+    "actionlint": "passed",
+    "whitespace": "passed",
+    "compose": "passed with placeholders and /dev/null env file"
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3202,
+      "preflight": 89,
+      "remaining": 2996,
+      "publication": 10,
+      "workspace": 48,
+      "human_review": 59
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_runtime_authorization_integration.py",
+      "backend/tests/test_publication_cli.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_authority_proposals.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "5e0801bd2191bd66d60f9995b4e2f4330e314318323801a5a6581d0c5e6dc2b4",
+    "workflow_sha256": "8ec152635d8f4682ae9165201206b6f80530c8e89d2b9c5d65eaee538e30c38d",
+    "no_runner_retry_existing_deadline_change": true,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "workspace_security_partition": {
+    "passed": 48,
+    "pytest_seconds": 11.84,
+    "new_runner_or_retry": false
+  },
+  "local_evidence_directory": ".data/verification/w01",
+  "hosted_checks_for_this_packet": "reported separately for the exact PR head; this file records local precommit verification",
+  "browser": {
+    "synthetic_only": true,
+    "employees_created": 3,
+    "custom_role_created": true,
+    "private_case_grants_created": 0,
+    "configuration_only_account_hides_private_portfolio_controls": true,
+    "scoped_guide_uses_no_provider_or_private_records": true,
+    "console_errors_or_warnings": 0,
+    "owned_loopback_server_stopped": true,
+    "owned_tab_closed": true,
+    "artifacts": {
+      "administration.png": "3d7ef20108d09056bda972eccb621623a327ec56f026d8a3fa0aec1ef0867de7",
+      "configuration-only.png": "d9ecd211092440acd31447d4da5c061003eec952c112e425deaafd55fc2cc31a",
+      "configuration-only-ax.txt": "d8dbfb31d0afb7cd199d6b5b516760123e479cc9c94b6ea5d52779c654e67d8d"
+    }
+  },
+  "retained_development_failures": [
+    "a nested test application lifespan started a second synthetic coordinator; fixture corrected",
+    "new route-action admission exposed an omitted readiness route and an intentional firm-change 401 contract; corrected and verified",
+    "an extra transition argument broke a legacy final-race test hook; the existing three-argument signature was preserved with current permission checks",
+    "initial browser fixture origin was absent from its allowlist; test fixture corrected without a runtime exception",
+    "initial Compose rehearsal omitted a synthetic extraction placeholder; corrected without reading a real .env",
+    "initial hosted backend reached its unchanged step deadline before all cases completed; follow-up keeps all gates, reduces fresh permission-read overhead and moves 59 heavy review cases into the existing frontend runner"
+  ],
+  "human_review_partition": {
+    "passed": 59,
+    "pytest_seconds": 44.3,
+    "workers": 2,
+    "existing_frontend_job_minutes": 5,
+    "new_step_minutes": 3,
+    "new_runner_or_retry": false
+  },
+  "first_hosted_attempt": {
+    "run": 37915720125,
+    "head_sha": "3d30e72ac635d3b78ad1c9f57975683dd2592516",
+    "conclusion": "failure",
+    "reason": "backend test step reached the unchanged 18-minute deadline at 96 percent; no assertion failure was logged before the timeout",
+    "frontend": "success: 193 frontend and 47 workspace tests",
+    "postgres": "success: 51 race and 10 publication cases",
+    "rerun_requested": false
+  },
+  "permission_read_profile": {
+    "synthetic_file": "backend/tests/test_authority_trial_cohorts.py",
+    "cases": 27,
+    "calls_to_permissions_for_before_optimization": 110005,
+    "managed_lookup_queries_before": 2,
+    "managed_lookup_query_budget_after": 1,
+    "authorization_result_cache": false,
+    "query_construction_reused": true,
+    "freshness_contract": "three assigned roles resolve within one read; changed permissions and empty assignments take effect on subsequent reads"
+  }
+}

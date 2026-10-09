@@ -6,6 +6,7 @@ from sqlalchemy import func, select
 from .auth import require_matter
 from .context_packing import pack_private_context
 from .db import Record, User, now, uid
+from .firm_rbac import guard_job_write
 from .graph import GraphBackendError
 from .policy import POLICY_VERSION
 from .provider import ProviderError
@@ -124,6 +125,7 @@ def run_research(app, run_id):
         finish_run(app.state.store, run_id, error_code=type(exc).__name__)
 
 
+@guard_job_write
 def publish_product(app, run_id, product, matter_version):
     """Commit output and completion together, serialized against cancellation.
 

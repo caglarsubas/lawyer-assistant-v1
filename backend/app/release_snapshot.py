@@ -24,6 +24,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from . import provision_mappings as mappings
 from . import source_reviews as reviews
 from .db import User
+from .firm_rbac import permissions_for
 from .provision_mapping_models import ProvisionMappingHead
 from .public_sources import PublicSourceError
 from .source_review_models import SourceReviewHead
@@ -130,7 +131,8 @@ def readonly_store(settings):
 def _operator(session, operator_id, *, shared=False):
     operator = session.scalar(select(User).where(User.id == operator_id).with_for_update(read=shared)
                               .execution_options(populate_existing=True))
-    if operator is None or not operator.active or operator.role not in {"admin", "curator"}:
+    if operator is None or not operator.active or (operator.role not in {"admin", "curator"}
+            or "source.curate" not in permissions_for(session, operator)):
         raise SnapshotError("An existing active administrator or curator operator is required")
     return operator
 

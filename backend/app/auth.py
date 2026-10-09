@@ -7,6 +7,7 @@ from fastapi import HTTPException, Request
 from sqlalchemy import select
 
 from .db import LoginSession, Membership, Record, User, digest
+from .firm_rbac import permissions_for, require_permission, route_permissions
 
 
 def hash_password(password):
@@ -21,7 +22,21 @@ def check_password(password, stored):
 
 
 def user_view(user):
-    return {"id": user.id, "name": user.name, "role": user.role, "firm_id": user.firm_id}
+    return {"id": user.id, "name": user.name, "role": user.role, "firm_id": user.firm_id,
+            "permissions": sorted(getattr(user, "action_permissions", []))}
+
+
+def hold_firm_guard(request, firm_id):
+    if getattr(request.state, "firm_guard", None):
+        if request.state.guard_firm_id != firm_id:
+            raise HTTPException(401, "Oturum veya kurum değişti")
+        return
+    guard = request.app.state.firm_authorization.guard(
+        firm_id, exclusive=request.url.path.startswith("/api/v1/firm-admin")
+    )
+    guard.__enter__()
+    request.state.firm_guard = guard
+    request.state.guard_firm_id = firm_id
 
 
 def authenticate(request: Request):
@@ -33,6 +48,18 @@ def authenticate(request: Request):
         user = session.get(User, login.user_id)
         if not user or not user.active:
             raise HTTPException(401, "Oturum geçersiz")
+        if not getattr(request.state, "firm_guard", None):
+            hold_firm_guard(request, user.firm_id)
+            # Account/session may have changed while admission waited for an update.
+            session.expire_all()
+            login = session.get(LoginSession, digest(token))
+            user = session.get(User, login.user_id) if login else None
+            if not user or not user.active or datetime.fromisoformat(login.expires_at) <= datetime.now(timezone.utc):
+                raise HTTPException(401, "Oturum geçersiz")
+        hold_firm_guard(request, user.firm_id)
+        user.action_permissions = permissions_for(session, user)
+        if not route_permissions(request.url.path, request.method) <= user.action_permissions:
+            raise HTTPException(403, "Bu işlem için rol izniniz yok")
         if request.method not in ("GET", "HEAD", "OPTIONS"):
             origin = request.headers.get("origin")
             if origin and origin not in request.app.state.settings.origins:
@@ -51,6 +78,7 @@ def require_matter(session, matter_id, user):
     member = session.get(Membership, (matter_id, user.id), populate_existing=True)
     if not matter or matter.kind != "matter" or matter.firm_id != user.firm_id or not member:
         raise HTTPException(404, "Dosya bulunamadı")
+    require_permission(session, current, "matter.read")
     return matter
 
 

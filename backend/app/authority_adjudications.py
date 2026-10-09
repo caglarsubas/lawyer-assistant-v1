@@ -15,6 +15,7 @@ from .auth import authenticate, require_child, require_matter
 from .db import Record, User, digest, now
 from .evidence_prompt import canonical
 from .exports import render_export
+from .firm_rbac import require_permission
 from .practice import StrictInput, _audit
 
 RECIPE = "private-authority-independent-adjudication-v1"
@@ -297,6 +298,7 @@ def _view(app, session, route, ident, user):
                 if not reviewer or reviewer.role not in {"lawyer", "admin"}:
                     raise HTTPException(403)
                 require_matter(session, route[0], reviewer)
+                require_permission(session, reviewer, "matter.review")
                 if reviewer.id in capture["basis"]["excluded_account_ids"]:
                     raise HTTPException(403)
             except HTTPException:

@@ -16,6 +16,7 @@ from .auth import authenticate, require_child, require_matter
 from .db import Record, User, digest, now
 from .evidence_prompt import canonical
 from .exports import render_export
+from .firm_rbac import require_permission
 from .practice import StrictInput, _audit
 
 RECIPE = 'private-authority-findings-v1'
@@ -216,6 +217,7 @@ def _view(app, session, matter_id, analysis_id, context_id, review_id, user):
                 if not reviewer or reviewer.role not in {'lawyer', 'admin'}:
                     raise HTTPException(403)
                 require_matter(session, matter_id, reviewer)
+                require_permission(session, reviewer, "matter.review")
             except HTTPException:
                 reasons.append('reviewer_access_changed')
             result.update(snapshot=data, public_source_access=True, is_latest_review=latest,

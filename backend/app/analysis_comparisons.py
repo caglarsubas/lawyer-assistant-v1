@@ -19,6 +19,7 @@ from .analysis_feedback import FeedbackSelection, resolve_feedback
 from .auth import authenticate, require_child, require_matter
 from .db import Record, User, digest, now
 from .evidence_prompt import canonical
+from .firm_rbac import require_permission
 from .practice import StrictInput, _audit
 
 RECIPE = "private-analysis-comparison-v1"
@@ -155,6 +156,7 @@ def _current(app, session, matter_id, user, plan):
             if not reviewer or not reviewer.active or reviewer.firm_id != user.firm_id:
                 raise HTTPException(404)
             require_matter(session, matter_id, reviewer)
+            require_permission(session, reviewer, "matter.review")
         except HTTPException:
             raise HTTPException(409, "Atanmış inceleyenlerin dosya erişimi değişti.") from None
 

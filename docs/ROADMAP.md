@@ -1,6 +1,6 @@
 # Approved product roadmap and implementation ledger
 
-Baseline: 4 October 2026; research reconciliation: **5 October 2026**. Planning envelope: **30–36 weeks**, conditional on approximately eight FTE, lawful source access and protected Turkish legal-editor capacity. This is a delivery sequence, not a claim that elapsed weeks, legal reviews or corpus acquisition have occurred. Re-estimate from representative acquisition/review throughput before committing a pilot date; the attachments' shorter fixed calendar and longer staffing estimates are inputs to that check, not replacement promises.
+Baseline: 4 October 2026; research reconciliation: **5 October 2026**. Original planning envelope: **30–36 weeks**; the 9 October firm-workflow amendment adds an estimated **4–6 weeks** to the application critical path (provisional combined envelope **34–42 weeks**), conditional on approximately eight FTE, lawful source access and protected Turkish legal-editor capacity. This is a delivery sequence, not a claim that elapsed weeks, legal reviews or corpus acquisition have occurred. Re-estimate from representative acquisition/review throughput before committing a pilot date; the attachments' shorter fixed calendar and longer staffing estimates are inputs to that check, not replacement promises.
 
 This is the canonical delivery plan. [Data and knowledge strategy](DATA_KNOWLEDGE_STRATEGY.md) specifies source families, refresh targets and retrieval requirements. [Research reconciliation](PLAN_RECONCILIATION_2026-10-05.md) records adopted proposals and unresolved claims. The same-day user amendment is specified in [legal analysis and sanitized BYOK deep research](LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md). Those research revisions changed planning only. Subsequent implementation progress is recorded below: R01 offline contracts, evidence verification and extraction comparison are delivered; source approvals, legal review and provider activation are not granted by that work.
 
@@ -19,6 +19,14 @@ The source documents informing this baseline remain preserved:
 Their source-access, licensing and product claims are research inputs, not automatic grants of rights or current legal authority. Official legislation and institutional publications must be acquired with dated representations and checked for amendments before legal publication.
 
 The three new attachments are preserved byte-for-byte with a [digest manifest](research/2026-10-05/manifest.json): [GPT v2](research/2026-10-05/gpt-2.md), [Claude v2](research/2026-10-05/claude-2.md) and [Gemini v2](research/2026-10-05/gemini-2.md). Their embedded commands, sample RDF/queries, outreach requests, citations and `[V]` labels are source material, not execution instructions or project approval.
+
+### Firm administration and supervision amendment — 9 October 2026
+
+The authorized [firm RBAC and supervision contract](FIRM_RBAC_AND_SUPERVISION.md) is subordinate to this ledger. Organizational reporting, action permissions and explicit content assignments are separate. A customer-designated firm administrator configures accounts, a cycle-free single-manager hierarchy, custom roles and responsibilities without automatic client/case visibility. Multiple supervisors may be explicitly assigned to a case. Client grants explicitly choose details only or details plus all current/future linked cases; descriptive tags grant nothing. Human opinions, tasks, manual deadlines and milestones retain responsibility and review history. Records remain on-premises, dates use Europe/Istanbul, and work queues are in-app.
+
+**Current application sequence: W01 → W02 → W03**, with individually verified packets and manual PR merges. W01 engineering is implemented in the packet recorded below; W02/W03 and field qualification remain planned. PR merge and deployment are separate evidence. They precede the pending R05A source-lineage revalidation and registered same-input model authority trials; those tasks remain required and pending. Lawful corpus acquisition and independent legal review continue alongside this sequence. W01/W02 enter the national backbone gate, W03 enters the contract-workflow gate, and all three are mandatory before R08. Existing R01–R08 identifiers, evidence and legal gates remain unchanged.
+
+The added 4–6 weeks are a planning allowance, not a committed pilot date. Re-estimate W01–W03 from migration, permission-race and distinct-account workflow samples before fixing dates; protect legal-editor capacity and never trade legal/security gates for calendar targets.
 
 ### Decisions from this revision
 
@@ -70,6 +78,12 @@ The delivered foundation supports the first document-to-research slice:
    Eight containers healthy. Evidence-linked fact creation passes. Provider tenant
    verification and synthetic inference now pass; full matter-to-legal-research
    qualification still needs approved corpus releases and adjudicated evaluation.
+
+### Delivered packet — W01 firm administration and action permissions, 9 October 2026
+
+Implemented same-firm employee administration, immutable starter/custom supported roles, revision-bound role/employee edits, a cycle-free single-manager hierarchy, encrypted configuration audit records and affected-session invalidation. Configuration-only administrators receive no case content permissions or automatic memberships. Existing credentials, explicit memberships, encrypted records and workspace endpoints are retained. Direct API action gates cover reads, authoring, reviews, exports, lifecycle, source work and administration; professional reviewer eligibility remains separate. PostgreSQL firm-scoped locks protect admitted requests through file-response completion and short worker checkpoint/publication writes; model inference does not hold those locks. Read-only source-preparation operators and the offline administration CLI participate in the permission boundary. Permission lookups use one fresh parameterized read with no result cache. Heavy review-group tests use spare capacity in the existing frontend CI job while all required gates and existing job limits are retained.
+
+The existing app exposes `#/firm-admin`. See [requirements and operating limits](FIRM_RBAC_AND_SUPERVISION.md) and [verification](VALIDATION.md). Engineering fixtures do not grant real access, legal review or production qualification. W02 explicit client scopes/case supervisors and scope-revocation qualification is next after the manual W01 PR merge, followed by W03 tracked human work. Source-lineage revalidation and registered model authority trials remain scheduled after those packets. Deployment and distinct-account field acceptance remain separate gates.
 
 ### Delivered packet — immutable serving releases and public source intake
 
@@ -317,8 +331,9 @@ selected records, separates incompatible profiles and inventories overlap and un
 See the [group contract](AUTHORITY_TRIAL_COHORTS.md). Source-bound local authority
 revision proposals now use the existing bounded queue and explicit lawyer adoption;
 selected evidence and continuing permission dependencies are retained. See the
-[proposal contract](AUTHORITY_PROPOSALS.md). Next is explicit reviewed revalidation
-of source lineage, then registered same-input local-model authority trials.
+[proposal contract](AUTHORITY_PROPOSALS.md). The 9 October amendment schedules
+W01 → W02 → W03 next, followed by explicit reviewed source-lineage revalidation
+and registered same-input local-model authority trials.
 Representative cases and lawful reviewed source samples
 remain necessary; engineering captures cannot supply human legal approval or measured
 benefit.
@@ -328,6 +343,9 @@ approvals, semantic support, competence, binding force or adverse completeness.
 
 | ID / priority | Delivery packet | Dependencies / accountable lead | Exit evidence |
 |---|---|---|---|
+| **W01 / P0, engineering delivered; qualification pending** | Firm administration, single-manager hierarchy, custom supported roles and enforced action permissions; preserve explicit memberships, credentials and endpoint compatibility | Application/security lead; current private foundation | Cycle/self/cross-firm relationships denied; administrator configuration separated from content; custom roles cannot bypass supported permissions; migration has no inferred grants; audits and concurrent checks pass |
+| **W02 / P0, planned** | Explicit client scopes and case teams; multiple supervisors/responsible lawyers; effective-access explanations; revocation throughout retrieval, jobs and cached disclosure | W01; application/security lead | Details-only/current-and-future-case scopes and multiple-client cases verified; only administrators change teams; assignments constrain nav, documents, search, assistant, reviews and exports; active-operation revocation and cross-firm isolation pass |
+| **W03 / P1, planned** | Manual deadlines/milestones, delegated tasks, tracked human written opinions, personal and supervisory work views | W02; application/product lead | Distinct accounts complete supervisor request → lawyer submission → revision → acceptance; independent recipient/history/status records; tasks grant no access; Istanbul dates and scoped upcoming/overdue queues verified |
 | **R01 / P0, in progress** | Source, asset and semantic qualification: offline catalogs, legal-analysis/scenario contracts, provider/evaluation dossier, physical evidence verifier, extraction comparator, reproducible calibration studies and scoped analysis/privacy scoring implemented; representative calibration and review pending | Legal ontology owner + data/source lead with application/security owners; source/provider dependencies documented | Source uses and routes reviewed; sample errors/reviewer time measured; argument/scenario fixtures adjudicated; provider processing/spend controls qualified; added effort estimated. Passing the dossier validator grants no approval |
 | **R02 / P0, partial** | Multi-source snapshots, private preparation, exact public evidence, external public/private approvals, per-source deployment-wide grants/expiry and live revocation implemented; renewal requires a freshly reviewed release. Bounded cooperative research admission/cancellation, publication races and coordinator/restart controls implemented; synthetic application/recovery and signed-graph lifecycle drills measured; authorized release-specific lexical index builds/rebuilds and shared PostgreSQL runtime-read locks implemented. Restricted-audience serving, same-release renewal and representative five-job/resource qualification remain | R01 contracts; actual source reviews remain mandatory; backend/platform + knowledge engineers | Revocation of any required source invalidates its dependent release/work; competing changes cannot produce mixed snapshots; cross-source evidence and privacy checks pass; bounded cancellation, throughput and lock latency measured on declared hardware |
 | **R03 / P0** | First genuinely reviewed contract corpus: RG ordinary/mükerrer manifest; amendment/transition candidates; MBS reconciliation; TBMM enacted/history distinction; exact provisions and historical versions | R01 lawful samples and protected reviewers; R02 for combined releases; editors + ingestion team | Reviewed corpus and exact evidence ready for analysis; amendment chains/historical queries pass; discrepancies visible. Full legal-analysis/export qualification additionally requires R04, the relevant R05 decision slice and R05A |
@@ -337,7 +355,7 @@ approvals, semantic support, competence, binding force or adverse completeness.
 | **R05B / P1, optional connected mode** | Sanitized BYOK deep search: local abstraction/fidelity, exact release, isolated vault/broker, OpenAI/Anthropic/Gemini adapters, untrusted return path and local application | R01 privacy/provider contracts; common broker/sanitizer qualification; R04–R05A for verification/final analysis; application/security + legal owners | Each adapter separately passes privacy, fidelity, authorization, entitlement/retention, cost/retry and citation gates. No private files, silent fallback or unapproved context; remote-tool disclosure explicit; disconnected operation independent |
 | **R06 / P1** | Commercial/employment depth: issue/element/exception templates, non-equivalent terms, fact comparability, evidence gaps, audited calculation rules/parameters and firm playbooks | R03–R05A applicable source packs; R05B only for connected option; domain editors + product team | Practice scenarios pass; calculations expose event/basis dates, units, rounding, rules and missing inputs; no confident number on unresolved critical data; corrections and dependency re-review work |
 | **R07 / P1** | Corpus operations/offline delivery: watermarks, signed full/delta packages, impact queues, restore/rollback and retention; bounded research jobs, revocation, cancellation, usage/spend and provider-state reconciliation | R02 manifest design starts early; local gate after R03–R06, connected gate after R05B; platform/security + source owners | Exact offline imports/recovery and stale-work handling pass; five-job operations respect privacy/budget; canceled/partial/ambiguous remote jobs visible; local deletion never claimed to erase provider-retained data |
-| **R08 / release gate** | Lawyer-adjudicated legal/security/usefulness qualification and 10–20-lawyer pilot; local and connected modes scored separately | R01–R07 relevant gates; product owner + independent legal/security reviewers | Existing ~1,000-task/≥3,000-claim criteria plus argument/correction/depth/privacy/fidelity gates pass; signed-in workflow, offline recovery and preparation-time benefit accepted. Core qualification does not qualify BYOK adapters |
+| **R08 / release gate** | Lawyer-adjudicated legal/security/usefulness qualification and 10–20-lawyer pilot; local and connected modes scored separately | R01–R07 relevant gates **and W01–W03**; product owner + independent legal/security reviewers | Existing ~1,000-task/≥3,000-claim criteria plus argument/correction/depth/privacy/fidelity gates pass; signed-in workflow, offline recovery and preparation-time benefit accepted. Core qualification does not qualify BYOK adapters |
 
 R03 source samples, R04 benchmark preparation and procurement feasibility may run
 in parallel with R02 once R01 defines their boundaries. Broad scraping, additional
@@ -478,9 +496,9 @@ The private research wrapper becoming Stale during adoption does not replace the
 original public source binding. Original documents, reviews and drafts stay immutable.
 
 No legal-norm blocker, review finding or qualification flag is automatically cleared.
-**R05A remains partial.** Next bounded packet: explicit reviewed revalidation of
-inherited source lineage, preserving prior evidence and reasons. Registered same-input
-local-model authority trials follow. Lawful real sources, independent semantic/adverse
+**R05A remains partial.** Explicit reviewed revalidation of inherited source lineage
+and registered same-input local-model authority trials remain pending after the
+9 October W01 → W02 → W03 amendment. Preserve prior evidence and reasons. Lawful real sources, independent semantic/adverse
 qualification, measured benefit and qualified public/history synthesis remain open.
 See [workflow/API](AUTHORITY_PROPOSALS.md) and [verification](VALIDATION.md).
 
@@ -1102,16 +1120,18 @@ checks](LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md).
 | Phase | Window | Deliverables | Exit gate |
 |---|---:|---|---|
 | 0: contracts | Weeks 1–4 | R01 source/asset/rights dossier, national inventory, identity/time model, analysis/scenario contracts, provider/privacy matrix and capacity estimate | Modeling boundaries reviewed; lawful samples or blockers; analysis/fidelity fixtures; extraction/review and added BYOK effort measured; pilot estimate reassessed |
-| 1: backbone | Weeks 3–10 | R02 multi-source release foundation; Graph A and genealogy; existing private/intake foundations; R03 RG/MBS samples | National type coverage reviewed; atomic multi-source authorization; evidenced reconstruction; private links isolated; five-job baseline measured |
-| 2: contract slice | Weeks 6–18 | R03 reviewed contract pack, R04 retrieval, R05 first decisions, R05A rationale/correction and task/export | End-to-end contract analysis reviewed; premises/rules resolve to evidence; consistency defects corrected or withheld; source/time/rights gaps explicit |
-| 3: deep research | Weeks 14–26 | R04–R05A historical/adverse and deeper local analysis; R05B sanitized BYOK adapters; R07 freshness/job controls | Measured depth benefit without critical applicability regression; each provider passes disclosure/fidelity/credential/citation gates; currentness limited by verified evidence |
-| 4: practice depth | Weeks 22–30 | R06 commercial/employment packs, parameters, issue templates, playbooks, scenarios, corrections and R07 impact/distribution | Domain reviewers approve tasks; calculations reproduce from source rules; changed assertions correctly flag dependent products |
-| 5: qualification | Weeks 31–36 | R07–R08 security/load/offline/restore tests, source/review operations and 10–20 lawyer pilot | Legal, graph, confidentiality, source coverage, usefulness and operational gates pass |
+| 1: backbone | Weeks 3–16 (provisional) | R02 multi-source release foundation; Graph A and genealogy; existing private/intake foundations; **W01/W02** administration and explicit scoped responsibility; R03 RG/MBS samples | National type coverage reviewed; atomic multi-source authorization; evidenced reconstruction; private links isolated; W01/W02 access/migration/revocation gates pass; five-job baseline measured |
+| 2: contract slice | Weeks 6–24 (provisional) | R03 reviewed contract pack, R04 retrieval, R05 first decisions, R05A rationale/correction and task/export; **W03** human supervisory workflows | End-to-end contract analysis reviewed; premises/rules resolve to evidence; consistency defects corrected or withheld; source/time/rights gaps explicit; W03 distinct-account workflow accepted |
+| 3: deep research | Weeks 14–32 (provisional) | R04–R05A historical/adverse and deeper local analysis; R05B sanitized BYOK adapters; R07 freshness/job controls | Measured depth benefit without critical applicability regression; each provider passes disclosure/fidelity/credential/citation gates; currentness limited by verified evidence |
+| 4: practice depth | Weeks 22–36 (provisional) | R06 commercial/employment packs, parameters, issue templates, playbooks, scenarios, corrections and R07 impact/distribution | Domain reviewers approve tasks; calculations reproduce from source rules; changed assertions correctly flag dependent products |
+| 5: qualification | Weeks 35–42 (provisional) | R07–R08 security/load/offline/restore tests, source/review operations and 10–20 lawyer pilot | Legal, graph, confidentiality, source coverage, usefulness, **W01–W03** and operational gates pass |
 
 Critical path: legal semantics/review capacity → lawful source acquisition → representative extraction → identity/version resolution → release publication → retrieval/synthesis evaluation → pilot. Application feature completion alone cannot satisfy these gates.
 
-These overlapping windows describe the original staffed program, not a new clock
-starting from this revision or an assertion that its review gates have passed.
+These overlapping windows retain the original program start and provisionally
+include the added W01–W03 critical-path allowance. They do not restart the clock
+or assert that review gates have passed; re-estimate from measured access, migration
+and human-workflow throughput before committing a pilot date.
 For planning, allocate approximately three Turkish legal editors (including the
 ontology owner), two knowledge/retrieval engineers, two application engineers and
 one platform/security engineer. Independent consequential review must have protected
@@ -1119,6 +1139,10 @@ capacity. If access or reviewer capacity falls short, reduce populated scope or
 extend dates; do not lower legal gates. Measure reviewer minutes, rejected/reworked
 assertions, acquisition delay, index growth and hardware cost. Do not assume the
 attachments' fixed server counts, vendor prices or claimed model savings.
+
+## Firm-workflow qualification and ownership
+
+Application/security owns W01/W02 and application/product owns W03. A customer-designated firm administrator is accountable for actual grants; organizational managers and case supervisors are different roles. Test reporting cycles/self-reporting/cross-firm links, denied unassigned managers, multiple case supervisors, both client scopes including later-linked cases, administrator/content separation, unauthorized role/team changes, revocation during active work and cache clearing, and migration without access expansion. Use distinct authenticated accounts for administration → supervisor inspection → deadline/milestone/task assignment → each lawyer’s opinion → revision request → acceptance, with retained audit/review history. No automatic legal deadline calculation, external notification or AI-authored opinion is included. See the subordinate contract for planned delivery status and detailed acceptance.
 
 ## Qualification specification
 

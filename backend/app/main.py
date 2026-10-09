@@ -13,6 +13,7 @@ from typing import Literal
 
 import httpx
 from fastapi import Depends, FastAPI, File, HTTPException, Request, Response, UploadFile
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
@@ -32,6 +33,7 @@ from .auth import (
     bootstrap,
     check_password,
     create_session,
+    hold_firm_guard,
     require_child,
     require_matter,
     user_view,
@@ -47,6 +49,8 @@ from .db import Audit, LoginSession, Membership, Record, Store, User, digest, no
 from .exports import render_export
 from .extract import SUPPORTED_SUFFIXES, ZIP_SUFFIXES
 from .extraction_client import ExtractionClient, ExtractionError, validate_result
+from .firm_admin import firm_admin_router
+from .firm_rbac import FirmAuthorization, FirmGuardMiddleware, initialize_firm, permissions_for
 from .governance import governance_router
 from .graph import GraphBackendError, GraphService
 from .policy import POLICY_VERSION, evaluate, request_digest
@@ -246,6 +250,11 @@ def create_app(settings=None):
                 app.state.research_owner = verify_owner
                 bootstrap(store, settings)
                 app.state.store = store
+                app.state.firm_authorization = FirmAuthorization(store.engine)
+                with store.session() as session:
+                    for firm in session.scalars(select(User.firm_id).distinct()):
+                        initialize_firm(session, firm)
+                    session.commit()
                 app.state.provider = Provider(settings)
                 app.state.extractor = (
                     ExtractionClient(settings.extraction_url, settings.extraction_token)
@@ -301,11 +310,20 @@ def create_app(settings=None):
     app.include_router(practice_router())
     app.include_router(governance_router())
     app.include_router(portfolio_router())
+    app.include_router(firm_admin_router())
     app.include_router(assistant_router())
     app.include_router(readiness_router())
     app.include_router(public_sources_router())
     app.include_router(source_reviews_router())
     app.include_router(provision_mappings_router())
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_error(request, exc):
+        # Password-bearing administration input must never be echoed in validation errors.
+        return JSONResponse(status_code=422, content={"detail": [
+            {"loc": list(item["loc"]), "type": item["type"], "msg": item["msg"]}
+            for item in exc.errors()
+        ]})
 
     @app.exception_handler(StaleDataError)
     async def concurrent_edit(request, exc):
@@ -394,6 +412,10 @@ def create_app(settings=None):
                 session.add(Audit(actor_id="anonymous", action="login_failed", object_id=client_id))
                 session.commit()
                 raise HTTPException(401, "Kullanıcı adı veya parola hatalı")
+            hold_firm_guard(request, user.firm_id)
+            session.refresh(user)
+            if not user.active:
+                raise HTTPException(401, "Oturum geçersiz")
             token, csrf = create_session(session, user, settings.session_hours)
             response.set_cookie(
                 "la_session",
@@ -404,6 +426,7 @@ def create_app(settings=None):
                 max_age=settings.session_hours * 3600,
                 path="/",
             )
+            user.action_permissions = permissions_for(session, user)
             return {"user": user_view(user), "csrf_token": csrf, "demo_mode": settings.demo_mode}
 
     @app.get("/api/v1/auth/me")
@@ -1023,4 +1046,5 @@ def create_app(settings=None):
             session.commit()
         return {k: v for k, v in source.items() if k != "content_base64"} | {"id": saved.id}
 
+    app.add_middleware(FirmGuardMiddleware)
     return app

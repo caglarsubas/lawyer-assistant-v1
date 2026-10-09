@@ -443,7 +443,7 @@ def test_inspection_rejects_self_consistent_hashes_with_different_manifest_metad
 
 
 @pytest.mark.parametrize('suffix', ['', '/passages', '/original'])
-@pytest.mark.parametrize('change,expected', [('role', 403), ('firm', 403), ('active', 401)])
+@pytest.mark.parametrize('change,expected', [('role', 403), ('firm', 401), ('active', 401)])
 def test_review_authority_change_during_verification_discards_content(
         workspace, source, monkeypatch, suffix, change, expected):
     app, client, _ = workspace
