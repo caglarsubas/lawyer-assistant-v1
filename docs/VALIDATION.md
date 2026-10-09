@@ -1,5 +1,65 @@
 # Verification record — 9 October 2026
 
+## R05A confidential human authority-trial groups — 9 October 2026 (Asia/Shanghai)
+
+PR #29 merged as `8baaa698079da9d3d46fbc54ab1b1efe552eca79`; its exact PR checks
+passed. Its [post-merge main run 37871027474](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37871027474)
+passed frontend and PostgreSQL, but backend exceeded the existing 18-minute test-step
+limit without a reported assertion failure. Main is not claimed green. This packet
+freezes explicitly selected human authority revision trials within one workspace,
+retaining exact original captures and named gaps without pooling incompatible profiles.
+
+- **3,083 backend tests passed in 437.77s**, with 51 PostgreSQL/drill skips and 28
+  existing warnings, using the standalone complete two-worker worksteal command.
+  **27 focused cases** cover explicit selections, profiles, repeated inputs/sources,
+  unknown observations/effort, already-stale dependency changes, capture/history,
+  recipe/account/source changes, nonce replay/conflict, pending admission, rollback,
+  caps, workspace access and post-serialization withholding.
+- **187 frontend tests in 23 files and strict TypeScript/Vite build passed.** Tools
+  load lazily and selections/attestations start empty. Group UI is a separate
+  59.06 KB / 14.89 KB gzip chunk; the existing main-bundle advisory remains enabled.
+  **41 deployment contracts**, repository Ruff, actionlint, Compose with `/dev/null`
+  env, RDF/SHACL, R01 planning and synthetic calibration/study checks passed.
+  Ontology remains legally unreviewed with **zero actual published historical records**.
+- **295 offline Linux cases passed in 128.92s**, with matching final application/test
+  fingerprints, network disabled, no ports or host mounts, non-root/read-only runtime,
+  dropped capabilities and bounded CPU/memory/PID/tmpfs. The existing locked runtime
+  was reused. **48 real PostgreSQL cases passed in 93.69s** in disposable child
+  databases on the pinned image. Three new races observe real workspace-row blocking
+  and prove identical replay, nonce conflict and distinct immutable groups. Owned
+  containers were removed. Neither check establishes production throughput.
+- **Built UI rehearsal used invented documents and signed synthetic public sources.**
+  Two registrations preceded revision. The browser explicitly selected, previewed,
+  froze, reopened and downloaded a partial group. Separate opinions and unknown
+  measurements remained visible. A private-source change projected Stale, preserved
+  the frozen manifest and closed export with HTTP 409. Simulated rights denial
+  projected Withheld with null manifest, cleared copied notes/titles from the UI and
+  closed export. Provider calls and console warnings/errors were zero. Owned preview
+  listeners, browser tab, downloads and containers were cleaned up.
+- **CI now executes the mandatory ontology preflight once.** One shared file list
+  defines preflight and exclusions from the subsequent two-worker step. Collection
+  using the workflow's actual shell commands proves **3,134 = 73 + 3,061** node IDs,
+  zero intersection, missing cases or extras. Existing job names, runners, worker
+  counts, retries and deadlines remain. All preflight cases passed separately; the
+  complete standalone suite above also passed. Profiling confirms repeated fresh
+  validation/inference remains costly. An invocation-local pattern-index experiment
+  measured only 1.6% median improvement and was discarded. No inference, source read,
+  authorization check or verdict was cached or weakened. Hosted speedup and billing
+  savings require separate observation; removing duplicate work is not a guarantee
+  against runner variability or future suite growth.
+
+[Retained verification metadata](evidence/private-authority-cohorts-verification-2026-10-09.json)
+pins sources, logs, collection and synthetic browser evidence. Raw logs, synthetic
+fixtures/keys and the confidential packet remain ignored under
+`.data/verification/r05a-authority-cohorts/`. A repeated diagnostic fixture-generation
+attempt rejected an already-existing output directory; checks passed against fresh
+owned directories. The original dirty checkout, `.env`, provider/source permissions,
+dependencies, database schema and deployed app were untouched. **R05A remains partial**:
+lawful source/legal review, representative Turkish qualification, public synthesis,
+Standard/Deep measurement and demonstrated benefit remain open. See
+[workflow/API](AUTHORITY_TRIAL_COHORTS.md); next engineering work is source-bound local
+authority revision proposals with explicit lawyer adoption.
+
 ## R05A registered fixed-evidence human authority trials — 9 October 2026 (Asia/Shanghai)
 
 PR #28 merged as `86566953c798b3a2af9cb0a42cdee9f370e88d27`; its PR checks and

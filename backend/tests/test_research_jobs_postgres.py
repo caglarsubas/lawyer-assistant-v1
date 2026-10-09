@@ -784,3 +784,48 @@ def test_authority_trials_serialize_capture_heads(workspace, monkeypatch, mode):
         assert accepted.json()['capture_id'] == rejected.json()['capture_id']
     assert count(app, trials.CAPTURE) == count(app, trials.HEAD) == count(app, trials.KIND) == 1
     assert count(app, trials.ADMISSION) == 2
+
+
+@pytest.mark.parametrize('mode', ['identical', 'nonce_conflict', 'different_nonce'])
+def test_authority_trial_cohorts_serialize_exact_preview_freezes(workspace, monkeypatch, mode):
+    from test_authority_findings import count
+    from test_authority_trial_cohorts import pair
+
+    from app import authority_trial_cohorts as cohorts
+
+    app, client, *_ = workspace
+    endpoint, spec, *_ = pair(_cohort_workbench(workspace), monkeypatch, complete=False)
+    preview = client.post(endpoint + '/preview', json=spec)
+    assert preview.status_code == 200, preview.text
+    body = {**spec, 'request_id': uuid4().hex, 'expected_preview_sha256': preview.json()['preview_sha256']}
+    competing = body if mode != 'nonce_conflict' else {**body, 'purpose': 'SYNTHETIC conflicting purpose'}
+    if mode == 'different_nonce':
+        competing = {**body, 'request_id': uuid4().hex}
+    locked, release = Event(), Event()
+    audit = cohorts._audit
+
+    def paused(*args, **kwargs):
+        audit(*args, **kwargs)
+        locked.set()
+        assert release.wait(10)
+
+    monkeypatch.setattr(cohorts, '_audit', paused)
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, endpoint, json=body)
+        try:
+            assert locked.wait(5), first.result(timeout=1).text
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, endpoint, json=competing)
+                assert observed[0].wait(5) and wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, other = first.result(timeout=10), second.result(timeout=10)
+    assert accepted.status_code == 201, accepted.text
+    assert other.status_code == (409 if mode == 'nonce_conflict' else 201), other.text
+    expected = 2 if mode == 'different_nonce' else 1
+    assert count(app, cohorts.KIND) == count(app, cohorts.ADMISSION) == expected
+    if mode == 'identical':
+        assert accepted.json()['id'] == other.json()['id']
+    if mode == 'different_nonce':
+        assert accepted.json()['id'] != other.json()['id']

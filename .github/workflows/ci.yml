@@ -14,6 +14,12 @@ jobs:
   backend-and-contracts:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      CI_ONTOLOGY_PREFLIGHT_TESTS: >-
+        backend/tests/test_validation_queries.py
+        backend/tests/test_validation_membership.py
+        backend/tests/test_ontology_syntax.py
+        backend/tests/test_validation_syntax.py
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -28,10 +34,18 @@ jobs:
         run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
       - name: Check ontology parsing, membership and SHACL work budgets before full suite
         timeout-minutes: 2
-        run: pytest backend/tests/test_validation_queries.py backend/tests/test_validation_membership.py backend/tests/test_ontology_syntax.py backend/tests/test_validation_syntax.py -q
+        run: |
+          read -r -a preflight_tests <<< "$CI_ONTOLOGY_PREFLIGHT_TESTS"
+          pytest "${preflight_tests[@]}" -q
       - name: Test backend
         timeout-minutes: 18
-        run: pytest backend/tests -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
+        run: |
+          read -r -a preflight_tests <<< "$CI_ONTOLOGY_PREFLIGHT_TESTS"
+          ignore_args=()
+          for path in "${preflight_tests[@]}"; do
+            ignore_args+=("--ignore=$path")
+          done
+          pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
       - name: Test deployment contracts
         run: python -m unittest discover -s deploy -p 'test_*.py'
       - name: Validate RDF and SHACL contract

@@ -39,6 +39,7 @@ from .auth import (
 from .authority_adjudications import authority_adjudications_router
 from .authority_comparisons import authority_comparisons_router
 from .authority_findings import authority_findings_router
+from .authority_trial_cohorts import authority_trial_cohorts_router
 from .authority_trials import authority_trials_router
 from .config import ROOT, load_settings
 from .context_packing import context_export_lines
@@ -295,6 +296,7 @@ def create_app(settings=None):
     app.include_router(authority_comparisons_router())
     app.include_router(authority_adjudications_router())
     app.include_router(authority_trials_router())
+    app.include_router(authority_trial_cohorts_router())
     app.include_router(practice_router())
     app.include_router(governance_router())
     app.include_router(portfolio_router())

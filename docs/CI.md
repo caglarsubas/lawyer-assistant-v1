@@ -13,6 +13,12 @@ uv sync --project backend --frozen --extra dev
 backend/.venv/bin/pytest backend/tests -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
 ```
 
+The command above is the standalone complete-suite check. In GitHub Actions, the
+four ontology preflight files are declared once in `CI_ONTOLOGY_PREFLIGHT_TESTS`.
+They run in the mandatory preflight step, then the two-worker step uses `--ignore`
+for those same files. The steps together run the complete suite once; failed
+preflight stops the job. No preflight case is waived or counted as a skipped test.
+
 This retains the complete suite and its real SHACL, cryptographic, authorization
 and publication checks. There are no selective test skips, mocked validation
 shortcuts, extra matrix runners or automatic worker-crash retries. Fixtures use
@@ -107,7 +113,8 @@ must scale with distinct programs while the number of query executions remains
 unchanged. It also tests the real release entry point, equal valid/invalid reports,
 changed evidence/bindings, namespaces/base, cache limits and parallel isolation.
 A regression fails this short step instead of consuming a full expensive run.
-The tests remain in the full suite as well. Dependency updates must pass them.
+The tests remain mandatory in preflight; the subsequent CI step excludes the same
+four files to avoid executing them twice. Dependency updates must pass them.
 The final two-worker work-stealing command passed all 2,081 backend tests locally
 in **241.73s (4m01s)**, with eight PostgreSQL skips and 28 existing warnings.
 This is 28.2% less wall time than the earlier 336.83s local run despite adding

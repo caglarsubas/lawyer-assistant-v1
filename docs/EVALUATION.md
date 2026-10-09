@@ -267,3 +267,16 @@ held-out evidence. No quality/recall/improvement or time-savings statistic is co
 The registered recipe, exact sources and immutable record seals permit reproducible
 engineering inspection only. Actual lawful corpus, historical/effect validation,
 qualified reviewers, full workflow measurement and held-out protocols remain required.
+
+## Human authority-trial group reconciliation
+
+The [group inventory](AUTHORITY_TRIAL_COHORTS.md) freezes explicitly selected human
+revision registrations in one workspace. Exact profiles remain separate; declared
+family/private-source and exact public-passage overlap, missing/partial/stale captures,
+separate reviewer outcomes and nullable effort retain their original scope. Observation
+slots and selected-record denominators describe record coverage. Unassessed/unresolved
+judgments remain visible even when capture is complete. Baselines were prepared before
+registration and their effort is retrospective. A repeated case or observation is not
+an independent sample. No quality score, held-out independence, adverse recall, benefit,
+legal approval or Standard/Deep model comparison follows from these inventories.
+Representative legal/source review and qualified evaluation remain separate gates.

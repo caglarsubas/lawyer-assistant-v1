@@ -93,5 +93,5 @@ identity/effect review and held-out evaluation remain required. R05A stays parti
 These observations can now be pinned by [registered fixed-evidence human revision
 trials](REGISTERED_AUTHORITY_TRIALS.md), with registration before revision and explicit
 original/revised work time. No model benchmark, statistical benefit or source-use
-permission is inferred. Next: confidential authority-trial cohort reconciliation. See [roadmap](ROADMAP.md), [evaluation](EVALUATION.md)
+permission is inferred. [Confidential authority-trial group reconciliation](AUTHORITY_TRIAL_COHORTS.md) is delivered. See [roadmap](ROADMAP.md), [evaluation](EVALUATION.md)
 and [verification](VALIDATION.md).
