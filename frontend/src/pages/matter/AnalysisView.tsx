@@ -1,3 +1,4 @@
+import { sourceBindingReason } from './lineageTypes';
 import { Badge, Detail, Notice } from '../../components';
 import { FACT_LABELS, locatorText } from '../../utils';
 import AuthorityProposalSummary from './AuthorityProposalSummary';
@@ -9,7 +10,7 @@ export function AnalysisCheckPanel({ checks, freshness, review }: { checks: Anal
   const disposition = freshness?.status === 'stale' || changesRequested ? 'withheld' : checks.effective_disposition;
   return <div>
     <div className="practice-record-heading"><Badge>{ANALYSIS_LABELS[disposition]}</Badge><span className="small muted">{checks.critical_count} kritik kontrol · Hukuki onay verilmedi</span></div>
-    {freshness?.status === 'stale' && <Notice error>Dayanaklar değişti. Önceki metin korunuyor; yeni sürümde inceleyin.{freshness.reasons.map((reason) => <p key={reason}>{reason}</p>)}</Notice>}
+    {freshness?.status === 'stale' && <Notice error>Dayanaklar değişti. Önceki metin korunuyor; yeni sürümde inceleyin.{freshness.reasons.map((reason) => <p key={reason}>{sourceBindingReason(reason)}</p>)}</Notice>}
     {changesRequested && <Notice error>Avukat değişiklik istedi; sonuç değerlendirmesi yeniden incelemeye kadar bekletilir. Yapısal kontrollerin özgün sonucu değiştirilmez.</Notice>}
     <Detail title={`Kontrol ayrıntıları (${checks.defects.length})`}>
       <p className="small muted">Kontroller beyan edilen bağlantıları ve koşulları inceler. Pasajın yorumu, çıkarımın doğruluğu ve hukuki uygulanabilirlik avukat incelemesi gerektirir.</p>
@@ -25,6 +26,7 @@ export function AnalysisContentView({ content, freshness, review, onSource, prop
     {content.ai_assistance && <Detail title="Model katkısı ve kayıt sınırları"><p>Model: {content.ai_assistance.provider.model} · {content.ai_assistance.passes} geçiş · Hukuki inceleme değildir.</p><p className="reference-id">Öneri: {content.ai_assistance.job_id} · Kaynak sürüm: {content.ai_assistance.source_version_id}</p><p className="small muted">Alınan önerinin doğrulanmamış notları; sonraki avukat değişikliklerini ayrıca inceleyin.</p><ul>{content.ai_assistance.review_notes?.map((note, index) => <li key={index}>{note.target_id} · Geçiş {note.pass}: {note.text}</li>)}</ul></Detail>}
     {content.authority_contributions?.map((item, index) => <Detail key={item.job_id} title={`Saklanan kamu katkısı ${index + 1}`}><p className="small">Model: {item.provider_pin.model} · Önceki katkı, güncel model yanıtı değildir.</p><p className="reference-id">Öneri: {item.job_id} · Kaynak sürüm: {item.source_version_id}</p><AuthorityProposalSummary feedback={item.feedback} responses={item.responses} pass={item.response_pass} /></Detail>)}
     {content.ai_assistance?.review_feedback && <FeedbackSummary feedback={content.ai_assistance.review_feedback} responses={content.ai_assistance.feedback_responses} pass={content.ai_assistance.feedback_response_pass} onSource={onSource} />}
+    {!!content.authority_revalidations?.length && <Detail title={`Saklanan kaynak bağı yenilemeleri (${content.authority_revalidations.length})`}><p className="small muted">Bu kayıtlar özgün katkıların yerine geçmez. Güncel gözlemleri yeniden inceleme araçlarından açın; hukuki onay verilmez.</p>{content.authority_revalidations.map(item => <p key={item.id} className="reference-id">{item.id} · SHA-256: {item.sha256}</p>)}</Detail>}
     <AnalysisCheckPanel checks={content.checks} freshness={freshness} review={review} />
     <Detail title="Öncül → kural → uygulama → alternatif → geçici sonuç">
       <p className="small muted">{proposed ? 'Modelin onaylanmamış düzenleme önerisi.' : content.authorship === 'user_with_ai_assistance' ? 'Model önerisinden uyarlanmış avukat taslağı.' : 'Avukat tarafından yazılmış gerekçe.'} Otomatik hukuki sonuç veya modelin düşünce kaydı değildir.</p>

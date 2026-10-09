@@ -177,10 +177,16 @@ def contributions(state, job_id):
 @contextmanager
 def scope(app, session, matter_id, user, state):
     with ExitStack() as stack:
-        reasons = []
+        reasons, incoming_reasons = [], []
+        content = state.get("source_content", state)
+        retained = dependencies(content)
         for dependency in dependencies(state):
-            reasons.extend(stack.enter_context(dependency_guard(app, session, matter_id, user, dependency)))
-        yield list(dict.fromkeys(reasons))
+            checked = stack.enter_context(dependency_guard(app, session, matter_id, user, dependency))
+            # A renewal covers retained sources only, never a newly selected input.
+            (reasons if dependency in retained else incoming_reasons).extend(checked)
+        from .authority_revalidations import projected_reasons
+
+        yield list(dict.fromkeys([*projected_reasons(app, session, matter_id, user, content, reasons), *incoming_reasons]))
 
 
 def check_admission(store, session, matter_id, user, content):
@@ -191,7 +197,9 @@ def check_admission(store, session, matter_id, user, content):
         raise HTTPException(409, 'Kamu dayanağı içeren taslak son izin kontrolünü bekliyor.')
     proof = store.decode(require_child(session, ident, ADMISSION, matter_id, user))
     if (not proof.get('completed')
-            or proof.get('dependencies_sha256') != digest(canonical(content['authority_dependencies']))):
+            or proof.get('dependencies_sha256') != digest(canonical(content['authority_dependencies']))
+            or ((content.get('authority_revalidations') or 'revalidations_sha256' in proof)
+                and proof.get('revalidations_sha256') != digest(canonical(content.get('authority_revalidations', []))))):
         raise HTTPException(409, 'Kamu dayanağı içeren taslak son izin kontrolünü bekliyor.')
 
 
@@ -201,7 +209,8 @@ def prepare_admission(store, session, matter_id, user, content):
     ident = 'aap-' + uuid4().hex
     content['authority_admission_id'] = ident
     store.add(session, ADMISSION, user, {'completed': False,
-        'dependencies_sha256': digest(canonical(content['authority_dependencies']))}, matter_id, record_id=ident)
+        'dependencies_sha256': digest(canonical(content['authority_dependencies'])),
+        'revalidations_sha256': digest(canonical(content.get('authority_revalidations', [])))}, matter_id, record_id=ident)
     return ident
 
 

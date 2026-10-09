@@ -17,6 +17,7 @@ env:
     backend/tests/test_firm_admin.py
     backend/tests/test_content_scope.py
     backend/tests/test_authority_proposals.py
+    backend/tests/test_authority_revalidations.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_open_validity_publication.py
     backend/tests/test_runtime_authorization_integration.py

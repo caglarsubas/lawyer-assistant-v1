@@ -82,9 +82,7 @@ Revocation cannot retract an already downloaded historical local copy.
 
 Changed review heads, recipes or reviewer access project Stale; source-dependent
 exports close. DOCX/PDF retain original quotations, seals, historical limits and
-response provenance and recheck dependencies after rendering. There is currently
-no automatic rebinding: inherited Stale lineage requires a future explicit reviewed
-revalidation workflow, not removal of prior evidence or silent regeneration.
+response provenance and recheck dependencies after rendering. There is no automatic rebinding. The [explicit reviewed renewal workflow](AUTHORITY_REVALIDATIONS.md) adds an exact human assessment for retained unchanged sources, preserving prior evidence and model contributions. Revoked/changed evidence and incompatible contracts remain blocked.
 
 ## API and remaining gates
 
