@@ -114,7 +114,7 @@ def route_permissions(path, method):
             required.add("portfolio.create" if len(parts) == 1 else "matter.write")
         if any(part in {"export", "exports"} for part in parts):
             required.add("matter.export")
-        if not read and any(part in {"reviews", "review", "observations", "adjudications"} for part in parts):
+        if not read and any(part in {"reviews", "review", "observations", "adjudications", "lineage-reviews"} for part in parts):
             required.add("matter.review")
         if (root == "governance" and not read) or any(part in {
             "legal-holds", "retention-policy", "erasure-plan", "restore"

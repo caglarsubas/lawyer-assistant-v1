@@ -22,6 +22,7 @@ export interface AnalysisChecks {
 }
 export interface AnalysisFreshness { status: 'current' | 'stale'; reasons: string[]; scope: string }
 export interface AnalysisContent extends Omit<AnalysisForm, 'evidence'> {
+  authority_revalidations?: { id: string; sha256: string }[];
   evidence: (AnalysisSelection & { document_id: string; document_revision: number; document_sha256: string | null; name: string; locator: Passage['locator']; passage_sha256: string; quote_sha256: string; text: string; full_passage_length: number })[];
   fact_snapshots: { id: string; revision: number; text: string; status: string; evidence_id: string | null }[];
   checks: AnalysisChecks; status: 'needs_review' | 'reviewed' | 'stale'; authorship: 'user' | 'user_with_ai_assistance' | 'model_proposal'; legal_authority: false;

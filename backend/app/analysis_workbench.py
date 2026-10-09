@@ -306,7 +306,8 @@ def _content(store, session, matter_id, user, body, previous=None):
     if (previous or {}).get("authority_dependencies"):
         content.update(authority_dependencies=previous["authority_dependencies"],
                        authority_admission_id=previous.get("authority_admission_id"),
-                       authority_contributions=previous.get("authority_contributions", []))
+                       authority_contributions=previous.get("authority_contributions", []),
+                       authority_revalidations=previous.get("authority_revalidations", []))
     content["checks"] = check_rationale(content)
     old_checks = {item["id"] for item in (previous or {}).get("checks", {}).get("defects", [])}
     new_checks = {item["id"] for item in content["checks"]["defects"]}
@@ -323,10 +324,10 @@ def _content(store, session, matter_id, user, body, previous=None):
     return content
 
 
-def _freshness(store, session, matter_id, user, content):
+def _freshness(store, session, matter_id, user, content, *, include_authorities=True):
     from .authority_proposals import freshness
 
-    reasons = freshness(store, session, matter_id, user, content)
+    reasons = freshness(store, session, matter_id, user, content) if include_authorities else []
     if content["checks"]["recipe"] != RECIPE:
         reasons.append("Kontrol kuralları değişti; yeni sürümde kontrolleri yeniden çalıştırın.")
     for fact in content["fact_snapshots"]:
@@ -563,6 +564,9 @@ def analysis_router():
             if content.get("authority_dependencies") and freshness["status"] != "current":
                 raise HTTPException(409, "Kamu dayanağı katkısı yeniden inceleme gerektiriyor; aktarım durduruldu.")
             lines = _export_lines(content, snapshot, version, _effective_freshness(freshness, review), review)
+            from .authority_revalidations import export_lines
+
+            lines.extend(export_lines(store, session, matter_id, user, content))
             response = render_export(lines, version.id, format)
             require_child(session, version.id, "practice_version", matter_id, user)
             if _freshness(store, session, matter_id, user, content) != freshness:

@@ -454,6 +454,7 @@ def suggestion_router():
             if inherited:
                 content["authority_dependencies"] = inherited
                 content["authority_contributions"] = authority_proposals.contributions(state, job.id)
+                content["authority_revalidations"] = state["source_content"].get("authority_revalidations", [])
             admission = authority_proposals.prepare_admission(store, session, matter_id, user, content)
             row = _write_version(store, session, user, "practice_analysis", inputs, content, matter_id, row)
             state["adopted_version_id"] = store.decode(row)["latest_version_id"]

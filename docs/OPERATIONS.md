@@ -951,3 +951,19 @@ exercised; [validation evidence](VALIDATION.md) records their scope. Disconnecte
 installation, customer-host isolation, volume encryption/recovery and legal
 qualification remain separate gates. CI checks Python, ontology, frontend build
 and Compose syntax; passing CI does not close those deployment gates.
+
+
+## R05A retained-source binding renewal
+
+Use the [reviewed renewal contract](AUTHORITY_REVALIDATIONS.md) for inherited source
+bindings. `authority_lineage_revalidation` and `authority_lineage_admission` are
+encrypted case records; ordinary matter retention, holds and deletion apply. No
+new service, provider call, graph mutation or database migration is required.
+
+A new renewal creates an immutable draft version with a separate pending admission.
+A `committed_needs_revalidation` HTTP 409 means the bytes were committed but the
+last guard or permission checks did not complete. Preserve the receipt/history and
+diagnose the incident; do not flip admission bits, strip retained source references
+or retry to force acceptance. Missing proofs fail closed. There is no administrator
+override/automatic pending-record repair in this packet. Restore and target-host
+acceptance remain independent qualification work.

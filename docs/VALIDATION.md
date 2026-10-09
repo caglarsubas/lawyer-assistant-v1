@@ -1,4 +1,69 @@
-# Verification record — 9 October 2026
+# Verification record — 10 October 2026
+
+## R05A reviewed retained-source binding renewal — 10 October 2026 (Asia/Shanghai)
+
+PR #34 is verified merged at `f0595702679386f7ccce9d11a5cb4119b3b1552f`;
+exact post-merge main run `37950562133` passed. This next engineering packet
+implements [explicit source-binding renewal](AUTHORITY_REVALIDATIONS.md) and
+awaits manual merge. Deployment and legal qualification are separate gates.
+
+An active authorized lawyer can inspect the current draft and the unchanged
+original public contexts, map every retained source to current draft targets, and
+record all six assessment dimensions. Saving seals the human assessment, creates
+an immutable Needs-review draft version and preserves original context/review IDs,
+quotes, model/job/pass contributions and prior versions. Unknown and unresolved
+observations remain unknown/unresolved; freshness grants no legal/source approval.
+
+Verification covers genuine loss of the original reviewer's case access and a
+second lawyer's explicit renewal, exact input/preview/version conflicts, all-source
+and all-dimension completeness, preservation of prior bytes, ordinary/model edit
+staleness, current review-head/reviewer-access changes, corrupt/missing admissions,
+renewal-reference stripping, source/graph/private-evidence changes, archived cases,
+late guard failure and retries that cannot complete pending admission. Renewing
+retained sources cannot clear a stale warning on a newly selected proposal input.
+Existing source-denial and signed physical-source checks remain in the regression
+suite. These are invented sources, synthetic accounts and mocked inference.
+
+Local checks passed:
+
+- Full backend regression: **3,195 passed, 60 skipped**; skipped PostgreSQL/environment
+  checks remain distinct from the real database run below.
+- Final focused renewal/proposal/suggestion checks: **81 passed**.
+- Real PostgreSQL: **57 passed**, including two new competing-save/retry cases in
+  random disposable child databases. Only one renewal/version is retained for a
+  competing parent; an identical pending retry cannot finalize admission.
+- Restricted offline Linux: **284 passed**, with final application/test fingerprints
+  matched to the checkout; network disabled, filesystem read-only, capabilities
+  dropped, two CPUs, 768 MiB and no host mounts/ports. Owned containers were removed.
+- Frontend production build and **203 tests** passed; the existing main-bundle
+  500 KB advisory remains. The renewal editor is loaded only by explicit action.
+- **41 deployment tests**, Ruff, actionlint, ontology/SHACL, R01 planning, synthetic
+  calibration/study contracts and Compose configuration passed. Compose used
+  `/dev/null` and synthetic placeholders, without reading the repository `.env`.
+
+CI retains one pull-request event run, the existing three job names, 20/5/5-minute
+job budgets, step deadlines, worker counts and no worker restarts/retries. New
+renewal checks join the existing workspace-permission group. Exact workflow-based
+collection proves **3,255 unique backend IDs**, with no duplication or omissions:
+89 preflight, 3,016 main, 10 publication, 81 workspace and 59 human-review checks.
+Hosted final-head success and billing savings are not inferred from local timing;
+verify the created PR's exact head separately.
+
+The production frontend was rehearsed against an owned loopback service and
+invented case. The second lawyer inspected the original quotation and recorded six
+Unresolved observations through the UI; save created version 3 as Needs review.
+A browser reload retained the human reviewer, old/new version links, seal and all
+six observations. History uses captured review labels. No console warnings/errors
+were observed in the final rehearsal. Initial fixture-origin/reader setup failures
+were corrected in the owned rehearsal configuration, without weakening app guards.
+The owned tab and loopback server were closed. Evidence is retained under
+`.data/verification/r05a-lineage-revalidation/`, including `renewal-history.jpg`.
+
+No live source approval/acquisition, inference/BYOK call, credential change,
+customer grant, database migration, public-graph mutation or live deployment was
+performed. **R05A remains partial**: registered same-input local-model authority
+trials are next; lawful corpus/legal review, representative Turkish semantic/adverse
+checks, measured lawyer benefit and release qualification remain required.
 
 ## W03 manual work and tracked human opinions — 9 October 2026 (Asia/Shanghai)
 

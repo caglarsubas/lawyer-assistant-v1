@@ -938,3 +938,44 @@ def test_source_bound_authority_adoption_serializes_competing_versions(workspace
     versions = client.get(endpoint.removesuffix('/suggestions') + '/versions').json()
     assert len(versions) == 2 and accepted.json()['latest_version_id'] == versions[0]['id']
     assert accepted.json()['authority_dependencies'] and accepted.json()['review']['effective_state'] == 'unreviewed'
+
+
+@pytest.mark.parametrize('replay', [False, True])
+def test_retained_authority_revalidation_serializes_exact_drafts_and_retries(workspace, monkeypatch, replay):
+    from test_authority_revalidations import ready, request
+
+    from app import authority_revalidations
+
+    app, client, _ = workspace
+    endpoint, *_ = ready(_cohort_workbench(workspace), monkeypatch)
+    body, _ = request(client, endpoint)
+    competing = body if replay else {**body, 'request_id': uuid4().hex}
+    locked, release = Event(), Event()
+    audit = authority_revalidations._audit
+
+    def paused(*args):
+        if args[2] == 'authority_lineage_revalidated' and not locked.is_set():
+            locked.set()
+            assert release.wait(10)
+        return audit(*args)
+
+    monkeypatch.setattr(authority_revalidations, '_audit', paused)
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, endpoint, json=body)
+        try:
+            assert locked.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, endpoint, json=competing)
+                assert observed[0].wait(5) and wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, rejected = first.result(timeout=10), second.result(timeout=10)
+    # A competing identical receipt can see a pending admission, but cannot finalize it.
+    assert accepted.status_code == 201, accepted.text
+    assert rejected.status_code in ({201, 409} if replay else {409}), rejected.text
+    retry = client.post(endpoint, json=body)
+    assert retry.status_code == 201 and retry.json()['replayed']
+    history = client.get(endpoint).json()
+    assert len(history) == 1 and history[0]['id'] == accepted.json()['id']
+    assert accepted.json()['analysis']['status'] == 'needs_review'
