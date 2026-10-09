@@ -1,0 +1,219 @@
+{
+  "schema": "private-authority-proposals-verification-v1",
+  "recorded_at": "2026-10-09T06:29:14.887760+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "4c77c49aecdf933cc9224292667a8fba5d2f871e",
+  "checkout_dirty": true,
+  "host": {
+    "system": "Darwin",
+    "architecture": "arm64"
+  },
+  "test_image": "sha256:4c66d928c6acca18f1948c6772f453c3391ace2e14ee5654ff69f771d7440e34",
+  "source": {
+    "ontology_runtime": {
+      "ontology/build_catalog.py": "60cfdd479eac4a3175e0ac566377c42f80f8ee686a40f391558fe6da23de0914",
+      "ontology/rdfs_identifiers.py": "3a1879c70bf18fee0e21ff8ba7e91d78e855aef7c547fa777ff86e6827f12095",
+      "ontology/releases.py": "270e8de7352169075e8e8e9819e35db0820777cb7e0afa10d3ebd2d877bebb88",
+      "ontology/serving.py": "777eaf7bb1e98a7a678294506b2cb23ae67589642dac077aaeba217be9c00e15",
+      "ontology/temporal.py": "e14241239a580dcf997e3c9fbf785df05ca035d9fcc6a7feb01bb5e398d7548c",
+      "ontology/validation.py": "465eb0d099e3b2a38a3b41ee137e43f49dcbb723bfd9e7cab35b94cf9cb0de30"
+    },
+    "dependencies": {
+      "pyshacl": "0.40.1",
+      "owlrl": "7.6.2",
+      "rdflib": "7.6.0"
+    },
+    "application": {
+      "sha256": "46a21c75bf3fe2c524c0d73d888b10f8cacf456862b34e1356ee7926a3e8da02",
+      "files": 122
+    },
+    "tests": {
+      "files": 88,
+      "sha256": "5b7648c6d05c7b2d1cb75ea6e463d3beb434b0de7e6b3f8f181099b9450e2b04"
+    }
+  },
+  "limits": {
+    "network": "none",
+    "host_ports": [],
+    "host_mounts": [],
+    "read_only": true,
+    "cpu": 2,
+    "memory_bytes": 805306368,
+    "pids": 128,
+    "tmpfs_bytes": 268435456
+  },
+  "linux_tests": {
+    "exit_code": 0,
+    "passed": 476,
+    "pytest_seconds": 163.62,
+    "container_wall_seconds": 164.745
+  },
+  "cleanup_verified": true,
+  "not_established": [
+    "Turkish legal accuracy or semantic completeness",
+    "real-provider authentication or model performance",
+    "production capacity or latency",
+    "real-corpus retrieval quality or adverse recall",
+    "real source/legal approval",
+    "live application deployment",
+    "automatic revalidation of inherited Stale source lineage",
+    "registered same-input local-model authority trials"
+  ],
+  "baseline": {
+    "pr": 30,
+    "merge_commit": "4c77c49aecdf933cc9224292667a8fba5d2f871e",
+    "post_merge_main_ci_run": 37887856160,
+    "post_merge_main_ci_conclusion": "success"
+  },
+  "native_backend": {
+    "passed": 3128,
+    "skipped": 52,
+    "warnings": 28,
+    "pytest_seconds": 387.38,
+    "skip_scope": "49 PostgreSQL cases executed separately; 3 opt-in infrastructure drills remain skipped"
+  },
+  "postgres": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "all forty-nine real PostgreSQL snapshot, authorization and research/adoption/context/review/comparison races from the exact CI selection in random disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 95.095,
+    "passed": 49,
+    "pytest_seconds": 92.38
+  },
+  "postgres_final_provenance_adoption": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "final source-bound authority adoption race after inherited-provenance refinement in random disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 5.151,
+    "passed": 1,
+    "pytest_seconds": 4.81
+  },
+  "frontend": {
+    "passed": 191,
+    "files": 24,
+    "typecheck_build_exit_code": 0,
+    "existing_main_chunk_warning": true
+  },
+  "contracts": {
+    "ruff": {
+      "exit_code": 0,
+      "wall_seconds": 0.014
+    },
+    "deployment": {
+      "exit_code": 0,
+      "wall_seconds": 0.704
+    },
+    "ontology": {
+      "exit_code": 0,
+      "wall_seconds": 0.593
+    },
+    "planning": {
+      "exit_code": 0,
+      "wall_seconds": 0.113
+    },
+    "calibration-fixture": {
+      "exit_code": 0,
+      "wall_seconds": 0.244
+    },
+    "calibration": {
+      "exit_code": 0,
+      "wall_seconds": 0.104
+    },
+    "study-fixture": {
+      "exit_code": 0,
+      "wall_seconds": 0.41
+    },
+    "study": {
+      "exit_code": 0,
+      "wall_seconds": 0.125
+    },
+    "actionlint": {
+      "exit_code": 0,
+      "wall_seconds": 0.102
+    },
+    "git-diff": {
+      "exit_code": 0,
+      "wall_seconds": 0.016
+    },
+    "compose": {
+      "exit_code": 0,
+      "wall_seconds": 0.049
+    }
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3180,
+      "preflight": 89,
+      "remaining": 3081,
+      "publication": 10
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_runtime_authorization_integration.py",
+      "backend/tests/test_publication_cli.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "d9c337a3a4a4c0c1490fbb50ff33a17b2b5870d3a375b4e894b21b6bc916de19",
+    "workflow_sha256": "274b5b9d1810feebc556cb5996e9e7195e8d5f06ffe6bddc14538132cf0222b7",
+    "no_runner_retry_deadline_change": true,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "browser": {
+    "synthetic_only": true,
+    "versions": [
+      2,
+      1
+    ],
+    "needs_review": true,
+    "retained_contributions": 1,
+    "exports": {
+      "docx": {
+        "status_code": 200,
+        "bytes": 39241,
+        "original_quote_present": true
+      },
+      "pdf": {
+        "status_code": 200,
+        "bytes": 21565,
+        "original_quote_present": true
+      }
+    },
+    "mocked_calls_after_explicit_request": 1,
+    "zero_calls_on_tool_visit": true,
+    "console_errors_or_warnings": 0,
+    "source_denial_clears_cached_draft": true,
+    "owned_loopback_server_stopped": true,
+    "owned_tabs_closed": true,
+    "artifacts": {
+      "adopted-ax.txt": "528189a2dad01a47fb23d301a6f519061b875eeaa39f37500ac581d2d6f7a008",
+      "adopted.png": "5ed45de31c1404c94da2359de5499437e32a0072d1faf0d489cd29d3b202793d",
+      "proposal-ax.txt": "5d02ea9b46290f995be91a9bea93d687c00b1934c3a10e1e63dde78b0ad0ca22",
+      "withheld-ax.txt": "ae1fada45ae78d357d9ed1fec85417892c0c1c31d07235e15687f4db95b4c76e",
+      "withheld.png": "bf68e56f7d10abb44629b032f7eb90f6ff584a532de0ffa3ec01187c377efda5"
+    }
+  },
+  "retained_development_failures": [
+    "initial new PostgreSQL test used lock-observer tuple incorrectly; fixed without changing application locking",
+    "initial offline rehearsal exceeded its local 180-second driver budget under simultaneous validation; container was removed, final exact-source rehearsal passed within the local 300-second driver budget"
+  ],
+  "ci_configuration_changed": false,
+  "hosted_checks_for_this_packet": "reported separately by exact PR head; this file records local precommit verification",
+  "local_evidence_directory": ".data/verification/r05a-authority-proposals"
+}

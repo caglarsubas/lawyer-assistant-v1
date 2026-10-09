@@ -829,3 +829,39 @@ def test_authority_trial_cohorts_serialize_exact_preview_freezes(workspace, monk
         assert accepted.json()['id'] == other.json()['id']
     if mode == 'different_nonce':
         assert accepted.json()['id'] != other.json()['id']
+
+
+def test_source_bound_authority_adoption_serializes_competing_versions(workspace, monkeypatch):
+    from test_authority_proposals import complete
+
+    app, client, matter = workspace
+    endpoint, _, record, _, _, _, _, job = complete(_cohort_workbench(workspace), monkeypatch)
+    locked, release = Event(), Event()
+    write = analysis_suggestions._write_version
+
+    def paused(*args, **kwargs):
+        if args[4].change_note == 'SYNTHETIC public first adoption':
+            locked.set()
+            assert release.wait(10)
+        return write(*args, **kwargs)
+
+    monkeypatch.setattr(analysis_suggestions, '_write_version', paused)
+    body = {'expected_revision': record['revision'], 'candidate_sha256': job['candidate_sha256'],
+            'change_note': 'SYNTHETIC public first adoption'}
+    url = endpoint + '/' + job['id'] + '/adopt'
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, url, json=body)
+        try:
+            assert locked.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, url, json={**body, 'change_note': 'SYNTHETIC competing public adoption'})
+                assert observed[0].wait(5) and wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, rejected = first.result(timeout=5), second.result(timeout=5)
+    assert accepted.status_code == 201, accepted.text
+    assert rejected.status_code == 409, rejected.text
+    versions = client.get(endpoint.removesuffix('/suggestions') + '/versions').json()
+    assert len(versions) == 2 and accepted.json()['latest_version_id'] == versions[0]['id']
+    assert accepted.json()['authority_dependencies'] and accepted.json()['review']['effective_state'] == 'unreviewed'

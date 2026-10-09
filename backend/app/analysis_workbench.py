@@ -303,6 +303,10 @@ def _content(store, session, matter_id, user, body, previous=None):
                    status="needs_review", legal_authority=False)
     if (previous or {}).get("ai_assistance"):
         content.update(authorship="user_with_ai_assistance", ai_assistance=previous["ai_assistance"])
+    if (previous or {}).get("authority_dependencies"):
+        content.update(authority_dependencies=previous["authority_dependencies"],
+                       authority_admission_id=previous.get("authority_admission_id"),
+                       authority_contributions=previous.get("authority_contributions", []))
     content["checks"] = check_rationale(content)
     old_checks = {item["id"] for item in (previous or {}).get("checks", {}).get("defects", [])}
     new_checks = {item["id"] for item in content["checks"]["defects"]}
@@ -320,7 +324,9 @@ def _content(store, session, matter_id, user, body, previous=None):
 
 
 def _freshness(store, session, matter_id, user, content):
-    reasons = []
+    from .authority_proposals import freshness
+
+    reasons = freshness(store, session, matter_id, user, content)
     if content["checks"]["recipe"] != RECIPE:
         reasons.append("Kontrol kuralları değişti; yeni sürümde kontrolleri yeniden çalıştırın.")
     for fact in content["fact_snapshots"]:
@@ -380,7 +386,7 @@ def _export_lines(content, snapshot, version, freshness, review=None):
         lines[1] = "GİZLİ — MODEL ÖNERİSİNDEN UYARLANMIŞ KOŞULLU ANALİZ TASLAĞI"
         lines.extend(["Model katkısı (hukuki inceleme değildir): " + json.dumps(
             {key: value for key, value in content["ai_assistance"].items()
-             if key not in {"review_notes", "review_feedback", "feedback_responses"}}, ensure_ascii=False)])
+             if key not in {"review_notes", "review_feedback", "feedback_responses", "authority_feedback", "authority_responses"}}, ensure_ascii=False)])
         lines.extend(f"Alınan model önerisinin doğrulanmamış inceleme notu, geçiş {item['pass']} / {item['target_id']}: {item['text']}"
                      for item in content["ai_assistance"].get("review_notes", []))
         feedback = content["ai_assistance"].get("review_feedback")
@@ -394,6 +400,23 @@ def _export_lines(content, snapshot, version, freshness, review=None):
             lines.extend(f"Model yanıtı {item['finding_id']} / {labels[item['outcome']]}: {item['text']} "
                          f"Bağlanan düzenlemeler: {', '.join(item['edited_targets']) or 'Yok'} / dayanaklar: {', '.join(item['evidence_ids'])}"
                          for item in content["ai_assistance"].get("feedback_responses", []))
+        for contribution in content.get("authority_contributions", []):
+            authority = contribution["feedback"]
+            lines.append("Saklanan kamu katkısının model ve iş bağı: " + json.dumps(
+                {key: contribution[key] for key in ("job_id", "source_version_id", "provider_pin", "response_pass")}, ensure_ascii=False))
+            lines.append("Seçilen kamu dayanağı bulguları; model yanıtları hukuki onay veya bulgu çözümü değildir.")
+            lines.append("Kaynak inceleme: " + authority["dependency"]["review_id"])
+            lines.extend(f"Avukat bulgusu {item['finding_id']} / {item['outcome']}: {item['note']}"
+                         for item in authority["findings"])
+            for source in authority["sources"]:
+                evidence = source["evidence"]
+                lines.extend([source["id"] + " / " + evidence["source_version_id"] + " / " + evidence["locator"],
+                              evidence["text"], "Alıntı SHA-256: " + evidence["quote_sha256"],
+                              "Tarih ve uygulanabilirlik sınırları: " + json.dumps(source["temporal_alignment"], ensure_ascii=False)])
+            lines.extend(f"Model yanıtı {item['finding_id']} / {item['outcome']}: {item['text']} / "
+                         f"Düzenlemeler: {', '.join(item['edited_targets']) or 'Yok'} / "
+                         f"Dayanaklar: {', '.join(item['authority_ids'])}"
+                         for item in contribution["responses"])
     if review and review["latest"]:
         event = review["latest"]
         from .analysis_adjudication import assessment_lines
@@ -475,17 +498,27 @@ def analysis_router():
 
     def write(matter_id, body, request, user, record_id=None):
         store = request.app.state.store
-        with store.session() as session:
+        from contextlib import ExitStack
+
+        from . import authority_proposals
+
+        with store.session() as session, ExitStack() as guards:
             matter = require_matter(session, matter_id, user)
             session.refresh(matter, with_for_update=True)
             require_matter(session, matter_id, user)
             row = require_child(session, record_id, "practice_analysis", matter_id, user) if record_id else None
+            if row:
+                authority_proposals.check_admission(store, session, matter_id, user, store.decode(row))
             content = _content(store, session, matter_id, user, body, store.decode(row) if row else None)
+            guards.enter_context(authority_proposals.scope(request.app, session, matter_id, user, content))
+            admission = authority_proposals.prepare_admission(store, session, matter_id, user, content)
             row = _write_version(store, session, user, "practice_analysis", body, content, matter_id, row)
             _invalidate(store, session, matter, "Avukatın yapılandırılmış analizi değişti; hazırlık bağlamını inceleyin.")
             _audit(session, user, "analysis_version_created", row.id, matter_id)
             require_matter(session, matter_id, user)
             session.commit()
+            guards.close()
+            authority_proposals.complete_admission(store, matter_id, user, admission)
             return _view(store, session, matter_id, user, row)
 
     @router.get("/{record_id}/versions")
@@ -527,6 +560,8 @@ def analysis_router():
             content = snapshot["content"]
             freshness = _freshness(store, session, matter_id, user, content)
             review = projection(store, session, matter_id, row.id, version.id, user, content, freshness)
+            if content.get("authority_dependencies") and freshness["status"] != "current":
+                raise HTTPException(409, "Kamu dayanağı katkısı yeniden inceleme gerektiriyor; aktarım durduruldu.")
             lines = _export_lines(content, snapshot, version, _effective_freshness(freshness, review), review)
             response = render_export(lines, version.id, format)
             require_child(session, version.id, "practice_version", matter_id, user)

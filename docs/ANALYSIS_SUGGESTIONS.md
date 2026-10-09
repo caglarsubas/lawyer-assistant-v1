@@ -135,3 +135,10 @@ adverse verification, broader correction, calibrated Standard/Deep modes and pai
 lawyer-adjudicated comparisons are open. R05B's sanitized BYOK adapters remain
 separate planned work. See [verification](VALIDATION.md),
 [analysis requirements](LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md) and [roadmap](ROADMAP.md).
+
+## Selected public-authority findings
+
+The same bounded queue now supports an explicit, separately pinned source-bound
+authority selection. See [contract and continuing permissions](AUTHORITY_PROPOSALS.md).
+It cannot be combined with private-feedback/comparison protocols in one request.
+Human findings and legal blockers are never automatically cleared.

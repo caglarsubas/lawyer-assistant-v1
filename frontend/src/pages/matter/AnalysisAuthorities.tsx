@@ -48,14 +48,14 @@ export function AuthorityContextView({ value }: { value: AuthorityContext }) {
   </>;
 }
 
-function ContextCard({ item, base, matterId, analysisId }: { item: AuthoritySummary; base: string; matterId: string; analysisId: string }) {
+function ContextCard({ item, base, matterId, analysisId, onAdopt }: { item: AuthoritySummary; base: string; matterId: string; analysisId: string; onAdopt?: () => Promise<void> }) {
   const [findingsOpen, setFindingsOpen] = useState(false);
   const [view, setView] = useState<AuthorityContext | null>(null); const [busy, setBusy] = useState(false); const [error, setError] = useState('');
   const mounted = useRef(true); useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   async function inspect() { setView(null); setError(''); setBusy(true); try { const value = await request<AuthorityContext>(`${base}/${encodeURIComponent(item.id)}`, { cache: 'no-store' }); if (mounted.current) setView(value); } catch (cause) { if (mounted.current) setError(messageOf(cause)); } finally { if (mounted.current) setBusy(false); } }
   async function download(format: 'json' | 'docx' | 'pdf') { setBusy(true); setError(''); try { await downloadAuthorityContext(matterId, analysisId, item.id, format); } catch (cause) { if (mounted.current) { setView(null); setError(messageOf(cause)); } } finally { if (mounted.current) setBusy(false); } }
   return <Detail title={item.title}><button className="text-button" disabled={busy} onClick={() => void inspect()}>{busy ? 'Kontrol ediliyor…' : 'Bağlamı aç / güncel izinleri kontrol et'}</button>{view && <><AuthorityContextView value={view} /><div className="practice-record-actions">{(['json', 'docx', 'pdf'] as const).map((format) => <button key={format} className="text-button" disabled={busy || !view.public_source_access || !view.manifest || view.freshness.status !== 'current'} onClick={() => void download(format)}>{format.toUpperCase()} bağlamı indir</button>)}</div>
-    {view.public_source_access && view.manifest && <><button className="text-button" disabled={busy} onClick={() => setFindingsOpen(old => !old)}>{findingsOpen ? 'Avukat kaynak incelemesini kapat' : 'Avukat kaynak incelemesini aç'}</button>{findingsOpen && <Suspense fallback={<p>İnceleme araçları yükleniyor…</p>}><AuthorityFindings matterId={matterId} analysisId={analysisId} contextId={item.id} onUnavailable={cause => { setView(null); setError(messageOf(cause)); }} /></Suspense>}</>}
+    {view.public_source_access && view.manifest && <><button className="text-button" disabled={busy} onClick={() => setFindingsOpen(old => !old)}>{findingsOpen ? 'Avukat kaynak incelemesini kapat' : 'Avukat kaynak incelemesini aç'}</button>{findingsOpen && <Suspense fallback={<p>İnceleme araçları yükleniyor…</p>}><AuthorityFindings matterId={matterId} analysisId={analysisId} contextId={item.id} onAdopt={onAdopt} onUnavailable={cause => { setView(null); setError(messageOf(cause)); }} /></Suspense>}</>}
   </>}{error && <Notice error>{error}</Notice>}</Detail>;
 }
 
@@ -104,7 +104,7 @@ function ContextEditor({ candidates, productId, base, versionId, onSaved }: { ca
   </form>;
 }
 
-export default function AnalysisAuthorities({ matterId, record }: { matterId: string; record: AnalysisRecord }) {
+export default function AnalysisAuthorities({ matterId, record, onAdopt }: { matterId: string; record: AnalysisRecord; onAdopt?: () => Promise<void> }) {
   const base = `/matters/${encodeURIComponent(matterId)}/analyses/${encodeURIComponent(record.id)}/authority-contexts`;
   const [products, setProducts] = useState<{ id: string; title: string }[]>([]); const [product, setProduct] = useState(''); const [productMore, setProductMore] = useState(false);
   const [candidates, setCandidates] = useState<AuthorityCandidates | null>(null); const [items, setItems] = useState<AuthoritySummary[]>([]); const [more, setMore] = useState(false); const [loaded, setLoaded] = useState(false);
@@ -117,7 +117,7 @@ export default function AnalysisAuthorities({ matterId, record }: { matterId: st
     {products.length > 0 && <><Field label="Kamu kaynakları içeren araştırma">{(id) => <select id={id} value={product} disabled={busy} onChange={(event) => { setProduct(event.target.value); setCandidates(null); setError(''); }}><option value="">Araştırma seçin</option>{products.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select>}</Field><button className="text-button" disabled={busy || !product} onClick={() => void inspect()}>İzinli kaynak adaylarını aç</button></>}
     {productMore && <button className="text-button" disabled={busy} onClick={() => void research(true)}>Önceki araştırmaları getir</button>}
     {candidates && <ContextEditor candidates={candidates} productId={product} versionId={record.latest_version_id} base={base} onSaved={(item) => { setCandidates(null); setItems((old) => [item, ...old.filter((value) => value.id !== item.id)]); setLoaded(true); }} />}
-    {items.map((item) => <ContextCard key={item.id} item={item} base={base} matterId={matterId} analysisId={record.id} />)}
+    {items.map((item) => <ContextCard key={item.id} item={item} base={base} matterId={matterId} analysisId={record.id} onAdopt={onAdopt} />)}
     {loaded && !items.length && <p>Bu analiz için saklanan dayanak bağlamı yok.</p>}{more && <button className="text-button" disabled={busy} onClick={() => void history(true)}>Önceki bağlamları getir</button>}{error && <Notice error>{error}</Notice>}
   </>;
 }
