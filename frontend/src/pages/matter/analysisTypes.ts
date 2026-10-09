@@ -1,3 +1,4 @@
+import type { AuthorityFeedback, AuthorityResponse } from './authorityProposalTypes';
 import type { Fact, Passage } from '../../types';
 
 export interface AnalysisPremise { id: string; kind: 'fact' | 'assumption' | 'unknown'; fact_id: string | null; fact_revision: number | null; text: string }
@@ -24,7 +25,8 @@ export interface AnalysisContent extends Omit<AnalysisForm, 'evidence'> {
   evidence: (AnalysisSelection & { document_id: string; document_revision: number; document_sha256: string | null; name: string; locator: Passage['locator']; passage_sha256: string; quote_sha256: string; text: string; full_passage_length: number })[];
   fact_snapshots: { id: string; revision: number; text: string; status: string; evidence_id: string | null }[];
   checks: AnalysisChecks; status: 'needs_review' | 'reviewed' | 'stale'; authorship: 'user' | 'user_with_ai_assistance' | 'model_proposal'; legal_authority: false;
-  ai_assistance?: { job_id: string; source_version_id: string; passes: number; provider: { model: string }; review_notes?: { target_id: string; text: string; pass: number }[]; review_feedback?: AnalysisFeedback; feedback_responses?: FeedbackResponse[]; feedback_response_pass?: number | null };
+  ai_assistance?: { job_id: string; source_version_id: string; passes: number; provider: { model: string }; review_notes?: { target_id: string; text: string; pass: number }[]; review_feedback?: AnalysisFeedback; feedback_responses?: FeedbackResponse[]; feedback_response_pass?: number | null; authority_feedback?: AuthorityFeedback; authority_responses?: AuthorityResponse[]; authority_response_pass?: number | null };
+  authority_contributions?: { job_id: string; source_version_id: string; provider_pin: { model: string }; feedback: AuthorityFeedback; responses: AuthorityResponse[]; response_pass: number | null }[];
   revision_comparison: { previous_version_id: string | null; changed_sections: string[]; changed_dependency_groups: string[]; checks_no_longer_triggered: string[]; new_check_ids: string[]; scope: string };
 }
 export interface AnalysisRecord extends AnalysisContent {
@@ -70,11 +72,11 @@ export interface AnalysisSuggestion {
   source_version_id: string; created_at: string; finished_at?: string; deadline_at: string; budget_seconds: number;
   provider_pin: { model: string; recipe: string; transport: { mode: string; uses_public_network: boolean } };
   candidate?: AnalysisContent; candidate_sha256?: string; can_adopt: boolean; adopted_version_id?: string;
-  freshness: AnalysisFreshness; error?: string;
+  freshness: AnalysisFreshness; error?: string; public_source_access?: boolean;
   review_notes?: { target_id: string; text: string; evidence_ids: string[]; pass: number }[];
-  review_feedback?: AnalysisFeedback; feedback_responses?: FeedbackResponse[]; feedback_response_pass?: number | null;
+  review_feedback?: AnalysisFeedback; feedback_responses?: FeedbackResponse[]; feedback_response_pass?: number | null; authority_feedback?: AuthorityFeedback; authority_responses?: AuthorityResponse[]; authority_response_pass?: number | null;
   comparison_ref?: { id: string; protocol_sha256: string; arm: 'single_pass' | 'bounded_correction' };
-  iterations?: { pass: number; provider_seconds: number; prompt: { utf8_bytes: number; messages_sha256: string; completion_tokens: number }; outcome: string; new_critical_check_ids: string[]; checks: AnalysisChecks; patch?: { feedback_responses?: FeedbackResponse[] } }[];
+  iterations?: { pass: number; provider_seconds: number; prompt: { utf8_bytes: number; messages_sha256: string; completion_tokens: number }; outcome: string; new_critical_check_ids: string[]; checks: AnalysisChecks; patch?: { feedback_responses?: FeedbackResponse[]; authority_responses?: AuthorityResponse[] } }[];
 }
 
 export interface FeedbackResponse { finding_id: string; outcome: 'proposed_change' | 'requires_manual_work' | 'unresolved'; edited_targets: string[]; text: string; evidence_ids: string[] }

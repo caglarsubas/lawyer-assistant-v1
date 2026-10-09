@@ -243,10 +243,10 @@ class Provider:
             raise ProviderError("Invalid private quotation context") from None
         return self._complete(messages, 1000, measured["total_upper_bound_units"])
 
-    def suggest_analysis(self, content, *, repair=False, budget_seconds=120, review_feedback=None):
+    def suggest_analysis(self, content, *, repair=False, budget_seconds=120, review_feedback=None, authority_feedback=None):
         from .analysis_proposals import COMPLETION_TOKENS, prompt_measurement, proposal_messages
         try:
-            messages = proposal_messages(content, repair=repair, review_feedback=review_feedback)
+            messages = proposal_messages(content, repair=repair, review_feedback=review_feedback, authority_feedback=authority_feedback)
             measured = prompt_measurement(messages)
         except (ValueError, TypeError, KeyError):
             raise ProviderError("Invalid private analysis context") from None

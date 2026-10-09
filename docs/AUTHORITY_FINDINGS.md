@@ -121,3 +121,9 @@ Independent semantic/adverse adjudication, held-out evaluation, qualified public
 synthesis and measured Standard/Deep benefit remain open. See the
 [context contract](ANALYSIS_AUTHORITIES.md), [roadmap](ROADMAP.md),
 [evaluation](EVALUATION.md) and [verification](VALIDATION.md).
+
+## Optional selected-finding proposal follow-up
+
+A separate, explicitly requested local-model job can use eligible findings from the
+latest Current review. It never changes this immutable human review or its
+`model_use: none` attribution. See [proposal contract](AUTHORITY_PROPOSALS.md).

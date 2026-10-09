@@ -24,7 +24,7 @@ from .analysis_cohorts import cohort_router
 from .analysis_comparisons import comparison_router
 from .analysis_reviews import review_router
 from .analysis_suggestions import PURPOSE as ANALYSIS_SUGGESTION_PURPOSE
-from .analysis_suggestions import suggestion_router
+from .analysis_suggestions import suggestion_router, suggestion_view
 from .analysis_workbench import analysis_router
 from .assistant import assistant_router
 from .auth import (
@@ -258,6 +258,7 @@ def create_app(settings=None):
                     trusted_review_key=Path(settings.graph_trusted_review_key) if settings.graph_trusted_review_key else None,
                     authorization_guard=authorization_guard,
                 )
+                store.authority_proposal_app = app
                 app.state.search = PublicSearchService(settings.opensearch_url, index=settings.search_index,
                                                      release_id=settings.search_release_id,
                                                      graph_release=app.state.graph.release)
@@ -708,7 +709,10 @@ def create_app(settings=None):
     @app.get("/api/v1/matters/{matter_id}/research/{run_id}")
     def research_status(matter_id: str, run_id: str, user=Depends(authenticate)):
         with app.state.store.session() as session:
-            return app.state.store.view(require_child(session, run_id, "research", matter_id, user))
+            row = require_child(session, run_id, "research", matter_id, user)
+            if app.state.store.decode(row).get("purpose") == ANALYSIS_SUGGESTION_PURPOSE:
+                return suggestion_view(app, session, matter_id, user, row)
+            return app.state.store.view(row)
 
     @app.post("/api/v1/matters/{matter_id}/research/{run_id}/cancel")
     def cancel(matter_id: str, run_id: str, user=Depends(authenticate)):
@@ -717,7 +721,10 @@ def create_app(settings=None):
             session, run_id, "research", matter_id, user))
         app.state.research_jobs.cancel(run_id)
         with store.session() as session:
-            return store.view(require_child(session, run_id, "research", matter_id, user))
+            row = require_child(session, run_id, "research", matter_id, user)
+            if store.decode(row).get("purpose") == ANALYSIS_SUGGESTION_PURPOSE:
+                return suggestion_view(app, session, matter_id, user, row)
+            return store.view(row)
 
     @app.get("/api/v1/matters/{matter_id}/products/{product_id}")
     def product(matter_id: str, product_id: str, user=Depends(authenticate)):

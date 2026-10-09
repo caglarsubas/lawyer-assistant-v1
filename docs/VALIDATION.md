@@ -1,5 +1,67 @@
 # Verification record — 9 October 2026
 
+## R05A source-bound local authority proposals — 9 October 2026 (Asia/Shanghai)
+
+PR #30 is merged at `4c77c49aecdf933cc9224292667a8fba5d2f871e`; exact post-merge
+main run `37887856160` passed. This next packet adds opt-in selected authority-review
+findings to the existing bounded local proposal queue. Fixed source/target responses,
+accepted-pass provenance and explicit adoption preserve the original human record.
+Inherited public contributions retain their original model/job and exact quotations
+through subsequent manual and private-model revisions. No legal blocker or finding
+is automatically cleared.
+
+Final local verification:
+
+- **3,128 backend tests passed**, 52 skipped in 387.38 seconds with two workers.
+  Skips are the 49 separately executed PostgreSQL cases and three opt-in
+  infrastructure drills. Existing dependency deprecations remain visible.
+- **49 real PostgreSQL cases passed** on the pinned disposable PostgreSQL 16.10
+  image. The new competing source-bound adoption test proves the second request
+  waits on a real database lock and rejects a duplicate version. That case also
+  passed again after the inherited-provenance refinement. Containers/child databases
+  were removed. An initial test-only observer tuple error was corrected.
+- **476 exact-source offline Linux cases passed** in 163.62 seconds: proposals,
+  private-workbench regressions, authority contexts/findings/comparisons/trials/groups,
+  signed-source revocation and ontology syntax/membership/work budgets. Application,
+  tests, ontology runtime and locked dependencies matched the checkout. The nonroot
+  container had no network, host ports or mounts, a read-only filesystem, two CPUs,
+  768 MiB memory, 128 PIDs and a 256 MiB temporary filesystem. Cleanup was verified.
+  An earlier rehearsal under concurrent validation exceeded its local 180-second
+  driver budget; the final run used a local 300-second budget. CI limits are unchanged.
+- **191 frontend tests passed** across 24 files; typecheck/production build passed.
+  The existing main-chunk size advisory remains. Tests cover safe quotation rendering,
+  withholding cached candidate/iteration bytes and preserving earlier source/model
+  attribution after a later proposal.
+- **41 deployment contracts**, RDF/SHACL, R01 planning/calibration/study contracts,
+  Ruff, actionlint, whitespace and Compose validation passed. Compose used
+  `/dev/null` and disposable placeholders, without reading a local `.env`.
+- Final production-build browser rehearsal used invented sources and mocked inference:
+  tool visits made zero model calls; one selected historical finding triggered one
+  call; explicit adoption created version 2, Needs review, with version 1 retained.
+  DOCX/PDF contained the original public quote and model attribution. Simulated
+  permission denial cleared the displayed draft and cached public prose. No browser
+  console warning/error occurred; owned tabs and loopback servers were closed.
+
+API cases exercise exact review/context/source binding, payload retries/conflicts,
+strict selection, invented references, fixed-rule protection, unaccounted edits,
+rejected repair lineage, cancellation, in-flight/late revocation, pending post-commit
+receipts, generic research-route withholding, inherited permissions, missing lineage
+and export-time revocation. Selected review text cannot be replaced by client prose.
+
+The workflow file and job names/resources/retries/timeouts are unchanged. Collection
+contains **3,180 unique backend node IDs**: 89 preflight, 3,081 main partition and
+10 publication cases, with zero overlap or omission. Hosted PR checks are reported
+separately for the exact pushed head. This local record does not establish GitHub
+billing savings or a live deployment.
+
+**R05A remains partial.** Real source/legal review, representative semantic/adverse
+qualification, real-model performance, measured benefit and qualified public synthesis
+remain open. Explicit reviewed revalidation of inherited Stale lineage is the next
+bounded packet; registered same-input model authority trials follow. No live provider
+call, credential change, graph/index activation, migration or deployment occurred.
+See [workflow/API](AUTHORITY_PROPOSALS.md) and
+[verification metadata](evidence/private-authority-proposals-verification-2026-10-09.json).
+
 ## PR #30 CI follow-up — existing-job workload balance
 
 [Run 37882649274](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37882649274)

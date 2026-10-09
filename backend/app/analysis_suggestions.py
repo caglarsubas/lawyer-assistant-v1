@@ -1,14 +1,15 @@
 """Private proposal jobs on the shared research queue; adoption is a human write."""
 
 import time
+from contextlib import ExitStack
 from datetime import datetime, timezone
 from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import Field
+from pydantic import Field, model_validator
 from sqlalchemy import select
 
-from . import analysis_reviews
+from . import analysis_reviews, authority_proposals
 from .analysis_feedback import FeedbackSelection, resolve_feedback
 from .analysis_proposals import (
     RECIPE,
@@ -52,6 +53,13 @@ class SuggestionInput(StrictInput):
     mode: Literal["single", "repair"] = "single"
     review_feedback: FeedbackSelection | None = None
     comparison_ref: ComparisonReference | None = None
+    authority_feedback: authority_proposals.AuthorityFeedbackSelection | None = None
+
+    @model_validator(mode="after")
+    def separate(self):
+        if self.authority_feedback and (self.review_feedback or self.comparison_ref):
+            raise ValueError("Authority proposals cannot share a private-feedback or comparison protocol")
+        return self
 
 
 class AdoptInput(StrictInput):
@@ -119,10 +127,48 @@ def _source(app, session, matter_id, user, state):
                     selected_pass is not None and (not iteration or iteration["outcome"] != "accepted_structural_patch"
                     or iteration["patch"]["feedback_responses"] != state.get("feedback_responses"))):
                 raise HTTPException(409, "Bulgu yanıtlarının saklanan aday geçişi doğrulanamadı.")
+    if state.get("authority_feedback"):
+        feedback = state["authority_feedback"]
+        selection = authority_proposals.AuthorityFeedbackSelection(
+            **{key: feedback["dependency"][key] for key in ("context_id", "review_id", "review_sha256")},
+            findings=[{"source_index": int(item["authority_id"].split(":")[1]), "dimension": item["dimension"]}
+                      for item in feedback["findings"]])
+        snapshot, checksum = authority_proposals.resolve(
+            app, session, matter_id, row.id, state["source_version_id"], user, selection)
+        if snapshot != feedback or checksum != state.get("authority_feedback_sha256"):
+            raise HTTPException(409, "Seçilen kamu bulgularının tam kaynak bağı değişti.")
+        selected_pass = state.get("authority_response_pass")
+        iteration = next((item for item in state.get("iterations", []) if item["pass"] == selected_pass), None)
+        if (state.get("candidate") and state["candidate"]["revision_comparison"]["changed_sections"]
+                and selected_pass is None):
+            raise HTTPException(409, "Dayanak yanıtları olmayan düzenleme adaya alınamaz.")
+        if selected_pass is not None and (not iteration or iteration["outcome"] != "accepted_structural_patch"
+                or iteration["patch"]["authority_responses"] != state.get("authority_responses")):
+            raise HTTPException(409, "Dayanak yanıtlarının saklanan aday geçişi doğrulanamadı.")
     return row
 
 
 def suggestion_view(app, session, matter_id, user, row):
+    data = app.state.store.view(row)
+    if authority_proposals.dependencies(data):
+        try:
+            with authority_proposals.scope(app, session, matter_id, user, data):
+                authority_proposals.check_admission(app.state.store, session, matter_id, user, data["source_content"])
+                if data.get("authority_publication_pending"):
+                    raise HTTPException(409)
+                return _suggestion_view(app, session, matter_id, user, row)
+        except HTTPException as exc:
+            if exc.status_code not in {404, 409}:
+                raise
+            return {key: data[key] for key in ("id", "status", "phase", "mode", "max_passes", "source_version_id",
+                    "created_at", "deadline_at", "budget_seconds", "provider_pin")} | {
+                "candidate": None, "can_adopt": False, "review_notes": [], "iterations": [],
+                "freshness": {"status": "stale", "reasons": ["public_authority_content_withheld"],
+                              "scope": "source_bound_authority_proposal"}, "public_source_access": False}
+    return _suggestion_view(app, session, matter_id, user, row)
+
+
+def _suggestion_view(app, session, matter_id, user, row):
     data = app.state.store.view(row)
     reasons = []
     try:
@@ -149,10 +195,10 @@ def _require_job(store, session, matter_id, analysis_id, job_id, user):
     return row
 
 
-def _progress(app, job_id, candidate, iterations, notes, responses, response_pass, *, completed=False):
+def _progress(app, job_id, candidate, iterations, notes, responses, response_pass, authority_responses, authority_pass, *, completed=False):
     app.state.research_owner()
     store = app.state.store
-    with store.session() as session:
+    with store.session() as session, ExitStack() as guards:
         row = session.get(Record, job_id)
         user = session.get(User, row.owner_id)
         matter = require_matter(session, row.matter_id, user)
@@ -160,16 +206,34 @@ def _progress(app, job_id, candidate, iterations, notes, responses, response_pas
         session.refresh(row, with_for_update=True)
         state = store.decode(row)
         ensure_active(state)
+        guards.enter_context(authority_proposals.scope(app, session, row.matter_id, user, state))
         _source(app, session, row.matter_id, user, state)
-        state.update(candidate=candidate, candidate_sha256=digest(canonical(candidate)),
+        state.update(authority_responses=authority_responses, authority_response_pass=authority_pass,
+                     authority_publication_pending=bool(authority_proposals.dependencies(state)), candidate=candidate, candidate_sha256=digest(canonical(candidate)),
                      iterations=iterations, review_notes=notes,
                      feedback_responses=responses, feedback_response_pass=response_pass)
-        if completed:
+        if completed and not state["authority_publication_pending"]:
             state.update(status="completed", phase="finished", finished_at=now())
         else:
             state["phase"] = "checked"
         store.update(row, state)
         session.commit()
+        guards.close()
+        _finalize_job(app, job_id, row.revision, completed=completed)
+
+
+def _finalize_job(app, job_id, revision, *, completed=False):
+    with app.state.store.session() as session:
+        row = session.get(Record, job_id, with_for_update=True)
+        if row.revision != revision:
+            raise HTTPException(409, "Önerinin kayıt sırası değişti.")
+        state = app.state.store.decode(row)
+        if state.get("authority_publication_pending"):
+            state["authority_publication_pending"] = False
+            if completed:
+                state.update(status="completed", phase="finished", finished_at=now())
+            app.state.store.update(row, state)
+            session.commit()
 
 
 def run_suggestion(app, job_id):
@@ -191,23 +255,31 @@ def run_suggestion(app, job_id):
         matter_id = row.matter_id
     iterations, notes, responses, response_pass = [], [], [], None
     feedback = state.get("review_feedback")
+    authority_feedback = state.get("authority_feedback")
+    authority_responses, authority_pass = [], None
     for index in range(state["max_passes"]):
         checkpoint(app, job_id, "suggesting" if index == 0 else "repairing")
         with store.session() as session:
             user = session.get(User, row.owner_id)
             _source(app, session, matter_id, user, state)
-        messages = proposal_messages(best, repair=index > 0, review_feedback=feedback)
+        messages = proposal_messages(best, repair=index > 0, review_feedback=feedback, authority_feedback=authority_feedback)
         measured = prompt_measurement(messages)
         remaining = (datetime.fromisoformat(state["deadline_at"]) - datetime.now(timezone.utc)).total_seconds()
         if remaining <= 0:
             raise JobStopped("timed_out")
         started = time.monotonic()
         options = {"review_feedback": feedback} if feedback else {}
-        raw = app.state.provider.suggest_analysis(best, repair=index > 0, budget_seconds=min(120, remaining), **options)
+        if authority_feedback:
+            options["authority_feedback"] = authority_feedback
+        with store.session() as session:
+            user = session.get(User, row.owner_id)
+            with authority_proposals.scope(app, session, matter_id, user, state):
+                _source(app, session, matter_id, user, state)
+                raw = app.state.provider.suggest_analysis(best, repair=index > 0, budget_seconds=min(120, remaining), **options)
         elapsed = time.monotonic() - started
         checkpoint(app, job_id, "checking")
         patch = parse_patch(raw)
-        body = apply_patch(best, patch, review_feedback=feedback)
+        body = apply_patch(best, patch, review_feedback=feedback, authority_feedback=authority_feedback)
         with store.session() as session:
             user = session.get(User, row.owner_id)
             _source(app, session, matter_id, user, state)
@@ -223,10 +295,12 @@ def run_suggestion(app, job_id):
             best = candidate
             responses = [item.model_dump() for item in patch.feedback_responses]
             response_pass = index + 1 if feedback else None
-        _progress(app, job_id, best, iterations, notes, responses, response_pass)
+            authority_responses = [item.model_dump() for item in patch.authority_responses]
+            authority_pass = index + 1 if authority_feedback else None
+        _progress(app, job_id, best, iterations, notes, responses, response_pass, authority_responses, authority_pass)
         if not critical_ids(best):
             break
-    _progress(app, job_id, best, iterations, notes, responses, response_pass, completed=True)
+    _progress(app, job_id, best, iterations, notes, responses, response_pass, authority_responses, authority_pass, completed=True)
 
 
 def start_suggestion(matter_id: str, analysis_id: str, body: SuggestionInput, request: Request, user=Depends(authenticate)):
@@ -234,10 +308,12 @@ def start_suggestion(matter_id: str, analysis_id: str, body: SuggestionInput, re
     request_value = body.model_dump(exclude={"request_id"})
     if request_value.get("comparison_ref") is None:
         request_value.pop("comparison_ref", None)
+    if request_value.get("authority_feedback") is None:
+        request_value.pop("authority_feedback", None)
     scope = digest(canonical(request_value))
     receipt_id = analysis_id + "-" + digest(user.id + ":" + body.request_id)[:30]
     try:
-        with store.session() as session:
+        with store.session() as session, ExitStack() as guards:
             matter = require_matter(session, matter_id, user)
             session.refresh(matter, with_for_update=True)
             require_child(session, analysis_id, "practice_analysis", matter_id, user)
@@ -261,6 +337,11 @@ def start_suggestion(matter_id: str, analysis_id: str, body: SuggestionInput, re
             if body.review_feedback:
                 state["review_feedback"], state["review_feedback_sha256"] = resolve_feedback(
                     store, session, matter_id, row.id, body.version_id, user, body.review_feedback)
+            if body.authority_feedback:
+                state["authority_feedback"], state["authority_feedback_sha256"] = authority_proposals.resolve(
+                    app, session, matter_id, row.id, body.version_id, user, body.authority_feedback)
+            guards.enter_context(authority_proposals.scope(app, session, matter_id, user, state))
+            state["authority_publication_pending"] = bool(authority_proposals.dependencies(state))
             if body.comparison_ref:
                 state.update(comparison_ref=body.comparison_ref.model_dump(), comparison_request_id=body.request_id)
                 _source(app, session, matter_id, user, state)
@@ -276,6 +357,13 @@ def start_suggestion(matter_id: str, analysis_id: str, body: SuggestionInput, re
                 _audit(session, user, "analysis_suggestion_requested", ident, matter_id)
                 require_matter(session, matter_id, user)
                 session.commit()
+                try:
+                    guards.close()
+                except HTTPException:
+                    finish_run(store, ident, "interrupted")
+                    raise HTTPException(409, "Öneri kaydedildi; son kamu izin kontrolü tamamlanamadı. Geçmişi inceleyin.") from None
+                _finalize_job(app, ident, job.revision)
+                session.refresh(job)
                 result = suggestion_view(app, session, matter_id, user, job)
                 try:
                     app.state.research_jobs.submit(ident)
@@ -328,12 +416,13 @@ def suggestion_router():
     def adopt(matter_id: str, analysis_id: str, job_id: str, body: AdoptInput, request: Request, user=Depends(authenticate)):
         app, store = request.app, request.app.state.store
         app.state.research_owner()
-        with store.session() as session:
+        with store.session() as session, ExitStack() as guards:
             matter = require_matter(session, matter_id, user)
             session.refresh(matter, with_for_update=True)
             job = _require_job(store, session, matter_id, analysis_id, job_id, user)
             session.refresh(job, with_for_update=True)
             state = store.decode(job)
+            guards.enter_context(authority_proposals.scope(app, session, matter_id, user, state))
             row = _source(app, session, matter_id, user, state)
             eligible = suggestion_view(app, session, matter_id, user, job)
             if (not eligible["can_adopt"] or body.candidate_sha256 != state.get("candidate_sha256")
@@ -355,6 +444,15 @@ def suggestion_router():
                 content["ai_assistance"].update(
                     review_feedback=state["review_feedback"], review_feedback_sha256=state["review_feedback_sha256"],
                     feedback_responses=state["feedback_responses"], feedback_response_pass=state["feedback_response_pass"])
+            if state.get("authority_feedback"):
+                content["ai_assistance"].update(authority_feedback=state["authority_feedback"],
+                    authority_feedback_sha256=state["authority_feedback_sha256"],
+                    authority_responses=state["authority_responses"], authority_response_pass=state["authority_response_pass"])
+            inherited = authority_proposals.dependencies(state)
+            if inherited:
+                content["authority_dependencies"] = inherited
+                content["authority_contributions"] = authority_proposals.contributions(state, job.id)
+            admission = authority_proposals.prepare_admission(store, session, matter_id, user, content)
             row = _write_version(store, session, user, "practice_analysis", inputs, content, matter_id, row)
             state["adopted_version_id"] = store.decode(row)["latest_version_id"]
             store.update(job, state)
@@ -362,6 +460,8 @@ def suggestion_router():
             _audit(session, user, "analysis_suggestion_adopted", job.id, matter_id)
             require_matter(session, matter_id, user)
             session.commit()
+            guards.close()
+            authority_proposals.complete_admission(store, matter_id, user, admission)
             return _view(store, session, matter_id, user, row)
 
     return router

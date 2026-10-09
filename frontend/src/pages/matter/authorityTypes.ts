@@ -32,7 +32,7 @@ export interface LinkedAuthority {
     within_assertion_interval: boolean | null; target_version_within_interval: boolean | null; applicability: 'not_assessed' };
 }
 export interface AuthorityManifest extends AuthoritySpec {
-  recipe: string; analysis_content: AnalysisContent; graph_release_pin: AuthorityPin; sources: LinkedAuthority[];
+  recipe: string; analysis_revision?: number; analysis_content: AnalysisContent; graph_release_pin: AuthorityPin; sources: LinkedAuthority[];
   analysis_content_sha256: string; analysis_review_id: string | null; product_sha256: string;
   legal_approval: 'not_granted'; matter_applicability: 'not_assessed'; binding_effect: 'not_assessed'; model_use: 'none';
 }
