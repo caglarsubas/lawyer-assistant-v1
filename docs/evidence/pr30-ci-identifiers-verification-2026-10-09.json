@@ -1,0 +1,220 @@
+{
+  "schema": "pr30-ci-identifiers-verification-v1",
+  "recorded_at": "2026-10-09T04:10:29.744782+00:00",
+  "base_commit": "b4d024160662665cee0bb736b3f2a0e14f897f06",
+  "failed_initial_run": {
+    "id": 37874784913,
+    "head": "b4d024160662665cee0bb736b3f2a0e14f897f06",
+    "backend": "18-minute timeout at 91%; no reported assertion failure",
+    "frontend": "success",
+    "postgres": "success"
+  },
+  "synthetic_only": true,
+  "production_qualified": false,
+  "source": {
+    "ontology_runtime": {
+      "ontology/build_catalog.py": "60cfdd479eac4a3175e0ac566377c42f80f8ee686a40f391558fe6da23de0914",
+      "ontology/rdfs_identifiers.py": "3a1879c70bf18fee0e21ff8ba7e91d78e855aef7c547fa777ff86e6827f12095",
+      "ontology/releases.py": "270e8de7352169075e8e8e9819e35db0820777cb7e0afa10d3ebd2d877bebb88",
+      "ontology/serving.py": "777eaf7bb1e98a7a678294506b2cb23ae67589642dac077aaeba217be9c00e15",
+      "ontology/temporal.py": "e14241239a580dcf997e3c9fbf785df05ca035d9fcc6a7feb01bb5e398d7548c",
+      "ontology/validation.py": "465eb0d099e3b2a38a3b41ee137e43f49dcbb723bfd9e7cab35b94cf9cb0de30"
+    },
+    "dependencies": {
+      "pyshacl": "0.40.1",
+      "owlrl": "7.6.2",
+      "rdflib": "7.6.0"
+    },
+    "application": {
+      "sha256": "2233aff90fb99bcc6c8e392affcafdea1d349113b250c07c48b462a7e3ca9b7b",
+      "files": 121
+    },
+    "tests": {
+      "files": 87,
+      "sha256": "d5728d4b6c0b8481dce760c2cd936eb81a3cd0eb168f5765aabdd148e5e2efe0"
+    }
+  },
+  "checks": {
+    "backend": {
+      "passed": 3099,
+      "skipped": 51,
+      "warnings": 28,
+      "seconds": 387.02,
+      "command": "pytest backend/tests -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30"
+    },
+    "mandatory_preflight": {
+      "passed": 89,
+      "new_cases": 16,
+      "seconds": 9.58
+    },
+    "postgres": {
+      "synthetic_only": true,
+      "production_qualified": false,
+      "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+      "scope": "all forty-eight real PostgreSQL snapshot, authorization and research/adoption/context/review/comparison races from the exact CI selection in random disposable child databases",
+      "cleanup_verified": true,
+      "exit_code": 0,
+      "wall_seconds": 74.054,
+      "passed": 48,
+      "pytest_seconds": 71.61
+    },
+    "offline_linux": {
+      "exit_code": 0,
+      "passed": 311,
+      "pytest_seconds": 126.35,
+      "container_wall_seconds": 127.336
+    },
+    "linux_cleanup_verified": true,
+    "deployment_contracts": 41,
+    "contract_cli": {
+      "ruff": {
+        "exit_code": 0,
+        "wall_seconds": 0.01
+      },
+      "deployment": {
+        "exit_code": 0,
+        "wall_seconds": 0.538
+      },
+      "ontology": {
+        "exit_code": 0,
+        "wall_seconds": 0.487
+      },
+      "planning": {
+        "exit_code": 0,
+        "wall_seconds": 0.091
+      },
+      "calibration-fixture": {
+        "exit_code": 0,
+        "wall_seconds": 0.207
+      },
+      "calibration": {
+        "exit_code": 0,
+        "wall_seconds": 0.081
+      },
+      "study-fixture": {
+        "exit_code": 0,
+        "wall_seconds": 0.337
+      },
+      "study": {
+        "exit_code": 0,
+        "wall_seconds": 0.104
+      },
+      "actionlint": {
+        "exit_code": 0,
+        "wall_seconds": 0.038
+      },
+      "git-diff": {
+        "exit_code": 0,
+        "wall_seconds": 0.014
+      },
+      "compose": {
+        "exit_code": 0,
+        "wall_seconds": 0.042
+      }
+    },
+    "ci_partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 3150,
+        "preflight": 89,
+        "remaining": 3061
+      },
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "ba37c2817e477ade6bb727b2d3782f45112c95f544bad4d53eb231a597a956c4",
+      "workflow_sha256": "4b0bb77d3b6c938f1a66d0fa78f896d47ca30a3fc2d917761a053a1aa8b0cbd9",
+      "no_runner_retry_deadline_change": true,
+      "hosted_speedup_or_billing_savings_established": false
+    }
+  },
+  "work_counts": {
+    "native": {
+      "rules": 11888,
+      "resolutions": 151647,
+      "queries": 186
+    },
+    "bound": {
+      "rules": 11888,
+      "resolutions": 0,
+      "queries": 186
+    }
+  },
+  "production_adapter_measurement": {
+    "synthetic_only": true,
+    "pairs": 8,
+    "warmup_pairs": 2,
+    "measurement": "current production adapter versus native with identical scratch graph, shapes, options and syntax cache; no dependency monkeypatch",
+    "measurements": {
+      "native": [
+        0.09568716600188054,
+        0.09520387498196214,
+        0.0943710420106072,
+        0.09506358299404383,
+        0.09499087501899339,
+        0.09443658302188851,
+        0.11109545902581885,
+        0.09448299999348819
+      ],
+      "identifier_bound": [
+        0.06129354200675152,
+        0.059226791985565796,
+        0.059711209003580734,
+        0.059304041002178565,
+        0.059293208993040025,
+        0.05918908299645409,
+        0.06016154101234861,
+        0.06030787498457357
+      ]
+    },
+    "median_seconds": {
+      "native": 0.09502722900651861,
+      "identifier_bound": 0.05950762500287965
+    },
+    "median_reduction_percent": 37.378343423233375
+  },
+  "native_rule_and_entry_point_code_objects_reused": true,
+  "identifier_bindings": 12,
+  "third_party_globals_mutated": false,
+  "shared_query_inference_or_verdict_cache_added": false,
+  "log_sha256": {
+    "failed-hosted.log": "6b141b2b30fc9a50dedf4a31019363461a25abea9e93f26e73d128300b340074",
+    "backend-full.log": "4542c768bd919a313a499aa79d8c09c9f5aa26584511cee1e269b44bc7a57f24",
+    "backend-final.log": "b67a01d538e2fd3a2142de6ba072aa564bc10f69acf14203137251f5847dbf00",
+    "preflight-final.log": "523e657713233acf402db820559b45e02c9acbc7f93adb97d7fa43e80a43032c",
+    "identifier-tests.log": "07a386e3a2c90faaadcb69e63bb2cef5a6b2767cfa887a84f9549ebffd3d9541",
+    "identifier-tests-final.log": "717eed97cfb5a3701c85cc98bb60b352ad876ea8c0713f504cd25f0bbe248128",
+    "identifier-work-counts.json": "8fa7fe0b4ae4291f8d51782e8797b2a034005b8202e46ebebc1cbc9478d3caf7",
+    "production-measurement.json": "672ea106b974094f4ee02ca45b66ac00b17d7259a8b45f7a4deddf9f1ca7dccd",
+    "linux-tests.log": "63899f11b54a5e6638cbe9d377770518d5c83323375a6b5e1e552cfd9e2914b9",
+    "postgres.log": "54a77146bdf6301fa812a4dfcbcd07e80804f85b3a881717bad0ba0a36a08134",
+    "contracts-final.log": "cc5f1d3e669255a4822739bb19d3210845977b6e42a6af4ac17c36c6d1a10b2e",
+    "ci-collection-complete.log": "9ff2d06d08c51ac61df8638ec3285848c61aad1d0590dee7e26e7c37fc263f7e",
+    "ci-collection-preflight.log": "7b985045d605ee86ba9c3157a2b72c32122a9451dc53073246264a29f9a69703",
+    "ci-collection-remaining.log": "12650d7b6320fb8d195f54344f0b27d856a679db1374915b93bcd5528da41a45"
+  },
+  "unchanged": [
+    "runner/worker/retry counts",
+    "job/step deadlines",
+    "dependencies and lockfile",
+    "graph/schema/catalog definition bytes",
+    "signed release formats",
+    "source integrity reads and current authorization checks",
+    "provider and source permissions",
+    "original dirty checkout and .env",
+    "deployed app"
+  ],
+  "not_established": [
+    "new-head hosted CI until separately observed",
+    "post-merge main CI",
+    "invoiced currency savings",
+    "production latency/capacity or legal qualification"
+  ]
+}

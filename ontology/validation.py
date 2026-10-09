@@ -11,10 +11,10 @@ store. Inference, source reads and every SHACL query still execute afresh.
 from __future__ import annotations
 
 from collections import OrderedDict
+from pathlib import Path
 from threading import Lock
 
 from pyparsing import ParseResults
-from pyshacl import validate
 from rdflib import BNode, Graph, Literal, URIRef, Variable
 from rdflib.plugins.sparql import prepareQuery, processor
 from rdflib.plugins.sparql.algebra import translateQuery
@@ -281,6 +281,19 @@ def _copy_into(source: Graph, target: Graph) -> Graph:
         target.bind(prefix, namespace, override=True, replace=True)
     target += source
     return target
+
+
+# Validation is also loaded directly by path by the offline qualification tools.
+# Resolve only this local sibling; do not change sys.path or third-party globals.
+def _local_validate():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('lawyer_rdfs_identifiers', Path(__file__).with_name('rdfs_identifiers.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.validate_for(_ValidationGraph)
+
+
+validate = _local_validate()
 
 
 def validate_graph(data: Graph, shapes: Graph, schema: Graph):

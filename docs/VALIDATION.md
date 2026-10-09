@@ -1,5 +1,60 @@
 # Verification record — 9 October 2026
 
+## PR #30 CI correction — native RDFS identifier bindings
+
+Initial [run 37874784913](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37874784913)
+on `b4d024160662665cee0bb736b3f2a0e14f897f06` passed frontend/PostgreSQL but exceeded
+the unchanged 18-minute backend-step limit at 91%, without a reported assertion
+failure. Dependency installation took three seconds. The preflight duplication fix
+alone was insufficient; repeated namespace resolution remained costly.
+
+The correction binds twelve immutable RDF/RDFS identifiers in the existing native
+rule function. Its code object, rule/closure execution, inference writes and the
+pySHACL entry-point code remain unchanged. Each invocation still constructs fresh
+inference and validation state. A private validator opts in only for the exact
+application scratch graph and RDFS mode. Package globals, graph/corpus definition
+bytes, release formats, source reads, live rights checks and schema remain untouched.
+Unrecognized programs, adapters and different dependency versions use native execution.
+Engineering-tested pins: pySHACL 0.40.1, OWL-RL 7.6.2, RDFLib 7.6.0.
+
+- **3,099 backend tests passed in 387.02s**, with 51 documented database/drill skips
+  and 28 existing warnings, using the unchanged standalone complete two-worker
+  worksteal command. **89 mandatory preflight cases passed in 9.58s**, including
+  16 new code/identifier equivalence, invalid-report, cycle/literal/domain/range,
+  unchanged-input, dependency/program fallback and parallel-isolation cases.
+- The representative fixture retains **11,888 inference rule executions and 186
+  SHACL queries**, reducing namespace resolutions within those rules from
+  **151,647 to zero**. The work-count test initially caught a destination-identifier
+  condition that left the optimization inactive; it was corrected before final checks.
+  Unsupported programs still use native execution. These counters are deterministic,
+  rather than machine-dependent time thresholds.
+- Eight alternating warm comparisons of the final adapter and native entry point,
+  with identical scratch graphs/shapes/options/syntax caches and no dependency
+  monkeypatch, measured **0.09503s / 0.05951s median (37.4% lower)**. Local timing
+  does not establish hosted performance, cost savings or legal qualification.
+- **48 real PostgreSQL cases passed in 71.61s** in disposable child databases on
+  the pinned image, including source authorization and real row-lock races.
+  **311 offline Linux cases passed in 126.35s**, with matching final runtime/test
+  fingerprints and dependency versions. Network disabled, no host ports/mounts,
+  non-root/read-only execution, capability/security/resource limits were preserved.
+  Both sets of owned containers were removed.
+- **41 deployment contracts**, repository Ruff, actionlint, RDF/SHACL, R01 planning,
+  synthetic calibration/study and Compose with `/dev/null` env passed. Definitions
+  remain legally unreviewed with zero actual published historical records. The
+  correction changes no frontend code; its existing exact-head check passed on
+  the initial PR run, and the next hosted head checks it again.
+- CI collection using actual shell commands proves **3,150 = 89 + 3,061** distinct
+  node IDs, with no overlap, missing cases or extras. All five preflight files remain
+  mandatory and are excluded only from the subsequent step to avoid duplicate work.
+  Required checks, runners, workers, retries and job/step limits are unchanged.
+
+[Correction verification metadata](evidence/pr30-ci-identifiers-verification-2026-10-09.json)
+pins source, dependencies, work counts, measurements and logs. Raw diagnostic logs
+and fixtures remain ignored under `.data/verification/pr30-ci-fix/`. The original
+checkout, `.env`, provider/source permissions and deployed app were untouched. Hosted
+checks for the correction are reported separately on PR #30; a passing PR does not
+establish passing post-merge `main` or invoiced savings. See [CI controls](CI.md).
+
 ## R05A confidential human authority-trial groups — 9 October 2026 (Asia/Shanghai)
 
 PR #29 merged as `8baaa698079da9d3d46fbc54ab1b1efe552eca79`; its exact PR checks

@@ -20,6 +20,7 @@ jobs:
         backend/tests/test_validation_membership.py
         backend/tests/test_ontology_syntax.py
         backend/tests/test_validation_syntax.py
+        backend/tests/test_rdfs_identifiers.py
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

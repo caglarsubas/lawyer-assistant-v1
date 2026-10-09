@@ -14,7 +14,7 @@ backend/.venv/bin/pytest backend/tests -n 2 --dist worksteal --max-worker-restar
 ```
 
 The command above is the standalone complete-suite check. In GitHub Actions, the
-four ontology preflight files are declared once in `CI_ONTOLOGY_PREFLIGHT_TESTS`.
+five ontology preflight files are declared once in `CI_ONTOLOGY_PREFLIGHT_TESTS`.
 They run in the mandatory preflight step, then the two-worker step uses `--ignore`
 for those same files. The steps together run the complete suite once; failed
 preflight stops the job. No preflight case is waived or counted as a skipped test.
@@ -107,14 +107,14 @@ in-place inference; caller-owned graphs stay unchanged. RDF, SHACL and catalog
 files remain byte-identical, preserving ontology fingerprints and existing signed
 packet compatibility. All live integrity and authorization checks remain active.
 
-CI runs the query, membership, ontology-syntax and SHACL-syntax checks before the expensive full suite. Their work
+CI runs the query, membership, ontology-syntax, SHACL-syntax and RDFS-identifier checks before the expensive full suite. Their work
 budget is deterministic rather than a fragile timing threshold: query parsing
 must scale with distinct programs while the number of query executions remains
 unchanged. It also tests the real release entry point, equal valid/invalid reports,
 changed evidence/bindings, namespaces/base, cache limits and parallel isolation.
 A regression fails this short step instead of consuming a full expensive run.
 The tests remain mandatory in preflight; the subsequent CI step excludes the same
-four files to avoid executing them twice. Dependency updates must pass them.
+five files to avoid executing them twice. Dependency updates must pass them.
 The final two-worker work-stealing command passed all 2,081 backend tests locally
 in **241.73s (4m01s)**, with eight PostgreSQL skips and 28 existing warnings.
 This is 28.2% less wall time than the earlier 336.83s local run despite adding
@@ -244,6 +244,53 @@ checks remain in the complete suite. No jobs, workers, dependencies, retries,
 test omissions or time-limit increases were introduced. RDF/SHACL/catalog bytes
 and signed formats remain unchanged. New-head CI and post-merge CI are separate
 observations; see [verification](VALIDATION.md).
+
+## PR #30 timeout: repeated immutable identifier resolution
+
+Initial [run 37874784913](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37874784913)
+on `b4d024160662665cee0bb736b3f2a0e14f897f06` passed frontend and PostgreSQL but
+backend reached 91% and exceeded its unchanged 18-minute step limit. Dependency
+installation took three seconds. Removing repeated preflight execution was useful
+but insufficient. There was no reported assertion failure before cancellation.
+
+The signed-source authorization profile showed millions of repeated RDFLib
+`DefinedNamespace` attribute resolutions in the native RDFS rule loop. RDF/RDFS
+identifiers are constants; resolving their names on every rule invocation adds
+work without changing their values. `ontology/rdfs_identifiers.py` binds those
+identifiers to immutable tuples of the exact same URIRef objects.
+
+The function's **native code object is reused**, including every entailment rule,
+closure cycle and inference write. The pySHACL entry point also uses its native
+code object with a private validator class. Only the application's exact scratch
+graph and RDFS mode opt in. Third-party package globals are untouched. Different
+dependency versions, unrecognized programs and other graph adapters retain native
+execution. The engineering-tested versions are pySHACL 0.40.1, OWL-RL 7.6.2 and
+RDFLib 7.6.0. No dependency or lockfile changes were needed.
+
+There are twelve fixed identifier bindings and no matter data, source assertions,
+query results, inferred graphs, source permissions or validation verdicts retained
+by this adapter. Each call still constructs a new inference engine and performs
+the full RDFS/SHACL validation against freshly read, integrity-checked inputs.
+RDF, SHACL and catalog definition bytes and signed release formats are unchanged.
+
+The deterministic regression budget retains **11,888 rule executions and 186
+SHACL queries**, reducing namespace resolutions inside those rules from
+**151,647 to zero** on the representative synthetic fixture. Native and optimized
+inferred triples and valid/invalid reports match. Tests also cover cyclic
+class/property relationships, domain/range, literals, container/datatype types,
+unchanged caller inputs, immutable identifiers, unsupported-program/dependency
+fallback and parallel graph isolation. They run in mandatory preflight before
+the expensive suite. Collection proves **3,150 = 89 + 3,061** distinct node IDs,
+with zero overlap, omitted cases or extras across the two CI steps.
+
+Eight alternating warm, unprofiled comparisons measured native/identifier-bound
+validation medians of **0.09503s / 0.05951s (37.4% lower)** using the final production
+adapter with identical scratch graphs, shapes, options and syntax caches, without
+patching dependency globals. This is a local validator
+measurement, not a hosted runner or currency claim. Two pattern-index experiments
+did not establish worthwhile improvement and were discarded. The correction adds
+no runner, worker, retry or time-limit increase. Final-source full-suite, PostgreSQL,
+offline Linux and hosted results are reported in [verification](VALIDATION.md).
 
 ## Offline evaluation scoring
 
