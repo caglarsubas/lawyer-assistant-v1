@@ -744,3 +744,43 @@ def test_authority_adjudications_serialize_reviewer_heads(workspace, monkeypatch
     if mode == 'identical':
         assert accepted.json()['id'] == rejected.json()['id']
     assert count(app, adjudications.KIND) == count(app, adjudications.HEAD) == count(app, adjudications.ADMISSION) == 1
+
+
+@pytest.mark.parametrize('mode', ['identical', 'nonce_conflict', 'head_conflict'])
+def test_authority_trials_serialize_capture_heads(workspace, monkeypatch, mode):
+    from test_authority_findings import count
+    from test_authority_trials import prepared
+
+    from app import authority_trials as trials
+
+    app, client, *_ = workspace
+    endpoint, body, *_ = prepared(_cohort_workbench(workspace), monkeypatch)
+    competing = body if mode == 'identical' else {**body, 'note': 'SYNTHETIC competing trial capture'}
+    if mode == 'head_conflict':
+        competing = {**competing, 'request_id': uuid4().hex}
+    locked, release = Event(), Event()
+    audit = trials._audit
+
+    def paused(*args, **kwargs):
+        audit(*args, **kwargs)
+        locked.set()
+        assert release.wait(10)
+
+    monkeypatch.setattr(trials, '_audit', paused)
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, endpoint + '/captures', json=body)
+        try:
+            assert locked.wait(5), first.result(timeout=1).text
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, endpoint + '/captures', json=competing)
+                assert observed[0].wait(5) and wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, rejected = first.result(timeout=5), second.result(timeout=5)
+    assert accepted.status_code == 201, accepted.text
+    assert rejected.status_code == (201 if mode == 'identical' else 409), rejected.text
+    if mode == 'identical':
+        assert accepted.json()['capture_id'] == rejected.json()['capture_id']
+    assert count(app, trials.CAPTURE) == count(app, trials.HEAD) == count(app, trials.KIND) == 1
+    assert count(app, trials.ADMISSION) == 2

@@ -244,3 +244,26 @@ recipes, permissions and account eligibility; changes invalidate effective expor
 No score rows, source-use permissions, public graph knowledge, model prompts, qualified
 synthesis or Standard/Deep benefit are automatically produced. R03–R05 actual lawful
 source and independent legal review gates remain open; synthetic records grant none.
+
+## Registered human authority trials (R05A engineering boundary)
+
+[Registered authority trials](REGISTERED_AUTHORITY_TRIALS.md) freeze the existing
+baseline, private case inputs and selected public sources before revision. Both
+versions use the same issue, posture/date, premises and fact/document/contradiction
+snapshots. Rules/application/conclusion may change. Candidate/comparison timestamps
+must follow registration. The original draft predates registration and its active
+effort is retrospective. Model-assisted drafts are excluded; no provider is run.
+
+Two assigned-account source-linked observations, frozen rubrics and separately
+declared original/revised preparation, verification and correction phases form a
+confidential capture. Unknowns, explicit zero, unassessed dimensions and differing
+judgments remain explicit. Completion establishes record presence with full effort
+attestations, not assessment adequacy, legal support, independent expertise or
+benefit. The interface is not blinded and does not randomly assign conditions.
+
+This packet must not be treated as single-pass/correction or Standard/Deep model
+comparisons, a preregistered baseline experiment, a scored cohort or representative
+held-out evidence. No quality/recall/improvement or time-savings statistic is computed.
+The registered recipe, exact sources and immutable record seals permit reproducible
+engineering inspection only. Actual lawful corpus, historical/effect validation,
+qualified reviewers, full workflow measurement and held-out protocols remain required.
