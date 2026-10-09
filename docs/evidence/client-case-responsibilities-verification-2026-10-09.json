@@ -1,0 +1,189 @@
+{
+  "schema": "client-case-responsibilities-verification-v1",
+  "recorded_at": "2026-10-09T12:58:57.459799+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "04481e8ebbb696544423de246f89a06f4c7eccef",
+  "checkout_dirty": true,
+  "host": {
+    "system": "Darwin",
+    "architecture": "arm64"
+  },
+  "test_image": "sha256:0e17fa2615ad7a55965114908a646da76c5a2be21efe59767f7549b61ed5a4ce",
+  "source": {
+    "ontology_runtime": {
+      "ontology/build_catalog.py": "60cfdd479eac4a3175e0ac566377c42f80f8ee686a40f391558fe6da23de0914",
+      "ontology/rdfs_identifiers.py": "3a1879c70bf18fee0e21ff8ba7e91d78e855aef7c547fa777ff86e6827f12095",
+      "ontology/releases.py": "270e8de7352169075e8e8e9819e35db0820777cb7e0afa10d3ebd2d877bebb88",
+      "ontology/serving.py": "777eaf7bb1e98a7a678294506b2cb23ae67589642dac077aaeba217be9c00e15",
+      "ontology/temporal.py": "e14241239a580dcf997e3c9fbf785df05ca035d9fcc6a7feb01bb5e398d7548c",
+      "ontology/validation.py": "465eb0d099e3b2a38a3b41ee137e43f49dcbb723bfd9e7cab35b94cf9cb0de30"
+    },
+    "dependencies": {
+      "pyshacl": "0.40.1",
+      "owlrl": "7.6.2",
+      "rdflib": "7.6.0"
+    },
+    "application": {
+      "sha256": "ed3b4e0bb70be576209b0794a0da6c6b031e47ec14e705b78645078f95b025f1",
+      "files": 126
+    },
+    "tests": {
+      "files": 91,
+      "sha256": "da6ab505f2b1c8901c71986c35487afa97d063b58f3b2f1077f00f55840ef61c"
+    }
+  },
+  "limits": {
+    "network": "none",
+    "host_ports": [],
+    "host_mounts": [],
+    "read_only": true,
+    "cpu": 2,
+    "memory_bytes": 805306368,
+    "pids": 128,
+    "tmpfs_bytes": 268435456
+  },
+  "linux_tests": {
+    "exit_code": 0,
+    "passed": 247,
+    "pytest_seconds": 102.77,
+    "container_wall_seconds": 103.945
+  },
+  "cleanup_verified": true,
+  "not_established": [
+    "Turkish legal accuracy or semantic completeness",
+    "real-provider authentication or model performance",
+    "production capacity or latency",
+    "real-corpus retrieval quality or adverse recall",
+    "real source/legal approval",
+    "live application deployment",
+    "W03 deadlines, task delegation or tracked human opinion workflow",
+    "customer migration or field acceptance",
+    "SQLite multi-process coordination",
+    "production lock-loss or network-failure qualification",
+    "hosted CI speedup or billing savings",
+    "erasure of previously copied or exported information or instantly clearing suspended/offline clients"
+  ],
+  "baseline": {
+    "pr": 32,
+    "merge_commit": "04481e8ebbb696544423de246f89a06f4c7eccef",
+    "post_merge_main_ci_run": 37926628508,
+    "post_merge_main_ci_conclusion": "success"
+  },
+  "native_backend": {
+    "passed": 3158,
+    "skipped": 56,
+    "warnings": 28,
+    "pytest_seconds": 435.45,
+    "workers": 2,
+    "skip_scope": "53 PostgreSQL cases executed separately; three existing opt-in infrastructure drills remain skipped"
+  },
+  "postgres": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "all fifty-three real PostgreSQL snapshot, authorization and research/adoption/context/review/comparison races from the exact CI selection in random disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 96.666,
+    "passed": 53,
+    "pytest_seconds": 94.08
+  },
+  "frontend": {
+    "passed": 196,
+    "files": 26,
+    "typecheck_build_exit_code": 0,
+    "existing_main_chunk_warning": true
+  },
+  "contracts": {
+    "deployment_cases": 41,
+    "rdf_shacl": "passed; structural engineering only",
+    "r01_planning_calibration_study": "passed; synthetic only",
+    "ruff": "passed",
+    "actionlint": "passed",
+    "whitespace": "passed",
+    "compose": "passed with six disposable placeholders and /dev/null env file"
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3214,
+      "preflight": 89,
+      "remaining": 2998,
+      "publication": 10,
+      "workspace": 58,
+      "human_review": 59
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_runtime_authorization_integration.py",
+      "backend/tests/test_publication_cli.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "8556732a53db19a9ce35f0232e0894a908060aa42013e413a92f789ca9ed3919",
+    "workflow_sha256": "b5cb4f8ef46a99791e4c7bf46c605676c80724be1966f3498f501c84db39e270",
+    "no_runner_retry_existing_deadline_change": true,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "browser": {
+    "synthetic_only": true,
+    "employees_created": 3,
+    "configuration_account_created": true,
+    "invented_client_and_case": true,
+    "multiple_direct_supervisors_displayed": true,
+    "client_all_cases_only_account_locates_linked_case": true,
+    "details_only_assignment_saved_with_revision_receipt": true,
+    "configuration_only_account_hides_private_portfolio": true,
+    "revocation_clears_open_private_view": true,
+    "relogin_portfolio_empty_and_case_denied": true,
+    "console_errors_or_warnings": 0,
+    "owned_loopback_server_stopped": true,
+    "owned_tab_closed": true,
+    "artifacts": {
+      "case-access.png": "298ead207d809734bb05e254a306e4668749f7f18b4a0f6c347be78068eb9693",
+      "configuration-only.png": "26e3d82e38b46a195f3ec9ef50e4b65a0635ab894e5d054d95aafcc1aa2f8013",
+      "revoked-view.png": "a22c9dd7a05f1867dd7084c4877ac60c0b6fb9458ab38400b4b311a11908634b",
+      "re-login-denied.png": "bc322aa1e6f657e7ebf748a6752139b31865d9ea6c23de0f95afb28a95298f38"
+    }
+  },
+  "scope_contracts": [
+    "client details-only does not grant case access or reveal other-case counts",
+    "client all_cases prospectively covers validated same-firm linked active and archived cases",
+    "direct Membership remains independently revocable; organizational reporting grants no content",
+    "multiple explicit supervisor/responsible flags grant no global action or professional qualification",
+    "authorization precedes case/user list joins, assistant context, export and fresh worker checkpoints",
+    "assignment edits and relinking serialize with admitted responses and revision checks",
+    "changed recipient sessions invalidated; unauthorized research marked cancelling without releasing running capacity early",
+    "migration preserves credentials/direct grants, converts prior client-owner details visibility once and infers no all_cases grant or supervisors",
+    "archived case team can be revoked by reference without opening archived legal content"
+  ],
+  "local_evidence_directory": ".data/verification/w02",
+  "hosted_checks_for_this_packet": "reported separately for the exact PR head; this file records local precommit verification",
+  "retained_development_failures": [
+    "entering a second TestClient lifespan started another synthetic coordinator; secondary client now shares the existing app without another lifespan",
+    "an initial Cache-Control extension broke the existing exact no-store export contract; universal API policy uses the retained no-store value",
+    "the first deployment rehearsal used system Python lacking dependencies; rerun passed with the locked backend runtime",
+    "initial TypeScript visibility narrowing failed after await; the visibility helper fixes the narrowing and final build passed",
+    "initial browser role text inherited oversized objective styling; existing Detail layout restored readable copy and final screenshot was inspected"
+  ]
+}

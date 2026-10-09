@@ -8,7 +8,8 @@ from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError
 
 from .auth import authenticate, hash_password
-from .db import Audit, Employee, EmployeeRole, FirmRole, LoginSession, Membership, User, now
+from .content_scope import invalidate_scope, remove_queued, scoped_records, scoped_users
+from .db import Audit, Employee, EmployeeRole, FirmRole, Record, User, now
 from .firm_rbac import CATALOG, initialize_firm, permissions_for, require_permission, validate_permissions
 
 
@@ -124,10 +125,6 @@ def _retain_administrator(session, users):
         raise HTTPException(409, "En az bir aktif büro yöneticisi korunmalı")
 
 
-def _revoke_sessions(session, user_ids):
-    session.execute(delete(LoginSession).where(LoginSession.user_id.in_(user_ids)))
-
-
 def firm_admin_router():
     router = APIRouter(prefix="/api/v1/firm-admin", tags=["firm-administration"])
 
@@ -181,12 +178,13 @@ def firm_admin_router():
             session.flush()
             _retain_administrator(session, users)
             affected = list(session.scalars(select(EmployeeRole.user_id).where(EmployeeRole.role_id == role.id)))
-            _revoke_sessions(session, affected)
+            stopped = invalidate_scope(store, session, user.firm_id, affected)
             for employee in session.scalars(select(Employee).where(Employee.user_id.in_(affected))):
                 employee.revision += 1
             result = _role_view(role)
             _audit(store, session, user, "firm_role_updated", role.id, before, result)
             session.commit()
+            remove_queued(request.app, stopped)
             return result
 
     @router.post("/employees", status_code=201)
@@ -236,11 +234,8 @@ def firm_admin_router():
                 if session.scalar(select(Employee.user_id).where(Employee.manager_id == user_id)):
                     raise HTTPException(409, "Önce bağlı çalışanların yöneticisini değiştirin")
                 # Preserve the offline administrator's no-stranded-matter guarantee.
-                for matter in session.scalars(select(Membership.matter_id).where(Membership.user_id == user_id)):
-                    others = session.scalar(select(User.id).join(Membership, Membership.user_id == User.id).where(
-                        Membership.matter_id == matter, User.id != user_id, User.firm_id == user.firm_id,
-                        User.active.is_(True)))
-                    if not others:
+                for matter in session.scalars(scoped_records(target, ("matter", "archived_matter"))):
+                    if not any(person.id != user_id for person in scoped_users(session, matter.id, user.firm_id)):
                         raise HTTPException(409, "Son aktif dosya üyesi devre dışı bırakılamaz")
             before = _employee_view(session, target)
             target.name, target.active = body.name, body.active
@@ -249,20 +244,19 @@ def firm_admin_router():
             session.add_all([EmployeeRole(user_id=user_id, role_id=role.id) for role in roles])
             session.flush()
             _retain_administrator(session, users)
-            _revoke_sessions(session, [user_id])
+            stopped = invalidate_scope(store, session, user.firm_id, [user_id])
             result = _employee_view(session, target)
             _audit(store, session, user, "firm_employee_updated", user_id, before, result)
             session.commit()
+            remove_queued(request.app, stopped)
             return result
 
     @router.get("/changes")
     def changes(request: Request, user=Depends(authenticate)):
-        from .db import Record
-
         store = request.app.state.store
         with store.session() as session:
             require_permission(session, user, "firm.manage")
-            rows = session.scalars(select(Record).where(Record.kind == "firm_change", Record.firm_id == user.firm_id)
+            rows = session.scalars(select(Record).where(Record.kind.in_(["firm_change", "access_change"]), Record.firm_id == user.firm_id)
                                    .order_by(Record.created_at.desc(), Record.id).limit(100)).all()
             return {"items": [{**store.view(row), "actor_id": row.owner_id} for row in rows], "limit": 100}
 

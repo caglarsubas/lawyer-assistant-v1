@@ -6,7 +6,8 @@ from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException, Request
 from sqlalchemy import select
 
-from .db import LoginSession, Membership, Record, User, digest
+from .content_scope import has_case_scope
+from .db import LoginSession, Record, User, digest
 from .firm_rbac import permissions_for, require_permission, route_permissions
 
 
@@ -32,7 +33,10 @@ def hold_firm_guard(request, firm_id):
             raise HTTPException(401, "Oturum veya kurum değişti")
         return
     guard = request.app.state.firm_authorization.guard(
-        firm_id, exclusive=request.url.path.startswith("/api/v1/firm-admin")
+        firm_id, exclusive=(request.url.path.startswith("/api/v1/firm-admin")
+            or (request.method not in {"GET", "HEAD", "OPTIONS"} and (
+                request.url.path in {"/api/v1/customers", "/api/v1/workspaces", "/api/v1/matters"}
+                or (request.url.path.startswith("/api/v1/workspaces/") and request.url.path.endswith("/customers")))))
     )
     guard.__enter__()
     request.state.firm_guard = guard
@@ -75,8 +79,7 @@ def require_matter(session, matter_id, user):
     if not current or not current.active or current.firm_id != user.firm_id:
         raise HTTPException(401, "Oturum geçersiz")
     matter = session.get(Record, matter_id)
-    member = session.get(Membership, (matter_id, user.id), populate_existing=True)
-    if not matter or matter.kind != "matter" or matter.firm_id != user.firm_id or not member:
+    if not matter or matter.kind != "matter" or matter.firm_id != user.firm_id or not has_case_scope(session, matter_id, user):
         raise HTTPException(404, "Dosya bulunamadı")
     require_permission(session, current, "matter.read")
     return matter

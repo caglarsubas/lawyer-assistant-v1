@@ -13,6 +13,7 @@ describe('session and request boundaries', () => {
     const [url, options] = fetchMock.mock.calls[0];
     expect(url).toBe('/api/v1/matters');
     expect(options?.credentials).toBe('same-origin');
+    expect(options?.cache).toBe('no-store');
     expect(new Headers(options?.headers).get('X-CSRF-Token')).toBe('session-specific-token');
     expect(new Headers(options?.headers).get('Content-Type')).toBe('application/json');
   });
@@ -100,7 +101,7 @@ describe('session and request boundaries', () => {
     const controller = new AbortController();
     const original = await fetchOriginal('matter/1', 'document/2', controller.signal);
     expect(new Uint8Array(await original.arrayBuffer())).toEqual(source);
-    expect(fetchMock.mock.calls[0]).toEqual(['/api/v1/matters/matter%2F1/documents/document%2F2/original', { credentials: 'same-origin', signal: controller.signal }]);
+    expect(fetchMock.mock.calls[0]).toEqual(['/api/v1/matters/matter%2F1/documents/document%2F2/original', { credentials: 'same-origin', cache: 'no-store', signal: controller.signal }]);
   });
 
   it('never previews authorization failures as document content and expires rejected sessions', async () => {

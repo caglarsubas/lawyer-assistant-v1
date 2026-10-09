@@ -61,6 +61,46 @@ class Membership(Base):
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
 
 
+class CustomerAssignment(Base):
+    __tablename__ = "customer_assignments"
+    customer_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    firm_id: Mapped[str] = mapped_column(String(64), index=True)
+    scope: Mapped[str] = mapped_column(String(24))
+    assigned_by: Mapped[str] = mapped_column(String(64))
+    assigned_at: Mapped[str] = mapped_column(String(40), default=now)
+
+
+class WorkspaceCustomerLink(Base):
+    __tablename__ = "workspace_customer_links"
+    matter_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    customer_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    firm_id: Mapped[str] = mapped_column(String(64), index=True)
+
+
+class CaseResponsibility(Base):
+    __tablename__ = "case_responsibilities"
+    matter_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    firm_id: Mapped[str] = mapped_column(String(64), index=True)
+    supervisor: Mapped[bool] = mapped_column(Boolean, default=False)
+    responsible: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class AccessConfiguration(Base):
+    __tablename__ = "access_configurations"
+    target_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    firm_id: Mapped[str] = mapped_column(String(64))
+    kind: Mapped[str] = mapped_column(String(24))
+    revision: Mapped[int] = mapped_column(Integer, default=1)
+
+
+class ScopeMigration(Base):
+    __tablename__ = "scope_migrations"
+    firm_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    version: Mapped[int] = mapped_column(Integer, default=1)
+
+
 class FirmRole(Base):
     __tablename__ = "firm_roles"
     id: Mapped[str] = mapped_column(String(64), primary_key=True, default=uid)

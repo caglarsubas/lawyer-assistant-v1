@@ -1,7 +1,8 @@
 import { lazy, Suspense, useEffect, useState, type FormEvent } from 'react';
-import { onUnauthorized, post, request, setCsrfToken } from './api';
+import { ApiError, onUnauthorized, post, request, setCsrfToken } from './api';
 import { Icon, Loading, Mark, Notice } from './components';
 import type { Bootstrap, Session, SystemStatus } from './types';
+import { monitorSession } from './sessionMonitor';
 import { messageOf } from './utils';
 const FirmAdminPage = lazy(() => import('./pages/FirmAdminPage'));
 import MattersPage from './pages/MattersPage';
@@ -25,6 +26,7 @@ export default function App() {
   const [status, setStatus] = useState<SystemStatus | null>(null);
   const [booting, setBooting] = useState(true);
   const [error, setError] = useState('');
+  const [checkingAccess, setCheckingAccess] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
   useEffect(() => { const update = () => { setRoute(currentRoute()); window.scrollTo(0, 0); }; window.addEventListener('hashchange', update); return () => window.removeEventListener('hashchange', update); }, []);
   useEffect(() => {
@@ -41,15 +43,27 @@ export default function App() {
   useEffect(() => {
     if (!session) return;
     const controller = new AbortController();
-    request<SystemStatus>('/status', { signal: controller.signal }).then(setStatus).catch((cause) => { if (cause.name !== 'AbortError') setError(messageOf(cause)); });
+    request<SystemStatus>('/status', { signal: controller.signal }).then(value => { if (!controller.signal.aborted) setStatus(value); }).catch((cause) => { if (cause.name !== 'AbortError') setError(messageOf(cause)); });
     return () => controller.abort();
+  }, [session]);
+  useEffect(() => {
+    if (!session) return;
+    return monitorSession(value => {
+      setCsrfToken(value.csrf_token);
+      if (value.user.id !== session.user.id || JSON.stringify(value.user.permissions) !== JSON.stringify(session.user.permissions)) setSession(value);
+      setCheckingAccess(false);
+    }, cause => {
+      setSession(null); setStatus(null); setCsrfToken(''); setCheckingAccess(false);
+      setError(cause instanceof ApiError && cause.status === 401 ? 'Erişim veya oturum değişti. Lütfen yeniden giriş yapın.' : 'Erişim doğrulanamadı. Bağlantıyı kontrol edip yeniden giriş yapın.');
+    }, () => setCheckingAccess(true));
   }, [session]);
   async function signOut() {
     setSigningOut(true); setError('');
     try { await post('/auth/logout', {}); setSession(null); setStatus(null); setCsrfToken(''); } catch (cause) { setError(messageOf(cause)); } finally { setSigningOut(false); }
   }
   if (booting) return <div className="boot"><Mark large /><Loading label="Çalışma alanı hazırlanıyor…" /></div>;
-  if (!session) return <Login demo={Boolean(bootstrap?.demo_mode)} initialError={error} onLogin={(value) => { setSession(value); setCsrfToken(value.csrf_token); setError(''); if (value.user.permissions?.includes('firm.manage') && !value.user.permissions.includes('matter.read')) navigate('/firm-admin'); }} />;
+  if (!session) return <Login demo={Boolean(bootstrap?.demo_mode)} initialError={error} onLogin={(value) => { setCheckingAccess(false); setSession(value); setCsrfToken(value.csrf_token); setError(''); if (value.user.permissions?.includes('firm.manage') && !value.user.permissions.includes('matter.read')) navigate('/firm-admin'); }} />;
+  if (checkingAccess) return <div className="boot"><Loading label="Erişim doğrulanıyor…" /></div>;
   const [pathname, query = ''] = route.split('?');
   const page = pathname.split('/')[1];
   const matterId = ['matters', 'workspaces'].includes(page) && pathname.split('/')[2] ? decodeURIComponent(pathname.split('/')[2]) : null;

@@ -1,5 +1,89 @@
 # Verification record — 9 October 2026
 
+## W02 client and case responsibilities — 9 October 2026 (Asia/Shanghai)
+
+PR #32 is merged at `04481e8ebbb696544423de246f89a06f4c7eccef`; exact post-merge
+main run `37926628508` passed. This packet implements W02 after that verified W01
+foundation. Manual PR merge, target-host migration and field qualification remain
+separate gates. W03 human deadlines, tasks and written-opinion review comes next.
+
+Client assignments explicitly choose **details only** or **all current and future
+linked cases**. Direct case grants remain independent. Case teams support multiple
+explicit supervisors and responsible lawyers; these flags grant no global action
+permission. Organizational reporting still grants no content. Configuration-only
+administrators operate on supplied references without client names, case titles,
+notes, public-authority selections or private portfolio counts. A case-authorized
+lawyer can inspect their scope origins, operation permissions and team roles.
+
+A one-time migration preserves passwords and direct memberships, converts prior
+client-owner details visibility to a details-only grant and validates same-firm
+client links. It infers no prospective case access or supervisory designation.
+Current scope is applied before portfolio/eligible-user joins and rechecked for
+private tools, exports and worker checkpoints. Active and archived case teams can
+be configured by reference. Last-active-scope-holder recovery checks apply.
+
+Assignment edits and client relinking use the existing exclusive firm guard and
+revision checks. They atomically invalidate changed recipients' sessions and mark
+unauthorized queued/running research as cancelling. Queued work is removed;
+running calls retain capacity until actual exit and may not publish after a failed
+checkpoint. A retained independent grant permits continued work. API responses
+and authenticated browser fetches use no-store. Active session polling clears a
+revoked private view; suspension/focus/pageshow unmount private panels and require
+verification before they reopen. Network failure/timeout closes the local session.
+This does not erase information already copied/exported or establish instantaneous
+clearing of suspended or disconnected browsers.
+
+Final local verification on the final application source:
+
+- **3,158 backend tests passed**, 56 skipped, 28 warnings in **435.45 seconds** with
+  two workers. Skips are the 53 separately executed PostgreSQL cases and three
+  existing opt-in infrastructure drills.
+- **53 real PostgreSQL cases passed** in **94.08 seconds** on the pinned disposable
+  16.10 image. New cases observe competing assignment revisions and an actual
+  paused HTTP response: revocation waits for its admitted body, invalidates the
+  session, denies reopening after login and persists the worker cancellation intent.
+  Random child databases and the owned container were removed.
+- **247 exact-source offline Linux cases passed** in **102.77 seconds**. Application,
+  test, ontology and locked dependency fingerprints matched. The nonroot container
+  had no network, host ports or mounts, a read-only filesystem, two CPUs, 768 MiB,
+  128 PIDs and 256 MiB tmpfs. Cleanup was verified.
+- **196 frontend tests passed** across 26 files; typecheck and production build
+  passed. Session tests cover active polling, suspension, timeout and late responses.
+  The existing main-chunk advisory remains; administration stays lazy loaded.
+- **41 deployment contracts**, RDF/SHACL, R01 planning/calibration/study contracts,
+  Ruff, actionlint, whitespace and Compose validation passed. Compose used all six
+  disposable placeholders and `/dev/null`, without reading a local `.env`.
+- A production-build browser rehearsal used invented accounts and one synthetic
+  client/case. It saved a details-only assignment, showed two supervisors and the
+  all-cases scope origin, cleared an open view on revocation, then showed an empty
+  portfolio and denied the old case after login. A configuration-only account had
+  no private portfolio controls. No console warning/error occurred; owned tabs and
+  the loopback server were closed.
+
+API regressions cover future linked cases, multiple clients without leaking other
+case counts, both directions of independent-origin revocation, unassigned managers,
+custom action permissions, client relinking, archived team revocation, foreign and
+inactive employees, strict/stale inputs, migration idempotency and job cancellation.
+The maintenance CLI checks direct and prospective scope, advances the same team
+revision, invalidates changed sessions and removes flags with a direct revocation.
+It retains its extra active-case operator requirement; it is not a live job-control
+interface. Back up before migration and upgrade all writers together.
+
+The same three CI job names/runners, worker counts, retries and time limits remain.
+The new scope file runs in the existing workspace-security group and the two new
+PostgreSQL races in its existing database selection. Actual workflow collection
+proves **3,214 = 89 preflight + 2,998 main + 10 publication + 58 workspace-security
++ 59 human-review cases**, with zero overlap, omission or extras. Exact pushed-head
+hosted checks are reported separately; local timing establishes no billing savings.
+
+SQLite coordination remains single-process demo behavior. Target-host migration,
+production lock-loss/network failure, customer acceptance, legal/model accuracy,
+corpus rights, pilot capacity and deployment remain unqualified. No live provider
+call, real employee/client access change, credential edit, graph activation or
+production deployment occurred. See [requirements and operator notes](FIRM_RBAC_AND_SUPERVISION.md)
+and [verification metadata](evidence/client-case-responsibilities-verification-2026-10-09.json).
+
+
 ## W01 firm administration and permission foundation — 9 October 2026 (Asia/Shanghai)
 
 PR #31 is merged at `9db46fd292e80c57fed54a92494ea4a0eccab225`; exact post-merge

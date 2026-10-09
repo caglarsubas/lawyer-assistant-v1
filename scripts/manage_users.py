@@ -11,12 +11,18 @@ from types import SimpleNamespace
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
 
-from sqlalchemy import create_engine, delete, func, select
+from sqlalchemy import create_engine, delete, select
 from sqlalchemy.engine import make_url
 from sqlalchemy.orm import sessionmaker
 
 from app.auth import hash_password
-from app.db import Audit, LoginSession, Membership, Record, User
+from app.content_scope import (
+    configuration,
+    has_case_scope,
+    scoped_records,
+    scoped_users,
+)
+from app.db import Audit, CaseResponsibility, LoginSession, Membership, Record, User
 from app.firm_rbac import (
     FirmAuthorization,
     initialize_firm,
@@ -89,18 +95,13 @@ def operate(store, operator_id, command, *, user_id=None, matter_id=None,
             raise AdministrationError("Target user is not in the operator's firm")
 
         def active_others(matter, admin_only=False):
-            query = (select(func.count()).select_from(Membership)
-                     .join(User, User.id == Membership.user_id)
-                     .where(Membership.matter_id == matter, User.firm_id == operator.firm_id,
-                            User.active.is_(True), User.id != target.id))
-            if admin_only:
-                query = query.where(User.role == "admin")
-            return session.scalar(query)
+            return sum(person.id != target.id and (not admin_only or person.role == "admin")
+                       for person in scoped_users(session, matter, operator.firm_id))
 
         if command in {"grant", "revoke"}:
             matter = session.scalar(select(Record).where(Record.id == matter_id, Record.kind == "matter",
                                                          Record.firm_id == operator.firm_id).with_for_update())
-            if matter is None or session.get(Membership, (matter.id, operator.id)) is None:
+            if matter is None or not has_case_scope(session, matter.id, operator):
                 raise AdministrationError("Operator must already be a member of the same-firm matter")
             membership = session.get(Membership, (matter.id, target.id))
             if command == "grant":
@@ -116,16 +117,17 @@ def operate(store, operator_id, command, *, user_id=None, matter_id=None,
                 if target.active and not active_others(matter.id):
                     raise AdministrationError("Cannot remove the last active matter member")
                 session.delete(membership)
+                session.execute(delete(CaseResponsibility).where(CaseResponsibility.matter_id == matter.id,
+                                                                 CaseResponsibility.user_id == target.id))
                 audit("operator_member_revoked", target.id, matter.id)
+            configuration(session, matter).revision += 1
+            session.execute(delete(LoginSession).where(LoginSession.user_id == target.id))
             return {"changed": True}
 
         if target.id == operator.id:
             raise AdministrationError("Self-deactivation is prohibited")
         if target.active:
-            matters = session.scalars(select(Record).join(Membership, Membership.matter_id == Record.id)
-                                     .where(Membership.user_id == target.id,
-                                            Record.kind.in_(["matter", "archived_matter"]),
-                                            Record.firm_id == operator.firm_id)
+            matters = session.scalars(scoped_records(target, ("matter", "archived_matter"))
                                      .order_by(Record.id).with_for_update(of=Record)).all()
             if any(not active_others(matter.id) for matter in matters):
                 raise AdministrationError("Cannot deactivate the last active member of a matter")

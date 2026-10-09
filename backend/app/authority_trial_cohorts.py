@@ -15,7 +15,8 @@ from . import authority_comparisons as comparisons
 from . import authority_findings as findings
 from . import authority_trials as trials
 from .auth import authenticate, require_child, require_matter
-from .db import Membership, Record, User, digest, now
+from .content_scope import has_case_scope
+from .db import Record, User, digest, now
 from .evidence_prompt import canonical
 from .firm_rbac import permissions_for
 from .practice import StrictInput, _audit
@@ -166,7 +167,7 @@ def _entry(app, session, matter_id, selection, user):
             and member.firm_id == user.firm_id
             and member.role in {"lawyer", "admin"}
             and "matter.review" in permissions_for(session, member)
-            and session.get(Membership, (matter_id, ident), populate_existing=True)
+            and has_case_scope(session, matter_id, member)
         )
         participants.append({"id": ident, "authorized": authorized, "role": member.role if member else None})
     live = {

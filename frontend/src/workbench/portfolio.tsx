@@ -29,8 +29,8 @@ export function PortfolioProvider({ children, enabled = true }: { children: Reac
     if (!enabled) { setCustomers([]); setWorkspaces([]); setLoading(false); return; }
     if (filters.date_from && filters.date_to && filters.date_from > filters.date_to) { setError('Başlangıç tarihi bitiş tarihinden sonra olamaz.'); setWorkspaces([]); setLoading(false); return; }
     Promise.all([request<Customer[]>('/customers', { signal: controller.signal }), request<Matter[]>(`/workspaces?${workspaceQuery(filters)}`, { signal: controller.signal })])
-      .then(([customerData, workspaceData]) => { setCustomers(customerData); setWorkspaces(workspaceData); })
-      .catch(cause => { if (cause.name !== 'AbortError') { setError(messageOf(cause)); setWorkspaces([]); } })
+      .then(([customerData, workspaceData]) => { if (!controller.signal.aborted) { setCustomers(customerData); setWorkspaces(workspaceData); } })
+      .catch(cause => { if (!controller.signal.aborted) { setError(messageOf(cause)); setCustomers([]); setWorkspaces([]); } })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [filters, revision, enabled]);

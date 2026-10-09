@@ -68,6 +68,14 @@ and a context-aware assistant. Customer/date filters, workspace comments and
 on-demand calendar portfolio summaries respect existing workspace permissions.
 See [portfolio behavior and API compatibility](docs/PORTFOLIO_WORKSPACE.md).
 
+Bureau administration at `#/firm-admin` now manages employees, supported roles,
+explicit client scopes and case teams. Choose client details-only or all current
+and future linked cases; direct case grants remain independent. The case overview
+explains access origins and shows multiple supervisors/responsible lawyers.
+Organizational management confers no case access. Changed grants revoke sessions
+and unauthorized research; tracked deadlines/tasks/opinions are the next packet.
+See [firm responsibility and operating boundaries](docs/FIRM_RBAC_AND_SUPERVISION.md).
+
 ## Configured installation
 
 See [operations and qualification](docs/OPERATIONS.md) before using Compose. Copy `.env.example` to root `.env` manually and fill operator settings. `.env` is gitignored. The provider identity is:
