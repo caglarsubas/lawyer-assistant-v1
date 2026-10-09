@@ -15,7 +15,8 @@ from . import authority_comparisons as comparisons
 from . import authority_findings as findings
 from .analysis_comparisons import ArmEffort
 from .auth import authenticate, require_child, require_matter
-from .db import Membership, Record, User, digest, now
+from .content_scope import scoped_users
+from .db import Record, User, digest, now
 from .evidence_prompt import canonical
 from .firm_rbac import require_permission
 from .practice import StrictInput, _audit
@@ -174,19 +175,11 @@ def registration_context(app, session, route, user):
     basis, reasons = _basis(app, session, route, user)
     analysis = require_child(session, route[1], "practice_analysis", route[0], user)
     excluded = {user.id, basis["baseline_author_id"], basis["review"]["reviewer_id"]}
-    members = session.scalars(
-        select(User)
-        .join(Membership, Membership.user_id == User.id)
-        .where(
-            Membership.matter_id == route[0],
-            User.firm_id == user.firm_id,
-            User.active.is_(True),
-            User.role.in_(["lawyer", "admin"]),
-            User.id.not_in(excluded),
-        )
-        .order_by(User.name, User.id)
-    )
-    reviewers = [{"id": item.id, "name": item.name} for item in members]
+    from .firm_rbac import permissions_for
+
+    reviewers = [{"id": item.id, "name": item.name} for item in scoped_users(session, route[0], user.firm_id)
+                 if item.id not in excluded and item.role in {"lawyer", "admin"}
+                 and "matter.review" in permissions_for(session, item)]
     original_current = (
         store.decode(analysis)["latest_version_id"] == basis["baseline_version_id"]
         and findings._view(app, session, *route, user)["freshness"]["status"] == "current"

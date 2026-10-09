@@ -14,7 +14,8 @@ from sqlalchemy import select
 from sqlalchemy.orm.exc import StaleDataError
 
 from .auth import authenticate
-from .db import Audit, Membership, Record, User, digest, now
+from .content_scope import has_case_scope, scoped_records
+from .db import Audit, Record, User, digest, now
 from .firm_rbac import permissions_for, require_permission
 
 
@@ -125,12 +126,11 @@ def _matter(session, matter_id, user, *, admin=False, lock=False):
     current = _current_user(session, user)
     query = select(Record).where(Record.id == matter_id).execution_options(populate_existing=True)
     matter = session.scalar(query.with_for_update() if lock else query)
-    membership = session.get(Membership, (matter_id, current.id), populate_existing=True)
     if (
         not matter
         or matter.kind not in {"matter", "archived_matter"}
         or matter.firm_id != current.firm_id
-        or not membership
+        or not has_case_scope(session, matter_id, current)
     ):
         raise HTTPException(404, "Dosya bulunamadı")
     require_permission(session, current, "matter.read")
@@ -547,16 +547,7 @@ def governance_router():
         with store.session() as session:
             current = _current_user(session, user)
             records = session.scalars(
-                select(Record)
-                .join(
-                    Membership,
-                    Membership.matter_id == Record.id,
-                )
-                .where(
-                    Record.kind == "archived_matter",
-                    Record.firm_id == current.firm_id,
-                    Membership.user_id == current.id,
-                )
+                scoped_records(current, ("archived_matter",))
                 .order_by(Record.created_at, Record.id)
             )
             return [
@@ -649,16 +640,7 @@ def governance_router():
             current = _current_user(session, user, admin=True)
             ids = list(
                 session.scalars(
-                    select(Record.id)
-                    .join(
-                        Membership,
-                        Membership.matter_id == Record.id,
-                    )
-                    .where(
-                        Record.kind.in_(["matter", "archived_matter"]),
-                        Record.firm_id == current.firm_id,
-                        Membership.user_id == current.id,
-                    )
+                    scoped_records(current, ("matter", "archived_matter")).with_only_columns(Record.id)
                     .order_by(Record.id)
                 )
             )

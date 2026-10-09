@@ -15,6 +15,7 @@ env:
     backend/tests/test_analysis_cohorts.py
   CI_WORKSPACE_SECURITY_TESTS: >-
     backend/tests/test_firm_admin.py
+    backend/tests/test_content_scope.py
     backend/tests/test_authority_proposals.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_open_validity_publication.py
@@ -112,7 +113,7 @@ jobs:
       - name: Test real PostgreSQL review and research races in isolated child databases
         env:
           LA_TEST_POSTGRES_URL: postgresql+psycopg://snapshot_test:disposable-ci-snapshot-only@127.0.0.1:${{ job.services.postgres.ports['5432'] }}/lawyer_snapshot_test
-        run: backend/.venv/bin/pytest backend/tests/test_snapshot_set_postgres.py backend/tests/test_set_authorization_postgres.py backend/tests/test_research_jobs_postgres.py
+        run: backend/.venv/bin/pytest backend/tests/test_snapshot_set_postgres.py backend/tests/test_set_authorization_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py
       - name: Test signed publication integration
         run: |
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"

@@ -26,7 +26,7 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
   if (!['GET', 'HEAD', 'OPTIONS'].includes(method) && csrfToken) headers.set('X-CSRF-Token', csrfToken);
   let response: Response;
   try {
-    response = await fetch(`${BASE}${path}`, { ...options, headers, credentials: 'same-origin' });
+    response = await fetch(`${BASE}${path}`, { ...options, headers, credentials: 'same-origin', cache: 'no-store' });
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') throw error;
     throw new ApiError('Sunucuya ulaşılamıyor. Yerel hizmetin çalıştığını kontrol edin.', 0);
@@ -45,7 +45,7 @@ export const patch = <T,>(path: string, body: unknown) => request<T>(path, { met
 
 export async function fetchOriginal(matterId: string, documentId: string, signal?: AbortSignal): Promise<Blob> {
   let response: Response;
-  try { response = await fetch(`${BASE}/matters/${encodeURIComponent(matterId)}/documents/${encodeURIComponent(documentId)}/original`, { credentials: 'same-origin', signal }); }
+  try { response = await fetch(`${BASE}/matters/${encodeURIComponent(matterId)}/documents/${encodeURIComponent(documentId)}/original`, { credentials: 'same-origin', cache: 'no-store', signal }); }
   catch (cause) {
     if (cause instanceof DOMException && cause.name === 'AbortError') throw cause;
     throw new ApiError('Özgün dosya açılamadı. Yerel hizmete bağlantıyı kontrol edin.', 0);
@@ -67,7 +67,7 @@ export async function downloadOriginal(matterId: string, documentId: string, fil
 export async function downloadPracticeDraft(matterId: string, recordId: string, versionId: string, format: 'docx' | 'pdf') {
   const params = new URLSearchParams({ format, version_id: versionId });
   let response: Response;
-  try { response = await fetch(`${BASE}/matters/${encodeURIComponent(matterId)}/practice/drafts/${encodeURIComponent(recordId)}/export?${params}`, { credentials: 'same-origin' }); }
+  try { response = await fetch(`${BASE}/matters/${encodeURIComponent(matterId)}/practice/drafts/${encodeURIComponent(recordId)}/export?${params}`, { credentials: 'same-origin', cache: 'no-store' }); }
   catch { throw new ApiError('Taslak indirilemedi. Yerel hizmete bağlantıyı kontrol edin.', 0); }
   if (!response.ok) {
     if (response.status === 401) unauthorizedHandler?.();
@@ -82,7 +82,7 @@ export async function downloadPracticeDraft(matterId: string, recordId: string, 
 export async function downloadAnalysis(matterId: string, recordId: string, versionId: string, format: 'docx' | 'pdf') {
   const params = new URLSearchParams({ version_id: versionId, format });
   let response: Response;
-  try { response = await fetch(`${BASE}/matters/${encodeURIComponent(matterId)}/analyses/${encodeURIComponent(recordId)}/export?${params}`, { credentials: 'same-origin' }); }
+  try { response = await fetch(`${BASE}/matters/${encodeURIComponent(matterId)}/analyses/${encodeURIComponent(recordId)}/export?${params}`, { credentials: 'same-origin', cache: 'no-store' }); }
   catch { throw new ApiError('Analiz indirilemedi. Yerel hizmete bağlantıyı kontrol edin.', 0); }
   if (!response.ok) {
     if (response.status === 401) unauthorizedHandler?.();
@@ -140,7 +140,7 @@ export async function downloadAuthorityComparison(matterId: string, analysisId: 
 export async function downloadProduct(matterId: string, productId: string, format: 'docx' | 'pdf') {
   let response: Response;
   try {
-    response = await fetch(`${BASE}/matters/${encodeURIComponent(matterId)}/products/${encodeURIComponent(productId)}/export?format=${format}`, { credentials: 'same-origin' });
+    response = await fetch(`${BASE}/matters/${encodeURIComponent(matterId)}/products/${encodeURIComponent(productId)}/export?format=${format}`, { credentials: 'same-origin', cache: 'no-store' });
   } catch {
     throw new ApiError('Dosya indirilemedi. Yerel hizmete bağlantıyı kontrol edin.', 0);
   }

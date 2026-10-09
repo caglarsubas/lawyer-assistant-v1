@@ -11,7 +11,7 @@ from sqlalchemy import bindparam, select, text
 from .db import Employee, EmployeeRole, FirmRole, Record, User, digest
 
 CATALOG = {
-    "firm.manage": "Çalışan, organizasyon ve rol yapılandırmasını yönet",
+    "firm.manage": "Çalışan, organizasyon, rol ve açık içerik atamalarını yönet",
     "portfolio.read": "Yetkili müvekkilleri ve portföyü görüntüle",
     "portfolio.create": "Müvekkil ve çalışma alanı oluştur",
     "matter.read": "Açıkça yetkili çalışma alanı içeriğini görüntüle",
@@ -221,8 +221,13 @@ class FirmGuardMiddleware:
         self.app = app
 
     async def __call__(self, scope, receive, send):
+        async def private_response(message):
+            if scope["type"] == "http" and scope.get("path", "").startswith("/api/v1/") and message["type"] == "http.response.start":
+                headers = [(key, value) for key, value in message.get("headers", []) if key.lower() != b"cache-control"]
+                message = {**message, "headers": [*headers, (b"cache-control", b"no-store")]}
+            await send(message)
         try:
-            await self.app(scope, receive, send)
+            await self.app(scope, receive, private_response)
         finally:
             if scope["type"] == "http":
                 guard = scope.get("state", {}).get("firm_guard")

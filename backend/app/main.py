@@ -20,6 +20,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 from sqlalchemy.orm.exc import StaleDataError
 
+from .access_admin import access_router
 from .analysis_authorities import authority_context_router
 from .analysis_cohorts import cohort_router
 from .analysis_comparisons import comparison_router
@@ -44,6 +45,7 @@ from .authority_findings import authority_findings_router
 from .authority_trial_cohorts import authority_trial_cohorts_router
 from .authority_trials import authority_trials_router
 from .config import ROOT, load_settings
+from .content_scope import initialize_scope, scoped_records
 from .context_packing import context_export_lines
 from .db import Audit, LoginSession, Membership, Record, Store, User, digest, now, uid
 from .exports import render_export
@@ -254,6 +256,7 @@ def create_app(settings=None):
                 with store.session() as session:
                     for firm in session.scalars(select(User.firm_id).distinct()):
                         initialize_firm(session, firm)
+                        initialize_scope(store, session, firm)
                     session.commit()
                 app.state.provider = Provider(settings)
                 app.state.extractor = (
@@ -311,6 +314,7 @@ def create_app(settings=None):
     app.include_router(governance_router())
     app.include_router(portfolio_router())
     app.include_router(firm_admin_router())
+    app.include_router(access_router())
     app.include_router(assistant_router())
     app.include_router(readiness_router())
     app.include_router(public_sources_router())
@@ -448,9 +452,7 @@ def create_app(settings=None):
         store = app.state.store
         with store.session() as session:
             rows = session.scalars(
-                select(Record)
-                .join(Membership, Membership.matter_id == Record.id)
-                .where(Record.kind == "matter", Record.firm_id == user.firm_id, Membership.user_id == user.id)
+                scoped_records(user)
                 .order_by(Record.created_at.desc())
             ).all()
             return [

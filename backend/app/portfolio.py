@@ -1,6 +1,6 @@
 """Customer tags and workspace navigation over the existing encrypted matter store.
 
-Customer membership is descriptive, never an authorization grant. Workspaces retain
+Tags alone grant no access; explicit client-wide assignments use validated links. Workspaces retain
 their matter identities, membership checks, documents, and lifecycle endpoints.
 """
 
@@ -13,7 +13,9 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from sqlalchemy import func, or_, select
 
 from .auth import authenticate, require_matter
-from .db import Audit, Membership, Record, User, now
+from .content_scope import has_case_scope, remove_queued, scoped_records, sync_links
+from .db import Audit, CustomerAssignment, Membership, Record, User, now
+from .firm_rbac import permissions_for
 
 Identifier = Annotated[str, Field(min_length=1, max_length=64)]
 DateField = Literal["created_at", "updated_at", "relevant_date"]
@@ -77,11 +79,11 @@ def _current_user(session, user):
 
 
 def _workspace_records(session, user):
-    _current_user(session, user)
+    current = _current_user(session, user)
+    if "matter.read" not in permissions_for(session, current):
+        return []
     return session.scalars(
-        select(Record)
-        .join(Membership, Membership.matter_id == Record.id)
-        .where(Record.kind == "matter", Record.firm_id == user.firm_id, Membership.user_id == user.id)
+        scoped_records(user)
         .order_by(Record.created_at.desc(), Record.id)
     ).all()
 
@@ -95,7 +97,9 @@ def _customer_records(store, session, user, workspaces):
     return session.scalars(select(Record).where(
         Record.kind == "customer",
         Record.firm_id == user.firm_id,
-        or_(Record.owner_id == user.id, Record.id.in_(linked_ids)),
+        or_(Record.id.in_(select(CustomerAssignment.customer_id).where(
+            CustomerAssignment.user_id == user.id, CustomerAssignment.firm_id == user.firm_id,
+            CustomerAssignment.scope.in_(["details", "all_cases"]))), Record.id.in_(linked_ids)),
     ).order_by(Record.created_at.desc(), Record.id)).all()
 
 
@@ -209,6 +213,8 @@ def portfolio_router():
         with store.session() as session:
             _current_user(session, user)
             record = store.add(session, "customer", user, body.model_dump())
+            session.add(CustomerAssignment(customer_id=record.id, user_id=user.id, firm_id=user.firm_id,
+                                           scope="details", assigned_by=user.id))
             _audit(session, user, "customer_created", record.id)
             session.commit()
             return {**store.view(record), "workspace_count": 0}
@@ -232,8 +238,10 @@ def portfolio_router():
             data = {**body.model_dump(), "customer_ids": ids, "status": "draft", "updated_at": now()}
             record = store.add(session, "matter", user, data)
             session.add(Membership(matter_id=record.id, user_id=user.id))
+            stopped = sync_links(store, session, user, record, ids)
             _audit(session, user, "workspace_created", record.id, record.id)
             session.commit()
+            remove_queued(request.app, stopped)
             return workspace_view(store, session, user, record)
 
     @router.get("/workspaces/{workspace_id}")
@@ -265,8 +273,13 @@ def portfolio_router():
                 raise HTTPException(409, "Çalışma alanı değişti; yenileyip tekrar deneyin")
             ids = validate_customer_ids(store, session, user, body.customer_ids)
             store.update(workspace, {**store.decode(workspace), "customer_ids": ids, "updated_at": now()})
+            stopped = sync_links(store, session, user, workspace, ids)
             _audit(session, user, "workspace_customers_changed", workspace.id, workspace.id)
             session.commit()
+            remove_queued(request.app, stopped)
+            if not has_case_scope(session, workspace.id, user):
+                from fastapi import Response
+                return Response(status_code=204)
             return workspace_view(store, session, user, workspace)
 
     @router.get("/workspaces/{workspace_id}/comments")

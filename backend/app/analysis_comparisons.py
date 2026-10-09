@@ -100,12 +100,11 @@ def registration_context(app, session, matter_id, analysis_id, user):
     review_id = analysis_reviews.review_pin(store, session, matter_id, analysis_id, content["latest_version_id"], user)
     review = store.view(require_child(session, review_id, analysis_reviews.KIND, matter_id, user)) if review_id else None
     excluded = {user.id, version["authored_by"], (review or {}).get("reviewer_id")}
-    from .db import Membership
+    from .content_scope import scoped_users
+    from .firm_rbac import permissions_for
 
-    reviewers = session.scalars(select(User).join(Membership, Membership.user_id == User.id).where(
-        Membership.matter_id == matter_id, User.firm_id == user.firm_id, User.active.is_(True), User.id.not_in(excluded - {None}))
-        .order_by(User.name, User.id))
-    members = [{"id": item.id, "name": item.name} for item in reviewers]
+    members = [{"id": item.id, "name": item.name} for item in scoped_users(session, matter_id, user.firm_id)
+               if item.id not in excluded and "matter.review" in permissions_for(session, item)]
     from .analysis_workbench import _freshness
 
     current = _freshness(store, session, matter_id, user, version["content"])["status"] == "current"

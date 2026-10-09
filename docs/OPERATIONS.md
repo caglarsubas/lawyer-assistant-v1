@@ -597,6 +597,16 @@ for a qualified live identity-administration service. The command does not call
 an external identity service, bootstrap accounts, migrate schema or create keys.
 `--help` is safe before configuration is loaded.
 
+W02 adds an authenticated administration UI for explicit client/case scopes and
+case responsibilities; see [the assignment contract](FIRM_RBAC_AND_SUPERVISION.md).
+Upgrade API/schema and take a protected backup before enabling prospective grants.
+The API's single coordinator performs the additive migration once per firm; older
+writers must not run after enabling these grants. This offline command retains its
+maintenance-window restriction and additional active-case access check. It considers
+prospective scope for recovery checks, invalidates changed recipients' sessions and
+advances the same case-team revision. Use the UI for client scopes and active/archived
+case responsibility flags; the CLI changes independent direct memberships only.
+
 Supply your existing active administrator ID, obtainable from your authenticated
 `/api/v1/auth/me` response before maintenance. Replace the uppercase identifiers
 below with actual IDs. Commands list only user IDs, names, roles and active state
@@ -626,7 +636,7 @@ administrator status alone cannot bypass matter access. Cross-firm mutations
 and grants to inactive users are denied. Revocation or deactivation cannot remove
 the last active member of an active or archived matter. Archived matters also
 retain at least one existing active administrator member when that administrator
-is deactivated, because restoration requires both role and membership. Restore
+is deactivated, because restoration requires both lifecycle action permission and current content scope. Restore
 an archived matter through its authorized workflow before changing memberships.
 Self-deactivation is prohibited. Deactivation disables the account and deletes
 all its login sessions; passwords and historical memberships remain intact.

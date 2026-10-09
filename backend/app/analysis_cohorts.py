@@ -11,7 +11,8 @@ from . import analysis_adjudication, analysis_reviews, analysis_suggestions, ana
 from . import analysis_comparisons as comparisons
 from .analysis_adjudication import DIMENSIONS
 from .auth import authenticate, require_child, require_matter
-from .db import Membership, Record, User, digest, now
+from .content_scope import has_case_scope
+from .db import Record, User, digest, now
 from .evidence_prompt import canonical
 from .practice import StrictInput, _audit
 
@@ -106,7 +107,7 @@ def _entry(app, session, matter_id, selected, user):
     for ident in [plan["registered_by"], *plan["reviewer_ids"]]:
         member = session.get(User, ident, populate_existing=True)
         participants.append({"id": ident, "authorized": bool(member and member.active and member.firm_id == user.firm_id
-            and session.get(Membership, (matter_id, ident), populate_existing=True))})
+            and has_case_scope(session, matter_id, member))})
     facts = {item["id"] for item in plan["source_content"]["fact_snapshots"]}
     basis = {"records": records, "participants": participants, "latest_review_id": latest_review,
         "contradictions_sha256": digest(canonical(analysis_workbench._contradictions(store, session, matter_id, user.firm_id, facts))),
