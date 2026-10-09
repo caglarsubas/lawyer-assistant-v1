@@ -6,6 +6,7 @@ from uuid import uuid4
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import select
 from test_research_jobs import products, seed_run, state, wait_for
 from test_snapshot_set_postgres import (
     observe_identity_lock,
@@ -19,6 +20,78 @@ from app.db import Record, User, digest
 from app.main import create_app
 from app.research import publish_product
 from app.research_jobs import JobStopped, coordinator_lease, finish_run, request_stop
+
+
+def test_firm_permission_changes_wait_for_complete_active_reads_across_connections(workspace):
+    from app.firm_rbac import FirmAuthorization
+
+    app, _, _ = workspace
+    first = FirmAuthorization(app.state.store.engine)
+    second = FirmAuthorization(app.state.store.engine)
+    admitted = Event()
+
+    def change():
+        with second.guard('demo-firm', exclusive=True):
+            admitted.set()
+
+    with ThreadPoolExecutor(1) as pool:
+        with first.guard('demo-firm'), observe_identity_lock(
+            app.state.store.engine, statement_fragment='SELECT pg_advisory_lock('
+        ) as observed:
+            future = pool.submit(change)
+            assert observed[0].wait(5)
+            assert wait_until_blocked(app.state.store.engine, observed[1][-1])
+            assert not admitted.is_set()
+            # Another firm is independent of this lock, not a global blocking queue.
+            with second.guard('other-firm', exclusive=True):
+                assert not future.done()
+        future.result(timeout=5)
+    assert admitted.is_set()
+    with first.guard('demo-firm', exclusive=True):
+        pass
+
+
+def test_firm_administration_conflicting_roles_preserve_one_revision_and_revoke_session(workspace):
+    import json
+
+    from app.auth import create_session
+    from app.db import Employee, EmployeeRole, FirmRole, LoginSession
+
+    app, client, _ = workspace
+    initial = client.get('/api/v1/firm-admin').json()
+    admin = initial['employees'][0]
+    created = client.post('/api/v1/firm-admin/roles', json={
+        'name': 'SYNTHETIC policy', 'permissions': ['system.read'],
+    })
+    assert created.status_code == 201
+    role = created.json()
+    with app.state.store.session() as session:
+        target = User(username='SYNTHETIC peer', name='SYNTHETIC peer', firm_id='demo-firm',
+                      role='lawyer', password_hash='never-used')
+        session.add(target)
+        session.flush()
+        session.add(Employee(user_id=target.id, firm_id='demo-firm'))
+        session.flush()
+        session.add(EmployeeRole(user_id=target.id, role_id=role['id']))
+        create_session(session, target, 1)
+        target_id = target.id
+    endpoint = '/api/v1/firm-admin/roles/' + role['id']
+    barrier = Barrier(2)
+
+    def edit(name):
+        barrier.wait(timeout=5)
+        return client.put(endpoint, json={'name': name, 'permissions': [], 'revision': role['revision']})
+
+    with ThreadPoolExecutor(2) as pool:
+        a, b = pool.submit(edit, 'SYNTHETIC A'), pool.submit(edit, 'SYNTHETIC B')
+        results = [a.result(timeout=10), b.result(timeout=10)]
+    assert sorted(result.status_code for result in results) == [200, 409]
+    with app.state.store.session() as session:
+        current = session.get(FirmRole, role['id'])
+        assert current.revision == 2 and json.loads(current.permissions) == []
+        assert session.get(Employee, target_id).revision == 2
+        assert not list(session.scalars(select(LoginSession).where(LoginSession.user_id == target_id)))
+        assert session.get(User, admin['id']).active
 
 
 @pytest.fixture

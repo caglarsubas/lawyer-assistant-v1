@@ -1,8 +1,9 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { lazy, Suspense, useEffect, useState, type FormEvent } from 'react';
 import { onUnauthorized, post, request, setCsrfToken } from './api';
 import { Icon, Loading, Mark, Notice } from './components';
 import type { Bootstrap, Session, SystemStatus } from './types';
 import { messageOf } from './utils';
+const FirmAdminPage = lazy(() => import('./pages/FirmAdminPage'));
 import MattersPage from './pages/MattersPage';
 import MatterPage from './pages/MatterPage';
 import GraphPage from './pages/GraphPage';
@@ -48,15 +49,15 @@ export default function App() {
     try { await post('/auth/logout', {}); setSession(null); setStatus(null); setCsrfToken(''); } catch (cause) { setError(messageOf(cause)); } finally { setSigningOut(false); }
   }
   if (booting) return <div className="boot"><Mark large /><Loading label="Çalışma alanı hazırlanıyor…" /></div>;
-  if (!session) return <Login demo={Boolean(bootstrap?.demo_mode)} initialError={error} onLogin={(value) => { setSession(value); setCsrfToken(value.csrf_token); setError(''); }} />;
+  if (!session) return <Login demo={Boolean(bootstrap?.demo_mode)} initialError={error} onLogin={(value) => { setSession(value); setCsrfToken(value.csrf_token); setError(''); if (value.user.permissions?.includes('firm.manage') && !value.user.permissions.includes('matter.read')) navigate('/firm-admin'); }} />;
   const [pathname, query = ''] = route.split('?');
   const page = pathname.split('/')[1];
   const matterId = ['matters', 'workspaces'].includes(page) && pathname.split('/')[2] ? decodeURIComponent(pathname.split('/')[2]) : null;
   const params = new URLSearchParams(query);
   const section = params.get('tab') || 'overview';
-  return <PortfolioProvider key={session.user.id}><Workbench session={session} signingOut={signingOut} onSignOut={signOut} page={page} workspaceId={matterId} section={section} demo={Boolean(status?.demo_mode || session.demo_mode)}>
+  return <PortfolioProvider key={session.user.id} enabled={!session.user.permissions || session.user.permissions.includes('portfolio.read')}><Workbench session={session} signingOut={signingOut} onSignOut={signOut} page={page} workspaceId={matterId} section={section} demo={Boolean(status?.demo_mode || session.demo_mode)}>
     {error && <Notice error>{error}</Notice>}
-    {matterId ? <MatterPage key={matterId} matterId={matterId} tab={section} selectedDocumentId={params.get('document')} userRole={session.user.role} demo={Boolean(status?.demo_mode || session.demo_mode)} /> : page === 'sources' ? pathname.split('/')[3] === 'provisions' ? <ProvisionMappingPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : <SourceReviewPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : page === 'customers' ? <CustomersPage /> : page === 'graphs' ? <GraphPage /> : page === 'coverage' ? <CoveragePage /> : page === 'system' ? <SystemPage status={status} onStatus={setStatus} /> : <MattersPage newRequested={params.get('new') === '1'} />}
+    {matterId ? <MatterPage key={matterId} matterId={matterId} tab={section} selectedDocumentId={params.get('document')} userRole={session.user.role} permissions={session.user.permissions} demo={Boolean(status?.demo_mode || session.demo_mode)} /> : page === 'sources' ? pathname.split('/')[3] === 'provisions' ? <ProvisionMappingPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : <SourceReviewPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : page === 'firm-admin' ? <Suspense fallback={<Loading label="Büro yönetimi yükleniyor…" />}><FirmAdminPage /></Suspense> : page === 'customers' ? <CustomersPage /> : page === 'graphs' ? <GraphPage /> : page === 'coverage' ? <CoveragePage /> : page === 'system' ? <SystemPage status={status} onStatus={setStatus} /> : <MattersPage newRequested={params.get('new') === '1'} />}
   </Workbench></PortfolioProvider>;
 
 }

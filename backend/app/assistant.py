@@ -10,6 +10,7 @@ from sqlalchemy import select
 
 from .auth import authenticate, require_matter
 from .db import Audit, Record
+from .firm_rbac import require_permission
 from .portfolio import list_workspaces
 from .provider import ProviderError
 
@@ -123,6 +124,10 @@ def assistant_router():
     def respond(body: AssistantInput, request: Request, user=Depends(authenticate)):
         store = request.app.state.store
         context = body.context
+        if context.page == "firm-admin" and body.mode in {"guide", "chat"}:
+            return {"answer": "Büro yönetiminde çalışanları, en fazla bir organizasyon yöneticisini ve işlem rollerini düzenleyebilirsiniz. Organizasyon bağı ve yönetici rolü dosya erişimi vermez. İçerik için ayrıca açık atama gerekir. Rol değişikliklerinden sonra ilgili hesap yeniden giriş yapar. Dosya ekipleri ve insan görüşü iş akışı sonraki aşamalarda açılacaktır.",
+                    "mode": body.mode, "sources": [], "suggestions": [], "period": None,
+                    "provider_used": False, "limitations": ["Bu kullanım rehberi çalışan veya dosya içeriği okumaz."]}
         if context.page == "sources" and body.mode in {"guide", "chat"}:
             if body.mode == "chat" and not body.question:
                 raise HTTPException(422, "Asistana bir soru yazın")
@@ -136,6 +141,8 @@ def assistant_router():
                     "period": None, "provider_used": False,
                     "limitations": ["Bu yanıt yalnızca ekranın kullanım rehberidir. Kaynak metni, inceleme notları ve kaydedilmemiş girdiler okunmaz; değerlendirme veya hukuki sonuç üretilmez."]}
         with store.session() as session:
+            require_permission(session, user, "portfolio.read")
+            require_permission(session, user, "matter.read")
             # Explicit current workspace IDs are checked even if filters omit them.
             active = None
             if context.workspace_id:

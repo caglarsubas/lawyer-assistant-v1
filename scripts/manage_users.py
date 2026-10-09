@@ -11,12 +11,17 @@ from types import SimpleNamespace
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
 
-from sqlalchemy import create_engine, delete, func, select  # noqa: E402
-from sqlalchemy.engine import make_url  # noqa: E402
-from sqlalchemy.orm import sessionmaker  # noqa: E402
+from sqlalchemy import create_engine, delete, func, select
+from sqlalchemy.engine import make_url
+from sqlalchemy.orm import sessionmaker
 
-from app.auth import hash_password  # noqa: E402
-from app.db import Audit, LoginSession, Membership, Record, User  # noqa: E402
+from app.auth import hash_password
+from app.db import Audit, LoginSession, Membership, Record, User
+from app.firm_rbac import (
+    FirmAuthorization,
+    initialize_firm,
+    permissions_for,
+)
 
 
 class AdministrationError(Exception):
@@ -38,16 +43,21 @@ def operate(store, operator_id, command, *, user_id=None, matter_id=None,
             username=None, name=None, role="lawyer", password=None):
     if command not in {"list", "create", "grant", "revoke", "deactivate"}:
         raise AdministrationError("Unsupported operation")
-    with store.session() as session, session.begin():
+    with store.session() as lookup:
+        identity = lookup.get(User, operator_id)
+        if not identity or not identity.active:
+            raise AdministrationError("An existing active administrator ID is required")
+        firm_id = identity.firm_id
+    with FirmAuthorization(store.engine).guard(firm_id, exclusive=True), store.session() as session, session.begin():
         operator = session.get(User, operator_id)
-        if not operator or not operator.active or operator.role != "admin":
+        if not operator or not operator.active or "firm.manage" not in permissions_for(session, operator):
             raise AdministrationError("An existing active administrator ID is required")
         # One stable lock order serializes this CLI's firm-level access changes.
         users = session.scalars(select(User).where(User.firm_id == operator.firm_id)
                                 .order_by(User.id).with_for_update()
                                 .execution_options(populate_existing=True)).all()
         operator = next((user for user in users if user.id == operator_id), None)
-        if not operator or not operator.active or operator.role != "admin":
+        if not operator or not operator.active or "firm.manage" not in permissions_for(session, operator):
             raise AdministrationError("Administrator access changed; operation denied")
 
         def audit(action, target_id, matter=None):
@@ -70,6 +80,7 @@ def operate(store, operator_id, command, *, user_id=None, matter_id=None,
                           active=True, password_hash=hash_password(password))
             session.add(target)
             session.flush()
+            initialize_firm(session, operator.firm_id)
             audit("operator_user_created", target.id)
             return {"changed": True, "user": user_summary(target)}
 

@@ -17,6 +17,7 @@ from .analysis_feedback import editable_targets
 from .auth import require_child, require_matter
 from .db import User, digest
 from .evidence_prompt import canonical
+from .firm_rbac import require_permission
 from .practice import StrictInput
 
 RECIPE = 'source-bound-authority-proposals-v1'
@@ -128,6 +129,7 @@ def dependency_guard(app, session, matter_id, user, dependency):
                 if not reviewer or reviewer.role not in {'lawyer', 'admin'}:
                     raise HTTPException(403)
                 require_matter(session, matter_id, reviewer)
+                require_permission(session, reviewer, "matter.review")
             except HTTPException:
                 reasons.append('authority_reviewer_access_changed')
             yield reasons

@@ -22,7 +22,7 @@ type Lists = Record<PracticeKind | 'playbooks' | 'library', PracticeRecord[]>;
 const emptyLists = (): Lists => ({ scenarios: [], contradictions: [], arguments: [], drafts: [], playbooks: [], library: [] });
 type Editor = { kind: PracticeKind; record?: PracticeRecord } | null;
 
-export default function PracticePanel({ matter, onChange, userRole }: { matter: Matter; onChange: () => Promise<void>; userRole: string }) {
+export default function PracticePanel({ matter, onChange, userRole, permissions }: { matter: Matter; onChange: () => Promise<void>; userRole: string; permissions?: string[] }) {
   const [data, setData] = useState<Lists>(emptyLists); const [loading, setLoading] = useState(true); const [errors, setErrors] = useState<Record<string, string>>({});
   const [editor, setEditor] = useState<Editor>(null); const [notice, setNotice] = useState(''); const [source, setSource] = useState<string | null>(null);
   const [cohortsVisible, setCohortsVisible] = useState(false);
@@ -57,7 +57,7 @@ export default function PracticePanel({ matter, onChange, userRole }: { matter: 
       </article>)}</div>
       {data[kind].length === 100 && <p className="small muted">En yeni 100 kayıt gösteriliyor.</p>}
     </Detail>)}
-    {!loading && <Detail title={`Kurum rehberleri (${data.playbooks.length} benimsenmiş sürüm)`}><Playbooks matterId={matter.id} library={data.library} adopted={data.playbooks} canCurate={['admin', 'curator'].includes(userRole)} onSave={saved} error={errors.playbooks || errors.library} /></Detail>}
+    {!loading && <Detail title={`Kurum rehberleri (${data.playbooks.length} benimsenmiş sürüm)`}><Playbooks matterId={matter.id} library={data.library} adopted={data.playbooks} canCurate={['admin', 'curator'].includes(userRole) && (!permissions || permissions.includes('playbook.manage'))} onSave={saved} error={errors.playbooks || errors.library} /></Detail>}
     {source && <EvidenceViewer key={source} matter={matter} evidenceId={source} onClose={() => setSource(null)} />}
   </section>;
 }

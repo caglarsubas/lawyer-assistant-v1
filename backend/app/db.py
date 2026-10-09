@@ -61,6 +61,30 @@ class Membership(Base):
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
 
 
+class FirmRole(Base):
+    __tablename__ = "firm_roles"
+    id: Mapped[str] = mapped_column(String(64), primary_key=True, default=uid)
+    firm_id: Mapped[str] = mapped_column(String(64), index=True)
+    name: Mapped[str] = mapped_column(String(100))
+    permissions: Mapped[str] = mapped_column(Text)
+    revision: Mapped[int] = mapped_column(Integer, default=1)
+    starter: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class Employee(Base):
+    __tablename__ = "firm_employees"
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    firm_id: Mapped[str] = mapped_column(String(64), index=True)
+    manager_id: Mapped[str | None] = mapped_column(ForeignKey("users.id"), nullable=True)
+    revision: Mapped[int] = mapped_column(Integer, default=1)
+
+
+class EmployeeRole(Base):
+    __tablename__ = "employee_roles"
+    user_id: Mapped[str] = mapped_column(ForeignKey("firm_employees.user_id"), primary_key=True)
+    role_id: Mapped[str] = mapped_column(ForeignKey("firm_roles.id"), primary_key=True)
+
+
 class Audit(Base):
     __tablename__ = "audit"
     id: Mapped[str] = mapped_column(String(64), primary_key=True, default=uid)

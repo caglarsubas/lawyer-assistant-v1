@@ -10,7 +10,7 @@ import PracticePanel from './matter/PracticePanel';
 import WorkspaceComments from './matter/WorkspaceComments';
 import WorkspaceCustomers from './matter/WorkspaceCustomers';
 
-export default function MatterPage({ matterId, demo, userRole, tab: selectedTab, selectedDocumentId }: { matterId: string; demo: boolean; userRole: string; tab: string; selectedDocumentId: string | null }) {
+export default function MatterPage({ matterId, demo, userRole, permissions, tab: selectedTab, selectedDocumentId }: { matterId: string; demo: boolean; userRole: string; permissions?: string[]; tab: string; selectedDocumentId: string | null }) {
   const [matter, setMatter] = useState<Matter | null>(null); const [error, setError] = useState(''); const [loading, setLoading] = useState(true);
   const tab = ['overview', 'documents', 'facts', 'practice', 'research', 'comments'].includes(selectedTab) ? selectedTab : 'overview';
   function setTab(value: string) { window.location.hash = `/matters/${encodeURIComponent(matterId)}?tab=${value}`; }
@@ -28,7 +28,7 @@ export default function MatterPage({ matterId, demo, userRole, tab: selectedTab,
     {tab === 'documents' && <DocumentsPanel matter={matter} onChange={reload} selectedDocumentId={selectedDocumentId} demo={demo} />}
     {tab === 'comments' && <WorkspaceComments workspaceId={matterId} />}
     {tab === 'facts' && <FactsPanel matter={matter} onChange={reload} />}
-    {tab === 'practice' && <PracticePanel matter={matter} onChange={reload} userRole={userRole} />}
+    {tab === 'practice' && <PracticePanel matter={matter} onChange={reload} userRole={userRole} permissions={permissions} />}
     {tab === 'research' && <ResearchPanel matter={matter} onChange={reload} demo={demo} />}
   </>;
 }

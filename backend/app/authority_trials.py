@@ -17,6 +17,7 @@ from .analysis_comparisons import ArmEffort
 from .auth import authenticate, require_child, require_matter
 from .db import Membership, Record, User, digest, now
 from .evidence_prompt import canonical
+from .firm_rbac import require_permission
 from .practice import StrictInput, _audit
 
 RECIPE = "registered-human-authority-revision-v1"
@@ -257,6 +258,7 @@ def _current(app, session, route, plan, user):
             if not member or member.role not in {"lawyer", "admin"}:
                 raise HTTPException(403)
             require_matter(session, route[0], member)
+            require_permission(session, member, "matter.review")
         except HTTPException:
             reasons.append("participant_access_changed")
     return sorted(set(reasons))

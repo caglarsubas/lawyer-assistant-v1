@@ -1,5 +1,62 @@
 # Verification record — 9 October 2026
 
+## W01 firm administration and permission foundation — 9 October 2026 (Asia/Shanghai)
+
+PR #31 is merged at `9db46fd292e80c57fed54a92494ea4a0eccab225`; exact post-merge
+main run `37903786237` passed. The approved firm-access amendment is integrated
+into the canonical roadmap without changing the R01–R08 identifiers. Delivery
+now proceeds W01 → W02 → W03 before the retained R05A source-lineage revalidation
+and registered model authority trials.
+
+W01 adds local employee administration, a zero/one-manager hierarchy, immutable
+starter and supported custom roles, revision conflicts, encrypted configuration
+history and fresh route/action checks. Configuration-only administrators receive
+no client/case access. Existing explicit memberships and credentials are retained;
+reporting creates no content grant. Role or employee edits invalidate affected
+sessions; PostgreSQL firm guards serialize configuration against admitted requests
+and short worker publication checkpoints. Response guards last through file-body
+completion. Inference does not hold a write-blocking guard.
+
+Final local verification:
+
+- **3,147 backend tests passed**, 54 skipped, 28 warnings in 412.37 seconds with
+  two workers. Skips are the 51 separately executed PostgreSQL cases and three
+  existing opt-in infrastructure drills.
+- **51 PostgreSQL cases passed** in 87.79 seconds on the pinned disposable 16.10
+  image. New cases observe actual advisory-lock blocking, independent-firm progress,
+  competing role edits and revoked sessions. Owned containers/databases were removed.
+- **141 exact-source offline Linux cases passed** in 28.19 seconds for administration,
+  authority proposals, offline user management and source reviews. Source/test,
+  ontology and locked dependency fingerprints matched. The nonroot container had
+  no network, host ports or mounts, a read-only filesystem, two CPUs, 768 MiB,
+  128 PIDs and 256 MiB tmpfs; cleanup was verified.
+- **193 frontend tests passed** across 25 files; typecheck and production build
+  passed. The existing main-chunk advisory remains; administration is lazy loaded.
+- **41 deployment contracts**, RDF/SHACL, R01 planning/calibration/study contracts,
+  Ruff, actionlint, whitespace and Compose validation passed. Compose used all six
+  disposable placeholders and `/dev/null`, without reading a local `.env`.
+- A production-build browser rehearsal used three invented employees and one custom
+  role, with zero new case grants. The configuration-only account showed no private
+  portfolio controls; its scoped assistant guide used no provider or private records.
+  No console warning/error occurred. Owned tabs and the loopback server were closed.
+
+The two administration/proposal files now run in the existing frontend CI job after
+its build/tests. Actual workflow collection proves **3,201 = 89 preflight + 3,055
+main + 10 publication + 47 workspace-security cases**, with zero overlap, omission
+or extras. The serial security partition passed all 47 cases in 13.75 seconds locally.
+The same three job names, runners, worker counts, no retries and existing step/job
+time limits remain. No coverage gate was removed. Hosted capacity and billing savings
+are not established by local timing.
+
+SQLite demo coordination is single-process only. Production lock-loss/network-failure
+behavior and customer migration need target-host qualification. W02 explicit client
+and case responsibilities, supervisors and scoped revocation, and W03 human deadlines,
+tasks and written-opinion review are pending. These synthetic engineering checks do
+not qualify legal/model accuracy, corpus rights, pilot capacity or deployment. No
+live provider call, real employee/access change, credential edit, graph activation or
+production deployment occurred. See [requirements and boundaries](FIRM_RBAC_AND_SUPERVISION.md)
+and [verification metadata](evidence/firm-administration-verification-2026-10-09.json).
+
 ## R05A source-bound local authority proposals — 9 October 2026 (Asia/Shanghai)
 
 PR #30 is merged at `4c77c49aecdf933cc9224292667a8fba5d2f871e`; exact post-merge

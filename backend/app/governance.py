@@ -15,6 +15,7 @@ from sqlalchemy.orm.exc import StaleDataError
 
 from .auth import authenticate
 from .db import Audit, Membership, Record, User, digest, now
+from .firm_rbac import permissions_for, require_permission
 
 
 class Input(BaseModel):
@@ -115,8 +116,8 @@ def _current_user(session, user, admin=False):
     current = session.get(User, user.id, populate_existing=True)
     if not current or not current.active or current.firm_id != user.firm_id:
         raise HTTPException(401, "Oturum geçersiz")
-    if admin and current.role != "admin":
-        raise HTTPException(403, "Bu işlem yönetici yetkisi gerektirir")
+    if admin:
+        require_permission(session, current, "matter.lifecycle")
     return current
 
 
@@ -132,8 +133,9 @@ def _matter(session, matter_id, user, *, admin=False, lock=False):
         or not membership
     ):
         raise HTTPException(404, "Dosya bulunamadı")
-    if (admin or matter.kind == "archived_matter") and current.role != "admin":
-        raise HTTPException(403, "Bu işlem yönetici yetkisi gerektirir")
+    require_permission(session, current, "matter.read")
+    if admin or matter.kind == "archived_matter":
+        require_permission(session, current, "matter.lifecycle")
     return matter
 
 
@@ -563,7 +565,7 @@ def governance_router():
                     "title": store.decode(record).get("title", ""),
                     "revision": record.revision,
                     "status": "archived",
-                    "can_restore": current.role == "admin",
+                    "can_restore": "matter.lifecycle" in permissions_for(session, current),
                 }
                 for record in records
             ]

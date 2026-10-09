@@ -17,7 +17,7 @@ interface PortfolioState {
   refresh: () => void;
 }
 const PortfolioContext = createContext<PortfolioState | null>(null);
-export function PortfolioProvider({ children }: { children: ReactNode }) {
+export function PortfolioProvider({ children, enabled = true }: { children: ReactNode; enabled?: boolean }) {
   const [customers, setCustomers] = useState<Customer[]>([]); const [workspaces, setWorkspaces] = useState<Matter[]>([]);
   const [filters, setFilters] = useState<PortfolioFilters>(EMPTY_FILTERS); const [loading, setLoading] = useState(true); const [error, setError] = useState('');
   const [revision, setRevision] = useState(0);
@@ -26,13 +26,14 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true); setError('');
+    if (!enabled) { setCustomers([]); setWorkspaces([]); setLoading(false); return; }
     if (filters.date_from && filters.date_to && filters.date_from > filters.date_to) { setError('Başlangıç tarihi bitiş tarihinden sonra olamaz.'); setWorkspaces([]); setLoading(false); return; }
     Promise.all([request<Customer[]>('/customers', { signal: controller.signal }), request<Matter[]>(`/workspaces?${workspaceQuery(filters)}`, { signal: controller.signal })])
       .then(([customerData, workspaceData]) => { setCustomers(customerData); setWorkspaces(workspaceData); })
       .catch(cause => { if (cause.name !== 'AbortError') { setError(messageOf(cause)); setWorkspaces([]); } })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
-  }, [filters, revision]);
+  }, [filters, revision, enabled]);
   const value = useMemo(() => ({ customers, workspaces, filters, setFilters, loading, error, revision, refresh }), [customers, workspaces, filters, loading, error, revision, refresh]);
   return <PortfolioContext.Provider value={value}>{children}</PortfolioContext.Provider>;
 }

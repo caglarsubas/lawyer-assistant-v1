@@ -1,3 +1,4 @@
+import PortfolioNavigation from './PortfolioNavigation';
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_LAYOUT, sanitizeLayout } from './layout';
@@ -38,5 +39,16 @@ describe('workbench boundaries', () => {
     expect(markup).toContain('aria-label="Hukuk asistanı tam ekran"');
     expect(markup).toContain('aria-label="Çalışma alanı panelini daralt"');
     expect(markup).toContain('maxLength="2000"');
+  });
+});
+
+
+describe('configuration-only portfolio navigation', () => {
+  it('offers administration without private portfolio filters or creation links', () => {
+    const markup = renderToStaticMarkup(<PortfolioProvider enabled={false}><PortfolioNavigation page="firm-admin" workspaceId={null} permissions={['firm.manage', 'system.read']} /></PortfolioProvider>);
+    expect(markup).toContain('Büro yönetimi');
+    expect(markup).not.toContain('Portföy filtresi');
+    expect(markup).not.toContain('Yeni çalışma alanı');
+    expect(markup).not.toContain('Müvekkil ekle');
   });
 });

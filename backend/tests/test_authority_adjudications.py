@@ -226,7 +226,7 @@ def test_preserve_disagreement_per_account_heads_idempotency_and_no_consensus(wo
     assert payload(app, first["id"]) == frozen and len(client.get(endpoint).json()) == 3
 
 
-@pytest.mark.parametrize("change", ["draft", "private", "comparison", "recipe", "role"])
+@pytest.mark.parametrize("change", ["draft", "private", "comparison", "recipe", "role", "permission"])
 def test_changed_dependencies_stale_without_rewriting_judgments(workbench, monkeypatch, change):
     app, client, _, _, fact, *_ = workbench
     endpoint, comp, _, candidate, *_ = setup(workbench, monkeypatch)
@@ -244,6 +244,17 @@ def test_changed_dependencies_stale_without_rewriting_judgments(workbench, monke
     if change == "role":
         with app.state.store.session() as session:
             session.get(User, value["reviewer_id"]).role = "reader"
+            session.commit()
+    if change == "permission":
+        from app.db import Employee, EmployeeRole, FirmRole
+        with app.state.store.session() as session:
+            reviewer = session.get(User, value["reviewer_id"])
+            role = FirmRole(firm_id=reviewer.firm_id, name="SYNTHETIC inspect", permissions='["matter.read", "matter.export"]')
+            session.add(role)
+            session.flush()
+            session.add(Employee(user_id=reviewer.id, firm_id=reviewer.firm_id))
+            session.flush()
+            session.add(EmployeeRole(user_id=reviewer.id, role_id=role.id))
             session.commit()
     shown = client.get(endpoint + "/" + value["id"]).json()
     assert shown["freshness"]["status"] == "stale" and shown["snapshot"] == value["snapshot"]

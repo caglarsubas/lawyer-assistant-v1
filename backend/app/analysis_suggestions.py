@@ -25,6 +25,7 @@ from .analysis_workbench import _content, _freshness, _view
 from .auth import authenticate, require_child, require_matter
 from .db import Record, User, digest, now
 from .evidence_prompt import canonical
+from .firm_rbac import guard_job_write
 from .practice import StrictInput, _audit, _invalidate, _write_version
 from .research_jobs import (
     JobStopped,
@@ -195,6 +196,7 @@ def _require_job(store, session, matter_id, analysis_id, job_id, user):
     return row
 
 
+@guard_job_write
 def _progress(app, job_id, candidate, iterations, notes, responses, response_pass, authority_responses, authority_pass, *, completed=False):
     app.state.research_owner()
     store = app.state.store

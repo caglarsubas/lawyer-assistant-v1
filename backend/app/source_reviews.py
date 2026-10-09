@@ -21,6 +21,7 @@ from sqlalchemy.exc import IntegrityError, OperationalError
 
 from .auth import authenticate
 from .db import LoginSession, User, digest, now, uid
+from .firm_rbac import permissions_for
 from .public_sources import SHA256, PublicSourceError, PublicSourceStore
 from .source_review_models import SourceReviewEvent, SourceReviewHead
 
@@ -278,8 +279,8 @@ def _transition(projection, event, user):
     elif action == "release":
         if assigned is None:
             raise HTTPException(409, "Kaynak incelemesi zaten atanmamış")
-        if assigned["id"] != user.id and user.role != "admin":
-            raise HTTPException(403, "Atamayı yalnızca incelemeci veya gerekçe belirten yönetici kaldırabilir")
+        if assigned["id"] != user.id and "source.assign" not in user.action_permissions:
+            raise HTTPException(403, "Başka incelemecinin atamasını kaldırma izniniz yok")
         projection["assigned_to"] = None
     else:
         if assigned is None or assigned["id"] != user.id:
@@ -307,6 +308,7 @@ def _mutate(request, source_id, body, user):
             current = _lock_identity(session, request, user)
             authorized_role = current.role
             event = _event(current, revision + 1, body)
+            current.action_permissions = permissions_for(session, current)
             _transition(projection, event, current)
             head_id = head.id if head else uid()
             projection["context"] = {"firm_id": current.firm_id, "head_id": head_id, "revision": revision + 1}
