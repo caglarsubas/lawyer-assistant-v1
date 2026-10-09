@@ -1,5 +1,155 @@
 # Verification record — 9 October 2026
 
+## PR #30 CI follow-up — existing-job workload balance
+
+[Run 37882649274](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37882649274)
+on `1629195943490100ce712ab39a4350733d13dc4d` passed all 89 preflight checks,
+frontend and PostgreSQL. Every remaining backend test also passed (3,010 passed,
+51 documented skips, 28 warnings), but **1,090.47s** exceeded the existing
+18-minute step deadline. The required check failed; downstream contract steps
+were skipped. This was a workload deadline failure, not an assertion failure.
+The native identifier optimization remained active in the actual application
+profile: 58 validations and 663,180 rule executions persisted while namespace
+resolutions fell from 8,500,101 to 41,605.
+
+Three expensive publication integration files now run after the serial database
+step in the existing PostgreSQL job. One workflow-wide file list defines both their
+execution and exclusion from the main backend step. Its database URL does not
+reach the publication step. Existing job names, three runners, worker counts,
+retries and 18/20/5-minute limits remain unchanged. No tests or real validation,
+source-integrity or authorization checks are removed.
+
+Collection using the actual workflow shell selections proves **3,150 = 89 +
+3,051 + 10** distinct cases, with zero overlap, missing cases or extras. In one
+disposable pinned PostgreSQL rehearsal, **48 database cases passed in 65.71s**,
+followed by **10 publication cases in 22.49s**; combined test wall time was
+**90.53s**, below the unchanged five-minute job cap. The database URL was absent
+from the publication environment, and the owned container was removed.
+Actionlint and `git diff --check` passed. This local rehearsal does not establish
+hosted capacity.
+
+Partition and combined-job verification are recorded in
+[the follow-up metadata](evidence/pr30-ci-workload-verification-2026-10-09.json).
+The previously completed full local suite and offline Linux source validation
+remain applicable: this follow-up changes only workflow allocation and records.
+Exact-head hosted completion is checked separately; main, deployment, legal
+qualification and invoiced savings are not established by a PR check.
+
+## PR #30 CI correction — native RDFS identifier bindings
+
+Initial [run 37874784913](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37874784913)
+on `b4d024160662665cee0bb736b3f2a0e14f897f06` passed frontend/PostgreSQL but exceeded
+the unchanged 18-minute backend-step limit at 91%, without a reported assertion
+failure. Dependency installation took three seconds. The preflight duplication fix
+alone was insufficient; repeated namespace resolution remained costly.
+
+The correction binds twelve immutable RDF/RDFS identifiers in the existing native
+rule function. Its code object, rule/closure execution, inference writes and the
+pySHACL entry-point code remain unchanged. Each invocation still constructs fresh
+inference and validation state. A private validator opts in only for the exact
+application scratch graph and RDFS mode. Package globals, graph/corpus definition
+bytes, release formats, source reads, live rights checks and schema remain untouched.
+Unrecognized programs, adapters and different dependency versions use native execution.
+Engineering-tested pins: pySHACL 0.40.1, OWL-RL 7.6.2, RDFLib 7.6.0.
+
+- **3,099 backend tests passed in 387.02s**, with 51 documented database/drill skips
+  and 28 existing warnings, using the unchanged standalone complete two-worker
+  worksteal command. **89 mandatory preflight cases passed in 9.58s**, including
+  16 new code/identifier equivalence, invalid-report, cycle/literal/domain/range,
+  unchanged-input, dependency/program fallback and parallel-isolation cases.
+- The representative fixture retains **11,888 inference rule executions and 186
+  SHACL queries**, reducing namespace resolutions within those rules from
+  **151,647 to zero**. The work-count test initially caught a destination-identifier
+  condition that left the optimization inactive; it was corrected before final checks.
+  Unsupported programs still use native execution. These counters are deterministic,
+  rather than machine-dependent time thresholds.
+- Eight alternating warm comparisons of the final adapter and native entry point,
+  with identical scratch graphs/shapes/options/syntax caches and no dependency
+  monkeypatch, measured **0.09503s / 0.05951s median (37.4% lower)**. Local timing
+  does not establish hosted performance, cost savings or legal qualification.
+- **48 real PostgreSQL cases passed in 71.61s** in disposable child databases on
+  the pinned image, including source authorization and real row-lock races.
+  **311 offline Linux cases passed in 126.35s**, with matching final runtime/test
+  fingerprints and dependency versions. Network disabled, no host ports/mounts,
+  non-root/read-only execution, capability/security/resource limits were preserved.
+  Both sets of owned containers were removed.
+- **41 deployment contracts**, repository Ruff, actionlint, RDF/SHACL, R01 planning,
+  synthetic calibration/study and Compose with `/dev/null` env passed. Definitions
+  remain legally unreviewed with zero actual published historical records. The
+  correction changes no frontend code; its existing exact-head check passed on
+  the initial PR run, and the next hosted head checks it again.
+- CI collection using actual shell commands proves **3,150 = 89 + 3,061** distinct
+  node IDs, with no overlap, missing cases or extras. All five preflight files remain
+  mandatory and are excluded only from the subsequent step to avoid duplicate work.
+  Required checks, runners, workers, retries and job/step limits are unchanged.
+
+[Correction verification metadata](evidence/pr30-ci-identifiers-verification-2026-10-09.json)
+pins source, dependencies, work counts, measurements and logs. Raw diagnostic logs
+and fixtures remain ignored under `.data/verification/pr30-ci-fix/`. The original
+checkout, `.env`, provider/source permissions and deployed app were untouched. Hosted
+checks for the correction are reported separately on PR #30; a passing PR does not
+establish passing post-merge `main` or invoiced savings. See [CI controls](CI.md).
+
+## R05A confidential human authority-trial groups — 9 October 2026 (Asia/Shanghai)
+
+PR #29 merged as `8baaa698079da9d3d46fbc54ab1b1efe552eca79`; its exact PR checks
+passed. Its [post-merge main run 37871027474](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37871027474)
+passed frontend and PostgreSQL, but backend exceeded the existing 18-minute test-step
+limit without a reported assertion failure. Main is not claimed green. This packet
+freezes explicitly selected human authority revision trials within one workspace,
+retaining exact original captures and named gaps without pooling incompatible profiles.
+
+- **3,083 backend tests passed in 437.77s**, with 51 PostgreSQL/drill skips and 28
+  existing warnings, using the standalone complete two-worker worksteal command.
+  **27 focused cases** cover explicit selections, profiles, repeated inputs/sources,
+  unknown observations/effort, already-stale dependency changes, capture/history,
+  recipe/account/source changes, nonce replay/conflict, pending admission, rollback,
+  caps, workspace access and post-serialization withholding.
+- **187 frontend tests in 23 files and strict TypeScript/Vite build passed.** Tools
+  load lazily and selections/attestations start empty. Group UI is a separate
+  59.06 KB / 14.89 KB gzip chunk; the existing main-bundle advisory remains enabled.
+  **41 deployment contracts**, repository Ruff, actionlint, Compose with `/dev/null`
+  env, RDF/SHACL, R01 planning and synthetic calibration/study checks passed.
+  Ontology remains legally unreviewed with **zero actual published historical records**.
+- **295 offline Linux cases passed in 128.92s**, with matching final application/test
+  fingerprints, network disabled, no ports or host mounts, non-root/read-only runtime,
+  dropped capabilities and bounded CPU/memory/PID/tmpfs. The existing locked runtime
+  was reused. **48 real PostgreSQL cases passed in 93.69s** in disposable child
+  databases on the pinned image. Three new races observe real workspace-row blocking
+  and prove identical replay, nonce conflict and distinct immutable groups. Owned
+  containers were removed. Neither check establishes production throughput.
+- **Built UI rehearsal used invented documents and signed synthetic public sources.**
+  Two registrations preceded revision. The browser explicitly selected, previewed,
+  froze, reopened and downloaded a partial group. Separate opinions and unknown
+  measurements remained visible. A private-source change projected Stale, preserved
+  the frozen manifest and closed export with HTTP 409. Simulated rights denial
+  projected Withheld with null manifest, cleared copied notes/titles from the UI and
+  closed export. Provider calls and console warnings/errors were zero. Owned preview
+  listeners, browser tab, downloads and containers were cleaned up.
+- **CI now executes the mandatory ontology preflight once.** One shared file list
+  defines preflight and exclusions from the subsequent two-worker step. Collection
+  using the workflow's actual shell commands proves **3,134 = 73 + 3,061** node IDs,
+  zero intersection, missing cases or extras. Existing job names, runners, worker
+  counts, retries and deadlines remain. All preflight cases passed separately; the
+  complete standalone suite above also passed. Profiling confirms repeated fresh
+  validation/inference remains costly. An invocation-local pattern-index experiment
+  measured only 1.6% median improvement and was discarded. No inference, source read,
+  authorization check or verdict was cached or weakened. Hosted speedup and billing
+  savings require separate observation; removing duplicate work is not a guarantee
+  against runner variability or future suite growth.
+
+[Retained verification metadata](evidence/private-authority-cohorts-verification-2026-10-09.json)
+pins sources, logs, collection and synthetic browser evidence. Raw logs, synthetic
+fixtures/keys and the confidential packet remain ignored under
+`.data/verification/r05a-authority-cohorts/`. A repeated diagnostic fixture-generation
+attempt rejected an already-existing output directory; checks passed against fresh
+owned directories. The original dirty checkout, `.env`, provider/source permissions,
+dependencies, database schema and deployed app were untouched. **R05A remains partial**:
+lawful source/legal review, representative Turkish qualification, public synthesis,
+Standard/Deep measurement and demonstrated benefit remain open. See
+[workflow/API](AUTHORITY_TRIAL_COHORTS.md); next engineering work is source-bound local
+authority revision proposals with explicit lawyer adoption.
+
 ## R05A registered fixed-evidence human authority trials — 9 October 2026 (Asia/Shanghai)
 
 PR #28 merged as `86566953c798b3a2af9cb0a42cdee9f370e88d27`; its PR checks and

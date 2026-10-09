@@ -1,0 +1,208 @@
+{
+  "schema": "human-authority-cohort-verification-v1",
+  "recorded_at": "2026-10-09T02:27:48.301685+00:00",
+  "local_date": "2026-10-09",
+  "base_commit": "8baaa698079da9d3d46fbc54ab1b1efe552eca79",
+  "base_pr_ci": {
+    "run": 37811791009,
+    "head": "7ea824c92082015fa9e04864d7ce31e35bf0f352",
+    "conclusion": "success"
+  },
+  "base_main_ci": {
+    "run": 37871027474,
+    "head": "8baaa698079da9d3d46fbc54ab1b1efe552eca79",
+    "conclusion": "failure",
+    "backend": "18-minute test-step timeout; no reported assertion failure",
+    "frontend": "success",
+    "postgres": "success"
+  },
+  "synthetic_only": true,
+  "production_qualified": false,
+  "source": {
+    "application": {
+      "sha256": "c08202182f897f689efe38bceac821676a9c5e7dd16d29c51f3a700716744c22",
+      "files": 120
+    },
+    "tests": {
+      "files": 86,
+      "sha256": "54124a1387cc0d0b3dfe38dd85618ec12845efa882648ccea4a5060ba356372f"
+    }
+  },
+  "checks": {
+    "backend": {
+      "passed": 3083,
+      "skipped": 51,
+      "warnings": 28,
+      "seconds": 437.77,
+      "command": "pytest backend/tests -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30"
+    },
+    "focused_cases": 27,
+    "frontend": {
+      "passed": 187,
+      "files": 23,
+      "strict_build": "passed",
+      "lazy_chunk_kb": 59.06,
+      "lazy_chunk_gzip_kb": 14.89
+    },
+    "postgres": {
+      "synthetic_only": true,
+      "production_qualified": false,
+      "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+      "scope": "all forty-eight real PostgreSQL snapshot, authorization and research/adoption/context/review/comparison races from the exact CI selection in random disposable child databases",
+      "cleanup_verified": true,
+      "exit_code": 0,
+      "wall_seconds": 96.283,
+      "passed": 48,
+      "pytest_seconds": 93.69
+    },
+    "offline_linux": {
+      "exit_code": 0,
+      "passed": 295,
+      "pytest_seconds": 128.92,
+      "container_wall_seconds": 130.181
+    },
+    "linux_cleanup_verified": true,
+    "deployment_contracts": 41,
+    "contract_cli": {
+      "ruff": {
+        "exit_code": 0,
+        "wall_seconds": 0.01
+      },
+      "deployment": {
+        "exit_code": 0,
+        "wall_seconds": 0.58
+      },
+      "ontology": {
+        "exit_code": 0,
+        "wall_seconds": 0.528
+      },
+      "planning": {
+        "exit_code": 0,
+        "wall_seconds": 0.098
+      },
+      "calibration-fixture": {
+        "exit_code": 0,
+        "wall_seconds": 0.217
+      },
+      "calibration": {
+        "exit_code": 0,
+        "wall_seconds": 0.097
+      },
+      "study-fixture": {
+        "exit_code": 0,
+        "wall_seconds": 0.357
+      },
+      "study": {
+        "exit_code": 0,
+        "wall_seconds": 0.109
+      },
+      "actionlint": {
+        "exit_code": 0,
+        "wall_seconds": 0.033
+      },
+      "git-diff": {
+        "exit_code": 0,
+        "wall_seconds": 0.015
+      },
+      "compose": {
+        "exit_code": 0,
+        "wall_seconds": 0.044
+      }
+    },
+    "ci_partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 3134,
+        "preflight": 73,
+        "remaining": 3061
+      },
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "a7677b58e95bef30c497e2b060a23cb63f5c95c26acfb31b917e47f7bd4ea935",
+      "workflow_sha256": "70be016a0d2b28ebc9794f36e0607f5d7d29e4271043a46df5de52188dce28c8",
+      "no_runner_retry_deadline_change": true,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "mandatory_preflight": {
+      "passed": 73,
+      "seconds": 8.95
+    }
+  },
+  "browser": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "group_id": "atc-9099b711153f6dc03489-2f290c60ddae9242714c556c3ec7ce3c",
+    "current_download_sha256": "707e2b6b5d2282f5afd1b888f4f60f87521440fbbc317da4fdd1e5f3d4426a27",
+    "download_cleanup_verified": true,
+    "immutable_manifest_sha256": "42dff0e19a959aa9c85171e7fba4246af6311b85cd11a8f1cde4e9f972f27db1",
+    "stale_preserves_manifest": true,
+    "stale_export_status": 409,
+    "withheld_manifest_null": true,
+    "withheld_export_status": 409,
+    "provider_calls": 0,
+    "explicit_selection_preview_freeze": true,
+    "reopened_after_build": true,
+    "unknown_measurements_preserved": true,
+    "cached_notes_hidden_after_denial": true,
+    "console_warnings_errors": [],
+    "owned_tab_closed": true,
+    "owned_preview_listeners_closed": true
+  },
+  "log_sha256": {
+    "backend-final.log": "fc8ef9e0ec67d0d835ecd435e092e2c5e4532d1adc5dda0f665ac6ca345dd62b",
+    "focused.log": "73e71a815e90b2eaf085a44b42d45101f57cb1053bd73b1798121f18499f6e4e",
+    "frontend-tests.log": "05b6a4280d99197cd31270c5a3bdc402fa568683a9e6a2714194416fa9aaffa1",
+    "frontend-build.log": "9a737cfd3115ffd088b43a541e834e12f0a5e9b46c5df388ca931cefd0a1cfb2",
+    "linux-tests.log": "b6a8097b318c3bde04c76eb3ec26dd2b75073e026d7672e23dd6b9ee4c959f08",
+    "postgres.log": "7990f5b100b59981708de6cbfe0e762806f3112e1b8d87ab03fea10bfe9c53d8",
+    "ontology.log": "7ac5d3623be54d1faf806abe85c63f9dc12820b8c3a45a0a3460315e245c8aab",
+    "actionlint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "contracts-final.log": "cc5f1d3e669255a4822739bb19d3210845977b6e42a6af4ac17c36c6d1a10b2e",
+    "base-main-failed.log": "660083ee6bd5c2a58386ba4fedf152d183ffb48ed884726541b56d5409db25cd",
+    "previous-pr-ci.log": "2a37af5e140134a4221b86375b46f8804689cbf4f8fcb2e03a6c43f7b2237499",
+    "ci-collection-complete.log": "e2fac919c48f6bc39ed47ae17714a455c05ceef3261f436e11a22b7d45be6e88",
+    "ci-collection-preflight.log": "4a071fab46b7091b99e1d72558669251551cfbb3c747ef92219e0915b3fb6b3e",
+    "ci-collection-remaining.log": "ddf51a54559a83d53790e17b1c992cd99decba078c5eedf456e97aee85c3490b",
+    "pattern-measurement.json": "ee24114ffb36e25908fe256ca54230574d0402daefb3bc4647da36e5f1c28ca6",
+    "preflight-final.log": "b51737ab9a9bc39c73ef41c7e30d75f5facbdfbe15abdec16d025c328baa36a2"
+  },
+  "screenshot_sha256": {
+    "current.png": "f62c0d8d8671dbafed058ae4de3d0a67ca5fa24ab5bad737aab2631bc1eb3400",
+    "stale.png": "676ba96ed5ce34c3bbfb035decc91587a0ab8d212948031d1ba139f3d8988094",
+    "withheld.png": "149e5d86c5b51477a9b0dbc9d252ef07220147ad7a14e088aa05f18f91c44130"
+  },
+  "ci_optimization": {
+    "mandatory_preflight_repetition_removed": 73,
+    "no_runner_retry_deadline_change": true,
+    "no_shared_verdict_inference_or_authorization_cache": true,
+    "discarded_pattern_index_median_percent": 1.567845890832542,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "unchanged": [
+    "provider credentials and permissions",
+    "public-source permissions",
+    "dependencies",
+    "database schema",
+    "original dirty checkout",
+    "deployed application"
+  ],
+  "not_established": [
+    "real lawful-source or Turkish legal approval",
+    "independent professional expertise",
+    "legal correctness or semantic completeness",
+    "real-provider model performance",
+    "representative or held-out evaluation",
+    "corpus-wide adverse recall",
+    "preparation-time gain or Standard/Deep qualification",
+    "production throughput",
+    "hosted CI speedup or invoiced savings",
+    "application deployment"
+  ]
+}

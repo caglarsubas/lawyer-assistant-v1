@@ -7,6 +7,7 @@ import { EvidenceViewer } from './FactsPanel';
 import AnalysisPanel from './AnalysisPanel';
 
 const AnalysisCohorts = lazy(() => import('./AnalysisCohorts'));
+const AuthorityTrialCohorts = lazy(() => import('./AuthorityTrialCohorts'));
 
 const LABELS: Record<PracticeKind, string> = { scenarios: 'Senaryolar', contradictions: 'Çelişki kaydı', arguments: 'Argüman matrisi', drafts: 'Hazırlık taslakları ve inceleme notları' };
 const DESCRIPTIONS: Record<PracticeKind, string> = {
@@ -25,6 +26,7 @@ export default function PracticePanel({ matter, onChange, userRole }: { matter: 
   const [data, setData] = useState<Lists>(emptyLists); const [loading, setLoading] = useState(true); const [errors, setErrors] = useState<Record<string, string>>({});
   const [editor, setEditor] = useState<Editor>(null); const [notice, setNotice] = useState(''); const [source, setSource] = useState<string | null>(null);
   const [cohortsVisible, setCohortsVisible] = useState(false);
+  const [authorityCohortsVisible, setAuthorityCohortsVisible] = useState(false);
   const base = `/matters/${encodeURIComponent(matter.id)}/practice`;
   const load = useCallback(async () => {
     const keys = [...KIND_LIST, 'playbooks', 'library'] as (keyof Lists)[];
@@ -38,6 +40,7 @@ export default function PracticePanel({ matter, onChange, userRole }: { matter: 
   return <section><div className="section-heading"><div><h2>Avukatın çalışma defteri</h2><p className="small muted">Avukat notları ve ayrı işaretlenmiş model önerileri. Hukuki değerlendirmeyi ve özgün kaynakları inceleyin; öneriyi yeni taslağa almak hukuki onay değildir.</p></div><button className="button secondary" onClick={() => void load()}>Yenile</button></div>
     {notice && <Notice>{notice}</Notice>}
     <AnalysisPanel key={matter.id} matter={matter} onChange={onChange} />
+    <Detail title="Dayanak deneme grupları ve eksiklerin incelemesi">{authorityCohortsVisible ? <Suspense fallback={<Loading label="Dayanak grubu incelemesi açılıyor…" />}><AuthorityTrialCohorts key={matter.id} matterId={matter.id} /></Suspense> : <><p>İnsan revizyonu denemelerini, kaynak örtüşmelerini ve ayrı görüşleri özel bir sabit grupta inceleyin.</p><button className="text-button" onClick={() => setAuthorityCohortsVisible(true)}>Dayanak grubu incelemesini aç</button></>}</Detail>
     <Detail title="Özel deneme grupları ve eksiklerin incelemesi">{cohortsVisible ? <Suspense fallback={<Loading label="Grup incelemesi açılıyor…" />}><AnalysisCohorts key={matter.id} matterId={matter.id} onSource={setSource} /></Suspense> : <><p>Bu çalışma alanındaki açıkça seçilmiş denemeleri, farklı ayarları ve eksikleri özel bir sabit kayıtta inceleyin.</p><button className="text-button" onClick={() => setCohortsVisible(true)}>Özel grup incelemesini aç</button></>}</Detail>
     {loading ? <Loading label="Çalışma notları açılıyor…" /> : KIND_LIST.map((kind) => <Detail key={kind} title={`${LABELS[kind]} (${data[kind].length})`}>
       <div className="practice-section-intro"><p>{DESCRIPTIONS[kind]}</p><button className="button secondary" onClick={() => { setEditor({ kind }); setNotice(''); }}><Icon name="plus" size={16} />{kind === 'scenarios' ? 'Senaryo ekle' : kind === 'contradictions' ? 'Çelişki bağla' : kind === 'arguments' ? 'Argüman ekle' : 'Taslak yaz'}</button></div>

@@ -1,0 +1,100 @@
+{
+  "schema": "pr30-ci-workload-verification-v1",
+  "recorded_at": "2026-10-09T04:40:24.427324+00:00",
+  "base_commit": "1629195943490100ce712ab39a4350733d13dc4d",
+  "failed_hosted_run": {
+    "id": 37882649274,
+    "head": "1629195943490100ce712ab39a4350733d13dc4d",
+    "preflight_passed": 89,
+    "backend_passed": 3010,
+    "backend_skipped": 51,
+    "backend_seconds": 1090.47,
+    "backend_conclusion": "failure: test step exceeded unchanged 18-minute deadline despite all assertions passing; downstream contracts skipped",
+    "postgres_seconds": 108,
+    "postgres_conclusion": "success",
+    "frontend_seconds": 23,
+    "frontend_conclusion": "success"
+  },
+  "changes": "Move three expensive signed-publication files into spare capacity after serial PostgreSQL tests in the existing job; one shared selection controls execution and backend exclusions.",
+  "checks": {
+    "ci_partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 3150,
+        "preflight": 89,
+        "remaining": 3051,
+        "publication": 10
+      },
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_open_validity_publication.py",
+        "backend/tests/test_runtime_authorization_integration.py",
+        "backend/tests/test_publication_cli.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "f7e3e12767ed8549a3802aa8ca1ecd9aad711593ac3d75dfed9c80c8041c847f",
+      "workflow_sha256": "274b5b9d1810feebc556cb5996e9e7195e8d5f06ffe6bddc14538132cf0222b7",
+      "no_runner_retry_deadline_change": true,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "combined_postgres_and_publication": {
+      "synthetic_only": true,
+      "production_qualified": false,
+      "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+      "scope": "existing PostgreSQL job: all forty-eight database cases then ten signed-publication cases; unchanged five-minute budget",
+      "cleanup_verified": true,
+      "exit_code": 0,
+      "wall_seconds": 67.931,
+      "passed": 48,
+      "pytest_seconds": 65.71,
+      "publication_exit_code": 0,
+      "publication_wall_seconds": 22.603,
+      "combined_wall_seconds": 90.534,
+      "database_url_absent_from_publication_environment": true,
+      "publication_passed": 10,
+      "publication_pytest_seconds": 22.49
+    },
+    "actionlint": "passed",
+    "git_diff_check": "passed"
+  },
+  "runtime_profile": {
+    "same_validations": 58,
+    "same_native_rule_executions": 663180,
+    "defined_namespace_resolutions_before": 8500101,
+    "defined_namespace_resolutions_after": 41605,
+    "diagnostic_only": true
+  },
+  "workflow_sha256": "274b5b9d1810feebc556cb5996e9e7195e8d5f06ffe6bddc14538132cf0222b7",
+  "log_sha256": {
+    "hosted-fix-failed.log": "d679a15786ddd4c3ae6dd1419e70594e0b0b53d0e59b90838977dc7d96039da9",
+    "partition-postgres.log": "a8ebe02ca17e713132d6877e9ed5f887643e3deb951c5356b6e53e4ec53c1d73",
+    "partition-publication.log": "3757cdd54d7e92ca3138435a44fb15c7d883cffd2ae5284cf8f00b39b6d8d2a0",
+    "ci-collection-complete.log": "63058c4ebb2dfc45c269b2b182c53455629a464b4cd978c5dcac587c30a07f1e",
+    "ci-collection-preflight.log": "05b742cdc0ff0bb5b5a7a64f5ec8fd69701d312edc3ced8a92af04c323528a46",
+    "ci-collection-remaining.log": "95ba5ea985c078c60f525b5eaecb60b94c1a5f9a97af71379caca4cb592c80fe",
+    "ci-collection-publication.log": "6a5ba7ece51db38974bc4ffa8305647c7515506111e34d31948303fed93e2cac"
+  },
+  "unchanged": [
+    "three required job names and runners",
+    "two-worker test execution; serial PostgreSQL races",
+    "job/step time limits and retry policy",
+    "source-integrity, SHACL and authorization checks",
+    "dependencies and lockfile",
+    "application and test sources since full validation at base_commit",
+    "original dirty checkout, .env and deployed application"
+  ],
+  "not_established": [
+    "new-head hosted success until separately observed",
+    "post-merge main CI",
+    "invoiced currency savings",
+    "production or legal qualification"
+  ]
+}

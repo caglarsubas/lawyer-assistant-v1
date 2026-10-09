@@ -122,7 +122,9 @@ Prefix: `/api/v1/matters/{matter_id}/analyses/{analysis_id}/authority-contexts/{
 
 Representative lawful Turkish legal sources, historical/effect review, independent
 qualified adjudicators and held-out evaluation remain required. R05A stays partial.
-Next engineering packet: confidential within-workspace authority-trial cohort
-reconciliation with exact profiles, declared family/source overlap and unknowns.
+[Confidential within-workspace authority-trial groups](AUTHORITY_TRIAL_COHORTS.md) now
+freeze exact selections and preserve profiles, declared family/source overlap and unknowns.
+Next engineering packet: source-bound local authority revision proposals with explicit
+lawyer adoption through the existing bounded queue.
 Model-driven public synthesis and measured Standard/Deep improvement remain separate
 qualification work. See [roadmap](ROADMAP.md) and [evaluation](EVALUATION.md).

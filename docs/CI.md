@@ -13,6 +13,15 @@ uv sync --project backend --frozen --extra dev
 backend/.venv/bin/pytest backend/tests -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
 ```
 
+The command above is the standalone complete-suite check. In GitHub Actions, the
+five ontology preflight files are declared once in `CI_ONTOLOGY_PREFLIGHT_TESTS`.
+Three expensive signed-publication integration files are declared once in the
+workflow-wide `CI_PUBLICATION_TESTS` list. Preflight runs first; the main two-worker
+step excludes both lists. The publication files run with two workers after the
+serial database tests in the existing PostgreSQL job, without inheriting its
+database URL. Together these three mandatory phases run the complete suite once;
+a failed phase fails its required job. No case is waived or newly skipped.
+
 This retains the complete suite and its real SHACL, cryptographic, authorization
 and publication checks. There are no selective test skips, mocked validation
 shortcuts, extra matrix runners or automatic worker-crash retries. Fixtures use
@@ -101,13 +110,14 @@ in-place inference; caller-owned graphs stay unchanged. RDF, SHACL and catalog
 files remain byte-identical, preserving ontology fingerprints and existing signed
 packet compatibility. All live integrity and authorization checks remain active.
 
-CI runs the query, membership, ontology-syntax and SHACL-syntax checks before the expensive full suite. Their work
+CI runs the query, membership, ontology-syntax, SHACL-syntax and RDFS-identifier checks before the expensive full suite. Their work
 budget is deterministic rather than a fragile timing threshold: query parsing
 must scale with distinct programs while the number of query executions remains
 unchanged. It also tests the real release entry point, equal valid/invalid reports,
 changed evidence/bindings, namespaces/base, cache limits and parallel isolation.
 A regression fails this short step instead of consuming a full expensive run.
-The tests remain in the full suite as well. Dependency updates must pass them.
+The tests remain mandatory in preflight; the subsequent CI step excludes the same
+five files to avoid executing them twice. Dependency updates must pass them.
 The final two-worker work-stealing command passed all 2,081 backend tests locally
 in **241.73s (4m01s)**, with eight PostgreSQL skips and 28 existing warnings.
 This is 28.2% less wall time than the earlier 336.83s local run despite adding
@@ -238,6 +248,53 @@ test omissions or time-limit increases were introduced. RDF/SHACL/catalog bytes
 and signed formats remain unchanged. New-head CI and post-merge CI are separate
 observations; see [verification](VALIDATION.md).
 
+## PR #30 timeout: repeated immutable identifier resolution
+
+Initial [run 37874784913](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37874784913)
+on `b4d024160662665cee0bb736b3f2a0e14f897f06` passed frontend and PostgreSQL but
+backend reached 91% and exceeded its unchanged 18-minute step limit. Dependency
+installation took three seconds. Removing repeated preflight execution was useful
+but insufficient. There was no reported assertion failure before cancellation.
+
+The signed-source authorization profile showed millions of repeated RDFLib
+`DefinedNamespace` attribute resolutions in the native RDFS rule loop. RDF/RDFS
+identifiers are constants; resolving their names on every rule invocation adds
+work without changing their values. `ontology/rdfs_identifiers.py` binds those
+identifiers to immutable tuples of the exact same URIRef objects.
+
+The function's **native code object is reused**, including every entailment rule,
+closure cycle and inference write. The pySHACL entry point also uses its native
+code object with a private validator class. Only the application's exact scratch
+graph and RDFS mode opt in. Third-party package globals are untouched. Different
+dependency versions, unrecognized programs and other graph adapters retain native
+execution. The engineering-tested versions are pySHACL 0.40.1, OWL-RL 7.6.2 and
+RDFLib 7.6.0. No dependency or lockfile changes were needed.
+
+There are twelve fixed identifier bindings and no matter data, source assertions,
+query results, inferred graphs, source permissions or validation verdicts retained
+by this adapter. Each call still constructs a new inference engine and performs
+the full RDFS/SHACL validation against freshly read, integrity-checked inputs.
+RDF, SHACL and catalog definition bytes and signed release formats are unchanged.
+
+The deterministic regression budget retains **11,888 rule executions and 186
+SHACL queries**, reducing namespace resolutions inside those rules from
+**151,647 to zero** on the representative synthetic fixture. Native and optimized
+inferred triples and valid/invalid reports match. Tests also cover cyclic
+class/property relationships, domain/range, literals, container/datatype types,
+unchanged caller inputs, immutable identifiers, unsupported-program/dependency
+fallback and parallel graph isolation. They run in mandatory preflight before
+the expensive suite. Collection proves **3,150 = 89 + 3,061** distinct node IDs,
+with zero overlap, omitted cases or extras across the two CI steps.
+
+Eight alternating warm, unprofiled comparisons measured native/identifier-bound
+validation medians of **0.09503s / 0.05951s (37.4% lower)** using the final production
+adapter with identical scratch graphs, shapes, options and syntax caches, without
+patching dependency globals. This is a local validator
+measurement, not a hosted runner or currency claim. Two pattern-index experiments
+did not establish worthwhile improvement and were discarded. The correction adds
+no runner, worker, retry or time-limit increase. Final-source full-suite, PostgreSQL,
+offline Linux and hosted results are reported in [verification](VALIDATION.md).
+
 ## Offline evaluation scoring
 
 The versioned analysis/privacy scorer is covered by fast synthetic Python tests in
@@ -260,3 +317,30 @@ The R04 development benchmark adds fast ranking, complete-cell, snapshot,
 revocation, file-integrity and grouped-bootstrap cases to that suite. Real profile
 capture is exercised only by the opt-in v5 OpenSearch drill. No hosted Docker
 benchmark, matrix, dependency, job, worker, retry or time-limit increase is added.
+
+## PR #30 follow-up: balance existing runner capacity
+
+The identifier correction was active in the application: an actual runtime profile
+retained 58 validations and 663,180 native rule executions, while namespace
+resolutions fell from 8,500,101 to 41,605. Nevertheless, [run 37882649274](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37882649274)
+on `1629195943490100ce712ab39a4350733d13dc4d` finished all remaining backend cases
+(**3,010 passed, 51 documented skips**) in **1,090.47s**, just beyond the unchanged
+18-minute step deadline. The check failed and downstream contracts did not run.
+There was no assertion failure. Its PostgreSQL job finished in 1m48s and frontend
+in 23s; all workload in one backend job still exceeded available time.
+
+The three measured expensive signed-publication files now use spare capacity in
+the existing PostgreSQL job. Its 48 database cases remain serial and its URL remains
+scoped exclusively to that step; the ten publication cases then run with two
+workers. These cases keep real validation, publication and revocation checks.
+Both jobs consume one shared publication file list, preventing omissions or
+duplicate execution when that list changes. Full-suite collection verifies
+**3,150 = 89 preflight + 3,051 remaining + 10 publication** distinct node IDs, with
+zero missing, extra or overlapping cases. The 51 database/drill skips in the
+standalone suite are unchanged; database cases still execute in the serial step.
+
+This balances the existing three jobs, without additional runners, workers,
+retries, raised time limits or selective skips. It prevents the deadline from
+discarding completed backend verification; actual hosted results must still be
+observed at the new head. Future suite growth must be profiled against both job
+budgets. Runner elapsed time is not an invoice or a production-performance claim.

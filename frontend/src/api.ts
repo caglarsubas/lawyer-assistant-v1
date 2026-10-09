@@ -170,6 +170,14 @@ export async function downloadAuthorityAdjudication(base: string, id: string, fo
 }
 
 export async function downloadAuthorityTrial(base: string, id: string) {
+  return downloadAuthorityTrialPacket(base, id, 'ozel-dayanak-denemesi');
+}
+
+export async function downloadAuthorityTrialCohort(base: string, id: string) {
+  return downloadAuthorityTrialPacket(`${base}/${encodeURIComponent(id)}`, id, 'ozel-dayanak-grubu');
+}
+
+async function downloadAuthorityTrialPacket(base: string, id: string, prefix: string) {
   let response: Response;
   try { response = await fetch(`${BASE}${base}/export`, { credentials: 'same-origin', cache: 'no-store' }); }
   catch { throw new ApiError('Deneme paketi indirilemedi. Yerel bağlantıyı kontrol edin.', 0); }
@@ -178,6 +186,6 @@ export async function downloadAuthorityTrial(base: string, id: string) {
     throw new ApiError(errorText(await response.json().catch(() => null)), response.status);
   }
   const url = URL.createObjectURL(await response.blob()); const link = document.createElement('a');
-  link.href = url; link.download = `ozel-dayanak-denemesi-${id}.json`;
+  link.href = url; link.download = `${prefix}-${id}.json`;
   document.body.append(link); link.click(); link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
