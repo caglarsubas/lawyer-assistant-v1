@@ -88,6 +88,7 @@ export default function AuthorityModelTrials({ matterId, analysisId, sourceInput
   const [value, setValue] = useState<ModelTrialCapture | null>(null); const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [nonoverlap, setNonoverlap] = useState(false);
   const pending = useRef<{ key: string; id: string } | null>(null); const mounted = useRef(true);
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
+  useEffect(() => { setNonoverlap(false); }, [value?.id, value?.execution_sha256, value?.previous_effort_id]);
   function fail(cause: unknown) { setContext(null); setValue(null); setItems([]); setError(cause instanceof ApiError && (cause.data as { status?: string })?.status === 'committed_needs_revalidation' ? 'Kayıt saklandı; son izin kontrolü tamamlanmadı. İçerik bekletiliyor; aynı isteği yinelemek kabulünü tamamlamaz.' : messageOf(cause)); onUnavailable?.(cause); }
   function accept(next: ModelTrialCapture) { if (!next.public_source_access || !next.protocol) fail(new Error('Kaynak veya kayıt kabulü bekletiliyor.')); else setValue(next); }
   async function operation(task: () => Promise<void>) { setBusy(true); setError(''); try { await task(); } catch (cause) { if (mounted.current) fail(cause); } finally { if (mounted.current) setBusy(false); } }

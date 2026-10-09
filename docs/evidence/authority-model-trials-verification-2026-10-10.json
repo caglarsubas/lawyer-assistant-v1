@@ -35,7 +35,7 @@
   },
   "frontend_source": {
     "files": 99,
-    "sha256": "9ede9f7fc1e06eaa4a6fe21715c7f838038d68c66a5a482829e128d220e24ab1"
+    "sha256": "054e786233cbf3730b008e6d92add81406f3ecd13e30a890a3ce29092f26e963"
   },
   "tests": {
     "backend": {
@@ -185,6 +185,8 @@
     "renewed_finding_selection_and_registration": true,
     "two_completed_candidates": true,
     "declared_effort_persisted": true,
+    "final_confirmation_reset_separately_browser_exercised": false,
+    "final_confirmation_reset_verified": "source review and final frontend tests/build",
     "reload_retains_history": true,
     "draft_version_unchanged": 3,
     "recorded_observer_judgments": 0,
@@ -221,8 +223,8 @@
     "final-focused.log": "f39216cd24ba3e7652c0e7f26034cd37f1e3a4a39bcf7b862d773a372b88ecc2",
     "postgres.log": "cf9bccc2798ff53b474f40e79b1a1d9cd2bffa32fe6b62b970139311f74635cb",
     "linux-tests.log": "a1efa69450923621a89e680e31a09763b570073bcdf5a4bf3fd615c1b8427057",
-    "frontend-tests.log": "f04a8b5c39b0d174055af6ca40a80e8ba6ef39030fb3c5668e6e634666fdc4ab",
-    "frontend-build.log": "ab65b49184f8a3111868599df332ab567411020bbc7fd48b26c1ae3ce812ed69",
+    "frontend-tests.log": "221f55ab829a76ce5563950c57948b1a202c5e01bf54efe99da825504aa1f449",
+    "frontend-build.log": "15f39e6e4cea9b62c8dc17a21ee1aac4ed485ec591ddc0deddab142f8bd4e2b9",
     "deploy.log": "c6d60365321e23df8a36dea11421321a2112ac25d7e300be73aa0ddf004ce494",
     "ruff.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
     "actionlint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",

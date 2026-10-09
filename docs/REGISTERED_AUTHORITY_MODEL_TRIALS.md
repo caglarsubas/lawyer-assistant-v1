@@ -83,6 +83,8 @@ explicit confirmations: shared setup included consistently, full verification an
 correction included, active phases non-overlapping. Waiting for inference is not
 active effort. Optional evaluator-review seconds remain separate. No timer infers
 these measurements, and no benefit or quality threshold is computed from them.
+The non-overlap confirmation resets when the trial, execution or prior effort
+record changes; it cannot carry over to another capture.
 
 `capture_complete` requires current authorized inputs, two completed measured
 candidates, latest judgments from both assigned accounts and complete effort

@@ -43,14 +43,18 @@ Local checks passed:
   An earlier run exposed the polling-helper mistake; it was fixed without weakening
   source/admission checks, increasing deadlines or adding worker retries.
 - Frontend: production build and **207 tests** passed. Existing main-bundle 500 KB
-  advisory remains; trial components load only by explicit action.
+  advisory remains; trial components load only by explicit action. Final source
+  review binds the non-overlap confirmation to the trial/execution/effort head;
+  the final build and tests include this reset. The earlier browser rehearsal
+  exercised capture and effort persistence, but did not separately test this reset.
 - **41 deployment contracts**, Ruff, actionlint, ontology/SHACL, R01 planning and
   synthetic calibration/study contracts, and Compose configuration passed. Compose
   used `/dev/null` with disposable placeholders and did not read `.env`.
 
 CI retains the same three jobs, one PR event run, 20/5/5-minute job limits, existing
 step deadlines and no restarts/retries. Isolated PostgreSQL races now use two
-bounded workers on the existing runner; application groups retain two workers. The 20 model-trial checks run in an early two-minute backend step, outside the
+bounded workers on the existing runner; model/human-review groups use two workers,
+and the workspace group remains serial. The 20 model-trial checks run in an early two-minute backend step, outside the
 long suite. Frontend retains 59 human-review and 58 workspace checks; the 23 renewal
 checks run with signed publication on the PostgreSQL job. Workflow-based collection proves **3,277 unique IDs**:
 89 preflight, 3,018 main, 33 publication/renewal, 58 workspace, 59 human-review
