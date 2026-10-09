@@ -36,7 +36,8 @@ def hold_firm_guard(request, firm_id):
         firm_id, exclusive=(request.url.path.startswith("/api/v1/firm-admin")
             or (request.method not in {"GET", "HEAD", "OPTIONS"} and (
                 request.url.path in {"/api/v1/customers", "/api/v1/workspaces", "/api/v1/matters"}
-                or (request.url.path.startswith("/api/v1/workspaces/") and request.url.path.endswith("/customers")))))
+                or (request.url.path.startswith("/api/v1/workspaces/") and request.url.path.endswith("/customers"))
+                or (request.method == "PUT" and request.url.path.startswith("/api/v1/workspaces/") and "/work/" in request.url.path))))
     )
     guard.__enter__()
     request.state.firm_guard = guard

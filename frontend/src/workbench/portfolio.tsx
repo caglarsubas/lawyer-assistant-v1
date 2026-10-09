@@ -39,6 +39,6 @@ export function PortfolioProvider({ children, enabled = true }: { children: Reac
 }
 export function usePortfolio() { const value = useContext(PortfolioContext); if (!value) throw new Error('Portfolio provider required'); return value; }
 export function safeAppHref(value: string | undefined): string | null {
-  if (!value || !/^#?\/(matters|workspaces|customers|graphs|coverage|system)(?:[/?]|$)/.test(value) || /[\r\n\\]/.test(value)) return null;
+  if (!value || !/^#?\/(matters|workspaces|customers|graphs|coverage|system|work)(?:[/?]|$)/.test(value) || /[\r\n\\]/.test(value)) return null;
   return value.startsWith('#') ? value : `#${value}`;
 }

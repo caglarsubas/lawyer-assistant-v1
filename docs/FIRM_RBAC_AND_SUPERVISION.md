@@ -7,8 +7,8 @@ Authorized amendment: 9 October 2026. Canonical scheduling, gates and evidence r
 | Packet | State | Ownership | Dependency and gate |
 |---|---|---|---|
 | W01 | PR #32 merged; exact main CI passed; deployment/field qualification pending | Application/security | Existing private foundation; national backbone gate |
-| W02 | Engineering implemented; manual PR merge and deployment/field qualification pending | Application/security | W01; national backbone gate |
-| W03 | Planned | Application/product | W02; contract-workflow gate |
+| W02 | PR #33 merged; exact main CI passed; deployment/field qualification pending | Application/security | W01; national backbone gate |
+| W03 | Engineering implemented; manual PR merge and deployment/field qualification pending | Application/product | W02; contract-workflow gate |
 
 All three are mandatory before R08. Pending R05A reviewed source-lineage revalidation and registered same-input model authority trials follow W03. Corpus curation and human legal review can proceed independently. Existing R01–R08 requirements and evidence remain intact.
 
@@ -59,7 +59,7 @@ The administration UI is at `#/firm-admin` in the existing app. The server retur
 
 PostgreSQL shared/exclusive advisory locks serialize administration changes against admitted HTTP operations, including file bodies. Short worker checkpoint/publication writes share the same lock domain and recheck write permission; inference does not hold those locks. Lock admission waits are bounded at 15 seconds and failed admission does not apply the change. SQLite coordination is a demo-only, in-process equivalent, never a multi-process production guarantee. Existing offline administration participates in the same production lock domain and action permissions; upgrade the API/schema before using the updated CLI. Read-only source-preparation operators recheck curation permission. Each permission lookup reads the managed-account marker and roles together in one fresh query; only query construction is reused, never authorization results.
 
-W01 preserved direct case memberships. W02 below adds separately identified client scope origins and explicit case responsibilities. Deadline/task/opinion workflow and portfolio work views remain W03 work. W01 development fixtures grant no actual firm responsibilities or legal approvals, and no production accounts or documents are changed by engineering verification.
+W01 preserved direct case memberships. W02 below adds separately identified client scope origins and explicit case responsibilities. W03 implements deadline/task/opinion workflow and portfolio work views below. W01 development fixtures grant no actual firm responsibilities or legal approvals, and no production accounts or documents are changed by engineering verification.
 
 
 ## W02 delivered packet and operator notes
@@ -76,4 +76,19 @@ Administrators manage assignments in `#/firm-admin` using a client or case refer
 
 The administration CLI still runs in the documented maintenance window. It checks both direct and prospective scope, invalidates changed recipients' sessions, advances the same assignment revision and removes case-role flags with direct revocation. It operates on routing metadata without decrypting legal payloads and does not run live model cancellation during maintenance. Its additional requirement that the operator already have active-case access remains; the UI configuration endpoints can manage references without granting legal-content access.
 
-W03 deadline/task/opinion recording and supervisor delegation are still planned. W02 flags confer no global operation or professional qualification. Local synthetic tests, PostgreSQL races and browser rehearsals establish engineering behavior, not customer rollout, loss-of-connection qualification, legal accuracy, source rights or pilot readiness.
+PR #33 is merged at `6649b117144a5851626e78423a18fc350b9fb89c`; exact post-merge main run `37941600919` passed. W03 deadline/task/opinion recording and supervisor delegation are implemented below. W02 flags confer no global operation or professional qualification. Local synthetic tests, PostgreSQL races and browser rehearsals establish engineering behavior, not customer rollout, loss-of-connection qualification, legal accuracy, source rights or pilot readiness.
+
+
+## W03 delivered packet and operator notes
+
+Use the case **İş takibi** tab to record manual deadlines, milestones, tasks and written-opinion requests. **İşlerim** at `#/work` switches between personal and explicitly supervised case work, with upcoming/overdue/closed filters. The existing client/date portfolio filter applies to the workspace date; the work deadline is a separate filter. Dates are explicit Europe/Istanbul wall time, retained with their UTC instant. Unknown legal periods are not computed.
+
+A work request never grants case access. Its current recipients or current case supervisors can read it only while they retain case scope and read permission. A recipient sees their own response trail; supervisors see independent current and historical trails. Organizational managers, configuration-only administrators and nonrecipient case teammates have no opinion-content bypass. Creating/editing requests requires an explicit case supervisor and `matter.write`; opinion recipients must also carry the existing lawyer/admin professional marker. Reviews require the current supervisor, `matter.review`, a different author, the exact latest submission and its current revision/version. Configurable action roles do not confer professional qualification.
+
+Requests and each recipient response are encrypted records with independent revisions and attributed append-only workflow histories. Manual progress, written submissions, revision reasons and acceptance remain separate. Question/title/date/recipient changes advance the request version; previous progress/opinions remain visible as Stale and require fresh work. Closing requires all active recipients completed, or accepted for opinions; cancellation remains possible after a recipient loses case permission. Removed recipients remain in historical routing; readding them retains their history.
+
+Recipient-removing work edits share the exclusive firm guard with admitted HTTP responses and invalidate removed recipients' login sessions even if their case access remains. The W02 no-store/session monitor clears open private views; after login, the case can remain accessible while that work request is denied. This cannot recall copied/downloaded text. PostgreSQL tests observe actual blocking and conflicting reviews, not only sequential requests. SQLite remains a single-process demo equivalent.
+
+Queue authorization precedes joins/decryption/counts. To bound work, it sorts due dates within the newest 1,000 authorized requests and returns up to 100 by default (API maximum 500). `truncated` explicitly discloses omitted candidates/results; these queues never establish that older work is absent. Open a case for its complete authorized register. In-app views are not delivery guarantees or external notifications.
+
+Upgrade all writers/schema together with a protected backup. The new `work_participants` table stores same-firm/case/recipient routing and active state; payloads and history use encrypted `records`. Preserve both and their identifiers in backups, legal holds and restoration. Archive hides work without erasing it; physical erasure remains unqualified. See [workflow/API contract](HUMAN_WORKFLOW.md) and [verification](VALIDATION.md). Account attribution establishes who submitted in the platform; it does not attest the provenance of pasted text. No model writes/submits/reviews opinions, and acceptance is not legal, source or model qualification. Manual merge, target-host migration and distinct-account field acceptance remain open.

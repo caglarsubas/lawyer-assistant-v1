@@ -55,6 +55,7 @@ from .firm_admin import firm_admin_router
 from .firm_rbac import FirmAuthorization, FirmGuardMiddleware, initialize_firm, permissions_for
 from .governance import governance_router
 from .graph import GraphBackendError, GraphService
+from .human_workflow import workflow_router
 from .policy import POLICY_VERSION, evaluate, request_digest
 from .portfolio import portfolio_router
 from .practice import practice_router
@@ -315,6 +316,7 @@ def create_app(settings=None):
     app.include_router(portfolio_router())
     app.include_router(firm_admin_router())
     app.include_router(access_router())
+    app.include_router(workflow_router())
     app.include_router(assistant_router())
     app.include_router(readiness_router())
     app.include_router(public_sources_router())

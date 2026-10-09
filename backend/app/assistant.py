@@ -15,8 +15,9 @@ from .portfolio import list_workspaces
 from .provider import ProviderError
 
 TURKEY = ZoneInfo("Europe/Istanbul")
-SECTIONS = {"overview", "documents", "facts", "practice", "research", "comments"}
+SECTIONS = {"overview", "documents", "facts", "practice", "research", "comments", "workflow"}
 GUIDE = {
+    "workflow": "İş ve görüş takibinde tarih/saatleri İstanbul saatiyle elle kaydedin; sistem hukuki süre hesaplamaz. Dosya gözetmeni, dosyaya zaten yetkili çalışanlara görev veya görüş isteği açar. Atanan avukat kendi hesabıyla yazılı görüş gönderir; gözetmen gerekçeli değişiklik isteği veya kabul kaydeder. Önceki gönderimler ve yazarlar korunur. Bu kabul hukuki kaynak ya da yapay zekâ çıktısı onayı değildir.",
     "overview": "Çalışma alanının amacını, temsil edilen tarafı ve ilgili tarihi kontrol edin. Müvekkil etiketleri erişim yetkisi vermez.",
     "documents": "Dosyaları açık çalışma alanına yükleyin. Dosyayı seçerek çıkarılan pasajları ve çıkarım uyarılarını inceleyin; yüklenemeyen içerik araştırma dayanağı değildir.",
     "facts": "Belgelenmiş olguları, taraf beyanlarını, varsayımları ve çıkarımları ayrı kaydedin. Belgelenmiş olguyu ilgili kaynak pasajına bağlayın.",
@@ -195,6 +196,10 @@ def assistant_router():
                     {"label": "Dosyaları incele", "href": f"#/matters/{active['id']}?tab=documents"},
                     {"label": "Yorum ekle", "href": f"#/matters/{active['id']}?tab=comments"},
                 ]
+            elif context.page == "work":
+                section = "workflow"
+                response["answer"] = GUIDE[section]
+                response["suggestions"] = [{"label": "İşlerim", "href": "#/work"}]
             elif context.page == "graphs":
                 response["answer"] = "Hukuk haritasında kavram ve kurum bağlantılarını inceleyin. Ontoloji kapsamını gerçek kaynak kapsamından ayırın; bir grafik yolu tek başına hukuki sonuca dayanak oluşturmaz."
             elif context.page == "coverage":

@@ -73,8 +73,12 @@ explicit client scopes and case teams. Choose client details-only or all current
 and future linked cases; direct case grants remain independent. The case overview
 explains access origins and shows multiple supervisors/responsible lawyers.
 Organizational management confers no case access. Changed grants revoke sessions
-and unauthorized research; tracked deadlines/tasks/opinions are the next packet.
-See [firm responsibility and operating boundaries](docs/FIRM_RBAC_AND_SUPERVISION.md).
+and unauthorized research. Case **İş takibi** now records manual Istanbul dates,
+delegated tasks and separate human opinion/review histories. **İşlerim** at
+`#/work` shows personal or explicitly supervised work. A task grants no case access;
+a supervisor cannot accept their own opinion.
+See [firm responsibility and operating boundaries](docs/FIRM_RBAC_AND_SUPERVISION.md)
+and [human workflow](docs/HUMAN_WORKFLOW.md).
 
 ## Configured installation
 

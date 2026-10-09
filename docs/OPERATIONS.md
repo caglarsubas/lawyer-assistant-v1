@@ -607,6 +607,24 @@ prospective scope for recovery checks, invalidates changed recipients' sessions 
 advances the same case-team revision. Use the UI for client scopes and active/archived
 case responsibility flags; the CLI changes independent direct memberships only.
 
+W03 adds encrypted manual work/opinion records and the `work_participants` routing
+table. Take a protected database/encryption-key backup before schema startup and
+upgrade all writers together; mixed old/new writers are not qualified. Retain the
+routing table, parent/recipient records and identifiers in backups, legal holds,
+restoration and deletion design. Case archiving hides work, retaining histories;
+physical erasure remains unavailable rather than pretending to delete routing only.
+
+Creating a request requires an explicitly appointed case supervisor and recipients
+who already have case scope and write permission. The queue at `#/work` and case
+**İş takibi** are manual work tracking; dates are Europe/Istanbul, with no legal
+period computation or external notifications. Each lawyer submits under their own
+account; a different current supervisor records exact-submission feedback/acceptance.
+Question/date/recipient changes mark earlier work Stale. Removed work recipients
+lose sessions even if they retain case scope. Exclusive firm guards order removal
+after admitted reads; W02 no-store/session monitoring clears open UI. Copies already
+retained outside the browser are not recalled. Qualify target-host lock, disconnect,
+restore and distinct-account workflows before rollout. See [human workflow/API](HUMAN_WORKFLOW.md).
+
 Supply your existing active administrator ID, obtainable from your authenticated
 `/api/v1/auth/me` response before maintenance. Replace the uppercase identifiers
 below with actual IDs. Commands list only user IDs, names, roles and active state

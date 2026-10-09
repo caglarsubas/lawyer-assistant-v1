@@ -925,3 +925,15 @@ textarea { resize: vertical; }
 .firm-administration details { margin: 16px 0; }
 .firm-administration ol { padding-left: 20px; line-height: 1.8; font-size: 13px; }
 @media (max-width: 620px) { .firm-administration .panel { padding: 16px; } .firm-administration fieldset { grid-template-columns: 1fr; } }
+
+/* Human workflow uses the existing workbench, with readable attributed text. */
+.work-register { margin: 24px 0; }
+.work-register article { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.work-register h3 { margin: 8px 0; font-size: 18px; }
+.work-detail { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }
+.work-detail h3 { font-size: 24px; }
+.work-response, .work-action { margin: 24px 0; padding: 20px; background: var(--surface); border: 1px solid var(--line); }
+.work-history { padding: 16px 0; border-bottom: 1px solid var(--line); }
+.preserve-lines { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.75; }
+.human-work fieldset { margin: 16px 0; border: 1px solid var(--line); padding: 16px; }
+@media (max-width: 600px) { .work-register article { align-items: flex-start; flex-direction: column; } }
