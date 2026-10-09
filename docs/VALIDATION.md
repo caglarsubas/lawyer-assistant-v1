@@ -1,5 +1,40 @@
 # Verification record — 9 October 2026
 
+## PR #30 CI follow-up — existing-job workload balance
+
+[Run 37882649274](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37882649274)
+on `1629195943490100ce712ab39a4350733d13dc4d` passed all 89 preflight checks,
+frontend and PostgreSQL. Every remaining backend test also passed (3,010 passed,
+51 documented skips, 28 warnings), but **1,090.47s** exceeded the existing
+18-minute step deadline. The required check failed; downstream contract steps
+were skipped. This was a workload deadline failure, not an assertion failure.
+The native identifier optimization remained active in the actual application
+profile: 58 validations and 663,180 rule executions persisted while namespace
+resolutions fell from 8,500,101 to 41,605.
+
+Three expensive publication integration files now run after the serial database
+step in the existing PostgreSQL job. One workflow-wide file list defines both their
+execution and exclusion from the main backend step. Its database URL does not
+reach the publication step. Existing job names, three runners, worker counts,
+retries and 18/20/5-minute limits remain unchanged. No tests or real validation,
+source-integrity or authorization checks are removed.
+
+Collection using the actual workflow shell selections proves **3,150 = 89 +
+3,051 + 10** distinct cases, with zero overlap, missing cases or extras. In one
+disposable pinned PostgreSQL rehearsal, **48 database cases passed in 65.71s**,
+followed by **10 publication cases in 22.49s**; combined test wall time was
+**90.53s**, below the unchanged five-minute job cap. The database URL was absent
+from the publication environment, and the owned container was removed.
+Actionlint and `git diff --check` passed. This local rehearsal does not establish
+hosted capacity.
+
+Partition and combined-job verification are recorded in
+[the follow-up metadata](evidence/pr30-ci-workload-verification-2026-10-09.json).
+The previously completed full local suite and offline Linux source validation
+remain applicable: this follow-up changes only workflow allocation and records.
+Exact-head hosted completion is checked separately; main, deployment, legal
+qualification and invoiced savings are not established by a PR check.
+
 ## PR #30 CI correction — native RDFS identifier bindings
 
 Initial [run 37874784913](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37874784913)

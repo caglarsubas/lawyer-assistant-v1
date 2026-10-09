@@ -9,6 +9,11 @@ permissions:
 concurrency:
   group: checks-${{ github.ref }}
   cancel-in-progress: true
+env:
+  CI_PUBLICATION_TESTS: >-
+    backend/tests/test_open_validity_publication.py
+    backend/tests/test_runtime_authorization_integration.py
+    backend/tests/test_publication_cli.py
 
 jobs:
   backend-and-contracts:
@@ -42,8 +47,9 @@ jobs:
         timeout-minutes: 18
         run: |
           read -r -a preflight_tests <<< "$CI_ONTOLOGY_PREFLIGHT_TESTS"
+          read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
           ignore_args=()
-          for path in "${preflight_tests[@]}"; do
+          for path in "${preflight_tests[@]}" "${publication_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
@@ -99,6 +105,10 @@ jobs:
         env:
           LA_TEST_POSTGRES_URL: postgresql+psycopg://snapshot_test:disposable-ci-snapshot-only@127.0.0.1:${{ job.services.postgres.ports['5432'] }}/lawyer_snapshot_test
         run: backend/.venv/bin/pytest backend/tests/test_snapshot_set_postgres.py backend/tests/test_set_authorization_postgres.py backend/tests/test_research_jobs_postgres.py
+      - name: Test signed publication integration
+        run: |
+          read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
+          backend/.venv/bin/pytest "${publication_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 
   frontend:
     runs-on: ubuntu-latest
