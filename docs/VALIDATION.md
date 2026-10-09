@@ -50,9 +50,11 @@ Local checks passed:
 
 CI retains the same three jobs, one PR event run, 20/5/5-minute job limits, existing
 step deadlines and no restarts/retries. Isolated PostgreSQL races now use two
-bounded workers on the existing runner; application groups retain two workers. The 20 new model-trial checks run in the
-main backend suite; the frontend human-review group retains its prior 59 checks. Workflow-based collection proves **3,277 unique IDs**:
-89 preflight, 3,038 main, 10 publication, 81 workspace and 59 human-review checks,
+bounded workers on the existing runner; application groups retain two workers. The 20 model-trial checks run in an early two-minute backend step, outside the
+long suite. Frontend retains 59 human-review and 58 workspace checks; the 23 renewal
+checks run with signed publication on the PostgreSQL job. Workflow-based collection proves **3,277 unique IDs**:
+89 preflight, 3,018 main, 33 publication/renewal, 58 workspace, 59 human-review
+and 20 model-trial checks,
 with zero duplicate/missing IDs. Local timing does not establish hosted runtime or
 billing savings; verify the created PR's exact head separately.
 
@@ -73,9 +75,19 @@ in 103.90 seconds and 10 publication checks in 57.66 seconds). Frontend build/te
 and 81 workspace checks passed, but the enlarged 79-check human-review group hit
 the five-minute frontend job cap. The final partition restores that group to 59
 checks and runs the 20 new model-trial checks in the existing main backend suite.
-Collection still proves every ID is covered exactly once. No worker, test or budget
-is removed to obtain a green result, and no deadline/job/retry is added. Final-head
+Collection still proves every ID is covered exactly once. No test is removed to obtain a green result, and no existing deadline, job cap
+or retry is increased. Final-head
 hosted results remain separately verified.
+
+The third run (`37978040874`) reported **81 passed in 115.99 seconds**, but its
+workspace step exceeded two minutes during process completion. The final split
+moves 23 renewal checks from that group to the publication job, leaving 58 workspace
+checks. All 33 publication/renewal checks passed together locally in **30.88 seconds**.
+The 20 model-trial checks passed in a separate two-worker run in **11.11 seconds**;
+an early two-minute backend step now runs them before the long suite, without
+adding them to that suite's 18-minute allocation. The backend job still has its
+original 20-minute cap. This preserves coverage and existing deadlines while
+providing headroom in the short jobs. Final-head CI remains separately verified.
 
 The final production frontend was rehearsed on an owned loopback service with
 invented evidence and a mocked local provider. The lawyer explicitly selected one

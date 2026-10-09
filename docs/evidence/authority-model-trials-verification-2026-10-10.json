@@ -65,6 +65,14 @@
     },
     "frontend_passed": 207,
     "deployment_contracts_passed": 41,
+    "publication_and_renewal": {
+      "passed": 33,
+      "pytest_seconds": 30.88
+    },
+    "dedicated_model_step": {
+      "passed": 20,
+      "pytest_seconds": 11.11
+    },
     "other_passed": [
       "frontend production build",
       "Ruff",
@@ -94,10 +102,11 @@
     "counts": {
       "complete": 3277,
       "preflight": 89,
-      "remaining": 3038,
-      "publication": 10,
-      "workspace": 81,
-      "human_review": 59
+      "remaining": 3018,
+      "publication": 33,
+      "workspace": 58,
+      "human_review": 59,
+      "model_trials": 20
     },
     "preflight_files": [
       "backend/tests/test_validation_queries.py",
@@ -109,23 +118,26 @@
     "publication_files": [
       "backend/tests/test_open_validity_publication.py",
       "backend/tests/test_runtime_authorization_integration.py",
-      "backend/tests/test_publication_cli.py"
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py"
     ],
     "workspace_files": [
       "backend/tests/test_firm_admin.py",
       "backend/tests/test_content_scope.py",
-      "backend/tests/test_authority_proposals.py",
-      "backend/tests/test_authority_revalidations.py"
+      "backend/tests/test_authority_proposals.py"
     ],
     "human_review_files": [
       "backend/tests/test_authority_trial_cohorts.py",
       "backend/tests/test_analysis_cohorts.py"
     ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
     "intersection": 0,
     "missing": 0,
     "extra": 0,
-    "complete_node_ids_sha256": "526ea0359fa7f8d8a47b6e8e9a0cbafcc02ca28dc3b97b6cff53063c13b3ae82",
-    "workflow_sha256": "01e78f7502b397c568b5c50fae3a47618d15f3b76c5aa2535ff670719b9968dc",
+    "complete_node_ids_sha256": "87066b5ba6feced6ba4c9edab757cc54393b8e0e2d96ab9e15deca507210c8d4",
+    "workflow_sha256": "93bf2d62e080038e87e451e775e419537288ed298fd95c05b8fbe9b16a1c188b",
     "no_runner_retry_existing_deadline_change": true,
     "human_review_workers": 2,
     "human_review_new_step_minutes": 3,
@@ -154,6 +166,15 @@
     "workspace_checks_passed": 81,
     "fix": "run 20 new model-trial cases in the main backend suite and retain 59 human review cases in frontend",
     "deadline_increased": false,
+    "additional_jobs_or_retries": false
+  },
+  "third_hosted_failure": {
+    "run_id": 37978040874,
+    "workspace_checks_reported_passed": 81,
+    "workspace_pytest_seconds": 115.99,
+    "failed_step": "workspace step process completion exceeded two minutes",
+    "fix": "move 23 renewal checks to publication and run 20 model-trial checks in an early separate backend step",
+    "existing_deadline_or_job_cap_increased": false,
     "additional_jobs_or_retries": false
   },
   "browser": {
@@ -209,6 +230,8 @@
     "r01-check.log": "aaa2f49ef768a2438ee864b57ca7000f06e0d40687e2316dd4ce398354dc557f",
     "r01-calibration.log": "ad35f5dcab94b9af06a5034ed6c1743d466eac94b87181b66f8aa25f46ba2c8c",
     "r01-study.log": "406fe5d7c57061f452c221f8cfa4b8813e135cd2a937121804379474e1e15ffc",
-    "compose.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    "compose.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "publication-and-renewal.log": "3914bae5267bba73daf95930def5cd0236eb9aa53a8984be867567c60cbfea3b",
+    "model-trial-step.log": "1616d8254462ab76b598d5f09d43ada33fc6e715d3e28f4ba5318c0768d6fad1"
   }
 }
