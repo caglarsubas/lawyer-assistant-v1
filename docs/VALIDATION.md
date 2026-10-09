@@ -50,9 +50,9 @@ Local checks passed:
 
 CI retains the same three jobs, one PR event run, 20/5/5-minute job limits, existing
 step deadlines and no restarts/retries. Isolated PostgreSQL races now use two
-bounded workers on the existing runner; application groups retain two workers. New trial checks join the
-existing human-review group. Workflow-based collection proves **3,277 unique IDs**:
-89 preflight, 3,018 main, 10 publication, 81 workspace and 79 human-review checks,
+bounded workers on the existing runner; application groups retain two workers. The 20 new model-trial checks run in the
+main backend suite; the frontend human-review group retains its prior 59 checks. Workflow-based collection proves **3,277 unique IDs**:
+89 preflight, 3,038 main, 10 publication, 81 workspace and 59 human-review checks,
 with zero duplicate/missing IDs. Local timing does not establish hosted runtime or
 billing savings; verify the created PR's exact head separately.
 
@@ -67,6 +67,15 @@ in 25.92 seconds. No test is skipped/retried, no new job is added and no deadlin
 is raised. The cancellation API was denied by the token (HTTP 403); the superseding
 push uses the workflow's existing cancellation rule. Verify final-head hosted
 results separately; local timings do not guarantee future hosted duration.
+
+The second run (`37976761888`) passed the PostgreSQL job in **3m12s** (59 races
+in 103.90 seconds and 10 publication checks in 57.66 seconds). Frontend build/tests
+and 81 workspace checks passed, but the enlarged 79-check human-review group hit
+the five-minute frontend job cap. The final partition restores that group to 59
+checks and runs the 20 new model-trial checks in the existing main backend suite.
+Collection still proves every ID is covered exactly once. No worker, test or budget
+is removed to obtain a green result, and no deadline/job/retry is added. Final-head
+hosted results remain separately verified.
 
 The final production frontend was rehearsed on an owned loopback service with
 invented evidence and a mocked local provider. The lawyer explicitly selected one

@@ -94,10 +94,10 @@
     "counts": {
       "complete": 3277,
       "preflight": 89,
-      "remaining": 3018,
+      "remaining": 3038,
       "publication": 10,
       "workspace": 81,
-      "human_review": 79
+      "human_review": 59
     },
     "preflight_files": [
       "backend/tests/test_validation_queries.py",
@@ -119,14 +119,13 @@
     ],
     "human_review_files": [
       "backend/tests/test_authority_trial_cohorts.py",
-      "backend/tests/test_analysis_cohorts.py",
-      "backend/tests/test_authority_model_trials.py"
+      "backend/tests/test_analysis_cohorts.py"
     ],
     "intersection": 0,
     "missing": 0,
     "extra": 0,
-    "complete_node_ids_sha256": "5d72a5f1a672016a49a3fff2dce61f8233d4d6609e1262f5f244392a07c59149",
-    "workflow_sha256": "ba9a851f0d32b785fef00b410027b357831b3125941ee445aafe151adb20b1a7",
+    "complete_node_ids_sha256": "526ea0359fa7f8d8a47b6e8e9a0cbafcc02ca28dc3b97b6cff53063c13b3ae82",
+    "workflow_sha256": "01e78f7502b397c568b5c50fae3a47618d15f3b76c5aa2535ff670719b9968dc",
     "no_runner_retry_existing_deadline_change": true,
     "human_review_workers": 2,
     "human_review_new_step_minutes": 3,
@@ -141,6 +140,19 @@
     "job_deadline_minutes": 5,
     "failed_step": "signed publication after serial PostgreSQL suite",
     "fix": "two bounded workers using per-test random disposable databases on the existing runner",
+    "deadline_increased": false,
+    "additional_jobs_or_retries": false
+  },
+  "second_hosted_failure": {
+    "run_id": 37976761888,
+    "postgres_job_seconds": 192,
+    "postgres_races_passed": 59,
+    "postgres_pytest_seconds": 103.9,
+    "publication_passed": 10,
+    "publication_pytest_seconds": 57.66,
+    "failed_step": "enlarged frontend human review group",
+    "workspace_checks_passed": 81,
+    "fix": "run 20 new model-trial cases in the main backend suite and retain 59 human review cases in frontend",
     "deadline_increased": false,
     "additional_jobs_or_retries": false
   },
