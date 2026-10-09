@@ -10,6 +10,9 @@ concurrency:
   group: checks-${{ github.ref }}
   cancel-in-progress: true
 env:
+  CI_HUMAN_REVIEW_GROUP_TESTS: >-
+    backend/tests/test_authority_trial_cohorts.py
+    backend/tests/test_analysis_cohorts.py
   CI_WORKSPACE_SECURITY_TESTS: >-
     backend/tests/test_firm_admin.py
     backend/tests/test_authority_proposals.py
@@ -52,8 +55,9 @@ jobs:
           read -r -a preflight_tests <<< "$CI_ONTOLOGY_PREFLIGHT_TESTS"
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
           read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
+          read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
           ignore_args=()
-          for path in "${preflight_tests[@]}" "${publication_tests[@]}" "${workspace_tests[@]}"; do
+          for path in "${preflight_tests[@]}" "${publication_tests[@]}" "${workspace_tests[@]}" "${human_review_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
@@ -143,3 +147,8 @@ jobs:
         run: |
           read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
           backend/.venv/bin/pytest "${workspace_tests[@]}" -q --maxfail=1 --durations=10
+      - name: Test confidential human review groups
+        timeout-minutes: 3
+        run: |
+          read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
+          backend/.venv/bin/pytest "${human_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10

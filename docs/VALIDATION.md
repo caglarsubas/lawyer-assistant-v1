@@ -19,14 +19,14 @@ completion. Inference does not hold a write-blocking guard.
 
 Final local verification:
 
-- **3,147 backend tests passed**, 54 skipped, 28 warnings in 412.37 seconds with
+- **3,148 backend tests passed**, 54 skipped, 28 warnings in 406.14 seconds with
   two workers. Skips are the 51 separately executed PostgreSQL cases and three
   existing opt-in infrastructure drills.
-- **51 PostgreSQL cases passed** in 87.79 seconds on the pinned disposable 16.10
+- **51 PostgreSQL cases passed** in 93.49 seconds on the pinned disposable 16.10
   image. New cases observe actual advisory-lock blocking, independent-firm progress,
   competing role edits and revoked sessions. Owned containers/databases were removed.
-- **141 exact-source offline Linux cases passed** in 28.19 seconds for administration,
-  authority proposals, offline user management and source reviews. Source/test,
+- **201 exact-source offline Linux cases passed** in 77.61 seconds for administration,
+  authority proposals, offline user management, source reviews and human review groups. Source/test,
   ontology and locked dependency fingerprints matched. The nonroot container had
   no network, host ports or mounts, a read-only filesystem, two CPUs, 768 MiB,
   128 PIDs and 256 MiB tmpfs; cleanup was verified.
@@ -40,13 +40,27 @@ Final local verification:
   portfolio controls; its scoped assistant guide used no provider or private records.
   No console warning/error occurred. Owned tabs and the loopback server were closed.
 
-The two administration/proposal files now run in the existing frontend CI job after
-its build/tests. Actual workflow collection proves **3,201 = 89 preflight + 3,055
-main + 10 publication + 47 workspace-security cases**, with zero overlap, omission
-or extras. The serial security partition passed all 47 cases in 13.75 seconds locally.
-The same three job names, runners, worker counts, no retries and existing step/job
-time limits remain. No coverage gate was removed. Hosted capacity and billing savings
-are not established by local timing.
+The first hosted attempt, run `37915720125` on `3d30e72ac635d3b78ad1c9f57975683dd2592516`,
+passed frontend/workspace and PostgreSQL/publication groups, but the backend step
+reached its unchanged 18-minute deadline at 96%. No assertion failure was recorded
+before timeout; the remaining checks were not completed. That head was not rerun.
+
+Profiling one 27-case synthetic review-group file found **110,005 permission lookups**.
+Permission resolution now reuses a parameterized query structure and reads the managed
+account and all role records in one fresh query, rather than two reads per managed
+lookup. No permission results are cached. A query-budget/freshness contract verifies
+three-role union, a subsequent permission change and empty-role denial, with one
+read per lookup. The final full suite and PostgreSQL races passed after this change.
+
+The existing frontend runner also executes the two heavy human-review group files
+with two bounded workers in a new three-minute step. Its five-minute job limit remains.
+Actual workflow collection proves **3,202 = 89 preflight + 2,996 main + 10 publication
++ 48 workspace-security + 59 human-review cases**, with zero overlap, omission or
+extras. The serial security group passed 48 cases in 11.84 seconds and the two-worker
+human-review group passed 59 in 44.30 seconds locally. The same three required job
+names/runners, no retries, backend worker count and existing step/job time limits
+remain. No coverage gate was removed. Hosted capacity and billing savings are not
+established by local timing; checks are reported separately for the final pushed head.
 
 SQLite demo coordination is single-process only. Production lock-loss/network-failure
 behavior and customer migration need target-host qualification. W02 explicit client

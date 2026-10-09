@@ -1,6 +1,6 @@
 {
   "schema": "firm-administration-verification-v1",
-  "recorded_at": "2026-10-09T10:06:58.735222+00:00",
+  "recorded_at": "2026-10-09T10:45:06.377573+00:00",
   "synthetic_only": true,
   "production_qualified": false,
   "base_commit": "9db46fd292e80c57fed54a92494ea4a0eccab225",
@@ -9,7 +9,7 @@
     "system": "Darwin",
     "architecture": "arm64"
   },
-  "test_image": "sha256:df1a73fa0af443967def7ee58b00c4328523d2c6d9959db83fe42a0e23d65f28",
+  "test_image": "sha256:6d7e8b552ea07bf82977544e66b751f559646757caebec8a835d7895900ae1a5",
   "source": {
     "ontology_runtime": {
       "ontology/build_catalog.py": "60cfdd479eac4a3175e0ac566377c42f80f8ee686a40f391558fe6da23de0914",
@@ -25,12 +25,12 @@
       "rdflib": "7.6.0"
     },
     "application": {
-      "sha256": "8377eb4a913cf3f51a4ecdb327a7bb786b6d608f6995df01bd54b67af3c256ef",
+      "sha256": "1fb108bc92f7e286436436fe0fcebff7252f67e4efd35c311f7a20bc8345ad77",
       "files": 124
     },
     "tests": {
       "files": 89,
-      "sha256": "8f471973c7ed515a69c4126c6012249bcdf1b784a24fdf674b75efcd81fe3d33"
+      "sha256": "5d89187703661dadd6be0ab199bc1b49b9ddb7f83a24ef7cebdbf53399179bd3"
     }
   },
   "limits": {
@@ -45,9 +45,9 @@
   },
   "linux_tests": {
     "exit_code": 0,
-    "passed": 141,
-    "pytest_seconds": 28.19,
-    "container_wall_seconds": 29.584
+    "passed": 201,
+    "pytest_seconds": 77.61,
+    "container_wall_seconds": 78.517
   },
   "cleanup_verified": true,
   "not_established": [
@@ -69,10 +69,10 @@
     "post_merge_main_ci_conclusion": "success"
   },
   "native_backend": {
-    "passed": 3147,
+    "passed": 3148,
     "skipped": 54,
     "warnings": 28,
-    "pytest_seconds": 412.37,
+    "pytest_seconds": 406.14,
     "skip_scope": "51 PostgreSQL cases executed separately; three existing opt-in infrastructure drills remain skipped"
   },
   "postgres": {
@@ -82,9 +82,9 @@
     "scope": "all fifty-one real PostgreSQL snapshot, authorization and research/adoption/context/review/comparison races from the exact CI selection in random disposable child databases",
     "cleanup_verified": true,
     "exit_code": 0,
-    "wall_seconds": 89.849,
+    "wall_seconds": 95.994,
     "passed": 51,
-    "pytest_seconds": 87.79
+    "pytest_seconds": 93.49
   },
   "frontend": {
     "passed": 193,
@@ -104,11 +104,12 @@
   "ci_partition": {
     "schema": "complete-ci-partition-v1",
     "counts": {
-      "complete": 3201,
+      "complete": 3202,
       "preflight": 89,
-      "remaining": 3055,
+      "remaining": 2996,
       "publication": 10,
-      "workspace": 47
+      "workspace": 48,
+      "human_review": 59
     },
     "preflight_files": [
       "backend/tests/test_validation_queries.py",
@@ -126,17 +127,23 @@
       "backend/tests/test_firm_admin.py",
       "backend/tests/test_authority_proposals.py"
     ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py"
+    ],
     "intersection": 0,
     "missing": 0,
     "extra": 0,
-    "complete_node_ids_sha256": "89d16a5720b600505583d17388089dbfc91b6c02df2aad361062d0db1fe2878d",
-    "workflow_sha256": "805b496f56ae2f005e820582b80c1cb8312d71a2aa1a538a38395548e66c9c28",
-    "no_runner_retry_deadline_change": true,
+    "complete_node_ids_sha256": "5e0801bd2191bd66d60f9995b4e2f4330e314318323801a5a6581d0c5e6dc2b4",
+    "workflow_sha256": "8ec152635d8f4682ae9165201206b6f80530c8e89d2b9c5d65eaee538e30c38d",
+    "no_runner_retry_existing_deadline_change": true,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
     "hosted_speedup_or_billing_savings_established": false
   },
   "workspace_security_partition": {
-    "passed": 47,
-    "pytest_seconds": 13.75,
+    "passed": 48,
+    "pytest_seconds": 11.84,
     "new_runner_or_retry": false
   },
   "local_evidence_directory": ".data/verification/w01",
@@ -162,6 +169,34 @@
     "new route-action admission exposed an omitted readiness route and an intentional firm-change 401 contract; corrected and verified",
     "an extra transition argument broke a legacy final-race test hook; the existing three-argument signature was preserved with current permission checks",
     "initial browser fixture origin was absent from its allowlist; test fixture corrected without a runtime exception",
-    "initial Compose rehearsal omitted a synthetic extraction placeholder; corrected without reading a real .env"
-  ]
+    "initial Compose rehearsal omitted a synthetic extraction placeholder; corrected without reading a real .env",
+    "initial hosted backend reached its unchanged step deadline before all cases completed; follow-up keeps all gates, reduces fresh permission-read overhead and moves 59 heavy review cases into the existing frontend runner"
+  ],
+  "human_review_partition": {
+    "passed": 59,
+    "pytest_seconds": 44.3,
+    "workers": 2,
+    "existing_frontend_job_minutes": 5,
+    "new_step_minutes": 3,
+    "new_runner_or_retry": false
+  },
+  "first_hosted_attempt": {
+    "run": 37915720125,
+    "head_sha": "3d30e72ac635d3b78ad1c9f57975683dd2592516",
+    "conclusion": "failure",
+    "reason": "backend test step reached the unchanged 18-minute deadline at 96 percent; no assertion failure was logged before the timeout",
+    "frontend": "success: 193 frontend and 47 workspace tests",
+    "postgres": "success: 51 race and 10 publication cases",
+    "rerun_requested": false
+  },
+  "permission_read_profile": {
+    "synthetic_file": "backend/tests/test_authority_trial_cohorts.py",
+    "cases": 27,
+    "calls_to_permissions_for_before_optimization": 110005,
+    "managed_lookup_queries_before": 2,
+    "managed_lookup_query_budget_after": 1,
+    "authorization_result_cache": false,
+    "query_construction_reused": true,
+    "freshness_contract": "three assigned roles resolve within one read; changed permissions and empty assignments take effect on subsequent reads"
+  }
 }

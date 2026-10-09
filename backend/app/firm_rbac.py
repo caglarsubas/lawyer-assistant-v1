@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from functools import wraps
 
 from fastapi import HTTPException
-from sqlalchemy import select, text
+from sqlalchemy import bindparam, select, text
 
 from .db import Employee, EmployeeRole, FirmRole, Record, User, digest
 
@@ -37,6 +37,16 @@ DEPENDENCIES = {"matter.write": {"matter.read"}, "matter.review": {"matter.read"
                 "portfolio.create": {"portfolio.read", "matter.read", "matter.write"},
                 "source.assign": {"source.curate"}}
 
+# Reuse query construction, never permission results. One fresh query includes the
+# managed-account marker, all assigned roles and missing-role references.
+PERMISSION_ROWS = (
+    select(Employee.firm_id, EmployeeRole.role_id, FirmRole.firm_id, FirmRole.permissions)
+    .select_from(Employee)
+    .outerjoin(EmployeeRole, Employee.user_id == EmployeeRole.user_id)
+    .outerjoin(FirmRole, EmployeeRole.role_id == FirmRole.id)
+    .where(Employee.user_id == bindparam("permission_user_id"))
+)
+
 
 def validate_permissions(values):
     if not isinstance(values, list) or any(not isinstance(item, str) for item in values):
@@ -50,18 +60,17 @@ def validate_permissions(values):
 
 
 def permissions_for(session, user):
-    employee = session.get(Employee, user.id, populate_existing=True)
-    if employee is None:
+    roles = session.execute(PERMISSION_ROWS, {"permission_user_id": user.id}).all()
+    if not roles:
         # Compatibility for pre-migration accounts; migration creates an explicit
         # Employee even for users with no roles, so an empty assignment denies.
         return LEGACY.get(user.role, frozenset()) if user.active else frozenset()
-    if employee.firm_id != user.firm_id or not user.active:
+    if roles[0][0] != user.firm_id or not user.active:
         return frozenset()
-    roles = session.execute(select(EmployeeRole.role_id, FirmRole.firm_id, FirmRole.permissions)
-                            .outerjoin(FirmRole, EmployeeRole.role_id == FirmRole.id)
-                            .where(EmployeeRole.user_id == user.id)).all()
     permissions = set()
-    for _, firm, encoded in roles:
+    for _, role_id, firm, encoded in roles:
+        if role_id is None:
+            continue
         if firm != user.firm_id:
             return frozenset()
         try:

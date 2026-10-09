@@ -4,11 +4,11 @@ import json
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import select
+from sqlalchemy import event, select
 
 from app.config import Settings
 from app.db import Employee, EmployeeRole, FirmRole, LoginSession, Membership, Record, User
-from app.firm_rbac import FirmAuthorization, route_permissions
+from app.firm_rbac import FirmAuthorization, permissions_for, route_permissions
 from app.main import create_app
 
 PASSWORD = "synthetic-new-lawyer-12345"
@@ -66,6 +66,46 @@ def test_migration_keeps_credentials_memberships_and_source_status(firm):
         assert {(m.matter_id, m.user_id) for m in session.scalars(select(Membership))} == {
             (m.matter_id, m.user_id) for m in members}
         assert not list(session.scalars(select(Record).where(Record.kind == "source_review")))
+
+
+def test_permission_resolution_has_one_read_and_stays_fresh_after_role_changes(firm):
+    app, client = firm
+    employee = create_employee(client)
+    with app.state.store.session() as session:
+        user = session.get(User, employee["id"])
+        for assignment in session.scalars(select(EmployeeRole).where(EmployeeRole.user_id == user.id)):
+            session.delete(assignment)
+        roles = [FirmRole(firm_id=user.firm_id, name="query-budget-" + str(index),
+                          permissions=json.dumps(values)) for index, values in enumerate([
+                              ["system.read"], ["matter.read"], ["system.read", "matter.read"]])]
+        session.add_all(roles)
+        session.flush()
+        assignments = [EmployeeRole(user_id=user.id, role_id=role.id) for role in roles]
+        session.add_all(assignments)
+        session.flush()
+        reads = []
+
+        def observed(connection, cursor, statement, parameters, context, executemany):
+            if statement.lstrip().upper().startswith("SELECT"):
+                reads.append(statement)
+
+        connection = session.connection()
+        event.listen(connection, "before_cursor_execute", observed)
+        try:
+            assert permissions_for(session, user) == {"system.read", "matter.read"}
+            assert len(reads) == 1
+            for role in roles:
+                role.permissions = '["system.read"]'
+            session.flush()
+            assert permissions_for(session, user) == {"system.read"}
+            assert len(reads) == 2
+            for assignment in assignments:
+                session.delete(assignment)
+            session.flush()
+            assert not permissions_for(session, user)  # Managed empty roles never regain legacy defaults.
+            assert len(reads) == 3
+        finally:
+            event.remove(connection, "before_cursor_execute", observed)
 
 
 def test_administrator_without_assignment_cannot_see_cases_or_documents(firm):
