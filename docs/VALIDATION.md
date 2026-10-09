@@ -33,7 +33,7 @@ Local checks passed:
   **36.04 seconds**, after fixing the shared polling helper to require two arms.
   A transient source-publication admission withholds capture; empty arms never
   establish completion. Final full-suite and restricted-container runs include the guarded renewal-history mapping.
-- Real PostgreSQL: **59 passed** in **145.42 seconds**, disposable child databases;
+- Real PostgreSQL: **59 passed** in **66.63 seconds**, two bounded workers and disposable child databases;
   identical observation replay and competing own-head writes serialize under the
   case lock. A pending replay may conflict and cannot finalize admission. Cleanup
   was verified. This includes the final no-edit synthetic repair fixture.
@@ -49,11 +49,24 @@ Local checks passed:
   used `/dev/null` with disposable placeholders and did not read `.env`.
 
 CI retains the same three jobs, one PR event run, 20/5/5-minute job limits, existing
-step deadlines, two workers and no restarts/retries. New trial checks join the
+step deadlines and no restarts/retries. Isolated PostgreSQL races now use two
+bounded workers on the existing runner; application groups retain two workers. New trial checks join the
 existing human-review group. Workflow-based collection proves **3,277 unique IDs**:
 89 preflight, 3,018 main, 10 publication, 81 workspace and 79 human-review checks,
 with zero duplicate/missing IDs. Local timing does not establish hosted runtime or
 billing savings; verify the created PR's exact head separately.
+
+The first PR run (`37975556394`) passed all 59 PostgreSQL races in **211.92
+seconds**, but exceeded the unchanged five-minute job cap during the following
+publication group. The serial database workload left insufficient room for that
+required gate. The tests already allocate one random child database per case;
+running them with two bounded xdist workers preserves in-test row-lock races and
+uses the existing runner's capacity. Final local execution passed all 59 cases in
+66.63 seconds, with cleanup verified, and the 10 publication checks passed separately
+in 25.92 seconds. No test is skipped/retried, no new job is added and no deadline
+is raised. The cancellation API was denied by the token (HTTP 403); the superseding
+push uses the workflow's existing cancellation rule. Verify final-head hosted
+results separately; local timings do not guarantee future hosted duration.
 
 The final production frontend was rehearsed on an owned loopback service with
 invented evidence and a mocked local provider. The lawyer explicitly selected one

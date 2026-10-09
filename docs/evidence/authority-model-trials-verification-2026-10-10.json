@@ -50,10 +50,12 @@
     },
     "postgres": {
       "passed": 59,
-      "pytest_seconds": 145.42,
-      "wall_seconds": 148.3,
+      "pytest_seconds": 66.63,
+      "wall_seconds": 66.765,
       "cleanup_verified": true,
-      "exit_code": 0
+      "exit_code": 0,
+      "workers": 2,
+      "worker_restarts": 0
     },
     "restricted_linux": {
       "exit_code": 0,
@@ -123,12 +125,24 @@
     "intersection": 0,
     "missing": 0,
     "extra": 0,
-    "complete_node_ids_sha256": "3934527a07d1b25d37980008b87f8ba44fdf0f676229afe76b39ec1e326a6c71",
-    "workflow_sha256": "4b782ec5affb18ff637726671fb5b72120c568e29c77276f1b58da21e1faeae1",
+    "complete_node_ids_sha256": "5d72a5f1a672016a49a3fff2dce61f8233d4d6609e1262f5f244392a07c59149",
+    "workflow_sha256": "ba9a851f0d32b785fef00b410027b357831b3125941ee445aafe151adb20b1a7",
     "no_runner_retry_existing_deadline_change": true,
     "human_review_workers": 2,
     "human_review_new_step_minutes": 3,
-    "hosted_speedup_or_billing_savings_established": false
+    "hosted_speedup_or_billing_savings_established": false,
+    "postgres_workers": 2,
+    "postgres_worker_restarts": 0
+  },
+  "first_hosted_failure": {
+    "run_id": 37975556394,
+    "postgres_races_passed": 59,
+    "serial_pytest_seconds": 211.92,
+    "job_deadline_minutes": 5,
+    "failed_step": "signed publication after serial PostgreSQL suite",
+    "fix": "two bounded workers using per-test random disposable databases on the existing runner",
+    "deadline_increased": false,
+    "additional_jobs_or_retries": false
   },
   "browser": {
     "production_build": true,
@@ -172,7 +186,7 @@
   "retained_log_sha256": {
     "backend.log": "72f3de62e9e4820ac2f238bcc099cc389a3e4f04ef8f5cede710aacd653688a5",
     "final-focused.log": "f39216cd24ba3e7652c0e7f26034cd37f1e3a4a39bcf7b862d773a372b88ecc2",
-    "postgres.log": "b73107bfc3f6a84acbbb1fe90d9de7646e565aadaa0a85bb80ecaa94e5cf944f",
+    "postgres.log": "cf9bccc2798ff53b474f40e79b1a1d9cd2bffa32fe6b62b970139311f74635cb",
     "linux-tests.log": "a1efa69450923621a89e680e31a09763b570073bcdf5a4bf3fd615c1b8427057",
     "frontend-tests.log": "f04a8b5c39b0d174055af6ca40a80e8ba6ef39030fb3c5668e6e634666fdc4ab",
     "frontend-build.log": "ab65b49184f8a3111868599df332ab567411020bbc7fd48b26c1ae3ce812ed69",
