@@ -4,6 +4,7 @@ import { Icon, Loading, Mark, Notice } from './components';
 import type { Bootstrap, Session, SystemStatus } from './types';
 import { monitorSession } from './sessionMonitor';
 import { messageOf } from './utils';
+const WorkQueuePage = lazy(() => import('./pages/WorkQueuePage'));
 const FirmAdminPage = lazy(() => import('./pages/FirmAdminPage'));
 import MattersPage from './pages/MattersPage';
 import MatterPage from './pages/MatterPage';
@@ -71,7 +72,7 @@ export default function App() {
   const section = params.get('tab') || 'overview';
   return <PortfolioProvider key={session.user.id} enabled={!session.user.permissions || session.user.permissions.includes('portfolio.read')}><Workbench session={session} signingOut={signingOut} onSignOut={signOut} page={page} workspaceId={matterId} section={section} demo={Boolean(status?.demo_mode || session.demo_mode)}>
     {error && <Notice error>{error}</Notice>}
-    {matterId ? <MatterPage key={matterId} matterId={matterId} tab={section} selectedDocumentId={params.get('document')} userRole={session.user.role} permissions={session.user.permissions} demo={Boolean(status?.demo_mode || session.demo_mode)} /> : page === 'sources' ? pathname.split('/')[3] === 'provisions' ? <ProvisionMappingPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : <SourceReviewPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : page === 'firm-admin' ? <Suspense fallback={<Loading label="Büro yönetimi yükleniyor…" />}><FirmAdminPage /></Suspense> : page === 'customers' ? <CustomersPage /> : page === 'graphs' ? <GraphPage /> : page === 'coverage' ? <CoveragePage /> : page === 'system' ? <SystemPage status={status} onStatus={setStatus} /> : <MattersPage newRequested={params.get('new') === '1'} />}
+    {matterId ? <MatterPage key={matterId} matterId={matterId} tab={section} selectedDocumentId={params.get('document')} selectedWorkId={params.get('work')} userRole={session.user.role} permissions={session.user.permissions} demo={Boolean(status?.demo_mode || session.demo_mode)} /> : page === 'sources' ? pathname.split('/')[3] === 'provisions' ? <ProvisionMappingPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : <SourceReviewPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : page === 'firm-admin' ? <Suspense fallback={<Loading label="Büro yönetimi yükleniyor…" />}><FirmAdminPage /></Suspense> : page === 'work' ? <Suspense fallback={<Loading />}><WorkQueuePage /></Suspense> : page === 'customers' ? <CustomersPage /> : page === 'graphs' ? <GraphPage /> : page === 'coverage' ? <CoveragePage /> : page === 'system' ? <SystemPage status={status} onStatus={setStatus} /> : <MattersPage newRequested={params.get('new') === '1'} />}
   </Workbench></PortfolioProvider>;
 
 }

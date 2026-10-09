@@ -106,6 +106,8 @@ def route_permissions(path, method):
         return {"source.curate"}
     if root == "playbooks":
         return {"portfolio.read" if read else "playbook.manage"}
+    if root == "work":
+        return {"matter.read"}
     if root in {"matters", "workspaces", "governance"}:
         required = {"matter.read"}
         if not read:

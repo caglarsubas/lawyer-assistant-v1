@@ -1,5 +1,95 @@
 # Verification record — 9 October 2026
 
+## W03 manual work and tracked human opinions — 9 October 2026 (Asia/Shanghai)
+
+PR #33 is merged at `6649b117144a5851626e78423a18fc350b9fb89c`; exact post-merge
+main run `37941600919` passed. This packet delivers W03 engineering on that verified
+W02 foundation. Manual PR merge, deployment/migration and distinct-account customer
+field qualification remain separate gates. After its merge, retained R05A reviewed
+source-lineage revalidation and registered same-input model authority trials follow.
+
+The case **İş takibi** tab supports manual deadlines, milestones, tasks and written
+opinion requests. **İşlerim** provides personal and explicitly supervised case queues
+with due-status filters, plus existing customer/workspace-date filtering. Dates are
+explicit Europe/Istanbul wall times with recorded UTC instants. These are not legal
+period calculations, external notifications or a guarantee of delivered reminders.
+
+Only current recipients or explicitly appointed case supervisors can see requests
+while they retain case scope and read permission. Case access alone does not reveal
+other lawyers' opinions. Supervisors delegate only to existing authorized writers;
+organizational managers and configuration-only administrators receive no bypass.
+Each recipient records independent progress or a human-account text submission.
+A different current supervisor requests revision or accepts the exact latest
+submission with a reason. Prior texts, actors, timestamps, decisions and request
+versions remain in encrypted history. A request edit marks older progress/opinions
+Stale; closing requires completed/accepted current work from all active recipients.
+No model drafts/submits/accepts opinions in this workflow. Acceptance and account
+attribution cannot attest legal accuracy or the provenance of pasted text.
+
+Work edits that remove recipients use the exclusive firm guard. They wait for
+admitted HTTP reads and invalidate removed recipients' sessions even when case
+access remains. Existing no-store responses and browser session revalidation close
+open private views. Ineligible/removed recipient histories remain for authorized
+supervisors without new review permission. No private work is automatically inserted
+into model context, authority approval, evidence ledgers or legal exports.
+
+Final local verification on the final application source:
+
+- **3,172 backend tests passed**, 58 skipped and 28 existing dependency warnings in
+  **439.76 seconds** with two workers. Skips are 55 separately executed PostgreSQL
+  cases and three existing opt-in infrastructure drills. Fourteen new cases cover
+  distinct opinion accounts, independent revisions, stale request changes, all
+  three other work kinds, personal/supervisory status, Istanbul boundaries,
+  self-review/impersonation denial, unauthorized assignments, role/team revocation,
+  recipient removal, archival retention and cross-firm isolation.
+- **55 real PostgreSQL cases passed** in **117.09 seconds** on the pinned disposable
+  16.10 image. New races observe actual blocking of competing exact-submission
+  reviews (one acceptance, one revision conflict) and a paused HTTP opinion read
+  versus recipient-removing work edit. The admitted body completes first; the
+  removed session then fails, and a new session retains case access while work
+  detail/queue access is denied. Owned random child databases/container were removed.
+- **261 exact-source offline Linux cases passed** in **114.66 seconds**. Application,
+  test, ontology and locked dependency fingerprints matched. The nonroot container
+  had no network, ports or host mounts, a read-only filesystem, two CPUs, 768 MiB,
+  128 PIDs and 256 MiB tmpfs. Cleanup was verified.
+- **200 frontend tests passed** across 27 files; typecheck and production build
+  passed. Work panels/queue are lazy loaded. The existing main-bundle size advisory
+  remains; this packet does not claim a general frontend performance qualification.
+- **41 deployment contracts**, RDF/SHACL and R01 planning/calibration/study contracts,
+  Ruff, actionlint, whitespace and Compose validation passed. Compose used all six
+  disposable placeholders and `/dev/null`; no local `.env` or real provider key was read.
+- Production-build browser rehearsal with invented client/case and three separate
+  accounts created a two-lawyer opinion request with an explicit Istanbul date,
+  submitted both opinions separately, requested revision, resubmitted and accepted
+  each exact submission. The original text, feedback, revised text and distinct
+  actors remained visible. Each recipient saw only their own response history.
+  Personal accepted and supervisory open queues, closed filtering and contextual
+  workflow guide worked. Recipient removal cleared the open view; after login,
+  case access remained and the old work detail was denied. No console warning/error
+  occurred. The owned tab and loopback server were closed.
+
+All existing CI names/runners, worker counts, retry behavior and deadlines remain.
+Only the two new database races join the existing PostgreSQL selection. Actual
+workflow collection proves **3,230 = 89 preflight + 3,014 main + 10 publication + 58
+workspace-security + 59 human-review cases**, with zero overlap, missing or extra
+node IDs. Exact pushed-head checks are reported separately; local timings do not
+establish hosted billing savings.
+
+Queue authorization precedes joins/decryption/counts. Due sorting is within the
+newest 1,000 authorized candidates, with 100 returned by default (API maximum 500).
+The API/UI explicitly disclose truncation; an empty/short queue is not proof that
+older work is absent. Case registers provide the authorized full register.
+
+Back up routing plus encrypted request/recipient records and encryption keys before
+schema upgrade; upgrade all writers together. Legal holds/restoration must preserve
+the new `work_participants` table and stable identifiers. Archive retains histories;
+physical erasure remains unqualified. SQLite remains single-process demo behavior.
+Target-host migration/restore, suspended/disconnected browser behavior, legal/model
+accuracy, corpus rights and pilot capacity remain open. No real employee/client
+access, credentials, provider call, graph activation or live deployment was changed.
+See [workflow/API](HUMAN_WORKFLOW.md), [firm boundaries](FIRM_RBAC_AND_SUPERVISION.md)
+and [verification metadata](evidence/human-workflow-verification-2026-10-09.json).
+
 ## W02 client and case responsibilities — 9 October 2026 (Asia/Shanghai)
 
 PR #32 is merged at `04481e8ebbb696544423de246f89a06f4c7eccef`; exact post-merge

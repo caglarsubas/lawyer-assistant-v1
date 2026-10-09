@@ -1,0 +1,192 @@
+{
+  "schema": "human-workflow-verification-v1",
+  "recorded_at": "2026-10-09T14:52:17.060168+00:00",
+  "synthetic_only": true,
+  "production_qualified": false,
+  "base_commit": "6649b117144a5851626e78423a18fc350b9fb89c",
+  "checkout_dirty": true,
+  "host": {
+    "system": "Darwin",
+    "architecture": "arm64"
+  },
+  "test_image": "sha256:084a7f347b1b95dbdf298ffbb9c391c91b156fd1bf66716a959fd9b43fd2b2d7",
+  "source": {
+    "ontology_runtime": {
+      "ontology/build_catalog.py": "60cfdd479eac4a3175e0ac566377c42f80f8ee686a40f391558fe6da23de0914",
+      "ontology/rdfs_identifiers.py": "3a1879c70bf18fee0e21ff8ba7e91d78e855aef7c547fa777ff86e6827f12095",
+      "ontology/releases.py": "270e8de7352169075e8e8e9819e35db0820777cb7e0afa10d3ebd2d877bebb88",
+      "ontology/serving.py": "777eaf7bb1e98a7a678294506b2cb23ae67589642dac077aaeba217be9c00e15",
+      "ontology/temporal.py": "e14241239a580dcf997e3c9fbf785df05ca035d9fcc6a7feb01bb5e398d7548c",
+      "ontology/validation.py": "465eb0d099e3b2a38a3b41ee137e43f49dcbb723bfd9e7cab35b94cf9cb0de30"
+    },
+    "dependencies": {
+      "pyshacl": "0.40.1",
+      "owlrl": "7.6.2",
+      "rdflib": "7.6.0"
+    },
+    "application": {
+      "sha256": "ceed2e06af1eed97210e3f7134c40dc66480cf3eb3855150a493ebbb8e8f6681",
+      "files": 127
+    },
+    "tests": {
+      "files": 93,
+      "sha256": "28eb4663e86209d7261c07f65bc86b0f1ef79d2c2d888cac85d749f14c10178f"
+    },
+    "workflow_frontend": {
+      "frontend/src/pages/HumanWorkPanel.tsx": "380b59a3e083499e64f664022cc56a880769af0e70cdf7ff55342511694106af",
+      "frontend/src/pages/WorkQueuePage.tsx": "eeef4d86b3cb44602277f96ef90fcdbe832f92904aee5d3d6dfa8c95c0d85045",
+      "frontend/src/pages/workflowTypes.ts": "8a2e4a52c1872543567306916677365b3310975a35fb1186dcaebd5b5508b00c",
+      "frontend/src/pages/workflow.test.tsx": "9af9d0214b79de587c7a7dcb9f8c82c114c2d626004dd4e5156cb71ad1045717"
+    }
+  },
+  "limits": {
+    "network": "none",
+    "host_ports": [],
+    "host_mounts": [],
+    "read_only": true,
+    "cpu": 2,
+    "memory_bytes": 805306368,
+    "pids": 128,
+    "tmpfs_bytes": 268435456
+  },
+  "linux_tests": {
+    "exit_code": 0,
+    "passed": 261,
+    "pytest_seconds": 114.66,
+    "container_wall_seconds": 115.941
+  },
+  "cleanup_verified": true,
+  "not_established": [
+    "Turkish legal accuracy or semantic completeness",
+    "real-provider authentication or model performance",
+    "production capacity or latency",
+    "real-corpus retrieval quality or adverse recall",
+    "real source/legal approval",
+    "live application deployment"
+  ],
+  "verified_previous_main": {
+    "pull_request": 33,
+    "commit": "6649b117144a5851626e78423a18fc350b9fb89c",
+    "run_id": 37941600919,
+    "conclusion": "success"
+  },
+  "local_backend": {
+    "passed": 3172,
+    "skipped": 58,
+    "warnings": 28,
+    "pytest_seconds": 439.76,
+    "workers": 2,
+    "skips": "55 separately executed PostgreSQL cases and 3 existing opt-in infrastructure drills"
+  },
+  "postgres": {
+    "synthetic_only": true,
+    "production_qualified": false,
+    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "scope": "all fifty-five real PostgreSQL snapshot, authorization and research/adoption/context/review/comparison races from the exact CI selection in random disposable child databases",
+    "cleanup_verified": true,
+    "exit_code": 0,
+    "wall_seconds": 120.081,
+    "passed": 55,
+    "pytest_seconds": 117.09
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3230,
+      "preflight": 89,
+      "remaining": 3014,
+      "publication": 10,
+      "workspace": 58,
+      "human_review": 59
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_runtime_authorization_integration.py",
+      "backend/tests/test_publication_cli.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "0f5c5d0f849a29bfdd14d626f7ae9da8adec664575dfe4f0fc7b9de6b61fb6ea",
+    "workflow_sha256": "184559aa63c22171724d25b5f6142cb89190619574c3530d101ec13b7ff2a994",
+    "no_runner_retry_existing_deadline_change": true,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "frontend": {
+    "passed": 200,
+    "files": 27,
+    "typecheck_and_production_build": true,
+    "main_chunk_bytes_approx": 517050,
+    "existing_chunk_advisory_retained": true,
+    "work_panels_lazy_loaded": true
+  },
+  "other_checks": {
+    "deployment_contracts": 41,
+    "rdf_shacl_conforms": true,
+    "ontology_legally_reviewed": false,
+    "r01_planning_calibration_study_contracts": true,
+    "ruff": true,
+    "actionlint": true,
+    "compose_placeholders_and_dev_null_only": true,
+    "whitespace": true
+  },
+  "browser": {
+    "production_frontend": true,
+    "synthetic_only": true,
+    "distinct_lawyer_accounts": 3,
+    "invented_client_case": true,
+    "manual_istanbul_deadline_created_in_ui": true,
+    "two_independent_opinion_submissions": true,
+    "recipient_sees_own_history_only": true,
+    "supervisor_revision_then_lawyer_resubmission": true,
+    "separate_exact_submission_acceptances": true,
+    "prior_text_feedback_and_authors_visible": true,
+    "personal_accepted_queue_and_supervisory_open_queue": true,
+    "contextual_manual_work_guide": true,
+    "recipient_removal_clears_open_view": true,
+    "relogin_case_access_retained_work_denied": true,
+    "console_errors_or_warnings": 0,
+    "owned_loopback_server_stopped": true,
+    "owned_tab_closed": true,
+    "artifacts": {
+      "opinion-history.png": "f610d6a9e7e4a9ef707a1e490f73db1b23e0dc791055b3aab42cfcf99157a00a",
+      "recipient-revoked.png": "803e317b52eb6145c124f36f6224a5572a23137f717b53be041c8e79fba20c1a",
+      "recipient-relogin-denied.png": "4101d444e315b30a1c7682146eb5678d1d60f8f28e1408734caeb3b7e6cfab20"
+    }
+  },
+  "scope_contracts": [
+    "manual dates interpreted explicitly in Europe/Istanbul; no automatic legal periods",
+    "explicit current supervisor and already authorized recipients; tasks grant no case scope",
+    "independent encrypted human-account submission/progress and exact-submission review histories",
+    "request edits preserve past work as Stale; reviewer cannot accept own opinion",
+    "request/response revision conflicts and recipient removal verified with actual PostgreSQL blocking",
+    "recipient-removing work edits invalidate sessions even when independent case scope remains",
+    "authorized queues use newest 1000 candidate window and disclose truncation; no absence guarantee",
+    "work/opinions are not automatically legal evidence, model context, legal export or source approval"
+  ],
+  "local_evidence_directory": ".data/verification/w03",
+  "hosted_checks_for_this_packet": "reported separately for the exact PR head; this file records local precommit verification",
+  "retained_development_failures": [
+    "initial lint rejected unused fixture variable and one misplaced guard parenthesis; corrected before final suite",
+    "native datetime-local browser fill left the value empty; native validity prevented submission; explicit keyboard date entry verified correct Istanbul instant",
+    "one browser locator for a nested label did not match; role-based combobox selection verified the same rendered filter"
+  ]
+}

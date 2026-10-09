@@ -87,6 +87,17 @@ class CaseResponsibility(Base):
     responsible: Mapped[bool] = mapped_column(Boolean, default=False)
 
 
+class WorkParticipant(Base):
+    """Routing only; assignment never grants case access. History stays encrypted."""
+    __tablename__ = "work_participants"
+    work_id: Mapped[str] = mapped_column(ForeignKey("records.id"), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    response_id: Mapped[str] = mapped_column(ForeignKey("records.id"), unique=True)
+    firm_id: Mapped[str] = mapped_column(String(64), index=True)
+    matter_id: Mapped[str] = mapped_column(String(64), index=True)
+    active: Mapped[bool] = mapped_column(Boolean, default=True)
+
+
 class AccessConfiguration(Base):
     __tablename__ = "access_configurations"
     target_id: Mapped[str] = mapped_column(String(64), primary_key=True)
