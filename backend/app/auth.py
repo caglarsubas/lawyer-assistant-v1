@@ -4,11 +4,23 @@ import secrets
 from datetime import datetime, timedelta, timezone
 
 from fastapi import HTTPException, Request
-from sqlalchemy import select
+from sqlalchemy import and_, bindparam, select
 
-from .content_scope import has_case_scope
+from .content_scope import case_scope
 from .db import LoginSession, Record, User, digest
-from .firm_rbac import permissions_for, require_permission, route_permissions
+from .firm_rbac import AUTHORIZATION_ROWS, _permissions, permissions_for, route_permissions
+
+# Compile the scope/permission query once, but execute it afresh at every check.
+# Content grants and action permissions remain independent predicates. Outer
+# joins retain missing-user/missing-matter/empty-managed-role denial semantics.
+MATTER_AUTHORIZATION_ROWS = (
+    AUTHORIZATION_ROWS.add_columns(
+        Record,
+        case_scope(bindparam("scope_matter_id"), User.id, bindparam("scope_firm_id")),
+    )
+    .outerjoin(Record, and_(Record.id == bindparam("scope_matter_id"),
+                           Record.firm_id == bindparam("scope_firm_id")))
+)
 
 
 def hash_password(password):
@@ -76,13 +88,20 @@ def authenticate(request: Request):
 
 
 def require_matter(session, matter_id, user):
-    current = session.get(User, user.id, populate_existing=True)
-    if not current or not current.active or current.firm_id != user.firm_id:
+    # Pin before populate_existing refreshes a caller that shares ORM identity.
+    expected_firm = user.firm_id
+    rows = session.execute(MATTER_AUTHORIZATION_ROWS, {
+        "permission_user_id": user.id, "scope_matter_id": matter_id, "scope_firm_id": expected_firm,
+    }).all()
+    current = rows[0][0] if rows else None
+    if not current or not current.active or current.firm_id != expected_firm:
         raise HTTPException(401, "Oturum geçersiz")
-    matter = session.get(Record, matter_id)
-    if not matter or matter.kind != "matter" or matter.firm_id != user.firm_id or not has_case_scope(session, matter_id, user):
+    matter, in_scope = rows[0][-2:]
+    if not matter or matter.kind != "matter" or not in_scope:
         raise HTTPException(404, "Dosya bulunamadı")
-    require_permission(session, current, "matter.read")
+    roles = [row[1:5] for row in rows] if rows[0][1] is not None else []
+    if "matter.read" not in _permissions(current, roles):
+        raise HTTPException(403, "Bu işlem için rol izniniz yok")
     return matter
 
 

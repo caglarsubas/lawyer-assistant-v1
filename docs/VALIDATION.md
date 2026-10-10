@@ -1,5 +1,60 @@
 # Verification record — 10 October 2026
 
+## Fresh matter authorization cost — 10 October 2026 (Asia/Shanghai)
+
+PR #39 is merged at `c2b0b3b1c7df49da171a92316855d1288724bf11`. Exact-head run
+`38050597031` and post-merge main run `38053314945` passed; the latter backend job
+was 19m15s. This packet reduces repeated authorization query construction and
+round trips, retaining every fresh scope/action check and all existing CI limits.
+
+| Check | Result |
+|---|---|
+| New one-query/current-state boundaries | 27 passed as part of the full suite |
+| Focused new and existing authorization lookup checks | 40 passed, 0.52s |
+| Complete checkout backend (two workers) | 3,387 passed, 64 existing skips, 444.39s |
+| Restricted Linux current-state/authority/scanner/relay/serving checks | 238 passed, 74.33s; matching source/test/deployment fingerprints |
+| Real PostgreSQL review/access/research races | 61 passed, 76.34s; disposable databases/container removed |
+| Deployment contracts | 41 passed |
+| Ruff, actionlint, RDF/SHACL, R01 planning and whitespace | Passed |
+| Complete/disjoint CI collection | 3,451 cases, zero missing/extra/overlap |
+
+The four-case profile retains the same invented workflows and assertions. SQL
+statements fall 213,202 → 112,927 (47.0%), with slightly more matter checks
+(47,319 → 47,383) and trial-currentness checks (586 → 587), reflecting asynchronous
+polling. First-pair elapsed time is 30.30s → 25.57s; this is diagnostic, not a
+controlled hosted speedup or invoice measurement. No permission, content grant,
+source verdict or trial result is cached. Current user/role/scope/matter state is
+read in one statement. Expected firm is pinned before shared ORM identity refresh.
+
+New checks cover direct/client-origin revocation, independent grants, current
+roles including malformed/dangling/foreign/empty-managed states, inactive/deleted/
+moved accounts, shared ORM identity, archive/deletion and indistinguishable 404s.
+Existing role-without-scope and separate reviewer/source/publication guards remain.
+The complete suite runs from the owned checkout with explicit `PYTHONPATH=backend`,
+two workers and no retries/restarts. The corrected Linux selection has matching
+source/test/deployment-asset fingerprints. PostgreSQL's separately required races also pass.
+
+The initial local 768 MiB/256 MiB-tmpfs full run failed from one confirmed OOM-killed
+worker and temporary-space exhaustion (816 passed, one crash failure, one setup
+error). A second run was interrupted after discovering the same inadequate tmpfs
+budget. Both records are retained; neither is a pass. A disk-backed Linux rerun
+then passed 2,736 cases with 50 skips before failing
+from missing scanner/relay files in its minimal image (one setup error and one
+missing-entrypoint failure); that is also not a complete pass. The image now
+contains exact deployment assets. A focused run rejected execution of an invented
+relay mock on Docker's default noexec tmpfs (182 passed, one failure); explicit exec
+for those test-only mocks resolved it. The corrected Linux selection passes with
+2 GiB RAM/512 MiB tmpfs, no network or host bind mounts, read-only image, user 10001
+and dropped capabilities. Disposable containers/volumes are removed. The complete
+checkout run supplies full-suite evidence. No GitHub runner configuration changed.
+
+All workflow events, jobs, execution groups, workers, retries and deadlines remain
+unchanged. Hosted exact-head results follow final push and will be recorded in the
+PR description without a metadata-only code push. Manual merge, post-merge CI,
+deployment, representative performance, actual legal/source approvals and production
+qualification remain separate. See [CI explanation](CI.md#fresh-matter-authorization-cost--10-october-2026)
+and [measurement manifest](evidence/matter-authorization-cost-verification-2026-10-10.json).
+
 ## R01 registration witnesses and main integration — 10 October 2026 (Asia/Shanghai)
 
 Verified PR #36 merged into main at `3de49c8b991e6526ebdf1bc825b815db385a2201`

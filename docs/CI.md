@@ -54,6 +54,40 @@ a limit fails/cancels the check rather than marking partial work successful. Lin
 separate steps. The test log prints the 30 slowest setup/call/teardown durations
 to guide future optimization. Required job names are unchanged.
 
+## Fresh matter authorization cost — 10 October 2026
+
+PR #39's exact-head run `38050597031` passed, but its backend job took 19m14s
+inside the existing 20-minute limit. A four-case isolated authority-workflow
+profile found 47,319 calls to `require_matter` and 213,202 SQL statements. Each
+call separately refreshed the account, checked case grants and refreshed action
+permissions. The client-scope query was also constructed repeatedly.
+
+`require_matter` now executes one prepared, parameterized statement covering
+current account state, same-firm matter identity, direct/client scope and all
+current role rows. Only query construction is reused. Every invocation still
+executes SQL; no grant, permission, source verdict or trial-currentness result is
+cached. Outer joins preserve unmanaged versus empty-managed roles and dangling,
+foreign or malformed role denial. Account failure remains 401, absent/foreign/
+out-of-scope matters remain indistinguishable 404s, and missing action permission
+after valid scope remains 403. The expected firm is pinned before refreshing a
+caller that shares ORM identity; a changed firm cannot overwrite that pin.
+
+The same four cases in matching restricted Linux containers measured 112,927 SQL
+statements after the change (**47.0% fewer**). Revalidation calls were slightly
+higher (47,383 matter checks and 587 trial-currentness calls, versus 47,319 and
+586 before), owing to asynchronous workflow polling. First-pair elapsed time was
+30.30s before / 25.57s after; it is a diagnostic sample, not a stable hosted speedup
+or invoice comparison. Both arms use invented cases and isolated databases.
+
+Twenty-seven new regression cases require exactly one fresh SELECT per matter
+check and verify current direct/client revocation, role changes, tenant changes,
+archive/deletion, shared ORM identity and denial precedence. Existing full backend
+and PostgreSQL race checks remain mandatory. CI events, job counts, execution
+groups, workers, retries and deadlines are unchanged; collection verifies all
+cases remain covered exactly once. Final checks and measurement fingerprints are
+recorded in [verification](VALIDATION.md). Source/legal qualification and deployment
+remain separate gates.
+
 ## Evidence and measurement boundary
 
 On 5 October 2026, completed [run 37283288461](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/37283288461)

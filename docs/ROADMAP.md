@@ -24,7 +24,7 @@ The three new attachments are preserved byte-for-byte with a [digest manifest](r
 
 The authorized [firm RBAC and supervision contract](FIRM_RBAC_AND_SUPERVISION.md) is subordinate to this ledger. Organizational reporting, action permissions and explicit content assignments are separate. A customer-designated firm administrator configures accounts, a cycle-free single-manager hierarchy, custom roles and responsibilities without automatic client/case visibility. Multiple supervisors may be explicitly assigned to a case. Client grants explicitly choose details only or details plus all current/future linked cases; descriptive tags grant nothing. Human opinions, tasks, manual deadlines and milestones retain responsibility and review history. Records remain on-premises, dates use Europe/Istanbul, and work queues are in-app.
 
-**Current application sequence: W01 → W02 → W03**, with individually verified packets and manual PR merges. W01 and W02 are merged with verified exact main CI. W03 is merged at `f0595702679386f7ccce9d11a5cb4119b3b1552f` with verified exact post-merge main CI (`37950562133`); deployment and field qualification remain open. PR merge and deployment are separate evidence. R05A source-lineage renewal is merged in PR #35 with verified exact main CI. Registered model-authority trials and cohort reconciliation reached main through PR #36 at `3de49c8b991e6526ebdf1bc825b815db385a2201`, including PR #37. PR #38 merged into that dependency branch **after** #36 reached main, so the integration packet below brings its reference-case intake and live authorization optimization onto the current main base. The registry-witness verifier extends that engineering boundary; actual legal/source review and pre-execution registration remain open. Lawful corpus acquisition and independent legal review continue alongside this sequence. W01/W02 enter the national backbone gate, W03 enters the contract-workflow gate, and all three are mandatory before R08. Existing R01–R08 identifiers, evidence and legal gates remain unchanged.
+**Current application sequence: W01 → W02 → W03**, with individually verified packets and manual PR merges. W01 and W02 are merged with verified exact main CI. W03 is merged at `f0595702679386f7ccce9d11a5cb4119b3b1552f` with verified exact post-merge main CI (`37950562133`); deployment and field qualification remain open. PR merge and deployment are separate evidence. R05A source-lineage renewal is merged in PR #35 with verified exact main CI. Registered model-authority trials and cohort reconciliation reached main through PR #36 at `3de49c8b991e6526ebdf1bc825b815db385a2201`, including PR #37. PR #38 merged into that dependency branch **after** #36 reached main. PR #39 integrated its reference-case intake and live authorization optimization plus registration-witness verification into main at `c2b0b3b1c7df49da171a92316855d1288724bf11`; its exact-head run `38050597031` passed. Exact post-merge main run `38053314945` also passed. Deployment remains a separate observation. Actual legal/source review and pre-execution registration remain open. Lawful corpus acquisition and independent legal review continue alongside this sequence. W01/W02 enter the national backbone gate, W03 enters the contract-workflow gate, and all three are mandatory before R08. Existing R01–R08 identifiers, evidence and legal gates remain unchanged.
 
 The added 4–6 weeks are a planning allowance, not a committed pilot date. Re-estimate W01–W03 from migration, permission-race and distinct-account workflow samples before fixing dates; protect legal-editor capacity and never trade legal/security gates for calendar targets.
 
@@ -1425,3 +1425,34 @@ its exact-head checks; it does not claim deployment or post-merge main qualifica
 authored source-linked references, measured extraction/review throughput, actual
 witnessed pre-execution registration with reliable time/execution evidence, and
 representative paired model/reviewer studies. R01/R03–R05/R05A remain partial.
+
+### Delivered packet — R07 engineering: fresh authorization cost, 10 October 2026
+
+PR #39 is verified merged into main at `c2b0b3b1c7df49da171a92316855d1288724bf11`.
+Its exact-head run `38050597031` passed, but the backend job took 19m14s against
+the existing 20-minute cap. This continuation addresses measured repeated work
+before adding another product packet.
+
+Every `require_matter` invocation now executes one prepared, fresh SQL statement
+for account state, tenant/matter identity, independent content grants and current
+action-role rows. No permission, scope, source validation or trial-currentness
+result is cached. Direct and client grants remain independently revocable; errors
+retain account/scope/action precedence. The caller's expected firm is pinned before
+ORM refresh so a moved account cannot change its own authorization boundary.
+
+Four isolated invented workflows reduced SQL statements from 213,202 to 112,927
+(47.0%) with slightly more matter/trial-currentness checks. First-pair elapsed time
+was 30.30s before / 25.57s after; this does not establish stable hosted or billing
+savings. Twenty-seven new one-statement/current-state regressions cover revocation,
+tenant changes, malformed/dangling roles, archived/missing matters and separate
+grants. Full backend and real PostgreSQL race coverage remain required. No workflow
+events, runners, execution groups, workers, retries, dependencies or time limits
+change. See [CI measurement](CI.md#fresh-matter-authorization-cost--10-october-2026)
+and [verification](VALIDATION.md).
+
+This engineering packet requires manual PR merge and exact-head hosted checks.
+Deployment, representative capacity and R07 operational qualification remain open.
+The next product qualification priority remains lawful representative source/case
+samples, independent source-linked reference review and measured extraction/review
+throughput, followed by actual witnessed registration and paired model/reviewer
+studies. R01/R03–R05/R05A legal gates remain partial.
