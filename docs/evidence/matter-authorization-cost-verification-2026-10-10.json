@@ -1,0 +1,210 @@
+{
+  "schema_version": "matter-authorization-cost-verification-v1",
+  "recorded_on": "2026-10-10",
+  "base_commit": "c2b0b3b1c7df49da171a92316855d1288724bf11",
+  "base_main_ci": {
+    "run": 38053314945,
+    "conclusion": "success",
+    "backend_seconds": 1155
+  },
+  "scope": "invented cases and fixture accounts; live authorization query optimization",
+  "profile": {
+    "before": {
+      "counts": {
+        "sql": 213202,
+        "require_matter": 47319,
+        "trial_current": 586
+      },
+      "inclusive_seconds": {
+        "require_matter": 11.23557242390234,
+        "trial_current": 15.301941203710157
+      },
+      "wall_seconds": 30.296366806025617,
+      "cpu_seconds": 30.644097025,
+      "exit_code": 0,
+      "image_id": "sha256:e439b58cafe6793477ea7c3d30bf9814fbefe06fa723212f2d9115ff912631d4",
+      "selected": [
+        "tests/test_authority_model_cohorts.py::test_freezes_both_arms_original_or_renewal_with_unknowns_overlap_and_no_new_calls[True]",
+        "tests/test_authority_model_cohorts.py::test_new_execution_or_human_event_invalidates_the_frozen_capture[effort]",
+        "tests/test_authority_model_cohorts.py::test_new_execution_or_human_event_invalidates_the_frozen_capture[observation]",
+        "tests/test_release_set_authorization.py::test_actual_guard_rollback_revalidates_both_sources_and_preserves_pointer_on_denial"
+      ]
+    },
+    "after": {
+      "counts": {
+        "sql": 112927,
+        "require_matter": 47383,
+        "trial_current": 587
+      },
+      "inclusive_seconds": {
+        "require_matter": 7.095711052126717,
+        "trial_current": 12.099815047055017
+      },
+      "wall_seconds": 25.57366788596846,
+      "cpu_seconds": 25.738075074,
+      "exit_code": 0,
+      "image_id": "sha256:e4d13e2419be74c1f34a93210974a3a83e093e55377c52d31c5ade16ce356bfb",
+      "selected": [
+        "tests/test_authority_model_cohorts.py::test_freezes_both_arms_original_or_renewal_with_unknowns_overlap_and_no_new_calls[True]",
+        "tests/test_authority_model_cohorts.py::test_new_execution_or_human_event_invalidates_the_frozen_capture[effort]",
+        "tests/test_authority_model_cohorts.py::test_new_execution_or_human_event_invalidates_the_frozen_capture[observation]",
+        "tests/test_release_set_authorization.py::test_actual_guard_rollback_revalidates_both_sources_and_preserves_pointer_on_denial"
+      ]
+    },
+    "sql_statement_reduction_percent": 47.03,
+    "revalidation_results_cached": false,
+    "controlled_hosted_speedup_established": false,
+    "billing_savings_measured": false
+  },
+  "tests": {
+    "new_lookup_cases": 27,
+    "focused_lookup_cases": 40,
+    "complete_native": {
+      "passed": 3387,
+      "skipped": 64,
+      "pytest_seconds": 444.39,
+      "exit_code": 0,
+      "workers": 2,
+      "worker_restarts": 0,
+      "scope": "complete owned checkout suite with PYTHONPATH=backend; concurrent local Linux checks",
+      "production_qualified": false
+    },
+    "restricted_linux": {
+      "passed": 238,
+      "pytest_seconds": 74.33,
+      "exit_code": 0,
+      "workers": 2,
+      "worker_restarts": 0,
+      "network": "none",
+      "read_only": true,
+      "host_bind_mounts": false,
+      "user": "10001:10001",
+      "capabilities": "ALL dropped",
+      "cpu_limit": 2,
+      "memory_mib": 2048,
+      "pids_limit": 128,
+      "tmpfs_mib": 512,
+      "tmpfs_execution": "enabled only for invented executable relay mocks",
+      "cleanup": "docker --rm completed",
+      "production_qualified": false
+    },
+    "source_verification": {
+      "image_id": "sha256:c7a73d08d0f74df9fdf6ad020bd995ed0f29cbb23212770e6bf88a4db0bf742a",
+      "source_fingerprints": {
+        "application": {
+          "sha256": "a273501b54daa51977445f9cddb4fd2891636f6bb1d8c8a1031c4daf7fa8dca7",
+          "files": 135
+        },
+        "tests": {
+          "files": 100,
+          "sha256": "402f353ef2bd390d29ebcb5479eb21ddbd90f4a61375816655b334b3c79d51d9"
+        },
+        "deployment_assets": {
+          "files": 25,
+          "sha256": "873384a7c505f4171d2c222cd3dc97b0e64afeaf283a4811df767fbb3a83adae"
+        }
+      },
+      "production_qualified": false
+    },
+    "real_postgres": {
+      "synthetic_only": true,
+      "production_qualified": false,
+      "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+      "scope": "All current real PostgreSQL snapshot, authorization and research/adoption/context/review/comparison races from the exact CI selection in random disposable child databases",
+      "cleanup_verified": true,
+      "workers": 2,
+      "worker_restarts": 0,
+      "exit_code": 0,
+      "wall_seconds": 76.496,
+      "passed": 61,
+      "pytest_seconds": 76.34
+    },
+    "deployment_contracts": 41,
+    "ci_partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 3451,
+        "preflight": 89,
+        "remaining": 3192,
+        "publication": 32,
+        "workspace": 58,
+        "human_review": 60,
+        "model_trials": 20
+      },
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_open_validity_publication.py",
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_content_scope.py",
+        "backend/tests/test_authority_proposals.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_authority_trial_cohorts.py",
+        "backend/tests/test_analysis_cohorts.py",
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "ca907288a5cda099623ed5af3ef082373d6f13753466b6972c3089c6939f1db3",
+      "workflow_sha256": "9e9b8003a36dd25553aeffea4e59f41bf6c9a6d702718a9ad0356844c96dda92",
+      "no_runner_retry_existing_deadline_change": true,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "ruff": "passed",
+    "actionlint": "passed",
+    "ontology_and_shacl": "passed",
+    "r01_planning": "passed",
+    "whitespace": "passed"
+  },
+  "initial_local_failure": {
+    "memory_mib": 768,
+    "tmpfs_mib": 256,
+    "oom_kill_observed": 1,
+    "temporary_space_exhausted": true,
+    "failed": 1,
+    "errors": 1,
+    "passed": 816,
+    "seconds": 270.12,
+    "exit_code": 2,
+    "second_run_interrupted_before_same_tmpfs_failure": true,
+    "hosted_retry_or_configuration_change": false
+  },
+  "additional_local_failures": {
+    "minimal_image_missing_deployment_assets": {
+      "passed": 2736,
+      "skipped": 50,
+      "failed": 1,
+      "errors": 1,
+      "exit_code": 2,
+      "seconds": 628.99
+    },
+    "invented_relay_mock_on_noexec_tmpfs": {
+      "passed": 182,
+      "failed": 1,
+      "exit_code": 2,
+      "seconds": 68.64
+    },
+    "source_changes_required": false,
+    "resolved_by_local_test_environment": true
+  },
+  "final_exact_head_hosted_ci": "pending_after_final_push; terminal evidence will be recorded in PR description",
+  "real_source_or_legal_approval": false,
+  "runtime_deployment": false,
+  "production_qualified": false
+}
