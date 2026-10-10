@@ -47,16 +47,24 @@ export interface PublicSourceDetail extends PublicSourceRecord {
 export type SourceReviewCategory = 'rights' | 'source_identity' | 'extraction' | 'legal';
 export type SourceReviewDecision = 'accepted' | 'needs_changes' | 'rejected';
 export type SourcePermittedUse = 'storage' | 'local_processing' | 'internal_display' | 'indexing' | 'local_inference' | 'export';
+export interface SourceReviewEffort { active_seconds: number; basis: 'self_reported_timer' | 'estimate' }
+export interface SourceReviewEffortSummary {
+  scope: 'all_assessment_events'; declaration_only: true; includes_superseded_assessments: true;
+  total_assessments: number; timer_reported_assessments: number; estimated_assessments: number;
+  unknown_assessments: number; timer_reported_active_seconds: number; estimated_active_seconds: number;
+}
 export interface SourceReviewEvent {
   id: string; revision: number; event_type: 'claim' | 'release' | 'assessment';
   reviewer: { id: string; name: string }; created_at: string; rationale: string;
   category?: SourceReviewCategory; decision?: SourceReviewDecision;
   evidence_refs: { reference: string; sha256: string }[]; passage_ids: string[]; permitted_uses: SourcePermittedUse[];
+  effort?: SourceReviewEffort | null;
 }
 export interface SourceReviewState {
   source: PublicSourceDetail; revision: number; assigned_to: { id: string; name: string } | null;
   assessments: SourceReviewEvent[]; history: SourceReviewEvent[]; history_truncated: boolean;
   handoff_ready: boolean; publication_eligible: false; limitations: string[];
+  effort_summary?: SourceReviewEffortSummary;
 }
 export interface PublicSourcePassage { id: string; start: number; end: number; text_sha256: string; locator: string; text: string }
 export interface PublicSourceOriginalText {

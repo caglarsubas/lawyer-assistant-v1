@@ -1517,3 +1517,35 @@ originals with measured active effort; expand lawful samples beyond this source,
 representation and contracts; independently author source-linked references;
 then conduct actual registered paired studies. R01/R03/R05A legal qualification,
 representative throughput, target-host capacity and pilot gates remain open.
+
+### Delivered packet — R01/R03 accountable curator active effort, 10 October 2026
+
+PR #42 is verified merged into main at `52a3a7cd951fbe52c8b44094a00c1a58feef7916`;
+all three post-merge jobs passed in run `38064746653`. Source fidelity inspection
+now supports the next gate: collecting actual curator work separately from parser
+timings, assignment elapsed time and synthetic study rehearsals.
+
+Curators can record optional active seconds on each source assessment, identifying
+their own timer declaration or an estimate. Empty/legacy durations remain unknown;
+explicit zero is preserved. Records stay encrypted, firm-confidential and bound
+to the same authenticated reviewer, immutable source artifacts and revision.
+Totals include all verified assessments, including superseded decisions beyond
+the visible history window, with timer declarations, estimates and unknown counts
+reported separately. The existing JSON dossier carries the same metadata. No
+automatic timer, timestamp-based guess or legal/publication approval is added.
+
+Thirty-two new engineering regressions, a disconnected Linux source/snapshot
+suite and a disposable browser workflow check the distinction, integrity,
+confidentiality, legacy compatibility and downstream revalidation. Browser
+durations are explicitly invented. A separate no-write check of the acquired
+6098 package still finds revision 0, no assessments and no actual human effort.
+See the [effort contract](SOURCE_REVIEW_CONTRACT.md#active-review-effort) and
+[verification](VALIDATION.md). This packet requires manual PR merge and exact-head
+hosted checks; it does not change the deployed application or source approvals.
+
+Next: qualified curators review 6098/6101 with actual timer declarations and
+adjudicated study records; expand lawful samples beyond TBMM HTML/contracts;
+independently author source-linked references; then conduct actual witnessed,
+registered paired model/reviewer studies. Timer declarations remain self-reported;
+erroneous entries require study adjudication. R01/R03/R05A legal qualification,
+representative throughput, target-host capacity and pilot gates remain open.

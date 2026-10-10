@@ -28,7 +28,7 @@ retrieval. An absent review has revision0 and no owner; GET does not create it.
   owner releases it, except an admin may release another owner's assignment with
   an explicit rationale. No automatic reassignment on another account's behalf.
 - `POST /review/assessments`: `{expected_revision, category, decision, rationale,
-  evidence_refs, passage_ids, permitted_uses}`. Accepted assessments require at
+  evidence_refs, passage_ids, permitted_uses, effort?}`. Accepted assessments require at
   least one evidence reference; accepted extraction also cites at least one
   actual passage ID. Rights acceptance specifies at least one permitted use.
   Other categories must not supply permitted uses. Rationale is3–4000 characters.
@@ -44,6 +44,50 @@ Evidence references: `{reference:string, sha256:64-lowercase-hex}`;1–10 on acc
 maximum10 otherwise. They bind an accountable review to supporting material; its
 availability/authenticity still needs human verification. Passage IDs maximum100,
 unique and members of the exact source package. Review never presumes current law.
+
+## Active review effort
+
+An assessment may include `effort: {active_seconds: integer, basis:
+"self_reported_timer" | "estimate"}`. Seconds are strict integers from 0 through
+86,400. The record describes active work on **this assessment only**: exclude
+breaks, waiting and time already declared for another assessment. The curator
+enters their own timer result or an estimate; the platform does not measure or
+independently verify human effort. The form defaults to an empty duration and an
+estimate basis. Opening a source, claiming an assignment or saving a decision
+does not automatically start a timer or infer duration from server timestamps.
+
+Omitted/null effort, including every legacy record without the field, means
+**unknown**. An explicit zero remains a recorded declaration with its selected
+basis. Assignment events cannot include effort. No caller can supply a reviewer,
+timestamp, verification status or custom measurement basis. Effort is encrypted
+inside the same append-only assessment, bound to its authenticated reviewer,
+revision, firm and exact source artifacts. No database migration or legacy
+record rewrite is required. The existing owner, CSRF, revision, integrity and
+fresh authorization checks apply.
+
+`effort_summary` in GET, successful mutation responses and the unsigned JSON
+export covers **all verified assessment events**, including superseded decisions.
+The existing 50-event display/export window does not limit these totals:
+
+- `total_assessments`, `timer_reported_assessments`, `estimated_assessments`,
+  `unknown_assessments` describe their denominators. Unknown is never counted as
+  zero-duration work. Assignment/release events are excluded.
+- `timer_reported_active_seconds` and `estimated_active_seconds` remain separate.
+- `scope: "all_assessment_events"`, `declaration_only: true` and
+  `includes_superseded_assessments: true` identify the interpretation explicitly.
+
+The entire bounded ledger is already checked against immutable events before
+the summary is computed; a missing, corrupt or mismatched event fails closed
+even outside the visible window. Reads do not create or backfill records. Old
+API responses without a summary display “unavailable”; the UI never reconstructs
+a total from its possibly truncated history.
+
+These are unadjudicated effort declarations, not reviewer productivity, legal
+approval, representative throughput or a benchmark. An erroneous declaration
+remains in immutable history and needs explicit adjudication when preparing a
+study; entering another assessment does not erase the earlier time. Time metadata
+never changes rights, handoff readiness, publication eligibility or source use
+permissions. An assessment update retains normal dependency revalidation.
 
 ## Original source-code inspection
 
@@ -93,6 +137,7 @@ interface SourceReviewEvent {
   evidence_refs: { reference: string; sha256: string }[];
   passage_ids: string[];
   permitted_uses: string[];
+  effort?: { active_seconds: number; basis: 'self_reported_timer' | 'estimate' } | null;
 }
 interface SourceReviewState {
   source: PublicSourceDetail;
@@ -101,6 +146,13 @@ interface SourceReviewState {
   assessments: SourceReviewEvent[]; // latest event in each category
   history: SourceReviewEvent[]; // newest first, capped50
   history_truncated: boolean;
+  effort_summary: {
+    scope: 'all_assessment_events'; declaration_only: true;
+    includes_superseded_assessments: true; total_assessments: number;
+    timer_reported_assessments: number; estimated_assessments: number;
+    unknown_assessments: number; timer_reported_active_seconds: number;
+    estimated_active_seconds: number;
+  };
   handoff_ready: boolean; // all four latest assessments accepted; NOT use permission
   publication_eligible: false;
   limitations: string[];

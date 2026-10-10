@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ApiError, onUnauthorized, request, setCsrfToken } from '../api';
 import type { PublicSourceOriginalText, PublicSourcePassages, SourceReviewState, User } from '../types';
-import SourceReviewPage, { assessmentPayload, canReviewSource, EMPTY_ASSESSMENT, fetchSourceAttachment, fetchOriginalSourceText, SourceOriginalView, SourcePassageList, SourceReviewSummary, sourceReviewPath, writeSourceReview, type AssessmentDraft } from './SourceReviewPage';
+import SourceReviewPage, { assessmentPayload, canReviewSource, EMPTY_ASSESSMENT, fetchSourceAttachment, fetchOriginalSourceText, reviewEffortPayload, SourceOriginalView, SourcePassageList, SourceReviewEffortFields, SourceReviewEffortTotals, SourceReviewSummary, sourceReviewPath, writeSourceReview, type AssessmentDraft } from './SourceReviewPage';
 
 const sourceId = 'a'.repeat(64);
 const user: User = { id: 'reviewer-1', name: 'İnceleyen', role: 'curator', firm_id: 'firm-1' };
@@ -130,6 +130,52 @@ describe('source review evidence and permissions', () => {
     fetchMock.mockRejectedValueOnce(new DOMException('Aborted', 'AbortError'));
     await expect(fetchSourceAttachment(sourceId, 'original', controller.signal)).rejects.toMatchObject({ name: 'AbortError' });
     expect(fetchMock.mock.calls[2][1]?.signal).toBe(controller.signal);
+  });
+});
+
+describe('explicit curator active effort', () => {
+  it('keeps blank time unknown and preserves an explicit zero with its basis', () => {
+    expect(reviewEffortPayload('', 'estimate')).toBeNull();
+    expect(reviewEffortPayload('  ', 'self_reported_timer')).toBeNull();
+    expect(reviewEffortPayload('0', 'estimate')).toEqual({ active_seconds: 0, basis: 'estimate' });
+    expect(reviewEffortPayload(' 86400 ', 'self_reported_timer')).toEqual({ active_seconds: 86400, basis: 'self_reported_timer' });
+    expect(assessmentPayload(accepted, 4)).not.toHaveProperty('effort');
+    expect(assessmentPayload({ ...accepted, active_seconds: '0' }, 4).effort).toEqual({ active_seconds: 0, basis: 'estimate' });
+    expect(assessmentPayload({ ...accepted, active_seconds: '123', effort_basis: 'self_reported_timer' }, 4).effort).toEqual({ active_seconds: 123, basis: 'self_reported_timer' });
+  });
+
+  it.each(['-1', '86401', '1.5', '1e3', 'NaN', 'Infinity', '+1', '12 sec', '0x10', '000000'])('rejects ambiguous/out-of-budget duration before sending: %s', seconds => {
+    expect(() => reviewEffortPayload(seconds, 'estimate')).toThrow('tam saniye');
+  });
+
+  it('never accepts a wall-clock/verified-time basis or starts an automatic timer', () => {
+    expect(() => reviewEffortPayload('12', 'verified_timer' as 'estimate')).toThrow('dayanağını');
+    expect(EMPTY_ASSESSMENT.active_seconds).toBe(''); expect(EMPTY_ASSESSMENT.effort_basis).toBe('estimate');
+    const markup = renderToStaticMarkup(<SourceReviewEffortFields seconds="" basis="estimate" onSeconds={() => undefined} onBasis={() => undefined} />);
+    expect(markup).toContain('isteğe bağlı'); expect(markup).toContain('Boş: bilinmiyor; 0: açık sıfır beyanı');
+    expect(markup).toContain('ara ve beklemeleri hariç');
+    expect(markup).toContain('min="0" max="86400" step="1"');
+    expect(markup).toContain('<option value="estimate" selected="">Tahmin</option>');
+    expect(markup).toContain('disabled=""'); expect(markup).not.toContain('required=""');
+    const zero = renderToStaticMarkup(<SourceReviewEffortFields seconds="0" basis="self_reported_timer" onSeconds={() => undefined} onBasis={() => undefined} />);
+    expect(zero).not.toContain('disabled=""'); expect(zero).toContain('platform bağımsız ölçüm yapmaz');
+  });
+
+  it('shows server totals for all assessments without reconstructing them from a truncated window', () => {
+    const summary = { scope: 'all_assessment_events' as const, declaration_only: true as const, includes_superseded_assessments: true as const, total_assessments: 70, timer_reported_assessments: 4, estimated_assessments: 6, unknown_assessments: 60, timer_reported_active_seconds: 0, estimated_active_seconds: 125 };
+    const markup = renderToStaticMarkup(<SourceReviewSummary state={{ ...state, history_truncated: true, history: [], effort_summary: summary }} />);
+    expect(markup).toContain('0 saniye · 4 değerlendirme');
+    expect(markup).toContain('125 saniye · 6 değerlendirme'); expect(markup).toContain('60 / 70 değerlendirme');
+    expect(markup).toContain('değiştirilen önceki kararlar dahil'); expect(markup).toContain('verimlilik sonucu değildir');
+    expect(markup).not.toContain('%');
+    expect(renderToStaticMarkup(<SourceReviewEffortTotals />)).toContain('Görüntülenen geçmişten toplam süre hesaplanmaz');
+  });
+
+  it('shows assessment time as a declaration while legacy records retain unknown time', () => {
+    const event = { id: 'event-1', revision: 2, event_type: 'assessment' as const, reviewer: { id: user.id, name: user.name }, created_at: '2026-10-04T08:00:00Z', rationale: 'Invented test only', category: 'legal' as const, decision: 'needs_changes' as const, evidence_refs: [], passage_ids: [], permitted_uses: [] };
+    expect(renderToStaticMarkup(<SourceReviewSummary state={{ ...state, assessments: [event] }} />)).toContain('Aktif süre: bilinmiyor');
+    expect(renderToStaticMarkup(<SourceReviewSummary state={{ ...state, assessments: [{ ...event, effort: { active_seconds: 0, basis: 'self_reported_timer' } }] }} />)).toContain('Aktif süre: 0 saniye · Zamanlayıcı beyanı');
+    expect(renderToStaticMarkup(<SourceReviewSummary state={{ ...state, assessments: [{ ...event, effort: { active_seconds: 10, basis: 'estimate' } }] }} />)).toContain('Aktif süre: 10 saniye · Tahmin');
   });
 });
 

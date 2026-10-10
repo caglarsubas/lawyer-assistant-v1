@@ -1,0 +1,186 @@
+{
+  "schema": "curator-active-effort-engineering-v1",
+  "recorded_at": "2026-10-10T15:58:27.382691+00:00",
+  "base_merge": "52a3a7cd951fbe52c8b44094a00c1a58feef7916",
+  "base_post_merge_run": 38064746653,
+  "base_jobs": {
+    "conclusion": "success",
+    "jobs": [
+      {
+        "completedAt": "2026-10-10T15:46:40Z",
+        "conclusion": "success",
+        "name": "frontend",
+        "startedAt": "2026-10-10T15:43:17Z",
+        "status": "completed"
+      },
+      {
+        "completedAt": "2026-10-10T15:47:01Z",
+        "conclusion": "success",
+        "name": "postgres-snapshot-concurrency",
+        "startedAt": "2026-10-10T15:43:17Z",
+        "status": "completed"
+      },
+      {
+        "completedAt": "2026-10-10T15:56:08Z",
+        "conclusion": "success",
+        "name": "backend-and-contracts",
+        "startedAt": "2026-10-10T15:43:17Z",
+        "status": "completed"
+      }
+    ],
+    "status": "completed"
+  },
+  "files_sha256": {
+    "backend/app/source_reviews.py": "9a2b40adcb17a32eb0a5ced624c6da61d9fb8dba3d3ad4ce5e5253f8fcc8a959",
+    "backend/tests/test_source_review_effort.py": "b5958dd1fc5973e4bdfe122f25dc7cd1151d66a9eca0e8d5e8b93e3a36dda621",
+    "backend/tests/test_release_snapshot.py": "5c8a0a03c11e513a95c646fa30020ce5499e86c4866e0a5f62917554cdfbe4fe",
+    "frontend/src/types.ts": "8e0304806fbdd1ac4c5c9794693868126001f2568523579638cb4342260d88ff",
+    "frontend/src/pages/SourceReviewPage.tsx": "3d3dd678c28399046b05b585630d1082aa6ee884d494c9c2f4555cb2699daa47",
+    "frontend/src/pages/SourceReviewPage.test.tsx": "3ceaf458bae6ce0b4c13586bc360c42bcbc06fb6e6055737a6f6db0fbb3a4f26"
+  },
+  "container_image": "sha256:4e432bf65167719b172dd1828225472bffe93e661028d9e46066eb4dcaa56102",
+  "linux_fingerprints": {
+    "backend/app/source_reviews.py": "9a2b40adcb17a32eb0a5ced624c6da61d9fb8dba3d3ad4ce5e5253f8fcc8a959",
+    "backend/tests/test_source_review_effort.py": "b5958dd1fc5973e4bdfe122f25dc7cd1151d66a9eca0e8d5e8b93e3a36dda621",
+    "backend/tests/test_release_snapshot.py": "5c8a0a03c11e513a95c646fa30020ce5499e86c4866e0a5f62917554cdfbe4fe"
+  },
+  "checks": {
+    "native_source_review": {
+      "passed": 100,
+      "seconds": 17.62
+    },
+    "disconnected_linux_source_snapshot": {
+      "passed": 430,
+      "seconds": 52.83
+    },
+    "frontend": {
+      "passed": 254,
+      "files": 30
+    },
+    "frontend_production_build": "passed_existing_chunk_warning",
+    "deployment_unittest": {
+      "passed": 41
+    },
+    "ruff": "passed_after_import_format_fix",
+    "whitespace": "passed"
+  },
+  "ci_collection": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3598,
+      "preflight": 89,
+      "remaining": 3339,
+      "publication": 32,
+      "workspace": 58,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "3f61b99a944e1fd070aef4f1855f56a715b5f0c360e209fbec7225cf13a307e2",
+    "workflow_sha256": "9e9b8003a36dd25553aeffea4e59f41bf6c9a6d702718a9ad0356844c96dda92",
+    "no_runner_retry_existing_deadline_change": true,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "actual_public_source_read": {
+    "source_id": "b8910032eb8bfa8a02085d5125ea071e517940d2f25e8225c6abdeec0b48792b",
+    "sampled_http_windows": [
+      {
+        "passage_id": "html_block_0001",
+        "status": 200,
+        "window_sha256": "30c76d66b46756501bdf9beb651f199b8df0adc58c4d4f4b28cc5c0728de8662",
+        "no_store": true
+      },
+      {
+        "passage_id": "html_block_1220",
+        "status": 200,
+        "window_sha256": "0e885b568d67fa4c21f8d2d95467a4721cc3571c778cfa7ba773d8c839802d1e",
+        "no_store": true
+      },
+      {
+        "passage_id": "html_block_2438",
+        "status": 200,
+        "window_sha256": "13dbe4c85b147fefd6f74f0a569cab493256350a155273ce88ccfbd36d563439",
+        "no_store": true
+      }
+    ],
+    "review_revision_before_after": 0,
+    "review_created_or_changed": false,
+    "effort_summary": {
+      "scope": "all_assessment_events",
+      "declaration_only": true,
+      "includes_superseded_assessments": true,
+      "total_assessments": 0,
+      "timer_reported_assessments": 0,
+      "estimated_assessments": 0,
+      "unknown_assessments": 0,
+      "timer_reported_active_seconds": 0,
+      "estimated_active_seconds": 0
+    },
+    "actual_human_effort_recorded": false,
+    "network_used": false,
+    "provider_called": false,
+    "scope": "temporary local demo/TestClient; not deployed application or browser acceptance"
+  },
+  "synthetic_browser_check": {
+    "scope": "Disposable local demo with invented duration declarations; not actual legal review or deployed application",
+    "source_id": "b8910032eb8bfa8a02085d5125ea071e517940d2f25e8225c6abdeec0b48792b",
+    "synthetic_assessment_count": 3,
+    "synthetic_timer_reported_active_seconds": 0,
+    "synthetic_timer_reported_count": 1,
+    "synthetic_estimated_active_seconds": 90,
+    "synthetic_estimated_count": 1,
+    "synthetic_unknown_count": 1,
+    "persisted_after_reload": true,
+    "input_reset_after_save": true,
+    "approvals_created": false,
+    "provider_configured": false,
+    "private_matter_data_used": false,
+    "console_warn_error_count": 0,
+    "screenshot": "browser-effort.jpg",
+    "font_fallbacks": "Vite font asset allowlist warnings retained; not typography acceptance",
+    "temporary_tab_and_processes_closed": true
+  },
+  "actual_human_review_or_effort_created": false,
+  "deployment_changed": false,
+  "source_promoted": false,
+  "provider_called": false,
+  "legal_qualification_established": false,
+  "representative_throughput_established": false,
+  "unchanged_ci_budgets": true,
+  "exact_head_hosted_status": "pending_one_normal_run_recorded_in_pr_and_ignored_receipt",
+  "limitations": [
+    "Timer reports and estimates are reviewer declarations, not independent measurements.",
+    "Previous assessments retain declared effort; erroneous durations require study adjudication.",
+    "Synthetic browser durations are not actual curator work.",
+    "Real public source remains unreviewed; no serving corpus, credentials or actual approvals were changed."
+  ]
+}

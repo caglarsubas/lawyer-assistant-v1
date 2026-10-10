@@ -61,6 +61,12 @@ class AssignmentInput(MutationInput):
     action: Literal["claim", "release"]
 
 
+class ReviewEffort(StrictInput):
+    # An accountable reviewer declaration, not elapsed assignment time or telemetry.
+    active_seconds: StrictInt = Field(ge=0, le=86400)
+    basis: Literal["self_reported_timer", "estimate"]
+
+
 class AssessmentInput(MutationInput):
     category: Literal["rights", "source_identity", "extraction", "legal"]
     decision: Literal["accepted", "needs_changes", "rejected"]
@@ -68,6 +74,7 @@ class AssessmentInput(MutationInput):
     passage_ids: list[str] = Field(default_factory=list, max_length=100)
     permitted_uses: list[Literal["storage", "local_processing", "internal_display", "indexing",
                                  "local_inference", "export"]] = Field(default_factory=list, max_length=6)
+    effort: ReviewEffort | None = None
 
     @model_validator(mode="after")
     def required_support(self):
@@ -160,6 +167,8 @@ def _valid_event(value):
     action = value.get("event_type")
     if action == "assessment":
         fields |= {"category", "decision"}
+        if "effort" in value:
+            fields.add("effort")
     if (set(value) != fields or not isinstance(value["id"], str) or len(value["id"]) != 32
             or not _valid_reviewer(value["reviewer"]) or type(value["revision"]) is not int
             or not 1 <= value["revision"] <= MAX_EVENTS):
@@ -171,6 +180,8 @@ def _valid_event(value):
         body = {"expected_revision": value["revision"] - 1, "rationale": value["rationale"]}
         if action == "assessment":
             body.update({key: value[key] for key in ("category", "decision", "evidence_refs", "passage_ids", "permitted_uses")})
+            if "effort" in value:
+                body["effort"] = value["effort"]
             AssessmentInput.model_validate(body)
         else:
             AssignmentInput.model_validate({**body, "action": action})
@@ -247,13 +258,37 @@ def _history(store, session, head):
             assessments[event["category"]] = event
     if projection["assigned_to"] != assigned or projection["assessments"] != assessments:
         raise HTTPException(409, "Güncel inceleme kararı değişmez geçmişinin son durumuyla eşleşmiyor")
-    return history[:HISTORY_LIMIT]
+    return history
+
+
+def _effort_summary(history):
+    """Use the complete verified ledger, including superseded assessments, once."""
+    summary = {"scope": "all_assessment_events", "declaration_only": True,
+               "includes_superseded_assessments": True, "total_assessments": 0,
+               "timer_reported_assessments": 0, "estimated_assessments": 0,
+               "unknown_assessments": 0, "timer_reported_active_seconds": 0,
+               "estimated_active_seconds": 0}
+    for event in history:
+        if event["event_type"] != "assessment":
+            continue
+        summary["total_assessments"] += 1
+        effort = event.get("effort")
+        if effort is None:
+            summary["unknown_assessments"] += 1
+        elif effort["basis"] == "self_reported_timer":
+            summary["timer_reported_assessments"] += 1
+            summary["timer_reported_active_seconds"] += effort["active_seconds"]
+        else:
+            summary["estimated_assessments"] += 1
+            summary["estimated_active_seconds"] += effort["active_seconds"]
+    return summary
 
 
 def _state(package, revision, projection, history):
     assessments = [projection["assessments"][key] for key in CATEGORIES if key in projection["assessments"]]
     return {"source": package.detail, "revision": revision, "assigned_to": projection["assigned_to"],
-            "assessments": assessments, "history": history, "history_truncated": revision > len(history),
+            "assessments": assessments, "history": history[:HISTORY_LIMIT],
+            "history_truncated": len(history) > HISTORY_LIMIT, "effort_summary": _effort_summary(history),
             "handoff_ready": len(assessments) == len(CATEGORIES) and all(
                 item["decision"] == "accepted" for item in assessments),
             "publication_eligible": False, "limitations": LIMITATIONS}
@@ -265,7 +300,7 @@ def _event(user, revision, body):
              "event_type": body.action if isinstance(body, AssignmentInput) else "assessment",
              "evidence_refs": [], "passage_ids": [], "permitted_uses": []}
     if isinstance(body, AssessmentInput):
-        event.update(body.model_dump(exclude={"expected_revision", "rationale"}))
+        event.update(body.model_dump(exclude={"expected_revision", "rationale"}, exclude_none=True))
     return event
 
 
@@ -329,7 +364,7 @@ def _mutate(request, source_id, body, user):
                                          revision=event["revision"], created_at=event["created_at"],
                                          payload=store.encode({"source_binding": _binding(package), "event": event,
                                                                "context": {**projection["context"], "event_id": event["id"]}})))
-            result = _state(package, revision + 1, projection, [event, *history][:HISTORY_LIMIT])
+            result = _state(package, revision + 1, projection, [event, *history])
             # Refresh role/session immediately before commit; held row locks protect the final boundary.
             if _lock_identity(session, request, user).role != authorized_role:
                 raise HTTPException(403, "İnceleme sırasında yetkiniz değişti; güncel kaydı açın")

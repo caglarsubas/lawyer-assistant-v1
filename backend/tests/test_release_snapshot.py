@@ -87,6 +87,25 @@ def test_snapshot_is_exact_deterministic_and_has_no_writes(accepted):
     assert packages == {path.name: path.read_bytes() for path in (store.root / source_id).iterdir()}
 
 
+def test_optional_effort_survives_source_linked_snapshot_without_becoming_approval(mapping):
+    _, client, _, _, base = mapping
+    assert assign(client, base + "/review").status_code == 200
+    for revision, category in enumerate(("rights", "source_identity", "extraction", "legal"), start=1):
+        options = {"permitted_uses": sorted(REQUIRED_USES)} if category == "rights" else {}
+        assert assess(client, base + "/review", revision, category, **options,
+                      effort={"active_seconds": revision, "basis": "estimate"}).status_code == 200
+    identifier = propose(mapping, source_revision=5).json()["items"][0]["id"]
+    assert review(mapping, identifier).status_code == 200
+    with snapshot(mapping) as captured:
+        assert captured["source_review"]["assessments"]["legal"]["effort"] == {
+            "active_seconds": 4, "basis": "estimate"}
+        assert not captured["state"]["publication_eligible"]
+    assert assess(client, base + "/review", 5, "legal", "needs_changes", effort=None).status_code == 200
+    with pytest.raises(SnapshotError):
+        with snapshot(mapping):
+            pytest.fail("A superseded source review cannot reuse the previous snapshot")
+
+
 def test_readonly_store_opens_existing_encryption_without_schema_bootstrap_or_key_changes(accepted, monkeypatch):
     app = accepted[0]
     settings = app.state.settings
