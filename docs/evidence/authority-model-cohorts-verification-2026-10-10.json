@@ -1,0 +1,211 @@
+{
+  "schema": "authority-model-cohorts-verification-v1",
+  "recorded_date": "2026-10-10",
+  "timezone": "Asia/Shanghai",
+  "synthetic_only": true,
+  "legal_qualification_granted": false,
+  "benefit_established": false,
+  "base_commit": "b9f884e559c0c0de34ceee78be8400fb10dcf25f",
+  "dependency_pr": 36,
+  "dependency_exact_head_ci": {
+    "run_id": 37979906924,
+    "conclusion": "success"
+  },
+  "dependency_merge_verified": false,
+  "last_verified_main": "5ee45d1782da1da7cd36c2b729345d9377719847",
+  "source": {
+    "ontology_runtime": {
+      "ontology/build_catalog.py": "60cfdd479eac4a3175e0ac566377c42f80f8ee686a40f391558fe6da23de0914",
+      "ontology/rdfs_identifiers.py": "3a1879c70bf18fee0e21ff8ba7e91d78e855aef7c547fa777ff86e6827f12095",
+      "ontology/releases.py": "270e8de7352169075e8e8e9819e35db0820777cb7e0afa10d3ebd2d877bebb88",
+      "ontology/serving.py": "777eaf7bb1e98a7a678294506b2cb23ae67589642dac077aaeba217be9c00e15",
+      "ontology/temporal.py": "e14241239a580dcf997e3c9fbf785df05ca035d9fcc6a7feb01bb5e398d7548c",
+      "ontology/validation.py": "465eb0d099e3b2a38a3b41ee137e43f49dcbb723bfd9e7cab35b94cf9cb0de30"
+    },
+    "dependencies": {
+      "pyshacl": "0.40.1",
+      "owlrl": "7.6.2",
+      "rdflib": "7.6.0"
+    },
+    "application": {
+      "sha256": "ef8d19f3a7244dec9daffe1cf45966470785711bd461e91ec148ecc8fc44355b",
+      "files": 131
+    },
+    "tests": {
+      "files": 96,
+      "sha256": "86cc8b724260e0c2d40392240eef77fab66130c33f9bd41ff83f5201593eb7cc"
+    }
+  },
+  "frontend_source": {
+    "files": 102,
+    "sha256": "942d5ffec727b8db1e649390192cfcc424daadb9613c0707934d3843fb6e6634"
+  },
+  "tests": {
+    "backend": {
+      "passed": 3235,
+      "skipped": 64,
+      "warnings": 28,
+      "seconds": 485.99
+    },
+    "focused": {
+      "passed": 19,
+      "seconds": 35.26
+    },
+    "postgres": {
+      "passed": 61,
+      "pytest_seconds": 98.51,
+      "wall_seconds": 98.639,
+      "cleanup_verified": true,
+      "exit_code": 0,
+      "workers": 2,
+      "worker_restarts": 0
+    },
+    "restricted_linux": {
+      "exit_code": 0,
+      "passed": 324,
+      "pytest_seconds": 177.96,
+      "container_wall_seconds": 179.178
+    },
+    "frontend_passed": 211,
+    "deployment_contracts_passed": 41,
+    "other_passed": [
+      "strict TypeScript and production frontend build",
+      "Ruff",
+      "actionlint",
+      "ontology and SHACL",
+      "R01 planning contracts",
+      "synthetic extraction calibration and study",
+      "Compose configuration with env-file /dev/null"
+    ]
+  },
+  "date_regression": {
+    "failure": "An existing reopened-task test assumed its fixed 2026-10-09 21:30 UTC deadline was upcoming",
+    "fix": "Controlled application clock verifies both upcoming and overdue queues after task instructions change",
+    "runtime_behavior_changed": false,
+    "standalone_tests_passed": 15
+  },
+  "offline_linux": {
+    "image_id": "sha256:508db1261e6e52aeeb5969a4a05531352d33de8add8306ef3327efbebfc7a73b",
+    "limits": {
+      "network": "none",
+      "host_ports": [],
+      "host_mounts": [],
+      "read_only": true,
+      "cpu": 2,
+      "memory_bytes": 805306368,
+      "pids": 128,
+      "tmpfs_bytes": 268435456
+    },
+    "cleanup_verified": true
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3299,
+      "preflight": 89,
+      "remaining": 3040,
+      "publication": 33,
+      "workspace": 58,
+      "human_review": 59,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_runtime_authorization_integration.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "8ba0e62cb3815e739c9a428ec7dfe5cef10f0da7d5fc2fd90e6ecd23120fc957",
+    "workflow_sha256": "93bf2d62e080038e87e451e775e419537288ed298fd95c05b8fbe9b16a1c188b",
+    "no_runner_retry_existing_deadline_change": true,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false,
+    "new_model_cohort_tests_in_existing_main_step": 19,
+    "additional_jobs": 0,
+    "deadlines_changed": false,
+    "retries_or_worker_restarts_added": false
+  },
+  "browser": {
+    "production_build": true,
+    "owned_loopback_port": 18637,
+    "invented_case_and_sources": true,
+    "mock_inference_only": true,
+    "explicit_two_trial_selection": true,
+    "exact_preview_freeze": true,
+    "reload_retains_history": true,
+    "both_arm_and_unknown_inventory_inspected": true,
+    "original_passage_temporal_warnings_and_history_inspected": true,
+    "source_denial_removes_quoted_histories": true,
+    "source_denial_disables_export": true,
+    "mock_calls_before_freeze": 4,
+    "mock_calls_after_freeze": 4,
+    "console_errors_or_warnings": 0,
+    "browser_file_save_exercised": false,
+    "export_bytes_and_revocation_verified": "backend guarded export tests",
+    "proof_file": ".data/verification/r05a-model-trial-cohorts/model-trial-cohort.jpg",
+    "proof_sha256": "79461497dfd2555ffe2e50da6158cb9d4945baf7c2bf2f2a09543c1d2a541296",
+    "withheld_proof_sha256": "da5d39f7b0afb0f915d0adc7dbfbc41cb60348f12b26dce89633b446bb2f0fea",
+    "owned_tab_closed": true,
+    "owned_server_stopped_and_port_unbound": true
+  },
+  "boundary": {
+    "provider_calls_real": 0,
+    "env_read": false,
+    "credential_changes": false,
+    "customer_grants": false,
+    "live_source_acquisition_or_approval": false,
+    "shared_graph_mutation": false,
+    "schema_migration": false,
+    "deployment": false,
+    "hosted_exact_head_ci": "verify separately after PR creation",
+    "hosted_billing_savings_established": false,
+    "manual_merge_required": true
+  },
+  "remaining": [
+    "lawful representative Turkish corpus/case intake",
+    "independent source-linked semantic and adverse authority review",
+    "frozen family splits and measured paired model/reviewer effort",
+    "Standard/Deep and release qualification",
+    "target-host deployment and pilot acceptance"
+  ],
+  "retained_log_sha256": {
+    "backend.log": "b37b73db5ce5f4010227c34de9757e425b4db50f49c74ed02e85b21192aeddd9",
+    "cohorts-focused.log": "5da418a46a3a19cc55e9af242d1d877295fb2ea5989029a8e92681807cc29887",
+    "postgres.log": "b79a895fe0f1fc68e81c9c305a2ffa73dee406f5320dd1f80a86602466008dc3",
+    "linux-tests.log": "743dc61bd6bc8e07745b62682186c552a27c6e76d15eeb9d409eef8379062bef",
+    "frontend-tests.log": "7a08f77ad7518f397b6a0ee2039c89073a81bb87d9e0573e193c0b73c94bf123",
+    "frontend-build.log": "115cda160ddc94077de4940d6d4bca99189737e63e47f5f031f135c11bbbfaaa",
+    "deploy.log": "61bb33e53ad7f98f4e8028d761758fd158b24fca26c7fc1a5b9103f1087973db",
+    "ruff.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "actionlint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ontology.log": "7ac5d3623be54d1faf806abe85c63f9dc12820b8c3a45a0a3460315e245c8aab",
+    "r01-check.log": "aaa2f49ef768a2438ee864b57ca7000f06e0d40687e2316dd4ce398354dc557f",
+    "r01-calibration.log": "1a8d77e3eeff2accc21a00549bd8ff79f95d80be6cd95e3f08d9f7bd8cf2016d",
+    "r01-study.log": "f88ca546cc709c782d8b786bf0897bb8734be5de24211a2bad30c5640a6a68cd",
+    "compose.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "human-clock.log": "cb9edb86df32e3d97cf110549eadf552579b071fbf2a230f98416c5afc381857"
+  }
+}
