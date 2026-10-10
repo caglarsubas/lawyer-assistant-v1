@@ -41,6 +41,10 @@ become overdue. The test now controls the application clock on both sides of tha
 deadline and verifies that changed instructions require fresh progress in both
 upcoming and overdue queues. Production timing behavior is unchanged. The corrected
 15-case human-workflow suite and final full/Linux suites pass. No check was removed.
+The first hosted frontend run caught a strict TypeScript cast error in the intentionally
+incomplete denied-response fixture. The fixture now crosses an explicit `unknown`
+boundary; the final strict build and all 211 frontend checks pass. Runtime code and
+CI budgets are unchanged. Exact corrected-head hosted results are verified separately.
 
 An owned loopback production-build browser rehearsal on port 18637 confirmed
 explicit two-trial selection, exact preview/freeze, Current history after reload,

@@ -38,7 +38,7 @@
   },
   "frontend_source": {
     "files": 102,
-    "sha256": "942d5ffec727b8db1e649390192cfcc424daadb9613c0707934d3843fb6e6634"
+    "sha256": "beff8eed5724ffb2eb0eaa57a169650628dcbd24df9bcfbde83909b1be413a2e"
   },
   "tests": {
     "backend": {
@@ -77,6 +77,15 @@
       "synthetic extraction calibration and study",
       "Compose configuration with env-file /dev/null"
     ]
+  },
+  "initial_hosted_failure": {
+    "run_id": 38021225729,
+    "head_sha": "f8a32ba39c24e88109b045f91d74a0c8e3a4fe24",
+    "job": "frontend",
+    "cause": "TS2352 on intentionally incomplete denied-response test payload",
+    "fix": "Explicit unknown boundary cast for malformed fixture; final strict TypeScript/build and all 211 tests pass",
+    "runtime_code_changed": false,
+    "superseded_run_cancellation": "verify separately after corrected push"
   },
   "date_regression": {
     "failure": "An existing reopened-task test assumed its fixed 2026-10-09 21:30 UTC deadline was upcoming",
@@ -196,7 +205,7 @@
     "cohorts-focused.log": "5da418a46a3a19cc55e9af242d1d877295fb2ea5989029a8e92681807cc29887",
     "postgres.log": "b79a895fe0f1fc68e81c9c305a2ffa73dee406f5320dd1f80a86602466008dc3",
     "linux-tests.log": "743dc61bd6bc8e07745b62682186c552a27c6e76d15eeb9d409eef8379062bef",
-    "frontend-tests.log": "7a08f77ad7518f397b6a0ee2039c89073a81bb87d9e0573e193c0b73c94bf123",
+    "frontend-tests.log": "b1d413f265c2c80ef3c9ca10efa57958a9a71da1ab3f675f275dee133e9a8d1b",
     "frontend-build.log": "115cda160ddc94077de4940d6d4bca99189737e63e47f5f031f135c11bbbfaaa",
     "deploy.log": "61bb33e53ad7f98f4e8028d761758fd158b24fca26c7fc1a5b9103f1087973db",
     "ruff.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",

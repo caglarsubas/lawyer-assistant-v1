@@ -13,7 +13,7 @@ describe('confidential model authority groups', () => {
   });
   it('withholds residual captured text on denied access or pending admission', () => {
     for (const status of ['current', 'withheld'] as const) {
-      const value = { public_source_access: false, freshness: { status, reasons: [] }, manifest: { title: 'SECRET fixture quote' } } as ModelCohortView;
+      const value = { public_source_access: false, freshness: { status, reasons: [] }, manifest: { title: 'SECRET fixture quote' } } as unknown as ModelCohortView;
       const html = renderToStaticMarkup(<ModelCohortContent value={value} />);
       expect(html).toContain('bekletiliyor'); expect(html).not.toContain('SECRET');
     }
