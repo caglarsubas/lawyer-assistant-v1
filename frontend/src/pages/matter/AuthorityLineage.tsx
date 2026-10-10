@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { ApiError, post, request } from '../../api';
 import { Detail, Field, Notice } from '../../components';
 import { formatDate, messageOf } from '../../utils';
@@ -8,6 +8,7 @@ import type { EditableAssessment, FindingOutcome } from './authorityFindingTypes
 import { occurrence, occurrenceKey } from './authorityTypes';
 import { pendingLineageReceipt, sourceBindingReason } from './lineageTypes';
 import type { EditableRenewal, LineagePreview, LineageRecord } from './lineageTypes';
+import { renewedTrialSelection } from './authorityModelTypes';
 
 function RenewalEditor({ value, base, onSaved, onUnavailable }: { value: LineagePreview; base: string; onSaved: () => Promise<void>; onUnavailable: (cause: unknown) => void }) {
   const preview = value.preview;
@@ -59,6 +60,8 @@ function RenewalEditor({ value, base, onSaved, onUnavailable }: { value: Lineage
   </form>;
 }
 
+const AuthorityModelTrials = lazy(() => import('./AuthorityModelTrials'));
+
 export default function AuthorityLineage({ matterId, analysisId, onSaved }: { matterId: string; analysisId: string; onSaved: () => Promise<void> }) {
   const base = `/matters/${encodeURIComponent(matterId)}/analyses/${encodeURIComponent(analysisId)}/lineage-reviews`;
   const [value, setValue] = useState<LineagePreview | null>(null); const [history, setHistory] = useState<LineageRecord[]>([]);
@@ -72,7 +75,7 @@ export default function AuthorityLineage({ matterId, analysisId, onSaved }: { ma
   return <><p className="small">Saklanan kamu katkılarını değiştirmeden, mevcut taslak için açık avukat incelemesi kaydedin. Değişmiş veya izni kaldırılmış kaynaklar bu akışla açılamaz.</p>
     <div className="practice-record-actions"><button className="text-button" disabled={busy} onClick={() => void load('preview')}>Yeniden inceleme için güncel taslak ve kaynakları getir</button><button className="text-button" disabled={busy} onClick={() => void load('history')}>Kaynak bağı yenileme geçmişini getir</button></div>
     {value && <RenewalEditor key={value.preview_sha256} value={value} base={base} onSaved={onSaved} onUnavailable={unavailable} />}
-    {history.map(item => <Detail key={item.id} title={`${item.snapshot.sequence}. kaynak bağı yenilemesi · ${item.snapshot.reviewer_name}`}><p>{formatDate(item.snapshot.recorded_at, true)} · Hukuki veya kaynak onayı verilmedi.</p><p className="reference-id">Özgün taslak: {item.snapshot.version_id} · Yeni sürüm: {item.version_id}</p><p className="reference-id">{item.id} · SHA-256: {item.sha256}</p>{item.snapshot.renewals?.map(renewal => <Detail key={renewal.dependency_sha256} title="Son yenileme gözlemleri"><p>{renewal.note}</p>{renewal.sources.map(source => <div key={occurrenceKey(source)}><p className="reference-id">{source.authority_id} · Hedefler: {source.target_ids.join(', ')}</p>{source.observations.map(observation => <p key={observation.dimension}>{item.snapshot.dimensions[observation.dimension]} · {FINDING_OUTCOMES[observation.outcome]}: {observation.note}</p>)}</div>)}</Detail>)}</Detail>)}
+    {history.map(item => <Detail key={item.id} title={`${item.snapshot.sequence}. kaynak bağı yenilemesi · ${item.snapshot.reviewer_name}`}><p>{formatDate(item.snapshot.recorded_at, true)} · Hukuki veya kaynak onayı verilmedi.</p><p className="reference-id">Özgün taslak: {item.snapshot.version_id} · Yeni sürüm: {item.version_id}</p><p className="reference-id">{item.id} · SHA-256: {item.sha256}</p>{item.snapshot.renewals?.map(renewal => <Detail key={renewal.dependency_sha256} title="Son yenileme gözlemleri"><p>{renewal.note}</p>{renewal.sources.map(source => <div key={occurrenceKey(source)}><p className="reference-id">{source.authority_id} · Hedefler: {source.target_ids.join(', ')}</p>{source.observations.map(observation => <p key={observation.dimension}>{item.snapshot.dimensions[observation.dimension]} · {FINDING_OUTCOMES[observation.outcome]}: {observation.note}</p>)}</div>)}{item.snapshot.entries?.some(entry => entry.dependency_sha256 === renewal.dependency_sha256) && <Detail title="Yenilenmiş girdilerle yerel model denemesi"><Suspense fallback={<p>Deneme araçları açılıyor…</p>}><AuthorityModelTrials matterId={matterId} analysisId={analysisId} sourceInput={{ selection: renewedTrialSelection(item.snapshot.entries!.find(entry => entry.dependency_sha256 === renewal.dependency_sha256)!.dependency, item), assessment: renewal, dimensions: item.snapshot.dimensions }} onUnavailable={unavailable} /></Suspense></Detail>}</Detail>)}</Detail>)}
     {loaded && !value && !history.length && !error && <p>Henüz kaynak bağı yenilemesi yok.</p>}{error && <Notice error>{error}</Notice>}
   </>;
 }

@@ -8,6 +8,11 @@ The original draft was prepared **before registration**; its effort is retrospec
 This is a reproducible human revision capture, not a preregistered model benchmark,
 randomized/blinded experiment, legal approval or a held-out qualification protocol.
 
+The separate [registered model-authority trial](REGISTERED_AUTHORITY_MODEL_TRIALS.md)
+now freezes public review or admitted renewal inputs before paired local-model calls.
+Its candidates stay unadopted; its capture must not be pooled into this human
+revision protocol without preserving incompatible profiles.
+
 ## Register, then revise
 
 In **Work notebook → Structured analyses → Public-authority context → Lawyer source

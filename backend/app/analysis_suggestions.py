@@ -55,11 +55,14 @@ class SuggestionInput(StrictInput):
     review_feedback: FeedbackSelection | None = None
     comparison_ref: ComparisonReference | None = None
     authority_feedback: authority_proposals.AuthorityFeedbackSelection | None = None
+    authority_trial_ref: ComparisonReference | None = None
 
     @model_validator(mode="after")
     def separate(self):
         if self.authority_feedback and (self.review_feedback or self.comparison_ref):
             raise ValueError("Authority proposals cannot share a private-feedback or comparison protocol")
+        if self.authority_trial_ref and (self.review_feedback or self.comparison_ref or self.authority_feedback):
+            raise ValueError("Registered authority trials resolve their own immutable source inputs")
         return self
 
 
@@ -113,6 +116,10 @@ def _source(app, session, matter_id, user, state):
         from .analysis_comparisons import validate_job
 
         validate_job(app, session, matter_id, user, state)
+    if state.get("authority_trial_ref"):
+        from .authority_model_trials import validate_job
+
+        validate_job(app, session, matter_id, user, state)
     if state.get("review_feedback"):
         feedback = state["review_feedback"]
         selection = FeedbackSelection(review_id=feedback["review_id"],
@@ -130,14 +137,15 @@ def _source(app, session, matter_id, user, state):
                 raise HTTPException(409, "Bulgu yanıtlarının saklanan aday geçişi doğrulanamadı.")
     if state.get("authority_feedback"):
         feedback = state["authority_feedback"]
-        selection = authority_proposals.AuthorityFeedbackSelection(
-            **{key: feedback["dependency"][key] for key in ("context_id", "review_id", "review_sha256")},
-            findings=[{"source_index": int(item["authority_id"].split(":")[1]), "dimension": item["dimension"]}
-                      for item in feedback["findings"]])
-        snapshot, checksum = authority_proposals.resolve(
-            app, session, matter_id, row.id, state["source_version_id"], user, selection)
-        if snapshot != feedback or checksum != state.get("authority_feedback_sha256"):
-            raise HTTPException(409, "Seçilen kamu bulgularının tam kaynak bağı değişti.")
+        if not state.get("authority_trial_ref"):
+            selection = authority_proposals.AuthorityFeedbackSelection(
+                **{key: feedback["dependency"][key] for key in ("context_id", "review_id", "review_sha256")},
+                findings=[{"source_index": int(item["authority_id"].split(":")[1]), "dimension": item["dimension"]}
+                          for item in feedback["findings"]])
+            snapshot, checksum = authority_proposals.resolve(
+                app, session, matter_id, row.id, state["source_version_id"], user, selection)
+            if snapshot != feedback or checksum != state.get("authority_feedback_sha256"):
+                raise HTTPException(409, "Seçilen kamu bulgularının tam kaynak bağı değişti.")
         selected_pass = state.get("authority_response_pass")
         iteration = next((item for item in state.get("iterations", []) if item["pass"] == selected_pass), None)
         if (state.get("candidate") and state["candidate"]["revision_comparison"]["changed_sections"]
@@ -185,7 +193,8 @@ def _suggestion_view(app, session, matter_id, user, row):
     return {**data, "freshness": {"status": "stale" if reasons else "current", "reasons": reasons,
                                  "scope": "pinned_private_analysis_and_provider_policy"},
             "can_adopt": data["status"] == "completed" and not reasons and changed
-                         and not data.get("adopted_version_id") and not data.get("comparison_ref")}
+                         and not data.get("adopted_version_id") and not data.get("comparison_ref")
+                         and not data.get("authority_trial_ref")}
 
 
 def _require_job(store, session, matter_id, analysis_id, job_id, user):
@@ -312,6 +321,8 @@ def start_suggestion(matter_id: str, analysis_id: str, body: SuggestionInput, re
         request_value.pop("comparison_ref", None)
     if request_value.get("authority_feedback") is None:
         request_value.pop("authority_feedback", None)
+    if request_value.get("authority_trial_ref") is None:
+        request_value.pop("authority_trial_ref", None)
     scope = digest(canonical(request_value))
     receipt_id = analysis_id + "-" + digest(user.id + ":" + body.request_id)[:30]
     try:
@@ -342,6 +353,13 @@ def start_suggestion(matter_id: str, analysis_id: str, body: SuggestionInput, re
             if body.authority_feedback:
                 state["authority_feedback"], state["authority_feedback_sha256"] = authority_proposals.resolve(
                     app, session, matter_id, row.id, body.version_id, user, body.authority_feedback)
+            if body.authority_trial_ref:
+                from .authority_model_trials import job_feedback
+
+                state["authority_feedback"], state["authority_feedback_sha256"] = job_feedback(
+                    app, session, matter_id, row.id, user, body.authority_trial_ref)
+                state.update(authority_trial_ref=body.authority_trial_ref.model_dump(), comparison_request_id=body.request_id)
+                _source(app, session, matter_id, user, state)
             guards.enter_context(authority_proposals.scope(app, session, matter_id, user, state))
             state["authority_publication_pending"] = bool(authority_proposals.dependencies(state))
             if body.comparison_ref:

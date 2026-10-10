@@ -23,7 +23,7 @@ export function AuthorityCohortSummary({ report }: { report: AuthorityCohortRepo
     </Detail></>;
 }
 
-function Dimension({ value }: { value: AuthorityCohortDimension }) {
+export function Dimension({ value }: { value: AuthorityCohortDimension }) {
   return <Detail title={`${value.source_index === undefined ? '' : `Kaynak ${value.source_index + 1} · `}${value.label}${value.outcome_difference ? ' · Farklı sonuçlar' : ''}`}>
     <p>{value.unknown_observations}/2 bilinmeyen veya çözümlenmemiş gözlem · {value.outcome_difference === null ? 'Görüş çifti eksik; fark bilinmiyor' : value.outcome_difference ? 'Farklı beyanlar korunuyor' : 'Kaydedilen sonuç etiketleri aynı; doğruluk değerlendirilmedi'}</p>
     {value.observations.map(item => <Detail key={item.reviewer_id} title={`${item.reviewer_name} · ${outcomeLabels[item.outcome] || item.outcome}`}><p className="authored-text">{item.note}</p><p className="small">Hedefler: {item.target_refs.join(', ') || 'Seçilmedi'} · Özel pasajlar: {item.private_source_refs.join(', ') || 'Seçilmedi'} · Kamu kaynakları: {item.public_source_indices.map(index => index + 1).join(', ') || 'Seçilmedi'}</p></Detail>)}

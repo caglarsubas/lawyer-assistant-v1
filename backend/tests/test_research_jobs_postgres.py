@@ -904,6 +904,46 @@ def test_authority_trial_cohorts_serialize_exact_preview_freezes(workspace, monk
         assert accepted.json()['id'] != other.json()['id']
 
 
+@pytest.mark.parametrize('mode', ['identical', 'nonce_conflict'])
+def test_authority_model_cohorts_serialize_exact_preview_freezes(workspace, monkeypatch, mode):
+    from test_authority_findings import count
+    from test_authority_model_cohorts import pair
+
+    from app import authority_model_cohorts as cohorts
+
+    app, client, *_ = workspace
+    endpoint, spec, *_ = pair(_cohort_workbench(workspace), monkeypatch, complete=False)
+    preview = client.post(endpoint + '/preview', json=spec)
+    assert preview.status_code == 200, preview.text
+    body = {**spec, 'request_id': uuid4().hex, 'expected_preview_sha256': preview.json()['preview_sha256']}
+    competing = body if mode != 'nonce_conflict' else {**body, 'purpose': 'SYNTHETIC conflicting purpose'}
+    locked, release = Event(), Event()
+    audit = cohorts._audit
+
+    def paused(*args, **kwargs):
+        audit(*args, **kwargs)
+        locked.set()
+        assert release.wait(10)
+
+    monkeypatch.setattr(cohorts, '_audit', paused)
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, endpoint, json=body)
+        try:
+            assert locked.wait(5), first.result(timeout=1).text
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, endpoint, json=competing)
+                assert observed[0].wait(5) and wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, other = first.result(timeout=10), second.result(timeout=10)
+    assert accepted.status_code == 201, accepted.text
+    assert other.status_code == (409 if mode == 'nonce_conflict' else 201), other.text
+    assert count(app, cohorts.KIND) == count(app, cohorts.ADMISSION) == 1
+    if mode == 'identical':
+        assert accepted.json()['id'] == other.json()['id']
+
+
 def test_source_bound_authority_adoption_serializes_competing_versions(workspace, monkeypatch):
     from test_authority_proposals import complete
 
@@ -979,3 +1019,46 @@ def test_retained_authority_revalidation_serializes_exact_drafts_and_retries(wor
     history = client.get(endpoint).json()
     assert len(history) == 1 and history[0]['id'] == accepted.json()['id']
     assert accepted.json()['analysis']['status'] == 'needs_review'
+
+
+@pytest.mark.parametrize('replay', [False, True])
+def test_authority_model_observation_own_head_and_nonce_serialize(workspace, monkeypatch, replay):
+    from test_analysis_comparisons import login
+    from test_authority_model_trials import observation, register, run
+
+    from app import authority_model_trials as trials
+
+    app, client, _ = workspace
+    endpoint, value, *_ = register(_cohort_workbench(workspace), monkeypatch)
+    value = run(client, endpoint, value)
+    login(client, 'SYNTHETIC-model-reviewer-0')
+    endpoint += '/' + value['id']
+    body = observation(client.get(endpoint).json())
+    competing = body if replay else {**body, 'request_id': uuid4().hex}
+    locked, release = Event(), Event()
+    audit = trials._audit
+
+    def paused(*args):
+        if args[2] == 'authority_model_observation' and not locked.is_set():
+            locked.set()
+            assert release.wait(10)
+        return audit(*args)
+
+    monkeypatch.setattr(trials, '_audit', paused)
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, endpoint + '/observations', json=body)
+        try:
+            assert locked.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, endpoint + '/observations', json=competing)
+                assert observed[0].wait(5) and wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        accepted, rejected = first.result(timeout=10), second.result(timeout=10)
+    assert accepted.status_code == 201, accepted.text
+    assert rejected.status_code in ({201, 409} if replay else {409}), rejected.text
+    retry = client.post(endpoint + '/observations', json=body)
+    assert retry.status_code == 201 and retry.json()['id'] == accepted.json()['id']
+    current = client.get(endpoint).json()
+    assert len(current['observations']) == 1 and current['current_reviewer_count'] == 1

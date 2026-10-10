@@ -228,10 +228,12 @@ def authority_revalidation_router():
                 # Bounded history summaries; only the latest assessment is expanded.
                 values = records(store, session, matter_id, user, content)
                 return _bounded([{'id': item['id'], 'sha256': item['sha256'], 'version_id': item['version_id'],
-                    'snapshot': {key: val for key, val in item['snapshot'].items() if key in {
+                    'snapshot': {**{key: val for key, val in item['snapshot'].items() if key in {
                         'recipe', 'sequence', 'previous', 'version_id', 'reviewer_id', 'reviewer_name', 'recorded_at',
                         'draft_sha256', 'scope', 'dimensions', 'legal_approval', 'source_approval', 'qualification_granted',
-                        *(['renewals'] if index == len(values) - 1 else [])}}}
+                        *(['renewals'] if index == len(values) - 1 else [])}},
+                        **({'entries': [{key: entry[key] for key in ('dependency', 'dependency_sha256')}
+                            for entry in item['snapshot']['entries']]} if index == len(values) - 1 else {})}}
                     for index, item in enumerate(values)])
 
     @router.post('', status_code=201)

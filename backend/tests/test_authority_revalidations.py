@@ -80,6 +80,10 @@ def test_genuine_reviewer_loss_explicit_renewal_keeps_all_original_provenance(wo
     assert payload(app, original['latest_version_id']) == old_bytes
     history = client.get(path).json()
     assert history[-1]['snapshot']['renewals'] == body['renewals']
+    assert {entry['dependency_sha256'] for entry in history[-1]['snapshot']['entries']} == {
+        entry['dependency_sha256'] for entry in body['renewals']}
+    assert all(set(entry) == {'dependency', 'dependency_sha256'} for entry in history[-1]['snapshot']['entries'])
+    assert history[-1]['snapshot']['entries'][0]['dependency'] == original['authority_dependencies'][0]
     assert history[-1]['snapshot']['legal_approval'] == 'not_granted'
     assert history[-1]['snapshot']['qualification_granted'] is False
     export = client.get(base + '/analyses/' + original['id'] + '/export')

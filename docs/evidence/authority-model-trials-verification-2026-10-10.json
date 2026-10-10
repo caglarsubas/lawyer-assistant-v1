@@ -1,0 +1,239 @@
+{
+  "schema": "authority-model-trials-verification-v1",
+  "recorded_date": "2026-10-10",
+  "timezone": "Asia/Shanghai",
+  "synthetic_only": true,
+  "legal_qualification_granted": false,
+  "benefit_established": false,
+  "base_commit": "5ee45d1782da1da7cd36c2b729345d9377719847",
+  "verified_base_main_ci": {
+    "run_id": 37969967765,
+    "conclusion": "success"
+  },
+  "source": {
+    "ontology_runtime": {
+      "ontology/build_catalog.py": "60cfdd479eac4a3175e0ac566377c42f80f8ee686a40f391558fe6da23de0914",
+      "ontology/rdfs_identifiers.py": "3a1879c70bf18fee0e21ff8ba7e91d78e855aef7c547fa777ff86e6827f12095",
+      "ontology/releases.py": "270e8de7352169075e8e8e9819e35db0820777cb7e0afa10d3ebd2d877bebb88",
+      "ontology/serving.py": "777eaf7bb1e98a7a678294506b2cb23ae67589642dac077aaeba217be9c00e15",
+      "ontology/temporal.py": "e14241239a580dcf997e3c9fbf785df05ca035d9fcc6a7feb01bb5e398d7548c",
+      "ontology/validation.py": "465eb0d099e3b2a38a3b41ee137e43f49dcbb723bfd9e7cab35b94cf9cb0de30"
+    },
+    "dependencies": {
+      "pyshacl": "0.40.1",
+      "owlrl": "7.6.2",
+      "rdflib": "7.6.0"
+    },
+    "application": {
+      "sha256": "3d66031eadcd95ebda7fc5a6642f723e54e4ddbc7f1cb7d842241d9687719056",
+      "files": 130
+    },
+    "tests": {
+      "files": 95,
+      "sha256": "e5a0631226c57ca085d0a18bc8bb301873e41c0813855e2dee83e1af94aaa6ae"
+    }
+  },
+  "frontend_source": {
+    "files": 99,
+    "sha256": "054e786233cbf3730b008e6d92add81406f3ecd13e30a890a3ce29092f26e963"
+  },
+  "tests": {
+    "backend": {
+      "passed": 3215,
+      "skipped": 62,
+      "warnings": 28,
+      "seconds": 439.54
+    },
+    "final_focused": {
+      "passed": 84,
+      "seconds": 36.04
+    },
+    "postgres": {
+      "passed": 59,
+      "pytest_seconds": 66.63,
+      "wall_seconds": 66.765,
+      "cleanup_verified": true,
+      "exit_code": 0,
+      "workers": 2,
+      "worker_restarts": 0
+    },
+    "restricted_linux": {
+      "exit_code": 0,
+      "passed": 304,
+      "pytest_seconds": 144.54,
+      "container_wall_seconds": 145.571
+    },
+    "frontend_passed": 207,
+    "deployment_contracts_passed": 41,
+    "publication_and_renewal": {
+      "passed": 33,
+      "pytest_seconds": 30.88
+    },
+    "dedicated_model_step": {
+      "passed": 20,
+      "pytest_seconds": 11.11
+    },
+    "other_passed": [
+      "frontend production build",
+      "Ruff",
+      "actionlint",
+      "ontology and SHACL",
+      "R01 planning contracts",
+      "synthetic extraction calibration and study",
+      "Compose configuration with env-file /dev/null"
+    ]
+  },
+  "offline_linux": {
+    "image_id": "sha256:d551b6d641eee754bfc9d10bab4db3e9f8e6afa88289957ac970e2628472755b",
+    "limits": {
+      "network": "none",
+      "host_ports": [],
+      "host_mounts": [],
+      "read_only": true,
+      "cpu": 2,
+      "memory_bytes": 805306368,
+      "pids": 128,
+      "tmpfs_bytes": 268435456
+    },
+    "cleanup_verified": true
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3277,
+      "preflight": 89,
+      "remaining": 3018,
+      "publication": 33,
+      "workspace": 58,
+      "human_review": 59,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_runtime_authorization_integration.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "87066b5ba6feced6ba4c9edab757cc54393b8e0e2d96ab9e15deca507210c8d4",
+    "workflow_sha256": "93bf2d62e080038e87e451e775e419537288ed298fd95c05b8fbe9b16a1c188b",
+    "no_runner_retry_existing_deadline_change": true,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false,
+    "postgres_workers": 2,
+    "postgres_worker_restarts": 0
+  },
+  "first_hosted_failure": {
+    "run_id": 37975556394,
+    "postgres_races_passed": 59,
+    "serial_pytest_seconds": 211.92,
+    "job_deadline_minutes": 5,
+    "failed_step": "signed publication after serial PostgreSQL suite",
+    "fix": "two bounded workers using per-test random disposable databases on the existing runner",
+    "deadline_increased": false,
+    "additional_jobs_or_retries": false
+  },
+  "second_hosted_failure": {
+    "run_id": 37976761888,
+    "postgres_job_seconds": 192,
+    "postgres_races_passed": 59,
+    "postgres_pytest_seconds": 103.9,
+    "publication_passed": 10,
+    "publication_pytest_seconds": 57.66,
+    "failed_step": "enlarged frontend human review group",
+    "workspace_checks_passed": 81,
+    "fix": "run 20 new model-trial cases in the main backend suite and retain 59 human review cases in frontend",
+    "deadline_increased": false,
+    "additional_jobs_or_retries": false
+  },
+  "third_hosted_failure": {
+    "run_id": 37978040874,
+    "workspace_checks_reported_passed": 81,
+    "workspace_pytest_seconds": 115.99,
+    "failed_step": "workspace step process completion exceeded two minutes",
+    "fix": "move 23 renewal checks to publication and run 20 model-trial checks in an early separate backend step",
+    "existing_deadline_or_job_cap_increased": false,
+    "additional_jobs_or_retries": false
+  },
+  "browser": {
+    "production_build": true,
+    "owned_loopback_port": 18636,
+    "invented_case_and_sources": true,
+    "mock_inference": true,
+    "renewed_finding_selection_and_registration": true,
+    "two_completed_candidates": true,
+    "declared_effort_persisted": true,
+    "final_confirmation_reset_separately_browser_exercised": false,
+    "final_confirmation_reset_verified": "source review and final frontend tests/build",
+    "reload_retains_history": true,
+    "draft_version_unchanged": 3,
+    "recorded_observer_judgments": 0,
+    "capture_complete": false,
+    "original_passages_temporal_flags_and_uncertainty_inspected": true,
+    "console_errors_or_warnings": 0,
+    "proof_file": ".data/verification/r05a-model-authority-trials/model-trial-history.jpg",
+    "proof_sha256": "d5be705ac4c6116c1dc998d3ce70fbce0aabb31e8e67763a539228d097c72e3b",
+    "owned_tab_closed": true,
+    "owned_server_stopped_and_port_unbound": true
+  },
+  "boundary": {
+    "provider_calls_real": 0,
+    "env_read": false,
+    "credential_changes": false,
+    "customer_grants": false,
+    "live_source_acquisition_or_approval": false,
+    "shared_graph_mutation": false,
+    "schema_migration": false,
+    "deployment": false,
+    "hosted_final_head_ci": "verify separately after PR creation",
+    "hosted_billing_savings_established": false,
+    "manual_merge_required": true
+  },
+  "remaining": [
+    "confidential model-authority trial cohort reconciliation",
+    "lawful representative corpus and independent legal review",
+    "Turkish semantic and adverse authority evaluation",
+    "real-model benefit and Standard/Deep qualification",
+    "deployment and release qualification"
+  ],
+  "retained_log_sha256": {
+    "backend.log": "72f3de62e9e4820ac2f238bcc099cc389a3e4f04ef8f5cede710aacd653688a5",
+    "final-focused.log": "f39216cd24ba3e7652c0e7f26034cd37f1e3a4a39bcf7b862d773a372b88ecc2",
+    "postgres.log": "cf9bccc2798ff53b474f40e79b1a1d9cd2bffa32fe6b62b970139311f74635cb",
+    "linux-tests.log": "a1efa69450923621a89e680e31a09763b570073bcdf5a4bf3fd615c1b8427057",
+    "frontend-tests.log": "221f55ab829a76ce5563950c57948b1a202c5e01bf54efe99da825504aa1f449",
+    "frontend-build.log": "15f39e6e4cea9b62c8dc17a21ee1aac4ed485ec591ddc0deddab142f8bd4e2b9",
+    "deploy.log": "c6d60365321e23df8a36dea11421321a2112ac25d7e300be73aa0ddf004ce494",
+    "ruff.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "actionlint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ontology.log": "7ac5d3623be54d1faf806abe85c63f9dc12820b8c3a45a0a3460315e245c8aab",
+    "r01-check.log": "aaa2f49ef768a2438ee864b57ca7000f06e0d40687e2316dd4ce398354dc557f",
+    "r01-calibration.log": "ad35f5dcab94b9af06a5034ed6c1743d466eac94b87181b66f8aa25f46ba2c8c",
+    "r01-study.log": "406fe5d7c57061f452c221f8cfa4b8813e135cd2a937121804379474e1e15ffc",
+    "compose.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "publication-and-renewal.log": "3914bae5267bba73daf95930def5cd0236eb9aa53a8984be867567c60cbfea3b",
+    "model-trial-step.log": "1616d8254462ab76b598d5f09d43ada33fc6e715d3e28f4ba5318c0768d6fad1"
+  }
+}

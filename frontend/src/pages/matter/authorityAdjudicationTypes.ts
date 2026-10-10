@@ -1,4 +1,6 @@
 import type { AuthorityComparisonView } from './authorityComparisonTypes';
+import type { AuthorityComparisonSnapshot } from './authorityComparisonTypes';
+import type { AuthorityAssessment } from './authorityFindingTypes';
 import type { FindingDimension, FindingSummary } from './authorityFindingTypes';
 export const SEMANTIC_DIMENSIONS = ['meaning', 'roles', 'logic', 'conditions', 'adverse', 'certainty'] as const;
 export type SemanticDimension = typeof SEMANTIC_DIMENSIONS[number];
@@ -20,7 +22,14 @@ export interface AdjudicationView extends FindingSummary {
     assessment: { note: string; review_seconds: number | null; observations: SemanticObservation[]; judgments: FindingJudgment[]; adverse_scope: AdverseScope };
     coverage: { semantic: { assessed: number; total: number }; findings: { assessed: number; total: number }; corpus_completeness: 'unknown'; adverse_recall: null } };
 }
-export function adjudicationAssessment(inputs: AdjudicationInputs, observations: SemanticObservation[], judgments: FindingJudgment[], scope: AdverseScope, note: string, seconds: string) {
+export interface AssessmentInputs {
+  can_record: boolean;
+  basis: { comparison: {
+    comparison_snapshot: Pick<AuthorityComparisonSnapshot, 'before_targets' | 'after_targets' | 'private_sources'> & { authority_review_snapshot: { assessment: AuthorityAssessment } };
+    assessment: { dispositions: { source_index: number; dimension: FindingDimension }[] };
+  } };
+}
+export function adjudicationAssessment(inputs: AssessmentInputs, observations: SemanticObservation[], judgments: FindingJudgment[], scope: AdverseScope, note: string, seconds: string) {
   const time = seconds.trim() === '' ? null : Number(seconds);
   const comp = inputs.basis.comparison.comparison_snapshot;
   const publicIndices = comp.authority_review_snapshot.assessment.sources.map((_, index) => index);

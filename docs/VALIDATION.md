@@ -1,5 +1,194 @@
 # Verification record — 10 October 2026
 
+
+## R05A confidential model-authority trial groups — 10 October 2026 (Asia/Shanghai)
+
+This packet extends PR #36's registered same-input local-model trials with explicit
+within-workspace trial-group preview/freeze/reconciliation, guarded immutable
+history and confidential JSON. It uses invented evidence, fixture accounts and
+mock inference only. PR #36's exact head
+`b9f884e559c0c0de34ceee78be8400fb10dcf25f` and successful run `37979906924`
+were verified; GitHub still reported the PR open at preparation time. Main remains
+verified through PR #35, independently of the user's merge report. This packet
+awaits manual merge and exact-head hosted checks after PR creation.
+
+| Verification | Result |
+|---|---|
+| Complete local backend, two workers, no restarts/retries | 3235 passed, 64 skipped, 485.99s |
+| New original/renewal cohort and private/source/export boundary cases | 19 passed |
+| Real PostgreSQL snapshot/authorization/work/research races | 61 passed, 98.51s; disposable child databases/container removed |
+| Restricted offline Linux related regression suite | 324 passed, 177.96s; exact final application/test fingerprints match |
+| Frontend tests and strict production build | 211 passed; build passed |
+| Deployment contracts | 41 passed |
+| Ruff, actionlint, ontology/SHACL, R01 and synthetic calibration/study | Passed; no legal or source approval |
+| Compose configuration | Passed using `/dev/null` and synthetic placeholders; no deployment or real `.env` read |
+| Exact CI partition | 3,299 collected cases; complete/disjoint execution groups; existing jobs/deadlines/retries unchanged |
+
+The restricted Linux image ran with no network, host mounts or ports, a read-only
+filesystem, dropped capabilities and bounded CPU/RAM/PIDs/tmpfs. The PostgreSQL
+checks proved a competing freeze actually waits on the workspace row lock, exact
+nonce replay yields one cohort, and conflicting payloads fail. Selected private
+parents are resolved before public guards; cross-workspace IDs are rejected before
+a public join. Cases cover missing runs/review/effort, differing exact profiles,
+full original/renewal inputs, duplicates/family/source overlap, changed private
+evidence/participants/provider recipes, new runs/observations/effort, pending
+admissions, before-commit rollback, late committed failure, temporary source denial
+and post-serialization revocation. Old manifests are never rewritten; unavailable
+source/admission content is withheld, and stale/denied exports discard bytes.
+
+The initial offline run exposed a pre-existing test whose hard-coded deadline had
+become overdue. The test now controls the application clock on both sides of that
+deadline and verifies that changed instructions require fresh progress in both
+upcoming and overdue queues. Production timing behavior is unchanged. The corrected
+15-case human-workflow suite and final full/Linux suites pass. No check was removed.
+The first hosted frontend run caught a strict TypeScript cast error in the intentionally
+incomplete denied-response fixture. The fixture now crosses an explicit `unknown`
+boundary; the final strict build and all 211 frontend checks pass. Runtime code and
+CI budgets are unchanged. Exact corrected-head hosted results are verified separately.
+
+Hosted run `38021373670` passed frontend in 244 seconds and PostgreSQL in 298
+seconds, leaving only two seconds below the latter's five-minute deadline. Its
+runtime-authorization case used 32.11 seconds including setup. That one case is
+now in the existing frontend confidential-group step, with the same two workers
+and three-minute step/five-minute job caps, and is removed from the PostgreSQL
+publication selection. Collection is still complete/disjoint: 60 frontend group/
+authorization cases and 32 publication/renewal cases. The revised local groups pass: 60 checks in 53.98 seconds and 32 checks in 35.54
+seconds. Exact-head hosted results must verify the changed placement; no extra runner,
+retry, omitted case or higher deadline is introduced. Billing savings are not measured.
+
+An owned loopback production-build browser rehearsal on port 18637 confirmed
+explicit two-trial selection, exact preview/freeze, Current history after reload,
+both model arms, unknown observation denominators, repeated sources and original
+passages with temporal warnings. Source denial removed all captured titles/quotes
+and disabled export. Mock calls remained four before and after freeze; no real
+provider was used. Console warnings/errors were zero. The owned tab/server closed
+and the port is unbound. Browser file saving was not exercised; guarded export
+bytes/headers and late revocation were verified in backend cases. Proof images
+are retained under `.data/verification/r05a-model-trial-cohorts/` and excluded from Git.
+
+[Machine verification record](evidence/authority-model-cohorts-verification-2026-10-10.json)
+pins code/test/frontend fingerprints and retained log hashes. See [contract](REGISTERED_AUTHORITY_MODEL_COHORTS.md)
+and [operations](OPERATIONS.md). No real credential read/change, source acquisition/
+approval, customer grant, shared graph mutation, schema migration, deployment,
+representative legal accuracy, adverse recall, model benefit or release
+qualification is established. Lawful representative Turkish intake, independent
+semantic/adverse review, frozen family splits and measured paired effort remain open.
+
+## R05A registered same-input model-authority trials — 10 October 2026 (Asia/Shanghai)
+
+PR #35 is verified merged at `5ee45d1782da1da7cd36c2b729345d9377719847`;
+exact post-merge main run `37969967765` passed. This next engineering packet adds
+[registered local-model authority trials](REGISTERED_AUTHORITY_MODEL_TRIALS.md)
+and awaits manual merge. Deployment and legal qualification remain separate.
+
+Immutable registration selects current original-review or latest admitted-renewal
+inputs before inference. The full private draft, public passages/human assessment,
+selected open findings, provider/recipe/budget, rubric/family/origin and assigned
+accounts are frozen. Both candidates remain unadopted. Separate source-linked
+semantic/adverse judgments, all-source finding dispositions, explicit active effort,
+immutable disagreements and unknown measurements govern capture completeness;
+no benefit, expertise or qualification is inferred.
+
+Synthetic verification covers both input kinds, exact renewed versus original
+assessment identity, permanent receipts/no adoption, separate accounts, complete
+judgments, unknown effort, evidence requirements for positive/adverse declarations,
+rejected repair provenance, private/source/review/model/account changes, source
+withholding, in-flight revocation, nonce/override/mixed-input rejection, corrupt
+admission, post-commit guard failure and byte-discarding export checks. Registration
+also rolls back a detected changed input before commit. Pending committed records
+cannot be finalized by replay.
+
+Local checks passed:
+
+- Full backend: **3,215 passed, 62 skipped**, 28 existing dependency warnings in
+  **439.54 seconds**, two workers without restarts. Skips are 59 separately executed
+  PostgreSQL cases and three existing opt-in infrastructure drills.
+- Final model-authority/private-comparison/renewal focused regression: **84 passed** in
+  **36.04 seconds**, after fixing the shared polling helper to require two arms.
+  A transient source-publication admission withholds capture; empty arms never
+  establish completion. Final full-suite and restricted-container runs include the guarded renewal-history mapping.
+- Real PostgreSQL: **59 passed** in **66.63 seconds**, two bounded workers and disposable child databases;
+  identical observation replay and competing own-head writes serialize under the
+  case lock. A pending replay may conflict and cannot finalize admission. Cleanup
+  was verified. This includes the final no-edit synthetic repair fixture.
+- Restricted offline Linux: **304 passed** in **144.54 seconds**; final application
+  and test fingerprints match the checkout. Network disabled, read-only filesystem,
+  capabilities dropped, two CPUs, 768 MiB, no host mounts/ports. Cleanup verified.
+  An earlier run exposed the polling-helper mistake; it was fixed without weakening
+  source/admission checks, increasing deadlines or adding worker retries.
+- Frontend: production build and **207 tests** passed. Existing main-bundle 500 KB
+  advisory remains; trial components load only by explicit action. Final source
+  review binds the non-overlap confirmation to the trial/execution/effort head;
+  the final build and tests include this reset. The earlier browser rehearsal
+  exercised capture and effort persistence, but did not separately test this reset.
+- **41 deployment contracts**, Ruff, actionlint, ontology/SHACL, R01 planning and
+  synthetic calibration/study contracts, and Compose configuration passed. Compose
+  used `/dev/null` with disposable placeholders and did not read `.env`.
+
+CI retains the same three jobs, one PR event run, 20/5/5-minute job limits, existing
+step deadlines and no restarts/retries. Isolated PostgreSQL races now use two
+bounded workers on the existing runner; model/human-review groups use two workers,
+and the workspace group remains serial. The 20 model-trial checks run in an early two-minute backend step, outside the
+long suite. Frontend retains 59 human-review and 58 workspace checks; the 23 renewal
+checks run with signed publication on the PostgreSQL job. Workflow-based collection proves **3,277 unique IDs**:
+89 preflight, 3,018 main, 33 publication/renewal, 58 workspace, 59 human-review
+and 20 model-trial checks,
+with zero duplicate/missing IDs. Local timing does not establish hosted runtime or
+billing savings; verify the created PR's exact head separately.
+
+The first PR run (`37975556394`) passed all 59 PostgreSQL races in **211.92
+seconds**, but exceeded the unchanged five-minute job cap during the following
+publication group. The serial database workload left insufficient room for that
+required gate. The tests already allocate one random child database per case;
+running them with two bounded xdist workers preserves in-test row-lock races and
+uses the existing runner's capacity. Final local execution passed all 59 cases in
+66.63 seconds, with cleanup verified, and the 10 publication checks passed separately
+in 25.92 seconds. No test is skipped/retried, no new job is added and no deadline
+is raised. The cancellation API was denied by the token (HTTP 403); the superseding
+push uses the workflow's existing cancellation rule. Verify final-head hosted
+results separately; local timings do not guarantee future hosted duration.
+
+The second run (`37976761888`) passed the PostgreSQL job in **3m12s** (59 races
+in 103.90 seconds and 10 publication checks in 57.66 seconds). Frontend build/tests
+and 81 workspace checks passed, but the enlarged 79-check human-review group hit
+the five-minute frontend job cap. The final partition restores that group to 59
+checks and runs the 20 new model-trial checks in the existing main backend suite.
+Collection still proves every ID is covered exactly once. No test is removed to obtain a green result, and no existing deadline, job cap
+or retry is increased. Final-head
+hosted results remain separately verified.
+
+The third run (`37978040874`) reported **81 passed in 115.99 seconds**, but its
+workspace step exceeded two minutes during process completion. The final split
+moves 23 renewal checks from that group to the publication job, leaving 58 workspace
+checks. All 33 publication/renewal checks passed together locally in **30.88 seconds**.
+The 20 model-trial checks passed in a separate two-worker run in **11.11 seconds**;
+an early two-minute backend step now runs them before the long suite, without
+adding them to that suite's 18-minute allocation. The backend job still has its
+original 20-minute cap. This preserves coverage and existing deadlines while
+providing headroom in the short jobs. Final-head CI remains separately verified.
+
+The final production frontend was rehearsed on an owned loopback service with
+invented evidence and a mocked local provider. The lawyer explicitly selected one
+renewed historical finding, sample origin and two assigned accounts, registered a
+protocol through the UI, ran both arms and saved synthetic effort declarations.
+Reload retained both completed candidates and effort history while draft version 3
+remained unchanged; capture stayed incomplete with zero observer judgments. Exact
+original public quotations, historical mismatch flags and unresolved renewal
+observations remained inspectable. No console warnings/errors were observed.
+The rehearsal caught and fixed the latest-history dependency projection and strict
+selection mapping; the latter has a frontend regression test. Trial checkboxes and
+action spacing use existing interface styles. Proof: `model-trial-history.jpg` in
+the retained verification directory. Owned browser/server cleanup is recorded in
+the [synthetic evidence report](evidence/authority-model-trials-verification-2026-10-10.json).
+
+Verification logs and disposable rehearsal artifacts are retained in
+`.data/verification/r05a-model-authority-trials/`. No real public-source acquisition
+or approval, local/BYOK provider call, credential change, customer access grant,
+schema migration, shared-graph mutation or live deployment occurred. **R05A remains
+partial**: confidential model-authority cohort reconciliation is next; lawful corpus
+and legal review, representative Turkish semantic/adverse evaluation, measured
+real-model benefit, Standard/Deep qualification and release gates remain open.
+
 ## R05A reviewed retained-source binding renewal — 10 October 2026 (Asia/Shanghai)
 
 PR #34 is verified merged at `f0595702679386f7ccce9d11a5cb4119b3b1552f`;
