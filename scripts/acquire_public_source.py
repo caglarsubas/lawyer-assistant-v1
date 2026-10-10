@@ -2,7 +2,6 @@
 """Acquire one registered public HTML source in an isolated, disposable staging container."""
 
 import argparse
-import hashlib
 import json
 import os
 import re
@@ -24,9 +23,10 @@ from app.source_gateway import (  # noqa: E402
     AcquisitionError,
     registered,
     rename_new,
+    validate_acquisition_metadata,
 )
 
-IMAGE = "lawyer-assistant-api:0.1.0"
+IMAGE = "lawyer-assistant-public-acquisition:0.1.0"
 
 
 def _run(command, *, timeout=15):
@@ -67,7 +67,7 @@ def _command(source_id, directory, name, image):
 
 
 def _validate_package(source_id, directory):
-    source = registered(source_id)
+    registered(source_id)
     if directory.is_symlink() or not directory.is_dir():
         raise AcquisitionError("Staged output is missing")
     if {item.name for item in directory.iterdir()} != {"raw.html", "acquisition.json"}:
@@ -81,19 +81,12 @@ def _validate_package(source_id, directory):
         manifest = json.loads((directory / "acquisition.json").read_text())
     except (ValueError, UnicodeError):
         raise AcquisitionError("Staged manifest is invalid") from None
-    digest = hashlib.sha256(raw).hexdigest()
-    expected = {
-        "schema_version": "registered-source-acquisition-v1", "registry_version": REGISTRY_VERSION,
-        "registry_id": source_id, "source_url": source.url, "raw_sha256": digest,
-        "source_version_id": f"{source_id}:sha256:{digest}", "byte_count": len(raw),
-        "raw_media_type": "text/html", "rights_status": "rights_pending",
-        "review_status": "legal_review_pending", "publication_status": "quarantined",
-        "content_status": "untrusted_unscanned", "extraction_status": "not_processed",
-        "representation": "enacted_text", "current_consolidation": False,
-    }
-    if not isinstance(manifest, dict) or any(manifest.get(key) != value for key, value in expected.items()):
+    if not isinstance(manifest, dict) or manifest.get("registry_id") != source_id:
         raise AcquisitionError("Staged provenance does not match the registered acquisition")
-    return manifest
+    try:
+        return validate_acquisition_metadata(raw, manifest, required_registry_version=REGISTRY_VERSION)
+    except AcquisitionError:
+        raise AcquisitionError("Staged provenance does not match the registered acquisition") from None
 
 
 def _cleanup(name):
@@ -118,7 +111,7 @@ def acquire_in_container(source_id, destination, *, connected_staging=False):
         raise AcquisitionError("Output must be a new directory under an existing parent")
     image = _run(["docker", "image", "inspect", "--format", "{{.Id}}", IMAGE]).strip()
     if not re.fullmatch(r"sha256:[0-9a-f]{64}", image):
-        raise AcquisitionError("An existing immutable local application image is required")
+        raise AcquisitionError("An existing immutable local acquisition image is required")
     with tempfile.TemporaryDirectory(prefix=".registered-staging-", dir=destination.parent) as temporary:
         directory = Path(temporary)
         # Only a newly created, empty public staging directory enters the worker.

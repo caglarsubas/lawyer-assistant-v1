@@ -1,0 +1,322 @@
+{
+  "schema": "registered-domain-intake-engineering-v1",
+  "recorded_at": "2026-10-10T16:55:19.511967+00:00",
+  "base_merge": "bba695c8d5c100253952f4a911794ce8d3cc76aa",
+  "base_post_merge_run": 38068593529,
+  "base_jobs_at_recording": {
+    "conclusion": "",
+    "jobs": [
+      {
+        "completedAt": "2026-10-10T16:43:28Z",
+        "conclusion": "success",
+        "name": "frontend",
+        "startedAt": "2026-10-10T16:40:10Z",
+        "status": "completed"
+      },
+      {
+        "completedAt": "2026-10-10T16:42:46Z",
+        "conclusion": "success",
+        "name": "postgres-snapshot-concurrency",
+        "startedAt": "2026-10-10T16:40:10Z",
+        "status": "completed"
+      },
+      {
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "name": "backend-and-contracts",
+        "startedAt": "2026-10-10T16:40:10Z",
+        "status": "in_progress"
+      }
+    ],
+    "status": "in_progress"
+  },
+  "registry_version": "tbmm-enacted-2026-10-11-v2",
+  "files_sha256": {
+    "backend/app/source_gateway.py": "7934e9eb8016e4fb3d309ae8a54b73fadc8a936644c7a8821ac8014ac844560e",
+    "backend/app/registered_source_preparation.py": "41f90c36253e05eb1c26bfb95a5353e9896909c71837fd46bb5e38be6b2a02d5",
+    "scripts/acquire_public_source.py": "33fd2a1c9bdddcb257a5be5cfa4bdeb0c787925423c75a2b0989ef2cdc2d0ffb",
+    "backend/tests/test_source_gateway.py": "fc31d81195b65eb9cdc4148bcd7b10ddf293fc718c62c14abc1646485d13b2dc",
+    "backend/tests/test_registered_source_preparation.py": "a31782a577137a091521dfa53fb19a0fb159b42b39539d542f59329bc183ba92",
+    "deploy/public-source-acquisition.Dockerfile": "604912afa6f893946e5952f15ccdd6008e099b51f7a7b819ff64df0ade25c2da"
+  },
+  "linux_files_sha256": {
+    "backend/app/source_gateway.py": "7934e9eb8016e4fb3d309ae8a54b73fadc8a936644c7a8821ac8014ac844560e",
+    "backend/app/registered_source_preparation.py": "41f90c36253e05eb1c26bfb95a5353e9896909c71837fd46bb5e38be6b2a02d5",
+    "scripts/acquire_public_source.py": "33fd2a1c9bdddcb257a5be5cfa4bdeb0c787925423c75a2b0989ef2cdc2d0ffb",
+    "backend/tests/test_source_gateway.py": "fc31d81195b65eb9cdc4148bcd7b10ddf293fc718c62c14abc1646485d13b2dc",
+    "backend/tests/test_registered_source_preparation.py": "a31782a577137a091521dfa53fb19a0fb159b42b39539d542f59329bc183ba92"
+  },
+  "linux_image_id": "sha256:7ef5b2d749c7efae52ab792f557c2674cee5e6b44a68777518331a0a3e9dc326",
+  "images": {
+    "lawyer-assistant-public-acquisition:0.1.0": "sha256:ced70a3d62ea6ba52ebc125a13774860946cac9784e31c5186cc118680cca1f0",
+    "lawyer-assistant-public-preparation:0.1.0": "sha256:597e4a0d555aaddd780813e6fccff1103a8fb2271c95ff2e0650bdf20264d45f",
+    "lawyer-assistant-scanner:1.4.6": "sha256:f5e27bb0523b586350f123763246debbfef9b18e7c6f50f0fde76b1ac7582222",
+    "lawyer-assistant-api:0.1.0": "sha256:95dcfeb31f0c3e3dffc22c8838500f293aa0fceba1a1c2ab8209cadf03c31376"
+  },
+  "deployed_api_image_unchanged": true,
+  "checks": {
+    "native_gateway_preparation": {
+      "passed": 173,
+      "seconds": 1.65
+    },
+    "disconnected_linux_source_snapshot": {
+      "passed": 452,
+      "seconds": 44.82
+    },
+    "deployment_unittest": {
+      "passed": 41
+    },
+    "ruff": "passed_repository_configuration",
+    "frontend_code_changed": false,
+    "workflow_code_changed": false
+  },
+  "ci_collection": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3632,
+      "preflight": 89,
+      "remaining": 3373,
+      "publication": 32,
+      "workspace": 58,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "ab919ddea1d51128e36bc7627e507a65ca594b4bf26f5288d4f9e69e5c469ae0",
+    "workflow_sha256": "9e9b8003a36dd25553aeffea4e59f41bf6c9a6d702718a9ad0356844c96dda92",
+    "no_runner_retry_existing_deadline_change": true,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "sources": [
+    {
+      "registry_id": "tbmm-4857-enacted",
+      "domain": "employment",
+      "registry_version": "tbmm-enacted-2026-10-11-v2",
+      "source_url": "https://cdn.tbmm.gov.tr/KKBSPublicFile/D22/Y1/T1/KanunMetni/359dee72-3cd1-4131-8597-48c58658e326.html",
+      "acquired_at": "2026-10-10T16:49:08.813883+00:00",
+      "raw_bytes": 247132,
+      "raw_sha256": "a5296326e224bcb50a7202fbac4e9e7c768abd023cc146bf03eb06e62a2d0a92",
+      "text_sha256": "f7781e2a882642d09368c306e87c71006465c68d7b2b384cebb7866bdb91e153",
+      "passage_count": 616,
+      "encoding": "cp1254",
+      "catalog_id": "bac5a526122fcd966affcc599874ccb54342287cd41060831a94a295b6103ccb",
+      "all_passage_integrity_checked": true,
+      "scan": {
+        "clean": true,
+        "databases": {
+          "databases": [
+            {
+              "build_time": 1765927102,
+              "bytes": 89072577,
+              "file": "main.cvd",
+              "sha256": "0b2182d229f46981ec8f535382222f7c9dfdd656b250ad47988b910a8d302365",
+              "signatures": 3287027,
+              "version": 63
+            },
+            {
+              "build_time": 1791613444,
+              "bytes": 23442295,
+              "file": "daily.cvd",
+              "sha256": "d4117485e03b333d4b40d77b9280750a14555ae84978f43de676cf5ff0810fd8",
+              "signatures": 355760,
+              "version": 28149
+            },
+            {
+              "build_time": 1757593759,
+              "bytes": 281702,
+              "file": "bytecode.cvd",
+              "sha256": "6d4aa01f219e988060fc419f495d07f27e0cdf1a2cccc065971da922c76f7ffb",
+              "signatures": 80,
+              "version": 339
+            }
+          ],
+          "engine": "ClamAV 1.4.6",
+          "schema_version": 1
+        },
+        "elapsed_seconds": 7.757736502971966,
+        "raw_sha256": "a5296326e224bcb50a7202fbac4e9e7c768abd023cc146bf03eb06e62a2d0a92",
+        "schema_version": "registered-source-scan-v1"
+      },
+      "parser_image_id": "sha256:597e4a0d555aaddd780813e6fccff1103a8fb2271c95ff2e0650bdf20264d45f",
+      "scanner_image_id": "sha256:f5e27bb0523b586350f123763246debbfef9b18e7c6f50f0fde76b1ac7582222",
+      "review_status": "legal_review_pending",
+      "rights_status": "rights_pending",
+      "current_consolidation": false,
+      "legal_dates": null,
+      "source_fidelity_approved": false,
+      "published": false,
+      "sampled_http_windows": [
+        {
+          "passage_id": "html_block_0001",
+          "http_status": 200,
+          "no_store": true,
+          "window_sha256": "30c76d66b46756501bdf9beb651f199b8df0adc58c4d4f4b28cc5c0728de8662"
+        },
+        {
+          "passage_id": "html_block_0309",
+          "http_status": 200,
+          "no_store": true,
+          "window_sha256": "b64685d2932d871079381aa110d30341405195590768a0e966172f9cfc4c52e2"
+        },
+        {
+          "passage_id": "html_block_0616",
+          "http_status": 200,
+          "no_store": true,
+          "window_sha256": "5bde95053eb9828856fa88a5976c8ff17cd2850c5e6d31ae3f126a359b9dca85"
+        }
+      ],
+      "review_revision_before_after": 0,
+      "actual_human_effort_recorded": false
+    },
+    {
+      "registry_id": "tbmm-6103-enacted",
+      "domain": "commercial",
+      "registry_version": "tbmm-enacted-2026-10-11-v2",
+      "source_url": "https://cdn.tbmm.gov.tr/KKBSPublicFile/D23/Y2/T1/KanunMetni/7f9bad4f-097c-4097-960f-2ef0bb0ed482.html",
+      "acquired_at": "2026-10-10T16:49:33.682689+00:00",
+      "raw_bytes": 87088,
+      "raw_sha256": "48eb54d51d71af9c9ee5751b7c6110d42593707776df867860a57bf887cce985",
+      "text_sha256": "0cd6e199a71cde16d846d89c703804a6e960a25685c446809e6858f83a1bc655",
+      "passage_count": 215,
+      "encoding": "cp1254",
+      "catalog_id": "34445e5d8d33b2e5af9dcfbb41d0e4fc4a09fa1ea11b71199dc39b2f712c9fc4",
+      "all_passage_integrity_checked": true,
+      "scan": {
+        "clean": true,
+        "databases": {
+          "databases": [
+            {
+              "build_time": 1765927102,
+              "bytes": 89072577,
+              "file": "main.cvd",
+              "sha256": "0b2182d229f46981ec8f535382222f7c9dfdd656b250ad47988b910a8d302365",
+              "signatures": 3287027,
+              "version": 63
+            },
+            {
+              "build_time": 1791613444,
+              "bytes": 23442295,
+              "file": "daily.cvd",
+              "sha256": "d4117485e03b333d4b40d77b9280750a14555ae84978f43de676cf5ff0810fd8",
+              "signatures": 355760,
+              "version": 28149
+            },
+            {
+              "build_time": 1757593759,
+              "bytes": 281702,
+              "file": "bytecode.cvd",
+              "sha256": "6d4aa01f219e988060fc419f495d07f27e0cdf1a2cccc065971da922c76f7ffb",
+              "signatures": 80,
+              "version": 339
+            }
+          ],
+          "engine": "ClamAV 1.4.6",
+          "schema_version": 1
+        },
+        "elapsed_seconds": 8.809744420985226,
+        "raw_sha256": "48eb54d51d71af9c9ee5751b7c6110d42593707776df867860a57bf887cce985",
+        "schema_version": "registered-source-scan-v1"
+      },
+      "parser_image_id": "sha256:597e4a0d555aaddd780813e6fccff1103a8fb2271c95ff2e0650bdf20264d45f",
+      "scanner_image_id": "sha256:f5e27bb0523b586350f123763246debbfef9b18e7c6f50f0fde76b1ac7582222",
+      "review_status": "legal_review_pending",
+      "rights_status": "rights_pending",
+      "current_consolidation": false,
+      "legal_dates": null,
+      "source_fidelity_approved": false,
+      "published": false,
+      "sampled_http_windows": [
+        {
+          "passage_id": "html_block_0001",
+          "http_status": 200,
+          "no_store": true,
+          "window_sha256": "30c76d66b46756501bdf9beb651f199b8df0adc58c4d4f4b28cc5c0728de8662"
+        },
+        {
+          "passage_id": "html_block_0108",
+          "http_status": 200,
+          "no_store": true,
+          "window_sha256": "495ea236f878a076a6341e70551c17e1483b87ea6ae807b273074a003f6665ec"
+        },
+        {
+          "passage_id": "html_block_0215",
+          "http_status": 200,
+          "no_store": true,
+          "window_sha256": "119c2ae9542302d8072714a9d61d0868f10109a7eaf940851adc0fc3d15b5736"
+        }
+      ],
+      "review_revision_before_after": 0,
+      "actual_human_effort_recorded": false
+    }
+  ],
+  "legacy_manifest_validation": [
+    {
+      "registry_id": "tbmm-6101-enacted",
+      "registry_version": "tbmm-enacted-2026-10-04-v1",
+      "raw_sha256": "dbc85863a7a5b93aab7736b1fcf19d13180bbc6ecdb7252b619cc4c68d84b064",
+      "manifest_sha256": "293c2c47a3ca6cbbb553bce36f05eac54d50001156112df553cdf5cc4174ead5",
+      "domain": "contracts",
+      "no_write": true
+    },
+    {
+      "registry_id": "tbmm-6098-enacted",
+      "registry_version": "tbmm-enacted-2026-10-04-v1",
+      "raw_sha256": "0d34bafb03f799995266b0f6cf7ca551ea97643bf671de05388b3132c0d05b41",
+      "manifest_sha256": "dd0ad7f053ede321b8f5ce9773af02fbb1e44c01b5695e91a54f74d950b783c3",
+      "domain": "contracts",
+      "no_write": true
+    }
+  ],
+  "network_during_inspection": false,
+  "provider_used": false,
+  "actual_review_created_or_changed": false,
+  "scope": "separate public-only host catalog and disposable no-write TestClient inspection; not deployed app or corpus qualification",
+  "qualification": {
+    "r01_r03_r05a_legal_qualification": false,
+    "national_corpus_complete": false,
+    "source_representation_diversity": false,
+    "representative_throughput": false,
+    "actual_human_review_or_paired_study": false,
+    "target_host_capacity": false,
+    "pilot": false
+  },
+  "limits": {
+    "new_domains": "two TBMM enacted HTML representations only",
+    "classification": "intake labels, not exhaustive legal ontology or applicability",
+    "acquisition": "exact registered GET only; existing byte, DNS, TLS and time bounds unchanged",
+    "preparation": "mandatory cryptographically verified local CVD scan, then disconnected inert parsing",
+    "inspection": "all digest/range checks and six HTTP windows are engineering integrity checks, not legal review",
+    "deployed_app_or_private_data_changed": false,
+    "credentials_loaded_or_transmitted": false,
+    "hosted_ci": "separate exact-head results retained after push; no rerun or metadata-only push requested"
+  }
+}
