@@ -85,6 +85,10 @@ jobs:
         run: |
           python scripts/build_calibration_study_fixture.py "$RUNNER_TEMP/r01-study" --dossier-dir qualification
           python scripts/qualify_roadmap.py study "$RUNNER_TEMP/r01-study/study" --dossier-dir qualification --artifacts-dir "$RUNNER_TEMP/r01-study/artifacts"
+      - name: Verify source-linked synthetic reference intake without legal approval
+        run: |
+          python scripts/build_reference_case_fixture.py "$RUNNER_TEMP/r01-reference-cases"
+          python scripts/qualify_reference_cases.py "$RUNNER_TEMP/r01-reference-cases/intake" --artifacts-dir "$RUNNER_TEMP/r01-reference-cases/artifacts" --source-catalog-dir "$RUNNER_TEMP/r01-reference-cases/catalog"
       - name: Validate Compose without reading a local env file
         env:
           LA_POSTGRES_PASSWORD: ci-placeholder-not-a-real-secret

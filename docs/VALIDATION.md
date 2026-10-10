@@ -1,5 +1,44 @@
 # Verification record — 10 October 2026
 
+## R01/R05A source-linked reference-case intake — 10 October 2026
+
+The continuation base is PR #37's verified merge into the still-open PR #36
+branch, `187f2700cad09d18d6a235a3fa8e2e3b11f2c692`; exact dependency run
+`38037218901` passed. Main remains independently verified through PR #35.
+This packet adds offline physical reference intake and optional scorer binding;
+it does not migrate/deploy the app, call inference, acquire sources or read `.env`.
+
+| Verification | Result |
+|---|---|
+| Complete local backend, two workers, no retries/restarts | 3,301 passed, 64 existing skips, 433.27s |
+| New reference intake and score-binding boundaries | 66 passed as part of the complete suite |
+| Related qualification/evidence/calibration regressions | 340 passed, 7.72s |
+| Restricted offline Linux same-source regression | 340 passed, 17.33s; application/test fingerprints match |
+| Deployment contracts | 41 passed |
+| Ruff, actionlint, ontology/SHACL, R01 planning and new intake fixture | Passed |
+| Compose configuration | Passed with `/dev/null` and invented placeholders |
+| Exact CI collection | 3,365 cases, complete and disjoint across existing six execution groups |
+
+Boundary checks cover exact passage/reference pins, distinct versions in one
+proceeding crossing splits, shared norms that do not merge cases, missing review
+records, protocol development reservations, real/synthetic separation, historical
+periods, changed gold/adverse sets, entire scored-row receipts, missing/extra rows,
+duplicate JSON fields, links/special files, unexpected artifacts and final-capture
+changes. A 1,000-case synthetic roster passes structural intake while all legal/
+production flags remain false. A deliberately false real label demonstrates that
+byte binding cannot authenticate source/reviewer declarations. Existing default
+2,000-file limits reject larger inventories; case-artifact capture explicitly opts
+into a bounded larger inventory without increasing byte limits.
+
+Linux ran with no network, host mounts or ports, read-only storage, user 10001,
+dropped capabilities, no-new-privileges and bounded CPU/RAM/PIDs/tmpfs. Fixture
+generation preserves existing destinations and rejects symlinked parents. Invalid
+CLI input produces no partial report, submitted values or private paths.
+No frontend/runtime schema changes require a UI rehearsal. Hosted exact-head checks
+follow PR creation; merge, deployment, actual legal/source review and production
+qualification remain separate. See [contract](REFERENCE_CASE_INTAKE.md) and
+[verification manifest](evidence/reference-case-intake-verification-2026-10-10.json).
+
 
 ## R05A confidential model-authority trial groups — 10 October 2026 (Asia/Shanghai)
 

@@ -1,0 +1,148 @@
+{
+  "schema_version": "reference-case-intake-engineering-verification-v1",
+  "recorded_on": "2026-10-10",
+  "scope": "invented offline intake and score-binding engineering",
+  "continuation": {
+    "pr_37": "merged_into_pr_36_branch",
+    "pr_36": "open",
+    "exact_dependency_ci": 38037218901,
+    "dependency_ci_conclusion": "success",
+    "main_deployment_claim": false,
+    "base_commit": "187f2700cad09d18d6a235a3fa8e2e3b11f2c692"
+  },
+  "tests": {
+    "complete_backend": {
+      "passed": 3301,
+      "skipped": 64,
+      "seconds": 433.27,
+      "workers": 2,
+      "worker_restarts": 0
+    },
+    "new_reference_cases": 66,
+    "focused_regressions": {
+      "passed": 340,
+      "seconds": 7.72
+    },
+    "restricted_linux": {
+      "passed": 340,
+      "seconds": 17.33,
+      "runtime": {
+        "image_id": "sha256:69a7cab620191d7f47baa2aa709d29e2650e9d8cb9dc3ef75f3efa15db1212fd",
+        "source_fingerprints": {
+          "application": {
+            "sha256": "e01a5a643f103aeaea23ea38bce291fd4dc58413731df480e2f20888802ab21a",
+            "files": 134
+          },
+          "tests": {
+            "files": 97,
+            "sha256": "e6735a130a6b275cdbaaf51548c245990d29e96f19986a7f8b915bc20c65529f"
+          }
+        },
+        "elapsed_seconds": 18.13,
+        "exit_code": 0,
+        "network": "none",
+        "read_only": true,
+        "host_mounts": false,
+        "host_ports": false,
+        "capabilities": "ALL dropped",
+        "user": "10001:10001",
+        "cpu_limit": 2,
+        "memory_mib": 768,
+        "pids_limit": 128,
+        "selected_files": [
+          "test_reference_cases.py",
+          "test_qualification_scoring.py",
+          "test_qualification_evidence.py",
+          "test_calibration_study.py",
+          "test_calibration_study_cli.py",
+          "test_calibration_study_fixture.py",
+          "test_qualification_cli.py"
+        ],
+        "production_qualified": false
+      }
+    },
+    "deployment_contracts": 41
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3365,
+      "preflight": 89,
+      "remaining": 3106,
+      "publication": 32,
+      "workspace": 58,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "38f9f9b5a25c6b022f218aef1790ea2f9fde10368cd60877109f4c255f806138",
+    "workflow_sha256": "9e9b8003a36dd25553aeffea4e59f41bf6c9a6d702718a9ad0356844c96dda92",
+    "no_runner_retry_existing_deadline_change": true,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "checks": {
+    "ruff": "passed",
+    "actionlint": "passed",
+    "ontology_shacl": "passed",
+    "r01_contract": "passed",
+    "synthetic_reference_intake": "passed",
+    "compose_without_local_env": "passed",
+    "diff_whitespace": "passed"
+  },
+  "scope_boundaries": {
+    "real_source_acquisition": false,
+    "source_legal_approval": false,
+    "pii_classification_authenticated": false,
+    "reviewer_independence_authenticated": false,
+    "representative_legal_evaluation": false,
+    "provider_calls": 0,
+    "provider_credentials_read": false,
+    "deployment": false,
+    "runtime_schema_migration": false,
+    "production_qualified": false,
+    "model_benefit_established": false
+  },
+  "log_integrity": {
+    "backend-full.log": "cea80ddce1307f17ffc93677a665bcf0f7037d2dfc560048a75dfcb8730418c0",
+    "focused.log": "7bdf05c1ad4e6c039cf5afced56c8ff8cfb949e149d37bfff90ae739cabe4310",
+    "linux-tests.log": "191e4f195c5b6b805279fffcd9a68bd2c0c33ad09c598a07726be3e919b507e8",
+    "deployment.log": "0ad809be954c778492f3ef84d23cfa52e6180d531d01a7191beea57d058b9cae",
+    "ruff.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "actionlint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ontology.log": "7ac5d3623be54d1faf806abe85c63f9dc12820b8c3a45a0a3460315e245c8aab",
+    "r01.log": "aaa2f49ef768a2438ee864b57ca7000f06e0d40687e2316dd4ce398354dc557f",
+    "intake-report.json": "6d51ea9be5c973c1ad974b983da2c6119ba62ca196dcac9467873550b552347c",
+    "compose.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ci-partition.json": "6650abb9088ddfadeb29ea9ddf4cc677d45c4c93a696b0bd89a484f47cf99861"
+  },
+  "hosted_ci": "awaiting PR creation; record exact head result in PR without another validation-only push"
+}

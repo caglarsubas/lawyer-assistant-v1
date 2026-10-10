@@ -26,6 +26,12 @@ The [calibration study workflow](docs/R01_QUALIFICATION.md#run-a-reproducible-mu
 recomputes multiple samples from their original artifacts, rejects repeated originals
 and declared source identities, and reports real and synthetic coverage separately.
 
+[Reference-case intake](docs/REFERENCE_CASE_INTAKE.md) additionally checks exact
+source passages, reference answers, review records and declared family splits.
+Optional scorer binding rejects changed gold/adverse sets or scored-row receipts
+and exposes missing held-out cases. These offline checks do not authenticate legal
+review, grant source rights or establish model benefit.
+
 The [R02 source-set inspector](docs/RELEASE_SNAPSHOT_SET.md) checks 2–8 existing
 reviewed sources together, with exact revisions, per-source rights and deterministic
 PostgreSQL locks. It emits a confidential summary after complete revalidation.
