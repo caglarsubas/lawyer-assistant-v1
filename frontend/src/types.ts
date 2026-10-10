@@ -59,6 +59,14 @@ export interface SourceReviewState {
   handoff_ready: boolean; publication_eligible: false; limitations: string[];
 }
 export interface PublicSourcePassage { id: string; start: number; end: number; text_sha256: string; locator: string; text: string }
+export interface PublicSourceOriginalText {
+  source_id: string; source_version_id: string; passage_id: string;
+  raw_sha256: string; text_sha256: string; decoded_original_sha256: string; window_sha256: string;
+  encoding: string; offset_unit: 'unicode_code_points_excluding_initial_utf8_bom';
+  range_start: number; range_end: number; start: number; end: number; next_offset: number | null;
+  text: string; integrity_scope: 'all_artifacts_verified';
+  locator_coordinate_status: 'consistent_not_fidelity_reviewed'; extraction_fidelity_verified: false;
+}
 export interface PublicSourcePassages {
   source_id: string; source_version_id: string; raw_sha256: string; text_sha256: string;
   offset_unit: 'unicode_code_points'; items: PublicSourcePassage[]; total: number; next_offset: number | null; integrity_scope: string;

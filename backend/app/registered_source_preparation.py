@@ -17,6 +17,7 @@ from pathlib import Path
 from .public_sources import _json, _validate
 from .qualification_evidence import read_exact_directory
 from .source_gateway import HISTORICAL_LIMITATION, MAX_BYTES, REGISTRY_VERSION, registered
+from .source_original_text import OriginalTextUnavailable, decode_html_source
 
 ADAPTER_VERSION = "registered-html-blocks-v1"
 ACQUISITION_FILES = {"raw.html": MAX_BYTES, "acquisition.json": 64 * 1024}
@@ -83,21 +84,10 @@ def validate_acquisition(files):
 
 
 def decode_html(raw):
-    # No guessing or replacement decoding: a missing declaration admits UTF-8 only.
-    declarations = re.findall(rb"charset\s*=\s*[\"']?\s*([A-Za-z0-9_-]+)", raw[:4096], re.I)
-    aliases = {"utf-8": "utf-8", "utf8": "utf-8", "windows-1254": "cp1254",
-               "iso-8859-9": "iso8859-9"}
-    encodings = {aliases.get(item.decode("ascii").lower(), "unsupported") for item in declarations}
-    if raw.startswith(b"\xef\xbb\xbf"):
-        encodings.add("utf-8")
-    if len(encodings) > 1 or "unsupported" in encodings:
-        raise PreparationError("Unsupported or conflicting HTML encoding")
-    encoding = next(iter(encodings), "utf-8")
     try:
-        decoded = raw.removeprefix(b"\xef\xbb\xbf").decode(encoding, errors="strict")
-    except UnicodeError:
-        raise PreparationError("HTML encoding could not be decoded exactly") from None
-    return decoded, encoding
+        return decode_html_source(raw)
+    except OriginalTextUnavailable as error:
+        raise PreparationError(str(error)) from None
 
 
 class BlockParser(HTMLParser):

@@ -18,6 +18,12 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, field_validator
 
 from .auth import authenticate
+from .source_original_text import (
+    MAX_ORIGINAL_BYTES,
+    MAX_WINDOW,
+    OriginalTextUnavailable,
+    original_text_window,
+)
 
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 MAX_RAW = 20 * 1024 * 1024
@@ -415,6 +421,10 @@ class PublicSourceStore:
                 "next_offset": next_offset if next_offset < len(passages) else None,
                 "integrity_scope": "all_artifacts_verified"}
 
+    def original_text(self, identifier, passage_id, *, offset=0, limit=MAX_WINDOW):
+        package = self.verified_package(identifier)
+        return original_text_window(package, identifier, passage_id, offset=offset, limit=limit)
+
 
 def public_sources_router():
     router = APIRouter(prefix="/api/v1/public-sources", tags=["public-source-staging"])
@@ -468,6 +478,26 @@ def public_sources_router():
             raise HTTPException(409, "Kaynak paketi yok veya bütünlük denetimi başarısız") from None
         reauthorize(request, user)
         return result
+
+    @router.get("/{identifier}/original-text")
+    def original_text(identifier: str, request: Request,
+                      passage_id: str = Query(pattern=r"^[A-Za-z][A-Za-z0-9_-]{0,79}$"),
+                      offset: int = Query(default=0, ge=0, le=MAX_ORIGINAL_BYTES),
+                      limit: int = Query(default=MAX_WINDOW, ge=1, le=MAX_WINDOW),
+                      user=Depends(authorize)):
+        if not SHA256.fullmatch(identifier):
+            raise HTTPException(404, "Kaynak hazırlama kaydı bulunamadı")
+        try:
+            result = store(request).original_text(identifier, passage_id, offset=offset, limit=limit)
+        except OriginalTextUnavailable:
+            raise HTTPException(422, "Bu pasajın özgün kaynak kodu gösterilemiyor; özgün dosyayı indirerek inceleyin") from None
+        except (PublicSourceError, OSError):
+            raise HTTPException(409, "Kaynak paketi yok veya bütünlük denetimi başarısız") from None
+        reauthorize(request, user)
+        return Response(content=_canonical(result), media_type="application/json", headers={
+            "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff",
+            "Content-Security-Policy": "sandbox; default-src 'none'; frame-ancestors 'none'",
+        })
 
     @router.get("/{identifier}/original")
     def original(identifier: str, request: Request, user=Depends(authorize)):

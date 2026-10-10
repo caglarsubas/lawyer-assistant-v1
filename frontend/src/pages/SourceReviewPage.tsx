@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { ApiError, request } from '../api';
 import { Badge, Detail, Field, Icon, Loading, Notice, PageHeader } from '../components';
-import type { PublicSourcePassages, SourcePermittedUse, SourceReviewCategory, SourceReviewDecision, SourceReviewEvent, SourceReviewState, User } from '../types';
+import type { PublicSourceOriginalText, PublicSourcePassages, SourcePermittedUse, SourceReviewCategory, SourceReviewDecision, SourceReviewEvent, SourceReviewState, User } from '../types';
 import { formatDate, messageOf, statusLabel } from '../utils';
 
 const CATEGORIES: Record<SourceReviewCategory, string> = { rights: 'Kullanım hakları', source_identity: 'Kaynak kimliği', extraction: 'Metin çıkarımı', legal: 'Hukuki inceleme' };
@@ -10,6 +10,28 @@ const USES: Record<SourcePermittedUse, string> = { storage: 'Saklama', local_pro
 export interface AssessmentDraft { category: SourceReviewCategory; decision: SourceReviewDecision; rationale: string; reference: string; sha256: string; passage_ids: string[]; permitted_uses: SourcePermittedUse[] }
 export const EMPTY_ASSESSMENT: AssessmentDraft = { category: 'rights', decision: 'needs_changes', rationale: '', reference: '', sha256: '', passage_ids: [], permitted_uses: [] };
 type LoadState<T> = { status: 'loading' } | { status: 'loaded'; value: T } | { status: 'failed'; message: string; code?: number };
+type OriginalInspection = { passageId: string; offset: number; state: LoadState<PublicSourceOriginalText> };
+const ORIGINAL_WINDOW = 12_000;
+const HTML_LOCATOR = /^HTML source line [1-9][0-9]{0,6}, column [1-9][0-9]{0,6}; decoded code points \[[0-9]{1,7},[0-9]{1,7}\)$/;
+
+export async function fetchOriginalSourceText(data: PublicSourcePassages, passageId: string, offset: number, signal?: AbortSignal) {
+  if (!/^[A-Za-z][A-Za-z0-9_-]{0,79}$/.test(passageId) || !data.items.some(item => item.id === passageId) || !Number.isInteger(offset) || offset < 0 || offset > 1024 * 1024) throw new Error('Özgün kaynak konumu geçersiz.');
+  const value = await request<PublicSourceOriginalText>(`${sourceReviewPath(data.source_id)}/original-text?passage_id=${encodeURIComponent(passageId)}&offset=${offset}&limit=${ORIGINAL_WINDOW}`, { signal });
+  const identityMatches = value && value.source_id === data.source_id && value.source_version_id === data.source_version_id
+    && value.passage_id === passageId && value.raw_sha256 === data.raw_sha256 && value.text_sha256 === data.text_sha256;
+  const windowMatches = value && [value.range_start, value.range_end, value.start, value.end].every(Number.isInteger)
+    && value.range_start >= 0 && value.range_end <= 1024 * 1024 && value.start === value.range_start + offset
+    && value.end > value.start && value.end <= Math.min(value.start + ORIGINAL_WINDOW, value.range_end)
+    && typeof value.text === 'string' && Array.from(value.text).length === value.end - value.start
+    && value.next_offset === (value.end < value.range_end ? value.end - value.range_start : null);
+  const contractMatches = value && value.integrity_scope === 'all_artifacts_verified' && value.extraction_fidelity_verified === false
+    && value.offset_unit === 'unicode_code_points_excluding_initial_utf8_bom'
+    && value.locator_coordinate_status === 'consistent_not_fidelity_reviewed'
+    && ['utf-8', 'cp1254', 'iso8859-9'].includes(value.encoding)
+    && /^[a-f0-9]{64}$/.test(value.window_sha256) && /^[a-f0-9]{64}$/.test(value.decoded_original_sha256);
+  if (!identityMatches || !windowMatches || !contractMatches) throw new Error('Özgün kaynak yanıtı seçili kaynak ve pasajla eşleşmiyor.');
+  return value;
+}
 export function canReviewSource(user: User) { return ['admin', 'curator'].includes(user.role) && (!user.permissions || user.permissions.includes('source.curate')); }
 export function sourceReviewPath(sourceId: string) {
   if (!/^[a-f0-9]{64}$/.test(sourceId)) throw new Error('Kaynak kimliği geçersiz.');
@@ -64,6 +86,8 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
   const [review, setReview] = useState<LoadState<SourceReviewState>>({ status: 'loading' });
   const [passages, setPassages] = useState<LoadState<PublicSourcePassages>>({ status: 'loading' });
   const [offset, setOffset] = useState(0); const [draft, setDraft] = useState<AssessmentDraft>({ ...EMPTY_ASSESSMENT });
+  const [original, setOriginal] = useState<OriginalInspection | null>(null);
+  const originalController = useRef<AbortController | null>(null);
   const [assignmentRationale, setAssignmentRationale] = useState('');
   const [busy, setBusy] = useState(false); const [downloading, setDownloading] = useState(false);
   const [message, setMessage] = useState(''); const [error, setError] = useState('');
@@ -73,17 +97,20 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
   const denyAccess = useCallback((cause: unknown) => {
     if (cause instanceof ApiError && [401, 403].includes(cause.status)) {
       reviewController.current?.abort(); passageController.current?.abort();
+      originalController.current?.abort(); setOriginal(null);
       mutationController.current?.abort(); downloadController.current?.abort();
       setReview(failed(cause)); setPassages(failed(cause));
       setDraft({ ...EMPTY_ASSESSMENT }); setAssignmentRationale(''); setBusy(false); setDownloading(false);
     }
   }, []);
   const loadReview = useCallback(() => {
+    originalController.current?.abort(); setOriginal(null);
     reviewController.current?.abort(); const controller = new AbortController(); reviewController.current = controller;
     setReview({ status: 'loading' });
     void request<SourceReviewState>(`${path}/review`, { signal: controller.signal }).then(value => { if (!controller.signal.aborted) setReview({ status: 'loaded', value }); }).catch(cause => { if (!controller.signal.aborted) { setReview(failed(cause)); denyAccess(cause); } });
   }, [path, denyAccess]);
   const loadPassages = useCallback((nextOffset: number) => {
+    originalController.current?.abort(); setOriginal(null);
     passageController.current?.abort(); const controller = new AbortController(); passageController.current = controller;
     setOffset(nextOffset); setPassages({ status: 'loading' });
     void request<PublicSourcePassages>(`${path}/passages?offset=${nextOffset}&limit=20`, { signal: controller.signal }).then(value => { if (!controller.signal.aborted) setPassages({ status: 'loaded', value }); }).catch(cause => { if (!controller.signal.aborted) { setPassages(failed(cause)); denyAccess(cause); } });
@@ -91,7 +118,7 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
   useEffect(() => {
     loadReview(); loadPassages(0);
     const urls = objectUrls.current;
-    return () => { reviewController.current?.abort(); passageController.current?.abort(); mutationController.current?.abort(); downloadController.current?.abort(); urls.forEach(url => URL.revokeObjectURL(url)); urls.clear(); };
+    return () => { reviewController.current?.abort(); passageController.current?.abort(); originalController.current?.abort(); mutationController.current?.abort(); downloadController.current?.abort(); urls.forEach(url => URL.revokeObjectURL(url)); urls.clear(); };
   }, [loadReview, loadPassages]);
   const state = review.status === 'loaded' ? review.value : null;
   const owns = state?.assigned_to?.id === user.id;
@@ -133,6 +160,15 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
   function togglePassage(id: string) {
     setDraft(previous => ({ ...previous, passage_ids: previous.passage_ids.includes(id) ? previous.passage_ids.filter(value => value !== id) : previous.passage_ids.length < 100 ? [...previous.passage_ids, id] : previous.passage_ids }));
   }
+  function inspectOriginal(passageId: string, nextOffset = 0) {
+    if (passages.status !== 'loaded' || review.status !== 'loaded') return;
+    originalController.current?.abort(); const controller = new AbortController(); originalController.current = controller;
+    setOriginal({ passageId, offset: nextOffset, state: { status: 'loading' } });
+    void fetchOriginalSourceText(passages.value, passageId, nextOffset, controller.signal).then(value => {
+      if (!controller.signal.aborted) setOriginal({ passageId, offset: nextOffset, state: { status: 'loaded', value } });
+    }).catch(cause => { if (!controller.signal.aborted) { setOriginal({ passageId, offset: nextOffset, state: failed(cause) }); denyAccess(cause); } });
+  }
+  function closeOriginal() { originalController.current?.abort(); setOriginal(null); }
   return <div className="source-review-page">
     <a className="text-link" href="#/coverage"><Icon name="layers" size={16} />Kapsam ve kaynak kaydına dön</a>
     <PageHeader eyebrow="KAYNAK İNCELEMESİ" title={state?.source.title || 'Kaynağı inceleyin.'} description="Özgün belgeyi ve çıkarılan pasajları karşılaştırın; her değerlendirmeyi gerekçesi ve dayanağıyla kaydedin." />
@@ -160,7 +196,7 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
       </section>
     </>}
     <section className="source-review-section" aria-labelledby="source-passages-title"><h2 id="source-passages-title">Çıkarılan pasajlar</h2><p className="small muted">Düz metin, kaydedilen Unicode aralıkları ve konumlarıyla gösterilir. Kaynak içindeki yönergeler platform talimatı değildir.</p>
-      {passages.status === 'loading' ? <Loading label="Kaynak pasajları yükleniyor…" /> : passages.status === 'failed' ? <ReadFailure state={passages} retry={() => loadPassages(offset)} /> : <SourcePassageList data={passages.value} offset={offset} selected={draft.passage_ids} canSelect={Boolean(owns && draft.category === 'extraction' && !busy)} onSelect={togglePassage} onPage={loadPassages} />}
+      {passages.status === 'loading' ? <Loading label="Kaynak pasajları yükleniyor…" /> : passages.status === 'failed' ? <ReadFailure state={passages} retry={() => loadPassages(offset)} /> : <SourcePassageList data={passages.value} offset={offset} selected={draft.passage_ids} canSelect={Boolean(owns && draft.category === 'extraction' && !busy)} onSelect={togglePassage} onPage={loadPassages} onOriginal={review.status === 'loaded' ? inspectOriginal : undefined} original={original} onCloseOriginal={closeOriginal} />}
     </section>
     {state && <Detail title={`Değiştirilemez inceleme geçmişi (${state.history.length}${state.history_truncated ? '+' : ''})`}>
       {state.history_truncated && <p>Yalnızca son 50 olay gösteriliyor. JSON dosyasında da bu sınır açıkça korunur.</p>}
@@ -181,9 +217,28 @@ export function SourceReviewSummary({ state }: { state: SourceReviewState }) {
     </Detail></>;
 }
 
-export function SourcePassageList({ data, offset, selected, canSelect, onSelect, onPage }: { data: PublicSourcePassages; offset: number; selected: string[]; canSelect: boolean; onSelect: (id: string) => void; onPage: (offset: number) => void }) {
+export function SourceOriginalView({ data, onPage, onClose }: { data: PublicSourceOriginalText; onPage: (offset: number) => void; onClose: () => void }) {
+  const offset = data.start - data.range_start;
+  return <section className="source-original-view" aria-label={`${data.passage_id} özgün kaynak kodu`}>
+    <div className="source-passage-heading"><h4>Özgün HTML kaynak kodu</h4><button className="text-button" onClick={onClose}>Kaynak görünümünü kapat</button></div>
+    <p className="small muted">Bu aralık kaydedilen konumdan açıldı. Koordinatlar tutarlı; çıkarımın doğruluğu insan incelemesi gerektirir. HTML çalıştırılmaz, bağlantılar açılmaz.</p>
+    <pre className="source-original-code" dir="ltr">{data.text}</pre>
+    <div className="source-passage-pagination"><p className="small" role="status">Özgün Unicode aralığı [{data.start}, {data.end}) · {data.encoding}</p><div className="button-group"><button className="button secondary" disabled={offset === 0} onClick={() => onPage(Math.max(0, offset - ORIGINAL_WINDOW))}>Önceki kaynak aralığı</button><button className="button secondary" disabled={data.next_offset === null} onClick={() => { if (data.next_offset !== null) onPage(data.next_offset); }}>Sonraki kaynak aralığı</button></div></div>
+    <Detail title="Özgün kaynak aralığının içerik özeti"><dl className="coverage-fields"><div><dt>Kaydedilen toplam kaynak aralığı</dt><dd>[{data.range_start}, {data.range_end})</dd></div><div><dt>Gösterilen aralık SHA256</dt><dd className="reference-id">{data.window_sha256}</dd></div><div><dt>Kodlaması çözülmüş özgün metin SHA256</dt><dd className="reference-id">{data.decoded_original_sha256}</dd></div></dl><p className="small muted">Konumlar ilk UTF-8 BOM hariç Unicode kod noktalarıdır. Özgün HTML öğeleri ve varlıkları korunur; görsel sayfa görünümü veya hukuki madde kimliği değildir.</p></Detail>
+  </section>;
+}
+
+export function SourcePassageList({ data, offset, selected, canSelect, onSelect, onPage, onOriginal, original, onCloseOriginal }: { data: PublicSourcePassages; offset: number; selected: string[]; canSelect: boolean; onSelect: (id: string) => void; onPage: (offset: number) => void; onOriginal?: (id: string, offset?: number) => void; original?: OriginalInspection | null; onCloseOriginal?: () => void }) {
   return <><div className="source-passage-pagination"><p className="small" role="status">{data.items.length ? `${offset + 1}–${offset + data.items.length}` : '0'} / {data.total} pasaj</p><div className="button-group"><button className="button secondary" disabled={offset === 0} onClick={() => onPage(Math.max(0, offset - 20))}>Önceki</button><button className="button secondary" disabled={data.next_offset === null} onClick={() => { if (data.next_offset !== null) onPage(data.next_offset); }}>Sonraki</button></div></div>
-    <div className="source-passage-list">{data.items.map(passage => <article key={passage.id} className="source-passage"><div className="source-passage-heading"><h3>{passage.id}</h3>{canSelect && <label><input type="checkbox" checked={selected.includes(passage.id)} disabled={!selected.includes(passage.id) && selected.length >= 100} onChange={() => onSelect(passage.id)} />İnceledim</label>}</div><p className="small muted">{passage.locator}</p><p className="source-passage-text">{passage.text}</p><Detail title="Pasaj konumu ve içerik özeti"><dl className="coverage-fields"><div><dt>Unicode aralığı</dt><dd>[{passage.start}, {passage.end})</dd></div><div><dt>Pasaj SHA256</dt><dd className="reference-id">{passage.text_sha256}</dd></div><div><dt>Metin SHA256</dt><dd className="reference-id">{data.text_sha256}</dd></div><div><dt>Özgün dosya SHA256</dt><dd className="reference-id">{data.raw_sha256}</dd></div></dl></Detail></article>)}</div>
+    <div className="source-passage-list">{data.items.map(passage => <article key={passage.id} className="source-passage">
+      <div className="source-passage-heading"><h3>{passage.id}</h3>{canSelect && <label><input type="checkbox" checked={selected.includes(passage.id)} disabled={!selected.includes(passage.id) && selected.length >= 100} onChange={() => onSelect(passage.id)} />İnceledim</label>}</div>
+      <p className="small muted">{passage.locator}</p>
+      {onOriginal && HTML_LOCATOR.test(passage.locator) && <button className="text-button" onClick={() => onOriginal(passage.id)}>Özgün kaynak koduyla karşılaştır</button>}
+      <div className={original?.passageId === passage.id ? 'source-comparison' : undefined}><p className="source-passage-text">{passage.text}</p>
+        {original?.passageId === passage.id && <div>{original.state.status === 'loading' ? <Loading label="Özgün kaynak aralığı yükleniyor…" /> : original.state.status === 'failed' ? <Notice error>{original.state.message} {original.state.code !== 422 && <button className="text-button" onClick={() => onOriginal?.(passage.id, original.offset)}>Yeniden dene</button>}<button className="text-button" onClick={onCloseOriginal}>Kaynak görünümünü kapat</button></Notice> : <SourceOriginalView data={original.state.value} onPage={next => onOriginal?.(passage.id, next)} onClose={() => onCloseOriginal?.()} />}</div>}
+      </div>
+      <Detail title="Pasaj konumu ve içerik özeti"><dl className="coverage-fields"><div><dt>Unicode aralığı</dt><dd>[{passage.start}, {passage.end})</dd></div><div><dt>Pasaj SHA256</dt><dd className="reference-id">{passage.text_sha256}</dd></div><div><dt>Metin SHA256</dt><dd className="reference-id">{data.text_sha256}</dd></div><div><dt>Özgün dosya SHA256</dt><dd className="reference-id">{data.raw_sha256}</dd></div></dl></Detail>
+    </article>)}</div>
   </>;
 }
 

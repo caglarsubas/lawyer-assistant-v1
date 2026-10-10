@@ -124,6 +124,11 @@ isolated import container and dedicated public-source volume. Claim the source i
 the curator workspace and assess rights, identity, fidelity and legal context
 separately.
 
+For HTML with these source-code locators, **Özgün kaynak koduyla karşılaştır**
+opens an inert, bounded original window beside an extracted passage in the curator
+workspace. Both use the same strict decoder. Coordinate checks do not certify
+fidelity; see [original inspection](SOURCE_REVIEW_CONTRACT.md#original-source-code-inspection).
+
 All sources remain rights pending and legal review pending. Enacted text remains
 explicitly **not current consolidated law**. Public-origin declarations cannot prove
 absence of PII; sensitivity review remains open. Preparation fabricates no reviewer
