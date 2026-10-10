@@ -1578,7 +1578,13 @@ See the [operator contract](REGISTERED_SOURCES.md), [verification](VALIDATION.md
 and [engineering receipt](evidence/registered-domain-intake-2026-10-11.json).
 This packet requires manual PR merge and exact-head hosted checks. It does not
 change the deployed app, provider, private matters or actual curator records.
-CI event configuration, worker counts, retries and time limits are unchanged.
+The inherited main run `38068593529` timed out at the existing 18-minute backend
+step limit near 99% completion. Local profiling identified uneven CI ownership;
+119 source/model review tests now use existing spare runner capacity. Complete
+collection still covers all 3,632 cases exactly once. The workspace group uses two
+workers, matching the other groups; event configuration, runner count, retries
+and every time limit are unchanged. No validation result/source cache or disabled
+test is introduced. Hosted qualification is separate from local timing.
 
 Next: qualified curators review all four acquired originals, recording actual
 active effort and adjudicated study evidence; add other lawful source families

@@ -24,9 +24,29 @@ Local verification:
   remains; no provider, application volume or credential was present.
 - **41** deployment contract tests and repository-configured Ruff passed. Test
   collection partitions all **3,632** backend cases across the existing CI groups
-  with no missing, duplicate or extra cases. No CI YAML, runner concurrency,
-  deadlines, retry policy or dependency change is included. Frontend code is
-  unchanged; its hosted checks remain required.
+  with no missing, duplicate or extra cases. Frontend code is unchanged; its hosted checks remain required. The inherited
+  main timeout requires the bounded CI redistribution below.
+
+The inherited post-merge main run **38068593529** failed when **Test backend**
+reached its unchanged **18-minute** step deadline; last progress was **99%** and
+no assertion failure was recorded. Frontend and PostgreSQL jobs passed in 3m18s
+and 2m36s. The first PR head remains separate from the final CI change.
+
+A Linux profile of the candidate 119-test group passed in **31.93 s** on two CPUs.
+Move 100 source-review tests into the existing publication runner and 19 model
+cohort tests into the existing workspace runner. Those final groups passed locally:
+**132 tests / 44.15 s** (publication/source review), **77 tests / 30.07 s**
+(workspace/model cohorts). The workspace group now uses two workers like the other
+groups, preserving its two-minute step limit. All three jobs, event rules,
+20/5/5-minute job caps, the 18-minute backend step cap, retries and dependencies
+are unchanged. No source, permission, graph-validation result or inferred-triple
+cache is added. Production checks still run afresh; only CI ownership changes.
+
+The final collection has **3,632** cases: preflight 89, backend remaining 3,254,
+model trials 20, workspace/model cohorts 77, human review 60, publication/source
+review 132. Pairwise intersection, missing and extra counts are zero. Existing
+real-PostgreSQL execution remains separately required. Local container timings do
+not establish hosted speedup, billing savings or future growth capacity.
 
 Actual acquisition and offline preparation:
 

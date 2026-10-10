@@ -1,10 +1,10 @@
 {
   "schema": "registered-domain-intake-engineering-v1",
-  "recorded_at": "2026-10-10T16:55:19.511967+00:00",
+  "recorded_at": "2026-10-10T17:10:29.683465+00:00",
   "base_merge": "bba695c8d5c100253952f4a911794ce8d3cc76aa",
   "base_post_merge_run": 38068593529,
   "base_jobs_at_recording": {
-    "conclusion": "",
+    "conclusion": "failure",
     "jobs": [
       {
         "completedAt": "2026-10-10T16:43:28Z",
@@ -21,14 +21,14 @@
         "status": "completed"
       },
       {
-        "completedAt": "0001-01-01T00:00:00Z",
-        "conclusion": "",
+        "completedAt": "2026-10-10T16:59:47Z",
+        "conclusion": "failure",
         "name": "backend-and-contracts",
         "startedAt": "2026-10-10T16:40:10Z",
-        "status": "in_progress"
+        "status": "completed"
       }
     ],
-    "status": "in_progress"
+    "status": "completed"
   },
   "registry_version": "tbmm-enacted-2026-10-11-v2",
   "files_sha256": {
@@ -68,16 +68,26 @@
     },
     "ruff": "passed_repository_configuration",
     "frontend_code_changed": false,
-    "workflow_code_changed": false
+    "workflow_code_changed": true,
+    "linux_rebalanced_workspace": {
+      "passed": 77,
+      "seconds": 30.07,
+      "workers": 2
+    },
+    "linux_rebalanced_publication": {
+      "passed": 132,
+      "seconds": 44.15,
+      "workers": 2
+    }
   },
   "ci_collection": {
     "schema": "complete-ci-partition-v1",
     "counts": {
       "complete": 3632,
       "preflight": 89,
-      "remaining": 3373,
-      "publication": 32,
-      "workspace": 58,
+      "remaining": 3254,
+      "publication": 132,
+      "workspace": 77,
       "human_review": 60,
       "model_trials": 20
     },
@@ -91,12 +101,15 @@
     "publication_files": [
       "backend/tests/test_open_validity_publication.py",
       "backend/tests/test_publication_cli.py",
-      "backend/tests/test_authority_revalidations.py"
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
     ],
     "workspace_files": [
       "backend/tests/test_firm_admin.py",
       "backend/tests/test_content_scope.py",
-      "backend/tests/test_authority_proposals.py"
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
     ],
     "human_review_files": [
       "backend/tests/test_authority_trial_cohorts.py",
@@ -109,9 +122,10 @@
     "intersection": 0,
     "missing": 0,
     "extra": 0,
-    "complete_node_ids_sha256": "ab919ddea1d51128e36bc7627e507a65ca594b4bf26f5288d4f9e69e5c469ae0",
-    "workflow_sha256": "9e9b8003a36dd25553aeffea4e59f41bf6c9a6d702718a9ad0356844c96dda92",
-    "no_runner_retry_existing_deadline_change": true,
+    "complete_node_ids_sha256": "1cdde7956b1e95c7b5965ff9345ae96226b0b16c2b8064b28ccedc9b472a1c68",
+    "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
     "human_review_workers": 2,
     "human_review_new_step_minutes": 3,
     "hosted_speedup_or_billing_savings_established": false
@@ -317,6 +331,34 @@
     "inspection": "all digest/range checks and six HTTP windows are engineering integrity checks, not legal review",
     "deployed_app_or_private_data_changed": false,
     "credentials_loaded_or_transmitted": false,
-    "hosted_ci": "separate exact-head results retained after push; no rerun or metadata-only push requested"
+    "hosted_ci": "Updated code will trigger the normal exact-head run. No retry, deadline increase, runner addition or metadata-only push requested."
+  },
+  "ci_rebalance": {
+    "trigger_run": 38068593529,
+    "trigger_job": 114261199102,
+    "trigger": "Test backend timed out after 18 minutes, last progress 99 percent; no assertion failure recorded",
+    "test_count_transferred": 119,
+    "remaining_count_before": 3373,
+    "remaining_count_after": 3254,
+    "workspace_count_before": 58,
+    "workspace_count_after": 77,
+    "publication_count_before": 32,
+    "publication_count_after": 132,
+    "new_jobs": 0,
+    "new_runners": 0,
+    "deadlines_changed": false,
+    "event_configuration_changed": false,
+    "rerun_requested": false,
+    "workspace_workers_before": 1,
+    "workspace_workers_after": 2,
+    "validation_verdict_or_source_cache_added": false,
+    "tests_disabled": false,
+    "billing_reduction_established": false,
+    "local_profile": {
+      "cases": 119,
+      "seconds": 31.93,
+      "cpus": 2
+    },
+    "limits": "Local group timings are not hosted capacity proof. Exact-head CI must pass with the unchanged 5/20-minute job caps and 18-minute backend step cap."
   }
 }
