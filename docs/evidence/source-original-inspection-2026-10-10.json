@@ -1,0 +1,266 @@
+{
+  "schema_version": "source-original-inspection-verification-v1",
+  "base": {
+    "pull_request": 41,
+    "merge_commit": "7710ef7f5c3f542be3510dc086491f5bd3a51b12",
+    "main_run": 38061667300,
+    "all_three_jobs": "success"
+  },
+  "scope": "inert curator original-source windows and real quarantined contract sample; not legal qualification or deployment",
+  "code_sha256": {
+    "backend/app/source_original_text.py": "d030378e4eca22e301d4da2a6299ec25a050cdb53dab4b618efa7465bbb32670",
+    "backend/app/public_sources.py": "9b4101c205ca6567da5e4498268ef199ae86543d9c9502a4996c79c5b52ee485",
+    "backend/app/registered_source_preparation.py": "8a37b86881c88ecd5a3ac0dd3fbbb3c10d72bfc30cd4a030636187a1058812af",
+    "backend/tests/test_source_original_text.py": "72fa0fb092e79f4ee254e231874b3a99acc496b671d43417fff5208aa1ec3bdd",
+    "frontend/src/pages/SourceReviewPage.tsx": "94875aa515ac2c63096b3c9c68c7198135a526c83e6ab5f26aca2dbd8dbeb966",
+    "frontend/src/pages/SourceReviewPage.test.tsx": "317477e9cfde588d57ac12f8496bc56681eea088efd27310fcd1fe34a57c288d",
+    "frontend/src/types.ts": "1359e14891601d61c3d0c5104bcd923610e77b13006acb28705344bc6ca498e6",
+    "frontend/src/styles.css": "5cfb7d5b815b5613608243d273dca500ac2cc8276d45387355ceb7dda9eb8188"
+  },
+  "acquisition": {
+    "registry_id": "tbmm-6098-enacted",
+    "acquired_at": "2026-10-10T15:01:28.269678+00:00",
+    "raw_sha256": "0d34bafb03f799995266b0f6cf7ca551ea97643bf671de05388b3132c0d05b41",
+    "byte_count": 708685,
+    "registry_version": "tbmm-enacted-2026-10-04-v1",
+    "image_id": "sha256:95dcfeb31f0c3e3dffc22c8838500f293aa0fceba1a1c2ab8209cadf03c31376",
+    "network_policy_changed": false,
+    "dns_diagnosis": {
+      "completed": [
+        {
+          "family": 0,
+          "elapsed": 0.005,
+          "status": "resolved",
+          "addresses": [
+            "185.160.114.164"
+          ]
+        },
+        {
+          "family": 2,
+          "elapsed": 0.005,
+          "status": "resolved",
+          "addresses": [
+            "185.160.114.164"
+          ]
+        },
+        {
+          "family": 10,
+          "elapsed": 0.002,
+          "status": "dns_failed"
+        }
+      ],
+      "pending": 0
+    },
+    "dns_root_cause_established": false
+  },
+  "preparation": {
+    "adapter_version": "registered-html-blocks-v1",
+    "encoding": "cp1254",
+    "passage_count": 2438,
+    "text_sha256": "037f3663cc7319c935d4611f263456e47d964ca8479734dc352698c9639b0994",
+    "decoded_html_sha256": "ba239fe215a7f133ecb8283bca3308c9e61f8f7036abc90cb3dcb80cda8547a1",
+    "elapsed_seconds": 0.025046999973710626,
+    "current_consolidation": false
+  },
+  "scan": {
+    "clean": true,
+    "databases": {
+      "databases": [
+        {
+          "build_time": 1765927102,
+          "bytes": 89072577,
+          "file": "main.cvd",
+          "sha256": "0b2182d229f46981ec8f535382222f7c9dfdd656b250ad47988b910a8d302365",
+          "signatures": 3287027,
+          "version": 63
+        },
+        {
+          "build_time": 1791613444,
+          "bytes": 23442295,
+          "file": "daily.cvd",
+          "sha256": "d4117485e03b333d4b40d77b9280750a14555ae84978f43de676cf5ff0810fd8",
+          "signatures": 355760,
+          "version": 28149
+        },
+        {
+          "build_time": 1757593759,
+          "bytes": 281702,
+          "file": "bytecode.cvd",
+          "sha256": "6d4aa01f219e988060fc419f495d07f27e0cdf1a2cccc065971da922c76f7ffb",
+          "signatures": 80,
+          "version": 339
+        }
+      ],
+      "engine": "ClamAV 1.4.6",
+      "schema_version": 1
+    },
+    "elapsed_seconds": 5.8932179610128514,
+    "raw_sha256": "0d34bafb03f799995266b0f6cf7ca551ea97643bf671de05388b3132c0d05b41",
+    "schema_version": "registered-source-scan-v1"
+  },
+  "parser_image_id": "sha256:e48a76286a19a971bcf8b7a8658d04df97130f28264ac5115fd75e4381462c97",
+  "scanner_image_id": "sha256:f5e27bb0523b586350f123763246debbfef9b18e7c6f50f0fde76b1ac7582222",
+  "public_import": {
+    "id": "b8910032eb8bfa8a02085d5125ea071e517940d2f25e8225c6abdeec0b48792b",
+    "title": "6098 sayılı Türk Borçlar Kanunu — kabul edilen metin",
+    "source_url": "https://cdn.tbmm.gov.tr/KKBSPublicFile/D23/Y2/T1/KanunMetni/a657b33d-109c-473d-9266-5aa48d603ab2.html",
+    "source_version_id": "tbmm-6098-enacted:sha256:0d34bafb03f799995266b0f6cf7ca551ea97643bf671de05388b3132c0d05b41",
+    "domain": "contracts",
+    "acquired_at": "2026-10-10T15:01:28.269678+00:00",
+    "rights_status": "rights_pending",
+    "review_status": "legal_review_pending",
+    "passage_count": 2438,
+    "publication_status": "staged"
+  },
+  "original_coordinate_checks": {
+    "source_id": "b8910032eb8bfa8a02085d5125ea071e517940d2f25e8225c6abdeec0b48792b",
+    "registry_id": "tbmm-6098-enacted",
+    "checked_locator_coordinates": 2438,
+    "raw_sha256": "0d34bafb03f799995266b0f6cf7ca551ea97643bf671de05388b3132c0d05b41",
+    "decoded_original_sha256": "ba239fe215a7f133ecb8283bca3308c9e61f8f7036abc90cb3dcb80cda8547a1",
+    "extraction_fidelity_reviewed": false,
+    "rights_approved": false,
+    "legal_approved": false,
+    "published": false,
+    "provider_called": false,
+    "scope": "one verified public snapshot, pure inert window projection"
+  },
+  "local_api_sample": {
+    "source_id": "b8910032eb8bfa8a02085d5125ea071e517940d2f25e8225c6abdeec0b48792b",
+    "sampled_http_windows": [
+      {
+        "passage_id": "html_block_0001",
+        "status": 200,
+        "window_sha256": "30c76d66b46756501bdf9beb651f199b8df0adc58c4d4f4b28cc5c0728de8662",
+        "no_store": true
+      },
+      {
+        "passage_id": "html_block_1220",
+        "status": 200,
+        "window_sha256": "0e885b568d67fa4c21f8d2d95467a4721cc3571c778cfa7ba773d8c839802d1e",
+        "no_store": true
+      },
+      {
+        "passage_id": "html_block_2438",
+        "status": 200,
+        "window_sha256": "13dbe4c85b147fefd6f74f0a569cab493256350a155273ce88ccfbd36d563439",
+        "no_store": true
+      }
+    ],
+    "review_revision_before_after": 0,
+    "review_created_or_changed": false,
+    "network_used": false,
+    "provider_called": false,
+    "scope": "temporary local demo/TestClient; not deployed application or browser acceptance"
+  },
+  "local_checks": {
+    "new_backend_cases": 41,
+    "focused_native": {
+      "passed": 209,
+      "seconds": 11.46
+    },
+    "restricted_linux": {
+      "passed": 483,
+      "seconds": 62.93,
+      "network": "none",
+      "readonly": true,
+      "user": "10001:10001",
+      "cpus": 2,
+      "memory": "1g",
+      "pids": 64,
+      "tmpfs": "256m,noexec,nosuid,nodev",
+      "fingerprints": {
+        "backend/app/source_original_text.py": "d030378e4eca22e301d4da2a6299ec25a050cdb53dab4b618efa7465bbb32670",
+        "backend/app/public_sources.py": "9b4101c205ca6567da5e4498268ef199ae86543d9c9502a4996c79c5b52ee485",
+        "backend/app/registered_source_preparation.py": "8a37b86881c88ecd5a3ac0dd3fbbb3c10d72bfc30cd4a030636187a1058812af",
+        "backend/tests/test_source_original_text.py": "72fa0fb092e79f4ee254e231874b3a99acc496b671d43417fff5208aa1ec3bdd"
+      },
+      "image_id": "sha256:fa92b929380c8ee805033ed85e5d8ff4b6429853fc7b432763d10d0cb413ecf0"
+    },
+    "frontend": {
+      "passed": 240,
+      "files": 30,
+      "build": "passed"
+    },
+    "deployment_contracts": {
+      "passed": 41
+    },
+    "ruff": "passed",
+    "whitespace": "passed",
+    "ci_partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 3566,
+        "preflight": 89,
+        "remaining": 3307,
+        "publication": 32,
+        "workspace": 58,
+        "human_review": 60,
+        "model_trials": 20
+      },
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_open_validity_publication.py",
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_content_scope.py",
+        "backend/tests/test_authority_proposals.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_authority_trial_cohorts.py",
+        "backend/tests/test_analysis_cohorts.py",
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "b6c18adfda7c44bb56f3d2fb464cf0376a3e43dca3c9f8de64b7abec59930a33",
+      "workflow_sha256": "9e9b8003a36dd25553aeffea4e59f41bf6c9a6d702718a9ad0356844c96dda92",
+      "no_runner_retry_existing_deadline_change": true,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "hosted_speedup_or_billing_savings_established": false
+    }
+  },
+  "retained_initial_failures": [
+    {
+      "check": "frontend focused",
+      "failed": 7,
+      "passed": 39,
+      "cause": "new describe block did not reset a reused fetch mock",
+      "resolution": "reset mock before each case; full frontend suite passed"
+    },
+    {
+      "check": "deployment invocation",
+      "exit_code": 4,
+      "tests_run": 0,
+      "cause": "requested nonexistent deploy/tests path",
+      "resolution": "exact CI unittest discover command passed 41 tests"
+    }
+  ],
+  "boundaries": {
+    "source_rights_approved": false,
+    "source_identity_reviewed": false,
+    "extraction_fidelity_reviewed": false,
+    "sensitivity_reviewed": false,
+    "legal_approved": false,
+    "representative_throughput_established": false,
+    "new_ci_jobs_or_retries_or_time_limits": false,
+    "provider_called": false,
+    "published_or_indexed": false,
+    "deployed": false
+  },
+  "hosted_checks": "Required at exact PR head after push; final results retained locally and in PR body without a metadata-only code push"
+}

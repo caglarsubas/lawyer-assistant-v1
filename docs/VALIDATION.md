@@ -1,5 +1,64 @@
 # Verification record — 10 October 2026
 
+## Original-source fidelity inspection — 10 October 2026
+
+PR #41 is merged at `7710ef7f5c3f542be3510dc086491f5bd3a51b12`; all three
+post-merge jobs passed in run `38061667300`. This packet adds curator comparison
+of inert original HTML with extracted passages and an actual registered 6098
+sample for pending review. No source/legal acceptance is granted.
+
+| Check | Result |
+|---|---|
+| New backend boundaries | 41 invented-source cases |
+| Focused native source/preparation regressions | 209 passed, 11.46s |
+| Restricted Linux source/review/provision regressions | 483 passed, 62.93s; matching application/test fingerprints |
+| Complete frontend and production build | 240 passed across 30 files; build passed |
+| Deployment contracts | Exact CI unittest command: 41 passed |
+| Ruff and whitespace | Passed |
+| Complete/disjoint CI collection | 3,566 cases; no missing, extra or overlapping cases |
+| Real 6098 source-coordinate inspection | All 2,438 recorded original ranges consistent |
+| Real-source HTTP windows | First, middle and last passage: 200, exact projection, no-store; temporary local demo only |
+
+The current isolated acquisition resolves the exact TBMM hostname and fetches
+the registered 6098 URL under existing public-IP/TLS/wire/deadline checks. No DNS
+or network setting changed; the earlier timeout's cause remains unknown. Original
+SHA256 is `0d34bafb03f799995266b0f6cf7ca551ea97643bf671de05388b3132c0d05b41`,
+708,685 bytes, acquired `2026-10-10T15:01:28.269678+00:00`. The existing local
+scanner and cryptographically verified fresh official databases passed the
+mandatory disconnected scan. The pinned preparation image produced 2,438 cp1254
+passages. Parser time was 0.025047s for this call, not representative throughput.
+Public-only host package:
+`b8910032eb8bfa8a02085d5125ea071e517940d2f25e8225c6abdeec0b48792b`.
+
+The all-coordinate sweep uses one verified public snapshot and pure window
+projection. Three API reads use an isolated temporary demo/TestClient with network
+resolution blocked and provider/graph/search/gateway unset. Source review remains
+revision0 before and after inspection; no review is created or changed. Neither
+check establishes browser acceptance or behavior of the deployed application.
+
+Tests cover exact Unicode/CRLF/combining/astral positions, unchanged markup/entities
+and whitespace, hashes, pagination, unsupported/ambiguous encodings, non-HTML/
+oversized originals, unknown or inconsistent locators, full-artifact integrity,
+bounded inputs, response identity mismatch, escaped hostile content and revoked
+role/account/firm access. Shared decoding retains all preparation regressions.
+Linux uses network none, read-only image, user10001, dropped capabilities,
+bounded 1GiB/2CPU/64PIDs and 256MiB noexec scratch; its container is removed.
+
+Two initial validation failures are retained: seven frontend cases saw an old
+fetch mock call because the new test group omitted its reset; resetting the mock
+gives the full pass. Nonexistent `deploy/tests` exited4 with no tests run; the
+unchanged CI unittest discovery command passes41. Final Ruff passes after one
+import-format correction. The build retains its existing large-chunk warning.
+
+Rights, identity, sensitivity, extraction fidelity and historical/legal review
+are pending. Coordinate agreement is not extraction truth, corpus coverage,
+privacy clearance or current consolidated law. No provider call, permission
+record, serving release, graph/index update, deployment, CI job/retry/worker/
+deadline change or billing-savings claim is made. Exact-head hosted CI remains
+required after push and will be recorded in the PR body without a metadata-only
+code push. See [inspection contract](SOURCE_REVIEW_CONTRACT.md#original-source-code-inspection)
+and [receipt](evidence/source-original-inspection-2026-10-10.json).
+
 ## Registered public-source preparation — 10 October 2026
 
 Verified continuation: PR #40 merged into main at

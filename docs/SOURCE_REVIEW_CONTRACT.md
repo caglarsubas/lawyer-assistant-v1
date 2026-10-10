@@ -17,6 +17,11 @@ retrieval. An absent review has revision0 and no owner; GET does not create it.
   total, next_offset, source/raw/text digests and integrity scope. Plain text only.
 - `GET /original`: integrity-checked opaque attachment (`application/octet-stream`),
   never browser-rendered HTML. Source fidelity review compares this with extracted text.
+- `GET /original-text?passage_id=html_block_0001&offset=0&limit=12000`:
+  an inert original HTML source-code window beside the selected extracted passage.
+  The offset is relative to that passage's recorded original range; the limit is
+  1–12,000 Unicode code points. No arbitrary original range or source URL is accepted.
+  See the inspection boundaries below.
 - `GET /review`: response shape below, last50 events, explicit history_truncated.
 - `POST /review/assignment`: `{expected_revision, action:"claim"|"release", rationale}`.
   A reviewer claims an unassigned source; reviews require that ownership. Only the
@@ -39,6 +44,39 @@ Evidence references: `{reference:string, sha256:64-lowercase-hex}`;1–10 on acc
 maximum10 otherwise. They bind an accountable review to supporting material; its
 availability/authenticity still needs human verification. Passage IDs maximum100,
 unique and members of the exact source package. Review never presumes current law.
+
+## Original source-code inspection
+
+For prepared HTML, choose **Özgün kaynak koduyla karşılaştır** on a passage.
+The view preserves source whitespace, CRLF, markup and HTML entities as escaped
+plain text. It does not render HTML, execute scripts, open links, load resources,
+call a provider or interpret the document. Narrow work areas stack the comparison.
+Large original ranges have separate paging; only one passage's original window is
+open at a time. Opening a window never selects **İnceledim** or saves a decision.
+
+Every window verifies the complete immutable source package, then checks the
+recorded source-code range and its line/column against the decoded original.
+UTF-8, Windows-1254 and ISO-8859-9 use the same strict decoder as disconnected
+preparation. No fallback or replacement decoding is allowed. The preview admits
+only `text/html` originals of at most 1 MiB and the preparation adapter's exact
+source-code locator syntax. Other formats, unknown locators, conflicting encodings
+and inconsistent coordinates return a fixed 422 response. The original attachment
+remains the independent inspection path; integrity failures remain 409.
+
+Responses bind source/package/version/passage identity, raw and extracted-text
+digests, decoded-original and window digests, encoding, original range, returned
+window and `next_offset`. Offsets exclude an initial UTF-8 BOM and count Unicode
+code points, rather than UTF-8 bytes or JavaScript UTF-16 units. The browser checks
+identity and window bounds before display. JSON responses use `no-store`, `nosniff`
+and a restrictive CSP. Live curator authorization is checked again before return;
+refresh, paging, source changes and access denial cancel or discard old windows.
+
+`locator_coordinate_status: consistent_not_fidelity_reviewed` means coordinates
+agree only. A self-consistent operator-supplied locator can still identify the wrong
+content. `extraction_fidelity_verified` therefore remains false. Source identity,
+visual reading order, omitted content, privacy, rights, historical applicability and
+actual extraction fidelity still require accountable human review. Source-code
+coordinates are neither rendered page locations nor legal provision identities.
 
 ## Response
 

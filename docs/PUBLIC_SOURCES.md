@@ -143,6 +143,11 @@ Authenticated active `admin` and `curator` roles can read the global **public-on
 
 - `GET /api/v1/public-sources?limit=50&after=SHA256`: bounded lexicographic pagination, source summaries, `next_cursor` and limitations. `integrity_scope: manifest_only` means artifact bytes are not rehashed while listing.
 - `GET /api/v1/public-sources/{SHA256}`: complete artifact and span verification, source dates, artifact digests/sizes, independent-review presence and injection-risk hint names. `integrity_scope: all_artifacts_verified` means integrity only, not legal or rights approval.
+- `GET /api/v1/public-sources/{SHA256}/original-text`: bounded inert HTML source-code
+  inspection for one selected passage's recorded locator, with exact original
+  hashes/encoding and coordinate checks. This curator-only JSON view does not
+  establish extraction fidelity or render the HTML. See the
+  [inspection contract](SOURCE_REVIEW_CONTRACT.md#original-source-code-inspection).
 
 Catalog and metadata responses include no raw source text, raw bytes, local paths, review rationales, reviewer identities or private matter links. Source titles, URLs and metadata remain untrusted display text. A catalog count measures staged packages, not nationwide corpus completeness or qualified legal coverage.
 

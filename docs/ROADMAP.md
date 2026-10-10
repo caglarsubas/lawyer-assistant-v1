@@ -1486,3 +1486,34 @@ is approved connected-route restoration, diverse lawful source/case intake,
 independent source-linked references and measured curator effort before actual
 registered paired studies. R01/R03/R05A legal qualification, target-host capacity
 and pilot acceptance remain open. No new CI jobs, retries or deadlines are added.
+
+### Delivered packet — R01/R03 original-source fidelity inspection, 10 October 2026
+
+PR #41 is verified merged into main at `7710ef7f5c3f542be3510dc086491f5bd3a51b12`;
+all three post-merge jobs passed in run `38061667300`. The isolated TBMM route now
+resolves and a fresh registered 6098 enacted text was acquired without changing
+DNS, destinations, TLS checks or network/deadline policy. The earlier timeout's
+root cause is not established and continued source availability is not assumed.
+
+The 708,685-byte original passed the existing disconnected scan/preparation and
+public-only host import path, producing 2,438 Windows-1254 passages. All recorded
+source-code coordinates agree with that exact decoded original. Three selected
+windows also pass HTTP inspection in a temporary local demo. Rights, identity,
+sensitivity, extraction fidelity and legal applicability remain pending. This is
+one contract-domain sample, not representative corpus coverage or current law.
+
+Curators can now open a bounded inert original HTML source window beside an
+extracted passage. Exact hashes, Unicode coordinates, shared strict decoding,
+separate original-window paging and fresh access checks support accountable
+fidelity review. No scripts/resources are executed and opening a window neither
+selects a reviewed passage nor records acceptance. Other representations and
+unverifiable locators retain the independent original-download path. See the
+[inspection contract](SOURCE_REVIEW_CONTRACT.md#original-source-code-inspection)
+and [verification](VALIDATION.md).
+
+This packet still requires manual PR merge and exact-head hosted checks; nothing
+is deployed or published. Next: qualified curators review the acquired 6098/6101
+originals with measured active effort; expand lawful samples beyond this source,
+representation and contracts; independently author source-linked references;
+then conduct actual registered paired studies. R01/R03/R05A legal qualification,
+representative throughput, target-host capacity and pilot gates remain open.

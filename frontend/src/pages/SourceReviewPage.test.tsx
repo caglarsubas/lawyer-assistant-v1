@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ApiError, onUnauthorized, request, setCsrfToken } from '../api';
-import type { PublicSourcePassages, SourceReviewState, User } from '../types';
-import SourceReviewPage, { assessmentPayload, canReviewSource, EMPTY_ASSESSMENT, fetchSourceAttachment, SourcePassageList, SourceReviewSummary, sourceReviewPath, writeSourceReview, type AssessmentDraft } from './SourceReviewPage';
+import type { PublicSourceOriginalText, PublicSourcePassages, SourceReviewState, User } from '../types';
+import SourceReviewPage, { assessmentPayload, canReviewSource, EMPTY_ASSESSMENT, fetchSourceAttachment, fetchOriginalSourceText, SourceOriginalView, SourcePassageList, SourceReviewSummary, sourceReviewPath, writeSourceReview, type AssessmentDraft } from './SourceReviewPage';
 
 const sourceId = 'a'.repeat(64);
 const user: User = { id: 'reviewer-1', name: 'İnceleyen', role: 'curator', firm_id: 'firm-1' };
@@ -130,5 +130,82 @@ describe('source review evidence and permissions', () => {
     fetchMock.mockRejectedValueOnce(new DOMException('Aborted', 'AbortError'));
     await expect(fetchSourceAttachment(sourceId, 'original', controller.signal)).rejects.toMatchObject({ name: 'AbortError' });
     expect(fetchMock.mock.calls[2][1]?.signal).toBe(controller.signal);
+  });
+});
+
+const originalText = '  İ😀 &amp; <script>fetch("https://untrusted.invalid")</script>\r\n';
+const original: PublicSourceOriginalText = { source_id: sourceId, source_version_id: passages.source_version_id, passage_id: 'p01', raw_sha256: passages.raw_sha256, text_sha256: passages.text_sha256, decoded_original_sha256: 'd'.repeat(64), window_sha256: 'e'.repeat(64), encoding: 'utf-8', offset_unit: 'unicode_code_points_excluding_initial_utf8_bom', range_start: 40, range_end: 40 + Array.from(originalText).length, start: 40, end: 40 + Array.from(originalText).length, next_offset: null, text: originalText, integrity_scope: 'all_artifacts_verified', locator_coordinate_status: 'consistent_not_fidelity_reviewed', extraction_fidelity_verified: false };
+
+describe('inert original-source inspection', () => {
+  const fetchMock = vi.fn<typeof fetch>();
+  beforeEach(() => { vi.stubGlobal('fetch', fetchMock); fetchMock.mockReset(); onUnauthorized(); });
+  afterEach(() => { vi.unstubAllGlobals(); onUnauthorized(); });
+
+  it('requests only a selected source passage and bounded window; passes cancellation', async () => {
+    fetchMock.mockResolvedValue(new Response(JSON.stringify(original), { status: 200 }));
+    const controller = new AbortController();
+    expect(await fetchOriginalSourceText(passages, 'p01', 0, controller.signal)).toEqual(original);
+    const [url, options] = fetchMock.mock.calls[0];
+    expect(url).toBe(`/api/v1/public-sources/${sourceId}/original-text?passage_id=p01&offset=0&limit=12000`);
+    expect(options?.signal).toBe(controller.signal);
+    expect(options?.credentials).toBe('same-origin');
+    expect(options?.body).toBeUndefined();
+  });
+
+  it.each(['../private', 'unknown', 'p01?secret=1'])('rejects a caller-supplied passage before any request: %s', async id => {
+    await expect(fetchOriginalSourceText(passages, id, 0)).rejects.toThrow('konumu geçersiz');
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it.each([-1, 1.5, 1048577, Number.NaN])('rejects out-of-budget offsets before requesting: %s', async offset => {
+    await expect(fetchOriginalSourceText(passages, 'p01', offset)).rejects.toThrow('konumu geçersiz');
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    { source_id: 'f'.repeat(64) }, { source_version_id: 'other-version' }, { passage_id: 'other-passage' },
+    { raw_sha256: 'f'.repeat(64) }, { text_sha256: 'f'.repeat(64) }, { extraction_fidelity_verified: true },
+    { integrity_scope: 'manifest_only' }, { offset_unit: 'utf16' }, { locator_coordinate_status: 'reviewed' },
+    { start: 39 }, { end: original.end + 1 }, { range_end: 1048577 }, { next_offset: 0 },
+    { text: originalText + 'altered' }, { text: null }, { window_sha256: 'broken' }, { decoded_original_sha256: 'broken' },
+  ])('withholds original content with a mismatched identity/window: %j', async change => {
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ ...original, ...change }), { status: 200 }));
+    await expect(fetchOriginalSourceText(passages, 'p01', 0)).rejects.toThrow('eşleşmiyor');
+  });
+
+  it('propagates authorization denial and unavailable-locator errors without a fallback request', async () => {
+    for (const status of [401, 403, 409, 422]) {
+      fetchMock.mockReset();
+      fetchMock.mockResolvedValue(new Response(JSON.stringify({ detail: 'Özgün kaynak gösterilemiyor' }), { status }));
+      await expect(fetchOriginalSourceText(passages, 'p01', 0)).rejects.toMatchObject({ status });
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    }
+  });
+
+  it('escapes original script, entities and URLs without executing, linking or recording acceptance', () => {
+    const markup = renderToStaticMarkup(<SourceOriginalView data={original} onPage={() => undefined} onClose={() => undefined} />);
+    expect(markup).toContain('&lt;script&gt;fetch(&quot;https://untrusted.invalid&quot;)&lt;/script&gt;');
+    expect(markup).toContain('&amp;amp;');
+    expect(markup).not.toContain('<script>'); expect(markup).not.toContain('<iframe'); expect(markup).not.toContain('href="https://');
+    expect(markup).toContain('insan incelemesi gerektirir');
+    expect(markup).not.toContain('checkbox'); expect(markup).not.toContain('Kabul edildi');
+    expect(markup).toContain('disabled="">Önceki kaynak aralığı');
+    expect(markup).toContain('disabled="">Sonraki kaynak aralığı');
+  });
+
+  it('opens a source comparison only for a recognized locator and keeps extraction selection separate', () => {
+    const mapped = { ...passages, items: [{ ...passages.items[0], locator: 'HTML source line 2, column 4; decoded code points [40,90)' }] };
+    const markup = renderToStaticMarkup(<SourcePassageList data={mapped} offset={0} selected={[]} canSelect={false} onSelect={() => undefined} onPage={() => undefined} onOriginal={() => undefined} original={{ passageId: 'p01', offset: 0, state: { status: 'loaded', value: original } }} />);
+    expect(markup).toContain('Özgün kaynak koduyla karşılaştır');
+    expect(markup).toContain('source-comparison'); expect(markup).not.toContain('checkbox');
+    expect(markup).not.toContain('<script>');
+    const unsupported = renderToStaticMarkup(<SourcePassageList data={passages} offset={0} selected={[]} canSelect={false} onSelect={() => undefined} onPage={() => undefined} onOriginal={() => undefined} />);
+    expect(unsupported).not.toContain('Özgün kaynak koduyla karşılaştır');
+  });
+
+  it('does not present old original content under a different selected passage', () => {
+    const markup = renderToStaticMarkup(<SourcePassageList data={passages} offset={0} selected={[]} canSelect={false} onSelect={() => undefined} onPage={() => undefined} original={{ passageId: 'not-p01', offset: 0, state: { status: 'loaded', value: original } }} />);
+    expect(markup).not.toContain('Özgün HTML kaynak kodu');
+    expect(markup).not.toContain(original.window_sha256);
   });
 });
