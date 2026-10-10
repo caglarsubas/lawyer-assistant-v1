@@ -1,5 +1,102 @@
 # Verification record — 10 October 2026
 
+## R01 registration witnesses and main integration — 10 October 2026 (Asia/Shanghai)
+
+Verified PR #36 merged into main at `3de49c8b991e6526ebdf1bc825b815db385a2201`
+and PR #38 merged seven seconds later into its dependency branch. The latter's
+reference-case intake and authorization optimization were absent from main. This
+packet integrates that merged branch; before the extension, its source tree was
+identical to tested PR #38 head `2bd9dfa9cc10f7d559f55a303b14b02eb9765b30`.
+Previous exact-head run `38044253519` passed all three jobs (backend 19m19s,
+remaining suite 17m41s), without changing deadlines or coverage.
+
+The extension verifies separately pinned enrollment records and two to ten distinct
+Ed25519 registration witnesses. Keys/signatures and all legal cases are invented.
+It authenticates key possession and exact commitments only. Actual registration
+time, execution start, current trust administration, professional independence,
+privacy, lawful source approval and legal/production qualification remain unverified.
+There is no provider call, real key/review, database migration or deployment.
+
+| Check | Result |
+|---|---|
+| New witness boundary tests | 46 |
+| Focused qualification regressions | 353 passed, 4.26s |
+| Restricted Linux, matching application/test fingerprints | 447 passed, 71.41s |
+| Deployment contracts | 41 passed |
+| Ruff, ontology/SHACL, R01 planning and whitespace | Passed |
+| Complete/disjoint CI collection | 3,424 cases, zero missing/extra/overlap |
+
+Tests reject changed signed inputs, swapped registries, omitted trust pins, key/subject
+aliases, duplicate signatures, unknown/revoked/expired keys, wrong purposes/domains,
+invalid declared chronology, duplicate JSON, links, FIFOs, oversized/extra files and
+changes during both witness and final casebook capture. Actual CLI scoring with valid
+invented witnesses still exits 1 for synthetic evidence; failures exit 2 without
+partial output or private paths/values. A measurement date is not execution start.
+No witness opts into trust automatically, supplies real approval or changes scoring
+thresholds. Legacy unsupplied behavior remains explicit.
+
+Linux used a read-only container, no network/host ports/mounts, user 10001, dropped
+capabilities, no-new-privileges and bounded CPU/RAM/PIDs/tmpfs. Its disposable container
+was removed. Existing PostgreSQL/UI/runtime code is unchanged by the witness extension;
+hosted checks still cover every required group and real PostgreSQL race check.
+No runners, retries, workers or deadline allowances were added. Hosted exact-head
+checks follow final push; manual merge, post-merge main CI, deployment and legal
+qualification are separate. Final hosted results are recorded in the PR description
+without an evidence-only code push. See [contract](REFERENCE_CASE_INTAKE.md#independently-enrolled-registration-signatures)
+and [manifest](evidence/registration-witness-verification-2026-10-10.json).
+
+## R01/R05A source-linked reference-case intake — 10 October 2026
+
+The continuation base is PR #37's verified merge into the still-open PR #36
+branch, `187f2700cad09d18d6a235a3fa8e2e3b11f2c692`; exact dependency run
+`38037218901` passed. Main remains independently verified through PR #35.
+This packet adds offline physical reference intake and optional scorer binding;
+it does not migrate/deploy the app, call inference, acquire sources or read `.env`.
+
+| Verification | Result |
+|---|---|
+| Complete final local backend, two workers, no retries/restarts | 3,314 passed, 64 existing skips, 567.20s; concurrent local verification |
+| New reference intake and score-binding boundaries | 66 passed as part of the complete suite |
+| Fresh joined authorization boundaries | 13 passed; role/user changes, absent/dangling/foreign roles and one live SELECT per call |
+| Related qualification/evidence/calibration regressions | 340 passed, 7.72s |
+| Restricted offline Linux same-source regression | 401 passed, 110.39s; application/test fingerprints match |
+| Real PostgreSQL authorization/research races | 61 passed, 84.56s; owned container/child databases removed |
+| Deployment contracts | 41 passed |
+| Ruff, actionlint, ontology/SHACL, R01 planning and new intake fixture | Passed |
+| Compose configuration | Passed with `/dev/null` and invented placeholders |
+| Exact CI collection | 3,378 cases, complete and disjoint across existing six execution groups |
+
+Boundary checks cover exact passage/reference pins, distinct versions in one
+proceeding crossing splits, shared norms that do not merge cases, missing review
+records, protocol development reservations, real/synthetic separation, historical
+periods, changed gold/adverse sets, entire scored-row receipts, missing/extra rows,
+duplicate JSON fields, links/special files, unexpected artifacts and final-capture
+changes. A 1,000-case synthetic roster passes structural intake while all legal/
+production flags remain false. A deliberately false real label demonstrates that
+byte binding cannot authenticate source/reviewer declarations. Existing default
+2,000-file limits reject larger inventories; case-artifact capture explicitly opts
+into a bounded larger inventory without increasing byte limits.
+
+Linux ran with no network, host mounts or ports, read-only storage, user 10001,
+dropped capabilities, no-new-privileges and bounded CPU/RAM/PIDs/tmpfs. Fixture
+generation preserves existing destinations and rejects symlinked parents. Invalid
+CLI input produces no partial report, submitted values or private paths.
+The first hosted run `38040849976` reached 99% without assertion failure before
+the existing 18-minute backend deadline. A representative workflow profile found
+84,872 SQL statements; disk versus tmpfs probes were CPU-bound, so no storage
+workaround was applied. The final change joins fresh user and role authorization
+in one statement, retains all current/source/scope checks and pins expected firm
+before ORM refresh. The same workflow now issues 68,308 SQL statements while
+still making 206 trial revalidation calls. No permission result is cached; no
+runner, worker, deadline, retry or coverage budget is increased. Full-suite timing
+was measured under different concurrent local loads; no full-suite speedup or
+hosted billing reduction is claimed before final exact-head CI.
+
+No frontend/runtime schema changes require a UI rehearsal. Hosted exact-head checks
+follow the authorization fix; merge, deployment, actual legal/source review and
+production qualification remain separate. See [contract](REFERENCE_CASE_INTAKE.md) and
+[verification manifest](evidence/reference-case-intake-verification-2026-10-10.json).
+
 
 ## R05A confidential model-authority trial groups — 10 October 2026 (Asia/Shanghai)
 

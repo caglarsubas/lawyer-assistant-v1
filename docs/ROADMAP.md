@@ -24,7 +24,7 @@ The three new attachments are preserved byte-for-byte with a [digest manifest](r
 
 The authorized [firm RBAC and supervision contract](FIRM_RBAC_AND_SUPERVISION.md) is subordinate to this ledger. Organizational reporting, action permissions and explicit content assignments are separate. A customer-designated firm administrator configures accounts, a cycle-free single-manager hierarchy, custom roles and responsibilities without automatic client/case visibility. Multiple supervisors may be explicitly assigned to a case. Client grants explicitly choose details only or details plus all current/future linked cases; descriptive tags grant nothing. Human opinions, tasks, manual deadlines and milestones retain responsibility and review history. Records remain on-premises, dates use Europe/Istanbul, and work queues are in-app.
 
-**Current application sequence: W01 → W02 → W03**, with individually verified packets and manual PR merges. W01 and W02 are merged with verified exact main CI. W03 is merged at `f0595702679386f7ccce9d11a5cb4119b3b1552f` with verified exact post-merge main CI (`37950562133`); deployment and field qualification remain open. PR merge and deployment are separate evidence. R05A source-lineage renewal is merged in PR #35 with verified exact main CI. Registered same-input model-authority trials and confidential model-authority cohort reconciliation are implemented below and await verified manual merge. Lawful corpus acquisition and independent legal review continue alongside this sequence. W01/W02 enter the national backbone gate, W03 enters the contract-workflow gate, and all three are mandatory before R08. Existing R01–R08 identifiers, evidence and legal gates remain unchanged.
+**Current application sequence: W01 → W02 → W03**, with individually verified packets and manual PR merges. W01 and W02 are merged with verified exact main CI. W03 is merged at `f0595702679386f7ccce9d11a5cb4119b3b1552f` with verified exact post-merge main CI (`37950562133`); deployment and field qualification remain open. PR merge and deployment are separate evidence. R05A source-lineage renewal is merged in PR #35 with verified exact main CI. Registered model-authority trials and cohort reconciliation reached main through PR #36 at `3de49c8b991e6526ebdf1bc825b815db385a2201`, including PR #37. PR #38 merged into that dependency branch **after** #36 reached main, so the integration packet below brings its reference-case intake and live authorization optimization onto the current main base. The registry-witness verifier extends that engineering boundary; actual legal/source review and pre-execution registration remain open. Lawful corpus acquisition and independent legal review continue alongside this sequence. W01/W02 enter the national backbone gate, W03 enters the contract-workflow gate, and all three are mandatory before R08. Existing R01–R08 identifiers, evidence and legal gates remain unchanged.
 
 The added 4–6 weeks are a planning allowance, not a committed pilot date. Re-estimate W01–W03 from migration, permission-race and distinct-account workflow samples before fixing dates; protect legal-editor capacity and never trade legal/security gates for calendar targets.
 
@@ -1339,3 +1339,89 @@ intake, independent source-linked semantic/adverse review, frozen family splits 
 measured paired model/reviewer effort. Actual legal/source approval, representative
 model benefit, Standard/Deep budgets, target-host operation and pilot acceptance
 remain open; a complete synthetic inventory cannot satisfy those gates.
+
+
+### Delivered packet — R01/R05A source-linked reference-case intake, 10 October 2026
+
+The offline intake checker now binds original source bytes, exact passage exports,
+case inputs, independently supplied reference answers, reviewer/history/rights
+records and declared development/held-out families to one protocol/snapshot/rubric.
+It preserves missing review evidence and separate real/synthetic practice/period
+inventories. Shared norms do not merge case families; shared decision/proceeding
+identities, decision representations, inputs and family labels form transitive
+components exposing leakage and inconsistent groupings. No near-duplicate identity
+is inferred automatically.
+
+Optional scorer integration binds every later held-out row, explicit gold/adverse
+set and post-run receipt to the exact pre-run reference. Missing rows fail binding;
+changed sources/inputs/scores, undeclared files, mixed scopes and invalid receipts
+fail closed. A 1,000-case synthetic boundary rehearsal exercises the bounded roster,
+not a representative legal benchmark. Reports contain counts/gaps/fingerprints
+without private prose, locators or reviewer identities. Existing numeric-only
+scoring remains compatible and explicitly reports missing reference-case evidence.
+All approval, authenticity, privacy, independence and production flags remain false;
+physical binding alone cannot establish any of them.
+
+This engineering packet awaits manual PR merge. Verified continuation base:
+PR #37 merged into PR #36 at `187f2700cad09d18d6a235a3fa8e2e3b11f2c692`, with
+successful exact-head CI `38037218901`; GitHub still reports PR #36 open. Main
+remains independently verified through PR #35. No deployment or actual source/legal
+approval is implied. CI adds only a small offline fixture check within existing
+job counts and deadlines. See [reference intake](REFERENCE_CASE_INTAKE.md),
+[scoring](EVALUATION.md) and [verification](VALIDATION.md).
+
+**Next qualification priority:** obtain lawful representative samples and independent
+source-linked reference review, measure review/extraction throughput, witness actual
+family/protocol registration and run representative paired model/reviewer studies.
+R01, R03–R05 and R05A remain partial. Standard/Deep budget calibration, target-host
+operation and pilot acceptance remain open. Source/legal approvals cannot be
+supplied by synthetic engineering records.
+
+
+The reference-intake packet also reduces repeated live authorization work found
+after its first hosted backend suite reached 99% and hit the existing deadline.
+`require_permission` now reads current user and all role rows in one fresh joined
+statement; unmanaged/empty-managed, dangling, foreign, malformed and revoked-role
+semantics remain explicit. Expected firm is pinned before refresh, and no permission
+result is cached. The profiled workflow drops from 84,872 to 68,308 SQL statements
+with the same 206 trial revalidation calls. This is an operational engineering
+improvement, not legal qualification or a universal performance claim. Existing
+CI coverage, jobs, workers, deadlines and no-retry policy remain unchanged.
+
+
+### Delivered packet — R01 registration witness verification and main integration, 10 October 2026
+
+PR #36 is verified merged into main at `3de49c8b991e6526ebdf1bc825b815db385a2201`
+(11:43:28 UTC), including PR #37. PR #38 merged seven seconds later into the
+dependency branch at `b34ab86264b882a1f5eac8c8ba1d6383941c1761`; main did not
+contain its two implementation commits. This packet integrates that merged branch
+onto the verified main base. The application code immediately after integration
+is byte-identical to PR #38's tested head `2bd9dfa9cc10f7d559f55a303b14b02eb9765b30`.
+Its exact-head run `38044253519` passed all three jobs; backend took 19m19s
+(the remaining suite 17m41s), so further CI runtime reduction remains needed.
+
+Offline case intake and extended scoring now optionally verify two to ten distinct
+enrolled Ed25519 witnesses over exact raw casebook/protocol/snapshot/catalog and
+registry digests. An independent registry pin is mandatory; no key is trusted from
+the envelope or inherited from legal-source publication. The bounded registry
+separates key identity and subject identity, rejects aliases/revocation/invalid
+enrollment intervals, and restricts purpose to evaluation registration. All supplied
+signatures must verify; malformed, changed, undeclared or unstable inventories
+produce no partial report. Signature counts and fingerprints omit private identities
+and legal content. Existing numeric scoring and unsupplied-witness behavior remain.
+
+Signed dates are checked against declared case registration and row measurement
+dates. They are not trusted timestamps or execution-start records. Valid signatures
+prove enrolled signing-key possession and committed bytes, not actual pre-run
+registration, independent enrollment/currentness, professional independence, privacy,
+legal/source approval or representativeness. Synthetic evidence still cannot qualify.
+No real witnesses, private signing keys, provider calls, new network paths, runtime
+authorization, graph mutations, schema migrations or deployment are created.
+See [witness contracts](REFERENCE_CASE_INTAKE.md#independently-enrolled-registration-signatures)
+and [validation](VALIDATION.md). This packet still requires manual PR merge and
+its exact-head checks; it does not claim deployment or post-merge main qualification.
+
+**Next qualification work:** lawful representative source/case samples, independently
+authored source-linked references, measured extraction/review throughput, actual
+witnessed pre-execution registration with reliable time/execution evidence, and
+representative paired model/reviewer studies. R01/R03–R05/R05A remain partial.

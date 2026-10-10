@@ -1,0 +1,227 @@
+{
+  "schema_version": "reference-case-intake-engineering-verification-v1",
+  "recorded_on": "2026-10-10",
+  "scope": "invented offline intake and score-binding engineering",
+  "continuation": {
+    "pr_37": "merged_into_pr_36_branch",
+    "pr_36": "open",
+    "exact_dependency_ci": 38037218901,
+    "dependency_ci_conclusion": "success",
+    "main_deployment_claim": false,
+    "base_commit": "187f2700cad09d18d6a235a3fa8e2e3b11f2c692"
+  },
+  "tests": {
+    "new_reference_cases": 66,
+    "focused_regressions": {
+      "passed": 340,
+      "seconds": 7.72
+    },
+    "restricted_linux": {
+      "passed": 401,
+      "seconds": 110.39,
+      "runtime": {
+        "image_id": "sha256:5e808e74033570e0a3802c03790ebd11f9532a8fc3f0c22d8cc1720eb66a153b",
+        "source_fingerprints": {
+          "application": {
+            "sha256": "7afbd8f83c6dafecad0e6c7d168aa713f820369b206a4f466e367a4d54508fdd",
+            "files": 134
+          },
+          "tests": {
+            "files": 98,
+            "sha256": "1d68531381a84c5396aaac25d8fdda75ee4ba1626d2caf1eaca995ed541e8523"
+          }
+        },
+        "elapsed_seconds": 114.92,
+        "exit_code": 0,
+        "network": "none",
+        "read_only": true,
+        "host_mounts": false,
+        "host_ports": false,
+        "capabilities": "ALL dropped",
+        "user": "10001:10001",
+        "cpu_limit": 2,
+        "memory_mib": 768,
+        "pids_limit": 128,
+        "selected_files": [
+          "test_reference_cases.py",
+          "test_qualification_scoring.py",
+          "test_qualification_evidence.py",
+          "test_calibration_study.py",
+          "test_calibration_study_cli.py",
+          "test_calibration_study_fixture.py",
+          "test_qualification_cli.py",
+          "test_authorization_lookup.py",
+          "test_firm_admin.py",
+          "test_content_scope.py",
+          "test_authority_model_cohorts.py"
+        ],
+        "production_qualified": false
+      }
+    },
+    "deployment_contracts": 41,
+    "initial_complete_backend": {
+      "passed": 3301,
+      "skipped": 64,
+      "seconds": 433.27,
+      "workers": 2,
+      "worker_restarts": 0
+    },
+    "complete_backend": {
+      "passed": 3314,
+      "skipped": 64,
+      "seconds": 567.2,
+      "workers": 2,
+      "worker_restarts": 0,
+      "concurrent_local_verification": true,
+      "full_suite_speedup_claim": false
+    },
+    "live_authorization_boundaries": 13,
+    "authorization_and_cohort_regressions": {
+      "passed": 61,
+      "seconds": 41.87
+    },
+    "postgres_races": {
+      "synthetic_only": true,
+      "production_qualified": false,
+      "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+      "scope": "All current real PostgreSQL snapshot, authorization and research/adoption/context/review/comparison races from the exact CI selection in random disposable child databases",
+      "cleanup_verified": true,
+      "workers": 2,
+      "worker_restarts": 0,
+      "exit_code": 0,
+      "wall_seconds": 84.717,
+      "passed": 61,
+      "pytest_seconds": 84.56
+    }
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3378,
+      "preflight": 89,
+      "remaining": 3119,
+      "publication": 32,
+      "workspace": 58,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "b23adfe6b61e1cb3b277cd1c60a0f5f882b2d1409a46e0772b9bf235f4625f46",
+    "workflow_sha256": "9e9b8003a36dd25553aeffea4e59f41bf6c9a6d702718a9ad0356844c96dda92",
+    "no_runner_retry_existing_deadline_change": true,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "checks": {
+    "ruff": "passed",
+    "actionlint": "passed",
+    "ontology_shacl": "passed",
+    "r01_contract": "passed",
+    "synthetic_reference_intake": "passed",
+    "compose_without_local_env": "passed",
+    "diff_whitespace": "passed"
+  },
+  "scope_boundaries": {
+    "real_source_acquisition": false,
+    "source_legal_approval": false,
+    "pii_classification_authenticated": false,
+    "reviewer_independence_authenticated": false,
+    "representative_legal_evaluation": false,
+    "provider_calls": 0,
+    "provider_credentials_read": false,
+    "deployment": false,
+    "runtime_schema_migration": false,
+    "production_qualified": false,
+    "model_benefit_established": false
+  },
+  "log_integrity": {
+    "backend-full.log": "cea80ddce1307f17ffc93677a665bcf0f7037d2dfc560048a75dfcb8730418c0",
+    "focused.log": "7bdf05c1ad4e6c039cf5afced56c8ff8cfb949e149d37bfff90ae739cabe4310",
+    "linux-tests.log": "f1d469c49976abf45bf484682a8e701a02d749c22b851864d271b0d643b8e83f",
+    "deployment.log": "0ad809be954c778492f3ef84d23cfa52e6180d531d01a7191beea57d058b9cae",
+    "ruff.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "actionlint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ontology.log": "7ac5d3623be54d1faf806abe85c63f9dc12820b8c3a45a0a3460315e245c8aab",
+    "r01.log": "aaa2f49ef768a2438ee864b57ca7000f06e0d40687e2316dd4ce398354dc557f",
+    "intake-report.json": "6d51ea9be5c973c1ad974b983da2c6119ba62ca196dcac9467873550b552347c",
+    "compose.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ci-partition.json": "0747fa0e257f2a1e35f75c34a5a7b331e301b8b2bfb3b6434a6055a0360b1868",
+    "backend-full-after-authorization.log": "62944506c0a732cfc076f7fe801cdbe56c7a405c865fcba4c51234dac29aa74e",
+    "authorization-regression.log": "2729c80a0f6931f0fa8948119c9041fbefacf9243226543c46e1834631752219",
+    "cpu-profile-before.log": "c3e65da8288433305e35e52fc498fa2bf6c6cce73d63559402b9eef534b2e270",
+    "cpu-profile-after.log": "c625b5e9e9e17af4dfe4a474abc8dd614663b5c3d720ed983beb1aabb29ed330",
+    "storage-profile-before.json": "2bf081d665d16927a1c075802cd174ce47efa621598b1da4c66f9f24f7256f7e",
+    "storage-profile.json": "a60e343fbfbd816f7aa4a049115e745cdb26ef15b10cc10538a76935a0b946e0",
+    "postgres.log": "d77b1c1c89286fe986c808810130b6a7a0a2e2a5037eab6b623a8cc0457f6c8a",
+    "ruff-after.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "hosted-backend-failed.log": "adfd97c9c5b2846badab75170a2223d9116803a8b66ae66d94a5f99358b75219"
+  },
+  "hosted_ci": "Final exact-head checks follow the authorization fix; record result in the PR without a validation-only push",
+  "ci_timeout_investigation": {
+    "run": 38040849976,
+    "head": "5d7ad4e1f5f813e521d20995ad29ec1afb5e3c40",
+    "failure": "Test backend exceeded its existing 18-minute step deadline at 99 percent",
+    "assertion_failure_observed": false,
+    "reference_workflow_sql_statements_before": 84872,
+    "reference_workflow_sql_statements_after": 68308,
+    "trial_current_checks_before": 206,
+    "trial_current_checks_after": 206,
+    "source_of_repeated_work": "require_permission separately reread User then its managed-role rows",
+    "change": "one fresh joined query, with original case/source guards preserved and expected firm pinned before ORM refresh",
+    "permission_result_cache": false,
+    "deadline_runner_worker_retry_changes": false,
+    "storage_probe_before": {
+      "disk": {
+        "wall_seconds": 41.65309326903662,
+        "cpu_seconds": 41.572227215999995,
+        "result": 0
+      },
+      "ram": {
+        "wall_seconds": 43.23643947800156,
+        "cpu_seconds": 43.941628984,
+        "result": 0
+      }
+    },
+    "storage_probe_after": {
+      "disk": {
+        "wall_seconds": 37.50264755904209,
+        "cpu_seconds": 37.282857320999994,
+        "result": 0
+      },
+      "ram": {
+        "wall_seconds": 45.67229568696348,
+        "cpu_seconds": 46.223439355,
+        "result": 0
+      }
+    },
+    "hosted_savings_established": false
+  }
+}

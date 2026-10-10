@@ -17,11 +17,12 @@ from .research_qualification import ResearchDossier
 MAX_FILE_BYTES = 20 * 1024 * 1024
 MAX_TOTAL_BYTES = 128 * 1024 * 1024
 MAX_FILES = 2000
+MAX_REFERENCE_FILES = 16000
 CHUNK_BYTES = 64 * 1024
 FIXED_FILENAMES = frozenset({
     "source-catalog.json", "asset-catalog.json", "analysis-fixture.json", "scenario-fixture.json",
     "research-dossier.json", "sample.json", "raw.bin", "extraction.json", "reference.json", "study.json",
-    "sources.json",
+    "sources.json", "casebook.json", "protocol.json", "snapshot.json", "registration.json", "witness-registry.json",
 })
 FAILURE = "qualification_evidence_invalid"
 
@@ -90,7 +91,7 @@ def _inventory(directory_fd, specifications):
     with os.scandir(directory_fd) as entries:
         for entry in entries:
             count += 1
-            if count > MAX_FILES or count > len(specifications) or entry.name not in specifications:
+            if count > len(specifications) or entry.name not in specifications:
                 _invalid()
             found.add(entry.name)
     if found != set(specifications):
@@ -154,7 +155,8 @@ def _check_file_bindings(directory_fd, metadata):
             _invalid()
 
 
-def read_exact_directory(directory: Path, specifications: dict[str, int], total_limit: int) -> dict[str, bytes]:
+def read_exact_directory(directory: Path, specifications: dict[str, int], total_limit: int,
+                         *, maximum_files: int = MAX_FILES) -> dict[str, bytes]:
     """Read one exact, immutable-during-inspection inventory without following symlinks.
 
     Only the fixed packet filenames and lowercase SHA-256 ``.bin`` filenames are
@@ -162,7 +164,8 @@ def read_exact_directory(directory: Path, specifications: dict[str, int], total_
     and metadata. Returned bytes are private input, never an automatically safe report.
     """
     try:
-        if (type(specifications) is not dict or len(specifications) > MAX_FILES
+        if (type(maximum_files) is not int or not 0 < maximum_files <= MAX_REFERENCE_FILES
+                or type(specifications) is not dict or len(specifications) > maximum_files
                 or type(total_limit) is not int or not 0 < total_limit <= MAX_TOTAL_BYTES):
             _invalid()
         for name, limit in specifications.items():
