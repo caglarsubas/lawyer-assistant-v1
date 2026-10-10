@@ -47,6 +47,18 @@ PERMISSION_ROWS = (
     .where(Employee.user_id == bindparam("permission_user_id"))
 )
 
+# Fresh user state and all role rows in ONE statement. Keep the outer joins:
+# absence of an Employee is different from a managed account with no roles.
+AUTHORIZATION_ROWS = (
+    select(User, Employee.firm_id, EmployeeRole.role_id, FirmRole.firm_id, FirmRole.permissions)
+    .select_from(User)
+    .outerjoin(Employee, User.id == Employee.user_id)
+    .outerjoin(EmployeeRole, Employee.user_id == EmployeeRole.user_id)
+    .outerjoin(FirmRole, EmployeeRole.role_id == FirmRole.id)
+    .where(User.id == bindparam("permission_user_id"))
+    .execution_options(populate_existing=True)
+)
+
 
 def validate_permissions(values):
     if not isinstance(values, list) or any(not isinstance(item, str) for item in values):
@@ -61,6 +73,10 @@ def validate_permissions(values):
 
 def permissions_for(session, user):
     roles = session.execute(PERMISSION_ROWS, {"permission_user_id": user.id}).all()
+    return _permissions(user, roles)
+
+
+def _permissions(user, roles):
     if not roles:
         # Compatibility for pre-migration accounts; migration creates an explicit
         # Employee even for users with no roles, so an empty assignment denies.
@@ -81,10 +97,13 @@ def permissions_for(session, user):
 
 
 def require_permission(session, user, permission):
-    current = session.get(User, user.id, populate_existing=True)
-    if not current or not current.active or current.firm_id != user.firm_id:
+    expected_firm = user.firm_id
+    rows = session.execute(AUTHORIZATION_ROWS, {"permission_user_id": user.id}).all()
+    current = rows[0][0] if rows else None
+    if not current or not current.active or current.firm_id != expected_firm:
         raise HTTPException(401, "Oturum geçersiz")
-    if permission not in permissions_for(session, current):
+    roles = [row[1:] for row in rows] if rows[0][1] is not None else []
+    if permission not in _permissions(current, roles):
         raise HTTPException(403, "Bu işlem için rol izniniz yok")
     return current
 

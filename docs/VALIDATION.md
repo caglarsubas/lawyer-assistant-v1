@@ -10,14 +10,16 @@ it does not migrate/deploy the app, call inference, acquire sources or read `.en
 
 | Verification | Result |
 |---|---|
-| Complete local backend, two workers, no retries/restarts | 3,301 passed, 64 existing skips, 433.27s |
+| Complete final local backend, two workers, no retries/restarts | 3,314 passed, 64 existing skips, 567.20s; concurrent local verification |
 | New reference intake and score-binding boundaries | 66 passed as part of the complete suite |
+| Fresh joined authorization boundaries | 13 passed; role/user changes, absent/dangling/foreign roles and one live SELECT per call |
 | Related qualification/evidence/calibration regressions | 340 passed, 7.72s |
-| Restricted offline Linux same-source regression | 340 passed, 17.33s; application/test fingerprints match |
+| Restricted offline Linux same-source regression | 401 passed, 110.39s; application/test fingerprints match |
+| Real PostgreSQL authorization/research races | 61 passed, 84.56s; owned container/child databases removed |
 | Deployment contracts | 41 passed |
 | Ruff, actionlint, ontology/SHACL, R01 planning and new intake fixture | Passed |
 | Compose configuration | Passed with `/dev/null` and invented placeholders |
-| Exact CI collection | 3,365 cases, complete and disjoint across existing six execution groups |
+| Exact CI collection | 3,378 cases, complete and disjoint across existing six execution groups |
 
 Boundary checks cover exact passage/reference pins, distinct versions in one
 proceeding crossing splits, shared norms that do not merge cases, missing review
@@ -34,9 +36,20 @@ Linux ran with no network, host mounts or ports, read-only storage, user 10001,
 dropped capabilities, no-new-privileges and bounded CPU/RAM/PIDs/tmpfs. Fixture
 generation preserves existing destinations and rejects symlinked parents. Invalid
 CLI input produces no partial report, submitted values or private paths.
+The first hosted run `38040849976` reached 99% without assertion failure before
+the existing 18-minute backend deadline. A representative workflow profile found
+84,872 SQL statements; disk versus tmpfs probes were CPU-bound, so no storage
+workaround was applied. The final change joins fresh user and role authorization
+in one statement, retains all current/source/scope checks and pins expected firm
+before ORM refresh. The same workflow now issues 68,308 SQL statements while
+still making 206 trial revalidation calls. No permission result is cached; no
+runner, worker, deadline, retry or coverage budget is increased. Full-suite timing
+was measured under different concurrent local loads; no full-suite speedup or
+hosted billing reduction is claimed before final exact-head CI.
+
 No frontend/runtime schema changes require a UI rehearsal. Hosted exact-head checks
-follow PR creation; merge, deployment, actual legal/source review and production
-qualification remain separate. See [contract](REFERENCE_CASE_INTAKE.md) and
+follow the authorization fix; merge, deployment, actual legal/source review and
+production qualification remain separate. See [contract](REFERENCE_CASE_INTAKE.md) and
 [verification manifest](evidence/reference-case-intake-verification-2026-10-10.json).
 
 

@@ -1376,3 +1376,14 @@ family/protocol registration and run representative paired model/reviewer studie
 R01, R03–R05 and R05A remain partial. Standard/Deep budget calibration, target-host
 operation and pilot acceptance remain open. Source/legal approvals cannot be
 supplied by synthetic engineering records.
+
+
+The reference-intake packet also reduces repeated live authorization work found
+after its first hosted backend suite reached 99% and hit the existing deadline.
+`require_permission` now reads current user and all role rows in one fresh joined
+statement; unmanaged/empty-managed, dangling, foreign, malformed and revoked-role
+semantics remain explicit. Expected firm is pinned before refresh, and no permission
+result is cached. The profiled workflow drops from 84,872 to 68,308 SQL statements
+with the same 206 trial revalidation calls. This is an operational engineering
+improvement, not legal qualification or a universal performance claim. Existing
+CI coverage, jobs, workers, deadlines and no-retry policy remain unchanged.
