@@ -33,3 +33,5 @@ export function renewedTrialSelection(dependency: Pick<ModelInputSelection, 'con
   return { kind: 'admitted_renewal', context_id: dependency.context_id, review_id: dependency.review_id,
     review_sha256: dependency.review_sha256, renewal_id: renewal.id, renewal_sha256: renewal.sha256 };
 }
+
+export type ModelTrialEvidence = Omit<ModelTrialCapture, 'can_run' | 'can_observe' | 'can_record_effort' | 'previous_observation_id' | 'previous_effort_id'>;

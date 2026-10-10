@@ -246,7 +246,15 @@ def test_time_validation_duplicates_kind_mutation_and_early_completion(workflow)
     assert datetime.fromisoformat(item['history'][0]['recorded_at']).tzinfo == timezone.utc
 
 
-def test_changed_task_instructions_require_fresh_progress_not_old_completion(workflow):
+@pytest.mark.parametrize("overdue", [False, True])
+def test_changed_task_instructions_require_fresh_progress_not_old_completion(workflow, monkeypatch, overdue):
+    # This task is due at 21:30 UTC. Both queues must work regardless of today.
+    class FixedTime(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return datetime(2026, 10, 9, 22 if overdue else 20, tzinfo=timezone.utc).astimezone(tz)
+
+    monkeypatch.setattr("app.human_workflow.datetime", FixedTime)
     app, client = workflow
     _, first, _, case = setup(app, client)
     item = create(client, case, [first['id']], 'task')
@@ -259,7 +267,8 @@ def test_changed_task_instructions_require_fresh_progress_not_old_completion(wor
     assert updated['responses'][0]['status'] == 'stale'
     assert client.put(path(case, item), json=edit_body(updated, status='completed')).status_code == 409
     login(client, 'first', PASSWORD)
-    assert len(client.get('/api/v1/work?bucket=upcoming').json()['items']) == 1
+    bucket = 'overdue' if overdue else 'upcoming'
+    assert [row['id'] for row in client.get('/api/v1/work?bucket=' + bucket).json()['items']] == [item['id']]
     own = client.get(path(case, item)).json()['responses'][0]
     assert client.post(path(case, item) + '/progress', json={'revision': own['revision'], 'status': 'completed', 'note': 'Additional work completed'}).status_code == 200
     assert client.post(path(case, item) + '/progress', json={'revision': own['revision'], 'status': 'completed', 'note': 'Stale duplicate'}).status_code == 409

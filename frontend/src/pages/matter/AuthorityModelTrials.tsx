@@ -11,14 +11,14 @@ import { adjudicationAssessment, JUDGMENT_OUTCOMES, SEMANTIC_DIMENSIONS, SEMANTI
 import type { AdverseScope, AssessmentInputs, FindingJudgment, SemanticObservation } from './authorityAdjudicationTypes';
 import { FINDING_OUTCOMES } from './authorityFindingTypes';
 import { blankTrialLinks } from './authorityModelTypes';
-import type { ModelComparison, ModelInputSelection, ModelTrialCapture, ModelTrialContext, TrialAssessment, TrialSourceInput } from './authorityModelTypes';
+import type { ModelComparison, ModelInputSelection, ModelTrialCapture, ModelTrialEvidence, ModelTrialContext, TrialAssessment, TrialSourceInput } from './authorityModelTypes';
 import { ARM_LABELS } from './comparisonTypes';
 import type { ComparisonArm } from './comparisonTypes';
 
 const ARMS = Object.keys(ARM_LABELS) as ComparisonArm[];
 const seconds = (value: number | null) => value === null ? 'Ölçülmedi' : `${value.toFixed(3)} sn`;
 
-export function TrialSummary({ value }: { value: ModelTrialCapture }) {
+export function TrialSummary({ value }: { value: ModelTrialEvidence }) {
   const plan = value.protocol;
   if (!plan || !value.public_source_access) return <Notice error>Kaynak veya kayıt kabulü doğrulanamadı; deneme metinleri bekletiliyor.</Notice>;
   return <><h4>{plan.title}</h4><Badge>{value.freshness.status === 'stale' ? 'Yeniden inceleme gerekli' : value.capture_complete ? 'Deneme kaydı tamamlandı' : 'Deneme kaydı eksik'}</Badge>
@@ -66,7 +66,7 @@ function TrialObservationForm({ value, busy, onSave }: { value: ModelTrialCaptur
   </form></Detail>;
 }
 
-function TrialResults({ value }: { value: ModelTrialCapture }) {
+export function TrialResults({ value }: { value: ModelTrialEvidence }) {
   return <>{ARMS.map(arm => { const result = value.arms[arm]; return <Detail key={arm} title={`${ARM_LABELS[arm]} · ${result.status === 'not_started' ? 'Başlatılmadı' : statusLabel(result.status)}`}>
     <p>En fazla {value.protocol!.arms[arm].max_passes} geçiş / {value.protocol!.arms[arm].budget_seconds} sn · Saklanan geçiş: {result.job?.iterations?.length || 0}</p><p>Kuyruk dahil süre: {seconds(result.elapsed_seconds)} · Sağlayıcı gidiş/dönüşü: {seconds(result.provider_round_trip_seconds)} · GPU süresi: Ölçülmedi</p>
     <p className="small">Başarısız veya yarım işte toplam çağrı/maliyet bilinmiyor. Ek geçiş yalnız kritik yapısal kontrol kalırsa yapılır.</p>

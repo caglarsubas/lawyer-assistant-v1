@@ -1,5 +1,79 @@
 # Verification record — 10 October 2026
 
+
+## R05A confidential model-authority trial groups — 10 October 2026 (Asia/Shanghai)
+
+This packet extends PR #36's registered same-input local-model trials with explicit
+within-workspace trial-group preview/freeze/reconciliation, guarded immutable
+history and confidential JSON. It uses invented evidence, fixture accounts and
+mock inference only. PR #36's exact head
+`b9f884e559c0c0de34ceee78be8400fb10dcf25f` and successful run `37979906924`
+were verified; GitHub still reported the PR open at preparation time. Main remains
+verified through PR #35, independently of the user's merge report. This packet
+awaits manual merge and exact-head hosted checks after PR creation.
+
+| Verification | Result |
+|---|---|
+| Complete local backend, two workers, no restarts/retries | 3235 passed, 64 skipped, 485.99s |
+| New original/renewal cohort and private/source/export boundary cases | 19 passed |
+| Real PostgreSQL snapshot/authorization/work/research races | 61 passed, 98.51s; disposable child databases/container removed |
+| Restricted offline Linux related regression suite | 324 passed, 177.96s; exact final application/test fingerprints match |
+| Frontend tests and strict production build | 211 passed; build passed |
+| Deployment contracts | 41 passed |
+| Ruff, actionlint, ontology/SHACL, R01 and synthetic calibration/study | Passed; no legal or source approval |
+| Compose configuration | Passed using `/dev/null` and synthetic placeholders; no deployment or real `.env` read |
+| Exact CI partition | 3,299 collected cases; complete/disjoint execution groups; existing jobs/deadlines/retries unchanged |
+
+The restricted Linux image ran with no network, host mounts or ports, a read-only
+filesystem, dropped capabilities and bounded CPU/RAM/PIDs/tmpfs. The PostgreSQL
+checks proved a competing freeze actually waits on the workspace row lock, exact
+nonce replay yields one cohort, and conflicting payloads fail. Selected private
+parents are resolved before public guards; cross-workspace IDs are rejected before
+a public join. Cases cover missing runs/review/effort, differing exact profiles,
+full original/renewal inputs, duplicates/family/source overlap, changed private
+evidence/participants/provider recipes, new runs/observations/effort, pending
+admissions, before-commit rollback, late committed failure, temporary source denial
+and post-serialization revocation. Old manifests are never rewritten; unavailable
+source/admission content is withheld, and stale/denied exports discard bytes.
+
+The initial offline run exposed a pre-existing test whose hard-coded deadline had
+become overdue. The test now controls the application clock on both sides of that
+deadline and verifies that changed instructions require fresh progress in both
+upcoming and overdue queues. Production timing behavior is unchanged. The corrected
+15-case human-workflow suite and final full/Linux suites pass. No check was removed.
+The first hosted frontend run caught a strict TypeScript cast error in the intentionally
+incomplete denied-response fixture. The fixture now crosses an explicit `unknown`
+boundary; the final strict build and all 211 frontend checks pass. Runtime code and
+CI budgets are unchanged. Exact corrected-head hosted results are verified separately.
+
+Hosted run `38021373670` passed frontend in 244 seconds and PostgreSQL in 298
+seconds, leaving only two seconds below the latter's five-minute deadline. Its
+runtime-authorization case used 32.11 seconds including setup. That one case is
+now in the existing frontend confidential-group step, with the same two workers
+and three-minute step/five-minute job caps, and is removed from the PostgreSQL
+publication selection. Collection is still complete/disjoint: 60 frontend group/
+authorization cases and 32 publication/renewal cases. The revised local groups pass: 60 checks in 53.98 seconds and 32 checks in 35.54
+seconds. Exact-head hosted results must verify the changed placement; no extra runner,
+retry, omitted case or higher deadline is introduced. Billing savings are not measured.
+
+An owned loopback production-build browser rehearsal on port 18637 confirmed
+explicit two-trial selection, exact preview/freeze, Current history after reload,
+both model arms, unknown observation denominators, repeated sources and original
+passages with temporal warnings. Source denial removed all captured titles/quotes
+and disabled export. Mock calls remained four before and after freeze; no real
+provider was used. Console warnings/errors were zero. The owned tab/server closed
+and the port is unbound. Browser file saving was not exercised; guarded export
+bytes/headers and late revocation were verified in backend cases. Proof images
+are retained under `.data/verification/r05a-model-trial-cohorts/` and excluded from Git.
+
+[Machine verification record](evidence/authority-model-cohorts-verification-2026-10-10.json)
+pins code/test/frontend fingerprints and retained log hashes. See [contract](REGISTERED_AUTHORITY_MODEL_COHORTS.md)
+and [operations](OPERATIONS.md). No real credential read/change, source acquisition/
+approval, customer grant, shared graph mutation, schema migration, deployment,
+representative legal accuracy, adverse recall, model benefit or release
+qualification is established. Lawful representative Turkish intake, independent
+semantic/adverse review, frozen family splits and measured paired effort remain open.
+
 ## R05A registered same-input model-authority trials — 10 October 2026 (Asia/Shanghai)
 
 PR #35 is verified merged at `5ee45d1782da1da7cd36c2b729345d9377719847`;

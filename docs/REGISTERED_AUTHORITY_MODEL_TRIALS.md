@@ -142,3 +142,9 @@ reconciliation, retaining exact incompatible profiles, overlap, disagreement and
 unknown measurements. Lawful corpus acquisition, protected independent legal review,
 representative Turkish semantic/adverse evaluation, real-model benefit, deployment
 and release qualification remain open.
+
+
+Registered trials can now be explicitly selected into [confidential model-authority
+groups](REGISTERED_AUTHORITY_MODEL_COHORTS.md). This preserves both arms and all
+source-linked history without additional inference, candidate adoption or pooled
+qualification claims.

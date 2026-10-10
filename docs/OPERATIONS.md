@@ -991,3 +991,25 @@ references or retry to force admission. There is no override or automatic repair
 Source/admission failures clear protocol text, candidates, observations and effort
 history. The metadata list contains opaque IDs/dates/seals only. JSON exports are
 confidential case evidence and remain subject to firm handling after download.
+
+
+## R05A confidential model-authority trial groups
+
+[Model-authority groups](REGISTERED_AUTHORITY_MODEL_COHORTS.md) use encrypted
+`authority_model_cohort` and `authority_model_cohort_admission` case records. No
+schema migration, new service or provider credentials are needed. Existing case
+retention, holds, erasure inventory and deletion cover both records.
+
+Selections and public-authority usage remain confidential. Metadata lists are not
+source permission checks: inspect full Current/Stale/Withheld state before export.
+A changed run, observation, effort, draft, source, participant access or provider pin
+requires a separate exact preview/freeze; original snapshots are never resealed.
+Inventories reject limits rather than dropping evidence. A stale history is not a
+current trial result, and complete capture is not legal or model qualification.
+
+HTTP 409 `committed_needs_revalidation` retains the opaque committed group ID and
+pending admission. Keep the receipt and diagnose source/private authorization; do
+not flip bits, strip evidence or retry to force completion. Export remains closed.
+There is no override or automatic repair. Confidential JSON handling after download
+remains the firm's responsibility. Deployment/restore/offline acceptance and real
+legal/model/source qualification remain separate gates.
