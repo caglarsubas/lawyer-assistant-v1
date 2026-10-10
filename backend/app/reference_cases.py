@@ -201,8 +201,12 @@ def _inventory(book, references, rows, *, declared=False):
     return specs
 
 
-def inspect_casebook(directory, artifacts_directory, source_catalog, rows=None):
+def inspect_casebook(directory, artifacts_directory, source_catalog, rows=None, *, registration_directory=None,
+                     witness_registry_directory=None, trusted_registry_sha256=None):
     """Stable exact captures; reports contain counts/hashes, never submitted prose."""
+    witness_options = (registration_directory, witness_registry_directory, trusted_registry_sha256)
+    if any(item is not None for item in witness_options) and any(item is None for item in witness_options):
+        raise ValueError('Registration verification requires all witness inputs')
     meta_specs = dict.fromkeys(('casebook.json', 'protocol.json', 'snapshot.json'), MAX_COMPONENT_BYTES)
     captured = read_exact_directory(directory, meta_specs, MAX_COMPONENT_BYTES * 3)
     catalog_specs = {'source-catalog.json': MAX_COMPONENT_BYTES}
@@ -263,10 +267,21 @@ def inspect_casebook(directory, artifacts_directory, source_catalog, rows=None):
                 or case.split == 'held_out' and case.family_sha256 in protocol.development_family_sha256):
             raise ValueError('Protocol development reservation differs')
     report = _report(book, parsed, sources, tasks, artifacts, sha(captured['casebook.json']), rows is not None)
+    report['registration_witness'] = {'status': 'not_supplied', 'registration_time_authenticated': False}
+    if registration_directory is not None:
+        from .registration_witness import verify_registration
+
+        report['registration_witness'] = verify_registration(
+            registration_directory, witness_registry_directory, trusted_registry_sha256, captured,
+            book.source_catalog_sha256, book.registered_at, [row.measured_at for row in tasks])
     if (read_exact_directory(directory, meta_specs, MAX_COMPONENT_BYTES * 3) != captured
             or read_exact_directory(source_catalog, catalog_specs, MAX_COMPONENT_BYTES) != catalog_bytes
             or read_exact_directory(artifacts_directory, specs, MAX_TOTAL_BYTES, maximum_files=MAX_REFERENCE_FILES) != artifacts):
         raise ValueError('Reference casebook changed during inspection')
+    if registration_directory is not None and report['registration_witness'] != verify_registration(
+            registration_directory, witness_registry_directory, trusted_registry_sha256, captured,
+            book.source_catalog_sha256, book.registered_at, [row.measured_at for row in tasks]):
+        raise ValueError('Registration changed during complete casebook inspection')
     report['input_files'] = {name: {'sha256': sha(raw), 'bytes': len(raw)} for name, raw in captured.items()}
     report['verified_artifact_count'] = len(artifacts)
     report['verified_artifact_bytes'] = sum(map(len, artifacts.values()))

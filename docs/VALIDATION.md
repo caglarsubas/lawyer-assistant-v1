@@ -1,5 +1,50 @@
 # Verification record — 10 October 2026
 
+## R01 registration witnesses and main integration — 10 October 2026 (Asia/Shanghai)
+
+Verified PR #36 merged into main at `3de49c8b991e6526ebdf1bc825b815db385a2201`
+and PR #38 merged seven seconds later into its dependency branch. The latter's
+reference-case intake and authorization optimization were absent from main. This
+packet integrates that merged branch; before the extension, its source tree was
+identical to tested PR #38 head `2bd9dfa9cc10f7d559f55a303b14b02eb9765b30`.
+Previous exact-head run `38044253519` passed all three jobs (backend 19m19s,
+remaining suite 17m41s), without changing deadlines or coverage.
+
+The extension verifies separately pinned enrollment records and two to ten distinct
+Ed25519 registration witnesses. Keys/signatures and all legal cases are invented.
+It authenticates key possession and exact commitments only. Actual registration
+time, execution start, current trust administration, professional independence,
+privacy, lawful source approval and legal/production qualification remain unverified.
+There is no provider call, real key/review, database migration or deployment.
+
+| Check | Result |
+|---|---|
+| New witness boundary tests | 46 |
+| Focused qualification regressions | 353 passed, 4.26s |
+| Restricted Linux, matching application/test fingerprints | 447 passed, 71.41s |
+| Deployment contracts | 41 passed |
+| Ruff, ontology/SHACL, R01 planning and whitespace | Passed |
+| Complete/disjoint CI collection | 3,424 cases, zero missing/extra/overlap |
+
+Tests reject changed signed inputs, swapped registries, omitted trust pins, key/subject
+aliases, duplicate signatures, unknown/revoked/expired keys, wrong purposes/domains,
+invalid declared chronology, duplicate JSON, links, FIFOs, oversized/extra files and
+changes during both witness and final casebook capture. Actual CLI scoring with valid
+invented witnesses still exits 1 for synthetic evidence; failures exit 2 without
+partial output or private paths/values. A measurement date is not execution start.
+No witness opts into trust automatically, supplies real approval or changes scoring
+thresholds. Legacy unsupplied behavior remains explicit.
+
+Linux used a read-only container, no network/host ports/mounts, user 10001, dropped
+capabilities, no-new-privileges and bounded CPU/RAM/PIDs/tmpfs. Its disposable container
+was removed. Existing PostgreSQL/UI/runtime code is unchanged by the witness extension;
+hosted checks still cover every required group and real PostgreSQL race check.
+No runners, retries, workers or deadline allowances were added. Hosted exact-head
+checks follow final push; manual merge, post-merge main CI, deployment and legal
+qualification are separate. Final hosted results are recorded in the PR description
+without an evidence-only code push. See [contract](REFERENCE_CASE_INTAKE.md#independently-enrolled-registration-signatures)
+and [manifest](evidence/registration-witness-verification-2026-10-10.json).
+
 ## R01/R05A source-linked reference-case intake — 10 October 2026
 
 The continuation base is PR #37's verified merge into the still-open PR #36

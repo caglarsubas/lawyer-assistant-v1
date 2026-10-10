@@ -51,8 +51,12 @@ def capture(path, maximum):
 
 
 def score_files(tasks_path, snapshot_path, protocol_path=None, *, casebook_dir=None,
-                case_artifacts_dir=None, source_catalog_dir=None):
+                case_artifacts_dir=None, source_catalog_dir=None, registration_dir=None,
+                witness_registry_dir=None, trusted_registry_sha256=None):
     reference_paths = (casebook_dir, case_artifacts_dir, source_catalog_dir)
+    witness_options = (registration_dir, witness_registry_dir, trusted_registry_sha256)
+    if any(item is not None for item in witness_options) and (casebook_dir is None or any(item is None for item in witness_options)):
+        raise ValueError('Registration verification requires reference cases and all witness inputs')
     if any(path is not None for path in reference_paths) and (protocol_path is None or any(path is None for path in reference_paths)):
         raise ValueError('Reference cases require all directories and an extended protocol')
     specs = {"tasks": (tasks_path, MAX_TASK_BYTES), "snapshot": (snapshot_path, 2 * 1024 * 1024)}
@@ -73,7 +77,10 @@ def score_files(tasks_path, snapshot_path, protocol_path=None, *, casebook_dir=N
     if casebook_dir is not None:
         from app.reference_cases import inspect_casebook
 
-        reference = inspect_casebook(casebook_dir, case_artifacts_dir, source_catalog_dir, rows)
+        reference = inspect_casebook(casebook_dir, case_artifacts_dir, source_catalog_dir, rows,
+                                    registration_directory=registration_dir,
+                                    witness_registry_directory=witness_registry_dir,
+                                    trusted_registry_sha256=trusted_registry_sha256)
         if any(reference['input_files'][f'{key}.json']['sha256'] != hashlib.sha256(raw[key]).hexdigest()
                for key in ('snapshot', 'protocol')):
             raise ValueError('Scoring and reference intake use different captured files')
@@ -95,12 +102,16 @@ def main(argv=None):
     parser.add_argument('--casebook-dir', type=Path, help='Frozen source-linked reference inventory')
     parser.add_argument('--case-artifacts-dir', type=Path, help='Exact digest-named originals, references and adjudications')
     parser.add_argument('--source-catalog-dir', type=Path, help='Directory containing only the pinned source-catalog.json')
+    parser.add_argument('--registration-dir', type=Path, help='Exact detached registration envelope inventory')
+    parser.add_argument('--witness-registry-dir', type=Path, help='Independently enrolled evaluation witness public keys')
+    parser.add_argument('--trusted-registry-sha256', help='Out-of-band pin for that exact registry; never inferred')
     parser.add_argument("--schemas", action="store_true", help="Print extended input schemas without reading files")
     try:
         arguments = parser.parse_args(argv)
         if arguments.schemas:
             if (arguments.tasks or arguments.snapshot or arguments.protocol or arguments.casebook_dir
-                    or arguments.case_artifacts_dir or arguments.source_catalog_dir):
+                    or arguments.case_artifacts_dir or arguments.source_catalog_dir or arguments.registration_dir
+                    or arguments.witness_registry_dir or arguments.trusted_registry_sha256 is not None):
                 raise ValueError("Schemas do not take evaluation files")
             report = {"schema_version": "legal-evaluation-schemas-v1", "runtime_authorization": "none",
                       "validation_note": "Python cross-record validation and independent evidence review also required.",
@@ -113,7 +124,10 @@ def main(argv=None):
                 raise ValueError("Evaluation paths required")
             report = score_files(arguments.tasks, arguments.snapshot, arguments.protocol,
                                  casebook_dir=arguments.casebook_dir, case_artifacts_dir=arguments.case_artifacts_dir,
-                                 source_catalog_dir=arguments.source_catalog_dir)
+                                 source_catalog_dir=arguments.source_catalog_dir,
+                                 registration_dir=arguments.registration_dir,
+                                 witness_registry_dir=arguments.witness_registry_dir,
+                                 trusted_registry_sha256=arguments.trusted_registry_sha256)
         output = json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False)
     except (ValueError, OSError, TypeError, AttributeError, RecursionError, OverflowError):
         print("Invalid evaluation input; validate the adjudication schema, protocol and snapshot.", file=sys.stderr)

@@ -22,7 +22,7 @@ CHUNK_BYTES = 64 * 1024
 FIXED_FILENAMES = frozenset({
     "source-catalog.json", "asset-catalog.json", "analysis-fixture.json", "scenario-fixture.json",
     "research-dossier.json", "sample.json", "raw.bin", "extraction.json", "reference.json", "study.json",
-    "sources.json", "casebook.json", "protocol.json", "snapshot.json",
+    "sources.json", "casebook.json", "protocol.json", "snapshot.json", "registration.json", "witness-registry.json",
 })
 FAILURE = "qualification_evidence_invalid"
 

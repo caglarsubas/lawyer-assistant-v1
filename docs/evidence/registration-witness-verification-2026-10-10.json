@@ -1,0 +1,128 @@
+{
+  "schema_version": "registration-witness-engineering-verification-v1",
+  "recorded_on": "2026-10-10",
+  "scope": "invented offline witness keys, reference cases and scoring",
+  "continuation": {
+    "pr_36_main_commit": "3de49c8b991e6526ebdf1bc825b815db385a2201",
+    "pr_38_dependency_merge_commit": "b34ab86264b882a1f5eac8c8ba1d6383941c1761",
+    "pr_38_previous_exact_head": "2bd9dfa9cc10f7d559f55a303b14b02eb9765b30",
+    "pr_38_exact_head_ci": 38044253519,
+    "pr_38_ci_conclusion": "success",
+    "integration_tree_identical_to_pr_38_before_extension": true,
+    "main_contains_pr_38_at_start": false
+  },
+  "tests": {
+    "new_witness_boundaries": 46,
+    "focused_qualification_passed": 353,
+    "focused_seconds": 4.26,
+    "restricted_linux_passed": 447,
+    "linux_seconds": 71.41,
+    "linux": {
+      "image_id": "sha256:e439b58cafe6793477ea7c3d30bf9814fbefe06fa723212f2d9115ff912631d4",
+      "source_fingerprints": {
+        "application": {
+          "sha256": "349eb352400bd44c2fedd68cd1ce83bd6a7a8537cd1698f78c35941616e36b4b",
+          "files": 135
+        },
+        "tests": {
+          "files": 99,
+          "sha256": "04778475b912fd27fb88c0b0449685a1f66c642b349c26f68091848790f4f9b9"
+        }
+      },
+      "elapsed_seconds": 74.85,
+      "exit_code": 0,
+      "network": "none",
+      "read_only": true,
+      "host_mounts": false,
+      "host_ports": false,
+      "capabilities": "ALL dropped",
+      "user": "10001:10001",
+      "cpu_limit": 2,
+      "memory_mib": 768,
+      "pids_limit": 128,
+      "selected_files": [
+        "test_registration_witness.py",
+        "test_reference_cases.py",
+        "test_qualification_scoring.py",
+        "test_qualification_evidence.py",
+        "test_calibration_study.py",
+        "test_calibration_study_cli.py",
+        "test_calibration_study_fixture.py",
+        "test_qualification_cli.py",
+        "test_authorization_lookup.py",
+        "test_firm_admin.py",
+        "test_content_scope.py",
+        "test_authority_model_cohorts.py"
+      ],
+      "production_qualified": false
+    },
+    "deployment_contracts_passed": 41,
+    "ruff": "passed",
+    "ontology_shacl": "passed",
+    "r01_planning": "passed",
+    "actionlint": "passed"
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3424,
+      "preflight": 89,
+      "remaining": 3165,
+      "publication": 32,
+      "workspace": 58,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "3b8bc82be5f29b26cd40c856e40eced0c665bbeace1fd72cc44a5e99e281e93b",
+    "workflow_sha256": "9e9b8003a36dd25553aeffea4e59f41bf6c9a6d702718a9ad0356844c96dda92",
+    "no_runner_retry_existing_deadline_change": true,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "log_sha256": {
+    "focused.log": "5f3a4082bc28c7428ec8985b005cc94e4f8a3768c9406e66697b000fd4b13633",
+    "linux-tests.log": "e46da5a30e292d0662820a7a6d0d13d40820cee77dd5ee66ee515e8aec601a85",
+    "deployment.log": "0fe6ca9ce009a806b2e7f91379a988f58cfcb965fa40e36727515c5d09033f2f",
+    "ruff.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "ontology.log": "7ac5d3623be54d1faf806abe85c63f9dc12820b8c3a45a0a3460315e245c8aab",
+    "r01-planning.log": "aaa2f49ef768a2438ee864b57ca7000f06e0d40687e2316dd4ce398354dc557f"
+  },
+  "hosted_exact_head_ci": "pending_after_final_push",
+  "registration_time_authenticated": false,
+  "execution_start_authenticated": false,
+  "witness_independence_verified": false,
+  "current_registry_authenticated": false,
+  "legal_or_source_approval": false,
+  "production_qualified": false,
+  "deployment_claim": false,
+  "billing_or_runtime_guarantee": false
+}

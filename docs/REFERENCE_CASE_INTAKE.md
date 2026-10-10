@@ -130,3 +130,69 @@ Next: lawful representative source sampling, independently authored/adjudicated
 references, measured review throughput, witnessed protocol registration and
 representative paired trials. Qualified publication, model benefit, historical
 coverage, Standard/Deep budgets, deployment and pilot acceptance remain open.
+
+## Independently enrolled registration signatures
+
+Optional registration verification checks two to ten Ed25519 signatures over the
+same exact frozen casebook, protocol, snapshot and catalog. Supply all three options
+to either intake or extended scoring: `--registration-dir`,
+`--witness-registry-dir` and `--trusted-registry-sha256`. Partial options are invalid.
+Without them, `registration_witness.status: not_supplied` remains explicit and
+numeric-only compatibility is unchanged.
+
+The registration directory contains exactly `registration.json`; the separate
+trust directory contains exactly `witness-registry.json`. Enroll public keys through
+the accountable evaluation process and obtain the registry's raw-file SHA-256
+through that independent process. The verifier never selects trust from the signed
+envelope, inherits graph-publication keys or reads private signing keys. The supplied
+pin is a trust assumption; it cannot prove independent enrollment or currentness.
+Keys and signatures are operational metadata even though public-key material is
+not a bearer secret. Keep actual packets outside Git and public legal datasets.
+
+`--schemas` prints the complete `RegistrationEnvelope` and `WitnessRegistry`
+contracts. The registration body contains raw-file digests for `casebook.json`,
+`protocol.json`, `snapshot.json`, the source catalog and the witness registry, plus
+`witnessed_at`. All fields are mandatory. Formatting changes to those files change
+the commitment. Every witness signs these bytes:
+
+1. UTF-8 prefix `legal-evaluation-registration-witness-v1` followed by one LF.
+2. The complete validated body as UTF-8 JSON, sorted keys, no extra whitespace,
+   Unicode retained, separators `,` and `:`, and no nonfinite numbers.
+
+Use `app.registration_witness.signing_bytes` to construct this payload in the
+independent signing process. Signatures are 64-byte lowercase hexadecimal;
+enrolled Ed25519 public keys are 32-byte lowercase hexadecimal. Two signatures must
+use distinct enrolled subject identities and distinct public keys. Key aliases,
+duplicate signatures, unknown keys, non-registration purposes, revoked entries and
+enrollment intervals outside the signed declared date fail closed. Rotation may
+enroll multiple keys for one subject, but that subject counts only once. There are
+at most 100 enrolled keys and ten signatures; all supplied signatures must verify.
+
+```sh
+backend/.venv/bin/python scripts/evaluate_release.py /evaluation/tasks.jsonl \
+  --protocol /evaluation/intake/protocol.json \
+  --snapshot /evaluation/intake/snapshot.json \
+  --casebook-dir /evaluation/intake --case-artifacts-dir /evaluation/artifacts \
+  --source-catalog-dir /evaluation/catalog \
+  --registration-dir /evaluation/registration \
+  --witness-registry-dir /approved-evaluation-trust \
+  --trusted-registry-sha256 "$APPROVED_WITNESS_REGISTRY_SHA256"
+```
+
+Verified signatures produce `registration_witness.status: verified_signatures`,
+signature/measurement counts and receipt/registry fingerprints, without signer
+identities, legal content or private paths. The signed declared date must follow
+the casebook's declared registration date and precede each supplied row's
+`measured_at`. That row field is a declared measurement date, **not execution start**.
+With no rows, the measurement count is zero. Exact bounded no-follow inventories
+and final recaptures cover witness/trust files as well as case inputs. Invalid
+signatures, changed files or inconsistent declarations emit no partial report.
+
+This authenticates possession of enrolled signing keys and the exact commitment;
+it does **not** authenticate wall-clock time, actual pre-execution registration,
+current trust administration, professional independence, privacy, source rights or
+legal correctness. Those flags remain false and synthetic cases still cannot pass
+reference binding or release qualification. No signing service, immutable registry,
+trusted timestamp authority, live registration workflow or runtime authorization is
+provided. Real witnessed pre-execution registration and independent legal review
+remain gates in the roadmap. No real signature or approval is created by these tools.
