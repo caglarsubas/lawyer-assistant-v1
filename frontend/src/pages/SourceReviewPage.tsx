@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { ApiError, request } from '../api';
 import { Badge, Detail, Field, Icon, Loading, Notice, PageHeader } from '../components';
-import type { PublicSourceOriginalText, PublicSourcePassages, SourcePermittedUse, SourceReviewCategory, SourceReviewDecision, SourceReviewEvent, SourceReviewState, User } from '../types';
+import type { PublicSourceOriginalText, PublicSourcePassages, SourcePermittedUse, SourceReviewCategory, SourceReviewDecision, SourceReviewEffort, SourceReviewEffortSummary, SourceReviewEvent, SourceReviewState, User } from '../types';
 import { formatDate, messageOf, statusLabel } from '../utils';
 
 const CATEGORIES: Record<SourceReviewCategory, string> = { rights: 'Kullanım hakları', source_identity: 'Kaynak kimliği', extraction: 'Metin çıkarımı', legal: 'Hukuki inceleme' };
 const DECISIONS: Record<SourceReviewDecision, string> = { accepted: 'Kabul edildi', needs_changes: 'Düzeltme gerekli', rejected: 'Reddedildi' };
 const USES: Record<SourcePermittedUse, string> = { storage: 'Saklama', local_processing: 'Yerel işleme', internal_display: 'Kurum içi gösterim', indexing: 'Dizinleme', local_inference: 'Yerel model kullanımı', export: 'Dışa aktarma' };
-export interface AssessmentDraft { category: SourceReviewCategory; decision: SourceReviewDecision; rationale: string; reference: string; sha256: string; passage_ids: string[]; permitted_uses: SourcePermittedUse[] }
-export const EMPTY_ASSESSMENT: AssessmentDraft = { category: 'rights', decision: 'needs_changes', rationale: '', reference: '', sha256: '', passage_ids: [], permitted_uses: [] };
+export interface AssessmentDraft { category: SourceReviewCategory; decision: SourceReviewDecision; rationale: string; reference: string; sha256: string; passage_ids: string[]; permitted_uses: SourcePermittedUse[]; active_seconds: string; effort_basis: SourceReviewEffort['basis'] }
+export const EMPTY_ASSESSMENT: AssessmentDraft = { category: 'rights', decision: 'needs_changes', rationale: '', reference: '', sha256: '', passage_ids: [], permitted_uses: [], active_seconds: '', effort_basis: 'estimate' };
 type LoadState<T> = { status: 'loading' } | { status: 'loaded'; value: T } | { status: 'failed'; message: string; code?: number };
 type OriginalInspection = { passageId: string; offset: number; state: LoadState<PublicSourceOriginalText> };
 const ORIGINAL_WINDOW = 12_000;
@@ -37,6 +37,12 @@ export function sourceReviewPath(sourceId: string) {
   if (!/^[a-f0-9]{64}$/.test(sourceId)) throw new Error('Kaynak kimliği geçersiz.');
   return `/public-sources/${sourceId}`;
 }
+export function reviewEffortPayload(seconds: string, basis: SourceReviewEffort['basis']): SourceReviewEffort | null {
+  const value = seconds.trim();
+  if (!value) return null;
+  if (!/^[0-9]{1,5}$/.test(value) || Number(value) > 86400 || !['self_reported_timer', 'estimate'].includes(basis)) throw new Error('Aktif süre 0–86400 arasında tam saniye olmalı; sürenin dayanağını seçin.');
+  return { active_seconds: Number(value), basis };
+}
 export function assessmentPayload(draft: AssessmentDraft, revision: number) {
   const rationale = draft.rationale.trim(); const reference = draft.reference.trim(); const sha256 = draft.sha256.trim();
   if (rationale.length < 3 || rationale.length > 4000) throw new Error('Gerekçe 3–4000 karakter olmalı.');
@@ -45,10 +51,11 @@ export function assessmentPayload(draft: AssessmentDraft, revision: number) {
   if (draft.passage_ids.length > 100 || new Set(draft.passage_ids).size !== draft.passage_ids.length) throw new Error('En fazla 100 farklı pasaj seçebilirsiniz.');
   if (draft.decision === 'accepted' && draft.category === 'extraction' && !draft.passage_ids.length) throw new Error('Metin çıkarımını kabul etmek için incelediğiniz pasajları seçin.');
   if (draft.decision === 'accepted' && draft.category === 'rights' && !draft.permitted_uses.length) throw new Error('Hak incelemesini kabul etmek için en az bir izin verilen kullanım seçin.');
+  const effort = reviewEffortPayload(draft.active_seconds, draft.effort_basis);
   return { expected_revision: revision, category: draft.category, decision: draft.decision, rationale,
     evidence_refs: reference ? [{ reference, sha256 }] : [],
     passage_ids: draft.category === 'extraction' ? draft.passage_ids : [],
-    permitted_uses: draft.category === 'rights' ? draft.permitted_uses : [] };
+    permitted_uses: draft.category === 'rights' ? draft.permitted_uses : [], ...(effort ? { effort } : {}) };
 }
 
 // A conflict always refreshes the server projection. The caller retains its draft;
@@ -187,6 +194,7 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
         <form onSubmit={assess}><fieldset className="source-review-fieldset" disabled={!owns || busy}><legend className="visually-hidden">Yeni insan incelemesi</legend>
           <div className="form-grid"><Field label="İnceleme alanı">{id => <select id={id} value={draft.category} onChange={event => setDraft(previous => ({ ...previous, category: event.target.value as SourceReviewCategory }))}>{Object.entries(CATEGORIES).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select>}</Field><Field label="Karar">{id => <select id={id} value={draft.decision} onChange={event => setDraft(previous => ({ ...previous, decision: event.target.value as SourceReviewDecision }))}>{Object.entries(DECISIONS).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select>}</Field></div>
           <Field label="Gerekçe" hint="Değerlendirdiğiniz kapsamı ve bilinen sınırları yazın. Önceki incelemeler geçmişte korunur.">{id => <textarea id={id} required minLength={3} maxLength={4000} rows={4} value={draft.rationale} onChange={event => setDraft(previous => ({ ...previous, rationale: event.target.value }))} />}</Field>
+          <SourceReviewEffortFields seconds={draft.active_seconds} basis={draft.effort_basis} onSeconds={value => setDraft(previous => ({ ...previous, active_seconds: value }))} onBasis={value => setDraft(previous => ({ ...previous, effort_basis: value }))} />
           <Field label="Dayanak referansı" hint="Kabul kararı için gerekli. Yerel kayıt veya belge konumunu belirtin; bağlantı otomatik açılmaz.">{id => <input id={id} maxLength={1000} required={draft.decision === 'accepted'} value={draft.reference} onChange={event => setDraft(previous => ({ ...previous, reference: event.target.value }))} />}</Field>
           <Field label="Dayanağın SHA256 içerik özeti" hint="Destekleyici belgenin 64 haneli küçük harfli içerik özeti. Belgenin erişilebilirliğini ve doğruluğunu inceleyen kişi doğrular.">{id => <input id={id} spellCheck={false} autoCapitalize="off" autoComplete="off" pattern="[a-f0-9]{64}" maxLength={64} required={draft.decision === 'accepted' || Boolean(draft.reference)} value={draft.sha256} onChange={event => setDraft(previous => ({ ...previous, sha256: event.target.value }))} />}</Field>
           {draft.category === 'rights' && <fieldset className="source-use-options"><legend>İzin verilen kullanımlar</legend><p className="small muted">Yalnızca dayanakta izin verilen kapsamı seçin. Bu seçimler teknik olarak kullanım başlatmaz.</p>{Object.entries(USES).map(([key, label]) => <label key={key}><input type="checkbox" checked={draft.permitted_uses.includes(key as SourcePermittedUse)} onChange={event => setDraft(previous => ({ ...previous, permitted_uses: event.target.checked ? [...previous.permitted_uses, key as SourcePermittedUse] : previous.permitted_uses.filter(value => value !== key) }))} />{label}</label>)}</fieldset>}
@@ -209,12 +217,30 @@ export function SourceReviewSummary({ state }: { state: SourceReviewState }) {
   return <><p className="small-label">Değiştirilemez edinim kaydı</p><div className="source-review-badges"><Badge>{statusLabel(state.source.rights_status)}</Badge><Badge>{statusLabel(state.source.review_status)}</Badge><Badge>{statusLabel(state.source.publication_status)}</Badge></div>
     <p className="small muted">Aşağıdaki büro incelemeleri, edinim paketinin bu durumlarını değiştirmez.</p>
     <p className="small source-summary">{state.handoff_ready ? 'Dört inceleme alanı kabul edildi. Dosya bağımsız yayın incelemesine devredilmeye hazır; bu, yayın veya kullanım izni değildir.' : 'İnceleme dosyası tamamlanmadı. Dört alanın en son kararları ayrı izlenir.'}</p>
+    <SourceReviewEffortTotals summary={state.effort_summary} />
     <div className="source-review-decisions">{(Object.keys(CATEGORIES) as SourceReviewCategory[]).map(category => { const event = state.assessments.find(value => value.category === category); return <article key={category}><h3>{CATEGORIES[category]}</h3><Badge status={event?.decision === 'accepted' ? 'reviewed' : event?.decision}>{event?.decision ? DECISIONS[event.decision] : 'İnceleme bekliyor'}</Badge>{event && <><p className="small muted">{event.reviewer.name} · {formatDate(event.created_at, true)}</p><Detail title="Son değerlendirmenin dayanakları"><ReviewEvent event={event} /></Detail></>}</article>; })}</div>
     <Detail title="Kaynak kimliği, bütünlük ve tarih sınırları"><dl className="coverage-fields"><div><dt>Kaynak adresi</dt><dd className="reference-id">{state.source.source_url}</dd></div><div><dt>Kaynak sürümü</dt><dd className="reference-id">{state.source.source_version_id}</dd></div><div><dt>Paket SHA256</dt><dd className="reference-id">{state.source.id}</dd></div><div><dt>Edinim tarihi</dt><dd>{formatDate(state.source.acquired_at, true)}</dd></div><div><dt>Yayımlanma</dt><dd>{formatDate(state.source.dates.published_on)}</dd></div><div><dt>Yürürlük başlangıcı</dt><dd>{formatDate(state.source.dates.effective_from)}</dd></div><div><dt>Yürürlük sonu</dt><dd>{formatDate(state.source.dates.effective_until)}</dd></div><div><dt>Paket bütünlüğü</dt><dd>{state.source.integrity_scope === 'all_artifacts_verified' ? 'Tüm dosyalar doğrulandı' : 'Doğrulanmış kapsam bildirilmedi'}</dd></div>{Object.entries(state.source.artifacts).map(([name, value]) => <div key={name}><dt>{name}</dt><dd className="reference-id">{value.sha256} · {value.bytes} bayt</dd></div>)}</dl>
       <p className="small">Kaynak adresi yalnızca köken bilgisidir; dış bağlantı kurulmaz. Bilinmeyen tarihler ve tarihsel metinlerin güncel uygulanabilirliği insan incelemesi gerektirir.</p>
       {state.source.injection_risk_hints.length > 0 && <p className="small">Kaynak metninde talimat benzeri içerik işaretlendi: {state.source.injection_risk_hints.join(' · ')}</p>}
       <ul>{[...new Set([...state.source.limitations, ...state.limitations])].map((limitation, index) => <li key={index}>{limitation}</li>)}</ul>
     </Detail></>;
+}
+
+export function SourceReviewEffortFields({ seconds, basis, onSeconds, onBasis }: { seconds: string; basis: SourceReviewEffort['basis']; onSeconds: (value: string) => void; onBasis: (value: SourceReviewEffort['basis']) => void }) {
+  return <div className="form-grid">
+    <Field label="Aktif inceleme süresi (saniye, isteğe bağlı)" hint="Yalnızca bu değerlendirmeye harcadığınız aktif zamanı girin; ara ve beklemeleri hariç tutun. Boş: bilinmiyor; 0: açık sıfır beyanı.">{id => <input id={id} type="number" min={0} max={86400} step={1} inputMode="numeric" value={seconds} onChange={event => onSeconds(event.target.value)} />}</Field>
+    <Field label="Süre dayanağı" hint="Zamanlayıcı süresi de incelemecinin beyanıdır; platform bağımsız ölçüm yapmaz.">{id => <select id={id} value={basis} disabled={!seconds.trim()} onChange={event => onBasis(event.target.value as SourceReviewEffort['basis'])}><option value="estimate">Tahmin</option><option value="self_reported_timer">Kendi zamanlayıcım</option></select>}</Field>
+  </div>;
+}
+
+export function SourceReviewEffortTotals({ summary }: { summary?: SourceReviewEffortSummary }) {
+  return <Detail title="Aktif inceleme emeği">
+    {summary ? <><p className="small muted">Bu kaynağın tüm değerlendirmeleri, değiştirilen önceki kararlar dahil. Görevlendirme ve bekleme süreleri dahil değildir. Süreler incelemeci beyanıdır; kalite onayı veya verimlilik sonucu değildir.</p><dl className="coverage-fields">
+      <div><dt>Zamanlayıcı beyanı</dt><dd>{summary.timer_reported_active_seconds} saniye · {summary.timer_reported_assessments} değerlendirme</dd></div>
+      <div><dt>Tahmini aktif süre</dt><dd>{summary.estimated_active_seconds} saniye · {summary.estimated_assessments} değerlendirme</dd></div>
+      <div><dt>Süresi bilinmeyen</dt><dd>{summary.unknown_assessments} / {summary.total_assessments} değerlendirme</dd></div>
+    </dl></> : <p>Aktif süre özeti bu kayıtta mevcut değil. Görüntülenen geçmişten toplam süre hesaplanmaz.</p>}
+  </Detail>;
 }
 
 export function SourceOriginalView({ data, onPage, onClose }: { data: PublicSourceOriginalText; onPage: (offset: number) => void; onClose: () => void }) {
@@ -244,5 +270,5 @@ export function SourcePassageList({ data, offset, selected, canSelect, onSelect,
 
 function ReviewEvent({ event }: { event: SourceReviewEvent }) {
   const label = event.event_type === 'claim' ? 'İnceleme üstlenildi' : event.event_type === 'release' ? 'Görevlendirme kaldırıldı' : `${event.category ? CATEGORIES[event.category] : 'İnceleme'} · ${event.decision ? DECISIONS[event.decision] : 'Karar belirtilmedi'}`;
-  return <div><p><strong>{label}</strong> · Revizyon {event.revision}</p><p className="small muted">{event.reviewer.name} · {formatDate(event.created_at, true)}</p><p className="source-review-rationale">{event.rationale}</p>{event.evidence_refs.length > 0 && <ul>{event.evidence_refs.map((reference, index) => <li key={index}><span>{reference.reference}</span><p className="reference-id">{reference.sha256}</p></li>)}</ul>}{event.passage_ids.length > 0 && <p className="small">İncelenen pasajlar: {event.passage_ids.join(', ')}</p>}{event.permitted_uses.length > 0 && <p className="small">İzin kapsamı: {event.permitted_uses.map(value => USES[value]).join(', ')}</p>}</div>;
+  return <div><p><strong>{label}</strong> · Revizyon {event.revision}</p><p className="small muted">{event.reviewer.name} · {formatDate(event.created_at, true)}</p>{event.event_type === 'assessment' && <p className="small">{event.effort ? `Aktif süre: ${event.effort.active_seconds} saniye · ${event.effort.basis === 'self_reported_timer' ? 'Zamanlayıcı beyanı' : 'Tahmin'}` : 'Aktif süre: bilinmiyor'}</p>}<p className="source-review-rationale">{event.rationale}</p>{event.evidence_refs.length > 0 && <ul>{event.evidence_refs.map((reference, index) => <li key={index}><span>{reference.reference}</span><p className="reference-id">{reference.sha256}</p></li>)}</ul>}{event.passage_ids.length > 0 && <p className="small">İncelenen pasajlar: {event.passage_ids.join(', ')}</p>}{event.permitted_uses.length > 0 && <p className="small">İzin kapsamı: {event.permitted_uses.map(value => USES[value]).join(', ')}</p>}</div>;
 }

@@ -3394,3 +3394,57 @@ No claim is made that the 30–36 week roadmap is complete. Remaining work inclu
 In particular, the constrained extraction worker has no matter/database mount or provider credentials, but concurrent parser processes share a UID/container. Adversarial isolation between parser jobs has not been demonstrated. Compose validation cannot substitute for that test or for actual PostgreSQL/OpenSearch/Jena runtime validation.
 
 The provider API key remains user-managed in the gitignored root `.env`. This implementation did not read, generate or modify a real provider credential. Development preview data is isolated from configured customer storage. No repository commit, push or production deployment was performed.
+## Curator active effort — 10 October 2026
+
+Base: verified PR #42 merge `52a3a7cd951fbe52c8b44094a00c1a58feef7916`.
+All three post-merge jobs passed in run `38064746653`. This packet adds optional
+reviewer-declared active seconds without changing rights, source promotion,
+publication, provider settings, graph releases or serving data.
+
+Evidence: [local receipt](evidence/curator-active-effort-2026-10-10.json).
+Ignored detailed logs and the browser screenshot are retained under
+`.data/verification/r03-curator-effort/` in the owned worktree.
+
+- Native source-review tests: **100 passed**, 17.62s. New effort cases distinguish
+  missing/null/legacy durations, explicit zero, own-timer reports and estimates;
+  reject coercion, overflow, forged measurement bases and assignment effort;
+  preserve source/reviewer/revision binding, encrypted firm isolation, bounded
+  writes, acceptance semantics and full-ledger totals beyond display truncation.
+- Disconnected Linux source/provision/snapshot suite: **430 passed**, 52.83s,
+  including a new optional-effort snapshot and stale-review regression. The
+  application and both changed/new test files were fingerprinted against the
+  worktree. Container: no network, read-only filesystem, user 10001, dropped
+  capabilities, no-new-privileges, bounded memory/CPU/PIDs and noexec scratch.
+  Read-only pytest cache and existing TestClient deprecation warnings are retained.
+- Frontend: **254 tests passed**, 30 files; production build passed. Existing
+  >500kB bundle warning remains. Tests cover optional inputs, strict duration
+  validation, zero versus unknown display, separated server totals, old API
+  compatibility and declaration wording; no truncated-window reconstruction.
+- Deployment: **41 unittest checks passed**. Full Python Ruff and whitespace
+  checks passed. The first new test import-format finding was corrected; no
+  tests were removed, weakened, retried on failure or moved between CI groups.
+- Exact workflow collection: **3,598** backend cases form disjoint complete
+  existing groups: preflight89, remaining3339, publication32, workspace58,
+  human-review60, model20. No missing/extra/overlapping cases. No workflow event,
+  runner, worker, retry, dependency or deadline changes; no billing claim.
+- Real acquired 6098 package: first/middle/last original windows still return
+  exact HTTP200/no-store results in a no-network temporary TestClient. Before
+  and after: revision0, no assessments, no owner, no actual human effort.
+  Public source artifacts and actual approvals were not modified.
+- Browser: disposable local demo, blank provider/service configuration and fresh
+  temporary SQLite; no client material or root `.env`. Three **invented**
+  needs-changes assessments exercise unknown, estimated90s and own-timer0s.
+  UI totals correctly retain all three after refresh; successful writes reset
+  duration and basis fields. Main-pane fullscreen screenshot retained; no
+  browser console warnings/errors observed. Vite retained font allowlist warnings
+  from the shared dependency symlink; this is interaction/layout evidence with
+  font fallbacks, not production typography acceptance. Temporary tab/processes closed;
+  this does not establish deployment or actual legal review.
+
+Effort totals are unadjudicated declarations, not independently verified measures
+or throughput results. Erroneous declarations stay in append-only history and
+need study adjudication. Actual qualified reviewer work, representative source
+coverage, independent references, witnessed paired studies and legal/pilot
+qualification remain open. Exact-head hosted results are recorded in the PR and
+ignored verification receipt after its one normal run; local checks alone do not
+establish hosted success.
