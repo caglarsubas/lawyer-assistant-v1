@@ -50,7 +50,11 @@ def capture(path, maximum):
         os.close(fd)
 
 
-def score_files(tasks_path, snapshot_path, protocol_path=None):
+def score_files(tasks_path, snapshot_path, protocol_path=None, *, casebook_dir=None,
+                case_artifacts_dir=None, source_catalog_dir=None):
+    reference_paths = (casebook_dir, case_artifacts_dir, source_catalog_dir)
+    if any(path is not None for path in reference_paths) and (protocol_path is None or any(path is None for path in reference_paths)):
+        raise ValueError('Reference cases require all directories and an extended protocol')
     specs = {"tasks": (tasks_path, MAX_TASK_BYTES), "snapshot": (snapshot_path, 2 * 1024 * 1024)}
     if protocol_path is not None:
         specs["protocol"] = protocol_path, 2 * 1024 * 1024
@@ -65,6 +69,17 @@ def score_files(tasks_path, snapshot_path, protocol_path=None):
     snapshot = parse_component(raw["snapshot"])
     report = (evaluate_qualification(rows, snapshot, parse_component(raw["protocol"])) if protocol_path is not None
               else evaluate_release(rows, snapshot))
+    report['reference_cases'] = {'status': 'not_supplied', 'reference_case_binding_pass': False}
+    if casebook_dir is not None:
+        from app.reference_cases import inspect_casebook
+
+        reference = inspect_casebook(casebook_dir, case_artifacts_dir, source_catalog_dir, rows)
+        if any(reference['input_files'][f'{key}.json']['sha256'] != hashlib.sha256(raw[key]).hexdigest()
+               for key in ('snapshot', 'protocol')):
+            raise ValueError('Scoring and reference intake use different captured files')
+        report['reference_cases'] = reference
+        report['gates']['reference_case_binding'] = reference['reference_case_binding_pass']
+        report['quantitative_gates_pass'] = report['quantitative_gates_pass'] and reference['reference_case_binding_pass']
     if any(capture(path, maximum) != raw[name] for name, (path, maximum) in specs.items()):
         raise ValueError("Evaluation inputs changed during scoring")
     report["input_files"] = {name: {"sha256": hashlib.sha256(value).hexdigest(), "bytes": len(value)}
@@ -77,11 +92,15 @@ def main(argv=None):
     parser.add_argument("tasks", type=Path, nargs="?")
     parser.add_argument("--snapshot", type=Path)
     parser.add_argument("--protocol", type=Path, help="Frozen local or single-provider extended evaluation protocol")
+    parser.add_argument('--casebook-dir', type=Path, help='Frozen source-linked reference inventory')
+    parser.add_argument('--case-artifacts-dir', type=Path, help='Exact digest-named originals, references and adjudications')
+    parser.add_argument('--source-catalog-dir', type=Path, help='Directory containing only the pinned source-catalog.json')
     parser.add_argument("--schemas", action="store_true", help="Print extended input schemas without reading files")
     try:
         arguments = parser.parse_args(argv)
         if arguments.schemas:
-            if arguments.tasks or arguments.snapshot or arguments.protocol:
+            if (arguments.tasks or arguments.snapshot or arguments.protocol or arguments.casebook_dir
+                    or arguments.case_artifacts_dir or arguments.source_catalog_dir):
                 raise ValueError("Schemas do not take evaluation files")
             report = {"schema_version": "legal-evaluation-schemas-v1", "runtime_authorization": "none",
                       "validation_note": "Python cross-record validation and independent evidence review also required.",
@@ -92,7 +111,9 @@ def main(argv=None):
         else:
             if arguments.tasks is None or arguments.snapshot is None:
                 raise ValueError("Evaluation paths required")
-            report = score_files(arguments.tasks, arguments.snapshot, arguments.protocol)
+            report = score_files(arguments.tasks, arguments.snapshot, arguments.protocol,
+                                 casebook_dir=arguments.casebook_dir, case_artifacts_dir=arguments.case_artifacts_dir,
+                                 source_catalog_dir=arguments.source_catalog_dir)
         output = json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False)
     except (ValueError, OSError, TypeError, AttributeError, RecursionError, OverflowError):
         print("Invalid evaluation input; validate the adjudication schema, protocol and snapshot.", file=sys.stderr)

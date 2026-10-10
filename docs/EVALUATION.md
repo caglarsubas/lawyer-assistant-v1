@@ -1,5 +1,12 @@
 # Offline legal-analysis and BYOK qualification scoring
 
+Optional [reference-case binding](REFERENCE_CASE_INTAKE.md) connects scored rows to
+a physically checked source/passage/reference inventory and declared family splits.
+Supply `--casebook-dir`, `--case-artifacts-dir` and `--source-catalog-dir` together
+with the extended protocol. Missing/changed references or rows cannot pass that
+additional gate. Existing invocations retain numeric compatibility and explicitly
+report `reference_cases.status: not_supplied`; they do not inspect underlying evidence.
+
 The separate [R04 development retrieval benchmark](RETRIEVAL_BENCHMARK.md) captures
 fixed lexical profiles on one authorized snapshot and reports ranking metrics and
 paired family uncertainty. Its development observations do not replace the held-out
