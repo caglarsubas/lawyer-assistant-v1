@@ -1,5 +1,57 @@
 # Verification record — 10 October 2026
 
+## Registered public-source preparation — 10 October 2026
+
+Verified continuation: PR #40 merged into main at
+`4eac0341a3ffdf2bb9bbf75ae4f71b80b131bf1d`; post-merge run `38058176402`
+passed all three jobs. This packet adds offline source preparation and a real
+pending-review sample, without changing application authorization or serving data.
+
+| Check | Result |
+|---|---|
+| New transcription/admission regressions | 74 passed within related selections |
+| Native source, gateway, physical evidence, calibration and reference intake | 398 passed, 7.62s |
+| Restricted disconnected Linux source/gateway/physical evidence selection | 275 passed, 9.90s, non-root/read-only |
+| Deployment contracts and Ruff | 41 passed; lint passed |
+| Complete/disjoint CI collection | 3,525 cases; zero missing, extra or overlap; unchanged workflow |
+| Actual admitted official CVD databases | All three signatures verified; daily version 28149 |
+| Actual previously acquired TBMM 6101 original | Clean disconnected scan; 38 Windows-1254 passages prepared |
+| Actual malware rejection | Inert EICAR fixture only in disconnected container tmpfs; `clamscan` exit 1, no parser/output |
+| Actual expired signatures | Old daily CVD rejected for expiry; no prepared output |
+| Separate host public staging catalog | Import/complete artifact verification passed; rights/legal review pending |
+| Application deployment, graph/index changes, inference and source/legal approval | None performed |
+
+Real original SHA-256 is
+`dbc85863a7a5b93aab7736b1fcf19d13180bbc6ecdb7252b619cc4c68d84b064`
+(17,537 bytes), acquired 4 October. The final real scan call took 6.081s and parser
+call 0.00144s; these exclude curator time and do not establish representative
+throughput. Publication/effect dates, fidelity, sensitivity, identity and legal
+applicability remain unknown/unreviewed. The staged package is
+`98759ad5dd8511ceb41cff0f2b7c269516dc63b8c5115392955c86ab21c9825c` in
+a separate public-only verification store. It is not in the Docker catalog or
+active graph/search release. Real source contents and signatures remain ignored
+local artifacts; only provenance/counts/fingerprints enter the repository.
+
+Both fresh TBMM acquisition attempts failed on the existing gateway DNS timeout
+and admitted nothing; no destination, deadline or policy was weakened. The initial
+Linux test command inherited `/app/backend` and found no `backend/tests` paths.
+That error is retained. The corrected run explicitly uses `/app` and passes; no
+full Linux backend-suite result is claimed. Full coverage remains the hosted CI
+gate, with the same three jobs, workers, deadlines and no-retry policy.
+
+Tests exercise Turkish/UTF-8 encodings, exact original/Unicode/entity positions,
+nested active-region omission, malformed/oversized inputs, strict provenance,
+missing/stale/changed signature receipts, scan-before-parse ordering, source drift,
+hardlinks/FIFOs/symlinks, approval/date spoofing, exclusive destination races,
+timeout cleanup, import compatibility and sanitized failures. Actual scanner
+verification, stale rejection and malware rejection use the real local scanner
+image; synthetic manifests are never installed as legal authority.
+
+See [contract](REGISTERED_SOURCE_PREPARATION.md) and
+[machine-readable receipt](evidence/registered-source-preparation-2026-10-10.json).
+Independent source/rights/fidelity/history review, representative source-linked
+references and curator effort remain R01/R03/R05A qualification work.
+
 ## Fresh matter authorization cost — 10 October 2026 (Asia/Shanghai)
 
 PR #39 is merged at `c2b0b3b1c7df49da171a92316855d1288724bf11`. Exact-head run

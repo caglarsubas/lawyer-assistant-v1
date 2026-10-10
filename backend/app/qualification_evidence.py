@@ -23,6 +23,8 @@ FIXED_FILENAMES = frozenset({
     "source-catalog.json", "asset-catalog.json", "analysis-fixture.json", "scenario-fixture.json",
     "research-dossier.json", "sample.json", "raw.bin", "extraction.json", "reference.json", "study.json",
     "sources.json", "casebook.json", "protocol.json", "snapshot.json", "registration.json", "witness-registry.json",
+    "raw.html", "acquisition.json", "text.txt", "locators.json", "source.json", "preparation.json",
+    "admission.json",
 })
 FAILURE = "qualification_evidence_invalid"
 
