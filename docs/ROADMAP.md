@@ -1323,8 +1323,9 @@ exports without rewriting snapshots. Source/admission denial withholds all quote
 history. Workspace row locks serialize freezes; exact preview and live authorization
 are checked before commit and again before completing admission. Late committed
 failures retain permanently pending receipts; retry cannot override them. Export
-rechecks after serialization and through guard exit. Existing CI partition, job
-count, deadlines and no-retry policy are unchanged. See [contract](REGISTERED_AUTHORITY_MODEL_COHORTS.md),
+rechecks after serialization and through guard exit. The complete/disjoint CI partition moves one existing runtime-authorization
+case from the near-limit PostgreSQL job into the existing frontend group step;
+job count, deadlines, coverage and no-retry policy are unchanged. See [contract](REGISTERED_AUTHORITY_MODEL_COHORTS.md),
 [verification](VALIDATION.md) and [operations](OPERATIONS.md).
 
 This engineering packet awaits manual PR merge. The user's PR #36 merge report was

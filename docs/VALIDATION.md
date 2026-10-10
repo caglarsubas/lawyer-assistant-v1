@@ -46,6 +46,16 @@ incomplete denied-response fixture. The fixture now crosses an explicit `unknown
 boundary; the final strict build and all 211 frontend checks pass. Runtime code and
 CI budgets are unchanged. Exact corrected-head hosted results are verified separately.
 
+Hosted run `38021373670` passed frontend in 244 seconds and PostgreSQL in 298
+seconds, leaving only two seconds below the latter's five-minute deadline. Its
+runtime-authorization case used 32.11 seconds including setup. That one case is
+now in the existing frontend confidential-group step, with the same two workers
+and three-minute step/five-minute job caps, and is removed from the PostgreSQL
+publication selection. Collection is still complete/disjoint: 60 frontend group/
+authorization cases and 32 publication/renewal cases. The revised local groups pass: 60 checks in 53.98 seconds and 32 checks in 35.54
+seconds. Exact-head hosted results must verify the changed placement; no extra runner,
+retry, omitted case or higher deadline is introduced. Billing savings are not measured.
+
 An owned loopback production-build browser rehearsal on port 18637 confirmed
 explicit two-trial selection, exact preview/freeze, Current history after reload,
 both model arms, unknown observation denominators, repeated sources and original

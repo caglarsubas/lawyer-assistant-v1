@@ -60,6 +60,14 @@
       "workers": 2,
       "worker_restarts": 0
     },
+    "balanced_frontend_step": {
+      "passed": 60,
+      "seconds": 53.98
+    },
+    "balanced_publication_step": {
+      "passed": 32,
+      "seconds": 35.54
+    },
     "restricted_linux": {
       "exit_code": 0,
       "passed": 324,
@@ -77,6 +85,20 @@
       "synthetic extraction calibration and study",
       "Compose configuration with env-file /dev/null"
     ]
+  },
+  "hosted_capacity_observation": {
+    "run_id": 38021373670,
+    "head_sha": "1471bea09a04c488bb2ec6215cd46903f1f606a3",
+    "postgres_job_seconds": 298,
+    "postgres_tests_seconds": 143.11,
+    "publication_tests_seconds": 122.4,
+    "frontend_job_seconds": 244,
+    "human_review_step_seconds": 142.44,
+    "runtime_authorization_case_seconds": 32.11,
+    "fix": "Run the existing runtime authorization case alongside confidential groups in the frontend runner; remove it from the PostgreSQL publication partition",
+    "coverage_omitted": false,
+    "deadline_or_runner_count_changed": false,
+    "billing_savings_measured": false
   },
   "initial_hosted_failure": {
     "run_id": 38021225729,
@@ -113,9 +135,9 @@
       "complete": 3299,
       "preflight": 89,
       "remaining": 3040,
-      "publication": 33,
+      "publication": 32,
       "workspace": 58,
-      "human_review": 59,
+      "human_review": 60,
       "model_trials": 20
     },
     "preflight_files": [
@@ -127,7 +149,6 @@
     ],
     "publication_files": [
       "backend/tests/test_open_validity_publication.py",
-      "backend/tests/test_runtime_authorization_integration.py",
       "backend/tests/test_publication_cli.py",
       "backend/tests/test_authority_revalidations.py"
     ],
@@ -138,7 +159,8 @@
     ],
     "human_review_files": [
       "backend/tests/test_authority_trial_cohorts.py",
-      "backend/tests/test_analysis_cohorts.py"
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
     ],
     "model_trial_files": [
       "backend/tests/test_authority_model_trials.py"
@@ -146,14 +168,15 @@
     "intersection": 0,
     "missing": 0,
     "extra": 0,
-    "complete_node_ids_sha256": "8ba0e62cb3815e739c9a428ec7dfe5cef10f0da7d5fc2fd90e6ecd23120fc957",
-    "workflow_sha256": "93bf2d62e080038e87e451e775e419537288ed298fd95c05b8fbe9b16a1c188b",
+    "complete_node_ids_sha256": "cf3c608fbaa38456517590c89df9ba7e3e5d8e0dc72a79475505da4c448a553c",
+    "workflow_sha256": "f5dcedfa0fc58098b2ca3191f4d19e008217540820c641bc16e7996707ff09ea",
     "no_runner_retry_existing_deadline_change": true,
     "human_review_workers": 2,
     "human_review_new_step_minutes": 3,
     "hosted_speedup_or_billing_savings_established": false,
     "new_model_cohort_tests_in_existing_main_step": 19,
     "additional_jobs": 0,
+    "runtime_authorization_case_moved_from_publication_to_existing_frontend_step": true,
     "deadlines_changed": false,
     "retries_or_worker_restarts_added": false
   },
@@ -215,6 +238,8 @@
     "r01-calibration.log": "1a8d77e3eeff2accc21a00549bd8ff79f95d80be6cd95e3f08d9f7bd8cf2016d",
     "r01-study.log": "f88ca546cc709c782d8b786bf0897bb8734be5de24211a2bad30c5640a6a68cd",
     "compose.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "human-clock.log": "cb9edb86df32e3d97cf110549eadf552579b071fbf2a230f98416c5afc381857"
+    "human-clock.log": "cb9edb86df32e3d97cf110549eadf552579b071fbf2a230f98416c5afc381857",
+    "balanced-frontend-step.log": "b918314960c976bf0651eba40e60c5ce6123af181214d2ff0fcc957d5a2f3efc",
+    "balanced-publication-step.log": "7d77c9eeb79d1e44667989c09953aea4526a783fdf7a8c343da4e06ba740fcec"
   }
 }
