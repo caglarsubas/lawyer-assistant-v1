@@ -1,5 +1,11 @@
 # Local deployment and recovery
 
+[Reference-case intake](REFERENCE_CASE_INTAKE.md) is an offline qualification tool,
+not a deployment command or runtime permission. Keep real inventories, artifacts
+and reports in confidential storage outside Git. Use new owner-only destinations
+for invented fixtures. No source acquisition, provider call, database migration or
+`.env` access is needed; current application/source authorization remains unchanged.
+
 This is a development and evaluation baseline, not a production-qualified release.
 The application, provider authentication, source rights, legal accuracy, capacity,
 availability and privacy controls require separate qualification. Do not admit live

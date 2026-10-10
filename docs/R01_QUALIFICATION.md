@@ -1,5 +1,10 @@
 # R01 qualification, evidence verification and extraction calibration
 
+[Source-linked reference-case intake](REFERENCE_CASE_INTAKE.md) now checks exact
+original/passage/reference bytes, explicit family splits and review gaps, and can
+bind later scorer rows to the frozen inventory. It remains offline and supplies no
+source approval, privacy verdict, legal adjudication or model execution.
+
 R01 provides **offline planning contracts, evidence-file verification and extraction
 comparison and scoped evaluation scoring**. These tools turn the roadmap's source, asset, analysis, scenario and
 research requirements into inspectable records and measure extraction discrepancies.
