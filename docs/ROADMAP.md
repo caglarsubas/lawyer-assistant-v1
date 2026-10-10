@@ -1456,3 +1456,33 @@ The next product qualification priority remains lawful representative source/cas
 samples, independent source-linked reference review and measured extraction/review
 throughput, followed by actual witnessed registration and paired model/reviewer
 studies. R01/R03–R05/R05A legal gates remain partial.
+
+### Delivered packet — R01/R03 registered source preparation, 10 October 2026
+
+PR #40 is verified merged into main at `4eac0341a3ffdf2bb9bbf75ae4f71b80b131bf1d`.
+All three post-merge main jobs passed in run `38058176402`. This packet moves from
+synthetic intake rehearsals to a repeatable bridge for actual registered originals.
+
+One operator CLI captures exact quarantined public bytes, requires cryptographically
+verified fresh ClamAV databases and a clean disconnected scan, then transcribes HTML
+in a second disconnected worker. Strict Turkish encodings, original source-code
+ranges, exact UTF-8 passages, preserved acquisition provenance and measured individual
+scan/parser calls feed the existing curator import/review path. Prepared files use
+exclusive atomic publication; source changes, missing controls, worker failures and
+unconfirmed cleanup produce no completed package. Application data, credentials,
+provider calls, serving graphs and source/legal approvals are outside this operation.
+
+The retained real TBMM 6101 acquisition from 4 October was scanned and prepared into
+38 Windows-1254 passages, then verified in a separate public-only host staging catalog.
+Neither that catalog nor these review files update the Docker deployment. Today's
+registered acquisitions of 6101 and 6098 stopped at the gateway DNS timeout; nothing
+was admitted by those attempts. The real sample remains rights/identity/fidelity/
+sensitivity/legal review pending and explicitly not current consolidated law. Its
+single-call measurements are not representative throughput or reviewer productivity.
+See [preparation contract](REGISTERED_SOURCE_PREPARATION.md) and [verification](VALIDATION.md).
+
+This engineering packet requires manual PR merge and exact-head checks. Next work
+is approved connected-route restoration, diverse lawful source/case intake,
+independent source-linked references and measured curator effort before actual
+registered paired studies. R01/R03/R05A legal qualification, target-host capacity
+and pilot acceptance remain open. No new CI jobs, retries or deadlines are added.

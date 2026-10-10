@@ -8,6 +8,12 @@ A source being publicly accessible does not establish permission to store, proce
 
 An operator imports already acquired raw bytes, separately extracted UTF-8 text, a locator map and a source record. Raw documents are opaque: this importer never executes scripts, renders HTML, parses PDF/Office contents, follows URLs, resolves citations, calls inference, or reads the private matter database. Acquisition and extraction must take place through approved source-access and sandboxing procedures before staging. A source URL is provenance, not a request to fetch it.
 
+For the closed TBMM HTML registry, the [offline preparation workflow](REGISTERED_SOURCE_PREPARATION.md)
+now produces four import-compatible artifacts after a mandatory disconnected scan
+and isolated transcription. It retains original acquisition dates, encoding,
+decoded-source-code ranges and pending review states. Its separate provenance and
+admission sidecars belong in the review archive; preparation does not import or publish.
+
 Each package remains:
 
 - `rights_status: rights_pending`

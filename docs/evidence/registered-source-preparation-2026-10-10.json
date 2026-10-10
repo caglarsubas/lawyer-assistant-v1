@@ -1,0 +1,209 @@
+{
+  "schema_version": "registered-source-preparation-verification-v1",
+  "verified_on": "2026-10-10",
+  "continuation_base": {
+    "pr": 40,
+    "merge_sha": "4eac0341a3ffdf2bb9bbf75ae4f71b80b131bf1d",
+    "main_run_id": 38058176402,
+    "all_three_jobs_passed": true
+  },
+  "engineering_checks": {
+    "new_test_cases": 74,
+    "native_related_cases_passed": 398,
+    "native_seconds": 7.62,
+    "restricted_linux_related_cases_passed": 275,
+    "linux_seconds": 9.9,
+    "linux_network": "none",
+    "linux_nonroot_readonly": true,
+    "linux_test_image_id": "sha256:711a86fd77af29f9eb34d6d3d3e9533bd338218c004bc5cc720c4e0f69febd90",
+    "application_fingerprint": {
+      "files": 82,
+      "sha256": "4593f799f11202d395bb62939299d07c74ee87be6c077feb5e0543ad3db6851e"
+    },
+    "test_fingerprint": {
+      "files": 101,
+      "sha256": "f9df7e48bc2e6a6706098f076d41de20027ffbb672be6fdb190d95650d62a9d2"
+    },
+    "deployment_contracts_passed": 41,
+    "ruff_passed": true,
+    "ci_partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 3525,
+        "preflight": 89,
+        "remaining": 3266,
+        "publication": 32,
+        "workspace": 58,
+        "human_review": 60,
+        "model_trials": 20
+      },
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_open_validity_publication.py",
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_content_scope.py",
+        "backend/tests/test_authority_proposals.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_authority_trial_cohorts.py",
+        "backend/tests/test_analysis_cohorts.py",
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "6cd84b888fdea82bf06d0426b3474b36cdf45f2b6aca6af9c0e40a54231fc274",
+      "workflow_sha256": "9e9b8003a36dd25553aeffea4e59f41bf6c9a6d702718a9ad0356844c96dda92",
+      "no_runner_retry_existing_deadline_change": true,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "orchestrator_sha256": "a23248d5c35ad371f73bcc2f70629aaeefa12101d1447567f5b5fccf7dea30f0",
+    "restricted_image_matches_final_source": true
+  },
+  "real_sample": {
+    "sample_count": 1,
+    "registry_id": "tbmm-6101-enacted",
+    "source_url": "https://cdn.tbmm.gov.tr/KKBSPublicFile/D23/Y3/T1/KanunMetni/3c4eac23-5d02-49cd-9ef1-4bf8de05aee6.html",
+    "acquired_at": "2026-10-04T07:28:12.787825+00:00",
+    "fresh_acquisition": false,
+    "raw_bytes": 17537,
+    "raw_sha256": "dbc85863a7a5b93aab7736b1fcf19d13180bbc6ecdb7252b619cc4c68d84b064",
+    "text_bytes": 5057,
+    "text_sha256": "60ef1f7ce8dcd83d563e3ae18c88c845843f301aa3123402e929953a35e16a49",
+    "encoding": "cp1254",
+    "decoded_html_sha256": "e78b6bd243a77a53218999688c258edd75ca0b362b8653874ccc4e346a2ee192",
+    "adapter_version": "registered-html-blocks-v1",
+    "passages": 38,
+    "omitted_regions": 1,
+    "parser_call_seconds": 0.0014407500275410712,
+    "scan_call_seconds": 6.080545753007755,
+    "scan": {
+      "clean": true,
+      "databases": {
+        "databases": [
+          {
+            "build_time": 1765927102,
+            "bytes": 89072577,
+            "file": "main.cvd",
+            "sha256": "0b2182d229f46981ec8f535382222f7c9dfdd656b250ad47988b910a8d302365",
+            "signatures": 3287027,
+            "version": 63
+          },
+          {
+            "build_time": 1791613444,
+            "bytes": 23442295,
+            "file": "daily.cvd",
+            "sha256": "d4117485e03b333d4b40d77b9280750a14555ae84978f43de676cf5ff0810fd8",
+            "signatures": 355760,
+            "version": 28149
+          },
+          {
+            "build_time": 1757593759,
+            "bytes": 281702,
+            "file": "bytecode.cvd",
+            "sha256": "6d4aa01f219e988060fc419f495d07f27e0cdf1a2cccc065971da922c76f7ffb",
+            "signatures": 80,
+            "version": 339
+          }
+        ],
+        "engine": "ClamAV 1.4.6",
+        "schema_version": 1
+      },
+      "elapsed_seconds": 6.080545753007755,
+      "raw_sha256": "dbc85863a7a5b93aab7736b1fcf19d13180bbc6ecdb7252b619cc4c68d84b064",
+      "schema_version": "registered-source-scan-v1"
+    },
+    "worker_images": {
+      "parser_image_id": "sha256:e48a76286a19a971bcf8b7a8658d04df97130f28264ac5115fd75e4381462c97",
+      "scanner_image_id": "sha256:f5e27bb0523b586350f123763246debbfef9b18e7c6f50f0fde76b1ac7582222"
+    },
+    "artifact_sha256": {
+      "acquisition.json": "293c2c47a3ca6cbbb553bce36f05eac54d50001156112df553cdf5cc4174ead5",
+      "locators.json": "33d841fa65f1a9053ca68bab4a793ef4d296fdc6184850ab946d7f3208fb655f",
+      "preparation.json": "fdc050d43a669f9c24572099eb9c1f957825206214966573b13b29a8e042f35b",
+      "raw.bin": "dbc85863a7a5b93aab7736b1fcf19d13180bbc6ecdb7252b619cc4c68d84b064",
+      "source.json": "d5e63d9e9e57c48b05a3f9a00cf5f4bfc5a83e9273651d05cfc1f02eec6b8da9",
+      "text.txt": "60ef1f7ce8dcd83d563e3ae18c88c845843f301aa3123402e929953a35e16a49"
+    },
+    "separate_host_catalog_package_id": "98759ad5dd8511ceb41cff0f2b7c269516dc63b8c5115392955c86ab21c9825c",
+    "catalog_integrity_scope": "all_artifacts_verified",
+    "representation": "enacted_text",
+    "current_consolidation": false,
+    "rights_status": "rights_pending",
+    "review_status": "legal_review_pending",
+    "published_on": null,
+    "effective_from": null,
+    "effective_until": null,
+    "source_identity_verified": false,
+    "extraction_fidelity_verified": false,
+    "sensitivity_reviewed": false,
+    "reviewer_seconds": null,
+    "independent_reference_cases": 0
+  },
+  "failure_checks": {
+    "live_acquisitions": [
+      {
+        "registry_id": "tbmm-6098-enacted",
+        "outcome": "dns_timeout",
+        "output_admitted": false
+      },
+      {
+        "registry_id": "tbmm-6101-enacted",
+        "outcome": "dns_timeout",
+        "output_admitted": false
+      }
+    ],
+    "expired_actual_signature_package_blocked": true,
+    "expired_signature_output_published": false,
+    "actual_malware_rejection": {
+      "schema_version": 1,
+      "engine": "ClamAV 1.4.6",
+      "image_id": "sha256:f5e27bb0523b586350f123763246debbfef9b18e7c6f50f0fde76b1ac7582222",
+      "network": "none",
+      "signature_location": "container_tmpfs_only",
+      "actual_clamscan_exit_code": 1,
+      "worker_exit_code": 1,
+      "parser_invoked": false,
+      "source_output_published": false,
+      "cleanup_confirmed": true
+    },
+    "initial_linux_check_wrong_workdir": {
+      "tests_run": 0,
+      "retained": true,
+      "corrected_restricted_run_passed": true,
+      "exit_code_recorded": false
+    },
+    "actual_signature_age_rejection": {
+      "worker_exit_code": 1,
+      "actual_verification": {
+        "status": "blocked",
+        "reason": "expired_daily_signatures"
+      },
+      "cleanup_confirmed": true
+    }
+  },
+  "boundaries": {
+    "api_or_provider_restarted": false,
+    "deployed_public_catalog_updated": false,
+    "graph_or_index_mutated": false,
+    "legal_or_rights_approved": false,
+    "representative_throughput_established": false,
+    "reviewer_productivity_established": false,
+    "new_ci_jobs_or_deadlines": false
+  }
+}

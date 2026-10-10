@@ -92,9 +92,10 @@ State remains `rights_pending`, `legal_review_pending`, `quarantined`,
 hash does not establish usage rights, legal applicability, current consolidation
 or a qualified legal corpus.
 
-Before staging in the public-source catalog, perform the mandatory local malware
-scan and isolated extraction, preserve passage locators, and assemble the
-required provenance and review-evidence package. Publication to an immutable
+Use the [offline preparation wrapper](REGISTERED_SOURCE_PREPARATION.md) to perform
+the mandatory local malware scan, transcribe registered HTML in an isolated worker
+and assemble exact passage locators and provenance. Import into the public-source
+catalog explicitly, then collect accountable review evidence. Publication to an immutable
 serving release remains a separate reviewed operation. No acquisition automatically
 alters a graph, search index, private matter or reviewed work product.
 
