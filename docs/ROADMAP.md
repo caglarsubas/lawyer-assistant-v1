@@ -1549,3 +1549,46 @@ independently author source-linked references; then conduct actual witnessed,
 registered paired model/reviewer studies. Timer declarations remain self-reported;
 erroneous entries require study adjudication. R01/R03/R05A legal qualification,
 representative throughput, target-host capacity and pilot gates remain open.
+
+### Delivered packet — R01/R03 employment and commercial source intake, 11 October 2026
+
+PR #43 is verified merged into main at `bba695c8d5c100253952f4a911794ce8d3cc76aa`.
+The closed registry now includes the official TBMM enacted representations of
+4857 (employment) and 6103 (commercial-code transition statute), alongside the two
+contract entries. Domain labels organize intake; they do not determine applicability
+or create legal graph assertions. The registry remains limited to TBMM HTML.
+
+New acquisitions use an immutable v2 registry and a separate fixed Docker staging
+image, without rebuilding or retagging the deployed API. The exact v1 contract
+snapshot remains available for offline preparation: old manifest bytes and dates
+are preserved, missing/unknown versions fail, and new entries cannot claim v1.
+Shared strict provenance checks bind title, domain, exact URL, bytes and pending
+states; the host rejects a stale acquisition worker before admitting output.
+
+Both new samples were actually acquired within existing limits, scanned against
+cryptographically verified official CVD databases and prepared disconnected:
+4857 produced 616 passages from 247,132 bytes; 6103 produced 215 from 87,088 bytes.
+A separate public-only host catalog and six no-write HTTP inspection windows work.
+All passage digests/ranges are consistent with the retained originals; this is
+not evidence of legally correct transcription. Rights, identity, fidelity,
+sensitivity and legal review remain pending; effect/publication dates are unknown.
+No sources, assertions or work products are promoted to a serving release.
+
+See the [operator contract](REGISTERED_SOURCES.md), [verification](VALIDATION.md)
+and [engineering receipt](evidence/registered-domain-intake-2026-10-11.json).
+This packet requires manual PR merge and exact-head hosted checks. It does not
+change the deployed app, provider, private matters or actual curator records.
+The inherited main run `38068593529` timed out at the existing 18-minute backend
+step limit near 99% completion. Local profiling identified uneven CI ownership;
+119 source/model review tests now use existing spare runner capacity. Complete
+collection still covers all 3,632 cases exactly once. The workspace group uses two
+workers, matching the other groups; event configuration, runner count, retries
+and every time limit are unchanged. No validation result/source cache or disabled
+test is introduced. Hosted qualification is separate from local timing.
+
+Next: qualified curators review all four acquired originals, recording actual
+active effort and adjudicated study evidence; add other lawful source families
+and representations; independently author source-linked references; then conduct
+witnessed, registered paired model/reviewer studies. Current consolidated law,
+jurisprudence coverage, legal qualification, representative throughput,
+target-host capacity and pilot acceptance remain open.

@@ -10,13 +10,17 @@ import html
 import json
 import re
 import time
-from datetime import UTC, datetime
 from html.parser import HTMLParser
 from pathlib import Path
 
 from .public_sources import _json, _validate
 from .qualification_evidence import read_exact_directory
-from .source_gateway import HISTORICAL_LIMITATION, MAX_BYTES, REGISTRY_VERSION, registered
+from .source_gateway import (
+    HISTORICAL_LIMITATION,
+    MAX_BYTES,
+    AcquisitionError,
+    validate_acquisition_metadata,
+)
 from .source_original_text import OriginalTextUnavailable, decode_html_source
 
 ADAPTER_VERSION = "registered-html-blocks-v1"
@@ -50,37 +54,10 @@ def encode(value):
 
 
 def validate_acquisition(files):
-    raw = files["raw.html"]
-    manifest = _json(files["acquisition.json"])
-    if not isinstance(manifest, dict) or not 0 < len(raw) <= MAX_BYTES:
-        raise PreparationError("Invalid registered acquisition")
-    source_id = manifest.get("registry_id")
-    source = registered(source_id)
-    digest = sha(raw)
-    expected = {
-        "schema_version": "registered-source-acquisition-v1", "registry_version": REGISTRY_VERSION,
-        "registry_id": source_id, "title": source.title, "source_url": source.url,
-        "source_version_id": f"{source_id}:sha256:{digest}", "domain": "contracts",
-        "raw_sha256": digest, "byte_count": len(raw), "raw_media_type": "text/html",
-        "rights_status": "rights_pending", "review_status": "legal_review_pending",
-        "publication_status": "quarantined", "content_status": "untrusted_unscanned",
-        "extraction_status": "not_processed", "representation": "enacted_text", "current_consolidation": False,
-        "limitations": [HISTORICAL_LIMITATION,
-            "Public availability does not establish permitted use, source identity review or legal applicability.",
-            "This acquisition is unscanned and unparsed; admission and legal review are separate steps."],
-    }
-    if (set(manifest) != set(expected) | {"started_at", "acquired_at"}
-            or any(encode(manifest[key]) != encode(value) for key, value in expected.items())):
-        raise PreparationError("Invalid registered acquisition")
     try:
-        dates = [datetime.fromisoformat(manifest[key]) for key in ("started_at", "acquired_at")]
-        if any(date.tzinfo is None or date.utcoffset() is None for date in dates):
-            raise ValueError
-        if not dates[0] <= dates[1] <= datetime.now(UTC):
-            raise ValueError
-    except (ValueError, TypeError):
-        raise PreparationError("Invalid acquisition dates") from None
-    return manifest
+        return validate_acquisition_metadata(files["raw.html"], _json(files["acquisition.json"]))
+    except AcquisitionError as error:
+        raise PreparationError(str(error)) from None
 
 
 def decode_html(raw):
