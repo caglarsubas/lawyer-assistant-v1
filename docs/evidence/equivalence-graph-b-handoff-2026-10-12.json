@@ -1,0 +1,105 @@
+{
+  "schema": "equivalence-graph-b-engineering-v1",
+  "date": "2026-10-12",
+  "verification": {
+    "linux": {
+      "passed": 196,
+      "seconds": 53.96
+    },
+    "postgres": {
+      "passed": 9,
+      "seconds": 8.11,
+      "deselected": 11
+    },
+    "frontend": {
+      "passed": 465,
+      "files": 41
+    },
+    "production_build": "passed",
+    "ruff": "passed",
+    "deployment_contracts": 41,
+    "ci_partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 4021,
+        "preflight": 89,
+        "remaining": 3643,
+        "publication": 132,
+        "workspace": 77,
+        "human_review": 60,
+        "model_trials": 20
+      },
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_open_validity_publication.py",
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py",
+        "backend/tests/test_source_reviews.py",
+        "backend/tests/test_source_review_effort.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_content_scope.py",
+        "backend/tests/test_authority_proposals.py",
+        "backend/tests/test_authority_model_cohorts.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_authority_trial_cohorts.py",
+        "backend/tests/test_analysis_cohorts.py",
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "47d36ce0515c8747a1b28f1ed5a7736407867e113fd8e6c88dd73395f7067ffe",
+      "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+      "no_new_runner_retry_or_deadline_change": true,
+      "workspace_workers": 2,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "browser": {
+      "synthetic_only": true,
+      "actual_download_confirmed": true,
+      "envelope_sha256": "8c031845e72bfa76aaaf4db7ac7eb01258f426bd23b88e7444f8b34eab3073f4",
+      "packet_id": "d217cc9929069e44c020e2642afebdb3b0cf44b87fcc9867ec32125a495a55a1",
+      "file_count": 16,
+      "all_file_hashes_verified": true,
+      "original_sources": 3,
+      "assertion_candidates": 6,
+      "browser_console_warnings_errors": 0,
+      "screenshot_sha256": "3cc1f75a294cf4281fdcede3eb4ae4269d73d1202ffe2769cfc9aff1446d41cb",
+      "source_edit_cleared_private_packet": true,
+      "final_validator_build_identical_download": true
+    }
+  },
+  "actual_legal_review": false,
+  "graph_published": false,
+  "deployment_performed": false,
+  "provider_credentials_changed": false,
+  "limitations": [
+    "This is an invented engineering fixture with separate accounts, not actual legal qualification.",
+    "Candidate RDF is preparation-only, unreviewed and unsigned; canonical reservations and original versions remain unchanged.",
+    "Register passages support institution identity only. Competence, temporal applicability and legal effect remain unknown.",
+    "Exact-head hosted CI and merge are separate gates recorded in GitHub after publication."
+  ],
+  "base": {
+    "pr": 56,
+    "merge": "914b939dd29164a850b16c26e7e2bb9aea8f3f0c",
+    "exact_head": "9b112fbfe06cce42df07592636a304ad9e484509",
+    "all_three_exact_head_checks": "success",
+    "ci_run": 38158461025,
+    "main_tree_verified": true,
+    "successor_tested_tree_unchanged_after_rebase": true
+  }
+}

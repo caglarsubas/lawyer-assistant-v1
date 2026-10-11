@@ -534,3 +534,38 @@ def test_equivalence_waits_for_register_review_and_rechecks_pin(postgres_equival
                 head.revision += 1
                 blocker.commit()
                 assert future.result(timeout=10).status_code == 409
+
+
+def test_equivalence_handoff_holds_register_lock_until_full_packet_finishes(postgres_equivalence, monkeypatch):
+    from test_decision_equivalence import opinion, propose
+    from test_decision_equivalence_handoff import decode, download
+    from test_source_reviews import assess
+
+    from app import decision_equivalence_handoff as handoff
+
+    assert propose(postgres_equivalence).status_code == opinion(postgres_equivalence).status_code == 200
+    item = postgres_equivalence[0][2]
+    entered, resume = Event(), Event()
+    compile_packet = handoff.compile_packet
+    def pause(*args):
+        result = compile_packet(*args)
+        entered.set()
+        assert resume.wait(5)
+        return result
+    monkeypatch.setattr(handoff, "compile_packet", pause)
+    with ThreadPoolExecutor(2) as pool:
+        packet = pool.submit(download, postgres_equivalence, postgres_equivalence[2])
+        try:
+            assert entered.wait(5)
+            with observe_identity_lock(item[0].state.store.engine, statement_fragment="FROM source_review_heads") as (attempted, pids):
+                writer = pool.submit(assess, item[1], item[4] + "/review", 6, "legal")
+                assert attempted.wait(5)
+                assert wait_until_blocked(item[0].state.store.engine, pids[-1])
+                assert not writer.done()
+                resume.set()
+                data = decode(packet.result(timeout=10))
+                assert data["pins"]["source_revisions"][item[3]] == 6
+                assert writer.result(timeout=10).status_code == 200
+        finally:
+            resume.set()
+    assert download(postgres_equivalence).status_code == 409

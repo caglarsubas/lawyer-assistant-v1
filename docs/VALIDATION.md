@@ -3983,3 +3983,30 @@ and private form state. Screenshot and logs remain ignored under
 client data, configured provider, shared graph mutation or deployment was used.
 These synthetic opinions do not establish legal review, national identity registry
 qualification, institution competence, historical applicability or publication.
+
+## Multi-source reviewed-equivalence handoff — 12 October 2026
+
+Base: verified PR #56 merge `914b939dd29164a850b16c26e7e2bb9aea8f3f0c`;
+all three exact-head checks passed in run `38158461025`. The successor
+rebased with an unchanged tested tree.
+[Engineering receipt](evidence/equivalence-graph-b-handoff-2026-10-12.json).
+Disconnected Linux regressions: **196 passed**, 53.96s, covering the new handoff,
+equivalence, original canonical identities/mappings/dossiers/single-source
+handoffs and shared preparation validation. Actual PostgreSQL concurrency
+subset: **9 passed**, 8.11s, including witnessed register locking through
+compilation and rejection of the later stale selection. Frontend: **465 passed**,
+41 files; production build and configured full Ruff passed. Deployment contracts
+remain **41 passed**. Unchanged CI collection covers **4,021** disjoint backend
+cases without omissions, extras, retries or additional runners.
+
+The isolated loopback browser retained the invented accepted equivalence from the
+previous fixture. The actual download event completed; the saved JSON packet ID,
+all physical hashes and byte counts were verified again from disk. The package
+contains all three original source packages, two preserved decision versions and
+six unreviewed identity candidates. SHA256s and screenshot fingerprint are in the
+receipt. Detailed logs, the downloaded fixture and screenshot remain ignored
+under `.data/verification/r03-equivalence/`; no console errors/warnings observed.
+The temporary Downloads copy was removed after retention in that private folder.
+The final validator build downloaded byte-identical JSON; editing the peer source
+removed the old packet summary and download control immediately. No real source
+review, shared graph publication, provider or user deployment was performed. Exact-head hosted checks and observed merge remain separate gates.

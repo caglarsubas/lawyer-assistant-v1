@@ -1936,3 +1936,19 @@ multi-source Graph B preparation handoff with the reviewed anchor and retained
 register passages. Decision-specific publication review, signed legal/ontology
 approval, national institutional genealogy, retrieval qualification and pilot gates
 remain open. R03/R05 remain partial.
+
+## R03 continuation — reviewed equivalence Graph B handoff (12 October 2026)
+
+The private reviewed equivalence now nominates an explicit anchor for a
+[three-source staged Graph B packet](EQUIVALENCE_GRAPH_B_HANDOFF.md). Original
+identity reservations, two decision versions, institutional-register passages and
+all review histories remain distinct and hash-bound. Six reified relationships
+are unreviewed candidates with unknown legal validity; intact preparation RDF
+cannot enter current publication tooling. No global or transitive equivalence,
+competence inference, graph activation or user deployment is implied.
+
+Next: the decision-specific multi-source publication review contract, independent
+legal-editor and institutional/temporal qualification, exact candidate signatures,
+withheld disagreements and activation/rollback validation. Actual legal-source
+acquisition, licensed corpus coverage, reviewer qualification and legal/pilot
+acceptance remain external requirements.

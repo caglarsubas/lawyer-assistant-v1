@@ -16,7 +16,7 @@ function fixture(): EquivalenceState {
     proposal: { claims, decisions, pins, snapshot_sha256: 'e'.repeat(64), contributors: ['identity-reviewer', 'register-owner'], proposer: { id: 'owner', name: 'Synthetic owner' } } };
   return { schema_version: 'decision-equivalence-review-v1', confidentiality: 'firm_confidential', firm_id: 'firm', context_id: 'f'.repeat(64), decision_source_ids: ids.slice(0, 2), register_source_id: ids[2],
     sources: Object.fromEntries(ids.map(id => [id, { id, title: 'Synthetic source', source_version_id: 'v1', artifacts: {} }])), decisions, revision: 1, pins, current: event, history: [event], history_complete: true,
-    stale: false, inputs_ready: true, can_propose: false, can_independently_review: true, review_accepted: false, same_decision_supported: false,
+    stale: false, inputs_ready: true, export_allowed: true, can_propose: false, can_independently_review: true, review_accepted: false, same_decision_supported: false,
     identity_reservations_changed: false, global_registry_qualified: false, legal_effect_verified: false, institutional_competence_verified: false, publication_eligible: false } as unknown as EquivalenceState;
 }
 afterEach(() => vi.unstubAllGlobals());

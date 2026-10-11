@@ -274,10 +274,11 @@ def view(packages, decision_ids, key, captured, events, user, anchor_id):
     latest = events[-1] if events else None
     stale = bool(latest and latest["proposal"]["pins"] != pins)
     try:
-        snapshot(packages, captured, decision_ids, pins)
+        bound = snapshot(packages, captured, decision_ids, pins)
+        export_allowed = all(value["export_allowed"] for value in bound["sources"].values())
         ready = True
     except HTTPException:
-        ready = False
+        ready, export_allowed = False, False
     contributors = latest["proposal"]["contributors"] + [latest["proposal"]["proposer"]["id"]] if latest else []
     owner = captured["sources"][anchor_id]["state"]["assigned_to"]
     accepted = bool(latest and latest["decision"] == "accepted" and not stale and ready)
@@ -286,6 +287,7 @@ def view(packages, decision_ids, key, captured, events, user, anchor_id):
             "sources": {key: package.detail for key, package in packages.items()}, "revision": len(events), "pins": pins,
             "decisions": decision_summary(captured["identities"]),
             "current": latest, "history": list(reversed(events)), "history_complete": True, "stale": stale, "inputs_ready": ready,
+            "export_allowed": export_allowed,
             "can_propose": bool(owner and owner["id"] == user.id and ready),
             "can_independently_review": bool(latest and not stale and ready and user.id not in contributors),
             "review_accepted": accepted, "same_decision_supported": bool(accepted and latest["proposal"]["claims"]["relation"] == "same_decision"),
@@ -397,4 +399,11 @@ def decision_equivalence_router():
     def review(source_id: str, body: ReviewInput, request: Request, peer_source_id: str = Query(pattern=r"^[a-f0-9]{64}$"),
                register_source_id: str = Query(pattern=r"^[a-f0-9]{64}$"), user=Depends(authorize)):
         return mutate(request, source_id, peer_source_id, register_source_id, body, user)
+
+    from .decision_equivalence_handoff import HandoffInput, build_handoff
+
+    @router.post("/{source_id}/decision-equivalence/graph-b-handoff")
+    def handoff(source_id: str, body: HandoffInput, request: Request, peer_source_id: str = Query(pattern=r"^[a-f0-9]{64}$"),
+                register_source_id: str = Query(pattern=r"^[a-f0-9]{64}$"), user=Depends(authorize)):
+        return build_handoff(request, source_id, peer_source_id, register_source_id, body, user)
     return router
