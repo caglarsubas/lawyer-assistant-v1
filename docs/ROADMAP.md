@@ -1690,3 +1690,34 @@ actual effort and disagreements. Source assessments remain individual dossiers;
 this tool grants no cross-source registry or independent-study qualification.
 Independently authored references, witnessed paired studies, diverse RG/MBS and
 judicial acquisition, reviewed history and national/pilot legal gates remain open.
+
+### Delivered packet — R01/R03 human source relationship review, 11 October 2026
+
+PR #47 is verified merged at `1b33e2da15812b2b53cdc6446d50e60eebf63966`;
+exact main run `38124024422` passed all three jobs. The next packet adds an explicit
+firm-confidential pair review after source comparison. A curator owning both source
+dossiers can preserve unresolved or evidence-backed work/version opinions. Resolved
+opinions require accepted identity assessments on both sources, explicit consistent
+work/version references and additional supporting material beyond the comparison.
+
+Each encrypted immutable event binds both historical review revisions and original
+artifact sets, the exact regenerated comparison, actor, rationale, references and
+optional declared effort. Canonical pair ordering and optimistic writes preserve
+one history. Changed source reviews project Stale without changing old opinions;
+renewal is explicit. No identity merge, transitive grouping, automatic independent
+sample count, source permission or graph publication is added. The screen retains
+disagreements and freshly exports a confidential, unsigned dossier.
+
+Synthetic native/Linux tests, real PostgreSQL races and the disposable production
+browser verify the engineering boundary. Real acquired 6101/TBMM source dossiers,
+provider, private matters, serving release and deployed application are unchanged.
+See [relationship contract](SOURCE_RELATIONSHIPS.md) and [verification](VALIDATION.md).
+All 3,805 backend cases retain complete/disjoint collection in the unchanged CI
+partition; runner counts, retries and deadlines are unchanged. Manual merge and
+exact-head hosted checks remain distinct from deployment/legal qualification.
+
+Next: qualified curators use the tools to review the actual acquired originals,
+adjudicate their work/version relationships and retain real effort/disagreement
+evidence. Independently author references and register witnessed paired studies;
+continue lawful RG/MBS/judicial acquisition and historical reconstruction. These
+human/corpus, national legal, representative throughput and pilot gates remain open.

@@ -83,9 +83,11 @@ and legal applicability. A mechanical receipt cannot serve as sole proof of lega
 equivalence or study independence. Do not create a second study original merely
 because a PDF and HTML package have different hashes.
 
-Source assessments keep their existing individual immutable histories; this tool
-does not create a cross-source identity registry, relationship decision, automatic
-cross-source revalidation or casebook approval. Independent publication/identity
+Source assessments keep their existing individual immutable histories; the literal
+comparison itself does not create a cross-source identity registry or relationship
+decision. The separate [human relationship review](SOURCE_RELATIONSHIPS.md) can retain
+an explicit firm-private opinion and project it Stale after either source review
+changes. Neither tool merges public identities or grants casebook approval. Independent publication/identity
 review and source-linked reference intake must still inspect physical supporting
 evidence and retain unresolved or conflicting classifications. Actual shared-work
 adjudication and registered paired studies remain open roadmap requirements.

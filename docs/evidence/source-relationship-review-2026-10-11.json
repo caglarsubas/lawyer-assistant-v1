@@ -1,0 +1,128 @@
+{
+  "schema_version": "source-relationship-engineering-v1",
+  "scope": "synthetic_engineering_not_legal_qualification",
+  "base_main_sha": "1b33e2da15812b2b53cdc6446d50e60eebf63966",
+  "base_main_run": 38124024422,
+  "base_main_ci": "all_three_success",
+  "native_focused": {
+    "passed": 262,
+    "seconds": 69.38
+  },
+  "isolated_linux": {
+    "passed": 622,
+    "seconds": 86.88,
+    "network": "none",
+    "read_only": true,
+    "unprivileged": true,
+    "cpu_limit": 2,
+    "memory_mib": 1536,
+    "image": "sha256:a739f37f3191b4aaef7b06fb9b79db9b4aab9976834a73faed5d328714267198",
+    "tested_fingerprints": {
+      "backend/app/main.py": "75a72b17db661e685d9482484dcbe785382dc23b216ab3ceca4cff29d704ec22",
+      "backend/app/source_review_models.py": "0c8454ac9d2764e292e27e556dcd9fd0774c2d8d6a2f7be02e4c4bc07706e53a",
+      "backend/app/source_relationships.py": "d2ba41ec808e20bcd1dd0849cbacb157fc2264dc0513adc1032c492e004f3b32",
+      "backend/tests/test_source_relationships.py": "7b84ecc164bdd93cb233be1d243202d6eed171351cffdd1f564bba74c71ae028",
+      "backend/tests/test_snapshot_set_postgres.py": "847cec62eb041ca0badd0b3c7ffbcd24da887b43836329dfdcf6ff57e0c5d6f1"
+    }
+  },
+  "real_postgres": {
+    "passed": 2,
+    "seconds": 1.76,
+    "scope": "dedicated_loopback_disposable_database_races",
+    "container_removed": true
+  },
+  "frontend": {
+    "passed": 350,
+    "files": 34,
+    "production_build": "passed"
+  },
+  "deployment_contracts": {
+    "passed": 41
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3805,
+      "preflight": 89,
+      "remaining": 3427,
+      "publication": 132,
+      "workspace": 77,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "ce743b50d19e12d812b3546f3f27574bf45c40d2e374cf5980cb46627bcba54f",
+    "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "browser": {
+    "scope": "disposable_synthetic_browser_engineering_only",
+    "source_ids": [
+      "2bc6d6fa9cb752198d2568966269d3b97c29db62bff50d6f6c2f05ff11d6eaa3",
+      "5f1a3bad4558726e0ad3048ce807411b3ddb2f741e174dc6f1972bcd18fae71b"
+    ],
+    "pair_id": "615f00eafd5e5fcd2ac3506229701193f9d67637bdbfa7546793cc0d8bc22504",
+    "browser_saved_revisions": [
+      1,
+      2
+    ],
+    "first_classification": "same_work_same_version",
+    "second_classification": "unresolved",
+    "preserved_prior_opinion": true,
+    "first_effort": null,
+    "second_effort": {
+      "active_seconds": 0,
+      "basis": "estimate"
+    },
+    "source_change_marks_stale": true,
+    "resolved_for_handoff": false,
+    "fresh_export_download_sha256": "4bffa4674f991fa30f882fca9dd47b71d7a3e8800be6bfbc4351630f9dd75a56",
+    "actual_source_review_changed": false,
+    "provider_used": false,
+    "deployment_changed": false,
+    "legal_identity_adjudicated": false,
+    "console_errors": 0,
+    "selection_change_clears_review": true,
+    "tab_closed": true,
+    "synthetic_services_stopped": true
+  },
+  "candidate_hosted_ci": "pending_after_push",
+  "actual_curator_reviews_changed": false,
+  "legal_identity_adjudicated": false,
+  "deployed_app_changed": false,
+  "qualification_or_publication_approval": false
+}

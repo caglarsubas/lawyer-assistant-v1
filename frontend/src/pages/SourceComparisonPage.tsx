@@ -4,6 +4,7 @@ import { Detail, Field, Loading, Notice, PageHeader } from '../components';
 import type { PublicSourceCatalog, PublicSourcePassages, User } from '../types';
 import { messageOf } from '../utils';
 import { canReviewSource } from './SourceReviewPage';
+import SourceRelationshipPanel from './SourceRelationshipPanel';
 import { COMPARISON_WINDOW, fetchSourceComparison, type ComparisonEvidence, type ComparisonSelection, type ComparisonWindow } from './sourceComparison';
 
 export default function SourceComparisonPage({ sourceId, user }: { sourceId: string; user: User }) {
@@ -73,7 +74,7 @@ function ComparisonWorkspace({ sourceId }: { sourceId: string }) {
       <div className="form-grid"><Field label="Birinci pasaj başlangıcı">{id => <input id={id} type="number" min={0} max={left.passage.end - left.passage.start - 1} value={offset} onChange={event => { clearResult(); setOffset(event.target.value === '' ? -1 : Number(event.target.value)); }} />}</Field><Field label="İkinci pasaj başlangıcı">{id => <input id={id} type="number" min={0} max={right.passage.end - right.passage.start - 1} value={otherOffset} onChange={event => { clearResult(); setOtherOffset(event.target.value === '' ? -1 : Number(event.target.value)); }} />}</Field></div>
       <button className="button primary" disabled={busy} onClick={() => void compare()}>{busy ? 'Doğrulanıyor…' : 'Seçili pasajları karşılaştır'}</button>
     </section>}
-    {result && <><ComparisonResult value={result} /><button className="button secondary" disabled={busy} onClick={() => void compare(true)}>Kanıt kaydını yeniden doğrula ve indir (JSON)</button><p className="small muted">İndirme kaynakları yeniden doğrular. Dosya özeti kimlik incelemesinde dayanak olarak kullanılabilir; insan kararı yerine geçmez.</p></>}
+    {result && <><ComparisonResult value={result} /><button className="button secondary" disabled={busy} onClick={() => void compare(true)}>Kanıt kaydını yeniden doğrula ve indir (JSON)</button><p className="small muted">İndirme kaynakları yeniden doğrular. Dosya özeti kimlik incelemesinde dayanak olarak kullanılabilir; insan kararı yerine geçmez.</p><SourceRelationshipPanel key={result.evidence_sha256} evidence={result} onError={fail} /></>}
   </div>;
 }
 

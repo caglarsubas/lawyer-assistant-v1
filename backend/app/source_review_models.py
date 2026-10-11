@@ -34,3 +34,33 @@ class SourceReviewEvent(Base):
 @event.listens_for(SourceReviewEvent, "before_delete")
 def _immutable_event(mapper, connection, target):
     raise ValueError("Source review events are append-only")
+
+
+class SourceRelationshipHead(Base):
+    __tablename__ = "source_relationship_heads"
+    __table_args__ = (UniqueConstraint("firm_id", "pair_id", name="uq_source_relationship_firm_pair"),)
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True, default=uid)
+    firm_id: Mapped[str] = mapped_column(String(64), index=True)
+    pair_id: Mapped[str] = mapped_column(String(64), index=True)
+    revision: Mapped[int] = mapped_column(Integer)
+    payload: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[str] = mapped_column(String(40), default=now)
+
+
+class SourceRelationshipEvent(Base):
+    __tablename__ = "source_relationship_events"
+    __table_args__ = (UniqueConstraint("head_id", "revision", name="uq_source_relationship_event_revision"),)
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True, default=uid)
+    head_id: Mapped[str] = mapped_column(ForeignKey("source_relationship_heads.id"), index=True)
+    firm_id: Mapped[str] = mapped_column(String(64), index=True)
+    revision: Mapped[int] = mapped_column(Integer)
+    payload: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[str] = mapped_column(String(40), default=now)
+
+
+@event.listens_for(SourceRelationshipEvent, "before_update")
+@event.listens_for(SourceRelationshipEvent, "before_delete")
+def _immutable_relationship_event(mapper, connection, target):
+    raise ValueError("Source relationship events are append-only")
