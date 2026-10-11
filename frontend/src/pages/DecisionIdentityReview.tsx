@@ -4,6 +4,7 @@ import { Detail, Field, Loading, Notice } from '../components';
 import type { SourceReviewDecision, User } from '../types';
 import { formatDate, messageOf } from '../utils';
 import type { DecisionState } from './decisionMapping';
+import DecisionEquivalenceReview from './DecisionEquivalenceReview';
 import { evidence, fetchGraphBHandoff, fetchIdentities, identityPath, identityPins, identityProposalPayload, mayIndependentlyReview, validateIdentityState, type GraphBHandoff, type IdentityState } from './decisionIdentity';
 
 export default function DecisionIdentityReview({ source, user, onDenied }: { source: DecisionState; user: User; onDenied: () => void }) {
@@ -83,6 +84,7 @@ export default function DecisionIdentityReview({ source, user, onDenied }: { sou
           <Field label="Bağımsız inceleme gerekçesi">{id => <textarea id={id} required minLength={3} maxLength={4000} value={rationale} onChange={e => setRationale(e.target.value)} />}</Field>
           <button className="button">Bağımsız incelemeyi kaydet</button>
         </fieldset></form></Detail>}
+      <DecisionEquivalenceReview identity={state} user={user} onDenied={onDenied} />
     </>}
   </section>;
 }
