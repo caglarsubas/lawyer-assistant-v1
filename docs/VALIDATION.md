@@ -1,5 +1,40 @@
 # Verification record — 11 October 2026
 
+## Evidence-bound jurisprudence occurrence inspection — 11 October 2026
+
+PR #50 is verified merged at `3f819ecd85f1c79332e570be309952cd86f4a841`;
+all three exact-head checks passed in `38134025268`. Post-merge main CI is tracked
+separately. This R03 packet depends on the registered decision-PDF intake and implements
+read-only curator API/offline operator inspection of one selected retained passage.
+It does not approve sources, populate Graph B or qualify legal extraction.
+
+- 37 new native regressions pass (0.91s); 475 isolated Linux candidate/source/PDF/
+  preparation/provision/serving-citation cases pass (10.25s), including a trusted synthetic registered
+  AYM PDF → transcription → public staging → exact occurrence inspection. Its
+  date hints leave actual source dates unknown and rights/legal status pending.
+  Four changed production/test files match the final tested image fingerprints.
+- Exact Unicode, CRLF, NBSP and astral spans; separate syntax hints; conflicting/
+  repeated/quoted identifiers; invalid calendar dates; unsupported/bare values;
+  passage boundaries; stable source/version binding; full withholding on budget
+  exhaustion; no network/raw parsing; corruption and session revocation pass.
+  API receipts are reproducible, inert and uncached. Unauthorized, missing,
+  duplicate and extra inputs are denied; review/database counts remain unchanged.
+- Complete collection assigns all 3,880 cases exactly once across the unchanged
+  CI partitions. Configured Ruff, whitespace and 41 deployment contracts pass.
+  No workflow, dependency, runner, retry or time limit change is made. No frontend
+  or deployed service changed; browser acceptance and curator UI are not claimed.
+- Initial synthetic fixtures exposed the importer's already stricter passage
+  admission and an incorrect CLI test path. The defensive-budget fixture and path
+  were corrected before the passing suites. Review also added rejection of decimal
+  article-number fragments and exercised exact maximum budgets and the PDF join.
+
+See [candidate contract](JURISPRUDENCE_CANDIDATES.md) and
+[metadata-only receipt](evidence/jurisprudence-occurrences-2026-10-11.json).
+These are pre-push engineering results. Exact-head hosted checks and the dependency
+merge are recorded separately before agent-authorized merge. Actual source legal/
+privacy/fidelity review, canonical identity resolution, date promotion, Graph B
+publication and corpus/recall/national/pilot qualification remain open.
+
 ## Registered jurisprudence PDF intake — 11 October 2026
 
 PR #49 is verified merged at `dda436732fa9dee4060bd4e17e680bce1eea2974`.
