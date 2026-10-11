@@ -13,6 +13,7 @@ exposes this acquisition function, and no existing network profile is changed.
 | `tbmm-6098-enacted` | contracts | [TBMM: 6098, enacted text](https://cdn.tbmm.gov.tr/KKBSPublicFile/D23/Y2/T1/KanunMetni/a657b33d-109c-473d-9266-5aa48d603ab2.html) |
 | `tbmm-4857-enacted` | employment | [TBMM: 4857, İş Kanunu, enacted text](https://cdn.tbmm.gov.tr/KKBSPublicFile/D22/Y1/T1/KanunMetni/359dee72-3cd1-4131-8597-48c58658e326.html) |
 | `tbmm-6103-enacted` | commercial | [TBMM: 6103, commercial-code transition statute, enacted text](https://cdn.tbmm.gov.tr/KKBSPublicFile/D23/Y2/T1/KanunMetni/7f9bad4f-097c-4097-960f-2ef0bb0ed482.html) |
+| `adalet-6101-pdf` | contracts | [Ministry of Justice: 6101, institution-hosted PDF](https://mgm.adalet.gov.tr/Resimler/SayfaDokuman/181020191506586101.pdf) |
 
 The two additions follow the final-text links on TBMM's official
 [4857 law record](https://www.tbmm.gov.tr/Yasama/Kanun/f72877bd-9f9a-037b-e050-007f01005610)
@@ -21,17 +22,27 @@ Intake domains organize review; they are not exhaustive legal classifications,
 applicability judgments or graph assertions. The 6103 entry is the transition
 statute, not the entire 6102 commercial code.
 
+The PDF destination follows the 6101 link on the Ministry's official
+[2011 legislation index](https://mgm.adalet.gov.tr/home/Sayfadetay/2011-yilinda-kanunlasanlar).
+Its registered representation is `institution_hosted_text`: source/version history,
+authenticity and consolidation remain unverified. It is not relabeled a Gazette
+original or current law. The filename's apparent date is not a publication,
+acquisition or legal-effect date. Its bytes and provenance stay distinct from
+TBMM's 6101 representation. Shared legal-work identity requires review; multiple
+representations of one law must not count as independent study originals.
+
 TBMM identifies these as enacted texts that exclude subsequent amendments.
 Acquisition preserves that historical representation and explicitly records
 `current_consolidation=false`. None of these sources is presented as current
 consolidated law. Adding or changing a destination requires a reviewed code and
 registry-version change; users cannot substitute a URL, path, query or header.
 
-New acquisitions use `tbmm-enacted-2026-10-11-v2`. The immutable
+New acquisitions use `registered-public-2026-10-11-v3`. The immutable v2 snapshot
+`tbmm-enacted-2026-10-11-v2` retains exactly the four HTML entries; the immutable
 `tbmm-enacted-2026-10-04-v1` snapshot retains only 6098/6101 and their original
 titles, URLs and contract-domain metadata. Offline preparation resolves the
 manifest's declared version, preserves the original manifest bytes and rejects
-missing/unknown versions or a new member claiming v1. It never defaults to the
+missing/unknown versions or a new member claiming an earlier snapshot. It never defaults to the
 latest registry or relabels an old acquisition. Validation binds metadata and
 content; it does not authenticate an operator-supplied provenance declaration.
 
@@ -75,16 +86,18 @@ the Docker client times out, and requires cleanup confirmation before publishing
 - Resolve the exact registry hostname once; reject the entire answer if **any**
   address is non-global, reserved, multicast, loopback, link-local or an IPv4-mapped
   IPv6 address. Pin one admitted address for the connection while validating TLS
-  against `cdn.tbmm.gov.tr` with the standard trusted CA store.
+  against the exact registered hostname with the standard trusted CA store.
 - Send only an exact `GET` for the registered path, with fixed headers and no
   query, cookies, authorization or request body. No redirect is followed.
-- Require HTTP 200 and `text/html`. Reject compression, ambiguous framing,
+- Require HTTP 200 and the entry's exact media type: `text/html` for TBMM,
+  `application/pdf` for the Ministry. No sniffing or HTML-error-page fallback.
+  Reject compression, ambiguous framing,
   duplicate critical headers, malformed or incomplete content and empty bodies.
 - Bound DNS/idle waits to five seconds and total network work to 20 seconds,
   including slow-drip headers. Content is limited to 1 MiB; total HTTP wire data
   also has a 1 MiB plus 64 KiB cap. A 45-second outer container wait bounds process
   overhead and cleanup starts after that wait fails.
-- Do not parse, render, execute, scan, index or promote the acquired HTML in this
+- Do not parse, render, execute, scan, index or promote the acquired representation in this
   worker. Errors never reproduce server bodies, arbitrary response headers or
   TLS diagnostics.
 
@@ -106,10 +119,11 @@ is checked by the operation itself. Unsupported publication fails closed.
 
 The package contains only:
 
-- `raw.html`: exact acquired bytes, untrusted and unscanned.
+- `raw.html` or `raw.pdf`: exact acquired bytes under the registry's fixed
+  format-specific filename, untrusted and unscanned. Both together are rejected.
 - `acquisition.json`: registry/source identity, original URL, acquisition start
   and completion timestamps, content hash, byte count, content-derived source
-  version ID, and the enacted-text limitation.
+  version ID, exact media/representation and source-specific historical limitation.
 
 State remains `rights_pending`, `legal_review_pending`, `quarantined`,
 `untrusted_unscanned` and `not_processed`. A public URL, successful TLS or content
@@ -117,7 +131,7 @@ hash does not establish usage rights, legal applicability, current consolidation
 or a qualified legal corpus.
 
 Use the [offline preparation wrapper](REGISTERED_SOURCE_PREPARATION.md) to perform
-the mandatory local malware scan, transcribe registered HTML in an isolated worker
+the mandatory local malware scan, transcribe supported registered HTML/PDF in an isolated worker
 and assemble exact passage locators and provenance. Import into the public-source
 catalog explicitly, then collect accountable review evidence. Publication to an immutable
 serving release remains a separate reviewed operation. No acquisition automatically
@@ -125,6 +139,8 @@ alters a graph, search index, private matter or reviewed work product.
 
 Focused tests use synthetic HTTP/DNS fixtures only; passing them is not evidence
 of acquisition or legal qualification. The separately recorded actual samples in
-[validation](VALIDATION.md) remain pending human review. All four registry entries
-use the same TBMM HTML representation; source/representation diversity, current-law
-coverage and historical jurisprudence acquisition remain separate roadmap gates.
+[validation](VALIDATION.md) remain pending human review. The fifth route adds a
+second institution and PDF representation to the engineering contract; its real
+11 October acquisition attempt failed at the DNS deadline and admitted nothing.
+Successful acquisition, actual PDF fidelity/rights review, current-law coverage
+and historical jurisprudence remain separate roadmap gates.

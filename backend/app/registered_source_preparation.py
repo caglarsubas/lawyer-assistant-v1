@@ -1,4 +1,4 @@
-"""Inert, bounded HTML transcription for the closed public-source registry.
+"""Bounded disconnected transcription for the closed public-source registry.
 
 This module does not scan or approve content. The operator wrapper scans the exact
 snapshot first and runs this worker disconnected, without application data/secrets.
@@ -19,6 +19,7 @@ from .source_gateway import (
     HISTORICAL_LIMITATION,
     MAX_BYTES,
     AcquisitionError,
+    registered,
     validate_acquisition_metadata,
 )
 from .source_original_text import OriginalTextUnavailable, decode_html_source
@@ -55,9 +56,25 @@ def encode(value):
 
 def validate_acquisition(files):
     try:
-        return validate_acquisition_metadata(files["raw.html"], _json(files["acquisition.json"]))
+        manifest = _json(files["acquisition.json"])
+        if not isinstance(manifest, dict):
+            raise PreparationError("Invalid registered acquisition")
+        source = registered(manifest.get("registry_id"), registry_version=manifest.get("registry_version"))
+        if set(files) != {source.raw_filename, "acquisition.json"}:
+            raise PreparationError("Acquisition inventory does not match the registered representation")
+        return validate_acquisition_metadata(files[source.raw_filename], manifest)
     except AcquisitionError as error:
         raise PreparationError(str(error)) from None
+
+
+def capture_acquisition(directory):
+    # The precheck only selects a closed inventory; the descriptor-relative capture
+    # enforces exact membership, no links and recapture checks even across a race.
+    filename = "raw.pdf" if (directory / "raw.pdf").exists() else "raw.html"
+    limits = {filename: MAX_BYTES, "acquisition.json": 64 * 1024}
+    files = read_exact_directory(directory, limits, sum(limits.values()))
+    validate_acquisition(files)
+    return files
 
 
 def decode_html(raw):
@@ -149,6 +166,9 @@ def prepare(files):
     """Pure transcription: it never asserts scanning, approval or complete extraction."""
     started = time.monotonic()
     manifest = validate_acquisition(files)
+    if manifest["raw_media_type"] == "application/pdf":
+        from .registered_pdf_transcription import prepare_pdf
+        return prepare_pdf(files, manifest)
     decoded, encoding = decode_html(files["raw.html"])
     parser = BlockParser(decoded)
     parser.feed(decoded)
@@ -204,7 +224,7 @@ def main():
     cli.add_argument("output", type=Path)
     args = cli.parse_args()
     try:
-        files = read_exact_directory(args.input, ACQUISITION_FILES, sum(ACQUISITION_FILES.values()))
+        files = capture_acquisition(args.input)
         artifacts = prepare(files)
         if args.output.is_symlink() or not args.output.is_dir() or any(args.output.iterdir()):
             raise PreparationError("Worker output must be empty")

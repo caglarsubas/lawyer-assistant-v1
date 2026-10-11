@@ -87,7 +87,7 @@ def cli():
 
 def test_registry_is_closed_and_immutable():
     assert set(gateway.REGISTRY) == {"tbmm-6101-enacted", "tbmm-6098-enacted",
-                                     "tbmm-4857-enacted", "tbmm-6103-enacted"}
+                                     "tbmm-4857-enacted", "tbmm-6103-enacted", "adalet-6101-pdf"}
     assert gateway.REGISTRY[SOURCE].url.endswith("3c4eac23-5d02-49cd-9ef1-4bf8de05aee6.html")
     with pytest.raises(TypeError):
         gateway.REGISTRY["caller"] = gateway.REGISTRY[SOURCE]
@@ -108,6 +108,57 @@ def test_historical_registry_cannot_acquire_later_members_or_be_mutated():
         old["tbmm-4857-enacted"] = gateway.REGISTRY["tbmm-4857-enacted"]
     with pytest.raises(TypeError):
         gateway.REGISTRY_SNAPSHOTS["caller"] = old
+
+
+def test_v2_snapshot_retains_exact_html_membership_and_excludes_pdf():
+    old = gateway.REGISTRY_SNAPSHOTS[gateway.HTML_REGISTRY_VERSION]
+    assert set(old) == {"tbmm-6101-enacted", "tbmm-6098-enacted", "tbmm-4857-enacted", "tbmm-6103-enacted"}
+    assert all(gateway.REGISTRY[key] == value for key, value in old.items())
+    with pytest.raises(TypeError):
+        old["adalet-6101-pdf"] = gateway.REGISTRY["adalet-6101-pdf"]
+    for version in (gateway.LEGACY_REGISTRY_VERSION, gateway.HTML_REGISTRY_VERSION):
+        with pytest.raises(gateway.AcquisitionError, match="Unknown registered source"):
+            gateway.registered("adalet-6101-pdf", registry_version=version)
+
+
+def test_pdf_get_media_provenance_and_package_are_bound_to_exact_registry(transport, tmp_path, cli):
+    body = b"%PDF-1.7\nsynthetic unparsed fixture\n%%EOF"
+    observed = transport(body=body, headers=[("Content-Type", "application/pdf"), ("Content-Length", str(len(body)))])
+    raw, manifest = gateway.acquire("adalet-6101-pdf", connected_staging=True)
+    wire = observed["tls"].sent.decode("ascii")
+    assert wire == ("GET /Resimler/SayfaDokuman/181020191506586101.pdf HTTP/1.1\r\n"
+                    "Host: mgm.adalet.gov.tr\r\nUser-Agent: LawyerAssistant-RegisteredStaging/0.1\r\n"
+                    "Accept: application/pdf\r\nAccept-Encoding: identity\r\nConnection: close\r\n\r\n")
+    assert observed["sni"] == ["mgm.adalet.gov.tr"]
+    assert manifest["raw_media_type"] == "application/pdf"
+    assert manifest["representation"] == "institution_hosted_text"
+    assert manifest["limitations"][0] == gateway.PDF_LIMITATION
+    assert gateway.validate_acquisition_metadata(raw, manifest) == manifest
+    gateway.write_package(raw, manifest, tmp_path / "pdf")
+    assert {item.name for item in (tmp_path / "pdf").iterdir()} == {"raw.pdf", "acquisition.json"}
+    assert cli._validate_package("adalet-6101-pdf", tmp_path / "pdf") == manifest
+    (tmp_path / "pdf/raw.pdf").rename(tmp_path / "pdf/raw.html")
+    with pytest.raises(gateway.AcquisitionError, match="unexpected"):
+        cli._validate_package("adalet-6101-pdf", tmp_path / "pdf")
+
+
+@pytest.mark.parametrize("source_id,media", [("adalet-6101-pdf", "text/html"),
+                                           (SOURCE, "application/pdf"), ("adalet-6101-pdf", "application/octet-stream")])
+def test_media_cannot_be_substituted_or_guessed(transport, source_id, media):
+    transport(headers=[("Content-Type", media)])
+    with pytest.raises(gateway.AcquisitionError, match="media type"):
+        gateway.acquire(source_id, connected_staging=True)
+
+
+@pytest.mark.parametrize("field,value", [("raw_media_type", "text/html"), ("representation", "enacted_text"),
+                                       ("limitations", [gateway.HISTORICAL_LIMITATION]),
+                                       ("registry_version", gateway.HTML_REGISTRY_VERSION)])
+def test_pdf_metadata_cannot_claim_html_or_an_earlier_snapshot(transport, field, value):
+    transport(headers=[("Content-Type", "application/pdf")])
+    raw, manifest = gateway.acquire("adalet-6101-pdf", connected_staging=True)
+    manifest[field] = value
+    with pytest.raises(gateway.AcquisitionError):
+        gateway.validate_acquisition_metadata(raw, manifest)
 
 
 @pytest.mark.parametrize("source_id,domain,path", [

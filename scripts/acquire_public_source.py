@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Acquire one registered public HTML source in an isolated, disposable staging container."""
+"""Acquire one registered public representation in isolated, disposable staging."""
 
 import argparse
 import json
@@ -67,16 +67,16 @@ def _command(source_id, directory, name, image):
 
 
 def _validate_package(source_id, directory):
-    registered(source_id)
+    source = registered(source_id)
     if directory.is_symlink() or not directory.is_dir():
         raise AcquisitionError("Staged output is missing")
-    if {item.name for item in directory.iterdir()} != {"raw.html", "acquisition.json"}:
+    if {item.name for item in directory.iterdir()} != {source.raw_filename, "acquisition.json"}:
         raise AcquisitionError("Staged output has unexpected artifacts")
-    for name, limit in (("raw.html", MAX_BYTES), ("acquisition.json", 64 * 1024)):
+    for name, limit in ((source.raw_filename, MAX_BYTES), ("acquisition.json", 64 * 1024)):
         path = directory / name
         if path.is_symlink() or not path.is_file() or not 0 < path.stat().st_size <= limit:
             raise AcquisitionError("Staged artifact is invalid")
-    raw = (directory / "raw.html").read_bytes()
+    raw = (directory / source.raw_filename).read_bytes()
     try:
         manifest = json.loads((directory / "acquisition.json").read_text())
     except (ValueError, UnicodeError):

@@ -1,5 +1,59 @@
 # Verification record — 11 October 2026
 
+## Registered text-only PDF preparation — 11 October 2026 (Asia/Shanghai)
+
+Base: PR #44 is merged at `eea77d9ea5e8316e7f9546876d8d37083281df24`.
+The frozen v3 registry adds the exact Ministry of Justice 6101 PDF linked by its
+official 2011 legislation index. V1/v2 retain their original HTML membership and
+metadata. The new entry binds `application/pdf`, `raw.pdf`, an institution-hosted
+representation and unverified version history. Neither the route nor a filename
+establishes a current consolidated source, publication date or shared-work identity.
+
+Local verification:
+
+- **277** native source/preparation/integrity regressions passed in **0.86 s**;
+  **62** added cases cover the new fixed route/media/snapshot boundary, retained
+  v2 preparation and PDF extraction/report/admission behavior. Content is synthetic.
+- **556** disconnected Linux source/original/review/effort/snapshot/integrity tests
+  passed in **48.18 s**, with a read-only root, unprivileged user, two CPUs, 1.5 GiB
+  memory and dropped capabilities. Seven code/test/CLI fingerprints match. One
+  existing TestClient deprecation warning remains.
+- **41** deployment contract tests, repository-configured Ruff and whitespace
+  checks passed. Actual workflow collection covers **3,694** cases exactly once;
+  no missing, duplicate or extra cases, and the workflow is unchanged. The final
+  PR head still requires all hosted backend/frontend/real-PostgreSQL checks.
+- A no-write check validates all four retained actual HTML originals and their
+  unchanged v1/v2 acquisition manifests against the old snapshots. Their domains,
+  rights-pending and legal-review-pending states remain unchanged; 6101 uses its
+  retained prepared original plus original acquisition sidecar.
+- The actual connected PDF attempt failed closed at **`dns_timeout`**, admitting
+  **zero** artifacts. One attempt is recorded; no retry, proxy, redirect, DNS
+  change, budget increase or network-policy bypass was used. Gazette web research
+  also timed out, which is a different route and is not a catalog acquisition.
+- A clearly marked **synthetic PDF**, carrying fixture provenance rather than an
+  authentic acquisition, completed the real isolated scanner/parser wrapper. Official
+  main/daily/bytecode CVDs were cryptographically verified before/after scanning;
+  the disconnected pinned parser emitted two page passages. There was **no catalog
+  import**. This verifies worker execution, not real legal-text fidelity or accuracy.
+- The deployed API image ID is unchanged; only dedicated staging/test images were
+  rebuilt without network or pulls. `.env`, provider configuration, private matters,
+  actual curator records and deployment were untouched. Worker cleanup is confirmed.
+
+The text-only adapter rejects encryption, unsupported active features, images/forms,
+annotations, empty/OCR pages, malformed content, changed parser versions and budget
+failures. It preserves unusual glyphs and internal whitespace, trims outer page
+whitespace and joins pages with two newlines. Exact page offsets/digests are extraction
+coordinates, not PDF byte ranges, rendered positions, provision IDs or verified fidelity.
+Host admission rejects altered page origins, locators, parser versions or review states.
+Large decompression/fonts still rely on the mandatory 256 MiB/45-second worker boundary.
+
+See the [engineering receipt](evidence/registered-pdf-intake-2026-10-11.json).
+No real PDF source, rights/identity/fidelity/legal review, independent reference,
+publication, graph change or pilot qualification is claimed. Next: successful bounded
+acquisition, actual page-by-page curator review and shared-work identity adjudication
+before reference/study selection; then independently authored references and witnessed
+paired studies. Distinct HTML/PDF copies of 6101 are not independent study originals.
+
 ## Employment and commercial registered intake — 11 October 2026 (Asia/Shanghai)
 
 Base: PR #43 is merged at `bba695c8d5c100253952f4a911794ce8d3cc76aa`. This packet

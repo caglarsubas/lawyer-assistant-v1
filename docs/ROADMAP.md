@@ -1592,3 +1592,36 @@ and representations; independently author source-linked references; then conduct
 witnessed, registered paired model/reviewer studies. Current consolidated law,
 jurisprudence coverage, legal qualification, representative throughput,
 target-host capacity and pilot acceptance remain open.
+
+### Delivered packet — R01/R03 versioned PDF source preparation, 11 October 2026
+
+PR #44 is verified merged into main at `eea77d9ea5e8316e7f9546876d8d37083281df24`.
+The next engineering packet adds one exact Ministry of Justice 6101 PDF route from
+its official 2011 legislation index. A frozen v3 registry binds media type, filename,
+representation and limitation; both earlier HTML snapshots remain immutable and
+available for offline preparation. The PDF is an institution-hosted representation
+with unverified version history, distinct from TBMM's copy and from a Gazette original.
+
+After mandatory scanning, an isolated disconnected worker transcribes text-only
+PDFs into page passages, exact text offsets and digests. It records the pinned
+parser/adapter and preserves unusual glyphs. Unsupported/empty pages, encryption,
+interactive/image/form features, unevaluated parsers, over-budget work and altered
+page reports fail without a partial package. No OCR, text correction or provision
+identity is inferred. Dates, rights, fidelity and legal review remain unknown/pending.
+
+The actual connected attempt failed at the existing DNS deadline and admitted
+no original. Synthetic native/Linux regressions and a real CVD scanner/parser
+handoff on synthetic bytes verify engineering only; there is no real PDF catalog
+entry, legal review, source-linked reference or serving publication. Existing
+network/resource/CI limits and the deployed API remain unchanged. See the
+[preparation contract](REGISTERED_SOURCE_PREPARATION.md#text-only-pdf) and
+[receipt](evidence/registered-pdf-intake-2026-10-11.json). Manual PR merge and exact-head
+hosted checks are required.
+
+Next: successfully acquire the registered PDF through the approved bounded route;
+have qualified curators compare every original page and assess identity, version,
+rights and sensitivity; record the shared-work identity before study selection.
+Continue actual review of the four TBMM originals, independently author references
+and run witnessed paired studies. Two representations of 6101 are not two independent
+study originals. RG/MBS current-law reconstruction, jurisprudence, national legal
+qualification, representative throughput, target-host capacity and pilot gates stay open.

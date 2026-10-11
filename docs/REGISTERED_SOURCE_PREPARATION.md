@@ -2,7 +2,7 @@
 
 This R01/R03 packet connects [registered acquisition](REGISTERED_SOURCES.md) to
 [public-source staging](PUBLIC_SOURCES.md). Operators can turn one quarantined
-TBMM HTML representation into original bytes, extracted passages and an inspectable
+registered HTML or text-only PDF representation into original bytes, extracted passages and an inspectable
 source map. It does not approve a source, acquire current law, populate either graph
 or add authorities to research.
 
@@ -21,9 +21,9 @@ backend/.venv/bin/python scripts/prepare_public_source.py \
   --signatures /approved-signatures/clamav
 ```
 
-Input is an exact two-file acquisition (`raw.html`, `acquisition.json`). The output
+Input is an exact two-file acquisition (`raw.html` or `raw.pdf`, plus `acquisition.json`). The output
 parent must exist; the output directory must be new. Only the closed registry and
-current registry version are accepted. Custom URLs, raw-file substitutions, image
+known immutable registry snapshots are accepted. Custom URLs, raw-file substitutions, image
 options, signature-age overrides and asserted clean-scan documents are unavailable.
 Neither CLI nor workers load `.env`, contact inference or use a database.
 
@@ -43,8 +43,9 @@ pending review states and timezone-aware acquisition ordering. This binds
 operator-supplied provenance; it cannot authenticate a historical acquisition.
 
 Resolve the exact declared [registry snapshot](REGISTERED_SOURCES.md#closed-registry).
-The retained v1 contract acquisitions and the v2 contract/employment/commercial
-entries use the same admission path. Missing/unknown versions, mismatched domains,
+The retained v1/v2 HTML acquisitions and current v3 HTML/PDF entries use the same
+admission path. The registry determines filename, media type, representation and
+historical limitation. Missing/unknown versions, mismatched domains,
 or later entries falsely claiming an earlier registry fail before scanning. Neither
 host nor parser rewrites the acquisition manifest, changes its dates or infers a
 source's current legal effect. Build the current preparation image after a registry
@@ -70,6 +71,8 @@ defaults. They have no application networks, ports, matter volumes, credentials 
 Docker socket. Cleanup is required on success and failure before output publication.
 
 ## Transcription and exact locators
+
+### HTML
 
 The adapter supports strict UTF-8 (including an initial BOM), explicitly declared
 Windows-1254 and ISO-8859-9. It does not guess undeclared legacy encodings or replace
@@ -97,6 +100,34 @@ points per passage. Exceeding a limit fails the whole preparation; no silently
 truncated package is emitted. Publication/effect dates remain explicitly unknown.
 Original acquisition dates are preserved and never substituted for legal dates.
 
+### Text-only PDF
+
+The disconnected worker uses the existing pinned `pypdf` **6.19.0** runtime and
+`registered-pdf-pages-v1` adapter. Unevaluated versions fail. Strict parsing requires
+a PDF header and final EOF marker. Encrypted PDFs, interactive catalog features,
+JavaScript/embedded-file name trees, optional-content layers, annotations and image/form
+XObjects are outside this narrow adapter and fail the whole operation. An empty
+page or page needing OCR fails, including after earlier pages were extracted.
+There is no rendering, OCR, external-resource fetch, spelling repair or Unicode
+normalization. Internal whitespace and unusual glyph mappings remain visible;
+outer page whitespace is trimmed and two newlines separate extracted pages.
+
+Each complete page is one passage: one-based physical page number, exact extracted
+page code-point range, assembled-text range and digest. These are neither raw PDF
+byte offsets nor visual coordinates nor provision IDs. The host checks every page
+origin, ordered ID, separator and digest without parsing the original before the
+scan. The preparation report records adapter/parser versions, page count, exact
+origins and explicit fidelity limitations; extra or inconsistent report fields fail.
+
+Limits are **1 MiB raw PDF**, **50 pages**, **20,000 code points per page**, **2 MiB
+extracted UTF-8**, **4 MiB decoded content stream per page** and **20 MiB total
+decoded page streams**. Stream checks occur before text extraction, as recommended
+by [pypdf](https://pypdf.readthedocs.io/en/6.19.0/user/extract-text.html). Decompression
+and fonts may allocate before a size check: the unchanged **256 MiB**, **45-second**
+disconnected worker is mandatory, and any kill/deadline fails without publishing a
+partial package. Reading order, hidden text, glyphs and completeness still require
+comparison with all original pages. Source/publication/effect dates remain unknown.
+
 ## Output and explicit import
 
 Seven owner-read-only files are published into a new owner-only directory with
@@ -104,12 +135,12 @@ exclusive atomic rename. Existing destinations are never replaced:
 
 | File | Use |
 |---|---|
-| `raw.bin` | Exact original HTML bytes, retained as an inert attachment |
+| `raw.bin` | Exact original HTML/PDF bytes, retained as an inert attachment |
 | `text.txt` | Extracted UTF-8 |
 | `locators.json` | Import-compatible exact passage map |
 | `source.json` | Import-compatible public-origin and date declarations |
 | `acquisition.json` | Unchanged acquisition record |
-| `preparation.json` | Adapter version, encoding, decoded-original digest/ranges, omissions, parser-call wall time and limitations |
+| `preparation.json` | Format-specific adapter, original HTML ranges or extracted PDF page ranges, parser version where applicable, wall time and limitations |
 | `admission.json` | Artifact digests, immutable worker IDs, signature evidence and scan wall time |
 
 A privileged host can alter files; digests detect alteration but do not authenticate
@@ -156,3 +187,10 @@ Next: restore the approved connected acquisition route, obtain diverse lawful
 originals across the three practices and representations, have qualified curators
 review fidelity/rights/history, and independently author source-linked references
 with measured review effort. R01/R03/R05A legal qualification remains open.
+
+On 11 October the new Ministry 6101 PDF route stopped at the existing DNS deadline;
+no original or catalog entry was acquired. Native/Linux synthetic regressions and
+a real scanner/parser run on an explicitly **synthetic PDF** verify the engineering
+handoff only. No actual PDF fidelity, independent reference, legal review or serving
+publication is claimed. See [verification](VALIDATION.md) and the
+[PDF intake receipt](evidence/registered-pdf-intake-2026-10-11.json).
