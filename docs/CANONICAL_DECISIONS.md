@@ -57,9 +57,11 @@ or private inverse link is created.
 
 `canonical_identity_reviewed` and `staged_handoff_ready` mean a current independent
 account accepted this private identity assertion. `global_registry_qualified`,
-`legal_effect_verified` and `publication_eligible` remain false. The next packet
-will compile a bounded private Graph B staging artifact, with exact evidence and
-review provenance. Existing shared provision publication tooling does not accept
+`legal_effect_verified` and `publication_eligible` remain false. The handoff compiler
+produces a bounded [private Graph B staging artifact](GRAPH_B_HANDOFF.md), with
+exact retained passage evidence and complete review provenance. Arbitrary external
+evidence references remain unsupported by that handoff. Existing shared provision
+publication tooling does not accept
 decision identity ledgers. Legal/privacy/fidelity review, graph identity equivalence,
 ontology qualification, publication authorization and serving activation remain
 separate work. No actual legal approval is supplied by engineering fixtures.

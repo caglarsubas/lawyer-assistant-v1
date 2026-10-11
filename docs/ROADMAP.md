@@ -1894,3 +1894,28 @@ multi-decision segmentation and cross-source equivalence remain open. See
 Next packet: evidence-backed, revision-bound private Graph B staging. Do not
 automatically promote private identities, contributor names or reviewer opinions
 to shared datasets. Actual source/legal review and R03/R05 release gates remain open.
+
+## Delivered R03 packet — private staged Graph B handoff (11 October 2026)
+
+PR #54 is verified merged at `c716de71fb5f37aa5d7df7549ea8e839c223f3ec` after
+all three exact-head jobs passed in `38150833586`. Its post-merge main run is
+tracked separately. This successor provides a deterministic, firm-confidential
+handoff with original artifacts, complete review histories, compiler/ontology pins,
+physical file hashes and a content-addressed packet ID. The three reified own-decision
+identity relations remain unreviewed RDF candidates. Exact retained passage evidence,
+current separate-account acceptance, accepted export rights and all three revisions
+gate download; unresolved external registers, stale inputs and oversized output are
+withheld. Source selection does not become shared graph data.
+
+The curator screen verifies the complete JSON/file/packet hashes and reports private
+staging status; the read-only source usage guide explains proposal, independent review
+and handoff. Existing publication tooling rejects the intact preparation marker.
+No graph mutation, signing, publication, legal-effect assertion or model call occurs.
+See [handoff contract](GRAPH_B_HANDOFF.md), [validation](VALIDATION.md) and
+[engineering receipt](evidence/graph-b-handoff-2026-10-11.json).
+
+Next: explicit reviewed cross-source decision identity equivalence and external
+institutional-register evidence, followed by a decision-specific publication review
+contract. These must preserve source versions, private contributors and conflicting
+identities. Real legal/editor approvals, ontology qualification, Graph B population,
+retrieval evaluation and pilot gates remain open; R03/R05 are partial.

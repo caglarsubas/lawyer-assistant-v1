@@ -1,5 +1,35 @@
 # Verification record — 11 October 2026
 
+## Private staged Graph B handoff — 11 October 2026
+
+Base: PR #54 merged at `c716de71fb5f37aa5d7df7549ea8e839c223f3ec` after its
+three exact-head jobs passed in `38150833586`. The post-merge main run is separate.
+
+- 74 disconnected Linux identity/mapping/dossier/handoff cases pass (25.11s).
+  Handoff cases verify deterministic complete histories, physical bytes, exact
+  Unicode quote grounding, three reified candidate relations, unknown validity,
+  excluded citations, all revision pins, unresolved external evidence, explicit
+  export rights, stale acceptance, source/ontology changes, private boundaries and
+  whole-packet capacity failures. Intact preparation RDF is rejected by publication
+  tooling. A subsequent targeted check covers the earlier ontology fingerprint pin.
+- Six real PostgreSQL decision/dossier/identity/handoff race and source-lock cases
+  pass (5.11s), including stale handoff rejection after a real source-row wait.
+  Dedicated internal test network, random child databases and unprivileged bounded
+  read-only containers isolate these checks from production and user credentials.
+- Production frontend build and 428 tests in 39 files pass. Browser QA downloaded
+  the actual 31,587-byte JSON after frontend hash validation: six physical files,
+  two identity events, two mapping events, six source-review events, three candidate
+  assertions and `publication_eligible=false`. A separate local decoder verified
+  every physical size/hash. QA accounts and sources are synthetic; no provider is
+  configured. The loopback QA is separate from the disconnected Linux tests.
+- Ruff, 41 deployment contracts and whitespace pass. Collection assigns all 3,960
+  backend cases exactly once in the unchanged partitions. No CI runner, dependency,
+  retry or deadline changes, and no measured billing-savings claim.
+
+Ignored local receipts are in `.data/verification/r03-graph-b-handoff/` in the owned
+worktree. Engineering review does not approve real identities, external registries,
+source rights, legal effects, ontology semantics, deployment or graph publication.
+
 ## Canonical decision identities — 11 October 2026
 
 Base: PR #53 merged at `e9ff93a87f082a25edc19b6f3ae8c9c7e82b9cca`, with all

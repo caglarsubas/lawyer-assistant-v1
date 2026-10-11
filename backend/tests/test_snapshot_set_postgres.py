@@ -467,3 +467,29 @@ def test_canonical_identity_source_wait_revalidates_before_proposal(postgres_dec
                 head.revision += 1  # Corrupt synthetic ledger cannot become an identity proposal.
                 blocker.commit()
                 assert future.result(timeout=10).status_code == 409
+
+
+def test_graph_b_handoff_waits_for_source_then_withholds_stale_approval(postgres_decision):
+    from test_decision_graph_handoff import download, evidence
+    from test_decision_identities import proposal, propose_identity, review_identity
+    from test_decision_mappings import review as decision_review
+    from test_source_reviews import assess
+    app, client, _, identifier, base, _, _ = postgres_decision
+    assert assess(client, base + "/review", 5, "rights", permitted_uses=["local_processing", "internal_display", "export"]).status_code == 200
+    item = client.get(base + "/decision-mappings").json()["items"][0]
+    assert decision_review(postgres_decision, item["id"], 2, 6).status_code == 200
+    identity = {**proposal(postgres_decision)["identity"], "identity_evidence": evidence(postgres_decision), "institution_evidence": evidence(postgres_decision)}
+    assert propose_identity(postgres_decision, expected_mapping_revision=3, expected_source_review_revision=6, identity=identity).status_code == 200
+    peer = another_client(app, username="stage-peer")
+    assert review_identity(postgres_decision, peer, expected_mapping_revision=3, expected_source_review_revision=6, evidence_refs=evidence(postgres_decision)).status_code == 200
+    with app.state.store.session() as blocker:
+        head = blocker.scalar(select(SourceReviewHead).where(SourceReviewHead.source_id == identifier).with_for_update())
+        with observe_identity_lock(app.state.store.engine, statement_fragment="FROM source_review_heads") as (attempted, pids):
+            with ThreadPoolExecutor(1) as pool:
+                future = pool.submit(download, postgres_decision, expected_mapping_revision=3)
+                assert attempted.wait(5)
+                assert wait_until_blocked(app.state.store.engine, pids[-1])
+                head.revision += 1
+                blocker.commit()
+                result = future.result(timeout=10)
+    assert result.status_code == 409 and "evidence_json" not in result.json()

@@ -33,6 +33,10 @@ SOURCE_REVIEW_GUIDE = (
     "Madde eşlemesinde başlık adayını seçin ve metin sınırlarını önizlemede doğrulayın. "
     "Düzenleme, madde ve tarihsel sürüm referanslarını ayrı kaydedin; bilinmeyen yürürlük tarihlerini boş bırakın. "
     "Kaynak incelemesi değişirse kabul edilmiş eşlemeyi yeniden değerlendirin. "
+    "Karar eşlemesinde belgenin kendi kararını, yargılamayı ve kurumu atıf yapılan otoritelerden ayrı kaydedin. "
+    "Kanonik kimlik önerisini kaynak sorumlusu girer; öneren ve kaynak/eşleme inceleme geçmişine katılan hesaplardan farklı bir hesap incelemelidir. "
+    "Graph B aday devri için kimlik, kurum ve bağımsız inceleme dayanaklarını bu kaynağın kabul edilmiş tam pasaj referansı ve SHA256'sına bağlayın. "
+    "Güncel bağımsız kabul ve açık dışa aktarma izniyle gizli aday paketini indirebilirsiniz; kaynak veya eşleme değişince kabul eskir. "
     "İnceleme tamamlanınca kayıt dosyasını dışa aktarın. Bu kayıt graf yayımlama onayı değildir; "
     "ayrı yayın incelemesi ve imzalı sürüm gerekir."
 )
