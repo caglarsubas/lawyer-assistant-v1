@@ -38,12 +38,12 @@ scanner or extend its age policy.
 
 The host captures a bounded exact acquisition inventory with descriptor-relative
 no-follow reads, regular-file checks, hardlink rejection and repeated captures.
-It verifies registry identity, original digest/length, enacted-text limitations,
+It verifies registry identity, original digest/length, source-specific limitations,
 pending review states and timezone-aware acquisition ordering. This binds
 operator-supplied provenance; it cannot authenticate a historical acquisition.
 
 Resolve the exact declared [registry snapshot](REGISTERED_SOURCES.md#closed-registry).
-The retained v1/v2 HTML acquisitions and current v3 HTML/PDF entries use the same
+The retained v1/v2/v3 acquisitions and current v4 HTML/PDF entries use the same
 admission path. The registry determines filename, media type, representation and
 historical limitation. Missing/unknown versions, mismatched domains,
 or later entries falsely claiming an earlier registry fail before scanning. Neither
@@ -118,6 +118,14 @@ byte offsets nor visual coordinates nor provision IDs. The host checks every pag
 origin, ordered ID, separator and digest without parsing the original before the
 scan. The preparation report records adapter/parser versions, page count, exact
 origins and explicit fidelity limitations; extra or inconsistent report fields fail.
+
+For the AYM individual-application representation, the first report warning retains
+the registry's exact decision-specific legal-effect/finality/opinion/privacy
+limitation. The host resolves that warning from the immutable declared registry,
+not from a caller assertion. Earlier Ministry reports retain their original statute
+warning unchanged. Transcription does not identify judicial findings, allegations,
+opinions, citations, decision dates or binding effect. Those require separately
+evidenced candidate extraction and review; a public original may still contain PII.
 
 Limits are **1 MiB raw PDF**, **50 pages**, **20,000 code points per page**, **2 MiB
 extracted UTF-8**, **4 MiB decoded content stream per page** and **20 MiB total

@@ -1,0 +1,104 @@
+{
+  "schema_version": "registered-decision-intake-engineering-v1",
+  "scope": "synthetic_engineering_not_legal_qualification",
+  "base_main_sha": "dda436732fa9dee4060bd4e17e680bce1eea2974",
+  "base_main_run": 38133240697,
+  "base_main_ci": "all_three_success",
+  "registry_version": "registered-public-2026-10-11-v4",
+  "retained_registry_versions": [
+    "tbmm-enacted-2026-10-04-v1",
+    "tbmm-enacted-2026-10-11-v2",
+    "registered-public-2026-10-11-v3"
+  ],
+  "new_registry_id": "aym-2018-31036-pdf",
+  "representation": "individual_application_decision",
+  "native": {
+    "passed": 245,
+    "seconds": 0.99
+  },
+  "isolated_linux": {
+    "passed": 339,
+    "seconds": 9.07,
+    "network": "none",
+    "read_only": true,
+    "user": 10001,
+    "cpu_limit": 2,
+    "memory_mib": 1536,
+    "image": "sha256:3a47b9380d1f977783a2975b1d18011f8bebefe2a9de9eceeb7cb369e15428a6"
+  },
+  "tested_file_sha256": {
+    "backend/app/registered_pdf_transcription.py": "4030b9cd355ee4985373def6774519ad3ada2f34937d095ae4084a9a9fa55e0e",
+    "backend/app/source_gateway.py": "ae0ef330c127fec4310500cdf633326018adbe2703451a49555f20b75ff9463c",
+    "backend/tests/test_registered_pdf_transcription.py": "32a140dff31e60c723ea9aefff33737691c29fb72efe5c0b2043c753ec943a39",
+    "backend/tests/test_source_gateway.py": "6845216a0ea5c465b13f0e7c44f9f7fde233a2bf5ca2dc01e04b620441ca9db7",
+    "scripts/prepare_public_source.py": "d25cabdb84c4b7cc67a6003d22f373bdb474e61d56b6540ef97278d78b1b3a31"
+  },
+  "deployment_contracts_passed": 41,
+  "configured_ruff": "passed",
+  "diff_check": "passed",
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3843,
+      "preflight": 89,
+      "remaining": 3465,
+      "publication": 132,
+      "workspace": 77,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "431962e784190fe35eea6ec5108d4432166768d3b3c4597804985903cebed884",
+    "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "actual_acquisition": {
+    "invocations": 1,
+    "outcome": "dns_timeout",
+    "admitted_files": 0,
+    "scan_parse_import_run": false,
+    "policy_or_retry_change": false,
+    "image": "sha256:357146a4001bc9b2402e021025dec7b3565c884c04235d1cd7f6e1339d11df11"
+  },
+  "legal_review": false,
+  "source_rights_privacy_review": false,
+  "decision_effect_or_identity_inferred": false,
+  "no_provider_matter_graph_or_deployment_change": true,
+  "pre_push_engineering_only": true,
+  "exact_head_hosted_checks": "pending_normal_push",
+  "merge": "agent_authorized_after_review_and_passing_exact_head_checks"
+}

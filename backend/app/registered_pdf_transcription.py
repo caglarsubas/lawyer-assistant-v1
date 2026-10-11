@@ -110,7 +110,7 @@ def prepare_pdf(files, manifest):
               "current_consolidation": False, "rights_status": "rights_pending",
               "review_status": "legal_review_pending", "publication_status": "prepared_for_staging",
               "extraction_fidelity_verified": False, "source_identity_verified": False,
-              "sensitivity_reviewed": False, "limitations": WARNINGS}
+              "sensitivity_reviewed": False, "limitations": [manifest["limitations"][0], *WARNINGS[1:]]}
     artifacts = {"raw.bin": files["raw.pdf"], "text.txt": text, "locators.json": encode(locators),
                  "source.json": encode(source), "acquisition.json": files["acquisition.json"],
                  "preparation.json": encode(report)}
@@ -121,7 +121,7 @@ def prepare_pdf(files, manifest):
     return artifacts
 
 
-def validate_pdf_report(report, locators, text):
+def validate_pdf_report(report, locators, text, *, source_limitation=PDF_LIMITATION):
     """Host-side consistency checks without parsing an untrusted PDF."""
     fields = {"schema_version", "adapter_version", "registry_id", "raw_sha256", "text_sha256",
               "passage_count", "page_count", "passage_origins", "parser", "parser_version", "elapsed_seconds",
@@ -131,7 +131,7 @@ def validate_pdf_report(report, locators, text):
             or type(report.get("page_count")) is not int or not 1 <= report["page_count"] <= MAX_PAGES
             or report["page_count"] != len(locators.passages)
             or report.get("parser") != "pypdf" or report.get("parser_version") != PARSER_VERSION
-            or report.get("limitations") != WARNINGS
+            or report.get("limitations") != [source_limitation, *WARNINGS[1:]]
             or type(report.get("elapsed_seconds")) not in (int, float)
             or not math.isfinite(report["elapsed_seconds"]) or not 0 <= report["elapsed_seconds"] <= 45):
         raise PreparationError("PDF preparation report failed consistency checks")

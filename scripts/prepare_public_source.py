@@ -229,7 +229,7 @@ def prepare_in_containers(acquisition, signatures, destination):
                 or report.get("publication_status") != "prepared_for_staging"):
             raise PreparationError("Prepared review states or counts changed")
         if source.media_type == "application/pdf":
-            validate_pdf_report(report, locators, text)
+            validate_pdf_report(report, locators, text, source_limitation=source.limitation)
         if capture_acquisition(acquisition) != files:
             raise PreparationError("Original acquisition changed during preparation")
         admission = {"schema_version": "registered-source-admission-v1", "registry_id": manifest["registry_id"],

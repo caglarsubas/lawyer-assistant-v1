@@ -27,12 +27,17 @@ TOTAL_SECONDS = 20
 IDLE_SECONDS = 5
 LEGACY_REGISTRY_VERSION = "tbmm-enacted-2026-10-04-v1"
 HTML_REGISTRY_VERSION = "tbmm-enacted-2026-10-11-v2"
-REGISTRY_VERSION = "registered-public-2026-10-11-v3"
+PDF_REGISTRY_VERSION = "registered-public-2026-10-11-v3"
+REGISTRY_VERSION = "registered-public-2026-10-11-v4"
 HISTORICAL_LIMITATION = (
     "TBMM enacted text excludes subsequent amendments; this is not a current consolidated text."
 )
 PDF_LIMITATION = (
     "Institution-hosted PDF has unverified version history; this is not a current consolidated text."
+)
+DECISION_LIMITATION = (
+    "Court-hosted individual-application decision representation; legal effect, finality, "
+    "opinion roles, applicability and personal-data suitability require separate review."
 )
 ERROR_CATEGORIES = MappingProxyType({
     "Public DNS resolution timed out": "dns_timeout",
@@ -105,7 +110,7 @@ _HTML_REGISTRY = MappingProxyType({
         "commercial",
     ),
 })
-REGISTRY = MappingProxyType({
+_PDF_REGISTRY = MappingProxyType({
     **_HTML_REGISTRY,
     "adalet-6101-pdf": RegisteredSource(
         "6101 sayılı Kanun — Adalet Bakanlığı PDF temsili",
@@ -113,11 +118,20 @@ REGISTRY = MappingProxyType({
         "contracts", "application/pdf", "institution_hosted_text", PDF_LIMITATION,
     ),
 })
+REGISTRY = MappingProxyType({
+    **_PDF_REGISTRY,
+    "aym-2018-31036-pdf": RegisteredSource(
+        "AYM bireysel başvuru 2018/31036 — kurumda yayımlanan karar PDF temsili",
+        "https://www.anayasa.gov.tr/media/7232/2018-31036.pdf",
+        "employment", "application/pdf", "individual_application_decision", DECISION_LIMITATION,
+    ),
+})
 # Retain exact historical membership and metadata; new acquisitions always use
 # REGISTRY. Only offline preparation may resolve a declared earlier snapshot.
 REGISTRY_SNAPSHOTS = MappingProxyType({
     LEGACY_REGISTRY_VERSION: _LEGACY_REGISTRY,
     HTML_REGISTRY_VERSION: _HTML_REGISTRY,
+    PDF_REGISTRY_VERSION: _PDF_REGISTRY,
     REGISTRY_VERSION: REGISTRY,
 })
 

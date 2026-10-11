@@ -18,7 +18,13 @@ from app.registered_source_preparation import (
     prepare,
     sha,
 )
-from app.source_gateway import HTML_REGISTRY_VERSION, REGISTRY_VERSION, registered
+from app.source_gateway import (
+    DECISION_LIMITATION,
+    HTML_REGISTRY_VERSION,
+    PDF_REGISTRY_VERSION,
+    REGISTRY_VERSION,
+    registered,
+)
 
 
 def fixture_pdf(*, count=2, content=b"SYNTHETIC fixture", root_key=None, page_key=None, encrypted=False):
@@ -45,13 +51,12 @@ def fixture_pdf(*, count=2, content=b"SYNTHETIC fixture", root_key=None, page_ke
     return output.getvalue()
 
 
-def acquisition(raw=None):
+def acquisition(raw=None, *, source_id="adalet-6101-pdf", registry_version=REGISTRY_VERSION):
     raw = fixture_pdf() if raw is None else raw
-    source_id = "adalet-6101-pdf"
-    source = registered(source_id)
+    source = registered(source_id, registry_version=registry_version)
     now = (datetime.now(UTC) - timedelta(minutes=1)).isoformat()
     manifest = {
-        "schema_version": "registered-source-acquisition-v1", "registry_version": REGISTRY_VERSION,
+        "schema_version": "registered-source-acquisition-v1", "registry_version": registry_version,
         "registry_id": source_id, "title": source.title, "source_url": source.url,
         "source_version_id": f"{source_id}:sha256:{sha(raw)}", "domain": source.domain,
         "started_at": now, "acquired_at": now, "raw_sha256": sha(raw), "byte_count": len(raw),
@@ -92,6 +97,30 @@ def test_exact_pages_hashes_offsets_and_pending_states():
     assert all(metadata[key] is None for key in ("published_on", "effective_from", "effective_until"))
     assert artifacts["raw.bin"] == files["raw.pdf"]
     assert artifacts["acquisition.json"] == files["acquisition.json"]
+
+
+def test_prior_pdf_snapshot_retains_original_provenance_and_warnings():
+    files = acquisition(registry_version=PDF_REGISTRY_VERSION)
+    artifacts = prepare(files)
+    assert artifacts["acquisition.json"] == files["acquisition.json"]
+    assert _json(artifacts["preparation.json"])["limitations"] == pdf.WARNINGS
+
+
+def test_individual_application_representation_is_not_statute_or_legal_approval():
+    files = acquisition(source_id="aym-2018-31036-pdf")
+    artifacts = prepare(files)
+    metadata, locators, text = _validate({name: artifacts[name] for name in (
+        "raw.bin", "text.txt", "source.json", "locators.json")})
+    report = _json(artifacts["preparation.json"])
+    assert report["representation"] == "individual_application_decision"
+    assert report["limitations"] == [DECISION_LIMITATION, *pdf.WARNINGS[1:]]
+    assert report["rights_status"] == "rights_pending" and report["review_status"] == "legal_review_pending"
+    assert all(metadata[key] is None for key in ("published_on", "effective_from", "effective_until"))
+    assert metadata["domain"] == "employment"
+    assert artifacts["acquisition.json"] == files["acquisition.json"] and artifacts["raw.bin"] == files["raw.pdf"]
+    pdf.validate_pdf_report(report, locators, text, source_limitation=DECISION_LIMITATION)
+    with pytest.raises(PreparationError, match="consistency"):
+        pdf.validate_pdf_report(report, locators, text)
 
 
 def test_glyphs_and_internal_whitespace_are_never_repaired(monkeypatch):
@@ -229,13 +258,13 @@ def test_inventory_and_manifest_fail_before_pdf_parser(monkeypatch, change):
 
 
 @pytest.fixture
-def offline_workers(cli, monkeypatch, tmp_path):
+def offline_workers(cli, monkeypatch, tmp_path, request):
     # Scanner observations here are invented; real CVD scanning is recorded separately.
     from test_registered_source_preparation import scan_receipt
     incoming, signatures = tmp_path / "input", tmp_path / "signatures"
     incoming.mkdir()
     signatures.mkdir()
-    for name, raw in acquisition().items():
+    for name, raw in acquisition(source_id=getattr(request, "param", "adalet-6101-pdf")).items():
         (incoming / name).write_bytes(raw)
     for name in ("main.cvd", "daily.cvd", "bytecode.cvd"):
         (signatures / name).write_bytes(b"synthetic, unscanned database")
@@ -255,6 +284,7 @@ def offline_workers(cli, monkeypatch, tmp_path):
     return incoming, signatures, tmp_path / "prepared", events
 
 
+@pytest.mark.parametrize("offline_workers", ["adalet-6101-pdf", "aym-2018-31036-pdf"], indirect=True)
 def test_scan_first_then_parse_import_and_preserve_distinct_source(offline_workers, cli, tmp_path):
     incoming, signatures, destination, events = offline_workers
     before = capture_acquisition(incoming)
@@ -266,7 +296,7 @@ def test_scan_first_then_parse_import_and_preserve_distinct_source(offline_worke
     imported = store.import_package(metadata_path=destination / "source.json", raw_path=destination / "raw.bin",
                                     text_path=destination / "text.txt", locators_path=destination / "locators.json")
     assert imported["rights_status"] == "rights_pending" and imported["review_status"] == "legal_review_pending"
-    assert imported["source_url"] == registered("adalet-6101-pdf").url
+    assert imported["source_url"] == _json(before["acquisition.json"])["source_url"]
 
 
 @pytest.mark.parametrize("field,value", [("page_count", True), ("page_count", 1), ("parser_version", "unknown"),

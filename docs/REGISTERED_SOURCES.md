@@ -14,6 +14,7 @@ exposes this acquisition function, and no existing network profile is changed.
 | `tbmm-4857-enacted` | employment | [TBMM: 4857, İş Kanunu, enacted text](https://cdn.tbmm.gov.tr/KKBSPublicFile/D22/Y1/T1/KanunMetni/359dee72-3cd1-4131-8597-48c58658e326.html) |
 | `tbmm-6103-enacted` | commercial | [TBMM: 6103, commercial-code transition statute, enacted text](https://cdn.tbmm.gov.tr/KKBSPublicFile/D23/Y2/T1/KanunMetni/7f9bad4f-097c-4097-960f-2ef0bb0ed482.html) |
 | `adalet-6101-pdf` | contracts | [Ministry of Justice: 6101, institution-hosted PDF](https://mgm.adalet.gov.tr/Resimler/SayfaDokuman/181020191506586101.pdf) |
+| `aym-2018-31036-pdf` | employment | [AYM: individual application 2018/31036, court-hosted decision PDF](https://www.anayasa.gov.tr/media/7232/2018-31036.pdf) |
 
 The two additions follow the final-text links on TBMM's official
 [4857 law record](https://www.tbmm.gov.tr/Yasama/Kanun/f72877bd-9f9a-037b-e050-007f01005610)
@@ -31,13 +32,31 @@ acquisition or legal-effect date. Its bytes and provenance stay distinct from
 TBMM's 6101 representation. Shared legal-work identity requires review; multiple
 representations of one law must not count as independent study originals.
 
+The AYM route is a separate `individual_application_decision` representation for
+the first jurisprudence intake slice. The court's indexed PDF is the exact
+destination; the current decision-database page redirects to a JavaScript shell
+that this inert pipeline cannot treat as decision text. Neither a shell, a press
+release nor an arbitrary download URL substitutes for the registered PDF.
+Decision/proceeding identity, legal effect, finality, majority/dissent roles and
+applicability require accountable review. Publication and legal-effect dates stay
+unknown until evidenced. Employment is only an intake organizer.
+
+A court-published original may contain personal data. `contains_private_matter_data=false`
+records its public-source origin, not an absence of PII or permission to redistribute
+it. Sensitivity, permitted uses and legal review remain pending. The retained
+`current_consolidation=false` field grants no current-law status and does not model
+a judgment's finality or effect. No party correlation or automatic graph identity
+is introduced.
+
 TBMM identifies these as enacted texts that exclude subsequent amendments.
 Acquisition preserves that historical representation and explicitly records
 `current_consolidation=false`. None of these sources is presented as current
 consolidated law. Adding or changing a destination requires a reviewed code and
 registry-version change; users cannot substitute a URL, path, query or header.
 
-New acquisitions use `registered-public-2026-10-11-v3`. The immutable v2 snapshot
+New acquisitions use `registered-public-2026-10-11-v4`. The immutable v3 snapshot
+`registered-public-2026-10-11-v3` retains exactly the former five entries and their
+metadata. The immutable v2 snapshot
 `tbmm-enacted-2026-10-11-v2` retains exactly the four HTML entries; the immutable
 `tbmm-enacted-2026-10-04-v1` snapshot retains only 6098/6101 and their original
 titles, URLs and contract-domain metadata. Offline preparation resolves the
@@ -90,7 +109,7 @@ the Docker client times out, and requires cleanup confirmation before publishing
 - Send only an exact `GET` for the registered path, with fixed headers and no
   query, cookies, authorization or request body. No redirect is followed.
 - Require HTTP 200 and the entry's exact media type: `text/html` for TBMM,
-  `application/pdf` for the Ministry. No sniffing or HTML-error-page fallback.
+  `application/pdf` for the Ministry and AYM. No sniffing or HTML-error-page fallback.
   Reject compression, ambiguous framing,
   duplicate critical headers, malformed or incomplete content and empty bodies.
 - Bound DNS/idle waits to five seconds and total network work to 20 seconds,
@@ -151,3 +170,9 @@ mandatory disconnected CVD scan/parser workflow and produced two page passages.
 A separate host public-only catalog now contains this PDF in pending-review state;
 the deployed Docker catalog is unchanged. Acquisition/preparation and original-page
 inspection establish engineering evidence only. See [verification](VALIDATION.md).
+
+The first AYM route invocation on 11 October stopped at `dns_timeout` and admitted
+no package. Synthetic tests cover its fixed destination, representation and
+source-specific warnings through acquisition/preparation/import; they do not prove
+actual PDF fidelity, availability, personal-data suitability or jurisprudence
+qualification. The network policy, limits and absence of retries are unchanged.
