@@ -26,9 +26,13 @@ MAX_WIRE_BYTES = MAX_BYTES + 64 * 1024
 TOTAL_SECONDS = 20
 IDLE_SECONDS = 5
 LEGACY_REGISTRY_VERSION = "tbmm-enacted-2026-10-04-v1"
-REGISTRY_VERSION = "tbmm-enacted-2026-10-11-v2"
+HTML_REGISTRY_VERSION = "tbmm-enacted-2026-10-11-v2"
+REGISTRY_VERSION = "registered-public-2026-10-11-v3"
 HISTORICAL_LIMITATION = (
     "TBMM enacted text excludes subsequent amendments; this is not a current consolidated text."
+)
+PDF_LIMITATION = (
+    "Institution-hosted PDF has unverified version history; this is not a current consolidated text."
 )
 ERROR_CATEGORIES = MappingProxyType({
     "Public DNS resolution timed out": "dns_timeout",
@@ -40,7 +44,7 @@ ERROR_CATEGORIES = MappingProxyType({
     "Exclusive publication is unsupported on this platform": "publication_unsupported",
     "Output must be a new directory under an existing parent": "invalid_output",
     "Redirects and non-success responses are not admitted": "http_status",
-    "Only registered HTML representations are admitted": "media_type",
+    "Response media type does not match the registered representation": "media_type",
     "Compressed representations are not admitted": "compression",
     "Ambiguous response headers": "headers",
     "Invalid response headers": "headers",
@@ -62,6 +66,13 @@ class RegisteredSource:
     title: str
     url: str
     domain: str
+    media_type: str = "text/html"
+    representation: str = "enacted_text"
+    limitation: str = HISTORICAL_LIMITATION
+
+    @property
+    def raw_filename(self):
+        return "raw.pdf" if self.media_type == "application/pdf" else "raw.html"
 
 
 _LEGACY_REGISTRY = MappingProxyType({
@@ -79,7 +90,7 @@ _LEGACY_REGISTRY = MappingProxyType({
     ),
 })
 
-REGISTRY = MappingProxyType({
+_HTML_REGISTRY = MappingProxyType({
     **_LEGACY_REGISTRY,
     "tbmm-4857-enacted": RegisteredSource(
         "4857 sayılı İş Kanunu — kabul edilen metin",
@@ -94,10 +105,19 @@ REGISTRY = MappingProxyType({
         "commercial",
     ),
 })
+REGISTRY = MappingProxyType({
+    **_HTML_REGISTRY,
+    "adalet-6101-pdf": RegisteredSource(
+        "6101 sayılı Kanun — Adalet Bakanlığı PDF temsili",
+        "https://mgm.adalet.gov.tr/Resimler/SayfaDokuman/181020191506586101.pdf",
+        "contracts", "application/pdf", "institution_hosted_text", PDF_LIMITATION,
+    ),
+})
 # Retain exact historical membership and metadata; new acquisitions always use
 # REGISTRY. Only offline preparation may resolve a declared earlier snapshot.
 REGISTRY_SNAPSHOTS = MappingProxyType({
     LEGACY_REGISTRY_VERSION: _LEGACY_REGISTRY,
+    HTML_REGISTRY_VERSION: _HTML_REGISTRY,
     REGISTRY_VERSION: REGISTRY,
 })
 
@@ -124,11 +144,11 @@ def validate_acquisition_metadata(content, manifest, *, required_registry_versio
         "schema_version": "registered-source-acquisition-v1", "registry_version": version,
         "registry_id": source_id, "title": source.title, "source_url": source.url,
         "source_version_id": f"{source_id}:sha256:{digest}", "domain": source.domain,
-        "raw_sha256": digest, "byte_count": len(content), "raw_media_type": "text/html",
+        "raw_sha256": digest, "byte_count": len(content), "raw_media_type": source.media_type,
         "rights_status": "rights_pending", "review_status": "legal_review_pending",
         "publication_status": "quarantined", "content_status": "untrusted_unscanned",
-        "extraction_status": "not_processed", "representation": "enacted_text", "current_consolidation": False,
-        "limitations": [HISTORICAL_LIMITATION,
+        "extraction_status": "not_processed", "representation": source.representation, "current_consolidation": False,
+        "limitations": [source.limitation,
             "Public availability does not establish permitted use, source identity review or legal applicability.",
             "This acquisition is unscanned and unparsed; admission and legal review are separate steps."],
     }
@@ -220,14 +240,14 @@ def _header(response, name):
     return value
 
 
-def _body(stream, deadline):
+def _body(stream, deadline, media_type="text/html"):
     with http.client.HTTPResponse(_ResponseSocket(stream, deadline)) as response:
         response.begin()
         if response.status != 200:
             raise AcquisitionError("Redirects and non-success responses are not admitted")
         media = _header(response, "Content-Type")
-        if not media or media.split(";", 1)[0].strip().lower() != "text/html":
-            raise AcquisitionError("Only registered HTML representations are admitted")
+        if not media or media.split(";", 1)[0].strip().lower() != media_type:
+            raise AcquisitionError("Response media type does not match the registered representation")
         encoding = _header(response, "Content-Encoding")
         if encoding is not None and encoding.lower() != "identity":
             raise AcquisitionError("Compressed representations are not admitted")
@@ -270,9 +290,9 @@ def acquire(source_id, *, connected_staging=False):
                 stream.settimeout(_remaining(deadline))
                 wire = (f"GET {url.path} HTTP/1.1\r\nHost: {url.hostname}\r\n"
                         "User-Agent: LawyerAssistant-RegisteredStaging/0.1\r\n"
-                        "Accept: text/html\r\nAccept-Encoding: identity\r\nConnection: close\r\n\r\n")
+                        f"Accept: {source.media_type}\r\nAccept-Encoding: identity\r\nConnection: close\r\n\r\n")
                 stream.sendall(wire.encode("ascii"))
-                content = _body(stream, deadline)
+                content = _body(stream, deadline, source.media_type)
     except AcquisitionError:
         raise
     except (OSError, ValueError, http.client.HTTPException, OverflowError):
@@ -283,11 +303,11 @@ def acquire(source_id, *, connected_staging=False):
         "registry_id": source_id, "title": source.title, "source_url": source.url,
         "source_version_id": f"{source_id}:sha256:{digest}", "domain": source.domain,
         "started_at": started, "acquired_at": datetime.now(timezone.utc).isoformat(),
-        "raw_sha256": digest, "byte_count": len(content), "raw_media_type": "text/html",
+        "raw_sha256": digest, "byte_count": len(content), "raw_media_type": source.media_type,
         "rights_status": "rights_pending", "review_status": "legal_review_pending",
         "publication_status": "quarantined", "content_status": "untrusted_unscanned",
-        "extraction_status": "not_processed", "representation": "enacted_text",
-        "current_consolidation": False, "limitations": [HISTORICAL_LIMITATION,
+        "extraction_status": "not_processed", "representation": source.representation,
+        "current_consolidation": False, "limitations": [source.limitation,
             "Public availability does not establish permitted use, source identity review or legal applicability.",
             "This acquisition is unscanned and unparsed; admission and legal review are separate steps."],
     }
@@ -317,9 +337,10 @@ def write_package(content, metadata, destination):
     destination = Path(destination).absolute()
     if destination.exists() or destination.is_symlink() or not destination.parent.is_dir():
         raise AcquisitionError("Output must be a new directory under an existing parent")
+    source = registered(metadata.get("registry_id"), registry_version=metadata.get("registry_version"))
     with tempfile.TemporaryDirectory(prefix=".public-acquisition-", dir=destination.parent) as temporary:
         staged = Path(temporary)
-        (staged / "raw.html").write_bytes(content)
+        (staged / source.raw_filename).write_bytes(content)
         (staged / "acquisition.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n")
         for path in staged.iterdir():
             path.chmod(0o600)

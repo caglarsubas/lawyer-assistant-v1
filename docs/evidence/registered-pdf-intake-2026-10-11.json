@@ -1,0 +1,206 @@
+{
+  "schema_version": "registered-pdf-intake-engineering-v1",
+  "recorded_on": "2026-10-11",
+  "timezone": "Asia/Shanghai",
+  "base_merge": {
+    "pr": 44,
+    "commit": "eea77d9ea5e8316e7f9546876d8d37083281df24"
+  },
+  "registry": {
+    "current": "registered-public-2026-10-11-v3",
+    "retained": [
+      "tbmm-enacted-2026-10-04-v1",
+      "tbmm-enacted-2026-10-11-v2"
+    ],
+    "entry_count": 5,
+    "new_entry": {
+      "id": "adalet-6101-pdf",
+      "url": "https://mgm.adalet.gov.tr/Resimler/SayfaDokuman/181020191506586101.pdf",
+      "official_index": "https://mgm.adalet.gov.tr/home/Sayfadetay/2011-yilinda-kanunlasanlar",
+      "media_type": "application/pdf",
+      "domain": "contracts",
+      "representation": "institution_hosted_text",
+      "review_status": "legal_review_pending",
+      "rights_status": "rights_pending",
+      "same_work_identity_reviewed": false
+    }
+  },
+  "actual_acquisition": {
+    "attempts": 1,
+    "success": false,
+    "error_category": "dns_timeout",
+    "admitted_artifacts": 0,
+    "acquired_bytes": null,
+    "passage_count": null,
+    "network_limits_changed": false,
+    "proxy_redirect_or_dns_bypass": false
+  },
+  "synthetic_real_worker_rehearsal": {
+    "original_kind": "synthetic_pdf_not_acquired_legal_source",
+    "source_provenance_authentic": false,
+    "catalog_imported": false,
+    "page_count": 2,
+    "passage_count": 2,
+    "raw_sha256": "d88175b78c0db6f7e520f6859b2eed852a8eb2960e63eda1285cf25da3d418fa",
+    "artifact_sha256": {
+      "acquisition.json": "180f96cf5bb25777673813cda690151f6ca6a98e8e835961f0bdeb54284dfb52",
+      "locators.json": "db79882101ae18473357a8dd6a67d6b0bc2bef193a3804939a37f3bd2b49d24e",
+      "preparation.json": "c7d2147ba02f05aee05212511bea79386983b047ba6c585941818b13d290c4bc",
+      "raw.bin": "d88175b78c0db6f7e520f6859b2eed852a8eb2960e63eda1285cf25da3d418fa",
+      "source.json": "857bed85ce69fe4cd6cc4674a686e5d2d064a883002d7adc9b623ef06d854d0d",
+      "text.txt": "7a6527127044f368f7612499a08ef0d9f0e0a69170147c37090afdb2ebc2dbf5"
+    },
+    "parser": "pypdf",
+    "parser_version": "6.19.0",
+    "adapter_version": "registered-pdf-pages-v1",
+    "parser_elapsed_seconds": 0.15182199998525903,
+    "scan_elapsed_seconds": 7.08950066997204,
+    "official_cvd_verification_before_after": true,
+    "scanner_databases": {
+      "databases": [
+        {
+          "build_time": 1765927102,
+          "bytes": 89072577,
+          "file": "main.cvd",
+          "sha256": "0b2182d229f46981ec8f535382222f7c9dfdd656b250ad47988b910a8d302365",
+          "signatures": 3287027,
+          "version": 63
+        },
+        {
+          "build_time": 1791613444,
+          "bytes": 23442295,
+          "file": "daily.cvd",
+          "sha256": "d4117485e03b333d4b40d77b9280750a14555ae84978f43de676cf5ff0810fd8",
+          "signatures": 355760,
+          "version": 28149
+        },
+        {
+          "build_time": 1757593759,
+          "bytes": 281702,
+          "file": "bytecode.cvd",
+          "sha256": "6d4aa01f219e988060fc419f495d07f27e0cdf1a2cccc065971da922c76f7ffb",
+          "signatures": 80,
+          "version": 339
+        }
+      ],
+      "engine": "ClamAV 1.4.6",
+      "schema_version": 1
+    },
+    "network": "none",
+    "rights_approved": false,
+    "legal_approved": false,
+    "published": false
+  },
+  "local_checks": {
+    "native_source_and_integrity": {
+      "passed": 277,
+      "seconds": 0.86
+    },
+    "linux_source_review_snapshot": {
+      "passed": 556,
+      "seconds": 48.18,
+      "cpus": 2,
+      "memory_mib": 1536,
+      "network": "none",
+      "root_readonly": true,
+      "warning": "existing TestClient deprecation"
+    },
+    "new_cases": 62,
+    "deployment_contracts_passed": 41,
+    "ruff": "pass",
+    "whitespace": "pass",
+    "source_worker_fingerprints_match": true,
+    "fingerprints": {
+      "backend/app/qualification_evidence.py": "cda6e74e99ca5c49df51ad76593cb2a182859b81aee5d39692d88cca41e0a927",
+      "backend/app/registered_pdf_transcription.py": "73fa9e2c64ed31913179aba02e06202a55cd942e62babd5a2bf4e04f77e5b830",
+      "backend/app/registered_source_preparation.py": "ea71837e039ebc54d220bea1714aa8fe184e9c95dec3fe66994591f68fd3f7a1",
+      "backend/app/source_gateway.py": "b91ea0f45deb9e50a6acc6ac222788a7330d06aac49de742914435df7099181b",
+      "backend/tests/test_registered_pdf_transcription.py": "d6a4f3f7383f36af12f2ea5e95f6a39704eb66a4539134f6f6c5f6b68190c4d4",
+      "scripts/acquire_public_source.py": "eeeb463ecaba24e3c8741f979b052d39da9550cba749791624d4d90b036d5622",
+      "scripts/prepare_public_source.py": "bda4ccd5379594abf41b1111209e8976c1015ef2c453af544c5ec6f523d4a279"
+    }
+  },
+  "ci_collection": {
+    "counts": {
+      "complete": 3694,
+      "preflight": 89,
+      "remaining": 3316,
+      "publication": 132,
+      "workspace": 77,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "missing": 0,
+    "overlap": 0,
+    "extra": 0,
+    "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+    "workflow_changed": false,
+    "runners_deadlines_retries_changed": false,
+    "hosted_status": "verify_exact_head_after_push"
+  },
+  "images": {
+    "lawyer-assistant-api:0.1.0": "sha256:95dcfeb31f0c3e3dffc22c8838500f293aa0fceba1a1c2ab8209cadf03c31376",
+    "lawyer-assistant-public-acquisition:0.1.0": "sha256:e23cdcac0ed0c265720c8f2179cffc5dbc0f5f5ad977dcaac8561e7e7794beb2",
+    "lawyer-assistant-public-preparation:0.1.0": "sha256:3e7324fb4fbe560e1ab8a2f33550b207a72fe0dc1f1c36ec439280adb20b5898",
+    "lawyer-assistant-analysis-test:pdf-intake": "sha256:abdb046b71bc6d41b7f2bf45cc79c3c6eb9f6ad2d44a25e7f69a3a2954fe3865",
+    "lawyer-assistant-scanner:1.4.6": "sha256:f5e27bb0523b586350f123763246debbfef9b18e7c6f50f0fde76b1ac7582222"
+  },
+  "qualification": {
+    "actual_pdf_original_acquired": false,
+    "actual_pdf_fidelity_reviewed": false,
+    "actual_human_reviews_recorded": false,
+    "source_linked_reference_authored": false,
+    "legal_corpus_qualified": false,
+    "current_law_qualified": false,
+    "national_ontology_qualified": false,
+    "study_qualified": false,
+    "pilot_qualified": false,
+    "deployed_application_changed": false,
+    "provider_or_environment_accessed": false,
+    "private_matter_data_accessed": false,
+    "source_publication_or_graph_mutation": false
+  },
+  "retained_actual_html_readback": [
+    {
+      "registry_id": "tbmm-6098-enacted",
+      "registry_version": "tbmm-enacted-2026-10-04-v1",
+      "raw_sha256": "0d34bafb03f799995266b0f6cf7ca551ea97643bf671de05388b3132c0d05b41",
+      "manifest_sha256": "dd0ad7f053ede321b8f5ce9773af02fbb1e44c01b5695e91a54f74d950b783c3",
+      "domain": "contracts",
+      "review_status": "legal_review_pending",
+      "rights_status": "rights_pending",
+      "unchanged": true
+    },
+    {
+      "registry_id": "tbmm-4857-enacted",
+      "registry_version": "tbmm-enacted-2026-10-11-v2",
+      "raw_sha256": "a5296326e224bcb50a7202fbac4e9e7c768abd023cc146bf03eb06e62a2d0a92",
+      "manifest_sha256": "ffbd4a40fb9706002ebd13fdf9b468df3c0546541f38a90d1d9c8ef4f4ffa937",
+      "domain": "employment",
+      "review_status": "legal_review_pending",
+      "rights_status": "rights_pending",
+      "unchanged": true
+    },
+    {
+      "registry_id": "tbmm-6103-enacted",
+      "registry_version": "tbmm-enacted-2026-10-11-v2",
+      "raw_sha256": "48eb54d51d71af9c9ee5751b7c6110d42593707776df867860a57bf887cce985",
+      "manifest_sha256": "463df5543f04566e6844867aa9b0ac060f4c4d466837a56399016d8e0e48900d",
+      "domain": "commercial",
+      "review_status": "legal_review_pending",
+      "rights_status": "rights_pending",
+      "unchanged": true
+    },
+    {
+      "registry_id": "tbmm-6101-enacted",
+      "registry_version": "tbmm-enacted-2026-10-04-v1",
+      "raw_sha256": "dbc85863a7a5b93aab7736b1fcf19d13180bbc6ecdb7252b619cc4c68d84b064",
+      "manifest_sha256": "293c2c47a3ca6cbbb553bce36f05eac54d50001156112df553cdf5cc4174ead5",
+      "domain": "contracts",
+      "review_status": "legal_review_pending",
+      "rights_status": "rights_pending",
+      "unchanged": true,
+      "artifact_location": "retained_prepared_original_and_acquisition_sidecar"
+    }
+  ]
+}

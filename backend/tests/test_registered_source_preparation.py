@@ -23,6 +23,7 @@ from app.registered_source_preparation import (
 )
 from app.source_gateway import (
     HISTORICAL_LIMITATION,
+    HTML_REGISTRY_VERSION,
     LEGACY_REGISTRY_VERSION,
     REGISTRY,
     REGISTRY_VERSION,
@@ -63,7 +64,7 @@ def scan_receipt(digest):
                 for name in ("main.cvd", "daily.cvd", "bytecode.cvd")]}}
 
 
-@pytest.mark.parametrize("source_id", tuple(REGISTRY))
+@pytest.mark.parametrize("source_id", [key for key, value in REGISTRY.items() if value.media_type == "text/html"])
 def test_each_registered_representation_stays_historical_and_pending(source_id):
     artifacts = prepare(acquisition(source_id=source_id))
     source = _json(artifacts["source.json"])
@@ -257,7 +258,8 @@ def offline_workers(tmp_path, monkeypatch):
 
 
 @pytest.mark.parametrize("source_id,version", [
-    *[(identifier, REGISTRY_VERSION) for identifier in REGISTRY],
+    *[(identifier, version) for identifier, source in REGISTRY.items() if source.media_type == "text/html"
+      for version in (HTML_REGISTRY_VERSION, REGISTRY_VERSION)],
     ("tbmm-6101-enacted", LEGACY_REGISTRY_VERSION), ("tbmm-6098-enacted", LEGACY_REGISTRY_VERSION),
 ])
 def test_preparation_is_importable_but_unapproved_and_source_is_unchanged(offline_workers, tmp_path,

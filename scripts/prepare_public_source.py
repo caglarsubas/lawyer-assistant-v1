@@ -18,16 +18,22 @@ sys.path.insert(0, str(ROOT / "backend"))
 
 from app.public_sources import _json, _validate  # noqa: E402
 from app.qualification_evidence import read_exact_directory  # noqa: E402
+from app.registered_pdf_transcription import (  # noqa: E402
+    ADAPTER_VERSION as PDF_ADAPTER_VERSION,
+)
+from app.registered_pdf_transcription import (  # noqa: E402
+    validate_pdf_report,
+)
 from app.registered_source_preparation import (  # noqa: E402
-    ACQUISITION_FILES,
     ADAPTER_VERSION,
     PREPARATION_FILES,
     PreparationError,
+    capture_acquisition,
     encode,
     sha,
     validate_acquisition,
 )
-from app.source_gateway import rename_new  # noqa: E402
+from app.source_gateway import registered, rename_new  # noqa: E402
 
 IMAGE = "lawyer-assistant-public-preparation:0.1.0"
 SCANNER_IMAGE = "lawyer-assistant-scanner:1.4.6"
@@ -39,16 +45,19 @@ import hashlib, json, subprocess, sys, time
 sys.path.insert(0, "/opt/scanner")
 from control import verify
 started = time.monotonic()
+if len(sys.argv) != 2 or sys.argv[1] not in ("raw.html", "raw.pdf"):
+    sys.exit(1)
+original = "/input/" + sys.argv[1]
 before = verify("/var/lib/clamav")
 result = subprocess.run([
     "clamscan", "--database=/var/lib/clamav", "--official-db-only=yes",
     "--max-filesize=20M", "--max-scansize=100M", "--max-recursion=12", "--max-files=5000",
     "--max-scantime=0", "--alert-exceeds-max=yes", "--alert-encrypted=yes",
-    "--alert-broken=yes", "--bytecode-unsigned=no", "--no-summary", "/input/raw.html"
+    "--alert-broken=yes", "--bytecode-unsigned=no", "--no-summary", original
 ], stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120)
 if result.returncode != 0 or verify("/var/lib/clamav") != before:
     sys.exit(1)
-raw = open("/input/raw.html", "rb").read(1048577)
+raw = open(original, "rb").read(1048577)
 if not 0 < len(raw) <= 1048576:
     sys.exit(1)
 print(json.dumps({"schema_version": "registered-source-scan-v1", "clean": True,
@@ -79,7 +88,9 @@ def image_id(tag):
     return value
 
 
-def worker_command(name, image, mounts, *, scanner=False):
+def worker_command(name, image, mounts, *, scanner=False, raw_filename="raw.html"):
+    if raw_filename not in ("raw.html", "raw.pdf"):
+        raise PreparationError("Unknown scan representation")
     # No application networks, ports, credentials, socket or private volumes.
     command = ["docker", "run", "--rm", "--name", name, "--pull", "never", "--network", "none",
                "--read-only", "--cap-drop", "ALL", "--security-opt", "no-new-privileges:true",
@@ -94,7 +105,7 @@ def worker_command(name, image, mounts, *, scanner=False):
     command += [image, "-i", "PATH=/app/backend/.venv/bin:/usr/sbin:/usr/bin:/bin",
                 "PYTHONDONTWRITEBYTECODE=1", "PYTHONUNBUFFERED=1", "LANG=C.UTF-8", "TZ=UTC", "LC_ALL=C"]
     if scanner:
-        return command + ["LA_SCANNER_MAX_SIGNATURE_AGE_DAYS=7", "python3", "-c", SCAN_CODE]
+        return command + ["LA_SCANNER_MAX_SIGNATURE_AGE_DAYS=7", "python3", "-c", SCAN_CODE, raw_filename]
     return command + ["/app/backend/.venv/bin/python", "-m", "app.registered_source_preparation",
                       "/input", "/output"]
 
@@ -110,10 +121,11 @@ def cleanup(name):
             time.sleep(0.1)
 
 
-def execute(image, mounts, *, scanner=False):
+def execute(image, mounts, *, scanner=False, raw_filename="raw.html"):
     name = "lawyer-public-preparation-" + uuid.uuid4().hex
     try:
-        return run(worker_command(name, image, mounts, scanner=scanner), timeout=180 if scanner else 45)
+        return run(worker_command(name, image, mounts, scanner=scanner, raw_filename=raw_filename),
+                   timeout=180 if scanner else 45)
     finally:
         cleanup(name)
 
@@ -162,8 +174,10 @@ def prepare_in_containers(acquisition, signatures, destination):
             or any(char in destination.name for char in ",\n\r")):
         raise PreparationError("Output must be a new directory")
     # Capture original input with exact inventory/no-follow/regular-file/recapture checks.
-    files = read_exact_directory(acquisition, ACQUISITION_FILES, sum(ACQUISITION_FILES.values()))
+    files = capture_acquisition(acquisition)
     manifest = validate_acquisition(files)
+    source = registered(manifest["registry_id"], registry_version=manifest["registry_version"])
+    adapter = PDF_ADAPTER_VERSION if source.media_type == "application/pdf" else ADAPTER_VERSION
     for name in ("main.cvd", "daily.cvd", "bytecode.cvd"):
         path = signatures / name
         if path.is_symlink() or not path.is_file() or path.stat().st_nlink != 1:
@@ -182,24 +196,27 @@ def prepare_in_containers(acquisition, signatures, destination):
             # our disposable snapshot/output, never the acquisition or CVD release.
             for path in [incoming, outgoing, *incoming.iterdir()]:
                 os.chown(path, 10001, os.getgid() or 10001)
+        scan_options = {"raw_filename": "raw.pdf"} if source.media_type == "application/pdf" else {}
         scan = _json(execute(scanner_image, [(incoming, "/input", True),
-                      (signatures, "/var/lib/clamav", True)], scanner=True))
+                      (signatures, "/var/lib/clamav", True)], scanner=True, **scan_options))
         validate_scan(scan, manifest["raw_sha256"])
-        if read_exact_directory(incoming, ACQUISITION_FILES, sum(ACQUISITION_FILES.values())) != files:
+        if capture_acquisition(incoming) != files:
             raise PreparationError("Captured source changed after scanning")
         execute(parser_image, [(incoming, "/input", True), (outgoing, "/output", False)])
         artifacts = read_exact_directory(outgoing, PREPARATION_FILES, sum(PREPARATION_FILES.values()))
         report = _json(artifacts["preparation.json"])
         if (not isinstance(report, dict)
-                or artifacts["raw.bin"] != files["raw.html"] or artifacts["acquisition.json"] != files["acquisition.json"]
+                or artifacts["raw.bin"] != files[source.raw_filename]
+                or artifacts["acquisition.json"] != files["acquisition.json"]
+                or report.get("registry_id") != manifest["registry_id"]
                 or report.get("raw_sha256") != manifest["raw_sha256"]
                 or report.get("text_sha256") != sha(artifacts["text.txt"])
-                or report.get("adapter_version") != ADAPTER_VERSION or report.get("current_consolidation") is not False
+                or report.get("adapter_version") != adapter or report.get("current_consolidation") is not False
                 or report.get("extraction_fidelity_verified") is not False
                 or report.get("source_identity_verified") is not False or report.get("sensitivity_reviewed") is not False
                 or report.get("rights_status") != "rights_pending" or report.get("review_status") != "legal_review_pending"):
             raise PreparationError("Prepared output does not match the captured source")
-        metadata, locators, _ = _validate({name: artifacts[name] for name in (
+        metadata, locators, text = _validate({name: artifacts[name] for name in (
             "raw.bin", "text.txt", "source.json", "locators.json")})
         if any(metadata[key] != manifest[key] for key in (
             "title", "source_url", "source_version_id", "acquired_at", "domain", "raw_media_type")):
@@ -208,10 +225,12 @@ def prepare_in_containers(acquisition, signatures, destination):
                 or type(report.get("passage_count")) is not int
                 or report.get("passage_count") != len(locators.passages)
                 or report.get("schema_version") != "registered-source-preparation-v1"
-                or report.get("representation") != "enacted_text"
+                or report.get("representation") != manifest["representation"]
                 or report.get("publication_status") != "prepared_for_staging"):
             raise PreparationError("Prepared review states or counts changed")
-        if read_exact_directory(acquisition, ACQUISITION_FILES, sum(ACQUISITION_FILES.values())) != files:
+        if source.media_type == "application/pdf":
+            validate_pdf_report(report, locators, text)
+        if capture_acquisition(acquisition) != files:
             raise PreparationError("Original acquisition changed during preparation")
         admission = {"schema_version": "registered-source-admission-v1", "registry_id": manifest["registry_id"],
                      "raw_sha256": manifest["raw_sha256"], "parser_image_id": parser_image,
