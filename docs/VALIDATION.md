@@ -1,5 +1,48 @@
 # Verification record — 11 October 2026
 
+## Retained source comparison — 11 October 2026
+
+PR #46 is verified merged into main at `cd813d8e44c3cc84aa258f2d77cda611afb93675`.
+All three exact post-merge jobs passed in run `38121156515`.
+This packet adds only curator-selected public passage comparison and reproducible
+mechanical evidence, with no identity merge, legal decision or source-review writes.
+
+- 115 native original/paired-source tests pass; 544 disconnected read-only,
+  unprivileged Linux source, preparation, original and review tests pass (47.70s).
+  All three changed backend code/test files match the tested image fingerprint.
+- 330 frontend tests in 33 files, TypeScript/production build, configured Ruff,
+  whitespace checks and 41 deployment contracts pass. CI still partitions all
+  3,768 backend cases exactly once, with the same workflow hash, existing jobs,
+  complete gates, retries and time/resource limits.
+- Both retained 6101 representations pass authenticated local HTTP comparison;
+  repeated canonical evidence and the actual browser JSON download have digest
+  `5ac16d2b94362e75d6e4211d9f23ef68fa45985cf97a425fca2c4f627e07a1cd`.
+  The selected windows are an engineering sample without provision alignment.
+  Both source review ledgers remain unassigned at revision 0, without assessments.
+- The disposable read-only production-build browser now loads without the former
+  local URL block. Both original PDF pages render using the real worker and page
+  switching clears the old view. The new comparison renders, downloads matching
+  bytes, and clears on passage change. Normal/expanded frames were inspected;
+  no console errors were observed and no browser security policy was overridden.
+  This bounded sample is not every browser/error/revocation scenario or target-host
+  acceptance, and does not establish original extraction fidelity or legal truth.
+
+The initial malformed local test invocation used the image's `/app/backend` working
+folder with repository-relative paths and ran no tests. The corrected `/app`
+invocation above completed. A native corruption fixture initially lacked permission
+for its deliberately read-only synthetic files; it now explicitly changes only
+that fixture's mode before tampering. The first deployment-contract invocation
+used system Python without Pydantic; the complete 41-case pass uses the repository
+runtime. No production permissions or dependencies were changed to make tests pass.
+
+See [comparison contract](SOURCE_COMPARISON.md) and the metadata-only
+[engineering receipt](evidence/retained-source-comparison-2026-10-11.json).
+Originals, comparison text, browser images and operational receipts stay outside
+Git. Candidate hosted checks remain pending until a single exact-head PR run.
+The deployed application, provider/`.env`, actual curator ledgers and serving graphs
+remain unchanged. Shared-work identity, independent references, witnessed paired
+studies and R01/R03/R05A legal qualification remain open.
+
 ## Original PDF page inspection and actual acquisition — 11 October 2026 (Asia/Shanghai)
 
 Base: PR #45 is merged at `05dd5b29f52f4918c0a4b8629cb6f77094c2f258`.

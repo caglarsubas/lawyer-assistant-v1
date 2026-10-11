@@ -18,6 +18,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, field_validator
 
 from .auth import authenticate
+from .source_comparison import (
+    MAX_COMPARISON_WINDOW,
+    SourceComparisonUnavailable,
+    compare_sources,
+)
 from .source_original_pdf import original_pdf_page
 from .source_original_text import (
     MAX_ORIGINAL_BYTES,
@@ -533,6 +538,39 @@ def public_sources_router():
         return Response(content=package.raw, media_type="application/octet-stream", headers={
             "Content-Disposition": f'attachment; filename="public-source-{identifier[:16]}.bin"',
             "X-Content-Type-Options": "nosniff", "Cache-Control": "no-store",
+            "Content-Security-Policy": "sandbox; default-src 'none'; frame-ancestors 'none'",
+        })
+
+    @router.get("/{identifier}/comparison")
+    def comparison(identifier: str, request: Request,
+                   other_source_id: str = Query(pattern=r"^[0-9a-f]{64}$"),
+                   passage_id: str = Query(pattern=r"^[A-Za-z][A-Za-z0-9_-]{0,79}$"),
+                   other_passage_id: str = Query(pattern=r"^[A-Za-z][A-Za-z0-9_-]{0,79}$"),
+                   offset: int = Query(default=0, ge=0, le=20000),
+                   other_offset: int = Query(default=0, ge=0, le=20000),
+                   limit: int = Query(default=MAX_COMPARISON_WINDOW, ge=1, le=MAX_COMPARISON_WINDOW),
+                   user=Depends(authorize)):
+        if not SHA256.fullmatch(identifier):
+            raise HTTPException(404, "Kaynak hazırlama kaydı bulunamadı")
+        if identifier == other_source_id:
+            raise HTTPException(422, "İki farklı kaynak paketi seçin")
+        try:
+            catalog = store(request)
+            left = catalog.verified_package(identifier)
+            reauthorize(request, user)
+            right = catalog.verified_package(other_source_id)
+            reauthorize(request, user)
+            result = compare_sources(left, right, passage_id=passage_id, other_passage_id=other_passage_id,
+                                     offset=offset, other_offset=other_offset, limit=limit)
+        except SourceComparisonUnavailable:
+            raise HTTPException(422, "Seçili pasaj veya karşılaştırma aralığı kullanılamıyor") from None
+        except (PublicSourceError, OSError):
+            raise HTTPException(409, "Kaynak paketlerinden biri yok veya bütünlük denetimi başarısız") from None
+        evidence = _canonical(result)
+        reauthorize(request, user)
+        return Response(content=_canonical({'evidence_json': evidence.decode('utf-8'),
+                                            'evidence_sha256': _hash(evidence)}), media_type="application/json", headers={
+            "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff",
             "Content-Security-Policy": "sandbox; default-src 'none'; frame-ancestors 'none'",
         })
 

@@ -25,6 +25,10 @@ retrieval. An absent review has revision0 and no owner; GET does not create it.
 - `GET /original-pdf?passage_id=pdf_page_0001`: integrity-checked page binding for
   a complete text-only PDF map. Original bytes still use the separate opaque
   attachment endpoint. See the PDF inspection boundaries below.
+- `GET /comparison?other_source_id=<package-sha256>&passage_id=<id>&other_passage_id=<id>`:
+  bounded literal comparison with a separately verified retained source. Choose
+  both passages explicitly; no legal identity or version is resolved. See the
+  [comparison and evidence contract](SOURCE_COMPARISON.md).
 - `GET /review`: response shape below, last50 events, explicit history_truncated.
 - `POST /review/assignment`: `{expected_revision, action:"claim"|"release", rationale}`.
   A reviewer claims an unassigned source; reviews require that ownership. Only the
