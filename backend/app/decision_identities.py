@@ -294,6 +294,7 @@ def mutate(request, source_id, body, user):
 
 
 def decision_identities_router():
+    from .decision_graph_handoff import HandoffInput, build_handoff
     router = APIRouter(prefix="/api/v1/public-sources", tags=["decision-identity"])
 
     def authorize(request: Request):
@@ -323,5 +324,9 @@ def decision_identities_router():
     @router.post("/{source_id}/decision-identities/review")
     def review(source_id: str, body: ReviewInput, request: Request, user=Depends(authorize)):
         return mutate(request, source_id, body, user)
+
+    @router.post("/{source_id}/decision-identities/graph-b-handoff")
+    def handoff(source_id: str, body: HandoffInput, request: Request, user=Depends(authorize)):
+        return build_handoff(request, source_id, body, user)
 
     return router
