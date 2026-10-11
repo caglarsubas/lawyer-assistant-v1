@@ -1849,3 +1849,25 @@ and clears or cancels old views on navigation/access changes. See
 Next packet: complete, revision-bound confidential decision-review dossiers and
 handoff consistency checks. Independent legal/privacy/fidelity review of acquired
 decisions, Graph B population and national/pilot qualification remain open.
+
+## Delivered R03 packet — confidential decision review dossiers (11 October 2026)
+
+PR #52 is verified merged at `9798987199ef49e49f2c630765bc0a1730bd6a37`;
+all three exact-head checks passed in `38138989212`, and all three post-merge main
+jobs passed in `38140262894`. The successor packet provides complete, revision-bound
+firm-confidential dossiers: source and mapping histories, exact supporting passages,
+accountable reviewers and original artifact hashes. Explicit accepted export rights
+gate download. Draft evidence remains exportable for review without implying source
+qualification; stale, corrupt, incomplete or oversized output is withheld entirely.
+
+Literal identity/date/number conflicts and unresolved mappings block independent
+review readiness. These checks neither resolve canonical identities nor prove legal
+effect. Browser session scope now includes firm and role even when permissions are
+unchanged, clearing private portfolio/source views on transitions. See
+[decision mapping contract](DECISION_MAPPING.md), [validation](VALIDATION.md) and
+[engineering receipt](evidence/decision-dossier-2026-10-11.json).
+
+Next packet: canonical proceeding/decision/institution identity proposals with
+independent review and a staged Graph B handoff. No automatic promotion from the
+firm-private ledger. Real source acquisition, fidelity/privacy/legal review,
+historical-version resolution, graph qualification and pilot gates remain open.

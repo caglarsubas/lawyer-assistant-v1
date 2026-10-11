@@ -66,5 +66,41 @@ exact Unicode slices and stable candidate identities before display.
 source reviews are ready. It is not legal qualification, corpus completeness,
 permission to export, independent release review or graph-publication eligibility.
 The source stays staged and `publication_eligible` is always false. No deployment or
-serving-release change accompanies this packet. Next: a revision-bound confidential
-review dossier with complete evidence/history and independent handoff checks.
+serving-release change accompanies this packet.
+
+## Complete confidential review dossier
+
+`POST /api/v1/public-sources/{id}/decision-mappings/dossier` takes both expected
+revisions and requires current curator authorization, CSRF and accepted rights with
+explicit `local_processing`, `internal_display` and `export` scopes. It is a read
+operation: it does not append a review, approve a source or publish a graph. Authorized
+curators may export a draft while other reviews are pending; draft status remains
+explicit. Export does not require source ownership, which still gates review writes.
+
+The exact JSON contains firm/exporter identity, acquisition hashes, current source
+assessments, all source and mapping events (including events beyond the UI's latest
+50), and exact supporting passages with hashes and locators. Both histories are
+verified completely. Source row and identity locks, revision pins, a fresh artifact
+check and final reauthorization withhold stale or corrupted output. The 4 MiB limit
+withholds the complete dossier rather than returning partial history. The response
+contains SHA256 over its exact bytes; this integrity digest is not a signature.
+
+Handoff checks compare only literal reviewer-declared decision references. Conflicting
+proceeding/institution references, same-kind numbers or same-role dates for one
+declared decision retain alternative values and contributing mapping IDs. They do not
+merge equivalent identities, infer legal effects or find every legal inconsistency.
+Independent-review readiness additionally requires current accepted source/mapping
+reviews, a reviewed self-identity and no unresolved mapping or literal identity
+conflict. Canonical identity resolution, verified legal effect and publication
+eligibility remain false even when this engineering handoff check passes.
+
+The browser verifies envelope, firm, exporter, source/version/artifact bindings,
+revisions, complete ordered histories and supporting passage hashes before creating
+an inert JSON download. It revokes temporary URLs and cancels old operations on
+access loss or navigation. Session refresh compares user, firm, role and permissions;
+the portfolio and private source workspaces reset when any access scope changes.
+Already downloaded files require the firm's local document controls.
+
+Next: independently reviewed canonical decision/proceeding/institution resolution
+and a staged Graph B handoff contract, retaining unresolved references and explicit
+legal/privacy/fidelity release gates.

@@ -1,5 +1,34 @@
 # Verification record — 11 October 2026
 
+## Complete decision review dossier — 11 October 2026
+
+Based on PR #52's verified merged main at `9798987199ef49e49f2c630765bc0a1730bd6a37`.
+Its exact-head run `38138989212` and post-merge main run `38140262894` passed all
+three required jobs. Dossier validation uses disposable synthetic data only.
+
+- 39 disconnected Linux decision/dossier cases pass (12.32s). Coverage includes
+  complete histories beyond display truncation, old-event tampering, source changes
+  during export, explicit export rights, dual revisions, firm/role/CSRF boundaries,
+  no partial oversized output and preservation of disagreements. Three real
+  PostgreSQL races/lock waits pass (3.14s), including export waiting for source
+  review changes. Containers are unprivileged, read-only and resource bounded;
+  PostgreSQL uses a dedicated internal network and disposable child databases.
+- Production frontend build and 408 tests across 37 files pass, including envelope,
+  source/version/hash/Unicode validation, cancellation, escaped conflict display
+  and firm/role/permission session boundaries. The disposable Docker browser QA
+  performed an explicitly synthetic rights assessment and downloaded the actual
+  9,604-byte JSON. Both two-event histories and one supporting passage were retained;
+  one unresolved mapping correctly blocked independent review. Identity, extraction
+  and legal reviews remained pending. This loopback browser QA is separate from
+  the disconnected test run, and no provider was configured.
+- 41 deployment contracts, complete Ruff and whitespace checks pass. All 3,922
+  backend cases remain assigned exactly once in the unchanged CI partitions.
+  Workflow, dependency, runner, retry and deadline settings are unchanged. Hosted
+  speedup or billing savings are not established by these local results.
+- No real source/legal review, canonical identity resolution, Graph B publication,
+  deployment or serving-release qualification occurred. The registered AYM source
+  remains unacquired; its earlier DNS failure was not retried in this packet.
+
 
 ## Curator decision mapping — 11 October 2026
 

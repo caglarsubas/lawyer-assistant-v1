@@ -404,3 +404,22 @@ def test_decision_writer_rechecks_source_revision_after_lock_wait(postgres_sourc
     from app.decision_mapping_models import DecisionMappingHead
     with app.state.store.session() as session:
         assert session.scalar(select(DecisionMappingHead)) is None
+
+
+def test_decision_dossier_waits_for_source_then_withholds_stale_pin(postgres_sources):
+    app, sources, _, _ = postgres_sources
+    client, base, _ = _decision_proposal(postgres_sources)
+    identifier = sources[0][3]
+    with app.state.store.session() as blocker:
+        head = blocker.scalar(select(SourceReviewHead).where(SourceReviewHead.source_id == identifier).with_for_update())
+        with observe_identity_lock(app.state.store.engine, statement_fragment="FROM source_review_heads") as (attempted, pids):
+            with ThreadPoolExecutor(1) as pool:
+                future = pool.submit(client.post, base + "/dossier", json={
+                    "expected_revision": 0, "expected_source_review_revision": 5})
+                assert attempted.wait(timeout=5)
+                wait_until_blocked(app.state.store.engine, pids[-1])
+                assert not future.done()
+                head.revision += 1  # Deliberately inconsistent synthetic ledger; no response after the wait.
+                blocker.commit()
+                response = future.result(timeout=10)
+    assert response.status_code == 409 and "evidence_json" not in response.json()

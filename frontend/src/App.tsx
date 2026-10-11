@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useState, type FormEvent } from 'react';
 import { ApiError, onUnauthorized, post, request, setCsrfToken } from './api';
 import { Icon, Loading, Mark, Notice } from './components';
 import type { Bootstrap, Session, SystemStatus } from './types';
-import { monitorSession } from './sessionMonitor';
+import { monitorSession, sessionPrincipalKey } from './sessionMonitor';
 import { messageOf } from './utils';
 const WorkQueuePage = lazy(() => import('./pages/WorkQueuePage'));
 const FirmAdminPage = lazy(() => import('./pages/FirmAdminPage'));
@@ -53,7 +53,7 @@ export default function App() {
     if (!session) return;
     return monitorSession(value => {
       setCsrfToken(value.csrf_token);
-      if (value.user.id !== session.user.id || JSON.stringify(value.user.permissions) !== JSON.stringify(session.user.permissions)) setSession(value);
+      if (sessionPrincipalKey(value.user) !== sessionPrincipalKey(session.user) || value.user.name !== session.user.name) setSession(value);
       setCheckingAccess(false);
     }, cause => {
       setSession(null); setStatus(null); setCsrfToken(''); setCheckingAccess(false);
@@ -72,7 +72,7 @@ export default function App() {
   const matterId = ['matters', 'workspaces'].includes(page) && pathname.split('/')[2] ? decodeURIComponent(pathname.split('/')[2]) : null;
   const params = new URLSearchParams(query);
   const section = params.get('tab') || 'overview';
-  return <PortfolioProvider key={session.user.id} enabled={!session.user.permissions || session.user.permissions.includes('portfolio.read')}><Workbench session={session} signingOut={signingOut} onSignOut={signOut} page={page} workspaceId={matterId} section={section} demo={Boolean(status?.demo_mode || session.demo_mode)}>
+  return <PortfolioProvider key={sessionPrincipalKey(session.user)} enabled={!session.user.permissions || session.user.permissions.includes('portfolio.read')}><Workbench session={session} signingOut={signingOut} onSignOut={signOut} page={page} workspaceId={matterId} section={section} demo={Boolean(status?.demo_mode || session.demo_mode)}>
     {error && <Notice error>{error}</Notice>}
     {matterId ? <MatterPage key={matterId} matterId={matterId} tab={section} selectedDocumentId={params.get('document')} selectedWorkId={params.get('work')} userRole={session.user.role} permissions={session.user.permissions} demo={Boolean(status?.demo_mode || session.demo_mode)} /> : page === 'sources' ? pathname.split('/')[3] === 'compare' ? <Suspense fallback={<Loading label="Kaynak karşılaştırması yükleniyor…" />}><SourceComparisonPage sourceId={pathname.split('/')[2] || ''} user={session.user} otherSourceId={params.get('other_source_id') || ''} /></Suspense> : pathname.split('/')[3] === 'decisions' ? <Suspense fallback={<Loading label="Karar incelemesi yükleniyor…" />}><DecisionMappingPage sourceId={pathname.split('/')[2] || ''} user={session.user} /></Suspense> : pathname.split('/')[3] === 'provisions' ? <ProvisionMappingPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : <SourceReviewPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : page === 'firm-admin' ? <Suspense fallback={<Loading label="Büro yönetimi yükleniyor…" />}><FirmAdminPage /></Suspense> : page === 'work' ? <Suspense fallback={<Loading />}><WorkQueuePage /></Suspense> : page === 'customers' ? <CustomersPage /> : page === 'graphs' ? <GraphPage /> : page === 'coverage' ? <CoveragePage /> : page === 'system' ? <SystemPage status={status} onStatus={setStatus} /> : <MattersPage newRequested={params.get('new') === '1'} />}
   </Workbench></PortfolioProvider>;

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { monitorSession } from './sessionMonitor';
+import { monitorSession, sessionPrincipalKey } from './sessionMonitor';
 
 const value = { user: { id: 'u1', name: 'Synthetic', role: 'lawyer', firm_id: 'f1', permissions: ['matter.read'] }, csrf_token: 'synthetic-csrf' };
 describe('open-view session freshness', () => {
@@ -33,5 +33,22 @@ describe('open-view session freshness', () => {
     await vi.advanceTimersByTimeAsync(4000); expect(lost).toHaveBeenCalledOnce();
     windowEvents.dispatchEvent(new Event('focus')); stop(); stop = undefined; await vi.advanceTimersByTimeAsync(0);
     expect(lost).toHaveBeenCalledOnce();
+  });
+});
+
+
+describe('private session principal boundaries', () => {
+  const user = { id: 'same-user', firm_id: 'first-firm', role: 'curator', name: 'Synthetic reviewer', permissions: ['source.curate', 'matter.read'] };
+  it('changes on firm or role transitions even when permissions stay equal', () => {
+    expect(sessionPrincipalKey(user)).not.toBe(sessionPrincipalKey({ ...user, firm_id: 'second-firm' }));
+    expect(sessionPrincipalKey(user)).not.toBe(sessionPrincipalKey({ ...user, role: 'lawyer' }));
+  });
+  it('distinguishes missing permission information from explicit denial', () => {
+    expect(sessionPrincipalKey({ ...user, permissions: undefined })).not.toBe(sessionPrincipalKey({ ...user, permissions: [] }));
+  });
+  it('keeps permission ordering and display-name changes outside the access boundary', () => {
+    const permissions = [...user.permissions].reverse();
+    expect(sessionPrincipalKey(user)).toBe(sessionPrincipalKey({ ...user, name: 'Updated display', permissions }));
+    expect(permissions).toEqual(['matter.read', 'source.curate']);
   });
 });

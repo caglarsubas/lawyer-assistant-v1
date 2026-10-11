@@ -133,6 +133,9 @@ def _source_review(store, session, package, firm_id, *, lock=False):
     head = session.scalar(select(SourceReviewHead).where(
         SourceReviewHead.firm_id == firm_id, SourceReviewHead.source_id == package.detail["id"]))
     assessments = reviews._projection(store, head, package)["assessments"]
+    rights = assessments.get("rights", {})
+    result["export_allowed"] = rights.get("decision") == "accepted" and {
+        "local_processing", "internal_display", "export"}.issubset(rights.get("permitted_uses", []))
     result["reviewed_passage_ids"] = sorted(assessments.get("extraction", {}).get("passage_ids", []))
     return result
 
@@ -248,7 +251,7 @@ def _state(package, revision, source_review, projection, history):
         stale = snapshot["status"] == "accepted" and snapshot["reviewed_source_revision"] != source_review["revision"]
         items.append({"id": identifier, **snapshot, "stale": stale, "last_event": event})
     return {"source": package.detail, "revision": revision, "source_review_revision": source_review["revision"],
-            "assigned_to": source_review["assigned_to"], "source_review_ready": source_review["ready"], "items": items,
+            "assigned_to": source_review["assigned_to"], "source_review_ready": source_review["ready"], "export_allowed": source_review["export_allowed"], "items": items,
             "history": history, "history_truncated": revision > len(history),
             "handoff_ready": bool(items) and source_review["ready"] and all(
                 item["status"] == "accepted" and not item["stale"] for item in items),
@@ -374,5 +377,17 @@ def decision_mappings_router():
     @router.post("/{source_id}/decision-mappings/{mapping_id}/review")
     def review(source_id: str, mapping_id: str, body: ReviewInput, request: Request, user=Depends(authorize)):
         return _mutate(request, source_id, body, user, mapping_id)
+
+    from .decision_dossier import DossierInput, build_dossier
+
+    @router.post("/{source_id}/decision-mappings/dossier")
+    def dossier(source_id: str, body: DossierInput, request: Request, user=Depends(authorize)):
+        from .public_sources import PublicSourceError
+        try:
+            result = build_dossier(request, source_id, body, user)
+        except (PublicSourceError, OSError):
+            raise HTTPException(409, "Kaynak bütünlüğü dışa aktarma sırasında doğrulanamadı") from None
+        reviews._authorize(request, user)
+        return result
 
     return router
