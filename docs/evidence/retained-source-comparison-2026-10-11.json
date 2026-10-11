@@ -1,0 +1,163 @@
+{
+  "schema_version": "retained-source-comparison-engineering-v1",
+  "recorded_on": "2026-10-11",
+  "scope": "engineering_sample_not_legal_or_study_qualification",
+  "base_main": {
+    "sha": "cd813d8e44c3cc84aa258f2d77cda611afb93675",
+    "pr": 46,
+    "merge_verified": true,
+    "hosted_run": 38121156515,
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "actual_public_sample": {
+    "scope": "actual_retained_public_source_http_comparison_no_human_review",
+    "source_ids": [
+      "5e9676d291388c0220a304ede024c31ed72988913034a120e91dbffe9c261b60",
+      "98759ad5dd8511ceb41cff0f2b7c269516dc63b8c5115392955c86ab21c9825c"
+    ],
+    "evidence_sha256": "5ac16d2b94362e75d6e4211d9f23ef68fa45985cf97a425fca2c4f627e07a1cd",
+    "repeated_response_equal": true,
+    "window_selection": "explicit_engineering_sample_not_legal_alignment",
+    "windows": [
+      {
+        "source_id": "5e9676d291388c0220a304ede024c31ed72988913034a120e91dbffe9c261b60",
+        "passage_id": "pdf_page_0001",
+        "start": 0,
+        "end": 2000,
+        "window_sha256": "a116a9669acb2e8e3de9eb90c27c50b50f3e4116596071530700e0dba80563bd"
+      },
+      {
+        "source_id": "98759ad5dd8511ceb41cff0f2b7c269516dc63b8c5115392955c86ab21c9825c",
+        "passage_id": "html_block_0002",
+        "start": 141,
+        "end": 207,
+        "window_sha256": "2ce3ddd6f575e7fba719855329aeacac6b4d4efde8d88d861d1a4a82c49cf675"
+      }
+    ],
+    "extracted_text_equal": false,
+    "raw_bytes_equal": false,
+    "legal_identity_status": "unresolved",
+    "legal_version_status": "unresolved",
+    "independent_originals_verified": false,
+    "human_review_recorded": false,
+    "reviews": [
+      {
+        "source_id": "5e9676d291388c0220a304ede024c31ed72988913034a120e91dbffe9c261b60",
+        "revision": 0,
+        "assigned_to": null,
+        "assessments": 0,
+        "history": 0
+      },
+      {
+        "source_id": "98759ad5dd8511ceb41cff0f2b7c269516dc63b8c5115392955c86ab21c9825c",
+        "revision": 0,
+        "assigned_to": null,
+        "assessments": 0,
+        "history": 0
+      }
+    ],
+    "provider_used": false,
+    "new_acquisition": false
+  },
+  "browser_sample": {
+    "scope": "read_only_disposable_browser_engineering_not_legal_acceptance",
+    "original_pdf_pages_rendered": [
+      1,
+      2
+    ],
+    "pdf_page_switch_clears_previous_view": true,
+    "source_comparison_rendered": true,
+    "fresh_json_download_sha256": "5ac16d2b94362e75d6e4211d9f23ef68fa45985cf97a425fca2c4f627e07a1cd",
+    "download_bytes_match_http_receipt": true,
+    "selection_change_clears_result": true,
+    "expanded_working_frame_two_columns": true,
+    "normal_workbench_stacks_comparison": true,
+    "console_errors": 0,
+    "policy_override": false,
+    "provider_used": false,
+    "review_writes": 0,
+    "target_host_acceptance": false,
+    "legal_identity_reviewed": false,
+    "extraction_fidelity_reviewed": false
+  },
+  "local_validation": {
+    "native_original_and_comparison_tests": 115,
+    "linux_source_preparation_and_review_tests": 544,
+    "frontend_tests": 330,
+    "deployment_contracts": 41,
+    "frontend_build": "passed",
+    "configured_ruff": "passed",
+    "ci_partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 3768,
+        "preflight": 89,
+        "remaining": 3390,
+        "publication": 132,
+        "workspace": 77,
+        "human_review": 60,
+        "model_trials": 20
+      },
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_open_validity_publication.py",
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py",
+        "backend/tests/test_source_reviews.py",
+        "backend/tests/test_source_review_effort.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_content_scope.py",
+        "backend/tests/test_authority_proposals.py",
+        "backend/tests/test_authority_model_cohorts.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_authority_trial_cohorts.py",
+        "backend/tests/test_analysis_cohorts.py",
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "b17af52f3c852e0aa73d5a87d773cad53bf8503a8409ef7106e8dda3fab659ab",
+      "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+      "no_new_runner_retry_or_deadline_change": true,
+      "workspace_workers": 2,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "linux_fingerprints": {
+      "image": "sha256:d74467aacceacd306d27d2fae2cd35901d0bfd0959f6dea2f48e701ad4123169",
+      "files": {
+        "backend/app/public_sources.py": "43f5deeb77b5b0ec7912132d589cce3c9104f8f9c5323abf69e307a6e5dbaeb7",
+        "backend/app/source_comparison.py": "1a3093d630f474e16917f680a49ce33a2f6fabec3e38c55ffb2dc0e11f7373f4",
+        "backend/tests/test_source_comparison.py": "865b1ef1e2383480cbfe1a46314781d263087fae514d9e939f202b79a33f77db"
+      },
+      "tested_files": {
+        "backend/app/public_sources.py": "43f5deeb77b5b0ec7912132d589cce3c9104f8f9c5323abf69e307a6e5dbaeb7",
+        "backend/app/source_comparison.py": "1a3093d630f474e16917f680a49ce33a2f6fabec3e38c55ffb2dc0e11f7373f4",
+        "backend/tests/test_source_comparison.py": "865b1ef1e2383480cbfe1a46314781d263087fae514d9e939f202b79a33f77db"
+      },
+      "match": true
+    }
+  },
+  "candidate_hosted_ci": "pending_after_push",
+  "deployed_app_changed": false,
+  "provider_or_env_changed": false,
+  "source_review_writes": false,
+  "serving_graph_changed": false,
+  "shared_work_identity_adjudicated": false,
+  "legal_qualification": false
+}

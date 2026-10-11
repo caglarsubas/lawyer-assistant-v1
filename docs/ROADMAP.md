@@ -1657,3 +1657,36 @@ identity of the two 6101 manifestations before independent reference/study selec
 Independently authored references, witnessed paired studies, RG/MBS current-law
 reconstruction, jurisprudence, national legal qualification, representative
 throughput, target-host capacity and pilot gates remain open.
+
+
+### Delivered packet — R01/R03 retained representation comparison, 11 October 2026
+
+PR #46 is verified merged into main at `cd813d8e44c3cc84aa258f2d77cda611afb93675`.
+Curators can now choose two retained packages, their exact passages and independent
+Unicode offsets to inspect bounded literal wording differences. Full original-byte,
+full extracted-text and selected-window equality remain separate. No normalization,
+provision alignment, identity merge, legal version, current authority or study
+independence is inferred. Reproducible unsigned JSON binds both complete artifact
+sets and exact windows; download freshly verifies the same digest and permissions.
+
+Both retained 6101 manifestations passed actual local HTTP/browser checks with no
+source-review writes. The downloaded record matches the repeatable HTTP receipt.
+Changing the selected passage clears the prior result. The previous local browser
+block did not occur in this invocation; original PDF pages 1 and 2 now render in
+an actual worker and switch cleanly. Normal and expanded comparison layouts were
+inspected. This is bounded engineering acceptance, not qualified source fidelity,
+shared-work adjudication or target-host/pilot acceptance. Both actual source ledgers
+remain unassigned at revision 0 with no assessments.
+
+See [comparison and handoff contract](SOURCE_COMPARISON.md), [verification](VALIDATION.md)
+and [receipt](evidence/retained-source-comparison-2026-10-11.json). Manual PR merge
+and exact-head hosted checks are required; no deployment, provider, matter, actual
+human-review or serving-graph changes occur. CI jobs, complete gates and existing
+limits are retained, with all 3,768 backend cases assigned exactly once.
+
+Next: qualified curators use original inspection and retained comparison evidence
+to adjudicate the 6101 shared work/version and review all acquired sources, retaining
+actual effort and disagreements. Source assessments remain individual dossiers;
+this tool grants no cross-source registry or independent-study qualification.
+Independently authored references, witnessed paired studies, diverse RG/MBS and
+judicial acquisition, reviewed history and national/pilot legal gates remain open.
