@@ -79,6 +79,12 @@ export interface PublicSourcePassages {
   source_id: string; source_version_id: string; raw_sha256: string; text_sha256: string;
   offset_unit: 'unicode_code_points'; items: PublicSourcePassage[]; total: number; next_offset: number | null; integrity_scope: string;
 }
+export interface PublicSourceOriginalPdf {
+  source_id: string; source_version_id: string; passage_id: string;
+  raw_sha256: string; text_sha256: string; raw_bytes: number; raw_media_type: 'application/pdf';
+  page: number; page_count: number; integrity_scope: 'all_artifacts_verified';
+  locator_coordinate_status: 'consistent_not_fidelity_reviewed'; extraction_fidelity_verified: false;
+}
 export interface GraphServingRelease {
   status: 'unconfigured' | 'verified' | 'unavailable';
   release_id?: string; ontology_sha256?: string; legal_review_verified?: boolean; reason?: string;

@@ -1625,3 +1625,35 @@ Continue actual review of the four TBMM originals, independently author referenc
 and run witnessed paired studies. Two representations of 6101 are not two independent
 study originals. RG/MBS current-law reconstruction, jurisprudence, national legal
 qualification, representative throughput, target-host capacity and pilot gates stay open.
+
+### Delivered packet — R01/R03 original PDF inspection and actual sample, 11 October 2026
+
+PR #45 is verified merged into main at `05dd5b29f52f4918c0a4b8629cb6f77094c2f258`.
+The curator workspace now offers an original PDF page comparison beside extracted
+text. A typed read-only binding checks the complete page map without server-side
+PDF parsing. The browser bounds and hashes the authenticated opaque attachment,
+requires a dedicated local worker, checks parsed page count and draws only the
+selected page with bounded canvas/zoom and cancellation. Existing HTML inspection,
+independent download, selection and accountable review remain separate.
+
+The existing fixed Ministry 6101 route also succeeded in one new invocation, without
+network-policy, DNS, proxy or deadline changes. Its 218,901 original bytes passed
+mandatory signature-verified disconnected scanning and the pinned parser, yielding
+two exact page passages. Only a separate host public staging catalog is imported;
+actual HTTP readback finds no owner, revision 0 and no assessments. Both retained
+original pages were rendered and visually inspected with Poppler; that is not
+qualified transcription or legal review. Browser automation was blocked at the
+local verification URL, so end-to-end viewer/lifecycle acceptance remains open.
+
+See the [inspection contract](SOURCE_REVIEW_CONTRACT.md#original-pdf-page-inspection),
+[verification](VALIDATION.md) and [public engineering receipt](evidence/pdf-original-inspection-2026-10-11.json).
+Manual PR merge and exact-head hosted checks are required. The deployed application,
+provider, private matters, actual curator records and serving graphs are unchanged.
+
+Next: complete browser acceptance, then qualified curators compare every original
+PDF page and the four TBMM originals, recording actual effort and evidence of
+identity/version, rights, sensitivity and fidelity. Adjudicate the shared-work
+identity of the two 6101 manifestations before independent reference/study selection.
+Independently authored references, witnessed paired studies, RG/MBS current-law
+reconstruction, jurisprudence, national legal qualification, representative
+throughput, target-host capacity and pilot gates remain open.
