@@ -86,6 +86,7 @@ from .scanner import MalwareDetected, ScannerUnavailable, scan_document
 from .search import PublicSearchService
 from .source_relationships import source_relationships_router
 from .source_reviews import source_reviews_router
+from .source_selection import source_selection_router
 
 
 class Input(BaseModel):
@@ -329,6 +330,7 @@ def create_app(settings=None):
     app.include_router(public_sources_router())
     app.include_router(source_reviews_router())
     app.include_router(source_relationships_router())
+    app.include_router(source_selection_router())
     app.include_router(provision_mappings_router())
 
     @app.exception_handler(RequestValidationError)

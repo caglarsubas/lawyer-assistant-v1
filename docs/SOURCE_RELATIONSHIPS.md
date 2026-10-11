@@ -85,6 +85,11 @@ The two additive SQL tables use the existing initialization and encrypted store;
 they neither rewrite old review events nor change old source/preparation manifests.
 Qualification and publication tools do not consume these opinions automatically.
 
+The [source-selection handoff](SOURCE_SELECTION.md) reads current direct opinions
+for two to six explicitly selected packages, shows missing/stale edges and conflicting
+identity declarations, and exports a freshly checked confidential snapshot. It does
+not merge identities or qualify independent study originals.
+
 ## Qualification boundary
 
 The engineering suite and disposable browser use invented identity, support and
