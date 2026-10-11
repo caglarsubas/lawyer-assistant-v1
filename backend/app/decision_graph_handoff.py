@@ -48,6 +48,33 @@ def _passage_references(package, captured, event):
     return [p for p in package.locators.passages if p.id in result]
 
 
+def source_evidence(graph, package, passages, locator_raw, *, compiler_version=VERSION, scoped_artifact=False):
+    artifact = URIRef("urn:la:source:" + (digest(canonical([package.detail["id"], package.locators.raw_sha256, compiler_version])) if scoped_artifact else package.locators.raw_sha256))
+    representation = URIRef("urn:la:representation:" + digest(canonical([
+        package.detail["id"], package.locators.text_sha256, digest(locator_raw), compiler_version])))
+    for node, kind in ((artifact, LA.SourceArtifact), (representation, LA.SourceRepresentation)):
+        graph.add((node, RDF.type, kind))
+        graph.add((node, LA.scope, Literal("public")))
+        graph.add((node, LA.synthetic, Literal(False)))
+    for key, value in ((LA.contentHash, Literal(package.locators.raw_sha256)), (LA.rightsStatus, Literal("permitted")),
+                       (LA.fetchedAt, Literal(package.metadata.acquired_at, datatype=XSD.dateTime))):
+        graph.add((artifact, key, value))
+    for key, value in ((LA.artifact, artifact), (LA.contentHash, Literal(package.locators.text_sha256)),
+                       (LA.locatorMapHash, Literal(digest(locator_raw))),
+                       (LA.extractionMethod, Literal("verified_public_source_locator_conversion")), (LA.extractorVersion, Literal(compiler_version))):
+        graph.add((representation, key, value))
+    evidence = []
+    for passage in passages:
+        node = URIRef("urn:la:passage:" + digest(canonical([package.detail["id"], passage.id, passage.start, passage.end] + ([compiler_version] if scoped_artifact else []))))
+        evidence.append(node)
+        for key, value in ((RDF.type, LA.EvidencePassage), (LA.scope, Literal("public")), (LA.artifact, artifact),
+                           (LA.textRepresentation, representation), (LA.startOffset, Literal(passage.start, datatype=XSD.integer)),
+                           (LA.endOffset, Literal(passage.end, datatype=XSD.integer)), (LA.locator, Literal(passage.locator)),
+                           (LA.quotedText, Literal(package.text[passage.start:passage.end]))):
+            graph.add((node, key, value))
+    return evidence
+
+
 def _rdf(package, event, passages, locator_raw):
     graph = Graph()
     proposal = event["proposal"]
@@ -58,29 +85,7 @@ def _rdf(package, event, passages, locator_raw):
                        (institution, LA.Institution), (version, LA.DecisionVersion)):
         graph.add((node, RDF.type, kind))
         graph.add((node, LA.scope, Literal("public")))
-    artifact = URIRef("urn:la:source:" + package.locators.raw_sha256)
-    representation = URIRef("urn:la:representation:" + digest(canonical([
-        package.detail["id"], package.locators.text_sha256, digest(locator_raw), VERSION])))
-    for node, kind in ((artifact, LA.SourceArtifact), (representation, LA.SourceRepresentation)):
-        graph.add((node, RDF.type, kind))
-        graph.add((node, LA.scope, Literal("public")))
-        graph.add((node, LA.synthetic, Literal(False)))
-    for key, value in ((LA.contentHash, Literal(package.locators.raw_sha256)), (LA.rightsStatus, Literal("permitted")),
-                       (LA.fetchedAt, Literal(package.metadata.acquired_at, datatype=XSD.dateTime))):
-        graph.add((artifact, key, value))
-    for key, value in ((LA.artifact, artifact), (LA.contentHash, Literal(package.locators.text_sha256)),
-                       (LA.locatorMapHash, Literal(digest(locator_raw))),
-                       (LA.extractionMethod, Literal("verified_public_source_locator_conversion")), (LA.extractorVersion, Literal(VERSION))):
-        graph.add((representation, key, value))
-    evidence = []
-    for passage in passages:
-        node = URIRef("urn:la:passage:" + digest(canonical([package.detail["id"], passage.id, passage.start, passage.end])))
-        evidence.append(node)
-        for key, value in ((RDF.type, LA.EvidencePassage), (LA.scope, Literal("public")), (LA.artifact, artifact),
-                           (LA.textRepresentation, representation), (LA.startOffset, Literal(passage.start, datatype=XSD.integer)),
-                           (LA.endOffset, Literal(passage.end, datatype=XSD.integer)), (LA.locator, Literal(passage.locator)),
-                           (LA.quotedText, Literal(package.text[passage.start:passage.end]))):
-            graph.add((node, key, value))
+    evidence = source_evidence(graph, package, passages, locator_raw)
     for predicate, obj in ((LA.decidedIn, proceeding), (LA.issuedBy, institution), (LA.hasDecisionVersion, version)):
         assertion = URIRef("urn:la:decision-assertion-proposal:" + digest(canonical([
             str(decision), str(predicate), str(obj), proposal["snapshot_sha256"], event["id"], VERSION])))

@@ -91,3 +91,8 @@ private Graph B preparation artifact. Its RDF relationships must remain unreview
 with unknown validity and a publication-blocking marker. It must not promote reviewer
 identities, opinions, source-selection links or an unqualified equivalence to shared
 graphs, and must not manufacture ontology/assertion approval or signing credentials.
+
+The [multi-source staged handoff](EQUIVALENCE_GRAPH_B_HANDOFF.md) now exports a
+current accepted same-decision proposal with all three original source packages
+and complete histories. It preserves reservations and institution limitations;
+no global resolver or publication authority is conferred.

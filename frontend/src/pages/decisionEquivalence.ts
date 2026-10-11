@@ -14,7 +14,7 @@ export interface EquivalenceState {
   decision_source_ids: string[]; register_source_id: string; sources: Record<string, PublicSourceDetail>;
   decisions: Record<string, DecisionSummary | null>;
   revision: number; pins: EquivalencePins; current: EquivalenceEvent | null; history: EquivalenceEvent[]; history_complete: true;
-  stale: boolean; inputs_ready: boolean; can_propose: boolean; can_independently_review: boolean; review_accepted: boolean; same_decision_supported: boolean;
+  stale: boolean; inputs_ready: boolean; export_allowed: boolean; can_propose: boolean; can_independently_review: boolean; review_accepted: boolean; same_decision_supported: boolean;
   identity_reservations_changed: false; global_registry_qualified: false; legal_effect_verified: false; institutional_competence_verified: false; publication_eligible: false;
 }
 export type EvidenceSelection = { peer: string; register: string };

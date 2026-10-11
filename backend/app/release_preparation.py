@@ -384,6 +384,15 @@ def _rdf(package, mappings, resolutions, locator_raw):
 
 
 def _validate_rdf(graphs, ontology_root, package, locator_raw):
+    physical = {package.locators.raw_sha256: package.raw, package.locators.text_sha256: package.artifacts["text.txt"],
+                digest(locator_raw): locator_raw}
+    return validate_candidate_physical(graphs, ontology_root, physical)
+
+
+def validate_candidate_physical(graphs, ontology_root, physical):
+    """Check all candidate representations against exact retained physical bytes."""
+    if any(not isinstance(raw, bytes) or digest(raw) != sha256 for sha256, raw in physical.items()):
+        raise PreparationError("Candidate physical file hash does not match retained bytes")
     release = _load_serving()._release
     stripped = {}
     for family, graph in graphs.items():
@@ -396,8 +405,6 @@ def _validate_rdf(graphs, ontology_root, package, locator_raw):
         checked = release.check_data(stripped, ontology_root, {"verified": False})
     except (ValueError, TypeError, KeyError):
         raise PreparationError("Candidate RDF failed structural validation") from None
-    physical = {package.locators.raw_sha256: package.raw, package.locators.text_sha256: package.artifacts["text.txt"],
-                digest(locator_raw): locator_raw}
     if set(release.required_physical_hashes(checked)) != set(physical):
         raise PreparationError("Candidate RDF physical evidence binding is inconsistent")
     for passage in checked["passages"]:

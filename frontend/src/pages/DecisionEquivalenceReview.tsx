@@ -3,6 +3,7 @@ import { ApiError, request } from '../api';
 import { Detail, Field, Loading, Notice } from '../components';
 import type { SourceReviewDecision, User } from '../types';
 import { formatDate, messageOf } from '../utils';
+import { fetchEquivalenceHandoff, type EquivalenceHandoff } from './equivalenceHandoff';
 import type { IdentityState } from './decisionIdentity';
 import { equivalencePath, equivalencePayload, fetchEquivalence, mayReviewEquivalence, validateEquivalence, validateSelection, type EquivalenceClaims, type EquivalenceState, type EvidenceProof, type EvidenceSelection } from './decisionEquivalence';
 
@@ -30,8 +31,9 @@ function EquivalenceWorkspace({ identity, user, selection, onDenied }: { identit
   const [canonicalId, setCanonicalId] = useState('');
   const [rationale, setRationale] = useState(''); const [reviewRationale, setReviewRationale] = useState(''); const [decision, setDecision] = useState<SourceReviewDecision>('needs_changes');
   const [proofs, setProofs] = useState<EvidenceProof[]>([]); const [reviewProofs, setReviewProofs] = useState<EvidenceProof[]>([]);
+  const [handoff, setHandoff] = useState<EquivalenceHandoff | null>(null); const urls = useRef(new Set<string>());
   const controller = useRef<AbortController | null>(null);
-  function start() { controller.current?.abort(); const operation = new AbortController(); controller.current = operation; setError(''); setBusy(true); return operation; }
+  function start() { controller.current?.abort(); const operation = new AbortController(); controller.current = operation; setError(''); setBusy(true); setHandoff(null); for (const url of urls.current) URL.revokeObjectURL(url); urls.current.clear(); return operation; }
   function fail(cause: unknown, operation: AbortController) {
     if (operation.signal.aborted) return;
     setError(messageOf(cause));
@@ -43,7 +45,20 @@ function EquivalenceWorkspace({ identity, user, selection, onDenied }: { identit
     try { const value = await fetchEquivalence(identity, user, selection, operation.signal); if (!operation.signal.aborted) setState(value); }
     catch (cause) { fail(cause, operation); } finally { if (!operation.signal.aborted) setBusy(false); }
   }
-  useEffect(() => { void load(); return () => controller.current?.abort(); }, []);
+  useEffect(() => { void load(); return () => { controller.current?.abort(); for (const url of urls.current) URL.revokeObjectURL(url); urls.current.clear(); }; }, []);
+  async function download() {
+    if (!state || busy) return;
+    const operation = start();
+    try {
+      const result = await fetchEquivalenceHandoff(state, identity.source.id, selection, user, operation.signal);
+      if (!operation.signal.aborted) {
+        const url = URL.createObjectURL(new Blob([result.evidence_json], { type: 'application/json' })); urls.current.add(url);
+        const link = document.createElement('a'); link.href = url; link.download = `gizli-cok-kaynakli-graph-b-${result.data.packet_id}.json`; document.body.append(link); link.click(); link.remove();
+        window.setTimeout(() => { URL.revokeObjectURL(url); urls.current.delete(url); }, 1000);
+        setHandoff(result.data);
+      }
+    } catch (cause) { fail(cause, operation); } finally { if (!operation.signal.aborted) setBusy(false); }
+  }
   async function save(event: FormEvent, review: boolean) {
     event.preventDefault(); if (!state || busy) return;
     const operation = start();
@@ -58,6 +73,9 @@ function EquivalenceWorkspace({ identity, user, selection, onDenied }: { identit
   return <>{busy && <Loading label="Kaynaklar arası inceleme sürüyor…" />}{error && <Notice error>{error}</Notice>}
     {!denied && <button className="button secondary" disabled={busy} onClick={() => void load()}>Eşdeğerlik incelemesini yenile</button>}
     {state && <><EquivalenceSummary state={state} />
+      <button className="button secondary" disabled={busy || !state.same_decision_supported || !state.export_allowed} onClick={() => void download()}>Çok kaynaklı gizli Graph B aday paketini indir (JSON)</button>
+      <p className="small muted">İki karar sürümü, kurum sicili ve tam inceleme geçmişleri birlikte indirilir. Üç kaynak için açık dışa aktarma izni ve güncel aynı-karar kabulü gerekir.</p>
+      {handoff && <EquivalenceHandoffSummary data={handoff} />}
       <Detail title="Kaynaklar ve dayanak revizyonları">{Object.entries(state.sources).map(([key, source]) => <article key={key}><h3>{key === state.register_source_id ? 'Kurum sicili' : 'Karar belgesi'} · {source.title}</h3>
         <p className="small source-passage-text">{key} · {source.source_version_id}</p><p>Kaynak incelemesi {state.pins.source_revisions[key]} · Eşleme {state.pins.mapping_revisions[key]}{key in state.pins.identity_revisions ? ` · Kimlik ${state.pins.identity_revisions[key]}` : ''}</p>
         {state.decisions[key] && <dl>{Object.entries(state.decisions[key]!).map(([field, value]) => <div key={field}><dt>{{decision_id: 'Karar', proceeding_id: 'Yargılama', institution_id: 'Tarihsel kurum', version_id: 'Belge sürümü'}[field]}</dt><dd className="source-passage-text">{value}</dd></div>)}</dl>}
@@ -102,4 +120,12 @@ export function EquivalenceSummary({ state }: { state: EquivalenceState }) {
         <p>{labels[event.proposal.claims.relation]} · {event.rationale}</p><pre className="source-passage-text">{JSON.stringify({claims: event.proposal.claims, decisions: event.proposal.decisions}, null, 2)}</pre><p className="small source-passage-text">Dayanak sürümü: {event.proposal.snapshot_sha256}</p>
         {event.evidence.map(proof => <p className="small source-passage-text" key={`${proof.source_id}:${proof.passage_id}`}>{proof.source_id} · {proof.passage_id} · {proof.sha256}</p>)}</article>)}</Detail></>}
   </>;
+}
+
+export function EquivalenceHandoffSummary({ data }: { data: EquivalenceHandoff }) {
+  return <section className="source-review-section"><h3>Çok kaynaklı Graph B devir adayı hazır</h3><p>Üç özgün kaynak · İki karar sürümü · Altı yapı doğrulanmış kimlik adayı</p>
+    <p className="source-passage-text">Kanonik aday: {data.canonical_candidate}</p><p className="small source-passage-text">Paket: {data.packet_id}</p>
+    <Notice>Büroya özel · İmzalanmadı · Graf yayımlanmadı · Kimlik rezervasyonları korunuyor · Hukuki doğruluk ve kurumun görev/yetkisi doğrulanmadı.</Notice>
+    {data.limitations.map(text => <p className="small muted" key={text}>{text}</p>)}
+  </section>;
 }
