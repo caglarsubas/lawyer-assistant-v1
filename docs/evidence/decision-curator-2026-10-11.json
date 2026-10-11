@@ -1,0 +1,51 @@
+{
+  "schema_version": "decision-curator-engineering-v1",
+  "date": "2026-10-11",
+  "base_main": "d6a4796e92eef6ee705a07ad4d6cfbb39fd0d98d",
+  "base_main_ci": {
+    "run": 38136788663,
+    "conclusion": "success"
+  },
+  "features": [
+    "exact_occurrence_inspection_ui",
+    "encrypted_firm_private_accountable_mapping",
+    "explicit_unknowns",
+    "source_review_staleness",
+    "append_only_disagreements"
+  ],
+  "tests": {
+    "linux_initial_source_regressions": 305,
+    "final_decision_regressions": 23,
+    "final_postgresql_races": 2,
+    "frontend": 392,
+    "deployment_contracts": 41,
+    "ci_collection": 3905
+  },
+  "code_sha256": {
+    "backend/app/decision_mappings.py": "501c22c54e6d604d7e8338a04e9719f4ffc711cf330ac3e42aeee50fea648e6f",
+    "backend/app/decision_mapping_models.py": "97adbba34563ecc141181066d50a3debfeaed67d1a4890fd7c822ff3018d28ce",
+    "backend/tests/test_decision_mappings.py": "eb170bb2c4e2054429553a1b3b95f378deb71d2f0977abd82963af2837d0ae53",
+    "backend/tests/test_snapshot_set_postgres.py": "838bda5bbde7eabd809df23bedd76d3583e13bb65cc304ec556f37dd0acd2bbc",
+    "frontend/src/pages/decisionMapping.ts": "41f63d5e8c39861558a2e7dc85f0e28d6d737c3002d0efe7eae22c7abffc40bc",
+    "frontend/src/pages/DecisionMappingPage.tsx": "a68490b07c406d8984cdaf890f685e872c5125d28d07f747ee4b6c5151bbfb4f",
+    "frontend/src/pages/DecisionMappingPage.test.tsx": "3b06deff1fdb42dc34e3b252fda7c63a3deb91e89bcae52b3f4410d90a93f786"
+  },
+  "actual_decision_acquired": false,
+  "actual_source_or_legal_review_performed": false,
+  "canonical_identity_resolution": false,
+  "graph_publication": false,
+  "deployment_changed": false,
+  "hosted_ci": "pending",
+  "no_workflow_dependency_runner_retry_or_deadline_change": true,
+  "browser_qa": {
+    "production_build": true,
+    "disposable_synthetic_backend": true,
+    "selected_passage_occurrences": 4,
+    "proposal_saved": true,
+    "needs_changes_review_saved": true,
+    "reviewer_history_visible": true,
+    "source_reviews_still_pending": true,
+    "real_source_review_performed": false,
+    "provider_calls": 0
+  }
+}
