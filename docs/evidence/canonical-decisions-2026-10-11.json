@@ -1,0 +1,85 @@
+{
+  "schema_version": "engineering-verification-v1",
+  "packet": "R03 canonical decision identity review",
+  "date": "2026-10-11",
+  "base_main": "e9ff93a87f082a25edc19b6f3ae8c9c7e82b9cca",
+  "base_post_merge_run": 38143052204,
+  "synthetic_only": true,
+  "linux": {
+    "passed": 58,
+    "seconds": 16.38,
+    "disconnected": true
+  },
+  "postgres": {
+    "passed": 5,
+    "seconds": 4.41,
+    "disposable_child_databases": true
+  },
+  "frontend": {
+    "passed": 418,
+    "files": 38,
+    "production_build": true
+  },
+  "deployment_contracts": 41,
+  "ruff": true,
+  "browser": {
+    "synthetic_owner_proposal": true,
+    "proposer_review_disabled": true,
+    "second_account_acceptance": true,
+    "provider_configured": false
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3943,
+      "preflight": 89,
+      "remaining": 3565,
+      "publication": 132,
+      "workspace": 77,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "846c00fe78ad5994829bc56b11fa8f2ae4a96f35d05f74bd9badff8f72e61342",
+    "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "actual_legal_approval": false,
+  "global_registry_qualified": false,
+  "graph_published": false,
+  "deployed": false
+}

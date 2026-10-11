@@ -423,3 +423,47 @@ def test_decision_dossier_waits_for_source_then_withholds_stale_pin(postgres_sou
                 blocker.commit()
                 response = future.result(timeout=10)
     assert response.status_code == 409 and "evidence_json" not in response.json()
+
+
+@pytest.fixture
+def postgres_decision(postgres_sources, tmp_path):
+    from test_decision_identities import mapped
+    from test_decision_mappings import mapping as mapping_fixture
+    from test_jurisprudence_candidates import incoming
+    app, sources, _, _ = postgres_sources
+    root = tmp_path / "synthetic-decision"
+    root.mkdir()
+    package = source_fixture.__wrapped__(root)
+    result = mapping_fixture.__wrapped__((app, sources[0][1], None), incoming.__wrapped__(package))
+    mapped(result)
+    return result
+
+
+def test_canonical_identity_competing_reviews_keep_one_approval(postgres_decision):
+    from test_decision_identities import propose_identity, review_identity
+    assert propose_identity(postgres_decision).status_code == 200
+    peer = another_client(postgres_decision[0], username="canonical-peer")
+    barrier = Barrier(2)
+    def write(_):
+        barrier.wait(timeout=5)
+        return review_identity(postgres_decision, peer)
+    with ThreadPoolExecutor(2) as pool:
+        results = list(pool.map(write, range(2)))
+    assert sorted(response.status_code for response in results) == [200, 409]
+    state = peer.get(postgres_decision[4] + "/decision-identities").json()
+    assert state["revision"] == 2 and state["staged_handoff_ready"] and len(state["history"]) == 2
+
+
+def test_canonical_identity_source_wait_revalidates_before_proposal(postgres_decision):
+    from test_decision_identities import propose_identity
+    app = postgres_decision[0]
+    with app.state.store.session() as blocker:
+        head = blocker.scalar(select(SourceReviewHead).where(SourceReviewHead.source_id == postgres_decision[3]).with_for_update())
+        with observe_identity_lock(app.state.store.engine, statement_fragment="FROM source_review_heads") as (attempted, pids):
+            with ThreadPoolExecutor(1) as pool:
+                future = pool.submit(propose_identity, postgres_decision)
+                assert attempted.wait(5)
+                assert wait_until_blocked(app.state.store.engine, pids[-1])
+                head.revision += 1  # Corrupt synthetic ledger cannot become an identity proposal.
+                blocker.commit()
+                assert future.result(timeout=10).status_code == 409

@@ -1,5 +1,31 @@
 # Verification record — 11 October 2026
 
+## Canonical decision identities — 11 October 2026
+
+Base: PR #53 merged at `e9ff93a87f082a25edc19b6f3ae8c9c7e82b9cca`, with all
+three post-merge main jobs successful in `38143052204`. Synthetic validation:
+
+- 58 disconnected Linux identity/mapping/dossier cases pass (16.38s), including
+  stale re-proposals, complete historical contributors, encrypted history tampering,
+  oversized forged revision pins, reservation corruption, cross-source collisions,
+  distinct decisions sharing a proceeding, retained reservations after rejection,
+  role/firm/CSRF boundaries, competing approvals and original corruption rollback.
+- Five PostgreSQL decision/dossier/identity race and source-lock cases pass (4.41s)
+  using random child databases in a dedicated disposable internal network. Read-only,
+  unprivileged, bounded containers were used for Linux and PostgreSQL checks.
+- Frontend: 418 tests in 38 files pass; production build succeeds. Browser QA
+  saved a synthetic explicit identity proposal, switched to a separate account and
+  accepted its review. Proposer review controls were disabled; the accepted view
+  still displayed private/unpublished/unqualified/unknown-effect states. This
+  loopback QA had no configured provider and does not grant actual legal review.
+- Ruff, 41 deployment contracts and whitespace checks pass. Complete collection
+  confirms 3,943 cases assigned exactly once across unchanged CI partitions; no
+  runner, dependency, retry or deadline changes and no claimed billing savings.
+
+Ignored local receipts: `.data/verification/r03-canonical-identities/` in the owned
+worktree. Actual sources/people, national identity equivalence, Graph B publication,
+legal-effect review, deployment and serving qualification were not validated.
+
 ## Complete decision review dossier — 11 October 2026
 
 Based on PR #52's verified merged main at `9798987199ef49e49f2c630765bc0a1730bd6a37`.
