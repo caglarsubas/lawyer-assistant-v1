@@ -1,5 +1,33 @@
 # Verification record — 11 October 2026
 
+
+## Curator decision mapping — 11 October 2026
+
+Based on PR #51's verified merged main and successful post-merge run `38136788663`.
+The packet adds a Turkish curator screen, exact candidate receipt verification and
+an encrypted accountable review ledger. Engineering validation uses disposable
+synthetic sources and accounts only; it establishes no legal/source approval.
+
+- 305 isolated Linux source/review/provision/candidate/decision regressions passed
+  before the final extraction-coverage regression; the final 23 decision regressions
+  and two real PostgreSQL competing-write/lock-wait tests passed together (25 tests,
+  12.81s). Linux test containers are unprivileged, read-only with bounded resources;
+  broad regression execution has no network; PostgreSQL runs in a dedicated internal
+  network with disposable child databases. No production database or `.env` is read.
+- Full frontend production build and 392 tests across 36 files pass. Tests include
+  inert rendering, receipt/source/hash/Unicode tampering, cancellation and review
+  payload/source-readiness boundaries. The production build was inspected in a disposable Docker browser session:
+  four exact occurrences were found; an assignment, proposal and request for changes
+  were saved through the UI with reviewer/history visible. The actual source reviews
+  remained pending and no provider was configured. Browser QA used a loopback-only
+  published port; it is distinct from the disconnected Linux test run.
+- 41 deployment contracts, complete Ruff and whitespace checks pass. All 3,905
+  backend cases remain assigned exactly once in unchanged workflow partitions.
+  No new runner, retry, deadline or dependency changes; hosted savings are not claimed.
+- Actual jurisprudence acquisition, fidelity/privacy/legal review and release
+  qualification remain pending. The AYM acquisition has not been retried or admitted.
+
+
 ## Evidence-bound jurisprudence occurrence inspection — 11 October 2026
 
 PR #50 is verified merged at `3f819ecd85f1c79332e570be309952cd86f4a841`;

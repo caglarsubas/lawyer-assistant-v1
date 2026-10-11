@@ -359,3 +359,48 @@ def test_committed_revocation_is_seen_after_waiting_for_operator(postgres_source
                 wait_until_blocked(app.state.store.engine, observed[1][0])
                 blocker.commit()
                 future.result(timeout=10)
+
+
+def _decision_proposal(postgres_sources):
+    from app.jurisprudence_candidates import find_occurrences
+    _, sources, _, _ = postgres_sources
+    _, client, store, identifier, base = sources[0]
+    package = store.verified_package(identifier)
+    passage = package.locators.passages[0]
+    occurrence = find_occurrences(package, passage.id)["items"][0]
+    return client, base + "/decision-mappings", {"expected_revision": 0, "expected_source_review_revision": 5,
+        "passage_id": passage.id, "candidate_id": occurrence["id"], "rationale": "Synthetic PostgreSQL occurrence"}
+
+
+def test_decision_mapping_competing_writers_keep_one_revision(postgres_sources):
+    client, base, body = _decision_proposal(postgres_sources)
+    barrier = Barrier(2)
+    def write(_):
+        barrier.wait(timeout=5)
+        return client.post(base, json=body)
+    with ThreadPoolExecutor(2) as pool:
+        responses = list(pool.map(write, range(2)))
+    assert sorted(response.status_code for response in responses) == [200, 409]
+    state = client.get(base).json()
+    assert state["revision"] == 1 and len(state["history"]) == 1
+
+
+def test_decision_writer_rechecks_source_revision_after_lock_wait(postgres_sources):
+    app, sources, _, _ = postgres_sources
+    client, base, body = _decision_proposal(postgres_sources)
+    identifier = sources[0][3]
+    with app.state.store.session() as blocker:
+        head = blocker.scalar(select(SourceReviewHead).where(SourceReviewHead.source_id == identifier).with_for_update())
+        with observe_identity_lock(app.state.store.engine, statement_fragment="FROM source_review_heads") as (attempted, pids):
+            with ThreadPoolExecutor(1) as pool:
+                future = pool.submit(client.post, base, json=body)
+                assert attempted.wait(timeout=5)
+                wait_until_blocked(app.state.store.engine, pids[-1])
+                assert not future.done()
+                head.revision += 1  # Deliberately inconsistent synthetic ledger: fail closed after the lock wait.
+                blocker.commit()
+                response = future.result(timeout=10)
+    assert response.status_code == 409
+    from app.decision_mapping_models import DecisionMappingHead
+    with app.state.store.session() as session:
+        assert session.scalar(select(DecisionMappingHead)) is None

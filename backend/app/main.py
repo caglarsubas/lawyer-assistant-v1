@@ -51,6 +51,7 @@ from .config import ROOT, load_settings
 from .content_scope import initialize_scope, scoped_records
 from .context_packing import context_export_lines
 from .db import Audit, LoginSession, Membership, Record, Store, User, digest, now, uid
+from .decision_mappings import decision_mappings_router
 from .exports import render_export
 from .extract import SUPPORTED_SUFFIXES, ZIP_SUFFIXES
 from .extraction_client import ExtractionClient, ExtractionError, validate_result
@@ -332,6 +333,7 @@ def create_app(settings=None):
     app.include_router(source_relationships_router())
     app.include_router(source_selection_router())
     app.include_router(provision_mappings_router())
+    app.include_router(decision_mappings_router())
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request, exc):

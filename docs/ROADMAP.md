@@ -1828,3 +1828,24 @@ beside exact original passages and implement firm-private, accountable decision
 identity/date/citation review with preserved disagreements and independent release
 review. Actual jurisprudence acquisition/fidelity/privacy review, reviewed graph
 population, national qualification and pilot gates remain open.
+
+
+## Delivered R03 packet — curator UI and accountable decision mapping (11 October 2026)
+
+PR #51 is verified merged at `d6a4796e92eef6ee705a07ad4d6cfbb39fd0d98d`.
+Its post-merge main run `38136788663` passed all three jobs. The next packet adds a
+curator decision-mapping screen and encrypted firm-local review ledger, preserving
+exact occurrence evidence, separate proceeding/decision/institution references,
+unknown date roles and versions, human accountability and prior disagreements.
+Current source-review ownership, dual revision pins, source use scopes and explicitly
+reviewed extraction passages gate acceptance. Source-review changes stale acceptances.
+No actual source approval, canonical graph identity, publication or deployment is inferred.
+
+The candidate API remains additive and independently bounded. The UI inspects exact
+passage text and available original representations, verifies occurrence receipts,
+and clears or cancels old views on navigation/access changes. See
+[decision mapping contract](DECISION_MAPPING.md) and [validation](VALIDATION.md).
+
+Next packet: complete, revision-bound confidential decision-review dossiers and
+handoff consistency checks. Independent legal/privacy/fidelity review of acquired
+decisions, Graph B population and national/pilot qualification remain open.
