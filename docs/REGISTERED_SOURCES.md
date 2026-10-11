@@ -144,3 +144,10 @@ second institution and PDF representation to the engineering contract; its real
 11 October acquisition attempt failed at the DNS deadline and admitted nothing.
 Successful acquisition, actual PDF fidelity/rights review, current-law coverage
 and historical jurisprudence remain separate roadmap gates.
+
+On 11 October a later single invocation of the **unchanged** registered route
+succeeded after the earlier DNS failure. It retained 218,901 bytes, passed the
+mandatory disconnected CVD scan/parser workflow and produced two page passages.
+A separate host public-only catalog now contains this PDF in pending-review state;
+the deployed Docker catalog is unchanged. Acquisition/preparation and original-page
+inspection establish engineering evidence only. See [verification](VALIDATION.md).

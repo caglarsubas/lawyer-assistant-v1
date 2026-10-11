@@ -168,6 +168,10 @@ For HTML with these source-code locators, **Özgün kaynak koduyla karşılaşt�
 opens an inert, bounded original window beside an extracted passage in the curator
 workspace. Both use the same strict decoder. Coordinate checks do not certify
 fidelity; see [original inspection](SOURCE_REVIEW_CONTRACT.md#original-source-code-inspection).
+For a complete PDF page map, **Özgün PDF sayfasıyla karşılaştır** checks the
+original attachment digest and opens the corresponding page locally beside the
+extraction; see [PDF inspection](SOURCE_REVIEW_CONTRACT.md#original-pdf-page-inspection).
+Both inspection paths leave assessments and publication state unchanged.
 
 All sources remain rights pending and legal review pending. Enacted text remains
 explicitly **not current consolidated law**. Public-origin declarations cannot prove

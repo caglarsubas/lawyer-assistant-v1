@@ -3,6 +3,7 @@ import { ApiError, request } from '../api';
 import { Badge, Detail, Field, Icon, Loading, Notice, PageHeader } from '../components';
 import type { PublicSourceOriginalText, PublicSourcePassages, SourcePermittedUse, SourceReviewCategory, SourceReviewDecision, SourceReviewEffort, SourceReviewEffortSummary, SourceReviewEvent, SourceReviewState, User } from '../types';
 import { formatDate, messageOf, statusLabel } from '../utils';
+import SourcePdfView, { fetchOriginalSourcePdf, mappedPdfPage, type PdfInspection } from './SourcePdfInspection';
 
 const CATEGORIES: Record<SourceReviewCategory, string> = { rights: 'Kullanım hakları', source_identity: 'Kaynak kimliği', extraction: 'Metin çıkarımı', legal: 'Hukuki inceleme' };
 const DECISIONS: Record<SourceReviewDecision, string> = { accepted: 'Kabul edildi', needs_changes: 'Düzeltme gerekli', rejected: 'Reddedildi' };
@@ -10,7 +11,7 @@ const USES: Record<SourcePermittedUse, string> = { storage: 'Saklama', local_pro
 export interface AssessmentDraft { category: SourceReviewCategory; decision: SourceReviewDecision; rationale: string; reference: string; sha256: string; passage_ids: string[]; permitted_uses: SourcePermittedUse[]; active_seconds: string; effort_basis: SourceReviewEffort['basis'] }
 export const EMPTY_ASSESSMENT: AssessmentDraft = { category: 'rights', decision: 'needs_changes', rationale: '', reference: '', sha256: '', passage_ids: [], permitted_uses: [], active_seconds: '', effort_basis: 'estimate' };
 type LoadState<T> = { status: 'loading' } | { status: 'loaded'; value: T } | { status: 'failed'; message: string; code?: number };
-type OriginalInspection = { passageId: string; offset: number; state: LoadState<PublicSourceOriginalText> };
+type OriginalInspection = { passageId: string; offset: number; state: LoadState<PublicSourceOriginalText | PdfInspection> };
 const ORIGINAL_WINDOW = 12_000;
 const HTML_LOCATOR = /^HTML source line [1-9][0-9]{0,6}, column [1-9][0-9]{0,6}; decoded code points \[[0-9]{1,7},[0-9]{1,7}\)$/;
 
@@ -171,7 +172,11 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
     if (passages.status !== 'loaded' || review.status !== 'loaded') return;
     originalController.current?.abort(); const controller = new AbortController(); originalController.current = controller;
     setOriginal({ passageId, offset: nextOffset, state: { status: 'loading' } });
-    void fetchOriginalSourceText(passages.value, passageId, nextOffset, controller.signal).then(value => {
+    const passage = passages.value.items.find(item => item.id === passageId);
+    const operation = passage && mappedPdfPage(passage) !== null
+      ? fetchOriginalSourcePdf(passages.value, passageId, controller.signal)
+      : fetchOriginalSourceText(passages.value, passageId, nextOffset, controller.signal);
+    void operation.then(value => {
       if (!controller.signal.aborted) setOriginal({ passageId, offset: nextOffset, state: { status: 'loaded', value } });
     }).catch(cause => { if (!controller.signal.aborted) { setOriginal({ passageId, offset: nextOffset, state: failed(cause) }); denyAccess(cause); } });
   }
@@ -260,8 +265,9 @@ export function SourcePassageList({ data, offset, selected, canSelect, onSelect,
       <div className="source-passage-heading"><h3>{passage.id}</h3>{canSelect && <label><input type="checkbox" checked={selected.includes(passage.id)} disabled={!selected.includes(passage.id) && selected.length >= 100} onChange={() => onSelect(passage.id)} />İnceledim</label>}</div>
       <p className="small muted">{passage.locator}</p>
       {onOriginal && HTML_LOCATOR.test(passage.locator) && <button className="text-button" onClick={() => onOriginal(passage.id)}>Özgün kaynak koduyla karşılaştır</button>}
+      {onOriginal && mappedPdfPage(passage) !== null && <button className="text-button" onClick={() => onOriginal(passage.id)}>Özgün PDF sayfasıyla karşılaştır</button>}
       <div className={original?.passageId === passage.id ? 'source-comparison' : undefined}><p className="source-passage-text">{passage.text}</p>
-        {original?.passageId === passage.id && <div>{original.state.status === 'loading' ? <Loading label="Özgün kaynak aralığı yükleniyor…" /> : original.state.status === 'failed' ? <Notice error>{original.state.message} {original.state.code !== 422 && <button className="text-button" onClick={() => onOriginal?.(passage.id, original.offset)}>Yeniden dene</button>}<button className="text-button" onClick={onCloseOriginal}>Kaynak görünümünü kapat</button></Notice> : <SourceOriginalView data={original.state.value} onPage={next => onOriginal?.(passage.id, next)} onClose={() => onCloseOriginal?.()} />}</div>}
+        {original?.passageId === passage.id && <div>{original.state.status === 'loading' ? <Loading label="Özgün kaynak aralığı yükleniyor…" /> : original.state.status === 'failed' ? <Notice error>{original.state.message} {![401, 403, 422].includes(original.state.code || 0) && <button className="text-button" onClick={() => onOriginal?.(passage.id, original.offset)}>Yeniden dene</button>}<button className="text-button" onClick={onCloseOriginal}>Kaynak görünümünü kapat</button></Notice> : 'kind' in original.state.value ? <SourcePdfView data={original.state.value} onClose={() => onCloseOriginal?.()} /> : <SourceOriginalView data={original.state.value} onPage={next => onOriginal?.(passage.id, next)} onClose={() => onCloseOriginal?.()} />}</div>}
       </div>
       <Detail title="Pasaj konumu ve içerik özeti"><dl className="coverage-fields"><div><dt>Unicode aralığı</dt><dd>[{passage.start}, {passage.end})</dd></div><div><dt>Pasaj SHA256</dt><dd className="reference-id">{passage.text_sha256}</dd></div><div><dt>Metin SHA256</dt><dd className="reference-id">{data.text_sha256}</dd></div><div><dt>Özgün dosya SHA256</dt><dd className="reference-id">{data.raw_sha256}</dd></div></dl></Detail>
     </article>)}</div>

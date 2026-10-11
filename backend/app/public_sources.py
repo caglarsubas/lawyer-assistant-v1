@@ -18,6 +18,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, field_validator
 
 from .auth import authenticate
+from .source_original_pdf import original_pdf_page
 from .source_original_text import (
     MAX_ORIGINAL_BYTES,
     MAX_WINDOW,
@@ -425,6 +426,9 @@ class PublicSourceStore:
         package = self.verified_package(identifier)
         return original_text_window(package, identifier, passage_id, offset=offset, limit=limit)
 
+    def original_pdf(self, identifier, passage_id):
+        return original_pdf_page(self.verified_package(identifier), identifier, passage_id)
+
 
 def public_sources_router():
     router = APIRouter(prefix="/api/v1/public-sources", tags=["public-source-staging"])
@@ -491,6 +495,24 @@ def public_sources_router():
             result = store(request).original_text(identifier, passage_id, offset=offset, limit=limit)
         except OriginalTextUnavailable:
             raise HTTPException(422, "Bu pasajın özgün kaynak kodu gösterilemiyor; özgün dosyayı indirerek inceleyin") from None
+        except (PublicSourceError, OSError):
+            raise HTTPException(409, "Kaynak paketi yok veya bütünlük denetimi başarısız") from None
+        reauthorize(request, user)
+        return Response(content=_canonical(result), media_type="application/json", headers={
+            "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff",
+            "Content-Security-Policy": "sandbox; default-src 'none'; frame-ancestors 'none'",
+        })
+
+    @router.get("/{identifier}/original-pdf")
+    def original_pdf(identifier: str, request: Request,
+                     passage_id: str = Query(pattern=r"^pdf_page_[0-9]{4}$"),
+                     user=Depends(authorize)):
+        if not SHA256.fullmatch(identifier):
+            raise HTTPException(404, "Kaynak hazırlama kaydı bulunamadı")
+        try:
+            result = store(request).original_pdf(identifier, passage_id)
+        except OriginalTextUnavailable:
+            raise HTTPException(422, "Bu pasajın özgün PDF sayfası gösterilemiyor; özgün dosyayı indirerek inceleyin") from None
         except (PublicSourceError, OSError):
             raise HTTPException(409, "Kaynak paketi yok veya bütünlük denetimi başarısız") from None
         reauthorize(request, user)

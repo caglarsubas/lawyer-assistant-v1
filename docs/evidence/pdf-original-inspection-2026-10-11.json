@@ -1,0 +1,191 @@
+{
+  "schema_version": "pdf-original-inspection-engineering-v1",
+  "date": "2026-10-11",
+  "timezone": "Asia/Shanghai",
+  "base_merge": {
+    "pr": 45,
+    "commit": "05dd5b29f52f4918c0a4b8629cb6f77094c2f258"
+  },
+  "actual_public_sample": {
+    "synthetic": false,
+    "registry_id": "adalet-6101-pdf",
+    "registry_version": "registered-public-2026-10-11-v3",
+    "source_url": "https://mgm.adalet.gov.tr/Resimler/SayfaDokuman/181020191506586101.pdf",
+    "representation": "institution_hosted_text",
+    "acquired_at": "2026-10-11T04:25:05.327968+00:00",
+    "raw_sha256": "3413b2082815b45ab70aa2d82fb7daa476e372ad0a8c1328bd3d0f4ab99a9387",
+    "raw_bytes": 218901,
+    "text_sha256": "ecf8babcab918766782311810ec0e4e7456e2af6a16775891f7abf19c3d45028",
+    "page_count": 2,
+    "page_origins": [
+      {
+        "id": "pdf_page_0001",
+        "page": 1,
+        "page_text_end": 2377,
+        "page_text_sha256": "9ee88989601bb307d4d00479872fa286a1800cb7aaaa36e91386c8e5748adc84",
+        "page_text_start": 0
+      },
+      {
+        "id": "pdf_page_0002",
+        "page": 2,
+        "page_text_end": 2042,
+        "page_text_sha256": "e42e74b3660cb73578d0291742b28917e0d03124844b9066b00b1678dff512ee",
+        "page_text_start": 0
+      }
+    ],
+    "source_catalog_id": "5e9676d291388c0220a304ede024c31ed72988913034a120e91dbffe9c261b60",
+    "acquisition_image_id": "sha256:e23cdcac0ed0c265720c8f2179cffc5dbc0f5f5ad977dcaac8561e7e7794beb2",
+    "scan": {
+      "clean": true,
+      "databases": {
+        "databases": [
+          {
+            "build_time": 1765927102,
+            "bytes": 89072577,
+            "file": "main.cvd",
+            "sha256": "0b2182d229f46981ec8f535382222f7c9dfdd656b250ad47988b910a8d302365",
+            "signatures": 3287027,
+            "version": 63
+          },
+          {
+            "build_time": 1791613444,
+            "bytes": 23442295,
+            "file": "daily.cvd",
+            "sha256": "d4117485e03b333d4b40d77b9280750a14555ae84978f43de676cf5ff0810fd8",
+            "signatures": 355760,
+            "version": 28149
+          },
+          {
+            "build_time": 1757593759,
+            "bytes": 281702,
+            "file": "bytecode.cvd",
+            "sha256": "6d4aa01f219e988060fc419f495d07f27e0cdf1a2cccc065971da922c76f7ffb",
+            "signatures": 80,
+            "version": 339
+          }
+        ],
+        "engine": "ClamAV 1.4.6",
+        "schema_version": 1
+      },
+      "elapsed_seconds": 6.898436795047019,
+      "raw_sha256": "3413b2082815b45ab70aa2d82fb7daa476e372ad0a8c1328bd3d0f4ab99a9387",
+      "schema_version": "registered-source-scan-v1"
+    },
+    "parser_image_id": "sha256:3e7324fb4fbe560e1ab8a2f33550b207a72fe0dc1f1c36ec439280adb20b5898",
+    "scanner_image_id": "sha256:f5e27bb0523b586350f123763246debbfef9b18e7c6f50f0fde76b1ac7582222",
+    "signature_max_age_days": 7,
+    "artifact_sha256": {
+      "acquisition.json": "a1f1f614b8b6b1fd2c7529195ea13ad55e8e66e2bec235e0a214a94f71a0a1d9",
+      "locators.json": "42015f4cca1cd366cd83de514758fde51dd54e486c6f1f8b7e5bd7d92f1758b4",
+      "preparation.json": "bd4d4626d5b6bff3cf41cd320a3e7da5424833501be28dffb0837cb133e4853b",
+      "raw.bin": "3413b2082815b45ab70aa2d82fb7daa476e372ad0a8c1328bd3d0f4ab99a9387",
+      "source.json": "208839378dc1b0deec3cc9777cf304bc06007fafd477b60201157954dc7c869d",
+      "text.txt": "ecf8babcab918766782311810ec0e4e7456e2af6a16775891f7abf19c3d45028"
+    },
+    "parsed_with": {
+      "adapter": "registered-pdf-pages-v1",
+      "parser": "pypdf",
+      "version": "6.19.0"
+    },
+    "review_revision": 0,
+    "review_events": 0,
+    "scope": "separate_host_public_only_staging",
+    "deployed_catalog_changed": false,
+    "rights_approved": false,
+    "source_identity_verified": false,
+    "extraction_fidelity_verified": false,
+    "sensitivity_reviewed": false,
+    "legal_approved": false,
+    "current_consolidation": false,
+    "shared_work_identity_adjudicated": false,
+    "independent_study_original_established": false
+  },
+  "verification": {
+    "native_original_cases": 71,
+    "native_seconds": 6.65,
+    "linux_cases": 500,
+    "linux_seconds": 36.73,
+    "frontend_cases": 297,
+    "frontend_files": 32,
+    "new_backend_cases": 30,
+    "new_frontend_cases": 43,
+    "deploy_cases": 41,
+    "ruff": "passed",
+    "workflow_partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 3724,
+        "preflight": 89,
+        "remaining": 3346,
+        "publication": 132,
+        "workspace": 77,
+        "human_review": 60,
+        "model_trials": 20
+      },
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_open_validity_publication.py",
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py",
+        "backend/tests/test_source_reviews.py",
+        "backend/tests/test_source_review_effort.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_content_scope.py",
+        "backend/tests/test_authority_proposals.py",
+        "backend/tests/test_authority_model_cohorts.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_authority_trial_cohorts.py",
+        "backend/tests/test_analysis_cohorts.py",
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "a2fc31948bf130ad40994a3114b98f8b90de7163ddd5ff148dc37962edd92375",
+      "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+      "no_new_runner_retry_or_deadline_change": true,
+      "workspace_workers": 2,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "test_image_id": "sha256:402419b8f12318fbaa63ba09033847569b370702ced1cc71a34106d12a31c0ad",
+    "matching_code_test_fingerprints": {
+      "backend/app/public_sources.py": "3d2ef42fdc3cda0c6c781e19c6e5902af11e17f7a30a9a20fe25b5d7258b2c48",
+      "backend/app/source_original_pdf.py": "6838ee354121a3214919f52eed8ac48f19f1a8809480e78e06c1030a3a65ceb0",
+      "backend/tests/test_source_original_pdf.py": "d072be206b67fa83758213fd158ed81d9564995473c1cea59d84a7683fae8540"
+    },
+    "original_pages_visually_inspected": 2,
+    "original_render_engine": "Poppler pdftoppm",
+    "original_visual_inspection_is_legal_or_fidelity_review": false,
+    "browser_e2e_verified": false,
+    "browser_blocker": "ERR_BLOCKED_BY_CLIENT on disposable local verification URL",
+    "browser_policy_overridden": false,
+    "mocked_worker_lifecycle_is_browser_acceptance": false,
+    "hosted_exact_head_checks": "pending_after_push"
+  },
+  "unchanged_deployed_api_image_id": "sha256:95dcfeb31f0c3e3dffc22c8838500f293aa0fceba1a1c2ab8209cadf03c31376",
+  "qualification": {
+    "source_publication": false,
+    "serving_graph_modified": false,
+    "human_reviews_modified": false,
+    "provider_or_env_modified": false,
+    "private_matter_data_used": false,
+    "deployment_modified": false,
+    "legal_corpus_qualified": false,
+    "representative_throughput_established": false,
+    "pilot_qualified": false
+  }
+}

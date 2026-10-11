@@ -22,6 +22,9 @@ retrieval. An absent review has revision0 and no owner; GET does not create it.
   The offset is relative to that passage's recorded original range; the limit is
   1–12,000 Unicode code points. No arbitrary original range or source URL is accepted.
   See the inspection boundaries below.
+- `GET /original-pdf?passage_id=pdf_page_0001`: integrity-checked page binding for
+  a complete text-only PDF map. Original bytes still use the separate opaque
+  attachment endpoint. See the PDF inspection boundaries below.
 - `GET /review`: response shape below, last50 events, explicit history_truncated.
 - `POST /review/assignment`: `{expected_revision, action:"claim"|"release", rationale}`.
   A reviewer claims an unassigned source; reviews require that ownership. Only the
@@ -121,6 +124,52 @@ content. `extraction_fidelity_verified` therefore remains false. Source identity
 visual reading order, omitted content, privacy, rights, historical applicability and
 actual extraction fidelity still require accountable human review. Source-code
 coordinates are neither rendered page locations nor legal provision identities.
+
+## Original PDF page inspection
+
+Choose **Özgün PDF sayfasıyla karşılaştır** on a mapped PDF passage. The complete
+original is downloaded from the local authenticated attachment route, checked
+against the binding's byte count and SHA256, and supplied as bytes to a dedicated
+local PDF.js worker. Only the selected original page is drawn on a canvas beside
+its extracted text. Other pages open from their own passages with fresh reads;
+zoom changes stay within the selected page. No source URL is fetched. No iframe,
+object, annotation layer, links, attachments, XFA forms or document scripting
+manager is created. PDF.js and its font/CMap assets come from the installation;
+system-font fallback and WASM decoding are disabled for this text-only view.
+
+The server validates the entire immutable package and the complete sequential
+`pdf_page_NNNN` map: page numbers, full-page code-point lengths, assembled-text
+spans and two-newline separators. Only `application/pdf` originals of at most
+1 MiB with 1–50 mapped pages and at most 20,000 code points per page qualify for
+this preview. It does **not** parse or render PDF bytes. Unsupported or unknown
+mappings return fixed 422; corrupted/missing artifacts remain 409. Metadata binds
+source/package/version/passage, raw/text digests, byte count, page and expected
+page count. Authorization is rechecked after each verified read, including the
+independent original attachment. Metadata has the same no-store/nosniff/CSP
+headers as HTML inspection.
+
+The browser validates that binding against the selected passage, bounds streaming
+bytes before allocation, verifies SHA256, and rejects a parsed page-count mismatch.
+Attachment transfer is limited to 30 seconds. A real module worker is required;
+there is no main-thread fake-worker fallback. Opening and rendering each have
+15-second cancellation deadlines; page canvases are capped at 4096 pixels per
+edge and two device pixels per CSS pixel. These are browser cancellation and
+allocation safeguards, **not** a hard process CPU/memory sandbox. Mandatory
+malware scanning and isolated offline preparation remain separate operations;
+a coordinate binding alone does not attest either operation.
+
+Refresh, passage paging, source/user changes, closing, and observed access denial
+abort or discard old responses, destroy workers and clear canvases. Downloaded
+bytes are in component memory only, with no cross-source cache or public linkage.
+As with already loaded text, remote revocation cannot retroactively erase bytes
+from a disconnected client; subsequent reads enforce live authorization.
+
+`consistent_not_fidelity_reviewed` checks mapping consistency only. An operator
+can still supply a wrong self-consistent map. A successful canvas is a local
+rendition, with possible font/layout differences; it does not prove transcription
+completeness, glyph fidelity, legal version, identity, privacy or rights. Opening
+it never selects **İnceledim**, saves an assessment, starts an effort timer or
+publishes a source. Keep the original independent inspection/download path.
 
 ## Response
 

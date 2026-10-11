@@ -1,5 +1,56 @@
 # Verification record — 11 October 2026
 
+## Original PDF page inspection and actual acquisition — 11 October 2026 (Asia/Shanghai)
+
+Base: PR #45 is merged at `05dd5b29f52f4918c0a4b8629cb6f77094c2f258`.
+The curator comparison now checks a complete PDF page map and authenticated
+original bytes before local rendering. Mapping consistency is not fidelity approval;
+no server-side PDF parsing, new media endpoint, external PDF fetch, study approval
+or serving graph update is added.
+
+Local verification:
+
+- **71** native original HTML/PDF tests passed in **6.65 s**; **30** new backend
+  cases cover page bindings, whole-map consistency, format/size limits, exact
+  hashes, no server PDF parser/network, all-artifact integrity, live authorization,
+  fixed diagnostics and unchanged revision-0 human review.
+- **500** disconnected Linux source/original/review/preparation tests passed in
+  **36.73 s**, under the same read-only/unprivileged/bounded conditions as prior
+  packets. All three changed backend code/test fingerprints match the test image.
+- **297** frontend tests in **32** files passed; **43** new cases cover selected
+  page identity, bounded streaming, truncated/oversized/changed bytes, SHA256,
+  cancellation, escaped text, local assets and canvas limits. Mocked-worker tests
+  verify count mismatch, pending/late parse cancellation, fixed failures, real-worker
+  startup failure and timeout cleanup; they are not a real browser acceptance run.
+- Frontend TypeScript/build, **41** deployment contracts, configured Ruff and
+  whitespace checks pass. The existing CI workflow partitions **3,724** backend
+  cases exactly once. No runner, retry, event, deadline, result cache or test omission
+  is added. Exact-head hosted backend/frontend/real-PostgreSQL checks remain required.
+- One later invocation of the unchanged fixed Ministry route succeeded: **218,901**
+  bytes, raw SHA256 `3413b2082815b45ab70aa2d82fb7daa476e372ad0a8c1328bd3d0f4ab99a9387`.
+  Actual CVD verification/scan then disconnected pinned-parser execution produced
+  **two** page passages. The original acquisition manifest survives unchanged;
+  signature freshness, network/resource limits and pending states remain enforced.
+- Only a separate public-only **host staging catalog** was imported. Actual
+  authenticated HTTP reads bind both pages and the original bytes; revision **0**,
+  no owner and **no assessments** are confirmed. Identity, rights, version, dates,
+  privacy/sensitivity and legal qualification remain unknown/pending.
+- Both retained original pages were rendered with Poppler and visually inspected
+  for original-page visibility. This does not certify extracted-text correspondence
+  or the new browser viewer. Chrome and the in-app browser blocked the disposable
+  local verification URL (`ERR_BLOCKED_BY_CLIENT`); no warning/policy override was
+  attempted. End-to-end PDF.js canvas/lifecycle/responsive acceptance stays open.
+- Temporary verification services/tabs are closed. The deployed API image, Docker
+  catalog, provider, `.env`, matters, actual review ledgers and serving graphs remain
+  unchanged. Public source/staging sidecars and logs are retained outside Git.
+
+See the [public receipt](evidence/pdf-original-inspection-2026-10-11.json) and
+[inspection contract](SOURCE_REVIEW_CONTRACT.md#original-pdf-page-inspection).
+Next: browser acceptance and actual qualified page-by-page source reviews, shared
+legal-work identity adjudication for the two 6101 representations, independent
+source-linked references and witnessed paired studies. No current-law, historical
+jurisprudence, corpus, target-host or pilot qualification is inferred.
+
 ## Registered text-only PDF preparation — 11 October 2026 (Asia/Shanghai)
 
 Base: PR #44 is merged at `eea77d9ea5e8316e7f9546876d8d37083281df24`.
