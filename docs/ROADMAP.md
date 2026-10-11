@@ -6,6 +6,16 @@ This is the canonical delivery plan. [Data and knowledge strategy](DATA_KNOWLEDG
 
 ## Product contract
 
+### Delivery authorization amendment — 11 October 2026
+
+After reporting PR #49 merged, the user authorized the development agent to merge
+subsequent roadmap PRs and continue to the next packet. This prospectively supersedes
+the manual-merge instructions in earlier ledger entries. Merge only the reviewed
+exact PR head after all required hosted checks pass, using ordinary repository
+protections without an administrator bypass. Verify the resulting main commit and
+report post-merge CI separately. This authority grants neither legal/source review
+nor corpus publication, deployment or a weakening of security/quality gates.
+
 Türkiye-first preparation workspace for 10–50 lawyers. First validated workflows: contracts, commercial disputes and employment. Complete preparation flow: matter brief → local intake → facts/evidence → candidate issues → graph-assisted research → lawyer review → versioned export. Facts, allegations, judicial findings, hypotheses and legal conclusions remain distinct. Output must expose exact sources, adverse interpretations, missing evidence, coverage, applicability assumptions and review state.
 
 Two graphs are mandatory infrastructure; the former graph deferral is superseded. National ontology coverage begins at inception. Historical population covers 1920 onward with earlier predecessors where continuity or applicable law requires them. Deep content validation starts in the first three practices. Historical backfill continues beyond v1.
@@ -1756,3 +1766,32 @@ studies. The selection dossier assists this review without automatically enrolli
 or counting originals. Lawful RG/MBS/judicial acquisition, reviewed historical
 reconstruction, national legal qualification, representative throughput and
 target-host/pilot gates remain open; R01/R03 are not complete.
+
+### Delivered packet — R03 registered jurisprudence PDF intake, 11 October 2026
+
+PR #49 is verified merged at `dda436732fa9dee4060bd4e17e680bce1eea2974`;
+its exact-head hosted checks and all three post-merge main jobs in `38133240697` passed.
+The next packet registers one fixed AYM individual-application PDF representation
+for 2018/31036, separate from statute text. Immutable registry v4 preserves v1/v2/v3
+membership and metadata; older acquisitions never resolve against today's registry.
+
+The existing isolated PDF adapter and host admission retain decision-specific
+limitations while preserving exact originals, acquisition manifests and page
+locators. Legal effect, finality, opinion roles, personal-data suitability, identity
+and rights remain unreviewed; dates remain unknown. No graph identity, authority
+treatment, party correlation, current-law approval or retrieval publication is made.
+The JavaScript decision-database shell is not an admissible substitute.
+
+The first actual invocation stopped at the unchanged DNS deadline and admitted
+nothing. 339 isolated Linux source/acquisition/preparation/import tests pass,
+including legacy-v3 provenance preservation, fixed AYM transport, rejection of
+reclassification/relocation, scan-first preparation and pending-review import.
+See [registered sources](REGISTERED_SOURCES.md), [preparation](REGISTERED_SOURCE_PREPARATION.md)
+and [verification](VALIDATION.md). Actual acquisition/fidelity/rights review,
+independent references, national corpus and pilot qualification remain open.
+
+Next engineering packet: source-bound decision identifier/date/citation candidates
+with exact passage locations and explicit uncertainty. Candidate occurrences must
+not become canonical identities, historical provision versions or authority
+treatments without independent accountable review. Preserve unknown dates and all
+source evidence; continue lawful acquisition and human review alongside this work.

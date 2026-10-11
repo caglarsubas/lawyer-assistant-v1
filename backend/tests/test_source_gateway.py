@@ -87,7 +87,8 @@ def cli():
 
 def test_registry_is_closed_and_immutable():
     assert set(gateway.REGISTRY) == {"tbmm-6101-enacted", "tbmm-6098-enacted",
-                                     "tbmm-4857-enacted", "tbmm-6103-enacted", "adalet-6101-pdf"}
+                                     "tbmm-4857-enacted", "tbmm-6103-enacted", "adalet-6101-pdf",
+                                     "aym-2018-31036-pdf"}
     assert gateway.REGISTRY[SOURCE].url.endswith("3c4eac23-5d02-49cd-9ef1-4bf8de05aee6.html")
     with pytest.raises(TypeError):
         gateway.REGISTRY["caller"] = gateway.REGISTRY[SOURCE]
@@ -140,6 +141,47 @@ def test_pdf_get_media_provenance_and_package_are_bound_to_exact_registry(transp
     (tmp_path / "pdf/raw.pdf").rename(tmp_path / "pdf/raw.html")
     with pytest.raises(gateway.AcquisitionError, match="unexpected"):
         cli._validate_package("adalet-6101-pdf", tmp_path / "pdf")
+
+
+def test_decision_registry_keeps_all_prior_snapshots_exact_and_separate():
+    old = gateway.REGISTRY_SNAPSHOTS[gateway.PDF_REGISTRY_VERSION]
+    assert len(old) == 5 and "aym-2018-31036-pdf" not in old
+    assert all(gateway.REGISTRY[key] == value for key, value in old.items())
+    for version in (gateway.LEGACY_REGISTRY_VERSION, gateway.HTML_REGISTRY_VERSION, gateway.PDF_REGISTRY_VERSION):
+        with pytest.raises(gateway.AcquisitionError, match="Unknown registered source"):
+            gateway.registered("aym-2018-31036-pdf", registry_version=version)
+    with pytest.raises(TypeError):
+        old["aym-2018-31036-pdf"] = gateway.REGISTRY["aym-2018-31036-pdf"]
+
+
+def test_decision_get_has_no_query_secrets_or_html_fallback(transport, tmp_path, cli):
+    content = b"%PDF-1.7\nsynthetic court representation\n%%EOF"
+    observed = transport(body=content, headers=[("Content-Type", "application/pdf"), ("Content-Length", str(len(content)))])
+    raw, manifest = gateway.acquire("aym-2018-31036-pdf", connected_staging=True)
+    assert observed["sni"] == ["www.anayasa.gov.tr"]
+    assert observed["tls"].sent.startswith(b"GET /media/7232/2018-31036.pdf HTTP/1.1\r\nHost: www.anayasa.gov.tr\r\n")
+    assert b"?" not in observed["tls"].sent and b"Authorization" not in observed["tls"].sent
+    assert manifest["representation"] == "individual_application_decision"
+    assert manifest["limitations"][0] == gateway.DECISION_LIMITATION
+    assert manifest["review_status"] == "legal_review_pending" and manifest["current_consolidation"] is False
+    gateway.write_package(raw, manifest, tmp_path / "decision")
+    assert cli._validate_package("aym-2018-31036-pdf", tmp_path / "decision") == manifest
+    transport(headers=[("Content-Type", "text/html")])
+    with pytest.raises(gateway.AcquisitionError, match="media type"):
+        gateway.acquire("aym-2018-31036-pdf", connected_staging=True)
+
+
+@pytest.mark.parametrize("field,value", [("representation", "enacted_text"),
+                                       ("limitations", [gateway.PDF_LIMITATION]),
+                                       ("registry_version", gateway.PDF_REGISTRY_VERSION),
+                                       ("source_url", "https://www.anayasa.gov.tr/other.pdf"),
+                                       ("current_consolidation", True)])
+def test_decision_provenance_cannot_be_reclassified_or_relocated(transport, field, value):
+    transport(headers=[("Content-Type", "application/pdf")])
+    raw, manifest = gateway.acquire("aym-2018-31036-pdf", connected_staging=True)
+    manifest[field] = value
+    with pytest.raises(gateway.AcquisitionError):
+        gateway.validate_acquisition_metadata(raw, manifest)
 
 
 @pytest.mark.parametrize("source_id,media", [("adalet-6101-pdf", "text/html"),

@@ -1,5 +1,40 @@
 # Verification record — 11 October 2026
 
+## Registered jurisprudence PDF intake — 11 October 2026
+
+PR #49 is verified merged at `dda436732fa9dee4060bd4e17e680bce1eea2974`.
+All three exact post-merge main jobs passed in run `38133240697`. This packet adds
+one closed AYM decision-PDF route and preserves statute/decision provenance.
+
+- 245 focused native gateway/PDF/preparation tests pass (0.99s); 339 isolated Linux
+  gateway/PDF/preparation/public-source tests pass (9.07s). The Linux container has
+  no network, a read-only root, user 10001, dropped capabilities, no privilege
+  escalation, bounded memory/processes and no application-data or credential mounts.
+  All five changed code/test files match the test-only image fingerprints.
+- Tests retain v1/v2/v3 snapshots, exact AYM destination/media, original manifests
+  and page evidence; reject reclassification, old-registry substitution and wrong
+  limitations; and keep scan-first/import review states pending. Synthetic scanner
+  receipts do not establish real scanning, availability or decision fidelity.
+- Complete collection assigns all 3,843 cases exactly once across the unchanged
+  CI partitions. Configured Ruff, whitespace and 41 deployment contracts pass.
+  No workflow, runner, retry, dependency or deadline change is made. These are
+  engineering results, not a hosted performance or billing-savings claim.
+- One actual registered acquisition invocation used the separate public-only
+  worker with the current registry. It failed at `dns_timeout` and admitted no
+  package. No parser, import, review or graph publication ran for that attempt.
+  The JavaScript decision-database shell and press material were not substituted.
+- A native deployment-check command initially targeted a nonexistent `deploy/tests`
+  directory and ran zero cases; the correct existing unittest discovery produced
+  the 41-case result. One import-format issue was fixed before the passing lint.
+
+See [registered sources](REGISTERED_SOURCES.md), [preparation contract](REGISTERED_SOURCE_PREPARATION.md)
+and [metadata-only receipt](evidence/aym-decision-intake-2026-10-11.json).
+Exact-head hosted checks follow one normal push; user-authorized agent merge now
+supersedes earlier manual-merge instructions. Source rights/privacy/identity,
+decision effect/finality/opinion review, actual corpus acquisition, independent
+references and national/pilot qualification remain open. No provider, private
+matter, actual review ledger, serving graph or deployed application changed.
+
 ## Confidential source-selection handoff — 11 October 2026
 
 PR #48 is verified merged at `8bdb05275ff229d5559b696cd4092b8c12efbd94`.
