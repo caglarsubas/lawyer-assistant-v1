@@ -33,6 +33,67 @@ from app.release_snapshot_set import SnapshotSetRequest, SourceSelection, locked
 from app.source_review_models import SourceReviewHead
 
 
+def relationship_request(fixture, *, reverse=False):
+    app, sources, _, _ = fixture
+    client = sources[0][1]
+    identifiers = [item[3] for item in sources]
+    if reverse:
+        identifiers.reverse()
+    left, right = identifiers
+    store = sources[0][2]
+    packages = [store.verified_package(ident) for ident in identifiers]
+    params = {'other_source_id': right, 'passage_id': packages[0].locators.passages[0].id,
+              'other_passage_id': packages[1].locators.passages[0].id}
+    evidence = client.get(f'/api/v1/public-sources/{left}/comparison', params=params)
+    assert evidence.status_code == 200, evidence.text
+    base = f'/api/v1/public-sources/{left}/relationship?other_source_id={right}'
+    state = client.get(base).json()
+    body = {'expected_revision': state['revision'],
+            'expected_source_revisions': {key: value['revision'] for key, value in state['source_reviews'].items()},
+            'classification': 'unresolved', 'rationale': 'Synthetic PostgreSQL race; no legal opinion',
+            'identities': [], 'evidence_refs': [],
+            'comparison': {'passage_id': params['passage_id'], 'other_passage_id': params['other_passage_id'],
+                           'offset': 0, 'other_offset': 0, 'evidence_sha256': evidence.json()['evidence_sha256']}}
+    return client, base, body
+
+
+def test_relationship_opposite_pair_writers_keep_one_revision(postgres_sources):
+    forward = relationship_request(postgres_sources)
+    reverse = relationship_request(postgres_sources, reverse=True)
+    barrier = Barrier(2)
+    def write(args):
+        client, base, body = args
+        barrier.wait(timeout=5)
+        return client.post(base, json=body)
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        responses = list(pool.map(write, [forward, reverse]))
+    assert sorted(response.status_code for response in responses) == [200, 409]
+    state = forward[0].get(forward[1]).json()
+    assert state['revision'] == 1 and len(state['history']) == 1
+
+
+def test_relationship_waits_for_source_revision_then_rejects_old_pin(postgres_sources):
+    app, sources, _, _ = postgres_sources
+    client, base, body = relationship_request(postgres_sources)
+    source_id = sources[1][3]
+    with app.state.store.session() as blocker:
+        head = blocker.scalar(select(SourceReviewHead).where(SourceReviewHead.source_id == source_id).with_for_update())
+        with observe_identity_lock(app.state.store.engine, statement_fragment='FROM source_review_heads') as (attempted, pids):
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                future = pool.submit(client.post, base, json=body)
+                assert attempted.wait(timeout=5)
+                # The second source wait can have a different PID from the first
+                # head query only if the implementation changes connection use.
+                wait_until_blocked(app.state.store.engine, pids[-1])
+                head.revision += 1  # Deliberately inconsistent synthetic source ledger.
+                blocker.commit()
+                response = future.result(timeout=10)
+    assert response.status_code == 409
+    from app.source_review_models import SourceRelationshipHead
+    with app.state.store.session() as session:
+        assert session.scalar(select(SourceRelationshipHead)) is None
+
+
 @pytest.fixture
 def postgres_database():
     value = os.environ.get("LA_TEST_POSTGRES_URL")

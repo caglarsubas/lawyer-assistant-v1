@@ -29,6 +29,9 @@ retrieval. An absent review has revision0 and no owner; GET does not create it.
   bounded literal comparison with a separately verified retained source. Choose
   both passages explicitly; no legal identity or version is resolved. See the
   [comparison and evidence contract](SOURCE_COMPARISON.md).
+- `GET/POST /relationship?other_source_id=<package-sha256>` and `GET /relationship/export`:
+  separate firm-private, comparison/source-review-bound human work/version opinions;
+  no public identity merge or study/publication approval. See [relationship review](SOURCE_RELATIONSHIPS.md).
 - `GET /review`: response shape below, last50 events, explicit history_truncated.
 - `POST /review/assignment`: `{expected_revision, action:"claim"|"release", rationale}`.
   A reviewer claims an unassigned source; reviews require that ownership. Only the

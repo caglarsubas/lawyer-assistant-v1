@@ -1,5 +1,51 @@
 # Verification record — 11 October 2026
 
+## Human source relationship review — 11 October 2026
+
+PR #47 is verified merged at `1b33e2da15812b2b53cdc6446d50e60eebf63966`.
+All three exact main jobs passed in run `38124024422`. This packet adds only
+firm-private, evidence/source-review-bound human pair opinions; it makes no actual
+source judgment, public identity merge or publication/qualification approval.
+
+- 262 focused native source/relationship/review/mapping cases pass (69.38s), including
+  35 new relationship regressions. 622 disconnected, read-only, unprivileged Linux
+  source/preparation/original/review cases pass (86.88s). Five changed backend/test
+  files match the test-only image fingerprint.
+- Two new real PostgreSQL tests pass (1.76s): reversed pair writers retain one winner
+  and a source-head lock/change prevents an obsolete relationship write. Each uses
+  an isolated child database under the dedicated loopback test database. The
+  disposable container was removed; the deployed database was not used.
+- All 350 frontend tests in 34 files pass; TypeScript/Vite production build, configured
+  Ruff, whitespace and 41 deployment contracts pass. The existing bundle-size
+  warning remains. Native Starlette deprecation and isolated pytest read-only-cache
+  warnings do not imply a failed gate.
+- Complete collection assigns all 3,805 cases exactly once across the unchanged CI
+  partitions. No jobs, retries, skip conditions or time limits changed. This is
+  collection coverage, not a measured hosted speedup or billing-savings claim.
+- The disposable production browser saved synthetic same-work/version and unresolved
+  opinions at revisions 1/2, preserving both. Invented evidence/reference labels are
+  explicit. Unknown effort stayed null; a later explicit zero remained an estimate.
+  A real browser download contains the freshly checked confidential dossier. Changing
+  one synthetic source review projected Stale in the API and browser, disabled
+  resolved classifications, and preserved the old opinions. Clearing passage
+  selection removed all comparison/relationship UI. No console errors were observed.
+- Browser screenshots/downloads and operational records stay ignored. The signed-in
+  tab and both synthetic services were closed. No actual acquired source ledger,
+  provider, private matter, serving release or deployed application changed.
+- An initial router omission was caught by native setup and repaired before the
+  passing suites. A first isolated invocation named a nonexistent test file and
+  ran zero cases; the corrected explicit list produced the 622-case result. The
+  disposable browser harness initially rejected a symlinked temporary path and
+  middleware registration after startup; its resolved-path/setup order was fixed
+  without changing product admission or browser/security policies.
+
+See [relationship contract](SOURCE_RELATIONSHIPS.md) and the metadata-only
+[engineering receipt](evidence/source-relationship-review-2026-10-11.json).
+The committed receipt records pre-push engineering. Exact-head hosted checks must
+be recorded separately in the PR after one normal push; manual merge only. All
+human/corpus adjudication, independent references/registered paired studies,
+representative throughput and target-host/pilot gates remain open.
+
 ## Retained source comparison — 11 October 2026
 
 PR #46 is verified merged into main at `cd813d8e44c3cc84aa258f2d77cda611afb93675`.
