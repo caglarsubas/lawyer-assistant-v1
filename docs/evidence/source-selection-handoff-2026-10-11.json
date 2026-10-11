@@ -1,0 +1,133 @@
+{
+  "schema_version": "source-selection-engineering-v1",
+  "scope": "synthetic_engineering_not_legal_qualification",
+  "base_main_sha": "8bdb05275ff229d5559b696cd4092b8c12efbd94",
+  "base_main_run": 38129459620,
+  "base_main_ci": "all_three_success",
+  "isolated_linux": {
+    "passed": 449,
+    "seconds": 79.76,
+    "network": "none",
+    "read_only": true,
+    "unprivileged": true,
+    "cpu_limit": 2,
+    "memory_mib": 1536,
+    "image": "sha256:ac7876e428e345ce1837d966d6c19540b02804619effe3193e85397d4023d1a9",
+    "tested_fingerprints": {
+      "backend/app/main.py": "1323d70caba9e054a96bf83bcd51b8a9c1d7608b970dbcd0b70ba26ad3d543f8",
+      "backend/app/source_selection.py": "fd9f5faefa0779640c3fc0ac3a2be6c9504b4ce137d0454a2b86cc0c058e8af6",
+      "backend/tests/test_source_selection.py": "ae277f42bb1b3057387fe3ac8325588c33d084cd8d146a6eb75475a6f85b6891"
+    }
+  },
+  "real_postgres": {
+    "passed": 1,
+    "seconds": 1.26,
+    "scope": "dedicated_loopback_disposable_database_concurrent_pair_change",
+    "container_removed": true,
+    "test_fingerprint": "f14980ece546770eab71561d448b47a04719524426172fb57dc9e10b812c0bc5"
+  },
+  "frontend": {
+    "passed": 376,
+    "files": 35,
+    "production_build": "passed",
+    "existing_bundle_warning": true
+  },
+  "deployment_contracts": {
+    "passed": 41
+  },
+  "ruff": "passed",
+  "whitespace": "passed",
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3833,
+      "preflight": 89,
+      "remaining": 3455,
+      "publication": 132,
+      "workspace": 77,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "83af77c5045927e1fe0a15b1210febe9c90c31d83bc43be63d63ee6765775896",
+    "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "browser": {
+    "scope": "synthetic_only",
+    "download_file_sha256": "b3ddd7f6f806f2a356bb1d4c8cb17808893d61bf57d3fe1743ad8d4ac1e95167",
+    "initial_evidence_sha256": "ccfb025aaf61f819c7a5d5427d585f1a8adeee164e1fb6cf7ceb41cc3aab345b",
+    "fresh_http_match": true,
+    "before_pair_counts": {
+      "missing": 1,
+      "resolved": 2,
+      "stale": 0,
+      "unresolved": 0
+    },
+    "after_pair_counts": {
+      "missing": 1,
+      "resolved": 0,
+      "stale": 2,
+      "unresolved": 0
+    },
+    "changed_evidence_sha256": "348496ed0071e685896e06f484b179cf71f4ea2ac85473a8b273072371aaf75e",
+    "independent_original_count": null,
+    "study_qualified": false,
+    "stale_download_sha256": "d46607bd82c8261db39f773cae6bf7e64a07344afd4a1313686cfe25defeb9a8",
+    "stale_download_evidence_sha256": "348496ed0071e685896e06f484b179cf71f4ea2ac85473a8b273072371aaf75e",
+    "stale_history_preserved": true,
+    "fresh_browser_export_reflects_new_review": true,
+    "exact_pair_preselection_observed": true,
+    "comparison_passages_remain_unselected": true,
+    "navigation_clears_selection_to_zero": true,
+    "console_errors": 0,
+    "tab_closed": true,
+    "synthetic_services_stopped": true,
+    "screenshots": {
+      "browser-result.jpg": "8cab79a3655c188daba50b995a1f79b71f9b9c4cc5d606316e938766e5ace280",
+      "browser-stale.jpg": "9371e9a9f747800b8744ab936bf8e244265647a455c77c7061a1ceba01178dbc"
+    }
+  },
+  "no_actual_source_judgment": true,
+  "no_provider_matter_graph_or_deployment_change": true,
+  "independence_qualified": false,
+  "study_qualified": false,
+  "national_legal_qualified": false,
+  "pre_push_engineering_only": true,
+  "exact_head_hosted_checks": "pending_normal_push",
+  "merge": "manual_only"
+}

@@ -1721,3 +1721,38 @@ adjudicate their work/version relationships and retain real effort/disagreement
 evidence. Independently author references and register witnessed paired studies;
 continue lawful RG/MBS/judicial acquisition and historical reconstruction. These
 human/corpus, national legal, representative throughput and pilot gates remain open.
+
+### Delivered packet — R01/R03 confidential source-selection handoff, 11 October 2026
+
+PR #48 is verified merged at `8bdb05275ff229d5559b696cd4092b8c12efbd94`;
+exact main run `38129459620` passed all three jobs. Curators can now inspect two to
+six retained packages together before reference/study intake. Every direct pair
+has a missing, unresolved, stale or resolved state. Current conflicting work/version
+declarations and separate source-assessment gaps remain visible; prior opinions,
+classification counts and history fingerprints are retained. No transitive grouping,
+identity merge, independent-original count or study qualification is inferred.
+
+Read-only local endpoints freshly verify originals, encrypted source/pair heads,
+complete event histories and authorization before returning a reproducible unsigned
+firm-confidential snapshot. The browser checks exact receipt bytes and coverage,
+clears old results on selection/navigation changes and freshly revalidates each
+download. Exact pair links open comparison with both sources preselected while
+passage selection remains manual. Work, history and receipt limits withhold partial
+output; cooperative deadlines are documented separately from hard cancellation.
+
+The 449-case isolated Linux suite, 376 frontend tests, production build and new
+real-PostgreSQL concurrent-change rejection pass. A disposable synthetic browser
+demonstrates conflicting/missing opinions, a newly stale download preserving old
+opinions, exact navigation and cleared selection. Actual acquired source ledgers,
+private matters, provider, serving graphs and deployed application are unchanged.
+All 3,833 backend cases remain assigned exactly once in the unchanged CI partition;
+no runners, retries or deadlines were added. See the [handoff contract](SOURCE_SELECTION.md),
+[verification](VALIDATION.md) and [engineering receipt](evidence/source-selection-handoff-2026-10-11.json).
+Manual PR merge and exact-head hosted checks remain required.
+
+Next: qualified curators review the acquired originals and adjudicate shared work
+and version, then independently author references and register witnessed paired
+studies. The selection dossier assists this review without automatically enrolling
+or counting originals. Lawful RG/MBS/judicial acquisition, reviewed historical
+reconstruction, national legal qualification, representative throughput and
+target-host/pilot gates remain open; R01/R03 are not complete.

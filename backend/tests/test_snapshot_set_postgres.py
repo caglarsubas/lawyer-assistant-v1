@@ -57,6 +57,33 @@ def relationship_request(fixture, *, reverse=False):
     return client, base, body
 
 
+def test_selection_export_rejects_pair_changed_during_read(postgres_sources, monkeypatch):
+    from app import source_selection
+    client, base, body = relationship_request(postgres_sources)
+    assert client.post(base, json=body).status_code == 200
+    entered, resume = Event(), Event()
+    original = source_selection._identity_conflicts
+
+    def pause(pairs):
+        entered.set()
+        assert resume.wait(5)
+        return original(pairs)
+
+    monkeypatch.setattr(source_selection, '_identity_conflicts', pause)
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        future = pool.submit(client.post, '/api/v1/public-sources/selection-review/export',
+                             json={'source_ids': list(body['expected_source_revisions'])})
+        try:
+            assert entered.wait(5)
+            replacement = {**body, 'expected_revision': 1, 'rationale': 'New synthetic PostgreSQL opinion'}
+            assert client.post(base, json=replacement).status_code == 200
+        finally:
+            resume.set()
+        result = future.result(timeout=10)
+    assert result.status_code == 409 and 'evidence_json' not in result.json()
+    assert client.get(base).json()['revision'] == 2
+
+
 def test_relationship_opposite_pair_writers_keep_one_revision(postgres_sources):
     forward = relationship_request(postgres_sources)
     reverse = relationship_request(postgres_sources, reverse=True)

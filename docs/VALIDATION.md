@@ -1,5 +1,51 @@
 # Verification record — 11 October 2026
 
+## Confidential source-selection handoff — 11 October 2026
+
+PR #48 is verified merged at `8bdb05275ff229d5559b696cd4092b8c12efbd94`.
+All three exact main jobs passed in run `38129459620`. This packet exposes existing
+firm-private direct opinions before reference/study selection. It makes no actual
+source judgment, new review write, public identity merge or qualification approval.
+
+- 449 focused source/relation/review/mapping/reference cases pass in a disconnected,
+  read-only, unprivileged Linux container (79.76s). The production module/router and
+  new selection regression file match the test-only image fingerprints. Tests cover
+  all fifteen pairs, missing/stale/conflicting opinions, preserved disagreements,
+  strict inputs, cross-firm/permission/CSRF boundaries, changed originals, damaged
+  or deleted history, late head/event/account changes and work/receipt limits.
+- A new real PostgreSQL race passes (1.26s): a second connection changes a pair
+  opinion while export is being assembled; the export returns 409 without a partial
+  receipt and preserves revision 2. The dedicated disposable container was removed.
+- All 376 frontend tests in 35 files pass; TypeScript/Vite production build,
+  configured Ruff, whitespace checks and 41 deployment contracts pass. The existing bundle-size warning
+  remains. Native Starlette deprecation and isolated pytest read-only-cache warnings
+  do not imply failed gates.
+- Complete collection assigns all 3,833 cases exactly once: 89 preflight, 3,455
+  remaining, 132 publication, 77 workspace, 60 human-review and 20 model-trial cases.
+  Workflow, jobs, retries and time limits are unchanged. This is collection coverage,
+  not a measured hosted speedup or billing-savings claim.
+- The disposable production browser selects three explicitly synthetic sources:
+  two current opinions, one missing pair and one conflicting identity declaration.
+  Its actual JSON download matches the repeatable HTTP evidence digest. A new
+  synthetic source assessment makes two opinions stale; a fresh browser download
+  updates the displayed snapshot and retains both histories. Independent-original
+  count stays null and all qualification flags remain false.
+- Exact pair navigation preselects the intended second source, with no automatic
+  passage choice. Returning to the catalog clears the selection to zero. No console
+  errors were observed. The signed-in verification tab and both synthetic services
+  were closed; actual source ledgers, provider, matters and deployment are untouched.
+- Browser testing caught a JSON object-key-order mismatch in receipt consistency
+  checks. Recursive key ordering and canonical test envelopes fixed it before the
+  passing run. Synthetic corruption scaffolding and parameterized test typing were
+  repaired without changing product permissions, admission rules or CI limits.
+
+See [handoff contract](SOURCE_SELECTION.md) and the metadata-only
+[engineering receipt](evidence/source-selection-handoff-2026-10-11.json). The committed
+receipt records pre-push engineering; exact-head hosted results belong in the PR
+after one normal push, with manual merge only. Actual legal review, independent
+references, witnessed paired studies, national corpus and target-host/pilot gates
+remain open.
+
 ## Human source relationship review — 11 October 2026
 
 PR #47 is verified merged at `1b33e2da15812b2b53cdc6446d50e60eebf63966`.

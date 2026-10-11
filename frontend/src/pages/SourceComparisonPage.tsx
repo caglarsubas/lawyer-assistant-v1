@@ -7,17 +7,18 @@ import { canReviewSource } from './SourceReviewPage';
 import SourceRelationshipPanel from './SourceRelationshipPanel';
 import { COMPARISON_WINDOW, fetchSourceComparison, type ComparisonEvidence, type ComparisonSelection, type ComparisonWindow } from './sourceComparison';
 
-export default function SourceComparisonPage({ sourceId, user }: { sourceId: string; user: User }) {
+export default function SourceComparisonPage({ sourceId, user, otherSourceId = '' }: { sourceId: string; user: User; otherSourceId?: string }) {
   if (!canReviewSource(user)) return <Notice error>Kaynak karşılaştırması için küratör yetkisi gerekiyor.</Notice>;
   if (!/^[a-f0-9]{64}$/.test(sourceId)) return <Notice error>Kaynak kimliği geçersiz.</Notice>;
-  return <ComparisonWorkspace key={`${sourceId}:${user.id}`} sourceId={sourceId} />;
+  if (otherSourceId && (!/^[a-f0-9]{64}$/.test(otherSourceId) || otherSourceId === sourceId)) return <Notice error>İkinci kaynak kimliği geçersiz.</Notice>;
+  return <ComparisonWorkspace key={`${sourceId}:${user.id}:${otherSourceId}`} sourceId={sourceId} initialOther={otherSourceId} />;
 }
 
-function ComparisonWorkspace({ sourceId }: { sourceId: string }) {
+function ComparisonWorkspace({ sourceId, initialOther }: { sourceId: string; initialOther: string }) {
   const [catalog, setCatalog] = useState<(PublicSourceCatalog & { next_cursor: string | null }) | null>(null);
   const [refresh, setRefresh] = useState(0);
   const [catalogLoading, setCatalogLoading] = useState(false); const [catalogCursor, setCatalogCursor] = useState<string | null>(null);
-  const [other, setOther] = useState(''); const [left, setLeft] = useState<ComparisonSelection | null>(null); const [right, setRight] = useState<ComparisonSelection | null>(null);
+  const [other, setOther] = useState(initialOther); const [left, setLeft] = useState<ComparisonSelection | null>(null); const [right, setRight] = useState<ComparisonSelection | null>(null);
   const [offset, setOffset] = useState(0); const [otherOffset, setOtherOffset] = useState(0);
   const [result, setResult] = useState<ComparisonEvidence | null>(null); const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [denied, setDenied] = useState(false);
   const operation = useRef<AbortController | null>(null), catalogOperation = useRef<AbortController | null>(null);

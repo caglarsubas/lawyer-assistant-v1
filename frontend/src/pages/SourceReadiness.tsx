@@ -2,6 +2,7 @@ import { ApiError, request } from '../api';
 import { Badge, Detail, Loading, Notice } from '../components';
 import type { GraphServingRelease, PublicSourceCatalog, PublicSourceRecord } from '../types';
 import { DOMAIN_LABELS, formatDate, messageOf, statusLabel } from '../utils';
+import SourceSelectionPanel from './SourceSelectionPanel';
 
 export type SourceCatalogState =
   | { status: 'loading' }
@@ -57,6 +58,7 @@ export function SourceCatalog({ state, onRetry }: { state: SourceCatalogState; o
       <p className="small">Edinilen kamu kaynaklarının hazırlık kaydıdır. Kaynak veya pasaj sayısı; kullanım izni, hukuki inceleme, yayımlanmış sürüm veya derlemin tamlığı anlamına gelmez.</p>
       {state.status === 'loading' ? <Loading label="Kaynak hazırlık kayıtları yükleniyor…" /> : state.status === 'restricted' ? <Notice>Kaynak hazırlık kayıtlarını yalnızca yönetici ve küratörler görebilir. Genel kapsamı ve etkin graf sürümünün durumunu bu sayfadan incelemeye devam edebilirsiniz.</Notice> : state.status === 'failed' ? <Notice error>{state.message} Kaynak kabul kaydı alınamadı; genel kapsam bilgisi ayrı değerlendirilir.</Notice> : <>
         {state.catalog.items.length ? <div className="source-records">{state.catalog.items.map((source) => <SourceRecord key={source.id} source={source} />)}</div> : <p className="small muted source-summary">Henüz görünür hazırlık kaydı yok. Bu durum, ilgili hukuk alanında kaynak bulunmadığı anlamına gelmez.</p>}
+        {state.catalog.items.length >= 2 && <SourceSelectionPanel key={state.catalog.items.map(source => source.id).join(':')} sources={state.catalog.items} />}
         {state.catalog.limitations.length > 0 && <Detail title="Kaynak kabul kaydının sınırları"><ul>{state.catalog.limitations.map((limitation, index) => <li key={index}>{limitation}</li>)}</ul></Detail>}
       </>}
       {state.status !== 'restricted' && <button className="text-button" disabled={state.status === 'loading'} onClick={onRetry}>{state.status === 'loading' ? 'Yükleniyor…' : 'Kaynak kaydını yenile'}</button>}

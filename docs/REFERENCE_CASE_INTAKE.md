@@ -131,6 +131,11 @@ references, measured review throughput, witnessed protocol registration and
 representative paired trials. Qualified publication, model benefit, historical
 coverage, Standard/Deep budgets, deployment and pilot acceptance remain open.
 
+Before selecting study originals, curators can inspect the confidential
+[source-selection handoff](SOURCE_SELECTION.md). Its direct opinions, missing/stale
+edges and identity conflicts inform accountable review; they do not establish case
+families, independent sample counts or automatically populate this casebook.
+
 ## Independently enrolled registration signatures
 
 Optional registration verification checks two to ten Ed25519 signatures over the
