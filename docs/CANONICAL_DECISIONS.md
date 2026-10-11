@@ -65,3 +65,10 @@ publication tooling does not accept
 decision identity ledgers. Legal/privacy/fidelity review, graph identity equivalence,
 ontology qualification, publication authorization and serving activation remain
 separate work. No actual legal approval is supplied by engineering fixtures.
+# Cross-source review successor
+
+[Reviewed equivalence and retained institutional-register evidence](DECISION_EQUIVALENCE.md)
+now records a separate, firm-private claim between two accepted decision identities.
+An explicit existing canonical candidate is required for a same-decision claim. This
+does not relax the original reservation rules, recycle IDs or rewrite source-bound
+versions. Consequential shared identity registration and publication remain gated.

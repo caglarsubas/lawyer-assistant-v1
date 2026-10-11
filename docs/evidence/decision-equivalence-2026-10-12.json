@@ -1,0 +1,96 @@
+{
+  "schema": "decision-equivalence-engineering-v1",
+  "date": "2026-10-12",
+  "base": {
+    "pr": 55,
+    "merge": "257056245aafd4becf68f88a62e9d763fc69226a",
+    "post_merge_ci_run": 38153461750,
+    "all_three_jobs": "success"
+  },
+  "verification": {
+    "disconnected_linux": {
+      "passed": 105,
+      "seconds": 39.28
+    },
+    "postgres": {
+      "passed": 8,
+      "deselected": 11,
+      "seconds": 6.49
+    },
+    "frontend": {
+      "passed": 445,
+      "files": 40
+    },
+    "production_build": "passed",
+    "deployment_contracts": 41,
+    "ruff": "passed",
+    "ci_partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 3993,
+        "preflight": 89,
+        "remaining": 3615,
+        "publication": 132,
+        "workspace": 77,
+        "human_review": 60,
+        "model_trials": 20
+      },
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_open_validity_publication.py",
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py",
+        "backend/tests/test_source_reviews.py",
+        "backend/tests/test_source_review_effort.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_content_scope.py",
+        "backend/tests/test_authority_proposals.py",
+        "backend/tests/test_authority_model_cohorts.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_authority_trial_cohorts.py",
+        "backend/tests/test_analysis_cohorts.py",
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "061b8cfe1b9961ec4c069d88385167682898880175e2407597419ff5a0486f40",
+      "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+      "no_new_runner_retry_or_deadline_change": true,
+      "workspace_workers": 2,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "browser": {
+      "fixture": "three invented source representations, two reviewed identities, independent third account",
+      "proposal_revision": 1,
+      "accepted_revision": 2,
+      "canonical_candidate": "urn:tr-law:decision:synthetic-0",
+      "account_change_cleared_selection": true,
+      "screenshot_sha256": "56db153889ff607283b79305790d74d4e527753de28f7c61817cf0951b4a90b8"
+    }
+  },
+  "actual_legal_review": false,
+  "graph_published": false,
+  "deployment_performed": false,
+  "provider_credentials_changed": false,
+  "limitations": [
+    "Synthetic engineering evidence only; account separation does not establish separate qualified legal persons.",
+    "Private reviewed proposal preserves both original identities and versions; no reservations rewritten, global aliases or transitive equivalence.",
+    "Register evidence addresses institution identity only; temporal competence, binding effect and finality remain unknown.",
+    "Exact-head hosted CI and merge are separate gates recorded in GitHub after publication."
+  ]
+}

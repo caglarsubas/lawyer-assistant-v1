@@ -3960,3 +3960,26 @@ coverage, independent references, witnessed paired studies and legal/pilot
 qualification remain open. Exact-head hosted results are recorded in the PR and
 ignored verification receipt after its one normal run; local checks alone do not
 establish hosted success.
+
+## Reviewed cross-source identity equivalence — 12 October 2026
+
+Base: verified PR #55 merge `257056245aafd4becf68f88a62e9d763fc69226a`;
+all three post-merge jobs passed in run `38153461750`.
+[Engineering receipt](evidence/decision-equivalence-2026-10-12.json).
+
+Disconnected Linux identity/equivalence/mapping/dossier/handoff tests: **105 passed**
+in 39.28s. Actual PostgreSQL review/identity/handoff concurrency subset: **8 passed**
+in 6.49s. Frontend: **445 passed**, 40 files; TypeScript/Vite build passed.
+Deployment contracts: **41 passed**; full Ruff and whitespace checks passed.
+Exact unchanged CI collection covers **3,993** disjoint backend cases with no
+missing or extra nodes. No runner, retries, deadlines or workflow changes.
+
+A disposable loopback browser fixture proposed the explicit canonical anchor
+from two preserved decision identities and three retained passage hashes. A
+separate account, absent from the full source/mapping/identity contributor
+histories, accepted the proposal at revision two. Logout cleared source selections
+and private form state. Screenshot and logs remain ignored under
+`.data/verification/r03-equivalence/` in the owned worktree. No real legal sources,
+client data, configured provider, shared graph mutation or deployment was used.
+These synthetic opinions do not establish legal review, national identity registry
+qualification, institution competence, historical applicability or publication.

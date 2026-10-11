@@ -1919,3 +1919,20 @@ institutional-register evidence, followed by a decision-specific publication rev
 contract. These must preserve source versions, private contributors and conflicting
 identities. Real legal/editor approvals, ontology qualification, Graph B population,
 retrieval evaluation and pilot gates remain open; R03/R05 are partial.
+# R03 continuation — reviewed cross-source identities (12 October 2026)
+
+PR #55 is verified merged at `257056245aafd4becf68f88a62e9d763fc69226a`;
+post-merge main run `38153461750` passed all three jobs. This packet adds
+accountable equivalence proposals/opinions across two independently reviewed decision
+sources and a separate retained institutional-register source. Complete pinned
+source/mapping/identity contributor histories define reviewer-account independence.
+Exact retained evidence from every source, explicit canonical candidate selection,
+preserved disagreement and staleness checks gate the private review. Existing
+reservations and document versions remain unchanged; no national alias, competence,
+legal effect, historical validity or graph publication is qualified.
+
+See [contract](DECISION_EQUIVALENCE.md). Next packet: a complete, revision-bound
+multi-source Graph B preparation handoff with the reviewed anchor and retained
+register passages. Decision-specific publication review, signed legal/ontology
+approval, national institutional genealogy, retrieval qualification and pilot gates
+remain open. R03/R05 remain partial.

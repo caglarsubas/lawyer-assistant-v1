@@ -493,3 +493,44 @@ def test_graph_b_handoff_waits_for_source_then_withholds_stale_approval(postgres
                 blocker.commit()
                 result = future.result(timeout=10)
     assert result.status_code == 409 and "evidence_json" not in result.json()
+
+
+@pytest.fixture
+def postgres_equivalence(postgres_sources, tmp_path):
+    from test_decision_equivalence import prepare
+    from test_jurisprudence_candidates import incoming
+    app, sources, _, _ = postgres_sources
+    root = tmp_path / "synthetic-equivalence"
+    root.mkdir()
+    store, make = incoming.__wrapped__(source_fixture.__wrapped__(root))
+    return prepare(app, sources[0][1], store, make)
+
+
+def test_equivalence_competing_independent_reviews_keep_one_opinion(postgres_equivalence):
+    from test_decision_equivalence import endpoint, opinion, propose
+    assert propose(postgres_equivalence).status_code == 200
+    barrier = Barrier(2)
+    def write(_):
+        barrier.wait(timeout=5)
+        return opinion(postgres_equivalence)
+    with ThreadPoolExecutor(2) as pool:
+        results = list(pool.map(write, range(2)))
+    assert sorted(response.status_code for response in results) == [200, 409]
+    result = postgres_equivalence[2].get(endpoint(postgres_equivalence)).json()
+    assert result["revision"] == 2 and result["same_decision_supported"]
+
+
+def test_equivalence_waits_for_register_review_and_rechecks_pin(postgres_equivalence):
+    from test_decision_equivalence import propose
+    item = postgres_equivalence[0][2]
+    app = item[0]
+    with app.state.store.session() as blocker:
+        head = blocker.scalar(select(SourceReviewHead).where(SourceReviewHead.source_id == item[3]).with_for_update())
+        with observe_identity_lock(app.state.store.engine, statement_fragment="FROM source_review_heads") as (attempted, pids):
+            with ThreadPoolExecutor(1) as pool:
+                future = pool.submit(propose, postgres_equivalence)
+                assert attempted.wait(5)
+                assert wait_until_blocked(app.state.store.engine, pids[-1])
+                head.revision += 1
+                blocker.commit()
+                assert future.result(timeout=10).status_code == 409
