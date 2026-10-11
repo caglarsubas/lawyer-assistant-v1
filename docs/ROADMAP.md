@@ -1871,3 +1871,26 @@ Next packet: canonical proceeding/decision/institution identity proposals with
 independent review and a staged Graph B handoff. No automatic promotion from the
 firm-private ledger. Real source acquisition, fidelity/privacy/legal review,
 historical-version resolution, graph qualification and pilot gates remain open.
+
+## Delivered R03 packet — canonical decision identities and independent review (11 October 2026)
+
+PR #53 is verified merged at `e9ff93a87f082a25edc19b6f3ae8c9c7e82b9cca`;
+its post-merge main run `38143052204` passed all three jobs. This packet adds
+explicit institution/proceeding/decision identities, document-bound decision
+versions and a complete encrypted private proposal/opinion ledger. A reviewer
+account must be outside the proposer and the entire pinned source/mapping
+contributor history. Ownership transfers cannot erase that history. Current
+source/mapping changes invalidate identity acceptance; conflicting firm-local
+identity reservations cannot silently be reused.
+
+The curator screen exposes exact revision bindings, preserved opinions and stale
+state. Separate-account review is not proof of separate people or legal truth;
+global registry qualification, legal effect and publication remain false. The
+initial contract covers one own decision per source, with explicit evidence;
+multi-decision segmentation and cross-source equivalence remain open. See
+[identity contract](CANONICAL_DECISIONS.md), [validation](VALIDATION.md) and
+[engineering receipt](evidence/canonical-decisions-2026-10-11.json).
+
+Next packet: evidence-backed, revision-bound private Graph B staging. Do not
+automatically promote private identities, contributor names or reviewer opinions
+to shared datasets. Actual source/legal review and R03/R05 release gates remain open.

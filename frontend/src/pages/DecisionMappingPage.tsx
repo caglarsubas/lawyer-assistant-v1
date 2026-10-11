@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { sessionPrincipalKey } from '../sessionMonitor';
+import DecisionIdentityReview from './DecisionIdentityReview';
 import { ApiError, request } from '../api';
 import { Detail, Field, Loading, Notice, PageHeader } from '../components';
 import type { PublicSourceOriginalText, PublicSourcePassages, SourceReviewDecision, User } from '../types';
@@ -102,7 +103,7 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
     {busy && <Loading label="İnceleme işlemi sürüyor…" />}{error && <Notice error>{error}</Notice>}{message && <Notice>{message}</Notice>}
     {!denied && <button className="button secondary" disabled={busy} onClick={() => void load()}>Güncel kaydı yenile</button>}
     {state && <><p>{state.assigned_to?.name || 'Sorumlu atanmadı'} · Eşleme revizyonu {state.revision} · Kaynak inceleme revizyonu {state.source_review_revision}</p>
-      {!owner && <Notice>Değişiklik yapmak için kaynak incelemesini üstlenin.</Notice>}{!state.source_review_ready && <Notice>Kabul için haklar, kaynak kimliği, metin çıkarımı ve hukuki inceleme tamamlanmalıdır.</Notice>}
+      {!owner && <Notice>Anma eşlemelerini değiştirmek için kaynak incelemesini üstlenin. Bağımsız kimlik incelemesi ayrı hesapla yapılır.</Notice>}{!state.source_review_ready && <Notice>Kabul için haklar, kaynak kimliği, metin çıkarımı ve hukuki inceleme tamamlanmalıdır.</Notice>}
       <button className="button secondary" disabled={busy || !state.export_allowed} onClick={() => void downloadDossier()}>Tam gizli inceleme dosyasını indir (JSON)</button>
       {!state.export_allowed && <p className="small muted">Dayanak pasajlarını indirmek için hak incelemesinde açık dışa aktarma izni gerekir.</p>}
       {dossier && <DossierSummary data={dossier} />}
@@ -123,6 +124,7 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
         </fieldset></form>
       </section>}
       <DecisionHistory state={state} />
+      <DecisionIdentityReview key={`${state.revision}:${state.source_review_revision}`} source={state} user={user} onDenied={() => { setDenied(true); setState(null); setPassages(null); setOriginal(null); clearSelection(); }} />
     </>}
   </div>;
 }
