@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { sessionPrincipalKey } from '../sessionMonitor';
 import { ApiError, request } from '../api';
 import { Detail, Field, Loading, Notice, PageHeader } from '../components';
 import type { PublicSourceOriginalText, PublicSourcePassages, SourceReviewDecision, User } from '../types';
-import { messageOf } from '../utils';
+import { formatDate, messageOf } from '../utils';
 import { canReviewSource, fetchOriginalSourceText, SourcePassageList, sourceReviewPath } from './SourceReviewPage';
 import { fetchOriginalSourcePdf, mappedPdfPage, type PdfInspection } from './SourcePdfInspection';
-import { decisionPath, decisionReviewPayload, emptyResolution, fetchDecisionOccurrences, KIND_LABELS, type DecisionOccurrence, type DecisionOccurrences, type DecisionResolution, type DecisionState } from './decisionMapping';
+import { decisionPath, decisionReviewPayload, emptyResolution, fetchDecisionDossier, fetchDecisionOccurrences, KIND_LABELS, type DecisionDossier, type DecisionOccurrence, type DecisionOccurrences, type DecisionResolution, type DecisionState } from './decisionMapping';
 
 export default function DecisionMappingPage({ sourceId, user }: { sourceId: string; user: User }) {
   if (!canReviewSource(user)) return <Notice error>İnceleme yetkisi gerekli.</Notice>;
   try { decisionPath(sourceId); } catch (cause) { return <Notice error>{messageOf(cause)}</Notice>; }
-  return <DecisionWorkspace key={`${sourceId}:${user.id}:${user.role}:${user.permissions?.join(',')}`} sourceId={sourceId} user={user} />;
+  return <DecisionWorkspace key={`${sessionPrincipalKey(user)}:${sourceId}`} sourceId={sourceId} user={user} />;
 }
 type Original = { passageId: string; offset: number; state: { status: 'loading' } | { status: 'failed'; message: string; code?: number } | { status: 'loaded'; value: PublicSourceOriginalText | PdfInspection } };
 function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User }) {
@@ -23,13 +24,15 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
   const [decision, setDecision] = useState<SourceReviewDecision>('needs_changes'); const [rationale, setRationale] = useState('');
   const [reference, setReference] = useState(''); const [sha256, setSha256] = useState('');
   const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [message, setMessage] = useState('');
+  const [dossier, setDossier] = useState<DecisionDossier | null>(null);
+  const urls = useRef(new Set<string>());
   const [denied, setDenied] = useState(false); const controller = useRef<AbortController | null>(null);
   function begin() { controller.current?.abort(); const next = new AbortController(); controller.current = next; setBusy(true); setError(''); setMessage(''); return next; }
-  function clearSelection() { setOccurrences(null); setSelected(null); setMappingId(null); setResolution(null); setRationale(''); setReference(''); setSha256(''); setDecision('needs_changes'); }
+  function clearSelection() { setDossier(null); setOccurrences(null); setSelected(null); setMappingId(null); setResolution(null); setRationale(''); setReference(''); setSha256(''); setDecision('needs_changes'); }
   function failure(cause: unknown, operation: AbortController) {
     if (operation.signal.aborted) return;
     setError(messageOf(cause));
-    if (cause instanceof ApiError && [401, 403].includes(cause.status)) { setDenied(true); setState(null); setPassages(null); setOriginal(null); clearSelection(); }
+    if (cause instanceof ApiError && [401, 403].includes(cause.status)) { setDenied(true); for (const url of urls.current) URL.revokeObjectURL(url); urls.current.clear(); setState(null); setPassages(null); setOriginal(null); clearSelection(); }
   }
   async function load(nextOffset = offset) {
     const operation = begin(); setState(null); setPassages(null); setOriginal(null); clearSelection(); setOffset(nextOffset);
@@ -39,7 +42,7 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
       if (!operation.signal.aborted) { setState(s); setPassages(p); }
     } catch (cause) { failure(cause, operation); } finally { if (!operation.signal.aborted) setBusy(false); }
   }
-  useEffect(() => { void load(0); return () => controller.current?.abort(); }, []); // Keyed workspace clears all confidential state on identity/source changes.
+  useEffect(() => { void load(0); return () => { controller.current?.abort(); for (const url of urls.current) URL.revokeObjectURL(url); urls.current.clear(); }; }, []); // Keyed workspace clears all confidential state on identity/source changes.
   async function inspect(passageId: string) {
     if (!passages) return;
     const passage = passages.items.find(item => item.id === passageId); if (!passage) return;
@@ -62,7 +65,7 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
   }
   async function save(event: FormEvent) {
     event.preventDefault(); if (!state || !selected || !resolution || !occurrences) return;
-    const operation = begin();
+    const operation = begin(); setDossier(null);
     try {
       const payload = mappingId ? decisionReviewPayload(state, decision, rationale, resolution, reference, sha256) : {
         expected_revision: state.revision, expected_source_review_revision: state.source_review_revision,
@@ -78,6 +81,20 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
       } else failure(cause, operation);
     } finally { if (!operation.signal.aborted) setBusy(false); }
   }
+  async function downloadDossier() {
+    if (!state || busy) return;
+    const operation = begin(); setDossier(null);
+    try {
+      const result = await fetchDecisionDossier(state, user, operation.signal);
+      if (!operation.signal.aborted) {
+        const url = URL.createObjectURL(new Blob([result.evidence_json], { type: 'application/json' })); urls.current.add(url);
+        const link = document.createElement('a'); link.href = url; link.download = `gizli-karar-inceleme-${sourceId}-r${state.revision}.json`; document.body.append(link); link.click(); link.remove();
+        window.setTimeout(() => { URL.revokeObjectURL(url); urls.current.delete(url); }, 1000);
+        setDossier(result.data); setMessage('Tam inceleme dosyası indirildi. Dosya büroya özeldir; yayımlama izni değildir.');
+      }
+    } catch (cause) { failure(cause, operation); }
+    finally { if (!operation.signal.aborted) setBusy(false); }
+  }
   const owner = state?.assigned_to?.id === user.id;
   return <div className="source-review-page"><a className="text-link" href={`#/sources/${sourceId}`}>Kaynak ve özgün belge incelemesine dön</a>
     <PageHeader eyebrow="KARAR EŞLEŞTİRME" title="Anmadan hesap verebilir incelemeye." description="Seçili pasajdaki numara, tarih ve atıfları inceleyin; belge kimliğini alıntılanan kararlardan ayrı değerlendirin." />
@@ -86,7 +103,10 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
     {!denied && <button className="button secondary" disabled={busy} onClick={() => void load()}>Güncel kaydı yenile</button>}
     {state && <><p>{state.assigned_to?.name || 'Sorumlu atanmadı'} · Eşleme revizyonu {state.revision} · Kaynak inceleme revizyonu {state.source_review_revision}</p>
       {!owner && <Notice>Değişiklik yapmak için kaynak incelemesini üstlenin.</Notice>}{!state.source_review_ready && <Notice>Kabul için haklar, kaynak kimliği, metin çıkarımı ve hukuki inceleme tamamlanmalıdır.</Notice>}
-      <p className="small muted">İnceleme devri: {state.handoff_ready ? 'Hazır; bağımsız yayımlama incelemesi gerekir' : 'Bekliyor'} · Yayımlanmadı</p>
+      <button className="button secondary" disabled={busy || !state.export_allowed} onClick={() => void downloadDossier()}>Tam gizli inceleme dosyasını indir (JSON)</button>
+      {!state.export_allowed && <p className="small muted">Dayanak pasajlarını indirmek için hak incelemesinde açık dışa aktarma izni gerekir.</p>}
+      {dossier && <DossierSummary data={dossier} />}
+      <p className="small muted">İnceleme kayıtları: {state.handoff_ready ? 'Güncel kabuller var; tam dosyanın devir kontrollerini inceleyin' : 'Bekliyor'} · Yayımlanmadı</p>
       <section className="source-review-section"><h2>Pasajı seçin</h2>{passages && <SourcePassageList data={passages} offset={offset} selected={[]} canSelect={false} onSelect={() => undefined} onPage={next => { if (!busy) void load(next); }} onCandidates={id => { if (!busy) void inspect(id); }} candidatesDisabled={busy} original={original} onOriginal={(id, next) => { void inspectOriginal(id, next); }} onCloseOriginal={() => { if (!busy) setOriginal(null); }} />}</section>
       {occurrences && <section className="source-review-section"><h2>Seçili pasajdaki anmalar · {occurrences.count}</h2><p className="small muted">{occurrences.passage_id} · Yalnızca bu pasaj; otomatik adaylar henüz çözümlenmedi.</p>
         {occurrences.items.length ? <OccurrenceList items={occurrences.items} selectedId={selected?.id || null} disabled={busy} onSelect={item => { const existing = state.items.find(value => value.candidate.id === item.id); select(item, existing?.id || null, existing?.resolution || null); }} /> : <Notice>Bu pasajda tanınan yazım biçimi bulunamadı. Bu sonuç kararın atıf içermediğini göstermez.</Notice>}
@@ -119,7 +139,11 @@ function ResolutionFields({ value, onChange }: { value: DecisionResolution; onCh
   </>;
 }
 export function DecisionHistory({ state }: { state: DecisionState }) {
-  return <section className="source-review-section"><h2>Kayıtlar ve inceleme geçmişi</h2>{state.items.map(item => <article className="source-passage" key={item.id}><p className="source-passage-text">{item.candidate.text}</p><p>{item.status === 'machine_proposed' ? 'İnceleme bekliyor' : item.status === 'accepted' ? 'İnsan incelemesi kabul edildi' : item.status === 'rejected' ? 'Reddedildi' : 'Düzeltme gerekli'}{item.stale ? ' · Yeniden inceleme gerekli' : ''}</p>{item.resolution && <Detail title="İnsan tarafından girilen çözümleme"><dl>{Object.entries(item.resolution).map(([key, value]) => <div key={key}><dt>{{ start: 'Dayanak başlangıcı', end: 'Dayanak bitişi', occurrence_role: 'Anma rolü', proceeding_ref: 'Yargılama referansı', decision_ref: 'Karar referansı', institution_ref: 'Kurum referansı', target_ref: 'Atıf hedefi', target_version_ref: 'Hedef sürümü', event_role: 'Tarih rolü', event_date: 'Tarih', authority_treatment: 'Atfın kullanımı' }[key as keyof DecisionResolution]}</dt><dd>{value ?? 'Bilinmiyor'}</dd></div>)}</dl></Detail>}<p className="small">{item.last_event.reviewer.name} · {item.last_event.created_at}</p></article>)}
-    <Detail title="Önceki görüşler korunur">{state.history.map(event => <article key={event.id}><p>Revizyon {event.revision} · {event.reviewer.name} · {event.created_at} · {event.decision || 'Öneri'}</p><p>{event.rationale}</p>{event.snapshot.resolution && <pre className="source-passage-text">{JSON.stringify(event.snapshot.resolution, null, 2)}</pre>}{event.evidence_refs.map(ref => <p key={`${ref.reference}:${ref.sha256}`}>{ref.reference} · {ref.sha256}</p>)}</article>)}{state.history_truncated && <Notice>Bu görünüm yalnızca son 50 olayı içerir. Eski olaylar silinmedi.</Notice>}</Detail>
+  return <section className="source-review-section"><h2>Kayıtlar ve inceleme geçmişi</h2>{state.items.map(item => <article className="source-passage" key={item.id}><p className="source-passage-text">{item.candidate.text}</p><p>{item.status === 'machine_proposed' ? 'İnceleme bekliyor' : item.status === 'accepted' ? 'İnsan incelemesi kabul edildi' : item.status === 'rejected' ? 'Reddedildi' : 'Düzeltme gerekli'}{item.stale ? ' · Yeniden inceleme gerekli' : ''}</p>{item.resolution && <Detail title="İnsan tarafından girilen çözümleme"><dl>{Object.entries(item.resolution).map(([key, value]) => <div key={key}><dt>{{ start: 'Dayanak başlangıcı', end: 'Dayanak bitişi', occurrence_role: 'Anma rolü', proceeding_ref: 'Yargılama referansı', decision_ref: 'Karar referansı', institution_ref: 'Kurum referansı', target_ref: 'Atıf hedefi', target_version_ref: 'Hedef sürümü', event_role: 'Tarih rolü', event_date: 'Tarih', authority_treatment: 'Atfın kullanımı' }[key as keyof DecisionResolution]}</dt><dd>{value ?? 'Bilinmiyor'}</dd></div>)}</dl></Detail>}<p className="small">{item.last_event.reviewer.name} · {formatDate(item.last_event.created_at, true)}</p></article>)}
+    <Detail title="Önceki görüşler korunur">{state.history.map(event => <article key={event.id}><p>Revizyon {event.revision} · {event.reviewer.name} · {formatDate(event.created_at, true)} · {event.decision ? { accepted: 'Kabul edildi', rejected: 'Reddedildi', needs_changes: 'Düzeltme gerekli' }[event.decision] : 'Öneri'}</p><p>{event.rationale}</p>{event.snapshot.resolution && <pre className="source-passage-text">{JSON.stringify(event.snapshot.resolution, null, 2)}</pre>}{event.evidence_refs.map(ref => <p key={`${ref.reference}:${ref.sha256}`}>{ref.reference} · {ref.sha256}</p>)}</article>)}{state.history_truncated && <Notice>Bu görünüm yalnızca son 50 olayı içerir. Eski olaylar silinmedi.</Notice>}</Detail>
   </section>;
+}
+
+export function DossierSummary({ data }: { data: DecisionDossier }) {
+  return <section className="source-review-section"><h2>İndirilen inceleme dosyası</h2><p>Büroya özel · İmzasız · Yayımlanmadı</p><p>Bağımsız inceleme devri: {data.handoff_checks.independent_review_ready ? 'Hazır; yayımlama incelemesi gerekir' : 'Eksikler veya uyuşmazlıklar var'}</p><p>{data.mappings.history.length} eşleme olayı · {data.source_review.history.length} kaynak inceleme olayı · {data.supporting_passages.length} dayanak pasajı</p><p>Çözümlenmemiş kayıt: {data.handoff_checks.unresolved_mapping_ids.length} · Kimlik uyuşmazlığı: {data.handoff_checks.identity_conflicts.length}</p><Detail title="Kimlik uyuşmazlıkları ve sınırlar">{data.handoff_checks.identity_conflicts.map((conflict, index) => <div key={index}><p>{conflict.decision_ref}</p>{conflict.alternatives.map(alternative => <p key={alternative.value}>{alternative.value} · {alternative.mapping_ids.length} kayıt</p>)}</div>)}{data.limitations.map(text => <p key={text}>{text}</p>)}</Detail></section>;
 }

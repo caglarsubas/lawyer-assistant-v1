@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
+import { sessionPrincipalKey } from '../sessionMonitor';
 import { ApiError, request } from '../api';
 import { Badge, Detail, Empty, Field, Icon, Loading, Notice, PageHeader } from '../components';
 import type { ProvisionCandidate, ProvisionCandidates, ProvisionKind, ProvisionMapping, ProvisionMappingEvent, ProvisionMappingState, ProvisionResolution, ProvisionSpanPreview, SourceReviewDecision, User } from '../types';
@@ -94,7 +95,7 @@ function ReadFailure({ state, retry }: { state: Extract<Load<unknown>, { status:
 export default function ProvisionMappingPage({ sourceId, user }: { sourceId: string; user: User }) {
   if (!canReviewSource(user)) return <><PageHeader eyebrow="MADDE EŞLEŞTİRMESİ" title="İnceleme yetkisi gerekli." /><Notice>Madde eşleştirmelerini yalnızca yetkili yönetici ve küratörler görebilir.</Notice></>;
   if (!/^[a-f0-9]{64}$/.test(sourceId)) return <Notice error>Kaynak kimliği geçersiz.</Notice>;
-  return <MappingWorkspace key={`${user.id}:${sourceId}`} sourceId={sourceId} user={user} />;
+  return <MappingWorkspace key={`${sessionPrincipalKey(user)}:${sourceId}`} sourceId={sourceId} user={user} />;
 }
 function MappingWorkspace({ sourceId, user }: { sourceId: string; user: User }) {
   const [state, setState] = useState<Load<ProvisionMappingState>>({ status: 'loading' });

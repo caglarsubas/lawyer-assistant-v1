@@ -1,3 +1,4 @@
+import { sessionPrincipalKey } from '../sessionMonitor';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ApiError, request } from '../api';
 import { Detail, Field, Loading, Notice, PageHeader } from '../components';
@@ -11,7 +12,7 @@ export default function SourceComparisonPage({ sourceId, user, otherSourceId = '
   if (!canReviewSource(user)) return <Notice error>Kaynak karşılaştırması için küratör yetkisi gerekiyor.</Notice>;
   if (!/^[a-f0-9]{64}$/.test(sourceId)) return <Notice error>Kaynak kimliği geçersiz.</Notice>;
   if (otherSourceId && (!/^[a-f0-9]{64}$/.test(otherSourceId) || otherSourceId === sourceId)) return <Notice error>İkinci kaynak kimliği geçersiz.</Notice>;
-  return <ComparisonWorkspace key={`${sourceId}:${user.id}:${otherSourceId}`} sourceId={sourceId} initialOther={otherSourceId} />;
+  return <ComparisonWorkspace key={`${sessionPrincipalKey(user)}:${sourceId}:${otherSourceId}`} sourceId={sourceId} initialOther={otherSourceId} />;
 }
 
 function ComparisonWorkspace({ sourceId, initialOther }: { sourceId: string; initialOther: string }) {

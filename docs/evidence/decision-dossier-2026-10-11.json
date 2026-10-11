@@ -1,0 +1,54 @@
+{
+  "schema_version": "decision-dossier-engineering-v1",
+  "date": "2026-10-11",
+  "base_main": "9798987199ef49e49f2c630765bc0a1730bd6a37",
+  "base_main_ci": {
+    "run": 38140262894,
+    "conclusion": "success"
+  },
+  "features": [
+    "complete_confidential_review_dossier",
+    "explicit_export_use_scope",
+    "dual_revision_binding",
+    "literal_identity_conflict_checks",
+    "session_firm_role_scope_reset"
+  ],
+  "tests": {
+    "linux_decision_and_dossier": 39,
+    "postgresql_races": 3,
+    "frontend": 408,
+    "deployment_contracts": 41,
+    "ci_collection": 3922
+  },
+  "code_sha256": {
+    "backend/app/decision_dossier.py": "31550c0169faf177d15f9b13d69ff841afa7e301486dbabd4bee2734bd5eefe1",
+    "backend/app/decision_mappings.py": "1883707fe898ddc489ea12505701753170c314ba9664dda26bfccd531a2487f3",
+    "backend/tests/test_decision_dossier.py": "8defb79f71b5d3e215be074f8943599ef8a69f157f519163d1bfa17c9af55ef4",
+    "backend/tests/test_snapshot_set_postgres.py": "54f5214f316e30f0311fb804bb9da41333cd8396ab46b97c99b3e6ea5de756d8",
+    "frontend/src/pages/DecisionMappingPage.tsx": "490fe6ef4dbbd294601338f6e799d30822d42c1c9ec68e27c564e8ffca0e61bf",
+    "frontend/src/pages/decisionMapping.ts": "9ad25f483f6653b3e35d5177218065fefd37b5fe8cee9196d53a3249523070c3",
+    "frontend/src/pages/DecisionDossier.test.tsx": "e62aec8aeb546db1ea1549b536cb4ec9b6061752dd186834b9b58c9ac28423e5",
+    "frontend/src/App.tsx": "5f59e757979a25e0d5da282a4e26079458f82624990778fb1d94882dd805bbb9",
+    "frontend/src/sessionMonitor.ts": "93faf4cd54f1141d280cd6656a104585f3cb5361203ba8cead0fc8e93c11222d",
+    "frontend/src/sessionMonitor.test.ts": "011af844744bf16cd67ed13315d33c9781388f5e2a9bc2c60f617be848bd476c"
+  },
+  "browser_qa": {
+    "production_build": true,
+    "disposable_synthetic_backend": true,
+    "draft_download_verified": true,
+    "json_bytes": 9604,
+    "mapping_events": 2,
+    "source_events": 2,
+    "supporting_passages": 1,
+    "unresolved_mappings": 1,
+    "independent_review_ready": false,
+    "identity_extraction_legal_reviews_pending": true,
+    "provider_calls": 0
+  },
+  "actual_source_or_legal_review_performed": false,
+  "canonical_identity_resolution": false,
+  "graph_publication": false,
+  "deployment_changed": false,
+  "hosted_ci": "pending",
+  "no_workflow_dependency_runner_retry_or_deadline_change": true
+}

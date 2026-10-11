@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { ApiError, request } from '../api';
 import { Badge, Detail, Field, Icon, Loading, Notice, PageHeader } from '../components';
 import type { PublicSourceOriginalText, PublicSourcePassages, SourcePermittedUse, SourceReviewCategory, SourceReviewDecision, SourceReviewEffort, SourceReviewEffortSummary, SourceReviewEvent, SourceReviewState, User } from '../types';
+import { sessionPrincipalKey } from '../sessionMonitor';
 import { formatDate, messageOf, statusLabel } from '../utils';
 import SourcePdfView, { fetchOriginalSourcePdf, mappedPdfPage, type PdfInspection } from './SourcePdfInspection';
 
@@ -87,7 +88,7 @@ function ReadFailure({ state, retry }: { state: Extract<LoadState<unknown>, { st
 export default function SourceReviewPage({ sourceId, user }: { sourceId: string; user: User }) {
   if (!canReviewSource(user)) return <><PageHeader eyebrow="KAYNAK İNCELEMESİ" title="İnceleme yetkisi gerekli." /><Notice>Kaynak incelemelerini yalnızca yetkili yönetici ve küratörler görebilir.</Notice><a className="text-link" href="#/coverage">Kapsam kaydına dön</a></>;
   if (!/^[a-f0-9]{64}$/.test(sourceId)) return <Notice error>Kaynak kimliği geçersiz. <a className="text-link" href="#/coverage">Kapsam kaydına dön</a></Notice>;
-  return <SourceReviewWorkspace key={`${user.id}:${sourceId}`} sourceId={sourceId} user={user} />;
+  return <SourceReviewWorkspace key={`${sessionPrincipalKey(user)}:${sourceId}`} sourceId={sourceId} user={user} />;
 }
 
 function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: User }) {

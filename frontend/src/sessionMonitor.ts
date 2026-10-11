@@ -1,5 +1,5 @@
 import { request } from './api';
-import type { Session } from './types';
+import type { Session, User } from './types';
 
 /** Clear private views on suspension; verify before remounting and on active polling. */
 export function monitorSession(onFresh: (session: Session) => void, onLost: (cause: unknown) => void, onChecking: () => void) {
@@ -20,4 +20,9 @@ export function monitorSession(onFresh: (session: Session) => void, onLost: (cau
   const timer = window.setInterval(() => { void verify(); }, 5000);
   document.addEventListener('visibilitychange', resume); window.addEventListener('focus', resume); window.addEventListener('pageshow', resume);
   return () => { alive = false; controller?.abort(); window.clearInterval(timer); document.removeEventListener('visibilitychange', resume); window.removeEventListener('focus', resume); window.removeEventListener('pageshow', resume); };
+}
+
+/** Identity and capabilities define the lifetime of every private workspace. */
+export function sessionPrincipalKey(user: User) {
+  return JSON.stringify([user.id, user.firm_id, user.role, user.permissions ? [...user.permissions].sort() : null]);
 }

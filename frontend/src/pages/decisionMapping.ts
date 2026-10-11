@@ -33,7 +33,7 @@ export interface DecisionEvent {
 export interface DecisionMapping extends DecisionSnapshot { id: string; stale: boolean; last_event: DecisionEvent }
 export interface DecisionState {
   source: PublicSourceDetail; revision: number; source_review_revision: number; assigned_to: { id: string; name: string } | null;
-  source_review_ready: boolean; items: DecisionMapping[]; history: DecisionEvent[]; history_truncated: boolean;
+  source_review_ready: boolean; export_allowed: boolean; items: DecisionMapping[]; history: DecisionEvent[]; history_truncated: boolean;
   handoff_ready: boolean; publication_eligible: false; limitations: string[];
 }
 export function decisionPath(id: string) { return `${sourceReviewPath(id)}/decision-mappings`; }
@@ -47,7 +47,8 @@ export async function fetchDecisionOccurrences(source: PublicSourcePassages, pas
   const envelope = await request<{ evidence_json: string; evidence_sha256: string }>(`${sourceReviewPath(source.source_id)}/jurisprudence-candidates?passage_id=${encodeURIComponent(passage.id)}`, { signal });
   if (typeof envelope?.evidence_json !== 'string' || new TextEncoder().encode(envelope.evidence_json).length > 256 * 1024
     || envelope.evidence_sha256 !== await comparisonHash(envelope.evidence_json)) throw new Error('Anma kanıtının içerik özeti doğrulanamadı.');
-  const data = JSON.parse(envelope.evidence_json) as DecisionOccurrences;
+  let data: DecisionOccurrences;
+  try { data = JSON.parse(envelope.evidence_json); } catch { throw new Error('Anma kanıtı okunamadı.'); }
   const chars = Array.from(passage.text);
   if (data.schema_version !== 'jurisprudence-occurrences-v1' || data.extraction_version !== 'tr-jurisprudence-occurrences-v1'
     || data.source_id !== source.source_id || data.source_version_id !== source.source_version_id || data.raw_sha256 !== source.raw_sha256
@@ -80,4 +81,49 @@ export function decisionReviewPayload(state: DecisionState, decision: SourceRevi
   return { expected_revision: state.revision, expected_source_review_revision: state.source_review_revision, decision,
     rationale: rationale.trim(), resolution: decision === 'accepted' ? resolution : null,
     evidence_refs: reference ? [{ reference: reference.trim(), sha256 }] : [] };
+}
+
+export interface DecisionDossier {
+  schema_version: 'decision-review-dossier-v1'; confidentiality: 'firm_confidential'; firm_id: string;
+  exported_by: { id: string; name: string }; exported_at: string; signed: false; publication_eligible: false;
+  source_binding: { source_id: string; artifacts: PublicSourceDetail['artifacts'] };
+  mappings: DecisionState; history_complete: true;
+  source_review: { revision: number; history: { revision: number }[]; history_complete: true };
+  supporting_passages: { id: string; start: number; end: number; text: string; sha256: string; locator: string }[];
+  handoff_checks: { independent_review_ready: boolean; canonical_identity_resolved: false; legal_effect_verified: false;
+    publication_eligible: false; unresolved_mapping_ids: string[]; identity_conflicts: { decision_ref: string; field: string; alternatives: { value: string; mapping_ids: string[] }[] }[] };
+  limitations: string[];
+}
+export async function fetchDecisionDossier(state: DecisionState, user: { id: string; firm_id: string }, signal?: AbortSignal) {
+  const envelope = await request<{ evidence_json: string; evidence_sha256: string }>(`${decisionPath(state.source.id)}/dossier`, {
+    method: 'POST', body: JSON.stringify({ expected_revision: state.revision, expected_source_review_revision: state.source_review_revision }), signal,
+  });
+  if (typeof envelope?.evidence_json !== 'string' || new TextEncoder().encode(envelope.evidence_json).length > 4 * 1024 * 1024
+    || envelope.evidence_sha256 !== await comparisonHash(envelope.evidence_json)) throw new Error('İnceleme dosyasının içerik özeti doğrulanamadı.');
+  let data: DecisionDossier;
+  try { data = JSON.parse(envelope.evidence_json); } catch { throw new Error('İnceleme dosyası okunamadı.'); }
+  const artifacts = data?.source_binding?.artifacts;
+  if (data.schema_version !== 'decision-review-dossier-v1' || data.confidentiality !== 'firm_confidential' || data.firm_id !== user.firm_id
+    || data.exported_by?.id !== user.id || data.signed !== false || data.publication_eligible !== false
+    || data.source_binding.source_id !== state.source.id || data.mappings?.source.id !== state.source.id
+    || data.mappings.source.source_version_id !== state.source.source_version_id || data.mappings.revision !== state.revision
+    || data.mappings.source_review_revision !== state.source_review_revision || data.source_review?.revision !== state.source_review_revision
+    || data.history_complete !== true || data.source_review.history_complete !== true || data.mappings.history_truncated !== false
+    || data.mappings.publication_eligible !== false || data.mappings.export_allowed !== true
+    || data.handoff_checks?.publication_eligible !== false || data.handoff_checks.canonical_identity_resolved !== false || data.handoff_checks.legal_effect_verified !== false
+    || !artifacts || Object.keys(artifacts).sort().join(',') !== Object.keys(state.source.artifacts).sort().join(',')
+    || Object.entries(state.source.artifacts).some(([key, value]) => artifacts[key]?.sha256 !== value.sha256 || artifacts[key]?.bytes !== value.bytes)
+    || !Array.isArray(data.mappings.history) || data.mappings.history.length !== state.revision
+    || data.mappings.history.some((event, index) => event.revision !== state.revision - index)
+    || !Array.isArray(data.source_review.history) || data.source_review.history.length !== state.source_review_revision
+    || data.source_review.history.some((event, index) => event.revision !== state.source_review_revision - index)
+    || !Array.isArray(data.supporting_passages) || data.supporting_passages.length > 5000
+    || new Set(data.supporting_passages.map(passage => passage.id)).size !== data.supporting_passages.length) throw new Error('İnceleme dosyası seçili büro, kaynak ve güncel revizyonlarla eşleşmiyor.');
+  for (const passage of data.supporting_passages) {
+    if (!Number.isSafeInteger(passage.start) || !Number.isSafeInteger(passage.end) || passage.start < 0 || passage.end <= passage.start
+      || passage.end - passage.start > 20000 || typeof passage.text !== 'string' || Array.from(passage.text).length !== passage.end - passage.start
+      || await comparisonHash(passage.text) !== passage.sha256) throw new Error('Dosyadaki dayanak pasajı doğrulanamadı.');
+  }
+  signal?.throwIfAborted();
+  return { data, evidence_json: envelope.evidence_json, evidence_sha256: envelope.evidence_sha256 };
 }

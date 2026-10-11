@@ -16,7 +16,7 @@ async function fixture() {
   return { source, passage, data, item };
 }
 async function response(data: DecisionOccurrences) { const evidence_json = JSON.stringify(data); return new Response(JSON.stringify({ evidence_json, evidence_sha256: await comparisonHash(evidence_json) })); }
-const state = { source: { id: sourceId } as PublicSourceDetail, revision: 4, source_review_revision: 5, source_review_ready: true, publication_eligible: false, items: [], history: [], history_truncated: false, limitations: [], handoff_ready: false, assigned_to: null } as DecisionState;
+const state = { source: { id: sourceId } as PublicSourceDetail, revision: 4, source_review_revision: 5, source_review_ready: true, export_allowed: true, publication_eligible: false, items: [], history: [], history_truncated: false, limitations: [], handoff_ready: false, assigned_to: null } as DecisionState;
 describe('accountable decision UI', () => {
   const fetchMock = vi.fn<typeof fetch>();
   beforeEach(() => { vi.stubGlobal('fetch', fetchMock); fetchMock.mockReset(); }); afterEach(() => vi.unstubAllGlobals());
