@@ -1795,3 +1795,36 @@ with exact passage locations and explicit uncertainty. Candidate occurrences mus
 not become canonical identities, historical provision versions or authority
 treatments without independent accountable review. Preserve unknown dates and all
 source evidence; continue lawful acquisition and human review alongside this work.
+
+### Delivered packet — R03 evidence-bound jurisprudence occurrences, 11 October 2026
+
+PR #50 is verified merged at `3f819ecd85f1c79332e570be309952cd86f4a841`;
+all three exact-head checks passed in `38134025268`. Post-merge main CI is
+tracked separately. The dependent packet adds `tr-jurisprudence-occurrences-v1`: literal application,
+case and decision numbers, labelled dates and numbered instrument/article mentions
+in one retained curator-selected passage. Every occurrence carries exact Unicode
+and value spans, source/raw/text/passage hashes, rule/version and stable identity.
+Repeated, quoted and conflicting occurrences remain distinct. Separate syntax or
+calendar hints never become canonical identities, source dates or legal facts.
+
+Read-only curator API and the existing offline public-source CLI freshly verify
+all original artifacts before and after extraction. Authorization is checked before
+work and before response. Caller text/URLs, repeated or extra query parameters,
+cross-passage matching, global caches, model/network/raw-parser calls, party
+correlation and graph/review writes are unavailable. At 20,000 code points, 200
+occurrences or 256 KiB evidence, exceeded budgets withhold the entire result.
+
+37 new native regressions and 475 isolated Linux pipeline cases pass, including
+registered AYM synthetic transcription/import, preserved unknown dates, exact CRLF/
+NBSP/astral spans, conflicting occurrences, invalid calendars, raw corruption,
+revocation and resource boundaries. All 3,880 backend cases remain assigned exactly
+once in the unchanged CI partitions; no extra runners, retries or deadlines are added.
+See [candidate contract](JURISPRUDENCE_CANDIDATES.md), [verification](VALIDATION.md)
+and [engineering receipt](evidence/jurisprudence-occurrences-2026-10-11.json).
+
+This packet delivers API/operator inspection, not curator UI, decision segmentation,
+canonical decision mapping or a recall/quality benchmark. Next: expose candidates
+beside exact original passages and implement firm-private, accountable decision
+identity/date/citation review with preserved disagreements and independent release
+review. Actual jurisprudence acquisition/fidelity/privacy review, reviewed graph
+population, national qualification and pilot gates remain open.

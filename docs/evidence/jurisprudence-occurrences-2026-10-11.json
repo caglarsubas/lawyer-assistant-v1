@@ -1,0 +1,102 @@
+{
+  "schema_version": "jurisprudence-occurrences-engineering-v1",
+  "scope": "synthetic_engineering_not_legal_qualification",
+  "dependency_pr": 50,
+  "dependency_head_sha": "9cdd25bdb8e67f7281237ae86b13451413fb5c9b",
+  "extraction_version": "tr-jurisprudence-occurrences-v1",
+  "native_new_regressions": {
+    "passed": 37,
+    "seconds": 0.91
+  },
+  "isolated_linux": {
+    "passed": 475,
+    "seconds": 10.25,
+    "network": "none",
+    "read_only": true,
+    "user": 10001,
+    "cpu_limit": 2,
+    "memory_mib": 1536,
+    "image": "sha256:3d702fc23879ecfed4252b5541f5317ac083dea87d84180aa288081ee6ce08cf"
+  },
+  "tested_file_sha256": {
+    "backend/app/jurisprudence_candidates.py": "e6088895cc90cecdcc2693422777c058ffcbcd09a4af337cf4d0c23004b78557",
+    "backend/app/public_sources.py": "1e8d40aa87afe530cbab6a75c0a4dab1a24b71d80ddb59031b03c00df43d6538",
+    "backend/tests/test_jurisprudence_candidates.py": "657bd0664e4618349981fc412b1bb730e24c2ee2ae4557627cbf43cb018a4657",
+    "scripts/public_sources.py": "ff5e78e0f29efe129b69660a96432bd43e9b0ec12bc7055e02b836a893646f41"
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 3880,
+      "preflight": 89,
+      "remaining": 3502,
+      "publication": 132,
+      "workspace": 77,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "71fe015c02692a3e17ba2c4337408d35c4d316b5fdaf11b8b5f18ce6980b660a",
+    "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "deployment_contracts_passed": 41,
+  "configured_ruff": "passed",
+  "diff_check": "passed",
+  "limits": {
+    "selected_passage_unicode_code_points": 20000,
+    "occurrences": 200,
+    "canonical_receipt_bytes": 262144,
+    "partial_results_on_failure": false
+  },
+  "api_scope": "authenticated_source_curator_read_only",
+  "source_dates_promoted": false,
+  "canonical_identities_resolved": false,
+  "graph_updates": false,
+  "actual_source_review_entered": false,
+  "curator_ui_implemented": false,
+  "actual_jurisprudence_original_parsed": false,
+  "corpus_or_recall_qualified": false,
+  "no_provider_private_matter_or_deployment_change": true,
+  "pre_push_engineering_only": true,
+  "exact_head_hosted_checks": "pending_normal_push",
+  "merge": "agent_authorized_after_review_and_passing_exact_head_checks",
+  "base_main_sha": "3f819ecd85f1c79332e570be309952cd86f4a841",
+  "dependency_pr_ci": "all_three_success",
+  "dependency_pr_run": 38134025268,
+  "base_main_ci": "pending_post_merge_run"
+}

@@ -127,6 +127,10 @@ warning unchanged. Transcription does not identify judicial findings, allegation
 opinions, citations, decision dates or binding effect. Those require separately
 evidenced candidate extraction and review; a public original may still contain PII.
 
+After explicit import, the read-only [jurisprudence candidate inspector](JURISPRUDENCE_CANDIDATES.md)
+can identify limited literal occurrences in one curator-selected passage. It never
+promotes candidate values to source dates, canonical graph identities or legal facts.
+
 Limits are **1 MiB raw PDF**, **50 pages**, **20,000 code points per page**, **2 MiB
 extracted UTF-8**, **4 MiB decoded content stream per page** and **20 MiB total
 decoded page streams**. Stream checks occur before text extraction, as recommended

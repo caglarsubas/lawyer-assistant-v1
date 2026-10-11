@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
+from app.jurisprudence_candidates import JurisprudenceCandidatesUnavailable  # noqa: E402
 from app.public_sources import PublicSourceError, PublicSourceStore  # noqa: E402
 
 
@@ -30,6 +31,9 @@ def main(argv=None):
     listing.add_argument("--after")
     detail = commands.add_parser("verify")
     detail.add_argument("identifier")
+    candidates = commands.add_parser("jurisprudence-candidates")
+    candidates.add_argument("identifier")
+    candidates.add_argument("--passage", required=True, help="One retained passage ID; no caller-supplied text")
     args = parser.parse_args(argv)
     try:
         store = PublicSourceStore(args.store)
@@ -39,10 +43,12 @@ def main(argv=None):
                                           identity_review_path=args.identity_review)
         elif args.operation == "list":
             result = store.list_packages(limit=args.limit, after=args.after)
+        elif args.operation == "jurisprudence-candidates":
+            result = store.jurisprudence_candidates(args.identifier, args.passage)
         else:
             result = store.detail(args.identifier)
         print(json.dumps(result, ensure_ascii=False, indent=2))
-    except (PublicSourceError, OSError):
+    except (PublicSourceError, OSError, JurisprudenceCandidatesUnavailable):
         parser.exit(1, "Public source operation stopped: invalid input, integrity failure or unavailable store.\n")
 
 

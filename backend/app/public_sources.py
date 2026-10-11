@@ -434,6 +434,15 @@ class PublicSourceStore:
     def original_pdf(self, identifier, passage_id):
         return original_pdf_page(self.verified_package(identifier), identifier, passage_id)
 
+    def jurisprudence_candidates(self, identifier, passage_id):
+        from .jurisprudence_candidates import find_occurrences
+        package = self.verified_package(identifier)
+        result = find_occurrences(package, passage_id)
+        # Reopen exact originals before returning; no reusable result cache.
+        if self.verified_package(identifier).artifacts != package.artifacts:
+            raise PublicSourceError("Public source changed during candidate extraction")
+        return result
+
 
 def public_sources_router():
     router = APIRouter(prefix="/api/v1/public-sources", tags=["public-source-staging"])
@@ -522,6 +531,30 @@ def public_sources_router():
             raise HTTPException(409, "Kaynak paketi yok veya bütünlük denetimi başarısız") from None
         reauthorize(request, user)
         return Response(content=_canonical(result), media_type="application/json", headers={
+            "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff",
+            "Content-Security-Policy": "sandbox; default-src 'none'; frame-ancestors 'none'",
+        })
+
+    @router.get("/{identifier}/jurisprudence-candidates")
+    def jurisprudence_candidates(identifier: str, request: Request,
+                                passage_id: str = Query(pattern=r"^[A-Za-z][A-Za-z0-9_-]{0,79}$"),
+                                user=Depends(authorize)):
+        from .jurisprudence_candidates import JurisprudenceCandidatesUnavailable, encode
+        if not SHA256.fullmatch(identifier):
+            raise HTTPException(404, "Kaynak hazırlama kaydı bulunamadı")
+        if (set(request.query_params) != {"passage_id"}
+                or len(request.query_params.getlist("passage_id")) != 1):
+            raise HTTPException(422, "Yalnızca tek bir kayıtlı pasaj seçin")
+        try:
+            result = store(request).jurisprudence_candidates(identifier, passage_id)
+        except JurisprudenceCandidatesUnavailable:
+            raise HTTPException(422, "Pasaj veya aday çıkarım sınırları doğrulanamadı; sonuç verilmedi") from None
+        except (PublicSourceError, OSError):
+            raise HTTPException(409, "Kaynak paketi yok veya bütünlük denetimi başarısız") from None
+        evidence = encode(result)
+        reauthorize(request, user)
+        return Response(content=_canonical({"evidence_json": evidence.decode("utf-8"),
+                                            "evidence_sha256": _hash(evidence)}), media_type="application/json", headers={
             "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff",
             "Content-Security-Policy": "sandbox; default-src 'none'; frame-ancestors 'none'",
         })
