@@ -1,4 +1,93 @@
-# Verification record — 10 October 2026
+# Verification record — 11 October 2026
+
+## Employment and commercial registered intake — 11 October 2026 (Asia/Shanghai)
+
+Base: PR #43 is merged at `bba695c8d5c100253952f4a911794ce8d3cc76aa`. This packet
+adds two exact destinations from the official TBMM law records to the closed v2
+registry. The frozen v1 membership remains only 6098/6101. Source domains are
+intake labels, not legally reviewed classification or current-law declarations.
+The connected wrapper uses a separate locally built acquisition image resolved
+to its immutable ID, so updating this registry does not retag or restart the API.
+Shared strict validation checks all provenance fields and rejects stale workers,
+mislabeling, undeclared versions, bool/integer substitutions and invented states.
+
+Local verification:
+
+- **173** native gateway/preparation tests passed in **1.65 s**; **34** additional
+  cases cover version membership, legacy preservation, exact routes/domains,
+  stale-worker rejection, cleanup, missing versions and scan-before-import for
+  every current entry and both legacy entries. Tests use invented source content.
+- **452** source/preparation/original/review/snapshot tests passed in **44.82 s**
+  in a disposable disconnected Linux container with a read-only root, unprivileged
+  user, dropped capabilities and bounded resources. Five application/test/CLI
+  fingerprints match the worktree. One existing TestClient deprecation warning
+  remains; no provider, application volume or credential was present.
+- **41** deployment contract tests and repository-configured Ruff passed. Test
+  collection partitions all **3,632** backend cases across the existing CI groups
+  with no missing, duplicate or extra cases. Frontend code is unchanged; its hosted checks remain required. The inherited
+  main timeout requires the bounded CI redistribution below.
+
+The inherited post-merge main run **38068593529** failed when **Test backend**
+reached its unchanged **18-minute** step deadline; last progress was **99%** and
+no assertion failure was recorded. Frontend and PostgreSQL jobs passed in 3m18s
+and 2m36s. The first PR head remains separate from the final CI change.
+
+A Linux profile of the candidate 119-test group passed in **31.93 s** on two CPUs.
+Move 100 source-review tests into the existing publication runner and 19 model
+cohort tests into the existing workspace runner. Those final groups passed locally:
+**132 tests / 44.15 s** (publication/source review), **77 tests / 30.07 s**
+(workspace/model cohorts). The workspace group now uses two workers like the other
+groups, preserving its two-minute step limit. All three jobs, event rules,
+20/5/5-minute job caps, the 18-minute backend step cap, retries and dependencies
+are unchanged. No source, permission, graph-validation result or inferred-triple
+cache is added. Production checks still run afresh; only CI ownership changes.
+
+The final collection has **3,632** cases: preflight 89, backend remaining 3,254,
+model trials 20, workspace/model cohorts 77, human review 60, publication/source
+review 132. Pairwise intersection, missing and extra counts are zero. Existing
+real-PostgreSQL execution remains separately required. Local container timings do
+not establish hosted speedup, billing savings or future growth capacity.
+
+Actual acquisition and offline preparation:
+
+| Registered source | Intake domain | Raw bytes | Prepared passages | Encoding |
+|---|---|---:|---:|---|
+| 4857 enacted İş Kanunu | employment | 247,132 | 616 | Windows-1254 |
+| 6103 enacted transition statute | commercial | 87,088 | 215 | Windows-1254 |
+
+Both exact registered GETs succeeded on 11 October local time without changing
+DNS, TLS, the hostname, size budgets or deadlines. The existing scanner verifies
+official main/daily/bytecode CVD signatures before and after each clean scan;
+daily release **28149** is within the unchanged seven-day freshness policy.
+Parsing then runs without network, inference or application secrets. The retained
+[receipt](evidence/registered-domain-intake-2026-10-11.json) records source URLs,
+acquisition times, hashes, passage counts, scanner releases and immutable images.
+Original acquisition bytes are retained unchanged through preparation.
+
+The four import-compatible artifacts from each prepared package were explicitly
+imported into a new **public-only host catalog**, outside application volumes.
+Every passage digest and decoded original range is internally consistent. Three
+selected original windows per source returned exact HTTP 200/no-store responses
+in a disposable TestClient app with `.env` loading disabled, services blank and
+DNS calls rejected. Opening those windows leaves each review at revision 0 with
+zero assessments and no actual reviewer effort. A separate read-only manifest
+check accepts both previously acquired v1 originals without changing them.
+
+Raw/prepared packages and operational logs remain ignored under
+`.data/verification/r03-domain-intake/`; public metadata only is committed. The
+old deployed API image remains `sha256:95dcfeb31f0c3e3dffc22c8838500f293aa0fceba1a1c2ab8209cadf03c31376`.
+No actual rights, identity, extraction-fidelity, sensitivity or legal approval was
+created. Acquisition metadata is operator-supplied provenance, not authenticated
+source identity. All legal dates remain unknown and all texts explicitly remain
+historical enacted representations that exclude subsequent amendments.
+
+**Limits:** two additional samples from the same source/format do not establish
+representation diversity, complete commercial/employment coverage, current-law
+applicability, populated jurisdiction/jurisprudence graphs, human throughput,
+model quality or pilot acceptance. The 6103 sample is not the whole commercial
+code. Source-linked independent references and witnessed paired studies still
+require qualified humans. Hosted exact-head CI is separate from these local
+receipts and is recorded in the PR after the normal run; manual merge is required.
 
 ## Original-source fidelity inspection — 10 October 2026
 

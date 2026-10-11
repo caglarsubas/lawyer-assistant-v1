@@ -25,7 +25,8 @@ MAX_BYTES = 1024 * 1024
 MAX_WIRE_BYTES = MAX_BYTES + 64 * 1024
 TOTAL_SECONDS = 20
 IDLE_SECONDS = 5
-REGISTRY_VERSION = "tbmm-enacted-2026-10-04-v1"
+LEGACY_REGISTRY_VERSION = "tbmm-enacted-2026-10-04-v1"
+REGISTRY_VERSION = "tbmm-enacted-2026-10-11-v2"
 HISTORICAL_LIMITATION = (
     "TBMM enacted text excludes subsequent amendments; this is not a current consolidated text."
 )
@@ -60,26 +61,89 @@ class AcquisitionError(ValueError):
 class RegisteredSource:
     title: str
     url: str
+    domain: str
 
 
-REGISTRY = MappingProxyType({
+_LEGACY_REGISTRY = MappingProxyType({
     "tbmm-6101-enacted": RegisteredSource(
         "6101 sayılı Türk Borçlar Kanununun Yürürlüğü ve Uygulama Şekli Hakkında Kanun — kabul edilen metin",
         "https://cdn.tbmm.gov.tr/KKBSPublicFile/D23/Y3/T1/KanunMetni/"
         "3c4eac23-5d02-49cd-9ef1-4bf8de05aee6.html",
+        "contracts",
     ),
     "tbmm-6098-enacted": RegisteredSource(
         "6098 sayılı Türk Borçlar Kanunu — kabul edilen metin",
         "https://cdn.tbmm.gov.tr/KKBSPublicFile/D23/Y2/T1/KanunMetni/"
         "a657b33d-109c-473d-9266-5aa48d603ab2.html",
+        "contracts",
     ),
 })
 
+REGISTRY = MappingProxyType({
+    **_LEGACY_REGISTRY,
+    "tbmm-4857-enacted": RegisteredSource(
+        "4857 sayılı İş Kanunu — kabul edilen metin",
+        "https://cdn.tbmm.gov.tr/KKBSPublicFile/D22/Y1/T1/KanunMetni/"
+        "359dee72-3cd1-4131-8597-48c58658e326.html",
+        "employment",
+    ),
+    "tbmm-6103-enacted": RegisteredSource(
+        "6103 sayılı Türk Ticaret Kanununun Yürürlüğü ve Uygulama Şekli Hakkında Kanun — kabul edilen metin",
+        "https://cdn.tbmm.gov.tr/KKBSPublicFile/D23/Y2/T1/KanunMetni/"
+        "7f9bad4f-097c-4097-960f-2ef0bb0ed482.html",
+        "commercial",
+    ),
+})
+# Retain exact historical membership and metadata; new acquisitions always use
+# REGISTRY. Only offline preparation may resolve a declared earlier snapshot.
+REGISTRY_SNAPSHOTS = MappingProxyType({
+    LEGACY_REGISTRY_VERSION: _LEGACY_REGISTRY,
+    REGISTRY_VERSION: REGISTRY,
+})
 
-def registered(source_id):
-    if type(source_id) is not str or source_id not in REGISTRY:
+
+def registered(source_id, *, registry_version=REGISTRY_VERSION):
+    if type(registry_version) is not str or registry_version not in REGISTRY_SNAPSHOTS:
+        raise AcquisitionError("Unknown registry version")
+    snapshot = REGISTRY_SNAPSHOTS[registry_version]
+    if type(source_id) is not str or source_id not in snapshot:
         raise AcquisitionError("Unknown registered source")
-    return REGISTRY[source_id]
+    return snapshot[source_id]
+
+
+def validate_acquisition_metadata(content, manifest, *, required_registry_version=None):
+    """Bind all provenance to its immutable snapshot, without authenticating it."""
+    if not isinstance(manifest, dict) or not 0 < len(content) <= MAX_BYTES:
+        raise AcquisitionError("Invalid registered acquisition")
+    version, source_id = manifest.get("registry_version"), manifest.get("registry_id")
+    source = registered(source_id, registry_version=version)
+    if required_registry_version is not None and version != required_registry_version:
+        raise AcquisitionError("Registry version does not match the acquisition worker")
+    digest = hashlib.sha256(content).hexdigest()
+    expected = {
+        "schema_version": "registered-source-acquisition-v1", "registry_version": version,
+        "registry_id": source_id, "title": source.title, "source_url": source.url,
+        "source_version_id": f"{source_id}:sha256:{digest}", "domain": source.domain,
+        "raw_sha256": digest, "byte_count": len(content), "raw_media_type": "text/html",
+        "rights_status": "rights_pending", "review_status": "legal_review_pending",
+        "publication_status": "quarantined", "content_status": "untrusted_unscanned",
+        "extraction_status": "not_processed", "representation": "enacted_text", "current_consolidation": False,
+        "limitations": [HISTORICAL_LIMITATION,
+            "Public availability does not establish permitted use, source identity review or legal applicability.",
+            "This acquisition is unscanned and unparsed; admission and legal review are separate steps."],
+    }
+    if (set(manifest) != set(expected) | {"started_at", "acquired_at"}
+            or any(json.dumps(manifest[key], sort_keys=True) != json.dumps(value, sort_keys=True)
+                   for key, value in expected.items())):
+        raise AcquisitionError("Invalid registered acquisition")
+    try:
+        dates = [datetime.fromisoformat(manifest[key]) for key in ("started_at", "acquired_at")]
+        if (any(date.tzinfo is None or date.utcoffset() is None for date in dates)
+                or not dates[0] <= dates[1] <= datetime.now(timezone.utc)):
+            raise ValueError
+    except (ValueError, TypeError):
+        raise AcquisitionError("Invalid acquisition dates") from None
+    return manifest
 
 
 def _remaining(deadline):
@@ -217,7 +281,7 @@ def acquire(source_id, *, connected_staging=False):
     return content, {
         "schema_version": "registered-source-acquisition-v1", "registry_version": REGISTRY_VERSION,
         "registry_id": source_id, "title": source.title, "source_url": source.url,
-        "source_version_id": f"{source_id}:sha256:{digest}", "domain": "contracts",
+        "source_version_id": f"{source_id}:sha256:{digest}", "domain": source.domain,
         "started_at": started, "acquired_at": datetime.now(timezone.utc).isoformat(),
         "raw_sha256": digest, "byte_count": len(content), "raw_media_type": "text/html",
         "rights_status": "rights_pending", "review_status": "legal_review_pending",

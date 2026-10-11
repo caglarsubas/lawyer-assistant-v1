@@ -42,6 +42,15 @@ It verifies registry identity, original digest/length, enacted-text limitations,
 pending review states and timezone-aware acquisition ordering. This binds
 operator-supplied provenance; it cannot authenticate a historical acquisition.
 
+Resolve the exact declared [registry snapshot](REGISTERED_SOURCES.md#closed-registry).
+The retained v1 contract acquisitions and the v2 contract/employment/commercial
+entries use the same admission path. Missing/unknown versions, mismatched domains,
+or later entries falsely claiming an earlier registry fail before scanning. Neither
+host nor parser rewrites the acquisition manifest, changes its dates or infers a
+source's current legal effect. Build the current preparation image after a registry
+change; an older image may reject new entries. No alternate image or bypass option
+is provided.
+
 A disposable disconnected scanner receives only a read-only public snapshot and
 the read-only official signature directory. It cryptographically verifies all three
 CVD databases before and after `clamscan`, rejects changed databases and requires

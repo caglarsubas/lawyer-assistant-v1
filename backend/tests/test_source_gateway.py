@@ -86,12 +86,44 @@ def cli():
 
 
 def test_registry_is_closed_and_immutable():
-    assert set(gateway.REGISTRY) == {"tbmm-6101-enacted", "tbmm-6098-enacted"}
+    assert set(gateway.REGISTRY) == {"tbmm-6101-enacted", "tbmm-6098-enacted",
+                                     "tbmm-4857-enacted", "tbmm-6103-enacted"}
     assert gateway.REGISTRY[SOURCE].url.endswith("3c4eac23-5d02-49cd-9ef1-4bf8de05aee6.html")
     with pytest.raises(TypeError):
         gateway.REGISTRY["caller"] = gateway.REGISTRY[SOURCE]
     with pytest.raises(AttributeError):
         gateway.REGISTRY[SOURCE].url = "https://caller.invalid"
+
+
+def test_historical_registry_cannot_acquire_later_members_or_be_mutated():
+    old = gateway.REGISTRY_SNAPSHOTS[gateway.LEGACY_REGISTRY_VERSION]
+    assert set(old) == {"tbmm-6101-enacted", "tbmm-6098-enacted"}
+    for source_id in old:
+        assert gateway.registered(source_id, registry_version=gateway.LEGACY_REGISTRY_VERSION) == old[source_id]
+        assert gateway.REGISTRY[source_id] == old[source_id]
+    for source_id in ("tbmm-4857-enacted", "tbmm-6103-enacted"):
+        with pytest.raises(gateway.AcquisitionError, match="Unknown registered source"):
+            gateway.registered(source_id, registry_version=gateway.LEGACY_REGISTRY_VERSION)
+    with pytest.raises(TypeError):
+        old["tbmm-4857-enacted"] = gateway.REGISTRY["tbmm-4857-enacted"]
+    with pytest.raises(TypeError):
+        gateway.REGISTRY_SNAPSHOTS["caller"] = old
+
+
+@pytest.mark.parametrize("source_id,domain,path", [
+    ("tbmm-6101-enacted", "contracts", "D23/Y3/T1/KanunMetni/3c4eac23-5d02-49cd-9ef1-4bf8de05aee6.html"),
+    ("tbmm-6098-enacted", "contracts", "D23/Y2/T1/KanunMetni/a657b33d-109c-473d-9266-5aa48d603ab2.html"),
+    ("tbmm-4857-enacted", "employment", "D22/Y1/T1/KanunMetni/359dee72-3cd1-4131-8597-48c58658e326.html"),
+    ("tbmm-6103-enacted", "commercial", "D23/Y2/T1/KanunMetni/7f9bad4f-097c-4097-960f-2ef0bb0ed482.html"),
+])
+def test_domain_and_exact_destination_are_bound_to_current_registry(transport, source_id, domain, path):
+    observed = transport()
+    raw, manifest = gateway.acquire(source_id, connected_staging=True)
+    assert observed["tls"].sent.startswith(f"GET /KKBSPublicFile/{path} HTTP/1.1\r\n".encode())
+    assert observed["sni"] == ["cdn.tbmm.gov.tr"]
+    assert manifest["domain"] == domain
+    assert manifest["registry_version"] == gateway.REGISTRY_VERSION
+    assert gateway.validate_acquisition_metadata(raw, manifest) == manifest
 
 
 @pytest.mark.parametrize("identifier", ["unknown", "TBMM-6101-enacted", SOURCE + "?secret=1",
@@ -294,6 +326,46 @@ def test_cli_does_not_publish_tampered_content(cli, transport, tmp_path):
         cli._validate_package(SOURCE, tmp_path / "staged")
 
 
+@pytest.mark.parametrize("field,value", [
+    ("registry_version", gateway.LEGACY_REGISTRY_VERSION), ("domain", "employment"),
+    ("title", "Misidentified source"), ("byte_count", True),
+    ("current_consolidation", 0), ("started_at", "2999-01-01T00:00:00+00:00"),
+    ("extra", "unexpected"),
+])
+def test_host_rejects_stale_worker_or_mislabeled_provenance(cli, transport, tmp_path, field, value):
+    transport()
+    raw, manifest = gateway.acquire(SOURCE, connected_staging=True)
+    manifest[field] = value
+    gateway.write_package(raw, manifest, tmp_path / "staged")
+    with pytest.raises(gateway.AcquisitionError, match="provenance"):
+        cli._validate_package(SOURCE, tmp_path / "staged")
+
+
+def test_acquisition_uses_separate_fixed_image_and_stops_old_worker_after_cleanup(cli, transport, tmp_path,
+                                                                              monkeypatch):
+    transport()
+    raw, manifest = gateway.acquire(SOURCE, connected_staging=True)
+    manifest["registry_version"] = gateway.LEGACY_REGISTRY_VERSION
+    calls = []
+
+    def run(command, **kwargs):
+        calls.append(command)
+        if command[1:3] == ["image", "inspect"]:
+            assert command[-1] == "lawyer-assistant-public-acquisition:0.1.0"
+            return "sha256:" + "a" * 64
+        if command[1] == "run":
+            mount = command[command.index("--mount") + 1]
+            staging = Path(mount.split("src=", 1)[1].split(",dst=", 1)[0])
+            gateway.write_package(raw, manifest, staging / "acquired")
+        return ""
+
+    monkeypatch.setattr(cli, "_run", run)
+    with pytest.raises(gateway.AcquisitionError, match="provenance"):
+        cli.acquire_in_container(SOURCE, tmp_path / "target", connected_staging=True)
+    assert calls[-1][1:3] == ["rm", "--force"]
+    assert list(tmp_path.iterdir()) == []
+
+
 def test_cli_cleans_up_after_worker_failure_without_publishing(cli, tmp_path, monkeypatch):
     calls = []
     def run(command, **kwargs):
@@ -323,7 +395,8 @@ def test_cleanup_confirms_auto_removed_container_absence(cli, monkeypatch):
         cli._cleanup("fixture-worker")
 
 
-@pytest.mark.parametrize("option", ["--url", "--header", "--proxy", "--image", "--credentials"])
+@pytest.mark.parametrize("option", ["--url", "--header", "--proxy", "--image", "--credentials",
+                                    "--registry-version", "--domain"])
 def test_cli_rejects_custom_egress_inputs(cli, tmp_path, monkeypatch, option):
     monkeypatch.setattr(cli.sys, "argv", ["acquire_public_source.py", SOURCE, str(tmp_path / "new"),
                                        "--connected-staging", option, "untrusted"])

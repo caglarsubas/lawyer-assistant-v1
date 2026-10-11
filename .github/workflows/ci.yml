@@ -20,10 +20,13 @@ env:
     backend/tests/test_firm_admin.py
     backend/tests/test_content_scope.py
     backend/tests/test_authority_proposals.py
+    backend/tests/test_authority_model_cohorts.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_open_validity_publication.py
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py
+    backend/tests/test_source_reviews.py
+    backend/tests/test_source_review_effort.py
 
 jobs:
   backend-and-contracts:
@@ -130,6 +133,7 @@ jobs:
         # in-test row-lock races while leaving time for signed publication checks.
         run: backend/.venv/bin/pytest backend/tests/test_snapshot_set_postgres.py backend/tests/test_set_authorization_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
       - name: Test signed publication and retained-source renewal
+        # Source curation shares this runner's spare capacity; no test is omitted.
         run: |
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
           backend/.venv/bin/pytest "${publication_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
@@ -162,7 +166,7 @@ jobs:
         timeout-minutes: 2
         run: |
           read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
-          backend/.venv/bin/pytest "${workspace_tests[@]}" -q --maxfail=1 --durations=10
+          backend/.venv/bin/pytest "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
       # Keep the measured runtime authorization case on this runner: the
       # PostgreSQL job otherwise finished only two seconds below its five-minute cap.
       - name: Test confidential human review groups

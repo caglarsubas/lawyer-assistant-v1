@@ -21,7 +21,13 @@ from app.registered_source_preparation import (
     sha,
     validate_acquisition,
 )
-from app.source_gateway import HISTORICAL_LIMITATION, REGISTRY, REGISTRY_VERSION
+from app.source_gateway import (
+    HISTORICAL_LIMITATION,
+    LEGACY_REGISTRY_VERSION,
+    REGISTRY,
+    REGISTRY_VERSION,
+    registered,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location("prepare_public_source", ROOT / "scripts/prepare_public_source.py")
@@ -30,13 +36,13 @@ spec.loader.exec_module(cli)
 
 
 def acquisition(raw=b"<html><head><title>Invented fixture</title></head><body><p>MADDE 1 - Test.</p></body></html>",
-                source_id="tbmm-6101-enacted"):
-    source = REGISTRY[source_id]
+                source_id="tbmm-6101-enacted", registry_version=REGISTRY_VERSION):
+    source = registered(source_id, registry_version=registry_version)
     now = (datetime.now(UTC) - timedelta(minutes=1)).isoformat()
     manifest = {
-        "schema_version": "registered-source-acquisition-v1", "registry_version": REGISTRY_VERSION,
+        "schema_version": "registered-source-acquisition-v1", "registry_version": registry_version,
         "registry_id": source_id, "title": source.title, "source_url": source.url,
-        "source_version_id": f"{source_id}:sha256:{sha(raw)}", "domain": "contracts",
+        "source_version_id": f"{source_id}:sha256:{sha(raw)}", "domain": source.domain,
         "started_at": now, "acquired_at": now, "raw_sha256": sha(raw), "byte_count": len(raw),
         "raw_media_type": "text/html", "rights_status": "rights_pending", "review_status": "legal_review_pending",
         "publication_status": "quarantined", "content_status": "untrusted_unscanned",
@@ -62,8 +68,62 @@ def test_each_registered_representation_stays_historical_and_pending(source_id):
     artifacts = prepare(acquisition(source_id=source_id))
     source = _json(artifacts["source.json"])
     assert source["source_url"] == REGISTRY[source_id].url
+    assert source["domain"] == REGISTRY[source_id].domain
     assert source["effective_from"] is source["effective_until"] is source["published_on"] is None
     assert _json(artifacts["preparation.json"])["current_consolidation"] is False
+
+
+@pytest.mark.parametrize("source_id", ["tbmm-6101-enacted", "tbmm-6098-enacted"])
+def test_prior_acquisitions_are_prepared_without_rewriting_their_provenance(source_id):
+    files = acquisition(source_id=source_id, registry_version=LEGACY_REGISTRY_VERSION)
+    artifacts = prepare(files)
+    assert artifacts["acquisition.json"] == files["acquisition.json"]
+    assert artifacts["raw.bin"] == files["raw.html"]
+    source = _json(artifacts["source.json"])
+    manifest = _json(files["acquisition.json"])
+    assert manifest["registry_version"] == LEGACY_REGISTRY_VERSION
+    for key in ("source_version_id", "acquired_at", "title", "source_url", "domain"):
+        assert source[key] == manifest[key]
+    assert source["effective_from"] is source["effective_until"] is source["published_on"] is None
+
+
+@pytest.mark.parametrize("source_id", ["tbmm-4857-enacted", "tbmm-6103-enacted"])
+def test_later_member_cannot_claim_an_earlier_registry(source_id):
+    files = acquisition(source_id=source_id)
+    manifest = _json(files["acquisition.json"])
+    manifest["registry_version"] = LEGACY_REGISTRY_VERSION
+    files["acquisition.json"] = encode(manifest)
+    with pytest.raises(PreparationError, match="Unknown registered source"):
+        prepare(files)
+
+
+@pytest.mark.parametrize("version", [None, {}, 1, "unknown", REGISTRY_VERSION + "?id=1"])
+def test_missing_unknown_or_malformed_registry_version_never_defaults_to_current(version):
+    files = acquisition()
+    manifest = _json(files["acquisition.json"])
+    manifest["registry_version"] = version
+    files["acquisition.json"] = encode(manifest)
+    with pytest.raises(PreparationError, match="Unknown registry version"):
+        prepare(files)
+
+
+def test_absent_registry_version_never_defaults_to_current():
+    files = acquisition()
+    manifest = _json(files["acquisition.json"])
+    del manifest["registry_version"]
+    files["acquisition.json"] = encode(manifest)
+    with pytest.raises(PreparationError, match="Unknown registry version"):
+        prepare(files)
+
+
+@pytest.mark.parametrize("source_id", ["tbmm-4857-enacted", "tbmm-6103-enacted"])
+def test_new_domains_cannot_be_replaced_by_contracts(source_id):
+    files = acquisition(source_id=source_id)
+    manifest = _json(files["acquisition.json"])
+    manifest["domain"] = "contracts"
+    files["acquisition.json"] = encode(manifest)
+    with pytest.raises(PreparationError, match="Invalid registered acquisition"):
+        prepare(files)
 
 
 def test_unicode_passages_and_original_positions_are_inspectable():
@@ -196,8 +256,15 @@ def offline_workers(tmp_path, monkeypatch):
     return incoming, signatures, tmp_path / "prepared", events
 
 
-def test_preparation_is_importable_but_unapproved_and_source_is_unchanged(offline_workers, tmp_path):
+@pytest.mark.parametrize("source_id,version", [
+    *[(identifier, REGISTRY_VERSION) for identifier in REGISTRY],
+    ("tbmm-6101-enacted", LEGACY_REGISTRY_VERSION), ("tbmm-6098-enacted", LEGACY_REGISTRY_VERSION),
+])
+def test_preparation_is_importable_but_unapproved_and_source_is_unchanged(offline_workers, tmp_path,
+                                                                      source_id, version):
     incoming, signatures, destination, events = offline_workers
+    for name, raw in acquisition(source_id=source_id, registry_version=version).items():
+        (incoming / name).write_bytes(raw)
     before = {p.name: p.read_bytes() for p in incoming.iterdir()}
     result = cli.prepare_in_containers(incoming, signatures, destination)
     assert events == ["scan", "parse"]
@@ -211,6 +278,8 @@ def test_preparation_is_importable_but_unapproved_and_source_is_unchanged(offlin
                                     text_path=destination / "text.txt", locators_path=destination / "locators.json")
     assert imported["rights_status"] == "rights_pending"
     assert imported["review_status"] == "legal_review_pending"
+    assert imported["domain"] == REGISTRY[source_id].domain
+    assert (destination / "acquisition.json").read_bytes() == before["acquisition.json"]
     receipt = _json((destination / "admission.json").read_bytes())
     assert receipt["network"] == "none"
     assert receipt["published"] is False
