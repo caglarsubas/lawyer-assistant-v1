@@ -34,7 +34,7 @@ MAX_EVIDENCE = 128
 MAX_EVIDENCE_FILE = 8 * 1024 * 1024
 MAX_EVIDENCE_TOTAL = 32 * 1024 * 1024
 RESERVED = {"manifest.json", "manifest.sha256", "manifest.hmac"}
-PACKET_SCHEMAS = {"legal-review-packet-v1", "legal-review-source-set-packet-v1"}
+PACKET_SCHEMAS = {"legal-review-packet-v1", "legal-review-source-set-packet-v1", "legal-review-graph-b-packet-v1"}
 
 
 def canonical(value):
@@ -194,6 +194,7 @@ def atomic_packet(output, files, *, max_depth=4):
     os.close(fd)
     stage = None
     identity = None
+    completed = False
     try:
         if destination.exists():
             raise ValueError("Output already exists")
@@ -224,10 +225,11 @@ def atomic_packet(output, files, *, max_depth=4):
         identity = (result.st_dev, result.st_ino)
         _rename_exclusive(stage, destination)
         stage = None
+        completed = True
         return identity
     finally:
         try:
-            if stage is not None:
+            if stage is not None and stage.exists():
                 shutil.rmtree(stage)
             reservation.unlink()
         except BaseException:
@@ -235,6 +237,12 @@ def atomic_packet(output, files, *, max_depth=4):
             # never receive the inode and cannot discard the incomplete output.
             _remove_own_output(destination, identity)
             raise
+        finally:
+            # A signal can arrive after rename succeeds but before the caller
+            # receives the inode. Discard the new artifact and release the sibling
+            # reservation without masking the original interruption.
+            if not completed:
+                _remove_own_output(destination, identity)
 
 
 def _rename_exclusive(source, destination):

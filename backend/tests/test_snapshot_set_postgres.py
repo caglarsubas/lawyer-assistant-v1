@@ -749,3 +749,45 @@ def test_graph_b_local_snapshot_cancels_bounded_lock_wait_without_partial_output
         blocker.rollback()
     with readonly_store(fixture["app"].state.settings) as reader, opened(fixture, reader):
         pass
+
+
+def test_graph_b_publication_packet_holds_register_until_encrypted_atomic_output_completes(postgres_graph_b_snapshot, tmp_path, monkeypatch):
+    from test_graph_b_publication import command_module
+    from test_source_reviews import assess
+
+    from app.release_preparation import canonical, digest
+    fixture = postgres_graph_b_snapshot
+    command = command_module()
+    selection = tmp_path / "publication-selection.json"
+    selection.write_bytes(canonical(fixture["request"].model_dump()))
+    evidence = tmp_path / "publication-audience"
+    evidence.mkdir()
+    (evidence / (digest(fixture["audience"]) + ".bin")).write_bytes(fixture["audience"])
+    output = tmp_path / "encrypted-publication-packet"
+    entered, resume = Event(), Event()
+    original = command.io.atomic_packet
+    def pause(*args, **kwargs):
+        result = original(*args, **kwargs)
+        entered.set()
+        assert resume.wait(5)
+        return result
+    monkeypatch.setattr(command.io, "atomic_packet", pause)
+    item = fixture["evidence"][0][2]
+    with ThreadPoolExecutor(2) as pool:
+        preparation = pool.submit(command.prepare, fixture["app"].state.settings, operator_id=fixture["operator_id"],
+                                  selection=selection, evidence_dir=evidence, output=output)
+        try:
+            assert entered.wait(5)
+            with observe_identity_lock(fixture["app"].state.store.engine, statement_fragment="FROM users") as observed:
+                writer = pool.submit(assess, item[1], item[4] + "/review", 6, "rights", decision="rejected")
+                assert observed[0].wait(5)
+                assert wait_until_blocked(fixture["app"].state.store.engine, observed[1][-1])
+                assert not writer.done()
+                resume.set()
+                assert preparation.result(timeout=10)["encrypted_private_evidence"]
+                assert writer.result(timeout=10).status_code == 200
+        finally:
+            resume.set()
+    with pytest.raises(SnapshotError):
+        command.validate(fixture["app"].state.settings, output, operator_id=fixture["operator_id"])
+    assert output.exists()
