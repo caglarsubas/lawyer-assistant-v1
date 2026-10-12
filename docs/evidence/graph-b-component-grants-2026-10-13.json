@@ -87,6 +87,13 @@
       "passed": 82,
       "seconds": 63.32,
       "environment": "disconnected Linux, 2 CPUs, 2 workers, real PostgreSQL"
+    },
+    {
+      "name": "actual Linux RAM wrapper, isolated authentication, source races and executable relay contracts",
+      "passed": 161,
+      "seconds": 32.06,
+      "cleanup_after_success": true,
+      "pytest_usage_failure_status_and_cleanup_preserved": true
     }
   ],
   "ci_collection": {
@@ -131,8 +138,8 @@
     "intersection": 0,
     "missing": 0,
     "extra": 0,
-    "complete_node_ids_sha256": "d4c1068a309689aac2b96b842dac66b8500de983cdd39677f82a49da782953a9",
-    "workflow_sha256": "6304dd0463baad640d1f7c3d796bc07447c95c0a1418366f8038bc40c49857ea",
+    "complete_node_ids_sha256": "be6f811ff5448f303f7f6049fa348195c083277a482227be8e9e8b4480a01aa9",
+    "workflow_sha256": "07949f3c5bf099d3275d0dcc1f8169092057247afbf6fd2b32853e67dcbb1ab7",
     "no_new_runner_retry_or_deadline_change": true,
     "workspace_workers": 2,
     "human_review_workers": 2,
@@ -155,7 +162,20 @@
     "second_pr63_backend": "18-minute step deadline at 93 percent; no assertion failure reported before timeout",
     "transport_profile_before_portal_starts": 826,
     "transport_profile_after_portal_starts": 86,
-    "transport_profile_cases": 42
+    "transport_profile_cases": 42,
+    "third_pr63_run": 38295202820,
+    "third_pr63_head": "1ad6d0726f52091d1d6c28e318eb7cf89b761dfe",
+    "third_frontend_all_tests_passed": true,
+    "third_frontend_workspace_cases": 67,
+    "third_frontend_workspace_seconds": 87.88,
+    "third_frontend_human_review_cases": 108,
+    "third_frontend_human_review_seconds": 162.92,
+    "third_frontend_annotation": "The job has exceeded the maximum execution time of 5m0s",
+    "third_postgres_conclusion": "success",
+    "third_backend_conclusion": "success",
+    "third_backend_step_seconds": 885,
+    "third_backend_job_seconds": 961,
+    "third_run_conclusion": "cancelled; frontend five-minute deadline"
   },
   "ci_changes": [
     "only required sources in fresh PostgreSQL decision fixtures",
@@ -166,8 +186,9 @@
     "unsigned Graph B context copied independently with zero accepted review events; each test signs and accepts afresh",
     "case-local ASGI portal reuse with independent peer authentication, headers and cookies; real handlers and per-request checks retained",
     "passed-case temporary directories removed by pytest; failed-case files retained",
-    "bounded 1 GiB exec-enabled tmpfs for the backend partition preserves file-backed SQLite locks and relay executable tests; no durability or authentication settings changed"
+    "bounded 1 GiB exec-enabled tmpfs for the backend partition preserves file-backed SQLite locks and relay executable tests; no durability or authentication settings changed",
+    "shared bounded RAM-backed test-storage wrapper for every Python partition; real mount/unmount, executable relay, source race and failure-status contracts checked"
   ],
-  "hosted_final_head_checks": "pending next CI fix commit; all three exact-head successes required before merge",
+  "hosted_final_head_checks": "pending shared-wrapper revision; all three exact-head successes required before merge",
   "next_gate": "complete reviewed Graph A/Graph B assembly, independent final attestation, all-component current serving authorization"
 }
