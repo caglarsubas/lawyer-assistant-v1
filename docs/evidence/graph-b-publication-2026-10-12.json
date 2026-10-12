@@ -15,8 +15,8 @@
     "seconds": 105.1
   },
   "expanded_existing_ci_human_review_group": {
-    "passed": 173,
-    "seconds": 86.27,
+    "passed": 108,
+    "seconds": 62.51,
     "workers": 2
   },
   "actual_postgres": {
@@ -39,7 +39,8 @@
     "prior_pr61_backend_seconds": 1077.89,
     "hosted_savings_not_yet_established": true,
     "post_merge_pr61_backend_seconds": 1087.93,
-    "post_merge_pr61_timeout_despite_all_tests_passing": true
+    "post_merge_pr61_timeout_despite_all_tests_passing": true,
+    "initial_rebalanced_host_jobs_exhausted_budgets": true
   },
   "boundaries": [
     "Retained private review and audience evidence encrypted with deployment key",
@@ -58,5 +59,12 @@
     "seed_isolation_cases": 2,
     "no_cached_verdicts": true,
     "postgres_builders_remain_fresh": true
+  },
+  "full_final_backend_partition": {
+    "passed": 3640,
+    "postgres_opt_in_and_other_skipped": 84,
+    "seconds": 435.61,
+    "workers": 2,
+    "disconnected_readonly_linux": true
   }
 }
