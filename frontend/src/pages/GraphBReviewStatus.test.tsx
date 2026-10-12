@@ -9,7 +9,7 @@ const source = { context_id: 'd'.repeat(64), revision: 2 } as EquivalenceState;
 const user = { firm_id: 'firm' } as User;
 function state(): SignedGraphBState {
   const event = { id: 'test-event', revision: 1, created_at: '2026-10-12T00:00:00Z', actor: { id: 'reviewer', name: '<script>reviewer</script>' }, envelope: {
-    algorithm: 'Ed25519', signature: 's', body: { decision: 'approve', public_reviewer: 'TEST-ONLY', reviewed_at: '2026-10-12T00:00:00Z', reviewer_id: 'reviewer', equivalence_revision: 2, expected_review_revision: 0,
+    algorithm: 'Ed25519', signature: 's', body: { firm_id: 'firm', context_id: source.context_id, decision: 'approve', public_reviewer: 'TEST-ONLY', reviewed_at: '2026-10-12T00:00:00Z', reviewer_id: 'reviewer', equivalence_revision: 2, expected_review_revision: 0, ontology_sha256: 'e'.repeat(64),
       qualifications: { decision_on: '2021-01-12', institution: { scope: 'historical_identity_only', registered_name: 'TEST-ONLY court', register_record_id: 'register 7', identity_window: { valid_from: '2020-01-01', valid_until: '2022-01-01', checked_through: null } },
         relations: ids.slice(0,2).flatMap(id => ['decidedIn','issuedBy','hasDecisionVersion'].map(relation => ({ source_id: id, relation, end_status: 'unknown', valid_from: null, valid_until: null, checked_through: null, rationale: 'Unknown applicability' }))) },
       appointment: { scope: 'TR_decision_identity_institution_temporal_review', valid_from: '2026-01-01', valid_until: '2027-01-01', statement: 'TEST-ONLY appointment' } } } };
@@ -38,5 +38,17 @@ describe('signed qualification review disclosure', () => {
     expect(html).not.toContain('<script>');expect(html).toContain('Güncel bağımsız imza doğrulandı');
     expect(html).toContain('Graf yayımlanmadı');expect(html).toContain('Zamansal uygulanabilirlik bilinmiyor');
     expect(html).toContain('mesleki yeterliği veya hukuki doğruluğu tek başına kanıtlamaz');
+  });
+});
+
+describe('negative qualification review', () => {
+  it('retains explicit unknown dates on a negative opinion without an approval', () => {
+    const value=state();value.signed_review_current=false;value.current!.envelope.body.decision='needs_changes';value.current!.envelope.body.qualifications.decision_on=null;
+    expect(validateSignedReview(value,source,user)).toEqual(value);
+    const html=renderToStaticMarkup(<SignedGraphBSummary state={value}/>);expect(html).toContain('Bilinmiyor; hukuki kabul yok');expect(html).toContain('Düzeltme gerekli');
+  });
+  it('withholds an approval claiming an unknown decision date', () => {
+    const value=state();value.current!.envelope.body.qualifications.decision_on=null;
+    expect(()=>validateSignedReview(value,source,user)).toThrow();
   });
 });

@@ -608,3 +608,37 @@ def test_signed_graph_b_accept_waits_for_register_and_rejects_changed_pin(postgr
     from app.graph_b_review_models import GraphBReviewEvent
     with fixture[0].state.store.session() as session:
         assert session.scalar(select(GraphBReviewEvent)) is None
+
+
+def test_graph_b_signing_inputs_hold_register_lock_through_conversion(postgres_equivalence, tmp_path, monkeypatch):
+    from test_graph_b_review import accept, prepare
+    from test_graph_b_signing import download
+    from test_source_reviews import assess
+
+    from app import graph_b_review
+    fixture = prepare(postgres_equivalence, tmp_path)
+    assert accept(postgres_equivalence, fixture).status_code == 200
+    item = postgres_equivalence[0][2]
+    entered, resume = Event(), Event()
+    original = graph_b_review.compile_inputs
+    def pause(*args):
+        result = original(*args)
+        entered.set()
+        assert resume.wait(5)
+        return result
+    monkeypatch.setattr(graph_b_review, "compile_inputs", pause)
+    with ThreadPoolExecutor(2) as pool:
+        packet = pool.submit(download, postgres_equivalence, fixture)
+        try:
+            assert entered.wait(5)
+            with observe_identity_lock(fixture[0].state.store.engine, statement_fragment="FROM source_review_heads") as (attempted, pids):
+                writer = pool.submit(assess, item[1], item[4] + "/review", 6, "legal")
+                assert attempted.wait(5)
+                assert wait_until_blocked(fixture[0].state.store.engine, pids[-1])
+                assert not writer.done()
+                resume.set()
+                assert packet.result(timeout=10).status_code == 200
+                assert writer.result(timeout=10).status_code == 200
+        finally:
+            resume.set()
+    assert download(postgres_equivalence, fixture).status_code == 409

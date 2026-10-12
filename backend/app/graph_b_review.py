@@ -8,6 +8,7 @@ from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi.responses import JSONResponse
 from pydantic import Field, StrictInt, ValidationError, field_validator
 from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError, OperationalError
@@ -19,6 +20,7 @@ from .db import User, now, uid
 from .firm_rbac import permissions_for
 from .graph_b_qualification import Qualifications, ReviewerAppointment, day, validate_qualifications
 from .graph_b_review_models import GraphBReviewEvent, GraphBReviewHead
+from .graph_b_signing import SigningInput, compile_inputs
 from .graph_release import _load_serving
 from .release_preparation import canonical, digest
 
@@ -56,6 +58,7 @@ class SignedBody(reviews.StrictInput):
 
 
 class ReviewRequest(reviews.StrictInput):
+    decision: Literal["approve", "reject", "needs_changes"] = "approve"
     expected_review_revision: StrictInt = Field(ge=0, le=MAX_EVENTS)
     expected_equivalence_revision: StrictInt = Field(ge=1, le=eq.MAX_EVENTS)
     pins: eq.Pins
@@ -187,7 +190,7 @@ def validate_body(body, packages, captured, decisions, eq_events, context):
     if body["public_reviewer"] != body["public_reviewer"].strip() or any(ord(c) < 32 for c in body["public_reviewer"]):
         raise invalid()
     register = next(key for key in packages if key not in decisions)
-    validate_qualifications(body["qualifications"], packages, bound, decisions, register, prior[-1]["proposal"]["claims"], body["reviewed_at"])
+    validate_qualifications(body["qualifications"], packages, bound, decisions, register, prior[-1]["proposal"]["claims"], body["reviewed_at"], approval=body["decision"] == "approve")
     return body
 
 
@@ -320,7 +323,7 @@ def graph_b_review_router():
                 "expected_review_revision": len(events), "equivalence_revision": len(eq_events), "pins": body.pins.model_dump(),
                 "source_snapshot_sha256": digest(canonical({"sources": bound, "equivalence_history": prior})),
                 "ontology_sha256": ontology_sha, "review_key_sha256": key_sha, "reviewed_at": body.reviewed_at,
-                "decision": "approve", "qualifications": body.qualifications.model_dump(), "appointment": body.appointment.model_dump()}).model_dump()
+                "decision": body.decision, "qualifications": body.qualifications.model_dump(), "appointment": body.appointment.model_dump()}).model_dump()
             current_check(signed_body, session, packages, captured, decisions, eq_events, context, key_sha, ontology_sha)
             if events and datetime.fromisoformat(signed_body["reviewed_at"].replace("Z", "+00:00")) < datetime.fromisoformat(events[-1]["created_at"]):
                 raise invalid()
@@ -384,5 +387,38 @@ def graph_b_review_router():
                 session.commit()
                 return view([*events, event], session, packages, captured, decisions, eq_events, context, current, key_sha, ontology_sha)
         except (IntegrityError, OperationalError):
+            raise invalid() from None
+
+    @router.post("/{source_id}/graph-b-review/signing-inputs")
+    def signing_inputs(source_id: str, body: SigningInput, request: Request,
+                       peer_source_id: str = Query(pattern=r"^[a-f0-9]{64}$"),
+                       register_source_id: str = Query(pattern=r"^[a-f0-9]{64}$"), user=Depends(authorize)):
+        store = request.app.state.store
+        try:
+            with store.session() as session:
+                current = reviews._lock_identity(session, request, user)
+                role = current.role
+                data = context_data(request, source_id, peer_source_id, register_source_id, current, session, lock=True)
+                packages, decisions, context, captured, eq_events, events = data
+                key_raw, _, key_sha = configured_key(request)
+                ontology_sha = _load_serving()._release.ontology_digest(ROOT / "ontology")
+                if (not events or body.expected_review_revision != len(events)
+                        or body.expected_equivalence_revision != len(eq_events) or body.pins.model_dump() != eq.current_pins(captured)):
+                    raise invalid()
+                signed_body = events[-1]["envelope"]["body"]
+                current_check(signed_body, session, packages, captured, decisions, eq_events, context, key_sha, ontology_sha)
+                if signed_body["decision"] != "approve" or signed_body["operator_id"] != current.id:
+                    raise invalid()
+                bound, _ = assessed(packages, captured, decisions, eq_events, len(eq_events), body.pins.model_dump())
+                result = compile_inputs(packages, decisions, captured, bound, eq_events[-1], events[-1], ROOT / "ontology")
+                eq.verify(request, packages, current)
+                current_check(signed_body, session, packages, captured, decisions, eq_events, context, key_sha, ontology_sha)
+                if (context_data(request, source_id, peer_source_id, register_source_id, current, session, lock=True) != data
+                        or configured_key(request)[0] != key_raw or _load_serving()._release.ontology_digest(ROOT / "ontology") != ontology_sha
+                        or reviews._lock_identity(session, request, current).role != role):
+                    raise invalid()
+                return JSONResponse(result, headers={"Cache-Control": "no-store",
+                    "Content-Disposition": 'attachment; filename="private-graph-b-signing-inputs.json"'})
+        except (OperationalError, OSError, ValueError, KeyError, TypeError):
             raise invalid() from None
     return router
