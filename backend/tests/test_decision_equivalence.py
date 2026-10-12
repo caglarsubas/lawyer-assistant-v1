@@ -40,12 +40,13 @@ def prepare(app, client, store, make, *, permitted_uses=None, rights_evidence=No
         base = f"/api/v1/public-sources/{source_id}"
         candidates = json.loads(client.get(base + "/jurisprudence-candidates?passage_id=p2").json()["evidence_json"])["items"]
         item = (app, client, store, source_id, base, candidates, package)
+        source_rights = rights_evidence(index, item) if callable(rights_evidence) else rights_evidence
         if index < 2:
-            mapped(item, export=True, permitted_uses=permitted_uses, rights_evidence=rights_evidence)
+            mapped(item, export=True, permitted_uses=permitted_uses, rights_evidence=source_rights)
         else:
             ready(item)
             assert assess(client, base + "/review", 5, "rights", permitted_uses=permitted_uses or ["local_processing", "internal_display", "export"],
-                          **({"evidence_refs": rights_evidence} if rights_evidence else {})).status_code == 200
+                          **({"evidence_refs": source_rights} if source_rights else {})).status_code == 200
         mappings.append(item)
     identity_reviewer = another_client(app, username="identity-peer")
     for index, item in enumerate(mappings[:2]):
@@ -59,10 +60,10 @@ def prepare(app, client, store, make, *, permitted_uses=None, rights_evidence=No
 
 
 @pytest.fixture
-def evidence_set(workspace, incoming):
-    app, client, _ = workspace
-    store, make = incoming
-    return prepare(app, client, store, make)
+def evidence_set(tmp_path, synthetic_equivalence_seed):
+    from graph_b_test_seeds import cloned_equivalence
+    with cloned_equivalence(synthetic_equivalence_seed, tmp_path) as value:
+        yield value
 
 
 def endpoint(evidence_set, *, review=False, reverse=False):

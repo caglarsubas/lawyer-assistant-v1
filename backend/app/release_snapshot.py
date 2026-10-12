@@ -74,6 +74,10 @@ class _Reader:
     def decode(self, row):
         return json.loads(self._cipher.decrypt(row.payload.encode("utf-8")))
 
+    def seal_preparation(self, data):
+        """Encrypt private operator evidence; confers no review or permission."""
+        return self._cipher.encrypt(_canonical(data))
+
     def preparation_mac(self, payload: bytes) -> str:
         if not isinstance(payload, bytes):
             raise SnapshotError("Preparation integrity payload must be bytes")

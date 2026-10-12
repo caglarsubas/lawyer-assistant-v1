@@ -42,8 +42,10 @@ def prepare(workspace, incoming, tmp_path, *, full_rights=True):
 
 
 @pytest.fixture
-def current(workspace, incoming, tmp_path):
-    return prepare(workspace, incoming, tmp_path)
+def current(tmp_path, synthetic_signed_graph_b_seed):
+    from graph_b_test_seeds import cloned_signed_snapshot
+    with cloned_signed_snapshot(synthetic_signed_graph_b_seed, tmp_path) as value:
+        yield value
 
 
 def opened(fixture, reader, **changes):

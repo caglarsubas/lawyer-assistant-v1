@@ -1,0 +1,83 @@
+{
+  "schema_version": "encrypted-graph-b-publication-engineering-evidence-v1",
+  "date": "2026-10-12",
+  "synthetic_only": true,
+  "legal_truth_verified": false,
+  "professional_qualification_verified": false,
+  "publication_performed": false,
+  "deployment_performed": false,
+  "native_publication_tests": {
+    "passed": 31,
+    "seconds": 26.31
+  },
+  "disconnected_readonly_linux_regression": {
+    "passed": 257,
+    "seconds": 105.1
+  },
+  "expanded_existing_ci_human_review_group": {
+    "passed": 108,
+    "seconds": 62.51,
+    "workers": 2
+  },
+  "actual_postgres": {
+    "passed": 81,
+    "seconds": 57.61,
+    "workers": 2,
+    "encrypted_output_lock_race": true,
+    "owned_child_databases_removed": true
+  },
+  "deployment_contracts": {
+    "passed": 41
+  },
+  "ci_partition": {
+    "nodes": 4151,
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "jobs": 3,
+    "new_jobs_workers_retries_or_extended_deadlines": false,
+    "prior_pr61_backend_seconds": 1077.89,
+    "hosted_savings_not_yet_established": true,
+    "post_merge_pr61_backend_seconds": 1087.93,
+    "post_merge_pr61_timeout_despite_all_tests_passing": true,
+    "initial_rebalanced_host_jobs_exhausted_budgets": true,
+    "frontend_completed_all_tests_but_exhausted_job_cleanup_budget": true,
+    "content_scope_cases_moved_to_backend": 10
+  },
+  "boundaries": [
+    "Retained private review and audience evidence encrypted with deployment key",
+    "Only exact public signing paths leave private preparation",
+    "All three source-specific audience evidence requirements",
+    "Permission cannot borrow another source's accepted proof",
+    "Separately signed public attestation required",
+    "Late trust, epoch, expiry and source changes withhold newly owned artifacts",
+    "Interrupted atomic rename cleans artifact and reservation",
+    "Component inclusion request remains unsigned",
+    "National serving and complete-corpus assembly remain gated"
+  ],
+  "fresh_verified_seed_regression": {
+    "native_passed": 129,
+    "native_seconds": 75.14,
+    "seed_isolation_cases": 2,
+    "no_cached_verdicts": true,
+    "postgres_builders_remain_fresh": true,
+    "final_linux_passed": 99,
+    "final_linux_seconds": 41.94
+  },
+  "full_final_backend_partition": {
+    "passed": 3640,
+    "postgres_opt_in_and_other_skipped": 84,
+    "seconds": 435.61,
+    "workers": 2,
+    "disconnected_readonly_linux": true
+  },
+  "source_review_empty_seed": {
+    "native_passed": 100,
+    "native_seconds": 14.43,
+    "publication_group_passed": 132,
+    "publication_group_seconds": 42.73,
+    "publication_workers": 2,
+    "copy_isolation_and_no_reused_login_sessions": true,
+    "postgres_builders_remain_fresh": true
+  }
+}
