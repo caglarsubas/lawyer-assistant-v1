@@ -31,7 +31,7 @@ def reference(mapping):
     return [{"reference": f"source:{p['source_id']}:passage:{p['passage_id']}", "sha256": p["sha256"]}]
 
 
-def prepare(app, client, store, make):
+def prepare(app, client, store, make, *, permitted_uses=None, rights_evidence=None):
     app.state.settings.public_source_dir = store.root
     mappings = []
     for index in range(3):
@@ -41,10 +41,11 @@ def prepare(app, client, store, make):
         candidates = json.loads(client.get(base + "/jurisprudence-candidates?passage_id=p2").json()["evidence_json"])["items"]
         item = (app, client, store, source_id, base, candidates, package)
         if index < 2:
-            mapped(item, export=True)
+            mapped(item, export=True, permitted_uses=permitted_uses, rights_evidence=rights_evidence)
         else:
             ready(item)
-            assert assess(client, base + "/review", 5, "rights", permitted_uses=["local_processing", "internal_display", "export"]).status_code == 200
+            assert assess(client, base + "/review", 5, "rights", permitted_uses=permitted_uses or ["local_processing", "internal_display", "export"],
+                          **({"evidence_refs": rights_evidence} if rights_evidence else {})).status_code == 200
         mappings.append(item)
     identity_reviewer = another_client(app, username="identity-peer")
     for index, item in enumerate(mappings[:2]):

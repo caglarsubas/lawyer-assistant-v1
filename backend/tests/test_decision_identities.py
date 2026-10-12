@@ -23,12 +23,13 @@ source = source_fixture
 workspace = workspace_fixture
 
 
-def mapped(mapping, *, export=False):
+def mapped(mapping, *, export=False, permitted_uses=None, rights_evidence=None):
     ready(mapping)
     revision = 5
     if export:
         assert assess(mapping[1], mapping[4] + "/review", 5, "rights",
-                      permitted_uses=["local_processing", "internal_display", "export"]).status_code == 200
+                      permitted_uses=permitted_uses or ["local_processing", "internal_display", "export"],
+                      **({"evidence_refs": rights_evidence} if rights_evidence else {})).status_code == 200
         revision = 6
     identifier = propose(mapping, source_revision=revision).json()["items"][0]["id"]
     assert review(mapping, identifier, source_revision=revision).status_code == 200

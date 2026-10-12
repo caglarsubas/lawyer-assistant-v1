@@ -4116,3 +4116,9 @@ No browser console errors/warnings observed. Ignored screenshot/logs/packet rema
 under `.data/verification/r03-signed-review/`; the temporary Downloads copy was
 removed. No real source review, provider credentials/calls, actual signing keys,
 professional approval, shared graph mutation or user deployment was used.
+
+### R03 local signed Graph B publication snapshot — 2026-10-12
+
+113 native focused regressions passed (66.99 s); 175 disconnected, read-only Linux regressions passed (109.74 s). All 80 actual PostgreSQL cases passed with two workers (57.99 s), using isolated randomly named child databases and disposable storage. New database-observed checks establish five simultaneous shared readers, blocking writes to all 16 selected account/source/mapping/identity/equivalence/signed-review/reservation rows, later negative-review and register-rights invalidation, and bounded source-lock cancellation with no partial snapshot. Writer probes run in bounded batches within the existing connection pool; the first oversized probe exhausted available connections and was corrected without changing production pool capacity. The same live snapshot produces byte-identical signing inputs to the existing curator endpoint.
+
+The unchanged hosted partition collects 4,116 disjoint nodes with zero omissions/extras. Ruff and whitespace checks passed. TEST-ONLY keys and invented appointments qualify engineering behavior only; no actual corpus, institutional competence, legal/editor approval, audience grant, release installation or deployment is certified. See `docs/evidence/graph-b-snapshot-2026-10-12.json` and `docs/GRAPH_B_PUBLICATION_SNAPSHOTS.md`.

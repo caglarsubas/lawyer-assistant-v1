@@ -1,0 +1,15 @@
+# Current Graph B publication snapshots
+
+The local operator boundary reconstructs the complete three-source decision review without HTTP requests or impersonated login sessions. `app.graph_b_snapshot.locked_graph_b_snapshot` is for trusted deployment-host code using `release_snapshot.readonly_store`. It cannot sign, publish, activate, initialize storage, or manufacture a reviewer appointment.
+
+A closed `signed-graph-b-selection-v1` selection requires two sorted decision-source IDs, a distinct institutional-register source, explicit reviewer ID, and exact source, mapping, identity, equivalence, and signed-review revisions. All three sources must have current accepted rights for storage, local processing, internal display, export, indexing, and local inference. These six uses alone do not grant a deployment-wide audience.
+
+The reader verifies every historical source assessment, mapping, identity reservation, equivalence opinion, and signed review against the original source versions. The latest signed review must approve the exact context, remain independent of every contributor, match the separately configured reviewer public key and current ontology, and have an unexpired reviewer appointment. The operator must still own all three source reviews; operator and reviewer must be active permitted members of the same firm.
+
+PostgreSQL account locks precede sorted source locks. Mapping, identity, equivalence, signed-review heads and the exact relevant canonical reservations are also protected. Read operations use shared locks; preparation and transitions use exclusive locks. Before returning dependent output, the reader reloads accounts, source bytes, trust, ontology, and complete ledgers and checks every returned field for caller mutation. Storage access allows SELECT/SHOW only, never flush or commit; lock and statement waits are bounded by the existing read-only storage adapter. Explicit SQLite demos provide optimistic revalidation, not PostgreSQL locking guarantees.
+
+The snapshot binds original artifact hashes, private source selections, complete encrypted ledger contents, public-key fingerprint, current ontology, account roles, head IDs and every requested revision. This binding is confidential. Do not include it, reviewer credentials, private history, or matter-derived authority selections in shared RDF or public exports.
+
+The same reconstructed review produces byte-identical qualified public signing inputs to the curator endpoint. These remain an unsigned six-assertion identity slice with unknown intervals preserved where evidence is insufficient. Institutional competence, finality and general legal correctness remain unverified.
+
+The next gate is a separately signed decision-specific publication grant: exact prepared public bytes, per-source audience evidence, expiry, trusted public attestation and restore epoch, followed by current checks at install, activate, rollback and read. Never pass a decision grant through provision authorization or replace the complete national corpus with this slice.

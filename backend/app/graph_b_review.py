@@ -112,8 +112,8 @@ def public_key(raw):
         raise invalid() from None
 
 
-def configured_key(request):
-    value = request.app.state.settings.graph_b_review_trusted_key
+def configured_key_path(value):
+    """Read deployment trust without requiring an HTTP transport or session."""
     if not value:
         raise HTTPException(503, "Configure the independently vetted Graph B reviewer public key first")
     from .release_authorization import _packet_tools
@@ -123,6 +123,10 @@ def configured_key(request):
         return raw, key, fingerprint
     except (ValueError, OSError):
         raise HTTPException(503, "The configured independent review public key could not be read safely") from None
+
+
+def configured_key(request):
+    return configured_key_path(request.app.state.settings.graph_b_review_trusted_key)
 
 
 def verify_signature(envelope, key_raw):
@@ -264,13 +268,18 @@ def view(events, session, packages, captured, decisions, eq_events, context, use
             "institutional_competence_verified": False, "finality_verified": False}
 
 
+def context_from_packages(store, session, packages, decisions, context, firm_id, *, lock=False):
+    """Complete private reconstruction, shared by HTTP and trusted local readers."""
+    captured = eq.capture(store, session, packages, decisions, firm_id, lock=lock)
+    eq_events = eq.ledger(store, session, eq._head(session, firm_id, context), packages, decisions, captured)
+    events = ledger(store, session, head(session, firm_id, context), packages, captured, decisions, eq_events, context)
+    return packages, decisions, context, captured, eq_events, events
+
+
 def context_data(request, source, peer, register, user, session, *, lock=False):
     packages, decisions, context = eq.context(request, source, peer, register, user)
-    store = request.app.state.store
-    captured = eq.capture(store, session, packages, decisions, user.firm_id, lock=lock)
-    eq_events = eq.ledger(store, session, eq._head(session, user.firm_id, context), packages, decisions, captured)
-    events = ledger(store, session, head(session, user.firm_id, context), packages, captured, decisions, eq_events, context)
-    return packages, decisions, context, captured, eq_events, events
+    return context_from_packages(request.app.state.store, session, packages, decisions, context,
+                                 user.firm_id, lock=lock)
 
 
 def graph_b_review_router():

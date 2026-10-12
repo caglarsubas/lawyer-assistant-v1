@@ -642,3 +642,110 @@ def test_graph_b_signing_inputs_hold_register_lock_through_conversion(postgres_e
         finally:
             resume.set()
     assert download(postgres_equivalence, fixture).status_code == 409
+
+
+@pytest.fixture
+def postgres_graph_b_snapshot(postgres_sources, tmp_path):
+    from test_graph_b_snapshot import prepare
+    from test_jurisprudence_candidates import incoming
+    app, sources, _, _ = postgres_sources
+    root = tmp_path / "synthetic-signed-publication"
+    root.mkdir()
+    return prepare((app, sources[0][1], None), incoming.__wrapped__(source_fixture.__wrapped__(root)), tmp_path)
+
+
+def test_graph_b_local_snapshot_five_shared_readers_and_all_dependency_row_locks(postgres_graph_b_snapshot):
+    from test_graph_b_snapshot import opened
+
+    from app.decision_equivalence_models import DecisionEquivalenceHead
+    from app.decision_identity_models import DecisionIdentityHead, DecisionIdentityReservation
+    from app.decision_mapping_models import DecisionMappingHead
+    from app.graph_b_review_models import GraphBReviewHead
+    fixture = postgres_graph_b_snapshot
+    entered = Barrier(5)
+    with readonly_store(fixture["app"].state.settings) as reader:
+        def read():
+            with opened(fixture, reader, shared=True):
+                entered.wait(timeout=10)
+        with ThreadPoolExecutor(5) as pool:
+            futures = [pool.submit(read) for _ in range(5)]
+            for future in futures:
+                future.result(timeout=20)
+        with opened(fixture, reader, shared=True) as snapshot:
+            binding = snapshot["binding"]
+            targets = [(User, actor, "active") for actor in (binding["operator_id"], binding["reviewer_id"])]
+            for heads in binding["heads"].values():
+                targets.append((SourceReviewHead, heads["source_review"], "revision"))
+                if "mapping" in heads:
+                    targets += [(DecisionMappingHead, heads["mapping"], "revision"), (DecisionIdentityHead, heads["identity"], "revision")]
+            targets += [(DecisionEquivalenceHead, binding["equivalence_head_id"], "revision"),
+                        (GraphBReviewHead, binding["signed_review_head_id"], "revision")]
+            targets += [(DecisionIdentityReservation, row["id"], "payload") for row in snapshot["reservations"]]
+        def write(model, identifier, field):
+            with fixture["app"].state.store.session() as session:
+                session.execute(update(model).where(model.id == identifier).values({field: getattr(model, field)}))
+                session.commit()
+        # The application's connection pool is bounded to 15 connections. Probe
+        # in batches so queued connection acquisition cannot mask a row-lock test.
+        for offset in range(0, len(targets), 8):
+            batch = targets[offset:offset + 8]
+            with ThreadPoolExecutor(len(batch)) as pool:
+                with opened(fixture, reader, shared=True), observe_identity_lock(fixture["app"].state.store.engine, statement_fragment="UPDATE ") as observed:
+                    futures = [pool.submit(write, *target) for target in batch]
+                    deadline = time.monotonic() + 4
+                    while len(observed[1]) < len(batch) and time.monotonic() < deadline:
+                        time.sleep(.01)
+                    assert len(observed[1]) == len(batch)
+                    assert all(wait_until_blocked(fixture["app"].state.store.engine, pid) for pid in observed[1])
+                    assert not any(future.done() for future in futures)
+                for future in futures:
+                    future.result(timeout=10)
+
+
+
+@pytest.mark.parametrize("change", ["register-rights", "negative-review"])
+def test_graph_b_local_snapshot_blocks_review_writer_and_next_use_rejects(postgres_graph_b_snapshot, change):
+    from datetime import datetime, timezone
+
+    from test_graph_b_review import accept
+    from test_graph_b_snapshot import opened
+    from test_source_reviews import assess
+    fixture = postgres_graph_b_snapshot
+    if change == "negative-review":
+        fixture["signed"][5].update(expected_review_revision=1, reviewed_at=datetime.now(timezone.utc).isoformat())
+        def write():
+            return accept(fixture["evidence"], fixture["signed"], decision="reject")
+    else:
+        item = fixture["evidence"][0][2]
+        def write():
+            return assess(item[1], item[4] + "/review", 6, "rights", decision="rejected")
+    with readonly_store(fixture["app"].state.settings) as reader, ThreadPoolExecutor(1) as pool:
+        with opened(fixture, reader, shared=True), observe_identity_lock(fixture["app"].state.store.engine, statement_fragment="FROM users") as observed:
+            writer = pool.submit(write)
+            assert observed[0].wait(5)
+            assert wait_until_blocked(fixture["app"].state.store.engine, observed[1][-1])
+            assert not writer.done()
+        result = writer.result(timeout=10)
+        assert result.status_code == 200, result.text
+        with pytest.raises(SnapshotError), opened(fixture, reader, shared=True):
+            pytest.fail("A later negative review or source revocation must invalidate old publication snapshots")
+
+
+def test_graph_b_local_snapshot_cancels_bounded_lock_wait_without_partial_output(postgres_graph_b_snapshot):
+    from test_graph_b_snapshot import opened
+    fixture = postgres_graph_b_snapshot
+    with fixture["app"].state.store.session() as blocker, readonly_store(fixture["app"].state.settings) as reader:
+        blocker.scalar(select(SourceReviewHead).where(SourceReviewHead.source_id == fixture["request"].register_source_id).with_for_update())
+        def read():
+            with opened(fixture, reader):
+                pytest.fail("Timed-out source selection must not yield any partial snapshot")
+        with ThreadPoolExecutor(1) as pool:
+            with observe_identity_lock(reader.engine, statement_fragment="FROM source_review_heads") as observed:
+                future = pool.submit(read)
+                assert observed[0].wait(5)
+                assert wait_until_blocked(fixture["app"].state.store.engine, observed[1][-1])
+                with pytest.raises(SnapshotError, match="could not be verified"):
+                    future.result(timeout=8)
+        blocker.rollback()
+    with readonly_store(fixture["app"].state.settings) as reader, opened(fixture, reader):
+        pass

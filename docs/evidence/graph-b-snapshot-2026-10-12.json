@@ -1,0 +1,14 @@
+{
+  "schema_version": "graph-b-snapshot-engineering-evidence-v1",
+  "date": "2026-10-12",
+  "synthetic_only": true,
+  "legal_truth_verified": false,
+  "professional_qualification_verified": false,
+  "publication_performed": false,
+  "deployment_performed": false,
+  "native_regression": {"passed": 113, "seconds": 66.99},
+  "disconnected_readonly_linux_regression": {"passed": 175, "seconds": 109.74},
+  "actual_postgres": {"passed": 80, "seconds": 57.99, "workers": 2, "simultaneous_readers": 5, "protected_dependency_rows": 16, "bounded_lock_timeout": true, "owned_child_databases_removed": true},
+  "ci_partition": {"nodes": 4116, "intersection": 0, "missing": 0, "extra": 0, "workflow_changed": false, "extra_jobs_workers_retries_or_deadlines": false},
+  "boundaries": ["No HTTP identity fabrication", "No schema initialization or database writes", "All six source-use rights remain distinct from deployment audience", "Same-firm active owner and independent reviewer", "Complete history and original evidence revalidation", "Unknown temporal intervals remain unknown", "No public graph publication or production credentials"]
+}
