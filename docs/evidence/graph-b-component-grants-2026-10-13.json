@@ -52,14 +52,36 @@
     {
       "name": "ruff, whitespace and Compose config without dotenv",
       "passed": true
+    },
+    {
+      "name": "full backend after analysis baseline refinement, before unsigned-review fixture refinement",
+      "passed": 3683,
+      "skipped": 85,
+      "seconds": 440.3,
+      "environment": "disconnected read-only Linux, 2 CPUs, 2 workers"
+    },
+    {
+      "name": "final analysis/copy isolation native cases",
+      "passed": 306,
+      "seconds": 63.42
+    },
+    {
+      "name": "final unsigned review/signing/copy isolation native cases",
+      "passed": 77,
+      "seconds": 32.65
+    },
+    {
+      "name": "final affected analysis/unsigned-review/signing/isolation contracts in disconnected read-only Linux",
+      "passed": 372,
+      "seconds": 87.97
     }
   ],
   "ci_collection": {
     "schema": "complete-ci-partition-v1",
     "counts": {
-      "complete": 4179,
+      "complete": 4181,
       "preflight": 89,
-      "remaining": 3767,
+      "remaining": 3769,
       "publication": 128,
       "workspace": 67,
       "human_review": 108,
@@ -96,7 +118,7 @@
     "intersection": 0,
     "missing": 0,
     "extra": 0,
-    "complete_node_ids_sha256": "4dd442bb5125c34803ec11ebd106cbbadfaaffc8ebaf4e3d3f7bd37cce2fabd0",
+    "complete_node_ids_sha256": "45beeb907cd71d3f71cdf3c6bd14f564b944c3367a6b852351ba5cfcd35da849",
     "workflow_sha256": "107a18414d524ee9dfa363001f13e0a049c117fdb9fc87dea6c9af15680715b5",
     "no_new_runner_retry_or_deadline_change": true,
     "workspace_workers": 2,
@@ -109,14 +131,21 @@
     "postgres_tests_passed": 81,
     "postgres_test_seconds": 163.43,
     "publication_step_cancelled_after_seconds": 122,
-    "unchanged_job_budget_minutes": 5
+    "unchanged_job_budget_minutes": 5,
+    "first_pr63_run": 38275976155,
+    "first_pr63_head": "db45d94a3cf7132ef31dcdfc33ccfff3569215d5",
+    "first_pr63_backend": "18-minute step deadline at 93 percent; no assertion failure reported before timeout",
+    "first_pr63_frontend_seconds": 295,
+    "first_pr63_postgres_seconds": 298
   },
   "ci_changes": [
     "only required sources in fresh PostgreSQL decision fixtures",
     "independent empty baseline copies with real startup and fresh login",
     "independent component bytes with fresh complete verification for negative cases; fresh acceptance and PG builders",
-    "four measured open-validity tests moved to backend; all jobs and worker/timeout/retry budgets unchanged"
+    "four measured open-validity tests moved to backend; all jobs and worker/timeout/retry budgets unchanged",
+    "initial analysis document/fact baseline copied independently, no analysis/review verdicts retained; subjects and fresh builders remain active",
+    "unsigned Graph B context copied independently with zero accepted review events; each test signs and accepts afresh"
   ],
-  "hosted_final_head_checks": "pending PR; must verify all three exact-head successes before merge",
+  "hosted_final_head_checks": "pending revised PR commit; all three exact-head successes required before merge",
   "next_gate": "complete reviewed Graph A/Graph B assembly, independent final attestation, all-component current serving authorization"
 }

@@ -190,3 +190,43 @@ def test_component_grant_copies_reverify_and_do_not_modify_seed_or_sibling(synth
         assert second['command'].validate(second['settings'], second['prepared'], grant=sibling)['current_component_grant']
         assert hashes(root) == before and hashes(tmp_path / 'second') == original_second
         assert original['public'].read_bytes() == (tmp_path / 'second' / original['public'].relative_to(root)).read_bytes()
+
+
+def test_analysis_baseline_copies_have_no_verdicts_and_fact_changes_do_not_reach_sibling(synthetic_analysis_workbench_seed, tmp_path):
+    from graph_b_test_seeds import cloned_analysis_workbench
+    from test_analysis_workbench import create, fresh_workbench
+    root, _ = synthetic_analysis_workbench_seed
+    before = hashes(root)
+    with cloned_analysis_workbench(synthetic_analysis_workbench_seed, tmp_path / 'first') as first, cloned_analysis_workbench(
+            synthetic_analysis_workbench_seed, tmp_path / 'second') as second:
+        changed = first[1].patch(first[2] + '/facts/' + first[4]['id'], json={
+            'text': 'Changed independently copied TEST-ONLY fact', 'status': 'disputed', 'reason': 'TEST ONLY mutation'})
+        assert changed.status_code == 200
+        assert second[1].get(second[2]).json()['facts'][0] == second[4]
+        assert first[3] is not second[3] and first[4] is not second[4]
+        assert hashes(root) == before
+        result = create(second)
+        assert result['status'] == 'needs_review' and result['checks']['legal_approval'] == 'not_granted'
+    # Dedicated setup still creates a new store, document and real fact request.
+    lifetime = fresh_workbench(tmp_path / 'fresh-builder')
+    try:
+        fresh = next(lifetime)
+        assert fresh[4]['id'] != second[4]['id'] and fresh[5] != second[5]
+        assert fresh[1].get(fresh[2] + '/analyses').json() == []
+    finally:
+        lifetime.close()
+
+
+def test_unsigned_review_context_copies_have_no_accepted_review_and_recheck_live_source(synthetic_unsigned_graph_b_seed, tmp_path):
+    from graph_b_test_seeds import cloned_unsigned_graph_b
+    from test_graph_b_review import request_body
+    from test_source_reviews import assess
+    root, _, _ = synthetic_unsigned_graph_b_seed
+    before = hashes(root)
+    with cloned_unsigned_graph_b(synthetic_unsigned_graph_b_seed, tmp_path / 'first') as (first, request), cloned_unsigned_graph_b(
+            synthetic_unsigned_graph_b_seed, tmp_path / 'second') as (second, sibling):
+        register = first[0][2]
+        assert assess(register[1], register[4] + '/review', request[5]['pins']['source_revisions'][register[3]], 'rights', decision='rejected').status_code == 200
+        assert request_body(first, request).status_code == 409
+        assert request_body(second, sibling).status_code == 200
+        assert request[5] is not sibling[5] and hashes(root) == before

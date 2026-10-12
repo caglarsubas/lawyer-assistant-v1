@@ -15,8 +15,8 @@ from app.evidence_prompt import canonical
 
 
 @pytest.fixture
-def workbench(tmp_path):
-    yield from workbench_fixture.__wrapped__(tmp_path)
+def workbench(tmp_path, synthetic_analysis_workbench_seed):
+    yield from workbench_fixture.__wrapped__(tmp_path, synthetic_analysis_workbench_seed)
 
 
 def pair(workbench, monkeypatch, *, different_family=False, different_rubric=False):

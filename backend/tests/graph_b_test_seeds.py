@@ -117,3 +117,54 @@ def cloned_component_grant(seed, destination):
         # private original source/ledger, account, proof, appointment and key copy.
         assert value['command'].validate(settings, value['prepared'], grant=grant)['current_component_grant']
         yield value, grant
+
+
+@contextmanager
+def cloned_analysis_workbench(seed, destination):
+    root, original = seed
+    with cloned_empty_workspace(root, destination) as (app, client, matter):
+        base = f'/api/v1/matters/{matter}'
+        payload, fact = copy.deepcopy(original[3]), copy.deepcopy(original[4])
+        document, text = original[5:]
+        # Inspect only copied setup bytes here. Authentication and every subject's
+        # current evidence/permission checks still execute through the real app.
+        # Avoid three redundant HTTP retrievals before every analysis case.
+        from sqlalchemy import select
+
+        from app.db import Record, digest
+        with app.state.store.session() as session:
+            rows = list(session.scalars(select(Record).where(Record.matter_id == matter)))
+            doc = next(row for row in rows if row.id == document)
+            actual_doc = app.state.store.decode(doc)
+            assert actual_doc['passages'][0]['text'] == text and actual_doc['sha256'] == digest(text)
+            assert doc.revision == payload['evidence'][0]['document_revision']
+            assert app.state.store.view(next(row for row in rows if row.id == fact['id'])) == fact
+            assert not any(row.kind in {'analysis', 'analysis_version', 'analysis_review'} for row in rows)
+        yield app, client, base, payload, fact, document, text
+
+
+@contextmanager
+def cloned_unsigned_graph_b(seed, destination):
+    root, original_evidence, original_inputs = seed
+    with cloned_equivalence((root, original_evidence), destination) as evidence:
+        from sqlalchemy import func, select
+        from test_graph_b_review import request_body
+
+        from app.graph_b_review_models import GraphBReviewEvent, GraphBReviewHead
+        app, owner = evidence[0][0][:2]
+        reviewer = login(app, 'signed-reviewer', 'local-review-password')
+        try:
+            key = destination / original_inputs[4].relative_to(root)
+            app.state.settings.graph_b_review_trusted_key = str(key)
+            inputs = (app, owner, reviewer, original_inputs[3], key, copy.deepcopy(original_inputs[5]))
+            with app.state.store.session() as session:
+                assert session.scalar(select(func.count()).select_from(GraphBReviewHead)) == 0
+                assert session.scalar(select(func.count()).select_from(GraphBReviewEvent)) == 0
+            # Current unsigned request verification executes against these case
+            # bytes and active independent accounts. Every acceptance test still
+            # creates its own actual external signature and review event.
+            checked = request_body(evidence, inputs)
+            assert checked.status_code == 200 and checked.json()['signed'] is False, checked.text
+            yield evidence, inputs
+        finally:
+            reviewer.close()

@@ -17,13 +17,15 @@ from test_decision_equivalence import (  # noqa: F401
     source,
     workspace,
 )
-from test_decision_equivalence import evidence_set as evidence_fixture
 from test_source_reviews import another_client, assess
 
 from app.graph_b_review_models import GraphBReviewEvent
 from app.release_preparation import canonical, digest
 
-evidence_set = evidence_fixture
+
+@pytest.fixture
+def evidence_set(unsigned_graph_b_context):
+    return unsigned_graph_b_context[0]
 
 
 def path(evidence_set, suffix=""):
@@ -61,8 +63,8 @@ def prepare(evidence_set, tmp_path):
 
 
 @pytest.fixture
-def signed_review(evidence_set, tmp_path):
-    return prepare(evidence_set, tmp_path)
+def signed_review(unsigned_graph_b_context):
+    return unsigned_graph_b_context[1]
 
 
 def request_body(evidence_set, fixture, **changes):

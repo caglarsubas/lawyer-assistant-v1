@@ -136,3 +136,46 @@ def synthetic_component_grant_seed(tmp_path_factory):
         for client in (*current["evidence"][1:], current["signed"][2]):
             client.close()
     return root, value, grant
+
+
+@pytest.fixture(scope="session")
+def synthetic_analysis_workbench_seed(tmp_path_factory):
+    """Invented document/fact bytes before any analysis or review is performed."""
+    from test_analysis_workbench import fresh_workbench
+    root = tmp_path_factory.mktemp("TEST-ONLY-analysis-baseline")
+    lifetime = fresh_workbench(root)
+    value = next(lifetime)
+    discard_test_seed_logins(value[0].state.store)
+    lifetime.close()
+    value[0].state.store.engine.dispose()
+    return root, value
+
+
+@pytest.fixture(scope="session")
+def synthetic_unsigned_graph_b_seed(tmp_path_factory):
+    """Complete invented equivalence, no signed Graph B review or verdict."""
+    from test_decision_equivalence import prepare as prepare_equivalence
+    from test_graph_b_review import prepare
+    from test_jurisprudence_candidates import incoming
+    from test_public_sources import source
+    from test_workspace import fresh_workspace
+    root = tmp_path_factory.mktemp('TEST-ONLY-unsigned-graph-b-context')
+    lifetime = fresh_workspace(root)
+    workspace = next(lifetime)
+    evidence = prepare_equivalence(workspace[0], workspace[1], *incoming.__wrapped__(source.__wrapped__(root)))
+    try:
+        signed_inputs = prepare(evidence, root)
+    finally:
+        discard_test_seed_logins(workspace[0].state.store)
+        lifetime.close()
+        workspace[0].state.store.engine.dispose()
+    for client in (*evidence[1:], signed_inputs[2]):
+        client.close()
+    return root, evidence, signed_inputs
+
+
+@pytest.fixture
+def unsigned_graph_b_context(tmp_path, synthetic_unsigned_graph_b_seed):
+    from graph_b_test_seeds import cloned_unsigned_graph_b
+    with cloned_unsigned_graph_b(synthetic_unsigned_graph_b_seed, tmp_path) as value:
+        yield value
