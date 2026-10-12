@@ -4010,3 +4010,23 @@ The temporary Downloads copy was removed after retention in that private folder.
 The final validator build downloaded byte-identical JSON; editing the peer source
 removed the old packet summary and download control immediately. No real source
 review, shared graph publication, provider or user deployment was performed. Exact-head hosted checks and observed merge remain separate gates.
+
+## CI release fixture work — 12 October 2026
+
+PR #57 passed all exact-head jobs, but its later main run `38160839422`
+reached 96% at the 18-minute backend step limit without a test assertion failure.
+[Engineering receipt](evidence/ci-release-seeds-2026-10-12.json). Static empty
+release construction/install/activation was repeated in reader and transition
+setup. Each pytest worker now builds TEST-ONLY byte seeds once. Every test copies
+independent files and invokes production verification afresh; no validation or
+authorization verdict is cached. Dedicated preparation tests still call fresh
+preparation, and all test cases remain in the same CI groups.
+
+Bounded disconnected Linux comparison: **104 passed in 83.57s** before;
+**107 passed in 46.93s** after, including three new isolation/work-path checks.
+The app, validators, signatures, source checks, runner count, workers, retries
+and deadlines are unchanged. This measured fixture reduction does not establish
+hosted speedup or billing savings. The complete unchanged backend remainder passed **3,570 cases** (76 opt-in
+skips) in **443.42s**, with two workers and the same 18-minute cap. Collection
+covers all **4,024** cases across disjoint existing groups. Scratch test volume
+was removed on exit. These are engineering fixtures, not legal qualification.

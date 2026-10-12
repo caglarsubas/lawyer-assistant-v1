@@ -1,6 +1,7 @@
 """Synthetic release trust and query-pinning checks; no production review is created."""
 import base64
 import json
+import shutil
 from contextlib import contextmanager
 
 import pytest
@@ -78,8 +79,7 @@ def test_guard_exit_failure_during_startup_is_unavailable(active_release):
     assert 'PRIVATE' not in json.dumps(status)
 
 
-@pytest.fixture
-def active_release(tmp_path):
+def build_synthetic_active_release(tmp_path):
     serving = _load_serving()
     release = serving._release
     paths = {}
@@ -105,6 +105,19 @@ def active_release(tmp_path):
     root = tmp_path / 'serving'
     installed = serving.install(root, prepared, public, authorization_guard=synthetic_authorization)
     serving.activate(root, installed['release_id'], public, expected_current=None, authorization_guard=synthetic_authorization)
+    return root, public, installed
+
+
+@pytest.fixture
+def active_release(tmp_path, synthetic_active_release_template):
+    """Copy TEST-ONLY seed bytes, then verify a private copy through production."""
+    template_root, template_key, template_info = synthetic_active_release_template
+    root, public = tmp_path / 'serving', tmp_path / 'test-only-key.pem'
+    shutil.copytree(template_root, root)
+    shutil.copyfile(template_key, public)
+    # Never reuse a signature, graph, authorization or validation verdict. This
+    # fresh reader verifies the copied bytes/key and rebuilds its own metadata.
+    installed = _load_serving().validate_prepared(root / 'releases' / template_info['release_id'], public)
     return root, public, installed
 
 

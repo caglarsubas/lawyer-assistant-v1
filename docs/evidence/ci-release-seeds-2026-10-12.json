@@ -1,0 +1,98 @@
+{
+  "schema": "ci-release-seed-engineering-v1",
+  "date": "2026-10-12",
+  "base_merge": "002fe5bca10605178bd6d56ac63a230a72642622",
+  "successful_pr_run": 38159765496,
+  "post_merge_timeout_run": 38160839422,
+  "root_cause": "Repeated construction, preparation, installation and activation of static TEST-ONLY fixture releases consumed CI headroom; slower main runner reached 96 percent at the unchanged 18 minute test cap.",
+  "fix": "Per-worker TEST-ONLY seed artifacts; independently copied and freshly validated per test. Dedicated preparation tests still invoke fresh preparation. No application code, validators, verdict cache or production keys changed.",
+  "bounded_linux_comparison": {
+    "before": {
+      "passed": 104,
+      "seconds": 83.57
+    },
+    "after": {
+      "passed": 107,
+      "seconds": 46.93
+    }
+  },
+  "native_tests": {
+    "passed": 106,
+    "seconds": 38.02,
+    "before_final_isolation_case": true
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 4024,
+      "preflight": 89,
+      "remaining": 3646,
+      "publication": 132,
+      "workspace": 77,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "82dc84ff2a3a784fcfd4c34cfe34e67929f2c852a276d5e820c6c7f68e1d0c52",
+    "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "workflow_changes": false,
+  "runner_worker_retry_deadline_changes": false,
+  "billing_savings_established": false,
+  "new_cases": [
+    "Copies and keys are independently revalidated; seed/sibling mutation isolation",
+    "Changed copy key cannot inherit prior verification",
+    "Dedicated prepare subject remains fresh while other fixture copies isolate damage"
+  ],
+  "local_diagnostics": [
+    "A full-suite tmpfs scratch run exhausted 512 MiB; corrected to a disposable disk-backed volume.",
+    "Linux isolated an adversarial test attempting to write a read-only copy; the test now explicitly chmods its own copy to simulate the attacker. Production protection retained."
+  ],
+  "full_unchanged_ci_remainder": {
+    "passed": 3570,
+    "skipped": 76,
+    "seconds": 443.42,
+    "workers": 2,
+    "no_network": true,
+    "read_only_image": true,
+    "uid": 10001,
+    "cpu_limit": 2,
+    "memory_mib": 1536,
+    "scratch": "owned disposable disk-backed Docker volume; removed on exit"
+  }
+}

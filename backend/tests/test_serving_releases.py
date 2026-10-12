@@ -3,6 +3,7 @@ import base64
 import hashlib
 import importlib.util
 import json
+import shutil
 import stat
 from contextlib import contextmanager
 from pathlib import Path
@@ -33,12 +34,27 @@ def authorization_guard():
 
 
 @pytest.fixture
-def trust(tmp_path):
-    key = Ed25519PrivateKey.generate()
+def trust(tmp_path, synthetic_serving_seeds):
+    key, seeds = synthetic_serving_seeds
     public = tmp_path / "TEST-ONLY-public.pem"
     public.write_bytes(key.public_key().public_bytes(serialization.Encoding.PEM,
                                                    serialization.PublicFormat.SubjectPublicKeyInfo))
-    return key, public
+    return SeedTrust(key, public, seeds)
+
+
+class SeedTrust(tuple):
+    def __new__(cls, key, public, seeds):
+        result = super().__new__(cls, (key, public))
+        result.seeds = seeds
+        return result
+
+
+def build_serving_seeds(directory):
+    key = Ed25519PrivateKey.generate()
+    public = directory / "TEST-ONLY-public.pem"
+    public.write_bytes(key.public_key().public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo))
+    trust = (key, public)
+    return key, {variant: prepared(directory, trust, variant)[0] for variant in ("a", "b")}
 
 
 def bundle(tmp_path, trust, variant="a", unsigned=False):
@@ -68,13 +84,16 @@ def bundle(tmp_path, trust, variant="a", unsigned=False):
     return output
 
 
-def prepared(tmp_path, trust, variant="a"):
+def prepared(tmp_path, trust, variant="a", *, fresh=False):
     output = tmp_path / f"prepared-{variant}"
+    if isinstance(trust, SeedTrust) and variant in trust.seeds and not fresh:
+        shutil.copytree(trust.seeds[variant], output)
+        return output, serving.validate_prepared(output, trust[1])
     return output, serving.prepare(bundle(tmp_path, trust, variant), trust[1], output)
 
 
 def test_prepare_is_deterministic_and_contains_signed_shared_context(tmp_path, trust):
-    output, result = prepared(tmp_path, trust)
+    output, result = prepared(tmp_path, trust, fresh=True)
     again = serving.validate_prepared(output, trust[1])
     assert again == result
     assert result["release_id"] == result["bundle_sha256"]
@@ -97,7 +116,7 @@ def test_unsigned_bundle_cannot_be_prepared(tmp_path, trust):
 
 
 def test_prepare_rejects_existing_destination(tmp_path, trust):
-    output, _ = prepared(tmp_path, trust)
+    output, _ = prepared(tmp_path, trust, fresh=True)
     with pytest.raises(ValueError, match="already exists"):
         serving.prepare(output / "bundle", trust[1], output)
 
