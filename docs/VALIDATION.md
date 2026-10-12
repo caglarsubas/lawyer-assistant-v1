@@ -4030,3 +4030,29 @@ hosted speedup or billing savings. The complete unchanged backend remainder pass
 skips) in **443.42s**, with two workers and the same 18-minute cap. Collection
 covers all **4,024** cases across disjoint existing groups. Scratch test volume
 was removed on exit. These are engineering fixtures, not legal qualification.
+
+## Independently signed Graph B review — 12 October 2026
+
+Base: verified PR #58 merge `b3b467744726ab783e5599bc2d0ee01cc8b7c15f`;
+post-merge main run `38198597168` passed all three jobs.
+[Engineering receipt](evidence/signed-graph-b-review-2026-10-12.json).
+Disconnected Linux regressions: **289 passed**, 96.02s, including **40** signed-review
+cases plus equivalence, identities, mappings, handoffs, source reviews and physical
+preparation. Actual dedicated PostgreSQL subset: **5 passed**, 6.70s, including
+competing signatures and witnessed register-head locking followed by stale-pin
+rejection. Every child database and owned PostgreSQL container/network was removed.
+Frontend: **477 passed**, 42 files; production build, full configured Ruff and
+whitespace checks passed. Deployment contracts: **41 passed**. CI collection
+covers **4,066** disjoint backend cases without omissions or extra runners.
+
+A built loopback browser fixture displayed an externally TEST-ONLY signed approval,
+its explicit decision date/register record, full review history and six **unknown**
+relationship intervals. The screen clearly retained private/unpublished status and
+excluded competence/finality/professional-verification claims. No browser console
+errors/warnings observed. Screenshot and detailed logs remain ignored under
+`.data/verification/r03-signed-review/`. Wrong signatures/contexts/appointments,
+contributor self-review, changed keys/sources/roles, later rejection, corrupt or
+oversized ledgers and changes during request/acceptance are withheld. Private
+credential bytes and original accepted-key PEMs are encrypted and absent from API
+history. Synthetic appointments do not establish real reviewer qualifications,
+legal correctness, shared graph publication, provider use or production deployment.

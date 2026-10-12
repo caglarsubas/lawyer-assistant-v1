@@ -4,6 +4,7 @@ import { Detail, Field, Loading, Notice } from '../components';
 import type { SourceReviewDecision, User } from '../types';
 import { formatDate, messageOf } from '../utils';
 import { fetchEquivalenceHandoff, type EquivalenceHandoff } from './equivalenceHandoff';
+import GraphBReviewStatus from './GraphBReviewStatus';
 import type { IdentityState } from './decisionIdentity';
 import { equivalencePath, equivalencePayload, fetchEquivalence, mayReviewEquivalence, validateEquivalence, validateSelection, type EquivalenceClaims, type EquivalenceState, type EvidenceProof, type EvidenceSelection } from './decisionEquivalence';
 
@@ -76,6 +77,7 @@ function EquivalenceWorkspace({ identity, user, selection, onDenied }: { identit
       <button className="button secondary" disabled={busy || !state.same_decision_supported || !state.export_allowed} onClick={() => void download()}>Çok kaynaklı gizli Graph B aday paketini indir (JSON)</button>
       <p className="small muted">İki karar sürümü, kurum sicili ve tam inceleme geçmişleri birlikte indirilir. Üç kaynak için açık dışa aktarma izni ve güncel aynı-karar kabulü gerekir.</p>
       {handoff && <EquivalenceHandoffSummary data={handoff} />}
+      <GraphBReviewStatus key={`${state.revision}:${JSON.stringify(state.pins)}`} state={state} user={user} source={identity.source.id} selection={selection} onDenied={onDenied} />
       <Detail title="Kaynaklar ve dayanak revizyonları">{Object.entries(state.sources).map(([key, source]) => <article key={key}><h3>{key === state.register_source_id ? 'Kurum sicili' : 'Karar belgesi'} · {source.title}</h3>
         <p className="small source-passage-text">{key} · {source.source_version_id}</p><p>Kaynak incelemesi {state.pins.source_revisions[key]} · Eşleme {state.pins.mapping_revisions[key]}{key in state.pins.identity_revisions ? ` · Kimlik ${state.pins.identity_revisions[key]}` : ''}</p>
         {state.decisions[key] && <dl>{Object.entries(state.decisions[key]!).map(([field, value]) => <div key={field}><dt>{{decision_id: 'Karar', proceeding_id: 'Yargılama', institution_id: 'Tarihsel kurum', version_id: 'Belge sürümü'}[field]}</dt><dd className="source-passage-text">{value}</dd></div>)}</dl>}
