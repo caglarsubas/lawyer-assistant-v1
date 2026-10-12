@@ -1952,3 +1952,21 @@ legal-editor and institutional/temporal qualification, exact candidate signature
 withheld disagreements and activation/rollback validation. Actual legal-source
 acquisition, licensed corpus coverage, reviewer qualification and legal/pilot
 acceptance remain external requirements.
+
+## R03 continuation — independently signed Graph B review (12 October 2026)
+
+Built on verified PR #58 merge `b3b467744726ab783e5599bc2d0ee01cc8b7c15f`;
+its main run `38198597168` passed all three jobs. A separate vetted reviewer public
+key now verifies an externally signed, complete private review bound to three
+sources, accepted equivalence, ontology, independent active reviewer and retained
+appointment evidence. Institutional-register identity must cover the explicit
+decision date; all six relationship intervals are assessed separately. Unknown
+ranges remain unknown. Later rejection and stale trust/source/roles withhold approval.
+The curator screen displays full history and the unpublished scope.
+
+See [signed review contract](SIGNED_GRAPH_B_REVIEW.md). Next: deterministic public
+Graph B signing inputs containing only reviewed public evidence and individually
+qualified relationship intervals. Public attestation, decision-specific audience
+authorization and activation/rollback qualification remain separate gates. Actual
+legal-editor vetting, national genealogy, corpus coverage and legal/pilot approval
+remain open; R03/R05 remain partial.

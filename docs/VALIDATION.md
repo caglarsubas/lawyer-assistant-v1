@@ -4030,3 +4030,56 @@ hosted speedup or billing savings. The complete unchanged backend remainder pass
 skips) in **443.42s**, with two workers and the same 18-minute cap. Collection
 covers all **4,024** cases across disjoint existing groups. Scratch test volume
 was removed on exit. These are engineering fixtures, not legal qualification.
+
+## Independently signed Graph B review — 12 October 2026
+
+Base: verified PR #58 merge `b3b467744726ab783e5599bc2d0ee01cc8b7c15f`;
+post-merge main run `38198597168` passed all three jobs.
+[Engineering receipt](evidence/signed-graph-b-review-2026-10-12.json).
+Disconnected Linux regressions: **289 passed**, 96.02s, including **40** signed-review
+cases plus equivalence, identities, mappings, handoffs, source reviews and physical
+preparation. Actual dedicated PostgreSQL subset: **5 passed**, 6.70s, including
+competing signatures and witnessed register-head locking followed by stale-pin
+rejection. Every child database and owned PostgreSQL container/network was removed.
+Frontend: **477 passed**, 42 files; production build, full configured Ruff and
+whitespace checks passed. Deployment contracts: **41 passed**. CI collection
+covers **4,066** disjoint backend cases without omissions or extra runners.
+
+A built loopback browser fixture displayed an externally TEST-ONLY signed approval,
+its explicit decision date/register record, full review history and six **unknown**
+relationship intervals. The screen clearly retained private/unpublished status and
+excluded competence/finality/professional-verification claims. No browser console
+errors/warnings observed. Screenshot and detailed logs remain ignored under
+`.data/verification/r03-signed-review/`. Wrong signatures/contexts/appointments,
+contributor self-review, changed keys/sources/roles, later rejection, corrupt or
+oversized ledgers and changes during request/acceptance are withheld. Private
+credential bytes and original accepted-key PEMs are encrypted and absent from API
+history. Synthetic appointments do not establish real reviewer qualifications,
+legal correctness, shared graph publication, provider use or production deployment.
+
+The first PR #59 run `38201779315` passed frontend and PostgreSQL jobs but reached
+89% of the backend step at its unchanged 18-minute limit, without an assertion
+failure. Source-authorization setup repeatedly constructed the same TEST-ONLY
+reviewed release. The single-source and two-source authorization fixtures now
+build their seed once per worker, close the seed application's database, and copy
+independent encrypted databases, public sources, signing keys and sealed release
+files per case. Each copy signs in normally and verifies prepared release bytes,
+signature and current private authorization afresh. No credential check, production
+validator, permission check, test case, workflow, worker or deadline is weakened.
+Three added tests verify sibling/template isolation, current rights revocation and
+fresh full setup-builder execution. Disconnected Linux authorization/CLI/runtime/
+isolation subset: **104 passed**, 193.11s. Exact collection: **4,071** disjoint nodes.
+The private signed-review request and acceptance also recheck both actors after
+physical source verification; direct-storage deactivation during either action
+rolls back/withholds the result. Hosted timing and billing improvement require
+separate observation; synthetic fixtures remain unrelated to actual legal approval.
+The corrected full backend remainder passed **3,615 cases**, 78 opt-in skips,
+in **457.71s**, with two workers and the same 18-minute cap. Its owned scratch
+volume was removed. Exact-head hosted checks remain required before merging.
+The opt-in PostgreSQL helper calls the **fresh** single/two-source builders directly,
+preserving PostgreSQL databases and real locks rather than copying SQLite seeds.
+Its old fixture-call signature was found by run `38205017994` and corrected. The
+entire actual PostgreSQL group then passed **75 cases**, **45.84s**, two workers,
+in disposable child databases; owned container/network removed. Explicit workflow
+cancellation was denied by GitHub token permissions; the corrected head uses the
+existing concurrency cancellation policy. No CI permission was broadened.

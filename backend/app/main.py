@@ -61,6 +61,7 @@ from .firm_admin import firm_admin_router
 from .firm_rbac import FirmAuthorization, FirmGuardMiddleware, initialize_firm, permissions_for
 from .governance import governance_router
 from .graph import GraphBackendError, GraphService
+from .graph_b_review import graph_b_review_router
 from .human_workflow import workflow_router
 from .policy import POLICY_VERSION, evaluate, request_digest
 from .portfolio import portfolio_router
@@ -338,6 +339,7 @@ def create_app(settings=None):
     app.include_router(decision_mappings_router())
     app.include_router(decision_identities_router())
     app.include_router(decision_equivalence_router())
+    app.include_router(graph_b_review_router())
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request, exc):

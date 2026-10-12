@@ -71,8 +71,7 @@ def public_version(fixture, directory, *, public_reviewer="TEST-ONLY PUBLIC SET 
             "packet_digest": packet_digest, "source_permissions": permissions}
 
 
-@pytest.fixture
-def authorized_set(workspace, source, tmp_path):
+def build_authorized_set(workspace, source, tmp_path):
     mappings = make_source_set(workspace, source)
     app, _, sources, _, _ = mappings[0]
     tools = _packet_tools()
@@ -124,6 +123,39 @@ def authorized_set(workspace, source, tmp_path):
                "root": app.state.settings.data_dir / "release-authorizations", "request": request,
                "source_permissions": sorted(permissions, key=lambda value: value["source_id"])}
     return public_version(fixture, tmp_path / "initial-set-release")
+
+
+@pytest.fixture
+def authorized_set(tmp_path, synthetic_authorized_set_seed):
+    """Copy independent TEST-ONLY bytes; verify actual current authorization anew."""
+    import shutil
+
+    from app.config import Settings
+    from app.public_sources import PublicSourceStore
+    seed_root, seed = synthetic_authorized_set_seed
+    shutil.copytree(seed_root, tmp_path, dirs_exist_ok=True)
+    settings = Settings.model_construct(demo_mode=True, cookie_secure=False, data_dir=tmp_path,
+        public_source_dir=tmp_path / 'public-only', provider_base_url='', provider_api_key='', provider_model='')
+    app = create_app(settings)
+    with TestClient(app) as client:
+        response = client.post('/api/v1/auth/login', json={'username': 'demo', 'password': 'demo-local-only'})
+        assert response.status_code == 200
+        client.headers['X-CSRF-Token'] = response.json()['csrf_token']
+        sources = PublicSourceStore(tmp_path / 'public-only')
+        mappings = [(app, client, sources, item[3], item[4]) for item in seed['mappings']]
+        copied = copy.deepcopy({key: value for key, value in seed.items() if key not in
+            {'app', 'mappings', 'sources', 'tools', 'key', 'public_key', 'epoch_path', 'root', 'info', 'auth_path'}})
+        info = copy.deepcopy(seed['info'])
+        info['bundle_path'] = tmp_path / seed['info']['bundle_path'].relative_to(seed_root)
+        fixture = {**copied, 'app': app, 'mappings': mappings, 'sources': sources, 'tools': _packet_tools(),
+            'key': seed['key'], 'public_key': tmp_path / seed['public_key'].relative_to(seed_root),
+            'epoch_path': tmp_path / 'publication-epoch', 'root': tmp_path / 'release-authorizations', 'info': info,
+            'auth_path': tmp_path / seed['auth_path'].relative_to(seed_root)}
+        # No previous signature, policy, permission or validation verdict is reused.
+        assert _load_serving().validate_prepared(info['bundle_path'].parent, fixture['public_key']) == info
+        with guard_set(fixture):
+            pass
+        yield fixture
 
 
 @contextmanager

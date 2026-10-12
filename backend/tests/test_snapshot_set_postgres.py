@@ -569,3 +569,42 @@ def test_equivalence_handoff_holds_register_lock_until_full_packet_finishes(post
         finally:
             resume.set()
     assert download(postgres_equivalence).status_code == 409
+
+
+def test_signed_graph_b_competing_acceptances_keep_one_complete_event(postgres_equivalence, tmp_path):
+    import json
+
+    from test_graph_b_review import accept, path, prepare, request_body
+    fixture = prepare(postgres_equivalence, tmp_path)
+    body = json.loads(request_body(postgres_equivalence, fixture).json()["body_json"])
+    barrier = Barrier(2)
+    def write(_):
+        barrier.wait(timeout=5)
+        return accept(postgres_equivalence, fixture, body)
+    with ThreadPoolExecutor(2) as pool:
+        results = list(pool.map(write, range(2)))
+    assert sorted(response.status_code for response in results) == [200, 409]
+    state = fixture[1].get(path(postgres_equivalence)).json()
+    assert state["signed_review_current"] and state["revision"] == len(state["history"]) == 1
+
+
+def test_signed_graph_b_accept_waits_for_register_and_rejects_changed_pin(postgres_equivalence, tmp_path):
+    import json
+
+    from test_graph_b_review import accept, prepare, request_body
+    fixture = prepare(postgres_equivalence, tmp_path)
+    body = json.loads(request_body(postgres_equivalence, fixture).json()["body_json"])
+    item = postgres_equivalence[0][2]
+    with fixture[0].state.store.session() as blocker:
+        head = blocker.scalar(select(SourceReviewHead).where(SourceReviewHead.source_id == item[3]).with_for_update())
+        with observe_identity_lock(fixture[0].state.store.engine, statement_fragment="FROM source_review_heads") as (attempted, pids):
+            with ThreadPoolExecutor(1) as pool:
+                future = pool.submit(accept, postgres_equivalence, fixture, body)
+                assert attempted.wait(5)
+                assert wait_until_blocked(fixture[0].state.store.engine, pids[-1])
+                head.revision += 1
+                blocker.commit()
+                assert future.result(timeout=10).status_code == 409
+    from app.graph_b_review_models import GraphBReviewEvent
+    with fixture[0].state.store.session() as session:
+        assert session.scalar(select(GraphBReviewEvent)) is None

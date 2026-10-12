@@ -73,3 +73,52 @@ def test_prepared_copies_are_independent_and_preparation_subject_stays_fresh(tmp
         serving.validate_prepared(copies[0][0], public)
     assert hashes(seeds["a"]) == before
     assert serving.validate_prepared(copies[1][0], public)["release_id"] == copies[1][1]["release_id"]
+
+
+@pytest.mark.parametrize('kind', ['single', 'set'])
+def test_authorized_copies_reverify_private_rights_and_never_modify_template_or_sibling(tmp_path, request, kind):
+    from test_release_authorization import authorized, guard
+    from test_release_set_authorization import authorized_set, guard_set
+    from test_source_reviews import assess
+
+    from app.release_authorization import AuthorizationError
+    template = request.getfixturevalue('synthetic_authorized_seed' if kind == 'single' else 'synthetic_authorized_set_seed')
+    before = hashes(template[0])
+    build, verify = (authorized, guard) if kind == 'single' else (authorized_set, guard_set)
+    lifetimes, copies = [], []
+    try:
+        for name in ('first', 'second'):
+            folder = tmp_path / name
+            folder.mkdir()
+            lifetime = build.__wrapped__(folder, template)
+            lifetimes.append(lifetime)
+            copies.append(next(lifetime))
+        first, second = copies
+        assert first['body'] is not second['body'] and first['files'] is not second['files']
+        mapping = first['mapping'] if kind == 'single' else first['mappings'][0]
+        assert assess(mapping[1], mapping[4] + '/review', 6, 'rights', decision='needs_changes').status_code == 200
+        with pytest.raises(AuthorizationError):
+            with verify(first):
+                pass
+        with verify(second):
+            pass
+        assert hashes(template[0]) == before
+    finally:
+        for lifetime in lifetimes:
+            lifetime.close()
+
+
+def test_authorization_setup_builder_still_runs_complete_fresh_source_review(tmp_path):
+    from test_provision_mappings import mapping
+    from test_public_sources import source
+    from test_release_authorization import build_authorized, guard
+    from test_workspace import workspace
+    lifetime = workspace.__wrapped__(tmp_path)
+    try:
+        fixture = build_authorized(mapping.__wrapped__(next(lifetime), source.__wrapped__(tmp_path)), tmp_path)
+        with guard(fixture):
+            pass
+        assert fixture['body']['source_binding']['source_review_revision'] == 6
+        assert fixture['info']['review']['verified']
+    finally:
+        lifetime.close()
