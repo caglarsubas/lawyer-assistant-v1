@@ -1,0 +1,122 @@
+{
+  "schema_version": "graph-b-component-grants-engineering-validation-v1",
+  "date": "2026-10-13",
+  "scope": "signed encrypted component inclusion only; no national serving",
+  "test_only": true,
+  "actual_legal_qualification": false,
+  "production_publication_performed": false,
+  "current_user_deployment_verified": false,
+  "provider_dotenv_read_or_modified": false,
+  "checks": [
+    {
+      "name": "local backend partition before final grant-fixture refinement and validity partition move",
+      "passed": 3677,
+      "skipped": 85,
+      "seconds": 458.56,
+      "environment": "disconnected read-only Linux, 2 CPUs, 2 workers"
+    },
+    {
+      "name": "actual PostgreSQL complete concurrency suite, fresh real reviews and child databases",
+      "passed": 82,
+      "seconds": 69.36
+    },
+    {
+      "name": "final component and copied-fixture isolation, native",
+      "passed": 36,
+      "seconds": 36.62
+    },
+    {
+      "name": "final component and copied-fixture isolation, disconnected read-only Linux",
+      "passed": 36,
+      "seconds": 46.91
+    },
+    {
+      "name": "workspace/source and fixture isolation contracts",
+      "passed": 97,
+      "seconds": 20.49
+    },
+    {
+      "name": "workspace/research/analysis/renewal regression",
+      "passed": 108,
+      "seconds": 19.04
+    },
+    {
+      "name": "publication/source group including the four validity tests later moved to backend",
+      "passed": 132,
+      "seconds": 37.11
+    },
+    {
+      "name": "deployment contracts",
+      "passed": 41
+    },
+    {
+      "name": "ruff, whitespace and Compose config without dotenv",
+      "passed": true
+    }
+  ],
+  "ci_collection": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 4179,
+      "preflight": 89,
+      "remaining": 3767,
+      "publication": 128,
+      "workspace": 67,
+      "human_review": 108,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py",
+      "backend/tests/test_graph_b_snapshot.py",
+      "backend/tests/test_graph_b_publication.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "4dd442bb5125c34803ec11ebd106cbbadfaaffc8ebaf4e3d3f7bd37cce2fabd0",
+    "workflow_sha256": "107a18414d524ee9dfa363001f13e0a049c117fdb9fc87dea6c9af15680715b5",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "ci_root_cause_evidence": {
+    "post_merge_main_run": 38234643833,
+    "postgres_tests_passed": 81,
+    "postgres_test_seconds": 163.43,
+    "publication_step_cancelled_after_seconds": 122,
+    "unchanged_job_budget_minutes": 5
+  },
+  "ci_changes": [
+    "only required sources in fresh PostgreSQL decision fixtures",
+    "independent empty baseline copies with real startup and fresh login",
+    "independent component bytes with fresh complete verification for negative cases; fresh acceptance and PG builders",
+    "four measured open-validity tests moved to backend; all jobs and worker/timeout/retry budgets unchanged"
+  ],
+  "hosted_final_head_checks": "pending PR; must verify all three exact-head successes before merge",
+  "next_gate": "complete reviewed Graph A/Graph B assembly, independent final attestation, all-component current serving authorization"
+}

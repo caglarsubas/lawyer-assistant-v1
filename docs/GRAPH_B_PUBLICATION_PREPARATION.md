@@ -48,4 +48,4 @@ The retained `permission-request.fernet` is encrypted and unsigned. A trusted ex
 
 The exact request schema is `graph-b-component-permission-request-v1`, with `scope: component_inclusion_only`, `signed: false` and `national_release_serving_authorized: false`. Existing provision grants and runtime publication guards do not accept it. No command here imports a signature or grants installation.
 
-The successor must add independently signed component-grant acceptance and full Graph A/Graph B assembly, then require every current component/source permission at install, activate, rollback and read. Complete legal/editor vetting, actual corpus and institutional history, key custody, deployment and lawyer/pilot qualification remain separate gates.
+Separately signed component-grant acceptance is implemented in [the component inclusion workflow](GRAPH_B_COMPONENT_GRANTS.md). Complete Graph A/Graph B assembly must still require every current component/source permission at install, activate, rollback and read. Complete legal/editor vetting, actual corpus and institutional history, key custody, deployment and lawyer/pilot qualification remain separate gates.

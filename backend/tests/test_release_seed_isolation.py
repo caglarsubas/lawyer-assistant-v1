@@ -112,8 +112,8 @@ def test_authorization_setup_builder_still_runs_complete_fresh_source_review(tmp
     from test_provision_mappings import mapping
     from test_public_sources import source
     from test_release_authorization import build_authorized, guard
-    from test_workspace import workspace
-    lifetime = workspace.__wrapped__(tmp_path)
+    from test_workspace import fresh_workspace
+    lifetime = fresh_workspace(tmp_path)
     try:
         fixture = build_authorized(mapping.__wrapped__(next(lifetime), source.__wrapped__(tmp_path)), tmp_path)
         with guard(fixture):
@@ -175,3 +175,18 @@ def test_empty_source_workspace_copies_start_without_reviews_or_reused_login_ses
         assert first_review[1].get(first_review[4]).json()["revision"] == 1
         assert second_review[1].get(second_review[4]).json()["revision"] == 0
         assert (root / "workspace.db").read_bytes() == original
+
+
+def test_component_grant_copies_reverify_and_do_not_modify_seed_or_sibling(synthetic_component_grant_seed, tmp_path):
+    from graph_b_test_seeds import cloned_component_grant
+    root, original, _ = synthetic_component_grant_seed
+    before = hashes(root)
+    with cloned_component_grant(synthetic_component_grant_seed, tmp_path / 'first') as (first, grant), cloned_component_grant(
+            synthetic_component_grant_seed, tmp_path / 'second') as (second, sibling):
+        original_second = hashes(tmp_path / 'second')
+        first['public'].write_bytes(b'invalid independently copied TEST-ONLY grant key')
+        with pytest.raises(ValueError):
+            first['command'].validate(first['settings'], first['prepared'], grant=grant)
+        assert second['command'].validate(second['settings'], second['prepared'], grant=sibling)['current_component_grant']
+        assert hashes(root) == before and hashes(tmp_path / 'second') == original_second
+        assert original['public'].read_bytes() == (tmp_path / 'second' / original['public'].relative_to(root)).read_bytes()

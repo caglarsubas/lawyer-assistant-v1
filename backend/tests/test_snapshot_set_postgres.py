@@ -155,9 +155,7 @@ def postgres_database():
 
 
 @pytest.fixture
-def postgres_sources(postgres_database, tmp_path):
-    from test_release_snapshot_set import make_source_set
-
+def postgres_workspace(postgres_database, tmp_path):
     # model_construct deliberately bypasses all environment/dotenv configuration.
     settings = Settings.model_construct(
         demo_mode=True, cookie_secure=False, data_dir=tmp_path / "workspace",
@@ -170,15 +168,22 @@ def postgres_sources(postgres_database, tmp_path):
             assert response.status_code == 200
             client.headers["X-CSRF-Token"] = response.json()["csrf_token"]
             workspace = (app, client, client.get("/api/v1/matters").json()[0]["id"])
-            sources = make_source_set(workspace, source_fixture.__wrapped__(tmp_path), count=2)
-            with app.state.store.session() as session:
-                operator = session.scalar(select(User.id).where(User.username == "demo"))
-            request = SnapshotSetRequest(schema_version="legal-review-source-selection-v1", sources=[
-                SourceSelection(source_id=item[3], expected_source_review_revision=5, expected_mapping_revision=2)
-                for item in sources])
-            yield app, sources, operator, request
+            yield workspace
     finally:
         app.state.store.engine.dispose()
+
+
+@pytest.fixture
+def postgres_sources(postgres_workspace, tmp_path):
+    from test_release_snapshot_set import make_source_set
+    app, client, _ = postgres_workspace
+    sources = make_source_set(postgres_workspace, source_fixture.__wrapped__(tmp_path), count=2)
+    with app.state.store.session() as session:
+        operator = session.scalar(select(User.id).where(User.username == "demo"))
+    request = SnapshotSetRequest(schema_version="legal-review-source-selection-v1", sources=[
+        SourceSelection(source_id=item[3], expected_source_review_revision=5, expected_mapping_revision=2)
+        for item in sources])
+    return app, sources, operator, request
 
 
 @contextmanager
@@ -426,15 +431,15 @@ def test_decision_dossier_waits_for_source_then_withholds_stale_pin(postgres_sou
 
 
 @pytest.fixture
-def postgres_decision(postgres_sources, tmp_path):
+def postgres_decision(postgres_workspace, tmp_path):
     from test_decision_identities import mapped
     from test_decision_mappings import mapping as mapping_fixture
     from test_jurisprudence_candidates import incoming
-    app, sources, _, _ = postgres_sources
+    app, client, _ = postgres_workspace
     root = tmp_path / "synthetic-decision"
     root.mkdir()
     package = source_fixture.__wrapped__(root)
-    result = mapping_fixture.__wrapped__((app, sources[0][1], None), incoming.__wrapped__(package))
+    result = mapping_fixture.__wrapped__((app, client, None), incoming.__wrapped__(package))
     mapped(result)
     return result
 
@@ -496,14 +501,14 @@ def test_graph_b_handoff_waits_for_source_then_withholds_stale_approval(postgres
 
 
 @pytest.fixture
-def postgres_equivalence(postgres_sources, tmp_path):
+def postgres_equivalence(postgres_workspace, tmp_path):
     from test_decision_equivalence import prepare
     from test_jurisprudence_candidates import incoming
-    app, sources, _, _ = postgres_sources
+    app, client, _ = postgres_workspace
     root = tmp_path / "synthetic-equivalence"
     root.mkdir()
     store, make = incoming.__wrapped__(source_fixture.__wrapped__(root))
-    return prepare(app, sources[0][1], store, make)
+    return prepare(app, client, store, make)
 
 
 def test_equivalence_competing_independent_reviews_keep_one_opinion(postgres_equivalence):
@@ -645,13 +650,13 @@ def test_graph_b_signing_inputs_hold_register_lock_through_conversion(postgres_e
 
 
 @pytest.fixture
-def postgres_graph_b_snapshot(postgres_sources, tmp_path):
+def postgres_graph_b_snapshot(postgres_workspace, tmp_path):
     from test_graph_b_snapshot import prepare
     from test_jurisprudence_candidates import incoming
-    app, sources, _, _ = postgres_sources
+    app, client, _ = postgres_workspace
     root = tmp_path / "synthetic-signed-publication"
     root.mkdir()
-    return prepare((app, sources[0][1], None), incoming.__wrapped__(source_fixture.__wrapped__(root)), tmp_path)
+    return prepare((app, client, None), incoming.__wrapped__(source_fixture.__wrapped__(root)), tmp_path)
 
 
 def test_graph_b_local_snapshot_five_shared_readers_and_all_dependency_row_locks(postgres_graph_b_snapshot):
@@ -791,3 +796,36 @@ def test_graph_b_publication_packet_holds_register_until_encrypted_atomic_output
     with pytest.raises(SnapshotError):
         command.validate(fixture["app"].state.settings, output, operator_id=fixture["operator_id"])
     assert output.exists()
+
+
+def test_signed_component_grant_five_readers_block_register_revocation_and_reject_next_use(postgres_graph_b_snapshot, tmp_path):
+    from test_graph_b_component_grants import accept as grant_accept
+    from test_graph_b_component_grants import guarded, setup
+    from test_graph_b_publication import prepare
+    from test_source_reviews import assess
+
+    from app.graph_b_component_grants import ComponentGrantError
+    fixture = postgres_graph_b_snapshot
+    packet = prepare(fixture, tmp_path)
+    value = setup(fixture, packet, tmp_path)
+    grant = grant_accept(value, tmp_path)
+    entered = Barrier(5)
+    def read():
+        with guarded(value, grant) as receipt:
+            assert receipt['current'] and not receipt['national_release_serving_authorized']
+            entered.wait(timeout=20)
+    with ThreadPoolExecutor(5) as pool:
+        for future in [pool.submit(read) for _ in range(5)]:
+            future.result(timeout=30)
+    register = fixture['evidence'][0][2]
+    def revoke():
+        return assess(register[1], register[4] + '/review', 6, 'rights', decision='rejected')
+    with ThreadPoolExecutor(1) as pool:
+        with guarded(value, grant), observe_identity_lock(fixture['app'].state.store.engine, statement_fragment='FROM users') as observed:
+            writer = pool.submit(revoke)
+            assert observed[0].wait(5)
+            assert wait_until_blocked(fixture['app'].state.store.engine, observed[1][-1])
+            assert not writer.done()
+        assert writer.result(timeout=10).status_code == 200
+    with pytest.raises(ComponentGrantError), guarded(value, grant):
+        pytest.fail('A public signature and retained grant cannot outlive current register rights')

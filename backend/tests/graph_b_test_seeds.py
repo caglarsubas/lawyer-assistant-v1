@@ -2,6 +2,7 @@
 import copy
 import shutil
 from contextlib import contextmanager
+from pathlib import Path
 
 from fastapi.testclient import TestClient
 
@@ -23,7 +24,7 @@ def cloned_empty_workspace(root, destination):
     """No source review records or decisions; every subject still starts empty."""
     shutil.copytree(root, destination, dirs_exist_ok=True)
     settings = Settings.model_construct(demo_mode=True, cookie_secure=False, data_dir=destination,
-        database_url=f"sqlite:///{destination / 'workspace.db'}", provider_base_url="", provider_api_key="", provider_model="")
+        database_url=f"sqlite:///{destination / 'workspace.db'}", public_source_dir=destination / "public-only", provider_base_url="", provider_api_key="", provider_model="")
     app = create_app(settings)
     try:
         with TestClient(app) as client:
@@ -97,3 +98,22 @@ def cloned_signed_snapshot(seed, destination):
             yield value
         finally:
             reviewer.close()
+
+
+@contextmanager
+def cloned_component_grant(seed, destination):
+    root, original, original_grant = seed
+    with cloned_signed_snapshot((root, original['current']), destination) as current:
+        from test_graph_b_component_grants import command_module
+        settings = current['app'].state.settings
+        for field in ('graph_trusted_review_key', 'graph_b_component_trusted_key'):
+            setattr(settings, field, str(destination / Path(getattr(original['settings'], field)).relative_to(root)))
+        paths = {name: destination / original[name].relative_to(root)
+                 for name in ('prepared', 'packet', 'public', 'epoch', 'envelope', 'request')}
+        value = {**paths, 'command': command_module(), 'current': current, 'settings': settings,
+                 'key': original['key'], 'body': copy.deepcopy(original['body'])}
+        grant = destination / original_grant.relative_to(root)
+        # The actual gate freshly verifies every signed envelope, public byte,
+        # private original source/ledger, account, proof, appointment and key copy.
+        assert value['command'].validate(settings, value['prepared'], grant=grant)['current_component_grant']
+        yield value, grant
