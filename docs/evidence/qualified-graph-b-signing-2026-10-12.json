@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-12",
+  "scope": "engineering fixtures; no actual legal qualification, production signatures, graph publication or deployment",
+  "verified_base": {
+    "pr": 59,
+    "merge": "260554131c2fb518eb935bea02a4615c82e0e158",
+    "exact_head": "ca48e30a1fa0a209ea2419af6ac2a006812bd567",
+    "ci_run": 38205716348,
+    "checks": "all three success",
+    "backend_step_seconds": 966,
+    "tested_tree_matches_fetched_main": true
+  },
+  "linux": {
+    "passed": 314,
+    "seconds": 123.9,
+    "disconnected_read_only": true
+  },
+  "postgres": {
+    "passed": 76,
+    "seconds": 48.47,
+    "two_workers": true,
+    "owned_container_network_removed": true
+  },
+  "frontend": {
+    "passed": 503,
+    "files": 43,
+    "build": "passed"
+  },
+  "ruff": "passed",
+  "deployment_contracts": {
+    "passed": 41,
+    "runtime_contracts_unchanged_in_successor": true
+  },
+  "ci_collection": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 4095,
+      "preflight": 89,
+      "remaining": 3717,
+      "publication": 132,
+      "workspace": 77,
+      "human_review": 60,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_open_validity_publication.py",
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_content_scope.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "05a465af7402905b0269e33cfc6441a81201f9ce108ce47c488bcab2e0a44948",
+    "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "browser": {
+    "packet_id": "6bacb46d66b319b3f0669b5457e411328d76338fc97764bf439e76c11c125b06",
+    "sha256": "bb1d2b42bda71aa2bef277d83fee528b1d9a61cace52cb3d4b4a0f8e8b0f4445",
+    "files": 9,
+    "all_file_hashes_verified": true,
+    "synthetic_only": true,
+    "old_selection_output_cleared_in_browser": true,
+    "console_errors_warnings": 0,
+    "screenshot_sha256": "0123fc8689e76a4c8695d26343866b725f6f3cfee9d2ec50ae31db5dc53538bf"
+  },
+  "public_attestation_gate": "actual TEST-ONLY separate public signature verifies bundle; unsigned input rejected and installation without live guard rejected",
+  "negative_review_gate": "unknown decision date/register interval permitted only for negative review; latest negative blocks old positive signing inputs",
+  "next_gate": "decision-specific audience/source authorization, epoch revocation/restoration, complete final-release assembly and activation/rollback"
+}

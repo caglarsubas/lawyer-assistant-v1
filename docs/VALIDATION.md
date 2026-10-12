@@ -4083,3 +4083,36 @@ entire actual PostgreSQL group then passed **75 cases**, **45.84s**, two workers
 in disposable child databases; owned container/network removed. Explicit workflow
 cancellation was denied by GitHub token permissions; the corrected head uses the
 existing concurrency cancellation policy. No CI permission was broadened.
+
+## Qualified Graph B signing inputs — 12 October 2026
+
+Base: verified PR #59 merge `260554131c2fb518eb935bea02a4615c82e0e158`, with
+all three exact-head checks successful in `38205716348`. Fetched main has the same
+tree as tested head `ca48e30a1fa0a209ea2419af6ac2a006812bd567`.
+[Engineering receipt](evidence/qualified-graph-b-signing-2026-10-12.json).
+Disconnected read-only Linux: **314 passed**, 123.90s, including **23** signing-input
+and **42** signed-review cases plus existing identity/equivalence/handoff/preparation
+regressions. The entire actual PostgreSQL group passed **76 cases**, 48.47s, two
+workers. It witnesses register locking through conversion and withholds the next
+stale selection. All owned PostgreSQL containers/networks were removed. Frontend:
+**503 passed**, 43 files; production build/full Ruff/whitespace checks passed.
+Deployment contracts remain **41 passed**; successor runtime contracts unchanged.
+Exact unchanged CI partition covers **4,095** disjoint backend nodes.
+
+A separately TEST-ONLY signed public attestation verifies the generated six-assertion
+bundle. Unsigned inputs fail public attestation checks; installation without a live
+authorization guard is rejected. Unknown decision/register dates can accompany a
+signed rejection/change request, never positive approval. Later negative review,
+key/ontology/source/actor changes, missing rights, incorrect pins, byte tampering,
+wrong quotes and passage/physical/packet budget excess withhold complete output.
+Private credentials, rationales, account/firm/event IDs and histories stay outside
+public files; only the selected intentional public reviewer label/time is included.
+
+The built loopback UI verified current independent signature, explicit unpublished
+scope and all hashes before the actual nine-file JSON download. Its saved bytes,
+file hashes/lengths and packet ID were verified again from disk. Changing the peer
+source immediately removed old review, packet confirmation and download controls.
+No browser console errors/warnings observed. Ignored screenshot/logs/packet remain
+under `.data/verification/r03-signed-review/`; the temporary Downloads copy was
+removed. No real source review, provider credentials/calls, actual signing keys,
+professional approval, shared graph mutation or user deployment was used.

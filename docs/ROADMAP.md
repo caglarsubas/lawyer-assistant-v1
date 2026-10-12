@@ -1970,3 +1970,22 @@ qualified relationship intervals. Public attestation, decision-specific audience
 authorization and activation/rollback qualification remain separate gates. Actual
 legal-editor vetting, national genealogy, corpus coverage and legal/pilot approval
 remain open; R03/R05 remain partial.
+
+## R03 continuation — qualified Graph B signing inputs (12 October 2026)
+
+PR #59 is verified merged at `260554131c2fb518eb935bea02a4615c82e0e158` after
+all three exact-head checks passed in `38205716348`; its backend step completed in
+16m06s within the existing cap. Main deployment/CI remain separately tracked.
+Current externally signed private approval now gates a deterministic
+[public signing-input slice](QUALIFIED_GRAPH_B_SIGNING_INPUTS.md), with six exact
+identity relationships, independent temporal evidence, preserved decision versions
+and physical quote/locator validation. Private appointment/account/history data
+stay outside public inputs. The curator verifies and downloads the complete private
+wrapper. Signed negative opinions can retain unknown dates/register windows;
+positive approval cannot, and an older approval cannot bypass a later rejection.
+
+Next: decision-specific bounded source/audience authorization, revocation/restore
+invalidation, complete final-release assembly, activation/rollback and runtime
+historical retrieval qualification. No production signatures, actual legal-editor
+vetting, national ontology approval, legal-effect assertion, public graph write or
+user deployment is supplied by these engineering fixtures. R03/R05 remain partial.
