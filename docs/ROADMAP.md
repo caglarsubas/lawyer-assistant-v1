@@ -1989,3 +1989,7 @@ invalidation, complete final-release assembly, activation/rollback and runtime
 historical retrieval qualification. No production signatures, actual legal-editor
 vetting, national ontology approval, legal-effect assertion, public graph write or
 user deployment is supplied by these engineering fixtures. R03/R05 remain partial.
+
+### R03 — current local Graph B publication snapshots (2026-10-12)
+
+Implemented a transport-independent read-only reconstruction of signed decision, institutional-identity and temporal review for trusted local publication workflows. Exact current revisions, complete histories, original bytes, separately configured review trust, reviewer appointment, same-firm active accounts, all six source-use rights and ownership remain conjunctive. Shared PostgreSQL reads and exclusive preparation protect all source/identity/review heads and relevant reservations; final reconstruction withholds changed or caller-mutated output. This is preparation infrastructure, not audience authorization or public serving. The successor is a decision-specific signed publication grant and complete-corpus assembly qualification.

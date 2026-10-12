@@ -1,4 +1,5 @@
 """Reviewed cross-source claims and retained institutional identity evidence, never merging."""
+import re
 from datetime import datetime
 from typing import Annotated, Literal
 
@@ -88,12 +89,21 @@ def _error():
     return HTTPException(409, "Eşdeğerlik kaydı, tam dayanaklar veya güncel revizyonlar doğrulanamadı")
 
 
-def context(request, source_id, peer_source_id, register_source_id, user):
-    if len({source_id, peer_source_id, register_source_id}) != 3:
-        raise HTTPException(422, "İki karar kaynağı ve sicil kaynağı ayrı olmalı")
+def context_ids(source_id, peer_source_id, register_source_id):
+    if (any(type(value) is not str or re.fullmatch(r"[a-f0-9]{64}", value) is None
+            for value in (source_id, peer_source_id, register_source_id))
+            or len({source_id, peer_source_id, register_source_id}) != 3):
+        raise ValueError("Two distinct exact decision sources and a register source are required")
     decision_ids = sorted([source_id, peer_source_id])
+    return decision_ids, digest(canonical([decision_ids, register_source_id, VERSION]))
+
+
+def context(request, source_id, peer_source_id, register_source_id, user):
+    try:
+        decision_ids, key = context_ids(source_id, peer_source_id, register_source_id)
+    except ValueError:
+        raise HTTPException(422, "İki karar kaynağı ve sicil kaynağı ayrı olmalı") from None
     packages = {key: reviews._package(request, key, user) for key in sorted([*decision_ids, register_source_id])}
-    key = digest(canonical([decision_ids, register_source_id, VERSION]))
     return packages, decision_ids, key
 
 
