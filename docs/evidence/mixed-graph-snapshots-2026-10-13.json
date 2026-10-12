@@ -1,0 +1,93 @@
+{
+  "schema_version": "mixed-graph-snapshot-engineering-validation-v1",
+  "date": "2026-10-13",
+  "scope": "current private mixed preparation dependencies only",
+  "test_only": true,
+  "actual_legal_qualification": false,
+  "production_publication_performed": false,
+  "user_deployment_verified": false,
+  "provider_dotenv_read_or_modified": false,
+  "parent_merge_sha": "7f5ef8fd0d39fdf96b5f5d837fce9564ef0d5d72",
+  "parent_exact_head_run": 38297324243,
+  "checks": [
+    {
+      "name": "affected mixed/structural/decision/component regression, native",
+      "passed": 124,
+      "seconds": 41.14
+    },
+    {
+      "name": "affected mixed/structural/decision/component and real runtime authorization regression, disconnected read-only Linux",
+      "passed": 125,
+      "seconds": 60.54,
+      "cpus": 2,
+      "workers": 2
+    },
+    {
+      "name": "real PostgreSQL complete concurrency suite before final private-projection byte-accounting adjustment",
+      "passed": 83,
+      "seconds": 63.34
+    },
+    {
+      "name": "ruff and whitespace",
+      "passed": true
+    },
+    {
+      "name": "final real PostgreSQL complete suite, fresh child databases, two signed decision contexts and current private-projection budgets",
+      "passed": 83,
+      "seconds": 63.24,
+      "cpus": 2,
+      "workers": 2
+    }
+  ],
+  "ci_collection": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 4196,
+      "preflight": 89,
+      "remaining": 3785,
+      "publication": 128,
+      "workspace": 67,
+      "human_review": 107,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_graph_b_snapshot.py",
+      "backend/tests/test_graph_b_publication.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "704b2c3d6e1d2aaa096e917b56f540bdfaa7645c6a813f5b033917ca14882798",
+    "workflow_sha256": "f7df40fe79e636b472adcb8e20f323de0db27143bf83107752c08c89325a6bdc",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "hosted_exact_head_checks": "pending; all three successes required before merge",
+  "next_gate": "declared complete public assembly, retained base/components, current conjunctive grants, independent final attestation and separate full serving authorization"
+}

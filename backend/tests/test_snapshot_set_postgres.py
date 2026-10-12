@@ -17,6 +17,7 @@ from uuid import uuid4
 import psycopg
 import pytest
 from fastapi.testclient import TestClient
+from http_test_clients import attach_case_transport
 from psycopg import sql
 from sqlalchemy import event, select, text, update
 from sqlalchemy.engine import make_url
@@ -164,6 +165,7 @@ def postgres_workspace(postgres_database, tmp_path):
     app = create_app(settings)
     try:
         with TestClient(app) as client:
+            attach_case_transport(app, client)
             response = client.post("/api/v1/auth/login", json={"username": "demo", "password": "demo-local-only"})
             assert response.status_code == 200
             client.headers["X-CSRF-Token"] = response.json()["csrf_token"]
