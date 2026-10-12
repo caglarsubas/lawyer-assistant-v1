@@ -19,6 +19,23 @@ def login(app, username, password):
 
 
 @contextmanager
+def cloned_empty_workspace(root, destination):
+    """No source review records or decisions; every subject still starts empty."""
+    shutil.copytree(root, destination, dirs_exist_ok=True)
+    settings = Settings.model_construct(demo_mode=True, cookie_secure=False, data_dir=destination,
+        database_url=f"sqlite:///{destination / 'workspace.db'}", provider_base_url="", provider_api_key="", provider_model="")
+    app = create_app(settings)
+    try:
+        with TestClient(app) as client:
+            response = client.post("/api/v1/auth/login", json={"username": "demo", "password": "demo-local-only"})
+            assert response.status_code == 200, response.text
+            client.headers["X-CSRF-Token"] = response.json()["csrf_token"]
+            yield app, client, client.get("/api/v1/matters").json()[0]["id"]
+    finally:
+        app.state.store.engine.dispose()
+
+
+@contextmanager
 def cloned_equivalence(seed, destination):
     root, evidence = seed
     shutil.copytree(root, destination, dirs_exist_ok=True)

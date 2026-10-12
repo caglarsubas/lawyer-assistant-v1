@@ -19,7 +19,13 @@ workspace = workspace_fixture
 
 
 @pytest.fixture
-def review(workspace, source):
+def review(tmp_path, source, synthetic_empty_source_workspace):
+    from graph_b_test_seeds import cloned_empty_workspace
+    with cloned_empty_workspace(synthetic_empty_source_workspace, tmp_path / "empty-workspace-copy") as workspace:
+        yield build_review(workspace, source)
+
+
+def build_review(workspace, source):
     app, client, _ = workspace
     store, inputs, _, _ = source
     source_id = store.import_package(**inputs)["id"]

@@ -21,7 +21,7 @@
   },
   "actual_postgres": {
     "passed": 81,
-    "seconds": 60.81,
+    "seconds": 57.61,
     "workers": 2,
     "encrypted_output_lock_race": true,
     "owned_child_databases_removed": true
@@ -30,7 +30,7 @@
     "passed": 41
   },
   "ci_partition": {
-    "nodes": 4150,
+    "nodes": 4151,
     "intersection": 0,
     "missing": 0,
     "extra": 0,
@@ -58,7 +58,9 @@
     "native_seconds": 75.14,
     "seed_isolation_cases": 2,
     "no_cached_verdicts": true,
-    "postgres_builders_remain_fresh": true
+    "postgres_builders_remain_fresh": true,
+    "final_linux_passed": 99,
+    "final_linux_seconds": 41.94
   },
   "full_final_backend_partition": {
     "passed": 3640,
@@ -66,5 +68,14 @@
     "seconds": 435.61,
     "workers": 2,
     "disconnected_readonly_linux": true
+  },
+  "source_review_empty_seed": {
+    "native_passed": 100,
+    "native_seconds": 14.43,
+    "publication_group_passed": 132,
+    "publication_group_seconds": 42.73,
+    "publication_workers": 2,
+    "copy_isolation_and_no_reused_login_sessions": true,
+    "postgres_builders_remain_fresh": true
   }
 }
