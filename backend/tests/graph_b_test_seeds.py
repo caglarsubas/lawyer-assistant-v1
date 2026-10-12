@@ -5,6 +5,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 from fastapi.testclient import TestClient
+from http_test_clients import attach_case_transport, peer_client
 
 from app.config import Settings
 from app.main import create_app
@@ -12,7 +13,7 @@ from app.public_sources import PublicSourceStore
 
 
 def login(app, username, password):
-    client = TestClient(app)
+    client = peer_client(app)
     response = client.post("/api/v1/auth/login", json={"username": username, "password": password})
     assert response.status_code == 200, response.text
     client.headers["X-CSRF-Token"] = response.json()["csrf_token"]
@@ -28,6 +29,7 @@ def cloned_empty_workspace(root, destination):
     app = create_app(settings)
     try:
         with TestClient(app) as client:
+            attach_case_transport(app, client)
             response = client.post("/api/v1/auth/login", json={"username": "demo", "password": "demo-local-only"})
             assert response.status_code == 200, response.text
             client.headers["X-CSRF-Token"] = response.json()["csrf_token"]
@@ -49,6 +51,7 @@ def cloned_equivalence(seed, destination):
     app = create_app(settings)
     lifetime = TestClient(app)
     lifetime.__enter__()
+    attach_case_transport(app, lifetime)
     clients = []
     try:
         owner = login(app, "demo", "demo-local-only")

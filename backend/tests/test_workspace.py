@@ -8,6 +8,7 @@ import httpx
 import pytest
 from docx import Document
 from fastapi.testclient import TestClient
+from http_test_clients import attach_case_transport
 from pypdf import PdfReader
 from sqlalchemy import select
 
@@ -30,6 +31,7 @@ def fresh_workspace(tmp_path):
     )
     app = create_app(settings)
     with TestClient(app) as client:
+        attach_case_transport(app, client)
         login = client.post("/api/v1/auth/login", json={"username": "demo", "password": "demo-local-only"})
         assert login.status_code == 200
         client.headers["X-CSRF-Token"] = login.json()["csrf_token"]

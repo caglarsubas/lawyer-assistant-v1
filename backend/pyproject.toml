@@ -21,6 +21,8 @@ build-backend = "hatchling.build"
 packages = ["app"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Each case owns its directory; retain failures for diagnosis, remove passed cases.
+tmp_path_retention_policy = "failed"
 [tool.ruff]
 line-length = 110
 target-version = "py312"

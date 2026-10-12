@@ -73,7 +73,12 @@ jobs:
           for path in "${preflight_tests[@]}" "${publication_tests[@]}" "${workspace_tests[@]}" "${human_review_tests[@]}" "${model_trial_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
-          pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
+          # Preserve file-backed SQLite locking while avoiding runner disk latency.
+          # Exec remains enabled for the existing fake relay executable contract.
+          ci_test_storage=$(mktemp -d "$RUNNER_TEMP/lawyer-test-memory.XXXXXX")
+          sudo mount -t tmpfs -o size=1024m,mode=1777,nosuid,nodev tmpfs "$ci_test_storage"
+          trap 'sudo umount "$ci_test_storage"; rmdir "$ci_test_storage"' EXIT
+          pytest backend/tests "${ignore_args[@]}" --basetemp="$ci_test_storage/pytest" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
       - name: Test deployment contracts
         run: python -m unittest discover -s deploy -p 'test_*.py'
       - name: Validate RDF and SHACL contract

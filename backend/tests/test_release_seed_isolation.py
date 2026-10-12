@@ -230,3 +230,25 @@ def test_unsigned_review_context_copies_have_no_accepted_review_and_recheck_live
         assert request_body(first, request).status_code == 409
         assert request_body(second, sibling).status_code == 200
         assert request[5] is not sibling[5] and hashes(root) == before
+
+
+def test_peer_transport_shares_only_own_case_loop_with_independent_authentication(synthetic_empty_source_workspace, tmp_path):
+    from graph_b_test_seeds import cloned_empty_workspace
+    from http_test_clients import peer_client
+    from test_source_reviews import another_client
+    with cloned_empty_workspace(synthetic_empty_source_workspace, tmp_path / 'first') as first, cloned_empty_workspace(
+            synthetic_empty_source_workspace, tmp_path / 'second') as second:
+        app, primary, _ = first
+        peer = another_client(app, username='transport-peer')
+        anonymous = peer_client(app)
+        try:
+            assert peer.portal is primary.portal and peer.portal is not second[1].portal
+            assert primary.get('/api/v1/auth/me').json()['user']['id'] != peer.get('/api/v1/auth/me').json()['user']['id']
+            assert anonymous.get('/api/v1/auth/me').status_code == 401
+            assert primary.headers['X-CSRF-Token'] != peer.headers['X-CSRF-Token']
+            peer.close()
+            assert primary.get('/api/v1/auth/me').status_code == 200
+            assert second[1].get('/api/v1/auth/me').status_code == 200
+        finally:
+            peer.close()
+            anonymous.close()

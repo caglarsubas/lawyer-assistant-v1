@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from threading import Barrier
 
 import pytest
-from fastapi.testclient import TestClient
+from http_test_clients import peer_client
 from sqlalchemy import func, select
 from test_public_sources import source as source_fixture
 from test_workspace import workspace as workspace_fixture
@@ -62,7 +62,7 @@ def another_client(app, *, username="another", role="curator", firm="demo-firm")
                     password_hash=hash_password("local-review-password"))
         session.add(user)
         session.commit()
-    client = TestClient(app)
+    client = peer_client(app)
     response = client.post("/api/v1/auth/login", json={"username": username, "password": "local-review-password"})
     assert response.status_code == 200
     client.headers["X-CSRF-Token"] = response.json()["csrf_token"]
@@ -362,7 +362,7 @@ def test_simultaneous_writes_have_one_winner_no_lost_events(review, monkeypatch,
     monkeypatch.setattr(source_reviews, "_head", synchronize_head)
 
     def write():
-        worker = TestClient(app)
+        worker = peer_client(app)
         worker.cookies.update(client.cookies)
         worker.headers.update(client.headers)
         return (assess(worker, base, 1) if existing else assign(worker, base)).status_code
