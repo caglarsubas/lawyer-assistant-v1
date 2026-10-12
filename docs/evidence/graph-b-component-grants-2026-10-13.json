@@ -189,6 +189,22 @@
     "bounded 1 GiB exec-enabled tmpfs for the backend partition preserves file-backed SQLite locks and relay executable tests; no durability or authentication settings changed",
     "shared bounded RAM-backed test-storage wrapper for every Python partition; real mount/unmount, executable relay, source race and failure-status contracts checked"
   ],
-  "hosted_final_head_checks": "pending shared-wrapper revision; all three exact-head successes required before merge",
-  "next_gate": "complete reviewed Graph A/Graph B assembly, independent final attestation, all-component current serving authorization"
+  "hosted_final_head_checks": "all three exact-head checks passed; normal squash merged and identical tested/main trees verified",
+  "next_gate": "complete reviewed Graph A/Graph B assembly, independent final attestation, all-component current serving authorization",
+  "hosted_final_head": {
+    "head_sha": "20499607ac8c77eb43ce0f8c6ca56779624e074d",
+    "run_id": 38297324243,
+    "conclusion": "success",
+    "checks": [
+      "backend-and-contracts",
+      "frontend",
+      "postgres-snapshot-concurrency"
+    ],
+    "merge_sha": "7f5ef8fd0d39fdf96b5f5d837fce9564ef0d5d72",
+    "main_tree_equals_tested_head": true,
+    "backend_step_seconds": 975,
+    "frontend_job_seconds": 291,
+    "postgres_job_seconds": 279,
+    "deployment_verified": false
+  }
 }

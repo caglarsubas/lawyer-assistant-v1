@@ -15,7 +15,6 @@ env:
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_analysis_cohorts.py
-    backend/tests/test_runtime_authorization_integration.py
     backend/tests/test_graph_b_snapshot.py
     backend/tests/test_graph_b_publication.py
   CI_WORKSPACE_SECURITY_TESTS: >-
@@ -131,7 +130,7 @@ jobs:
           LA_TEST_POSTGRES_URL: postgresql+psycopg://snapshot_test:disposable-ci-snapshot-only@127.0.0.1:${{ job.services.postgres.ports['5432'] }}/lawyer_snapshot_test
         # Every test owns a random child database; bounded workers preserve the
         # in-test row-lock races while leaving time for signed publication checks.
-        run: bash scripts/run_ci_tests.sh backend/.venv/bin/pytest backend/tests/test_snapshot_set_postgres.py backend/tests/test_set_authorization_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+        run: bash scripts/run_ci_tests.sh backend/.venv/bin/pytest backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_set_authorization_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
       - name: Test signed publication and retained-source renewal
         # Keep the heavier open-validity end-to-end contracts on the backend
         # runner; their measured setup and call time exhausted this job's margin.
@@ -169,8 +168,8 @@ jobs:
         run: |
           read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
-      # Keep the measured runtime authorization case on this runner: the
-      # PostgreSQL job otherwise finished only two seconds below its five-minute cap.
+      # The real runtime authorization case returns to the backend partition,
+      # whose measured margin protects this runner's five-minute budget.
       - name: Test confidential human review groups
         timeout-minutes: 3
         run: |
