@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     graph_release_dir: str = ""
     graph_trusted_review_key: str = ""
     graph_b_review_trusted_key: str = ""
+    graph_b_component_trusted_key: str = ""
     public_source_dir: Path = ROOT / ".public-sources"
     opensearch_url: str = ""
     search_release_id: str = ""

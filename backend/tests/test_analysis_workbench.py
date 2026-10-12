@@ -16,8 +16,43 @@ from app.db import Membership, Record, User, digest
 from app.main import create_app
 
 
-@pytest.fixture
-def workbench(tmp_path):
+def build_workbench(workspace):
+    app, client, matter = workspace
+    base = f'/api/v1/matters/{matter}'
+    with app.state.store.session() as session:
+        user = session.scalar(select(User).where(User.username == 'demo'))
+        text = '📄 Sözleşme örneği\r\nTeslim yapılmadıkça ödeme istenemez. İstisna: yazılı kabul.\r\n'
+        doc = app.state.store.add(session, 'document', user, {
+            'name': 'SYNTHETIC.docx', 'status': 'extracted', 'sha256': digest(text),
+            'passages': [{'id': 'synthetic-clause', 'text': text, 'locator': 'SYNTHETIC §1'}],
+        }, matter)
+        session.commit()
+    fact = client.post(base + '/facts', json={
+        'text': 'Teslimin yapıldığına dair kayıt mevcut.', 'status': 'documented', 'evidence_id': 'synthetic-clause',
+    }).json()
+    payload = {
+        'title': 'SYNTHETIC ödeme incelemesi', 'issue': 'Ödeme talebinin dayanakları nelerdir?',
+        'posture': 'Sözleşme incelemesi', 'event_date': '2024-03-01',
+        'evidence': [{'evidence_id': 'synthetic-clause', 'passage_sha256': digest(text), 'document_revision': doc.revision, 'start': 2, 'end': len(text)}],
+        'premises': [{'id': 'p1', 'kind': 'fact', 'fact_id': fact['id'], 'fact_revision': fact['revision']}],
+        'rules': [{'id': 'r1', 'kind': 'contract_clause', 'text': 'Ödeme, teslimin gerçekleşmesine bağlı olabilir.',
+                   'evidence_ids': ['synthetic-clause'], 'conditions': [
+                       {'id': 'c1', 'text': 'Teslimin gerçekleşmesi', 'kind': 'element', 'required_status': 'met'},
+                       {'id': 'c2', 'text': 'Ayrı yazılı kabul istisnası', 'kind': 'exception', 'required_status': 'not_met'},
+                   ]}],
+        'applications': [{'id': 'a1', 'rule_id': 'r1', 'premise_ids': ['p1'],
+                          'rationale': 'Belgedeki teslim koşulu ile olgu arasındaki ilişki ayrıca incelenmelidir.',
+                          'assessments': [{'condition_id': 'c1', 'status': 'met', 'premise_ids': ['p1']},
+                                          {'condition_id': 'c2', 'status': 'not_met', 'premise_ids': ['p1']}]}],
+        'alternatives': [{'id': 'alt1', 'kind': 'search_gap', 'text': 'Karşı içtihat ve yazılı kabul araştırılmalı.'}],
+        'conclusion': {'text': 'Ödeme talebi koşullu olarak değerlendirilebilir.', 'application_ids': ['a1'],
+                       'alternative_ids': ['alt1'], 'uncertainty': ['Kabulün kapsamı bilinmiyor.'],
+                       'next_step': 'Özgün kabul belgesini ve ilgili kamu otoritelerini inceleyin.'},
+    }
+    return app, client, base, payload, fact, doc.id, text
+
+
+def fresh_workbench(tmp_path):
     app = create_app(Settings(
         _env_file=None, demo_mode=True, cookie_secure=False, data_dir=tmp_path,
         public_source_dir=tmp_path / 'public-sources', graph_url='', graph_release_dir='',
@@ -31,38 +66,14 @@ def workbench(tmp_path):
         assert login.status_code == 200
         client.headers['X-CSRF-Token'] = login.json()['csrf_token']
         matter = client.get('/api/v1/matters').json()[0]['id']
-        base = f'/api/v1/matters/{matter}'
-        with app.state.store.session() as session:
-            user = session.scalar(select(User).where(User.username == 'demo'))
-            text = '📄 Sözleşme örneği\r\nTeslim yapılmadıkça ödeme istenemez. İstisna: yazılı kabul.\r\n'
-            doc = app.state.store.add(session, 'document', user, {
-                'name': 'SYNTHETIC.docx', 'status': 'extracted', 'sha256': digest(text),
-                'passages': [{'id': 'synthetic-clause', 'text': text, 'locator': 'SYNTHETIC §1'}],
-            }, matter)
-            session.commit()
-        fact = client.post(base + '/facts', json={
-            'text': 'Teslimin yapıldığına dair kayıt mevcut.', 'status': 'documented', 'evidence_id': 'synthetic-clause',
-        }).json()
-        payload = {
-            'title': 'SYNTHETIC ödeme incelemesi', 'issue': 'Ödeme talebinin dayanakları nelerdir?',
-            'posture': 'Sözleşme incelemesi', 'event_date': '2024-03-01',
-            'evidence': [{'evidence_id': 'synthetic-clause', 'passage_sha256': digest(text), 'document_revision': doc.revision, 'start': 2, 'end': len(text)}],
-            'premises': [{'id': 'p1', 'kind': 'fact', 'fact_id': fact['id'], 'fact_revision': fact['revision']}],
-            'rules': [{'id': 'r1', 'kind': 'contract_clause', 'text': 'Ödeme, teslimin gerçekleşmesine bağlı olabilir.',
-                       'evidence_ids': ['synthetic-clause'], 'conditions': [
-                           {'id': 'c1', 'text': 'Teslimin gerçekleşmesi', 'kind': 'element', 'required_status': 'met'},
-                           {'id': 'c2', 'text': 'Ayrı yazılı kabul istisnası', 'kind': 'exception', 'required_status': 'not_met'},
-                       ]}],
-            'applications': [{'id': 'a1', 'rule_id': 'r1', 'premise_ids': ['p1'],
-                              'rationale': 'Belgedeki teslim koşulu ile olgu arasındaki ilişki ayrıca incelenmelidir.',
-                              'assessments': [{'condition_id': 'c1', 'status': 'met', 'premise_ids': ['p1']},
-                                              {'condition_id': 'c2', 'status': 'not_met', 'premise_ids': ['p1']}]}],
-            'alternatives': [{'id': 'alt1', 'kind': 'search_gap', 'text': 'Karşı içtihat ve yazılı kabul araştırılmalı.'}],
-            'conclusion': {'text': 'Ödeme talebi koşullu olarak değerlendirilebilir.', 'application_ids': ['a1'],
-                           'alternative_ids': ['alt1'], 'uncertainty': ['Kabulün kapsamı bilinmiyor.'],
-                           'next_step': 'Özgün kabul belgesini ve ilgili kamu otoritelerini inceleyin.'},
-        }
-        yield app, client, base, payload, fact, doc.id, text
+        yield build_workbench((app, client, matter))
+
+
+@pytest.fixture
+def workbench(tmp_path, synthetic_analysis_workbench_seed):
+    from graph_b_test_seeds import cloned_analysis_workbench
+    with cloned_analysis_workbench(synthetic_analysis_workbench_seed, tmp_path) as value:
+        yield value
 
 
 def create(workbench, payload=None):

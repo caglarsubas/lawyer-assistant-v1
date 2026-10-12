@@ -32,9 +32,9 @@ def synthetic_authorized_set_seed(tmp_path_factory):
     """Reviewed synthetic source-set fixture setup once per isolated pytest worker."""
     from test_public_sources import source
     from test_release_set_authorization import build_authorized_set
-    from test_workspace import workspace
+    from test_workspace import fresh_workspace
     root = tmp_path_factory.mktemp("TEST-ONLY-authorized-set-seed")
-    lifetime = workspace.__wrapped__(root)
+    lifetime = fresh_workspace(root)
     fixture_workspace = next(lifetime)
     try:
         seed = build_authorized_set(fixture_workspace, source.__wrapped__(root), root)
@@ -49,9 +49,9 @@ def synthetic_authorized_seed(tmp_path_factory):
     from test_provision_mappings import mapping
     from test_public_sources import source
     from test_release_authorization import build_authorized
-    from test_workspace import workspace
+    from test_workspace import fresh_workspace
     root = tmp_path_factory.mktemp("TEST-ONLY-authorized-seed")
-    lifetime = workspace.__wrapped__(root)
+    lifetime = fresh_workspace(root)
     fixture_workspace = next(lifetime)
     try:
         seed = build_authorized(mapping.__wrapped__(fixture_workspace, source.__wrapped__(root)), root)
@@ -65,9 +65,9 @@ def synthetic_equivalence_seed(tmp_path_factory):
     from test_decision_equivalence import prepare
     from test_jurisprudence_candidates import incoming
     from test_public_sources import source
-    from test_workspace import workspace
+    from test_workspace import fresh_workspace
     root = tmp_path_factory.mktemp("TEST-ONLY-equivalence-seed")
-    lifetime = workspace.__wrapped__(root)
+    lifetime = fresh_workspace(root)
     fixture = next(lifetime)
     try:
         value = prepare(fixture[0], fixture[1], *incoming.__wrapped__(source.__wrapped__(root)))
@@ -85,9 +85,9 @@ def synthetic_signed_graph_b_seed(tmp_path_factory):
     from test_graph_b_snapshot import prepare
     from test_jurisprudence_candidates import incoming
     from test_public_sources import source
-    from test_workspace import workspace
+    from test_workspace import fresh_workspace
     root = tmp_path_factory.mktemp("TEST-ONLY-signed-graph-b-seed")
-    lifetime = workspace.__wrapped__(root)
+    lifetime = fresh_workspace(root)
     fixture = next(lifetime)
     try:
         value = prepare(fixture, incoming.__wrapped__(source.__wrapped__(root)), root)
@@ -102,11 +102,80 @@ def synthetic_signed_graph_b_seed(tmp_path_factory):
 
 @pytest.fixture(scope="session")
 def synthetic_empty_source_workspace(tmp_path_factory):
-    from test_workspace import workspace
+    from test_workspace import fresh_workspace
     root = tmp_path_factory.mktemp("TEST-ONLY-empty-source-workspace")
-    lifetime = workspace.__wrapped__(root)
+    lifetime = fresh_workspace(root)
     fixture = next(lifetime)
     discard_test_seed_logins(fixture[0].state.store)
     lifetime.close()
     fixture[0].state.store.engine.dispose()
     return root
+
+
+@pytest.fixture(scope="session")
+def synthetic_component_grant_seed(tmp_path_factory):
+    """TEST ONLY setup bytes, never reused current verification or sessions."""
+    from test_graph_b_component_grants import accept, setup
+    from test_graph_b_publication import prepare as prepare_packet
+    from test_graph_b_snapshot import prepare
+    from test_jurisprudence_candidates import incoming
+    from test_public_sources import source
+    from test_workspace import fresh_workspace
+    root = tmp_path_factory.mktemp("TEST-ONLY-component-grant-seed")
+    lifetime = fresh_workspace(root)
+    workspace = next(lifetime)
+    current = prepare(workspace, incoming.__wrapped__(source.__wrapped__(root)), root)
+    try:
+        packet = prepare_packet(current, root)
+        value = setup(current, packet, root)
+        grant = accept(value, root)
+    finally:
+        discard_test_seed_logins(workspace[0].state.store)
+        lifetime.close()
+        workspace[0].state.store.engine.dispose()
+        for client in (*current["evidence"][1:], current["signed"][2]):
+            client.close()
+    return root, value, grant
+
+
+@pytest.fixture(scope="session")
+def synthetic_analysis_workbench_seed(tmp_path_factory):
+    """Invented document/fact bytes before any analysis or review is performed."""
+    from test_analysis_workbench import fresh_workbench
+    root = tmp_path_factory.mktemp("TEST-ONLY-analysis-baseline")
+    lifetime = fresh_workbench(root)
+    value = next(lifetime)
+    discard_test_seed_logins(value[0].state.store)
+    lifetime.close()
+    value[0].state.store.engine.dispose()
+    return root, value
+
+
+@pytest.fixture(scope="session")
+def synthetic_unsigned_graph_b_seed(tmp_path_factory):
+    """Complete invented equivalence, no signed Graph B review or verdict."""
+    from test_decision_equivalence import prepare as prepare_equivalence
+    from test_graph_b_review import prepare
+    from test_jurisprudence_candidates import incoming
+    from test_public_sources import source
+    from test_workspace import fresh_workspace
+    root = tmp_path_factory.mktemp('TEST-ONLY-unsigned-graph-b-context')
+    lifetime = fresh_workspace(root)
+    workspace = next(lifetime)
+    evidence = prepare_equivalence(workspace[0], workspace[1], *incoming.__wrapped__(source.__wrapped__(root)))
+    try:
+        signed_inputs = prepare(evidence, root)
+    finally:
+        discard_test_seed_logins(workspace[0].state.store)
+        lifetime.close()
+        workspace[0].state.store.engine.dispose()
+    for client in (*evidence[1:], signed_inputs[2]):
+        client.close()
+    return root, evidence, signed_inputs
+
+
+@pytest.fixture
+def unsigned_graph_b_context(tmp_path, synthetic_unsigned_graph_b_seed):
+    from graph_b_test_seeds import cloned_unsigned_graph_b
+    with cloned_unsigned_graph_b(synthetic_unsigned_graph_b_seed, tmp_path) as value:
+        yield value

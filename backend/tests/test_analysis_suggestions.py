@@ -20,8 +20,8 @@ from app.provider import ProviderError
 
 
 @pytest.fixture
-def workbench(tmp_path):
-    yield from workbench_fixture.__wrapped__(tmp_path)
+def workbench(tmp_path, synthetic_analysis_workbench_seed):
+    yield from workbench_fixture.__wrapped__(tmp_path, synthetic_analysis_workbench_seed)
 
 
 def prepare(workbench, monkeypatch, *, incomplete=True):

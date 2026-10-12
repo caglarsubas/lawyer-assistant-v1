@@ -8,7 +8,7 @@ from threading import Barrier, Event
 
 import pytest
 from sqlalchemy import func, select
-from test_workspace import workspace as workspace_fixture
+from test_workspace import fresh_workspace as workspace_fixture
 
 from app.db import Audit, Membership, Record, User
 from app.research import run_research
@@ -27,7 +27,7 @@ from app.research_jobs import (
 
 @pytest.fixture
 def workspace(tmp_path):
-    yield from workspace_fixture.__wrapped__(tmp_path)
+    yield from workspace_fixture(tmp_path)
 
 def wait_for(predicate, seconds=5):
     deadline = time.monotonic() + seconds

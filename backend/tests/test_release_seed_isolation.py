@@ -112,8 +112,8 @@ def test_authorization_setup_builder_still_runs_complete_fresh_source_review(tmp
     from test_provision_mappings import mapping
     from test_public_sources import source
     from test_release_authorization import build_authorized, guard
-    from test_workspace import workspace
-    lifetime = workspace.__wrapped__(tmp_path)
+    from test_workspace import fresh_workspace
+    lifetime = fresh_workspace(tmp_path)
     try:
         fixture = build_authorized(mapping.__wrapped__(next(lifetime), source.__wrapped__(tmp_path)), tmp_path)
         with guard(fixture):
@@ -175,3 +175,80 @@ def test_empty_source_workspace_copies_start_without_reviews_or_reused_login_ses
         assert first_review[1].get(first_review[4]).json()["revision"] == 1
         assert second_review[1].get(second_review[4]).json()["revision"] == 0
         assert (root / "workspace.db").read_bytes() == original
+
+
+def test_component_grant_copies_reverify_and_do_not_modify_seed_or_sibling(synthetic_component_grant_seed, tmp_path):
+    from graph_b_test_seeds import cloned_component_grant
+    root, original, _ = synthetic_component_grant_seed
+    before = hashes(root)
+    with cloned_component_grant(synthetic_component_grant_seed, tmp_path / 'first') as (first, grant), cloned_component_grant(
+            synthetic_component_grant_seed, tmp_path / 'second') as (second, sibling):
+        original_second = hashes(tmp_path / 'second')
+        first['public'].write_bytes(b'invalid independently copied TEST-ONLY grant key')
+        with pytest.raises(ValueError):
+            first['command'].validate(first['settings'], first['prepared'], grant=grant)
+        assert second['command'].validate(second['settings'], second['prepared'], grant=sibling)['current_component_grant']
+        assert hashes(root) == before and hashes(tmp_path / 'second') == original_second
+        assert original['public'].read_bytes() == (tmp_path / 'second' / original['public'].relative_to(root)).read_bytes()
+
+
+def test_analysis_baseline_copies_have_no_verdicts_and_fact_changes_do_not_reach_sibling(synthetic_analysis_workbench_seed, tmp_path):
+    from graph_b_test_seeds import cloned_analysis_workbench
+    from test_analysis_workbench import create, fresh_workbench
+    root, _ = synthetic_analysis_workbench_seed
+    before = hashes(root)
+    with cloned_analysis_workbench(synthetic_analysis_workbench_seed, tmp_path / 'first') as first, cloned_analysis_workbench(
+            synthetic_analysis_workbench_seed, tmp_path / 'second') as second:
+        changed = first[1].patch(first[2] + '/facts/' + first[4]['id'], json={
+            'text': 'Changed independently copied TEST-ONLY fact', 'status': 'disputed', 'reason': 'TEST ONLY mutation'})
+        assert changed.status_code == 200
+        assert second[1].get(second[2]).json()['facts'][0] == second[4]
+        assert first[3] is not second[3] and first[4] is not second[4]
+        assert hashes(root) == before
+        result = create(second)
+        assert result['status'] == 'needs_review' and result['checks']['legal_approval'] == 'not_granted'
+    # Dedicated setup still creates a new store, document and real fact request.
+    lifetime = fresh_workbench(tmp_path / 'fresh-builder')
+    try:
+        fresh = next(lifetime)
+        assert fresh[4]['id'] != second[4]['id'] and fresh[5] != second[5]
+        assert fresh[1].get(fresh[2] + '/analyses').json() == []
+    finally:
+        lifetime.close()
+
+
+def test_unsigned_review_context_copies_have_no_accepted_review_and_recheck_live_source(synthetic_unsigned_graph_b_seed, tmp_path):
+    from graph_b_test_seeds import cloned_unsigned_graph_b
+    from test_graph_b_review import request_body
+    from test_source_reviews import assess
+    root, _, _ = synthetic_unsigned_graph_b_seed
+    before = hashes(root)
+    with cloned_unsigned_graph_b(synthetic_unsigned_graph_b_seed, tmp_path / 'first') as (first, request), cloned_unsigned_graph_b(
+            synthetic_unsigned_graph_b_seed, tmp_path / 'second') as (second, sibling):
+        register = first[0][2]
+        assert assess(register[1], register[4] + '/review', request[5]['pins']['source_revisions'][register[3]], 'rights', decision='rejected').status_code == 200
+        assert request_body(first, request).status_code == 409
+        assert request_body(second, sibling).status_code == 200
+        assert request[5] is not sibling[5] and hashes(root) == before
+
+
+def test_peer_transport_shares_only_own_case_loop_with_independent_authentication(synthetic_empty_source_workspace, tmp_path):
+    from graph_b_test_seeds import cloned_empty_workspace
+    from http_test_clients import peer_client
+    from test_source_reviews import another_client
+    with cloned_empty_workspace(synthetic_empty_source_workspace, tmp_path / 'first') as first, cloned_empty_workspace(
+            synthetic_empty_source_workspace, tmp_path / 'second') as second:
+        app, primary, _ = first
+        peer = another_client(app, username='transport-peer')
+        anonymous = peer_client(app)
+        try:
+            assert peer.portal is primary.portal and peer.portal is not second[1].portal
+            assert primary.get('/api/v1/auth/me').json()['user']['id'] != peer.get('/api/v1/auth/me').json()['user']['id']
+            assert anonymous.get('/api/v1/auth/me').status_code == 401
+            assert primary.headers['X-CSRF-Token'] != peer.headers['X-CSRF-Token']
+            peer.close()
+            assert primary.get('/api/v1/auth/me').status_code == 200
+            assert second[1].get('/api/v1/auth/me').status_code == 200
+        finally:
+            peer.close()
+            anonymous.close()

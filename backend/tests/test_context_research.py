@@ -9,8 +9,8 @@ import pytest
 from docx import Document
 from pypdf import PdfReader
 from sqlalchemy import select
+from test_workspace import fresh_workspace as workspace_fixture
 from test_workspace import research_product
-from test_workspace import workspace as workspace_fixture
 
 from app.db import Record
 from app.evidence_prompt import canonical
@@ -18,7 +18,7 @@ from app.evidence_prompt import canonical
 
 @pytest.fixture
 def workspace(tmp_path):
-    yield from workspace_fixture.__wrapped__(tmp_path)
+    yield from workspace_fixture(tmp_path)
 
 
 def lightweight_graph(monkeypatch, app):

@@ -1,0 +1,194 @@
+{
+  "schema_version": "graph-b-component-grants-engineering-validation-v1",
+  "date": "2026-10-13",
+  "scope": "signed encrypted component inclusion only; no national serving",
+  "test_only": true,
+  "actual_legal_qualification": false,
+  "production_publication_performed": false,
+  "current_user_deployment_verified": false,
+  "provider_dotenv_read_or_modified": false,
+  "checks": [
+    {
+      "name": "local backend partition before final grant-fixture refinement and validity partition move",
+      "passed": 3677,
+      "skipped": 85,
+      "seconds": 458.56,
+      "environment": "disconnected read-only Linux, 2 CPUs, 2 workers"
+    },
+    {
+      "name": "actual PostgreSQL complete concurrency suite, fresh real reviews and child databases",
+      "passed": 82,
+      "seconds": 69.36
+    },
+    {
+      "name": "final component and copied-fixture isolation, native",
+      "passed": 36,
+      "seconds": 36.62
+    },
+    {
+      "name": "final component and copied-fixture isolation, disconnected read-only Linux",
+      "passed": 36,
+      "seconds": 46.91
+    },
+    {
+      "name": "workspace/source and fixture isolation contracts",
+      "passed": 97,
+      "seconds": 20.49
+    },
+    {
+      "name": "workspace/research/analysis/renewal regression",
+      "passed": 108,
+      "seconds": 19.04
+    },
+    {
+      "name": "publication/source group including the four validity tests later moved to backend",
+      "passed": 132,
+      "seconds": 37.11
+    },
+    {
+      "name": "deployment contracts",
+      "passed": 41
+    },
+    {
+      "name": "ruff, whitespace and Compose config without dotenv",
+      "passed": true
+    },
+    {
+      "name": "full backend after analysis baseline refinement, before unsigned-review fixture refinement",
+      "passed": 3683,
+      "skipped": 85,
+      "seconds": 440.3,
+      "environment": "disconnected read-only Linux, 2 CPUs, 2 workers"
+    },
+    {
+      "name": "final analysis/copy isolation native cases",
+      "passed": 306,
+      "seconds": 63.42
+    },
+    {
+      "name": "final unsigned review/signing/copy isolation native cases",
+      "passed": 77,
+      "seconds": 32.65
+    },
+    {
+      "name": "final affected analysis/unsigned-review/signing/isolation contracts in disconnected read-only Linux",
+      "passed": 372,
+      "seconds": 87.97
+    },
+    {
+      "name": "final full backend partition including transport and file-backed RAM storage",
+      "passed": 3685,
+      "skipped": 85,
+      "seconds": 425.01,
+      "environment": "disconnected read-only Linux, 2 CPUs, 2 workers, exec-enabled 1 GiB tmpfs"
+    },
+    {
+      "name": "final real PostgreSQL concurrency suite with isolated child databases",
+      "passed": 82,
+      "seconds": 63.32,
+      "environment": "disconnected Linux, 2 CPUs, 2 workers, real PostgreSQL"
+    },
+    {
+      "name": "actual Linux RAM wrapper, isolated authentication, source races and executable relay contracts",
+      "passed": 161,
+      "seconds": 32.06,
+      "cleanup_after_success": true,
+      "pytest_usage_failure_status_and_cleanup_preserved": true
+    }
+  ],
+  "ci_collection": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 4182,
+      "preflight": 89,
+      "remaining": 3770,
+      "publication": 128,
+      "workspace": 67,
+      "human_review": 108,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_runtime_authorization_integration.py",
+      "backend/tests/test_graph_b_snapshot.py",
+      "backend/tests/test_graph_b_publication.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "be6f811ff5448f303f7f6049fa348195c083277a482227be8e9e8b4480a01aa9",
+    "workflow_sha256": "07949f3c5bf099d3275d0dcc1f8169092057247afbf6fd2b32853e67dcbb1ab7",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "ci_root_cause_evidence": {
+    "post_merge_main_run": 38234643833,
+    "postgres_tests_passed": 81,
+    "postgres_test_seconds": 163.43,
+    "publication_step_cancelled_after_seconds": 122,
+    "unchanged_job_budget_minutes": 5,
+    "first_pr63_run": 38275976155,
+    "first_pr63_head": "db45d94a3cf7132ef31dcdfc33ccfff3569215d5",
+    "first_pr63_backend": "18-minute step deadline at 93 percent; no assertion failure reported before timeout",
+    "first_pr63_frontend_seconds": 295,
+    "first_pr63_postgres_seconds": 298,
+    "second_pr63_run": 38282563784,
+    "second_pr63_head": "5585518be0c43bd7b8c77f4d606bc0e3a0151750",
+    "second_pr63_backend": "18-minute step deadline at 93 percent; no assertion failure reported before timeout",
+    "transport_profile_before_portal_starts": 826,
+    "transport_profile_after_portal_starts": 86,
+    "transport_profile_cases": 42,
+    "third_pr63_run": 38295202820,
+    "third_pr63_head": "1ad6d0726f52091d1d6c28e318eb7cf89b761dfe",
+    "third_frontend_all_tests_passed": true,
+    "third_frontend_workspace_cases": 67,
+    "third_frontend_workspace_seconds": 87.88,
+    "third_frontend_human_review_cases": 108,
+    "third_frontend_human_review_seconds": 162.92,
+    "third_frontend_annotation": "The job has exceeded the maximum execution time of 5m0s",
+    "third_postgres_conclusion": "success",
+    "third_backend_conclusion": "success",
+    "third_backend_step_seconds": 885,
+    "third_backend_job_seconds": 961,
+    "third_run_conclusion": "cancelled; frontend five-minute deadline"
+  },
+  "ci_changes": [
+    "only required sources in fresh PostgreSQL decision fixtures",
+    "independent empty baseline copies with real startup and fresh login",
+    "independent component bytes with fresh complete verification for negative cases; fresh acceptance and PG builders",
+    "four measured open-validity tests moved to backend; all jobs and worker/timeout/retry budgets unchanged",
+    "initial analysis document/fact baseline copied independently, no analysis/review verdicts retained; subjects and fresh builders remain active",
+    "unsigned Graph B context copied independently with zero accepted review events; each test signs and accepts afresh",
+    "case-local ASGI portal reuse with independent peer authentication, headers and cookies; real handlers and per-request checks retained",
+    "passed-case temporary directories removed by pytest; failed-case files retained",
+    "bounded 1 GiB exec-enabled tmpfs for the backend partition preserves file-backed SQLite locks and relay executable tests; no durability or authentication settings changed",
+    "shared bounded RAM-backed test-storage wrapper for every Python partition; real mount/unmount, executable relay, source race and failure-status contracts checked"
+  ],
+  "hosted_final_head_checks": "pending shared-wrapper revision; all three exact-head successes required before merge",
+  "next_gate": "complete reviewed Graph A/Graph B assembly, independent final attestation, all-component current serving authorization"
+}

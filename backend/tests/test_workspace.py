@@ -8,6 +8,7 @@ import httpx
 import pytest
 from docx import Document
 from fastapi.testclient import TestClient
+from http_test_clients import attach_case_transport
 from pypdf import PdfReader
 from sqlalchemy import select
 
@@ -18,8 +19,7 @@ from app.main import create_app
 from app.research import run_research, select_passages
 
 
-@pytest.fixture
-def workspace(tmp_path):
+def fresh_workspace(tmp_path):
     settings = Settings(
         _env_file=None,
         demo_mode=True,
@@ -31,10 +31,18 @@ def workspace(tmp_path):
     )
     app = create_app(settings)
     with TestClient(app) as client:
+        attach_case_transport(app, client)
         login = client.post("/api/v1/auth/login", json={"username": "demo", "password": "demo-local-only"})
         assert login.status_code == 200
         client.headers["X-CSRF-Token"] = login.json()["csrf_token"]
         yield app, client, client.get("/api/v1/matters").json()[0]["id"]
+
+
+@pytest.fixture
+def workspace(tmp_path, synthetic_empty_source_workspace):
+    from graph_b_test_seeds import cloned_empty_workspace
+    with cloned_empty_workspace(synthetic_empty_source_workspace, tmp_path) as value:
+        yield value
 
 
 def research_product(client, matter):
