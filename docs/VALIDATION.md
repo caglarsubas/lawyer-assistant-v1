@@ -4076,3 +4076,10 @@ separate observation; synthetic fixtures remain unrelated to actual legal approv
 The corrected full backend remainder passed **3,615 cases**, 78 opt-in skips,
 in **457.71s**, with two workers and the same 18-minute cap. Its owned scratch
 volume was removed. Exact-head hosted checks remain required before merging.
+The opt-in PostgreSQL helper calls the **fresh** single/two-source builders directly,
+preserving PostgreSQL databases and real locks rather than copying SQLite seeds.
+Its old fixture-call signature was found by run `38205017994` and corrected. The
+entire actual PostgreSQL group then passed **75 cases**, **45.84s**, two workers,
+in disposable child databases; owned container/network removed. Explicit workflow
+cancellation was denied by GitHub token permissions; the corrected head uses the
+existing concurrency cancellation policy. No CI permission was broadened.

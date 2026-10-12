@@ -13,9 +13,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy import select, update
 from test_provision_mappings import mapping as mapping_fixture
 from test_public_sources import source as source_fixture
-from test_release_authorization import authorized as authorized_fixture
-from test_release_set_authorization import ONTOLOGY
-from test_release_set_authorization import authorized_set as authorized_set_fixture
+from test_release_authorization import build_authorized
+from test_release_set_authorization import ONTOLOGY, build_authorized_set
 from test_snapshot_set_postgres import observe_identity_lock, wait_until_blocked
 from test_snapshot_set_postgres import postgres_database as postgres_database_fixture
 from test_source_reviews import assess
@@ -48,11 +47,11 @@ def postgres_authorized_set(postgres_database, tmp_path, request):
             workspace = (app, client, client.get("/api/v1/matters").json()[0]["id"])
             source = source_fixture.__wrapped__(tmp_path)
             if getattr(request, "param", "set") == "single":
-                fixture = authorized_fixture.__wrapped__(mapping_fixture.__wrapped__(workspace, source), tmp_path)
+                fixture = build_authorized(mapping_fixture.__wrapped__(workspace, source), tmp_path)
                 fixture.update(app=app, sources=fixture["mapping"][2], mappings=[fixture["mapping"]])
                 yield fixture
             else:
-                yield authorized_set_fixture.__wrapped__(workspace, source, tmp_path)
+                yield build_authorized_set(workspace, source, tmp_path)
     finally:
         app.state.store.engine.dispose()
 

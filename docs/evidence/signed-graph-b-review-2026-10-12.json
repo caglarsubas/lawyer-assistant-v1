@@ -112,5 +112,17 @@
     "step_cap_minutes": 18,
     "scope": "complete existing backend remainder; exact-head hosted checks pending",
     "scratch_volume_removed": true
+  },
+  "full_postgres_after_fixture_refactor": {
+    "passed": 75,
+    "seconds": 45.84,
+    "workers": 2,
+    "child_database_setup": "fresh full builders, never SQLite copies",
+    "owned_container_network_removed": true
+  },
+  "second_pr_ci": {
+    "run": 38205017994,
+    "postgres": "test-only builder-call signature mismatch; corrected and full group verified locally",
+    "explicit_cancel": "GitHub token denied cancellation; next head supersedes through existing concurrency policy"
   }
 }
