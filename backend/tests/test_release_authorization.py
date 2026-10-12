@@ -46,8 +46,7 @@ def signed(path, body, key, tools):
                                      "signature": base64.b64encode(key.sign(tools.canonical(body))).decode()}))
 
 
-@pytest.fixture
-def authorized(mapping, tmp_path):
+def build_authorized(mapping, tmp_path):
     app, client, sources, source_id, base = mapping
     tools = _packet_tools()
     proof = b"PRIVATE TEST-ONLY RIGHTS, IDENTITY AND AUDIENCE PROOF"
@@ -121,6 +120,37 @@ def authorized(mapping, tmp_path):
     return {"mapping": mapping, "tools": tools, "key": key, "public_key": public_key, "root": root,
             "epoch_path": epoch_path, "auth_path": auth_path, "body": body, "files": files,
             "info": info, "packet_digest": packet_digest, "evidence_digest": evidence_digest}
+
+
+@pytest.fixture
+def authorized(tmp_path, synthetic_authorized_seed):
+    import copy
+
+    from fastapi.testclient import TestClient
+
+    from app.config import Settings
+    from app.main import create_app
+    from app.public_sources import PublicSourceStore
+    seed_root, seed = synthetic_authorized_seed
+    shutil.copytree(seed_root, tmp_path, dirs_exist_ok=True)
+    app = create_app(Settings.model_construct(demo_mode=True, cookie_secure=False, data_dir=tmp_path,
+        public_source_dir=tmp_path / 'public-only', provider_base_url='', provider_api_key='', provider_model=''))
+    with TestClient(app) as client:
+        response = client.post('/api/v1/auth/login', json={'username': 'demo', 'password': 'demo-local-only'})
+        assert response.status_code == 200
+        client.headers['X-CSRF-Token'] = response.json()['csrf_token']
+        sources = PublicSourceStore(tmp_path / 'public-only')
+        mapping = (app, client, sources, seed['mapping'][3], seed['mapping'][4])
+        copied = copy.deepcopy({key: value for key, value in seed.items() if key not in
+            {'mapping', 'tools', 'key', 'public_key', 'root', 'epoch_path', 'auth_path', 'info'}})
+        info = copy.deepcopy(seed['info'])
+        info['bundle_path'] = tmp_path / seed['info']['bundle_path'].relative_to(seed_root)
+        fixture = {**copied, 'mapping': mapping, 'tools': _packet_tools(), 'key': seed['key'], 'info': info,
+            **{name: tmp_path / seed[name].relative_to(seed_root) for name in ('public_key', 'root', 'epoch_path', 'auth_path')}}
+        assert _load_serving().validate_prepared(info['bundle_path'].parent, fixture['public_key']) == info
+        with guard(fixture):
+            pass
+        yield fixture
 
 
 @contextmanager

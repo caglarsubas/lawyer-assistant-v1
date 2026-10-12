@@ -27,9 +27,9 @@
   "ci_collection": {
     "schema": "complete-ci-partition-v1",
     "counts": {
-      "complete": 4066,
+      "complete": 4071,
       "preflight": 89,
-      "remaining": 3688,
+      "remaining": 3693,
       "publication": 132,
       "workspace": 77,
       "human_review": 60,
@@ -66,7 +66,7 @@
     "intersection": 0,
     "missing": 0,
     "extra": 0,
-    "complete_node_ids_sha256": "7a93a4f7b46aad75e270f7e901bec5cee73fba4303066fabbdcb4675d6599958",
+    "complete_node_ids_sha256": "4776c3e13044ccdb98406055b01dd726f353e6a81fff1c5249849d4fe0d42770",
     "workflow_sha256": "1b0d611c98a851175feedb6b9b8871498ae42d13b4970830125d5c0ccf53a042",
     "no_new_runner_retry_or_deadline_change": true,
     "workspace_workers": 2,
@@ -87,5 +87,30 @@
     "Register identity is not competence or finality",
     "Graph remains staged/unpublished",
     "Public signing draft and decision-specific permission/activation remain successor gates"
-  ]
+  ],
+  "first_pr_ci": {
+    "run": 38201779315,
+    "frontend": "success",
+    "postgres": "success",
+    "backend": "18-minute step timeout at 89 percent; no assertion failure reported"
+  },
+  "authorization_fixture_isolation": {
+    "passed": 104,
+    "seconds": 193.11,
+    "scope": "disconnected Linux authorization, CLI, runtime and isolation; per-worker TEST-ONLY seeds, fresh verification per copied case",
+    "new_isolation_cases": 3,
+    "credential_verification": "normal production login",
+    "production_checks_cached": false,
+    "workflow_workers_deadlines_changed": false
+  },
+  "signed_review_cases": 42,
+  "corrected_full_backend_remainder": {
+    "passed": 3615,
+    "opt_in_skipped": 78,
+    "seconds": 457.71,
+    "workers": 2,
+    "step_cap_minutes": 18,
+    "scope": "complete existing backend remainder; exact-head hosted checks pending",
+    "scratch_volume_removed": true
+  }
 }

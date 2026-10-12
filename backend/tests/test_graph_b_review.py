@@ -292,3 +292,24 @@ def test_key_change_during_action_withholds_output_and_rolls_back_acceptance(evi
     assert response.status_code == 409, response.text
     with signed_review[0].state.store.session() as session:
         assert session.scalar(select(GraphBReviewEvent)) is None
+
+
+@pytest.mark.parametrize('route', ['request', 'accept'])
+def test_other_review_actor_deactivation_during_action_withholds_and_rolls_back(evidence_set, signed_review, monkeypatch, route):
+    from sqlalchemy import update
+
+    from app import graph_b_review
+    from app.db import User
+    body = json.loads(request_body(evidence_set, signed_review).json()['body_json'])
+    verify = graph_b_review.eq.verify
+    def change(*args):
+        verify(*args)
+        ident = body['reviewer_id' if route == 'request' else 'operator_id']
+        with signed_review[0].state.store.session() as session:
+            session.execute(update(User).where(User.id == ident).values(active=False))
+            session.commit()
+    monkeypatch.setattr(graph_b_review.eq, 'verify', change)
+    response = request_body(evidence_set, signed_review) if route == 'request' else accept(evidence_set, signed_review, body)
+    assert response.status_code == 409
+    with signed_review[0].state.store.session() as session:
+        assert session.scalar(select(GraphBReviewEvent)) is None

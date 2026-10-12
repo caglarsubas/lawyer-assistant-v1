@@ -4056,3 +4056,23 @@ oversized ledgers and changes during request/acceptance are withheld. Private
 credential bytes and original accepted-key PEMs are encrypted and absent from API
 history. Synthetic appointments do not establish real reviewer qualifications,
 legal correctness, shared graph publication, provider use or production deployment.
+
+The first PR #59 run `38201779315` passed frontend and PostgreSQL jobs but reached
+89% of the backend step at its unchanged 18-minute limit, without an assertion
+failure. Source-authorization setup repeatedly constructed the same TEST-ONLY
+reviewed release. The single-source and two-source authorization fixtures now
+build their seed once per worker, close the seed application's database, and copy
+independent encrypted databases, public sources, signing keys and sealed release
+files per case. Each copy signs in normally and verifies prepared release bytes,
+signature and current private authorization afresh. No credential check, production
+validator, permission check, test case, workflow, worker or deadline is weakened.
+Three added tests verify sibling/template isolation, current rights revocation and
+fresh full setup-builder execution. Disconnected Linux authorization/CLI/runtime/
+isolation subset: **104 passed**, 193.11s. Exact collection: **4,071** disjoint nodes.
+The private signed-review request and acceptance also recheck both actors after
+physical source verification; direct-storage deactivation during either action
+rolls back/withholds the result. Hosted timing and billing improvement require
+separate observation; synthetic fixtures remain unrelated to actual legal approval.
+The corrected full backend remainder passed **3,615 cases**, 78 opt-in skips,
+in **457.71s**, with two workers and the same 18-minute cap. Its owned scratch
+volume was removed. Exact-head hosted checks remain required before merging.

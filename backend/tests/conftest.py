@@ -16,3 +16,36 @@ def synthetic_active_release_template(tmp_path_factory):
 def synthetic_serving_seeds(tmp_path_factory):
     from test_serving_releases import build_serving_seeds
     return build_serving_seeds(tmp_path_factory.mktemp("test-only-serving-seeds"))
+
+
+@pytest.fixture(scope="session")
+def synthetic_authorized_set_seed(tmp_path_factory):
+    """Reviewed synthetic source-set fixture setup once per isolated pytest worker."""
+    from test_public_sources import source
+    from test_release_set_authorization import build_authorized_set
+    from test_workspace import workspace
+    root = tmp_path_factory.mktemp("TEST-ONLY-authorized-set-seed")
+    lifetime = workspace.__wrapped__(root)
+    fixture_workspace = next(lifetime)
+    try:
+        seed = build_authorized_set(fixture_workspace, source.__wrapped__(root), root)
+    finally:
+        # Close all application connections before copying its test-only database.
+        lifetime.close()
+    return root, seed
+
+
+@pytest.fixture(scope="session")
+def synthetic_authorized_seed(tmp_path_factory):
+    from test_provision_mappings import mapping
+    from test_public_sources import source
+    from test_release_authorization import build_authorized
+    from test_workspace import workspace
+    root = tmp_path_factory.mktemp("TEST-ONLY-authorized-seed")
+    lifetime = workspace.__wrapped__(root)
+    fixture_workspace = next(lifetime)
+    try:
+        seed = build_authorized(mapping.__wrapped__(fixture_workspace, source.__wrapped__(root)), root)
+    finally:
+        lifetime.close()
+    return root, seed

@@ -330,6 +330,7 @@ def graph_b_review_router():
                     or reviews._lock_identity(session, request, current).role != role):
                 raise invalid()
             eq.verify(request, packages, current)
+            current_check(signed_body, session, packages, captured, decisions, eq_events, context, key_sha, ontology_sha)
             return {"body_json": raw.decode(), "body_sha256": digest(raw), "signed": False, "needs_external_signature": True,
                     "confidentiality": "firm_confidential", "publication_eligible": False}
 
@@ -374,6 +375,7 @@ def graph_b_review_router():
                         or reviews._lock_identity(session, request, current).role != role):
                     raise invalid()
                 eq.verify(request, packages, current)
+                current_check(signed_body, session, packages, captured, decisions, eq_events, context, key_sha, ontology_sha)
                 session.flush()
                 if ledger(store, session, head(session, current.firm_id, context), packages, captured, decisions, eq_events, context) != [*events, event]:
                     raise invalid()
