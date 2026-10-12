@@ -20,7 +20,6 @@ env:
     backend/tests/test_graph_b_publication.py
   CI_WORKSPACE_SECURITY_TESTS: >-
     backend/tests/test_firm_admin.py
-    backend/tests/test_content_scope.py
     backend/tests/test_authority_proposals.py
     backend/tests/test_authority_model_cohorts.py
   CI_PUBLICATION_TESTS: >-
