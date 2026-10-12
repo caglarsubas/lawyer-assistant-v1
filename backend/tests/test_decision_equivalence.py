@@ -60,10 +60,10 @@ def prepare(app, client, store, make, *, permitted_uses=None, rights_evidence=No
 
 
 @pytest.fixture
-def evidence_set(workspace, incoming):
-    app, client, _ = workspace
-    store, make = incoming
-    return prepare(app, client, store, make)
+def evidence_set(tmp_path, synthetic_equivalence_seed):
+    from graph_b_test_seeds import cloned_equivalence
+    with cloned_equivalence(synthetic_equivalence_seed, tmp_path) as value:
+        yield value
 
 
 def endpoint(evidence_set, *, review=False, reverse=False):

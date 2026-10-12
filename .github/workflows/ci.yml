@@ -18,6 +18,8 @@ env:
     backend/tests/test_runtime_authorization_integration.py
     backend/tests/test_graph_b_snapshot.py
     backend/tests/test_graph_b_publication.py
+    backend/tests/test_graph_b_review.py
+    backend/tests/test_graph_b_signing.py
   CI_WORKSPACE_SECURITY_TESTS: >-
     backend/tests/test_firm_admin.py
     backend/tests/test_content_scope.py

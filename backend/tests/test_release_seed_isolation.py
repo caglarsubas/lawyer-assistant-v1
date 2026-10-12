@@ -122,3 +122,29 @@ def test_authorization_setup_builder_still_runs_complete_fresh_source_review(tmp
         assert fixture['info']['review']['verified']
     finally:
         lifetime.close()
+@pytest.mark.parametrize("changed", ["key", "source-ledger"])
+def test_graph_b_copies_verify_live_state_and_cannot_modify_seed_or_sibling(synthetic_signed_graph_b_seed, tmp_path, changed):
+    from graph_b_test_seeds import cloned_signed_snapshot
+    from sqlalchemy import select
+    from test_graph_b_snapshot import opened
+
+    from app.release_snapshot import SnapshotError, readonly_store
+    from app.source_review_models import SourceReviewHead
+    root, seed = synthetic_signed_graph_b_seed
+    original_key = seed["key"].read_bytes()
+    original_database = (root / "workspace.db").read_bytes()
+    with cloned_signed_snapshot(synthetic_signed_graph_b_seed, tmp_path / "first") as first, cloned_signed_snapshot(
+            synthetic_signed_graph_b_seed, tmp_path / "second") as second:
+        if changed == "key":
+            first["key"].write_bytes(b"invalid private case copy")
+        else:
+            with first["app"].state.store.session() as session:
+                row = session.scalar(select(SourceReviewHead).where(SourceReviewHead.source_id == first["request"].register_source_id))
+                row.revision += 1
+                session.commit()
+        with readonly_store(first["app"].state.settings) as reader, pytest.raises(SnapshotError), opened(first, reader):
+            pytest.fail("Fresh validation must reject the changed copied key or ledger")
+        with readonly_store(second["app"].state.settings) as reader, opened(second, reader):
+            pass
+        assert seed["key"].read_bytes() == original_key
+        assert (root / "workspace.db").read_bytes() == original_database
