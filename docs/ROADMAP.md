@@ -2069,3 +2069,15 @@ exact-head CI succeeds. It does not approve production signatures, sources,
 legal coverage, activation, deployment or field acceptance. The successor is
 read-only whole-release transition reconciliation, followed by complete retained
 mixed-base reassembly with no dropped manifestation or dependency.
+
+### R03 read-only transition reconciliation
+
+The operator [inspection contract](WHOLE_RELEASE_AUTHORIZATION.md#read-only-uncertain-transition-observation)
+separates observed installation/pointer effects from present source permission
+and proof of a particular command's commit. It uses existing locks, exact expected
+before/after states, full public validation and the conjunctive current grant,
+with explicit no-retry/no-repair receipts. Shared API/publisher Compose paths now
+preserve the signed publication location without automatic packet rebinding.
+Previous namespaces require renewed independent review rather than migration of
+an approval. Complete reassembly onto a retained mixed base is the next gated
+packet; source/legal qualification and production activation remain external.

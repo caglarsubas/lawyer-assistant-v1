@@ -64,7 +64,7 @@ def compose_operation(args: argparse.Namespace) -> dict:
         # Live freshness requires the private PostgreSQL ledger. The dedicated
         # internal-network coordinator receives no inference/provider credentials.
         command = [*COMPOSE, "--profile", "publication", "run", "--rm", "--no-deps", "-T"]
-        child = ["--root", "/graph-publication", args.command]
+        child = ["--root", "/graph-releases", args.command]
         if args.command == "install":
             prepared = _path(args.prepared)
             serving.validate_prepared(prepared, _path(args.trusted_review_key))

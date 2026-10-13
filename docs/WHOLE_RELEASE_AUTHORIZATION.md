@@ -97,3 +97,41 @@ closed inventories and real PostgreSQL readers blocking both source families'
 rights writers. Actual licensed corpus/legal qualification, deployment and
 lawyer acceptance remain separate gates. Reassembly onto a previously mixed
 active base remains a separately gated successor; it fails closed here.
+
+## Read-only uncertain-transition observation
+
+The operator can supply a closed `legal-final-transition-expectation-v1` JSON
+object with `action` (`install`, `activate` or `rollback`), the complete expected
+`release_id` and `serving_sha256`, and an explicit `before` pointer (or `null`
+only for an observed empty root). A pointer contains its format version, full
+release/serving hashes, previous release ID and monotonic sequence. Missing
+`before` is an error. Rollback must name the recorded previous release.
+
+```bash
+python scripts/inspect_final_transition.py --expectation /trusted/expected-transition.json
+```
+
+The inspector acquires existing publication and installation shared locks; it
+creates no directory/lock, repairs no state, and performs no graph transition.
+It verifies the full target inventory and independent public signature, then
+separately checks its present whole-release source permission. The receipt
+records whether the pointer is the expected before/after state or another state,
+whether the expected effect is present at observation, and whether permission
+was verified, withheld/unavailable or not checked. Permission-check and observation
+times are distinct. A corrupt target, replaced lock, changing bytes/key/pointer,
+or missing trust yields an unavailable observation, never a retryable absence.
+
+An expected effect being present does not prove that a particular command
+committed. It may already have been present or result from a later command.
+A valid installed public signature can coexist with withdrawn source permission.
+Every receipt explicitly denies retry, repair, activation and legal qualification.
+A subsequent action still needs its own current permission and exact CAS.
+
+The Compose API and publisher now share the canonical `/graph-releases` namespace
+for their common graph volume, with read-only API and writable publisher mounts.
+This is required by the signed dependency-location contract. Fuseki remains a
+public query-only reader at `/fuseki` without private packet access. Source,
+review, candidate and trust paths must remain identically mounted in the API and
+publisher. Packets prepared using the older `/graph-publication` location fail
+closed: regenerate inputs and obtain independent external reviews/permissions;
+never rewrite, relocate or automatically rebind the existing signed packet.

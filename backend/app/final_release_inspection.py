@@ -82,6 +82,7 @@ def inspect_transition(settings, expectation):
             raise ValueError("Strict publication pointer required")
         present = target.exists() or target.is_symlink()
         public, current, capture = "absent", "not_checked", None
+        permission_checked_at = None
         if present:
             # FULL public signature/RDF/temporal/canonical/evidence validation.
             # A bad installed inventory does not become an absent-install verdict.
@@ -95,9 +96,10 @@ def inspect_transition(settings, expectation):
                 # runtime serving. Its original-source transaction closes before
                 # the observation receipt is returned; no verdict is retained.
                 with FinalReleaseAuthorization(settings).guard(info, "install"):
-                    pass
+                    permission_checked_at = datetime.now(timezone.utc).isoformat()
             except AuthorizationError:
                 current = "withheld_or_unavailable"
+                permission_checked_at = datetime.now(timezone.utc).isoformat()
             else:
                 current = "verified"
         before = expectation.before.model_dump() if expectation.before else None
@@ -124,7 +126,8 @@ def inspect_transition(settings, expectation):
             raise ValueError("Observation changed during bounded inspection")
     return {"schema_version": "legal-final-transition-observation-v1", "action": expectation.action,
             "release_id": expectation.release_id, "serving_sha256": expectation.serving_sha256,
-            "observed_at": datetime.now(timezone.utc).isoformat(), "active_pointer": pointer,
+            "observed_at": datetime.now(timezone.utc).isoformat(), "permission_checked_at": permission_checked_at,
+            "active_pointer": pointer,
             "pointer_relation": relation, "public_inventory": public, "current_permission": current,
             "observed_effect": effect, "command_commit_proven": False, "retry_authorized": False,
             "repair_performed": False, "activation_performed": False, "legal_qualification_granted": False}
