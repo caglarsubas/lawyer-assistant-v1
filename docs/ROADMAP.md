@@ -2105,3 +2105,10 @@ explicit current-versus-recorded state, followed by independently qualified
 corpus/retrieval integration. Licensed historical population, actual legal/editor
 review, production key custody, activation and held-out lawyer acceptance remain
 external gates.
+
+Retained-assembly CI qualification: measured withdrawal reconstruction exceeded
+the frontend job's existing five-minute cap. The complete eight-case withdrawal
+group now runs once in a separate three-minute ARM job; all existing job caps,
+two-worker limits and no-retry policy stay unchanged. The final-release and
+PostgreSQL groups passed on the first head. Every exact-head check, including the
+new disjoint withdrawal job, must pass before merge.
