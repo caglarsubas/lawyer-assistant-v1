@@ -1,0 +1,98 @@
+{
+  "schema_version": "declared-graph-assembly-engineering-evidence-v1",
+  "date": "2026-10-13",
+  "base_main": "753a1925009c805ef17a4cfce16928ca9127fc56",
+  "base_main_ci": {
+    "run_id": 38302856405,
+    "conclusion": "success"
+  },
+  "fixtures": "invented isolated corpora, appointments and TEST-ONLY external signatures",
+  "local": {
+    "linux_regression": {
+      "passed": 102,
+      "seconds": 268.2,
+      "before_final_hardening": true
+    },
+    "final_linux_assembly": {
+      "passed": 30,
+      "seconds": 183.86
+    },
+    "postgres_regression": {
+      "passed": 84,
+      "seconds": 97.25,
+      "before_final_hardening": true
+    },
+    "final_postgres_assembly": {
+      "passed": 1,
+      "seconds": 39.17
+    },
+    "deployment_contracts": {
+      "passed": 41
+    },
+    "ruff": "passed",
+    "whitespace": "passed"
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 4227,
+      "preflight": 89,
+      "remaining": 3816,
+      "publication": 128,
+      "workspace": 67,
+      "human_review": 107,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_graph_b_snapshot.py",
+      "backend/tests/test_graph_b_publication.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "a34faf7ac1fee6673d087f20d3a24e6ef374d18f4ef1814a131e668f9628a546",
+    "workflow_sha256": "e54a926b00423accf76ce346dd127806bafff4ca865b0eae3f4a0e6b9510c812",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "hosted_exact_head_required_before_merge": true,
+  "national_historical_completeness_established": false,
+  "professional_reviewer_vetting_established": false,
+  "production_keys_or_signatures_created": false,
+  "serving_authorization_created": false,
+  "graph_publication_performed": false,
+  "user_deployment_performed": false,
+  "source_sha256": {
+    "backend/app/declared_graph_assembly.py": "e108c2c536ccf3319536217aafb9898e7a38c9c83c5b96b7c9a1bbf9879cfd03",
+    "backend/app/public_graph_union.py": "1d3174a5ea59ad7d65fa6da42307ed34da88c9c9a3c02f86c1e6497c0b73b6da",
+    "scripts/assemble_legal_graphs.py": "1a85d89f5f59b1ed05207b19bfce42e60a76e435e6c2c18022ba927e90f586e3",
+    "backend/tests/test_declared_graph_assembly.py": "ee254c083ee5a52ed79683ea662bd1d6ad4a01f25ff5cebd61f8ab82c98a4d21",
+    "backend/tests/test_declared_assembly_postgres.py": "c58d2128022e0a747552d5fac14c4866fc736ddbe554a117dec625a7a1d66c7d"
+  }
+}

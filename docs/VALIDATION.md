@@ -4146,3 +4146,29 @@ Ordinary workspace fixture setup uses independent copies of a closed invented ba
 PR #63's first hosted backend run timed out at 93% under the unchanged 18-minute step limit; the frontend and PostgreSQL jobs passed near their five-minute limits. Further fixture profiling found repeated initial analysis document/fact setup and unsigned Graph B review-context construction. Both now use independently copied TEST-ONLY setup, current raw-byte/record checks and fresh authenticated applications. No analysis verdict or accepted Graph B review is copied into these initial contexts. Analysis/review/signature acceptance subjects still execute per case; dedicated fresh builders and all PostgreSQL cases remain fresh. Mutation isolation, missing-review checks and fresh-source rejection qualify the copied contexts. Hosted timing remains to be established on the revised exact head.
 
 Mixed Graph A/B snapshots: engineering coverage must prove one connection/no writes, original source/ compiler-contract preservation, all selected contexts, shared register handling, current ownership/reviewer/rights checks, aggregate bounds and exit reconstruction. Actual PostgreSQL tests must observe five shared readers and real writer waits for both families, then reject the entire selection after later-member revocation. This qualifies a preparation primitive; it does not establish legal truth, corpus completeness, component grants, final public attestation or national serving.
+
+### Complete declared assembly and independent final attestation — 2026-10-13
+
+The disconnected read-only Linux regression group passed 102 cases in 268.20s,
+including existing A permissions, B grants, mixed snapshots and publication CLI.
+After strengthening final dependency, lifetime and publication-lock checks, all
+30 assembly cases passed again on the final Linux source in 183.86s. These include
+real API-based fresh setup, two decision contexts with shared register evidence,
+whole retained-base inventory, original-triple preservation, strict external final
+signatures, component-signature rejection, conflicting separately attested
+identities, encryption, mutation, late expiry and atomic-output cleanup.
+
+All 84 actual PostgreSQL cases passed in 97.25s before the final hardening; the
+complete-assembly five-reader/two-family writer and committed-rights-revocation
+case passed again on final source in 39.17s. Tests own random child databases and
+observe actual database blocking; no production database or serving pointer is
+changed. Deployment contracts passed all 41 cases. Ruff and whitespace checks
+passed. Actual collection assigns all 4,227 cases disjointly, with zero missing or
+extra cases; three jobs, two workers, retry policy and deadlines remain unchanged.
+
+Exact-head hosted checks are required before merge. Test keys, signatures, source
+corpora and appointments are invented fixtures. This is engineering qualification
+for complete **declared** inputs and final signature verification, not national
+historical coverage, professional approval, a serving grant or deployment.
+See [operator contract](DECLARED_GRAPH_ASSEMBLY.md) and
+`docs/evidence/declared-graph-assembly-2026-10-13.json`.

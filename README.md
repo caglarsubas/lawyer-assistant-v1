@@ -130,6 +130,8 @@ flowchart LR
 
 Graph A and Graph B share stable RDF identities, reified evidence-bearing assertions, separate legal/system times, source versions, rights and review states. SKOS models terminology; SHACL checks structural constraints. No taxonomic rule establishes legal applicability, jurisdiction, liability or binding force. See [ontology documentation](ontology/README.md) and [implementation ledger](docs/ROADMAP.md).
 
+Trusted local operators can [assemble the complete declared A/B corpus and accept an independent final attestation](docs/DECLARED_GRAPH_ASSEMBLY.md). Every component's current permission and original sources are checked together; membership and the retained structural base are covered by final graph signatures. The reviewed packet is preparation evidence and does not authorize serving or establish national historical completeness.
+
 Accepted source/provision reviews can feed an [offline graph review preparation
 packet](docs/RELEASE_PREPARATION.md). It uses explicit identity proposals, physical
 rights evidence and current locked review revisions; unknown inputs remain

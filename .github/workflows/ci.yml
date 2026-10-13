@@ -130,7 +130,7 @@ jobs:
           LA_TEST_POSTGRES_URL: postgresql+psycopg://snapshot_test:disposable-ci-snapshot-only@127.0.0.1:${{ job.services.postgres.ports['5432'] }}/lawyer_snapshot_test
         # Every test owns a random child database; bounded workers preserve the
         # in-test row-lock races while leaving time for signed publication checks.
-        run: bash scripts/run_ci_tests.sh backend/.venv/bin/pytest backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_set_authorization_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+        run: bash scripts/run_ci_tests.sh backend/.venv/bin/pytest backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_set_authorization_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
       - name: Test signed publication and retained-source renewal
         # Keep the heavier open-validity end-to-end contracts on the backend
         # runner; their measured setup and call time exhausted this job's margin.

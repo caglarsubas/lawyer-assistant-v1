@@ -34,7 +34,8 @@ MAX_EVIDENCE = 128
 MAX_EVIDENCE_FILE = 8 * 1024 * 1024
 MAX_EVIDENCE_TOTAL = 32 * 1024 * 1024
 RESERVED = {"manifest.json", "manifest.sha256", "manifest.hmac"}
-PACKET_SCHEMAS = {"legal-review-packet-v1", "legal-review-source-set-packet-v1", "legal-review-graph-b-packet-v1"}
+PACKET_SCHEMAS = {"legal-review-packet-v1", "legal-review-source-set-packet-v1", "legal-review-graph-b-packet-v1",
+                  "legal-declared-graph-assembly-v1"}
 
 
 def canonical(value):

@@ -139,6 +139,28 @@ def synthetic_component_grant_seed(tmp_path_factory):
 
 
 @pytest.fixture(scope="session")
+def synthetic_declared_assembly_seed(tmp_path_factory):
+    from test_declared_graph_assembly import build
+    from test_graph_b_snapshot import prepare
+    from test_jurisprudence_candidates import incoming
+    from test_public_sources import source
+    from test_workspace import fresh_workspace
+    root = tmp_path_factory.mktemp("TEST-ONLY-declared-assembly-seed")
+    lifetime = fresh_workspace(root)
+    workspace = next(lifetime)
+    current = prepare(workspace, incoming.__wrapped__(source.__wrapped__(root)), root)
+    try:
+        value = build(current, root)
+    finally:
+        discard_test_seed_logins(workspace[0].state.store)
+        lifetime.close()
+        workspace[0].state.store.engine.dispose()
+        for client in (*current["evidence"][1:], current["signed"][2]):
+            client.close()
+    return root, value
+
+
+@pytest.fixture(scope="session")
 def synthetic_analysis_workbench_seed(tmp_path_factory):
     """Invented document/fact bytes before any analysis or review is performed."""
     from test_analysis_workbench import fresh_workbench

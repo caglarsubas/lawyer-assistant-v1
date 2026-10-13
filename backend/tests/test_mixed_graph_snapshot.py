@@ -53,7 +53,9 @@ def add_second_context(fixture, tmp_path):
         base = f'/api/v1/public-sources/{identifier}'
         candidates = json.loads(owner.get(base+'/jurisprudence-candidates?passage_id=p2').json()['evidence_json'])['items']
         item = app, owner, store, identifier, base, candidates, package
-        mapped(item, export=True, permitted_uses=sorted(REQUIRED_USES))
+        from app.release_preparation import digest
+        mapped(item, export=True, permitted_uses=sorted(REQUIRED_USES), rights_evidence=[
+            {"reference": "PRIVATE TEST-ONLY independent source audience proof", "sha256": digest(current["audience"])}])
         identity = {**proposal(item)['identity'], 'decision_id': f'urn:tr-law:decision:mixed-second-{index}',
             'proceeding_id': 'urn:tr-law:proceeding:mixed-second', 'identity_evidence': reference(item),
             'institution_evidence': reference(register)}
