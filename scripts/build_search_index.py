@@ -27,12 +27,12 @@ def main():
     args = parser.parse_args()
     try:
         settings = load_settings()
-        if not settings.graph_release_dir or not settings.graph_trusted_review_key or not settings.opensearch_url:
+        if not settings.graph_release_dir or not settings.serving_review_key or not settings.opensearch_url:
             raise ValueError("Graph, independent trust and private search configuration are required")
-        root, key = Path(settings.graph_release_dir), Path(settings.graph_trusted_review_key)
+        root, key = Path(settings.graph_release_dir), settings.serving_review_key
         with _load_serving().publication_lock(root, shared=True), readonly_store(settings) as store:
             authorization = ReleaseAuthorization(store, PublicSourceStore(settings.public_source_dir),
-                settings.data_dir / "release-authorizations", key, ROOT / "ontology", settings.data_dir / "publication-epoch")
+                settings.data_dir / "release-authorizations", key, ROOT / "ontology", settings.data_dir / "publication-epoch", settings=settings)
             release = RuntimeGraphRelease(root, key, authorization_guard=authorization.guard)
             result = build_index(release, settings.opensearch_url, args.expected_release)
         print(json.dumps(result, sort_keys=True))

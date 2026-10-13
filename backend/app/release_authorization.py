@@ -108,8 +108,9 @@ def build_authorization_body(info, packet_files, packet_digest, epoch, reviewer,
 
 
 class ReleaseAuthorization:
-    def __init__(self, store, source_store, root, trusted_key, ontology_root, epoch_path):
+    def __init__(self, store, source_store, root, trusted_key, ontology_root, epoch_path, *, settings=None):
         self.store, self.source_store = store, source_store
+        self.settings = settings
         self.root = Path(root) if root else None
         self.trusted_key = Path(trusted_key) if trusted_key else None
         self.ontology_root = Path(ontology_root)
@@ -202,6 +203,15 @@ class ReleaseAuthorization:
                     and tools.HASH.fullmatch(info["release_id"])):
                 envelope = tools.parse_json(tools.read_file(
                     self.root / info["release_id"] / "authorization.json", MAX_AUTHORIZATION))
+                if isinstance(envelope, dict) and envelope.get("schema_version") == "legal-final-release-authorization-v1":
+                    from .final_release_authorization import FinalReleaseAuthorization
+                    if (self.settings is None or envelope != {"schema_version": "legal-final-release-authorization-v1",
+                            "release_id": info["release_id"]}
+                            or self.root != self.settings.data_dir / "release-authorizations"):
+                        raise _fail()
+                    with FinalReleaseAuthorization(self.settings).guard(info, action) as receipt:
+                        yield receipt
+                    return
                 if (isinstance(envelope, dict) and isinstance(envelope.get("body"), dict)
                         and envelope["body"].get("schema_version") == "legal-release-source-set-authorization-v1"):
                     from .release_set_authorization import ReleaseSetAuthorization

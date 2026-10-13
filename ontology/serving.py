@@ -384,7 +384,7 @@ def _check_current(root: Path, expected_current: str | None, expected_sequence: 
 
 
 def _activate_authorized(root: Path, ident: str, trusted_key: Path, *, current: dict | None,
-                         authorization_guard, action: str) -> dict:
+                         authorization_guard, action: str, descriptor: int) -> dict:
     """Caller holds publication EX and has checked the exact current pointer."""
     ident = release_id(ident)
     target = root / "releases" / ident
@@ -401,7 +401,8 @@ def _activate_authorized(root: Path, ident: str, trusted_key: Path, *, current: 
     temporary = root / (".active-" + os.urandom(12).hex())
     committed = False
     try:
-        with authorization_guard(result, action):
+        with authorization_guard({**result, "_transition": {"before": current, "after": pointer,
+                "action": action, "descriptor": descriptor}}, action):
             # Catch non-cooperating pointer changes while authorization is read.
             if read_pointer(root) != current:
                 raise ValueError("Active release changed: compare-and-swap failed")
@@ -423,18 +424,18 @@ def activate(root: Path, ident: str, trusted_key: Path, *, expected_current: str
              expected_sequence: int = 0, authorization_guard=None) -> dict:
     _require_guard(authorization_guard)
     ident = release_id(ident)
-    with publication_lock(root):
+    with publication_lock(root) as descriptor:
         current = _check_current(root, expected_current, expected_sequence)
         return _activate_authorized(root, ident, trusted_key, current=current,
-                                    authorization_guard=authorization_guard, action="activate")
+                                    authorization_guard=authorization_guard, action="activate", descriptor=descriptor)
 
 
 def rollback(root: Path, trusted_key: Path, *, expected_current: str, expected_sequence: int,
              authorization_guard=None) -> dict:
     _require_guard(authorization_guard)
-    with publication_lock(root):
+    with publication_lock(root) as descriptor:
         current = _check_current(root, expected_current, expected_sequence)
         if current is None or current["previous_release_id"] is None:
             raise ValueError("No previous release is recorded for rollback")
         return _activate_authorized(root, current["previous_release_id"], trusted_key, current=current,
-                                    authorization_guard=authorization_guard, action="rollback")
+                                    authorization_guard=authorization_guard, action="rollback", descriptor=descriptor)

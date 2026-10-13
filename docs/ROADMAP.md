@@ -2051,3 +2051,21 @@ PR #65 merged at `78d8c8cab429d94d46d5fa43cf33591d7d9687da` after all three exac
 [Final candidate tooling](FINAL_GRAPH_CANDIDATES.md) constructs canonical serving artifacts from a current independently attested complete declared assembly. Every original A/B source and component permission remains conjunctive through staging. An encrypted unsigned whole-release request binds exact release/serving/ontology/review/packet/inventory/dependency hashes, every component, restore epoch, audience, six uses and a lifetime bounded by the shortest current component grant. A separately vetted fifth public key identifies the future permission signer; no key/signature/grant is generated or accepted. Invalid inputs fail before expensive construction, and changed sources/files/keys/epoch or atomic-output failures withhold the new artifact.
 
 Next: acceptance of an externally signed whole-release permission and current install/activation/rollback/runtime-read guards, with explicit treatment of reviewed immutable base dependencies versus active-pointer transitions and later mixed-base inventories. Current candidates remain unpublished and unauthorized for serving. Actual legal/editor approval, national historical population, production key custody, deployment and held-out lawyer acceptance remain open; R03/R05 are partial.
+
+### R03 whole-release serving permission — 13 October 2026
+
+The [signed whole-release contract](WHOLE_RELEASE_AUTHORIZATION.md) introduces a
+closed fifth-key authorization namespace, encrypted retained permission, explicit
+final attestation-role selection and conjunctive current guards for install,
+activation, rollback and runtime reads. The reviewed immutable structural base
+remains a dependency after a valid pointer change; transitions require the real
+publication lock, current rights and exact monotonic CAS. Unknown post-commit
+failures require inspection and cannot authorize a replay. All original source,
+identity, review, appointment and component-grant dependencies stay mandatory.
+
+Engineering validation uses invented corpora and TEST-ONLY signatures, with real
+PostgreSQL concurrency checks. Completion/merge evidence will be recorded after
+exact-head CI succeeds. It does not approve production signatures, sources,
+legal coverage, activation, deployment or field acceptance. The successor is
+read-only whole-release transition reconciliation, followed by complete retained
+mixed-base reassembly with no dropped manifestation or dependency.

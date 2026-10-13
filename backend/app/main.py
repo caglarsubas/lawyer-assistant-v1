@@ -241,7 +241,7 @@ def create_app(settings=None):
                 reader, PublicSourceStore(settings.public_source_dir),
                 settings.data_dir / 'release-authorizations',
                 Path(settings.graph_trusted_review_key), ROOT / 'ontology',
-                settings.data_dir / 'publication-epoch',
+                settings.data_dir / 'publication-epoch', settings=settings,
             )
             with authorization.guard(info, action) as result:
                 yield result
@@ -277,7 +277,7 @@ def create_app(settings=None):
                 app.state.graph = GraphService(
                     ROOT / "ontology", settings.graph_url, settings.graph_user, settings.graph_password,
                     release_root=Path(settings.graph_release_dir) if settings.graph_release_dir else None,
-                    trusted_review_key=Path(settings.graph_trusted_review_key) if settings.graph_trusted_review_key else None,
+                    trusted_review_key=settings.serving_review_key,
                     authorization_guard=authorization_guard,
                 )
                 store.authority_proposal_app = app

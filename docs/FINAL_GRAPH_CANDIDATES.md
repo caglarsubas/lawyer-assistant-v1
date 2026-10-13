@@ -8,8 +8,10 @@ the resulting candidate remains unpublished and unauthorized for serving.
 Configure `LA_GRAPH_FINAL_GRANT_TRUSTED_KEY` with a separately vetted Ed25519
 **public** key. It identifies the future whole-release permission signer and must
 differ in key material from all four component/private/final-review trust roles.
-No command generates a key or signature, accepts a signed permission, or contacts
-an inference or graph service.
+These candidate commands generate no key/signature, accept no signed permission
+and contact no inference/graph service. The subsequent
+[whole-release authorization workflow](WHOLE_RELEASE_AUTHORIZATION.md) accepts
+an independently supplied signed grant and guards each serving operation.
 
 ```bash
 python scripts/prepare_final_graph_release.py prepare \

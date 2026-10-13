@@ -114,7 +114,7 @@ def live_authorization(trusted_key):
     with readonly_store(settings) as store:
         yield ReleaseAuthorization(store, PublicSourceStore(settings.public_source_dir),
                                    settings.data_dir / "release-authorizations", trusted_key,
-                                   ROOT / "ontology", settings.data_dir / "publication-epoch").guard
+                                   ROOT / "ontology", settings.data_dir / "publication-epoch", settings=settings).guard
 
 
 def local_operation(args: argparse.Namespace) -> dict:

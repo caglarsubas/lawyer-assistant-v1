@@ -5,10 +5,10 @@ The existing retained structural base must be included whole. Unsupported base
 namespaces fail closed rather than treating a missing inventory as empty.
 """
 import os
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Literal
+from typing import Literal, NamedTuple
 
 from pydantic import Field
 
@@ -87,7 +87,21 @@ def _b_load(store, component, paths, epoch, ontology_root):
             "raw": raw, "outer_hash": outer_hash, "selection": SnapshotRequest.model_validate(private["binding"]["selection"])}
 
 
-def _load(settings, store, declaration, ontology_root):
+class VerifiedServingContext(NamedTuple):
+    """Internal signed-grant context; not a preparation or agent API.
+
+    The caller verifies the external whole-release envelope and exact sealed
+    original packet first. The original dependency fingerprint must still match.
+    Only the live pointer has a distinct before/after lifecycle.
+    """
+    release_id: str
+    original_pointer_sha256: str | None
+    before: bytes
+    after: bytes
+    descriptor: int
+
+
+def _load(settings, store, declaration, ontology_root, serving_context=None):
     tools, serving = _packet_tools(), _load_serving()
     paths, keys = trust(settings)
     epoch_bytes = tools.read_file(settings.data_dir / "publication-epoch", 37)
@@ -100,18 +114,24 @@ def _load(settings, store, declaration, ontology_root):
     if pointer and tools.parse_json(pointer_bytes) != pointer:
         raise ValueError("Retained pointer is not strict JSON")
     expected_base = declaration.expected_base.model_dump() if declaration.expected_base else None
-    if pointer != expected_base:
-        raise ValueError("Retained publication base changed")
+    if serving_context is None:
+        if pointer != expected_base:
+            raise ValueError("Retained publication base changed")
+    elif (not isinstance(serving_context, VerifiedServingContext)
+            or canonical(pointer) != serving_context.before):
+        raise ValueError("Signed serving context pointer differs")
     base = None
-    if pointer:
+    if expected_base:
         # This packet qualifies the first mixed release from a retained A source
         # set. A prior mixed assembly needs its own complete serving grant and
         # dependency reconstruction; never route it through an A-only fallback.
-        if pointer["release_id"] != declaration.structure.release_id:
+        if expected_base["release_id"] != declaration.structure.release_id:
             raise ValueError("The whole retained structural base must be declared")
-        active = serving.load_active(root, paths[0])
+        active = serving.validate_prepared(root / "releases" / expected_base["release_id"], paths[0])
+        if active["release_id"] != expected_base["release_id"] or active["serving_sha256"] != expected_base["serving_sha256"]:
+            raise ValueError("Original retained structural base differs")
         base_root = active["bundle_path"].parent
-        base = {"pointer": pointer, "files": {name: digest(tools.read_file(base_root / name, tools.MAX_FILE))
+        base = {"pointer": expected_base, "files": {name: digest(tools.read_file(base_root / name, tools.MAX_FILE))
                 for name in sorted(serving._files(base_root))}}
     a_info = serving.validate_prepared(tools.checked_path(declaration.structure.prepared), paths[0])
     if a_info["release_id"] != declaration.structure.release_id:
@@ -137,7 +157,8 @@ def _load(settings, store, declaration, ontology_root):
     lock_stat = (root / "publication.lock").stat()
     return {"paths": paths, "keys": keys, "epoch_bytes": epoch_bytes, "epoch": epoch,
             "location": (str(root), str(auth_root), str(tools.checked_path(settings.public_source_dir))),
-            "pointer_sha256": digest(pointer_bytes) if pointer_bytes else None,
+            "pointer_sha256": (serving_context.original_pointer_sha256 if serving_context is not None
+                                else digest(pointer_bytes) if pointer_bytes else None),
             "lock_identity": (lock_stat.st_dev, lock_stat.st_ino),
             "base": base, "structure": a_current, "a_info": a_info, "jurisprudence": b_values, "request": request}
 
@@ -223,7 +244,7 @@ def _lifetimes(loaded, snapshot):
 
 
 @contextmanager
-def current_assembly(settings, store, source_store, declaration, ontology_root):
+def current_assembly(settings, store, source_store, declaration, ontology_root, *, serving_context=None, shared=True):
     """One sorted transaction and publication read lock, all dependencies or none.
 
     Callers discard new artifacts on ANY failed exit, including interruption.
@@ -231,17 +252,19 @@ def current_assembly(settings, store, source_store, declaration, ontology_root):
     """
     declaration = Declaration.model_validate(declaration.model_dump())
     serving = _load_serving()
-    with serving.publication_lock(_packet_tools().checked_path(settings.graph_release_dir), shared=True) as descriptor:
+    publication = (nullcontext(serving_context.descriptor) if serving_context is not None
+                   else serving.publication_lock(_packet_tools().checked_path(settings.graph_release_dir), shared=True))
+    with publication as descriptor:
         lock_stat = os.fstat(descriptor)
         lock_identity = (lock_stat.st_dev, lock_stat.st_ino)
-        loaded = _load(settings, store, declaration, ontology_root)
+        loaded = _load(settings, store, declaration, ontology_root, serving_context)
         if loaded["lock_identity"] != lock_identity:
             raise ValueError("Publication lock was replaced")
         original = _fingerprint(loaded)
         public = {loaded["a_info"]["release_id"]: (loaded["a_info"], _public_capture(loaded["a_info"])),
                   **{item["info"]["release_id"]: (item["info"], _public_capture(item["info"])) for item in loaded["jurisprudence"]}}
         with locked_mixed_snapshot(store, source_store, operator_id=declaration.operator_id, request=loaded["request"],
-                trusted_key=loaded["paths"][1], ontology_root=ontology_root, shared=True) as snapshot:
+                trusted_key=loaded["paths"][1], ontology_root=ontology_root, shared=shared) as snapshot:
             _match(store, loaded, snapshot, ontology_root)
             files, inventory = compile_captured_union(public, base=loaded["base"], ontology_root=ontology_root)
             _lifetimes(loaded, snapshot)
@@ -261,7 +284,8 @@ def current_assembly(settings, store, source_store, declaration, ontology_root):
                 if (_fingerprint(loaded) != original or (current_lock.st_dev, current_lock.st_ino) != lock_identity
                         or tuple(map(str, (root, tools.checked_path(settings.data_dir / "release-authorizations"),
                                           tools.checked_path(settings.public_source_dir)))) != loaded["location"]
-                        or pointer_hash != loaded["pointer_sha256"]
+                        or (canonical(pointer) != serving_context.after if serving_context is not None
+                            else pointer_hash != loaded["pointer_sha256"])
                         or tools.read_file(settings.data_dir / "publication-epoch", 37) != loaded["epoch_bytes"]
                         or tools.read_file(Path(declaration.structure.grant) / "authorization.json", tools.MAX_JSON) != a["authorization"]
                         or tools.read_packet(Path(declaration.structure.grant) / "packet", store,

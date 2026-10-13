@@ -4243,3 +4243,18 @@ workers, deadlines and retries. The exact-head hosted gate remains mandatory.
 See [operator contract](FINAL_GRAPH_CANDIDATES.md) and
 `docs/evidence/final-graph-candidates-2026-10-13.json`. These engineering fixtures
 create no production signature, serving permission, installed graph or deployment.
+
+Whole-release permission qualification: `test_final_release_authorization.py`
+exercises real externally signed acceptance, installation, activation, runtime
+reads and two-release rollback. Negative paths cover partial grants, wrong keys,
+extra fields, unsigned requests, changed original bytes, either family's rights,
+epoch changes, fifth-key rotation, retained structural-base corruption, fake lock
+descriptors, owned-output cleanup and uncertain post-commit outcomes.
+`test_final_authorization_postgres.py` exercises five shared whole-release readers
+blocking actual A/register rights writers and publication transitions in owned
+child databases. These are synthetic engineering checks, not real-law review or
+deployment approval. New subjects remain disjointly assigned within the existing
+four CI jobs, two workers per job, no retries and unchanged existing deadlines.
+The new whole-release job is capped at six minutes (five-minute test step);
+existing jobs were already within 30 seconds of their caps. It adds necessary
+new lifecycle/race coverage without extending any existing long-running job.
