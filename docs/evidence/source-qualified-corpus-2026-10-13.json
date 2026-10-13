@@ -1,0 +1,25 @@
+{
+  "schema": "source-qualified-corpus-engineering-v1",
+  "recorded_on": "2026-10-13",
+  "sample_kind": "synthetic",
+  "actual_legal_qualification": false,
+  "production_activation": false,
+  "qualified_subjects": {
+    "disconnected_retrieval_and_research": {"passed": 143, "seconds": 16.27},
+    "whole_release_and_real_postgres": {"passed": 21, "seconds": 161.35},
+    "final_retained_withdrawal_order": {"passed": 1, "seconds": 58.02},
+    "final_typed_source_contracts": {"passed": 15, "seconds": 0.65},
+    "deployment_contracts": {"passed": 42}
+  },
+  "ci_partition": {"complete": 4299, "intersection": 0, "missing": 0, "extra": 0},
+  "checks": ["ruff", "diff_whitespace", "exact_quotes", "unknown_dates", "graph_independence",
+    "typed_budgets", "no_shared_queries_or_selections", "entry_and_exit_withholding",
+    "membership_withdrawal", "signed_source_withdrawal", "retained_source_dependencies"],
+  "limits": {"scan_passages": 25000, "scan_bytes": 67108864, "scan_seconds": 3,
+    "response_bytes": 262144, "maximum_hits": 50},
+  "national_corpus_denominator": null,
+  "legal_applicability_established": false,
+  "hosted_checks": "required_before_merge",
+  "limitations": ["Invented sources and TEST-ONLY signatures", "No real lawyer-adjudicated benchmark",
+    "Licensed historical population and actual legal/editorial review remain external gates"]
+}

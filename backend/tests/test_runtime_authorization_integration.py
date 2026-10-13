@@ -16,6 +16,7 @@ from test_source_reviews import assess
 from app.graph_release import LA, _load_serving
 from app.main import create_app
 from app.search_index import IndexBuildError, build_index
+from app.source_corpus import SourceCorpusService
 
 authorized = authorized_fixture
 mapping = mapping_fixture
@@ -96,6 +97,16 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         else:
             raise AssertionError('Unverified authority identity was accepted')
         assert (assertion, LA.claimStatus, Literal('legally_reviewed')) in graph
+        # Independent source discovery uses the actual signed physical quote
+        # and actual current private ledger, without relying on graph paths or
+        # guessing applicability from this deliberately different date.
+        source_result = SourceCorpusService(app.state.graph.release).search('SYNTHETIC',
+            passage_id=str(evidence), as_of='1921-01-01')
+        assert source_result['coverage']['status'] == 'available'
+        exact = source_result['hits'][0]
+        assert exact['text'] == source['text'] and exact['passage_id'] == str(evidence)
+        assert exact['authority_id'] is None and exact['temporal_applicability'] == 'not_assessed'
+        assert source_result['snapshot']['release_id'] == installed['release_id']
         # Reuse this costly signed/private-ledger fixture for index admission.
         # Only HTTP is simulated; source projection, publication locks and the
         # application's live private authorization dispatcher remain real.
@@ -119,6 +130,8 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         response = app.state.search.search('SYNTHETIC TEST ONLY')
         assert response['hits'] == [] and response['coverage']['status'] == 'unavailable'
         assert 'PRIVATE' not in json.dumps(response)
+        denied_sources = SourceCorpusService(app.state.graph.release).search('SYNTHETIC')
+        assert denied_sources['hits'] == [] and denied_sources['coverage']['status'] == 'unavailable'
         import pytest
         with pytest.raises(IndexBuildError) as denied:
             build_index(app.state.graph.release, 'http://opensearch:9200', installed['release_id'])

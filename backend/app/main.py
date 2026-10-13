@@ -88,6 +88,7 @@ from .research_jobs import (
 )
 from .scanner import MalwareDetected, ScannerUnavailable, scan_document
 from .search import PublicSearchService
+from .source_corpus import SourceCorpusService
 from .source_relationships import source_relationships_router
 from .source_reviews import source_reviews_router
 from .source_selection import source_selection_router
@@ -127,6 +128,15 @@ class AuthoritySearch(Input):
     query: str = Field(min_length=1, max_length=4000)
     as_of: str | None = None
     authority_id: str | None = Field(default=None, max_length=500)
+    limit: int = Field(default=20, ge=1, le=50)
+
+
+class CorpusSearch(Input):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    query: str = Field(min_length=1, max_length=4000)
+    as_of: str | None = None
+    passage_id: str | None = Field(default=None, max_length=512)
+    source_version_id: str | None = Field(default=None, max_length=512)
     limit: int = Field(default=20, ge=1, le=50)
 
 
@@ -750,6 +760,19 @@ def create_app(settings=None):
         with app.state.store.session() as session:
             require_matter(session, matter_id, user)
         return result
+
+    @app.post("/api/v1/matters/{matter_id}/corpus/search")
+    def search_corpus(matter_id: str, body: CorpusSearch, user=Depends(authenticate)):
+        valid_date(body.as_of)
+        with app.state.store.session() as session:
+            require_matter(session, matter_id, user)
+        try:
+            result = SourceCorpusService(app.state.graph.release).search(**body.model_dump())
+        except ValueError:
+            raise HTTPException(422, "Geçersiz kaynak pasajı arama parametreleri") from None
+        with app.state.store.session() as session:
+            require_matter(session, matter_id, user)
+        return JSONResponse(result, headers={"Cache-Control": "no-store"})
 
     @app.get("/api/v1/matters/{matter_id}/research/{run_id}")
     def research_status(matter_id: str, run_id: str, user=Depends(authenticate)):
