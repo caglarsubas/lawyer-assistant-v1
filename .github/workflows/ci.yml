@@ -24,6 +24,7 @@ env:
   CI_FINAL_RELEASE_TESTS: >-
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
+    backend/tests/test_final_release_inspection.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py
