@@ -2140,3 +2140,11 @@ Next: source-qualified corpus/retrieval integration using the guarded complete
 release and explicit evidence/coverage boundaries. Licensed historical source
 population, independent legal/editor review, production key custody and actual
 lawyer evaluation remain open; R03/R05 stay partial.
+
+Main qualification after PR #69 observed all 3,750 applicable backend tests
+passing, with 87 PostgreSQL cases covered in their separate jobs, but the backend
+step took 18m11s and exceeded its unchanged eighteen-minute cap. The measured
+final-candidate contract group now runs exactly once in a separate three-minute
+ARM job. All original subjects, job deadlines and worker/retry limits are
+preserved; the six exact-head checks are required before the next merge. This
+adds qualification headroom without interpreting a timed-out run as success.
