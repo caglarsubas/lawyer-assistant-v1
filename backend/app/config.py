@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Literal
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -21,6 +22,7 @@ class Settings(BaseSettings):
     graph_user: str = ""
     graph_password: str = Field(default="", repr=False)
     graph_release_dir: str = ""
+    graph_serving_review_role: Literal["component", "final"] = "component"
     graph_trusted_review_key: str = ""
     graph_b_review_trusted_key: str = ""
     graph_b_component_trusted_key: str = ""
@@ -63,6 +65,11 @@ class Settings(BaseSettings):
     provider_cloud_fallback_disabled: bool = Field(
         default=False, validation_alias="LLM_PROVIDER_CLOUD_FALLBACK_DISABLED"
     )
+
+    @property
+    def serving_review_key(self):
+        value = self.graph_final_review_trusted_key if self.graph_serving_review_role == "final" else self.graph_trusted_review_key
+        return Path(value) if value else None
 
     @property
     def origins(self):

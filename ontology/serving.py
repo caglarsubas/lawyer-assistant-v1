@@ -220,23 +220,78 @@ def validate_prepared(root: Path, trusted_key: Path) -> dict:
     return {**expected, "serving_sha256": hashlib.sha256(raw).hexdigest(), "bundle_path": root / "bundle"}
 
 
+def _key_bytes(key):
+    if key.is_symlink() or not key.is_file() or key.stat().st_size > 16384:
+        raise ValueError("Invalid publication review key")
+    return key.read_bytes()
+
+
+def _source_inventory(bundle, info):
+    # Called ONLY after full independent validation in this operation. Anchor
+    # every original byte to that verified manifest; not to caller metadata or
+    # mtimes. No verdict survives the operation.
+    manifest_path = safe_file(bundle, "manifest.json")
+    manifest_raw = manifest_path.read_bytes()
+    if hashlib.sha256(manifest_raw).hexdigest() != info["release_id"]:
+        raise ValueError("Verified manifest changed")
+    manifest = json.loads(manifest_raw)
+    expected = {**manifest["files"], "manifest.json": info["release_id"],
+                "manifest.sha256": hashlib.sha256((info["release_id"] + "\n").encode()).hexdigest()}
+    if {name: file_hash(safe_file(bundle, name)) for name in _files(bundle)} != expected:
+        raise ValueError("Verified source inventory changed")
+    return expected
+
+
+def _prepared_inventory(info, source):
+    return {**{"bundle/" + name: value for name, value in source.items()},
+            "serving.json": info["serving_sha256"],
+            **{family + ".nq": info["graphs"][family]["sha256"] for family in FAMILIES}}
+
+
+def _same_inventory(root, expected, key, key_bytes, info):
+    # Full signature/RDF/SHACL/temporal/quote/canonical reconstruction happened
+    # on entry. EXACT byte equality preserves it across a copy/rename; re-read
+    # ALL files and the key, plus current signature/time checks on every exit.
+    if (_key_bytes(key) != key_bytes
+            or {name: file_hash(safe_file(root, name)) for name in _files(root)} != expected):
+        raise ValueError("Copied publication inventory or trust changed")
+    bundle = root / "bundle"
+    manifest = json.loads(safe_file(bundle, "manifest.json").read_bytes())
+    current = _release.check_review_attestation(safe_file(bundle, "review-attestation.json"), key,
+        {name: manifest[name] for name in ("ontology_sha256", "input_graphs_sha256")})
+    if current != info["review"]:
+        raise ValueError("Current publication attestation changed")
+
+
+def _info_bytes(info):
+    return canonical({name: str(value) if isinstance(value, Path) else value for name, value in info.items()})
+
+
 def prepare(bundle: Path, trusted_key: Path, output: Path) -> dict:
     if output.exists() or output.is_symlink():
         raise ValueError("Immutable prepared release already exists")
+    key_bytes = _key_bytes(trusted_key)
     marker, payloads = expected_serving(bundle, trusted_key)
+    raw = canonical(marker)
+    info = {**marker, "serving_sha256": hashlib.sha256(raw).hexdigest(), "bundle_path": output / "bundle"}
+    source = _source_inventory(bundle, info)
+    inventory = _prepared_inventory(info, source)
     output.parent.mkdir(parents=True, exist_ok=True)
     stage = Path(tempfile.mkdtemp(prefix=".preparing-", dir=output.parent))
     try:
         shutil.copytree(bundle, stage / "bundle", symlinks=False)
         for family, data in payloads.items():
             _write(stage / f"{family}.nq", data)
-        _write(stage / "serving.json", canonical(marker))
-        validate_prepared(stage, trusted_key)
+        _write(stage / "serving.json", raw)
+        _same_inventory(stage, inventory, trusted_key, key_bytes, info)
         _public_release_modes(stage)
         _sync_tree(stage)
         _rename_exclusive(stage, output)
         _sync_directory(output.parent)
-        return validate_prepared(output, trusted_key)
+        _same_inventory(output, inventory, trusted_key, key_bytes, info)
+        if _source_inventory(bundle, info) != source:
+            raise ValueError("Original preparation source changed")
+        return info
     finally:
         if stage.exists():
             shutil.rmtree(stage)
@@ -330,37 +385,47 @@ def load_active(root: Path, trusted_key: Path | None) -> dict | None:
 
 def install(root: Path, prepared: Path, trusted_key: Path, *, authorization_guard=None) -> dict:
     _require_guard(authorization_guard)
-    verified = validate_prepared(prepared, trusted_key)
+    key_bytes = _key_bytes(trusted_key)
+    verified = validate_prepared(prepared, trusted_key)  # FULL, fresh per operation.
+    source = _source_inventory(prepared / "bundle", verified)
+    inventory = _prepared_inventory(verified, source)
+    original_info = _info_bytes(verified)
+    _same_inventory(prepared, inventory, trusted_key, key_bytes, verified)
     initialize(root)
-    # Install touches no active data and remains safe with live shared readers.
-    # Its independent filesystem lock always precedes live authorization locks.
     descriptor = _lock_descriptor(root, ".install.lock")
     stage, committed = None, False
     try:
         fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
         destination = root / "releases" / verified["release_id"]
+        result = {**verified, "bundle_path": destination / "bundle"}
         if destination.exists() or destination.is_symlink():
-            result = validate_prepared(destination, trusted_key)
-            if (result["release_id"] != verified["release_id"]
-                    or result["serving_sha256"] != verified["serving_sha256"]):
-                raise ValueError("Existing immutable release differs")
-            # An existing installation does not confer continuing authorization.
+            _same_inventory(destination, inventory, trusted_key, key_bytes, verified)
+            original_result = _info_bytes(result)
+            # Existing bytes confer no current permission; every use guards all
+            # original ledgers and rechecks ALL bytes/key/time after guard exit.
             with authorization_guard(result, "install"):
-                return result
-        with authorization_guard(verified, "install"):
-            stage = Path(tempfile.mkdtemp(prefix=".installing-", dir=root / "releases"))
-            shutil.copytree(prepared, stage, dirs_exist_ok=True, symlinks=False)
-            staged = validate_prepared(stage, trusted_key)
-            if (staged["release_id"] != verified["release_id"]
-                    or staged["serving_sha256"] != verified["serving_sha256"]):
-                raise ValueError("Prepared release changed during installation")
-            _public_release_modes(stage)
-            _sync_tree(stage)
-            _rename_exclusive(stage, destination)
-            committed = True
-            stage = None
-            _sync_directory(destination.parent)
-            return validate_prepared(destination, trusted_key)
+                pass
+            if _info_bytes(result) != original_result:
+                raise ValueError("Verified installation metadata changed")
+        else:
+            with authorization_guard(verified, "install"):
+                stage = Path(tempfile.mkdtemp(prefix=".installing-", dir=root / "releases"))
+                shutil.copytree(prepared, stage, dirs_exist_ok=True, symlinks=False)
+                try:
+                    _same_inventory(stage, inventory, trusted_key, key_bytes, verified)
+                except ValueError as exc:
+                    raise ValueError("Prepared release changed during installation") from exc
+                _public_release_modes(stage)
+                _sync_tree(stage)
+                _rename_exclusive(stage, destination)
+                committed = True
+                stage = None
+                _sync_directory(destination.parent)
+        if _info_bytes(verified) != original_info:
+            raise ValueError("Verified installation metadata changed")
+        _same_inventory(destination, inventory, trusted_key, key_bytes, verified)
+        _same_inventory(prepared, inventory, trusted_key, key_bytes, verified)
+        return result
     except BaseException:
         if committed:
             raise TransitionOutcomeUnknown("Release transition may have committed; reconcile pointer and installed inventory") from None
@@ -384,7 +449,7 @@ def _check_current(root: Path, expected_current: str | None, expected_sequence: 
 
 
 def _activate_authorized(root: Path, ident: str, trusted_key: Path, *, current: dict | None,
-                         authorization_guard, action: str) -> dict:
+                         authorization_guard, action: str, descriptor: int) -> dict:
     """Caller holds publication EX and has checked the exact current pointer."""
     ident = release_id(ident)
     target = root / "releases" / ident
@@ -401,7 +466,8 @@ def _activate_authorized(root: Path, ident: str, trusted_key: Path, *, current: 
     temporary = root / (".active-" + os.urandom(12).hex())
     committed = False
     try:
-        with authorization_guard(result, action):
+        with authorization_guard({**result, "_transition": {"before": current, "after": pointer,
+                "action": action, "descriptor": descriptor}}, action):
             # Catch non-cooperating pointer changes while authorization is read.
             if read_pointer(root) != current:
                 raise ValueError("Active release changed: compare-and-swap failed")
@@ -423,18 +489,18 @@ def activate(root: Path, ident: str, trusted_key: Path, *, expected_current: str
              expected_sequence: int = 0, authorization_guard=None) -> dict:
     _require_guard(authorization_guard)
     ident = release_id(ident)
-    with publication_lock(root):
+    with publication_lock(root) as descriptor:
         current = _check_current(root, expected_current, expected_sequence)
         return _activate_authorized(root, ident, trusted_key, current=current,
-                                    authorization_guard=authorization_guard, action="activate")
+                                    authorization_guard=authorization_guard, action="activate", descriptor=descriptor)
 
 
 def rollback(root: Path, trusted_key: Path, *, expected_current: str, expected_sequence: int,
              authorization_guard=None) -> dict:
     _require_guard(authorization_guard)
-    with publication_lock(root):
+    with publication_lock(root) as descriptor:
         current = _check_current(root, expected_current, expected_sequence)
         if current is None or current["previous_release_id"] is None:
             raise ValueError("No previous release is recorded for rollback")
         return _activate_authorized(root, current["previous_release_id"], trusted_key, current=current,
-                                    authorization_guard=authorization_guard, action="rollback")
+                                    authorization_guard=authorization_guard, action="rollback", descriptor=descriptor)

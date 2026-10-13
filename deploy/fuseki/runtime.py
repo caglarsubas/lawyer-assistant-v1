@@ -69,7 +69,11 @@ def configuration(datasets: dict[str, Path] | None) -> str:
 
 def start() -> None:
     root = Path("/fuseki")
-    key_value = os.environ.get("LA_GRAPH_TRUSTED_REVIEW_KEY", "").strip()
+    role = os.environ.get("LA_GRAPH_SERVING_REVIEW_ROLE", "component")
+    if role not in {"component", "final"}:
+        raise ValueError("Unknown serving review role")
+    key_name = "LA_GRAPH_FINAL_REVIEW_TRUSTED_KEY" if role == "final" else "LA_GRAPH_TRUSTED_REVIEW_KEY"
+    key_value = os.environ.get(key_name, "").strip()
     key = Path(key_value) if key_value else None
     with serving.publication_lock(root, shared=True) as descriptor:
         # Keep the shared lock across exec for the entire JVM lifetime. The

@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
+from typing import NamedTuple
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
@@ -23,6 +24,7 @@ from app.declared_graph_assembly import (  # noqa: E402
     PACKET_SCHEMA,
     Declaration,
     _fingerprint,
+    _public_capture,
     current_assembly,
     trust,
 )
@@ -83,12 +85,13 @@ def prepare(settings, *, selection, reviewer, reviewed_at, output):
 
 
 @contextmanager
-def current_packet(settings, packet, *, reviewed=False):
+def current_packet(settings, packet, *, reviewed=False, serving_context=None, shared=True, verified_public=None):
     with readonly_store(settings) as store:
         retained, fingerprint = io.read_packet(packet, store, schema_version=PACKET_SCHEMA)
         binding = store.decode(SimpleNamespace(payload=retained["dependencies.fernet"].decode("ascii")))
         declaration = Declaration.model_validate(binding["selection"])
-        with current_assembly(settings, store, _sources(settings), declaration, ROOT / "ontology") as (files, _, loaded):
+        with current_assembly(settings, store, _sources(settings), declaration, ROOT / "ontology",
+                serving_context=serving_context, shared=shared) as (files, _, loaded):
             if binding != _binding(declaration, loaded, files):
                 raise ValueError("Assembly dependency binding changed")
             body = io.parse_json(retained["public-review-body.json"])
@@ -98,7 +101,10 @@ def current_packet(settings, packet, *, reviewed=False):
                         "dependencies.fernet": retained["dependencies.fernet"]}
             if reviewed:
                 expected["review-attestation.json"] = retained["review-attestation.json"]
-                verify_attestation(expected, loaded)
+                if verified_public is None:
+                    verify_attestation(expected, loaded)
+                else:
+                    verify_captured_attestation(expected, loaded, verified_public)
             if retained != expected:
                 raise ValueError("Assembly packet has missing or extra content")
             yield store, retained, loaded
@@ -113,6 +119,42 @@ def current_packet(settings, packet, *, reviewed=False):
                 raise ValueError("Retained assembly changed during use")
         if io.read_packet(packet, store, schema_version=PACKET_SCHEMA) != (retained, fingerprint):
             raise ValueError("Retained assembly changed after source exit")
+
+
+class VerifiedFinalPayload(NamedTuple):
+    info: dict
+    files: dict
+
+
+def verify_public_payload(prepared, key):
+    # FULL production signature/RDF/temporal/quote/canonical checks. This proof
+    # is scoped to this call's captured bytes, never retained as a verdict.
+    info = _load_serving().validate_prepared(prepared, key)
+    return VerifiedFinalPayload(info, _public_capture(info))
+
+
+def verify_captured_attestation(files, loaded, payload):
+    if not isinstance(payload, VerifiedFinalPayload):
+        raise ValueError("A fully validated per-operation public payload is required")
+    body = io.parse_json(files["public-review-body.json"])
+    envelope = io.parse_json(files["review-attestation.json"])
+    if (canonical(envelope["body"]) != canonical(body)
+            or payload.info["review"]["key_sha256"] != configured_final_key(loaded)
+            or payload.info["ontology_sha256"] != body["ontology_sha256"]
+            or payload.info["review"]["reviewer"] != body["reviewer"]
+            or payload.info["review"]["reviewed_at"] != body["reviewed_at"]):
+        raise ValueError("Validated final attestation differs from original review")
+    for name, raw in files.items():
+        if name.startswith(("inputs/", "evidence/")) or name == "review-attestation.json":
+            if payload.files.get("bundle/" + name) != raw:
+                raise ValueError("Validated public bytes differ from complete original review")
+    if _public_capture(payload.info) != payload.files:
+        raise ValueError("Validated public payload changed during this operation")
+
+
+def configured_final_key(loaded):
+    from app.graph_b_review import configured_key_path
+    return configured_key_path(loaded["paths"][3])[2]
 
 
 def verify_attestation(files, loaded):

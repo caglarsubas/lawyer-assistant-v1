@@ -661,3 +661,37 @@ def test_initialize_rejects_symlink_lock(tmp_path, name):
     with pytest.raises(ValueError, match="symlink"):
         serving.initialize(volume)
     assert target.read_text() == "private sentinel"
+
+
+def test_copy_proof_rechecks_every_byte_after_install_guard_exit(tmp_path, trust, monkeypatch):
+    output, result = prepared(tmp_path, trust)
+    volume = tmp_path / "volume"
+    @contextmanager
+    def mutate_on_exit(info, action):
+        assert action == "install"
+        yield
+        target = volume / "releases" / result["release_id"] / "structure.nq"
+        target.chmod(0o600)
+        target.write_bytes(target.read_bytes() + b"# late copy change\n")
+    with pytest.raises(serving.TransitionOutcomeUnknown):
+        serving.install(volume, output, trust[1], authorization_guard=mutate_on_exit)
+    assert serving.read_pointer(volume) is None
+    assert (volume / "releases" / result["release_id"]).exists()
+    with pytest.raises(ValueError):
+        serving.validate_prepared(volume / "releases" / result["release_id"], trust[1])
+
+
+def test_existing_copy_is_rechecked_after_guard_without_overwriting_it(tmp_path, trust, authorization_guard):
+    output, result = prepared(tmp_path, trust)
+    volume = tmp_path / "volume"
+    serving.install(volume, output, trust[1], authorization_guard=authorization_guard)
+    @contextmanager
+    def mutate_on_exit(info, action):
+        assert action == "install"
+        yield
+        target = volume / "releases" / result["release_id"] / "jurisprudence.nq"
+        target.chmod(0o600)
+        target.write_bytes(target.read_bytes() + b"# late existing change\n")
+    with pytest.raises(ValueError, match="inventory"):
+        serving.install(volume, output, trust[1], authorization_guard=mutate_on_exit)
+    assert serving.read_pointer(volume) is None

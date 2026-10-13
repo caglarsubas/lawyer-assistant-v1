@@ -14,7 +14,16 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from assemble_legal_graphs import current_packet, trust  # noqa: E402
+from assemble_legal_graphs import (  # noqa: E402
+    current_packet,
+    trust,
+)
+from assemble_legal_graphs import (  # noqa: E402
+    verify_captured_attestation as verify_captured_attestation,
+)
+from assemble_legal_graphs import (  # noqa: E402
+    verify_public_payload as verify_public_payload,
+)
 
 from app.declared_graph_assembly import _fingerprint, _public_capture  # noqa: E402
 from app.graph_b_review import configured_key_path  # noqa: E402
@@ -43,8 +52,12 @@ def request_checks(settings, files, loaded, reviewer, approved_at, expires_at):
     if keys != (loaded["paths"], loaded["keys"]):
         raise ValueError("Final serving candidate trust changed")
     public_review = io.parse_json(files["public-review-body.json"])
+    disallowed = {public_review["reviewer"], loaded["structure"]["body"]["source_binding"]["operator_id"],
+                  loaded["a_info"]["review"]["reviewer"], loaded["structure"]["body"]["reviewer"],
+                  *(item["info"]["review"]["reviewer"] for item in loaded["jurisprudence"]),
+                  *(io.parse_json(item["raw"])["body"]["reviewer"] for item in loaded["jurisprudence"])}
     if (type(reviewer) is not str or not 1 <= len(reviewer) <= 300 or reviewer != reviewer.strip()
-            or any(ord(char) < 32 for char in reviewer) or reviewer == public_review["reviewer"]):
+            or any(ord(char) < 32 for char in reviewer) or reviewer in disallowed):
         raise ValueError("Independent accountable final permission reviewer is required")
     approved, expires, now = _instant(approved_at), _instant(expires_at), datetime.now(timezone.utc)
     grants = [loaded["structure"]["body"], *(io.parse_json(item["raw"])["body"] for item in loaded["jurisprudence"])]
@@ -106,14 +119,16 @@ def validate(settings, candidate):
     if type(binding) is not dict or set(binding) != {"reviewed_packet", "reviewed_packet_sha256"}:
         raise ValueError("Candidate source review binding differs")
     packet = io.checked_path(binding["reviewed_packet"])
-    with current_packet(settings, packet, reviewed=True) as (store, files, loaded):
+    verified_public = verify_public_payload(candidate / "prepared", original_trust[0][0][3])
+    with current_packet(settings, packet, reviewed=True, verified_public=verified_public) as (store, files, loaded):
         _, packet_hash = io.read_packet(packet, store, schema_version="legal-declared-graph-assembly-v1")
         if packet_hash != binding["reviewed_packet_sha256"]:
             raise ValueError("Original reviewed assembly changed")
-        info = match_candidate(candidate / "prepared", files, loaded)
-        public_capture = _public_capture(info)
+        verify_captured_attestation(files, loaded, verified_public)
+        info = verified_public.info
+        public_capture = verified_public.files
         expected = request_body(settings, files, loaded, info, packet_hash, body["reviewer"], body["approved_at"], body["expires_at"])
-        if body != expected:
+        if canonical(body) != canonical(expected):
             raise ValueError("Candidate permission request differs")
         if (io.read_packet(candidate / "permission", store) != (permission, permission_hash)
                 or _public_capture(info) != public_capture):
