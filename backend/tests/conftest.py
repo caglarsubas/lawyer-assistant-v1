@@ -1,5 +1,38 @@
 """Portable TEST-ONLY release seed; every test owns independently verified files."""
+import json
+import os
+from collections import defaultdict
+
 import pytest
+
+_ci_times = defaultdict(lambda: {"setup": 0.0, "call": 0.0, "teardown": 0.0, "completed": 0})
+_ci_completed = 0
+
+
+def pytest_runtest_logreport(report):
+    """Passive master-only timing: no fixture, verdict or runtime changes."""
+    global _ci_completed
+    if os.environ.get("GITHUB_ACTIONS") != "true" or os.environ.get("PYTEST_XDIST_WORKER"):
+        return
+    row = _ci_times[report.nodeid.split("::", 1)[0]]
+    row[report.when] += report.duration
+    if report.when == "teardown":
+        row["completed"] += 1
+        _ci_completed += 1
+        if _ci_completed % 100 == 0:
+            _print_ci_times()
+
+
+def _print_ci_times():
+    rows = sorted(_ci_times.items(), key=lambda item: sum(item[1][phase] for phase in ("setup", "call", "teardown")), reverse=True)[:8]
+    print("\nCI_TIMINGS " + json.dumps({"completed": _ci_completed,
+        "slow_files": [{"file": name, **{key: round(value, 2) for key, value in values.items()}}
+                       for name, values in rows]}, sort_keys=True), flush=True)
+
+
+def pytest_terminal_summary(terminalreporter):
+    if os.environ.get("GITHUB_ACTIONS") == "true" and not os.environ.get("PYTEST_XDIST_WORKER"):
+        _print_ci_times()
 
 
 def discard_test_seed_logins(store):

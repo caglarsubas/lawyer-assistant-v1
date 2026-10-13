@@ -4186,3 +4186,20 @@ CI deadline, worker count, job count or retry policy was expanded. Direct obsole
 run cancellation was rejected by the token's Actions permissions; a new PR head
 uses the existing concurrency cancellation rule. Whole-workflow hosted results
 remain a separate merge gate.
+
+The revised x86 hosted backend still reached its 18-minute limit at 82% without
+an assertion failure (`38342406129`, job `115116117783`). The exact full backend
+partition subsequently passed locally on native Linux ARM: 3,732 passed and 87
+environment skips in 522.76s, two workers, disconnected/read-only, two CPUs and
+1.5 GiB memory limit. Its subjects and source checks are unchanged. This is
+compatibility/completion evidence, not proof of hosted ARM speed or billing savings.
+
+Backend CI now qualifies GitHub's standard `ubuntu-24.04-arm` executor; the x86
+frontend and real PostgreSQL jobs stay intact. Availability for this public
+repository was verified against [GitHub's runner documentation](https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job).
+All 4,230 cases remain disjoint, with the same two workers, three jobs and existing
+deadlines. A passive master-only `CI_TIMINGS` report lists the eight slowest files
+every 100 completions, using setup/call/teardown durations and counts only. It
+contains no parameters, fixture contents, credentials or document text and changes
+no fixture or verdict. Four actual two-worker source-set guard cases verified the
+report (5.41s). Hosted exact-head success is still mandatory before merge.

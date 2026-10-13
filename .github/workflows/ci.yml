@@ -29,7 +29,9 @@ env:
 
 jobs:
   backend-and-contracts:
-    runs-on: ubuntu-latest
+    # Standard native ARM executor; x86 PostgreSQL/frontend jobs remain below.
+    # Keep the same two pytest workers and the existing test/job deadlines.
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 20
     env:
       CI_ONTOLOGY_PREFLIGHT_TESTS: >-
@@ -50,6 +52,13 @@ jobs:
           echo "$GITHUB_WORKSPACE/backend/.venv/bin" >> "$GITHUB_PATH"
       - name: Lint Python
         run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
+      - name: Record nonsecret test runtime characteristics
+        run: |
+          python - <<'PY'
+          import json, os, platform, ssl
+          print(json.dumps({"architecture": platform.machine(), "python": platform.python_version(),
+                            "available_cpus": len(os.sched_getaffinity(0)), "openssl": ssl.OPENSSL_VERSION}))
+          PY
       - name: Check ontology parsing, membership and SHACL work budgets before full suite
         timeout-minutes: 2
         run: |
