@@ -4146,3 +4146,72 @@ Ordinary workspace fixture setup uses independent copies of a closed invented ba
 PR #63's first hosted backend run timed out at 93% under the unchanged 18-minute step limit; the frontend and PostgreSQL jobs passed near their five-minute limits. Further fixture profiling found repeated initial analysis document/fact setup and unsigned Graph B review-context construction. Both now use independently copied TEST-ONLY setup, current raw-byte/record checks and fresh authenticated applications. No analysis verdict or accepted Graph B review is copied into these initial contexts. Analysis/review/signature acceptance subjects still execute per case; dedicated fresh builders and all PostgreSQL cases remain fresh. Mutation isolation, missing-review checks and fresh-source rejection qualify the copied contexts. Hosted timing remains to be established on the revised exact head.
 
 Mixed Graph A/B snapshots: engineering coverage must prove one connection/no writes, original source/ compiler-contract preservation, all selected contexts, shared register handling, current ownership/reviewer/rights checks, aggregate bounds and exit reconstruction. Actual PostgreSQL tests must observe five shared readers and real writer waits for both families, then reject the entire selection after later-member revocation. This qualifies a preparation primitive; it does not establish legal truth, corpus completeness, component grants, final public attestation or national serving.
+
+### Complete declared assembly and independent final attestation — 2026-10-13
+
+The disconnected read-only Linux regression group passed 102 cases in 268.20s,
+including existing A permissions, B grants, mixed snapshots and publication CLI.
+After strengthening final dependency, lifetime and publication-lock checks, all
+30 assembly cases passed again on the final Linux source in 183.86s. These include
+real API-based fresh setup, two decision contexts with shared register evidence,
+whole retained-base inventory, original-triple preservation, strict external final
+signatures, component-signature rejection, conflicting separately attested
+identities, encryption, mutation, late expiry and atomic-output cleanup.
+
+All 84 actual PostgreSQL cases passed in 97.25s before the final hardening; the
+complete-assembly five-reader/two-family writer and committed-rights-revocation
+case passed again on final source in 39.17s. Tests own random child databases and
+observe actual database blocking; no production database or serving pointer is
+changed. Deployment contracts passed all 41 cases. Ruff and whitespace checks
+passed. Actual collection assigns all 4,227 cases disjointly, with zero missing or
+extra cases; three jobs, two workers, retry policy and deadlines remain unchanged.
+
+Exact-head hosted checks are required before merge. Test keys, signatures, source
+corpora and appointments are invented fixtures. This is engineering qualification
+for complete **declared** inputs and final signature verification, not national
+historical coverage, professional approval, a serving grant or deployment.
+See [operator contract](DECLARED_GRAPH_ASSEMBLY.md) and
+`docs/evidence/declared-graph-assembly-2026-10-13.json`.
+
+PR65's first PostgreSQL run failed its 30-second reader barrier after spending
+CPU time repeatedly validating the same component RDF within each operation
+(`38340570114`, job `115110386015`, 82 preceding cases passed). Component validation
+now runs afresh once for each operation; a manifest-bound capture drives the
+compiler, and complete byte/permission/key/source checks still run on exit.
+Three added mutation cases require changes to captured Turtle, N-Quads and the
+manifest to fail. All 33 assembly cases passed in disconnected Linux in 83.59s;
+the unchanged real five-reader PostgreSQL case passed in 20.21s under a stricter
+one-CPU local limit. All 4,230 collected cases remain disjoint. No reader barrier,
+CI deadline, worker count, job count or retry policy was expanded. Direct obsolete
+run cancellation was rejected by the token's Actions permissions; a new PR head
+uses the existing concurrency cancellation rule. Whole-workflow hosted results
+remain a separate merge gate.
+
+The revised x86 hosted backend still reached its 18-minute limit at 82% without
+an assertion failure (`38342406129`, job `115116117783`). The exact full backend
+partition subsequently passed locally on native Linux ARM: 3,732 passed and 87
+environment skips in 522.76s, two workers, disconnected/read-only, two CPUs and
+1.5 GiB memory limit. Its subjects and source checks are unchanged. This is
+compatibility/completion evidence, not proof of hosted ARM speed or billing savings.
+
+Backend CI now qualifies GitHub's standard `ubuntu-24.04-arm` executor; the x86
+frontend and real PostgreSQL jobs stay intact. Availability for this public
+repository was verified against [GitHub's runner documentation](https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job).
+All 4,230 cases remain disjoint, with the same two workers, three jobs and existing
+deadlines. A passive master-only `CI_TIMINGS` report lists the eight slowest files
+every 100 completions, using setup/call/teardown durations and counts only. It
+contains no parameters, fixture contents, credentials or document text and changes
+no fixture or verdict. Four actual two-worker source-set guard cases verified the
+report (5.41s). Hosted exact-head success is still mandatory before merge.
+
+The first ARM full partition reached 99% before its unchanged 18-minute step cap
+(`38345785652`, job `115126760597`). Passive timing identified duplicate fixture
+warm-up: 33 assembly cases spent 156.21 aggregate worker-seconds in setup; copied
+single/set authorization cases spent 116.21/68.59 seconds in setup. Copies now
+retain independent bytes, fresh startup/login and public-signature checks, while
+the actual guarded test action performs the complete current source/permission
+validation. The whole guarded subject is not run again just to warm up each
+negative case. Fresh builders, positive multi-context/base cases, sibling isolation
+and every production guard remain unchanged. All 123 affected assembly, single/set
+authorization and seed-isolation cases passed in disconnected Linux in 103.91s.
+All 4,230 cases remain assigned; the next exact-head hosted result is still required.

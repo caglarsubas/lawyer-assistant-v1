@@ -1,0 +1,183 @@
+{
+  "schema_version": "declared-graph-assembly-engineering-evidence-v1",
+  "date": "2026-10-13",
+  "base_main": "753a1925009c805ef17a4cfce16928ca9127fc56",
+  "base_main_ci": {
+    "run_id": 38302856405,
+    "conclusion": "success"
+  },
+  "fixtures": "invented isolated corpora, appointments and TEST-ONLY external signatures",
+  "local": {
+    "linux_regression": {
+      "passed": 102,
+      "seconds": 268.2,
+      "before_final_hardening": true
+    },
+    "final_linux_assembly": {
+      "passed": 30,
+      "seconds": 183.86
+    },
+    "postgres_regression": {
+      "passed": 84,
+      "seconds": 97.25,
+      "before_final_hardening": true
+    },
+    "final_postgres_assembly": {
+      "passed": 1,
+      "seconds": 39.17
+    },
+    "deployment_contracts": {
+      "passed": 41
+    },
+    "ruff": "passed",
+    "whitespace": "passed",
+    "deduplicated_linux_assembly": {
+      "passed": 33,
+      "seconds": 83.59
+    },
+    "deduplicated_postgres_assembly": {
+      "passed": 1,
+      "seconds": 20.21,
+      "cpu_limit": 1,
+      "same_reader_barrier_and_deadlines": true
+    },
+    "full_backend_partition": {
+      "passed": 3732,
+      "environment_skips": 87,
+      "seconds": 522.76,
+      "architecture": "linux-arm64",
+      "workers": 2,
+      "cpu_limit": 2,
+      "memory_limit": "1536m",
+      "network": "none",
+      "read_only": true
+    },
+    "passive_timing_report": {
+      "passed": 4,
+      "seconds": 5.41,
+      "workers": 2,
+      "changes_fixtures_or_verdicts": false,
+      "includes_parameters_or_private_data": false
+    },
+    "fixture_subject_regression": {
+      "passed": 123,
+      "seconds": 103.91,
+      "network": "none",
+      "read_only": true,
+      "workers": 2
+    }
+  },
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 4230,
+      "preflight": 89,
+      "remaining": 3819,
+      "publication": 128,
+      "workspace": 67,
+      "human_review": 107,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_graph_b_snapshot.py",
+      "backend/tests/test_graph_b_publication.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "d3adf6f74a5ee55c550dae73b55f956cfbe28c35ccc03aedcd1c6cabd410c55f",
+    "workflow_sha256": "a3160c210bd1f4839d455f2c84f17cbfbb33e5b8c0d1a168b3430681e07f6421",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "hosted_exact_head_required_before_merge": true,
+  "national_historical_completeness_established": false,
+  "professional_reviewer_vetting_established": false,
+  "production_keys_or_signatures_created": false,
+  "serving_authorization_created": false,
+  "graph_publication_performed": false,
+  "user_deployment_performed": false,
+  "source_sha256": {
+    "backend/app/declared_graph_assembly.py": "987bb55d5dcc7f577d4238ff6f3af4b8c320c62bd5fdece651ce260eafbaa000",
+    "backend/app/public_graph_union.py": "44cf6d8da64f598ac10f9df9ab71829f224776e09baccbc4f9c1ad2bbaa5f258",
+    "scripts/assemble_legal_graphs.py": "1a85d89f5f59b1ed05207b19bfce42e60a76e435e6c2c18022ba927e90f586e3",
+    "backend/tests/test_declared_graph_assembly.py": "c0a7f0027d88d7a2c91e7ad5615f7b80a5adf051df01bff190d8c9a99787fd02",
+    "backend/tests/test_declared_assembly_postgres.py": "c58d2128022e0a747552d5fac14c4866fc736ddbe554a117dec625a7a1d66c7d"
+  },
+  "ci_failure": {
+    "run_id": 38340570114,
+    "job_id": 115110386015,
+    "cause": "30-second reader barrier expired during repeated per-operation RDF validation",
+    "preceding_pg_cases_passed": 82,
+    "direct_cancellation": "token denied Actions write HTTP 403"
+  },
+  "per_operation_public_validation": "fresh signature/RDF validation, complete manifest-bound captured bytes, fresh all-file hashing and original source reconstruction on exit; no cross-operation verdict cache",
+  "backend_timeout": {
+    "run_id": 38342406129,
+    "job_id": 115116117783,
+    "completed_percent": 82,
+    "step_minutes": 18,
+    "reported_assertion_failure": false
+  },
+  "backend_executor_qualification": {
+    "label": "ubuntu-24.04-arm",
+    "standard_runner": true,
+    "repo_visibility_verified": "public",
+    "availability_source": "https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job",
+    "x86_frontend_and_postgres_retained": true,
+    "hosted_success_required": true,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "arm_backend_timeout": {
+    "run_id": 38345785652,
+    "job_id": 115126760597,
+    "completed_percent": 99,
+    "step_minutes": 18,
+    "reported_assertion_failure": false,
+    "setup_worker_seconds": {
+      "assembly_33_cases": 156.21,
+      "single_authorization_49_cases": 116.21,
+      "set_authorization_28_cases": 68.59
+    }
+  },
+  "fixture_cost_fix": {
+    "removed": "duplicate complete guarded subject warm-ups in independent copied fixture setup",
+    "retained": [
+      "independent bytes",
+      "fresh startup and authentication",
+      "public signature verification",
+      "all actual guarded test actions",
+      "fresh setup builders",
+      "positive contracts",
+      "sibling isolation",
+      "all production guard checks"
+    ],
+    "cached_authorization_verdicts": false
+  }
+}
