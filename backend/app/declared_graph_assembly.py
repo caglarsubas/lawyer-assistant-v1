@@ -1,8 +1,8 @@
 """Complete declared A/B inputs under current, conjunctive component permission.
 
 No independent guard nesting, public graph mutation or serving authorization.
-The existing retained structural base must be included whole. Unsupported base
-namespaces fail closed rather than treating a missing inventory as empty.
+Existing structural and independently authorized mixed bases remain whole.
+Unsupported namespaces fail closed rather than treating missing history as empty.
 """
 import os
 from contextlib import contextmanager, nullcontext
@@ -115,7 +115,7 @@ class VerifiedServingContext(NamedTuple):
     descriptor: int
 
 
-def _load(settings, store, declaration, ontology_root, serving_context=None):
+def _load(settings, store, declaration, ontology_root, serving_context=None, *, _stack=(), _cache=None):
     tools, serving = _packet_tools(), _load_serving()
     paths, keys = trust(settings)
     epoch_bytes = tools.read_file(settings.data_dir / "publication-epoch", 37)
@@ -134,19 +134,25 @@ def _load(settings, store, declaration, ontology_root, serving_context=None):
     elif (not isinstance(serving_context, VerifiedServingContext)
             or canonical(pointer) != serving_context.before):
         raise ValueError("Signed serving context pointer differs")
-    base = None
+    base, retained = None, None
+    cache = {} if _cache is None else _cache
+    if (expected_base and expected_base["release_id"] != declaration.structure.release_id) or _stack:
+        from .retained_graph_assembly import reserve
+        reserve(cache, [Path(component.prepared) for component in [declaration.structure, *declaration.jurisprudence]]
+                      + [Path(component.grant) for component in [declaration.structure, *declaration.jurisprudence]])
     if expected_base:
-        # This packet qualifies the first mixed release from a retained A source
-        # set. A prior mixed assembly needs its own complete serving grant and
-        # dependency reconstruction; never route it through an A-only fallback.
         if expected_base["release_id"] != declaration.structure.release_id:
-            raise ValueError("The whole retained structural base must be declared")
-        active = serving.validate_prepared(root / "releases" / expected_base["release_id"], paths[0])
+            from . import retained_graph_assembly as retained_assembly
+            retained = retained_assembly.load(settings, store, expected_base, ontology_root, stack=_stack, cache=cache)
+            active = retained["payload"].info
+        else:
+            active = serving.validate_prepared(root / "releases" / expected_base["release_id"], paths[0])
         if active["release_id"] != expected_base["release_id"] or active["serving_sha256"] != expected_base["serving_sha256"]:
             raise ValueError("Original retained structural base differs")
-        base_root = active["bundle_path"].parent
+        base_root = root / "releases" / expected_base["release_id"]
         base = {"pointer": expected_base, "files": {name: digest(tools.read_file(base_root / name, tools.MAX_FILE))
                 for name in sorted(serving._files(base_root))}}
+    a_cache_key = ("structure", canonical(declaration.structure.model_dump()))
     a_info = _untrusted_prepared_hint(declaration.structure.prepared, tools)
     if a_info["release_id"] != declaration.structure.release_id:
         raise ValueError("Declared structural component differs")
@@ -156,11 +162,18 @@ def _load(settings, store, declaration, ontology_root, serving_context=None):
         raise ValueError("Structural permission must use the configured retained namespace")
     a_gate = ReleaseSetAuthorization(store, None, auth_root, paths[0], ontology_root,
                                      settings.data_dir / "publication-epoch")
-    a_current = a_gate._load(a_info, "read", tools)  # FULL independent public validation; no Session nesting.
+    if a_cache_key not in cache:
+        cache[a_cache_key] = a_gate._load(a_info, "read", tools)  # Fresh per operation; no Session nesting.
+    a_current = cache[a_cache_key]
     a_info = a_current["public_info"]
     if a_current["body"]["source_binding"]["operator_id"] != declaration.operator_id:
         raise ValueError("Exact common source owner is required")
-    b_values = [_b_load(store, component, paths, epoch, ontology_root) for component in declaration.jurisprudence]
+    b_values = []
+    for component in declaration.jurisprudence:
+        cache_key = ("jurisprudence", canonical(component.model_dump()))
+        if cache_key not in cache:
+            cache[cache_key] = _b_load(store, component, paths, epoch, ontology_root)
+        b_values.append(cache[cache_key])
     identifiers = [declaration.structure.release_id, *(item.release_id for item in declaration.jurisprudence)]
     if len(set(identifiers)) != len(identifiers):
         raise ValueError("Every component must be declared exactly once")
@@ -170,12 +183,18 @@ def _load(settings, store, declaration, ontology_root, serving_context=None):
         structure=_selection(a_current["body"]["source_binding"], tools),
         jurisprudence=[value["selection"] for value in b_values])
     lock_stat = (root / "publication.lock").stat()
-    return {"paths": paths, "keys": keys, "epoch_bytes": epoch_bytes, "epoch": epoch,
+    result = {"paths": paths, "keys": keys, "epoch_bytes": epoch_bytes, "epoch": epoch,
             "location": (str(root), str(auth_root), str(tools.checked_path(settings.public_source_dir))),
             "pointer_sha256": (serving_context.original_pointer_sha256 if serving_context is not None
                                 else digest(pointer_bytes) if pointer_bytes else None),
             "lock_identity": (lock_stat.st_dev, lock_stat.st_ino),
             "base": base, "structure": a_current, "a_info": a_info, "jurisprudence": b_values, "request": request}
+    # Extra internal fields never change the legacy signed fingerprint.
+    result["declaration"] = declaration
+    if retained:
+        result["retained"] = retained
+        retained_assembly.budget(result)
+    return result
 
 
 def _fingerprint(value):
@@ -184,7 +203,7 @@ def _fingerprint(value):
         return {name: digest(raw) for name, raw in files.items()}
     def info_hash(info):
         return digest(canonical({key: str(item) if isinstance(item, Path) else item for key, item in info.items()}))
-    return digest(canonical({"keys": [digest(key[0]) for key in value["keys"]], "epoch": digest(value["epoch_bytes"]),
+    legacy = digest(canonical({"keys": [digest(key[0]) for key in value["keys"]], "epoch": digest(value["epoch_bytes"]),
         "paths": [str(path) for path in value["paths"]],
         "base": value["base"], "location": value["location"], "pointer": value["pointer_sha256"],
         "lock_identity": value["lock_identity"], "request": value["request"].model_dump(),
@@ -193,6 +212,11 @@ def _fingerprint(value):
         "b_packets": sorted((item["info"]["release_id"], item["outer_hash"], item["packet_hash"], digest(item["raw"]),
                              digest(canonical(file_hashes(item["files"]))), digest(canonical(item["private"])), info_hash(item["info"]))
                             for item in value["jurisprudence"])}))
+    if "retained" in value:
+        from .retained_graph_assembly import fingerprint
+        return digest(canonical({"schema_version": "complete-retained-mixed-dependencies-v1",
+                                 "declared": legacy, "retained": fingerprint(value["retained"])}))
+    return legacy
 
 
 def _public_capture(info):
@@ -227,24 +251,34 @@ def _public_capture(info):
     return files
 
 
-def _match(store, loaded, snapshot, ontology_root):
+def _match(store, loaded, snapshot, ontology_root, *, matched=None):
     tools = _packet_tools()
+    # Exact duplicated components are proved once within THIS locked original
+    # source transaction. The full signed component identity/location/grant is
+    # checked by the union plan first and every byte is re-read at exit. This
+    # operation-local deduplication is never retained as a source verdict.
+    matched = set() if matched is None else matched
     a = loaded["structure"]
     validate_source_permissions(a["body"], snapshot["structure"])
-    evidence = {Path(name).stem: raw for name, raw in a["files"].items() if name.startswith("private-evidence/")}
-    rebuilt, _ = compile_review_set(snapshot["structure"], tools.parse_json(a["files"]["registry.json"]),
-                                    tools.parse_json(a["files"]["resolutions.json"]), evidence, ontology_root)
-    if rebuilt != a["files"]:
-        raise ValueError("Structural preparation differs from current original sources")
-    match_public_bundle(a["files"], loaded["a_info"], ontology_root)
+    ident = ("structure", loaded["a_info"]["release_id"])
+    if ident not in matched:
+        evidence = {Path(name).stem: raw for name, raw in a["files"].items() if name.startswith("private-evidence/")}
+        rebuilt, _ = compile_review_set(snapshot["structure"], tools.parse_json(a["files"]["registry.json"]),
+                                        tools.parse_json(a["files"]["resolutions.json"]), evidence, ontology_root)
+        if rebuilt != a["files"]:
+            raise ValueError("Structural preparation differs from current original sources")
+        match_public_bundle(a["files"], loaded["a_info"], ontology_root)
+        matched.add(ident)
     b_snapshots = {canonical(item["binding"]["selection"]): item for item in snapshot["jurisprudence"]}
     if len(b_snapshots) != len(loaded["jurisprudence"]):
         raise ValueError("Complete decision context inventory is required")
     for item in loaded["jurisprudence"]:
         current = b_snapshots[canonical(item["selection"].model_dump())]
-        private = b_public.verify_files(store, item["files"], current, ontology_root)
+        ident = ("jurisprudence", item["info"]["release_id"])
+        private = (b_public.verify_files(store, item["files"], current, ontology_root) if ident not in matched else item["private"])
         b_grants.match_grant(item["raw"], loaded["paths"][2], item["files"], item["packet_hash"], private,
                              current, item["info"], loaded["epoch"])
+        matched.add(ident)
     _lifetimes(loaded, snapshot)
 
 
@@ -256,6 +290,11 @@ def _lifetimes(loaded, snapshot):
     for item in loaded["jurisprudence"]:
         b_grants.match_grant(item["raw"], loaded["paths"][2], item["files"], item["packet_hash"], item["private"],
             b_snapshots[canonical(item["selection"].model_dump())], item["info"], loaded["epoch"])
+
+
+def component_nodes(loaded):
+    from .retained_graph_assembly import nodes
+    return nodes(loaded)
 
 
 @contextmanager
@@ -276,13 +315,34 @@ def current_assembly(settings, store, source_store, declaration, ontology_root, 
         if loaded["lock_identity"] != lock_identity:
             raise ValueError("Publication lock was replaced")
         original = _fingerprint(loaded)
-        public = {loaded["a_info"]["release_id"]: (loaded["a_info"], _public_capture(loaded["a_info"])),
-                  **{item["info"]["release_id"]: (item["info"], _public_capture(item["info"])) for item in loaded["jurisprudence"]}}
-        with locked_mixed_snapshot(store, source_store, operator_id=declaration.operator_id, request=loaded["request"],
+        from . import retained_graph_assembly as retained_assembly
+        all_nodes = component_nodes(loaded)
+        declarations = [canonical(node["declaration"].model_dump()) for node in all_nodes]
+        public = {}
+        for node in all_nodes:
+            for info in [node["a_info"], *(item["info"] for item in node["jurisprudence"])]:
+                if info["release_id"] not in public:
+                    public[info["release_id"]] = (info, _public_capture(info))
+        request = retained_assembly.plan(loaded) if loaded.get("retained") else loaded["request"]
+        with locked_mixed_snapshot(store, source_store, operator_id=declaration.operator_id, request=request,
                 trusted_key=loaded["paths"][1], ontology_root=ontology_root, shared=shared) as snapshot:
-            _match(store, loaded, snapshot, ontology_root)
-            files, inventory = compile_captured_union(public, base=loaded["base"], ontology_root=ontology_root)
-            _lifetimes(loaded, snapshot)
+            accumulated, results, node_snapshots, matched = {}, {}, [], set()
+            for node in all_nodes:
+                current = (retained_assembly.snapshot_for(node, request, snapshot) if loaded.get("retained") else snapshot)
+                node_snapshots.append((node, current))
+                _match(store, node, current, ontology_root, matched=matched)
+                for info in [node["a_info"], *(item["info"] for item in node["jurisprudence"])]:
+                    accumulated[info["release_id"]] = public[info["release_id"]]
+                parent = node.get("retained")
+                retained_public = (parent["payload"].info, parent["payload"].files) if parent else None
+                node_files, node_inventory = compile_captured_union(accumulated, base=node["base"],
+                    ontology_root=ontology_root, retained=retained_public)
+                results[id(node)] = (node_files, node_inventory)
+                if parent:
+                    retained_assembly.verify(parent, store, *results[id(parent["loaded"])])
+            files, inventory = results[id(loaded)]
+            for node, current in node_snapshots:
+                _lifetimes(node, current)
             if trust(settings) != (loaded["paths"], loaded["keys"]):
                 raise ValueError("Assembly trust changed during compilation")
             output_hash = digest(canonical({name: digest(raw) for name, raw in files.items()}))
@@ -295,30 +355,36 @@ def current_assembly(settings, store, source_store, declaration, ontology_root, 
                 current_lock = (root / "publication.lock").stat()
                 pointer = serving.read_pointer(root)
                 pointer_hash = digest(tools.read_file(root / "active.json", 4096)) if pointer else None
-                a = loaded["structure"]
-                if (_fingerprint(loaded) != original or (current_lock.st_dev, current_lock.st_ino) != lock_identity
+                if (_fingerprint(loaded) != original
+                        or [canonical(node["declaration"].model_dump()) for node in all_nodes] != declarations
+                        or (current_lock.st_dev, current_lock.st_ino) != lock_identity
                         or tuple(map(str, (root, tools.checked_path(settings.data_dir / "release-authorizations"),
                                           tools.checked_path(settings.public_source_dir)))) != loaded["location"]
                         or (canonical(pointer) != serving_context.after if serving_context is not None
                             else pointer_hash != loaded["pointer_sha256"])
                         or tools.read_file(settings.data_dir / "publication-epoch", 37) != loaded["epoch_bytes"]
-                        or tools.read_file(Path(declaration.structure.grant) / "authorization.json", tools.MAX_JSON) != a["authorization"]
-                        or tools.read_packet(Path(declaration.structure.grant) / "packet", store,
-                            schema_version="legal-review-source-set-packet-v1") != (a["files"], a["packet_digest"])
                         or canonical(inventory) != files["assembly-inputs.json"]
                         or digest(canonical({name: digest(raw) for name, raw in files.items()})) != output_hash):
                     raise ValueError("Assembly dependencies or output changed")
-                for component, item in zip(declaration.jurisprudence, loaded["jurisprudence"], strict=True):
-                    if tools.read_packet(component.grant, store, schema_version=b_public.PACKET_SCHEMA)[1] != item["outer_hash"]:
-                        raise ValueError("Retained inclusion grant changed")
+                for node, current in node_snapshots:
+                    a, selected = node["structure"], node["declaration"]
+                    if (tools.read_file(Path(selected.structure.grant) / "authorization.json", tools.MAX_JSON) != a["authorization"]
+                            or tools.read_packet(Path(selected.structure.grant) / "packet", store,
+                                schema_version="legal-review-source-set-packet-v1") != (a["files"], a["packet_digest"])):
+                        raise ValueError("Retained structural permission changed")
+                    for component, item in zip(selected.jurisprudence, node["jurisprudence"], strict=True):
+                        if tools.read_packet(component.grant, store, schema_version=b_public.PACKET_SCHEMA)[1] != item["outer_hash"]:
+                            raise ValueError("Retained inclusion grant changed")
+                    if node.get("retained"):
+                        retained_assembly.recheck(node["retained"])
+                    if node["base"]:
+                        base_root = root / "releases" / node["base"]["pointer"]["release_id"]
+                        if {name: digest(tools.read_file(base_root / name, tools.MAX_FILE)) for name in serving._files(base_root)} != node["base"]["files"]:
+                            raise ValueError("Complete retained base changed")
+                    _lifetimes(node, current)
                 for info, captured in public.values():
                     if _public_capture(info) != captured:
                         raise ValueError("Verified public component changed")
-                if loaded["base"]:
-                    base_root = root / "releases" / loaded["base"]["pointer"]["release_id"]
-                    if {name: digest(tools.read_file(base_root / name, tools.MAX_FILE)) for name in serving._files(base_root)} != loaded["base"]["files"]:
-                        raise ValueError("Complete retained base changed")
-                _lifetimes(loaded, snapshot)
                 if trust(settings) != (loaded["paths"], loaded["keys"]):
                     raise ValueError("Assembly trust changed at final validation")
             yield files, inventory, loaded

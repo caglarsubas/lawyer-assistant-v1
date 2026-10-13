@@ -17,6 +17,7 @@ env:
     backend/tests/test_analysis_cohorts.py
     backend/tests/test_graph_b_snapshot.py
     backend/tests/test_graph_b_publication.py
+    backend/tests/test_retained_release_withdrawal.py
   CI_WORKSPACE_SECURITY_TESTS: >-
     backend/tests/test_firm_admin.py
     backend/tests/test_authority_proposals.py
@@ -25,6 +26,7 @@ env:
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
     backend/tests/test_final_release_inspection.py
+    backend/tests/test_retained_mixed_assembly.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py

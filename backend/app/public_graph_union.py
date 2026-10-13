@@ -31,21 +31,27 @@ def compile_union(prepared, *, base, trusted_key, ontology_root):
     return compile_captured_union(captured, base=base, ontology_root=ontology_root)
 
 
-def compile_captured_union(captured, *, base, ontology_root):
+def compile_captured_union(captured, *, base, ontology_root, retained=None):
     """Trusted internal compiler of per-operation independently verified bytes.
 
     This is NEVER a signature/permission verifier. Only the guarded assembler
     supplies captures, after exact component/source/grant matching; no API or
     agent accepts captures from a caller. No validation survives the operation.
     """
-    if type(captured) is not dict or not 2 <= len(captured) <= 9:
+    if type(captured) is not dict or not 2 <= len(captured) <= 32:
         raise ValueError("A complete bounded component inventory is required")
     tools, serving = _packet_tools(), _load_serving()
     release = serving._release
     ontology_sha = release.ontology_digest(ontology_root)
     graphs = {family: Graph() for family in release.FAMILIES}
     definitions, evidence, members, total = {}, {}, [], 0
-    for ident, (info, files) in sorted(captured.items()):
+    # A retained mixed payload is included whole, but is not a new leaf source
+    # component. Its original complete inventory/grants are reconstructed by
+    # the enclosing transaction. Preserve its inventory nodes as original data.
+    inputs = list(sorted(captured.items()))
+    if retained is not None:
+        inputs.insert(0, (retained[0]["release_id"], retained))
+    for index, (ident, (info, files)) in enumerate(inputs):
         if type(ident) is not str or not tools.HASH.fullmatch(ident):
             raise ValueError("Invalid component identity")
         if info["release_id"] != ident or info["ontology_sha256"] != ontology_sha:
@@ -83,8 +89,9 @@ def compile_captured_union(captured, *, base, ontology_root):
                 if total > MAX_BYTES:
                     raise ValueError("Union exceeds budget")
             evidence[fingerprint] = raw
-        members.append({"release_id": ident, "serving_sha256": info["serving_sha256"],
-                        "input_graphs_sha256": hashes})
+        if retained is None or index != 0:
+            members.append({"release_id": ident, "serving_sha256": info["serving_sha256"],
+                            "input_graphs_sha256": hashes})
     inventory = {"schema_version": "declared-public-graph-inventory-v1", "ontology_sha256": ontology_sha,
                  "components": members, "retained_base": base, "coverage_scope": "declared_components_only"}
     inventory_hash = digest(canonical(inventory))

@@ -95,8 +95,9 @@ including first activation, two-release rollback, retained structural base,
 rights withdrawal in either family, epoch/key/packet changes, late failures,
 closed inventories and real PostgreSQL readers blocking both source families'
 rights writers. Actual licensed corpus/legal qualification, deployment and
-lawyer acceptance remain separate gates. Reassembly onto a previously mixed
-active base remains a separately gated successor; it fails closed here.
+lawyer acceptance remain separate gates. [Retained mixed assembly](RETAINED_MIXED_ASSEMBLY.md)
+extends this contract with complete original dependency reconstruction for
+successive mixed bases and fresh independent successor review and permission.
 
 ## Read-only uncertain-transition observation
 

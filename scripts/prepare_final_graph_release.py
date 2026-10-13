@@ -14,9 +14,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
+from assemble_legal_graphs import NOTICE as ASSEMBLY_NOTICE  # noqa: E402, F401
 from assemble_legal_graphs import (  # noqa: E402
     current_packet,
     trust,
+)
+from assemble_legal_graphs import (  # noqa: E402
+    review_body as review_body,
 )
 from assemble_legal_graphs import (  # noqa: E402
     verify_captured_attestation as verify_captured_attestation,
@@ -25,7 +29,7 @@ from assemble_legal_graphs import (  # noqa: E402
     verify_public_payload as verify_public_payload,
 )
 
-from app.declared_graph_assembly import _fingerprint, _public_capture  # noqa: E402
+from app.declared_graph_assembly import _fingerprint, _public_capture, component_nodes  # noqa: E402
 from app.graph_b_review import configured_key_path  # noqa: E402
 from app.graph_release import _load_serving  # noqa: E402
 from app.release_authorization import _instant, _packet_tools  # noqa: E402
@@ -52,15 +56,22 @@ def request_checks(settings, files, loaded, reviewer, approved_at, expires_at):
     if keys != (loaded["paths"], loaded["keys"]):
         raise ValueError("Final serving candidate trust changed")
     public_review = io.parse_json(files["public-review-body.json"])
-    disallowed = {public_review["reviewer"], loaded["structure"]["body"]["source_binding"]["operator_id"],
-                  loaded["a_info"]["review"]["reviewer"], loaded["structure"]["body"]["reviewer"],
-                  *(item["info"]["review"]["reviewer"] for item in loaded["jurisprudence"]),
-                  *(io.parse_json(item["raw"])["body"]["reviewer"] for item in loaded["jurisprudence"])}
+    nodes = component_nodes(loaded)
+    parents = [node["retained"] for node in nodes if node.get("retained")]
+    disallowed = {public_review["reviewer"]}
+    for node in nodes:
+        disallowed.update({node["structure"]["body"]["source_binding"]["operator_id"],
+            node["a_info"]["review"]["reviewer"], node["structure"]["body"]["reviewer"],
+            *(item["info"]["review"]["reviewer"] for item in node["jurisprudence"]),
+            *(io.parse_json(item["raw"])["body"]["reviewer"] for item in node["jurisprudence"])})
+    disallowed.update(parent["payload"].info["review"]["reviewer"] for parent in parents)
     if (type(reviewer) is not str or not 1 <= len(reviewer) <= 300 or reviewer != reviewer.strip()
             or any(ord(char) < 32 for char in reviewer) or reviewer in disallowed):
         raise ValueError("Independent accountable final permission reviewer is required")
     approved, expires, now = _instant(approved_at), _instant(expires_at), datetime.now(timezone.utc)
-    grants = [loaded["structure"]["body"], *(io.parse_json(item["raw"])["body"] for item in loaded["jurisprudence"])]
+    grants = [body for node in nodes for body in [node["structure"]["body"],
+        *(io.parse_json(item["raw"])["body"] for item in node["jurisprudence"])]]
+    grants += [parent["body"] for parent in parents]
     if (approved > now or approved < _instant(public_review["reviewed_at"]) or expires <= now
             or expires <= approved or expires - approved > timedelta(days=90)
             or any(expires > _instant(body["expires_at"]) or approved < _instant(body["approved_at"]) for body in grants)):

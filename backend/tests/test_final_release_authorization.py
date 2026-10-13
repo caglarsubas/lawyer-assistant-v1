@@ -9,7 +9,6 @@ import pytest
 from test_declared_graph_assembly import assembly as assembly_fixture
 from test_final_graph_candidate import input_for, proposed
 from test_release_authorization import signed
-from test_source_reviews import assess
 
 from app import final_release_authorization as final
 from app.graph_release import RuntimeGraphRelease, _load_serving
@@ -73,7 +72,8 @@ def form_candidate(value, candidate):
             info = serving.prepare(root / "bundle", value["assembly"]["public"], root / "prepared")
             now = datetime.now(timezone.utc)
             request = command.request_body(settings, files, loaded, info, packet_hash,
-                "TEST-ONLY INDEPENDENT FINAL PERMISSION REVIEWER", now.isoformat(), (now + timedelta(minutes=30)).isoformat())
+                "TEST-ONLY INDEPENDENT FINAL PERMISSION REVIEWER", now.isoformat(),
+                value.get("permission_expires_at", (now + timedelta(minutes=30)).isoformat()))
             private = {"binding.fernet": reader.seal_preparation({"reviewed_packet": str(value["packet"]),
                        "reviewed_packet_sha256": packet_hash}), "request.fernet": reader.seal_preparation(request),
                        "NOTICE.json": command.NOTICE}
@@ -164,43 +164,6 @@ def test_external_grant_requires_exact_whole_reviewed_request(staged):
         assert not (value["settings"].data_dir / "release-authorizations" / original["release_id"]).exists(), change
     signed(value["authorization"], original, value["key"], io)
     assert accepted(value)["whole_release_authorization_accepted"]
-
-
-@pytest.mark.parametrize("change", ["a-rights", "b-rights", "epoch", "fifth-key", "packet", "pointer"])
-def test_active_whole_release_withdrawn_after_any_dependency_changes(staged, change):
-    value = staged
-    accepted(value)
-    serving, root, key, info, guard, pointer = activate(value)
-    runtime = RuntimeGraphRelease(root, key, guard) if change == "pointer" else None
-    if change == "a-rights":
-        from app.release_set_authorization import _selection
-        io = final._packet_tools()
-        grant = Path(value["assembly"]["declaration"].structure.grant)
-        source_binding = io.parse_json(io.read_file(grant / "authorization.json", 64 * 1024))["body"]["source_binding"]
-        source_id = _selection(source_binding, io).sources[-1].source_id
-        # Same original rights service; a later revision withdraws all use.
-        app, client = value["assembly"]["current"]["evidence"][0][0][:2]
-        assert assess(client, f"/api/v1/public-sources/{source_id}/review", 6, "rights", decision="rejected").status_code == 200
-    elif change == "b-rights":
-        item = value["assembly"]["current"]["evidence"][0][-1]
-        assert assess(item[1], item[4] + "/review", 6, "rights", decision="rejected").status_code == 200
-    elif change == "epoch":
-        (value["settings"].data_dir / "publication-epoch").write_text(str(uuid4()) + "\n")
-    elif change == "fifth-key":
-        value["public"].write_bytes(value["assembly"]["public"].read_bytes())
-    elif change == "packet":
-        (value["packet"] / "inputs/structure.ttl").write_bytes(b"changed")
-    else:
-        (root / "active.json").chmod(0o600)
-        (root / "active.json").write_bytes(canonical({**pointer, "sequence": 2}))
-    runtime = runtime or RuntimeGraphRelease(root, key, guard)
-    assert runtime.status()["status"] == "unavailable"
-    with pytest.raises(AuthorizationError):
-        if change == "pointer":
-            with guard(runtime.info, "read"):
-                pytest.fail("Prior pinned pointer is stale")
-        else:
-            serving.install(root, value["candidate"] / "prepared", key, authorization_guard=guard)
 
 
 def test_activation_and_rollback_use_monotonic_pointer_and_current_target_grant(staged, tmp_path):
