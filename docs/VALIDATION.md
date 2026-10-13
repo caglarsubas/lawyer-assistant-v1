@@ -4273,7 +4273,9 @@ The read-only final transition observer covers missing installation, verified
 installation, expected activation before/after, later pointer states, rights
 withdrawal despite an unchanged valid public signature, corrupted installed
 bytes, complete expectation schemas and absent initialization locks. It creates
-no state and never authorizes retry/repair. Its eight tests stay in the backend
-partition; no subjects are added to the nearly full five-minute release step.
+no state and never authorizes retry/repair. Its eight tests share the existing six-minute release job. Its nested test step
+now shares that same ceiling; the hard job limit, workers, retries and other jobs'
+deadlines are unchanged. This uses its remaining capacity without adding work to
+the nearly full eighteen-minute backend step.
 Compose API/publisher mount alignment is separately checked by a deployment
 contract, with Fuseki kept read-only and free of private review documents.
