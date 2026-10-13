@@ -103,7 +103,12 @@ def current_packet(settings, packet, *, reviewed=False):
                 raise ValueError("Assembly packet has missing or extra content")
             yield store, retained, loaded
             if reviewed:
-                verify_attestation(retained, loaded)
+                # The signature/RDF was fully checked on entry. The unchanged
+                # sealed packet plus the enclosing ALL-byte/key/source exit
+                # checks retain that proof within this operation. Repeat only
+                # time/identity checks; never reuse a verdict on the next use.
+                if body != review_body(files, loaded, declaration, body["reviewer"], body["reviewed_at"]):
+                    raise ValueError("Final review time or identity changed")
             if io.read_packet(packet, store, schema_version=PACKET_SCHEMA) != (retained, fingerprint):
                 raise ValueError("Retained assembly changed during use")
         if io.read_packet(packet, store, schema_version=PACKET_SCHEMA) != (retained, fingerprint):

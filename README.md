@@ -132,6 +132,8 @@ Graph A and Graph B share stable RDF identities, reified evidence-bearing assert
 
 Trusted local operators can [assemble the complete declared A/B corpus and accept an independent final attestation](docs/DECLARED_GRAPH_ASSEMBLY.md). Every component's current permission and original sources are checked together; membership and the retained structural base are covered by final graph signatures. The reviewed packet is preparation evidence and does not authorize serving or establish national historical completeness.
 
+The next local stage produces [final serving candidates and encrypted bounded permission requests](docs/FINAL_GRAPH_CANDIDATES.md). Canonical public payloads remain tied to the independently reviewed bytes; current source grants constrain the proposed whole-release lifetime. A separate permission signature and serving guard are required before installation or activation.
+
 Accepted source/provision reviews can feed an [offline graph review preparation
 packet](docs/RELEASE_PREPARATION.md). It uses explicit identity proposals, physical
 rights evidence and current locked review revisions; unknown inputs remain
