@@ -4203,3 +4203,15 @@ every 100 completions, using setup/call/teardown durations and counts only. It
 contains no parameters, fixture contents, credentials or document text and changes
 no fixture or verdict. Four actual two-worker source-set guard cases verified the
 report (5.41s). Hosted exact-head success is still mandatory before merge.
+
+The first ARM full partition reached 99% before its unchanged 18-minute step cap
+(`38345785652`, job `115126760597`). Passive timing identified duplicate fixture
+warm-up: 33 assembly cases spent 156.21 aggregate worker-seconds in setup; copied
+single/set authorization cases spent 116.21/68.59 seconds in setup. Copies now
+retain independent bytes, fresh startup/login and public-signature checks, while
+the actual guarded test action performs the complete current source/permission
+validation. The whole guarded subject is not run again just to warm up each
+negative case. Fresh builders, positive multi-context/base cases, sibling isolation
+and every production guard remain unchanged. All 123 affected assembly, single/set
+authorization and seed-isolation cases passed in disconnected Linux in 103.91s.
+All 4,230 cases remain assigned; the next exact-head hosted result is still required.

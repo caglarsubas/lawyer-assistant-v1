@@ -144,9 +144,10 @@ def clone(seed, destination):
                  "key": original["key"], "public": destination / original["public"].relative_to(root),
                  "root": destination, "command": command_module(), "component_review_key": original["a"]["key"],
                  "a_request": original["a"]["request"], "component_grant_key": original["component_grant_key"]}
-        # Current permission is reconstructed per case, never a cloned verdict.
-        with readonly_store(settings) as store, current_assembly(settings, store, current["sources"], declaration, ROOT / "ontology"):
-            pass
+        # Copy setup bytes only. The actual preparation/validation/guard subject
+        # reconstructs every current permission per case; do not run the entire
+        # subject a second time before every negative input. Positive retained-
+        # base/multiple-context and fresh-builder cases qualify this setup.
         yield value
 
 

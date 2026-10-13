@@ -148,8 +148,8 @@ def authorized(tmp_path, synthetic_authorized_seed):
         fixture = {**copied, 'mapping': mapping, 'tools': _packet_tools(), 'key': seed['key'], 'info': info,
             **{name: tmp_path / seed[name].relative_to(seed_root) for name in ('public_key', 'root', 'epoch_path', 'auth_path')}}
         assert _load_serving().validate_prepared(info['bundle_path'].parent, fixture['public_key']) == info
-        with guard(fixture):
-            pass
+        # The test's real guard is the subject. Its current rights/signature
+        # checks must run there; repeated fixture warm-up is not a second case.
         yield fixture
 
 

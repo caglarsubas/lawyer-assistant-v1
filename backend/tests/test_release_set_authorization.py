@@ -153,8 +153,9 @@ def authorized_set(tmp_path, synthetic_authorized_set_seed):
             'auth_path': tmp_path / seed['auth_path'].relative_to(seed_root)}
         # No previous signature, policy, permission or validation verdict is reused.
         assert _load_serving().validate_prepared(info['bundle_path'].parent, fixture['public_key']) == info
-        with guard_set(fixture):
-            pass
+        # The actual test action revalidates every current source permission.
+        # Keep independent bytes/fresh login and public signature validation,
+        # without repeating the entire guarded subject in fixture setup.
         yield fixture
 
 
