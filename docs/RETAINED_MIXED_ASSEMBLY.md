@@ -63,3 +63,7 @@ epoch/grant changes, complete budgets and real concurrent PostgreSQL readers.
 They do not establish national historical corpus completeness, legal correctness,
 production signing, deployment or lawyer acceptance. Private matter overlays
 remain outside shared Graph A/B releases.
+
+Use [read-only dependency inspection](RETAINED_DEPENDENCY_INSPECTION.md) to
+observe the exact recorded inventory separately from present conjunctive
+permission. Its private receipt authorizes no publication, activation or retry.

@@ -2112,3 +2112,39 @@ group now runs once in a separate three-minute ARM job; all existing job caps,
 two-worker limits and no-retry policy stay unchanged. The final-release and
 PostgreSQL groups passed on the first head. Every exact-head check, including the
 new disjoint withdrawal job, must pass before merge.
+
+PR #69 merged at `8df632b3d790f4d502e0b2d0f52ff8f11eead740` after all five
+exact-head checks passed for `1f4a3da27f83b35f72c7c0abf67ad8b4767aa6cc` in run
+`38391251818`. Tested and main trees match. Post-main checks, production
+deployment, real legal approval and held-out lawyer acceptance are separate.
+
+### R03 read-only retained dependency observation
+
+[Dependency inspection](RETAINED_DEPENDENCY_INSPECTION.md) binds a private
+recorded-inventory receipt to the exact installed public bytes, original final
+review packet and whole-release signature. Present permission is qualified
+separately through the complete original-source guard. An installed inactive
+target or a still-valid historical signature does not authorize serving; rights
+withdrawal remains visible as withheld current permission. Changed/corrupt
+provenance, configuration or pointer withholds the observation. No state is
+initialized, repaired, published, or audited by this read-only operation.
+
+The combined fifteen-case inspection/withdrawal group passed in an isolated
+read-only, disconnected two-CPU container in 55.35 seconds. All 4,284 backend
+subjects remain assigned exactly once across unchanged existing job caps, the
+three-minute withdrawal/inspection job, two workers and no automatic retries.
+Hosted exact-head qualification remains mandatory before merge. Fixture
+signatures and engineering receipts do not confer legal or deployment approval.
+
+Next: source-qualified corpus/retrieval integration using the guarded complete
+release and explicit evidence/coverage boundaries. Licensed historical source
+population, independent legal/editor review, production key custody and actual
+lawyer evaluation remain open; R03/R05 stay partial.
+
+Main qualification after PR #69 observed all 3,750 applicable backend tests
+passing, with 87 PostgreSQL cases covered in their separate jobs, but the backend
+step took 18m11s and exceeded its unchanged eighteen-minute cap. The measured
+final-candidate contract group now runs exactly once in a separate three-minute
+ARM job. All original subjects, job deadlines and worker/retry limits are
+preserved; the six exact-head checks are required before the next merge. This
+adds qualification headroom without interpreting a timed-out run as success.
