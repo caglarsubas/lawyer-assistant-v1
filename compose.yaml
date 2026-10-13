@@ -100,7 +100,7 @@ services:
       LA_DATA_DIR: /data
       LA_ENCRYPTION_KEY: ${LA_ENCRYPTION_KEY:?Set LA_ENCRYPTION_KEY in .env}
       LA_PUBLIC_SOURCE_DIR: /public-sources
-      LA_GRAPH_RELEASE_DIR: /graph-publication
+      LA_GRAPH_RELEASE_DIR: /graph-releases
       LA_GRAPH_SERVING_REVIEW_ROLE: ${LA_GRAPH_SERVING_REVIEW_ROLE:-component}
       LA_GRAPH_TRUSTED_REVIEW_KEY: ${LA_GRAPH_TRUSTED_REVIEW_KEY:-}
       LA_GRAPH_B_REVIEW_TRUSTED_KEY: ${LA_GRAPH_B_REVIEW_TRUSTED_KEY:-}
@@ -110,7 +110,7 @@ services:
       LA_OPENSEARCH_URL: http://opensearch:9200
     volumes:
       - documents:/data:ro
-      - graphs:/graph-publication
+      - graphs:/graph-releases
       - ${LA_GRAPH_TRUST_DIRECTORY:-./.data/graph-trust}:/graph-trust:ro
       - public_sources:/public-sources:ro
     depends_on:

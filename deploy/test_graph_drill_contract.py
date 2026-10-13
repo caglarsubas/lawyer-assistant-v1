@@ -176,3 +176,17 @@ class GraphDrillContracts(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SignedPublicationNamespaceContracts(unittest.TestCase):
+    def test_compose_publisher_and_runtime_preserve_same_signed_graph_location(self):
+        import yaml
+        definition = yaml.safe_load((ROOT / "compose.yaml").read_text())
+        api, publisher = (definition["services"][name] for name in ("api", "publisher"))
+        self.assertEqual(api["environment"]["LA_GRAPH_RELEASE_DIR"], "/graph-releases")
+        self.assertEqual(publisher["environment"]["LA_GRAPH_RELEASE_DIR"], "/graph-releases")
+        self.assertIn("graphs:/graph-releases:ro", api["volumes"])
+        self.assertIn("graphs:/graph-releases", publisher["volumes"])
+        self.assertNotIn("/graph-publication", (ROOT / "scripts/graph_releases.py").read_text())
+        self.assertIn("graphs:/fuseki:ro", definition["services"]["fuseki"]["volumes"])
+        self.assertFalse(any("documents:" in value for value in definition["services"]["fuseki"]["volumes"]))

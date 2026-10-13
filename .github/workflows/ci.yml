@@ -24,6 +24,7 @@ env:
   CI_FINAL_RELEASE_TESTS: >-
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
+    backend/tests/test_final_release_inspection.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py
@@ -216,7 +217,9 @@ jobs:
           python -m pip install uv==0.8.15
           uv sync --project backend --frozen --extra dev
       - name: Test whole-release permission, transitions and real concurrent reads
-        timeout-minutes: 5
+        # Include read-only reconciliation in this existing six-minute job.
+        # The hard job cap, two workers and no-retry policy remain unchanged.
+        timeout-minutes: 6
         env:
           LA_TEST_POSTGRES_URL: postgresql+psycopg://snapshot_test:disposable-ci-snapshot-only@127.0.0.1:${{ job.services.postgres.ports['5432'] }}/lawyer_snapshot_test
         run: |
