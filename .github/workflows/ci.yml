@@ -19,6 +19,7 @@ env:
     backend/tests/test_graph_b_publication.py
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
+    backend/tests/test_retained_release_inspection.py
   CI_WORKSPACE_SECURITY_TESTS: >-
     backend/tests/test_firm_admin.py
     backend/tests/test_authority_proposals.py
