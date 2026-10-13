@@ -21,30 +21,47 @@ def compile_union(prepared, *, base, trusted_key, ontology_root):
     if type(prepared) is not dict or not 2 <= len(prepared) <= 9:
         raise ValueError("A complete bounded component inventory is required")
     tools, serving = _packet_tools(), _load_serving()
+    captured = {}
+    for ident, path in sorted(prepared.items()):
+        info = serving.validate_prepared(Path(path), trusted_key)
+        files = {name: tools.read_file(Path(path) / name, tools.MAX_FILE) for name in serving._files(Path(path))}
+        if serving.validate_prepared(Path(path), trusted_key) != info:
+            raise ValueError("Component changed during capture")
+        captured[ident] = (info, files)
+    return compile_captured_union(captured, base=base, ontology_root=ontology_root)
+
+
+def compile_captured_union(captured, *, base, ontology_root):
+    """Trusted internal compiler of per-operation independently verified bytes.
+
+    This is NEVER a signature/permission verifier. Only the guarded assembler
+    supplies captures, after exact component/source/grant matching; no API or
+    agent accepts captures from a caller. No validation survives the operation.
+    """
+    if type(captured) is not dict or not 2 <= len(captured) <= 9:
+        raise ValueError("A complete bounded component inventory is required")
+    tools, serving = _packet_tools(), _load_serving()
     release = serving._release
     ontology_sha = release.ontology_digest(ontology_root)
     graphs = {family: Graph() for family in release.FAMILIES}
     definitions, evidence, members, total = {}, {}, [], 0
-    for ident, path in sorted(prepared.items()):
+    for ident, (info, files) in sorted(captured.items()):
         if type(ident) is not str or not tools.HASH.fullmatch(ident):
             raise ValueError("Invalid component identity")
-        info = serving.validate_prepared(Path(path), trusted_key)
         if info["release_id"] != ident or info["ontology_sha256"] != ontology_sha:
             raise ValueError("Component identity or ontology differs")
-        bundle = info["bundle_path"]
-        manifest_raw = tools.read_file(bundle / "manifest.json", tools.MAX_JSON)
+        manifest_raw = files["bundle/manifest.json"]
         if digest(manifest_raw) != ident:
             raise ValueError("Component manifest changed")
         manifest = tools.parse_json(manifest_raw)
         own, hashes = {}, {}
         for family in graphs:
-            source = bundle / "inputs" / (family + ".ttl")
-            raw = tools.read_file(source, tools.MAX_FILE)
+            raw = files["bundle/inputs/" + family + ".ttl"]
             total += len(raw)
             if total > MAX_BYTES or digest(raw) != manifest["input_graphs_sha256"][family]:
                 raise ValueError("Component bytes changed or exceed budget")
             hashes[family] = digest(raw)
-            graph = Graph().parse(data=raw, format="turtle", publicID=source.absolute().as_uri())
+            graph = Graph().parse(data=raw, format="turtle", publicID=(info["bundle_path"] / "inputs" / (family + ".ttl")).absolute().as_uri())
             for triple in graph:
                 if any(isinstance(term, BNode) or isinstance(term, URIRef) and
                        not str(term).startswith(("urn:", "http:", "https:")) for term in triple):
@@ -55,18 +72,17 @@ def compile_union(prepared, *, base, trusted_key, ontology_root):
             if subject in definitions and definitions[subject] != triples:
                 raise ValueError("Shared identity definitions conflict; explicit review is required")
             definitions[subject] = triples
-        for source in sorted((bundle / "evidence").iterdir()):
-            raw = tools.read_file(source, tools.MAX_FILE)
+        for name, raw in sorted(files.items()):
+            if not name.startswith("bundle/evidence/"):
+                continue
             fingerprint = digest(raw)
-            if source.name != fingerprint + ".bin" or fingerprint in evidence and evidence[fingerprint] != raw:
+            if name != "bundle/evidence/" + fingerprint + ".bin" or fingerprint in evidence and evidence[fingerprint] != raw:
                 raise ValueError("Physical evidence identity differs")
             if fingerprint not in evidence:
                 total += len(raw)
                 if total > MAX_BYTES:
                     raise ValueError("Union exceeds budget")
             evidence[fingerprint] = raw
-        if serving.validate_prepared(Path(path), trusted_key) != info:
-            raise ValueError("Component changed during compilation")
         members.append({"release_id": ident, "serving_sha256": info["serving_sha256"],
                         "input_graphs_sha256": hashes})
     inventory = {"schema_version": "declared-public-graph-inventory-v1", "ontology_sha256": ontology_sha,

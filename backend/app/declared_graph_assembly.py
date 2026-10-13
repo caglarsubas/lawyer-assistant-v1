@@ -18,7 +18,7 @@ from .graph_b_review import configured_key_path
 from .graph_b_snapshot import SnapshotRequest
 from .graph_release import _load_serving
 from .mixed_graph_snapshot import MixedGraphRequest, locked_mixed_snapshot
-from .public_graph_union import compile_union
+from .public_graph_union import compile_captured_union
 from .release_authorization import _packet_tools, _uuid
 from .release_preparation import canonical, digest
 from .release_set_authorization import (
@@ -159,6 +159,38 @@ def _fingerprint(value):
                             for item in value["jurisprudence"])}))
 
 
+def _public_capture(info):
+    """Read ALL public bytes and bind them to the just-verified signed manifest.
+
+    Pure RDF/signature validation is not repeated for unchanged bytes within
+    this operation. Every file is read/hashed again on exit, never mtime-trusted.
+    """
+    tools, serving = _packet_tools(), _load_serving()
+    root = info["bundle_path"].parent
+    names = serving._files(root)
+    if len(names) > tools.MAX_FILES:
+        raise ValueError("Public component inventory exceeds budget")
+    files, total = {}, 0
+    for name in sorted(names):
+        raw = tools.read_file(root / name, tools.MAX_FILE)
+        total += len(raw)
+        if total > tools.MAX_PACKET:
+            raise ValueError("Public component exceeds capture budget")
+        files[name] = raw
+    manifest_raw = files["bundle/manifest.json"]
+    if digest(manifest_raw) != info["release_id"]:
+        raise ValueError("Verified public manifest changed")
+    manifest = tools.parse_json(manifest_raw)
+    expected = {"bundle/" + name for name in manifest["files"]}
+    expected |= {"bundle/manifest.json", "bundle/manifest.sha256", "serving.json", "structure.nq", "jurisprudence.nq"}
+    if (set(files) != expected or files["bundle/manifest.sha256"] != (info["release_id"] + "\n").encode()
+            or digest(files["serving.json"]) != info["serving_sha256"]
+            or any(digest(files["bundle/" + name]) != value for name, value in manifest["files"].items())
+            or any(digest(files[family + ".nq"]) != info["graphs"][family]["sha256"] for family in ("structure", "jurisprudence"))):
+        raise ValueError("Verified public bytes or complete inventory changed")
+    return files
+
+
 def _match(store, loaded, snapshot, ontology_root):
     tools = _packet_tools()
     a = loaded["structure"]
@@ -206,23 +238,48 @@ def current_assembly(settings, store, source_store, declaration, ontology_root):
         if loaded["lock_identity"] != lock_identity:
             raise ValueError("Publication lock was replaced")
         original = _fingerprint(loaded)
+        public = {loaded["a_info"]["release_id"]: (loaded["a_info"], _public_capture(loaded["a_info"])),
+                  **{item["info"]["release_id"]: (item["info"], _public_capture(item["info"])) for item in loaded["jurisprudence"]}}
         with locked_mixed_snapshot(store, source_store, operator_id=declaration.operator_id, request=loaded["request"],
                 trusted_key=loaded["paths"][1], ontology_root=ontology_root, shared=True) as snapshot:
             _match(store, loaded, snapshot, ontology_root)
-            prepared = {item.release_id: item.prepared for item in (declaration.structure, *declaration.jurisprudence)}
-            files, inventory = compile_union(prepared, base=loaded["base"], trusted_key=loaded["paths"][0],
-                                             ontology_root=ontology_root)
+            files, inventory = compile_captured_union(public, base=loaded["base"], ontology_root=ontology_root)
             _lifetimes(loaded, snapshot)
             if trust(settings) != (loaded["paths"], loaded["keys"]):
                 raise ValueError("Assembly trust changed during compilation")
             output_hash = digest(canonical({name: digest(raw) for name, raw in files.items()}))
             def recheck():
-                final = _load(settings, store, declaration, ontology_root)
-                if (_fingerprint(final) != original or _fingerprint(loaded) != original or final["lock_identity"] != lock_identity
+                # Read every private/public byte afresh. The enclosing mixed
+                # snapshot reconstructs all original DB/source histories on exit.
+                # Nothing is cached across operations or accepted from a caller.
+                tools = _packet_tools()
+                root = tools.checked_path(settings.graph_release_dir)
+                current_lock = (root / "publication.lock").stat()
+                pointer = serving.read_pointer(root)
+                pointer_hash = digest(tools.read_file(root / "active.json", 4096)) if pointer else None
+                a = loaded["structure"]
+                if (_fingerprint(loaded) != original or (current_lock.st_dev, current_lock.st_ino) != lock_identity
+                        or tuple(map(str, (root, tools.checked_path(settings.data_dir / "release-authorizations"),
+                                          tools.checked_path(settings.public_source_dir)))) != loaded["location"]
+                        or pointer_hash != loaded["pointer_sha256"]
+                        or tools.read_file(settings.data_dir / "publication-epoch", 37) != loaded["epoch_bytes"]
+                        or tools.read_file(Path(declaration.structure.grant) / "authorization.json", tools.MAX_JSON) != a["authorization"]
+                        or tools.read_packet(Path(declaration.structure.grant) / "packet", store,
+                            schema_version="legal-review-source-set-packet-v1") != (a["files"], a["packet_digest"])
                         or canonical(inventory) != files["assembly-inputs.json"]
                         or digest(canonical({name: digest(raw) for name, raw in files.items()})) != output_hash):
                     raise ValueError("Assembly dependencies or output changed")
-                _match(store, final, snapshot, ontology_root)
+                for component, item in zip(declaration.jurisprudence, loaded["jurisprudence"], strict=True):
+                    if tools.read_packet(component.grant, store, schema_version=b_public.PACKET_SCHEMA)[1] != item["outer_hash"]:
+                        raise ValueError("Retained inclusion grant changed")
+                for info, captured in public.values():
+                    if _public_capture(info) != captured:
+                        raise ValueError("Verified public component changed")
+                if loaded["base"]:
+                    base_root = root / "releases" / loaded["base"]["pointer"]["release_id"]
+                    if {name: digest(tools.read_file(base_root / name, tools.MAX_FILE)) for name in serving._files(base_root)} != loaded["base"]["files"]:
+                        raise ValueError("Complete retained base changed")
+                _lifetimes(loaded, snapshot)
                 if trust(settings) != (loaded["paths"], loaded["keys"]):
                     raise ValueError("Assembly trust changed at final validation")
             yield files, inventory, loaded

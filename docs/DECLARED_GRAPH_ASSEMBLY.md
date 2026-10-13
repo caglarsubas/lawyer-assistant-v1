@@ -130,6 +130,12 @@ expired permission invalidates the entire packet. Final reconstruction occurs
 after bounded work. Failed or interrupted output creation removes only the new
 artifact owned by that invocation; existing evidence is never overwritten.
 
+Each operation verifies component signatures/RDF afresh. Within that same
+operation, the compiler consumes captured bytes bound to those verified manifests
+instead of repeating identical RDF checks. Every private/public file is read and
+hashed again at exit; all keys, lifetimes, base inventory, original database/source
+histories and output bytes remain checked. No verdict is reused across operations.
+
 ## Next gate
 
 All commands return `national_release_serving_authorized: false`. The reviewed

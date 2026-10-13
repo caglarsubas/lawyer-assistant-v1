@@ -30,14 +30,24 @@
       "passed": 41
     },
     "ruff": "passed",
-    "whitespace": "passed"
+    "whitespace": "passed",
+    "deduplicated_linux_assembly": {
+      "passed": 33,
+      "seconds": 83.59
+    },
+    "deduplicated_postgres_assembly": {
+      "passed": 1,
+      "seconds": 20.21,
+      "cpu_limit": 1,
+      "same_reader_barrier_and_deadlines": true
+    }
   },
   "ci_partition": {
     "schema": "complete-ci-partition-v1",
     "counts": {
-      "complete": 4227,
+      "complete": 4230,
       "preflight": 89,
-      "remaining": 3816,
+      "remaining": 3819,
       "publication": 128,
       "workspace": 67,
       "human_review": 107,
@@ -73,7 +83,7 @@
     "intersection": 0,
     "missing": 0,
     "extra": 0,
-    "complete_node_ids_sha256": "a34faf7ac1fee6673d087f20d3a24e6ef374d18f4ef1814a131e668f9628a546",
+    "complete_node_ids_sha256": "85a0466cf8fbe6ded7d5a5452ced588741170149f4dfeb71eea624ed1a4a431c",
     "workflow_sha256": "e54a926b00423accf76ce346dd127806bafff4ca865b0eae3f4a0e6b9510c812",
     "no_new_runner_retry_or_deadline_change": true,
     "workspace_workers": 2,
@@ -89,10 +99,18 @@
   "graph_publication_performed": false,
   "user_deployment_performed": false,
   "source_sha256": {
-    "backend/app/declared_graph_assembly.py": "e108c2c536ccf3319536217aafb9898e7a38c9c83c5b96b7c9a1bbf9879cfd03",
-    "backend/app/public_graph_union.py": "1d3174a5ea59ad7d65fa6da42307ed34da88c9c9a3c02f86c1e6497c0b73b6da",
+    "backend/app/declared_graph_assembly.py": "987bb55d5dcc7f577d4238ff6f3af4b8c320c62bd5fdece651ce260eafbaa000",
+    "backend/app/public_graph_union.py": "44cf6d8da64f598ac10f9df9ab71829f224776e09baccbc4f9c1ad2bbaa5f258",
     "scripts/assemble_legal_graphs.py": "1a85d89f5f59b1ed05207b19bfce42e60a76e435e6c2c18022ba927e90f586e3",
-    "backend/tests/test_declared_graph_assembly.py": "ee254c083ee5a52ed79683ea662bd1d6ad4a01f25ff5cebd61f8ab82c98a4d21",
+    "backend/tests/test_declared_graph_assembly.py": "4427788ba5558260225d2da0aa98d88ca83d31a6321e01f23eecf4bd322ea52b",
     "backend/tests/test_declared_assembly_postgres.py": "c58d2128022e0a747552d5fac14c4866fc736ddbe554a117dec625a7a1d66c7d"
-  }
+  },
+  "ci_failure": {
+    "run_id": 38340570114,
+    "job_id": 115110386015,
+    "cause": "30-second reader barrier expired during repeated per-operation RDF validation",
+    "preceding_pg_cases_passed": 82,
+    "direct_cancellation": "token denied Actions write HTTP 403"
+  },
+  "per_operation_public_validation": "fresh signature/RDF validation, complete manifest-bound captured bytes, fresh all-file hashing and original source reconstruction on exit; no cross-operation verdict cache"
 }

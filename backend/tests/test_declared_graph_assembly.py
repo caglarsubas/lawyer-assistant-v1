@@ -410,3 +410,13 @@ def test_expiry_during_original_source_exit_withholds_new_output(assembly, tmp_p
     with pytest.raises(ValueError):
         prepared(assembly, tmp_path / "withheld")
     assert not (tmp_path / "withheld").exists()
+
+
+@pytest.mark.parametrize("relative", ["bundle/inputs/jurisprudence.ttl", "jurisprudence.nq", "bundle/manifest.json"])
+def test_operation_local_public_validation_never_skips_changed_bytes(assembly, relative):
+    with readonly_store(assembly["settings"]) as store, pytest.raises(ValueError):
+        with current_assembly(assembly["settings"], store, assembly["current"]["sources"],
+                assembly["declaration"], ROOT / "ontology"):
+            target = Path(assembly["declaration"].jurisprudence[0].prepared) / relative
+            target.chmod(0o600)
+            target.write_bytes(target.read_bytes() + b"\n# substituted after verified capture\n")

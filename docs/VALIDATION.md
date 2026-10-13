@@ -4172,3 +4172,17 @@ for complete **declared** inputs and final signature verification, not national
 historical coverage, professional approval, a serving grant or deployment.
 See [operator contract](DECLARED_GRAPH_ASSEMBLY.md) and
 `docs/evidence/declared-graph-assembly-2026-10-13.json`.
+
+PR65's first PostgreSQL run failed its 30-second reader barrier after spending
+CPU time repeatedly validating the same component RDF within each operation
+(`38340570114`, job `115110386015`, 82 preceding cases passed). Component validation
+now runs afresh once for each operation; a manifest-bound capture drives the
+compiler, and complete byte/permission/key/source checks still run on exit.
+Three added mutation cases require changes to captured Turtle, N-Quads and the
+manifest to fail. All 33 assembly cases passed in disconnected Linux in 83.59s;
+the unchanged real five-reader PostgreSQL case passed in 20.21s under a stricter
+one-CPU local limit. All 4,230 collected cases remain disjoint. No reader barrier,
+CI deadline, worker count, job count or retry policy was expanded. Direct obsolete
+run cancellation was rejected by the token's Actions permissions; a new PR head
+uses the existing concurrency cancellation rule. Whole-workflow hosted results
+remain a separate merge gate.
