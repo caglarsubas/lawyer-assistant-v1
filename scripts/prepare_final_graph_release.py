@@ -119,14 +119,16 @@ def validate(settings, candidate):
     if type(binding) is not dict or set(binding) != {"reviewed_packet", "reviewed_packet_sha256"}:
         raise ValueError("Candidate source review binding differs")
     packet = io.checked_path(binding["reviewed_packet"])
-    with current_packet(settings, packet, reviewed=True) as (store, files, loaded):
+    verified_public = verify_public_payload(candidate / "prepared", original_trust[0][0][3])
+    with current_packet(settings, packet, reviewed=True, verified_public=verified_public) as (store, files, loaded):
         _, packet_hash = io.read_packet(packet, store, schema_version="legal-declared-graph-assembly-v1")
         if packet_hash != binding["reviewed_packet_sha256"]:
             raise ValueError("Original reviewed assembly changed")
-        info = match_candidate(candidate / "prepared", files, loaded)
-        public_capture = _public_capture(info)
+        verify_captured_attestation(files, loaded, verified_public)
+        info = verified_public.info
+        public_capture = verified_public.files
         expected = request_body(settings, files, loaded, info, packet_hash, body["reviewer"], body["approved_at"], body["expires_at"])
-        if body != expected:
+        if canonical(body) != canonical(expected):
             raise ValueError("Candidate permission request differs")
         if (io.read_packet(candidate / "permission", store) != (permission, permission_hash)
                 or _public_capture(info) != public_capture):

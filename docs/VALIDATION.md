@@ -4258,3 +4258,13 @@ four CI jobs, two workers per job, no retries and unchanged existing deadlines.
 The new whole-release job is capped at six minutes (five-minute test step);
 existing jobs were already within 30 seconds of their caps. It adds necessary
 new lifecycle/race coverage without extending any existing long-running job.
+
+Immutable publication copies now reuse only the fresh validation of their exact
+entry bytes within that operation. Each staging/install copy and post-guard exit
+rechecks the complete file inventory, all hashes, original input bytes, key bytes
+and current Ed25519 review/timestamp. Any later operation performs full validation
+again. Late copy mutation and mutation of an existing installed copy remain
+explicit rejection tests. The CI timing hook also reports early completion counts
+for small groups without emitting test parameters, fixture contents or secrets.
+No test was omitted, existing deadline increased, permission verdict cached or
+retry added to address the initial PR67 timeouts.

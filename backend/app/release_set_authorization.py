@@ -241,7 +241,7 @@ class ReleaseSetAuthorization(ReleaseAuthorization):
         if any(verified.get(field) != info.get(field) for field in ("release_id", "serving_sha256", "ontology_sha256", "review")):
             raise _fail()
         return {"body": body, "files": files, "authorization": authorization, "epoch_bytes": epoch_bytes,
-                "key_bytes": key_bytes, "packet_digest": packet_digest, "bundle": bundle}
+                "key_bytes": key_bytes, "packet_digest": packet_digest, "bundle": bundle, "public_info": verified}
 
     def _public_match(self, current, info, tools):
         match_public_bundle(current["files"], info, self.ontology_root)

@@ -83,7 +83,7 @@ def match(settings, command, candidate, request, files, loaded, info, packet_has
         raise ValueError("Complete serving payload differs from approved candidate")
     expected = command.request_body(settings, files, loaded, candidate_info, packet_hash,
                                    request["reviewer"], request["approved_at"], request["expires_at"])
-    if request != expected:
+    if canonical(request) != canonical(expected):
         raise ValueError("Whole-release permission request differs")
     return _public_capture(candidate_info)
 
@@ -121,7 +121,7 @@ class FinalReleaseAuthorization:
             if type(private) is not dict or set(private) != {"candidate", "permission_sha256", "original_pointer_sha256"}:
                 raise ValueError("Exact retained whole-release binding required")
             command, candidate, permission, permission_hash, binding, request = candidate_inputs(settings, reader, private["candidate"])
-            if permission_hash != private["permission_sha256"] or body != approval_body(request):
+            if permission_hash != private["permission_sha256"] or canonical(body) != canonical(approval_body(request)):
                 raise ValueError("Whole-release signature must approve the exact original request")
         verified_public = command.verify_public_payload(candidate / "prepared", command.grant_trust(settings)[0][0][3])
         transition = info.get("_transition")
@@ -181,7 +181,7 @@ class FinalReleaseAuthorization:
                     serving_context=context, shared=action == "read", verified_public=verified_public) as (store, files, loaded):
                 packet = tools.checked_path(binding["reviewed_packet"])
                 _, packet_hash = tools.read_packet(packet, store, schema_version="legal-declared-graph-assembly-v1")
-                if packet_hash != binding["reviewed_packet_sha256"] or body != approval_body(request):
+                if packet_hash != binding["reviewed_packet_sha256"] or canonical(body) != canonical(approval_body(request)):
                     raise ValueError("Original independent final review differs")
                 public_candidate = match(settings, command, candidate, request, files, loaded, info, packet_hash, verified_public)
                 if info["review"]["key_sha256"] != configured_key_path(loaded["paths"][3])[2]:
@@ -214,11 +214,13 @@ def accept(settings, *, candidate, authorization):
     try:
         with readonly_store(settings) as reader:
             command, candidate, permission, permission_hash, binding, request = candidate_inputs(settings, reader, candidate)
+        if canonical(body) != canonical(approval_body(request)):
+            raise ValueError("Exact external whole-release approval required")
         verified_public = command.verify_public_payload(candidate / "prepared", command.grant_trust(settings)[0][0][3])
         with command.current_packet(settings, tools.checked_path(binding["reviewed_packet"]), reviewed=True,
                 verified_public=verified_public) as (store, files, loaded):
             _, packet_hash = tools.read_packet(binding["reviewed_packet"], store, schema_version="legal-declared-graph-assembly-v1")
-            if body != approval_body(request) or packet_hash != binding["reviewed_packet_sha256"]:
+            if canonical(body) != canonical(approval_body(request)) or packet_hash != binding["reviewed_packet_sha256"]:
                 raise ValueError("Exact external whole-release approval required")
             info = verified_public.info
             public = match(settings, command, candidate, request, files, loaded, info, packet_hash, verified_public)

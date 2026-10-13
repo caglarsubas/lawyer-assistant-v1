@@ -139,24 +139,31 @@ def test_whole_external_approval_install_activation_and_current_runtime_read(ass
     assert serving.read_pointer(root) == pointer
 
 
-@pytest.mark.parametrize("change", ["wrong-key", "partial-members", "extra-field", "unsigned-request"])
-def test_external_grant_requires_exact_whole_reviewed_request(staged, change):
+def test_external_grant_requires_exact_whole_reviewed_request(staged):
+    from cryptography.exceptions import InvalidSignature
     value, io = staged, final._packet_tools()
-    if change == "wrong-key":
-        signing_key = value["assembly"]["key"]
-    else:
-        signing_key = value["key"]
+    original = value["body"]
+    # Each bad envelope is independently signed and exercised. Sharing the
+    # unchanged valid candidate avoids rebuilding older staging subjects five
+    # times; final success proves denials were not caused by broken setup.
+    for change in ("wrong-key", "partial-members", "extra-field", "unsigned-request", "coerced-flag"):
+        body = {**original, "component_release_ids": list(original["component_release_ids"])}
+        signing_key = value["assembly"]["key"] if change == "wrong-key" else value["key"]
         if change == "partial-members":
-            value["body"]["component_release_ids"].pop()
+            body["component_release_ids"].pop()
         elif change == "extra-field":
-            value["body"]["extra"] = "invalid"
-        else:
-            value["body"].update(schema_version=value["command"].SCHEMA, decision="request", signed=False,
-                                 national_release_serving_authorized=False)
-    signed(value["authorization"], value["body"], signing_key, io)
-    with pytest.raises(Exception):
-        accepted(value)
-    assert not (value["settings"].data_dir / "release-authorizations" / value["body"]["release_id"]).exists()
+            body["extra"] = "invalid"
+        elif change == "coerced-flag":
+            body["signed"] = 1
+        elif change == "unsigned-request":
+            body.update(schema_version=value["command"].SCHEMA, decision="request", signed=False,
+                        national_release_serving_authorized=False)
+        signed(value["authorization"], body, signing_key, io)
+        with pytest.raises((ValueError, InvalidSignature)):
+            accepted(value)
+        assert not (value["settings"].data_dir / "release-authorizations" / original["release_id"]).exists(), change
+    signed(value["authorization"], original, value["key"], io)
+    assert accepted(value)["whole_release_authorization_accepted"]
 
 
 @pytest.mark.parametrize("change", ["a-rights", "b-rights", "epoch", "fifth-key", "packet", "pointer"])

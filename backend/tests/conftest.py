@@ -19,7 +19,7 @@ def pytest_runtest_logreport(report):
     if report.when == "teardown":
         row["completed"] += 1
         _ci_completed += 1
-        if _ci_completed % 100 == 0:
+        if _ci_completed % 100 == 0 or _ci_completed in {1, 5, 10, 20, 50}:
             _print_ci_times()
 
 

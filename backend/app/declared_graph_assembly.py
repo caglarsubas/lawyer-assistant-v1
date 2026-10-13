@@ -66,9 +66,23 @@ def trust(settings):
     return paths, tuple((key[0], key[2]) for key in keys)
 
 
+def _untrusted_prepared_hint(path, tools):
+    """Discovery only. Each caller MUST use its independent full validator.
+
+    This hint never establishes signature, RDF correctness or permission. Both
+    component validators return their actual freshly verified public info.
+    """
+    root = tools.checked_path(path)
+    raw = tools.read_file(root / "serving.json", 65536)
+    marker = tools.parse_json(raw)
+    if type(marker) is not dict:
+        raise ValueError("Invalid public component hint")
+    return {**marker, "serving_sha256": digest(raw), "bundle_path": root / "bundle"}
+
+
 def _b_load(store, component, paths, epoch, ontology_root):
     tools = _packet_tools()
-    info = _load_serving().validate_prepared(tools.checked_path(component.prepared), paths[0])
+    info = _untrusted_prepared_hint(component.prepared, tools)
     if info["release_id"] != component.release_id:
         raise ValueError("Declared decision component differs")
     outer, outer_hash = tools.read_packet(component.grant, store, schema_version=b_public.PACKET_SCHEMA)
@@ -82,7 +96,7 @@ def _b_load(store, component, paths, epoch, ontology_root):
     if outer != expected or envelope["body"]["publication_epoch"] != epoch:
         raise ValueError("Retained inclusion grant inventory or epoch differs")
     private = b_public.private_evidence(store, files)
-    b_public.match_public_component(files, info, paths[0], ontology_root)
+    info = b_public.match_public_component(files, info, paths[0], ontology_root)
     return {"info": info, "files": files, "packet_hash": packet_hash, "private": private,
             "raw": raw, "outer_hash": outer_hash, "selection": SnapshotRequest.model_validate(private["binding"]["selection"])}
 
@@ -133,7 +147,7 @@ def _load(settings, store, declaration, ontology_root, serving_context=None):
         base_root = active["bundle_path"].parent
         base = {"pointer": expected_base, "files": {name: digest(tools.read_file(base_root / name, tools.MAX_FILE))
                 for name in sorted(serving._files(base_root))}}
-    a_info = serving.validate_prepared(tools.checked_path(declaration.structure.prepared), paths[0])
+    a_info = _untrusted_prepared_hint(declaration.structure.prepared, tools)
     if a_info["release_id"] != declaration.structure.release_id:
         raise ValueError("Declared structural component differs")
     auth_root = tools.checked_path(settings.data_dir / "release-authorizations")
@@ -142,7 +156,8 @@ def _load(settings, store, declaration, ontology_root, serving_context=None):
         raise ValueError("Structural permission must use the configured retained namespace")
     a_gate = ReleaseSetAuthorization(store, None, auth_root, paths[0], ontology_root,
                                      settings.data_dir / "publication-epoch")
-    a_current = a_gate._load(a_info, "read", tools)  # Stateless; no Session/guard nesting.
+    a_current = a_gate._load(a_info, "read", tools)  # FULL independent public validation; no Session nesting.
+    a_info = a_current["public_info"]
     if a_current["body"]["source_binding"]["operator_id"] != declaration.operator_id:
         raise ValueError("Exact common source owner is required")
     b_values = [_b_load(store, component, paths, epoch, ontology_root) for component in declaration.jurisprudence]
