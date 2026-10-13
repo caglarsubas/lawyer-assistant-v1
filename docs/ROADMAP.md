@@ -2081,3 +2081,34 @@ preserve the signed publication location without automatic packet rebinding.
 Previous namespaces require renewed independent review rather than migration of
 an approval. Complete reassembly onto a retained mixed base is the next gated
 packet; source/legal qualification and production activation remain external.
+
+### R03 complete retained mixed-base assembly
+
+[Retained assembly](RETAINED_MIXED_ASSEMBLY.md) preserves the complete installed
+mixed base, all public manifestations, original source preparations, component
+grants and earlier whole-release permissions. Successors may add structural
+source sets and decision contexts without dropping earlier dependencies. One
+globally ordered original-source transaction reconstructs every earlier assembly;
+fresh independent final attestation and whole permission bind the new inventory.
+Frozen base inventories remain distinct from live CAS transitions. Explicit
+depth, source, component, file and byte limits withhold oversized assemblies.
+
+Qualification covers successive additions, shared registers, whole-byte
+preservation, rollback, original-source withdrawal, changed artifacts/trust and
+real PostgreSQL concurrency. CI groups remain disjoint under existing job caps,
+two workers and no automatic retries. Exact-head checks and verified main trees
+are required before merge; synthetic evidence confers no legal or deployment
+approval. R03/R05 remain partial.
+
+Next: read-only retained-dependency reconciliation, with private provenance and
+explicit current-versus-recorded state, followed by independently qualified
+corpus/retrieval integration. Licensed historical population, actual legal/editor
+review, production key custody, activation and held-out lawyer acceptance remain
+external gates.
+
+Retained-assembly CI qualification: measured withdrawal reconstruction exceeded
+the frontend job's existing five-minute cap. The complete eight-case withdrawal
+group now runs once in a separate three-minute ARM job; all existing job caps,
+two-worker limits and no-retry policy stay unchanged. The final-release and
+PostgreSQL groups passed on the first head. Every exact-head check, including the
+new disjoint withdrawal job, must pass before merge.

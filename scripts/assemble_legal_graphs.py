@@ -25,6 +25,7 @@ from app.declared_graph_assembly import (  # noqa: E402
     Declaration,
     _fingerprint,
     _public_capture,
+    component_nodes,
     current_assembly,
     trust,
 )
@@ -42,11 +43,16 @@ def review_body(files, loaded, declaration, reviewer, reviewed_at):
     if (type(reviewer) is not str or not 1 <= len(reviewer) <= 300 or reviewer != reviewer.strip()
             or any(ord(char) < 32 for char in reviewer)):
         raise ValueError("An independently accountable final reviewer is required")
-    reviews = [loaded["a_info"]["review"], *(item["info"]["review"] for item in loaded["jurisprudence"])]
+    nodes = component_nodes(loaded)
+    reviews = [review for node in nodes for review in
+        [node["a_info"]["review"], *(item["info"]["review"] for item in node["jurisprudence"])]]
+    parents = [node["retained"] for node in nodes if node.get("retained")]
+    reviews += [parent["payload"].info["review"] for parent in parents]
     if reviewer in {declaration.operator_id, *(item["reviewer"] for item in reviews)}:
         raise ValueError("Final reviewer must be independent of source ownership and component review")
-    approved = [loaded["structure"]["body"]["approved_at"],
-                *(io.parse_json(item["raw"])["body"]["approved_at"] for item in loaded["jurisprudence"])]
+    approved = [date for node in nodes for date in [node["structure"]["body"]["approved_at"],
+                *(io.parse_json(item["raw"])["body"]["approved_at"] for item in node["jurisprudence"])]]
+    approved += [parent["body"]["approved_at"] for parent in parents]
     timestamp = _instant(reviewed_at)
     if timestamp > datetime.now(timezone.utc) or any(timestamp < _instant(value) for value in
             [*approved, *(item["reviewed_at"] for item in reviews)]):

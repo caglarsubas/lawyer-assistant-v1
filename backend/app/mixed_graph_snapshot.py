@@ -47,6 +47,36 @@ class MixedGraphRequest(StrictInput):
         return self
 
 
+class RetainedGraphRequest(StrictInput):
+    """Internal complete dependency plan, never an agent query or permission."""
+    schema_version: Literal["legal-retained-mixed-selection-v1"]
+    structures: list[a_family.SnapshotSetRequest] = Field(min_length=1, max_length=8)
+    jurisprudence: list[b_family.SnapshotRequest] = Field(min_length=1, max_length=32)
+
+    @model_validator(mode="after")
+    def distinct_dependencies(self):
+        contexts = [context_ids(*item.decision_source_ids, item.register_source_id)[1]
+                    for item in self.jurisprudence]
+        a_sources = {item.source_id for group in self.structures for item in group.sources}
+        decisions = {key for item in self.jurisprudence for key in item.decision_source_ids}
+        registers = {item.register_source_id for item in self.jurisprudence}
+        if (len(contexts) != len(set(contexts)) or a_sources & (decisions | registers)
+                or decisions & registers or len(a_sources | decisions | registers) > 64):
+            raise ValueError("Complete distinct bounded source contexts are required")
+        pins = {}
+        for group in self.structures:
+            for item in group.sources:
+                encoded = canonical(item.model_dump())
+                if item.source_id in pins and pins[item.source_id] != encoded:
+                    raise ValueError("Conflicting retained structural source pins")
+                pins[item.source_id] = encoded
+        return self
+
+
+def _structures(request):
+    return request.structures if isinstance(request, RetainedGraphRequest) else [request.structure]
+
+
 def invalid():
     return SnapshotError("Current mixed legal-graph preparation dependencies could not be verified")
 
@@ -65,7 +95,7 @@ def _lock_plan(store, session, operator_id, request, shared):
     operator = members[operator_id]
     if any(actor.firm_id != operator.firm_id for actor in members.values()):
         raise invalid()
-    a_sources = {item.source_id for item in request.structure.sources}
+    a_sources = {item.source_id for group in _structures(request) for item in group.sources}
     decisions = {key for item in request.jurisprudence for key in item.decision_source_ids}
     registers = {item.register_source_id for item in request.jurisprudence}
     # A source cannot be a decision in one context and a register in another.
@@ -96,25 +126,20 @@ def _lock_plan(store, session, operator_id, request, shared):
 
 def _capture(store, source_store, session, operator_id, request, trusted_key, ontology_root, shared):
     operator = _lock_plan(store, session, operator_id, request, shared)
-    selections = a_family._selection(operator_id, request.structure)
-    snapshots, originals, fingerprints, byte_count, mapping_count = a_family._capture(
-        store, source_store, session, operator, selections, shared=shared)
-    a_family._revalidate(store, source_store, session, operator_id, a_family._identity(operator), selections,
-        originals, fingerprints, shared=shared)
-    binding = {"schema_version": "legal-review-snapshot-set-v1", "firm_id": operator.firm_id,
-        "operator_id": operator.id, "sources": [item["binding"] for item in snapshots], "publication_eligible": False}
+    a_values, packages, private_bytes = [], {}, 0
     mode = ("postgresql_transaction_locks" if store.engine.dialect.name == "postgresql"
             else "sqlite_demo_optimistic_revalidation")
-    a_value = {"snapshots": snapshots, "binding": binding,
-        "summary": {"schema_version": "legal-review-snapshot-set-summary-v1", "source_count": len(snapshots),
-            "mapping_count": mapping_count, "artifact_bytes": byte_count, "binding_sha256": digest(canonical(binding)),
-            "consistency_mode": mode, "signed": False, "publication_eligible": False, "confidentiality": "firm_confidential"}}
-    packages = {item["package"].detail["id"]: item["package"] for item in snapshots}
-    private_structure = {**{key: a_value[key] for key in ("binding", "summary")},
-        "snapshots": [{key: item[key] for key in item if key != "package"} for item in snapshots]}
-    b_values, private_bytes = [], len(canonical(private_structure))
-    if private_bytes > MAX_PRIVATE_BYTES:
-        raise invalid()
+    for group in _structures(request):
+        a_value = _capture_structure(store, source_store, session, operator, operator_id, group, shared, mode)
+        a_values.append(a_value)
+        packages.update({item["package"].detail["id"]: item["package"] for item in a_value["snapshots"]})
+        private_structure = {**{key: a_value[key] for key in ("binding", "summary")},
+            "snapshots": [{key: item[key] for key in item if key != "package"} for item in a_value["snapshots"]]}
+        private_bytes += len(canonical(private_structure))
+        if (private_bytes > MAX_PRIVATE_BYTES
+                or sum(len(raw) for package in packages.values() for raw in package.artifacts.values()) > MAX_BYTES):
+            raise invalid()
+    b_values = []
     for _, item in _contexts(request):
         value = b_family._capture(store, source_store, session, operator_id, item, trusted_key, ontology_root, shared)
         packages.update(value["packages"])
@@ -125,13 +150,33 @@ def _capture(store, source_store, session, operator_id, request, trusted_key, on
         b_values.append(value)
     if len({value["binding"]["ontology_sha256"] for value in b_values}) != 1:
         raise invalid()
-    return {"structure": a_value, "jurisprudence": b_values,
+    key = "structures" if isinstance(request, RetainedGraphRequest) else "structure"
+    return {key: a_values if key == "structures" else a_values[0], "jurisprudence": b_values,
         "summary": {"schema_version": "legal-mixed-graph-snapshot-v1", "source_count": len(packages),
                     "context_count": len(b_values), "consistency_mode": mode, "publication_eligible": False,
                     "confidentiality": "firm_confidential"}}
 
 
+def _capture_structure(store, source_store, session, operator, operator_id, group, shared, mode):
+    selections = a_family._selection(operator_id, group)
+    snapshots, originals, fingerprints, byte_count, mapping_count = a_family._capture(
+        store, source_store, session, operator, selections, shared=shared)
+    a_family._revalidate(store, source_store, session, operator_id, a_family._identity(operator), selections,
+        originals, fingerprints, shared=shared)
+    binding = {"schema_version": "legal-review-snapshot-set-v1", "firm_id": operator.firm_id,
+        "operator_id": operator.id, "sources": [item["binding"] for item in snapshots], "publication_eligible": False}
+    a_value = {"snapshots": snapshots, "binding": binding,
+        "summary": {"schema_version": "legal-review-snapshot-set-summary-v1", "source_count": len(snapshots),
+            "mapping_count": mapping_count, "artifact_bytes": byte_count, "binding_sha256": digest(canonical(binding)),
+            "consistency_mode": mode, "signed": False, "publication_eligible": False, "confidentiality": "firm_confidential"}}
+    return a_value
+
+
 def _fingerprint(value):
+    if type(value) is dict and set(value) == {"structures", "jurisprudence", "summary"}:
+        return digest(canonical({"summary": value["summary"],
+            "structures": [a_family._result_fingerprint(item) for item in value["structures"]],
+            "jurisprudence": [b_family._fingerprint(item) for item in value["jurisprudence"]]}))
     if type(value) is not dict or set(value) != {"structure", "jurisprudence", "summary"}:
         raise invalid()
     return digest(canonical({"summary": value["summary"],
@@ -148,9 +193,9 @@ def locked_mixed_snapshot(store, source_store, *, operator_id, request, trusted_
     """
     try:
         if (type(shared) is not bool or type(operator_id) is not str or not 1 <= len(operator_id) <= 64
-                or type(request) is not MixedGraphRequest or store.engine.dialect.name not in {"postgresql", "sqlite"}):
+                or type(request) not in {MixedGraphRequest, RetainedGraphRequest} or store.engine.dialect.name not in {"postgresql", "sqlite"}):
             raise invalid()
-        request = MixedGraphRequest.model_validate(request.model_dump())
+        request = type(request).model_validate(request.model_dump())
         with store.session() as session:
             value = _capture(store, source_store, session, operator_id, request, trusted_key, ontology_root, shared)
             fingerprint = _fingerprint(value)

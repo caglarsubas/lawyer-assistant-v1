@@ -26,7 +26,7 @@ source = source_fixture
 workspace = workspace_fixture
 
 
-def make_source_set(workspace, source, count=2):
+def make_source_set(workspace, source, count=2, *, version_prefix="snapshot-set-fixture"):
     """Populate exact independent ledger heads through real review APIs in tests."""
     app, client, _ = workspace
     store, inputs, metadata, locators = source
@@ -40,7 +40,7 @@ def make_source_set(workspace, source, count=2):
     for index in range(count):
         inputs["metadata_path"].write_text(json.dumps({
             **metadata, "title": f"ISOLATED SNAPSHOT-SET FIXTURE {index}",
-            "source_version_id": f"snapshot-set-fixture-{index}"}), encoding="utf-8")
+            "source_version_id": f"{version_prefix}-{index}"}), encoding="utf-8")
         source_id = store.import_package(**inputs)["id"]
         mapping = app, client, store, source_id, f"/api/v1/public-sources/{source_id}"
         ready(mapping, uses=sorted(REQUIRED_USES))

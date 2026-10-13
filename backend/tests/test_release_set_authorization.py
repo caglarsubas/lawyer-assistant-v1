@@ -71,8 +71,8 @@ def public_version(fixture, directory, *, public_reviewer="TEST-ONLY PUBLIC SET 
             "packet_digest": packet_digest, "source_permissions": permissions}
 
 
-def build_authorized_set(workspace, source, tmp_path):
-    mappings = make_source_set(workspace, source)
+def build_authorized_set(workspace, source, tmp_path, *, keys=None, epoch=None, identity_prefix="set-fixture"):
+    mappings = make_source_set(workspace, source, version_prefix=("snapshot-set-fixture" if identity_prefix == "set-fixture" else identity_prefix))
     app, _, sources, _, _ = mappings[0]
     tools = _packet_tools()
     registry, resolutions, selection, evidence, permissions = [], [], [], {}, []
@@ -92,7 +92,7 @@ def build_authorized_set(workspace, source, tmp_path):
                                      "text_role": "operative_text"},
                          evidence_refs=[{"reference": "PRIVATE MAPPING PROOF", "sha256": proof_hash}])
         assert changed.status_code == 200, changed.text
-        ids = [f"urn:tr-law:{kind}:set-fixture-{index}"
+        ids = [f"urn:tr-law:{kind}:{identity_prefix}-{index}"
                for kind in ("instrument", "provision", "provision-version")]
         registry.extend({"id": value, "kind": kind, "parent_id": parent, "evidence_sha256": [proof_hash]}
                         for value, kind, parent in ((ids[0], "instrument", None), (ids[1], "provision", ids[0]),
@@ -111,11 +111,14 @@ def build_authorized_set(workspace, source, tmp_path):
                 {"schema_version": "legal-identity-registry-v1", "entities": registry},
                 {"schema_version": "provision-source-set-resolutions-v1", "sources": resolutions}, evidence, ONTOLOGY)
     assert summary["rdf_generated"] and summary["assertion_count"] == 4
-    key = Ed25519PrivateKey.generate()  # TEST ONLY; never touches deployment credentials.
-    public_key = tmp_path / "TEST-ONLY-set-key.pem"
-    public_key.write_bytes(key.public_key().public_bytes(serialization.Encoding.PEM,
-                                                       serialization.PublicFormat.SubjectPublicKeyInfo))
-    epoch = str(uuid4())
+    if keys is None:
+        key = Ed25519PrivateKey.generate()  # TEST ONLY; never touches deployment credentials.
+        public_key = tmp_path / "TEST-ONLY-set-key.pem"
+        public_key.write_bytes(key.public_key().public_bytes(serialization.Encoding.PEM,
+                                                           serialization.PublicFormat.SubjectPublicKeyInfo))
+    else:
+        key, public_key = keys
+    epoch = epoch or str(uuid4())
     epoch_path = app.state.settings.data_dir / "publication-epoch"
     epoch_path.write_text(epoch + "\n")
     fixture = {"app": app, "mappings": mappings, "sources": sources, "tools": tools, "files": files,

@@ -7,6 +7,7 @@ import pytest
 from sqlalchemy import update
 from test_declared_graph_assembly import build
 from test_final_release_authorization import accepted, activate, stage_for
+from test_retained_mixed_assembly import successor
 from test_snapshot_set_postgres import (
     observe_identity_lock,
     postgres_database,
@@ -26,7 +27,13 @@ __all__ = ["postgres_database", "postgres_graph_b_snapshot", "postgres_workspace
 def test_five_authorized_whole_release_readers_protect_all_member_rights(postgres_graph_b_snapshot, tmp_path):
     value = stage_for(build(postgres_graph_b_snapshot, tmp_path), tmp_path)
     accepted(value)
-    serving, root, key, _, _, _ = activate(value)
+    serving, root, key, previous_info, guard, previous = activate(value)
+    second = successor(value, previous, tmp_path / "retained-successor")
+    accepted(second)
+    second_info = serving.validate_prepared(second["candidate"] / "prepared", key)
+    serving.install(root, second["candidate"] / "prepared", key, authorization_guard=guard)
+    serving.activate(root, second_info["release_id"], key, expected_current=previous_info["release_id"],
+                     expected_sequence=previous["sequence"], authorization_guard=guard)
     info = serving.load_active(root, key)
     current = value["assembly"]["current"]
     barrier, resume = Barrier(6), Event()
@@ -34,7 +41,7 @@ def test_five_authorized_whole_release_readers_protect_all_member_rights(postgre
     def read():
         with FinalReleaseAuthorization(value["settings"]).guard(info, "read") as receipt:
             assert receipt["scope"] == "complete_declared_release"
-            barrier.wait(timeout=30)
+            barrier.wait(timeout=45)
             assert resume.wait(timeout=10)
     def write(source):
         with current["app"].state.store.session() as session:

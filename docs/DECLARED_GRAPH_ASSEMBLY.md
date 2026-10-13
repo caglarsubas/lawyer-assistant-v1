@@ -2,7 +2,7 @@
 
 Trusted local operator tooling combines one approved structural source set with
 every declared Graph B component. **Complete means complete for the declared
-inventory and retained active structural base.** It does not mean acquisition of
+inventory and retained active base.** It does not mean acquisition of
 every Turkish judgment, national ontology approval, or legal applicability.
 
 ## Dependencies and trust
@@ -54,7 +54,9 @@ base namespaces, duplicates, empty families and undeclared files fail closed.
 Inactive installed releases remain retained for rollback; they are not implicitly
 part of the active corpus. This release prepares the first mixed corpus from an
 empty initialized publication root or an existing structural source-set base.
-Successive mixed bases require the successor full-release permission contract.
+Successive mixed bases use the [complete retained dependency contract](RETAINED_MIXED_ASSEMBLY.md)
+and the original externally signed whole-release permissions; no missing base
+inventory is treated as empty.
 
 ## Assembly guarantees
 
