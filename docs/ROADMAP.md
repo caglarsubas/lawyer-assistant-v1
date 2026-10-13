@@ -2148,3 +2148,25 @@ final-candidate contract group now runs exactly once in a separate three-minute
 ARM job. All original subjects, job deadlines and worker/retry limits are
 preserved; the six exact-head checks are required before the next merge. This
 adds qualification headroom without interpreting a timed-out run as success.
+
+### R03 source-qualified corpus retrieval
+
+[Independent source retrieval](SOURCE_QUALIFIED_CORPUS_RETRIEVAL.md) searches the
+exact public evidence in the guarded complete release. Missing graph paths or
+unknown assertion dates cannot exclude source passages. Quotes retain physical
+source, representation, locator, offsets and hashes; exact identifiers never
+resolve by similarity. Unknown applicability, finality and authority treatment
+remain unknown. Corpus scope and scan/result limits are explicit, with no assumed
+national denominator.
+
+One current source guard covers the bounded local operation, including every
+retained source and grant. Workspace membership is checked before discovery and
+before response; private queries/selections are neither shared nor cached.
+Qualification includes actual signed bytes, current source withdrawal and the
+retained mixed-release pipeline, plus bounded partial scans and membership loss.
+Synthetic tests do not grant legal qualification or production activation.
+
+Next: retain independent source nominations alongside authority candidates in
+private research output and exports, preserving grounded quotation-only output,
+coverage gaps and dependency revalidation. R03/R05 remain partial; licensed
+population and independent lawyer acceptance remain open.

@@ -18,10 +18,12 @@ from test_source_reviews import assess
 from app import final_release_authorization as final
 from app.config import ROOT
 from app.declared_graph_assembly import Declaration, VerifiedServingContext, current_assembly
+from app.graph_release import LA, RuntimeGraphRelease
 from app.mixed_graph_snapshot import MixedGraphRequest
 from app.release_authorization import AuthorizationError
 from app.release_preparation import canonical
 from app.release_snapshot import readonly_store
+from app.source_corpus import SourceCorpusService
 
 assembly = assembly_fixture
 
@@ -134,14 +136,25 @@ def test_two_successors_preserve_full_mixed_inventory_current_grants_and_rollbac
     rolled = serving.rollback(root, key, expected_current=third_info["release_id"],
         expected_sequence=3, authorization_guard=guard)
     assert rolled["sequence"] == 4
-    with guard(serving.load_active(root, key), "read"):
-        pass
+    # Source retrieval spans the exact whole retained release even when a
+    # decision has no eligible dated/legally-reviewed authority relationship.
+    # Construct AFTER rollback so the following denial proves source withdrawal,
+    # independently of pointer drift.
+    runtime = RuntimeGraphRelease(root, key, authorization_guard=guard)
+    assert runtime.info is not None
+    from rdflib import RDF
+    passage = next(runtime._resources.subjects(RDF.type, LA.EvidencePassage))
+    corpus = SourceCorpusService(runtime).search("TEST ONLY", passage_id=str(passage), as_of="1921-01-01")
+    assert corpus["snapshot"]["release_id"] == second_info["release_id"]
+    assert corpus["coverage"]["eligible_passages"] > 0 and len(corpus["hits"]) == 1
+    assert corpus["hits"][0]["authority_id"] is None
     # A source omitted from the new declaration is still mandatory, including
     # the shared register. Withdrawal denies both descendant and prior release.
     item = assembly["current"]["evidence"][0][0]
     assert assess(item[1], item[4] + "/review", 6, "rights", decision="rejected").status_code == 200
     with pytest.raises(AuthorizationError), guard(serving.load_active(root, key), "read"):
         pytest.fail("Retained original source cannot be dropped")
+    assert SourceCorpusService(runtime).search("TEST ONLY")["coverage"]["status"] == "unavailable"
     assert serving.read_pointer(root) == rolled
     assert later_items and added_sources
 
