@@ -4215,3 +4215,31 @@ negative case. Fresh builders, positive multi-context/base cases, sibling isolat
 and every production guard remain unchanged. All 123 affected assembly, single/set
 authorization and seed-isolation cases passed in disconnected Linux in 103.91s.
 All 4,230 cases remain assigned; the next exact-head hosted result is still required.
+
+### Final serving candidates and permission signing inputs — 2026-10-13
+
+PR65 passed all three exact-head jobs in `38348633921` and merged at
+`78d8c8cab429d94d46d5fa43cf33591d7d9687da`; tested/main trees match. The full backend
+step took 16m53s within its unchanged cap. Main run `38350855100` is tracked
+separately from these merge checks and from actual deployment/legal qualification.
+
+The final successor source passed 47 disconnected/read-only Linux cases in
+107.35s: all 33 existing declared-assembly cases plus 14 candidate cases. Coverage
+includes a fresh real acceptance-to-candidate positive flow, exact public payloads,
+fifth-key separation, encrypted unsigned permission, all-component expiry bounds,
+serving denial, changed bytes/requests/epoch/rights, extra-file rejection, owned
+atomic-output cleanup, safe CLI errors and reviewed-packet byte/time mutation at
+exit. Negative candidate fixtures use fresh actual preparation and external
+TEST-ONLY signatures; the candidate subject validates every source and signature
+instead of repeating the old acceptance command in setup. No verdict is retained.
+
+Invalid request metadata fails before expensive canonicalization. Unchanged
+reviewed packet bytes receive full signature/RDF validation on entry, then complete
+byte/key/source and review-time checks on exit; a duplicate RDF rebuild is avoided
+within that operation. Independent source reconstruction and the next operation's
+full validation remain mandatory. All 41 deployment contracts, Ruff and whitespace
+passed; actual collection covers all 4,244 cases disjointly, with unchanged jobs,
+workers, deadlines and retries. The exact-head hosted gate remains mandatory.
+See [operator contract](FINAL_GRAPH_CANDIDATES.md) and
+`docs/evidence/final-graph-candidates-2026-10-13.json`. These engineering fixtures
+create no production signature, serving permission, installed graph or deployment.

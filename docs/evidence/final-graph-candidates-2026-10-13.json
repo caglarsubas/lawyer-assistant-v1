@@ -1,0 +1,89 @@
+{
+  "schema_version": "final-graph-candidates-engineering-evidence-v1",
+  "date": "2026-10-13",
+  "base_main": "78d8c8cab429d94d46d5fa43cf33591d7d9687da",
+  "base_pr": 65,
+  "base_exact_head_ci": {
+    "run_id": 38348633921,
+    "all_three": "success",
+    "backend_step_seconds": 1013,
+    "tested_main_tree_equal": true
+  },
+  "base_main_ci_last_observed": {
+    "run_id": 38350855100,
+    "status": "in_progress"
+  },
+  "final_linux_regression": {
+    "passed": 47,
+    "seconds": 107.35,
+    "network": "none",
+    "read_only": true,
+    "workers": 2,
+    "cpu_limit": 2,
+    "memory_limit": "1536m"
+  },
+  "deployment_contracts_passed": 41,
+  "ruff": "passed",
+  "whitespace": "passed",
+  "ci_partition": {
+    "schema": "complete-ci-partition-v1",
+    "counts": {
+      "complete": 4244,
+      "preflight": 89,
+      "remaining": 3833,
+      "publication": 128,
+      "workspace": 67,
+      "human_review": 107,
+      "model_trials": 20
+    },
+    "preflight_files": [
+      "backend/tests/test_validation_queries.py",
+      "backend/tests/test_validation_membership.py",
+      "backend/tests/test_ontology_syntax.py",
+      "backend/tests/test_validation_syntax.py",
+      "backend/tests/test_rdfs_identifiers.py"
+    ],
+    "publication_files": [
+      "backend/tests/test_publication_cli.py",
+      "backend/tests/test_authority_revalidations.py",
+      "backend/tests/test_source_reviews.py",
+      "backend/tests/test_source_review_effort.py"
+    ],
+    "workspace_files": [
+      "backend/tests/test_firm_admin.py",
+      "backend/tests/test_authority_proposals.py",
+      "backend/tests/test_authority_model_cohorts.py"
+    ],
+    "human_review_files": [
+      "backend/tests/test_authority_trial_cohorts.py",
+      "backend/tests/test_analysis_cohorts.py",
+      "backend/tests/test_graph_b_snapshot.py",
+      "backend/tests/test_graph_b_publication.py"
+    ],
+    "model_trial_files": [
+      "backend/tests/test_authority_model_trials.py"
+    ],
+    "intersection": 0,
+    "missing": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "6c21eabef0eec9735311e74757fcb55d321d66f589c70bad03ec0aa22dac872a",
+    "workflow_sha256": "a3160c210bd1f4839d455f2c84f17cbfbb33e5b8c0d1a168b3430681e07f6421",
+    "no_new_runner_retry_or_deadline_change": true,
+    "workspace_workers": 2,
+    "human_review_workers": 2,
+    "human_review_new_step_minutes": 3,
+    "hosted_speedup_or_billing_savings_established": false
+  },
+  "test_inputs": "invented sources/appointments and TEST-ONLY external review signatures, revalidated by every candidate subject",
+  "actual_serving_signature_created": false,
+  "actual_serving_authorization_created": false,
+  "graph_install_or_activation_performed": false,
+  "user_deployment_performed": false,
+  "legal_or_national_corpus_qualification_established": false,
+  "exact_head_hosted_success_required_before_merge": true,
+  "source_sha256": {
+    "scripts/prepare_final_graph_release.py": "18e8ab1a77682b44a0bff31e40d21debe7acc853b9030caef63d9627c1639064",
+    "scripts/assemble_legal_graphs.py": "2ac6d3591d25bd590021a6c2665cb119b048e9bb4e36f3de0d6f9f8fa6af1261",
+    "backend/tests/test_final_graph_candidate.py": "ca51a00ddc2bc4dc9476fe12f264a2a010b785067f35d62b2702fd2618be4d5f"
+  }
+}
