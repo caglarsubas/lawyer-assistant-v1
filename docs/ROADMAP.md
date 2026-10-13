@@ -2170,3 +2170,27 @@ Next: retain independent source nominations alongside authority candidates in
 private research output and exports, preserving grounded quotation-only output,
 coverage gaps and dependency revalidation. R03/R05 remain partial; licensed
 population and independent lawyer acceptance remain open.
+
+### R03 private research source nominations
+
+[Saved source nominations](PRIVATE_RESEARCH_SOURCE_NOMINATIONS.md) connect the
+independent source corpus to encrypted matter research, a separate inspection
+panel and guarded DOCX/PDF exports. Original source identities, quote hashes and
+coverage limits remain explicit. Reuse re-projects every saved quote against the
+signed source inside the current whole-release guard; a zero-hit capture still
+requires its exact release pin.
+
+Lost permission or changed evidence projects stale state and withholds public
+passages and graph paths while preserving the stored version and authorized
+private evidence. A committed research job does not imply completed publication
+authorization; the independent guard-exit callback remains required. Public
+nominations stay outside private-document model prompts and legal conclusions.
+
+Qualification covers actual signed research persistence/export and withdrawal,
+saved identity/hash/uncertainty corruption, missing and mismatched pins, inert UI
+quotes and complete disjoint CI assignment. Source availability does not clear
+the legal-corpus gap. No production activation or legal approval is granted.
+
+Next: typed exact evidence lookup and reproducible independent-source versus
+graph-assisted discovery comparison, preserving adverse and unresolved authority
+states and corpus limits. R03/R05 and real lawyer acceptance remain partial.

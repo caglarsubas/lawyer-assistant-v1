@@ -1,10 +1,14 @@
 """Real sealed private authorization against an isolated synthetic source ledger."""
 
+import io
 import json
+import time
 
 import httpx
 import test_search_index
+from docx import Document
 from fastapi.testclient import TestClient
+from pypdf import PdfReader
 from rdflib import RDF, Literal
 from test_release_authorization import authorized as authorized_fixture
 from test_release_authorization import guard
@@ -121,6 +125,42 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
             assert built['document_count'] == len(server.docs) > 0
             assert all(row['source_url'] is None and row['assertion_id'] for row in server.docs.values())
             assert 'PRIVATE' not in json.dumps(server.docs)
+        # Real saved research and exports retain independently grounded source
+        # quotes even when authority retrieval cannot qualify this old date.
+        matter = restarted.get('/api/v1/matters').json()[0]['id']
+        matter_base = '/api/v1/matters/' + matter
+        submitted = restarted.post(matter_base + '/research', json={'question': source['text'][:100], 'as_of': '1921-01-01'})
+        assert submitted.status_code == 202, submitted.text
+        for _ in range(600):
+            state = restarted.get(matter_base + '/research/' + submitted.json()['id']).json()
+            if state['status'] in {'completed', 'failed'}:
+                break
+            time.sleep(0.05)
+        assert state['status'] == 'completed', state
+        product_path = matter_base + '/products/' + state['product_id']
+        # The committed job state precedes the source guard's exit. Wait for
+        # its independent callback, never infer authorization from completion.
+        for _ in range(600):
+            saved = restarted.get(product_path).json()
+            if not saved.get('authorization_revalidation'):
+                break
+            time.sleep(0.05)
+        assert saved['source_candidates']['hits'] and saved['critical_gaps'] == ['legal_corpus_unqualified'], {
+            'status': saved['status'], 'withheld': saved.get('public_results_withheld'),
+            'coverage': saved['source_candidates']['coverage'], 'snapshot': saved['source_candidates']['snapshot']}
+        assert any(item['text'] == source['text'] for item in saved['source_candidates']['hits'])
+        assert not saved['authority_candidates']['hits']
+        assert all(claim['kind'] == 'document_quote' for claim in saved['claims'])
+        public_ids = {item['passage_id'] for item in saved['source_candidates']['hits']}
+        assert not public_ids & {ref for claim in saved['claims'] for ref in claim['evidence_ids']}
+        docx = restarted.get(product_path + '/export?format=docx')
+        assert docx.status_code == 200, docx.text if docx.status_code != 200 else ''
+        exported = '\n'.join(item.text for item in Document(io.BytesIO(docx.content)).paragraphs)
+        assert source['text'].replace('\r\n', '\n') in exported and exact['quote_sha256'] in exported
+        pdf = restarted.get(product_path + '/export?format=pdf')
+        assert pdf.status_code == 200
+        pdf_text = '\n'.join(page.extract_text() for page in PdfReader(io.BytesIO(pdf.content)).pages)
+        assert str(evidence) in pdf_text and 'ulusal derlemin tamlığı bilinmiyor' in pdf_text
         changed = assess(restarted, base + '/review', 6, 'rights', decision='needs_changes')
         assert changed.status_code == 200
         assert app.state.graph.release_status()['status'] == 'unavailable'
@@ -132,6 +172,11 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         assert 'PRIVATE' not in json.dumps(response)
         denied_sources = SourceCorpusService(app.state.graph.release).search('SYNTHETIC')
         assert denied_sources['hits'] == [] and denied_sources['coverage']['status'] == 'unavailable'
+        withheld = restarted.get(product_path)
+        assert withheld.status_code == 200 and withheld.headers['cache-control'] == 'no-store'
+        assert withheld.json()['status'] == 'stale' and withheld.json()['public_results_withheld'] is True
+        assert not withheld.json()['source_candidates']['hits']
+        assert restarted.get(product_path + '/export?format=docx').status_code == 409
         import pytest
         with pytest.raises(IndexBuildError) as denied:
             build_index(app.state.graph.release, 'http://opensearch:9200', installed['release_id'])

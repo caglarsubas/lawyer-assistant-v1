@@ -1,0 +1,25 @@
+{
+  "schema": "private-research-source-nominations-engineering-v1",
+  "recorded_on": "2026-10-13",
+  "sample_kind": "synthetic",
+  "actual_legal_qualification": false,
+  "production_activation": false,
+  "qualified_subjects": {
+    "disconnected_backend_boundaries": {"passed": 120, "seconds": 29.64},
+    "frontend": {"passed": 505, "files": 44},
+    "deployment_contracts": {"passed": 42}
+  },
+  "ci_partition": {"complete": 4311, "intersection": 0, "missing": 0, "extra": 0},
+  "checks": ["ruff", "diff_whitespace", "frontend_build", "signed_source_research_persistence",
+    "guarded_docx_and_pdf", "current_source_withdrawal", "unknown_legal_effects",
+    "changed_quote_hash_identity_and_offset", "zero_hit_and_missing_pin",
+    "permission_exit_withholding", "no_stored_version_rewrite", "private_document_prompt_separation",
+    "inert_ui_quotes", "independent_guard_exit_callback"],
+  "legal_corpus_gap_cleared": false,
+  "quote_bytes_rewritten": false,
+  "export_presentation": "CRLF and CR normalized to LF; PDF line breaks preserved; original hashes and offsets retained",
+  "external_calls_added": false,
+  "hosted_checks": "all_six_exact_head_checks_required_before_merge",
+  "limitations": ["Invented documents and TEST-ONLY signatures", "No real lawyer benchmark or legal approval",
+    "Licensed population, editorial qualification and deployment remain external gates"]
+}

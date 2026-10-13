@@ -8,6 +8,9 @@ from fastapi.responses import StreamingResponse
 
 
 def render_export(lines: list[str], file_id: str, format: str):
+    # Office line-break elements cannot distinguish CRLF from LF. Normalize
+    # only presentation; original quote bytes/hashes stay in the source record.
+    lines = [line.replace("\r\n", "\n").replace("\r", "\n") for line in lines]
     output = io.BytesIO()
     if format == "docx":
         from docx import Document
@@ -35,7 +38,7 @@ def render_export(lines: list[str], file_id: str, format: str):
             [
                 element
                 for line in lines
-                for element in (Paragraph(escape(line), styles["Normal"]), Spacer(1, 8))
+                for element in (Paragraph(escape(line).replace("\n", "<br/>"), styles["Normal"]), Spacer(1, 8))
             ]
         )
         media = "application/pdf"
