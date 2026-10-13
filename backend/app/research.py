@@ -11,6 +11,8 @@ from .graph import GraphBackendError
 from .policy import POLICY_VERSION
 from .provider import ProviderError
 from .research_jobs import JobStopped, checkpoint, ensure_active, finish_run
+from .research_sources import validate_retained
+from .source_corpus import SourceCorpusService
 
 
 class GeneratedClaim(BaseModel):
@@ -29,12 +31,17 @@ def _product_graph_pin(data):
     """Legacy document-only work has no public-corpus authorization dependency."""
     snapshots = data.get('snapshots', {})
     pin = snapshots.get('graph_release_pin')
+    sources = data.get('source_candidates')
+    if sources is not None and (not isinstance(sources, dict) or not isinstance(sources.get('snapshot'), dict)
+                                or not isinstance(sources.get('hits'), list)):
+        raise GraphBackendError('The retained source dependency cannot be verified')
     public_results = bool(data.get('authority_candidates', {}).get('hits')) or any(
         path.get('mode') == 'fuseki' or path.get('snapshot', {}).get('release_id')
         for path in data.get('graph_paths', []))
     public_results = public_results or any(
         snapshot.get('mode') == 'fuseki' or snapshot.get('release_id')
         for snapshot in snapshots.get('graphs', []))
+    public_results = public_results or bool(sources and (sources['hits'] or sources['snapshot'].get('release_id')))
     if not public_results and (not isinstance(pin, dict) or pin.get('status') != 'verified'):
         return None
     if (not isinstance(pin, dict) or pin.get('status') != 'verified'
@@ -44,6 +51,8 @@ def _product_graph_pin(data):
                   if path.get('mode') == 'fuseki']
     if data.get('authority_candidates', {}).get('hits'):
         references.append(data.get('authority_candidates', {}).get('snapshot', {}).get('release_id'))
+    if sources and (sources['hits'] or sources['snapshot'].get('release_id')):
+        references.append(sources['snapshot'].get('release_id'))
     if any(reference != pin['release_id'] for reference in references):
         raise GraphBackendError('The retained public-corpus dependency does not match its release')
     return pin
@@ -64,8 +73,10 @@ def guard_product_graph(data, graph):
                        'activation_sequence': info['pointer']['sequence']}
             if pin != current:
                 raise ValueError('Retained release changed')
+            if data.get('source_candidates') is not None:
+                validate_retained(graph.release, data['source_candidates'], info)
             yield
-    except ValueError:
+    except (ValueError, KeyError, TypeError):
         raise GraphBackendError('Current authorization for the retained graph release is unavailable') from None
 
 
@@ -99,8 +110,15 @@ def effective_product(data, graph):
         with guard_product_graph(data, graph):
             pass
     except GraphBackendError:
-        return {**data, 'stored_status': data['status'], 'status': 'stale',
-                'stale_reason': 'Graf sürümünün güncel yayın izni doğrulanamadı; yeniden araştırma ve inceleme gerekli.'}
+        projected = {**data, 'stored_status': data['status'], 'status': 'stale',
+            'public_results_withheld': True, 'graph_paths': [],
+            'stale_reason': 'Kamu kaynaklarının güncel yayın izni veya dayanağı doğrulanamadı; pasajlar gösterilmiyor. Yeniden araştırma ve inceleme gerekli.'}
+        for key in ('authority_candidates', 'source_candidates'):
+            if data.get(key) is not None:
+                projected[key] = {'hits': [], 'snapshot': None,
+                    'coverage': {'status': 'unavailable', 'returned_hits': 0, 'completeness': 'unknown'},
+                    'limitations': ['Current publication permission or exact source grounding is unavailable; public passages were withheld.']}
+        return projected
     return data
 
 
@@ -258,9 +276,7 @@ def _run_research(app, run_id):
         gaps.append("Bazı alıntılar cümle veya satır parçasıdır; koşul ve istisnalar için özgün bağlamı inceleyin.")
     if context_manifest["omission_counts"].get("question_exceeds_context"):
         gaps.append("Çalışma sorusu sağlayıcı bağlam sınırına sığmadı; model çağrısı yapılmadı.")
-    gaps.append(
-        "Hukuken incelenmiş kamu içtihat/mevzuat korpusu henüz yayımlanmadı; hukuki sonuç üretilmedi."
-    )
+    gaps.append("Kamu kaynak pasajları inceleme adayıdır; somut olaya uygulanabilirlik doğrulanmadı ve hukuki sonuç üretilmedi.")
     claims = []
     summary = "Belge hazırlık özeti: aşağıdaki alıntılar kaynak incelemesi için seçildi. Hukuki değerlendirme tamamlanmadı."
     provider_mode = "extractive"
@@ -291,6 +307,11 @@ def _run_research(app, run_id):
         public_candidates = app.state.search.search(question, as_of=state.get("as_of"), limit=20)
         if public_candidates["coverage"]["status"] != "available":
             gaps.append("Kamu kaynak araması tamamlanmadı veya nitelikli korpus yapılandırılmadı.")
+        checkpoint(app, run_id, "source_corpus")
+        source_candidates = SourceCorpusService(app.state.graph.release).search(question, as_of=state.get("as_of"), limit=20)
+        if source_candidates["coverage"]["status"] != "available":
+            gaps.append("Bağımsız kamu pasajı taraması sınırlı veya kullanılamıyor; özel belge dayanakları korundu.")
+        gaps.append("Bağımsız kaynak taraması yalnızca yayımlanan kanıt pasajlarını kapsar; ulusal derlemin tamlığı bilinmiyor.")
         checkpoint(app, run_id, "synthesis")
         if provider.configured and selected:
             response = provider.generate(question, selected)
@@ -354,6 +375,7 @@ def _run_research(app, run_id):
                 "searched": [
                     "Yetkili dosyanın çıkarılmış belge bölümleri",
                     "Ulusal ontoloji katalog kapsamı",
+                    "Bağımsız kamu pasajı taraması (kapsam kaydına bakın)",
                 ],
                 "gaps": list(dict.fromkeys(gaps)),
             },
@@ -369,6 +391,7 @@ def _run_research(app, run_id):
                 "practice_versions": practice_versions,
                 "policy": POLICY_VERSION,
                 "corpus": public_candidates["snapshot"],
+                "source_corpus": source_candidates["snapshot"],
                 "context_pack": {"recipe": context_manifest["recipe"],
                                  "prompt_recipe": context_manifest["prompt"]["recipe"],
                                  "messages_sha256": context_manifest["prompt"]["messages_sha256"]},
@@ -377,6 +400,7 @@ def _run_research(app, run_id):
             "context_pack": context_manifest,
             "graph_paths": graph_paths,
             "authority_candidates": public_candidates,
+            "source_candidates": source_candidates,
             "generated_at": now(),
         }
         if app.state.graph.release_pin() != graph_pin:

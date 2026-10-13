@@ -144,11 +144,22 @@ export interface AuthorityCandidates {
   snapshot: unknown;
   limitations: string[];
 }
+export interface SourceCandidates {
+  hits: {
+    passage_id: string; document_id: string; source_version_id: string; text: string;
+    locator: Passage['locator']; source_sha256: string; quote_sha256: string;
+    start_offset: number; end_offset: number;
+  }[];
+  coverage: { status: string; [key: string]: unknown };
+  snapshot: unknown;
+  limitations: string[];
+}
 export interface Product {
   id: string; title: string; status: string; version: number; summary: string;
   claims: Claim[]; issues: { label: string; missing_facts: string[]; counterarguments: string[] }[];
   coverage: { searched: string[]; gaps: string[] }; snapshots: unknown; graph_paths?: unknown;
   authority_candidates?: AuthorityCandidates; created_at: string;
+  source_candidates?: SourceCandidates;
   evidence?: Passage[]; context_pack?: EvidenceContextPack;
 }
 export interface ResearchRun {

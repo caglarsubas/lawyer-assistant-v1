@@ -86,6 +86,7 @@ from .research_jobs import (
     request_stop,
     submission,
 )
+from .research_sources import export_lines as source_export_lines
 from .scanner import MalwareDetected, ScannerUnavailable, scan_document
 from .search import PublicSearchService
 from .source_corpus import SourceCorpusService
@@ -797,8 +798,11 @@ def create_app(settings=None):
     @app.get("/api/v1/matters/{matter_id}/products/{product_id}")
     def product(matter_id: str, product_id: str, user=Depends(authenticate)):
         with app.state.store.session() as session:
-            return effective_product(app.state.store.view(
+            result = effective_product(app.state.store.view(
                 require_child(session, product_id, "product", matter_id, user)), app.state.graph)
+        with app.state.store.session() as session:
+            require_child(session, product_id, "product", matter_id, user)
+        return JSONResponse(result, headers={"Cache-Control": "no-store"})
 
     @app.post("/api/v1/matters/{matter_id}/products/{product_id}/review")
     def review(matter_id: str, product_id: str, body: ReviewInput, user=Depends(authenticate)):
@@ -874,6 +878,7 @@ def create_app(settings=None):
                                      f"/ {p['full_passage_length']}; özgün pasajı ayrıca inceleyin.")
             if data.get("context_pack"):
                 lines.extend(context_export_lines(data["context_pack"]))
+            lines.extend(source_export_lines(data.get("source_candidates")))
             for issue in data["issues"]:
                 lines.append("İnceleme başlığı: " + issue["label"])
                 lines.extend(issue["missing_facts"])

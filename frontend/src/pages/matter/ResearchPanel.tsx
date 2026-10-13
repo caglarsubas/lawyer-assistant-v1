@@ -5,6 +5,7 @@ import type { AuthorityCandidates, Claim, GatewayEvaluation, Matter, Product, Re
 import { formatDate, isRunning, locatorText, messageOf, statusLabel } from '../../utils';
 import { EvidenceViewer } from './FactsPanel';
 import { EvidenceContextPanel } from './EvidenceContextPanel';
+import { SourceCandidatesPanel } from './SourceCandidatesPanel';
 import { ValidityDetails } from '../../ValidityDetails';
 
 export default function ResearchPanel({ matter, onChange, demo }: { matter: Matter; onChange: () => Promise<void>; demo: boolean }) {
@@ -59,6 +60,7 @@ export default function ResearchPanel({ matter, onChange, demo }: { matter: Matt
     {product.context_pack && <EvidenceContextPanel pack={product.context_pack} evidence={product.evidence || []} onSource={setSource} />}
     {product.graph_paths !== undefined && <JsonDetails value={product.graph_paths} title="Referans keşfinde kullanılan graf yolları" />}
     {product.authority_candidates && <AuthorityCandidatesPanel candidates={product.authority_candidates} />}
+    {product.source_candidates && <SourceCandidatesPanel candidates={product.source_candidates} />}
     <JsonDetails value={product.snapshots} title="Çalışmada kullanılan sürümler" />
     <div className="export-bar"><div><strong>Çalışmanızı dışa aktarın.</strong><p className="small muted">İnceleme durumu ve kaynaklar çıktıyla birlikte korunur.</p></div><div className="button-group"><button className="button secondary" disabled={Boolean(exporting)} onClick={() => void exportFile('docx')}><Icon name="download" size={17} />{exporting === 'docx' ? 'Hazırlanıyor…' : 'Word'}</button><button className="button secondary" disabled={Boolean(exporting)} onClick={() => void exportFile('pdf')}><Icon name="download" size={17} />{exporting === 'pdf' ? 'Hazırlanıyor…' : 'PDF'}</button></div></div>
     </article> : <Empty title="Hazırlık çıktınız burada oluşacak.">Sorunuzu belirlediğinizde çalışma durumu, dayanaklar, eksikler ve inceleme adımları bu alanda görünür.</Empty>}

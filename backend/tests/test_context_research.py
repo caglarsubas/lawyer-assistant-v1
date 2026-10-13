@@ -97,6 +97,27 @@ def test_actual_serialized_model_envelope_matches_retained_record_and_exports(wo
     assert "Belge bağlamı ve seçim sınırları" in pdf_text and digest in pdf_text
 
 
+def test_public_source_nominations_remain_outside_private_document_model_envelope(workspace, monkeypatch):
+    from test_source_corpus import passage, release
+    app, client, matter = workspace
+    lightweight_graph(monkeypatch, app)
+    seed_document(app, matter, "Ödeme yapılır. TEST ONLY private document.")
+    reader = release()
+    quoted = "Ödeme TEST ONLY PUBLIC SOURCE EXCLUSIVE CANARY"
+    passage(reader, "public-source", quoted)
+    monkeypatch.setattr(app.state.graph, "release", reader)
+    monkeypatch.setattr(app.state.graph, "release_pin", lambda: {
+        "status": "verified", "release_id": reader.info["release_id"],
+        "serving_sha256": reader.info["serving_sha256"], "activation_sequence": reader.info["pointer"]["sequence"]})
+    seen = provider_transport(app, monkeypatch)
+    product = research_product(client, matter)
+    assert product["source_candidates"]["hits"][0]["text"] == quoted
+    assert len(seen) == 2
+    messages = json.loads(seen[-1].content)["messages"]
+    assert "PUBLIC SOURCE EXCLUSIVE CANARY" not in canonical(messages)
+    assert all(claim["kind"] == "document_quote" for claim in product["claims"])
+
+
 def test_unconfigured_preparation_keeps_full_selected_quote_without_second_hidden_slice(workspace, monkeypatch):
     app, client, matter = workspace
     lightweight_graph(monkeypatch, app)
