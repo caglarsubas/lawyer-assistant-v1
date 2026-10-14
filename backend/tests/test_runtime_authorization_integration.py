@@ -9,7 +9,7 @@ import test_search_index
 from docx import Document
 from fastapi.testclient import TestClient
 from pypdf import PdfReader
-from rdflib import RDF, Literal
+from rdflib import RDF, Dataset, Literal
 from test_release_authorization import authorized as authorized_fixture
 from test_release_authorization import guard
 from test_release_authorization import mapping as mapping_fixture
@@ -19,8 +19,12 @@ from test_source_reviews import assess
 
 from app.graph_release import LA, _load_serving
 from app.main import create_app
+from app.policy import POLICY_VERSION
+from app.retrieval_benchmark import DiscoveryBenchmark, capture_discovery, score_discovery
+from app.search import PublicSearchService
 from app.search_index import IndexBuildError, build_index
-from app.source_corpus import SourceCorpusService
+from app.search_normalization import normalization_metadata
+from app.source_corpus import EvidenceLookup, SourceCorpusService
 
 authorized = authorized_fixture
 mapping = mapping_fixture
@@ -111,6 +115,10 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         assert exact['text'] == source['text'] and exact['passage_id'] == str(evidence)
         assert exact['authority_id'] is None and exact['temporal_applicability'] == 'not_assessed'
         assert source_result['snapshot']['release_id'] == installed['release_id']
+        lookup = EvidenceLookup(passage_id=exact['passage_id'], source_version_id=exact['source_version_id'],
+            expected_release_id=installed['release_id'], expected_serving_sha256=source_result['snapshot']['serving_sha256'],
+            as_of='1921-01-01')
+        assert SourceCorpusService(app.state.graph.release).get_evidence(lookup)['hit']['text'] == source['text']
         # Reuse this costly signed/private-ledger fixture for index admission.
         # Only HTTP is simulated; source projection, publication locks and the
         # application's live private authorization dispatcher remain real.
@@ -125,6 +133,35 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
             assert built['document_count'] == len(server.docs) > 0
             assert all(row['source_url'] is None and row['assertion_id'] for row in server.docs.values())
             assert 'PRIVATE' not in json.dumps(server.docs)
+            # Reuse actual signed source bytes and private grants. Only graph
+            # transport runs locally through RDFLib rather than a live server.
+            datasets = {}
+            for family in ('structure', 'jurisprudence'):
+                datasets[family] = Dataset()
+                datasets[family].parse(root / 'releases' / installed['release_id'] / (family + '.nq'), format='nquads')
+            patch.setattr(app.state.graph, 'fuseki_url', 'http://127.0.0.1:3030')
+            patch.setattr(app.state.graph, '_transport_select', lambda family, query:
+                json.loads(datasets[family].query(query).serialize(format='json'))['results']['bindings'])
+            benchmark = DiscoveryBenchmark.model_validate({
+                'schema_version': 'source-graph-discovery-benchmark-v1', 'dataset_id': 'test-only-signed-discovery',
+                'purpose': 'development', 'origin': 'synthetic', 'adjudication_status': 'pending',
+                'adjudication_evidence_sha256': None, 'snapshot': {
+                    'release_id': installed['release_id'], 'serving_sha256': source_result['snapshot']['serving_sha256'],
+                    'ontology_sha256': source_result['snapshot']['ontology_sha256'], 'activation_sequence': 1,
+                    'index': index_name, 'documents_sha256': built['documents_sha256'], 'index_schema': 'public-search-index-v3',
+                    'normalization': normalization_metadata(), 'citation_profile': 'tr-literal-citations-v1', 'fusion': 'rrf-k60-v1',
+                    'known_at': '2026-10-14T00:00:00Z', 'source_recipe': 'source-qualified-corpus-v1', 'policy': POLICY_VERSION},
+                'queries': [{'id': 'signed-one', 'query': 'test', 'graph_query': 'test', 'graph_family': 'structure',
+                    'family_sha256': 'f' * 64, 'practice': 'contracts', 'period': '2002_2015', 'slices': ['citation'],
+                    'as_of': '2011-06-01', 'corpus_coverage': 'unknown', 'source_coverage': 'covered',
+                    'judgments': [], 'exact_target': None,
+                    'passage_judgments': [{'passage_id': str(evidence), 'relevance': 3, 'adverse': False}]}]})
+            observed = capture_discovery(benchmark,
+                PublicSearchService('http://opensearch:9200', index_name, installed['release_id'], app.state.graph.release),
+                app.state.graph, SourceCorpusService(app.state.graph.release))
+            measured = score_discovery(benchmark, observed)
+            assert measured['profiles']['source_lexical']['passage_recall_at_20']['value'] == 1.0
+            assert measured['production_qualified'] is False and len(observed.observations) == 3
         # Real saved research and exports retain independently grounded source
         # quotes even when authority retrieval cannot qualify this old date.
         matter = restarted.get('/api/v1/matters').json()[0]['id']
@@ -172,6 +209,7 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         assert 'PRIVATE' not in json.dumps(response)
         denied_sources = SourceCorpusService(app.state.graph.release).search('SYNTHETIC')
         assert denied_sources['hits'] == [] and denied_sources['coverage']['status'] == 'unavailable'
+        assert SourceCorpusService(app.state.graph.release).get_evidence(lookup)['status'] == 'unavailable'
         withheld = restarted.get(product_path)
         assert withheld.status_code == 200 and withheld.headers['cache-control'] == 'no-store'
         assert withheld.json()['status'] == 'stale' and withheld.json()['public_results_withheld'] is True

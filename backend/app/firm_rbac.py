@@ -128,6 +128,8 @@ def route_permissions(path, method):
     if root == "work":
         return {"matter.read"}
     if root in {"matters", "workspaces", "governance"}:
+        if root == "matters" and method == "POST" and len(parts) == 4 and parts[2:] == ["corpus", "evidence"]:
+            return {"matter.read"}
         required = {"matter.read"}
         if not read:
             required.add("portfolio.create" if len(parts) == 1 else "matter.write")

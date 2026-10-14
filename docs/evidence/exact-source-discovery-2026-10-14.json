@@ -1,0 +1,30 @@
+{
+  "schema": "exact-source-discovery-engineering-v1",
+  "recorded_on": "2026-10-14",
+  "sample_kind": "synthetic",
+  "actual_legal_qualification": false,
+  "production_activation": false,
+  "qualified_subjects": {
+    "disconnected_lookup_and_discovery": {"passed": 121, "seconds": 34.54},
+    "whole_release_and_real_postgres": {"passed": 21, "seconds": 150.11},
+    "deployment_contracts": {"passed": 42}
+  },
+  "ci_partition": {"complete": 4340, "intersection": 0, "missing": 0, "extra": 0},
+  "checks": ["direct_lookup_without_enumeration", "read_action_and_current_membership",
+    "private_absent_wrong_version_refusal", "response_byte_budget", "signed_source_grounding",
+    "retained_source_withdrawal", "frozen_release_and_index_receipt", "graph_quote_and_edge_validation",
+    "separate_passage_and_entity_denominators", "source_matches_never_resolve_authorities",
+    "all_planned_cells_retained", "unknown_coverage_unmeasured", "legacy_benchmark_cli_compatibility",
+    "ruff", "diff_whitespace"],
+  "observations_authenticated_by_offline_scoring": false,
+  "national_corpus_denominator": null,
+  "lawyer_productivity_measured": false,
+  "hosted_checks": "all_seven_exact_head_checks_required_before_merge",
+  "first_hosted_partition": {"postgres_races_passed": 84, "postgres_races_seconds": 208.36,
+    "publication_passed": 128, "publication_seconds": 72.25,
+    "shared_job_outcome": "cancelled_at_existing_five_minute_cap",
+    "assertion_failures_observed": 0,
+    "fix": "complete publication group moved once to a dedicated three-minute ARM job"},
+  "limitations": ["Invented sources and TEST-ONLY signatures", "HTTP candidate/index responses simulated",
+    "Signed-source graph queries executed locally using RDFLib", "No real held-out lawyer benchmark or legal approval"]
+}

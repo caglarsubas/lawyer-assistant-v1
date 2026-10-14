@@ -89,7 +89,7 @@ from .research_jobs import (
 from .research_sources import export_lines as source_export_lines
 from .scanner import MalwareDetected, ScannerUnavailable, scan_document
 from .search import PublicSearchService
-from .source_corpus import SourceCorpusService
+from .source_corpus import EvidenceLookup, SourceCorpusService
 from .source_relationships import source_relationships_router
 from .source_reviews import source_reviews_router
 from .source_selection import source_selection_router
@@ -771,6 +771,15 @@ def create_app(settings=None):
             result = SourceCorpusService(app.state.graph.release).search(**body.model_dump())
         except ValueError:
             raise HTTPException(422, "Geçersiz kaynak pasajı arama parametreleri") from None
+        with app.state.store.session() as session:
+            require_matter(session, matter_id, user)
+        return JSONResponse(result, headers={"Cache-Control": "no-store"})
+
+    @app.post("/api/v1/matters/{matter_id}/corpus/evidence")
+    def source_evidence(matter_id: str, body: EvidenceLookup, user=Depends(authenticate)):
+        with app.state.store.session() as session:
+            require_matter(session, matter_id, user)
+        result = SourceCorpusService(app.state.graph.release).get_evidence(body)
         with app.state.store.session() as session:
             require_matter(session, matter_id, user)
         return JSONResponse(result, headers={"Cache-Control": "no-store"})
