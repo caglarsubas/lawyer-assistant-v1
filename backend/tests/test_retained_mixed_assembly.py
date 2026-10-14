@@ -23,7 +23,7 @@ from app.mixed_graph_snapshot import MixedGraphRequest
 from app.release_authorization import AuthorizationError
 from app.release_preparation import canonical
 from app.release_snapshot import readonly_store
-from app.source_corpus import SourceCorpusService
+from app.source_corpus import EvidenceLookup, SourceCorpusService
 
 assembly = assembly_fixture
 
@@ -148,6 +148,10 @@ def test_two_successors_preserve_full_mixed_inventory_current_grants_and_rollbac
     assert corpus["snapshot"]["release_id"] == second_info["release_id"]
     assert corpus["coverage"]["eligible_passages"] > 0 and len(corpus["hits"]) == 1
     assert corpus["hits"][0]["authority_id"] is None
+    item = corpus["hits"][0]
+    lookup = EvidenceLookup(passage_id=item["passage_id"], source_version_id=item["source_version_id"],
+        expected_release_id=second_info["release_id"], expected_serving_sha256=corpus["snapshot"]["serving_sha256"])
+    assert SourceCorpusService(runtime).get_evidence(lookup)["hit"]["text"] == item["text"]
     # A source omitted from the new declaration is still mandatory, including
     # the shared register. Withdrawal denies both descendant and prior release.
     item = assembly["current"]["evidence"][0][0]
@@ -155,6 +159,7 @@ def test_two_successors_preserve_full_mixed_inventory_current_grants_and_rollbac
     with pytest.raises(AuthorizationError), guard(serving.load_active(root, key), "read"):
         pytest.fail("Retained original source cannot be dropped")
     assert SourceCorpusService(runtime).search("TEST ONLY")["coverage"]["status"] == "unavailable"
+    assert SourceCorpusService(runtime).get_evidence(lookup)["status"] == "unavailable"
     assert serving.read_pointer(root) == rolled
     assert later_items and added_sources
 

@@ -2194,3 +2194,26 @@ the legal-corpus gap. No production activation or legal approval is granted.
 Next: typed exact evidence lookup and reproducible independent-source versus
 graph-assisted discovery comparison, preserving adverse and unresolved authority
 states and corpus limits. R03/R05 and real lawyer acceptance remain partial.
+
+### R03 exact source evidence and discovery comparison
+
+[Direct evidence lookup and comparison](EXACT_SOURCE_EVIDENCE_AND_DISCOVERY.md)
+add a typed exact-identity route independent of lexical scan order, with expected
+release/version pins, unknown legal effects, protected workspace reads and whole
+quote budgets. Every retained source/grant remains a current dependency.
+
+The development comparison captures independent source, ordinary authority and
+graph-grounded discovery on the same snapshot and index receipt. Passage and
+candidate-entity relevance have separate coverage/gold sets; source matches do
+not resolve authorities. All planned cells remain visible, and unknown coverage
+is unmeasured. Changed evidence or authorization discards a capture. Offline
+scoring and hashes do not authenticate reviewer labels or qualify production.
+
+Qualification includes exact lookup without enumeration, private/wrong-version
+refusal, signed source and retained-grant withdrawal, source/graph evidence
+corruption, frozen receipt checks, complete cell accounting and legacy benchmark
+compatibility. CI subjects remain disjoint under existing deadlines, two workers
+and no retries. Real population and held-out lawyer judgment remain open.
+
+Next: accountable source nomination review linked to private analysis targets and
+expanded independent development strata. R03/R05 remain partial.

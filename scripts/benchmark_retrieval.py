@@ -12,13 +12,22 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from evaluate_release import SafeParser, capture  # noqa: E402
 
 from app.qualification import MAX_COMPONENT_BYTES, parse_component  # noqa: E402
-from app.retrieval_benchmark import RetrievalBenchmark, RetrievalRun, score_run  # noqa: E402
+from app.retrieval_benchmark import (  # noqa: E402
+    DiscoveryBenchmark,
+    DiscoveryRun,
+    RetrievalBenchmark,
+    RetrievalRun,
+    score_discovery,
+    score_run,
+)
 
 
 def score_files(benchmark_path, run_path):
     paths = {"benchmark": benchmark_path, "run": run_path}
     raw = {name: capture(path, MAX_COMPONENT_BYTES) for name, path in paths.items()}
-    report = score_run(parse_component(raw["benchmark"]), parse_component(raw["run"]))
+    benchmark, run = parse_component(raw["benchmark"]), parse_component(raw["run"])
+    scorer = score_discovery if benchmark.get("schema_version") == "source-graph-discovery-benchmark-v1" else score_run
+    report = scorer(benchmark, run)
     if any(capture(path, MAX_COMPONENT_BYTES) != raw[name] for name, path in paths.items()):
         raise ValueError("Benchmark inputs changed")
     report["input_files"] = {name: {"sha256": hashlib.sha256(value).hexdigest(), "bytes": len(value)}
@@ -38,6 +47,7 @@ def main(argv=None):
                 raise ValueError("Schemas take no files")
             report = {"schema_version": "retrieval-development-schemas-v1", "runtime_authorization": "none",
                       "benchmark": RetrievalBenchmark.model_json_schema(), "run": RetrievalRun.model_json_schema()}
+            report.update(discovery_benchmark=DiscoveryBenchmark.model_json_schema(), discovery_run=DiscoveryRun.model_json_schema())
         else:
             if args.benchmark is None or args.run is None:
                 raise ValueError("Benchmark and run required")

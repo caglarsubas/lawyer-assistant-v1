@@ -9,9 +9,12 @@ import json
 import time
 from datetime import date
 
-from rdflib import RDF
+from pydantic import Field, model_validator
+from rdflib import RDF, URIRef
 
 from .graph_release import LA
+from .research_qualification import Digest, StrictRecord
+from .search import _entity_id
 from .search_normalization import MAX_TEXT, tokens
 
 MAX_PASSAGES = 25_000
@@ -19,6 +22,32 @@ MAX_SCAN_BYTES = 64 * 1024 * 1024
 MAX_RESPONSE_BYTES = 256 * 1024
 SCAN_SECONDS = 3
 RECIPE = "source-qualified-corpus-v1"
+LOOKUP_RECIPE = "source-evidence-lookup-v1"
+
+
+class EvidenceLookup(StrictRecord):
+    passage_id: str = Field(min_length=1, max_length=512)
+    source_version_id: str = Field(min_length=1, max_length=512)
+    expected_release_id: Digest
+    expected_serving_sha256: Digest
+    as_of: str | None = None
+
+    @model_validator(mode="after")
+    def exact_identifiers(self):
+        if not all(_entity_id(value) for value in (self.passage_id, self.source_version_id)):
+            raise ValueError("Use exact source identifiers")
+        if self.as_of is not None and date.fromisoformat(self.as_of).isoformat() != self.as_of:
+            raise ValueError("Use a canonical date")
+        return self
+
+
+def _lookup_empty(as_of):
+    return {"status": "unavailable", "hit": None,
+        "snapshot": {"recipe": LOOKUP_RECIPE, "release_id": None, "serving_sha256": None, "as_of": as_of},
+        "coverage": {"scope": "exact_source_passage_and_representation_only", "completeness": "unknown",
+                     "total_expected": None},
+        "limitations": ["An exact source identity is not an authority resolution or legal applicability assessment.",
+            "Private, absent and wrong-version identities share an unresolved result; no similar or current version is substituted."]}
 
 
 def _project(release, node):
@@ -63,6 +92,36 @@ def _empty(as_of):
 class SourceCorpusService:
     def __init__(self, release):
         self.release = release
+
+    def get_evidence(self, request: EvidenceLookup):
+        request = EvidenceLookup.model_validate(request.model_dump(warnings=False) if isinstance(request, EvidenceLookup) else request)
+        result = _lookup_empty(request.as_of)
+        if not self.release.info:
+            return result
+        try:
+            with self.release.current_guard() as info:
+                if (request.expected_release_id != info["release_id"]
+                        or request.expected_serving_sha256 != info["serving_sha256"]):
+                    raise ValueError("Source snapshot differs")
+                result["snapshot"].update(release_id=info["release_id"], serving_sha256=info["serving_sha256"],
+                    ontology_sha256=info["ontology_sha256"], activation_sequence=info["pointer"]["sequence"])
+                node = URIRef(request.passage_id)
+                # Direct indexed RDF identity lookup never enumerates passages
+                # or depends on lexical budgets, paths or query ordering.
+                if (not self.release._evidence_eligible(self.release._resources, node)
+                        or str(self.release._one(self.release._resources, node, LA.textRepresentation))
+                        != request.source_version_id):
+                    result["status"] = "unresolved"
+                else:
+                    result.update(status="found", hit=_project(self.release, node))
+                    if len(json.dumps(result, ensure_ascii=False).encode()) > MAX_RESPONSE_BYTES - 1024:
+                        result.update(status="over_budget", hit=None)
+                        result["limitations"].append("The exact quote exceeds the response budget; it was withheld without truncation.")
+            return result
+        except Exception:
+            result = _lookup_empty(request.as_of)
+            result["limitations"].append("Current source permission, integrity or the requested snapshot could not be established; evidence was withheld.")
+            return result
 
     def search(self, query, *, as_of=None, passage_id=None, source_version_id=None, limit=20):
         if not isinstance(query, str) or not query.strip() or len(query) > 4000:

@@ -13,12 +13,18 @@ from statistics import mean
 from typing import Literal
 
 from pydantic import Field, model_validator
+from rdflib import RDF, URIRef
 
+from .graph import GraphService, _datetime
+from .graph_release import LA
+from .policy import POLICY_VERSION
 from .qualification_scoring import digest, unique
 from .research_qualification import Digest, Practice, RecordId, StrictRecord
 from .search import PublicSearchService, _entity_id
 from .search_index_contract import MANAGED, ready_metadata
 from .search_normalization import normalization_metadata
+from .source_corpus import RECIPE as SOURCE_RECIPE
+from .source_corpus import SourceCorpusService, _project
 
 PROFILES = ("lexical", "turkish", "all")
 SLICES = Literal["citation", "temporal_transition", "adverse", "ocr", "concept_confusion", "missing_coverage", "roles"]
@@ -318,3 +324,262 @@ def score_run(benchmark, run):
                 "Unjudged authorities receive zero gain; nDCG depends on the judged relevance pool.",
                 "Intervals use declared source/proceeding/duplicate families; they do not discover leakage or establish representative sample size.",
                 "Three lexical profiles do not qualify vectors, rerankers, graph ablations, legal analysis or the held-out release suite."]}
+
+
+# Separate schema and denominators: source passages never become authority IDs.
+DISCOVERY_PROFILES = ("source_lexical", "authority_search", "graph_grounded")
+
+
+class DiscoverySnapshot(BenchmarkSnapshot):
+    ontology_sha256: Digest
+    known_at: str = Field(min_length=20, max_length=40)
+    source_recipe: Literal["source-qualified-corpus-v1"]
+    policy: str
+
+    @model_validator(mode="after")
+    def policies(self):
+        if (_datetime(self.known_at) != self.known_at
+                or self.policy != POLICY_VERSION or self.source_recipe != SOURCE_RECIPE):
+            raise ValueError("Discovery policy or source recipe differs")
+        return self
+
+
+class PassageJudgment(StrictRecord):
+    passage_id: str = Field(min_length=1, max_length=512)
+    relevance: int = Field(ge=0, le=3)
+    adverse: bool
+
+    @model_validator(mode="after")
+    def valid(self):
+        if not _entity_id(self.passage_id) or (self.adverse and not self.relevance):
+            raise ValueError("Invalid source passage judgment")
+        return self
+
+
+class DiscoveryQuery(BenchmarkQuery):
+    graph_query: str = Field(min_length=1, max_length=300)
+    graph_family: Literal["structure", "jurisprudence"]
+    source_coverage: Literal["covered", "outside", "unknown"]
+    passage_judgments: list[PassageJudgment] = Field(max_length=100)
+
+    @model_validator(mode="after")
+    def sources(self):
+        unique([item.passage_id for item in self.passage_judgments])
+        if not self.graph_query.strip() or self.as_of is None:
+            raise ValueError("A dated graph discovery query is required")
+        return self
+
+
+class DiscoveryBenchmark(StrictRecord):
+    schema_version: Literal["source-graph-discovery-benchmark-v1"]
+    dataset_id: RecordId
+    purpose: Literal["development"]
+    origin: Literal["real", "synthetic"]
+    adjudication_status: Literal["pending", "adjudicated"]
+    adjudication_evidence_sha256: Digest | None
+    snapshot: DiscoverySnapshot
+    queries: list[DiscoveryQuery] = Field(min_length=1, max_length=1000)
+
+    @model_validator(mode="after")
+    def valid(self):
+        unique([item.id for item in self.queries])
+        unique([digest({"query": item.query, "as_of": item.as_of}) for item in self.queries])
+        if self.adjudication_status == "adjudicated" and self.adjudication_evidence_sha256 is None:
+            raise ValueError("Adjudication evidence is required")
+        return self
+
+
+class DiscoveryObservation(StrictRecord):
+    query_id: RecordId
+    profile: Literal["source_lexical", "authority_search", "graph_grounded"]
+    status: Literal["available", "partial", "unavailable", "not_run"]
+    passage_ids: list[str] = Field(max_length=20)
+    authority_ids: list[str] = Field(max_length=20)
+    truncated: bool
+    elapsed_seconds: float = Field(ge=0)
+
+    @model_validator(mode="after")
+    def valid(self):
+        for values in (self.passage_ids, self.authority_ids):
+            unique(values)
+            if not all(_entity_id(value) for value in values):
+                raise ValueError("Invalid discovery identities")
+        if (self.profile == "source_lexical" and self.authority_ids
+                or self.status in {"unavailable", "not_run"} and (self.passage_ids or self.authority_ids)):
+            raise ValueError("Source discovery cannot resolve authorities or emit withheld results")
+        return self
+
+
+class DiscoveryRun(StrictRecord):
+    schema_version: Literal["source-graph-discovery-run-v1"]
+    benchmark_sha256: Digest
+    snapshot: DiscoverySnapshot
+    observations: list[DiscoveryObservation] = Field(min_length=3, max_length=3000)
+
+
+def _discovery_pin(info):
+    return {"release_id": info["release_id"], "serving_sha256": info["serving_sha256"],
+        "ontology_sha256": info["ontology_sha256"], "activation_sequence": info["pointer"]["sequence"]}
+
+
+def _graph_discovery(graph, query, expected):
+    result = graph.tool("locate_issues", {"query": query.graph_query, "graph": query.graph_family,
+        "as_of": query.as_of, "known_at": expected["known_at"], "limit": 20})
+    if result.get("mode") != "fuseki":
+        return "unavailable", [], [], False
+    snapshot = result.get("snapshot", {})
+    if (any(snapshot.get(key) != expected[key] for key in ("release_id", "serving_sha256", "ontology_sha256", "known_at"))
+            or snapshot.get("as_of") != query.as_of or snapshot.get("graph") != query.graph_family
+            or not isinstance(result.get("edges"), list) or len(result["edges"]) > 20):
+        raise ValueError("Graph discovery snapshot or budget differs")
+    passages, authorities = [], []
+    # Inspect signed inputs after graph transport, never nest a source guard
+    # inside the transport's own checks or trust result labels/quotes alone.
+    with graph.release.current_guard() as info:
+        if any(_discovery_pin(info)[key] != expected[key] for key in _discovery_pin(info)):
+            raise ValueError("Graph discovery changed")
+        source_graph = graph.release._graphs[query.graph_family]
+        for edge in result["edges"]:
+            assertion = URIRef(edge["id"])
+            if ((assertion, RDF.type, LA.Assertion) not in source_graph
+                    or edge.get("status") != str(graph.release._one(source_graph, assertion, LA.claimStatus))):
+                raise ValueError("Graph discovery assertion differs")
+            if edge["status"] != "legally_reviewed":
+                continue
+            if not graph.release._eligible(query.graph_family, assertion, as_of=query.as_of, known_at=expected["known_at"]):
+                raise ValueError("Graph discovery is outside its historical evidence scope")
+            for key, predicate in (("source", LA.subject), ("target", LA.object), ("predicate", LA.predicate)):
+                if edge.get(key) != str(graph.release._one(source_graph, assertion, predicate)):
+                    raise ValueError("Graph discovery relationship differs")
+            evidence = edge.get("evidence")
+            if not isinstance(evidence, list) or not 1 <= len(evidence) <= 20:
+                raise ValueError("Graph evidence exceeds its bounded inspection budget")
+            for item in evidence:
+                node = URIRef(item["id"])
+                if ((assertion, LA.evidence, node) not in source_graph
+                        or not graph.release._evidence_eligible(graph.release._resources, node)):
+                    raise ValueError("Graph passage is not evidenced")
+                exact = _project(graph.release, node)
+                fields = {"artifact_id": "document_id", "text_representation_id": "source_version_id",
+                    "sha256": "source_sha256", "text": "text", "locator": "locator", "text_sha256": "text_sha256",
+                    "locator_map_sha256": "locator_map_sha256", "start_offset": "start_offset", "end_offset": "end_offset"}
+                if any(str(item.get(key)) != str(exact[value]) for key, value in fields.items()):
+                    raise ValueError("Graph evidence differs from the exact source")
+                passages.append(exact["passage_id"])
+            authorities.extend((edge["source"], edge["target"]))
+    passages, authorities = list(dict.fromkeys(passages)), list(dict.fromkeys(authorities))
+    truncated = len(passages) > 20 or len(authorities) > 20 or len(result["edges"]) == 20
+    return "partial" if truncated else "available", passages[:20], authorities[:20], truncated
+
+
+def capture_discovery(benchmark, search, graph, sources, *, seconds=120):
+    """Development only; independently bounded channels, no private matters/inference.
+
+    Every channel uses the same signed public release and final index receipt.
+    Source/pointer/receipt change discards the capture, never creates a partial
+    authority verdict or a repeat request. Unexecuted planned cells are retained.
+    """
+    benchmark = DiscoveryBenchmark.model_validate(benchmark.model_dump(warnings=False) if isinstance(benchmark, DiscoveryBenchmark) else benchmark)
+    if (not isinstance(search, PublicSearchService) or not search.managed or not search.configured
+            or not isinstance(graph, GraphService) or not isinstance(sources, SourceCorpusService)
+            or graph.release is not sources.release or graph.release is not search.graph_release
+            or type(seconds) is not int or not 1 <= seconds <= 7200):
+        raise ValueError("Invalid discovery services or execution budget")
+    expected = benchmark.snapshot.model_dump(mode="json")
+    def check():
+        with graph.release.current_guard() as info:
+            if any(_discovery_pin(info)[key] != expected[key] for key in _discovery_pin(info)):
+                raise ValueError("Discovery release or authorization differs")
+    check()
+    if search.index != expected["index"]:
+        raise ValueError("Discovery index differs")
+    _check_receipt(search, expected)
+    deadline, rows = time.monotonic() + seconds, []
+    for position, query in enumerate(benchmark.queries):
+        rotation = position % len(DISCOVERY_PROFILES)
+        for profile in DISCOVERY_PROFILES[rotation:] + DISCOVERY_PROFILES[:rotation]:
+            if time.monotonic() >= deadline:
+                rows.append(DiscoveryObservation(query_id=query.id, profile=profile, status="not_run",
+                    passage_ids=[], authority_ids=[], truncated=False, elapsed_seconds=0.0))
+                continue
+            check()
+            started = time.monotonic()
+            if profile == "graph_grounded":
+                status, passages, authorities, truncated = _graph_discovery(graph, query, expected)
+            else:
+                result = (sources.search(query.query, as_of=query.as_of, limit=20) if profile == "source_lexical"
+                    else search.search(query.query, as_of=query.as_of, limit=20))
+                if result["snapshot"].get("release_id") != expected["release_id"]:
+                    raise ValueError("Discovery channel release differs")
+                if profile == "authority_search" and any(result["snapshot"].get(key) != expected[key] for key in (
+                        "index", "documents_sha256", "index_schema", "normalization", "citation_profile", "fusion")):
+                    raise ValueError("Discovery search receipt differs")
+                status = result["coverage"]["status"]
+                hits = result["hits"]
+                if profile == "authority_search":
+                    eligible = []
+                    with graph.release.current_guard() as info:
+                        if any(_discovery_pin(info)[key] != expected[key] for key in _discovery_pin(info)):
+                            raise ValueError("Authority discovery changed")
+                        for hit in hits:
+                            assertion = URIRef(hit["assertion_id"])
+                            families = [family for family, data in graph.release._graphs.items()
+                                if (assertion, RDF.type, LA.Assertion) in data]
+                            if len(families) != 1:
+                                raise ValueError("Authority assertion family is ambiguous")
+                            if graph.release._eligible(families[0], assertion, as_of=query.as_of, known_at=expected["known_at"]):
+                                eligible.append(hit)
+                    hits = eligible
+                passages = list(dict.fromkeys(hit["passage_id"] for hit in hits))
+                authorities = ([] if profile == "source_lexical" else
+                    list(dict.fromkeys(hit["authority_id"] for hit in hits)))
+                truncated = bool(result["coverage"].get("result_limit_reached")) or len(result["hits"]) == 20
+            check()
+            rows.append(DiscoveryObservation(query_id=query.id, profile=profile, status=status,
+                passage_ids=passages, authority_ids=authorities, truncated=truncated,
+                elapsed_seconds=time.monotonic() - started))
+    _check_receipt(search, expected)
+    check()
+    return DiscoveryRun(schema_version="source-graph-discovery-run-v1",
+        benchmark_sha256=digest(benchmark.model_dump(mode="json")), snapshot=benchmark.snapshot, observations=rows)
+
+
+def score_discovery(benchmark, run):
+    benchmark = DiscoveryBenchmark.model_validate(benchmark.model_dump(warnings=False) if isinstance(benchmark, DiscoveryBenchmark) else benchmark)
+    run = DiscoveryRun.model_validate(run.model_dump(warnings=False) if isinstance(run, DiscoveryRun) else run)
+    if (run.benchmark_sha256 != digest(benchmark.model_dump(mode="json")) or run.snapshot != benchmark.snapshot):
+        raise ValueError("Discovery inputs or snapshot differ")
+    observations = {(item.query_id, item.profile): item for item in run.observations}
+    planned = {(query.id, profile) for query in benchmark.queries for profile in DISCOVERY_PROFILES}
+    if len(observations) != len(run.observations) or set(observations) != planned:
+        raise ValueError("Every planned discovery cell is required exactly once")
+    profiles = {}
+    for profile in DISCOVERY_PROFILES:
+        passage_scores, authority_scores, adverse_scores = [], [], []
+        statuses = Counter()
+        for query in benchmark.queries:
+            row = observations[query.id, profile]
+            statuses[row.status] += 1
+            gold = {item.passage_id for item in query.passage_judgments if item.relevance}
+            adverse = {item.passage_id for item in query.passage_judgments if item.adverse}
+            if query.source_coverage == "covered" and gold:
+                passage_scores.append(len(gold & set(row.passage_ids)) / len(gold))
+            if query.source_coverage == "covered" and adverse:
+                adverse_scores.append(len(adverse & set(row.passage_ids)) / len(adverse))
+            authorities = {item.authority_id for item in query.judgments if item.relevance}
+            if profile != "source_lexical" and query.corpus_coverage == "covered" and authorities:
+                authority_scores.append(len(authorities & set(row.authority_ids)) / len(authorities))
+        def metric(values):
+            return {"value": mean(values) if values else None, "queries": len(values)}
+        profiles[profile] = {"statuses": dict(sorted(statuses.items())),
+            "passage_recall_at_20": metric(passage_scores), "adverse_passage_recall_at_20": metric(adverse_scores),
+            "candidate_entity_recall_at_20": metric(authority_scores)}
+    return {"schema_version": "source-graph-discovery-report-v1", "origin": benchmark.origin,
+        "benchmark_sha256": run.benchmark_sha256, "snapshot": run.snapshot.model_dump(mode="json"),
+        "profiles": profiles, "queries": len(benchmark.queries), "observations_authenticated": False,
+        "production_qualified": False, "legal_qualification": False, "runtime_authorization": "none",
+        "limitations": ["Passage and candidate entity denominators are independent; source passages do not resolve authorities.",
+            "Graph endpoints and source matches nominate candidates, not endorsement, binding effect or matter applicability.",
+            "Unknown/outside coverage and empty positive gold are unmeasured; unavailable and unexecuted covered cells are misses.",
+            "Judgments, provenance labels and offline observations require independent review; scoring does not authenticate them.",
+            "This development comparison does not establish legal correctness, nationwide recall, productivity or held-out acceptance."]}
