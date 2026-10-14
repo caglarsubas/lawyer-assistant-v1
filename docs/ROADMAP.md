@@ -2224,3 +2224,25 @@ five-minute cap. Publication now runs exactly once in a separate three-minute
 ARM job. All prior deadlines, two-worker/no-retry limits and complete subject
 assignment remain unchanged. Seven exact-head checks are required before merge;
 a cancelled job is not treated as successful qualification.
+
+### R03/R05A private source-to-analysis independent review
+
+[The source-review API](PRIVATE_SOURCE_ANALYSIS_REVIEW.md) freezes exact retained
+passage/representation/quote/release identities against specific private analysis
+targets. A different authorized lawyer records complete explained observations
+and their own relationship interpretation without rewriting the nominator's
+declaration, analysis or prior decisions. Support/adverse/distinction/unknown
+remain matter annotations rather than public authority assertions.
+
+Source and private basis checks bracket each operation. Existing authority-bound
+drafts retain their dependencies without nesting their guards inside the new
+source guard. Pending post-commit admissions remain withheld; changed evidence,
+reviewer permissions or policies hide quotes and notes and block export.
+Actual signed-source/private-ledger withdrawal and a real PostgreSQL competing
+review race supplement the invented-document fixtures. All seven exact-head CI
+checks remain mandatory; existing caps, workers and test partition coverage stay.
+
+Next: a lawyer-facing source nomination and independent-review panel using these
+typed contracts. Independent legal gold, historical/practice strata and measured
+preparation benefits remain separate. R03/R05 and real lawyer acceptance remain
+partial; this implementation grants no legal or production qualification.

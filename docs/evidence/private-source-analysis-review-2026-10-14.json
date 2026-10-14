@@ -1,0 +1,55 @@
+{
+  "schema": "private-source-analysis-engineering-evidence-v1",
+  "recorded_at": "2026-10-14T04:20:14.614991+00:00",
+  "origin": "invented-documents-and-test-only-keys",
+  "legal_qualification": false,
+  "production_qualified": false,
+  "runtime_activation": false,
+  "qualification_groups": [
+    {
+      "name": "source-and-analysis-linux-including-signed-private-ledger",
+      "passed": 152,
+      "seconds": 44.01,
+      "network": "none"
+    },
+    {
+      "name": "real-postgres-review-races",
+      "passed": 2,
+      "seconds": 3.97,
+      "network": "owned-internal"
+    },
+    {
+      "name": "deployment-contracts",
+      "passed": 42
+    }
+  ],
+  "focused_new_tests": 43,
+  "complete_ci_subjects": 4384,
+  "ci_partition": {
+    "missing": 0,
+    "extra": 0,
+    "intersection": 0,
+    "workflow_sha256": "1c5805f3cf0e2767104e756efd43762658e4a092fad2265305fc9eabc8c40106"
+  },
+  "required_hosted_checks": [
+    "backend-and-contracts",
+    "frontend",
+    "postgres-snapshot-concurrency",
+    "final-release-authorization",
+    "retained-release-withdrawal",
+    "graph-candidate-contracts",
+    "source-publication-contracts"
+  ],
+  "source_files_sha256": {
+    "backend/app/source_analysis_reviews.py": "c61247208a35e637e8b741f954f0e5ebe1e42b31c58e9d38f858fc53fad55103",
+    "backend/tests/test_source_analysis_reviews.py": "b36910ed2ba7bc31a2819a0b612c8851a5e5577913b45a4299a976c5c5474d21",
+    "backend/tests/test_runtime_authorization_integration.py": "3dfdb93bac2e4ee48e684754854b9afa9617ca888066227f535f0756d844340d",
+    "backend/tests/test_human_workflow_postgres.py": "47ba466c608d503816206bb6a2a9da3b77b4fe13e2bf2da688a675d990986ef0"
+  },
+  "limits": [
+    "Account separation does not establish independent legal expertise.",
+    "No national corpus, legal accuracy or preparation-time benefit qualified.",
+    "The lawyer-facing source review panel is the next packet.",
+    "No deployment, credentials, source grants or production activation changed."
+  ]
+}
