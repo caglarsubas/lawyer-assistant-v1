@@ -11,6 +11,9 @@ import type { Candidates, ContextView, Decision, EditableAssessment, EditableSel
 import { renewalPayload, verifyRenewalMetadata, type EditableMapping, type RenewalMetadata } from './sourceRenewalTypes';
 import { SourceRenewalMapping, SourceRenewalComparison } from './SourceRenewalMapping';
 
+import { SourceReviewQueue } from './SourceReviewQueue';
+import { verifyReadiness, type ReadinessFilters, type ReadinessPage } from './sourceReadinessTypes';
+
 type SaveRequest = { path: string; body: unknown; kind: 'context' | 'review' };
 type Saver = (value: SaveRequest) => Promise<void>;
 const nonce = () => crypto.randomUUID().replaceAll('-', '');
@@ -125,12 +128,13 @@ function SourceWorkspace({ matterId, record }: { matterId: string; record: Analy
   const [contextId, setContextId] = useState(''); const [view, setView] = useState<ContextView | null>(null); const [inputs, setInputs] = useState<ReviewInputs | null>(null);
   const [reviews, setReviews] = useState<Summary[]>([]); const [reviewMore, setReviewMore] = useState(false);
   const [renewal, setRenewal] = useState<RenewalMetadata | null>(null);
+  const [queue, setQueue] = useState<ReadinessPage | null>(null);
   const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [notice, setNotice] = useState(''); const [pending, setPending] = useState<SaveRequest | null>(null);
   const fence = useRef(new SourceReadFence()); useEffect(() => { const gate = fence.current; return () => gate.invalidate(); }, []);
   function clear(cause?: unknown) {
     fence.current.invalidate(); setBusy(false); setCandidates(null); setView(null); setInputs(null); setProducts([]); setProduct(''); setItems([]); setReviews([]);
     setMore(false); setProductMore(false); setReviewMore(false); setPending(null); setNotice(''); setError(cause ? messageOf(cause) : '');
-    setRenewal(null);
+    setRenewal(null); setQueue(null);
   }
   async function run<T>(load: (signal: AbortSignal, current: () => boolean) => Promise<T>, accept: (value: T) => void) {
     const task = fence.current.begin(); setBusy(true); setError(''); setView(null); setInputs(null); setCandidates(null); setNotice('');
@@ -175,6 +179,16 @@ function SourceWorkspace({ matterId, record }: { matterId: string; record: Analy
     const result = await request<ReviewInputs>(`${base}/${encodeURIComponent(contextId)}/reviews/context`, { signal }); await verifyManifest(result.manifest, matterId, record.id);
     if (!result.independent_reviewer_required || !/^[a-f0-9]{64}$/.test(result.expected_manifest_sha256)) throw new Error('Bağımsız inceleme bağı doğrulanamadı.'); return result;
   }, setInputs); }
+  function readiness(filters: ReadinessFilters, offset: number) {
+    setRenewal(null); setQueue(null); setContextId('');
+    void run(async signal => {
+      const params = new URLSearchParams({ bucket: filters.bucket, offset: String(offset) });
+      if (filters.date_from) params.set('date_from', filters.date_from);
+      if (filters.date_to) params.set('date_to', filters.date_to);
+      const result = await request<ReadinessPage>(`${base}/readiness?${params}`, { signal });
+      verifyReadiness(result, matterId, record.id, offset); return result;
+    }, setQueue);
+  }
   function history(append = false) { void run(signal => request<Summary[]>(`${base}?limit=10&offset=${append ? items.length : 0}`, { signal }), page => { setItems(old => append ? [...old, ...page] : page); setMore(page.length === 10); }); }
   function reviewHistory(append = false) { void run(signal => request<Summary[]>(`${base}/${encodeURIComponent(contextId)}/reviews?limit=10&offset=${append ? reviews.length : 0}`, { signal }), page => { setReviews(old => append ? [...old, ...page] : page); setReviewMore(page.length === 10); }); }
   function research(append = false) { void run(signal => request<{ id: string; title: string }[]>(`${base.replace('/source-contexts', '/authority-contexts')}/research-products?limit=10&offset=${append ? products.length : 0}`, { signal }), page => { setProducts(old => append ? [...old, ...page] : page); setProductMore(page.length === 10); }); }
@@ -186,6 +200,7 @@ function SourceWorkspace({ matterId, record }: { matterId: string; record: Analy
   return <><p>Bağımsız kamu kaynak pasajlarını bu özel analiz sürümüne bağlayın. Farklı bir avukatın incelemesi ve geçmiş kararları aynı yerde izlenir; özel bilgiler başka çalışma alanlarına aktarılmaz.</p>
     {pending && <Notice error>Kayıt sonucu bilinmiyor. Aynı istek kimliği korunuyor; kendiliğinden tekrar gönderilmez. <button className="text-button" disabled={busy} onClick={() => void save(pending)}>Aynı isteğin sonucunu kontrol et</button></Notice>}
     {notice && <Notice>{notice}</Notice>}{error && <Notice error>{error}</Notice>}
+    <SourceReviewQueue page={queue} busy={busy || !!pending} load={readiness} clear={clear} inspect={inspect} renew={renew} />
     <div className="practice-record-actions"><button className="text-button" disabled={busy || !!pending} onClick={() => research()}>Araştırma pasajlarını getir</button><button className="text-button" disabled={busy || !!pending} onClick={() => history()}>Kaynak seçimi geçmişini getir</button></div>
     {products.length > 0 && <><Field label="Kaynak pasajları için araştırma kaydı">{id => <select id={id} disabled={busy} value={product} onChange={event => { fence.current.invalidate(); setProduct(event.target.value); setCandidates(null); setView(null); setInputs(null); setError(''); }}><option value="">Araştırma seçin</option>{products.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}</select>}</Field>
       <button className="button secondary" disabled={busy || !product} onClick={() => void readCandidates()}>Özgün pasajları ve sürümleri aç</button>{productMore && <button className="text-button" disabled={busy} onClick={() => research(true)}>Daha fazla araştırma getir</button>}</>}

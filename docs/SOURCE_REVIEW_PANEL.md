@@ -67,3 +67,7 @@ separate. [Explicit renewal](SOURCE_CONTEXT_RENEWAL.md) now handles changed
 evidence/research with preserved original history, exact target mapping and fresh
 independent decisions. Next: authorized source-review readiness and a prioritized
 re-review queue. R03/R05 remain partial.
+
+The [private review queue](SOURCE_REVIEW_READINESS.md) now separates historical
+decisions, bounded private observations and unchecked public sources, with explicit
+inspection and renewal actions. Listing never grants current source access.

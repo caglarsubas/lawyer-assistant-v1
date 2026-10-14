@@ -209,3 +209,93 @@ def test_recipient_removal_waits_for_admitted_opinion_body_with_case_scope_retai
             assert session.scalar(select(Record).where(Record.id == item['id']))
     finally:
         other.close()
+
+
+def test_source_readiness_waits_for_independent_review_and_observes_exact_new_head(workspace, monkeypatch):
+    from test_analysis_workbench import build_workbench
+    from test_authority_adjudications import reviewer
+    from test_source_analysis_reviews import freeze, review_request, setup
+
+    from app import source_analysis_reviews
+
+    workbench = build_workbench(workspace)
+    app, client, *_ = workbench
+    endpoint, spec, *_ = setup(workbench, monkeypatch)
+    context, _ = freeze(client, endpoint, spec)
+    reviewer(workbench)
+    review_path, body = review_request(client, endpoint, context['id'])
+    entered, release = Event(), Event()
+    audit = source_analysis_reviews._audit
+
+    def pause(*args):
+        if args[2] == 'source_analysis_review_recorded' and not entered.is_set():
+            entered.set()
+            assert release.wait(10)
+        return audit(*args)
+
+    monkeypatch.setattr(source_analysis_reviews, '_audit', pause)
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, review_path, json=body)
+        try:
+            assert entered.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.get, endpoint + '/readiness')
+                assert observed[0].wait(5)
+                assert wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        saved = first.result(timeout=10)
+        observed = second.result(timeout=10)
+        assert saved.status_code == 201 and observed.status_code == 200
+    item = observed.json()['items'][0]
+    assert item['historical_review']['id'] == saved.json()['review']['id']
+    assert item['historical_review']['state'] == 'reviewed_conditional'
+    assert item['source_verification'] == 'not_checked' and item['legal_readiness'] == 'not_established'
+    assert item['state'] in {'pending', 'inspection_required'}
+
+
+def test_source_readiness_holds_private_basis_until_concurrent_version_edit_finishes(workspace, monkeypatch):
+    import copy
+
+    from test_analysis_workbench import build_workbench
+    from test_source_analysis_reviews import freeze, setup
+
+    from app import source_review_readiness
+
+    workbench = build_workbench(workspace)
+    app, client, base, payload, *_ = workbench
+    endpoint, spec, analysis, *_ = setup(workbench, monkeypatch)
+    frozen, _ = freeze(client, endpoint, spec)
+    entered, release = Event(), Event()
+    original = source_review_readiness._item
+
+    def pause(*args):
+        value = original(*args)
+        if not entered.is_set():
+            entered.set()
+            assert release.wait(10)
+        return value
+
+    monkeypatch.setattr(source_review_readiness, '_item', pause)
+    changed = copy.deepcopy(payload)
+    changed['rules'][0]['text'] = 'TEST ONLY later private version'
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.get, endpoint + '/readiness')
+        try:
+            assert entered.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, base + '/analyses/' + analysis['id'] + '/versions',
+                    json={**changed, 'expected_revision': analysis['revision'], 'change_note': 'TEST ONLY concurrent private change'})
+                assert observed[0].wait(5)
+                assert wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        observation = first.result(timeout=10)
+        saved = second.result(timeout=10)
+        assert observation.status_code == 200 and saved.status_code == 201
+    assert observation.json()['items'][0]['state'] == 'awaiting_review'
+    after = client.get(endpoint + '/readiness').json()['items'][0]
+    assert after['id'] == frozen['id'] and after['state'] == 'needs_renewal'
+    assert 'analysis_version_changed' in after['private_observation']['reasons']

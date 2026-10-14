@@ -2298,3 +2298,31 @@ national coverage, productivity and deployment remain separate; R03/R05 partial.
 
 Next: authorized source-review readiness and a prioritized re-review queue,
 explaining dependency changes without silently rewriting reviewed work.
+
+### R03/R05A authorized source-review observations and prioritized queue
+
+[Source-review readiness observations](SOURCE_REVIEW_READINESS.md) provide a
+bounded queue for the current authorized analysis. Recorded decisions remain
+historical; current private-version/research/review/admission/renewal-parent changes
+are separate observations. Public sources remain explicitly unchecked until an
+original guarded inspection. No state grants legal readiness or export permission.
+
+Date filters use source-record creation days in Türkiye. Priorities and counts
+cover only the scanned window; remaining pages, unknown total coverage and budget
+limits stay explicit. Listing runs no public graph validation per row and changes
+no records, assignments, permissions or old decisions. Scope/role checks precede
+queries and decryption; private joins do not read foreign payloads. Matter/firm
+guards serialize sanctioned edits and access changes. Client failures retire late
+replies and clear protected buffers. Existing independent review and renewal
+choices remain blank and explicit.
+
+Engineering qualification includes private changes, historical positives under
+source withdrawal, pending/missing admissions, foreign routing, date and budget
+bounds, real PostgreSQL review/version races, and wide/narrow browser rehearsal.
+All seven CI jobs, two workers, deadlines and no-retry behavior remain. Legal
+acceptance, national corpus coverage, productivity and deployment remain separate;
+R03/R05 are partial.
+
+Next: a bounded authorized portfolio source-review queue with customer/date
+selection and explicit per-matter coverage, preserving the same fresh guarded
+inspection and independent-review boundaries.

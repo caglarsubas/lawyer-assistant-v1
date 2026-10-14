@@ -113,5 +113,6 @@ corpus, legal accuracy, independent legal expertise, preparation-time benefit,
 production activation or user acceptance. R03/R05 remain partial.
 [Explicit renewal and version comparison](SOURCE_CONTEXT_RENEWAL.md) now require
 fresh independent map assessment. Independent evaluation strata/gold remain
-protected qualification work. Next: authorized source-review readiness and a
+protected qualification work. [Source-review observations](SOURCE_REVIEW_READINESS.md) now provide a bounded
+analysis-level queue. Next: an authorized portfolio view of the
 prioritized re-review queue.

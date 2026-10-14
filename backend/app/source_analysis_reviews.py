@@ -17,6 +17,7 @@ from sqlalchemy import select
 from . import analysis_authorities as authorities
 from . import analysis_reviews, analysis_workbench
 from . import source_context_renewals as renewals
+from . import source_review_readiness as readiness
 from .analysis_adjudication import target_values
 from .auth import authenticate, require_child, require_matter
 from .db import Record, User, digest, now
@@ -567,6 +568,17 @@ def source_analysis_router():
                 .order_by(Record.created_at.desc(), Record.id).limit(limit).offset(offset))
             # Metadata only: names and notes may repeat a subsequently withdrawn quote.
             return [{'id': row.id, 'recorded_at': row.created_at} for row in rows]
+
+    @router.get('/readiness')
+    def review_readiness(matter_id: str, analysis_id: str, request: Request, user=Depends(authenticate),
+                         window: int = Query(default=10, ge=1, le=readiness.MAX_WINDOW),
+                         offset: int = Query(default=0, ge=0, le=10000), bucket: readiness.Bucket = 'all',
+                         date_from: str | None = Query(default=None, max_length=10),
+                         date_to: str | None = Query(default=None, max_length=10)):
+        store = request.app.state.store
+        with store.session() as session:
+            return _bounded(readiness.queue(store, session, matter_id, analysis_id, user,
+                window=window, offset=offset, bucket=bucket, date_from=date_from, date_to=date_to))
 
     @router.get('/{context_id}')
     def detail(matter_id: str, analysis_id: str, context_id: str, request: Request, user=Depends(authenticate)):
