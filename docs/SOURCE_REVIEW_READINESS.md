@@ -78,3 +78,7 @@ PostgreSQL concurrency and browser rehearsal. National legal coverage, current
 law, legal correctness, productivity and production activation remain separate.
 Next: a bounded portfolio source-review queue with explicit customer/date selection,
 authorization before every matter join, and coverage that never implies completion.
+
+The [portfolio queue](PORTFOLIO_SOURCE_REVIEW_QUEUE.md) now reuses these
+observations with independent content grants, explicit customer/date filters and
+bounded cross-matter coverage. Original guarded inspections remain authoritative.
