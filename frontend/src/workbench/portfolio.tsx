@@ -1,7 +1,9 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { request } from '../api';
 import type { Customer, Matter, PortfolioFilters } from '../types';
 import { messageOf } from '../utils';
+
+import { PortfolioReturnBook } from './portfolioReturn';
 
 export const EMPTY_FILTERS: PortfolioFilters = { customer_ids: [], date_from: '', date_to: '', date_field: 'created_at' };
 export function workspaceQuery(filters: PortfolioFilters) {
@@ -12,14 +14,16 @@ export function workspaceQuery(filters: PortfolioFilters) {
   return query.toString();
 }
 interface PortfolioState {
-  customers: Customer[]; workspaces: Matter[]; filters: PortfolioFilters; loading: boolean; error: string; revision: number;
+  customers: Customer[]; workspaces: Matter[]; filters: PortfolioFilters; loading: boolean; error: string; revision: number; returns: PortfolioReturnBook;
   setFilters: (filters: PortfolioFilters | ((previous: PortfolioFilters) => PortfolioFilters)) => void;
   refresh: () => void;
 }
 const PortfolioContext = createContext<PortfolioState | null>(null);
-export function PortfolioProvider({ children, enabled = true }: { children: ReactNode; enabled?: boolean }) {
+export function PortfolioProvider({ children, enabled = true, returnBook }: { children: ReactNode; enabled?: boolean; returnBook?: PortfolioReturnBook }) {
   const [customers, setCustomers] = useState<Customer[]>([]); const [workspaces, setWorkspaces] = useState<Matter[]>([]);
   const [filters, setFilters] = useState<PortfolioFilters>(EMPTY_FILTERS); const [loading, setLoading] = useState(true); const [error, setError] = useState('');
+  const localReturns = useRef(new PortfolioReturnBook()).current;
+  const returns = returnBook || localReturns;
   const [revision, setRevision] = useState(0);
   const refresh = useCallback(() => setRevision(value => value + 1), []);
   useEffect(() => { window.addEventListener('portfolio-updated', refresh); return () => window.removeEventListener('portfolio-updated', refresh); }, [refresh]);
@@ -34,7 +38,7 @@ export function PortfolioProvider({ children, enabled = true }: { children: Reac
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [filters, revision, enabled]);
-  const value = useMemo(() => ({ customers, workspaces, filters, setFilters, loading, error, revision, refresh }), [customers, workspaces, filters, loading, error, revision, refresh]);
+  const value = useMemo(() => ({ customers, workspaces, filters, setFilters, loading, error, revision, refresh, returns }), [customers, workspaces, filters, loading, error, revision, refresh, returns]);
   return <PortfolioContext.Provider value={value}>{children}</PortfolioContext.Provider>;
 }
 export function usePortfolio() { const value = useContext(PortfolioContext); if (!value) throw new Error('Portfolio provider required'); return value; }

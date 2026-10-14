@@ -2,16 +2,18 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { request } from '../api';
 import { Badge, Empty, Loading, Notice, PageHeader } from '../components';
 import { messageOf } from '../utils';
+import { queueReturnHref, type QueueDestination } from '../workbench/portfolioReturn';
 import { usePortfolio } from '../workbench/portfolio';
 import { KIND_LABELS, WORK_STATUS, workTime, type WorkItem } from './workflowTypes';
 const PortfolioSourceReviewQueue = lazy(() => import('./PortfolioSourceReviewQueue'));
 
-export default function WorkQueuePage() {
-  const [mode, setMode] = useState('work');
+export default function WorkQueuePage({ destination = { kind: 'work' } }: { destination?: QueueDestination }) {
+  if (destination.kind === 'invalid') return <Notice error>Kaynak kuyruğu dönüşü eksik veya belirsiz. Başka filtre ya da iş görünümü kullanılmadı. <a href={queueReturnHref()!}>Yeni kaynak kuyruğunu açıkça hazırla</a></Notice>;
+  const sources = destination.kind === 'sources';
   return <><div className="practice-record-actions" role="group" aria-label="Çalışma kuyruğu görünümü">
-    <button className="text-button" aria-pressed={mode === 'work'} onClick={() => setMode('work')}>Atamalar ve gözetim</button>
-    <button className="text-button" aria-pressed={mode === 'sources'} onClick={() => setMode('sources')}>Portföy kaynak incelemeleri</button>
-  </div>{mode === 'sources' ? <Suspense fallback={<Loading />}><PortfolioSourceReviewQueue /></Suspense> : <AssignedWorkQueue />}</>;
+    <button className="text-button" aria-pressed={!sources} onClick={() => { window.location.hash = '#/work'; }}>Atamalar ve gözetim</button>
+    <button className="text-button" aria-pressed={sources} onClick={() => { window.location.hash = queueReturnHref()!; }}>Portföy kaynak incelemeleri</button>
+  </div>{sources ? <Suspense fallback={<Loading />}><PortfolioSourceReviewQueue returnToken={destination.return_token} /></Suspense> : <AssignedWorkQueue />}</>;
 }
 
 function AssignedWorkQueue() {

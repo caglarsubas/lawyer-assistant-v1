@@ -2403,6 +2403,30 @@ All seven jobs, two workers, existing caps and the exclusive full suite partitio
 remain. National coverage, legal accuracy, productivity, deployment and lawyer
 acceptance remain separate; R03/R05 are partial.
 
-Next: guarded return to the portfolio source-review queue with bounded exact
-customer/workspace/source-record filters, fresh observation and selected-record
-reconciliation, preserving all evidence and independent-review boundaries.
+### R03/R05A guarded portfolio source-review queue return
+
+[Guarded portfolio return](GUARDED_PORTFOLIO_SOURCE_RETURN.md) carries exact bounded
+customer OR, workspace date, source-record date and bucket intent through selected
+context and historical-event navigation. A session-only bounded token book preserves
+opaque identities and frozen evidence hashes without retaining source bodies,
+review notes, customer names or prior results. Expiry, reload, principal changes and
+mixed/duplicate routes close the handoff rather than guess a broader destination.
+
+Return arrival shows captured intent. Explicit preparation restores portfolio
+filters, and explicit fresh observation requests a bounded authorized queue window.
+Only a selected context occurring in the window triggers a separate exact metadata
+read. Frozen context/version/hash and current head identity/state must agree across
+both observations; mismatch or failed access drops all partial results. These reads
+are not an atomic snapshot or present source authorization. Missing targets remain
+unobserved within the window, without automatic scans or deletion/coverage claims.
+
+The original historical event stays distinct from the observed head/current version;
+source, retained-grant, private-basis and independent-review guards remain in force.
+Changed filters, refresh, actor/session, navigation and expiry retire delayed replies
+and protected buffers. The assistant is guide-only; history and public graphs are
+unchanged. All seven jobs, two workers, existing caps and exclusive full test
+partition remain. Legal/corpus qualification, productivity, deployment and lawyer
+acceptance stay separate; R03/R05 remain partial.
+
+Next: bounded selected-versus-current review-head/version comparison with explicit
+fresh follow-up navigation, preserving exact filters, evidence and immutable history.

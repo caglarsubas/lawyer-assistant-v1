@@ -23,8 +23,8 @@ export function queueQuery(filters: PortfolioQueueFilters, offset: number) {
   for (const key of ['date_from', 'date_to', 'source_date_from', 'source_date_to'] as const) if (filters[key]) params.set(key, filters[key]);
   return params.toString();
 }
-export function sourceQueueHref(item: PortfolioQueueItem): string | null {
-  return identifier(item.matter_id) && identifier(item.analysis_id) ? sourceContextHref(item.matter_id, item.analysis_id!, item.id) : null;
+export function sourceQueueHref(item: PortfolioQueueItem, token?: string): string | null {
+  return identifier(item.matter_id) && identifier(item.analysis_id) ? sourceContextHref(item.matter_id, item.analysis_id!, item.id, undefined, token) : null;
 }
 export function verifyPortfolioQueue(value: PortfolioQueuePage, expected: PortfolioQueueFilters, offset: number) {
   const fail = () => { throw new Error('Portföy kaynak kuyruğunun filtre veya kapsam bağı doğrulanamadı.'); };

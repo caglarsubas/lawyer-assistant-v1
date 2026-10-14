@@ -17,7 +17,7 @@ import { verifyReadiness, type ReadinessFilters, type ReadinessPage } from './so
 
 type SelectedContext = { id: string; manifest_sha256: string; version_id: string };
 export type SourceSaveReceipt = { kind: 'context' | 'review'; id: string; state: 'confirmed' | 'pending' };
-type WorkspaceProps = { matterId: string; record: Pick<AnalysisRecord, 'id' | 'latest_version_id'>; selectedContext?: SelectedContext; selectedReview?: { id: string; packet_sha256: string }; onFailure?: (cause: unknown) => void; onCommitted?: (receipt: SourceSaveReceipt) => void };
+type WorkspaceProps = { matterId: string; record: Pick<AnalysisRecord, 'id' | 'latest_version_id'>; returnToken?: string; selectedContext?: SelectedContext; selectedReview?: { id: string; packet_sha256: string }; onFailure?: (cause: unknown) => void; onCommitted?: (receipt: SourceSaveReceipt) => void };
 type SaveRequest = { path: string; body: unknown; kind: 'context' | 'review' };
 type Saver = (value: SaveRequest) => Promise<void>;
 const nonce = () => crypto.randomUUID().replaceAll('-', '');
@@ -125,7 +125,7 @@ function ReviewEditor({ inputs, base, busy, save }: { inputs: ReviewInputs; base
   </form>;
 }
 
-function SourceWorkspace({ matterId, record, selectedContext, selectedReview, onFailure, onCommitted }: WorkspaceProps) {
+function SourceWorkspace({ matterId, record, selectedContext, selectedReview, returnToken, onFailure, onCommitted }: WorkspaceProps) {
   const base = `/matters/${encodeURIComponent(matterId)}/analyses/${encodeURIComponent(record.id)}/source-contexts`;
   const [products, setProducts] = useState<{ id: string; title: string }[]>([]); const [product, setProduct] = useState(''); const [productMore, setProductMore] = useState(false);
   const [candidates, setCandidates] = useState<Candidates | null>(null); const [items, setItems] = useState<Summary[]>([]); const [more, setMore] = useState(false);
@@ -227,7 +227,7 @@ function SourceWorkspace({ matterId, record, selectedContext, selectedReview, on
     {contextId && !selectedReview && <div className="practice-record-actions"><button className="text-button" disabled={busy || !!pending} onClick={() => inspect(contextId)}>Güncel kaynak ve karar bağlarını kontrol et</button><button className="text-button" disabled={busy || !!pending} onClick={() => renew(contextId)}>Bu kaydın kaynak bağlamını yenile</button><button className="text-button" disabled={busy || !!pending} onClick={reviewContext}>Bağımsız inceleme içeriğini getir</button><button className="text-button" disabled={busy || !!pending} onClick={() => reviewHistory()}>Bağımsız karar geçmişini getir</button></div>}
     {view && <><SourceContextView value={view} />{!selectedReview && <div className="practice-record-actions">{(['json', 'docx', 'pdf'] as const).map(format => <button key={format} className="text-button" disabled={busy || !!selectedReview || !canExport(view)} onClick={() => void download(format)}>{format.toUpperCase()} kaynak incelemesini indir</button>)}</div>}</>}
     {inputs && <ReviewEditor key={`${contextId}:${inputs.expected_manifest_sha256}:${inputs.expected_review_id}`} inputs={inputs} base={`${base}/${encodeURIComponent(contextId)}/reviews`} busy={busy} save={save} />}
-    {reviews.map(item => <div className="practice-record-actions" key={item.id}><span className="small">{formatDate(item.recorded_at, true)} · İncelemeci: {item.recorded_by}</span>{!busy && !pending && sourceContextHref(matterId, record.id, contextId, item.id) ? <a className="text-link reference-id" href={sourceContextHref(matterId, record.id, contextId, item.id)!}>Kararın tam kimliğini aç · {item.id}</a> : <span className="small">Karar bağlantısı şu anda açılamıyor.</span>}</div>)}
+    {reviews.map(item => <div className="practice-record-actions" key={item.id}><span className="small">{formatDate(item.recorded_at, true)} · İncelemeci: {item.recorded_by}</span>{!busy && !pending && sourceContextHref(matterId, record.id, contextId, item.id, returnToken) ? <a className="text-link reference-id" href={sourceContextHref(matterId, record.id, contextId, item.id, returnToken)!}>Kararın tam kimliğini aç · {item.id}</a> : <span className="small">Karar bağlantısı şu anda açılamıyor.</span>}</div>)}
     {reviewMore && <button className="text-button" disabled={busy || !!pending} onClick={() => reviewHistory(true)}>Daha fazla bağımsız karar getir</button>}
   </>;
 }
