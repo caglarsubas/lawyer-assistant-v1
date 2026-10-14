@@ -63,11 +63,11 @@ They contain no old source quotes, target text, nomination/review notes or sourc
 capture content. Foreign dependencies are rejected before decryption. Invalid or
 inaccessible analysis routing remains an unavailable row with no analysis link.
 
-**Çalışma notlarını aç** opens the authorized matter's existing workbench. Identity
-references let the lawyer locate its source record. Original inspection, explicit
-renewal, independent decision and export remain under their full current guards;
-listing and navigation never inherit source authorization or a review decision.
-Historical records are not changed by filtering, listing, or navigation.
+**Tam kaynak bağlamını aç** opens the [exact metadata handoff](EXACT_SOURCE_CONTEXT_NAVIGATION.md)
+for the authorized matter, analysis and context, including records beyond initial
+list pages. Passage inspection, renewal, independent decisions and exports remain
+explicit under their original guards. Listing and navigation never inherit source
+authorization or decisions, and do not change historical records.
 
 The client verifies the exact echoed filters, closed metadata schema, bounds and
 source-status distinctions. Customer/workspace-date changes, refreshes, source-date
@@ -80,6 +80,5 @@ and changed-inventory races, real signed-release withdrawal, and browser exercis
 of multi-customer/date selection and late replies. Engineering checks do not qualify
 national legal coverage, accuracy, productivity, deployment or lawyer acceptance.
 
-Next: exact-context navigation and a guarded source-review handoff from the portfolio
-queue, including records outside the first analysis/history page, while preserving
-fresh independent review and the original evidence/version guards.
+Next: exact historical-review selection with bounded metadata lineage and original
+guarded event inspection.

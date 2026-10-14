@@ -2351,6 +2351,30 @@ All seven CI checks, two workers, resource/time limits and complete exclusive
 partition remain. Legal acceptance, national corpus, productivity and deployment
 remain separate; R03/R05 are partial.
 
-Next: exact-context navigation and guarded source-review handoff from the portfolio
-queue, preserving evidence versions, history and fresh independent decisions even
-when the target record lies outside initial analysis/history pages.
+### R03/R05A exact-context navigation and guarded source-review handoff
+
+[Exact context navigation](EXACT_SOURCE_CONTEXT_NAVIGATION.md) carries the selected
+matter, analysis and immutable source-context identity from the portfolio queue.
+A direct, access-checked metadata lookup avoids list-page dependence and rich
+workspace loading. Frozen/current versions, stored review state, integrity and
+admission state remain distinct from source authorization and legal readiness.
+Pending admissions are never completed by navigation; unavailable relationships
+remain unknown. Public-source verification stays unchecked.
+
+Explicit tools remain pinned to the selected context/hash/version and preserve all
+original evidence, private-basis, independent actor, review-head and mutation guards.
+Renewal creates a separately navigable context requiring fresh independent review;
+historical decisions remain immutable. Malformed/mixed selection closes the view;
+changed target, filters, actor or refresh retire replies, downloads and protected
+forms. The handoff assistant is a product guide without content reads or inference.
+
+Qualification covers records beyond initial pages, corrupt/pending admission,
+foreign/private boundaries, exact historical states, real PostgreSQL review-lock
+serialization, actual signed withdrawal and browser races/review/history/narrow
+layout. All seven hosted jobs, two workers, existing caps and the exclusive full
+suite partition remain. Legal qualification, national coverage, productivity,
+deployment and user acceptance remain separate; R03/R05 remain partial.
+
+Next: exact historical-review navigation and bounded metadata-only review lineage,
+preserving the immutable selected event, latest head, full original source guards
+and confidential matter access.

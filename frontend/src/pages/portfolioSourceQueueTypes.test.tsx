@@ -29,7 +29,8 @@ describe('authorized portfolio queue windows', () => {
     const value = page(); verifyPortfolioQueue(value, filters, 0); const html = render(value);
     expect(html).toContain('PRIVATE CASE &lt;script&gt;'); expect(html).not.toContain('<script>');
     expect(html).toContain('Koşullu inceleme kaydedildi'); expect(html).toContain('Kontrol edilmedi'); expect(html).toContain('Hukuki hazır olma belirlenmedi');
-    expect(html).toContain('href="#/matters/matter1?tab=practice"'); expect(html).not.toContain('indir'); expect(html).not.toContain('İncelemeyi tamamla');
+    expect(sourceQueueHref(value.items[0])).toBe(`#/matters/matter1?tab=source-review&analysis=analysis1&source_context=${value.items[0].id}`);
+    expect(html).toContain('Tam kaynak bağlamını aç'); expect(html).not.toContain('indir'); expect(html).not.toContain('İncelemeyi tamamla');
   });
   it.each([
     (v: PortfolioQueuePage) => { v.filters = { ...v.filters, customer_ids: ['foreign'] }; },

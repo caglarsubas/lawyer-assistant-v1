@@ -236,6 +236,13 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
                     AssertionError('Readiness metadata must not validate or read public sources')))
                 response = restarted.get(source_context_path + '/readiness')
                 portfolio_response = restarted.get('/api/v1/work/source-reviews')
+                selected_response = restarted.get(source_context_path + '/' + source_context['id'] + '/navigation-context')
+            assert selected_response.status_code == 200, selected_response.text
+            selected = selected_response.json()
+            assert selected['context']['manifest_sha256'] == source_context['manifest_sha256']
+            assert selected['historical_review']['state'] == 'reviewed_conditional'
+            assert selected['source_verification'] == 'not_checked' and selected['legal_readiness'] == 'not_established'
+            assert 'PRIVATE REVIEW NOTE' not in selected_response.text and 'analysis_content' not in selected_response.text
             assert response.status_code == 200, response.text
             assert response.headers['cache-control'] == 'no-store'
             value = response.json()

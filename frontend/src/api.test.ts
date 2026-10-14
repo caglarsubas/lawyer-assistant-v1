@@ -29,6 +29,17 @@ describe('session and request boundaries', () => {
     expect(new Headers(options?.headers).get('Content-Type')).toBe('application/json');
   });
 
+  it('keeps read-only preview scope alive while preserving default mutation refreshes', async () => {
+    const dispatchEvent = vi.fn(); vi.stubGlobal('window', { dispatchEvent });
+    fetchMock.mockResolvedValue(new Response('{}'));
+    await request('/matters/m/analyses/a/source-contexts/preview', { method: 'POST', body: '{}', refreshPortfolio: false });
+    expect(dispatchEvent).not.toHaveBeenCalled();
+    expect(fetchMock.mock.calls[0][1]).not.toHaveProperty('refreshPortfolio');
+    fetchMock.mockResolvedValue(new Response('{}'));
+    await post('/matters', { title: 'case' }); expect(dispatchEvent).toHaveBeenCalledTimes(1);
+    expect(dispatchEvent.mock.calls[0][0].type).toBe('portfolio-updated');
+  });
+
   it('does not forward a previous session token after logout clears it', async () => {
     fetchMock.mockResolvedValue(new Response('{}'));
     setCsrfToken('previous-session'); setCsrfToken('');

@@ -133,6 +133,13 @@ def assistant_router():
             return {"answer": "Büro yönetiminde çalışanları, en fazla bir organizasyon yöneticisini ve işlem rollerini düzenleyebilirsiniz. Organizasyon bağı ve yönetici rolü dosya erişimi vermez. İçerik için ayrıca açık atama gerekir. Rol değişikliklerinden sonra ilgili hesap yeniden giriş yapar. Dosya ekipleri ve insan görüşü iş akışı sonraki aşamalarda açılacaktır.",
                     "mode": body.mode, "sources": [], "suggestions": [], "period": None,
                     "provider_used": False, "limitations": ["Bu kullanım rehberi çalışan veya dosya içeriği okumaz."]}
+        if context.section == "source-review":
+            with store.session() as session:
+                if context.workspace_id:
+                    require_matter(session, context.workspace_id, user)
+            return {"answer": "Seçilen kaynak bağlamında önce tam kayıt ve sürüm kimliklerini doğrulayın. İnceleme araçlarını açtıktan sonra özgün pasajları ayrıca kontrol edin. Saklanan karar yalnızca geçmiş beyanıdır; güncel kaynak izni değildir. Yenileme yeni bir kayıt oluşturur ve önceki kararı devralmaz. Bağımsız inceleme farklı yetkili avukat tarafından yeni girdilerle kaydedilir.",
+                    "mode": body.mode, "sources": [], "suggestions": [], "period": None,
+                    "provider_used": False, "limitations": ["Bu ekranın rehberi kaynak, analiz, not veya portföy içeriği okumaz; dönem özeti ve hukuki değerlendirme üretmez."]}
         if context.page == "sources" and body.mode in {"guide", "chat"}:
             if body.mode == "chat" and not body.question:
                 raise HTTPException(422, "Asistana bir soru yazın")
