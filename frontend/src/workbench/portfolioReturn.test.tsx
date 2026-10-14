@@ -5,7 +5,7 @@ import SourceReviewLineagePanel from '../pages/SourceReviewLineagePanel';
 import { sourceContextHref, sourceNavigationSelection, type NavigationMetadata } from '../pages/sourceContextNavigationTypes';
 import type { ReviewLineage, ReviewMetadata } from '../pages/sourceReviewLineageTypes';
 import { queueFilters, type PortfolioQueuePage } from '../pages/portfolioSourceQueueTypes';
-import { captureReturn, departingReturn, PortfolioReturnBook, queueDestination, queueReturnHref, reconcileReturn, returnMatches, validateReturn, type ReturnIntent } from './portfolioReturn';
+import { captureReturn, departingReturn, PortfolioReturnBook, PrincipalReturnBook, queueDestination, queueReturnHref, reconcileReturn, returnMatches, validateReturn, type ReturnIntent } from './portfolioReturn';
 
 const context = `sac-${'a'.repeat(20)}-${'b'.repeat(32)}`, review = (n: number) => `sar-${'c'.repeat(20)}-${n.toString(16).padStart(32, '0')}`;
 const filters = queueFilters({ customer_ids: ['customerB', 'customerA'], date_field: 'relevant_date', date_from: '1920-01-01', date_to: '2026-10-14' },
@@ -56,6 +56,14 @@ describe('guarded portfolio return intent', () => {
     expect(sourceNavigationSelection('/work', new URLSearchParams('view=source-reviews&return=' + token))).toEqual({ kind: 'none' });
     for (const bad of ['return=' + token, 'view=source-reviews&return=bad', 'view=source-reviews&work=other', 'view=source-reviews&view=source-reviews', 'view=source-reviews&return=' + token + '&return=' + token]) expect(queueDestination(new URLSearchParams(bad)).kind).toBe('invalid');
     expect(queueDestination(new URLSearchParams())).toEqual({ kind: 'work' });
+  });
+  it('retains only intent across same-principal suspension and discards it on capability, actor or logout transitions', () => {
+    const owner = new PrincipalReturnBook(), first = owner.forPrincipal('actor1:firm1:lawyer'), token = first.put(intent());
+    expect(owner.forPrincipal('actor1:firm1:lawyer').get(token)).toEqual(intent());
+    expect(owner.forPrincipal('actor1:firm1:revoked').get(token)).toBeNull();
+    const next = owner.forPrincipal('actor1:firm1:lawyer'), second = next.put(intent());
+    expect(owner.forPrincipal(null).get(second)).toBeNull(); expect(owner.forPrincipal('actor1:firm1:lawyer').get(second)).toBeNull();
+    const third = owner.forPrincipal('actor1:firm1:lawyer').put(intent()); expect(owner.forPrincipal('actor2:firm1:lawyer').get(third)).toBeNull();
   });
   it.each([
     (v: ReturnIntent) => { v.filters.customer_ids = ['customerB', 'customerA']; },

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState, type FormEvent } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState, type FormEvent } from 'react';
 import { ApiError, onUnauthorized, post, request, setCsrfToken } from './api';
 import { Icon, Loading, Mark, Notice } from './components';
 import type { Bootstrap, Session, SystemStatus } from './types';
@@ -19,7 +19,7 @@ import SourceReviewPage from './pages/SourceReviewPage';
 import ProvisionMappingPage from './pages/ProvisionMappingPage';
 const DecisionMappingPage = lazy(() => import('./pages/DecisionMappingPage'));
 import { PortfolioProvider } from './workbench/portfolio';
-import { queueDestination } from './workbench/portfolioReturn';
+import { PrincipalReturnBook, queueDestination } from './workbench/portfolioReturn';
 import Workbench from './workbench/Workbench';
 
 function currentRoute() { return window.location.hash.slice(1) || '/matters'; }
@@ -34,6 +34,8 @@ export default function App() {
   const [error, setError] = useState('');
   const [checkingAccess, setCheckingAccess] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
+  const returnBooks = useRef(new PrincipalReturnBook());
+  const returnBook = returnBooks.current.forPrincipal(session ? sessionPrincipalKey(session.user) : null);
   useEffect(() => { const update = () => { setRoute(currentRoute()); window.scrollTo(0, 0); }; window.addEventListener('hashchange', update); return () => window.removeEventListener('hashchange', update); }, []);
   useEffect(() => {
     let alive = true;
@@ -80,7 +82,7 @@ export default function App() {
   const portfolioHandoff = page === 'work' && destination.kind !== 'work';
   const metadataOnly = selection.kind !== 'none';
   const section = metadataOnly || portfolioHandoff ? 'source-review' : params.get('tab') || 'overview';
-  return <PortfolioProvider key={sessionPrincipalKey(session.user)} enabled={!session.user.permissions || session.user.permissions.includes('portfolio.read')}><Workbench key={metadataOnly || portfolioHandoff ? route : 'ordinary-workbench'} session={session} signingOut={signingOut} onSignOut={signOut} page={page} workspaceId={selection.kind === 'invalid' ? null : matterId} section={section} metadataOnly={metadataOnly || portfolioHandoff} demo={Boolean(status?.demo_mode || session.demo_mode)}>
+  return <PortfolioProvider key={sessionPrincipalKey(session.user)} returnBook={returnBook} enabled={!session.user.permissions || session.user.permissions.includes('portfolio.read')}><Workbench key={metadataOnly || portfolioHandoff ? route : 'ordinary-workbench'} session={session} signingOut={signingOut} onSignOut={signOut} page={page} workspaceId={selection.kind === 'invalid' ? null : matterId} section={section} metadataOnly={metadataOnly || portfolioHandoff} demo={Boolean(status?.demo_mode || session.demo_mode)}>
     {error && <Notice error>{error}</Notice>}
     {metadataOnly ? <Suspense fallback={<Loading label="Kaynak bağlamı yükleniyor…" />}><SelectedSourceReviewPage key={route} selection={selection} /></Suspense> : matterId ? <MatterPage key={matterId} matterId={matterId} tab={section} selectedDocumentId={params.get('document')} selectedWorkId={params.get('work')} userRole={session.user.role} permissions={session.user.permissions} demo={Boolean(status?.demo_mode || session.demo_mode)} /> : page === 'sources' ? pathname.split('/')[3] === 'compare' ? <Suspense fallback={<Loading label="Kaynak karşılaştırması yükleniyor…" />}><SourceComparisonPage sourceId={pathname.split('/')[2] || ''} user={session.user} otherSourceId={params.get('other_source_id') || ''} /></Suspense> : pathname.split('/')[3] === 'decisions' ? <Suspense fallback={<Loading label="Karar incelemesi yükleniyor…" />}><DecisionMappingPage sourceId={pathname.split('/')[2] || ''} user={session.user} /></Suspense> : pathname.split('/')[3] === 'provisions' ? <ProvisionMappingPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : <SourceReviewPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : page === 'firm-admin' ? <Suspense fallback={<Loading label="Büro yönetimi yükleniyor…" />}><FirmAdminPage /></Suspense> : page === 'work' ? <Suspense fallback={<Loading />}><WorkQueuePage key={route} destination={destination} /></Suspense> : page === 'customers' ? <CustomersPage /> : page === 'graphs' ? <GraphPage /> : page === 'coverage' ? <CoveragePage /> : page === 'system' ? <SystemPage status={status} onStatus={setStatus} /> : <MattersPage newRequested={params.get('new') === '1'} />}
   </Workbench></PortfolioProvider>;

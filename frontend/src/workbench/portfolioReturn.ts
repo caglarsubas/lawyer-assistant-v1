@@ -67,6 +67,15 @@ export class PortfolioReturnBook {
   remaining(id: string) { this.prune(); return Math.max(0, (this.rows.get(id)?.expires || 0) - this.now()); }
   private prune() { for (const [id, row] of this.rows) if (row.expires <= this.now()) this.rows.delete(id); }
 }
+/** Suspension clears private views; only the same verified principal can resume intent. */
+export class PrincipalReturnBook {
+  private principal: string | null = null;
+  private book = new PortfolioReturnBook();
+  forPrincipal(principal: string | null) {
+    if (principal !== this.principal) { this.principal = principal; this.book = new PortfolioReturnBook(); }
+    return this.book;
+  }
+}
 export type ReturnReconciliation = { state: 'not_observed' | 'observed'; head_changed?: boolean; current_version_changed?: boolean;
   private_state?: string; context_state?: string; review_state?: string; selected_review_state?: string; queue_observed_at: string; target_observed_at?: string };
 export function reconcileReturn(intent: ReturnIntent, page: PortfolioQueuePage, meta: NavigationMetadata | null, lineage: ReviewLineage | null): ReturnReconciliation {

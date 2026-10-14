@@ -15,7 +15,10 @@ separate from the current head. An unavailable hash remains unknown.
 
 ## Session boundary and explicit observation
 
-The return book lives only in the current principal's in-memory portfolio provider.
+The return book lives only in the current principal's in-memory application session
+and is supplied to the portfolio provider. Focus/visibility revalidation clears all
+private views; the same verified principal can resume only intent, followed by fresh
+preparation/observation. A different principal or failed session check discards it.
 It contains at most eight intentions, with thirty-minute expiry and oldest-entry
 eviction. It stores closed filter/identity/hash/time metadata, never client names,
 source bodies, review notes, credentials or queue result arrays. The hash URL carries
@@ -74,7 +77,7 @@ history is never overwritten.
 ## Engineering qualification and next slice
 
 [Recorded checks](evidence/guarded-portfolio-source-return-2026-10-14.json) include
-647 frontend cases/build, 263 Linux publication cases, 243 focused source cases,
+648 frontend cases/build, 263 Linux publication cases, 243 focused source cases,
 nine real PostgreSQL races, 42 deployment contracts and actual signed-runtime
 withdrawal. Browser rehearsal with invented accounts/documents covers exact multiple
 customer/date restoration, historical continuation/current return, no automatic
