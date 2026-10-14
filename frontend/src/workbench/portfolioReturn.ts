@@ -4,6 +4,7 @@ import { canonicalJson } from '../pages/matter/sourceReviewTypes';
 import { navigationContextId, navigationIdentifier, navigationReviewId, type NavigationMetadata, type SourceTarget } from '../pages/sourceContextNavigationTypes';
 import type { ReviewLineage } from '../pages/sourceReviewLineageTypes';
 import { compareReturnIdentities, verifyReturnSelection, type ReturnComparison } from './returnComparison';
+import { validateRenewalHandoff, type RenewalHandoff } from './renewalHandoff';
 
 export const returnToken = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{32}$/.test(value);
 const sha = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
@@ -68,13 +69,14 @@ export function departingReturn(value: ReturnIntent, meta: NavigationMetadata | 
 }
 export const portfolioPart = (value: PortfolioQueueFilters): PortfolioFilters => ({ customer_ids: [...value.customer_ids], date_field: value.date_field, date_from: value.date_from, date_to: value.date_to });
 export class PortfolioReturnBook {
-  private rows = new Map<string, { expires: number; value: ReturnIntent }>();
+  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff }>();
   constructor(private now = () => Date.now(), private nonce = () => crypto.randomUUID().replaceAll('-', '')) {}
-  put(value: ReturnIntent): string { validateReturn(value); this.prune();
+  put(value: ReturnIntent, renewal?: RenewalHandoff): string { validateReturn(value); if (renewal) validateRenewalHandoff(renewal, value); this.prune();
     const id = this.nonce(); if (!returnToken(id) || this.rows.has(id)) throw new Error('Dönüş kimliği oluşturulamadı.');
     while (this.rows.size >= 8) this.rows.delete(this.rows.keys().next().value!);
-    this.rows.set(id, { value: structuredClone(value), expires: this.now() + 30 * 60 * 1000 }); return id; }
+    this.rows.set(id, { value: structuredClone(value), ...(renewal ? { renewal: structuredClone(renewal) } : {}), expires: this.now() + 30 * 60 * 1000 }); return id; }
   get(id: string): ReturnIntent | null { this.prune(); const row = returnToken(id) ? this.rows.get(id) : undefined; return row ? structuredClone(row.value) : null; }
+  getRenewal(id: string): RenewalHandoff | null { this.prune(); const row = returnToken(id) ? this.rows.get(id) : undefined; return row?.renewal ? structuredClone(row.renewal) : null; }
   remaining(id: string) { this.prune(); return Math.max(0, (this.rows.get(id)?.expires || 0) - this.now()); }
   private prune() { for (const [id, row] of this.rows) if (row.expires <= this.now()) this.rows.delete(id); }
 }

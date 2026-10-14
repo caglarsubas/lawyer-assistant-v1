@@ -2452,5 +2452,31 @@ existing caps and complete exclusive partition remain. National/legal coverage,
 professional independence, productivity, deployment and lawyer acceptance stay
 separate; R03/R05 remain partial.
 
-Next: guarded comparison-to-renewal preparation with separate successor navigation,
-exact portfolio filters, fresh source research and new independent review.
+### R03/R05A guarded comparison-to-renewal handoff
+
+[Comparison-to-renewal preparation](COMPARISON_RENEWAL_HANDOFF.md) captures a
+bounded, session-only target attachment from a fresh portfolio comparison. Explicit
+entry restores exact customer/workspace/source-date/bucket filters. Separate
+before/renewal/after metadata observations pin the original frozen context and
+captured target version/head/admission before opening renewal-only tools.
+
+Research, passage inspection, mapping, preview and freeze stay explicit, with
+target checks before/after protected operations and all original server guards.
+Confirmed receipts bind a distinct successor version/hash; fresh authorized
+successor navigation creates new comparison baselines with the same filters.
+Original history and approval are never copied. Pending receipts permit separate
+identity observation only, without write replay, inherited permission, admission
+repair or a claim of verified parent lineage. Changed filters, target, rights,
+session and expiry clear protected forms and retire delayed replies.
+
+Qualification covers 694 frontend cases/build, 243 focused source cases, 263
+publication cases, nine PostgreSQL races, actual signed-runtime withdrawal,
+deployment contracts and invented-record browser renewal/new independent review,
+post-commit pending result, drift, scope retirement and narrow layout. All seven
+jobs, two workers, existing caps and the exclusive full backend partition remain.
+Legal/corpus qualification, professional independence, productivity, deployment and
+lawyer acceptance remain separate; R03/R05 stay partial.
+
+Next: read-only uncertain-write reconciliation and qualified successor lineage,
+preserving filters and separate independent-review navigation without write replay
+or admission repair.
