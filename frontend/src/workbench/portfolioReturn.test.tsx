@@ -65,6 +65,11 @@ describe('guarded portfolio return intent', () => {
     expect(owner.forPrincipal(null).get(second)).toBeNull(); expect(owner.forPrincipal('actor1:firm1:lawyer').get(second)).toBeNull();
     const third = owner.forPrincipal('actor1:firm1:lawyer').put(intent()); expect(owner.forPrincipal('actor2:firm1:lawyer').get(third)).toBeNull();
   });
+  it('closes unknown work subpaths and unconsumed query delimiters', () => {
+    expect(queueDestination(new URLSearchParams('view=source-reviews'), '/work/foreign').kind).toBe('invalid');
+    expect(queueDestination(new URLSearchParams('view=source-reviews?return=ignored')).kind).toBe('invalid');
+    expect(queueDestination(new URLSearchParams('view=source-reviews&return=' + '1'.repeat(32) + '?work=ignored')).kind).toBe('invalid');
+  });
   it.each([
     (v: ReturnIntent) => { v.filters.customer_ids = ['customerB', 'customerA']; },
     (v: ReturnIntent) => { v.filters.customer_ids = ['customerA', 'customerA']; },

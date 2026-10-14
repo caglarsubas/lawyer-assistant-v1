@@ -14,7 +14,8 @@ export type ReturnTarget = { matter_id: string; analysis_id: string; context_id:
 export type ReturnIntent = { recipe: 'private-portfolio-return-intent-v1'; filters: PortfolioQueueFilters; target: ReturnTarget };
 export type QueueDestination = { kind: 'work' | 'invalid' } | { kind: 'sources'; return_token?: string };
 export const queueReturnHref = (token?: string) => token === undefined ? '#/work?view=source-reviews' : returnToken(token) ? `#/work?view=source-reviews&return=${token}` : null;
-export function queueDestination(params: URLSearchParams): QueueDestination {
+export function queueDestination(params: URLSearchParams, pathname = '/work'): QueueDestination {
+  if (pathname !== '/work') return { kind: 'invalid' };
   if (![...params.keys()].length) return { kind: 'work' };
   const view = params.getAll('view'), token = params.getAll('return');
   if ([...params.keys()].some(key => !['view', 'return'].includes(key)) || view.length !== 1 || view[0] !== 'source-reviews'

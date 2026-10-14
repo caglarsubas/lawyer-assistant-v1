@@ -77,7 +77,7 @@ history is never overwritten.
 ## Engineering qualification and next slice
 
 [Recorded checks](evidence/guarded-portfolio-source-return-2026-10-14.json) include
-648 frontend cases/build, 263 Linux publication cases, 243 focused source cases,
+649 frontend cases/build, 263 Linux publication cases, 243 focused source cases,
 nine real PostgreSQL races, 42 deployment contracts and actual signed-runtime
 withdrawal. Browser rehearsal with invented accounts/documents covers exact multiple
 customer/date restoration, historical continuation/current return, no automatic

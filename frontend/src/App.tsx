@@ -72,13 +72,14 @@ export default function App() {
   if (booting) return <div className="boot"><Mark large /><Loading label="Çalışma alanı hazırlanıyor…" /></div>;
   if (!session) return <Login demo={Boolean(bootstrap?.demo_mode)} initialError={error} onLogin={(value) => { setCheckingAccess(false); setSession(value); setCsrfToken(value.csrf_token); setError(''); if (value.user.permissions?.includes('firm.manage') && !value.user.permissions.includes('matter.read')) navigate('/firm-admin'); }} />;
   if (checkingAccess) return <div className="boot"><Loading label="Erişim doğrulanıyor…" /></div>;
-  const [pathname, query = ''] = route.split('?');
+  const [pathname, ...queryParts] = route.split('?');
+  const query = queryParts.join('?');
   const page = pathname.split('/')[1];
   let matterId: string | null = null;
   try { matterId = ['matters', 'workspaces'].includes(page) && pathname.split('/')[2] ? decodeURIComponent(pathname.split('/')[2]) : null; } catch { /* Invalid selection stays in the closed handoff view. */ }
   const params = new URLSearchParams(query);
   const selection = sourceNavigationSelection(pathname, params);
-  const destination = page === 'work' ? queueDestination(params) : { kind: 'work' as const };
+  const destination = page === 'work' ? queueDestination(params, pathname) : { kind: 'work' as const };
   const portfolioHandoff = page === 'work' && destination.kind !== 'work';
   const metadataOnly = selection.kind !== 'none';
   const section = metadataOnly || portfolioHandoff ? 'source-review' : params.get('tab') || 'overview';
