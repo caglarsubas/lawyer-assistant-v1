@@ -12,6 +12,7 @@ import { verifyReturnSelection } from '../workbench/returnComparison';
 
 import SourceReviewLineagePanel from './SourceReviewLineagePanel';
 import { verifyReviewLineage, type ReviewLineage } from './sourceReviewLineageTypes';
+import ComparisonRenewalPage from './ComparisonRenewalPage';
 
 const ADMISSION = { complete: 'Tamamlandı', pending: 'Son izin kontrolü bekliyor', unavailable: 'Doğrulanamadı', unknown: 'Bilinmiyor', not_recorded: 'Henüz karar yok' };
 const REVIEW = { unknown: 'Doğrulanamadı', unreviewed: 'Henüz kaydedilmedi', changes_requested: 'Değişiklik istendi', reviewed_conditional: 'Koşullu inceleme kaydedildi' };
@@ -77,5 +78,10 @@ export default function SelectedSourceReviewPage({ selection }: { selection: Sou
   const intent = token ? returns.get(token) : null;
   if (selection.kind !== 'selected') return <Notice error>Kaynak bağlamı bağlantısı eksik veya belirsiz. Portföy kuyruğundan tam kaydı yeniden seçin. <a href="#/work">İşlerime dön</a></Notice>;
   if (token && (expired || !intent || !returnMatches(intent, selection))) return <Notice error>Portföy dönüş bağı yok, süresi doldu veya başka kayda ait. İçerik açılmadı. <a href={queueReturnHref()!}>Yeni kaynak kuyruğunu açıkça hazırla</a></Notice>;
+  if (selection.prepare === 'renewal') {
+    const handoff = token ? returns.getRenewal(token) : null;
+    if (!token || !intent || !handoff) return <Notice error>Yenileme geçişi için yeni portföy karşılaştırması gerekli. Kaynak veya hazırlık açılmadı. <a href={queueReturnHref()!}>Yeni kaynak kuyruğunu açıkça hazırla</a></Notice>;
+    return <ComparisonRenewalPage key={token} intent={intent} handoff={handoff} token={token} />;
+  }
   return <SelectedWorkspace returnIntent={intent} key={`${selection.matter_id}:${selection.analysis_id}:${selection.context_id}:${selection.review_id}:${workspaceQuery(filters)}`} target={selection} revision={revision} blocked={loading || !!error} />;
 }

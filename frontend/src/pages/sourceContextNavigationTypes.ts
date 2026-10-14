@@ -3,21 +3,22 @@ export const navigationIdentifier = (value: unknown): value is string => typeof 
 export const navigationContextId = (value: unknown): value is string => typeof value === 'string' && /^sac-[a-f0-9]{20}-[a-f0-9]{32}$/.test(value);
 export const navigationReviewId = (value: unknown): value is string => typeof value === 'string' && /^sar-[a-f0-9]{20}-[a-f0-9]{32}$/.test(value);
 export const navigationReturnToken = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{32}$/.test(value);
-export type SourceTarget = { kind: 'selected'; matter_id: string; analysis_id: string; context_id: string; review_id?: string; return_token?: string };
+export type SourceTarget = { kind: 'selected'; matter_id: string; analysis_id: string; context_id: string; review_id?: string; return_token?: string; prepare?: 'renewal' };
 export type SourceSelection = SourceTarget | { kind: 'none' | 'invalid' };
 export function sourceNavigationSelection(pathname: string, params: URLSearchParams): SourceSelection {
   const tabs = params.getAll('tab');
   const returnIntent = params.has('return') && ['matters', 'workspaces'].includes(pathname.split('/')[1]);
-  if (!params.has('analysis') && !params.has('source_context') && !params.has('review') && !returnIntent && !tabs.includes('source-review')) return { kind: 'none' };
+  if (!params.has('analysis') && !params.has('source_context') && !params.has('review') && !params.has('prepare') && !returnIntent && !tabs.includes('source-review')) return { kind: 'none' };
   const parts = pathname.split('/'); let matter: string;
   try { matter = decodeURIComponent(parts[2] || ''); } catch { return { kind: 'invalid' }; }
-  const analysis = params.getAll('analysis'); const context = params.getAll('source_context'); const review = params.getAll('review'); const token = params.getAll('return');
+  const analysis = params.getAll('analysis'); const context = params.getAll('source_context'); const review = params.getAll('review'); const token = params.getAll('return'); const prepare = params.getAll('prepare');
   if (parts.length !== 3 || !['matters', 'workspaces'].includes(parts[1]) || tabs.length !== 1 || tabs[0] !== 'source-review'
-    || [...params.keys()].some(key => !['tab', 'analysis', 'source_context', 'review', 'return'].includes(key)) || analysis.length !== 1 || context.length !== 1
+    || [...params.keys()].some(key => !['tab', 'analysis', 'source_context', 'review', 'return', 'prepare'].includes(key)) || analysis.length !== 1 || context.length !== 1
+    || prepare.length > 1 || prepare.length === 1 && (prepare[0] !== 'renewal' || token.length !== 1 || review.length !== 0)
     || token.length > 1 || (token.length === 1 && !navigationReturnToken(token[0]))
     || review.length > 1 || (review.length === 1 && !navigationReviewId(review[0]))
     || !navigationIdentifier(matter) || !navigationIdentifier(analysis[0]) || !navigationContextId(context[0])) return { kind: 'invalid' };
-  return { kind: 'selected', matter_id: matter, analysis_id: analysis[0], context_id: context[0], ...(review.length ? { review_id: review[0] } : {}), ...(token.length ? { return_token: token[0] } : {}) };
+  return { kind: 'selected', matter_id: matter, analysis_id: analysis[0], context_id: context[0], ...(review.length ? { review_id: review[0] } : {}), ...(token.length ? { return_token: token[0] } : {}), ...(prepare.length ? { prepare: 'renewal' as const } : {}) };
 }
 export function sourceContextHref(matter: string, analysis: string, context: string, review?: string, token?: string): string | null {
   return navigationIdentifier(matter) && navigationIdentifier(analysis) && navigationContextId(context) && (review === undefined || navigationReviewId(review)) && (token === undefined || navigationReturnToken(token))

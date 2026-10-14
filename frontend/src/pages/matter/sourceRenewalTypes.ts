@@ -44,8 +44,14 @@ function validateTargets(targets: Record<string, string>) {
   if (!rows.length || rows.length > 12 || rows.some(([id, hash]) => !id.length || id.length > 129 || !isHash(hash))) throw new Error('Tam analiz adımı özeti doğrulanamadı.');
 }
 export function verifyRenewalMetadata(value: RenewalMetadata, matterId: string, analysisId: string, id: string) {
-  if (value.id !== id || !contextId(id) || value.matter_id !== matterId || value.analysis_id !== analysisId || !isHash(value.manifest_sha256)
-    || value.sources.length < 1 || value.sources.length > 8 || new Set(value.sources.map(row => row.identity.passage_id)).size !== value.sources.length
+  if (!value || !closed(value, ['id', 'matter_id', 'analysis_id', 'manifest_sha256', 'review_id', 'admission_completed', 'can_record', 'version_id', 'product_id', 'graph_release_pin', 'recorded_by', 'sources', 'old_quotes_and_notes', 'review_inheritance', 'legal_equivalence'])
+    || value.id !== id || !contextId(id) || value.matter_id !== matterId || value.analysis_id !== analysisId || !isHash(value.manifest_sha256)
+    || typeof value.admission_completed !== 'boolean' || typeof value.can_record !== 'boolean'
+    || typeof value.version_id !== 'string' || !/^[a-zA-Z0-9_-]{1,64}$/.test(value.version_id) || typeof value.product_id !== 'string' || !/^[a-zA-Z0-9_-]{1,64}$/.test(value.product_id)
+    || typeof value.recorded_by !== 'string' || !/^[a-zA-Z0-9_-]{1,64}$/.test(value.recorded_by) || value.review_id !== null && !/^sar-[a-f0-9]{20}-[a-f0-9]{32}$/.test(value.review_id)
+    || !value.graph_release_pin || !closed(value.graph_release_pin, ['release_id', 'serving_sha256', 'activation_sequence', 'status']) || value.graph_release_pin.status !== 'verified'
+    || !isHash(value.graph_release_pin.release_id) || !isHash(value.graph_release_pin.serving_sha256) || !Number.isSafeInteger(value.graph_release_pin.activation_sequence) || value.graph_release_pin.activation_sequence < 1
+    || !Array.isArray(value.sources) || value.sources.length < 1 || value.sources.length > 8 || new Set(value.sources.map(row => row.identity.passage_id)).size !== value.sources.length
     || value.old_quotes_and_notes !== 'withheld_use_original_guarded_context' || value.review_inheritance !== 'none' || value.legal_equivalence !== 'not_assessed') throw new Error('Özel yenileme kaydı doğrulanamadı.');
   value.sources.forEach(row => { if (!closed(row, ['identity', 'targets'])) throw new Error('Önceki içerik yerine yalnız kimlik ve özet gerekli.'); validateIdentity(row.identity); validateTargets(row.targets); });
 }

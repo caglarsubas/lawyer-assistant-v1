@@ -87,6 +87,7 @@ partition remain unchanged. Engineering checks do not establish national corpus
 coverage, legal accuracy, professional independence, productivity, deployment or
 lawyer acceptance; R03/R05 remain partial.
 
-Next: guarded comparison-to-renewal preparation, preserving the original context,
-exact portfolio filters and separate successor navigation; fresh research,
-source checks and independent review must precede any renewed legal work.
+Delivered next slice: [guarded comparison-to-renewal preparation](COMPARISON_RENEWAL_HANDOFF.md),
+preserving the original context, exact portfolio filters and separate successor
+navigation. Fresh research, source checks and independent review still precede
+any renewed legal work.

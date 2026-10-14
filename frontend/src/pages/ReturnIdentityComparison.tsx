@@ -5,7 +5,7 @@ import type { IdentityRelation, ReturnComparison } from '../workbench/returnComp
 const RELATION: Record<IdentityRelation, string> = { same: 'Aynı gözlenen kimlik', different: 'Farklı gözlenen kimlikler', unknown: 'İlişki bilinmiyor' };
 const HEAD = { unknown: 'Doğrulanamadı', unreviewed: 'Henüz karar kaydedilmedi', changes_requested: 'Değişiklik istendi', reviewed_conditional: 'Koşullu inceleme kaydedildi' };
 export type ReturnLinks = { selected: string | null; head: string | null; context: string | null };
-export default function ReturnIdentityComparison({ value: c, links }: { value: ReturnComparison; links: ReturnLinks }) {
+export default function ReturnIdentityComparison({ value: c, links, renew }: { value: ReturnComparison; links: ReturnLinks; renew?: () => void }) {
   return <section aria-label="Önceki ve yeni karar başı ile sürüm karşılaştırması">
     <h3>Önceki ve yeni kimlikler</h3>
     <p className="small muted">Kimlik karşılaştırmasıdır. Kararların birbirini desteklediğini, önceki kararı kaldırdığını veya kanıtın güncel olduğunu göstermez. Önceki gözlemler değiştirilmez.</p>
@@ -31,6 +31,7 @@ export default function ReturnIdentityComparison({ value: c, links }: { value: R
       {links.selected && <a className="text-link" href={links.selected}>Seçilen kaydın tam kimliğini yeniden aç</a>}
       {links.head && <a className="text-link" href={links.head}>Yeni gözlenen karar başının tam kimliğini aç</a>}
       {links.context && c.selected && <a className="text-link" href={links.context}>Bağlamı yeni kimlik gözlemiyle aç</a>}
+      {renew && <button className="text-button" onClick={renew}>Bu karşılaştırmadan yenileme hazırlığına geç</button>}
     </div>
     <p className="small muted">Her bağlantı yeni yetki ve kimlik kontrolü yapar. İnceleme araçları, alıntılar ve indirme ayrıca açıkça başlatılır; eski onay veya izin devralınmaz.</p>
   </section>;
