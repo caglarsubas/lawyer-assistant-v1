@@ -2375,6 +2375,34 @@ layout. All seven hosted jobs, two workers, existing caps and the exclusive full
 suite partition remain. Legal qualification, national coverage, productivity,
 deployment and user acceptance remain separate; R03/R05 remain partial.
 
-Next: exact historical-review navigation and bounded metadata-only review lineage,
-preserving the immutable selected event, latest head, full original source guards
-and confidential matter access.
+### R03/R05A exact historical-review navigation and metadata-only lineage
+
+[Exact historical-review navigation](EXACT_HISTORICAL_REVIEW_LINEAGE.md) carries one
+immutable private review event alongside its exact matter/analysis/source context.
+Direct scoped lookup works beyond initial history pages and distinguishes selected
+event, independently observed head, exact hashes/versions and admission status.
+
+The metadata-only chain is bounded to ten records. Verified sequence/predecessor
+links preserve recorded causal order; unknown dates, pending/corrupt admissions,
+broken links and cycles stay explicit. Truncation and a continuation pointer do
+not imply complete history. A different current head does not establish ancestry;
+head reachability stays unchecked. Metadata reads neither source passages nor notes,
+and performs no source authorization, inference, admission repair or mutation.
+
+Explicit historical inspection pins the selected event hash plus the frozen
+context/version under original source, retained-grant, private-basis, reviewer and
+post-operation guards. Current export/new-review work starts from a fresh context
+view; old decisions and nonces are never inherited. Typed history/head/continuation
+links and changed-scope retirement preserve confidentiality and immutable history.
+The assistant stays guide-only, with the existing three-panel layout retained.
+
+Qualification includes non-latest and opposing decisions, bounded/broken/cyclic
+history, pending admissions, content/actor changes, actual PostgreSQL head-update
+serialization, signed-source withdrawal and browser navigation/races/narrow layout.
+All seven jobs, two workers, existing caps and the exclusive full suite partition
+remain. National coverage, legal accuracy, productivity, deployment and lawyer
+acceptance remain separate; R03/R05 are partial.
+
+Next: guarded return to the portfolio source-review queue with bounded exact
+customer/workspace/source-record filters, fresh observation and selected-record
+reconciliation, preserving all evidence and independent-review boundaries.
