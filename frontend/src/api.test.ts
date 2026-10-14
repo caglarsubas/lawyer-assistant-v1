@@ -1,10 +1,21 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ApiError, downloadAuthorityComparison, downloadAuthorityContext, downloadAuthorityReview, fetchOriginal, onUnauthorized, post, request, setCsrfToken } from './api';
+import { ApiError, downloadAuthorityComparison, downloadAuthorityContext, downloadAuthorityReview, downloadSourceContext, fetchOriginal, onUnauthorized, post, request, setCsrfToken } from './api';
 
 describe('session and request boundaries', () => {
   const fetchMock = vi.fn<typeof fetch>();
   beforeEach(() => { vi.stubGlobal('fetch', fetchMock); setCsrfToken(''); onUnauthorized(); fetchMock.mockReset(); });
   afterEach(() => { vi.unstubAllGlobals(); setCsrfToken(''); onUnauthorized(); });
+
+  it('never downloads a withheld source review and uses exact encoded same-origin identifiers', async () => {
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ detail: 'Kaynak veya bağımsız inceleme bekletiliyor.' }), { status: 409 }));
+    await expect(downloadSourceContext('matter/1', 'analysis/2', 'context/3', 'pdf', () => true)).rejects.toMatchObject({ status: 409 });
+    expect(fetchMock.mock.calls[0][0]).toBe('/api/v1/matters/matter%2F1/analyses/analysis%2F2/source-contexts/context%2F3/export?format=pdf');
+    expect(fetchMock.mock.calls[0][1]?.cache).toBe('no-store'); expect(fetchMock.mock.calls[0][1]?.credentials).toBe('same-origin');
+  });
+  it('discards already-received attachment bytes if the matter scope changed before download', async () => {
+    fetchMock.mockResolvedValue(new Response('PRIVATE attachment'));
+    await expect(downloadSourceContext('m1', 'a1', 'c1', 'json', () => false)).rejects.toMatchObject({ name: 'AbortError' });
+  });
 
   it('uses same-origin session cookies and attaches the current CSRF token to mutations', async () => {
     fetchMock.mockResolvedValue(new Response(JSON.stringify({ id: 'matter-1' }), { status: 201 }));

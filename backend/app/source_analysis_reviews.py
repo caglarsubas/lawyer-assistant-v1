@@ -287,7 +287,7 @@ def _inspect(app, session, matter_id, analysis_id, ident, user, prepared, review
     """Under the caller's guard: reconstitute the frozen basis, never substitute."""
     store = app.state.store
     _, packet, _, proof = _require(store, session, matter_id, analysis_id, ident, user)
-    result = {'id': ident, 'version_id': packet['manifest']['version_id'], 'recorded_at': packet['recorded_at'],
+    result = {'id': ident, 'version_id': packet['manifest']['version_id'], 'recorded_at': packet['recorded_at'], 'recorded_by': packet['recorded_by'],
         'manifest_sha256': packet['manifest_sha256'], 'packet_sha256': packet['packet_sha256'],
         'manifest': None, 'public_source_access': False, 'freshness': {'status': 'stale', 'reasons': []},
         'review': {'effective_state': 'unreviewed', 'latest_review_id': None, 'snapshot': None},
@@ -539,7 +539,8 @@ def source_analysis_router():
                 head = _head(store, session, matter_id, analysis_id, context_id, user)
                 result = _bounded({'manifest': current['manifest'], 'expected_manifest_sha256': current['preview_sha256'],
                     'expected_review_id': head['latest_review_id'] if head else None, 'dimensions': DIMENSIONS,
-                    'independent_reviewer_required': True, 'qualification_granted': False}, reserve=4096)
+                    'independent_reviewer_required': True, 'qualification_granted': False,
+                    'can_record': store.decode(require_matter(session, matter_id, user)).get('status') != 'archived'}, reserve=4096)
                 _reviewer(session, matter_id, user, packet)
             _reviewer(session, matter_id, user, packet)
             return result

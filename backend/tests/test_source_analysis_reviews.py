@@ -114,6 +114,7 @@ def test_exact_version_nomination_independent_interpretation_and_no_mutation(wor
     event = value['review']['snapshot']
     assert event['input']['sources'][0]['relationship'] == 'adverse_candidate'
     assert event['recorded_by'] != value['manifest']['analysis_author_id']
+    assert value['recorded_by'] != event['recorded_by']
     assert event['legal_approval'] == value['legal_approval'] == 'not_granted'
     assert value['manifest']['coverage']['total_expected'] is None
     assert value['manifest']['event_date'] != value['manifest']['research_snapshot']['as_of']
@@ -457,3 +458,17 @@ def test_latest_version_author_differs_from_initial_owner_and_cannot_review(work
     reviewer(workbench, 'reviewer2')
     review_path, body = review_request(client, endpoint, context['id'])
     assert record(client, review_path, body)['review']['effective_state'] == 'reviewed_conditional'
+
+
+def test_reviewer_inputs_expose_archived_read_only_state_without_granting_record_permission(workbench, monkeypatch):
+    app, client, base, *_ = workbench
+    endpoint, spec, *_ = setup(workbench, monkeypatch)
+    context, _ = freeze(client, endpoint, spec)
+    reviewer(workbench)
+    path, body = review_request(client, endpoint, context['id'])
+    assert client.get(path + '/context').json()['can_record'] is True
+    mutate(app, base.split('/')[-1], lambda data: data.update(status='archived'))
+    response = client.get(path + '/context')
+    assert response.status_code == 200 and response.json()['can_record'] is False
+    assert client.post(path, json=body).status_code == 409
+    assert client.get(path).json() == []

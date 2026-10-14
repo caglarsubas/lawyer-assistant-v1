@@ -2,8 +2,8 @@
 
 R03/R05A now provide a private API workflow for linking independently retrieved
 source passages to exact analysis steps and recording an independent lawyer's
-decision. This release adds the backend contract; the lawyer-facing selection
-and review panel is the next finite packet.
+decision. The [lawyer-facing panel](SOURCE_REVIEW_PANEL.md) now exposes selection,
+independent review, history and guarded exports in the analysis workspace.
 
 ## Frozen evidence and private basis
 
@@ -110,6 +110,6 @@ matter row lock and proves one of two competing exact-head decisions succeeds.
 
 These tests are synthetic engineering evidence. They do not qualify a national
 corpus, legal accuracy, independent legal expertise, preparation-time benefit,
-production activation or user acceptance. R03/R05 remain partial. Next: the
-lawyer-facing source-selection/review panel; independent evaluation strata/gold
+production activation or user acceptance. R03/R05 remain partial. Next: explicit
+source-context renewal and version comparison; independent evaluation strata/gold
 remain separate, protected qualification work.
