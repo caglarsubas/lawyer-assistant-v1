@@ -65,6 +65,7 @@ from .graph_b_review import graph_b_review_router
 from .human_workflow import workflow_router
 from .policy import POLICY_VERSION, evaluate, request_digest
 from .portfolio import portfolio_router
+from .portfolio_source_reviews import portfolio_source_review_router
 from .practice import practice_router
 from .provider import Provider
 from .provision_mappings import provision_mappings_router
@@ -339,6 +340,7 @@ def create_app(settings=None):
     app.include_router(practice_router())
     app.include_router(governance_router())
     app.include_router(portfolio_router())
+    app.include_router(portfolio_source_review_router())
     app.include_router(firm_admin_router())
     app.include_router(access_router())
     app.include_router(workflow_router())

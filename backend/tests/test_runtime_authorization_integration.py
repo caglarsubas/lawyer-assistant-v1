@@ -235,6 +235,7 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
                 metadata_only.setattr(app.state.graph.release, 'current_guard', lambda: (_ for _ in ()).throw(
                     AssertionError('Readiness metadata must not validate or read public sources')))
                 response = restarted.get(source_context_path + '/readiness')
+                portfolio_response = restarted.get('/api/v1/work/source-reviews')
             assert response.status_code == 200, response.text
             assert response.headers['cache-control'] == 'no-store'
             value = response.json()
@@ -244,6 +245,13 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
                        for item in value['items'])
             assert 'PRIVATE REVIEW NOTE' not in response.text and 'analysis_content' not in response.text
             assert value['coverage']['total_count'] is None and not value['qualification_granted']
+            assert portfolio_response.status_code == 200, portfolio_response.text
+            portfolio = portfolio_response.json()
+            assert {item['id'] for item in portfolio['items']} == {source_context['id'], replacement['id']}
+            assert all(item['source_verification'] == 'not_checked' and item['legal_readiness'] == 'not_established'
+                       for item in portfolio['items'])
+            assert portfolio['coverage']['total_count'] is None and not portfolio['qualification_granted']
+            assert 'PRIVATE REVIEW NOTE' not in portfolio_response.text and 'analysis_content' not in portfolio_response.text
 
         observe_source_queue()
         login(restarted)

@@ -46,17 +46,20 @@ export function verifyReadiness(value: ReadinessPage, matterId: string, analysis
     || (coverage.pagination_limit_reached !== (coverage.has_more && offset + 10 > 10000))
     || (coverage.has_more && !coverage.pagination_limit_reached ? coverage.scanned_count !== 10 || coverage.next_offset !== offset + 10 : coverage.next_offset !== null)) fail();
   if (new Set(value.items.map(item => item.id)).size !== value.items.length) fail();
-  for (const item of value.items) {
-    if (!keys(item, ['id', 'recorded_at', 'state', 'version_id', 'product_id', 'manifest_sha256', 'historical_review', 'private_observation', 'source_verification', 'legal_readiness'])
-      || !/^sac-[a-f0-9]{20}-[a-f0-9]{32}$/.test(item.id) || !stamp(item.recorded_at) || !Object.hasOwn(READINESS_STATES, item.state)
-      || item.source_verification !== 'not_checked' || item.legal_readiness !== 'not_established'
-      || (item.version_id !== undefined && !boundedId(item.version_id)) || (item.product_id !== undefined && !boundedId(item.product_id))
-      || (item.manifest_sha256 !== undefined && !/^[a-f0-9]{64}$/.test(item.manifest_sha256)) || !item.historical_review || !item.private_observation) fail();
-    const historical = item.historical_review; const observation = item.private_observation;
-    if (!keys(historical, ['state', 'id', 'recorded_at']) || !['unknown', 'unreviewed', 'changes_requested', 'reviewed_conditional'].includes(historical.state)
-      || (historical.id !== null && (typeof historical.id !== 'string' || !/^sar-[a-f0-9]{20}-[a-f0-9]{32}$/.test(historical.id)))
-      || (historical.recorded_at !== null && !stamp(historical.recorded_at)) || !keys(observation, ['state', 'reasons'])
-      || !['unknown', 'unchanged', 'changed'].includes(observation.state) || !Array.isArray(observation.reasons) || observation.reasons.length > 20
-      || observation.reasons.some(reason => !Object.hasOwn(READINESS_REASONS, reason))) fail();
-  }
+  for (const item of value.items) verifyReadinessItem(item);
+}
+
+export function verifyReadinessItem(item: ReadinessItem) {
+  const fail = () => { throw new Error('Kaynak inceleme gözleminin kayıt bağı doğrulanamadı.'); };
+  if (!keys(item, ['id', 'recorded_at', 'state', 'version_id', 'product_id', 'manifest_sha256', 'historical_review', 'private_observation', 'source_verification', 'legal_readiness'])
+    || !/^sac-[a-f0-9]{20}-[a-f0-9]{32}$/.test(item.id) || !stamp(item.recorded_at) || !Object.hasOwn(READINESS_STATES, item.state)
+    || item.source_verification !== 'not_checked' || item.legal_readiness !== 'not_established'
+    || (item.version_id !== undefined && !boundedId(item.version_id)) || (item.product_id !== undefined && !boundedId(item.product_id))
+    || (item.manifest_sha256 !== undefined && !/^[a-f0-9]{64}$/.test(item.manifest_sha256)) || !item.historical_review || !item.private_observation) fail();
+  const historical = item.historical_review; const observation = item.private_observation;
+  if (!keys(historical, ['state', 'id', 'recorded_at']) || !['unknown', 'unreviewed', 'changes_requested', 'reviewed_conditional'].includes(historical.state)
+    || (historical.id !== null && (typeof historical.id !== 'string' || !/^sar-[a-f0-9]{20}-[a-f0-9]{32}$/.test(historical.id)))
+    || (historical.recorded_at !== null && !stamp(historical.recorded_at)) || !keys(observation, ['state', 'reasons'])
+    || !['unknown', 'unchanged', 'changed'].includes(observation.state) || !Array.isArray(observation.reasons) || observation.reasons.length > 20
+    || observation.reasons.some(reason => !Object.hasOwn(READINESS_REASONS, reason))) fail();
 }

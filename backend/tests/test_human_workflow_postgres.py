@@ -299,3 +299,84 @@ def test_source_readiness_holds_private_basis_until_concurrent_version_edit_fini
     after = client.get(endpoint + '/readiness').json()['items'][0]
     assert after['id'] == frozen['id'] and after['state'] == 'needs_renewal'
     assert 'analysis_version_changed' in after['private_observation']['reasons']
+
+
+def test_portfolio_source_queue_opposite_windows_wait_without_matter_lock_deadlock(workspace, monkeypatch):
+    from test_analysis_workbench import build_workbench
+    from test_portfolio_source_reviews import ENDPOINT, other_case
+    from test_source_analysis_reviews import freeze, setup
+
+    from app import portfolio_source_reviews
+
+    bench = build_workbench(workspace)
+    app, client, *_ = bench
+    endpoint, spec, *_ = setup(bench, monkeypatch)
+    first, _ = freeze(client, endpoint, spec)
+    other, _, _, _, _, _, second = other_case(bench, monkeypatch)
+    third, _ = freeze(client, endpoint, spec)
+    entered, release = Event(), Event()
+    original = portfolio_source_reviews._route
+
+    def pause(*args):
+        result = original(*args)
+        if not entered.is_set():
+            entered.set()
+            assert release.wait(10)
+        return result
+
+    monkeypatch.setattr(portfolio_source_reviews, '_route', pause)
+    with ThreadPoolExecutor(2) as pool:
+        forward = pool.submit(client.get, ENDPOINT, params={'window': 2})
+        try:
+            assert entered.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                reverse = pool.submit(client.get, ENDPOINT, params={'window': 2, 'offset': 1})
+                assert observed[0].wait(5)
+                assert wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not reverse.done()
+        finally:
+            release.set()
+        a, b = forward.result(timeout=10), reverse.result(timeout=10)
+    assert a.status_code == b.status_code == 200, (a.text, b.text)
+    assert a.json()['coverage']['locked_matter_count'] == b.json()['coverage']['locked_matter_count'] == 2
+    assert {item['id'] for item in a.json()['items']} == {third['id'], second['id']}
+    assert {item['id'] for item in b.json()['items']} == {second['id'], first['id']}
+    assert {item['matter_id'] for item in a.json()['items']} == {workspace[2], other}
+
+
+def test_portfolio_source_queue_new_unlocked_matter_record_requires_fresh_window(workspace, monkeypatch):
+    from test_analysis_workbench import build_workbench
+    from test_portfolio_source_reviews import ENDPOINT, other_case
+    from test_source_analysis_reviews import freeze, setup
+
+    from app import portfolio_source_reviews
+
+    bench = build_workbench(workspace)
+    app, client, *_ = bench
+    endpoint, spec, *_ = setup(bench, monkeypatch)
+    freeze(client, endpoint, spec)
+    _, _, other_endpoint, other_spec, _, _, _ = other_case(bench, monkeypatch)
+    freeze(client, endpoint, spec)  # Current window locks only the first matter.
+    entered, release = Event(), Event()
+    original = portfolio_source_reviews._route
+
+    def pause(*args):
+        result = original(*args)
+        entered.set()
+        assert release.wait(10)
+        return result
+
+    monkeypatch.setattr(portfolio_source_reviews, '_route', pause)
+    with ThreadPoolExecutor(2) as pool:
+        capture = pool.submit(client.get, ENDPOINT, params={'window': 1})
+        try:
+            assert entered.wait(5)
+            added = freeze(client, other_endpoint, other_spec)[0]
+        finally:
+            release.set()
+        response = capture.result(timeout=10)
+    assert response.status_code == 409 and 'items' not in response.json()
+    assert 'TEST ONLY' not in response.text
+    monkeypatch.setattr(portfolio_source_reviews, '_route', original)
+    latest = client.get(ENDPOINT, params={'window': 1}).json()
+    assert latest['items'][0]['id'] == added['id']

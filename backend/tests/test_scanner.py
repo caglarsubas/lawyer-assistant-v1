@@ -71,7 +71,8 @@ def test_malware_and_incomplete_content_are_rejected(monkeypatch, reply):
 
 @pytest.mark.parametrize("reply", [version(8), version(-1), b"ClamAV 1.4.6\0",
                                  b"ClamAV 1.4.6/0/Sat Oct  3 12:00:00 2026\0",
-                                 b"ClamAV 1.4.6/9/Sat Xxx  3 12:00:00 2026\0"])
+                                 b"ClamAV 1.4.6/9/Sat Xxx  3 12:00:00 2026\0"],
+                         ids=["expired-signatures", "future-signatures", "missing-date", "zero-version", "invalid-month"])
 def test_bad_signatures_prevent_content_transmission(monkeypatch, reply):
     seen = responses(monkeypatch, [b"PONG\0", reply])
     with pytest.raises(ScannerUnavailable):

@@ -2326,3 +2326,31 @@ R03/R05 are partial.
 Next: a bounded authorized portfolio source-review queue with customer/date
 selection and explicit per-matter coverage, preserving the same fresh guarded
 inspection and independent-review boundaries.
+
+### R03/R05A portfolio source-review queue and customer/date filters
+
+[The portfolio source-review queue](PORTFOLIO_SOURCE_REVIEW_QUEUE.md) extends
+analysis-level metadata observations to the lawyer's currently authorized active
+matters. A separate view under İşlerim applies OR customer matching, existing
+workspace created/updated/relevant dates and separately named source-record dates.
+Content grants and action permissions precede routing, joins, counts and decryption;
+customer selection, ownership, hierarchy and tags never infer new grants.
+
+Candidate windows and private observation work are bounded. Matter locks are
+ordered consistently; an intervening inventory change returns no partial results.
+Priorities/counts apply only to the current window, and empty/truncated/budget
+windows do not imply portfolio completion. Historical decisions remain immutable;
+public sources stay unchecked until their original guarded inspection. No review,
+admission, assignment, source grant, graph assertion or retained work is rewritten.
+
+The client verifies exact filters, clears changed scopes, retires delayed replies
+and provides authorized matter-workbench links with identity references. Qualification
+covers mixed scopes/customer grants, date axes, unknowns, opposite PostgreSQL
+windows, changed-inventory races, signed withdrawal and wide/narrow navigation.
+All seven CI checks, two workers, resource/time limits and complete exclusive
+partition remain. Legal acceptance, national corpus, productivity and deployment
+remain separate; R03/R05 are partial.
+
+Next: exact-context navigation and guarded source-review handoff from the portfolio
+queue, preserving evidence versions, history and fresh independent decisions even
+when the target record lies outside initial analysis/history pages.

@@ -1,10 +1,20 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { request } from '../api';
 import { Badge, Empty, Loading, Notice, PageHeader } from '../components';
 import { messageOf } from '../utils';
 import { usePortfolio } from '../workbench/portfolio';
 import { KIND_LABELS, WORK_STATUS, workTime, type WorkItem } from './workflowTypes';
+const PortfolioSourceReviewQueue = lazy(() => import('./PortfolioSourceReviewQueue'));
+
 export default function WorkQueuePage() {
+  const [mode, setMode] = useState('work');
+  return <><div className="practice-record-actions" role="group" aria-label="Çalışma kuyruğu görünümü">
+    <button className="text-button" aria-pressed={mode === 'work'} onClick={() => setMode('work')}>Atamalar ve gözetim</button>
+    <button className="text-button" aria-pressed={mode === 'sources'} onClick={() => setMode('sources')}>Portföy kaynak incelemeleri</button>
+  </div>{mode === 'sources' ? <Suspense fallback={<Loading />}><PortfolioSourceReviewQueue /></Suspense> : <AssignedWorkQueue />}</>;
+}
+
+function AssignedWorkQueue() {
   const [view, setView] = useState('personal'); const [bucket, setBucket] = useState('all');
   const [items, setItems] = useState<WorkItem[] | null>(null); const [truncated, setTruncated] = useState(false); const [error, setError] = useState('');
   const { workspaces, filters, loading } = usePortfolio();
