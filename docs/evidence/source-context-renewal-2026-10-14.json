@@ -1,0 +1,72 @@
+{
+  "schema": "source-context-renewal-engineering-evidence-v1",
+  "recorded_at": "2026-10-14T06:56:24.239244+00:00",
+  "origin": "invented-documents-and-test-only-accounts",
+  "frontend_tests_passed": 527,
+  "frontend_build": "passed",
+  "linux_source_analysis_cases_passed": 168,
+  "actual_signed_source_runtime_cases_passed": 1,
+  "linux_source_analysis_seconds": 31.32,
+  "actual_signed_source_runtime_seconds": 127.21,
+  "source_publication_cases_passed": 188,
+  "source_publication_seconds": 45.34,
+  "real_postgres_races_passed": 3,
+  "deployment_contracts_passed": 42,
+  "browser": {
+    "synthetic_only": true,
+    "rights_simulated": true,
+    "production_qualified": false,
+    "replacement_mapping_preview_invalidation": true,
+    "preserved_parent_identity_and_history": true,
+    "changed_target_hash_comparison": true,
+    "old_review_not_inherited": true,
+    "fresh_independent_mapping_assessment": true,
+    "self_review_denied_and_parent_quotes_cleared": true,
+    "explicit_independent_dimensions": true,
+    "opposing_declarations_preserved": true,
+    "guarded_exact_export": true,
+    "withdrawal_clears_quotes_notes_and_exports": true,
+    "narrow_overflow": false,
+    "browser_errors": [],
+    "external_requests": []
+  },
+  "browser_recovery": {
+    "synthetic_only": true,
+    "pending_receipt_response_mocked": true,
+    "production_qualified": false,
+    "ambiguous_network_hides_content": true,
+    "manual_retry_same_nonce_and_payload": true,
+    "automatic_replays": 0,
+    "explicit_pending_receipt_never_becomes_reviewed": true,
+    "pending_response_hides_quotes_and_forms": true,
+    "browser_errors": []
+  },
+  "ci_partition": {
+    "complete": 4402,
+    "remaining": 3881,
+    "missing": 0,
+    "overlap": 0,
+    "sha256": "453c9a0a74eacba9e1ce6641544141d5dcbf6b05e0f58a86e7a320cee49d1fcb"
+  },
+  "ci_jobs_workers_deadlines_retry_limits_changed": false,
+  "source_tests_reassigned_to_existing_publication_job": true,
+  "initial_combined_local_run_timed_out_seconds": 180,
+  "diagnostic": "Active RDF/SPARQL validation observed; final source cases and actual signed runtime qualified separately within unchanged local limits.",
+  "source_files_sha256": {
+    "backend/app/source_context_renewals.py": "52c46774c1ce6be0304752302777e70f0deafec09f8c53cb5d7b8e924e368d8e",
+    "backend/app/source_analysis_reviews.py": "4b09ce712b67eb2dd7dd037c151ea513e9850325aa65061c91b3b9676f0db122",
+    "frontend/src/pages/matter/sourceRenewalTypes.ts": "ea1d1f5a19f0c832e49c23e9acbfb71d0806038e59162882fae1cf7a77133649",
+    "frontend/src/pages/matter/SourceRenewalMapping.tsx": "316cf1f1c148229bef4a7016b2d64b86378d6348fb19c7a7626666aaca3e0af8",
+    "frontend/src/pages/matter/AnalysisSourceReviews.tsx": "e107c25bd2ed35d6099ded8845786f4e2827c822d8c7b2da880515bec477e62e",
+    ".github/workflows/ci.yml": "dd40ede63874a6002fae1d6aad534c8a59e41186725d36b73116f1169cbb96c1"
+  },
+  "production_qualified": false,
+  "legal_qualification": false,
+  "runtime_activation": false,
+  "deployment_changed": false,
+  "limitations": [
+    "Browser source rights are simulated and the pending receipt response is mocked.",
+    "Local timing variation and qualification do not establish hosted billing savings.",
+    "Account separation does not establish professional independence or legal accuracy."
+  ]
+}

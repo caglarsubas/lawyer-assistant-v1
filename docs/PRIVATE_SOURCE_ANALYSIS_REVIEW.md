@@ -110,6 +110,8 @@ matter row lock and proves one of two competing exact-head decisions succeeds.
 
 These tests are synthetic engineering evidence. They do not qualify a national
 corpus, legal accuracy, independent legal expertise, preparation-time benefit,
-production activation or user acceptance. R03/R05 remain partial. Next: explicit
-source-context renewal and version comparison; independent evaluation strata/gold
-remain separate, protected qualification work.
+production activation or user acceptance. R03/R05 remain partial.
+[Explicit renewal and version comparison](SOURCE_CONTEXT_RENEWAL.md) now require
+fresh independent map assessment. Independent evaluation strata/gold remain
+protected qualification work. Next: authorized source-review readiness and a
+prioritized re-review queue.

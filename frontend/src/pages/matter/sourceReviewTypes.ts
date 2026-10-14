@@ -1,5 +1,6 @@
 import { ApiError } from '../../api';
 import { AUTHORITY_ROLES, type AuthorityRole } from './authorityTypes';
+import { verifyRenewalComparison, type Renewal, type RenewalComparison, type RenewalAssessment } from './sourceRenewalTypes';
 
 export const DIMENSIONS = ['quote_identity', 'target_alignment', 'temporal_limits'] as const;
 export const DIMENSION_LABELS = { quote_identity: 'Özgün pasaj ve sürüm', target_alignment: 'Analiz adımları ve karşı dayanaklar', temporal_limits: 'Tarih, belirsizlik ve araştırma sınırları' };
@@ -27,6 +28,7 @@ export interface Candidates {
 export interface Spec {
   version_id: string; product_id: string; expected_release_id: string; expected_serving_sha256: string;
   title: string; purpose: string; selections: Selection[];
+  renewal?: Renewal;
 }
 export interface LinkedSource { selection: Selection; evidence: Quote; target_snapshots: Record<string, unknown> }
 export interface Manifest extends Spec {
@@ -34,10 +36,13 @@ export interface Manifest extends Spec {
   analysis_author_id: string; analysis_owner_id: string; analysis_content_sha256: string; product_sha256: string;
   coverage: Record<string, unknown>; limitations: string[]; event_date: string | null; research_snapshot: Candidates['snapshot'];
   legal_approval: 'not_granted'; matter_applicability: 'not_assessed'; temporal_applicability: 'not_assessed'; finality: 'unknown';
+  renewal_comparison?: RenewalComparison;
+  renewal_comparison_sha256?: string;
 }
 export interface Preview { manifest: Manifest; preview_sha256: string }
 export interface ReviewSpec {
   expected_manifest_sha256: string; expected_review_id: string | null; decision: Decision; sources: Assessment[]; note: string;
+  renewal_assessment?: RenewalAssessment;
 }
 export interface ReviewEvent {
   recorded_by: string; recorded_at: string; sequence: number; previous_review_id: string | null; packet_sha256: string;
@@ -73,7 +78,7 @@ export function selectionsPayload(rows: EditableSelection[], allowedTargets: str
     || new Set(row.target_ids).size !== row.target_ids.length || row.target_ids.some(id => !allowedTargets.includes(id)))) return null;
   return rows.map(row => ({ ...sourceIdentity(row), target_ids: [...row.target_ids], relationship: row.relationship as AuthorityRole, note: row.note }));
 }
-export function reviewPayload(rows: EditableAssessment[], note: string, decision: Decision, inputs: ReviewInputs): ReviewSpec | null {
+export function reviewPayload(rows: EditableAssessment[], note: string, decision: Decision, inputs: ReviewInputs, renewal?: RenewalAssessment): ReviewSpec | null {
   const expected = inputs.manifest.sources.map(source => source.selection);
   const selections = selectionsPayload(rows, expected.flatMap(source => source.target_ids));
   if (!selections || !boundedNote(note) || rows.length !== expected.length) return null;
@@ -86,9 +91,15 @@ export function reviewPayload(rows: EditableAssessment[], note: string, decision
     sources.push({ ...selected, observations: row.observations.map(item => ({ ...item, outcome: item.outcome as Outcome })) });
   }
   const outcomes = sources.flatMap(source => source.observations.map(item => item.outcome));
+  if (inputs.manifest.renewal) {
+    if (!renewal || renewal.expected_comparison_sha256 !== inputs.manifest.renewal_comparison_sha256 || !hash(renewal.expected_comparison_sha256)
+      || !Object.hasOwn(OUTCOMES, renewal.outcome) || !boundedNote(renewal.note)) return null;
+    outcomes.push(renewal.outcome);
+  } else if (renewal) return null;
   if ((decision === 'reviewed_conditional' && outcomes.some(value => value !== 'confirmed'))
     || (decision === 'changes_requested' && !outcomes.includes('needs_change'))) return null;
-  const value = { expected_manifest_sha256: inputs.expected_manifest_sha256, expected_review_id: inputs.expected_review_id, decision, sources, note };
+  const value = { expected_manifest_sha256: inputs.expected_manifest_sha256, expected_review_id: inputs.expected_review_id, decision, sources, note,
+    ...(renewal ? { renewal_assessment: renewal } : {}) };
   return new TextEncoder().encode(JSON.stringify({ ...value, request_id: '0'.repeat(32) })).length > 128 * 1024 ? null : value;
 }
 export function currentView(value: ContextView) { return value.public_source_access === true && value.freshness.status === 'current' && value.manifest !== null; }
@@ -126,6 +137,12 @@ export async function verifyManifest(manifest: Manifest, matterId: string, analy
   if (!selected || selected.length !== manifest.sources.length || manifest.sources.some(source => !selected.some(item => occurrenceKey(item) === occurrenceKey(source.evidence)
     && occurrenceKey(source.selection) === occurrenceKey(item) && source.selection.note === item.note && source.selection.relationship === item.relationship
     && JSON.stringify(source.selection.target_ids) === JSON.stringify(item.target_ids)))) throw new Error('Seçilen tam pasaj ve analiz adımları eşleşmiyor.');
+  verifyRenewalComparison(manifest);
+  if (manifest.renewal_comparison) {
+    const bytes = new TextEncoder().encode(canonicalJson(manifest.renewal_comparison));
+    const actual = [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map(value => value.toString(16).padStart(2, '0')).join('');
+    if (actual !== manifest.renewal_comparison_sha256) throw new Error('Yenileme karşılaştırmasının tam özeti eşleşmiyor.');
+  }
 }
 
 export async function verifyView(value: ContextView, matterId: string, analysisId: string): Promise<void> {
@@ -136,7 +153,7 @@ export async function verifyView(value: ContextView, matterId: string, analysisI
     const inputs: ReviewInputs = { manifest: value.manifest!, expected_manifest_sha256: value.manifest_sha256!, expected_review_id: event.input.expected_review_id,
       dimensions: event.dimensions, independent_reviewer_required: true, can_record: false };
     if (event.input.expected_manifest_sha256 !== value.manifest_sha256 || event.legal_approval !== 'not_granted'
-      || !reviewPayload(event.input.sources, event.input.note, event.input.decision, inputs)
+      || !reviewPayload(event.input.sources, event.input.note, event.input.decision, inputs, event.input.renewal_assessment)
       || [value.manifest!.analysis_author_id, value.manifest!.analysis_owner_id, value.recorded_by].includes(event.recorded_by)) throw new Error('Bağımsız inceleme ve tam kaynak bağları doğrulanamadı.');
   }
 }

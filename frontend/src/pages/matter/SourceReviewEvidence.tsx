@@ -2,6 +2,7 @@ import { Badge, Detail, Notice } from '../../components';
 import { formatDate } from '../../utils';
 import { AUTHORITY_ROLES } from './authorityTypes';
 import { currentView, DIMENSION_LABELS, OUTCOMES, occurrenceKey, type ContextView, type Manifest, type Quote } from './sourceReviewTypes';
+import { SourceRenewalComparison } from './SourceRenewalMapping';
 
 export function SourceQuote({ quote }: { quote: Quote }) {
   return <><p className="small"><strong>{quote.locator}</strong> · [{quote.start_offset}, {quote.end_offset}) · Unicode karakterleri</p>
@@ -13,6 +14,7 @@ export function SourceQuote({ quote }: { quote: Quote }) {
 }
 export function SourceManifest({ manifest }: { manifest: Manifest }) {
   return <><h4>{manifest.title}</h4><p className="authored-text">{manifest.purpose}</p>
+    {manifest.renewal && manifest.renewal_comparison && <SourceRenewalComparison value={manifest.renewal_comparison} reason={manifest.renewal.reason} />}
     <p className="small">Olay tarihi: {manifest.event_date ? formatDate(manifest.event_date) : 'Bilinmiyor'} · Araştırma tarihi: {manifest.research_snapshot.as_of ? formatDate(manifest.research_snapshot.as_of) : 'Belirtilmedi'}</p>
     <p className="small muted">Hukuki uygulanabilirlik değerlendirilmedi; kesinleşme bilinmiyor. Ulusal derlemin tamlığı bilinmiyor. Bağlantı, avukatın çalışma alanına özel yorumudur.</p>
     {manifest.sources.map(source => <section className="authority-candidate" key={occurrenceKey(source.evidence)}>
@@ -34,6 +36,7 @@ export function SourceContextView({ value }: { value: ContextView }) {
       <h4>Bağımsız incelemecinin kararı</h4><p><strong>{value.review.effective_state === 'reviewed_conditional' ? 'Koşullu inceleme tamamlandı' : 'Değişiklik istendi'}</strong> · Avukat beyanı</p>
       {!value.review.is_latest && <Notice>Önceki inceleme kararı. Güncel kararın yerine geçmez; bu kayıt üzerinden dışa aktarım açılmaz.</Notice>}
       <p className="small">{formatDate(event.recorded_at, true)} · <span className="reference-id">İncelemeci: {event.recorded_by}</span></p><p className="authored-text">{event.input.note}</p>
+      {event.input.renewal_assessment && <Detail title="Bağımsız yenileme eşlemesi kararı"><p>{OUTCOMES[event.input.renewal_assessment.outcome]}</p><p className="authored-text">{event.input.renewal_assessment.note}</p><p className="reference-id">{event.input.renewal_assessment.expected_comparison_sha256}</p></Detail>}
       {event.input.sources.map(source => <Detail key={occurrenceKey(source)} title={`İncelemecinin yorumu · ${AUTHORITY_ROLES[source.relationship]}`}><p className="authored-text">{source.note}</p>
         <p className="small">Analiz adımları: {source.target_ids.join(' · ')}</p>{source.observations.map(item => <section key={item.dimension}><h4>{DIMENSION_LABELS[item.dimension]}</h4><p><strong>{OUTCOMES[item.outcome]}</strong></p><p className="authored-text">{item.note}</p></section>)}
       </Detail>)}<Detail title="Değiştirilemez karar kaydı"><p className="reference-id">{value.review.id} · {event.packet_sha256}</p><p className="reference-id">Önceki karar: {event.previous_review_id || 'Yok'}</p></Detail>

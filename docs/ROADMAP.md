@@ -2271,3 +2271,30 @@ Next: explicit source-context renewal and version comparison while retaining
 all original history, source dependencies and independent decisions. Real legal
 gold, corpus coverage and preparation-time benefit remain unqualified; R03/R05
 remain partial.
+
+### R03/R05A explicit source-context renewal and version comparison
+
+[Source-context renewal](SOURCE_CONTEXT_RENEWAL.md) creates a new immutable
+private nomination from freshly inspected research and the current analysis.
+It retains the exact parent manifest/review head, requires declarations for
+every previous/new passage and compares representation/quote identities,
+Unicode offsets and exact target hashes. Same-named targets with changed content
+remain different. Old quotes and notes are withheld from metadata; their
+original guarded detail route remains authoritative.
+
+Retained passages require their original whole-release guard, sequentially with
+the new guard. Explicit replacement does not revive old permissions or remove
+the original record's dependencies. New work starts unreviewed and requires
+a fresh independent source decision plus an explained map assessment bound to
+the comparison SHA-256. Parent-head changes invalidate captured replacement
+work; old decisions remain immutable. Post-commit failures stay pending without
+automatic replay or historical finalization.
+
+Engineering evidence includes actual signed-source/private-ledger renewal and
+withdrawal, a real PostgreSQL parent-review/renewal race and wide/narrow browser
+rehearsal. Source-review cases share the existing publication CI job; all seven
+checks, deadlines, two workers and no-retry policy remain. Legal evaluation,
+national coverage, productivity and deployment remain separate; R03/R05 partial.
+
+Next: authorized source-review readiness and a prioritized re-review queue,
+explaining dependency changes without silently rewriting reviewed work.
