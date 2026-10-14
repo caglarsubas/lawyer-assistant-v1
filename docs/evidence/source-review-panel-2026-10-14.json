@@ -1,0 +1,54 @@
+{
+  "schema": "source-review-panel-engineering-evidence-v1",
+  "recorded_at": "2026-10-14T05:18:16.990812+00:00",
+  "origin": "invented-documents-and-test-only-accounts",
+  "frontend_tests_passed": 520,
+  "backend_source_group_passed": 153,
+  "backend_source_group_seconds": 95.58,
+  "real_postgres_review_races_passed": 2,
+  "deployment_contracts_passed": 42,
+  "browser": {
+    "synthetic_only": true,
+    "rights_simulated": true,
+    "production_qualified": false,
+    "selection_preview_invalidation": true,
+    "self_review_denied_and_parent_quotes_cleared": true,
+    "explicit_independent_dimensions": true,
+    "opposing_declarations_preserved": true,
+    "guarded_exact_export": true,
+    "withdrawal_clears_quotes_notes_and_exports": true,
+    "narrow_overflow": false,
+    "browser_errors": [],
+    "external_requests": []
+  },
+  "browser_recovery": {
+    "synthetic_only": true,
+    "pending_receipt_response_mocked": true,
+    "production_qualified": false,
+    "ambiguous_network_hides_content": true,
+    "manual_retry_same_nonce_and_payload": true,
+    "automatic_replays": 0,
+    "explicit_pending_receipt_never_becomes_reviewed": true,
+    "pending_response_hides_quotes_and_forms": true,
+    "browser_errors": []
+  },
+  "complete_backend_ci_subjects": 4385,
+  "ci_partition_missing": 0,
+  "ci_partition_overlap": 0,
+  "ci_limits_changed": false,
+  "source_files_sha256": {
+    "frontend/src/pages/matter/AnalysisSourceReviews.tsx": "b8fe33b569cfecde557d3cd5cb2656c6035c8c4c844358970a21756137100efb",
+    "frontend/src/pages/matter/sourceReviewTypes.ts": "f3922683aaa5b123364ce5c18dbb1d618e646a882a4e14de27335de67618cf8a",
+    "frontend/src/pages/matter/SourceReviewEvidence.tsx": "01f23cc0bed557612efebb157ac8603851b27c51eeecf1efcffbd574d5f24eca",
+    "backend/app/source_analysis_reviews.py": "7ee79358d264b4fc2c661776fddb1f7a4d8b2b2a714517a194def99d0d11f041"
+  },
+  "production_qualified": false,
+  "legal_qualification": false,
+  "runtime_activation": false,
+  "deployment_changed": false,
+  "limitations": [
+    "Browser source rights are simulated; the pending receipt response is mocked.",
+    "Account separation does not qualify professional independence.",
+    "No national corpus, legal accuracy or productivity claim qualified."
+  ]
+}

@@ -109,6 +109,18 @@ export async function downloadAuthorityContext(matterId: string, analysisId: str
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+export async function downloadSourceContext(matterId: string, analysisId: string, contextId: string, format: 'json' | 'docx' | 'pdf', current: () => boolean, signal?: AbortSignal) {
+  const path = [matterId, analysisId, contextId].map(encodeURIComponent);
+  let response: Response;
+  try { response = await fetch(`${BASE}/matters/${path[0]}/analyses/${path[1]}/source-contexts/${path[2]}/export?format=${format}`, { credentials: 'same-origin', cache: 'no-store', signal }); }
+  catch (cause) { if (cause instanceof DOMException && cause.name === 'AbortError') throw cause; throw new ApiError('Kaynak incelemesi indirilemedi. Yerel bağlantıyı kontrol edin.', 0); }
+  if (!response.ok) { if (response.status === 401) unauthorizedHandler?.(); throw new ApiError(errorText(await response.json().catch(() => null)), response.status); }
+  const blob = await response.blob();
+  if (!current() || signal?.aborted) throw new DOMException('Çalışma alanı değişti.', 'AbortError');
+  const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `ozel-kaynak-incelemesi-${contextId}.${format}`;
+  document.body.append(link); link.click(); link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 export async function downloadAuthorityReview(matterId: string, analysisId: string, contextId: string, reviewId: string, format: 'json' | 'docx' | 'pdf') {
   const path = [matterId, analysisId, contextId, reviewId].map(encodeURIComponent);
   let response: Response;

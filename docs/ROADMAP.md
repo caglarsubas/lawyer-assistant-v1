@@ -2246,3 +2246,28 @@ Next: a lawyer-facing source nomination and independent-review panel using these
 typed contracts. Independent legal gold, historical/practice strata and measured
 preparation benefits remain separate. R03/R05 and real lawyer acceptance remain
 partial; this implementation grants no legal or production qualification.
+
+### R03/R05A lawyer-facing source selection and independent review
+
+[The source-review panel](SOURCE_REVIEW_PANEL.md) now connects saved research
+passages to exact private analysis targets with a preview/freeze workflow,
+explicit independent observations, separate interpretations, immutable histories
+and guarded JSON/DOCX/PDF exports. It stays in the current analysis workspace,
+with source evidence beside each action and technical records in disclosures.
+
+Client checks verify exact UTF-8 quote hashes, offsets, source/representation and
+release identities. Scope retirement and abort signals prevent delayed replies
+or downloads from reappearing after a change. Source/private/permission failures
+clear quotes, notes and forms. Unknown save outcomes retain the same payload and
+nonce for explicit retry; pending receipts never become reviewed work.
+
+Synthetic browser checks include preview invalidation, same-author denial,
+independent adverse interpretation, withdrawal, exact exports, narrow layout and
+manual recovery without automatic replay. Actual signed private-ledger and
+PostgreSQL race tests supplement these interface checks. No CI cap, worker count,
+test partition, provider credential or production activation is changed.
+
+Next: explicit source-context renewal and version comparison while retaining
+all original history, source dependencies and independent decisions. Real legal
+gold, corpus coverage and preparation-time benefit remain unqualified; R03/R05
+remain partial.
