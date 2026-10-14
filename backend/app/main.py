@@ -89,6 +89,7 @@ from .research_jobs import (
 from .research_sources import export_lines as source_export_lines
 from .scanner import MalwareDetected, ScannerUnavailable, scan_document
 from .search import PublicSearchService
+from .source_analysis_reviews import source_analysis_router
 from .source_corpus import EvidenceLookup, SourceCorpusService
 from .source_relationships import source_relationships_router
 from .source_reviews import source_reviews_router
@@ -326,6 +327,7 @@ def create_app(settings=None):
     app.include_router(comparison_router())
     app.include_router(cohort_router())
     app.include_router(authority_context_router())
+    app.include_router(source_analysis_router())
     app.include_router(authority_findings_router())
     app.include_router(authority_revalidation_router())
     app.include_router(authority_comparisons_router())

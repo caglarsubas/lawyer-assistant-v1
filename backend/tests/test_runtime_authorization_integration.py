@@ -166,6 +166,12 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         # quotes even when authority retrieval cannot qualify this old date.
         matter = restarted.get('/api/v1/matters').json()[0]['id']
         matter_base = '/api/v1/matters/' + matter
+        from test_analysis_workbench import build_workbench, create
+        from test_authority_adjudications import reviewer
+        from test_source_analysis_reviews import freeze, nominate, record, review_request
+
+        private_workbench = build_workbench((app, restarted, matter))
+        analysis = create(private_workbench)
         submitted = restarted.post(matter_base + '/research', json={'question': source['text'][:100], 'as_of': '1921-01-01'})
         assert submitted.status_code == 202, submitted.text
         for _ in range(600):
@@ -198,6 +204,21 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         assert pdf.status_code == 200
         pdf_text = '\n'.join(page.extract_text() for page in PdfReader(io.BytesIO(pdf.content)).pages)
         assert str(evidence) in pdf_text and 'ulusal derlemin tamlığı bilinmiyor' in pdf_text
+        # Actual signed bytes/current private grants also qualify the new private
+        # source nomination and independent reviewer boundary. No new fixture.
+        source_context_path, spec, _ = nominate(private_workbench, state['product_id'],
+            saved['source_candidates']['hits'][0], saved['source_candidates']['snapshot'], analysis=analysis)
+        source_context, _ = freeze(restarted, source_context_path, spec)
+        assert restarted.get(source_context_path + '/' + source_context['id'] + '/export').status_code == 409
+        reviewer(private_workbench)
+        review_path, review_body = review_request(restarted, source_context_path, source_context['id'])
+        reviewed = record(restarted, review_path, review_body)
+        assert reviewed['review']['effective_state'] == 'reviewed_conditional'
+        assert reviewed['manifest']['sources'][0]['evidence']['text'] == saved['source_candidates']['hits'][0]['text']
+        assert restarted.get(source_context_path + '/' + source_context['id'] + '/export').status_code == 200
+        from test_analysis_comparisons import login
+
+        login(restarted)
         changed = assess(restarted, base + '/review', 6, 'rights', decision='needs_changes')
         assert changed.status_code == 200
         assert app.state.graph.release_status()['status'] == 'unavailable'
@@ -215,6 +236,11 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         assert withheld.json()['status'] == 'stale' and withheld.json()['public_results_withheld'] is True
         assert not withheld.json()['source_candidates']['hits']
         assert restarted.get(product_path + '/export?format=docx').status_code == 409
+        withdrawn = restarted.get(source_context_path + '/' + source_context['id'])
+        assert withdrawn.status_code == 200 and withdrawn.json()['manifest'] is None
+        assert withdrawn.json()['review']['snapshot'] is None
+        assert 'PRIVATE REVIEW NOTE' not in withdrawn.text
+        assert restarted.get(source_context_path + '/' + source_context['id'] + '/export').status_code == 409
         import pytest
         with pytest.raises(IndexBuildError) as denied:
             build_index(app.state.graph.release, 'http://opensearch:9200', installed['release_id'])
