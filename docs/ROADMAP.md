@@ -2217,3 +2217,10 @@ and no retries. Real population and held-out lawyer judgment remain open.
 
 Next: accountable source nomination review linked to private analysis targets and
 expanded independent development strata. R03/R05 remain partial.
+
+CI qualification observed 84 PostgreSQL races passing in 208.36 seconds and 128
+publication subjects passing in 72.25 seconds, but setup exceeded their shared
+five-minute cap. Publication now runs exactly once in a separate three-minute
+ARM job. All prior deadlines, two-worker/no-retry limits and complete subject
+assignment remain unchanged. Seven exact-head checks are required before merge;
+a cancelled job is not treated as successful qualification.

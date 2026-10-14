@@ -19,7 +19,12 @@
   "observations_authenticated_by_offline_scoring": false,
   "national_corpus_denominator": null,
   "lawyer_productivity_measured": false,
-  "hosted_checks": "all_six_exact_head_checks_required_before_merge",
+  "hosted_checks": "all_seven_exact_head_checks_required_before_merge",
+  "first_hosted_partition": {"postgres_races_passed": 84, "postgres_races_seconds": 208.36,
+    "publication_passed": 128, "publication_seconds": 72.25,
+    "shared_job_outcome": "cancelled_at_existing_five_minute_cap",
+    "assertion_failures_observed": 0,
+    "fix": "complete publication group moved once to a dedicated three-minute ARM job"},
   "limitations": ["Invented sources and TEST-ONLY signatures", "HTTP candidate/index responses simulated",
     "Signed-source graph queries executed locally using RDFLib", "No real held-out lawyer benchmark or legal approval"]
 }
