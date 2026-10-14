@@ -89,6 +89,7 @@ partition remain unchanged. Engineering qualification does not establish nationa
 corpus coverage, legal accuracy, professional independence, productivity, deployment
 or lawyer acceptance. R03/R05 remain partial.
 
-Next: show a bounded comparison of the originally selected and newly observed review
-head/current version, with explicit fresh context or historical-event follow-up;
-never infer ancestry, source permission or fresh independent approval.
+The [selected-versus-current comparison](PORTFOLIO_RETURN_COMPARISON.md) now shows
+bounded original/fresh head and version identities with explicit guarded follow-up.
+It keeps the original comparison baselines, frozen evidence and selected event
+separate without inferring ancestry, source permission or fresh independent approval.

@@ -91,10 +91,10 @@ describe('guarded portfolio return intent', () => {
     const original = intent(); original.target.head_id = review(1);
     const next = departingReturn(original, metadata(), lineage(), review(1));
     const m = metadata(); m.analysis.current_version_id = 'current2';
-    const result = reconcileReturn(next, page(), m, lineage());
-    expect(result.head_changed).toBe(true); expect(result.current_version_changed).toBe(true); expect(result.selected_review_state).toBe('reviewed_conditional');
+    const l = lineage(); l.context_navigation = m; const result = reconcileReturn(next, page(), m, l);
+    expect(result.state).toBe('observed'); if (result.state !== 'observed') throw new Error('Missing comparison'); expect(result.comparison.head_relation).toBe('different'); expect(result.comparison.version_relation).toBe('different'); expect(result.selected_review_state).toBe('reviewed_conditional');
     expect(next.target.review_id).toBe(review(1)); expect(next.target.version_id).toBe('frozen1'); expect(next.target.manifest_sha256).toBe('d'.repeat(64));
-    const pending = metadata(); pending.admission.review_state = 'pending'; expect(reconcileReturn(next, page(), pending, lineage()).review_state).toBe('pending');
+    const pending = metadata(); pending.admission.review_state = 'pending'; const lp = lineage(); lp.context_navigation = pending; lp.current_head!.admission = 'pending'; const rp = reconcileReturn(next, page(), pending, lp); expect(rp.state === 'observed' && rp.review_state).toBe('pending');
     expect(JSON.stringify(result)).not.toContain('qualified'); expect(JSON.stringify(result)).not.toContain('PRIVATE');
   });
   it('preserves an unavailable exact historical selection without inventing its packet or probing outside a returned window', () => {
@@ -123,7 +123,7 @@ describe('guarded portfolio return intent', () => {
   it('renders captured filter intent and bounded reconciliation without an approval or historical note', () => {
     const html = renderToStaticMarkup(<ReturnFilterSummary intent={intent()} />);
     expect(html).toContain('customerA, customerB'); expect(html).toContain('1920-01-01'); expect(html).toContain('2026-10-31'); expect(html).not.toContain('PRIVATE TITLE');
-    const absent = renderToStaticMarkup(<ReturnReconciliationPanel value={{ state: 'not_observed', queue_observed_at: stamp }} reopen="#/any" />);
+    const absent = renderToStaticMarkup(<ReturnReconciliationPanel value={{ state: 'not_observed', queue_observed_at: stamp }} links={{ selected: '#/any', head: null, context: null }} />);
     expect(absent).toContain('bu sınırlı pencerede gözlenmedi'); expect(absent).not.toContain('href=');
     const history = renderToStaticMarkup(<SourceReviewLineagePanel value={lineage()} returnToken={'1'.repeat(32)} />);
     expect(history).toContain('return=' + '1'.repeat(32)); expect(history).toContain('review=' + review(2)); expect(history).not.toContain('textarea');

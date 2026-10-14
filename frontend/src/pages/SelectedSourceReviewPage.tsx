@@ -8,6 +8,7 @@ import { SourceReadFence } from './matter/sourceReviewTypes';
 import { sourceContextHref, verifyNavigation, type NavigationMetadata, type SourceSelection, type SourceTarget } from './sourceContextNavigationTypes';
 
 import { departingReturn, queueReturnHref, returnMatches, type ReturnIntent } from '../workbench/portfolioReturn';
+import { verifyReturnSelection } from '../workbench/returnComparison';
 
 import SourceReviewLineagePanel from './SourceReviewLineagePanel';
 import { verifyReviewLineage, type ReviewLineage } from './sourceReviewLineageTypes';
@@ -41,10 +42,12 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent }: { target
       const base = `/matters/${encodeURIComponent(target.matter_id)}/analyses/${encodeURIComponent(target.analysis_id)}/source-contexts/${encodeURIComponent(target.context_id)}`;
       if (target.review_id) {
         const result = await request<ReviewLineage>(`${base}/reviews/${encodeURIComponent(target.review_id)}/navigation-context`, { signal: task.signal });
-        verifyReviewLineage(result, target); if (task.current()) { setValue(result.context_navigation); setLineage(result); }
+        verifyReviewLineage(result, target); if (returnIntent) verifyReturnSelection(returnIntent, result.context_navigation, result, target.review_id);
+        if (task.current()) { setValue(result.context_navigation); setLineage(result); }
       } else {
         const result = await request<NavigationMetadata>(`${base}/navigation-context`, { signal: task.signal });
-        verifyNavigation(result, target); if (task.current()) setValue(result);
+        verifyNavigation(result, target); if (returnIntent) verifyReturnSelection(returnIntent, result, null);
+        if (task.current()) setValue(result);
       }
     } catch (cause) { if (task.current()) clear(cause); } finally { if (task.current()) setBusy(false); }
   }
