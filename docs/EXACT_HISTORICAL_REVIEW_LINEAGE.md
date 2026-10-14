@@ -82,5 +82,6 @@ filter retirement, withdrawal and narrow layout.
 These are engineering checks. Legal corpus coverage, accuracy, professional
 independence, productivity, deployment and lawyer acceptance require separate gates.
 
-Next: explicit return to a freshly observed portfolio source-review queue with
-bounded customer/workspace/source-date filters and selected-record reconciliation.
+The [guarded portfolio return](GUARDED_PORTFOLIO_SOURCE_RETURN.md) now preserves
+exact customer/workspace/source-date filters through these links and requires
+explicit fresh queue observation and selected-record reconciliation.
