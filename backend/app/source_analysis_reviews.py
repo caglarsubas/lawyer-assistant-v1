@@ -16,6 +16,7 @@ from sqlalchemy import select
 
 from . import analysis_authorities as authorities
 from . import analysis_reviews, analysis_workbench
+from . import source_context_navigation as navigation
 from . import source_context_renewals as renewals
 from . import source_review_readiness as readiness
 from .analysis_adjudication import target_values
@@ -584,6 +585,12 @@ def source_analysis_router():
     def detail(matter_id: str, analysis_id: str, context_id: str, request: Request, user=Depends(authenticate)):
         with request.app.state.store.session() as session:
             return _read(request.app, session, matter_id, analysis_id, context_id, user)
+
+    @router.get('/{context_id}/navigation-context')
+    def navigation_context(matter_id: str, analysis_id: str, context_id: str, request: Request, user=Depends(authenticate)):
+        store = request.app.state.store
+        with store.session() as session:
+            return navigation.metadata(store, session, matter_id, analysis_id, context_id, user)
 
     @router.get('/{context_id}/renewal-context')
     def renewal_context(matter_id: str, analysis_id: str, context_id: str, request: Request, user=Depends(authenticate)):

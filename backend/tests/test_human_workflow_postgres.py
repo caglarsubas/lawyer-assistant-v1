@@ -211,7 +211,8 @@ def test_recipient_removal_waits_for_admitted_opinion_body_with_case_scope_retai
         other.close()
 
 
-def test_source_readiness_waits_for_independent_review_and_observes_exact_new_head(workspace, monkeypatch):
+@pytest.mark.parametrize("observation", ["readiness", "navigation"])
+def test_source_readiness_waits_for_independent_review_and_observes_exact_new_head(workspace, monkeypatch, observation):
     from test_analysis_workbench import build_workbench
     from test_authority_adjudications import reviewer
     from test_source_analysis_reviews import freeze, review_request, setup
@@ -239,7 +240,7 @@ def test_source_readiness_waits_for_independent_review_and_observes_exact_new_he
         try:
             assert entered.wait(5)
             with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
-                second = pool.submit(client.get, endpoint + '/readiness')
+                second = pool.submit(client.get, endpoint + ('/readiness' if observation == 'readiness' else '/' + context['id'] + '/navigation-context'))
                 assert observed[0].wait(5)
                 assert wait_until_blocked(app.state.store.engine, observed[1][-1])
                 assert not second.done()
@@ -248,11 +249,15 @@ def test_source_readiness_waits_for_independent_review_and_observes_exact_new_he
         saved = first.result(timeout=10)
         observed = second.result(timeout=10)
         assert saved.status_code == 201 and observed.status_code == 200
-    item = observed.json()['items'][0]
+    item = observed.json()['items'][0] if observation == 'readiness' else observed.json()
     assert item['historical_review']['id'] == saved.json()['review']['id']
     assert item['historical_review']['state'] == 'reviewed_conditional'
     assert item['source_verification'] == 'not_checked' and item['legal_readiness'] == 'not_established'
-    assert item['state'] in {'pending', 'inspection_required'}
+    if observation == 'readiness':
+        assert item['state'] in {'pending', 'inspection_required'}
+    else:
+        assert item['context_id'] == context['id'] and item['version_relation'] == 'same'
+        assert 'PRIVATE REVIEW NOTE' not in observed.text
 
 
 def test_source_readiness_holds_private_basis_until_concurrent_version_edit_finishes(workspace, monkeypatch):

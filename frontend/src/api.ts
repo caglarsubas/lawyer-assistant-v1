@@ -19,14 +19,15 @@ function errorText(data: unknown): string {
   return 'İşlem tamamlanamadı. Lütfen yeniden deneyin.';
 }
 
-export async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+export async function request<T>(path: string, options: RequestInit & { refreshPortfolio?: boolean } = {}): Promise<T> {
+  const { refreshPortfolio = true, ...fetchOptions } = options;
   const headers = new Headers(options.headers);
   const method = options.method?.toUpperCase() || 'GET';
   if (options.body && !(options.body instanceof FormData)) headers.set('Content-Type', 'application/json');
   if (!['GET', 'HEAD', 'OPTIONS'].includes(method) && csrfToken) headers.set('X-CSRF-Token', csrfToken);
   let response: Response;
   try {
-    response = await fetch(`${BASE}${path}`, { ...options, headers, credentials: 'same-origin', cache: 'no-store' });
+    response = await fetch(`${BASE}${path}`, { ...fetchOptions, headers, credentials: 'same-origin', cache: 'no-store' });
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') throw error;
     throw new ApiError('Sunucuya ulaşılamıyor. Yerel hizmetin çalıştığını kontrol edin.', 0);
@@ -36,7 +37,7 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
     if (response.status === 401 && path !== '/auth/login' && path !== '/auth/me') unauthorizedHandler?.();
     throw new ApiError(errorText(data), response.status, data);
   }
-  if (!['GET', 'HEAD', 'OPTIONS'].includes(method) && !path.startsWith('/auth/') && !path.startsWith('/assistant/') && !path.startsWith('/public-sources/') && !path.endsWith('/analyses/check') && typeof window !== 'undefined') window.dispatchEvent(new Event('portfolio-updated'));
+  if (refreshPortfolio && !['GET', 'HEAD', 'OPTIONS'].includes(method) && !path.startsWith('/auth/') && !path.startsWith('/assistant/') && !path.startsWith('/public-sources/') && !path.endsWith('/analyses/check') && typeof window !== 'undefined') window.dispatchEvent(new Event('portfolio-updated'));
   if (response.status === 204) return undefined as T;
   return response.json() as Promise<T>;
 }

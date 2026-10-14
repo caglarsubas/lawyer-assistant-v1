@@ -9,6 +9,8 @@ const FirmAdminPage = lazy(() => import('./pages/FirmAdminPage'));
 const SourceComparisonPage = lazy(() => import('./pages/SourceComparisonPage'));
 import MattersPage from './pages/MattersPage';
 import MatterPage from './pages/MatterPage';
+const SelectedSourceReviewPage = lazy(() => import('./pages/SelectedSourceReviewPage'));
+import { sourceNavigationSelection } from './pages/sourceContextNavigationTypes';
 import GraphPage from './pages/GraphPage';
 import CoveragePage from './pages/CoveragePage';
 import SystemPage from './pages/SystemPage';
@@ -69,12 +71,15 @@ export default function App() {
   if (checkingAccess) return <div className="boot"><Loading label="Erişim doğrulanıyor…" /></div>;
   const [pathname, query = ''] = route.split('?');
   const page = pathname.split('/')[1];
-  const matterId = ['matters', 'workspaces'].includes(page) && pathname.split('/')[2] ? decodeURIComponent(pathname.split('/')[2]) : null;
+  let matterId: string | null = null;
+  try { matterId = ['matters', 'workspaces'].includes(page) && pathname.split('/')[2] ? decodeURIComponent(pathname.split('/')[2]) : null; } catch { /* Invalid selection stays in the closed handoff view. */ }
   const params = new URLSearchParams(query);
-  const section = params.get('tab') || 'overview';
-  return <PortfolioProvider key={sessionPrincipalKey(session.user)} enabled={!session.user.permissions || session.user.permissions.includes('portfolio.read')}><Workbench session={session} signingOut={signingOut} onSignOut={signOut} page={page} workspaceId={matterId} section={section} demo={Boolean(status?.demo_mode || session.demo_mode)}>
+  const selection = sourceNavigationSelection(pathname, params);
+  const metadataOnly = selection.kind !== 'none';
+  const section = metadataOnly ? 'source-review' : params.get('tab') || 'overview';
+  return <PortfolioProvider key={sessionPrincipalKey(session.user)} enabled={!session.user.permissions || session.user.permissions.includes('portfolio.read')}><Workbench key={metadataOnly ? route : 'ordinary-workbench'} session={session} signingOut={signingOut} onSignOut={signOut} page={page} workspaceId={selection.kind === 'invalid' ? null : matterId} section={section} metadataOnly={metadataOnly} demo={Boolean(status?.demo_mode || session.demo_mode)}>
     {error && <Notice error>{error}</Notice>}
-    {matterId ? <MatterPage key={matterId} matterId={matterId} tab={section} selectedDocumentId={params.get('document')} selectedWorkId={params.get('work')} userRole={session.user.role} permissions={session.user.permissions} demo={Boolean(status?.demo_mode || session.demo_mode)} /> : page === 'sources' ? pathname.split('/')[3] === 'compare' ? <Suspense fallback={<Loading label="Kaynak karşılaştırması yükleniyor…" />}><SourceComparisonPage sourceId={pathname.split('/')[2] || ''} user={session.user} otherSourceId={params.get('other_source_id') || ''} /></Suspense> : pathname.split('/')[3] === 'decisions' ? <Suspense fallback={<Loading label="Karar incelemesi yükleniyor…" />}><DecisionMappingPage sourceId={pathname.split('/')[2] || ''} user={session.user} /></Suspense> : pathname.split('/')[3] === 'provisions' ? <ProvisionMappingPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : <SourceReviewPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : page === 'firm-admin' ? <Suspense fallback={<Loading label="Büro yönetimi yükleniyor…" />}><FirmAdminPage /></Suspense> : page === 'work' ? <Suspense fallback={<Loading />}><WorkQueuePage /></Suspense> : page === 'customers' ? <CustomersPage /> : page === 'graphs' ? <GraphPage /> : page === 'coverage' ? <CoveragePage /> : page === 'system' ? <SystemPage status={status} onStatus={setStatus} /> : <MattersPage newRequested={params.get('new') === '1'} />}
+    {metadataOnly ? <Suspense fallback={<Loading label="Kaynak bağlamı yükleniyor…" />}><SelectedSourceReviewPage key={route} selection={selection} /></Suspense> : matterId ? <MatterPage key={matterId} matterId={matterId} tab={section} selectedDocumentId={params.get('document')} selectedWorkId={params.get('work')} userRole={session.user.role} permissions={session.user.permissions} demo={Boolean(status?.demo_mode || session.demo_mode)} /> : page === 'sources' ? pathname.split('/')[3] === 'compare' ? <Suspense fallback={<Loading label="Kaynak karşılaştırması yükleniyor…" />}><SourceComparisonPage sourceId={pathname.split('/')[2] || ''} user={session.user} otherSourceId={params.get('other_source_id') || ''} /></Suspense> : pathname.split('/')[3] === 'decisions' ? <Suspense fallback={<Loading label="Karar incelemesi yükleniyor…" />}><DecisionMappingPage sourceId={pathname.split('/')[2] || ''} user={session.user} /></Suspense> : pathname.split('/')[3] === 'provisions' ? <ProvisionMappingPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : <SourceReviewPage sourceId={pathname.split('/')[2] || ''} user={session.user} /> : page === 'firm-admin' ? <Suspense fallback={<Loading label="Büro yönetimi yükleniyor…" />}><FirmAdminPage /></Suspense> : page === 'work' ? <Suspense fallback={<Loading />}><WorkQueuePage /></Suspense> : page === 'customers' ? <CustomersPage /> : page === 'graphs' ? <GraphPage /> : page === 'coverage' ? <CoveragePage /> : page === 'system' ? <SystemPage status={status} onStatus={setStatus} /> : <MattersPage newRequested={params.get('new') === '1'} />}
   </Workbench></PortfolioProvider>;
 
 }

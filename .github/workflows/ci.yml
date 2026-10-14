@@ -40,6 +40,7 @@ env:
     backend/tests/test_source_context_renewals.py
     backend/tests/test_source_review_readiness.py
     backend/tests/test_portfolio_source_reviews.py
+    backend/tests/test_source_context_navigation.py
 
 jobs:
   backend-and-contracts:

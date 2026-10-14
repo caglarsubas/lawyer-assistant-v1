@@ -18,7 +18,7 @@ export function PortfolioQueueResults({ page, busy, next }: { page: PortfolioQue
       <p className="small-label">{item.matter_title}</p><h3>{READINESS_STATES[item.state]}</h3><p className="small">Kayıt: {formatDate(item.recorded_at, true)}</p>
       <SourceReviewSummary item={item} />
       <Detail title="Kaynak kaydının kimlikleri"><p className="small reference-id">Analiz: {item.analysis_id || 'Doğrulanamadı'}</p><p className="small reference-id">Bağlam: {item.id}</p><p className="small reference-id">Sürüm: {item.version_id || 'Doğrulanamadı'}</p></Detail>
-    </div>{sourceQueueHref(item) ? <a className="button secondary" href={sourceQueueHref(item)!}>Çalışma notlarını aç</a> : <Notice>Analiz bağı doğrulanamadı. Bu kayıttan inceleme açılamaz.</Notice>}</article>)}</div>
+    </div>{sourceQueueHref(item) ? <a className="button secondary" href={sourceQueueHref(item)!}>Tam kaynak bağlamını aç</a> : <Notice>Analiz bağı doğrulanamadı. Bu kayıttan inceleme açılamaz.</Notice>}</article>)}</div>
     {page.coverage.pagination_limit_reached && <Notice>Sayfalama sınırına ulaşıldı. Müvekkil veya kaynak kayıt tarihini daraltıp yeniden gözlemleyin.</Notice>}
     {page.coverage.has_more && page.coverage.next_offset !== null && <button className="button secondary" disabled={busy} onClick={next}>Sonraki sınırlı portföy penceresini getir</button>}
   </section>;

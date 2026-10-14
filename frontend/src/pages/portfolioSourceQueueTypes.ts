@@ -1,3 +1,4 @@
+import { sourceContextHref } from './sourceContextNavigationTypes';
 import type { PortfolioFilters } from '../types';
 import { canonicalJson } from './matter/sourceReviewTypes';
 import { verifyReadinessItem, type ReadinessItem } from './matter/sourceReadinessTypes';
@@ -23,7 +24,7 @@ export function queueQuery(filters: PortfolioQueueFilters, offset: number) {
   return params.toString();
 }
 export function sourceQueueHref(item: PortfolioQueueItem): string | null {
-  return identifier(item.matter_id) && identifier(item.analysis_id) ? `#/matters/${encodeURIComponent(item.matter_id)}?tab=practice` : null;
+  return identifier(item.matter_id) && identifier(item.analysis_id) ? sourceContextHref(item.matter_id, item.analysis_id!, item.id) : null;
 }
 export function verifyPortfolioQueue(value: PortfolioQueuePage, expected: PortfolioQueueFilters, offset: number) {
   const fail = () => { throw new Error('Portföy kaynak kuyruğunun filtre veya kapsam bağı doğrulanamadı.'); };

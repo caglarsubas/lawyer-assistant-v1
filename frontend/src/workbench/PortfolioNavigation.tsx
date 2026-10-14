@@ -6,7 +6,7 @@ import type { Matter, PortfolioFilters } from '../types';
 import { formatDate, messageOf } from '../utils';
 import { EMPTY_FILTERS, usePortfolio } from './portfolio';
 
-export default function PortfolioNavigation({ page, workspaceId, permissions }: { page: string; workspaceId: string | null; permissions?: string[] }) {
+export default function PortfolioNavigation({ page, workspaceId, permissions, autoExpandSelected = true }: { page: string; workspaceId: string | null; permissions?: string[]; autoExpandSelected?: boolean }) {
   const { customers, workspaces, filters, setFilters, loading, error, refresh } = usePortfolio();
   const [query, setQuery] = useState('');
   const nav = [{ id: 'matters', label: 'Çalışma alanları', icon: 'folder' as const }, { id: 'work', label: 'İşlerim', icon: 'clock' as const }, { id: 'customers', label: 'Müvekkiller', icon: 'book' as const }, { id: 'graphs', label: 'Hukuk haritası', icon: 'graph' as const }, { id: 'coverage', label: 'Kaynak kapsamı', icon: 'layers' as const }, { id: 'system', label: 'Sistem durumu', icon: 'settings' as const }];
@@ -23,18 +23,18 @@ export default function PortfolioNavigation({ page, workspaceId, permissions }: 
     </section>
     <section className="workspace-tree" aria-label="Çalışma alanları ve yüklenen dosyalar"><div className="nav-section-heading"><h2>Çalışma alanları</h2><span className="count">{visible.length}</span></div><label className="search-input"><Icon name="search" size={15} /><input aria-label="Çalışma alanlarında ara" placeholder="Çalışma alanı ara" value={query} onChange={event => setQuery(event.target.value)} /></label><a className="new-workspace-link" href="#/matters?new=1"><Icon name="plus" size={16} />Yeni çalışma alanı</a>
     {error && <Notice error>{error}<button className="text-button" onClick={refresh}>Yeniden dene</button></Notice>}
-    {loading ? <Loading label="Portföy yükleniyor…" /> : visible.length ? visible.map(workspace => <WorkspaceBranch key={workspace.id} workspace={workspace} selected={workspace.id === workspaceId} />) : <p className="nav-empty">{active || query ? 'Bu filtrelerle çalışma alanı bulunamadı.' : 'İlk çalışma alanınızı oluşturun, ardından dosyalarınızı yükleyin.'}</p>}
+    {loading ? <Loading label="Portföy yükleniyor…" /> : visible.length ? visible.map(workspace => <WorkspaceBranch key={workspace.id} autoExpandSelected={autoExpandSelected} workspace={workspace} selected={workspace.id === workspaceId} />) : <p className="nav-empty">{active || query ? 'Bu filtrelerle çalışma alanı bulunamadı.' : 'İlk çalışma alanınızı oluşturun, ardından dosyalarınızı yükleyin.'}</p>}
     </section></>}<div className="navigation-footnote"><Icon name="shield" size={15} /><span>Yalnızca yetkili olduğunuz çalışmalar.</span></div>
   </div>;
 }
-function WorkspaceBranch({ workspace, selected }: { workspace: Matter; selected: boolean }) {
-  const [open, setOpen] = useState(selected); const [detail, setDetail] = useState<Matter | null>(null); const [error, setError] = useState('');
+function WorkspaceBranch({ workspace, selected, autoExpandSelected }: { workspace: Matter; selected: boolean; autoExpandSelected: boolean }) {
+  const [open, setOpen] = useState(selected && autoExpandSelected); const [detail, setDetail] = useState<Matter | null>(null); const [error, setError] = useState('');
   const { revision } = usePortfolio();
-  useEffect(() => { if (selected) setOpen(true); }, [selected]);
+  useEffect(() => { if (selected && autoExpandSelected) setOpen(true); }, [selected, autoExpandSelected]);
   useEffect(() => {
     if (!open) return;
     const controller = new AbortController(); setError('');
-    request<Matter>(`/workspaces/${encodeURIComponent(workspace.id)}`, { signal: controller.signal }).then(setDetail).catch(cause => { if (cause.name !== 'AbortError') setError(messageOf(cause)); });
+    request<Matter>(`/workspaces/${encodeURIComponent(workspace.id)}`, { signal: controller.signal }).then(value => { if (!controller.signal.aborted) setDetail(value); }).catch(cause => { if (cause.name !== 'AbortError') setError(messageOf(cause)); });
     return () => controller.abort();
   }, [open, revision, workspace.id]);
   return <div className={`workspace-branch ${selected ? 'selected' : ''}`}><div className="workspace-branch-heading"><button className={`branch-toggle ${open ? 'expanded' : ''}`} onClick={() => setOpen(!open)} aria-label={`${workspace.title}: dosyaları ${open ? 'gizle' : 'göster'}`} aria-expanded={open}><Icon name="chevron" size={13} /></button><a href={`#/matters/${encodeURIComponent(workspace.id)}`} aria-current={selected ? 'page' : undefined}><strong>{workspace.title}</strong><span>{workspace.document_count || 0} dosya · {formatDate(workspace.updated_at || workspace.created_at)}</span>{Boolean(workspace.customers?.length) && <small>{workspace.customers?.map(customer => customer.name).join(' · ')}</small>}</a></div>{open && <div className="workspace-files">{error ? <p className="small error-text">{error}</p> : !detail ? <p className="small muted">Dosyalar yükleniyor…</p> : detail.documents?.length ? detail.documents.map(document => <a key={document.id} href={`#/matters/${encodeURIComponent(workspace.id)}?tab=documents&document=${encodeURIComponent(document.id)}`}><Icon name="file" size={14} /><span>{document.name}</span></a>) : <span className="small muted">Henüz dosya yüklenmedi.</span>}<a className="file-upload-link" href={`#/matters/${encodeURIComponent(workspace.id)}?tab=documents`}><Icon name="upload" size={14} />Dosya yükle</a></div>}</div>;
