@@ -2428,5 +2428,29 @@ unchanged. All seven jobs, two workers, existing caps and exclusive full test
 partition remain. Legal/corpus qualification, productivity, deployment and lawyer
 acceptance stay separate; R03/R05 remain partial.
 
-Next: bounded selected-versus-current review-head/version comparison with explicit
-fresh follow-up navigation, preserving exact filters, evidence and immutable history.
+### R03/R05A selected-versus-current portfolio return comparison
+
+[Return identity comparison](PORTFOLIO_RETURN_COMPARISON.md) shows separately timed
+original and fresh review-head/current-version identities, alongside the unchanged
+frozen evidence and selected historical event. The closed session-only intent now
+retains the original head declaration and first version-observation time; follow-up
+navigation cannot silently rebase these observations. Unknown values stay unknown.
+
+Same/different identities are not legal effects, ancestry, current source permission
+or independent approval. Frozen-versus-current version and selected-versus-head
+relations remain separate. Explicit typed head/event/context follow-up retains the
+exact customer/workspace/source-date filters and bounded intent token, requires
+fresh matter authorization, and verifies frozen version/manifest and captured
+selected-event hashes before tools. Mismatches, pending/unavailable states and
+bounded-window omissions never promote readiness or inherit review decisions.
+
+Qualification covers baseline preservation, same/changed/unknown identities,
+pending/unavailable metadata, actual invented-record review/version append through
+authorized APIs, pinned follow-up, source withdrawal, real PostgreSQL races,
+late scope/session retirement and narrow layout. All seven jobs, two workers,
+existing caps and complete exclusive partition remain. National/legal coverage,
+professional independence, productivity, deployment and lawyer acceptance stay
+separate; R03/R05 remain partial.
+
+Next: guarded comparison-to-renewal preparation with separate successor navigation,
+exact portfolio filters, fresh source research and new independent review.

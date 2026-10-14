@@ -5,7 +5,9 @@ import { formatDate, messageOf } from '../utils';
 import { usePortfolio, workspaceQuery } from '../workbench/portfolio';
 import { captureReturn, portfolioPart, queueReturnHref, reconcileReturn, type ReturnIntent, type ReturnReconciliation } from '../workbench/portfolioReturn';
 import { canonicalJson, SourceReadFence } from './matter/sourceReviewTypes';
-import { sourceContextHref, verifyNavigation, type NavigationMetadata, type SourceTarget } from './sourceContextNavigationTypes';
+import { verifyNavigation, type NavigationMetadata, type SourceTarget } from './sourceContextNavigationTypes';
+import { returnComparisonLinks } from '../workbench/returnComparison';
+import ReturnIdentityComparison, { type ReturnLinks } from './ReturnIdentityComparison';
 import { verifyReviewLineage, type ReviewLineage } from './sourceReviewLineageTypes';
 import { queueFilters, queueQuery, sourceQueueHref, verifyPortfolioQueue, type PortfolioQueuePage } from './portfolioSourceQueueTypes';
 import { PortfolioQueueResults } from './PortfolioSourceReviewQueue';
@@ -20,16 +22,14 @@ export function ReturnFilterSummary({ intent }: { intent: ReturnIntent }) {
     <p className="small muted">Bu seçim yalnızca dönüş niyetidir. Önceki sonuçlar, alıntılar, yorumlar, inceleme onayı ve kaynak izinleri geri yüklenmez.</p>
   </Detail></section>;
 }
-export function ReturnReconciliationPanel({ value, reopen }: { value: ReturnReconciliation; reopen: string | null }) {
+export function ReturnReconciliationPanel({ value, links }: { value: ReturnReconciliation; links: ReturnLinks }) {
   return <section aria-label="Seçilen kaydın yeni portföy gözlemi">
-    <h3>Seçilen kaydın yeni gözlemi</h3><p className="small muted">Kuyruk gözlemi: {formatDate(value.queue_observed_at, true)}{value.target_observed_at && ` · Kayıt kimliği gözlemi: ${formatDate(value.target_observed_at, true)}`}. Ayrı gözlemler tek bir atomik an değildir; kaynaklar kontrol edilmedi.</p>
+    <h3>Seçilen kaydın yeni gözlemi</h3><p className="small muted">Kuyruk gözlemi: {formatDate(value.queue_observed_at, true)}{value.state === 'observed' && ` · Kayıt kimliği gözlemi: ${formatDate(value.target_observed_at, true)}`}. Ayrı gözlemler tek bir atomik an değildir; kaynaklar kontrol edilmedi.</p>
     {value.state === 'not_observed' ? <Notice>Seçilen kayıt bu sınırlı pencerede gözlenmedi. Silindiği, erişimin kaybolduğu veya tüm portföyün incelendiği sonucuna varılmaz. Pencereler kendiliğinden taranmaz.</Notice> : <>
       <p>Sabit bağlam ve kanıt sürümü kimlikleri eşleşiyor. Bu eşleşme içerik güncelliği veya hukuki hazır olma değildir.</p>
-      {value.head_changed && <Notice>İncelemeye giderken gözlenen karar başı değişti. Önceki karar korunur; yeni başın kimliği ayrıca gözlenir.</Notice>}
-      {value.current_version_changed && <Notice>Mevcut son analiz sürümü değişti. Sabit kanıt sürümü değiştirilmedi; yeni inceleme gerekebilir.</Notice>}
       <p>Özel dayanak gözlemi: {value.private_state === 'unchanged' ? 'Değişiklik gözlenmedi' : value.private_state === 'changed' ? 'Değişiklik gözlendi' : 'Bilinmiyor'} · Bağlam kabulü: {value.context_state === 'complete' ? 'Tamamlandı' : value.context_state === 'pending' ? 'Bekliyor' : 'Doğrulanamadı'} · Karar kabulü: {value.review_state === 'complete' ? 'Tamamlandı' : value.review_state === 'pending' ? 'Bekliyor' : 'Karar yok veya doğrulanamadı'}</p>
       {value.selected_review_state && <p>Seçilen tarihsel inceleme: {value.selected_review_state === 'reviewed_conditional' ? 'Koşullu inceleme kaydedildi' : value.selected_review_state === 'changes_requested' ? 'Değişiklik istendi' : 'Doğrulanamadı'}. Güncel kararın veya kaynak izninin yerine geçmez.</p>}
-      {reopen && <a className="text-link" href={reopen}>Seçilen kaydın tam kimliğini yeniden aç</a>}
+      <ReturnIdentityComparison value={value.comparison} links={links} />
     </>}
   </section>;
 }
@@ -71,7 +71,7 @@ function ReturnWorkspace({ intent, token }: { intent: ReturnIntent; token: strin
     <ReturnFilterSummary intent={intent} />
     {error && <Notice error>{error}</Notice>}{scopeError && <Notice error>{scopeError}</Notice>}
     {!prepared || !matching ? <button className="button secondary" disabled={busy} onClick={prepare}>Dönüş filtrelerini uygula ve hazırla</button> : <><p className="small muted">Tam müvekkil ve çalışma alanı tarih filtreleri soldaki portföye uygulandı. Kaynak kayıt tarihleri yukarıdaki niyette ayrı korunur.</p><button className="button secondary" disabled={busy || loading || !!scopeError} onClick={() => void observe(0)}>Aynı filtrelerle yeni portföy gözlemi yap</button></>}
-    {comparison && visible && <ReturnReconciliationPanel value={comparison} reopen={sourceContextHref(intent.target.matter_id, intent.target.analysis_id, intent.target.context_id, intent.target.review_id || undefined, token)} />}
+    {comparison && visible && <ReturnReconciliationPanel value={comparison} links={returnComparisonLinks(intent, comparison, token)} />}
     {page && visible && <PortfolioQueueResults page={page} busy={busy} next={() => void observe(page.coverage.next_offset!)} open={(item, event) => { event.preventDefault(); if (busy) return; try { const next = returns.put(captureReturn(page, item)); window.location.hash = sourceQueueHref(item, next)!; } catch (cause) { setPage(null); setComparison(null); setError(messageOf(cause)); } }} />}
     <p><a className="text-link" href={queueReturnHref()!}>Yeni filtrelerle ayrı kaynak kuyruğu hazırla</a></p>
   </>;

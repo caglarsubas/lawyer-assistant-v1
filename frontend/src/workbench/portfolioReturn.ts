@@ -3,6 +3,7 @@ import type { PortfolioQueueFilters, PortfolioQueueItem, PortfolioQueuePage } fr
 import { canonicalJson } from '../pages/matter/sourceReviewTypes';
 import { navigationContextId, navigationIdentifier, navigationReviewId, type NavigationMetadata, type SourceTarget } from '../pages/sourceContextNavigationTypes';
 import type { ReviewLineage } from '../pages/sourceReviewLineageTypes';
+import { compareReturnIdentities, verifyReturnSelection, type ReturnComparison } from './returnComparison';
 
 export const returnToken = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{32}$/.test(value);
 const sha = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
@@ -10,8 +11,9 @@ const stamp = (value: unknown) => typeof value === 'string' && value.length <= 4
 const keys = (value: object, names: string[]) => canonicalJson(Object.keys(value).sort()) === canonicalJson(names.sort());
 const day = (value: string) => value === '' || /^\d{4}-\d{2}-\d{2}$/.test(value) && value.slice(0, 4) !== '0000' && Number.isFinite(Date.parse(value + 'T00:00:00Z')) && new Date(value + 'T00:00:00Z').toISOString().slice(0, 10) === value;
 export type ReturnTarget = { matter_id: string; analysis_id: string; context_id: string; version_id: string | null; manifest_sha256: string | null;
-  head_id: string | null; current_version_id: string | null; review_id: string | null; review_packet_sha256: string | null; observed_at: string };
-export type ReturnIntent = { recipe: 'private-portfolio-return-intent-v1'; filters: PortfolioQueueFilters; target: ReturnTarget };
+  head_id: string | null; head_state: NavigationMetadata['historical_review']['state']; current_version_id: string | null; version_observed_at: string | null;
+  review_id: string | null; review_packet_sha256: string | null; observed_at: string };
+export type ReturnIntent = { recipe: 'private-portfolio-return-intent-v2'; filters: PortfolioQueueFilters; target: ReturnTarget };
 export type QueueDestination = { kind: 'work' | 'invalid' } | { kind: 'sources'; return_token?: string };
 export const queueReturnHref = (token?: string) => token === undefined ? '#/work?view=source-reviews' : returnToken(token) ? `#/work?view=source-reviews&return=${token}` : null;
 export function queueDestination(params: URLSearchParams, pathname = '/work'): QueueDestination {
@@ -24,7 +26,7 @@ export function queueDestination(params: URLSearchParams, pathname = '/work'): Q
 }
 export function validateReturn(value: ReturnIntent) {
   const fail = () => { throw new Error('Portföy dönüşünün tam filtre veya kayıt bağı doğrulanamadı.'); };
-  if (!value || !keys(value, ['recipe', 'filters', 'target']) || value.recipe !== 'private-portfolio-return-intent-v1') fail();
+  if (!value || !keys(value, ['recipe', 'filters', 'target']) || value.recipe !== 'private-portfolio-return-intent-v2') fail();
   const f = value.filters, t = value.target;
   if (!f || !keys(f, ['customer_ids', 'date_field', 'date_from', 'date_to', 'source_date_from', 'source_date_to', 'bucket'])
     || !Array.isArray(f.customer_ids) || f.customer_ids.length > 100 || f.customer_ids.some(id => !navigationIdentifier(id))
@@ -32,26 +34,34 @@ export function validateReturn(value: ReturnIntent) {
     || !['created_at', 'updated_at', 'relevant_date'].includes(f.date_field) || !['all', 'action_required'].includes(f.bucket)) fail();
   for (const key of ['date_from', 'date_to', 'source_date_from', 'source_date_to'] as const) if (typeof f[key] !== 'string' || !day(f[key])) fail();
   if (f.date_from && f.date_to && f.date_from > f.date_to || f.source_date_from && f.source_date_to && f.source_date_from > f.source_date_to) fail();
-  if (!t || !keys(t, ['matter_id', 'analysis_id', 'context_id', 'version_id', 'manifest_sha256', 'head_id', 'current_version_id', 'review_id', 'review_packet_sha256', 'observed_at'])
+  if (!t || !keys(t, ['matter_id', 'analysis_id', 'context_id', 'version_id', 'manifest_sha256', 'head_id', 'head_state', 'current_version_id', 'version_observed_at', 'review_id', 'review_packet_sha256', 'observed_at'])
     || !navigationIdentifier(t.matter_id) || !navigationIdentifier(t.analysis_id) || !navigationContextId(t.context_id) || !stamp(t.observed_at)
     || t.version_id !== null && !navigationIdentifier(t.version_id) || t.current_version_id !== null && !navigationIdentifier(t.current_version_id)
     || t.manifest_sha256 !== null && !sha(t.manifest_sha256) || t.head_id !== null && !navigationReviewId(t.head_id)
+    || !['unknown', 'unreviewed', 'changes_requested', 'reviewed_conditional'].includes(t.head_state)
+    || t.head_state === 'unreviewed' && t.head_id !== null || ['changes_requested', 'reviewed_conditional'].includes(t.head_state) && t.head_id === null
+    || t.version_observed_at !== null && !stamp(t.version_observed_at) || t.current_version_id !== null && t.version_observed_at === null
     || t.review_id !== null && !navigationReviewId(t.review_id) || t.review_packet_sha256 !== null && !sha(t.review_packet_sha256)
     || (t.review_id === null && t.review_packet_sha256 !== null) || (t.version_id === null) !== (t.manifest_sha256 === null)) fail();
 }
 export function captureReturn(page: PortfolioQueuePage, item: PortfolioQueueItem): ReturnIntent {
   if (!item.analysis_id || !page.items.includes(item)) throw new Error('Seçilen portföy kaydı bu gözlemde yok.');
-  const value: ReturnIntent = { recipe: 'private-portfolio-return-intent-v1', filters: structuredClone(page.filters), target: {
+  const value: ReturnIntent = { recipe: 'private-portfolio-return-intent-v2', filters: structuredClone(page.filters), target: {
     matter_id: item.matter_id, analysis_id: item.analysis_id, context_id: item.id, version_id: item.version_id || null, manifest_sha256: item.manifest_sha256 || null,
-    head_id: item.historical_review.id, current_version_id: null, review_id: null, review_packet_sha256: null, observed_at: page.observed_at } };
+    head_id: item.historical_review.id, head_state: item.historical_review.state, current_version_id: null, version_observed_at: null,
+    review_id: null, review_packet_sha256: null, observed_at: page.observed_at } };
   validateReturn(value); return value;
 }
 export function returnMatches(value: ReturnIntent, target: SourceTarget) { return value.target.matter_id === target.matter_id && value.target.analysis_id === target.analysis_id && value.target.context_id === target.context_id; }
 export function departingReturn(value: ReturnIntent, meta: NavigationMetadata | null, lineage: ReviewLineage | null, reviewId?: string): ReturnIntent {
-  if (meta && (value.target.matter_id !== meta.matter_id || value.target.analysis_id !== meta.analysis_id || value.target.context_id !== meta.context_id
-    || value.target.version_id !== meta.context.version_id || value.target.manifest_sha256 !== meta.context.manifest_sha256 || meta.integrity !== 'verified')) throw new Error('Sabit portföy seçimi değişti; dönüş yeniden kurulmalıdır.');
+  if (lineage && !meta) throw new Error('Seçilen kararın bağlam gözlemi yok; dönüş kurulmadı.');
+  if (meta) verifyReturnSelection(value, meta, lineage, reviewId);
   const next = structuredClone(value);
-  next.target.current_version_id = meta?.analysis.current_version_id || null;
+  // A follow-up observation must not silently replace the original comparison baseline.
+  if (next.target.version_observed_at === null && meta) {
+    next.target.current_version_id = meta.analysis.current_version_id;
+    next.target.version_observed_at = meta.observed_at;
+  }
   next.target.review_id = reviewId || null; next.target.review_packet_sha256 = lineage?.selected_review.packet_sha256 || null;
   if (lineage && lineage.selected_review.id !== reviewId) throw new Error('Seçilen inceleme kimliği eşleşmiyor.');
   validateReturn(next); return next;
@@ -77,8 +87,9 @@ export class PrincipalReturnBook {
     return this.book;
   }
 }
-export type ReturnReconciliation = { state: 'not_observed' | 'observed'; head_changed?: boolean; current_version_changed?: boolean;
-  private_state?: string; context_state?: string; review_state?: string; selected_review_state?: string; queue_observed_at: string; target_observed_at?: string };
+export type ReturnReconciliation = { state: 'not_observed'; queue_observed_at: string } | { state: 'observed'; comparison: ReturnComparison;
+  private_state: PortfolioQueueItem['private_observation']['state']; context_state: NavigationMetadata['admission']['context_state']; review_state: NavigationMetadata['admission']['review_state'];
+  selected_review_state?: string; queue_observed_at: string; target_observed_at: string };
 export function reconcileReturn(intent: ReturnIntent, page: PortfolioQueuePage, meta: NavigationMetadata | null, lineage: ReviewLineage | null): ReturnReconciliation {
   validateReturn(intent);
   if (canonicalJson(page.filters) !== canonicalJson(intent.filters)) throw new Error('Dönüşün tam filtreleri değişti; yeniden hazırlayın.');
@@ -88,8 +99,7 @@ export function reconcileReturn(intent: ReturnIntent, page: PortfolioQueuePage, 
     || item.version_id !== t.version_id || item.manifest_sha256 !== t.manifest_sha256 || meta.context.version_id !== t.version_id || meta.context.manifest_sha256 !== t.manifest_sha256
     || item.historical_review.id !== meta.historical_review.id || item.historical_review.state !== meta.historical_review.state) throw new Error('Kuyruk ve seçilen kaydın ayrı gözlemleri eşleşmiyor; yeniden gözlemleyin.');
   if (t.review_id && (!lineage || lineage.selected_review.id !== t.review_id || t.review_packet_sha256 !== null && lineage.selected_review.packet_sha256 !== t.review_packet_sha256)) throw new Error('Seçilen tarihsel inceleme değişti; başka karar kullanılmaz.');
-  return { state: 'observed', head_changed: meta.historical_review.id !== t.head_id,
-    current_version_changed: t.current_version_id !== null && meta.analysis.current_version_id !== t.current_version_id,
+  return { state: 'observed', comparison: compareReturnIdentities(intent, meta, lineage),
     private_state: item.private_observation.state, context_state: meta.admission.context_state, review_state: meta.admission.review_state,
     selected_review_state: lineage?.selected_review.state, queue_observed_at: page.observed_at, target_observed_at: meta.observed_at };
 }
