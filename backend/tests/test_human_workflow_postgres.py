@@ -211,11 +211,11 @@ def test_recipient_removal_waits_for_admitted_opinion_body_with_case_scope_retai
         other.close()
 
 
-@pytest.mark.parametrize("observation", ["readiness", "navigation"])
+@pytest.mark.parametrize("observation", ["readiness", "navigation", "lineage"])
 def test_source_readiness_waits_for_independent_review_and_observes_exact_new_head(workspace, monkeypatch, observation):
     from test_analysis_workbench import build_workbench
     from test_authority_adjudications import reviewer
-    from test_source_analysis_reviews import freeze, review_request, setup
+    from test_source_analysis_reviews import freeze, record, review_request, setup
 
     from app import source_analysis_reviews
 
@@ -224,6 +224,10 @@ def test_source_readiness_waits_for_independent_review_and_observes_exact_new_he
     endpoint, spec, *_ = setup(workbench, monkeypatch)
     context, _ = freeze(client, endpoint, spec)
     reviewer(workbench)
+    selected_review = None
+    if observation == 'lineage':
+        initial_path, initial_body = review_request(client, endpoint, context['id'])
+        selected_review = record(client, initial_path, initial_body)['review']['id']
     review_path, body = review_request(client, endpoint, context['id'])
     entered, release = Event(), Event()
     audit = source_analysis_reviews._audit
@@ -240,7 +244,9 @@ def test_source_readiness_waits_for_independent_review_and_observes_exact_new_he
         try:
             assert entered.wait(5)
             with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
-                second = pool.submit(client.get, endpoint + ('/readiness' if observation == 'readiness' else '/' + context['id'] + '/navigation-context'))
+                route = '/readiness' if observation == 'readiness' else '/' + context['id'] + (
+                    '/reviews/' + selected_review + '/navigation-context' if observation == 'lineage' else '/navigation-context')
+                second = pool.submit(client.get, endpoint + route)
                 assert observed[0].wait(5)
                 assert wait_until_blocked(app.state.store.engine, observed[1][-1])
                 assert not second.done()
@@ -250,6 +256,12 @@ def test_source_readiness_waits_for_independent_review_and_observes_exact_new_he
         observed = second.result(timeout=10)
         assert saved.status_code == 201 and observed.status_code == 200
     item = observed.json()['items'][0] if observation == 'readiness' else observed.json()
+    if observation == 'lineage':
+        assert item['selected_review']['id'] == selected_review
+        assert item['current_head']['id'] == saved.json()['review']['id']
+        assert item['head_relationship'] == 'different_from_head'
+        assert item['source_verification'] == 'not_checked' and 'PRIVATE REVIEW NOTE' not in observed.text
+        return
     assert item['historical_review']['id'] == saved.json()['review']['id']
     assert item['historical_review']['state'] == 'reviewed_conditional'
     assert item['source_verification'] == 'not_checked' and item['legal_readiness'] == 'not_established'

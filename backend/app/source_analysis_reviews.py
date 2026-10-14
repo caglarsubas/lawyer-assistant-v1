@@ -18,6 +18,7 @@ from . import analysis_authorities as authorities
 from . import analysis_reviews, analysis_workbench
 from . import source_context_navigation as navigation
 from . import source_context_renewals as renewals
+from . import source_review_lineage as lineage
 from . import source_review_readiness as readiness
 from .analysis_adjudication import target_values
 from .auth import authenticate, require_child, require_matter
@@ -698,6 +699,13 @@ def source_analysis_router():
                 Record.firm_id == user.firm_id, Record.id.startswith(prefix))
                 .order_by(Record.created_at.desc(), Record.id).limit(limit).offset(offset))
             return [{'id': row.id, 'recorded_by': row.owner_id, 'recorded_at': row.created_at} for row in rows]
+
+    @router.get('/{context_id}/reviews/{review_id}/navigation-context')
+    def review_navigation(matter_id: str, analysis_id: str, context_id: str, review_id: str, request: Request,
+                          user=Depends(authenticate), window: int = Query(default=lineage.MAX_WINDOW, ge=1, le=lineage.MAX_WINDOW)):
+        store = request.app.state.store
+        with store.session() as session:
+            return lineage.metadata(store, session, matter_id, analysis_id, context_id, review_id, user, window=window)
 
     @router.get('/{context_id}/reviews/{review_id}')
     def review_detail(matter_id: str, analysis_id: str, context_id: str, review_id: str, request: Request, user=Depends(authenticate)):

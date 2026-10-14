@@ -237,6 +237,13 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
                 response = restarted.get(source_context_path + '/readiness')
                 portfolio_response = restarted.get('/api/v1/work/source-reviews')
                 selected_response = restarted.get(source_context_path + '/' + source_context['id'] + '/navigation-context')
+                lineage_response = restarted.get(source_context_path + '/' + source_context['id'] + '/reviews/' + reviewed['review']['id'] + '/navigation-context')
+            assert lineage_response.status_code == 200, lineage_response.text
+            lineage = lineage_response.json()
+            assert lineage['selected_review']['id'] == reviewed['review']['id']
+            assert lineage['selected_review']['manifest_sha256'] == source_context['manifest_sha256']
+            assert lineage['source_verification'] == 'not_checked' and lineage['lineage']['head_reachability'] == 'not_checked'
+            assert 'PRIVATE REVIEW NOTE' not in lineage_response.text and 'analysis_content' not in lineage_response.text
             assert selected_response.status_code == 200, selected_response.text
             selected = selected_response.json()
             assert selected['context']['manifest_sha256'] == source_context['manifest_sha256']

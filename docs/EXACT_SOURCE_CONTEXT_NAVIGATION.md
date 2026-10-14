@@ -69,5 +69,7 @@ withdrawal, malformed routing and narrow viewports. These establish engineering
 behavior; national legal coverage, legal accuracy, productivity, deployment and
 lawyer acceptance require their separate qualification gates.
 
-Next: exact historical-review selection and metadata-only review lineage, with
-explicit guarded access to the selected event and preservation of the current head.
+[Exact historical-review selection and metadata lineage](EXACT_HISTORICAL_REVIEW_LINEAGE.md)
+now provide a separate exact event view and explicit guarded inspection.
+
+Next: guarded portfolio-queue return with exact bounded filters and fresh observation.
