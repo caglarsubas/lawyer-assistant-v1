@@ -16,6 +16,7 @@ from sqlalchemy import select
 
 from . import analysis_authorities as authorities
 from . import analysis_reviews, analysis_workbench
+from . import source_context_renewals as renewals
 from .analysis_adjudication import target_values
 from .auth import authenticate, require_child, require_matter
 from .db import Record, User, digest, now
@@ -70,6 +71,7 @@ class Specification(StrictInput):
     title: str = Field(min_length=3, max_length=200)
     purpose: str = Field(min_length=3, max_length=2000)
     selections: list[Selection] = Field(min_length=1, max_length=8)
+    renewal: renewals.Renewal | None = None
 
     @model_validator(mode='after')
     def distinct(self):
@@ -113,10 +115,13 @@ class ReviewInput(StrictInput):
     decision: Literal['reviewed_conditional', 'changes_requested']
     sources: list[SourceAssessment] = Field(min_length=1, max_length=8)
     note: str = Field(min_length=3, max_length=2000)
+    renewal_assessment: renewals.Assessment | None = None
 
     @model_validator(mode='after')
     def bounded(self):
         outcomes = {item.outcome for source in self.sources for item in source.observations}
+        if self.renewal_assessment:
+            outcomes.add(self.renewal_assessment.outcome)
         if (len({item.passage_id for item in self.sources}) != len(self.sources)
                 or len(self.note.strip()) < 3 or len(canonical(self.model_dump()).encode()) > 128 * 1024
                 or (self.decision == 'reviewed_conditional' and outcomes != {'confirmed'})
@@ -160,7 +165,7 @@ def _analysis_pin(store, session, matter_id, analysis_id, value, user):
 
 
 @contextmanager
-def _operation(app, session, matter_id, analysis_id, version_id, product_id, user):
+def _operation(app, session, matter_id, analysis_id, version_id, product_id, user, *, renewal=None):
     """Check existing authority dependencies sequentially, outside our source guard.
 
     The matter row serializes sanctioned private edits/reviews. A final complete
@@ -175,13 +180,19 @@ def _operation(app, session, matter_id, analysis_id, version_id, product_id, use
     pin = _analysis_pin(store, session, matter_id, analysis_id, prepared, user)
     _, public, _, _ = _product(store, session, matter_id, product_id, user)
     public_sha = digest(canonical(public))
+    lineage = renewals.parent(store, session, matter_id, analysis_id, renewal, user) if renewal else None
+    if renewal:
+        renewals.retained_sources(app, session, matter_id, analysis_id, renewal, user)
     with authorities._guard(app, public):
         yield prepared
+    if renewal:
+        renewals.retained_sources(app, session, matter_id, analysis_id, renewal, user)
     session.expire_all()
     current = authorities._analysis(store, session, matter_id, analysis_id, version_id, user)
     _, public, _, _ = _product(store, session, matter_id, product_id, user)
     if (_analysis_pin(store, session, matter_id, analysis_id, current, user) != pin
-            or digest(canonical(public)) != public_sha):
+            or digest(canonical(public)) != public_sha
+            or (renewal and renewals.parent(store, session, matter_id, analysis_id, renewal, user) != lineage)):
         raise HTTPException(409, 'İşlem sırasında özel analiz veya araştırma dayanakları değişti.')
 
 
@@ -198,6 +209,18 @@ def _private_analysis(store, session, matter_id, analysis_id, version_id, user, 
             or store.decode(row)['latest_version_id'] != version_id):
         raise HTTPException(409, 'Özel analiz dayanakları değişti; yeniden inceleme gerekli.')
     return row, snapshot, content, context
+
+
+def _spec_value(spec, exclude=None):
+    value = spec.model_dump(exclude=exclude or set())
+    # Preserve v1 manifests and idempotency hashes when renewal is absent.
+    if value.get('renewal') is None:
+        value.pop('renewal', None)
+    return value
+
+
+def _manifest_spec(manifest):
+    return Specification.model_validate({key: manifest[key] for key in Specification.model_fields if key in manifest})
 
 
 def _preview(app, session, matter_id, analysis_id, spec, user, prepared):
@@ -222,7 +245,7 @@ def _preview(app, session, matter_id, analysis_id, spec, user, prepared):
         evidence = _project(release, URIRef(selected.passage_id))
         sources.append({'selection': selected.model_dump(), 'evidence': evidence,
             'target_snapshots': {key: targets[key] for key in selected.target_ids}})
-    manifest = {'recipe': RECIPE, 'matter_id': matter_id, 'analysis_id': analysis_id, **spec.model_dump(),
+    manifest = {'recipe': RECIPE, 'matter_id': matter_id, 'analysis_id': analysis_id, **_spec_value(spec),
         'analysis_author_id': version['authored_by'], 'analysis_owner_id': row.owner_id, 'analysis_revision': row.revision,
         'analysis_content_sha256': context['content_sha256'], 'analysis_content': content,
         'analysis_review_id': context['expected_review_id'],
@@ -235,6 +258,9 @@ def _preview(app, session, matter_id, analysis_id, spec, user, prepared):
         'matter_applicability': 'not_assessed', 'temporal_applicability': 'not_assessed',
         'finality': 'unknown', 'legal_approval': 'not_granted', 'qualification_granted': False,
         'production_qualified': False, 'model_use': 'none', 'runtime_authorization': 'none'}
+    if spec.renewal:
+        manifest['renewal_comparison'] = renewals.comparison(store, session, matter_id, analysis_id, spec.renewal, manifest, user)
+        manifest['renewal_comparison_sha256'] = digest(canonical(manifest['renewal_comparison']))
     # A complete 128 KiB review and response envelope must still fit later.
     return _bounded({'manifest': manifest, 'preview_sha256': digest(canonical(manifest))}, reserve=140000)
 
@@ -296,7 +322,7 @@ def _inspect(app, session, matter_id, analysis_id, ident, user, prepared, review
     if not proof.get('guard_completed'):
         reasons.append('post_commit_authorization_pending')
     try:
-        spec = Specification.model_validate({key: packet['manifest'][key] for key in Specification.model_fields})
+        spec = _manifest_spec(packet['manifest'])
         current = _preview(app, session, matter_id, analysis_id, spec, user, prepared)
         if current['preview_sha256'] != packet['manifest_sha256']:
             reasons.append('private_or_research_basis_changed')
@@ -337,7 +363,8 @@ def _read(app, session, matter_id, analysis_id, ident, user, review_id=None):
     require_child(session, analysis_id, 'practice_analysis', matter_id, user)
     _, packet, _, _ = _require(store, session, matter_id, analysis_id, ident, user)
     try:
-        with _operation(app, session, matter_id, analysis_id, packet['manifest']['version_id'], packet['manifest']['product_id'], user) as prepared:
+        with _operation(app, session, matter_id, analysis_id, packet['manifest']['version_id'], packet['manifest']['product_id'], user,
+                        renewal=packet['manifest'].get('renewal')) as prepared:
             result = _inspect(app, session, matter_id, analysis_id, ident, user, prepared, review_id)
             require_child(session, ident, KIND, matter_id, user)
         _post_review_check(store, session, matter_id, analysis_id, ident, user, packet, result)
@@ -403,6 +430,21 @@ def _validate_review(body, packet):
     actual = {tuple(getattr(source, key) for key in IDENTITY): set(source.target_ids) for source in body.sources}
     if actual != expected:
         raise HTTPException(422, 'Her tam kaynak ve bağlı analiz adımı ayrı ve eksiksiz değerlendirilmelidir.')
+    comparison = packet['manifest'].get('renewal_comparison')
+    if comparison:
+        sha = digest(canonical(comparison))
+        if (not body.renewal_assessment or body.renewal_assessment.expected_comparison_sha256 != sha
+                or packet['manifest'].get('renewal_comparison_sha256') != sha):
+            raise HTTPException(422, 'Tam yenileme eşlemesi için ayrı ve açıklanmış bağımsız değerlendirme gerekli.')
+    elif body.renewal_assessment:
+        raise HTTPException(422, 'Bu bağlamda yenileme karşılaştırması bulunmuyor.')
+
+
+def _review_value(body, exclude=None):
+    value = body.model_dump(exclude=exclude or set())
+    if value.get('renewal_assessment') is None:
+        value.pop('renewal_assessment', None)
+    return value
 
 
 def _pending(ident):
@@ -419,6 +461,12 @@ def _export_lines(value):
         'Kaynak bağlamı SHA-256: ' + value['manifest_sha256'], 'Yayın: ' + canonical(manifest['graph_release_pin']),
         'Derlem kapsamı: ' + canonical(manifest['coverage']), *manifest['limitations'],
         'Olay tarihi: ' + str(manifest['event_date']), 'Hukuki ve zamansal uygulanabilirlik: değerlendirilmedi. Kesinleşme: bilinmiyor.']
+    if manifest.get('renewal_comparison'):
+        lines.extend(['Açık kaynak bağlamı yenilemesi; önceki kararlar devralınmaz.',
+                      'Yenileme karşılaştırması SHA-256:', manifest['renewal_comparison_sha256'],
+                      'Önceki kaynak bağlamı:', manifest['renewal_comparison']['parent_context_id'],
+                      'Yenileme gerekçesi:', manifest['renewal']['reason'],
+                      'Tam sürüm ve eşleme kaydı:', canonical(manifest['renewal_comparison'])])
     for source in manifest['sources']:
         selected, evidence = source['selection'], source['evidence']
         lines.extend(['Seçimi yapan avukatın beyanı: ' + selected['relationship'], selected['note'],
@@ -434,6 +482,10 @@ def _export_lines(value):
         lines.extend(['İncelemecinin bağlantı beyanı: ' + source['relationship'], source['note'],
                       'Hedefler: ' + ', '.join(source['target_ids']), 'Pasaj: ' + source['passage_id']])
         lines.extend(item['dimension'] + ' / ' + item['outcome'] + ': ' + item['note'] for item in source['observations'])
+    if event['input'].get('renewal_assessment'):
+        assessment = event['input']['renewal_assessment']
+        lines.extend(['Bağımsız yenileme değerlendirmesi:', 'Karşılaştırma SHA-256:', assessment['expected_comparison_sha256'],
+                      'İncelemecinin beyanı: ' + assessment['outcome'], assessment['note']])
     return lines
 
 
@@ -460,7 +512,7 @@ def source_analysis_router():
         with store.session() as session:
             matter = require_matter(session, matter_id, user)
             session.refresh(matter, with_for_update=True)
-            with _operation(app, session, matter_id, analysis_id, body.version_id, body.product_id, user) as prepared:
+            with _operation(app, session, matter_id, analysis_id, body.version_id, body.product_id, user, renewal=body.renewal) as prepared:
                 result = _preview(app, session, matter_id, analysis_id, body, user, prepared)
             require_child(session, analysis_id, 'practice_analysis', matter_id, user)
             return result
@@ -470,7 +522,7 @@ def source_analysis_router():
         app, store = request.app, request.app.state.store
         spec = Specification.model_validate(body.model_dump(exclude={'request_id', 'expected_preview_sha256'}))
         ident = _prefix(matter_id, analysis_id) + digest(user.id + ':' + body.request_id)[:32]
-        request_sha = digest(canonical(body.model_dump(exclude={'request_id'})))
+        request_sha = digest(canonical(_spec_value(body, {'request_id'})))
         committed = False
         try:
             with store.session() as session:
@@ -483,7 +535,7 @@ def source_analysis_router():
                     return _read(app, session, matter_id, analysis_id, ident, user)
                 if store.decode(matter).get('status') == 'archived':
                     raise HTTPException(409, 'Arşivlenmiş alanda kayıt oluşturulamaz.')
-                with _operation(app, session, matter_id, analysis_id, spec.version_id, spec.product_id, user) as prepared:
+                with _operation(app, session, matter_id, analysis_id, spec.version_id, spec.product_id, user, renewal=spec.renewal) as prepared:
                     value = _preview(app, session, matter_id, analysis_id, spec, user, prepared)
                     if value['preview_sha256'] != body.expected_preview_sha256:
                         raise HTTPException(409, 'Önizleme değişti; dayanakları yeniden açın.')
@@ -521,6 +573,18 @@ def source_analysis_router():
         with request.app.state.store.session() as session:
             return _read(request.app, session, matter_id, analysis_id, context_id, user)
 
+    @router.get('/{context_id}/renewal-context')
+    def renewal_context(matter_id: str, analysis_id: str, context_id: str, request: Request, user=Depends(authenticate)):
+        store = request.app.state.store
+        with store.session() as session:
+            matter = require_matter(session, matter_id, user)
+            session.refresh(matter, with_for_update=True)
+            require_child(session, analysis_id, 'practice_analysis', matter_id, user)
+            result = renewals.metadata(store, session, matter_id, analysis_id, context_id, user)
+            result['can_record'] = store.decode(matter).get('status') != 'archived'
+            require_child(session, context_id, KIND, matter_id, user)
+            return _bounded(result)
+
     @router.get('/{context_id}/reviews/context')
     def review_context(matter_id: str, analysis_id: str, context_id: str, request: Request, user=Depends(authenticate)):
         app, store = request.app, request.app.state.store
@@ -528,8 +592,9 @@ def source_analysis_router():
             _, packet, _, _ = _require(store, session, matter_id, analysis_id, context_id, user)
             _reviewer(session, matter_id, user, packet)
             # Fresh source/private context may renew a revoked review; no historical event is edited.
-            with _operation(app, session, matter_id, analysis_id, packet['manifest']['version_id'], packet['manifest']['product_id'], user) as prepared:
-                spec = Specification.model_validate({key: packet['manifest'][key] for key in Specification.model_fields})
+            with _operation(app, session, matter_id, analysis_id, packet['manifest']['version_id'], packet['manifest']['product_id'], user,
+                            renewal=packet['manifest'].get('renewal')) as prepared:
+                spec = _manifest_spec(packet['manifest'])
                 current = _preview(app, session, matter_id, analysis_id, spec, user, prepared)
                 if current['preview_sha256'] != packet['manifest_sha256']:
                     raise HTTPException(409, 'Kaynak veya özel dayanaklar değişti; yeni bağlam gerekli.')
@@ -549,7 +614,7 @@ def source_analysis_router():
     def record_review(matter_id: str, analysis_id: str, context_id: str, body: ReviewInput, request: Request, user=Depends(authenticate)):
         app, store = request.app, request.app.state.store
         ident = 'sar-' + digest(context_id)[:20] + '-' + digest(user.id + ':' + body.request_id)[:32]
-        request_sha = digest(canonical(body.model_dump(exclude={'request_id'})))
+        request_sha = digest(canonical(_review_value(body, {'request_id'})))
         committed = False
         try:
             with store.session() as session:
@@ -564,9 +629,10 @@ def source_analysis_router():
                     return _read(app, session, matter_id, analysis_id, context_id, user, ident)
                 if not proof.get('guard_completed') or store.decode(matter).get('status') == 'archived':
                     raise HTTPException(409, 'Yeni inceleme için açık alan ve tamamlanmış bağlam gerekli.')
-                with _operation(app, session, matter_id, analysis_id, packet['manifest']['version_id'], packet['manifest']['product_id'], user) as prepared:
+                with _operation(app, session, matter_id, analysis_id, packet['manifest']['version_id'], packet['manifest']['product_id'], user,
+                                renewal=packet['manifest'].get('renewal')) as prepared:
                     # One guard, without calling another guarded route or lookup.
-                    spec = Specification.model_validate({key: packet['manifest'][key] for key in Specification.model_fields})
+                    spec = _manifest_spec(packet['manifest'])
                     current = _preview(app, session, matter_id, analysis_id, spec, user, prepared)
                     if current['preview_sha256'] != packet['manifest_sha256'] or body.expected_manifest_sha256 != packet['manifest_sha256']:
                         raise HTTPException(409, 'İncelenen tam kaynak veya analiz sürümü değişti.')
@@ -578,7 +644,7 @@ def source_analysis_router():
                         raise HTTPException(409, 'İnceleme sayısı sınırına ulaşıldı; ayrı yeni bağlam gerekli.')
                     _validate_review(body, packet)
                     _save_packet(store, session, matter_id, analysis_id, ident, user, {'context_id': context_id,
-                        'manifest_sha256': packet['manifest_sha256'], 'input': body.model_dump(), 'request_sha256': request_sha,
+                        'manifest_sha256': packet['manifest_sha256'], 'input': _review_value(body), 'request_sha256': request_sha,
                         'recipe': REVIEW_RECIPE, 'dimensions': DIMENSIONS, 'sequence': sequence,
                         'previous_review_id': body.expected_review_id, 'legal_approval': 'not_granted'}, review=True)
                     head_row = session.get(Record, _id('sah-', context_id))
@@ -627,7 +693,8 @@ def source_analysis_router():
             matter = require_matter(session, matter_id, user)
             session.refresh(matter, with_for_update=True)
             _, packet, _, _ = _require(store, session, matter_id, analysis_id, context_id, user)
-            with _operation(app, session, matter_id, analysis_id, packet['manifest']['version_id'], packet['manifest']['product_id'], user) as prepared:
+            with _operation(app, session, matter_id, analysis_id, packet['manifest']['version_id'], packet['manifest']['product_id'], user,
+                            renewal=packet['manifest'].get('renewal')) as prepared:
                 value = _inspect(app, session, matter_id, analysis_id, context_id, user, prepared)
                 if not value['public_source_access'] or value['review']['effective_state'] != 'reviewed_conditional':
                     raise HTTPException(409, 'Güncel bağımsız olumlu inceleme gerekli; dışa aktarım durduruldu.')

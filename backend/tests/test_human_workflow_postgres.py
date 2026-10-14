@@ -115,6 +115,51 @@ def test_competing_independent_source_reviews_serialize_exact_head(workspace, mo
     assert current['review']['snapshot']['sequence'] == 1
 
 
+def test_source_renewal_waits_for_parent_review_and_rejects_changed_parent_head(workspace, monkeypatch):
+    from uuid import uuid4
+
+    from test_analysis_workbench import build_workbench
+    from test_authority_adjudications import reviewer
+    from test_source_analysis_reviews import freeze, review_request, setup
+    from test_source_context_renewals import renewal_spec
+
+    from app import source_analysis_reviews
+
+    workbench = build_workbench(workspace)
+    app, client, *_ = workbench
+    endpoint, spec, *_ = setup(workbench, monkeypatch)
+    parent, _ = freeze(client, endpoint, spec)
+    renewal, _ = renewal_spec(client, endpoint, spec, parent['id'])
+    preview = client.post(endpoint + '/preview', json=renewal).json()
+    reviewer(workbench)
+    review_path, body = review_request(client, endpoint, parent['id'])
+    entered, release = Event(), Event()
+    audit = source_analysis_reviews._audit
+
+    def pause(*args):
+        if args[2] == 'source_analysis_review_recorded' and not entered.is_set():
+            entered.set()
+            assert release.wait(10)
+        return audit(*args)
+
+    monkeypatch.setattr(source_analysis_reviews, '_audit', pause)
+    with ThreadPoolExecutor(2) as pool:
+        first = pool.submit(client.post, review_path, json=body)
+        try:
+            assert entered.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                second = pool.submit(client.post, endpoint, json={**renewal,
+                    'expected_preview_sha256': preview['preview_sha256'], 'request_id': uuid4().hex})
+                assert observed[0].wait(5)
+                assert wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not second.done()
+        finally:
+            release.set()
+        assert first.result(timeout=10).status_code == 201
+        assert second.result(timeout=10).status_code == 409
+    assert len(client.get(endpoint).json()) == 1
+
+
 def test_recipient_removal_waits_for_admitted_opinion_body_with_case_scope_retained(workspace, monkeypatch):
     app, client, case = workspace
     admin = client.get('/api/v1/auth/me').json()['user']['id']

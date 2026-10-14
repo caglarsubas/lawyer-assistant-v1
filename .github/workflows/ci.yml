@@ -36,6 +36,8 @@ env:
     backend/tests/test_authority_revalidations.py
     backend/tests/test_source_reviews.py
     backend/tests/test_source_review_effort.py
+    backend/tests/test_source_analysis_reviews.py
+    backend/tests/test_source_context_renewals.py
 
 jobs:
   backend-and-contracts:

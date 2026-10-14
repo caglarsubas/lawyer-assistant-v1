@@ -63,6 +63,7 @@ signed-source/private-ledger and real PostgreSQL race tests remain separate.
 
 These are engineering fixtures, not national corpus, legal accuracy, independent
 professional expertise, productivity or production qualification. Deployment is
-separate. Next: explicit source-context renewal and version comparison after
-changed evidence/research, preserving original history, exact target mapping and
-fresh independent decisions. R03/R05 remain partial.
+separate. [Explicit renewal](SOURCE_CONTEXT_RENEWAL.md) now handles changed
+evidence/research with preserved original history, exact target mapping and fresh
+independent decisions. Next: authorized source-review readiness and a prioritized
+re-review queue. R03/R05 remain partial.

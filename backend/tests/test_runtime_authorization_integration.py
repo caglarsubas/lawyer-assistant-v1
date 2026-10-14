@@ -219,6 +219,17 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         from test_analysis_comparisons import login
 
         login(restarted)
+        from test_source_context_renewals import renewal_spec, reviewed_renewal
+
+        replacement_spec, _ = renewal_spec(restarted, source_context_path, spec, source_context['id'])
+        replacement, _ = freeze(restarted, source_context_path, replacement_spec)
+        assert replacement['review']['snapshot'] is None
+        login(restarted, 'reviewer')
+        renewal_review_path, renewal_review_body = reviewed_renewal(restarted, source_context_path, replacement)
+        replacement_review = record(restarted, renewal_review_path, renewal_review_body)
+        assert replacement_review['review']['snapshot']['input']['renewal_assessment']['outcome'] == 'confirmed'
+        assert restarted.get(source_context_path + '/' + replacement['id'] + '/export').status_code == 200
+        login(restarted)
         changed = assess(restarted, base + '/review', 6, 'rights', decision='needs_changes')
         assert changed.status_code == 200
         assert app.state.graph.release_status()['status'] == 'unavailable'
@@ -241,6 +252,9 @@ def test_main_wires_real_private_guard_and_live_rights_revocation(authorized, tm
         assert withdrawn.json()['review']['snapshot'] is None
         assert 'PRIVATE REVIEW NOTE' not in withdrawn.text
         assert restarted.get(source_context_path + '/' + source_context['id'] + '/export').status_code == 409
+        renewed_withdrawn = restarted.get(source_context_path + '/' + replacement['id'])
+        assert renewed_withdrawn.json()['manifest'] is None and renewed_withdrawn.json()['review']['snapshot'] is None
+        assert restarted.get(source_context_path + '/' + replacement['id'] + '/export').status_code == 409
         import pytest
         with pytest.raises(IndexBuildError) as denied:
             build_index(app.state.graph.release, 'http://opensearch:9200', installed['release_id'])
