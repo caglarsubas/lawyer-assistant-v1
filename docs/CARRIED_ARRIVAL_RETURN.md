@@ -55,11 +55,13 @@ trigger a second request. No retained-detail fallback is used after denial.
 
 ## Interaction boundary
 
-The carried-arrival panel is metadata only, with no actions, forms or source
-bodies. Withhold the existing onward-return preparation for these entries because
-it cannot carry the additional snapshot. A further handoff requires its own
-fixed-depth contract. Existing separate source actions retain independent
-current authorization and evidence checks; append-only review history is intact.
+The carried-arrival panel compares metadata and exposes the separate
+[carried-arrival-preserving handoff](CARRIED_ARRIVAL_EVENT_HANDOFF.md) only with
+fresh complete current identities. It contains no source forms or bodies.
+The older onward-return preparation remains withheld on these entries because
+it cannot carry the additional snapshot. Existing separate source actions retain
+independent current authorization and evidence checks; append-only review
+history is intact.
 
 No backend endpoint/schema, automatic body/quotation retrieval, review/renewal/
 export write, replay, repair, provider call or shared/public graph mutation is
@@ -81,10 +83,6 @@ Keep all seven CI jobs, two workers, deadlines, native ARM PostgreSQL settings a
 the complete exclusive 4,521-case backend selection. Exact-head checks, merge,
 main CI and deployment remain separate evidence states.
 
-Next: a guarded carried-arrival-preserving exact-event handoff that carries the
-additional arrival and earlier observations unchanged without recursive history.
-
-The [carried-arrival-preserving handoff](CARRIED_ARRIVAL_EVENT_HANDOFF.md) now
-provides its own validated purpose. The older onward action remains withheld on
-carried entries; the new action requires fresh complete current identities and
-preserves the additional arrival through preparation, destination and return.
+The carried-arrival-preserving handoff retains the additional arrival through
+preparation, destination and verified return. A separately captured observation
+of that handoff's new destination remains a following slice.
