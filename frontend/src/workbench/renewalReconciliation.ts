@@ -1,4 +1,5 @@
-import { canonicalJson } from '../pages/matter/sourceReviewTypes';
+import { ApiError } from '../api';
+import { canonicalJson, pendingReceipt } from '../pages/matter/sourceReviewTypes';
 import type { RenewalMetadata } from '../pages/matter/sourceRenewalTypes';
 import { navigationContextId, navigationIdentifier, navigationReviewId } from '../pages/sourceContextNavigationTypes';
 
@@ -12,6 +13,10 @@ export type RenewalObservation = { recipe: 'private-renewal-reconciliation-v1'; 
   source_verification: 'not_checked'; legal_readiness: 'not_established'; review_inheritance: 'none'; qualification_granted: false; effects_replayed: false };
 const hash = (v: unknown): v is string => typeof v === 'string' && /^[a-f0-9]{64}$/.test(v);
 const closed = (v: unknown, keys: string[]): v is Record<string, unknown> => !!v && typeof v === 'object' && canonicalJson(Object.keys(v).sort()) === canonicalJson([...keys].sort());
+export function uncertainRenewalOutcome(cause: unknown) {
+  if (cause instanceof ApiError) return cause.status === 0 || cause.status >= 500 || pendingReceipt(cause, 'context') !== null;
+  return !(cause instanceof DOMException && cause.name === 'AbortError');
+}
 export function validateRenewalReceipt(v: RenewalReceipt) {
   if (!closed(v, ['request_id', 'expected_request_sha256', 'expected_preview_sha256', 'parent_context_id', 'expected_parent_manifest_sha256', 'expected_parent_review_id', 'parent_version_id', 'version_id'])
     || typeof v.request_id !== 'string' || !/^[a-f0-9]{32}$/.test(v.request_id) || !hash(v.expected_request_sha256) || !hash(v.expected_preview_sha256) || !hash(v.expected_parent_manifest_sha256)

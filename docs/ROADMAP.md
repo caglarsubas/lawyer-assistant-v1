@@ -2494,7 +2494,7 @@ preserving original customer/workspace/source-date/bucket filters, frozen versio
 and immutable history. The new context inherits no old independent decision.
 Changed filters/session/expiry and failed guards clear protected partial results.
 
-Qualification covers 712 frontend cases/build, 255 focused source cases, 275
+Qualification covers 717 frontend cases/build, 255 focused source cases, 275
 publication cases, ten real PostgreSQL races including concurrent private-version
 editing, actual signed-runtime withdrawal, deployment contracts and browser lost
 responses before/after commit, pending admission, no replay, separate review and

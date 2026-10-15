@@ -14,7 +14,7 @@ import { SourceRenewalMapping, SourceRenewalComparison } from './SourceRenewalMa
 
 import { SourceReviewQueue } from './SourceReviewQueue';
 import { verifyReadiness, type ReadinessFilters, type ReadinessPage } from './sourceReadinessTypes';
-import { renewalReceipt, type RenewalReceipt } from '../../workbench/renewalReconciliation';
+import { renewalReceipt, uncertainRenewalOutcome, type RenewalReceipt } from '../../workbench/renewalReconciliation';
 
 type SelectedContext = { id: string; manifest_sha256: string; version_id: string };
 export type SourceSaveReceipt = { kind: 'context' | 'review'; id: string; state: 'confirmed' | 'pending'; context?: { version_id: string; manifest_sha256: string } };
@@ -177,7 +177,7 @@ function SourceWorkspace({ matterId, record, selectedContext, selectedReview, re
       if (task.current()) { setPending(null); setCandidates(null); setInputs(null); setRenewal(null); setView(result); setContextId(result.id); setNotice(value.kind === 'context' ? 'Kaynak seçimi kaydedildi. Bağımsız inceleme ayrıca gerekli.' : 'Bağımsız karar kaydedildi. Önceki kararlar korunur.'); }
     } catch (cause) {
       if (task.current()) {
-        if (outcome && onRenewalOutcome && (pendingReceipt(cause, value.kind) || cause instanceof ApiError && cause.status === 0)) { clear(); onRenewalOutcome(outcome); return; }
+        if (outcome && onRenewalOutcome && uncertainRenewalOutcome(cause)) { clear(); onRenewalOutcome(outcome); return; }
         const id = pendingReceipt(cause, value.kind); clear(cause, !(id || (cause instanceof ApiError && cause.status === 0)));
         if (id && selectedContext && onCommitted) { onCommitted({ kind: value.kind, id, state: 'pending' }); return; }
         if (id) { setError(''); if (value.kind === 'context') { if (selectedContext) setSuccessor(id); else setContextId(id); } setNotice(`Kayıt saklandı; son izin kontrolü tamamlanamadı. Yeni inceleme gerekli. Kayıt: ${id}`); }

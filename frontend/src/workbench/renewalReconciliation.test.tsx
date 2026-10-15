@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { RenewalOutcomeSummary } from '../pages/ComparisonRenewalPage';
 import { metadata } from '../pages/matter/sourceRenewalFixtures';
-import { renewalReceipt, renewalReceiptQuery, validateRenewalReceipt, verifyRenewalObservation, type RenewalObservation, type RenewalReceipt } from './renewalReconciliation';
+import { ApiError } from '../api';
+import { renewalReceipt, renewalReceiptQuery, uncertainRenewalOutcome, validateRenewalReceipt, verifyRenewalObservation, type RenewalObservation, type RenewalReceipt } from './renewalReconciliation';
 const parent = `sac-${'a'.repeat(20)}-${'b'.repeat(32)}`, child = `sac-${'a'.repeat(20)}-${'c'.repeat(32)}`;
 const receipt = (): RenewalReceipt => ({ request_id: 'd'.repeat(32), expected_request_sha256: '1'.repeat(64), expected_preview_sha256: '2'.repeat(64), parent_context_id: parent,
   expected_parent_manifest_sha256: '3'.repeat(64), expected_parent_review_id: null, parent_version_id: 'old1', version_id: 'new1' });
@@ -12,6 +13,12 @@ const result = (): RenewalObservation => ({ recipe: 'private-renewal-reconciliat
     comparison_sha256: '6'.repeat(64), depth: 1, current_parent_head: 'not_checked', legal_equivalence: 'not_assessed' },
   admission: { successor: 'complete', parent: 'complete', parent_review: 'not_recorded' }, source_verification: 'not_checked', legal_readiness: 'not_established', review_inheritance: 'none', qualification_granted: false, effects_replayed: false });
 describe('read-only renewal reconciliation', () => {
+  it.each([new SyntaxError('Truncated JSON after commit'), new TypeError('Body stream lost'), new ApiError('Gateway outcome unknown', 502), new ApiError('Connection lost', 0)])('retains read-only receipt for uncertain %s without replay', cause => {
+    expect(uncertainRenewalOutcome(cause)).toBe(true);
+  });
+  it('closes aborted, forbidden and invalid writes instead of treating them as an admitted result', () => {
+    for (const cause of [new DOMException('Retired', 'AbortError'), new ApiError('Forbidden', 403), new ApiError('Invalid request', 422)]) expect(uncertainRenewalOutcome(cause)).toBe(false);
+  });
   it('retains bounded exact request identity and omits null head from the query', () => {
     validateRenewalReceipt(receipt()); const q = new URLSearchParams(renewalReceiptQuery(receipt()));
     expect(q.get('request_id')).toBe(receipt().request_id); expect(q.has('expected_parent_review_id')).toBe(false);

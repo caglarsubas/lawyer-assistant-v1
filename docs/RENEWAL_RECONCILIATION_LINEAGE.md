@@ -65,11 +65,11 @@ deployment and public graphs unchanged.
 ## Qualification and next slice
 
 [Engineering evidence](evidence/renewal-reconciliation-lineage-2026-10-15.json)
-records 712 frontend cases/build, 255 focused source cases, 275 publication cases,
+records 717 frontend cases/build, 255 focused source cases, 275 publication cases,
 ten real PostgreSQL races, an actual signed-runtime withdrawal case and 42
 deployment contracts. Browser tests use invented accounts/documents and simulated
 source rights, with actual fixture records for renewal and a fresh sequence-one
-independent review. They cover a lost response after commit, a request lost before
+independent review. They cover lost/truncated/gateway responses after commit, a request lost before
 dispatch, pending admission, exact receipt reconciliation, no extra POST, verified
 lineage, filter retirement, withdrawal, expiry/reload and wide/narrow layouts.
 Actual signed-runtime and PostgreSQL evidence remain separate from simulation.
