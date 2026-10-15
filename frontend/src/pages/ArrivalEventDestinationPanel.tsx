@@ -23,6 +23,6 @@ export default function ArrivalEventDestinationPanel({ handoff, value }: { hando
       {snapshots.map(([label, s]) => <div key={label}><h4>{label}</h4><p className="reference-id">Baş: {s.head?.id || 'Bilinmiyor'} · Paket: {s.head?.packet_sha256 || 'Doğrulanamadı'}</p>
         <p className="reference-id">Son sürüm: {s.metadata.analysis.current_version_id || 'Bilinmiyor'} · Revizyon: {s.metadata.analysis.revision}</p></div>)}
     </Detail>
-    <p className="small muted">Yalnız özel kimlik metadatası gözlendi. Kaynaklar, hukuki etki veya yeni başa yol doğrulanmadı; bekleyen kabuller tamamlanmadı. Doğrulanmış dönüş özgün varış gözlemini korur; güncel hedef yeni bir tarihsel kayda dönüştürülmez.</p>
+    <p className="small muted">Yalnız özel kimlik metadatası gözlendi. Kaynaklar, hukuki etki veya yeni başa yol doğrulanmadı; bekleyen kabuller tamamlanmadı. Doğrulanmış dönüş özgün varış gözlemini korur; hedef ayrı bir gözlem olarak korunur ve önceki kayıtların yerine geçmez.</p>
   </section>;
 }

@@ -50,7 +50,7 @@ env:
 
 jobs:
   backend-and-contracts:
-    # Standard native ARM executor; x86 PostgreSQL/frontend jobs remain below.
+    # Standard native ARM executor; the frontend job retains x86 coverage below.
     # Keep the same two pytest workers and the existing test/job deadlines.
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 20
@@ -136,7 +136,10 @@ jobs:
         run: docker compose --env-file /dev/null --profile research --profile native-provider config --quiet
 
   postgres-snapshot-concurrency:
-    runs-on: ubuntu-latest
+    # The unchanged CPU-heavy runtime guard exceeded the x86 job budget even
+    # after all 95 cases passed. Use the already-qualified native ARM executor,
+    # keeping every case, two workers and the original five-minute deadline.
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 5
     services:
       postgres:
@@ -147,9 +150,12 @@ jobs:
           POSTGRES_PASSWORD: disposable-ci-snapshot-only
         ports:
           - 5432/tcp
+        # Disposable race data only. Keep real WAL/fsync/commit semantics while
+        # avoiding repeated child-database checkpoints on the runner disk.
         options: >-
+          --tmpfs /var/lib/postgresql/data:rw,nosuid,size=512m
           --health-cmd "pg_isready -U snapshot_test -d lawyer_snapshot_test"
-          --health-interval 5s --health-timeout 3s --health-retries 10
+          --health-interval 1s --health-timeout 1s --health-retries 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -162,16 +168,23 @@ jobs:
       - name: Test real PostgreSQL review and research races in isolated child databases
         env:
           LA_TEST_POSTGRES_URL: postgresql+psycopg://snapshot_test:disposable-ci-snapshot-only@127.0.0.1:${{ job.services.postgres.ports['5432'] }}/lawyer_snapshot_test
-        # Every test owns a random child database; bounded workers preserve the
-        # in-test row-lock races while leaving time for signed publication checks.
-        # The full backend selection completed all 3,889 cases at 18:01 and hit
-        # its unchanged 18-minute step limit. Move its 130-second live-runtime
-        # integration here (the 94 PostgreSQL cases measured 162s), starting it
-        # first under the same two workers and five-minute job cap. No retry,
-        # skipped guard, duplicate execution or cached validation verdict.
+        # Every test owns a random child database. Start the costly runtime,
+        # authorization and declared-assembly groups early to bound the tail.
+        # Keep all 95 cases, two workers, real row-lock races and the five-minute
+        # cap. Temporary storage changes no PostgreSQL durability settings.
         run: |
+          backend/.venv/bin/python - <<'PYSQL'
+          import os, platform, ssl, psycopg
+          assert platform.machine() in {'aarch64', 'arm64'}, platform.machine()
+          print('Runtime:', platform.machine(), platform.python_version(), ssl.OPENSSL_VERSION, 'cpus', len(os.sched_getaffinity(0)))
+          url = os.environ['LA_TEST_POSTGRES_URL'].replace('postgresql+psycopg://', 'postgresql://', 1)
+          with psycopg.connect(url) as connection:
+              settings = dict(connection.execute("SELECT name, setting FROM pg_settings WHERE name IN ('fsync', 'full_page_writes', 'synchronous_commit')"))
+          assert settings == {'fsync': 'on', 'full_page_writes': 'on', 'synchronous_commit': 'on'}, settings
+          print('Disposable PostgreSQL settings:', settings)
+          PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_set_authorization_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 
   frontend:
     runs-on: ubuntu-latest

@@ -1,0 +1,217 @@
+{
+  "schema": "onward-destination-return-engineering-evidence-v1",
+  "recorded_at": "2026-10-15T14:07:28.848491+00:00",
+  "baseline_main_sha": "75ba8c2e0664e0aa5a6f7fa4416bf68d79d56844",
+  "baseline_main_ci": {
+    "conclusion": "success",
+    "headSha": "75ba8c2e0664e0aa5a6f7fa4416bf68d79d56844",
+    "status": "completed"
+  },
+  "origin": "invented documents and test-only accounts; simulated source rights, local providers disabled",
+  "frontend_tests_passed": 1136,
+  "focused_new_cases_passed": 40,
+  "frontend_build": "passed; existing bundle-size warning retained",
+  "source_publication_regression_cases_passed": 299,
+  "source_publication_seconds": 64.24,
+  "real_postgres_races_passed": 11,
+  "real_postgres_seconds": 11.19,
+  "deployment_contracts_passed": 42,
+  "ruff": "passed",
+  "backend_api_schema_or_production_source_changed": false,
+  "backend_test_image": "unchanged application image; current backend/tests mounted read-only",
+  "focused_browser": {
+    "synthetic_only": true,
+    "rights_simulated": true,
+    "production_qualified": false,
+    "two_exact_event_reads": true,
+    "second_read_drift_closed": true,
+    "late_first_read_retired": true,
+    "denied_preparation_no_retry": true,
+    "actual_selected_destination_one_get": true,
+    "same_event_new_token_remount": true,
+    "purpose_redirects_before_metadata": true,
+    "unknown_arrival_explicit": true,
+    "packet_substitution_closed": true,
+    "unavailable_return_selection_only": true,
+    "actual_later_opposing_head": true,
+    "actual_later_private_version": true,
+    "original_arrival_unchanged_on_return": true,
+    "onward_destination_separate": true,
+    "retained_destination_stable_against_fresh": true,
+    "actual_fresh_version_change": true,
+    "actual_fresh_opposing_head_change": true,
+    "retained_head_packet_swap_closed": true,
+    "denied_return_no_fallback": true,
+    "late_return_retired": true,
+    "older_onward_preparation_withheld": true,
+    "original_filters_preserved": true,
+    "no_automatic_body_or_write": true,
+    "reload_closes": true,
+    "narrow_overflow": false,
+    "browser_errors": [],
+    "external_requests": []
+  },
+  "screenshots_visually_checked": [
+    "onward-return-wide.png",
+    "onward-return-narrow.png"
+  ],
+  "capture": {
+    "recipe": "private-onward-return-v1",
+    "fixed_depth": true,
+    "separate_destination": true,
+    "prior_arrival_receipt_queue_preparation_unchanged": true,
+    "exact_original_intent_and_selected_packet": true,
+    "capture_requires_current_exact_metadata_and_history": true,
+    "unavailable": "selection only",
+    "partial_or_redirected": "rejected",
+    "source_content_or_notes_retained": false
+  },
+  "reconciliation": {
+    "reads": "existing authorized bounded queue and exact-event GET, with no new requests",
+    "omitted_target": "unobserved; no retained private details or fallback",
+    "comparisons": "destination versus fresh, original arrival versus fresh and preparation versus fresh stay separate",
+    "all_known_retained_identity_pins_checked": true,
+    "unknown_and_pending_explicit": true,
+    "regressive_times_or_revisions_rejected": true,
+    "changed_head_infers_path_or_approval": false,
+    "atomic_commit_after_all_checks_and_current_fence": true,
+    "older_onward_preparation": "withheld to avoid discarding destination history"
+  },
+  "session": {
+    "entries_max": 8,
+    "minutes": 30,
+    "principal_bound": true,
+    "cloned": true,
+    "opaque_url_token_only": true,
+    "persisted_to_browser_storage": false,
+    "validation_before_allocation_or_eviction": true,
+    "reload_expiry_eviction_principal_change": "closed"
+  },
+  "confidentiality": "explicit same-firm matter content grants before reads; customer tags are filters only; private snapshots remain in principal-bound memory",
+  "ci": {
+    "counts": {
+      "complete": 4521,
+      "runtime": 1,
+      "preflight": 89,
+      "remaining": 3888,
+      "publication": 299,
+      "workspace": 67,
+      "human_review": 107,
+      "model_trials": 20,
+      "final_release": 20,
+      "withdrawal": 15,
+      "candidate": 15
+    },
+    "missing": 0,
+    "overlap": 0,
+    "extra": 0,
+    "complete_node_ids_sha256": "b167d772d1b670bc19d2ecd002bb48d4f58a07075b38baef12dd41d9aabc1616",
+    "workflow_sha256": "ac975ed8652e05d7a626d9f803d394e1a18664c5977305f436ae2a5417ffdfec",
+    "jobs": 7,
+    "workers": 2,
+    "hosted_speedup_or_billing_savings_established": false,
+    "workflow_changed": true,
+    "caps_or_case_selection_changed": false
+  },
+  "source_files_sha256": {
+    "frontend/src/workbench/onwardReturn.ts": "2ad28493478fd38e7a241a18f5af7f4ec44152db497151f8b13286fbc464bafc",
+    "frontend/src/workbench/onwardReturn.test.tsx": "25725bfab1823e8bd8f5d2315b384d0bff405f98dc9f978cc2510037e3a2c425",
+    "frontend/src/workbench/portfolioReturn.ts": "6e45977a250adcc24a817671241a367b34eb09c46771e1408575f4f8a4d33f3b",
+    "frontend/src/pages/OnwardReturnPanel.tsx": "6985b2e3a8dfa100f2bd1b0e60926850ca2bde23588e9464c0fbd59394a99e0d",
+    "frontend/src/pages/PortfolioReturnQueue.tsx": "490bece79c413538012ee4f865c6c84166a57eb482f557a61b2897d7d12f9fd6",
+    "frontend/src/pages/SelectedSourceReviewPage.tsx": "a4935f73b6396744069f8d1befb2ae541d3640b5898f4eb0c02dcda0978ffc6b",
+    "frontend/src/pages/ArrivalEventDestinationPanel.tsx": "253f1a94d962c0602413dae8a6005647e9fd2ed233f61571621870bee7791c31",
+    ".github/workflows/ci.yml": "ac975ed8652e05d7a626d9f803d394e1a18664c5977305f436ae2a5417ffdfec"
+  },
+  "no_automatic_source_body_write_replay_repair_provider_or_graph_mutation": true,
+  "production_qualified": false,
+  "legal_qualification": false,
+  "held_out_lawyer_acceptance": "not established",
+  "deployed": false,
+  "provider_or_env_changed": false,
+  "hosted_checks_and_merge": "verify separately for final submitted PR head and actual merged tree",
+  "next_slice": "guarded onward-return-preserving exact-event handoff; no recursive chain or history rebasing",
+  "updated_at": "2026-10-15T14:32:28.555131+00:00",
+  "supplemental_browser": {
+    "bounded_omission_without_target_get_or_retained_details": true,
+    "consistent_unknown_identities_explicit": true,
+    "pending_admissions_without_preparation_or_approval": true,
+    "initial_inconsistent_queue_event_mock": "rejected; corrected fixture passed without application change",
+    "browser_errors": [],
+    "external_requests": []
+  },
+  "ci_postgres_budget": {
+    "initial_run": 38748646475,
+    "initial_head": "0d9d3b47bb88589638494c962a0e7c9572fb0e50",
+    "initial_job": 116468867310,
+    "result": "95 passed in 267.02s; job cancelled after exceeding five-minute cap",
+    "job_reported_seconds": 304,
+    "local_measurements": {
+      "disk": {
+        "exit_code": 0,
+        "elapsed_seconds": 99.09,
+        "settings": [
+          "fsync=on",
+          "full_page_writes=on",
+          "synchronous_commit=on"
+        ],
+        "case_count": 95,
+        "workers": 2,
+        "database_image": "postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+        "tmpfs_options": []
+      },
+      "tmpfs": {
+        "exit_code": 0,
+        "elapsed_seconds": 94.88,
+        "settings": [
+          "fsync=on",
+          "full_page_writes=on",
+          "synchronous_commit=on"
+        ],
+        "case_count": 95,
+        "workers": 2,
+        "database_image": "postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+        "tmpfs_options": [
+          "--tmpfs",
+          "/var/lib/postgresql/data:rw,nosuid,size=512m"
+        ]
+      },
+      "tmpfs-long-groups-first": {
+        "exit_code": 0,
+        "elapsed_seconds": 91.52,
+        "settings": [
+          "fsync=on",
+          "full_page_writes=on",
+          "synchronous_commit=on"
+        ],
+        "case_count": 95,
+        "workers": 2,
+        "database_image": "postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+        "tmpfs_options": [
+          "--tmpfs",
+          "/var/lib/postgresql/data:rw,nosuid,size=512m"
+        ]
+      }
+    },
+    "disposable_database_tmpfs_mib": 512,
+    "all_95_cases_preserved": true,
+    "production_changes": false,
+    "durability_settings_disabled": false,
+    "job_or_step_caps_increased": false,
+    "workers": 2,
+    "automatic_retry": false,
+    "corrected_hosted_checks": "native ARM head must be verified separately",
+    "storage_and_order_hosted_result": {
+      "run": 38750931137,
+      "head": "e83085d816dd0512954c538829dbf27cda8bfa02",
+      "job": 116477406092,
+      "result": "95 passed in 279.04s; job cancelled at unchanged five-minute cap",
+      "runtime_case_seconds": 164.16,
+      "hosted_speedup_established": false
+    },
+    "runner": "ubuntu-24.04-arm; same standard executor already used by other backend jobs",
+    "local_measurement_architecture": "arm64",
+    "x86_remaining": "frontend, workspace and human-review groups",
+    "architecture_reported_and_asserted": true
+  }
+}

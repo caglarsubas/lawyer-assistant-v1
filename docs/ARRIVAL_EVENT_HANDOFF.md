@@ -91,3 +91,8 @@ failure despite passing tests. The [CI budget recovery](CI_FINAL_AUTHORIZATION_B
 rebalances one unchanged case into an existing job and starts retained assembly
 first. Every case, seven jobs, two workers and original deadlines remain; the
 corrected head requires fresh hosted qualification.
+
+The [onward-destination return contract](ONWARD_DESTINATION_RETURN.md) extends
+explicit verified return with a separate fixed-depth destination observation.
+The original arrival and this handoff remain unchanged; fresh authorized queue
+reconciliation is required before retained destination details are displayed.
