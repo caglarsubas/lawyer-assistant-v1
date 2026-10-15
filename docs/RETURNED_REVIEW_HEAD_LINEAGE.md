@@ -87,3 +87,7 @@ Next: guarded exact-event navigation from a verified bounded path, preserving th
 original comparison baseline and the explicitly chosen intermediate event packet.
 Unknown/truncated results must nominate no event; navigation must re-observe the
 exact metadata and require the existing separate source-content guards.
+
+Guarded member selection is now implemented in
+[verified review path navigation](VERIFIED_REVIEW_PATH_NAVIGATION.md). It keeps
+this observation separate from the new destination and its source-content guards.

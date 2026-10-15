@@ -8,6 +8,7 @@ import { SourceReadFence } from './matter/sourceReviewTypes';
 import { sourceContextHref, verifyNavigation, type NavigationMetadata, type SourceSelection, type SourceTarget } from './sourceContextNavigationTypes';
 
 import { departingReturn, queueReturnHref, returnMatches, type ReturnIntent } from '../workbench/portfolioReturn';
+import { returnVerifiedEvent, verifyReturnedEventTarget } from '../workbench/returnedReviewLineage';
 import { verifyReturnSelection } from '../workbench/returnComparison';
 
 import SourceReviewLineagePanel from './SourceReviewLineagePanel';
@@ -31,7 +32,7 @@ export function NavigationSummary({ value, historicalSelection = false }: { valu
     </Detail>
   </section>;
 }
-function SelectedWorkspace({ target, blocked, revision, returnIntent }: { target: SourceTarget; blocked: boolean; revision: number; returnIntent: ReturnIntent | null }) {
+function SelectedWorkspace({ target, blocked, revision, returnIntent, pathLocked = false }: { pathLocked?: boolean; target: SourceTarget; blocked: boolean; revision: number; returnIntent: ReturnIntent | null }) {
   const { returns } = usePortfolio();
   const [value, setValue] = useState<NavigationMetadata | null>(null); const [error, setError] = useState('');
   const [lineage, setLineage] = useState<ReviewLineage | null>(null);
@@ -59,13 +60,13 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent }: { target
     <a className="text-link" href={queueReturnHref(target.return_token)!} onClick={event => {
       if (!returnIntent) return;
       event.preventDefault();
-      try { const token = returns.put(departingReturn(returnIntent, value, lineage, target.review_id)); window.location.hash = queueReturnHref(token)!; }
+      try { const token = returns.put(pathLocked ? returnVerifiedEvent(returnIntent, target, value, lineage) : departingReturn(returnIntent, value, lineage, target.review_id)); window.location.hash = queueReturnHref(token)!; }
       catch (cause) { clear(cause); }
     }}>Portföy kaynak kuyruğuna dön</a>
     {error && <Notice error>{error} Kimlik, erişim ve kayıt yeniden doğrulanmadan incelemeye devam edilemez.</Notice>}
     <div className="practice-record-actions"><button className="button secondary" disabled={busy || blocked} onClick={() => void load()}>Tam kayıt kimliğini yeniden doğrula</button></div>
     {busy && <Loading label="Seçilen kayıt kimliği doğrulanıyor…" />}
-    {value && !blocked && <>{receipt && <Notice>{receipt.state === 'pending' ? 'Kayıt saklandı; son izin kontrolü tamamlanamadı. Kabul ve bağımsız inceleme ayrıca gerekir.' : 'Kayıt saklandı; tam kimlik gözlemi güncellendi. İnceleme araçlarını yeniden açın.'}<p className="reference-id">Kayıt: {receipt.id}</p>{receipt.kind === 'context' && sourceContextHref(target.matter_id, target.analysis_id, receipt.id) && <a className="text-link" href={sourceContextHref(target.matter_id, target.analysis_id, receipt.id)!}>Yeni bağlamın tam kimliğini aç</a>}</Notice>}{lineage && <SourceReviewLineagePanel value={lineage} returnToken={target.return_token} />}<NavigationSummary value={value} historicalSelection={!!lineage} />
+    {value && !blocked && <>{receipt && <Notice>{receipt.state === 'pending' ? 'Kayıt saklandı; son izin kontrolü tamamlanamadı. Kabul ve bağımsız inceleme ayrıca gerekir.' : 'Kayıt saklandı; tam kimlik gözlemi güncellendi. İnceleme araçlarını yeniden açın.'}<p className="reference-id">Kayıt: {receipt.id}</p>{receipt.kind === 'context' && sourceContextHref(target.matter_id, target.analysis_id, receipt.id) && <a className="text-link" href={sourceContextHref(target.matter_id, target.analysis_id, receipt.id)!}>Yeni bağlamın tam kimliğini aç</a>}</Notice>}{lineage && <SourceReviewLineagePanel value={lineage} returnToken={target.return_token} lockedSelection={pathLocked} />}<NavigationSummary value={value} historicalSelection={!!lineage} />
       {!(lineage ? lineage.tools_available : value.tools_available) ? <Notice error>Sabit bağlam, sürüm veya tarihsel karar bağları doğrulanamadı. İnceleme araçları kapalı; başka kayıt seçilmez.</Notice> : tools ? <AnalysisSourceReviews key={generation} matterId={target.matter_id} record={{ id: target.analysis_id, latest_version_id: value.analysis.current_version_id! }}
         selectedContext={{ id: target.context_id, manifest_sha256: value.context.manifest_sha256!, version_id: value.context.version_id! }} returnToken={target.return_token} selectedReview={lineage ? { id: lineage.selected_review.id, packet_sha256: lineage.selected_review.packet_sha256! } : undefined} onFailure={clear} onCommitted={saved => { setReceipt(saved); window.dispatchEvent(new Event('portfolio-updated')); }} />
         : <button className="button secondary" onClick={() => setTools(true)}>{target.review_id ? 'Seçilen tarihsel kararın inceleme araçlarını aç' : 'Seçilen kaydın inceleme araçlarını aç'}</button>}
@@ -84,6 +85,11 @@ export default function SelectedSourceReviewPage({ selection }: { selection: Sou
   const intent = token ? returns.get(token) : null;
   if (selection.kind !== 'selected') return <Notice error>Kaynak bağlamı bağlantısı eksik veya belirsiz. Portföy kuyruğundan tam kaydı yeniden seçin. <a href="#/work">İşlerime dön</a></Notice>;
   if (token && (expired || !intent || !returnMatches(intent, selection))) return <Notice error>Portföy dönüş bağı yok, süresi doldu veya başka kayda ait. İçerik açılmadı. <a href={queueReturnHref()!}>Yeni kaynak kuyruğunu açıkça hazırla</a></Notice>;
+  const pathLocked = !!token && returns.isReviewPath(token);
+  if (pathLocked) {
+    try { if (!intent) throw new Error(); verifyReturnedEventTarget(intent, selection); }
+    catch { return <Notice error>Zincir geçişi başka kayda veya hazırlığa yönlendirilemez. Kaynak okunmadı. <a href={queueReturnHref(token)!}>Aynı filtrelerle portföye dön</a></Notice>; }
+  }
   if (selection.prepare === 'renewal') {
     const handoff = token ? returns.getRenewal(token) : null;
     if (!token || !intent || !handoff) return <Notice error>Yenileme geçişi için yeni portföy karşılaştırması gerekli. Kaynak veya hazırlık açılmadı. <a href={queueReturnHref()!}>Yeni kaynak kuyruğunu açıkça hazırla</a></Notice>;
@@ -93,5 +99,5 @@ export default function SelectedSourceReviewPage({ selection }: { selection: Sou
     if (!token || !intent || intent.target.review_id !== null || !intent.target.version_id || !intent.target.manifest_sha256) return <Notice error>Yeni bağımsız inceleme için tam ve ayrı portföy seçimi gerekli. İçerik açılmadı.</Notice>;
     return <IndependentReviewPreparationPage key={token} intent={intent} token={token} />;
   }
-  return <SelectedWorkspace returnIntent={intent} key={`${selection.matter_id}:${selection.analysis_id}:${selection.context_id}:${selection.review_id}:${workspaceQuery(filters)}`} target={selection} revision={revision} blocked={loading || !!error} />;
+  return <SelectedWorkspace pathLocked={pathLocked} returnIntent={intent} key={`${selection.matter_id}:${selection.analysis_id}:${selection.context_id}:${selection.review_id}:${selection.return_token || ''}:${workspaceQuery(filters)}`} target={selection} revision={revision} blocked={loading || !!error} />;
 }

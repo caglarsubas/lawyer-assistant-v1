@@ -5,9 +5,9 @@ import { formatDate, messageOf } from '../utils';
 import { usePortfolio, workspaceQuery } from '../workbench/portfolio';
 import { captureReturn, portfolioPart, queueReturnHref, reconcileReturn, type ReturnIntent, type ReturnReconciliation } from '../workbench/portfolioReturn';
 import { canonicalJson, SourceReadFence } from './matter/sourceReviewTypes';
-import { verifyNavigation, type NavigationMetadata, type SourceTarget } from './sourceContextNavigationTypes';
+import { sourceContextHref, verifyNavigation, type NavigationMetadata, type SourceTarget } from './sourceContextNavigationTypes';
 import { returnComparisonLinks } from '../workbench/returnComparison';
-import { captureReturnedLineage, observeReturnedLineage, type ReturnedLineageObservation } from '../workbench/returnedReviewLineage';
+import { captureReturnedLineage, observeReturnedLineage, prepareReturnedEvent, type ReturnedLineageObservation } from '../workbench/returnedReviewLineage';
 import ReturnedReviewLineagePanel from './ReturnedReviewLineagePanel';
 import ReturnIdentityComparison, { type ReturnLinks } from './ReturnIdentityComparison';
 import { captureRenewalHandoff, renewalHandoffHref } from '../workbench/renewalHandoff';
@@ -41,20 +41,21 @@ function ReturnWorkspace({ intent, token }: { intent: ReturnIntent; token: strin
   const [prepared, setPrepared] = useState(false); const [preparedRevision, setPreparedRevision] = useState(-1);
   const [page, setPage] = useState<PortfolioQueuePage | null>(null); const [comparison, setComparison] = useState<ReturnReconciliation | null>(null);
   const [history, setHistory] = useState<ReviewLineage | null>(null); const [path, setPath] = useState<ReturnedLineageObservation | null>(null);
+  const [eventLink, setEventLink] = useState<{ href: string; id: string } | null>(null);
   const [busy, setBusy] = useState(false); const [error, setError] = useState('');
   const fence = useRef(new SourceReadFence()); const matching = canonicalJson(filters) === canonicalJson(portfolioPart(intent.filters));
   const visible = prepared && matching && revision === preparedRevision && !loading && !scopeError;
   const key = `${workspaceQuery(filters)}:${revision}`;
   useEffect(() => { const gate = fence.current; return () => gate.invalidate(); }, []);
-  useEffect(() => { fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setBusy(false); if (prepared && (!matching || revision !== preparedRevision)) setPrepared(false); }, [key, matching]);
-  useEffect(() => { if (loading || scopeError) { fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setBusy(false); } }, [loading, scopeError]);
+  useEffect(() => { fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setEventLink(null); setBusy(false); if (prepared && (!matching || revision !== preparedRevision)) setPrepared(false); }, [key, matching]);
+  useEffect(() => { if (loading || scopeError) { fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setEventLink(null); setBusy(false); } }, [loading, scopeError]);
   function prepare() {
-    fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setError(''); setBusy(false);
+    fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setEventLink(null); setError(''); setBusy(false);
     setFilters(portfolioPart(intent.filters)); setPreparedRevision(revision + 1); refresh(); setPrepared(true);
   }
   async function observe(offset: number) {
     if (!prepared || !matching || loading || scopeError || !returns.get(token)) return;
-    const task = fence.current.begin(); setBusy(true); setError(''); setPage(null); setComparison(null); setHistory(null); setPath(null);
+    const task = fence.current.begin(); setBusy(true); setError(''); setPage(null); setComparison(null); setHistory(null); setPath(null); setEventLink(null);
     const target: SourceTarget = { kind: 'selected', matter_id: intent.target.matter_id, analysis_id: intent.target.analysis_id, context_id: intent.target.context_id, ...(intent.target.review_id ? { review_id: intent.target.review_id } : {}) };
     try {
       const expected = queueFilters(filters, intent.filters);
@@ -68,18 +69,32 @@ function ReturnWorkspace({ intent, token }: { intent: ReturnIntent; token: strin
       }
       const value = reconcileReturn(intent, result, meta, lineage);
       if (task.current() && returns.get(token)) { setPage(result); setComparison(value); setHistory(lineage); }
-    } catch (cause) { if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setBusy(false); setError(messageOf(cause)); } }
+    } catch (cause) { if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setEventLink(null); setBusy(false); setError(messageOf(cause)); } }
     finally { if (task.current()) setBusy(false); }
   }
   const basis = comparison && history ? captureReturnedLineage(intent, comparison, history) : null;
   async function observePath() {
     if (!visible || busy || !basis || !returns.get(token)) return;
-    const task = fence.current.begin(); setBusy(true); setError(''); setPath(null);
+    const task = fence.current.begin(); setBusy(true); setError(''); setPath(null); setEventLink(null);
     try {
       const value = await observeReturnedLineage(basis, url => request<ReviewLineage>(url, { signal: task.signal }), () => task.current() && !!returns.get(token));
       if (task.current() && returns.get(token)) setPath(value);
     } catch (cause) {
-      if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setBusy(false); setError(messageOf(cause)); }
+      if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setEventLink(null); setBusy(false); setError(messageOf(cause)); }
+    } finally { if (task.current()) setBusy(false); }
+  }
+  async function prepareEvent(id: string) {
+    if (!visible || busy || !basis || !path || !returns.get(token)) return;
+    const task = fence.current.begin(); setBusy(true); setError(''); setEventLink(null);
+    try {
+      const next = await prepareReturnedEvent(basis, path, id, url => request<ReviewLineage>(url, { signal: task.signal }), () => task.current() && !!returns.get(token));
+      if (!task.current() || !returns.get(token)) return;
+      const nextToken = returns.putReviewPath(next);
+      const href = sourceContextHref(next.target.matter_id, next.target.analysis_id, next.target.context_id, next.target.review_id!, nextToken);
+      if (!href) throw new Error('Tam tarihsel karar bağlantısı kurulamadı.');
+      setEventLink({ href, id: next.target.review_id! });
+    } catch (cause) {
+      if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setEventLink(null); setBusy(false); setError(messageOf(cause)); }
     } finally { if (task.current()) setBusy(false); }
   }
   return <><PageHeader eyebrow="PORTFÖYE GÜVENLİ DÖNÜŞ" title="Kaynak incelemelerine dön" description="Tam filtre niyetini yeniden hazırlayın; mevcut yetkilerinizle yeni ve sınırlı bir gözlem yapın." />
@@ -89,15 +104,18 @@ function ReturnWorkspace({ intent, token }: { intent: ReturnIntent; token: strin
     {comparison && visible && <ReturnReconciliationPanel value={comparison} links={returnComparisonLinks(intent, comparison, token)} renew={captureRenewalHandoff(intent, comparison) ? () => {
       try { const handoff = captureRenewalHandoff(intent, comparison); if (!handoff || !returns.get(token)) throw new Error('Yeni karşılaştırma gözlemi gerekli.');
         const next = returns.put(intent, handoff); window.location.hash = renewalHandoffHref(intent, next)!;
-      } catch (cause) { fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setError(messageOf(cause)); }
+      } catch (cause) { fence.current.invalidate(); setPage(null); setComparison(null); setHistory(null); setPath(null); setEventLink(null); setError(messageOf(cause)); }
     } : undefined} />}
     {comparison?.state === 'observed' && visible && <section aria-label="Sınırlı karar zinciri kontrolü">
       <p className="small muted">Bu karşılaştırmadaki karar başından seçilen tarihsel incelemeye kayıt bağlantısını ayrıca gözlemleyin. Seçilen kaydın iki kimlik gözlemi arasında, baştan başlayan tek ve en çok 10 kayıtlık geçmiş penceresi okunur.</p>
       {basis ? <button className="button secondary" disabled={busy} onClick={() => void observePath()}>Baştan seçilen incelemeye sınırlı zinciri kontrol et</button>
         : <Notice>Tam seçilen karar, güncel baş, sürüm veya kabuller doğrulanamadı. Zincir kontrolü için yeni ve tamamlanmış bir portföy gözlemi gerekli.</Notice>}
-      {path && <ReturnedReviewLineagePanel value={path} />}
+      {path && <ReturnedReviewLineagePanel value={path} busy={busy} choose={id => void prepareEvent(id)} />}
+      {eventLink && <section aria-label="Doğrulanan zincir kaydına güvenli geçiş"><p className="reference-id">Ayrıca seçilen kayıt: {eventLink.id}</p>
+        <p className="small muted">İlk filtreler ve karşılaştırma gözlemleri korundu. Bağlantı yeni tam kimlik gözlemi yapar; kaynak metni veya onay açmaz.</p>
+        <a className="button secondary" href={eventLink.href}>Doğrulanan zincir kaydının tam kimliğini aç</a></section>}
     </section>}
-    {page && visible && <PortfolioQueueResults page={page} busy={busy} next={() => void observe(page.coverage.next_offset!)} open={(item, event) => { event.preventDefault(); if (busy) return; try { const next = returns.put(captureReturn(page, item)); window.location.hash = sourceQueueHref(item, next)!; } catch (cause) { setPage(null); setComparison(null); setHistory(null); setPath(null); setError(messageOf(cause)); } }} />}
+    {page && visible && <PortfolioQueueResults page={page} busy={busy} next={() => void observe(page.coverage.next_offset!)} open={(item, event) => { event.preventDefault(); if (busy) return; try { const next = returns.put(captureReturn(page, item)); window.location.hash = sourceQueueHref(item, next)!; } catch (cause) { setPage(null); setComparison(null); setHistory(null); setPath(null); setEventLink(null); setError(messageOf(cause)); } }} />}
     <p><a className="text-link" href={queueReturnHref()!}>Yeni filtrelerle ayrı kaynak kuyruğu hazırla</a></p>
   </>;
 }

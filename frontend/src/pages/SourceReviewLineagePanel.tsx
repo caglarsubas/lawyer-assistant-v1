@@ -4,7 +4,7 @@ import { sourceContextHref } from './sourceContextNavigationTypes';
 import type { ReviewLineage, ReviewMetadata } from './sourceReviewLineageTypes';
 const STATE = { unknown: 'Doğrulanamadı', changes_requested: 'Değişiklik istendi', reviewed_conditional: 'Koşullu inceleme kaydedildi' };
 const ADMISSION = { complete: 'Tamamlandı', pending: 'Son izin kontrolü bekliyor', unavailable: 'Doğrulanamadı' };
-export default function SourceReviewLineagePanel({ value, returnToken }: { value: ReviewLineage; returnToken?: string }) {
+export default function SourceReviewLineagePanel({ value, returnToken, lockedSelection = false }: { value: ReviewLineage; returnToken?: string; lockedSelection?: boolean }) {
   const href = (row?: ReviewMetadata | null) => sourceContextHref(value.matter_id, value.analysis_id, value.context_id, row?.id, returnToken);
   return <section aria-label="Seçilen tarihsel karar ve sınırlı geçmişi">
     <h3>Seçilen tarihsel karar</h3><p className="reference-id">Karar: {value.selected_review.id}</p>
@@ -20,9 +20,9 @@ export default function SourceReviewLineagePanel({ value, returnToken }: { value
     {value.lineage.status === 'truncated' && <Notice>En fazla {value.lineage.window} kayıt gözlendi; geçmişin devamı bu pencerede incelenmedi.</Notice>}
     {value.lineage.status === 'complete_to_first_event' && <p>Bu seçimin bağlantıları ilk kayıtlı olaya kadar doğrulandı. Daha yeni kararlar bu zincire dahil değildir.</p>}
     <Detail title="Sınırlı önceki karar bağlantıları"><ol className="source-review-lineage">{value.lineage.items.map(row => <li key={row.id}><p>{row.sequence}. kayıt · {STATE[row.state]} · {row.recorded_at ? formatDate(row.recorded_at, true) : 'Bilinmiyor'} · Kabul: {ADMISSION[row.admission]}</p>
-      <p className="reference-id">{row.id}</p>{row.id !== value.review_id && href(row) && <a className="text-link" href={href(row)!}>Bu kararın tam kimliğini aç</a>}
+      <p className="reference-id">{row.id}</p>{!lockedSelection && row.id !== value.review_id && href(row) && <a className="text-link" href={href(row)!}>Bu kararın tam kimliğini aç</a>}
     </li>)}</ol></Detail>
-    {value.lineage.next_review_id && sourceContextHref(value.matter_id, value.analysis_id, value.context_id, value.lineage.next_review_id, returnToken) && <a className="button secondary" href={sourceContextHref(value.matter_id, value.analysis_id, value.context_id, value.lineage.next_review_id, returnToken)!}>Önceki bağlantıyı yeni seçim olarak aç</a>}
-    <div className="practice-record-actions"><a className="text-link" href={href()!}>Güncel bağlamın kimliğine dön</a>{value.current_head && href(value.current_head) && value.current_head.id !== value.review_id && <a className="text-link" href={href(value.current_head)!}>Gözlenen karar başının tam kimliğini aç</a>}</div>
+    {!lockedSelection && value.lineage.next_review_id && sourceContextHref(value.matter_id, value.analysis_id, value.context_id, value.lineage.next_review_id, returnToken) && <a className="button secondary" href={sourceContextHref(value.matter_id, value.analysis_id, value.context_id, value.lineage.next_review_id, returnToken)!}>Önceki bağlantıyı yeni seçim olarak aç</a>}
+    {lockedSelection ? <p className="small muted">Bu geçiş yalnızca doğrulanan tam kaydı seçer. Başka karar seçmek için portföyde yeni gözlem ve geçiş hazırlayın.</p> : <div className="practice-record-actions"><a className="text-link" href={href()!}>Güncel bağlamın kimliğine dön</a>{value.current_head && href(value.current_head) && value.current_head.id !== value.review_id && <a className="text-link" href={href(value.current_head)!}>Gözlenen karar başının tam kimliğini aç</a>}</div>}
   </section>;
 }
