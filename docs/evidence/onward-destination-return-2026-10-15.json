@@ -106,7 +106,7 @@
     "overlap": 0,
     "extra": 0,
     "complete_node_ids_sha256": "b167d772d1b670bc19d2ecd002bb48d4f58a07075b38baef12dd41d9aabc1616",
-    "workflow_sha256": "b7b3838c8323b611dfe4834b6e21d1a94b8f61f32e55096666f6dc76e36ba188",
+    "workflow_sha256": "ac975ed8652e05d7a626d9f803d394e1a18664c5977305f436ae2a5417ffdfec",
     "jobs": 7,
     "workers": 2,
     "hosted_speedup_or_billing_savings_established": false,
@@ -121,7 +121,7 @@
     "frontend/src/pages/PortfolioReturnQueue.tsx": "490bece79c413538012ee4f865c6c84166a57eb482f557a61b2897d7d12f9fd6",
     "frontend/src/pages/SelectedSourceReviewPage.tsx": "a4935f73b6396744069f8d1befb2ae541d3640b5898f4eb0c02dcda0978ffc6b",
     "frontend/src/pages/ArrivalEventDestinationPanel.tsx": "253f1a94d962c0602413dae8a6005647e9fd2ed233f61571621870bee7791c31",
-    ".github/workflows/ci.yml": "b7b3838c8323b611dfe4834b6e21d1a94b8f61f32e55096666f6dc76e36ba188"
+    ".github/workflows/ci.yml": "ac975ed8652e05d7a626d9f803d394e1a18664c5977305f436ae2a5417ffdfec"
   },
   "no_automatic_source_body_write_replay_repair_provider_or_graph_mutation": true,
   "production_qualified": false,
@@ -131,7 +131,7 @@
   "provider_or_env_changed": false,
   "hosted_checks_and_merge": "verify separately for final submitted PR head and actual merged tree",
   "next_slice": "guarded onward-return-preserving exact-event handoff; no recursive chain or history rebasing",
-  "updated_at": "2026-10-15T14:22:49.682258+00:00",
+  "updated_at": "2026-10-15T14:32:28.555131+00:00",
   "supplemental_browser": {
     "bounded_omission_without_target_get_or_retained_details": true,
     "consistent_unknown_identities_explicit": true,
@@ -200,6 +200,18 @@
     "job_or_step_caps_increased": false,
     "workers": 2,
     "automatic_retry": false,
-    "corrected_hosted_checks": "verify separately; not yet established"
+    "corrected_hosted_checks": "native ARM head must be verified separately",
+    "storage_and_order_hosted_result": {
+      "run": 38750931137,
+      "head": "e83085d816dd0512954c538829dbf27cda8bfa02",
+      "job": 116477406092,
+      "result": "95 passed in 279.04s; job cancelled at unchanged five-minute cap",
+      "runtime_case_seconds": 164.16,
+      "hosted_speedup_established": false
+    },
+    "runner": "ubuntu-24.04-arm; same standard executor already used by other backend jobs",
+    "local_measurement_architecture": "arm64",
+    "x86_remaining": "frontend, workspace and human-review groups",
+    "architecture_reported_and_asserted": true
   }
 }

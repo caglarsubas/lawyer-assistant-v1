@@ -50,7 +50,7 @@ env:
 
 jobs:
   backend-and-contracts:
-    # Standard native ARM executor; x86 PostgreSQL/frontend jobs remain below.
+    # Standard native ARM executor; the frontend job retains x86 coverage below.
     # Keep the same two pytest workers and the existing test/job deadlines.
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 20
@@ -136,7 +136,10 @@ jobs:
         run: docker compose --env-file /dev/null --profile research --profile native-provider config --quiet
 
   postgres-snapshot-concurrency:
-    runs-on: ubuntu-latest
+    # The unchanged CPU-heavy runtime guard exceeded the x86 job budget even
+    # after all 95 cases passed. Use the already-qualified native ARM executor,
+    # keeping every case, two workers and the original five-minute deadline.
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 5
     services:
       postgres:
@@ -171,7 +174,9 @@ jobs:
         # cap. Temporary storage changes no PostgreSQL durability settings.
         run: |
           backend/.venv/bin/python - <<'PYSQL'
-          import os, psycopg
+          import os, platform, ssl, psycopg
+          assert platform.machine() in {'aarch64', 'arm64'}, platform.machine()
+          print('Runtime:', platform.machine(), platform.python_version(), ssl.OPENSSL_VERSION, 'cpus', len(os.sched_getaffinity(0)))
           url = os.environ['LA_TEST_POSTGRES_URL'].replace('postgresql+psycopg://', 'postgresql://', 1)
           with psycopg.connect(url) as connection:
               settings = dict(connection.execute("SELECT name, setting FROM pg_settings WHERE name IN ('fsync', 'full_page_writes', 'synchronous_commit')"))

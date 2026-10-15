@@ -2879,6 +2879,13 @@ silent rebasing.
 PR95 hosted qualification exposed a five-minute PostgreSQL job cancellation
 after all 95 cases passed. The [CI service-budget correction](CI_POSTGRES_BUDGET.md)
 uses bounded disposable temporary storage, verifies unchanged durability settings
-and starts costly concurrency groups earlier. All cases, runners, workers and
-caps remain; the corrected head requires seven fresh successful checks. The
+and starts costly concurrency groups earlier. All cases, workers and caps remain; the corrected head requires seven fresh
+successful checks. The
 cancelled attempt is not reclassified as successful.
+
+Storage/order tuning alone did not protect the hosted PostgreSQL budget: its
+unchanged SQLite runtime guard grew from 130 to 164 seconds. The job now uses the
+standard native ARM executor already used by other backend checks, with explicit
+architecture/durability reporting; the frontend job retains x86 coverage. This
+requires fresh hosted qualification and establishes no universal timing/billing
+guarantee. Both earlier attempts remain cancelled.

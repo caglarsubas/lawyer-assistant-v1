@@ -37,7 +37,7 @@ Every configuration verified `fsync=on`, `full_page_writes=on` and
 `synchronous_commit=on`. Local timing is not a hosted guarantee or billing
 measurement. The corrected submitted head requires all seven hosted checks.
 
-Seven jobs, the same runners, two workers, every job/step deadline, the complete
+Seven jobs, two workers, every job/step deadline, the complete
 exclusive 4,521-case backend selection and no-retry behavior remain. No assertion,
 fixture logic, production source, provider or deployed service changed. The
 initial cancelled attempt remains cancelled; no cached success or automatic
@@ -45,3 +45,19 @@ retry is introduced. Existing workflow concurrency supersedes an obsolete run
 when the corrected commit is pushed.
 
 See [engineering evidence](evidence/onward-destination-return-2026-10-15.json).
+
+
+The storage/order correction alone was insufficient on the hosted x86 runner:
+all 95 cases passed in 279.04 seconds, while the job was again cancelled. The
+SQLite-based runtime guard alone increased from 130.25 to 164.16 seconds. These
+observations do not establish a hosted storage speedup; CPU-heavy signed-runtime
+work remains the dominant cost and varies between runners.
+
+The PostgreSQL job now uses `ubuntu-24.04-arm`, already used by the other backend
+contract jobs. Its pinned PostgreSQL image supports that architecture, and all
+three complete local qualifications above used native Linux ARM64. The job
+asserts and records architecture, Python/OpenSSL versions and available CPUs
+alongside unchanged durability settings. The frontend/workspace/human-review job
+retains x86 coverage. The executor change requires fresh hosted qualification;
+local timings do not prove a universal speedup. No job, worker, test or deadline
+is added, and both earlier cancelled attempts remain separate evidence.
