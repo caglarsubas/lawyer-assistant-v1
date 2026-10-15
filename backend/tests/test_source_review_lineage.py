@@ -18,6 +18,184 @@ from app.db import Membership, Record, User, digest
 workbench = workbench_fixture
 
 
+def review_receipt(body, context):
+    from app.evidence_prompt import canonical
+    return {'request_id': body['request_id'], 'expected_request_sha256': digest(canonical({key: value for key, value in body.items() if key != 'request_id'})),
+        'expected_manifest_sha256': context['manifest_sha256'], 'version_id': context['manifest']['version_id'],
+        **({'expected_review_id': body['expected_review_id']} if body['expected_review_id'] else {})}
+
+
+def reconcile_review(client, endpoint, context, receipt):
+    response = client.get(endpoint + '/' + context['id'] + '/reviews/reconciliation', params=receipt)
+    assert response.status_code == 200, response.text
+    assert response.headers['cache-control'] == 'no-store'
+    for secret in ['PRIVATE SOURCE NOTE', 'PRIVATE REVIEW NOTE', 'TEST ONLY 📄', 'sources', 'recorded_by', 'target_snapshots', 'purpose']:
+        assert secret not in response.text
+    result = response.json()
+    assert result['source_verification'] == 'not_checked' and result['current_head'] == 'not_checked'
+    assert result['legal_readiness'] == 'not_established' and not result['qualification_granted'] and not result['effects_replayed']
+    return result
+
+
+def no_reconciliation_effects(app, monkeypatch, reader):
+    no_public_reads(monkeypatch, reader)
+    monkeypatch.setattr(reviews, '_head', lambda *_a, **_k: pytest.fail('Do not substitute or read the current head'))
+    monkeypatch.setattr(reviews, '_finalize', lambda *_a, **_k: pytest.fail('No admission repair'))
+    monkeypatch.setattr(app.state.store, 'add', lambda *_a, **_k: pytest.fail('No new records'))
+    monkeypatch.setattr(app.state.store, 'update', lambda *_a, **_k: pytest.fail('No record changes'))
+
+
+def test_review_reconciliation_finds_exact_request_after_later_opposing_head_and_source_withdrawal(workbench, monkeypatch):
+    app, client, *_ = workbench
+    endpoint, spec, _, reader, permit = setup(workbench, monkeypatch)
+    context, _ = freeze(client, endpoint, spec)
+    reviewer(workbench)
+    path, first = review_request(client, endpoint, context['id'])
+    original = record(client, path, first)
+    path, second = review_request(client, endpoint, context['id'], decision='changes_requested')
+    selected = record(client, path, second)
+    path, third = review_request(client, endpoint, context['id'])
+    later = record(client, path, third)
+    assert later['review']['id'] != selected['review']['id']
+    permit.active = False
+    with app.state.store.session() as session:
+        before = {row.id: (row.revision, row.payload) for row in session.scalars(select(Record))}
+    no_reconciliation_effects(app, monkeypatch, reader)
+    value = reconcile_review(client, endpoint, context, review_receipt(second, context))
+    assert value['outcome'] == 'verified' and value['review']['id'] == selected['review']['id']
+    assert value['review']['packet_sha256'] == selected['review']['snapshot']['packet_sha256']
+    assert value['review']['previous_review_id'] == original['review']['id']
+    assert value['review']['previous_review_packet_sha256'] == original['review']['snapshot']['packet_sha256']
+    assert value['review']['state'] == 'changes_requested' and value['review']['sequence'] == 2
+    assert value['context']['version_id'] == context['manifest']['version_id']
+    assert value['admission'] == {'context': 'complete', 'review': 'complete', 'predecessor': 'complete'}
+    with app.state.store.session() as session:
+        assert before == {row.id: (row.revision, row.payload) for row in session.scalars(select(Record))}
+
+
+@pytest.mark.parametrize('fault', ['pending_context', 'pending_review', 'pending_predecessor', 'invalid_context_proof', 'invalid_review_proof', 'invalid_predecessor_proof', 'immutable', 'prior_immutable', 'missing_admission', 'tampered', 'request_hash', 'manifest_hash', 'version', 'nonce', 'predecessor', 'sequence', 'request_nonce', 'request_rehash', 'owner', 'recipe'])
+def test_review_reconciliation_withholds_unknown_mismatch_and_pending_without_replay(workbench, monkeypatch, fault):
+    app, client, *_ = workbench
+    endpoint, spec, _, reader, _ = setup(workbench, monkeypatch)
+    context, _ = freeze(client, endpoint, spec)
+    reviewer(workbench)
+    path, body = review_request(client, endpoint, context['id'])
+    first = record(client, path, body)
+    path, sent = review_request(client, endpoint, context['id'])
+    event = record(client, path, sent)
+    ident = event['review']['id']
+    receipt = review_receipt(sent, context)
+    if fault.startswith('pending_'):
+        target = {'pending_context': context['id'], 'pending_review': ident, 'pending_predecessor': first['review']['id']}[fault]
+        mutate(app, reviews._id('saa-', target), lambda p: p.update(guard_completed=False))
+    elif fault.startswith('invalid_'):
+        target = {'invalid_context_proof': context['id'], 'invalid_review_proof': ident, 'invalid_predecessor_proof': first['review']['id']}[fault]
+        mutate(app, reviews._id('saa-', target), lambda p: p.update(guard_completed='unknown'))
+    elif fault == 'immutable':
+        reseal(app, ident, lambda p: p.update(immutable=False))
+    elif fault == 'prior_immutable':
+        reseal(app, first['review']['id'], lambda p: p.update(immutable=False))
+    elif fault == 'missing_admission':
+        with app.state.store.session() as session:
+            session.execute(delete(Record).where(Record.id == reviews._id('saa-', ident)))
+            session.commit()
+    elif fault == 'tampered':
+        mutate(app, ident, lambda p: p['input'].update(note='CORRUPTED PRIVATE REVIEW NOTE'))
+    elif fault in {'sequence', 'request_nonce', 'request_rehash', 'recipe'}:
+        def change(p):
+            if fault == 'sequence':
+                p['sequence'] = 40
+            elif fault == 'request_nonce':
+                p['input']['request_id'] = uuid4().hex
+            elif fault == 'request_rehash':
+                p['input']['note'] = 'PRIVATE changed input with stale digest'
+            else:
+                p['recipe'] = 'unknown-review-recipe'
+        reseal(app, ident, change)
+    elif fault == 'owner':
+        with app.state.store.session() as session:
+            row = session.get(Record, ident)
+            row.owner_id = session.scalar(select(User).where(User.username == 'demo')).id
+            session.commit()
+        decode = app.state.store.decode
+        def scoped(row):
+            assert row.id != ident, 'Foreign-owner event must not be decrypted'
+            return decode(row)
+        monkeypatch.setattr(app.state.store, 'decode', scoped)
+    elif fault == 'predecessor':
+        receipt.pop('expected_review_id')
+    else:
+        key = {'request_hash': 'expected_request_sha256', 'manifest_hash': 'expected_manifest_sha256', 'version': 'version_id', 'nonce': 'request_id'}[fault]
+        receipt[key] = '0' * (32 if fault == 'nonce' else 64) if fault != 'version' else 'different'
+    no_reconciliation_effects(app, monkeypatch, reader)
+    value = reconcile_review(client, endpoint, context, receipt)
+    if fault.startswith('pending_'):
+        assert value['outcome'] == 'verified' and value['admission'][fault.removeprefix('pending_')] == 'pending'
+    else:
+        assert value['outcome'] == ('not_observed' if fault == 'nonce' else 'unavailable')
+        assert value['context'] is value['review'] is value['admission'] is None
+
+
+def test_review_reconciliation_original_actor_membership_and_closed_query_boundary(workbench, monkeypatch):
+    app, client, *_ = workbench
+    endpoint, spec, _, reader, _ = setup(workbench, monkeypatch)
+    context, _ = freeze(client, endpoint, spec)
+    reviewer(workbench)
+    path, sent = review_request(client, endpoint, context['id'])
+    event = record(client, path, sent)
+    receipt = review_receipt(sent, context)
+    decode = app.state.store.decode
+    def scoped(row):
+        assert row.id != event['review']['id'], 'Other actor must not decrypt the submitted event'
+        return decode(row)
+    monkeypatch.setattr(app.state.store, 'decode', scoped)
+    login(client)  # Admin and source author cannot resolve another lawyer's request.
+    assert reconcile_review(client, endpoint, context, receipt)['outcome'] == 'not_observed'
+    login(client, 'reviewer')
+    with app.state.store.session() as session:
+        actor = session.scalar(select(User).where(User.username == 'reviewer'))
+        session.execute(delete(Membership).where(Membership.user_id == actor.id))
+        session.commit()
+    target = endpoint + '/' + context['id'] + '/reviews/reconciliation'
+    assert client.get(target, params=receipt).status_code == 404
+    for params in [{**receipt, 'note': 'PRIVATE'}, list(receipt.items()) + [('request_id', receipt['request_id'])], {**receipt, 'request_id': 'bad'}]:
+        assert client.get(target, params=params).status_code == 422
+
+
+def test_pending_review_committed_before_finalize_is_observed_without_admission_repair(workbench, monkeypatch):
+    app, client, *_ = workbench
+    endpoint, spec, _, reader, _ = setup(workbench, monkeypatch)
+    context, _ = freeze(client, endpoint, spec)
+    reviewer(workbench)
+    path, sent = review_request(client, endpoint, context['id'])
+    def fail(*_a, **_k):
+        raise RuntimeError('TEST ONLY lost post-commit response')
+    monkeypatch.setattr(reviews, '_finalize', fail)
+    response = client.post(path, json=sent)
+    assert response.status_code == 409 and response.json()['outcome'] == 'committed_needs_revalidation'
+    no_reconciliation_effects(app, monkeypatch, reader)
+    value = reconcile_review(client, endpoint, context, review_receipt(sent, context))
+    assert value['outcome'] == 'verified' and value['review']['id'] == response.json()['id']
+    assert value['review']['sequence'] == 1 and value['review']['previous_review_id'] is None
+    assert value['admission'] == {'context': 'complete', 'review': 'pending', 'predecessor': 'not_recorded'}
+
+
+def test_review_reconciliation_rejects_mixed_context_or_foreign_routing_before_decryption(workbench, monkeypatch):
+    app, client, *_ = workbench
+    endpoint, spec, *_ = setup(workbench, monkeypatch)
+    context, _ = freeze(client, endpoint, spec)
+    other, _ = freeze(client, endpoint, spec)
+    reviewer(workbench)
+    path, sent = review_request(client, endpoint, context['id'])
+    record(client, path, sent)
+    receipt = review_receipt(sent, context)
+    receipt['expected_review_id'] = 'sar-' + digest(context['id'])[:20] + '-' + uuid4().hex
+    monkeypatch.setattr(app.state.store, 'decode', lambda *_: pytest.fail('Routing must close before decryption'))
+    assert client.get(endpoint + '/' + other['id'] + '/reviews/reconciliation', params=receipt).status_code == 404
+    foreign = 'sac-' + 'f' * 20 + '-' + uuid4().hex
+    assert client.get(endpoint + '/' + foreign + '/reviews/reconciliation', params=receipt).status_code == 404
+
+
 def read(client, endpoint, context_id, review_id, **params):
     response = client.get(endpoint + '/' + context_id + '/reviews/' + review_id + '/navigation-context', params=params)
     assert response.status_code == 200, response.text

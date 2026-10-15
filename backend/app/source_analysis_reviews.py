@@ -21,6 +21,7 @@ from . import source_context_renewals as renewals
 from . import source_renewal_reconciliation as reconciliation
 from . import source_review_lineage as lineage
 from . import source_review_readiness as readiness
+from . import source_review_reconciliation as review_reconciliation
 from .analysis_adjudication import target_values
 from .auth import authenticate, require_child, require_matter
 from .db import Record, User, digest, now
@@ -616,6 +617,17 @@ def source_analysis_router():
             result['can_record'] = store.decode(matter).get('status') != 'archived'
             require_child(session, context_id, KIND, matter_id, user)
             return _bounded(result)
+
+    @router.get('/{context_id}/reviews/reconciliation')
+    def reconcile_review(matter_id: str, analysis_id: str, context_id: str, request: Request, user=Depends(authenticate)):
+        try:
+            if any(len(request.query_params.getlist(key)) != 1 for key in request.query_params):
+                raise ValueError('Duplicate receipt fields')
+            receipt = review_reconciliation.Receipt.model_validate(dict(request.query_params))
+        except (ValidationError, ValueError):
+            raise HTTPException(422, 'Tam bağımsız inceleme istek kimliği doğrulanamadı.') from None
+        with request.app.state.store.session() as session:
+            return review_reconciliation.observe(request.app.state.store, session, matter_id, analysis_id, context_id, receipt, user)
 
     @router.get('/{context_id}/reviews/context')
     def review_context(matter_id: str, analysis_id: str, context_id: str, request: Request, user=Depends(authenticate)):

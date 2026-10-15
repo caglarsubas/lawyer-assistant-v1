@@ -449,3 +449,55 @@ def test_renewal_reconciliation_serializes_with_private_version_edit_without_rep
     assert edited.json()['latest_version_id'] != result['successor']['version_id']
     assert result['source_verification'] == 'not_checked' and not result['effects_replayed']
     assert len(client.get(endpoint).json()) == 2
+
+
+def test_review_reconciliation_serializes_with_later_opposing_review_without_head_substitution(workspace, monkeypatch):
+    from test_analysis_workbench import build_workbench
+    from test_authority_adjudications import reviewer
+    from test_source_analysis_reviews import freeze, record, review_request, setup
+    from test_source_review_lineage import review_receipt
+
+    from app import source_analysis_reviews
+
+    workbench = build_workbench(workspace)
+    app, client, *_ = workbench
+    endpoint, spec, *_ = setup(workbench, monkeypatch)
+    context, _ = freeze(client, endpoint, spec)
+    reviewer(workbench)
+    path, sent = review_request(client, endpoint, context['id'])
+    selected = record(client, path, sent)
+    receipt = review_receipt(sent, context)
+    _, opposing = review_request(client, endpoint, context['id'], decision='changes_requested')
+    entered, release = Event(), Event()
+    original = source_analysis_reviews._validate_review
+
+    def pause(*args):
+        result = original(*args)
+        if not entered.is_set():
+            entered.set()
+            assert release.wait(10)
+        return result
+
+    monkeypatch.setattr(source_analysis_reviews, '_validate_review', pause)
+    target = path + '/reconciliation'
+    with ThreadPoolExecutor(2) as pool:
+        reading = pool.submit(client.get, target, params=receipt)
+        try:
+            assert entered.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                writing = pool.submit(client.post, path, json=opposing)
+                assert observed[0].wait(5)
+                assert wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not writing.done()
+        finally:
+            release.set()
+        result = reading.result(timeout=10)
+        later = writing.result(timeout=10)
+    assert result.status_code == 200 and later.status_code == 201
+    first = result.json()
+    again = client.get(target, params=receipt).json()
+    assert first['outcome'] == again['outcome'] == 'verified'
+    assert first['review'] == again['review'] and first['review']['id'] == selected['review']['id']
+    assert first['review']['id'] != later.json()['review']['id']
+    assert first['current_head'] == again['current_head'] == 'not_checked'
+    assert not again['effects_replayed']
