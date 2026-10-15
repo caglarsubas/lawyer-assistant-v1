@@ -2601,3 +2601,35 @@ remain partial.
 Next: explicit bounded current-head-to-selected review lineage from the returned
 queue, with exact packet/head pins, fresh authorization and unknown/truncated paths
 kept explicit, without legal-effect inference or automatic expansion.
+
+
+### R03/R05A bounded returned-queue head-to-selected review lineage
+
+An explicit returned-queue action now brackets one maximum-ten-record current-head
+predecessor window with exact selected-event observations. Each observation pins
+the frozen context/version/manifest, selected packet, captured current head packet,
+current version/revision and admissions to the authorized queue comparison.
+Consecutive member identities and predecessor links must resolve to the exact
+selected event. Same-event and verified-path results are separate from legal
+effects, source rights and readiness. Truncation, missing selection or
+unavailable/pending members remain unknown without expansion, repair or replay.
+Identity, access or revision drift clears the captured comparison.
+
+Original head/version observations, selected/current identities, customer OR,
+workspace date field/range, source dates, bucket and immutable evidence remain
+unchanged. New observations/windows, filter/scope/principal/expiry changes and
+navigation retire results and delayed replies. No source text, inference, export,
+write, graph update or backend route/schema is introduced.
+[Contract](RETURNED_REVIEW_HEAD_LINEAGE.md) and
+[engineering evidence](evidence/returned-review-head-lineage-2026-10-15.json).
+
+Qualification covers exact packets and bounded links, a real twelve-event fixture
+history, pending/unavailable records, substitutions, final revision drift, denied
+access, late filters and narrow layout, plus source/publication and PostgreSQL
+regressions. Seven jobs, two workers, deadlines and the full exclusive backend
+partition remain unchanged. Hosted checks, actual merge/main, deployment and legal
+acceptance remain separate; R03/R05 stay partial.
+
+Next: guarded exact-event navigation from verified path members, preserving the
+original baseline and explicitly chosen packet, with fresh metadata observations
+and separate source-content authorization. Unknown/truncated paths confer no link.
