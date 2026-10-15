@@ -2840,3 +2840,38 @@ PR94 CI qualification also exposed a final-authorization job timeout after all
 unchanged activation/rollback case into the existing graph-candidate group and
 starts retained assembly first. All 4,521 cases remain exclusive and complete;
 seven jobs, two workers and original caps remain. A cancelled job is not a pass.
+
+### R03/R05A guarded onward-destination return reconciliation
+
+Explicit return from an arrival-preserving destination now retains a separate
+fixed-depth destination observation. The original arrival, receipt, queue and
+preparation history, exact customer OR/workspace/source dates, queue bucket,
+frozen evidence and selected review packet remain unchanged. Missing current
+metadata returns selection only; inconsistent or redirected purposes fail
+closed. The earlier handoff's selection-only destination retention boundary is
+superseded by this explicitly typed capture.
+
+After explicit filter restoration and a new authorized bounded queue containing
+the target, existing exact-event metadata reads compare the retained onward
+destination with fresh head/version/revision independently of the original
+arrival and preparations. Outside-window targets disclose no retained details.
+Immutable known-head/selected packet substitution, evidence/scope/filter drift
+and regressive observations close the views. Unknowns and pending admissions
+stay explicit; changed heads imply neither a path nor approval.
+
+The existing eight-entry, thirty-minute, principal-bound memory book, opaque
+tokens, clones and lifecycle fences remain. All comparisons commit together;
+denied or late responses cannot restore private panels. Older onward preparation
+is withheld where it would discard the new destination. No automatic body read,
+write/replay, repair, provider, backend schema, public graph or deployment change
+is added. Append-only independent review history stays intact.
+
+See the [contract](ONWARD_DESTINATION_RETURN.md) and
+[engineering evidence](evidence/onward-destination-return-2026-10-15.json).
+R03/R05 remain partial. All seven jobs, two workers, deadlines and complete
+exclusive 4,521-case backend partitions stay unchanged. Hosted checks, merge,
+main CI, deployment and legal/lawyer qualification remain separate.
+
+Next: guarded onward-return-preserving exact-event handoff, retaining the extra
+destination alongside all original observations without recursive history or
+silent rebasing.

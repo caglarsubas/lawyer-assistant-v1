@@ -12,6 +12,8 @@ import { validateArrivalReturn, type ArrivalReturn } from './arrivalReturn';
 
 import { validateArrivalEventHandoff, type ArrivalEventHandoff } from './arrivalEventHandoff';
 
+import { validateOnwardReturn, type OnwardReturn } from './onwardReturn';
+
 export const returnToken = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{32}$/.test(value);
 const sha = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
 const stamp = (value: unknown) => typeof value === 'string' && value.length <= 40 && Number.isFinite(Date.parse(value));
@@ -76,7 +78,7 @@ export function departingReturn(value: ReturnIntent, meta: NavigationMetadata | 
 }
 export const portfolioPart = (value: PortfolioQueueFilters): PortfolioFilters => ({ customer_ids: [...value.customer_ids], date_field: value.date_field, date_from: value.date_from, date_to: value.date_to });
 export class PortfolioReturnBook {
-  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff; reviewPath?: ReviewPathHandoff; comparisonReturn?: ComparisonReturnReceipt; comparisonEvent?: ComparisonEventHandoff; arrivalReturn?: ArrivalReturn; arrivalEvent?: ArrivalEventHandoff }>();
+  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff; reviewPath?: ReviewPathHandoff; comparisonReturn?: ComparisonReturnReceipt; comparisonEvent?: ComparisonEventHandoff; arrivalReturn?: ArrivalReturn; arrivalEvent?: ArrivalEventHandoff; onwardReturn?: OnwardReturn }>();
   constructor(private now = () => Date.now(), private nonce = () => crypto.randomUUID().replaceAll('-', '')) {}
   put(value: ReturnIntent, renewal?: RenewalHandoff): string { validateReturn(value); if (renewal) validateRenewalHandoff(renewal, value); this.prune();
     const id = this.nonce(); if (!returnToken(id) || this.rows.has(id)) throw new Error('Dönüş kimliği oluşturulamadı.');
@@ -90,6 +92,13 @@ export class PortfolioReturnBook {
   putComparisonReturn(value: ReturnIntent, receipt: ComparisonReturnReceipt): string {
     validateComparisonReturn(receipt, value); const id = this.put(value); this.rows.get(id)!.comparisonReturn = structuredClone(receipt); return id;
   }
+  putOnwardReturn(value: ReturnIntent, observation: OnwardReturn): string {
+    validateOnwardReturn(observation, value); const id = this.put(value);
+    this.rows.get(id)!.onwardReturn = structuredClone(observation);
+    this.rows.get(id)!.arrivalReturn = structuredClone(observation.handoff.observation);
+    this.rows.get(id)!.comparisonReturn = structuredClone(observation.handoff.observation.handoff.receipt); return id;
+  }
+  getOnwardReturn(id: string): OnwardReturn | null { this.prune(); const row = returnToken(id) ? this.rows.get(id) : undefined; return row?.onwardReturn ? structuredClone(row.onwardReturn) : null; }
   putArrivalEvent(value: ReturnIntent, handoff: ArrivalEventHandoff): string { validateArrivalEventHandoff(handoff, value); const id = this.put(value); this.rows.get(id)!.arrivalEvent = structuredClone(handoff); return id; }
   getArrivalEvent(id: string): ArrivalEventHandoff | null { this.prune(); const row = returnToken(id) ? this.rows.get(id) : undefined; return row?.arrivalEvent ? structuredClone(row.arrivalEvent) : null; }
   putArrivalReturn(value: ReturnIntent, observation: ArrivalReturn): string {
