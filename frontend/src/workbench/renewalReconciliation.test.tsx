@@ -13,7 +13,7 @@ const result = (): RenewalObservation => ({ recipe: 'private-renewal-reconciliat
     comparison_sha256: '6'.repeat(64), depth: 1, current_parent_head: 'not_checked', legal_equivalence: 'not_assessed' },
   admission: { successor: 'complete', parent: 'complete', parent_review: 'not_recorded' }, source_verification: 'not_checked', legal_readiness: 'not_established', review_inheritance: 'none', qualification_granted: false, effects_replayed: false });
 describe('read-only renewal reconciliation', () => {
-  it.each([new SyntaxError('Truncated JSON after commit'), new TypeError('Body stream lost'), new ApiError('Gateway outcome unknown', 502), new ApiError('Connection lost', 0)])('retains read-only receipt for uncertain %s without replay', cause => {
+  it.each([new SyntaxError('Truncated JSON after commit'), new TypeError('Body stream lost'), new ApiError('Gateway outcome unknown', 502), new ApiError('Connection lost', 0), new ApiError('Truncated conflict', 409), new ApiError('Timeout', 408), new ApiError('Throttled outcome', 429)])('retains read-only receipt for uncertain %s without replay', cause => {
     expect(uncertainRenewalOutcome(cause)).toBe(true);
   });
   it('closes aborted, forbidden and invalid writes instead of treating them as an admitted result', () => {

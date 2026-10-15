@@ -1,5 +1,5 @@
 import { ApiError } from '../api';
-import { canonicalJson, pendingReceipt } from '../pages/matter/sourceReviewTypes';
+import { canonicalJson } from '../pages/matter/sourceReviewTypes';
 import type { RenewalMetadata } from '../pages/matter/sourceRenewalTypes';
 import { navigationContextId, navigationIdentifier, navigationReviewId } from '../pages/sourceContextNavigationTypes';
 
@@ -14,7 +14,7 @@ export type RenewalObservation = { recipe: 'private-renewal-reconciliation-v1'; 
 const hash = (v: unknown): v is string => typeof v === 'string' && /^[a-f0-9]{64}$/.test(v);
 const closed = (v: unknown, keys: string[]): v is Record<string, unknown> => !!v && typeof v === 'object' && canonicalJson(Object.keys(v).sort()) === canonicalJson([...keys].sort());
 export function uncertainRenewalOutcome(cause: unknown) {
-  if (cause instanceof ApiError) return cause.status === 0 || cause.status >= 500 || pendingReceipt(cause, 'context') !== null;
+  if (cause instanceof ApiError) return ![400, 401, 403, 404, 422].includes(cause.status);
   return !(cause instanceof DOMException && cause.name === 'AbortError');
 }
 export function validateRenewalReceipt(v: RenewalReceipt) {
