@@ -2925,3 +2925,34 @@ remain separate.
 Next: guarded carried-arrival return reconciliation, through a separately typed
 fixed-depth observation without rebasing the original onward return or nesting
 arbitrary prior return chains.
+
+### R03/R05A guarded carried-arrival return reconciliation
+
+Explicit return from the onward-return-preserving destination now captures its
+verified arrival as a separate fixed-depth observation. The original onward
+return, receipt, arrivals, queues and preparations remain unchanged, as do exact
+customer OR/workspace/source dates, bucket, frozen evidence and selected review
+packet. Unavailable current reads retain selection only; inconsistent or
+redirected purposes fail closed. No unobserved intermediate version is invented.
+
+After explicit filter restoration, a fresh authorized bounded queue containing
+the target and its existing exact-event GET compare the carried arrival with
+fresh head/version/revision independently of older observations. Omitted windows
+reveal no retained details. Immutable packet substitution, evidence/scope/filter
+drift and regressive time/revision close all comparisons together. Unknowns and
+pending admissions remain explicit; changed heads imply no path or approval.
+
+The existing eight-entry/thirty-minute principal-bound memory, opaque tokens,
+clones and lifecycle fences remain. Denied/late replies cannot reopen private
+views. Existing preparation is withheld where it would discard this additional
+arrival. No body automation, write/replay, repair, provider, backend schema,
+public graph or deployment change is added. Independent review history remains.
+
+See the [contract](CARRIED_ARRIVAL_RETURN.md) and
+[engineering evidence](evidence/carried-arrival-return-2026-10-15.json).
+All seven jobs, two workers, deadlines, qualified native ARM PostgreSQL settings
+and all 4,521 exclusive backend cases remain. R03/R05 remain partial; hosted
+checks, merge, main CI, deployment and legal/lawyer qualification stay separate.
+
+Next: guarded carried-arrival-preserving exact-event handoff, retaining this
+arrival and every original observation without rebasing or arbitrary recursion.

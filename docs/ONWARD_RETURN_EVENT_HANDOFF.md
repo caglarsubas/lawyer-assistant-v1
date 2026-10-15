@@ -90,3 +90,9 @@ checks, merge, main CI and deployment remain separate evidence states.
 
 Next: guarded carried-arrival return reconciliation, keeping this handoff's fresh
 arrival separate from the original onward return and every earlier observation.
+
+The [carried-arrival return contract](CARRIED_ARRIVAL_RETURN.md) extends explicit
+verified return with a separate arrival observation. It preserves the original
+onward return and this handoff unchanged; retained details still require fresh
+authorized queue/event reads. It supersedes the earlier no-capture boundary
+without recursively appending further return chains.

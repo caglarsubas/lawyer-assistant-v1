@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { compareOnwardEventDestination, returnOnwardEvent, validateOnwardEventHandoff, type OnwardEventHandoff } from '../workbench/onwardEventHandoff';
+import { compareOnwardEventDestination, validateOnwardEventHandoff, type OnwardEventHandoff } from '../workbench/onwardEventHandoff';
+import { captureCarriedArrivalReturn } from '../workbench/carriedArrivalReturn';
 import OnwardEventDestinationPanel from './OnwardEventDestinationPanel';
 import { request } from '../api';
 import { Detail, Loading, Notice, PageHeader } from '../components';
@@ -82,8 +83,8 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent, pathHandof
         let token: string;
         if (onwardHandoff) {
           const available = !blocked && !busy && observedRevision === revision;
-          const next = returnOnwardEvent(returnIntent, onwardHandoff, target, available ? value : null, available ? lineage : null);
-          token = next.observation ? returns.putOnwardReturn(next.intent, next.observation) : returns.put(next.intent);
+          const next = captureCarriedArrivalReturn(returnIntent, onwardHandoff, target, available ? value : null, available ? lineage : null);
+          token = next.observation ? returns.putCarriedArrivalReturn(next.intent, next.observation) : returns.put(next.intent);
         } else if (arrivalHandoff) {
           const available = !blocked && !busy && observedRevision === revision;
           const next = captureOnwardReturn(returnIntent, arrivalHandoff, target, available ? value : null, available ? lineage : null);
