@@ -2568,3 +2568,36 @@ acceptance remain separate. R03/R05 remain partial.
 Next: guarded direct reconciled-review return to the portfolio queue with the exact
 selected historical event, original comparison baseline and fresh selected-versus-
 current observations, without replay or source content.
+
+### R03/R05A guarded reconciled-review return to portfolio
+
+A completely admitted exact actor/request outcome now offers a separate guarded
+direct queue-return action. Matching outcome observations surround fresh exact
+historical metadata. The new session token clones the original intent and changes
+only its selected event ID/packet hash. Original head/version observations and
+unknown values remain unchanged; exact-event navigation keeps its distinct fresh
+baseline. Later opposing heads and newer versions stay separate from the selected
+decision and frozen evidence. Customer OR, workspace date field/range, source-record
+date range and bucket are preserved.
+
+Queue arrival and filter restoration read no source context or queue result until
+the lawyer explicitly requests a new bounded window. An absent selected target
+remains unobserved, without metadata fallback or automatic window traversal.
+Packet substitutions, pending/unknown outcomes and late scope/filter responses
+withhold the handoff. Existing content grants, source/private-basis and export/write
+guards stay authoritative; no backend mutation, review replay, inferred grant,
+source content or public-graph promotion is added.
+[Contract](RECONCILED_REVIEW_PORTFOLIO_RETURN.md) and
+[engineering evidence](evidence/reconciled-review-portfolio-return-2026-10-15.json).
+
+Qualification covers original/selected/current identity separation, unknown
+baselines, token/principal isolation, real fixture review/version changes and an
+actual target outside the first queue window, plus source/publication and real
+PostgreSQL regressions. Seven jobs, two workers, deadlines and the complete disjoint
+backend partition remain unchanged. Hosted exact-head checks, merge/main,
+deployment, legal qualification and lawyer acceptance remain separate; R03/R05
+remain partial.
+
+Next: explicit bounded current-head-to-selected review lineage from the returned
+queue, with exact packet/head pins, fresh authorization and unknown/truncated paths
+kept explicit, without legal-effect inference or automatic expansion.

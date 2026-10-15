@@ -64,3 +64,10 @@ export function reconciledReviewIntent(intent: ReturnIntent, observation: Review
     observed_at: m.observed_at, current_version_id: m.analysis.current_version_id, version_observed_at: m.observed_at };
   validateReturn(next); return next;
 }
+/** A queue comparison keeps its original baseline, separate from fresh navigation. */
+export function reconciledReviewReturnIntent(intent: ReturnIntent, observation: ReviewObservation, history: ReviewLineage): ReturnIntent {
+  if (intent.target.review_id !== null || intent.target.review_packet_sha256 !== null) throw new Error('Yeni inceleme dönüşü önceki tarihsel seçimi değiştiremez.');
+  const verified = reconciledReviewIntent(intent, observation, history), next = structuredClone(intent);
+  next.target.review_id = verified.target.review_id; next.target.review_packet_sha256 = verified.target.review_packet_sha256;
+  validateReturn(next); return next;
+}
