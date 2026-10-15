@@ -88,6 +88,6 @@ deadlines, exclusive complete backend partition and no automatic retry remain.
 Exact-head hosted checks, merge/main, deployment and legal qualification are
 separate evidence states. R03/R05 remain partial.
 
-Next finite slice: guarded direct return from a reconciled review to its portfolio
-queue, retaining the selected historical event and original comparison baseline,
-with fresh selected-versus-current observations and no replay or source content.
+Continuation: [guarded direct portfolio return](RECONCILED_REVIEW_PORTFOLIO_RETURN.md)
+retains the selected historical event and original comparison baseline, with fresh
+selected-versus-current observations and no replay or source content.
