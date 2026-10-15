@@ -7,13 +7,14 @@ import { compareDestinationIdentities } from '../workbench/comparisonReturn';
 
 const relation = { same: 'Aynı kimlik gözlendi', different: 'Farklı kimlik gözlendi', unknown: 'İlişki doğrulanamadı' };
 const admission = (value: string) => value === 'complete' ? 'Tamamlandı' : value === 'pending' ? 'Bekliyor' : 'Doğrulanamadı';
-export default function ArrivalReturnPanel({ observation, value }: { observation: ArrivalReturn; value: ComparisonQueueReconciliation }) {
+export default function ArrivalReturnPanel({ observation, value, prepare, busy = false }: { observation: ArrivalReturn; value: ComparisonQueueReconciliation; prepare?: () => void; busy?: boolean }) {
   if (value.state === 'not_observed') return <Notice>Seçilen kayıt bu pencerede gözlenmedi. Korunan varış ayrıntıları açılmadı; güncel erişim veya ilişki kurulmadı.</Notice>;
   const a = observation.arrival, f = value.fresh;
   return <section aria-label="Korunan varış ve yeni kuyruk gözlemi">
     <h3>Varıştan portföye dönüş</h3>
     <p>Varıştan yeni kuyruğa — karar başı: {relation[value.head_relation]}. Analizin son sürümü: {relation[value.version_relation]}. Revizyon: {relation[value.revision_relation]}.</p>
     <p className="small muted">Korunan varış: {formatDate(a.metadata.observed_at, true)} · Yeni kuyruk: {formatDate(value.queue_observed_at, true)} · Tam kayıt: {formatDate(f.metadata.observed_at, true)}. Ayrı gözlemler tek atomik an değildir; önceki onay taşınmaz.</p>
+    {prepare && <button className="button secondary" disabled={busy} onClick={prepare}>Varışı koruyarak tam karar geçişini doğrula</button>}
     <Detail title="Varış ve yeni kuyruğun ayrı kimlik gözlemleri">
       <h4>Korunan tarihsel varış — güncel kabul değildir</h4>
       <ComparisonEventArrivalPanel handoff={observation.handoff} value={{ fresh: a, ...compareDestinationIdentities(observation.handoff.prepared, a) }} />
