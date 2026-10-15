@@ -7,6 +7,7 @@ import { compareReturnIdentities, verifyReturnSelection, type ReturnComparison }
 import { validateRenewalHandoff, type RenewalHandoff } from './renewalHandoff';
 import { validateReviewPathHandoff, type ReviewPathHandoff } from './reviewPathHandoff';
 import { validateComparisonReturn, type ComparisonReturnReceipt } from './comparisonReturn';
+import { validateComparisonEventHandoff, type ComparisonEventHandoff } from './comparisonEventHandoff';
 
 export const returnToken = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{32}$/.test(value);
 const sha = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
@@ -72,7 +73,7 @@ export function departingReturn(value: ReturnIntent, meta: NavigationMetadata | 
 }
 export const portfolioPart = (value: PortfolioQueueFilters): PortfolioFilters => ({ customer_ids: [...value.customer_ids], date_field: value.date_field, date_from: value.date_from, date_to: value.date_to });
 export class PortfolioReturnBook {
-  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff; reviewPath?: ReviewPathHandoff; comparisonReturn?: ComparisonReturnReceipt }>();
+  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff; reviewPath?: ReviewPathHandoff; comparisonReturn?: ComparisonReturnReceipt; comparisonEvent?: ComparisonEventHandoff }>();
   constructor(private now = () => Date.now(), private nonce = () => crypto.randomUUID().replaceAll('-', '')) {}
   put(value: ReturnIntent, renewal?: RenewalHandoff): string { validateReturn(value); if (renewal) validateRenewalHandoff(renewal, value); this.prune();
     const id = this.nonce(); if (!returnToken(id) || this.rows.has(id)) throw new Error('Dönüş kimliği oluşturulamadı.');
@@ -86,6 +87,8 @@ export class PortfolioReturnBook {
   putComparisonReturn(value: ReturnIntent, receipt: ComparisonReturnReceipt): string {
     validateComparisonReturn(receipt, value); const id = this.put(value); this.rows.get(id)!.comparisonReturn = structuredClone(receipt); return id;
   }
+  putComparisonEvent(value: ReturnIntent, handoff: ComparisonEventHandoff): string { validateComparisonEventHandoff(handoff, value); const id = this.put(value); this.rows.get(id)!.comparisonEvent = structuredClone(handoff); return id; }
+  getComparisonEvent(id: string): ComparisonEventHandoff | null { this.prune(); const row = returnToken(id) ? this.rows.get(id) : undefined; return row?.comparisonEvent ? structuredClone(row.comparisonEvent) : null; }
   getComparisonReturn(id: string): ComparisonReturnReceipt | null { this.prune(); const row = returnToken(id) ? this.rows.get(id) : undefined; return row?.comparisonReturn ? structuredClone(row.comparisonReturn) : null; }
   isReviewPath(id: string): boolean { this.prune(); return returnToken(id) && !!this.rows.get(id)?.reviewPath; }
   getReviewPath(id: string): ReviewPathHandoff | null { this.prune(); const row = returnToken(id) ? this.rows.get(id) : undefined; return row?.reviewPath ? structuredClone(row.reviewPath) : null; }
