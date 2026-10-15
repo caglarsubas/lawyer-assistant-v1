@@ -2875,3 +2875,10 @@ main CI, deployment and legal/lawyer qualification remain separate.
 Next: guarded onward-return-preserving exact-event handoff, retaining the extra
 destination alongside all original observations without recursive history or
 silent rebasing.
+
+PR95 hosted qualification exposed a five-minute PostgreSQL job cancellation
+after all 95 cases passed. The [CI service-budget correction](CI_POSTGRES_BUDGET.md)
+uses bounded disposable temporary storage, verifies unchanged durability settings
+and starts costly concurrency groups earlier. All cases, runners, workers and
+caps remain; the corrected head requires seven fresh successful checks. The
+cancelled attempt is not reclassified as successful.

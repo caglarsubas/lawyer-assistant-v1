@@ -3,9 +3,9 @@
   "recorded_at": "2026-10-15T14:07:28.848491+00:00",
   "baseline_main_sha": "75ba8c2e0664e0aa5a6f7fa4416bf68d79d56844",
   "baseline_main_ci": {
-    "conclusion": "",
+    "conclusion": "success",
     "headSha": "75ba8c2e0664e0aa5a6f7fa4416bf68d79d56844",
-    "status": "in_progress"
+    "status": "completed"
   },
   "origin": "invented documents and test-only accounts; simulated source rights, local providers disabled",
   "frontend_tests_passed": 1136,
@@ -106,11 +106,12 @@
     "overlap": 0,
     "extra": 0,
     "complete_node_ids_sha256": "b167d772d1b670bc19d2ecd002bb48d4f58a07075b38baef12dd41d9aabc1616",
-    "workflow_sha256": "aa4c54849c5b8c194b2762b48024fe90191a596c22613ef1e019ab0ff08115e9",
+    "workflow_sha256": "b7b3838c8323b611dfe4834b6e21d1a94b8f61f32e55096666f6dc76e36ba188",
     "jobs": 7,
     "workers": 2,
-    "workflow_or_caps_changed": false,
-    "hosted_speedup_or_billing_savings_established": false
+    "hosted_speedup_or_billing_savings_established": false,
+    "workflow_changed": true,
+    "caps_or_case_selection_changed": false
   },
   "source_files_sha256": {
     "frontend/src/workbench/onwardReturn.ts": "2ad28493478fd38e7a241a18f5af7f4ec44152db497151f8b13286fbc464bafc",
@@ -120,7 +121,7 @@
     "frontend/src/pages/PortfolioReturnQueue.tsx": "490bece79c413538012ee4f865c6c84166a57eb482f557a61b2897d7d12f9fd6",
     "frontend/src/pages/SelectedSourceReviewPage.tsx": "a4935f73b6396744069f8d1befb2ae541d3640b5898f4eb0c02dcda0978ffc6b",
     "frontend/src/pages/ArrivalEventDestinationPanel.tsx": "253f1a94d962c0602413dae8a6005647e9fd2ed233f61571621870bee7791c31",
-    ".github/workflows/ci.yml": "aa4c54849c5b8c194b2762b48024fe90191a596c22613ef1e019ab0ff08115e9"
+    ".github/workflows/ci.yml": "b7b3838c8323b611dfe4834b6e21d1a94b8f61f32e55096666f6dc76e36ba188"
   },
   "no_automatic_source_body_write_replay_repair_provider_or_graph_mutation": true,
   "production_qualified": false,
@@ -129,5 +130,76 @@
   "deployed": false,
   "provider_or_env_changed": false,
   "hosted_checks_and_merge": "verify separately for final submitted PR head and actual merged tree",
-  "next_slice": "guarded onward-return-preserving exact-event handoff; no recursive chain or history rebasing"
+  "next_slice": "guarded onward-return-preserving exact-event handoff; no recursive chain or history rebasing",
+  "updated_at": "2026-10-15T14:22:49.682258+00:00",
+  "supplemental_browser": {
+    "bounded_omission_without_target_get_or_retained_details": true,
+    "consistent_unknown_identities_explicit": true,
+    "pending_admissions_without_preparation_or_approval": true,
+    "initial_inconsistent_queue_event_mock": "rejected; corrected fixture passed without application change",
+    "browser_errors": [],
+    "external_requests": []
+  },
+  "ci_postgres_budget": {
+    "initial_run": 38748646475,
+    "initial_head": "0d9d3b47bb88589638494c962a0e7c9572fb0e50",
+    "initial_job": 116468867310,
+    "result": "95 passed in 267.02s; job cancelled after exceeding five-minute cap",
+    "job_reported_seconds": 304,
+    "local_measurements": {
+      "disk": {
+        "exit_code": 0,
+        "elapsed_seconds": 99.09,
+        "settings": [
+          "fsync=on",
+          "full_page_writes=on",
+          "synchronous_commit=on"
+        ],
+        "case_count": 95,
+        "workers": 2,
+        "database_image": "postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+        "tmpfs_options": []
+      },
+      "tmpfs": {
+        "exit_code": 0,
+        "elapsed_seconds": 94.88,
+        "settings": [
+          "fsync=on",
+          "full_page_writes=on",
+          "synchronous_commit=on"
+        ],
+        "case_count": 95,
+        "workers": 2,
+        "database_image": "postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+        "tmpfs_options": [
+          "--tmpfs",
+          "/var/lib/postgresql/data:rw,nosuid,size=512m"
+        ]
+      },
+      "tmpfs-long-groups-first": {
+        "exit_code": 0,
+        "elapsed_seconds": 91.52,
+        "settings": [
+          "fsync=on",
+          "full_page_writes=on",
+          "synchronous_commit=on"
+        ],
+        "case_count": 95,
+        "workers": 2,
+        "database_image": "postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+        "tmpfs_options": [
+          "--tmpfs",
+          "/var/lib/postgresql/data:rw,nosuid,size=512m"
+        ]
+      }
+    },
+    "disposable_database_tmpfs_mib": 512,
+    "all_95_cases_preserved": true,
+    "production_changes": false,
+    "durability_settings_disabled": false,
+    "job_or_step_caps_increased": false,
+    "workers": 2,
+    "automatic_retry": false,
+    "corrected_hosted_checks": "verify separately; not yet established"
+  }
 }
