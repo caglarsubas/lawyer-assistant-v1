@@ -58,8 +58,9 @@ export function departingReturn(value: ReturnIntent, meta: NavigationMetadata | 
   if (lineage && !meta) throw new Error('Seçilen kararın bağlam gözlemi yok; dönüş kurulmadı.');
   if (meta) verifyReturnSelection(value, meta, lineage, reviewId);
   const next = structuredClone(value);
-  // A follow-up observation must not silently replace the original comparison baseline.
-  if (next.target.version_observed_at === null && meta) {
+  // Only a first unselected departure may establish an unobserved version baseline.
+  // An already selected historical event retains even an explicitly unknown baseline.
+  if (next.target.version_observed_at === null && next.target.review_id === null && meta) {
     next.target.current_version_id = meta.analysis.current_version_id;
     next.target.version_observed_at = meta.observed_at;
   }
@@ -69,12 +70,18 @@ export function departingReturn(value: ReturnIntent, meta: NavigationMetadata | 
 }
 export const portfolioPart = (value: PortfolioQueueFilters): PortfolioFilters => ({ customer_ids: [...value.customer_ids], date_field: value.date_field, date_from: value.date_from, date_to: value.date_to });
 export class PortfolioReturnBook {
-  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff }>();
+  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff; reviewPath?: true }>();
   constructor(private now = () => Date.now(), private nonce = () => crypto.randomUUID().replaceAll('-', '')) {}
   put(value: ReturnIntent, renewal?: RenewalHandoff): string { validateReturn(value); if (renewal) validateRenewalHandoff(renewal, value); this.prune();
     const id = this.nonce(); if (!returnToken(id) || this.rows.has(id)) throw new Error('Dönüş kimliği oluşturulamadı.');
     while (this.rows.size >= 8) this.rows.delete(this.rows.keys().next().value!);
     this.rows.set(id, { value: structuredClone(value), ...(renewal ? { renewal: structuredClone(renewal) } : {}), expires: this.now() + 30 * 60 * 1000 }); return id; }
+  putReviewPath(value: ReturnIntent): string {
+    validateReturn(value);
+    if (!value.target.review_id || !value.target.review_packet_sha256) throw new Error('Zincir geçişi tam karar ve paket gerektirir.');
+    const id = this.put(value); this.rows.get(id)!.reviewPath = true; return id;
+  }
+  isReviewPath(id: string): boolean { this.prune(); return returnToken(id) && this.rows.get(id)?.reviewPath === true; }
   get(id: string): ReturnIntent | null { this.prune(); const row = returnToken(id) ? this.rows.get(id) : undefined; return row ? structuredClone(row.value) : null; }
   getRenewal(id: string): RenewalHandoff | null { this.prune(); const row = returnToken(id) ? this.rows.get(id) : undefined; return row?.renewal ? structuredClone(row.renewal) : null; }
   remaining(id: string) { this.prune(); return Math.max(0, (this.rows.get(id)?.expires || 0) - this.now()); }

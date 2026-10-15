@@ -2636,3 +2636,37 @@ acceptance remain separate; R03/R05 stay partial.
 Next: guarded exact-event navigation from verified path members, preserving the
 original baseline and explicitly chosen packet, with fresh metadata observations
 and separate source-content authorization. Unknown/truncated paths confer no link.
+
+
+### R03/R05A guarded exact-event navigation from verified review paths
+
+The returned queue now offers an explicit member handoff only from a complete,
+admitted verified path. Five bounded metadata observations bracket one maximum-
+ten-record head window with the original selected event and the chosen member.
+Exact packets, frozen evidence, head/version/revision, admissions and the same
+verified prefix must remain consistent. Unknown/truncated or changed paths grant
+no link, expansion, repair or replay.
+
+A separate session token clones the original intent, changing only the chosen
+review ID/packet. Exact customer OR, both date ranges, workspace date field,
+bucket, original baseline and unknown values remain intact. The destination
+rejects event/context/write-flow redirection and freshly verifies the selected
+packet; a new token for the same event triggers a new lookup. Other event controls
+are withheld until a new queue selection. Even a return after failed metadata
+keeps the event pin and original baseline while requiring fresh queue access.
+
+New choices, observations/windows and filter/revision/scope/principal/expiry
+changes retire links and delayed replies. Metadata continuity grants no source
+rights or legal approval. Content, review, renewal and export keep their own
+explicit guards; no backend route/schema, provider call or mutation is added.
+[Contract](VERIFIED_REVIEW_PATH_NAVIGATION.md) and
+[engineering evidence](evidence/verified-review-path-navigation-2026-10-15.json).
+
+Qualification covers exact intermediate/endpoints, five-stage drift, substitutions,
+pending/unavailable paths, token isolation, new-token refresh and pin-preserving
+return, plus browser real fixture history and source/PostgreSQL regressions.
+Seven jobs, two workers, deadlines and the complete exclusive backend partition
+stay unchanged; deployment and legal acceptance are separate. R03/R05 remain partial.
+
+Next: read-only handoff-versus-destination head/version comparison, keeping the
+original queue baseline, selected event and independent source-content guards.
