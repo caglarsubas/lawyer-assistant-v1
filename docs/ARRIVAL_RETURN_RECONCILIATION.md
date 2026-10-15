@@ -73,3 +73,7 @@ deployment and lawyer acceptance remain separate. R03/R05 remain partial.
 Next: an explicit arrival-preserving exact-event handoff from fresh queue
 reconciliation, retaining these fixed observations without recursively accumulating
 returns or rebasing any historical receipt.
+
+The [arrival-preserving onward handoff](ARRIVAL_EVENT_HANDOFF.md) now provides a
+separate explicit preparation path. The older receipt preparation remains
+withheld for these entries; the new path preserves their original arrival.

@@ -3,7 +3,7 @@ import type { PortfolioQueuePage } from '../pages/portfolioSourceQueueTypes';
 import type { NavigationMetadata, SourceTarget } from '../pages/sourceContextNavigationTypes';
 import type { ReviewLineage } from '../pages/sourceReviewLineageTypes';
 import { compareComparisonEventArrival, returnComparisonEvent, validateComparisonEventHandoff, type ComparisonEventHandoff } from './comparisonEventHandoff';
-import { compareDestinationIdentities, reconcileComparisonReturn, type ComparisonQueueReconciliation } from './comparisonReturn';
+import { compareDestinationIdentities, reconcileComparisonReturn, validateDestinationObservation, type ObservedComparison, type ComparisonQueueReconciliation } from './comparisonReturn';
 import type { ReturnIntent } from './portfolioReturn';
 import { verifyReviewPathDestination, type ReviewPathDestination } from './reviewPathHandoff';
 
@@ -37,4 +37,18 @@ export function reconcileArrivalReturn(intent: ReturnIntent, observation: Arriva
   if (value.state === 'not_observed') return value;
   compareDestinationIdentities(observation.handoff.prepared, value.fresh);
   return structuredClone({ ...value, ...compareDestinationIdentities(observation.arrival, value.fresh) });
+}
+
+/** Validate against every known historical identity without rebasing the arrival. */
+export function verifyArrivalDestination(intent: ReturnIntent, observation: ArrivalReturn, fresh: ReviewPathDestination) {
+  validateArrivalReturn(observation, intent);
+  verifyReviewPathDestination(intent, observation.handoff.receipt.handoff, fresh);
+  compareDestinationIdentities(observation.handoff.receipt.destination, fresh);
+  compareDestinationIdentities(observation.handoff.prepared, fresh);
+  return compareDestinationIdentities(observation.arrival, fresh);
+}
+export function validateArrivalObservation(intent: ReturnIntent, observation: ArrivalReturn, value: ObservedComparison) {
+  validateArrivalReturn(observation, intent);
+  validateDestinationObservation(intent, observation.handoff.receipt.handoff, observation.arrival, value);
+  verifyArrivalDestination(intent, observation, value.fresh);
 }

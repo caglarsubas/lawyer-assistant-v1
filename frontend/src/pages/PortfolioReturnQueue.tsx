@@ -11,6 +11,7 @@ import { captureReturnedLineage, observeReturnedLineage, prepareReturnedEvent, t
 import ReturnedReviewLineagePanel from './ReturnedReviewLineagePanel';
 import { reconcileComparisonReturn, type ComparisonReturnReceipt, type ComparisonQueueReconciliation } from '../workbench/comparisonReturn';
 import { reconcileArrivalReturn, type ArrivalReturn } from '../workbench/arrivalReturn';
+import { arrivalEventAvailable, prepareArrivalEvent } from '../workbench/arrivalEventHandoff';
 import ArrivalReturnPanel from './ArrivalReturnPanel';
 import ComparisonReturnPanel from './ComparisonReturnPanel';
 import { comparisonEventAvailable, prepareComparisonEvent } from '../workbench/comparisonEventHandoff';
@@ -94,12 +95,14 @@ function ReturnWorkspace({ intent, token, receipt, arrival }: { intent: ReturnIn
     } finally { if (task.current()) setBusy(false); }
   }
   async function prepareComparedEvent() {
-    if (!visible || busy || !receipt || !receiptComparison || !returns.get(token)) return;
+    if (!visible || busy || !receipt || !receiptComparison || arrival && !arrivalComparison || !returns.get(token)) return;
     const task = fence.current.begin(); setBusy(true); setError(''); setComparisonLink(null); setEventLink(null); setPath(null);
     try {
-      const value = await prepareComparisonEvent(intent, receipt, receiptComparison, url => request<ReviewLineage>(url, { signal: task.signal }), () => task.current() && !!returns.get(token));
-      if (!task.current() || !returns.get(token)) return;
-      const next = returns.putComparisonEvent(intent, value), t = intent.target;
+      const read = (url: string) => request<ReviewLineage>(url, { signal: task.signal }), current = () => task.current() && !!returns.get(token);
+      const preparedArrival = arrival ? await prepareArrivalEvent(intent, arrival, arrivalComparison!, read, current) : null;
+      const preparedComparison = !arrival ? await prepareComparisonEvent(intent, receipt, receiptComparison, read, current) : null;
+      if (!current()) return;
+      const next = preparedArrival ? returns.putArrivalEvent(intent, preparedArrival) : returns.putComparisonEvent(intent, preparedComparison!), t = intent.target;
       const href = sourceContextHref(t.matter_id, t.analysis_id, t.context_id, t.review_id!, next);
       if (!href) throw new Error('Tam karşılaştırma bağlantısı kurulamadı.');
       setComparisonLink(href);
@@ -127,10 +130,10 @@ function ReturnWorkspace({ intent, token, receipt, arrival }: { intent: ReturnIn
     {error && <Notice error>{error}</Notice>}{scopeError && <Notice error>{scopeError}</Notice>}
     {!prepared || !matching ? <button className="button secondary" disabled={busy} onClick={prepare}>Dönüş filtrelerini uygula ve hazırla</button> : <><p className="small muted">Tam müvekkil ve çalışma alanı tarih filtreleri soldaki portföye uygulandı. Kaynak kayıt tarihleri yukarıdaki niyette ayrı korunur.</p><button className="button secondary" disabled={busy || loading || !!scopeError} onClick={() => void observe(0)}>Aynı filtrelerle yeni portföy gözlemi yap</button></>}
     {receipt && receiptComparison && visible && <ComparisonReturnPanel receipt={receipt} value={receiptComparison} prepare={!arrival && comparisonEventAvailable(intent, receipt, receiptComparison) ? () => void prepareComparedEvent() : undefined} busy={busy} />}
-    {arrival && arrivalComparison && visible && <ArrivalReturnPanel observation={arrival} value={arrivalComparison} />}
-    {comparisonLink && visible && <section aria-label="Karşılaştırmadan seçilen karara güvenli geçiş">
+    {arrival && arrivalComparison && visible && <ArrivalReturnPanel observation={arrival} value={arrivalComparison} prepare={arrivalEventAvailable(intent, arrival, arrivalComparison) ? () => void prepareComparedEvent() : undefined} busy={busy} />}
+    {comparisonLink && visible && <section aria-label={arrival ? "Varışı koruyan seçilen karara güvenli geçiş" : "Karşılaştırmadan seçilen karara güvenli geçiş"}>
       <p className="small muted">Tam seçilen karar iki yeni kimlik gözlemiyle doğrulandı. İlk filtreler, kanıt ve ayrı karşılaştırma gözlemleri korundu. Kaynak içeriği veya onay açılmaz.</p>
-      <a className="button secondary" href={comparisonLink}>Karşılaştırmadan doğrulanan tam kararı aç</a>
+      <a className="button secondary" href={comparisonLink}>{arrival ? "Varışı koruyan doğrulanmış tam kararı aç" : "Karşılaştırmadan doğrulanan tam kararı aç"}</a>
     </section>}
     {comparison && visible && <ReturnReconciliationPanel value={comparison} links={returnComparisonLinks(intent, comparison, token)} renew={captureRenewalHandoff(intent, comparison) ? () => {
       try { const handoff = captureRenewalHandoff(intent, comparison); if (!handoff || !returns.get(token)) throw new Error('Yeni karşılaştırma gözlemi gerekli.');

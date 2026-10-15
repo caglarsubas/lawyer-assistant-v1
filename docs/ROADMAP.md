@@ -2800,3 +2800,37 @@ separate; R03/R05 stay partial.
 Next: guarded arrival-preserving exact-event handoff from fresh reconciliation,
 retaining fixed historical observations and fresh authorization without nesting
 prior return chains or rebasing the original receipt.
+
+### R03/R05A guarded arrival-preserving exact-event handoff
+
+A freshly authorized arrival-return queue can now explicitly prepare its pinned
+historical event through two fresh one-record metadata reads. Require known
+current version/head and complete current admissions, stable evidence/event/head/
+version/revision/admission metadata and monotonic times. Changed, denied, pending,
+unknown or retired current observations withhold the destination; no pointer is
+followed, retry performed or path inferred.
+
+A separate fixed-depth purpose token retains the original arrival and all its
+prior receipt/queue/preparation observations unchanged, plus new queue and
+preparation metadata. Exact customer OR, workspace/source dates, bucket and
+frozen evidence/event pin remain. Routes reject other events, context-only links
+and write preparation before metadata access; a new token remounts even for the
+same event.
+
+Arrival requires fresh exact-event metadata. Compare new preparation and retained
+arrival separately with the destination, reject immutable substitutions or
+regressive metadata, and keep unknowns/pending admissions explicit. Verified
+return restores the original arrival unchanged; unavailable reads keep only the
+selection. No new historical arrival is implicitly captured or recursively
+appended. Existing session bounds, content grants, lifecycle fences and source
+checks remain. No automatic source read, review write/replay, repair, provider,
+backend schema or public graph change is added.
+
+See the [contract](ARRIVAL_EVENT_HANDOFF.md) and
+[engineering evidence](evidence/arrival-event-handoff-2026-10-15.json).
+Seven CI jobs, two workers, caps and complete exclusive backend partitions stay
+unchanged. Hosted checks, merge, main CI, deployment and legal/lawyer qualification
+remain separate; R03/R05 stay partial.
+
+Next: guarded onward-destination return reconciliation through a separately typed
+fixed-depth observation, keeping the original arrival and receipt unchanged.

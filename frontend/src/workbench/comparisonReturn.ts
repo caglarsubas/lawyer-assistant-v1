@@ -63,10 +63,15 @@ export function compareDestinationIdentities(previous: ReviewPathDestination, fr
 export type ObservedComparison = Extract<ComparisonQueueReconciliation, { state: 'observed' }>;
 export function validateComparisonObservation(intent: ReturnIntent, receipt: ComparisonReturnReceipt, value: ObservedComparison) {
   validateComparisonReturn(receipt, intent);
+  validateDestinationObservation(intent, receipt.handoff, receipt.destination, value);
+}
+
+/** Strict reduced queue observation, bound to its own historical comparison baseline. */
+export function validateDestinationObservation(intent: ReturnIntent, handoff: ReviewPathHandoff, previous: ReviewPathDestination, value: ObservedComparison) {
   if (!value || !equal(Object.keys(value).sort(), ['fresh', 'head_relation', 'queue_observed_at', 'revision_relation', 'state', 'version_relation']) || value.state !== 'observed'
     || typeof value.queue_observed_at !== 'string' || value.queue_observed_at.length > 40 || !Number.isFinite(Date.parse(value.queue_observed_at))) fail();
-  verifyReviewPathDestination(intent, receipt.handoff, value.fresh);
-  if (Date.parse(value.queue_observed_at) < Date.parse(receipt.destination.metadata.observed_at) || Date.parse(value.fresh.metadata.observed_at) < Date.parse(value.queue_observed_at)) fail();
-  const expected = compareDestinationIdentities(receipt.destination, value.fresh);
+  verifyReviewPathDestination(intent, handoff, value.fresh);
+  if (Date.parse(value.queue_observed_at) < Date.parse(previous.metadata.observed_at) || Date.parse(value.fresh.metadata.observed_at) < Date.parse(value.queue_observed_at)) fail();
+  const expected = compareDestinationIdentities(previous, value.fresh);
   if (!equal(expected, { head_relation: value.head_relation, version_relation: value.version_relation, revision_relation: value.revision_relation })) fail();
 }
