@@ -2477,6 +2477,32 @@ jobs, two workers, existing caps and the exclusive full backend partition remain
 Legal/corpus qualification, professional independence, productivity, deployment and
 lawyer acceptance remain separate; R03/R05 stay partial.
 
-Next: read-only uncertain-write reconciliation and qualified successor lineage,
-preserving filters and separate independent-review navigation without write replay
-or admission repair.
+### R03/R05A read-only renewal reconciliation and verified successor lineage
+
+[Renewal reconciliation](RENEWAL_RECONCILIATION_LINEAGE.md) retains only a bounded,
+actor-bound nonce/hash receipt after normal, pending or uncertain network results.
+Explicit GET observation locates the exact submitting actor's request, checks the
+canonical request/preview hashes and reconstructs one historical renewal link from
+authenticated successor, parent and captured-review packets. Current parent head,
+further ancestry, source permission and legal applicability remain unchecked.
+
+Pending admission remains pending and withholds successor tools; unavailable or
+unobserved requests gain no identity or retry permission. No POST replay, admission
+repair, source/inference lookup or public graph update occurs. Complete admission
+allows another explicit receipt/link observation and exact successor navigation,
+preserving original customer/workspace/source-date/bucket filters, frozen versions
+and immutable history. The new context inherits no old independent decision.
+Changed filters/session/expiry and failed guards clear protected partial results.
+
+Qualification covers 712 frontend cases/build, 255 focused source cases, 275
+publication cases, ten real PostgreSQL races including concurrent private-version
+editing, actual signed-runtime withdrawal, deployment contracts and browser lost
+responses before/after commit, pending admission, no replay, separate review and
+scope retirement. Seven jobs, two workers, existing caps and the complete exclusive
+4,496-case backend partition remain. Legal/corpus qualification, professional
+independence, productivity, deployment and lawyer acceptance stay separate;
+R03/R05 remain partial.
+
+Next: guarded navigation from verified lineage to the exact historical parent and
+separate successor review, retaining filters and fresh authorization without
+inheriting decisions or promoting pending states.

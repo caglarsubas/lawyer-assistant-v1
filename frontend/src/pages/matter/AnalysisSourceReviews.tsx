@@ -14,10 +14,11 @@ import { SourceRenewalMapping, SourceRenewalComparison } from './SourceRenewalMa
 
 import { SourceReviewQueue } from './SourceReviewQueue';
 import { verifyReadiness, type ReadinessFilters, type ReadinessPage } from './sourceReadinessTypes';
+import { renewalReceipt, type RenewalReceipt } from '../../workbench/renewalReconciliation';
 
 type SelectedContext = { id: string; manifest_sha256: string; version_id: string };
 export type SourceSaveReceipt = { kind: 'context' | 'review'; id: string; state: 'confirmed' | 'pending'; context?: { version_id: string; manifest_sha256: string } };
-type WorkspaceProps = { matterId: string; record: Pick<AnalysisRecord, 'id' | 'latest_version_id'>; returnToken?: string; selectedContext?: SelectedContext; selectedReview?: { id: string; packet_sha256: string }; onFailure?: (cause: unknown) => void; onCommitted?: (receipt: SourceSaveReceipt) => void; preparedRenewal?: RenewalMetadata; guard?: (signal: AbortSignal) => Promise<void> };
+type WorkspaceProps = { matterId: string; record: Pick<AnalysisRecord, 'id' | 'latest_version_id'>; returnToken?: string; selectedContext?: SelectedContext; selectedReview?: { id: string; packet_sha256: string }; onFailure?: (cause: unknown) => void; onCommitted?: (receipt: SourceSaveReceipt) => void; preparedRenewal?: RenewalMetadata; guard?: (signal: AbortSignal) => Promise<void>; onRenewalOutcome?: (receipt: RenewalReceipt) => void };
 type SaveRequest = { path: string; body: unknown; kind: 'context' | 'review' };
 type Saver = (value: SaveRequest) => Promise<void>;
 const nonce = () => crypto.randomUUID().replaceAll('-', '');
@@ -126,7 +127,7 @@ function ReviewEditor({ inputs, base, busy, save }: { inputs: ReviewInputs; base
   </form>;
 }
 
-function SourceWorkspace({ matterId, record, selectedContext, selectedReview, returnToken, onFailure, onCommitted, preparedRenewal, guard }: WorkspaceProps) {
+function SourceWorkspace({ matterId, record, selectedContext, selectedReview, returnToken, onFailure, onCommitted, preparedRenewal, guard, onRenewalOutcome }: WorkspaceProps) {
   const base = `/matters/${encodeURIComponent(matterId)}/analyses/${encodeURIComponent(record.id)}/source-contexts`;
   const [products, setProducts] = useState<{ id: string; title: string }[]>([]); const [product, setProduct] = useState(''); const [productMore, setProductMore] = useState(false);
   const [candidates, setCandidates] = useState<Candidates | null>(null); const [items, setItems] = useState<Summary[]>([]); const [more, setMore] = useState(false);
@@ -153,9 +154,13 @@ function SourceWorkspace({ matterId, record, selectedContext, selectedReview, re
   }
   async function save(value: SaveRequest) {
     const task = fence.current.begin(); setBusy(true); setError('');
+    let outcome: RenewalReceipt | null = null;
     try {
       if (guard) await guard(task.signal); if (!task.current()) return;
+      if (preparedRenewal && onRenewalOutcome && value.kind === 'context') outcome = await renewalReceipt(value.body as Record<string, unknown>, preparedRenewal);
+      if (!task.current()) return;
       const result = await request<ContextView>(value.path, { method: 'POST', body: JSON.stringify(value.body), signal: task.signal, refreshPortfolio: !selectedContext });
+      if (outcome && onRenewalOutcome) { if (task.current()) { clear(); onRenewalOutcome(outcome); } return; }
       if (guard) { try { await guard(task.signal); } catch (cause) { if (task.current()) { clear(cause, false); if (value.kind === 'context' && /^sac-[a-f0-9]{20}-[a-f0-9]{32}$/.test(result.id)) onCommitted?.({ kind: 'context', id: result.id, state: 'pending' }); else onFailure?.(cause); } return; } }
       if (!currentView(result) && /^sac-[a-f0-9]{20}-[a-f0-9]{32}$/.test(result.id)) {
         if (preparedRenewal && selectedContext && value.kind === 'context' && onCommitted) { if (task.current()) { clear(); onCommitted({ kind: 'context', id: result.id, state: 'pending' }); } return; }
@@ -172,6 +177,7 @@ function SourceWorkspace({ matterId, record, selectedContext, selectedReview, re
       if (task.current()) { setPending(null); setCandidates(null); setInputs(null); setRenewal(null); setView(result); setContextId(result.id); setNotice(value.kind === 'context' ? 'Kaynak seçimi kaydedildi. Bağımsız inceleme ayrıca gerekli.' : 'Bağımsız karar kaydedildi. Önceki kararlar korunur.'); }
     } catch (cause) {
       if (task.current()) {
+        if (outcome && onRenewalOutcome && (pendingReceipt(cause, value.kind) || cause instanceof ApiError && cause.status === 0)) { clear(); onRenewalOutcome(outcome); return; }
         const id = pendingReceipt(cause, value.kind); clear(cause, !(id || (cause instanceof ApiError && cause.status === 0)));
         if (id && selectedContext && onCommitted) { onCommitted({ kind: value.kind, id, state: 'pending' }); return; }
         if (id) { setError(''); if (value.kind === 'context') { if (selectedContext) setSuccessor(id); else setContextId(id); } setNotice(`Kayıt saklandı; son izin kontrolü tamamlanamadı. Yeni inceleme gerekli. Kayıt: ${id}`); }
