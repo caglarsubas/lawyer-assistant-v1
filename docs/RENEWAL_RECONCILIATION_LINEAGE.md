@@ -81,6 +81,6 @@ separately. Engineering results establish no national corpus coverage, legal
 correctness, professional independence, productivity, deployment or lawyer
 acceptance. R03/R05 remain partial.
 
-Next: guarded navigation from verified lineage to the exact historical parent and
-separate successor review, retaining filters and fresh authorization without
-inheriting decisions or promoting pending states.
+Delivered follow-up: [guarded parent-lineage navigation and separate successor
+review](PARENT_LINEAGE_AND_SUCCESSOR_REVIEW.md), retaining exact filters and fresh
+authorization without inheriting decisions or promoting pending states.

@@ -2503,6 +2503,35 @@ scope retirement. Seven jobs, two workers, existing caps and the complete exclus
 independence, productivity, deployment and lawyer acceptance stay separate;
 R03/R05 remain partial.
 
-Next: guarded navigation from verified lineage to the exact historical parent and
-separate successor review, retaining filters and fresh authorization without
-inheriting decisions or promoting pending states.
+### R03/R05A guarded parent-lineage navigation and separate successor review
+
+[Guarded lineage follow-up](PARENT_LINEAGE_AND_SUCCESSOR_REVIEW.md) re-observes the
+actor-bound renewal receipt/link/admissions around exact parent or successor
+metadata lookups. The parent keeps its captured historical event/packet and frozen
+version distinct from any later head. When no review was captured, that absence remains explicit.
+Each explicit selection receives a separate bounded return intent with unchanged
+customer OR, workspace dates, source-record dates and bucket; original baselines,
+evidence and history are not rewritten.
+
+Successor independent review has a separate intent-only entry. Exact filters,
+version/head/admission observation, tool opening and original guarded content
+retrieval are explicit steps. Another lawyer selects the context through their own
+authorized session; tokens, old decisions and approval are not transferred. New
+review controls start blank. Confirmation binds the new event ID/packet/decision
+and predecessor to fresh authorized metadata under unchanged version/revision.
+Uncertain writes close protected forms without POST replay, admission repair or
+claiming a later head is the request's result. Scope changes retire delayed bodies
+and links; the assistant stays guide-only and public graphs stay unchanged.
+
+Qualification covers 743 frontend cases/build, 255 focused source cases, 275
+publication cases, ten PostgreSQL races, actual signed-runtime withdrawal,
+deployment contracts and browser real later-parent navigation, separate reviewer
+sequence-one confirmation, truncated sequence-two response/history, actor denial,
+late filter retirement and narrow layout. Seven jobs, two workers, existing caps
+and the complete exclusive 4,496-case backend partition remain unchanged. All
+legal/corpus, independence, productivity, deployment and lawyer acceptance gates
+remain separate; R03/R05 stay partial.
+
+Next: actor-bound read-only independent-review outcome reconciliation and exact
+event navigation, preserving filters, evidence and history without write replay or
+admission repair.
