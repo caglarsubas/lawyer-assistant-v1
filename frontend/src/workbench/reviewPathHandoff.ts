@@ -1,8 +1,8 @@
 import { canonicalJson } from '../pages/matter/sourceReviewTypes';
-import { navigationIdentifier } from '../pages/sourceContextNavigationTypes';
+import { navigationIdentifier, type NavigationMetadata } from '../pages/sourceContextNavigationTypes';
 import { verifyReviewMetadata, type ReviewLineage, type ReviewMetadata } from '../pages/sourceReviewLineageTypes';
 import { validateReturn, type ReturnIntent } from './portfolioReturn';
-import { compareReturnIdentities, type IdentityRelation, type ReturnComparison } from './returnComparison';
+import { compareReturnIdentities, verifyReturnSelection, type IdentityRelation, type ReturnComparison } from './returnComparison';
 
 /** Metadata from the five fresh preparation reads, separate from the original queue baseline. */
 export type ReviewPathHandoff = {
@@ -31,15 +31,28 @@ export type ReviewPathComparison = {
     context_admission: string; selected_admission: string; head_admission: string };
   head_relation: IdentityRelation; version_relation: IdentityRelation; revision_relation: 'same' | 'different';
 };
+export type ReviewPathDestination = { metadata: NavigationMetadata; selected: ReviewMetadata; head: ReviewMetadata | null };
+/** Validate a retained metadata observation without inventing a predecessor window. */
+export function verifyReviewPathDestination(intent: ReturnIntent, handoff: ReviewPathHandoff, value: ReviewPathDestination) {
+  validateReviewPathHandoff(handoff, intent);
+  if (!value || !equal(Object.keys(value).sort(), ['head', 'metadata', 'selected'])) fail();
+  const m = value.metadata, selected = value.selected, head = value.head;
+  verifyReturnSelection(intent, m, null); verifyReviewMetadata(selected, intent.target.manifest_sha256);
+  if (selected.integrity !== 'verified' || !equal(immutable(selected), immutable(handoff.selected))
+    || Date.parse(m.observed_at) < Date.parse(handoff.observed_at[4]) || m.analysis.revision < handoff.revision) fail();
+  if (head !== null) {
+    verifyReviewMetadata(head, intent.target.manifest_sha256);
+    if (head.id !== m.historical_review.id || head.id === selected.id && !equal(head, selected)) fail();
+    if (head.integrity === 'verified' && (head.state !== m.historical_review.state || head.admission !== m.admission.review_state
+      || head.id === handoff.head.id && !equal(immutable(head), immutable(handoff.head)))) fail();
+  }
+}
 /** Fresh authorized metadata only. Changed current identities are observations, never a new selection. */
 export function compareReviewPathHandoff(intent: ReturnIntent, handoff: ReviewPathHandoff, history: ReviewLineage): ReviewPathComparison {
-  validateReviewPathHandoff(handoff, intent);
   const original = compareReturnIdentities(intent, history.context_navigation, history);
   const selected = history.selected_review, head = history.current_head, m = history.context_navigation;
-  if (selected.integrity !== 'verified' || !equal(immutable(selected), immutable(handoff.selected))
-    || Date.parse(history.observed_at) < Date.parse(handoff.observed_at[4]) || m.analysis.revision < handoff.revision) fail();
+  verifyReviewPathDestination(intent, handoff, { metadata: m, selected, head });
   const knownHead = head?.integrity === 'verified' && m.historical_review.state !== 'unknown';
-  if (knownHead && head.id === handoff.head.id && !equal(immutable(head), immutable(handoff.head))) fail();
   return structuredClone({ original, handoff,
     destination: { head, current_version_id: m.analysis.current_version_id, revision: m.analysis.revision, observed_at: history.observed_at,
       context_admission: m.admission.context_state, selected_admission: selected.admission, head_admission: m.admission.review_state },
