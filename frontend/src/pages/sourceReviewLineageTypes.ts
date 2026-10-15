@@ -18,17 +18,7 @@ export function verifyReviewLineage(value: ReviewLineage, target: SourceTarget) 
     || value.recipe !== 'private-source-review-lineage-v1' || value.matter_id !== target.matter_id || value.analysis_id !== target.analysis_id || value.context_id !== target.context_id || value.review_id !== target.review_id
     || !stamp(value.observed_at) || value.source_verification !== 'not_checked' || value.legal_readiness !== 'not_established' || value.qualification_granted !== false) fail();
   verifyNavigation(value.context_navigation, target);
-  const check = (row: ReviewMetadata) => {
-    if (!row || !keys(row, ['id', 'state', 'sequence', 'recorded_at', 'packet_sha256', 'manifest_sha256', 'previous_review_id', 'admission', 'integrity'])
-      || !navigationReviewId(row.id) || !['unknown', 'changes_requested', 'reviewed_conditional'].includes(row.state)
-      || !['complete', 'pending', 'unavailable'].includes(row.admission) || !['verified', 'unavailable'].includes(row.integrity)
-      || (row.previous_review_id !== null && !navigationReviewId(row.previous_review_id))) fail();
-    if (row.integrity === 'verified') {
-      if (!Number.isInteger(row.sequence) || row.sequence! < 1 || row.sequence! > 100 || !stamp(row.recorded_at) || !sha(row.packet_sha256)
-        || row.manifest_sha256 !== value.context_navigation.context.manifest_sha256 || !sha(row.manifest_sha256)
-        || row.state === 'unknown' || row.admission === 'unavailable' || ((row.sequence === 1) !== (row.previous_review_id === null))) fail();
-    } else if (row.state !== 'unknown' || row.sequence !== null || row.recorded_at !== null || row.packet_sha256 !== null || row.manifest_sha256 !== null || row.previous_review_id !== null || row.admission !== 'unavailable') fail();
-  };
+  const check = (row: ReviewMetadata) => verifyReviewMetadata(row, value.context_navigation.context.manifest_sha256);
   check(value.selected_review); if (value.selected_review.id !== target.review_id) fail(); if (value.current_head) check(value.current_head);
   const head = value.current_head, selected = value.selected_review, lineage = value.lineage;
   if (head && head.id !== value.context_navigation.historical_review.id) fail();
@@ -49,4 +39,17 @@ export function verifyReviewLineage(value: ReviewLineage, target: SourceTarget) 
   if (lineage.status === 'complete_to_first_event' && (!last || last.sequence !== 1 || last.previous_review_id !== null || lineage.next_review_id !== null)) fail();
   if (lineage.status === 'truncated' && (lineage.items.length !== lineage.window || !last || !navigationReviewId(lineage.next_review_id) || lineage.next_review_id !== last.previous_review_id || seen.has(lineage.next_review_id))) fail();
   if (lineage.status === 'unavailable' && lineage.next_review_id !== null) fail();
+}
+
+export function verifyReviewMetadata(row: ReviewMetadata, manifest: string | null) {
+  const fail = () => { throw new Error('Karar kaydının değiştirilemez kimliği doğrulanamadı.'); };
+  if (!row || !keys(row, ['id', 'state', 'sequence', 'recorded_at', 'packet_sha256', 'manifest_sha256', 'previous_review_id', 'admission', 'integrity'])
+    || !navigationReviewId(row.id) || !['unknown', 'changes_requested', 'reviewed_conditional'].includes(row.state)
+    || !['complete', 'pending', 'unavailable'].includes(row.admission) || !['verified', 'unavailable'].includes(row.integrity)
+    || (row.previous_review_id !== null && !navigationReviewId(row.previous_review_id))) fail();
+  if (row.integrity === 'verified') {
+    if (!Number.isInteger(row.sequence) || row.sequence! < 1 || row.sequence! > 100 || !stamp(row.recorded_at) || !sha(row.packet_sha256)
+      || row.manifest_sha256 !== manifest || !sha(row.manifest_sha256)
+      || row.state === 'unknown' || row.admission === 'unavailable' || ((row.sequence === 1) !== (row.previous_review_id === null))) fail();
+  } else if (row.state !== 'unknown' || row.sequence !== null || row.recorded_at !== null || row.packet_sha256 !== null || row.manifest_sha256 !== null || row.previous_review_id !== null || row.admission !== 'unavailable') fail();
 }

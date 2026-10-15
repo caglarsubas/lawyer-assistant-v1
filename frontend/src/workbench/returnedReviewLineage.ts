@@ -3,6 +3,7 @@ import type { NavigationMetadata, SourceTarget } from '../pages/sourceContextNav
 import { verifyReviewLineage, type ReviewLineage, type ReviewMetadata } from '../pages/sourceReviewLineageTypes';
 import { validateReturn, returnMatches, type ReturnIntent, type ReturnReconciliation } from './portfolioReturn';
 import { compareReturnIdentities, verifyReturnSelection } from './returnComparison';
+import { validateReviewPathHandoff, type ReviewPathHandoff } from './reviewPathHandoff';
 
 export const RETURNED_LINEAGE_WINDOW = 10;
 export type ReturnedLineageBasis = { intent: ReturnIntent; metadata: NavigationMetadata; selected: ReviewMetadata; head: ReviewMetadata };
@@ -76,7 +77,7 @@ function pathObservation(basis: ReturnedLineageBasis, before: ReviewLineage, hea
 
 /** A prepared link chooses one exact member; it never changes original baselines. */
 export async function prepareReturnedEvent(basis: ReturnedLineageBasis, previous: ReturnedLineageObservation, chosenId: string,
-  read: (path: string) => Promise<ReviewLineage>, current: () => boolean): Promise<ReturnIntent> {
+  read: (path: string) => Promise<ReviewLineage>, current: () => boolean): Promise<{ intent: ReturnIntent; handoff: ReviewPathHandoff }> {
   validateReturn(basis.intent);
   if (!['same_event', 'verified_path'].includes(previous.status) || previous.reason !== previous.status
     || previous.window !== RETURNED_LINEAGE_WINDOW || previous.source_verification !== 'not_checked'
@@ -98,7 +99,12 @@ export async function prepareReturnedEvent(basis: ReturnedLineageBasis, previous
   if (fresh.status !== previous.status || !equal(fresh.path, previous.path) || !current()) fail();
   const next = structuredClone(basis.intent);
   next.target.review_id = chosen.id; next.target.review_packet_sha256 = chosen.packet_sha256;
-  validateReturn(next); return next;
+  validateReturn(next);
+  const handoff: ReviewPathHandoff = { recipe: 'private-review-path-handoff-v1', matter_id: next.target.matter_id, analysis_id: next.target.analysis_id, context_id: next.target.context_id,
+    frozen_version_id: next.target.version_id!, manifest_sha256: next.target.manifest_sha256!, selected: structuredClone(chosenAfter.selected_review), head: structuredClone(head.current_head!),
+    current_version_id: after.context_navigation.analysis.current_version_id!, revision: after.context_navigation.analysis.revision,
+    observed_at: [before.observed_at, chosenBefore.observed_at, head.observed_at, chosenAfter.observed_at, after.observed_at] };
+  validateReviewPathHandoff(handoff, next); return { intent: next, handoff };
 }
 
 /** A path token cannot be redirected to a context, another event or a write flow. */

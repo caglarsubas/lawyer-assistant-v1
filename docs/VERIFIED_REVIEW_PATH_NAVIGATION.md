@@ -82,6 +82,4 @@ records the checks. Seven CI jobs, two workers, existing deadlines and the compl
 exclusive backend partition remain unchanged. Hosted exact-head checks, merge,
 deployment and legal acceptance remain separate; R03/R05 stay partial.
 
-Next: an explicit read-only comparison between the navigation handoff's observed
-head/version and the destination's fresh metadata, preserving the original queue
-baseline and selected event without inheriting source approval or replaying work.
+Continuation: [handoff-versus-destination identity comparison](HANDOFF_DESTINATION_IDENTITY_COMPARISON.md) now retains those observations separately, preserving the original queue baseline and chosen event without transferring approval or replaying work.
