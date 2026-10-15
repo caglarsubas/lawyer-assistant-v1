@@ -87,9 +87,10 @@ function ReturnWorkspace({ intent, token }: { intent: ReturnIntent; token: strin
     if (!visible || busy || !basis || !path || !returns.get(token)) return;
     const task = fence.current.begin(); setBusy(true); setError(''); setEventLink(null);
     try {
-      const next = await prepareReturnedEvent(basis, path, id, url => request<ReviewLineage>(url, { signal: task.signal }), () => task.current() && !!returns.get(token));
+      const preparedEvent = await prepareReturnedEvent(basis, path, id, url => request<ReviewLineage>(url, { signal: task.signal }), () => task.current() && !!returns.get(token));
       if (!task.current() || !returns.get(token)) return;
-      const nextToken = returns.putReviewPath(next);
+      const { intent: next, handoff } = preparedEvent;
+      const nextToken = returns.putReviewPath(next, handoff);
       const href = sourceContextHref(next.target.matter_id, next.target.analysis_id, next.target.context_id, next.target.review_id!, nextToken);
       if (!href) throw new Error('Tam tarihsel karar bağlantısı kurulamadı.');
       setEventLink({ href, id: next.target.review_id! });

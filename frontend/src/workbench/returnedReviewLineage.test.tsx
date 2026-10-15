@@ -6,6 +6,7 @@ import type { NavigationMetadata } from '../pages/sourceContextNavigationTypes';
 import type { ReviewLineage, ReviewMetadata } from '../pages/sourceReviewLineageTypes';
 import { departingReturn, PortfolioReturnBook, PrincipalReturnBook, type ReturnIntent, type ReturnReconciliation } from './portfolioReturn';
 import { compareReturnIdentities } from './returnComparison';
+import type { ReviewPathHandoff } from './reviewPathHandoff';
 import { captureReturnedLineage, observeReturnedLineage, prepareReturnedEvent, returnVerifiedEvent, verifyReturnedEventTarget } from './returnedReviewLineage';
 
 const ctx = `sac-${'a'.repeat(20)}-${'b'.repeat(32)}`, id = (n: number) => `sar-${'c'.repeat(20)}-${n.toString(16).padStart(32, '0')}`;
@@ -146,18 +147,27 @@ describe('guarded exact-event selection from a verified path', () => {
   async function prepared(selected = 1, head = 3) { const f = fixture(selected, head), previous = await observe(f); f.read.mockClear(); return { ...f, previous }; }
   it.each([1, 2, 3])('selects only exact path member %s with five fresh bounded reads and unchanged original fields', async chosen => {
     const f = await prepared(), before = structuredClone(f.i);
-    const next = await prepareReturnedEvent(f.basis, f.previous, id(chosen), f.read, () => true);
+    const { intent: next } = await prepareReturnedEvent(f.basis, f.previous, id(chosen), f.read, () => true);
     expect(f.read.mock.calls.map(([url]) => url.split('/reviews/')[1])).toEqual([`${id(1)}/navigation-context?window=1`, `${id(chosen)}/navigation-context?window=1`, `${id(3)}/navigation-context?window=10`, `${id(chosen)}/navigation-context?window=1`, `${id(1)}/navigation-context?window=1`]);
     expect(next).toEqual({ ...before, target: { ...before.target, review_id: id(chosen), review_packet_sha256: row(chosen).packet_sha256 } });
     expect(f.i).toEqual(before); next.filters.customer_ids.pop(); expect(f.i.filters.customer_ids).toEqual(['A', 'B']);
   });
+  it('captures handoff metadata and all five timestamps from the fresh reads rather than the original baseline', async () => {
+    const f = await prepared(), normal = f.read.getMockImplementation()!; let n = 0;
+    f.read.mockImplementation(async url => { const v = await normal(url); v.observed_at = v.context_navigation.observed_at = `2026-10-15T01:00:0${++n}Z`; return v; });
+    const { intent: next, handoff } = await prepareReturnedEvent(f.basis, f.previous, id(2), f.read, () => true);
+    expect(handoff.observed_at).toEqual([1, 2, 3, 4, 5].map(v => `2026-10-15T01:00:0${v}Z`));
+    expect(handoff.current_version_id).toBe('newer'); expect(handoff.revision).toBe(4); expect(handoff.head).toEqual(row(3)); expect(handoff.selected).toEqual(row(2));
+    expect(next.target.current_version_id).toBe('original'); expect(next.target.head_id).toBe(id(1)); expect(next.target.version_observed_at).toBe(stamp);
+    handoff.head.state = 'changes_requested'; expect(f.basis.head).toEqual(row(3));
+  });
   it('supports a complete same-event path without interpreting it as approval', async () => {
-    const f = await prepared(1, 1); const next = await prepareReturnedEvent(f.basis, f.previous, id(1), f.read, () => true);
+    const f = await prepared(1, 1); const { intent: next } = await prepareReturnedEvent(f.basis, f.previous, id(1), f.read, () => true);
     expect(next.target.review_id).toBe(id(1)); expect(f.read).toHaveBeenCalledTimes(5);
   });
   it('preserves unknown original baselines on preparation and a subsequent exact-event queue return', async () => {
     const f = await prepared(); f.basis.intent.target.current_version_id = null; f.basis.intent.target.version_observed_at = null; f.basis.intent.target.head_id = null; f.basis.intent.target.head_state = 'unknown';
-    const next = await prepareReturnedEvent(f.basis, f.previous, id(2), f.read, () => true);
+    const { intent: next } = await prepareReturnedEvent(f.basis, f.previous, id(2), f.read, () => true);
     const history = snapshot(2), returned = departingReturn(next, history.context_navigation, history, id(2));
     expect(returned).toEqual(next); expect(returned.target.version_observed_at).toBeNull(); expect(returned.target.head_state).toBe('unknown');
   });
@@ -221,13 +231,14 @@ describe('guarded exact-event selection from a verified path', () => {
   });
   it('keeps path markers session-local, bounded, cloned and principal-bound', () => {
     let now = 0, nonce = 0; const book = new PortfolioReturnBook(() => now, () => (++nonce).toString(16).padStart(32, '0')), value = intent();
-    const token = book.putReviewPath(value); expect(book.isReviewPath(token)).toBe(true); expect(book.get(token)).toEqual(value);
+    const handoff: ReviewPathHandoff = { recipe: 'private-review-path-handoff-v1', matter_id: 'm', analysis_id: 'a', context_id: ctx, frozen_version_id: 'frozen', manifest_sha256: 'd'.repeat(64), selected: row(2), head: row(3), current_version_id: 'newer', revision: 4, observed_at: [stamp, stamp, stamp, stamp, stamp] };
+    const token = book.putReviewPath(value, handoff); expect(book.isReviewPath(token)).toBe(true); expect(book.get(token)).toEqual(value);
     value.filters.customer_ids.pop(); expect(book.get(token)!.filters.customer_ids).toEqual(['A', 'B']); expect(book.isReviewPath('foreign')).toBe(false);
     const ordinary = book.put(intent()); expect(book.isReviewPath(ordinary)).toBe(false);
-    for (let i = 0; i < 7; i++) book.putReviewPath(intent()); expect(book.isReviewPath(token)).toBe(false);
+    for (let i = 0; i < 7; i++) book.putReviewPath(intent(), handoff); expect(book.isReviewPath(token)).toBe(false);
     now = 30 * 60 * 1000; expect(book.isReviewPath(ordinary)).toBe(false);
-    const principals = new PrincipalReturnBook(), old = principals.forPrincipal('lawyer:A'), p = old.putReviewPath(intent()); expect(principals.forPrincipal('lawyer:B').isReviewPath(p)).toBe(false);
-    const noPin = intent(); noPin.target.review_packet_sha256 = null; expect(() => book.putReviewPath(noPin)).toThrow();
+    const principals = new PrincipalReturnBook(), old = principals.forPrincipal('lawyer:A'), p = old.putReviewPath(intent(), handoff); expect(principals.forPrincipal('lawyer:B').isReviewPath(p)).toBe(false);
+    const noPin = intent(); noPin.target.review_packet_sha256 = null; expect(() => book.putReviewPath(noPin, handoff)).toThrow();
   });
   it.each(['review', 'context-only', 'context', 'matter', 'prepare', 'packet'] as const)('rejects destination redirection through %s', field => {
     const v = intent(), target = { kind: 'selected' as const, matter_id: 'm', analysis_id: 'a', context_id: ctx, review_id: id(2) };

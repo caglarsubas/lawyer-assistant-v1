@@ -2670,3 +2670,36 @@ stay unchanged; deployment and legal acceptance are separate. R03/R05 remain par
 
 Next: read-only handoff-versus-destination head/version comparison, keeping the
 original queue baseline, selected event and independent source-content guards.
+
+### R03/R05A guarded handoff-versus-destination identity comparison
+
+Verified review-path tokens now retain a separately typed metadata observation of
+the handoff's exact selected event, current head packet, current analysis
+version/revision and five fresh-read timestamps. This does not overwrite the
+original queue baseline or unknown values. The principal-bound in-memory book
+keeps the same eight-entry/thirty-minute bounds and reload/eviction behavior.
+
+The exact-event destination compares a fresh authorized metadata response with
+that handoff observation. Same, different and unknown head/version relationships
+and changed revisions are explicit. Immutable selected-event or same-head packet/
+metadata substitutions, older observations and regressive revisions close the
+comparison. Pending admissions remain pending; a later head never replaces the
+chosen event. No source read or approval follows from a metadata match.
+
+The disclosure keeps original baseline, frozen evidence, chosen event, handoff and
+destination separate. Existing explicit queue return preserves customer OR,
+workspace/source dates, bucket, original head/version observations, unknowns and
+selected packet. Source tools retain their separate current checks. Filter,
+revision, principal/scope, token/target, expiry and navigation changes retire old
+comparisons and replies. No backend schema, review write, source-body read,
+provider call or public graph mutation is added.
+
+Qualification and limitations are recorded in the
+[contract](HANDOFF_DESTINATION_IDENTITY_COMPARISON.md) and
+[engineering evidence](evidence/handoff-destination-comparison-2026-10-15.json).
+Seven CI jobs, two workers, existing caps and the complete backend partition stay
+unchanged; hosted checks, merge, deployment and legal acceptance remain separate.
+R03/R05 remain partial.
+
+Next: guarded destination-comparison return and fresh queue reconciliation,
+retaining separate handoff/destination observations and the original baseline.
