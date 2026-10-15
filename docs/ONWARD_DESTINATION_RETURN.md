@@ -92,3 +92,8 @@ main CI and deployment must be verified separately.
 
 Next: guarded exact-event handoff retaining the onward-return destination and
 all earlier observations within an explicitly bounded fixed-depth contract.
+
+The [onward-return-preserving exact-event handoff](ONWARD_RETURN_EVENT_HANDOFF.md)
+now provides explicit preparation carrying the full retained destination and all
+earlier observations. It replaces the former withholding boundary with a separate
+purpose contract; it does not reuse the older arrival-only preparation.
