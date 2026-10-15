@@ -14,11 +14,12 @@ import { SourceRenewalMapping, SourceRenewalComparison } from './SourceRenewalMa
 
 import { SourceReviewQueue } from './SourceReviewQueue';
 import { verifyReadiness, type ReadinessFilters, type ReadinessPage } from './sourceReadinessTypes';
+import type { ReviewCommitPin } from '../../workbench/renewalLineageNavigation';
 import { renewalReceipt, uncertainRenewalOutcome, type RenewalReceipt } from '../../workbench/renewalReconciliation';
 
 type SelectedContext = { id: string; manifest_sha256: string; version_id: string };
 export type SourceSaveReceipt = { kind: 'context' | 'review'; id: string; state: 'confirmed' | 'pending'; context?: { version_id: string; manifest_sha256: string } };
-type WorkspaceProps = { matterId: string; record: Pick<AnalysisRecord, 'id' | 'latest_version_id'>; returnToken?: string; selectedContext?: SelectedContext; selectedReview?: { id: string; packet_sha256: string }; onFailure?: (cause: unknown) => void; onCommitted?: (receipt: SourceSaveReceipt) => void; preparedRenewal?: RenewalMetadata; guard?: (signal: AbortSignal) => Promise<void>; onRenewalOutcome?: (receipt: RenewalReceipt) => void };
+type WorkspaceProps = { matterId: string; record: Pick<AnalysisRecord, 'id' | 'latest_version_id'>; returnToken?: string; selectedContext?: SelectedContext; selectedReview?: { id: string; packet_sha256: string }; onFailure?: (cause: unknown) => void; onCommitted?: (receipt: SourceSaveReceipt) => void; preparedRenewal?: RenewalMetadata; guard?: (signal: AbortSignal, committed?: ReviewCommitPin) => Promise<void>; reviewOnly?: boolean; onReviewUncertain?: () => void; onRenewalOutcome?: (receipt: RenewalReceipt) => void };
 type SaveRequest = { path: string; body: unknown; kind: 'context' | 'review' };
 type Saver = (value: SaveRequest) => Promise<void>;
 const nonce = () => crypto.randomUUID().replaceAll('-', '');
@@ -127,7 +128,7 @@ function ReviewEditor({ inputs, base, busy, save }: { inputs: ReviewInputs; base
   </form>;
 }
 
-function SourceWorkspace({ matterId, record, selectedContext, selectedReview, returnToken, onFailure, onCommitted, preparedRenewal, guard, onRenewalOutcome }: WorkspaceProps) {
+function SourceWorkspace({ matterId, record, selectedContext, selectedReview, returnToken, onFailure, onCommitted, preparedRenewal, guard, onRenewalOutcome, reviewOnly, onReviewUncertain }: WorkspaceProps) {
   const base = `/matters/${encodeURIComponent(matterId)}/analyses/${encodeURIComponent(record.id)}/source-contexts`;
   const [products, setProducts] = useState<{ id: string; title: string }[]>([]); const [product, setProduct] = useState(''); const [productMore, setProductMore] = useState(false);
   const [candidates, setCandidates] = useState<Candidates | null>(null); const [items, setItems] = useState<Summary[]>([]); const [more, setMore] = useState(false);
@@ -154,14 +155,16 @@ function SourceWorkspace({ matterId, record, selectedContext, selectedReview, re
   }
   async function save(value: SaveRequest) {
     const task = fence.current.begin(); setBusy(true); setError('');
-    let outcome: RenewalReceipt | null = null;
+    let outcome: RenewalReceipt | null = null; let dispatched = false;
     try {
       if (guard) await guard(task.signal); if (!task.current()) return;
       if (preparedRenewal && onRenewalOutcome && value.kind === 'context') outcome = await renewalReceipt(value.body as Record<string, unknown>, preparedRenewal);
       if (!task.current()) return;
+      dispatched = true;
       const result = await request<ContextView>(value.path, { method: 'POST', body: JSON.stringify(value.body), signal: task.signal, refreshPortfolio: !selectedContext });
       if (outcome && onRenewalOutcome) { if (task.current()) { clear(); onRenewalOutcome(outcome); } return; }
-      if (guard) { try { await guard(task.signal); } catch (cause) { if (task.current()) { clear(cause, false); if (value.kind === 'context' && /^sac-[a-f0-9]{20}-[a-f0-9]{32}$/.test(result.id)) onCommitted?.({ kind: 'context', id: result.id, state: 'pending' }); else onFailure?.(cause); } return; } }
+      if (guard && !reviewOnly) { try { await guard(task.signal); } catch (cause) { if (task.current()) { clear(cause, false); if (value.kind === 'context' && /^sac-[a-f0-9]{20}-[a-f0-9]{32}$/.test(result.id)) onCommitted?.({ kind: 'context', id: result.id, state: 'pending' }); else onFailure?.(cause); } return; } }
+      if (reviewOnly && !currentView(result)) throw new Error('Saklanan bağımsız kararın son izin kontrolü doğrulanamadı.');
       if (!currentView(result) && /^sac-[a-f0-9]{20}-[a-f0-9]{32}$/.test(result.id)) {
         if (preparedRenewal && selectedContext && value.kind === 'context' && onCommitted) { if (task.current()) { clear(); onCommitted({ kind: 'context', id: result.id, state: 'pending' }); } return; }
         if (task.current()) { clear(); if (selectedContext && value.kind === 'context') setSuccessor(result.id); else { checkSelected(result.id, result.manifest_sha256, result.manifest?.version_id); setContextId(result.id); } setNotice(`Kayıt saklandı; kaynak bağları bekletiliyor. Geçmişi ayrıca kontrol edin. Kayıt: ${result.id}`); } return;
@@ -171,12 +174,17 @@ function SourceWorkspace({ matterId, record, selectedContext, selectedReview, re
       if (result.manifest_sha256 !== supplied[value.kind === 'context' ? 'expected_preview_sha256' : 'expected_manifest_sha256']
         || (value.kind === 'review' && canonicalJson(result.review.snapshot?.input) !== canonicalJson(supplied))) throw new Error('Saklanan kararın tam önizleme veya istek bağı eşleşmiyor.');
       if (value.kind === 'review') checkSelected(result.id, result.manifest_sha256, result.manifest?.version_id);
+      if (reviewOnly && guard) {
+        if (value.kind !== 'review' || !result.review.id || !result.review.snapshot || !/^sar-[a-f0-9]{20}-[a-f0-9]{32}$/.test(result.review.id) || !/^[a-f0-9]{64}$/.test(result.review.snapshot.packet_sha256)) throw new Error('Yeni kararın tam kimliği doğrulanamadı.');
+        await guard(task.signal, { id: result.review.id, packet_sha256: result.review.snapshot.packet_sha256, state: result.review.snapshot.input.decision });
+      }
       if (preparedRenewal && (result.manifest?.version_id !== record.latest_version_id || result.manifest.renewal?.parent_context_id !== preparedRenewal.id || result.manifest.renewal.expected_parent_manifest_sha256 !== preparedRenewal.manifest_sha256 || result.manifest.renewal.expected_parent_review_id !== preparedRenewal.review_id)) throw new Error('Yeni kaydın tam yenileme ve sürüm bağı değişti.');
       if (selectedContext && onCommitted) { if (task.current()) { clear(); onCommitted({ kind: value.kind, id: value.kind === 'context' ? result.id : result.review.id!, state: 'confirmed', ...(value.kind === 'context' ? { context: { version_id: result.manifest!.version_id, manifest_sha256: result.manifest_sha256! } } : {}) }); } return; }
       if (selectedContext && value.kind === 'context') { if (task.current()) { clear(); setSuccessor(result.id); setNotice('Yeni kaynak bağlamı kaydedildi. Önceki kayıt seçili kalır; yeni kayda ayrıca geçin ve bağımsız inceleme yapın.'); } return; }
       if (task.current()) { setPending(null); setCandidates(null); setInputs(null); setRenewal(null); setView(result); setContextId(result.id); setNotice(value.kind === 'context' ? 'Kaynak seçimi kaydedildi. Bağımsız inceleme ayrıca gerekli.' : 'Bağımsız karar kaydedildi. Önceki kararlar korunur.'); }
     } catch (cause) {
       if (task.current()) {
+        if (reviewOnly && dispatched && onReviewUncertain && uncertainRenewalOutcome(cause)) { clear(); onReviewUncertain(); return; }
         if (outcome && onRenewalOutcome && uncertainRenewalOutcome(cause)) { clear(); onRenewalOutcome(outcome); return; }
         const id = pendingReceipt(cause, value.kind); clear(cause, !(id || (cause instanceof ApiError && cause.status === 0)));
         if (id && selectedContext && onCommitted) { onCommitted({ kind: value.kind, id, state: 'pending' }); return; }
@@ -227,7 +235,7 @@ function SourceWorkspace({ matterId, record, selectedContext, selectedReview, re
     {pending && <Notice error>Kayıt sonucu bilinmiyor. Aynı istek kimliği korunuyor; kendiliğinden tekrar gönderilmez. <>{preparedRenewal ? <span>Yeni gönderim kapalı; yetkili kayıt geçmişinden ayrı uzlaştırma gerekir.</span> : <button className="text-button" disabled={busy} onClick={() => void save(pending)}>Aynı isteğin sonucunu kontrol et</button>}</></Notice>}
     {notice && <Notice>{notice}</Notice>}{successor && sourceContextHref(matterId, record.id, successor) && <a className="button secondary" href={sourceContextHref(matterId, record.id, successor)!}>Yeni bağlamın tam kimliğini aç</a>}{error && <Notice error>{error}</Notice>}
     {!selectedContext && <SourceReviewQueue page={queue} busy={busy || !!pending} load={readiness} clear={clear} inspect={inspect} renew={renew} />}
-    <div className="practice-record-actions">{(!selectedContext || renewal) && !selectedReview && <button className="text-button" disabled={busy || !!pending} onClick={() => research()}>Araştırma pasajlarını getir</button>}{!selectedContext && <button className="text-button" disabled={busy || !!pending} onClick={() => history()}>Kaynak seçimi geçmişini getir</button>}</div>
+    <div className="practice-record-actions">{!reviewOnly && (!selectedContext || renewal) && !selectedReview && <button className="text-button" disabled={busy || !!pending} onClick={() => research()}>Araştırma pasajlarını getir</button>}{!selectedContext && <button className="text-button" disabled={busy || !!pending} onClick={() => history()}>Kaynak seçimi geçmişini getir</button>}</div>
     {products.length > 0 && <><Field label="Kaynak pasajları için araştırma kaydı">{id => <select id={id} disabled={busy} value={product} onChange={event => { fence.current.invalidate(); setProduct(event.target.value); setCandidates(null); setView(null); setInputs(null); setError(''); }}><option value="">Araştırma seçin</option>{products.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}</select>}</Field>
       <button className="button secondary" disabled={busy || !product} onClick={() => void readCandidates()}>Özgün pasajları ve sürümleri aç</button>{productMore && <button className="text-button" disabled={busy} onClick={() => research(true)}>Daha fazla araştırma getir</button>}</>}
     {renewal && <><p className="small reference-id">Yenilenecek bağlam: {renewal.id}</p>{!preparedRenewal && <button className="text-button" disabled={busy || !!pending} onClick={() => { fence.current.invalidate(); setRenewal(null); setCandidates(null); setProducts([]); setProduct(''); }}>{selectedContext ? 'Yenileme hazırlığını kapat' : 'Ayrı kaynak seçimine dön'}</button>}</>}
@@ -235,7 +243,8 @@ function SourceWorkspace({ matterId, record, selectedContext, selectedReview, re
     {items.map(item => <div className="practice-record-actions" key={item.id}><span className="small">{formatDate(item.recorded_at, true)}</span><button className="text-button reference-id" disabled={busy || !!pending} onClick={() => inspect(item.id)}>Kaynak seçimini aç · {item.id}</button></div>)}
     {more && <button className="text-button" disabled={busy || !!pending} onClick={() => history(true)}>Daha fazla kaynak seçimi getir</button>}
     {contextId && selectedReview && <div className="practice-record-actions"><button className="text-button" disabled={busy} onClick={() => inspect(contextId, selectedReview.id)}>Seçilen tarihsel kararı ve özgün dayanakları kontrol et</button></div>}
-    {contextId && !selectedReview && !preparedRenewal && <div className="practice-record-actions"><button className="text-button" disabled={busy || !!pending} onClick={() => inspect(contextId)}>Güncel kaynak ve karar bağlarını kontrol et</button><button className="text-button" disabled={busy || !!pending} onClick={() => renew(contextId)}>Bu kaydın kaynak bağlamını yenile</button><button className="text-button" disabled={busy || !!pending} onClick={reviewContext}>Bağımsız inceleme içeriğini getir</button><button className="text-button" disabled={busy || !!pending} onClick={() => reviewHistory()}>Bağımsız karar geçmişini getir</button></div>}
+    {contextId && !selectedReview && !preparedRenewal && !reviewOnly && <div className="practice-record-actions"><button className="text-button" disabled={busy || !!pending} onClick={() => inspect(contextId)}>Güncel kaynak ve karar bağlarını kontrol et</button><button className="text-button" disabled={busy || !!pending} onClick={() => renew(contextId)}>Bu kaydın kaynak bağlamını yenile</button><button className="text-button" disabled={busy || !!pending} onClick={reviewContext}>Bağımsız inceleme içeriğini getir</button><button className="text-button" disabled={busy || !!pending} onClick={() => reviewHistory()}>Bağımsız karar geçmişini getir</button></div>}
+    {contextId && reviewOnly && <div className="practice-record-actions"><button className="button secondary" disabled={busy} onClick={reviewContext}>Yeni bağımsız inceleme içeriğini ayrıca getir</button></div>}
     {view && <><SourceContextView value={view} />{!selectedReview && <div className="practice-record-actions">{(['json', 'docx', 'pdf'] as const).map(format => <button key={format} className="text-button" disabled={busy || !!selectedReview || !canExport(view)} onClick={() => void download(format)}>{format.toUpperCase()} kaynak incelemesini indir</button>)}</div>}</>}
     {inputs && <ReviewEditor key={`${contextId}:${inputs.expected_manifest_sha256}:${inputs.expected_review_id}`} inputs={inputs} base={`${base}/${encodeURIComponent(contextId)}/reviews`} busy={busy} save={save} />}
     {reviews.map(item => <div className="practice-record-actions" key={item.id}><span className="small">{formatDate(item.recorded_at, true)} · İncelemeci: {item.recorded_by}</span>{!busy && !pending && sourceContextHref(matterId, record.id, contextId, item.id, returnToken) ? <a className="text-link reference-id" href={sourceContextHref(matterId, record.id, contextId, item.id, returnToken)!}>Kararın tam kimliğini aç · {item.id}</a> : <span className="small">Karar bağlantısı şu anda açılamıyor.</span>}</div>)}

@@ -6,6 +6,8 @@ import { usePortfolio, workspaceQuery } from '../workbench/portfolio';
 import { portfolioPart, queueReturnHref, type ReturnIntent } from '../workbench/portfolioReturn';
 import { successorIntent, verifyPreparedRenewal, verifyRenewalNavigation, type RenewalHandoff } from '../workbench/renewalHandoff';
 import { renewalReceiptQuery, verifyRenewalObservation, type RenewalObservation, type RenewalReceipt } from '../workbench/renewalReconciliation';
+import { completeRenewalAdmissions, independentReviewIntent, parentLineageIntent, reviewPreparationHref, verifySameRenewalLink } from '../workbench/renewalLineageNavigation';
+import { type ReviewLineage } from './sourceReviewLineageTypes';
 import { sourceContextHref, type NavigationMetadata } from './sourceContextNavigationTypes';
 import { canonicalJson, SourceReadFence } from './matter/sourceReviewTypes';
 import type { RenewalMetadata } from './matter/sourceRenewalTypes';
@@ -24,14 +26,14 @@ export default function ComparisonRenewalPage({ intent, handoff, token }: { inte
   const { filters, setFilters, revision, refresh, loading, error: scopeError, returns } = usePortfolio();
   const [prepared, setPrepared] = useState(-1), [proof, setProof] = useState<RenewalMetadata | null>(null), [editor, setEditor] = useState(false);
   const [busy, setBusy] = useState(false), [error, setError] = useState(''), [receipt, setReceipt] = useState<RenewalReceipt | null>(null);
-  const [result, setResult] = useState<RenewalObservation | null>(null), [successor, setSuccessor] = useState<string | null>(null);
+  const [result, setResult] = useState<RenewalObservation | null>(null), [successor, setSuccessor] = useState<string | null>(null), [parentHref, setParentHref] = useState<string | null>(null), [reviewHref, setReviewHref] = useState<string | null>(null);
   const fence = useRef(new SourceReadFence());
   const matching = canonicalJson(filters) === canonicalJson(portfolioPart(intent.filters));
   const ready = prepared === revision && matching && !loading && !scopeError;
   const key = `${workspaceQuery(filters)}:${revision}`;
   const base = `/matters/${encodeURIComponent(intent.target.matter_id)}/analyses/${encodeURIComponent(intent.target.analysis_id)}/source-contexts/${encodeURIComponent(intent.target.context_id)}`;
   useEffect(() => { const gate = fence.current; return () => gate.invalidate(); }, []);
-  function clear(cause?: unknown) { fence.current.invalidate(); setBusy(false); setProof(null); setEditor(false); setSuccessor(null); setResult(null); if (cause) setReceipt(null); setError(cause ? messageOf(cause) : ''); }
+  function clear(cause?: unknown) { fence.current.invalidate(); setBusy(false); setProof(null); setEditor(false); setSuccessor(null); setParentHref(null); setReviewHref(null); setResult(null); if (cause) setReceipt(null); setError(cause ? messageOf(cause) : ''); }
   useEffect(() => { clear(); setReceipt(null); }, [key]);
   useEffect(() => { if (loading || scopeError) { clear(); setReceipt(null); } }, [loading, scopeError]);
   function prepare() { clear(); setReceipt(null); setFilters(portfolioPart(intent.filters)); setPrepared(revision + 1); refresh(); }
@@ -58,19 +60,36 @@ export default function ComparisonRenewalPage({ intent, handoff, token }: { inte
       if (task.current() && returns.getRenewal(token)) setResult(value);
     } catch (cause) { if (task.current()) clear(cause); } finally { if (task.current()) setBusy(false); }
   }
-  async function observeSuccessor() {
-    if (!ready || !receipt || !result?.successor || result.admission?.successor !== 'complete' || result.admission.parent !== 'complete' || !['complete', 'not_recorded'].includes(result.admission.parent_review)) return;
-    const captured = result, task = fence.current.begin(); setBusy(true); setSuccessor(null);
+  async function observeRelated(kind: 'parent' | 'successor' | 'review') {
+    if (!ready || !receipt || !result || !completeRenewalAdmissions(result)) return;
+    const captured = result, task = fence.current.begin(); setBusy(true); setSuccessor(null); setParentHref(null); setReviewHref(null);
     try {
-      const id = captured.successor!.id;
-      const fresh = await request<RenewalObservation>(`${base.slice(0, base.lastIndexOf('/'))}/renewal-reconciliation?${renewalReceiptQuery(receipt)}`, { signal: task.signal });
-      verifyRenewalObservation(fresh, receipt, intent.target.matter_id, intent.target.analysis_id);
-      if (canonicalJson({ s: fresh.successor, l: fresh.lineage, a: fresh.admission }) !== canonicalJson({ s: captured.successor, l: captured.lineage, a: captured.admission })) throw new Error('Yenileme bağı veya kabul durumu değişti; sonucu yeniden gözlemleyin.');
-      if (!task.current()) return;
-      const meta = await request<NavigationMetadata>(`/matters/${encodeURIComponent(intent.target.matter_id)}/analyses/${encodeURIComponent(intent.target.analysis_id)}/source-contexts/${encodeURIComponent(id)}/navigation-context`, { signal: task.signal });
-      if (meta.admission.context_state !== 'complete') throw new Error('Ardıl bağlamın kabulü doğrulanamadı.');
-      const next = successorIntent(intent, id, meta, captured.successor!);
-      if (task.current() && returns.getRenewal(token)) { const nextToken = returns.put(next); setSuccessor(sourceContextHref(next.target.matter_id, next.target.analysis_id, next.target.context_id, undefined, nextToken)); }
+      const fresh = async () => {
+        const value = await request<RenewalObservation>(`${base.slice(0, base.lastIndexOf('/'))}/renewal-reconciliation?${renewalReceiptQuery(receipt)}`, { signal: task.signal });
+        verifySameRenewalLink(captured, value); return value;
+      };
+      await fresh(); if (!task.current()) return;
+      const id = kind === 'parent' ? captured.lineage!.parent_context_id : captured.successor!.id;
+      const targetBase = `/matters/${encodeURIComponent(intent.target.matter_id)}/analyses/${encodeURIComponent(intent.target.analysis_id)}/source-contexts/${encodeURIComponent(id)}`;
+      let next: ReturnIntent;
+      if (kind === 'parent') {
+        const review = captured.lineage!.parent_review_id;
+        const history = review ? await request<ReviewLineage>(`${targetBase}/reviews/${encodeURIComponent(review)}/navigation-context?window=1`, { signal: task.signal }) : null;
+        if (!task.current()) return;
+        const meta = history ? history.context_navigation : await request<NavigationMetadata>(`${targetBase}/navigation-context`, { signal: task.signal });
+        next = parentLineageIntent(intent, captured, meta, history);
+      } else {
+        const meta = await request<NavigationMetadata>(`${targetBase}/navigation-context`, { signal: task.signal });
+        if (meta.admission.context_state !== 'complete') throw new Error('Ardıl bağlamın kabulü doğrulanamadı.');
+        next = successorIntent(intent, id, meta, captured.successor!);
+        if (kind === 'review') next = independentReviewIntent(next, meta);
+      }
+      await fresh();
+      if (task.current() && returns.getRenewal(token)) {
+        const nextToken = returns.put(next), t = next.target;
+        const href = kind === 'review' ? reviewPreparationHref(next, nextToken) : sourceContextHref(t.matter_id, t.analysis_id, t.context_id, t.review_id || undefined, nextToken);
+        if (kind === 'parent') setParentHref(href); else if (kind === 'review') setReviewHref(href); else setSuccessor(href);
+      }
     } catch (cause) { if (task.current()) clear(cause); } finally { if (task.current()) setBusy(false); }
   }
   return <><PageHeader eyebrow="AYRI YENİLEME HAZIRLIĞI" title="Karşılaştırmadan kaynak yenilemeye" description="Özgün kayıt, yeni hedef ve bağımsız inceleme ayrı tutulur. Hazırlık açıkça başlatılır." />
@@ -85,8 +104,15 @@ export default function ComparisonRenewalPage({ intent, handoff, token }: { inte
     {ready && receipt && <Notice>İstek özeti korundu; sonuç ayrıca salt okunur gözlemlenir. İstek yeniden gönderilmez; eski karar devralınmaz.
       <p><button className="text-button" disabled={busy} onClick={() => void reconcile()}>Yenileme isteğinin sonucunu salt okunur gözle</button></p></Notice>}
     {ready && result && <RenewalOutcomeSummary value={result} />}
-    {ready && result?.outcome === 'verified' && result.admission?.successor === 'complete' && result.admission.parent === 'complete' && ['complete', 'not_recorded'].includes(result.admission.parent_review) && <button className="text-button" disabled={busy} onClick={() => void observeSuccessor()}>Doğrulanan ardılın güncel tam kimliğini ayrıca gözle</button>}
+    {ready && result && completeRenewalAdmissions(result) && <div className="practice-record-actions">
+      <button className="text-button" disabled={busy} onClick={() => void observeRelated('parent')}>Özgün tarihsel yenileme bağını ayrıca doğrula</button>
+      <button className="text-button" disabled={busy} onClick={() => void observeRelated('successor')}>Doğrulanan ardılın güncel tam kimliğini ayrıca gözle</button>
+      <button className="text-button" disabled={busy} onClick={() => void observeRelated('review')}>Ardıl bağımsız inceleme geçişini ayrıca doğrula</button>
+    </div>}
+    {ready && parentHref && <a className="button secondary" href={parentHref}>{result?.lineage?.parent_review_id ? 'Yakalanan özgün tarihsel kararı aç' : 'Özgün kaynak bağlamını karar devralmadan aç'}</a>}
     {ready && successor && <a className="button secondary" href={successor}>Ayrı yeni bağlamın tam kimliğini aç</a>}
+    {ready && reviewHref && <><p className="small">Bu geçiş incelemeci yetkisi vermez. Farklı avukat kendi oturumunda aynı ardılı yetkili portföy seçimiyle yeniden açmalıdır; geçiş anahtarları paylaşılmaz.</p><a className="button secondary" href={reviewHref}>Ardıl için ayrı bağımsız inceleme hazırlığını aç</a></>}
+
   </>;
 }
 

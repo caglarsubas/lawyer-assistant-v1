@@ -13,6 +13,8 @@ import { verifyReturnSelection } from '../workbench/returnComparison';
 import SourceReviewLineagePanel from './SourceReviewLineagePanel';
 import { verifyReviewLineage, type ReviewLineage } from './sourceReviewLineageTypes';
 import ComparisonRenewalPage from './ComparisonRenewalPage';
+import IndependentReviewPreparationPage from './IndependentReviewPreparationPage';
+import { independentReviewIntent, reviewPreparationHref } from '../workbench/renewalLineageNavigation';
 
 const ADMISSION = { complete: 'Tamamlandı', pending: 'Son izin kontrolü bekliyor', unavailable: 'Doğrulanamadı', unknown: 'Bilinmiyor', not_recorded: 'Henüz karar yok' };
 const REVIEW = { unknown: 'Doğrulanamadı', unreviewed: 'Henüz kaydedilmedi', changes_requested: 'Değişiklik istendi', reviewed_conditional: 'Koşullu inceleme kaydedildi' };
@@ -67,6 +69,10 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent }: { target
       {!(lineage ? lineage.tools_available : value.tools_available) ? <Notice error>Sabit bağlam, sürüm veya tarihsel karar bağları doğrulanamadı. İnceleme araçları kapalı; başka kayıt seçilmez.</Notice> : tools ? <AnalysisSourceReviews key={generation} matterId={target.matter_id} record={{ id: target.analysis_id, latest_version_id: value.analysis.current_version_id! }}
         selectedContext={{ id: target.context_id, manifest_sha256: value.context.manifest_sha256!, version_id: value.context.version_id! }} returnToken={target.return_token} selectedReview={lineage ? { id: lineage.selected_review.id, packet_sha256: lineage.selected_review.packet_sha256! } : undefined} onFailure={clear} onCommitted={saved => { setReceipt(saved); window.dispatchEvent(new Event('portfolio-updated')); }} />
         : <button className="button secondary" onClick={() => setTools(true)}>{target.review_id ? 'Seçilen tarihsel kararın inceleme araçlarını aç' : 'Seçilen kaydın inceleme araçlarını aç'}</button>}
+      {!target.review_id && returnIntent && value.tools_available && value.version_relation === 'same' && value.admission.context_state === 'complete' && ['complete', 'not_recorded'].includes(value.admission.review_state) && <button className="text-button" disabled={busy} onClick={() => {
+        try { const next = independentReviewIntent(returnIntent, value), token = returns.put(next); window.location.hash = reviewPreparationHref(next, token)!; }
+        catch (cause) { clear(cause); }
+      }}>Ayrı bağımsız incelemeyi hazırla</button>}
     </>}
   </>;
 }
@@ -82,6 +88,10 @@ export default function SelectedSourceReviewPage({ selection }: { selection: Sou
     const handoff = token ? returns.getRenewal(token) : null;
     if (!token || !intent || !handoff) return <Notice error>Yenileme geçişi için yeni portföy karşılaştırması gerekli. Kaynak veya hazırlık açılmadı. <a href={queueReturnHref()!}>Yeni kaynak kuyruğunu açıkça hazırla</a></Notice>;
     return <ComparisonRenewalPage key={token} intent={intent} handoff={handoff} token={token} />;
+  }
+  if (selection.prepare === 'review') {
+    if (!token || !intent || intent.target.review_id !== null || !intent.target.version_id || !intent.target.manifest_sha256) return <Notice error>Yeni bağımsız inceleme için tam ve ayrı portföy seçimi gerekli. İçerik açılmadı.</Notice>;
+    return <IndependentReviewPreparationPage key={token} intent={intent} token={token} />;
   }
   return <SelectedWorkspace returnIntent={intent} key={`${selection.matter_id}:${selection.analysis_id}:${selection.context_id}:${selection.review_id}:${workspaceQuery(filters)}`} target={selection} revision={revision} blocked={loading || !!error} />;
 }
