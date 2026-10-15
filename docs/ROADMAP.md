@@ -2956,3 +2956,28 @@ checks, merge, main CI, deployment and legal/lawyer qualification stay separate.
 
 Next: guarded carried-arrival-preserving exact-event handoff, retaining this
 arrival and every original observation without rebasing or arbitrary recursion.
+
+### R03/R05A guarded carried-arrival-preserving exact-event handoff
+
+A freshly reconciled carried-arrival return can now explicitly prepare the
+original selected historical event through a new fixed-depth purpose. Preserve
+all earlier observations, exact customer/date/source-date/bucket filters,
+frozen evidence and selected packet. Two stable one-record GETs check current
+complete admissions, every retained identity pin and monotonic times/revisions.
+Failure or retirement of the first read stops the second; no retry is added.
+
+Reject alternate-event/context/write-purpose redirects before destination GET.
+A fresh single exact-event GET compares new preparation and original carried
+arrival independently; unknown/pending states remain explicit. Verified return
+restores the original carried arrival unchanged. Unavailable reads yield selection
+only; partial or conflicting metadata fails closed. No new destination is
+implicitly captured, no review approval or legal effect is inferred.
+
+Keep current matter content grants, scope/request fences, opaque tokens, cloned
+bounded principal memory and immutable review history. No backend schema, body
+read, automatic write, provider, public-graph or deployment change. All seven CI
+jobs, workers, deadlines and complete exclusive backend selection are unchanged.
+See [the contract](CARRIED_ARRIVAL_EVENT_HANDOFF.md) and its synthetic engineering
+evidence. R03/R05 remain partial; corpus, legal and lawyer qualification remain
+separate. Next: guarded carried-destination return reconciliation with a separate
+observation of the new destination and unchanged earlier carried arrival.

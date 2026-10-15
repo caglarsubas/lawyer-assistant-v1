@@ -4,7 +4,7 @@ import type { NavigationMetadata, SourceTarget } from '../pages/sourceContextNav
 import type { ReviewLineage } from '../pages/sourceReviewLineageTypes';
 import { compareOnwardEventDestination, returnOnwardEvent, validateOnwardEventHandoff, type OnwardEventHandoff } from './onwardEventHandoff';
 import { reconcileOnwardReturn, verifyOnwardDestination } from './onwardReturn';
-import { compareDestinationIdentities, type ComparisonQueueReconciliation } from './comparisonReturn';
+import { compareDestinationIdentities, validateDestinationObservation, type ComparisonQueueReconciliation, type ObservedComparison } from './comparisonReturn';
 import type { ReturnIntent } from './portfolioReturn';
 import type { ReviewPathDestination } from './reviewPathHandoff';
 
@@ -34,4 +34,18 @@ export function reconcileCarriedArrivalReturn(intent: ReturnIntent, observation:
   if (value.state === 'not_observed') return value;
   compareDestinationIdentities(observation.handoff.prepared, value.fresh);
   return structuredClone({ ...value, ...compareDestinationIdentities(observation.arrival, value.fresh) });
+}
+
+/** Check every retained pin without replacing any original observation. */
+export function verifyCarriedArrivalDestination(intent: ReturnIntent, observation: CarriedArrivalReturn, fresh: ReviewPathDestination) {
+  validateCarriedArrivalReturn(observation, intent);
+  verifyOnwardDestination(intent, observation.handoff.observation, fresh);
+  compareDestinationIdentities(observation.handoff.prepared, fresh);
+  return compareDestinationIdentities(observation.arrival, fresh);
+}
+export function validateCarriedArrivalObservation(intent: ReturnIntent, observation: CarriedArrivalReturn, value: ObservedComparison) {
+  validateCarriedArrivalReturn(observation, intent);
+  const receipt = observation.handoff.observation.handoff.observation.handoff.receipt;
+  validateDestinationObservation(intent, receipt.handoff, observation.arrival, value);
+  verifyCarriedArrivalDestination(intent, observation, value.fresh);
 }

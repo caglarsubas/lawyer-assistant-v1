@@ -1,3 +1,4 @@
+import { carriedArrivalEventAvailable, prepareCarriedArrivalEvent } from '../workbench/carriedArrivalEventHandoff';
 import { useEffect, useRef, useState } from 'react';
 import { onwardEventAvailable, prepareOnwardEvent } from '../workbench/onwardEventHandoff';
 import { request } from '../api';
@@ -104,15 +105,16 @@ function ReturnWorkspace({ intent, token, receipt, arrival, onward, carried }: {
     } finally { if (task.current()) setBusy(false); }
   }
   async function prepareComparedEvent() {
-    if (!visible || busy || carried || onward && !onwardComparison || !receipt || !receiptComparison || arrival && !arrivalComparison || !returns.get(token)) return;
+    if (!visible || busy || carried && !carriedComparison || onward && !onwardComparison || !receipt || !receiptComparison || arrival && !arrivalComparison || !returns.get(token)) return;
     const task = fence.current.begin(); setBusy(true); setError(''); setComparisonLink(null); setEventLink(null); setPath(null);
     try {
       const read = (url: string) => request<ReviewLineage>(url, { signal: task.signal }), current = () => task.current() && !!returns.get(token);
-      const preparedOnward = onward ? await prepareOnwardEvent(intent, onward, onwardComparison!, read, current) : null;
-      const preparedArrival = !onward && arrival ? await prepareArrivalEvent(intent, arrival, arrivalComparison!, read, current) : null;
-      const preparedComparison = !onward && !arrival ? await prepareComparisonEvent(intent, receipt, receiptComparison, read, current) : null;
+      const preparedCarried = carried ? await prepareCarriedArrivalEvent(intent, carried, carriedComparison!, read, current) : null;
+      const preparedOnward = !carried && onward ? await prepareOnwardEvent(intent, onward, onwardComparison!, read, current) : null;
+      const preparedArrival = !carried && !onward && arrival ? await prepareArrivalEvent(intent, arrival, arrivalComparison!, read, current) : null;
+      const preparedComparison = !carried && !onward && !arrival ? await prepareComparisonEvent(intent, receipt, receiptComparison, read, current) : null;
       if (!current()) return;
-      const next = preparedOnward ? returns.putOnwardEvent(intent, preparedOnward) : preparedArrival ? returns.putArrivalEvent(intent, preparedArrival) : returns.putComparisonEvent(intent, preparedComparison!), t = intent.target;
+      const next = preparedCarried ? returns.putCarriedArrivalEvent(intent, preparedCarried) : preparedOnward ? returns.putOnwardEvent(intent, preparedOnward) : preparedArrival ? returns.putArrivalEvent(intent, preparedArrival) : returns.putComparisonEvent(intent, preparedComparison!), t = intent.target;
       const href = sourceContextHref(t.matter_id, t.analysis_id, t.context_id, t.review_id!, next);
       if (!href) throw new Error('Tam karşılaştırma bağlantısı kurulamadı.');
       setComparisonLink(href);
@@ -142,10 +144,10 @@ function ReturnWorkspace({ intent, token, receipt, arrival, onward, carried }: {
     {receipt && receiptComparison && visible && <ComparisonReturnPanel receipt={receipt} value={receiptComparison} prepare={!arrival && comparisonEventAvailable(intent, receipt, receiptComparison) ? () => void prepareComparedEvent() : undefined} busy={busy} />}
     {arrival && arrivalComparison && visible && <ArrivalReturnPanel observation={arrival} value={arrivalComparison} prepare={!onward && arrivalEventAvailable(intent, arrival, arrivalComparison) ? () => void prepareComparedEvent() : undefined} busy={busy} />}
     {onward && onwardComparison && visible && <OnwardReturnPanel observation={onward} value={onwardComparison} prepare={!carried && onwardEventAvailable(intent, onward, onwardComparison) ? () => void prepareComparedEvent() : undefined} busy={busy} />}
-    {carried && carriedComparison && visible && <CarriedArrivalReturnPanel observation={carried} value={carriedComparison} />}
-    {comparisonLink && visible && <section aria-label={onward ? "İleri dönüşü koruyan seçilen karara güvenli geçiş" : arrival ? "Varışı koruyan seçilen karara güvenli geçiş" : "Karşılaştırmadan seçilen karara güvenli geçiş"}>
+    {carried && carriedComparison && visible && <CarriedArrivalReturnPanel observation={carried} value={carriedComparison} prepare={carriedArrivalEventAvailable(intent, carried, carriedComparison) ? () => void prepareComparedEvent() : undefined} busy={busy} />}
+    {comparisonLink && visible && <section aria-label={carried ? "Taşınan varışı koruyan seçilen karara güvenli geçiş" : onward ? "İleri dönüşü koruyan seçilen karara güvenli geçiş" : arrival ? "Varışı koruyan seçilen karara güvenli geçiş" : "Karşılaştırmadan seçilen karara güvenli geçiş"}>
       <p className="small muted">Tam seçilen karar iki yeni kimlik gözlemiyle doğrulandı. İlk filtreler, kanıt ve ayrı karşılaştırma gözlemleri korundu. Kaynak içeriği veya onay açılmaz.</p>
-      <a className="button secondary" href={comparisonLink}>{onward ? "İleri dönüşü koruyan doğrulanmış tam kararı aç" : arrival ? "Varışı koruyan doğrulanmış tam kararı aç" : "Karşılaştırmadan doğrulanan tam kararı aç"}</a>
+      <a className="button secondary" href={comparisonLink}>{carried ? "Taşınan varışı koruyan doğrulanmış tam kararı aç" : onward ? "İleri dönüşü koruyan doğrulanmış tam kararı aç" : arrival ? "Varışı koruyan doğrulanmış tam kararı aç" : "Karşılaştırmadan doğrulanan tam kararı aç"}</a>
     </section>}
     {comparison && visible && <ReturnReconciliationPanel value={comparison} links={returnComparisonLinks(intent, comparison, token)} renew={captureRenewalHandoff(intent, comparison) ? () => {
       try { const handoff = captureRenewalHandoff(intent, comparison); if (!handoff || !returns.get(token)) throw new Error('Yeni karşılaştırma gözlemi gerekli.');
