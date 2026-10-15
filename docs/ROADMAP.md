@@ -2535,3 +2535,36 @@ remain separate; R03/R05 stay partial.
 Next: actor-bound read-only independent-review outcome reconciliation and exact
 event navigation, preserving filters, evidence and history without write replay or
 admission repair.
+
+### R03/R05A read-only independent-review outcome reconciliation
+
+The focused successor-review path now retains only a session-local request nonce,
+canonical digest, frozen manifest/version and expected predecessor identity.
+Successful, truncated, gateway and pending responses lead to an explicit read-only
+lookup for the authenticated submitting actor. Context/review/predecessor admission
+are reported separately. Unknown results grant neither absence nor retry permission;
+no lookup repairs admission, replays a write, reads source bodies or infers the
+submission from today's head. Scope, membership, independent-review permission,
+packet/request integrity, typed proofs and consecutive predecessor identity are
+checked locally before metadata is returned.
+
+Guarded follow-up re-observes the exact outcome around fresh historical-event
+metadata and creates a separate session token pinned to its packet hash. A later
+opposing head or newer version remains separate. Exact customer OR, workspace
+date field/range, source-record date range, bucket, evidence versions and immutable
+review history are preserved; late filter/principal/expiry responses are retired.
+Source rights/private-basis verification and consequential tools stay independent.
+[Contract](INDEPENDENT_REVIEW_OUTCOME_RECONCILIATION.md) and
+[engineering evidence](evidence/independent-review-outcome-reconciliation-2026-10-15.json).
+
+Qualification includes actor/admin isolation, explicit content grants, mixed-context
+routing, request/hash/version/predecessor substitutions, invalid proofs, real
+PostgreSQL serialization, no-write/no-head/source checks and wide/narrow browser
+rehearsal of real fixture commits with lost/truncated/gateway/pending replies.
+Seven jobs, two workers, all deadlines and the complete exclusive backend partition
+remain unchanged. Hosted exact-head checks, actual merge/main, deployment and legal
+acceptance remain separate. R03/R05 remain partial.
+
+Next: guarded direct reconciled-review return to the portfolio queue with the exact
+selected historical event, original comparison baseline and fresh selected-versus-
+current observations, without replay or source content.

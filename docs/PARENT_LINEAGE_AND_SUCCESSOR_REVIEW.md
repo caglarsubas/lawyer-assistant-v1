@@ -1,5 +1,10 @@
 # Guarded parent-lineage navigation and separate successor review
 
+Continuation: [read-only independent-review outcome reconciliation](INDEPENDENT_REVIEW_OUTCOME_RECONCILIATION.md)
+adds exact submitting-actor/request lookup for the focused review path. Successful,
+pending and uncertain replies now retain only a bounded receipt for explicit GET
+observation and guarded exact-event navigation; no review body is replayed.
+
 After [read-only renewal reconciliation](RENEWAL_RECONCILIATION_LINEAGE.md), a
 verified link with complete admissions offers three explicit follow-ups: the exact
 captured historical parent, ordinary successor identity navigation, or separate

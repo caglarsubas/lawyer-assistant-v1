@@ -16,10 +16,11 @@ import { SourceReviewQueue } from './SourceReviewQueue';
 import { verifyReadiness, type ReadinessFilters, type ReadinessPage } from './sourceReadinessTypes';
 import type { ReviewCommitPin } from '../../workbench/renewalLineageNavigation';
 import { renewalReceipt, uncertainRenewalOutcome, type RenewalReceipt } from '../../workbench/renewalReconciliation';
+import { reviewReceipt, type ReviewReceipt } from '../../workbench/reviewReconciliation';
 
 type SelectedContext = { id: string; manifest_sha256: string; version_id: string };
 export type SourceSaveReceipt = { kind: 'context' | 'review'; id: string; state: 'confirmed' | 'pending'; context?: { version_id: string; manifest_sha256: string } };
-type WorkspaceProps = { matterId: string; record: Pick<AnalysisRecord, 'id' | 'latest_version_id'>; returnToken?: string; selectedContext?: SelectedContext; selectedReview?: { id: string; packet_sha256: string }; onFailure?: (cause: unknown) => void; onCommitted?: (receipt: SourceSaveReceipt) => void; preparedRenewal?: RenewalMetadata; guard?: (signal: AbortSignal, committed?: ReviewCommitPin) => Promise<void>; reviewOnly?: boolean; onReviewUncertain?: () => void; onRenewalOutcome?: (receipt: RenewalReceipt) => void };
+type WorkspaceProps = { matterId: string; record: Pick<AnalysisRecord, 'id' | 'latest_version_id'>; returnToken?: string; selectedContext?: SelectedContext; selectedReview?: { id: string; packet_sha256: string }; onFailure?: (cause: unknown) => void; onCommitted?: (receipt: SourceSaveReceipt) => void; preparedRenewal?: RenewalMetadata; guard?: (signal: AbortSignal, committed?: ReviewCommitPin) => Promise<void>; reviewOnly?: boolean; onReviewUncertain?: () => void; onReviewOutcome?: (receipt: ReviewReceipt) => void; onRenewalOutcome?: (receipt: RenewalReceipt) => void };
 type SaveRequest = { path: string; body: unknown; kind: 'context' | 'review' };
 type Saver = (value: SaveRequest) => Promise<void>;
 const nonce = () => crypto.randomUUID().replaceAll('-', '');
@@ -128,7 +129,7 @@ function ReviewEditor({ inputs, base, busy, save }: { inputs: ReviewInputs; base
   </form>;
 }
 
-function SourceWorkspace({ matterId, record, selectedContext, selectedReview, returnToken, onFailure, onCommitted, preparedRenewal, guard, onRenewalOutcome, reviewOnly, onReviewUncertain }: WorkspaceProps) {
+function SourceWorkspace({ matterId, record, selectedContext, selectedReview, returnToken, onFailure, onCommitted, preparedRenewal, guard, onRenewalOutcome, reviewOnly, onReviewUncertain, onReviewOutcome }: WorkspaceProps) {
   const base = `/matters/${encodeURIComponent(matterId)}/analyses/${encodeURIComponent(record.id)}/source-contexts`;
   const [products, setProducts] = useState<{ id: string; title: string }[]>([]); const [product, setProduct] = useState(''); const [productMore, setProductMore] = useState(false);
   const [candidates, setCandidates] = useState<Candidates | null>(null); const [items, setItems] = useState<Summary[]>([]); const [more, setMore] = useState(false);
@@ -155,13 +156,15 @@ function SourceWorkspace({ matterId, record, selectedContext, selectedReview, re
   }
   async function save(value: SaveRequest) {
     const task = fence.current.begin(); setBusy(true); setError('');
-    let outcome: RenewalReceipt | null = null; let dispatched = false;
+    let outcome: RenewalReceipt | null = null; let reviewOutcome: ReviewReceipt | null = null; let dispatched = false;
     try {
       if (guard) await guard(task.signal); if (!task.current()) return;
       if (preparedRenewal && onRenewalOutcome && value.kind === 'context') outcome = await renewalReceipt(value.body as Record<string, unknown>, preparedRenewal);
+      if (reviewOnly && onReviewOutcome && selectedContext && value.kind === 'review') reviewOutcome = await reviewReceipt(value.body as Record<string, unknown>, selectedContext);
       if (!task.current()) return;
       dispatched = true;
       const result = await request<ContextView>(value.path, { method: 'POST', body: JSON.stringify(value.body), signal: task.signal, refreshPortfolio: !selectedContext });
+      if (reviewOutcome && onReviewOutcome) { if (task.current()) { clear(); onReviewOutcome(reviewOutcome); } return; }
       if (outcome && onRenewalOutcome) { if (task.current()) { clear(); onRenewalOutcome(outcome); } return; }
       if (guard && !reviewOnly) { try { await guard(task.signal); } catch (cause) { if (task.current()) { clear(cause, false); if (value.kind === 'context' && /^sac-[a-f0-9]{20}-[a-f0-9]{32}$/.test(result.id)) onCommitted?.({ kind: 'context', id: result.id, state: 'pending' }); else onFailure?.(cause); } return; } }
       if (reviewOnly && !currentView(result)) throw new Error('Saklanan bağımsız kararın son izin kontrolü doğrulanamadı.');
@@ -184,6 +187,7 @@ function SourceWorkspace({ matterId, record, selectedContext, selectedReview, re
       if (task.current()) { setPending(null); setCandidates(null); setInputs(null); setRenewal(null); setView(result); setContextId(result.id); setNotice(value.kind === 'context' ? 'Kaynak seçimi kaydedildi. Bağımsız inceleme ayrıca gerekli.' : 'Bağımsız karar kaydedildi. Önceki kararlar korunur.'); }
     } catch (cause) {
       if (task.current()) {
+        if (reviewOutcome && dispatched && onReviewOutcome && uncertainRenewalOutcome(cause)) { clear(); onReviewOutcome(reviewOutcome); return; }
         if (reviewOnly && dispatched && onReviewUncertain && uncertainRenewalOutcome(cause)) { clear(); onReviewUncertain(); return; }
         if (outcome && onRenewalOutcome && uncertainRenewalOutcome(cause)) { clear(); onRenewalOutcome(outcome); return; }
         const id = pendingReceipt(cause, value.kind); clear(cause, !(id || (cause instanceof ApiError && cause.status === 0)));
