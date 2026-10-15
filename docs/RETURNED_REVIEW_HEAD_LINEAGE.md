@@ -70,8 +70,17 @@ pending/unavailable intermediate records, final revision drift, access denial,
 late customer-filter retirement, no content/writes and wide/narrow layout.
 
 [Engineering evidence](evidence/returned-review-head-lineage-2026-10-15.json)
-records counts, limits and hashes. Seven CI jobs, two workers, existing caps and
-the full exclusive backend partition are unchanged. Exact-head checks, actual
+records counts, limits and hashes. The full backend selection reported 3,792
+passed and 97 skipped in 1,081.18 seconds, just beyond its existing 18-minute cap;
+the prior passing run took 1,041.17 seconds. Move its measured 129.93-second live
+runtime authorization integration into the existing PostgreSQL concurrency job,
+whose 94 cases measured 162.36 seconds under a five-minute cap. Start the runtime
+case first, using the same two workers. Explicitly exclude that file from the
+main selection: 3,888 remaining cases plus one relocated runtime case preserve
+the complete exclusive 4,521-case partition. No validation verdict, live guard,
+signature, assertion or test is removed or cached. Seven jobs, worker counts,
+runners, deadlines and no-retry policy stay unchanged; hosted headroom and billing
+savings require observation, not inference from the local rehearsal. Exact-head checks, actual
 merge/main, deployment and legal acceptance remain separate. R03/R05 stay partial.
 
 Next: guarded exact-event navigation from a verified bounded path, preserving the

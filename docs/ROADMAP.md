@@ -2626,8 +2626,11 @@ write, graph update or backend route/schema is introduced.
 Qualification covers exact packets and bounded links, a real twelve-event fixture
 history, pending/unavailable records, substitutions, final revision drift, denied
 access, late filters and narrow layout, plus source/publication and PostgreSQL
-regressions. Seven jobs, two workers, deadlines and the full exclusive backend
-partition remain unchanged. Hosted checks, actual merge/main, deployment and legal
+regressions. A measured backend deadline failure relocates the single live-runtime
+authorization integration into the existing PostgreSQL job; it is excluded from
+the main selection and still executes with all live guards. Seven jobs, two
+workers and deadlines remain unchanged; the complete exclusive 4,521-case
+partition is preserved. Hosted checks, actual merge/main, deployment and legal
 acceptance remain separate; R03/R05 stay partial.
 
 Next: guarded exact-event navigation from verified path members, preserving the

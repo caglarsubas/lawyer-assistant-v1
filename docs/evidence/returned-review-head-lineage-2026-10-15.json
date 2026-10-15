@@ -1,6 +1,6 @@
 {
   "schema": "returned-review-head-lineage-engineering-evidence-v1",
-  "recorded_at": "2026-10-15T07:58:33.246228+00:00",
+  "recorded_at": "2026-10-15T08:42:49.658834+00:00",
   "baseline_main_sha": "f4c84b7a41f85819e2269cc682ca634a5a321fb5",
   "baseline_main_ci": {
     "run": 38696580055,
@@ -110,12 +110,53 @@
     "frontend/src/pages/ReturnIdentityComparison.tsx": "899140f23712e1856c36ac2cab1e907b282af311e8f7dcfa4c8f6933a2fe9ae7",
     "backend/app/source_review_lineage.py": "178a5208c943efb4968b49595079197942168346ddc80868bae308f8430884ff",
     "backend/app/source_context_navigation.py": "b2a2ee7320c4f79a405a82f71b454e0f5efad86de789acaf4b8b244a3578215c",
-    ".github/workflows/ci.yml": "ee816909537002c9f3a772f475465f0c7b31dc91e19377fc7351ef7c476480f2"
+    ".github/workflows/ci.yml": "ebe09511b6cdc6dc09e665517236ed8ce1f4a7fae7abe013fd32727c0257fecc"
   },
   "production_qualified": false,
   "legal_qualification": false,
   "deployed": false,
   "provider_or_env_changed": false,
   "held_out_lawyer_acceptance": "not_established",
-  "hosted_checks_and_merge": "verify separately for final PR head and actual main tree"
+  "hosted_checks_and_merge": "verify separately for final PR head and actual main tree",
+  "ci_workflow_changed": true,
+  "ci_partition_counts": {
+    "complete": 4521,
+    "runtime": 1,
+    "preflight": 89,
+    "remaining": 3888,
+    "publication": 299,
+    "workspace": 67,
+    "human_review": 107,
+    "model_trials": 20,
+    "final_release": 21,
+    "withdrawal": 15,
+    "candidate": 14
+  },
+  "ci_deadline_failure_and_correction": {
+    "failed_head": "87d1a8b23c8e188cbaff85888789beb009997368",
+    "failed_run": 38702535331,
+    "functional_results": {
+      "passed": 3792,
+      "skipped": 97,
+      "seconds": 1081.18
+    },
+    "step_deadline_seconds": 1080,
+    "baseline_main_seconds": 1041.17,
+    "runtime_authorization_call_seconds": 129.93,
+    "baseline_postgres_cases": 94,
+    "baseline_postgres_seconds": 162.36,
+    "correction": "move one complete runtime integration file from main selection into existing PostgreSQL job, first in its two-worker command",
+    "new_remaining_cases": 3888,
+    "relocated_cases": 1,
+    "rebalanced_postgres_local_passed": 95,
+    "rebalanced_postgres_local_seconds": 198.15,
+    "job_count": 7,
+    "workers": 2,
+    "job_caps_changed": false,
+    "step_caps_changed": false,
+    "runners_changed": false,
+    "automatic_retries_added": false,
+    "production_validation_or_tests_changed": false,
+    "hosted_speedup_or_billing_savings_established": false
+  }
 }
