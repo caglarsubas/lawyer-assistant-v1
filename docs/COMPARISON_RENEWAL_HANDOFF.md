@@ -76,6 +76,10 @@ and merge are verified separately. This engineering slice establishes neither
 national corpus/legal qualification, professional independence, productivity,
 deployment nor lawyer acceptance; R03/R05 remain partial.
 
-Next: read-only uncertain-write reconciliation and qualified successor lineage,
-preserving filters and separate independent-review navigation without write replay
-or admission repair.
+Delivered follow-up: [read-only renewal reconciliation and verified successor
+lineage](RENEWAL_RECONCILIATION_LINEAGE.md). The preparation view now retains only
+an actor-bound request receipt for all observed/uncertain outcomes, requiring an
+explicit read-only lookup before claiming a successor relationship. Pending
+admission withholds successor tools. This supersedes the earlier preparation-view
+receipt-only identity observation described above; original ordinary selected
+context flows and all source/review guards remain in place.

@@ -10,7 +10,7 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import JSONResponse, Response
-from pydantic import Field, model_validator
+from pydantic import Field, ValidationError, model_validator
 from rdflib import URIRef
 from sqlalchemy import select
 
@@ -18,6 +18,7 @@ from . import analysis_authorities as authorities
 from . import analysis_reviews, analysis_workbench
 from . import source_context_navigation as navigation
 from . import source_context_renewals as renewals
+from . import source_renewal_reconciliation as reconciliation
 from . import source_review_lineage as lineage
 from . import source_review_readiness as readiness
 from .analysis_adjudication import target_values
@@ -581,6 +582,17 @@ def source_analysis_router():
         with store.session() as session:
             return _bounded(readiness.queue(store, session, matter_id, analysis_id, user,
                 window=window, offset=offset, bucket=bucket, date_from=date_from, date_to=date_to))
+
+    @router.get('/renewal-reconciliation')
+    def reconcile_renewal(matter_id: str, analysis_id: str, request: Request, user=Depends(authenticate)):
+        try:
+            if any(len(request.query_params.getlist(key)) != 1 for key in request.query_params):
+                raise ValueError('Duplicate receipt fields')
+            receipt = reconciliation.Receipt.model_validate(dict(request.query_params))
+        except (ValidationError, ValueError):
+            raise HTTPException(422, 'Tam yenileme istek kimliği doğrulanamadı.') from None
+        with request.app.state.store.session() as session:
+            return reconciliation.observe(request.app.state.store, session, matter_id, analysis_id, receipt, user)
 
     @router.get('/{context_id}')
     def detail(matter_id: str, analysis_id: str, context_id: str, request: Request, user=Depends(authenticate)):

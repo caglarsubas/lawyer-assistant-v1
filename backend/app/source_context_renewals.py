@@ -128,6 +128,11 @@ def retained_sources(app, session, matter_id, analysis_id, renewal, user):
 def comparison(store, session, matter_id, analysis_id, renewal, manifest, user):
     renewal = Renewal.model_validate(renewal)
     packet, review_id, depth = parent(store, session, matter_id, analysis_id, renewal, user)
+    return comparison_from_parent(renewal, manifest, packet, review_id, depth)
+
+
+def comparison_from_parent(renewal, manifest, packet, review_id, depth):
+    """Rebuild one immutable link; caller separately authenticates both packets."""
     previous = packet['manifest']
     old = {source['evidence']['passage_id']: source for source in previous['sources']}
     new = {source['evidence']['passage_id']: source for source in manifest['sources']}

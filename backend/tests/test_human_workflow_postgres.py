@@ -397,3 +397,55 @@ def test_portfolio_source_queue_new_unlocked_matter_record_requires_fresh_window
     monkeypatch.setattr(portfolio_source_reviews, '_route', original)
     latest = client.get(ENDPOINT, params={'window': 1}).json()
     assert latest['items'][0]['id'] == added['id']
+
+
+def test_renewal_reconciliation_serializes_with_private_version_edit_without_replaying(workspace, monkeypatch):
+    import copy
+
+    from test_analysis_workbench import build_workbench
+    from test_source_analysis_reviews import freeze, setup
+    from test_source_context_renewals import reconciliation_receipt, renewal_spec
+
+    from app import source_context_renewals
+
+    workbench = build_workbench(workspace)
+    app, client, base, payload, *_ = workbench
+    endpoint, spec, analysis, *_ = setup(workbench, monkeypatch)
+    parent, _ = freeze(client, endpoint, spec)
+    value, _ = renewal_spec(client, endpoint, spec, parent['id'])
+    child, sent = freeze(client, endpoint, value)
+    receipt = reconciliation_receipt(sent, parent)
+    entered, release = Event(), Event()
+    original = source_context_renewals.comparison_from_parent
+
+    def pause(*args):
+        result = original(*args)
+        if not entered.is_set():
+            entered.set()
+            assert release.wait(10)
+        return result
+
+    monkeypatch.setattr(source_context_renewals, 'comparison_from_parent', pause)
+    changed = copy.deepcopy(payload)
+    changed['rules'][0]['text'] = 'TEST ONLY concurrent new private version'
+    body = {**changed, 'expected_revision': analysis['revision'], 'change_note': 'TEST ONLY explicit edit'}
+    with ThreadPoolExecutor(2) as pool:
+        reading = pool.submit(client.get, endpoint + '/renewal-reconciliation', params=receipt)
+        try:
+            assert entered.wait(5)
+            with observe_identity_lock(app.state.store.engine, statement_fragment='FOR UPDATE') as observed:
+                writing = pool.submit(client.post, base + '/analyses/' + analysis['id'] + '/versions', json=body)
+                assert observed[0].wait(5)
+                assert wait_until_blocked(app.state.store.engine, observed[1][-1])
+                assert not writing.done()
+        finally:
+            release.set()
+        observed = reading.result(timeout=10)
+        edited = writing.result(timeout=10)
+        assert observed.status_code == 200 and edited.status_code == 201
+    result = observed.json()
+    assert result['outcome'] == 'verified' and result['successor']['id'] == child['id']
+    assert result['successor']['version_id'] == spec['version_id']
+    assert edited.json()['latest_version_id'] != result['successor']['version_id']
+    assert result['source_verification'] == 'not_checked' and not result['effects_replayed']
+    assert len(client.get(endpoint).json()) == 2

@@ -270,3 +270,129 @@ def test_postcommit_renewal_failure_stays_pending_and_does_not_replay_admission(
     assert client.get(endpoint + '/' + ident).json()['manifest'] is None
     assert client.post(endpoint, json=body).json()['manifest'] is None
     assert len(client.get(endpoint).json()) == 2
+
+
+def reconciliation_receipt(body, parent):
+    return {'request_id': body['request_id'],
+        'expected_request_sha256': digest(canonical({key: value for key, value in body.items() if key != 'request_id'})),
+        'expected_preview_sha256': body['expected_preview_sha256'], 'parent_context_id': parent['id'],
+        'expected_parent_manifest_sha256': parent['manifest_sha256'], 'parent_version_id': parent['manifest']['version_id'],
+        'version_id': body['version_id'], **({'expected_parent_review_id': body['renewal']['expected_parent_review_id']} if body['renewal']['expected_parent_review_id'] else {})}
+
+
+def reconcile(client, endpoint, receipt):
+    response = client.get(endpoint + '/renewal-reconciliation', params=receipt)
+    assert response.status_code == 200, response.text
+    assert response.headers['cache-control'] == 'no-store'
+    for text in ['TEST ONLY 📄', 'PRIVATE SOURCE NOTE', 'PRIVATE REVIEW NOTE', 'target_snapshots', 'selections', 'recorded_by', 'sources', 'purpose']:
+        assert text not in response.text
+    return response.json()
+
+
+def test_read_only_reconciliation_matches_exact_actor_request_and_historical_parent(workbench, monkeypatch):
+    from test_source_review_readiness import no_public_reads
+    _, client, *_ = workbench
+    endpoint, spec, _, reader, permit = setup(workbench, monkeypatch)
+    parent, _ = freeze(client, endpoint, spec)
+    reviewer(workbench)
+    path, body = review_request(client, endpoint, parent['id'])
+    old = record(client, path, body)
+    login(client)
+    value, _ = renewal_spec(client, endpoint, spec, parent['id'])
+    child, sent = freeze(client, endpoint, value)
+    login(client, 'reviewer')
+    path, body = review_request(client, endpoint, parent['id'], decision='changes_requested')
+    later = record(client, path, body)
+    assert later['review']['id'] != old['review']['id']
+    login(client)
+    permit.active = False
+    no_public_reads(monkeypatch, reader)
+    monkeypatch.setattr(reviews, '_finalize', lambda *_a, **_k: pytest.fail('Reconciliation cannot finalize a write'))
+    with workbench[0].state.store.session() as session:
+        before = {row.id: (row.revision, row.payload) for row in session.scalars(select(Record))}
+    result = reconcile(client, endpoint, reconciliation_receipt(sent, parent))
+    assert result['outcome'] == 'verified' and result['successor']['id'] == child['id']
+    assert result['lineage']['parent_review_id'] == old['review']['id']
+    assert result['lineage']['current_parent_head'] == 'not_checked'
+    assert result['lineage']['scope'] == 'one_historical_link'
+    assert result['admission'] == {'successor': 'complete', 'parent': 'complete', 'parent_review': 'complete'}
+    assert result['source_verification'] == 'not_checked' and result['legal_readiness'] == 'not_established'
+    assert not result['qualification_granted'] and not result['effects_replayed'] and result['review_inheritance'] == 'none'
+    with workbench[0].state.store.session() as session:
+        assert before == {row.id: (row.revision, row.payload) for row in session.scalars(select(Record))}
+
+
+@pytest.mark.parametrize('fault', ['pending', 'pending_parent', 'missing_admission', 'parent_hash', 'request_hash', 'preview_hash', 'version', 'parent_version', 'unknown_nonce', 'comparison'])
+def test_reconciliation_pending_unknown_or_mismatched_receipts_do_not_repair_or_replay(workbench, monkeypatch, fault):
+    from test_source_review_readiness import no_public_reads
+    app, client, *_ = workbench
+    endpoint, spec, _, reader, _ = setup(workbench, monkeypatch)
+    parent, _ = freeze(client, endpoint, spec)
+    value, _ = renewal_spec(client, endpoint, spec, parent['id'])
+    child, sent = freeze(client, endpoint, value)
+    receipt = reconciliation_receipt(sent, parent)
+    if fault in {'pending', 'pending_parent'}:
+        target = child['id'] if fault == 'pending' else parent['id']
+        mutate(app, reviews._id('saa-', target), lambda packet: packet.update(guard_completed=False))
+    elif fault == 'missing_admission':
+        from sqlalchemy import delete
+        with app.state.store.session() as session:
+            session.execute(delete(Record).where(Record.id == reviews._id('saa-', child['id'])))
+            session.commit()
+    elif fault == 'comparison':
+        # Re-sign an internally inconsistent comparison: the immutable parent must still win.
+        with app.state.store.session() as session:
+            row = session.get(Record, child['id'])
+            packet = app.state.store.decode(row)
+            packet['manifest']['renewal_comparison']['parent_packet_sha256'] = '0' * 64
+            packet['manifest']['renewal_comparison_sha256'] = digest(canonical(packet['manifest']['renewal_comparison']))
+            packet['manifest_sha256'] = digest(canonical(packet['manifest']))
+            packet['request_sha256'] = digest(canonical({**value, 'expected_preview_sha256': packet['manifest_sha256']}))
+            packet['packet_sha256'] = digest(canonical({k: v for k, v in packet.items() if k != 'packet_sha256'}))
+            app.state.store.update(row, packet)
+            admission = session.get(Record, reviews._id('saa-', child['id']))
+            proof = app.state.store.decode(admission)
+            proof['packet_sha256'] = packet['packet_sha256']
+            app.state.store.update(admission, proof)
+            session.commit()
+        receipt.update(expected_preview_sha256=packet['manifest_sha256'], expected_request_sha256=packet['request_sha256'])
+    else:
+        key = {'parent_hash': 'expected_parent_manifest_sha256', 'request_hash': 'expected_request_sha256', 'preview_hash': 'expected_preview_sha256', 'version': 'version_id', 'parent_version': 'parent_version_id', 'unknown_nonce': 'request_id'}[fault]
+        receipt[key] = '0' * (32 if fault == 'unknown_nonce' else 64) if 'hash' in fault or fault == 'unknown_nonce' else 'different'
+    no_public_reads(monkeypatch, reader)
+    monkeypatch.setattr(reviews, '_finalize', lambda *_a, **_k: pytest.fail('No finalization'))
+    with app.state.store.session() as session:
+        before = {row.id: (row.revision, row.payload) for row in session.scalars(select(Record))}
+    result = reconcile(client, endpoint, receipt)
+    if fault.startswith('pending'):
+        assert result['outcome'] == 'verified'
+        assert result['admission']['successor' if fault == 'pending' else 'parent'] == 'pending'
+    else:
+        assert result['outcome'] == ('not_observed' if fault == 'unknown_nonce' else 'unavailable')
+        assert result['successor'] is result['lineage'] is result['admission'] is None
+    with app.state.store.session() as session:
+        assert before == {row.id: (row.revision, row.payload) for row in session.scalars(select(Record))}
+
+
+def test_reconciliation_requires_original_actor_and_explicit_matter_content_access(workbench, monkeypatch):
+    from sqlalchemy import delete
+
+    from app.db import Membership
+    app, client, *_ = workbench
+    endpoint, spec, *_ = setup(workbench, monkeypatch)
+    parent, _ = freeze(client, endpoint, spec)
+    value, _ = renewal_spec(client, endpoint, spec, parent['id'])
+    _, sent = freeze(client, endpoint, value)
+    receipt = reconciliation_receipt(sent, parent)
+    reviewer(workbench)
+    assert reconcile(client, endpoint, receipt)['outcome'] == 'not_observed'
+    with app.state.store.session() as session:
+        actor = session.scalar(select(User).where(User.username == 'reviewer'))
+        session.execute(delete(Membership).where(Membership.user_id == actor.id))
+        session.commit()
+    assert client.get(endpoint + '/renewal-reconciliation', params=receipt).status_code == 404
+    login(client)
+    receipt['parent_context_id'] = 'sac-' + 'f' * 20 + '-' + 'e' * 32
+    assert reconcile(client, endpoint, receipt)['outcome'] == 'unavailable'
+    for params in [{**receipt, 'note': 'PRIVATE'}, list(receipt.items()) + [('request_id', receipt['request_id'])], {**receipt, 'request_id': 'bad'}]:
+        assert client.get(endpoint + '/renewal-reconciliation', params=params).status_code == 422
