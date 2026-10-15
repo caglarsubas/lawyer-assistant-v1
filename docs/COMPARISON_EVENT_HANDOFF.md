@@ -88,3 +88,8 @@ partition remain unchanged.
 Next: a separately typed read-only arrival observation carried through explicit
 return and fresh queue reconciliation, retaining prior observations without
 rebasing the original receipt or transferring approval.
+
+The [arrival return continuation](ARRIVAL_RETURN_RECONCILIATION.md) now retains a
+separate verified arrival observation through explicit return; it preserves this
+original receipt and preparation unchanged. Unavailable returns remain selection
+only.

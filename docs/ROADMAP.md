@@ -2767,3 +2767,36 @@ R03/R05 stay partial.
 
 Next: guarded arrival-observation return and fresh queue reconciliation, retaining
 prior observations and the original receipt without rebasing or approval transfer.
+
+### R03/R05A guarded arrival return and fresh queue reconciliation
+
+Explicit return from the comparison-event destination now retains a separately
+typed fixed-depth arrival observation. Original receipt, queue, preparation,
+customer OR, workspace/source dates, bucket, evidence/event pin and unknown
+baselines remain unchanged. Failed, loading, blocked or retired metadata keeps
+only the exact selection; no receipt, current admission or approval is invented.
+
+Retained arrival details require a fresh authorized bounded queue window that
+contains the selected context and a fresh exact-event read. Omitted targets stay
+unobserved and reveal no retained details. Reconciliation reuses those existing
+GETs, compares fresh identities with arrival separately from the older receipt,
+and rejects immutable substitutions or regressive time/revision. Pending
+admissions and unknown relationships remain explicit. No new head replaces the
+selected historical event or implies a verified path.
+
+The eight-entry/thirty-minute principal-bound memory book and current explicit
+content grants remain. All lifecycle fences retire views and late replies. This
+queue is read-only; older receipt preparation is withheld for arrival returns to
+avoid discarding their history. Source tools retain independent current guards.
+No source-body read, write/replay, repair, provider call, backend schema or public
+graph change is added.
+
+See the [contract](ARRIVAL_RETURN_RECONCILIATION.md) and
+[engineering evidence](evidence/arrival-return-reconciliation-2026-10-15.json).
+Seven CI jobs, two workers, caps and complete exclusive backend partitions remain
+unchanged. Hosted checks, merge, main CI, deployment and legal acceptance remain
+separate; R03/R05 stay partial.
+
+Next: guarded arrival-preserving exact-event handoff from fresh reconciliation,
+retaining fixed historical observations and fresh authorization without nesting
+prior return chains or rebasing the original receipt.
