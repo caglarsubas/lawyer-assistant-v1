@@ -10,6 +10,8 @@ import { returnComparisonLinks } from '../workbench/returnComparison';
 import { captureReturnedLineage, observeReturnedLineage, prepareReturnedEvent, type ReturnedLineageObservation } from '../workbench/returnedReviewLineage';
 import ReturnedReviewLineagePanel from './ReturnedReviewLineagePanel';
 import { reconcileComparisonReturn, type ComparisonReturnReceipt, type ComparisonQueueReconciliation } from '../workbench/comparisonReturn';
+import { reconcileArrivalReturn, type ArrivalReturn } from '../workbench/arrivalReturn';
+import ArrivalReturnPanel from './ArrivalReturnPanel';
 import ComparisonReturnPanel from './ComparisonReturnPanel';
 import { comparisonEventAvailable, prepareComparisonEvent } from '../workbench/comparisonEventHandoff';
 import ReturnIdentityComparison, { type ReturnLinks } from './ReturnIdentityComparison';
@@ -39,10 +41,11 @@ export function ReturnReconciliationPanel({ value, links, renew }: { value: Retu
     </>}
   </section>;
 }
-function ReturnWorkspace({ intent, token, receipt }: { intent: ReturnIntent; token: string; receipt: ComparisonReturnReceipt | null }) {
+function ReturnWorkspace({ intent, token, receipt, arrival }: { intent: ReturnIntent; token: string; receipt: ComparisonReturnReceipt | null; arrival: ArrivalReturn | null }) {
   const { filters, setFilters, revision, loading, error: scopeError, refresh, returns } = usePortfolio();
   const [prepared, setPrepared] = useState(false); const [preparedRevision, setPreparedRevision] = useState(-1);
   const [page, setPage] = useState<PortfolioQueuePage | null>(null); const [comparison, setComparison] = useState<ReturnReconciliation | null>(null);
+  const [arrivalComparison, setArrivalComparison] = useState<ComparisonQueueReconciliation | null>(null);
   const [receiptComparison, setReceiptComparison] = useState<ComparisonQueueReconciliation | null>(null);
   const [history, setHistory] = useState<ReviewLineage | null>(null); const [path, setPath] = useState<ReturnedLineageObservation | null>(null);
   const [comparisonLink, setComparisonLink] = useState<string | null>(null);
@@ -52,15 +55,15 @@ function ReturnWorkspace({ intent, token, receipt }: { intent: ReturnIntent; tok
   const visible = prepared && matching && revision === preparedRevision && !loading && !scopeError;
   const key = `${workspaceQuery(filters)}:${revision}`;
   useEffect(() => { const gate = fence.current; return () => gate.invalidate(); }, []);
-  useEffect(() => { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setBusy(false); if (prepared && (!matching || revision !== preparedRevision)) setPrepared(false); }, [key, matching]);
-  useEffect(() => { if (loading || scopeError) { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setBusy(false); } }, [loading, scopeError]);
+  useEffect(() => { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setArrivalComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setBusy(false); if (prepared && (!matching || revision !== preparedRevision)) setPrepared(false); }, [key, matching]);
+  useEffect(() => { if (loading || scopeError) { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setArrivalComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setBusy(false); } }, [loading, scopeError]);
   function prepare() {
-    fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setError(''); setBusy(false);
+    fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setArrivalComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setError(''); setBusy(false);
     setFilters(portfolioPart(intent.filters)); setPreparedRevision(revision + 1); refresh(); setPrepared(true);
   }
   async function observe(offset: number) {
     if (!prepared || !matching || loading || scopeError || !returns.get(token)) return;
-    const task = fence.current.begin(); setBusy(true); setError(''); setPage(null); setComparison(null); setReceiptComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null);
+    const task = fence.current.begin(); setBusy(true); setError(''); setPage(null); setComparison(null); setReceiptComparison(null); setArrivalComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null);
     const target: SourceTarget = { kind: 'selected', matter_id: intent.target.matter_id, analysis_id: intent.target.analysis_id, context_id: intent.target.context_id, ...(intent.target.review_id ? { review_id: intent.target.review_id } : {}) };
     try {
       const expected = queueFilters(filters, intent.filters);
@@ -74,8 +77,9 @@ function ReturnWorkspace({ intent, token, receipt }: { intent: ReturnIntent; tok
       }
       const value = reconcileReturn(intent, result, meta, lineage);
       const receiptValue = receipt ? reconcileComparisonReturn(intent, receipt, result, meta, lineage, offset) : null;
-      if (task.current() && returns.get(token)) { setPage(result); setComparison(value); setReceiptComparison(receiptValue); setHistory(lineage); }
-    } catch (cause) { if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setBusy(false); setError(messageOf(cause)); } }
+      const arrivalValue = arrival ? reconcileArrivalReturn(intent, arrival, result, meta, lineage, offset) : null;
+      if (task.current() && returns.get(token)) { setArrivalComparison(arrivalValue); setPage(result); setComparison(value); setReceiptComparison(receiptValue); setHistory(lineage); }
+    } catch (cause) { if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setArrivalComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setBusy(false); setError(messageOf(cause)); } }
     finally { if (task.current()) setBusy(false); }
   }
   const basis = comparison && history ? captureReturnedLineage(intent, comparison, history) : null;
@@ -86,7 +90,7 @@ function ReturnWorkspace({ intent, token, receipt }: { intent: ReturnIntent; tok
       const value = await observeReturnedLineage(basis, url => request<ReviewLineage>(url, { signal: task.signal }), () => task.current() && !!returns.get(token));
       if (task.current() && returns.get(token)) setPath(value);
     } catch (cause) {
-      if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setBusy(false); setError(messageOf(cause)); }
+      if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setArrivalComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setBusy(false); setError(messageOf(cause)); }
     } finally { if (task.current()) setBusy(false); }
   }
   async function prepareComparedEvent() {
@@ -100,7 +104,7 @@ function ReturnWorkspace({ intent, token, receipt }: { intent: ReturnIntent; tok
       if (!href) throw new Error('Tam karşılaştırma bağlantısı kurulamadı.');
       setComparisonLink(href);
     } catch (cause) {
-      if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setBusy(false); setError(messageOf(cause)); }
+      if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setArrivalComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setBusy(false); setError(messageOf(cause)); }
     } finally { if (task.current()) setBusy(false); }
   }
   async function prepareEvent(id: string) {
@@ -115,14 +119,15 @@ function ReturnWorkspace({ intent, token, receipt }: { intent: ReturnIntent; tok
       if (!href) throw new Error('Tam tarihsel karar bağlantısı kurulamadı.');
       setEventLink({ href, id: next.target.review_id! });
     } catch (cause) {
-      if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setBusy(false); setError(messageOf(cause)); }
+      if (task.current()) { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setArrivalComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setBusy(false); setError(messageOf(cause)); }
     } finally { if (task.current()) setBusy(false); }
   }
   return <><PageHeader eyebrow="PORTFÖYE GÜVENLİ DÖNÜŞ" title="Kaynak incelemelerine dön" description="Tam filtre niyetini yeniden hazırlayın; mevcut yetkilerinizle yeni ve sınırlı bir gözlem yapın." />
     <ReturnFilterSummary intent={intent} />
     {error && <Notice error>{error}</Notice>}{scopeError && <Notice error>{scopeError}</Notice>}
     {!prepared || !matching ? <button className="button secondary" disabled={busy} onClick={prepare}>Dönüş filtrelerini uygula ve hazırla</button> : <><p className="small muted">Tam müvekkil ve çalışma alanı tarih filtreleri soldaki portföye uygulandı. Kaynak kayıt tarihleri yukarıdaki niyette ayrı korunur.</p><button className="button secondary" disabled={busy || loading || !!scopeError} onClick={() => void observe(0)}>Aynı filtrelerle yeni portföy gözlemi yap</button></>}
-    {receipt && receiptComparison && visible && <ComparisonReturnPanel receipt={receipt} value={receiptComparison} prepare={comparisonEventAvailable(intent, receipt, receiptComparison) ? () => void prepareComparedEvent() : undefined} busy={busy} />}
+    {receipt && receiptComparison && visible && <ComparisonReturnPanel receipt={receipt} value={receiptComparison} prepare={!arrival && comparisonEventAvailable(intent, receipt, receiptComparison) ? () => void prepareComparedEvent() : undefined} busy={busy} />}
+    {arrival && arrivalComparison && visible && <ArrivalReturnPanel observation={arrival} value={arrivalComparison} />}
     {comparisonLink && visible && <section aria-label="Karşılaştırmadan seçilen karara güvenli geçiş">
       <p className="small muted">Tam seçilen karar iki yeni kimlik gözlemiyle doğrulandı. İlk filtreler, kanıt ve ayrı karşılaştırma gözlemleri korundu. Kaynak içeriği veya onay açılmaz.</p>
       <a className="button secondary" href={comparisonLink}>Karşılaştırmadan doğrulanan tam kararı aç</a>
@@ -130,7 +135,7 @@ function ReturnWorkspace({ intent, token, receipt }: { intent: ReturnIntent; tok
     {comparison && visible && <ReturnReconciliationPanel value={comparison} links={returnComparisonLinks(intent, comparison, token)} renew={captureRenewalHandoff(intent, comparison) ? () => {
       try { const handoff = captureRenewalHandoff(intent, comparison); if (!handoff || !returns.get(token)) throw new Error('Yeni karşılaştırma gözlemi gerekli.');
         const next = returns.put(intent, handoff); window.location.hash = renewalHandoffHref(intent, next)!;
-      } catch (cause) { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setError(messageOf(cause)); }
+      } catch (cause) { fence.current.invalidate(); setPage(null); setComparison(null); setReceiptComparison(null); setArrivalComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setError(messageOf(cause)); }
     } : undefined} />}
     {comparison?.state === 'observed' && visible && <section aria-label="Sınırlı karar zinciri kontrolü">
       <p className="small muted">Bu karşılaştırmadaki karar başından seçilen tarihsel incelemeye kayıt bağlantısını ayrıca gözlemleyin. Seçilen kaydın iki kimlik gözlemi arasında, baştan başlayan tek ve en çok 10 kayıtlık geçmiş penceresi okunur.</p>
@@ -141,7 +146,7 @@ function ReturnWorkspace({ intent, token, receipt }: { intent: ReturnIntent; tok
         <p className="small muted">İlk filtreler ve karşılaştırma gözlemleri korundu. Bağlantı yeni tam kimlik gözlemi yapar; kaynak metni veya onay açmaz.</p>
         <a className="button secondary" href={eventLink.href}>Doğrulanan zincir kaydının tam kimliğini aç</a></section>}
     </section>}
-    {page && visible && <PortfolioQueueResults page={page} busy={busy} next={() => void observe(page.coverage.next_offset!)} open={(item, event) => { event.preventDefault(); if (busy) return; try { const next = returns.put(captureReturn(page, item)); window.location.hash = sourceQueueHref(item, next)!; } catch (cause) { setPage(null); setComparison(null); setReceiptComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setError(messageOf(cause)); } }} />}
+    {page && visible && <PortfolioQueueResults page={page} busy={busy} next={() => void observe(page.coverage.next_offset!)} open={(item, event) => { event.preventDefault(); if (busy) return; try { const next = returns.put(captureReturn(page, item)); window.location.hash = sourceQueueHref(item, next)!; } catch (cause) { setPage(null); setComparison(null); setReceiptComparison(null); setArrivalComparison(null); setHistory(null); setPath(null); setEventLink(null); setComparisonLink(null); setError(messageOf(cause)); } }} />}
     <p><a className="text-link" href={queueReturnHref()!}>Yeni filtrelerle ayrı kaynak kuyruğu hazırla</a></p>
   </>;
 }
@@ -150,5 +155,5 @@ export default function PortfolioReturnQueue({ token }: { token: string }) {
   useEffect(() => { setExpired(false); const timer = setTimeout(() => setExpired(true), returns.remaining(token)); return () => clearTimeout(timer); }, [token, returns]);
   const intent = returns.get(token);
   if (expired || !intent) return <Notice error>Dönüş bağı yok veya süresi doldu. Tam filtreler tahmin edilmedi; kaynak kuyruğu okunmadı. <a href={queueReturnHref()!}>Yeni kaynak kuyruğunu açıkça hazırla</a></Notice>;
-  return <ReturnWorkspace key={token} token={token} intent={intent} receipt={returns.getComparisonReturn(token)} />;
+  return <ReturnWorkspace key={token} token={token} intent={intent} receipt={returns.getComparisonReturn(token)} arrival={returns.getArrivalReturn(token)} />;
 }

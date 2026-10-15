@@ -13,7 +13,8 @@ import { verifyReturnSelection } from '../workbench/returnComparison';
 import { compareReviewPathHandoff, validateReviewPathHandoff, type ReviewPathHandoff } from '../workbench/reviewPathHandoff';
 import ReviewPathIdentityComparison from './ReviewPathIdentityComparison';
 import { captureComparisonReturn } from '../workbench/comparisonReturn';
-import { compareComparisonEventArrival, returnComparisonEvent, validateComparisonEventHandoff, type ComparisonEventHandoff } from '../workbench/comparisonEventHandoff';
+import { compareComparisonEventArrival, validateComparisonEventHandoff, type ComparisonEventHandoff } from '../workbench/comparisonEventHandoff';
+import { captureArrivalReturn } from '../workbench/arrivalReturn';
 import ComparisonEventArrivalPanel from './ComparisonEventArrivalPanel';
 
 import SourceReviewLineagePanel from './SourceReviewLineagePanel';
@@ -74,8 +75,8 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent, pathHandof
         let token: string;
         if (comparisonHandoff) {
           const available = !blocked && !busy && observedRevision === revision;
-          const next = returnComparisonEvent(returnIntent, comparisonHandoff, target, available ? value : null, available ? lineage : null);
-          token = next.receipt ? returns.putComparisonReturn(next.intent, next.receipt) : returns.put(next.intent);
+          const next = captureArrivalReturn(returnIntent, comparisonHandoff, target, available ? value : null, available ? lineage : null);
+          token = next.observation ? returns.putArrivalReturn(next.intent, next.observation) : returns.put(next.intent);
         } else if (pathHandoff) {
           const available = !blocked && !busy && observedRevision === revision;
           const next = captureComparisonReturn(returnIntent, pathHandoff, target, available ? value : null, available ? lineage : null);
