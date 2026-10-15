@@ -4,7 +4,7 @@ import type { NavigationMetadata, SourceTarget } from '../pages/sourceContextNav
 import type { ReviewLineage } from '../pages/sourceReviewLineageTypes';
 import { compareArrivalEventDestination, returnArrivalEvent, validateArrivalEventHandoff, type ArrivalEventHandoff } from './arrivalEventHandoff';
 import { reconcileArrivalReturn, verifyArrivalDestination } from './arrivalReturn';
-import { compareDestinationIdentities, type ComparisonQueueReconciliation } from './comparisonReturn';
+import { compareDestinationIdentities, validateDestinationObservation, type ObservedComparison, type ComparisonQueueReconciliation } from './comparisonReturn';
 import type { ReturnIntent } from './portfolioReturn';
 import type { ReviewPathDestination } from './reviewPathHandoff';
 
@@ -34,4 +34,17 @@ export function reconcileOnwardReturn(intent: ReturnIntent, observation: OnwardR
   if (value.state === 'not_observed') return value;
   compareDestinationIdentities(observation.handoff.prepared, value.fresh);
   return structuredClone({ ...value, ...compareDestinationIdentities(observation.destination, value.fresh) });
+}
+
+/** Validate every historical pin without rebasing the retained onward destination. */
+export function verifyOnwardDestination(intent: ReturnIntent, observation: OnwardReturn, fresh: ReviewPathDestination) {
+  validateOnwardReturn(observation, intent);
+  verifyArrivalDestination(intent, observation.handoff.observation, fresh);
+  compareDestinationIdentities(observation.handoff.prepared, fresh);
+  return compareDestinationIdentities(observation.destination, fresh);
+}
+export function validateOnwardObservation(intent: ReturnIntent, observation: OnwardReturn, value: ObservedComparison) {
+  validateOnwardReturn(observation, intent);
+  validateDestinationObservation(intent, observation.handoff.observation.handoff.receipt.handoff, observation.destination, value);
+  verifyOnwardDestination(intent, observation, value.fresh);
 }

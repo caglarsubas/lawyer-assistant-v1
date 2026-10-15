@@ -2889,3 +2889,39 @@ standard native ARM executor already used by other backend checks, with explicit
 architecture/durability reporting; the frontend job retains x86 coverage. This
 requires fresh hosted qualification and establishes no universal timing/billing
 guarantee. Both earlier attempts remain cancelled.
+
+### R03/R05A guarded onward-return-preserving exact-event handoff
+
+A freshly authorized onward-return queue can now explicitly prepare its pinned
+historical event through two stable one-record metadata reads. Require known
+current version/head and complete current admissions, exact evidence/event/head
+pins and monotonic times, with current fences before/after each read. Drift,
+denial, omitted/pending/unknown current metadata or retirement stops preparation
+without retry, pointer walking or another request.
+
+A separate fixed-depth purpose token carries the original OnwardReturn unchanged,
+including all earlier receipt, arrival, queue and preparation history, plus new
+queue/preparation observations. Exact customer OR, workspace/source dates, bucket,
+frozen evidence and selected review packet remain. Alternate events, context-only
+routes and write preparation close before metadata. Same-event new tokens remount
+and require a fresh exact-event observation.
+
+The destination compares new preparation and retained onward destination with
+fresh arrival separately. All known immutable pins remain enforced; unknowns and
+pending admissions stay explicit. Different heads imply neither a path nor
+approval. Verified return restores the original onward return unchanged; this
+arrival is not implicitly appended. Unavailable reads retain selection only.
+
+Eight-entry/thirty-minute principal memory bounds, cloning, content grants and
+lifecycle fences remain. Existing source tools stay separately guarded. No
+source-body automation, write/replay, repair, provider, backend schema, public
+graph or deployment change is added. Independent review records stay unchanged.
+See the [contract](ONWARD_RETURN_EVENT_HANDOFF.md) and
+[engineering evidence](evidence/onward-return-event-handoff-2026-10-15.json).
+Seven jobs, two workers, deadlines and all 4,521 exclusive backend cases remain;
+R03/R05 stay partial. Hosted checks, merge, main CI and legal/lawyer qualification
+remain separate.
+
+Next: guarded carried-arrival return reconciliation, through a separately typed
+fixed-depth observation without rebasing the original onward return or nesting
+arbitrary prior return chains.

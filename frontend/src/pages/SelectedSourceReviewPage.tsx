@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { compareOnwardEventDestination, returnOnwardEvent, validateOnwardEventHandoff, type OnwardEventHandoff } from '../workbench/onwardEventHandoff';
+import OnwardEventDestinationPanel from './OnwardEventDestinationPanel';
 import { request } from '../api';
 import { Detail, Loading, Notice, PageHeader } from '../components';
 import { formatDate, messageOf } from '../utils';
@@ -41,9 +43,9 @@ export function NavigationSummary({ value, historicalSelection = false }: { valu
     </Detail>
   </section>;
 }
-function SelectedWorkspace({ target, blocked, revision, returnIntent, pathHandoff, comparisonHandoff, arrivalHandoff }: { arrivalHandoff: ArrivalEventHandoff | null; comparisonHandoff: ComparisonEventHandoff | null; pathHandoff: ReviewPathHandoff | null; target: SourceTarget; blocked: boolean; revision: number; returnIntent: ReturnIntent | null }) {
+function SelectedWorkspace({ target, blocked, revision, returnIntent, pathHandoff, comparisonHandoff, arrivalHandoff, onwardHandoff }: { onwardHandoff: OnwardEventHandoff | null; arrivalHandoff: ArrivalEventHandoff | null; comparisonHandoff: ComparisonEventHandoff | null; pathHandoff: ReviewPathHandoff | null; target: SourceTarget; blocked: boolean; revision: number; returnIntent: ReturnIntent | null }) {
   const { returns } = usePortfolio();
-  const pathLocked = pathHandoff !== null || comparisonHandoff !== null || arrivalHandoff !== null;
+  const pathLocked = pathHandoff !== null || comparisonHandoff !== null || arrivalHandoff !== null || onwardHandoff !== null;
   const [value, setValue] = useState<NavigationMetadata | null>(null); const [error, setError] = useState('');
   const [lineage, setLineage] = useState<ReviewLineage | null>(null);
   const [observedRevision, setObservedRevision] = useState(-1);
@@ -59,6 +61,7 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent, pathHandof
         const result = await request<ReviewLineage>(`${base}/reviews/${encodeURIComponent(target.review_id)}/navigation-context`, { signal: task.signal });
         verifyReviewLineage(result, target); if (returnIntent) verifyReturnSelection(returnIntent, result.context_navigation, result, target.review_id);
         if (pathHandoff && returnIntent) compareReviewPathHandoff(returnIntent, pathHandoff, result);
+        if (onwardHandoff && returnIntent) compareOnwardEventDestination(returnIntent, onwardHandoff, target, result);
         if (arrivalHandoff && returnIntent) compareArrivalEventDestination(returnIntent, arrivalHandoff, target, result);
         if (comparisonHandoff && returnIntent) compareComparisonEventArrival(returnIntent, comparisonHandoff, target, result);
         if (task.current()) { setValue(result.context_navigation); setLineage(result); setObservedRevision(revision); }
@@ -77,7 +80,11 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent, pathHandof
       try {
         if (!target.return_token || !returns.get(target.return_token)) throw new Error('Dönüş bağı artık geçerli değil.');
         let token: string;
-        if (arrivalHandoff) {
+        if (onwardHandoff) {
+          const available = !blocked && !busy && observedRevision === revision;
+          const next = returnOnwardEvent(returnIntent, onwardHandoff, target, available ? value : null, available ? lineage : null);
+          token = next.observation ? returns.putOnwardReturn(next.intent, next.observation) : returns.put(next.intent);
+        } else if (arrivalHandoff) {
           const available = !blocked && !busy && observedRevision === revision;
           const next = captureOnwardReturn(returnIntent, arrivalHandoff, target, available ? value : null, available ? lineage : null);
           token = next.observation ? returns.putOnwardReturn(next.intent, next.observation) : returns.put(next.intent);
@@ -98,6 +105,7 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent, pathHandof
     <div className="practice-record-actions"><button className="button secondary" disabled={busy || blocked} onClick={() => void load()}>Tam kayıt kimliğini yeniden doğrula</button></div>
     {busy && <Loading label="Seçilen kayıt kimliği doğrulanıyor…" />}
     {value && observedRevision === revision && !blocked && <>{receipt && <Notice>{receipt.state === 'pending' ? 'Kayıt saklandı; son izin kontrolü tamamlanamadı. Kabul ve bağımsız inceleme ayrıca gerekir.' : 'Kayıt saklandı; tam kimlik gözlemi güncellendi. İnceleme araçlarını yeniden açın.'}<p className="reference-id">Kayıt: {receipt.id}</p>{receipt.kind === 'context' && sourceContextHref(target.matter_id, target.analysis_id, receipt.id) && <a className="text-link" href={sourceContextHref(target.matter_id, target.analysis_id, receipt.id)!}>Yeni bağlamın tam kimliğini aç</a>}</Notice>}{lineage && pathHandoff && returnIntent && <ReviewPathIdentityComparison value={compareReviewPathHandoff(returnIntent, pathHandoff, lineage)} />}
+      {lineage && onwardHandoff && returnIntent && <OnwardEventDestinationPanel handoff={onwardHandoff} value={compareOnwardEventDestination(returnIntent, onwardHandoff, target, lineage)} />}
       {lineage && arrivalHandoff && returnIntent && <ArrivalEventDestinationPanel handoff={arrivalHandoff} value={compareArrivalEventDestination(returnIntent, arrivalHandoff, target, lineage)} />}
       {lineage && comparisonHandoff && returnIntent && <ComparisonEventArrivalPanel handoff={comparisonHandoff} value={compareComparisonEventArrival(returnIntent, comparisonHandoff, target, lineage)} />}
       {lineage && <SourceReviewLineagePanel value={lineage} returnToken={target.return_token} lockedSelection={pathLocked} />}<NavigationSummary value={value} historicalSelection={!!lineage} />
@@ -121,10 +129,11 @@ export default function SelectedSourceReviewPage({ selection }: { selection: Sou
   if (token && (expired || !intent || !returnMatches(intent, selection))) return <Notice error>Portföy dönüş bağı yok, süresi doldu veya başka kayda ait. İçerik açılmadı. <a href={queueReturnHref()!}>Yeni kaynak kuyruğunu açıkça hazırla</a></Notice>;
   const pathHandoff = token ? returns.getReviewPath(token) : null;
   const comparisonHandoff = token ? returns.getComparisonEvent(token) : null;
+  const onwardHandoff = token ? returns.getOnwardEvent(token) : null;
   const arrivalHandoff = token ? returns.getArrivalEvent(token) : null;
-  const pathLocked = !!token && returns.isReviewPath(token) || comparisonHandoff !== null || arrivalHandoff !== null;
+  const pathLocked = !!token && returns.isReviewPath(token) || comparisonHandoff !== null || arrivalHandoff !== null || onwardHandoff !== null;
   if (pathLocked) {
-    try { if (!intent) throw new Error(); verifyReturnedEventTarget(intent, selection); if (arrivalHandoff) validateArrivalEventHandoff(arrivalHandoff, intent); else if (comparisonHandoff) validateComparisonEventHandoff(comparisonHandoff, intent); else { if (!pathHandoff) throw new Error(); validateReviewPathHandoff(pathHandoff, intent); } }
+    try { if (!intent) throw new Error(); verifyReturnedEventTarget(intent, selection); if (onwardHandoff) validateOnwardEventHandoff(onwardHandoff, intent); else if (arrivalHandoff) validateArrivalEventHandoff(arrivalHandoff, intent); else if (comparisonHandoff) validateComparisonEventHandoff(comparisonHandoff, intent); else { if (!pathHandoff) throw new Error(); validateReviewPathHandoff(pathHandoff, intent); } }
     catch { return <Notice error>Zincir geçişi başka kayda veya hazırlığa yönlendirilemez. Kaynak okunmadı. <a href={queueReturnHref(token)!}>Aynı filtrelerle portföye dön</a></Notice>; }
   }
   if (selection.prepare === 'renewal') {
@@ -136,5 +145,5 @@ export default function SelectedSourceReviewPage({ selection }: { selection: Sou
     if (!token || !intent || intent.target.review_id !== null || !intent.target.version_id || !intent.target.manifest_sha256) return <Notice error>Yeni bağımsız inceleme için tam ve ayrı portföy seçimi gerekli. İçerik açılmadı.</Notice>;
     return <IndependentReviewPreparationPage key={token} intent={intent} token={token} />;
   }
-  return <SelectedWorkspace arrivalHandoff={arrivalHandoff} comparisonHandoff={comparisonHandoff} pathHandoff={pathHandoff} returnIntent={intent} key={`${selection.matter_id}:${selection.analysis_id}:${selection.context_id}:${selection.review_id}:${selection.return_token || ''}:${workspaceQuery(filters)}`} target={selection} revision={revision} blocked={loading || !!error} />;
+  return <SelectedWorkspace onwardHandoff={onwardHandoff} arrivalHandoff={arrivalHandoff} comparisonHandoff={comparisonHandoff} pathHandoff={pathHandoff} returnIntent={intent} key={`${selection.matter_id}:${selection.analysis_id}:${selection.context_id}:${selection.review_id}:${selection.return_token || ''}:${workspaceQuery(filters)}`} target={selection} revision={revision} blocked={loading || !!error} />;
 }

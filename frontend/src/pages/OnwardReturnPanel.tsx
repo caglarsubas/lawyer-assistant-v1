@@ -5,7 +5,7 @@ import { compareDestinationIdentities, type ComparisonQueueReconciliation } from
 
 const relation = { same: 'Aynı kimlik gözlendi', different: 'Farklı kimlik gözlendi', unknown: 'İlişki doğrulanamadı' };
 const admission = (v: string) => v === 'complete' ? 'Tamamlandı' : v === 'pending' ? 'Bekliyor' : 'Doğrulanamadı';
-export default function OnwardReturnPanel({ observation, value }: { observation: OnwardReturn; value: ComparisonQueueReconciliation }) {
+export default function OnwardReturnPanel({ observation, value, prepare, busy }: { observation: OnwardReturn; value: ComparisonQueueReconciliation; prepare?: () => void; busy?: boolean }) {
   if (value.state === 'not_observed') return <Notice>Seçilen kayıt bu pencerede gözlenmedi. Korunan ileri hedef ayrıntıları açılmadı; güncel erişim veya ilişki kurulmadı.</Notice>;
   const h = observation.handoff, d = observation.destination, f = value.fresh, r = h.observation.handoff.receipt;
   const a = compareDestinationIdentities(h.observation.arrival, f), p = compareDestinationIdentities(h.prepared, f);
@@ -26,5 +26,6 @@ export default function OnwardReturnPanel({ observation, value }: { observation:
         <p>Kabuller — bağlam: {admission(s.metadata.admission.context_state)}; seçilen karar: {admission(s.selected.admission)}; baş: {admission(s.metadata.admission.review_state)}.</p></div>)}
     </Detail>
     <p className="small muted">Özgün filtreler, sabit kanıt ve tarihsel inceleme korundu. Yalnız özel kimlik metadatası karşılaştırıldı; kaynaklar, hukuki etki veya yeni başa yol doğrulanmadı. Bekleyen kabul tamamlanmadı, başka karar seçilmedi.</p>
+    {prepare && <button className="button secondary" disabled={busy} onClick={prepare}>İleri dönüşü koruyarak tam karar geçişini doğrula</button>}
   </section>;
 }
