@@ -2834,3 +2834,9 @@ remain separate; R03/R05 stay partial.
 
 Next: guarded onward-destination return reconciliation through a separately typed
 fixed-depth observation, keeping the original arrival and receipt unchanged.
+
+PR94 CI qualification also exposed a final-authorization job timeout after all
+21 tests passed. The [budget recovery](CI_FINAL_AUTHORIZATION_BUDGET.md) moves one
+unchanged activation/rollback case into the existing graph-candidate group and
+starts retained assembly first. All 4,521 cases remain exclusive and complete;
+seven jobs, two workers and original caps remain. A cancelled job is not a pass.

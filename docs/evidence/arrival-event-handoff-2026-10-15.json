@@ -20,7 +20,7 @@
   "deployment_contracts_passed": 42,
   "ruff": "passed",
   "backend_api_or_schema_changed": false,
-  "backend_test_image": "reused unchanged backend/ontology/scripts/deploy snapshot; diff verified empty",
+  "backend_test_image": "unchanged application image; current tests mounted read-only for CI budget qualification; production source diff empty",
   "focused_browser": {
     "synthetic_only": true,
     "rights_simulated": true,
@@ -189,14 +189,14 @@
     "workspace": 67,
     "human_review": 107,
     "model_trials": 20,
-    "final_release": 21,
+    "final_release": 20,
     "withdrawal": 15,
-    "candidate": 14
+    "candidate": 15
   },
   "ci_partition_missing": 0,
   "ci_partition_overlap": 0,
   "ci_partition_extra": 0,
-  "ci_workflow_changed": false,
+  "ci_workflow_changed": true,
   "ci_limits_changed": false,
   "source_files_sha256": {
     "frontend/src/workbench/arrivalEventHandoff.ts": "f759652408316a0af49c609c794802a1bd1c1f1f9fbeca9c9fa080cf7ccfce1c",
@@ -208,12 +208,99 @@
     "frontend/src/pages/ArrivalEventDestinationPanel.tsx": "00c2edea611a299bea5a41ebfcb83decd4c748926d57e68eb5a7a816fbdd7c61",
     "frontend/src/pages/PortfolioReturnQueue.tsx": "ef792f50c5f3c9beda96eb67a37a0f81b5dfcf085d4a38afbeb9cb3a48994223",
     "frontend/src/pages/SelectedSourceReviewPage.tsx": "6c4d189a04cbf85f34b4b8d5b191c9886ac7f5a970a51bd9e2278688e84c4c43",
-    ".github/workflows/ci.yml": "ebe09511b6cdc6dc09e665517236ed8ce1f4a7fae7abe013fd32727c0257fecc"
+    ".github/workflows/ci.yml": "aa4c54849c5b8c194b2762b48024fe90191a596c22613ef1e019ab0ff08115e9",
+    "backend/tests/test_final_release_authorization.py": "42cedbcd9002987a5b74ea1a509f6162be9b56f14ec2a0f557a02fe28c199fdd",
+    "backend/tests/test_final_release_transitions.py": "2073497a5539cf3d0efec067bfa26091ad13353093c55b2b5c1af01507930a56"
   },
   "production_qualified": false,
   "legal_qualification": false,
   "deployed": false,
   "provider_or_env_changed": false,
   "held_out_lawyer_acceptance": "not_established",
-  "hosted_checks_and_merge": "verify separately for final PR head and actual merged tree"
+  "hosted_checks_and_merge": "verify separately for final PR head and actual merged tree",
+  "ci_budget_recovery": {
+    "initial_failure": {
+      "failed_head": "2b8212f1a99dba1bb5e70a174a246b626a50286d",
+      "run": 38740368706,
+      "job": 116440194102,
+      "annotation": "The job has exceeded the maximum execution time of 6m0s",
+      "test_result": "21 passed, 2 warnings in 348.91s",
+      "job_reported_seconds": 378,
+      "longest_case_seconds": 173.91,
+      "longest_case": "test_retained_mixed_assembly.py::test_two_successors_preserve_full_mixed_inventory_current_grants_and_rollback",
+      "recovery": "cancel obsolete run; measure unchanged complete group before changing collection order; preserve caps and all tests",
+      "passing_results_reclassified_as_success": false,
+      "automatic_retry_added": false
+    },
+    "ordering_measurement": {
+      "baseline": {
+        "elapsed_seconds": 152.91,
+        "exit_code": 0,
+        "files": [
+          "tests/test_final_release_authorization.py",
+          "tests/test_final_authorization_postgres.py",
+          "tests/test_final_release_inspection.py",
+          "tests/test_retained_mixed_assembly.py"
+        ]
+      },
+      "long-first": {
+        "elapsed_seconds": 146.32,
+        "exit_code": 0,
+        "files": [
+          "tests/test_retained_mixed_assembly.py",
+          "tests/test_final_release_authorization.py",
+          "tests/test_final_authorization_postgres.py",
+          "tests/test_final_release_inspection.py"
+        ]
+      }
+    },
+    "rebalanced_measurement": {
+      "balanced-final": {
+        "elapsed_seconds": 134.7,
+        "exit_code": 0,
+        "files": [
+          "tests/test_retained_mixed_assembly.py",
+          "tests/test_final_release_authorization.py",
+          "tests/test_final_authorization_postgres.py",
+          "tests/test_final_release_inspection.py"
+        ]
+      },
+      "balanced-candidate": {
+        "elapsed_seconds": 55.54,
+        "exit_code": 0,
+        "files": [
+          "tests/test_final_release_transitions.py",
+          "tests/test_final_graph_candidate.py"
+        ]
+      }
+    },
+    "case_membership": {
+      "total_cases": 4521,
+      "exact_case_membership_after_documented_file_move": true,
+      "dropped_cases": 0,
+      "duplicate_cases": 0,
+      "old_id": "test_final_release_authorization.py::test_activation_and_rollback_use_monotonic_pointer_and_current_target_grant",
+      "new_id": "test_final_release_transitions.py::test_activation_and_rollback_use_monotonic_pointer_and_current_target_grant",
+      "exact_test_body_sha256": "85881a38d281b1f312c6b2807747efc5e347af1e5c48582b1d1605bc10e9747d",
+      "assertions_changed": false
+    },
+    "qualified_counts": {
+      "final_release": 20,
+      "candidate": 15
+    },
+    "skipped_cases": 0,
+    "worker_count": 2,
+    "job_caps_minutes": {
+      "final_release": 6,
+      "candidate": 3
+    },
+    "jobs_added": 0,
+    "caps_increased": false,
+    "cached_verdicts": false,
+    "automatic_retry_added": false,
+    "production_code_changed": false,
+    "hosted_billing_savings_established": false,
+    "corrected_head_hosted_checks": "must verify separately"
+  },
+  "updated_at": "2026-10-15T13:31:36.913156+00:00"
 }

@@ -23,16 +23,19 @@ env:
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_retained_release_inspection.py
   CI_GRAPH_CANDIDATE_TESTS: >-
+    backend/tests/test_final_release_transitions.py
     backend/tests/test_final_graph_candidate.py
   CI_WORKSPACE_SECURITY_TESTS: >-
     backend/tests/test_firm_admin.py
     backend/tests/test_authority_proposals.py
     backend/tests/test_authority_model_cohorts.py
+  # Start the measured 174-second retained assembly first, so it cannot become
+  # a late single-worker tail. Full-suite membership, workers and caps stay.
   CI_FINAL_RELEASE_TESTS: >-
+    backend/tests/test_retained_mixed_assembly.py
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
     backend/tests/test_final_release_inspection.py
-    backend/tests/test_retained_mixed_assembly.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py
@@ -265,9 +268,9 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${withdrawal_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
 
   graph-candidate-contracts:
-    # Main's backend tests all passed but exceeded the step cap by 11 seconds.
-    # This measured expensive legacy group needs deterministic headroom. Keep
-    # every subject once, existing deadlines unchanged, and no automatic retry.
+    # A 67-second transition case previously consumed the final job's setup
+    # headroom. Run it first alongside candidate checks; keep every assertion,
+    # seven jobs, two workers and all existing deadlines without retry.
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 3
     steps:
