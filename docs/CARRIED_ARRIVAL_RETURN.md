@@ -83,3 +83,8 @@ main CI and deployment remain separate evidence states.
 
 Next: a guarded carried-arrival-preserving exact-event handoff that carries the
 additional arrival and earlier observations unchanged without recursive history.
+
+The [carried-arrival-preserving handoff](CARRIED_ARRIVAL_EVENT_HANDOFF.md) now
+provides its own validated purpose. The older onward action remains withheld on
+carried entries; the new action requires fresh complete current identities and
+preserves the additional arrival through preparation, destination and return.

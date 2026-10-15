@@ -4,7 +4,7 @@ import type { CarriedArrivalReturn } from '../workbench/carriedArrivalReturn';
 import { compareDestinationIdentities, type ComparisonQueueReconciliation } from '../workbench/comparisonReturn';
 const relation = { same: 'Aynı kimlik gözlendi', different: 'Farklı kimlik gözlendi', unknown: 'İlişki doğrulanamadı' };
 const admission = (v: string) => v === 'complete' ? 'Tamamlandı' : v === 'pending' ? 'Bekliyor' : 'Doğrulanamadı';
-export default function CarriedArrivalReturnPanel({ observation, value }: { observation: CarriedArrivalReturn; value: ComparisonQueueReconciliation }) {
+export default function CarriedArrivalReturnPanel({ observation, value, prepare, busy = false }: { observation: CarriedArrivalReturn; value: ComparisonQueueReconciliation; prepare?: () => void; busy?: boolean }) {
   if (value.state === 'not_observed') return <Notice>Seçilen kayıt bu pencerede gözlenmedi. Korunan taşınan varış ayrıntıları açılmadı; güncel erişim veya ilişki kurulmadı.</Notice>;
   const h = observation.handoff, o = h.observation, old = o.handoff.observation, r = old.handoff.receipt, f = value.fresh;
   const d = compareDestinationIdentities(o.destination, f), p = compareDestinationIdentities(h.prepared, f), a = compareDestinationIdentities(old.arrival, f);
@@ -15,6 +15,7 @@ export default function CarriedArrivalReturnPanel({ observation, value }: { obse
     <h3>Taşınan varıştan portföye dönüş</h3>
     <p>Taşınan varıştan yeni kuyruğa — karar başı: {relation[value.head_relation]}. Analizin son sürümü: {relation[value.version_relation]}. Revizyon: {relation[value.revision_relation]}.</p>
     <p className="small muted">Korunan varış: {formatDate(observation.arrival.metadata.observed_at, true)} · Yeni kuyruk: {formatDate(value.queue_observed_at, true)} · Tam kayıt: {formatDate(f.metadata.observed_at, true)}. Ayrı gözlemler atomik bir an değildir; önceki onay taşınmaz.</p>
+    {prepare && <button className="button secondary" disabled={busy} onClick={prepare}>Taşınan varışı koruyarak tam karar geçişini hazırla</button>}
     <Detail title="Taşınan varış, özgün ileri dönüş ve yeni kuyruğun ayrı kimlikleri">
       <p>Özgün ileri hedeften yeni kuyruğa — baş: {relation[d.head_relation]}; sürüm: {relation[d.version_relation]}; revizyon: {relation[d.revision_relation]}.</p>
       <p>Taşıyan hazırlıktan yeni kuyruğa — baş: {relation[p.head_relation]}; sürüm: {relation[p.version_relation]}; revizyon: {relation[p.revision_relation]}.</p>
