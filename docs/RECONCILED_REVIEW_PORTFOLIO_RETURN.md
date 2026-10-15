@@ -75,3 +75,7 @@ pinning the selected packet and current head across fresh observations. Establis
 only evidenced private predecessor links; truncation or an absent selected event
 remains unknown. No legal agreement, authority, source permission or automatic
 expansion follows from an observed path.
+
+The bounded metadata observation is now implemented in
+[returned review head lineage](RETURNED_REVIEW_HEAD_LINEAGE.md). Its separate action
+does not change these return identities or grant source access.

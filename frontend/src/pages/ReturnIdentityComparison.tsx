@@ -21,7 +21,7 @@ export default function ReturnIdentityComparison({ value: c, links, renew }: { v
     {c.version_relation === 'different' && <Notice>Analizin son sürüm kimliği değişti. Sabit kanıt sürümü değiştirilmedi; yenileme ve yeni bağımsız inceleme ayrıca gerekir.</Notice>}
     {(c.head_relation === 'unknown' || c.version_relation === 'unknown') && <p className="small muted">Bilinmeyen kimlik veya gözlem, değişiklik olmadığı şeklinde yorumlanmaz.</p>}
     <p>Sabit kanıt sürümü ile yeni gözlenen son sürüm: {RELATION[c.current.frozen_version_relation]}. Bu ilişki içerik uygunluğu veya kaynak izni değildir.</p>
-    {c.selected && <p>Seçilen tarihsel karar ile yeni gözlenen baş: {RELATION[c.selected_head_relation]}. Geçmiş zincirinde son başa erişim kontrol edilmedi; kararın etkisi ayrıca incelenir.</p>}
+    {c.selected && <p>Seçilen tarihsel karar ile yeni gözlenen baş: {RELATION[c.selected_head_relation]}. Bu kimlik karşılaştırması geçmiş zincirini kontrol etmez; ayrı bir sınırlı gözlem ve kararın etkisinin ayrıca incelenmesi gerekir.</p>}
     <Detail title="Sabit kanıt ve tam kimlikler">
       <p className="reference-id">Çalışma alanı: {c.fixed.matter_id} · Analiz: {c.fixed.analysis_id}</p><p className="reference-id">Sabit bağlam: {c.fixed.context_id}</p>
       <p className="reference-id">Sabit kanıt sürümü: {c.fixed.version_id}</p><p className="reference-id">Sabit bağlam SHA-256: {c.fixed.manifest_sha256}</p>
