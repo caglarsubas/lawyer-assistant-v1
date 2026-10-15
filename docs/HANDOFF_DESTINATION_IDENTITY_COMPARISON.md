@@ -77,6 +77,4 @@ The seven CI jobs, two workers, test partitions and deadlines remain unchanged.
 These checks establish synthetic software behavior, not reviewed corpus coverage,
 legal accuracy, pilot acceptance or deployment. R03/R05 remain partial.
 
-Next: preserve a separately typed destination-comparison observation through an
-explicit queue return and reconcile it against fresh bounded queue metadata,
-without rebasing the original baseline or inheriting approval.
+Continuation: [guarded comparison return and fresh queue reconciliation](COMPARISON_RETURN_RECONCILIATION.md) now retains those observations separately, without rebasing the original baseline or inheriting approval.

@@ -2703,3 +2703,34 @@ R03/R05 remain partial.
 
 Next: guarded destination-comparison return and fresh queue reconciliation,
 retaining separate handoff/destination observations and the original baseline.
+
+### R03/R05A guarded comparison return and fresh queue reconciliation
+
+Explicit return from a verified path destination can now retain a strictly typed
+historical comparison receipt in the bounded principal-bound session book. Exact
+customer OR, workspace/source date filters, bucket, original unknown baselines,
+frozen evidence and chosen event/packet remain unchanged. Failed or unavailable
+metadata keeps only the selection; it cannot invent a receipt or erase the pin.
+
+Receipt details require a new authorized bounded queue window containing the
+selected context and a fresh exact-event metadata read. Arrival/preparation alone
+expose no retained comparison; an out-of-window target remains unobserved and no
+window is automatically scanned. Reconciliation uses the existing GETs, compares
+retained destination with fresh identities, and keeps original baseline, chosen
+event, handoff and destination separate.
+
+Strict guards reject changed filters/evidence, event or same-head substitutions,
+nonmatching queue/head observations and regressive time/revision. Different and
+unknown current identities remain explicit; pending admissions stay pending.
+Scope/principal, filter/revision, expiry and navigation retire views and replies.
+No source text, notes, review write/replay, admission repair, provider call, backend
+schema change or public graph mutation is introduced.
+
+See the [contract](COMPARISON_RETURN_RECONCILIATION.md) and
+[engineering evidence](evidence/comparison-return-reconciliation-2026-10-15.json).
+CI jobs, workers, caps and complete exclusive partitions remain unchanged. Hosted
+checks, merge, main CI, deployment and legal acceptance stay separate; R03/R05
+remain partial.
+
+Next: guarded fresh-queue comparison-to-selected-event handoff, retaining exact
+filters, frozen evidence and all separate historical observations.

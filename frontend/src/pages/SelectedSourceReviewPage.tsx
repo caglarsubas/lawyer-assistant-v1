@@ -8,10 +8,11 @@ import { SourceReadFence } from './matter/sourceReviewTypes';
 import { sourceContextHref, verifyNavigation, type NavigationMetadata, type SourceSelection, type SourceTarget } from './sourceContextNavigationTypes';
 
 import { departingReturn, queueReturnHref, returnMatches, type ReturnIntent } from '../workbench/portfolioReturn';
-import { returnVerifiedEvent, verifyReturnedEventTarget } from '../workbench/returnedReviewLineage';
+import { verifyReturnedEventTarget } from '../workbench/returnedReviewLineage';
 import { verifyReturnSelection } from '../workbench/returnComparison';
 import { compareReviewPathHandoff, validateReviewPathHandoff, type ReviewPathHandoff } from '../workbench/reviewPathHandoff';
 import ReviewPathIdentityComparison from './ReviewPathIdentityComparison';
+import { captureComparisonReturn } from '../workbench/comparisonReturn';
 
 import SourceReviewLineagePanel from './SourceReviewLineagePanel';
 import { verifyReviewLineage, type ReviewLineage } from './sourceReviewLineageTypes';
@@ -65,7 +66,16 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent, pathHandof
     <a className="text-link" href={queueReturnHref(target.return_token)!} onClick={event => {
       if (!returnIntent) return;
       event.preventDefault();
-      try { const token = returns.put(pathLocked ? returnVerifiedEvent(returnIntent, target, value, lineage) : departingReturn(returnIntent, value, lineage, target.review_id)); window.location.hash = queueReturnHref(token)!; }
+      try {
+        if (!target.return_token || !returns.get(target.return_token)) throw new Error('Dönüş bağı artık geçerli değil.');
+        let token: string;
+        if (pathHandoff) {
+          const available = !blocked && !busy && observedRevision === revision;
+          const next = captureComparisonReturn(returnIntent, pathHandoff, target, available ? value : null, available ? lineage : null);
+          token = next.receipt ? returns.putComparisonReturn(next.intent, next.receipt) : returns.put(next.intent);
+        } else token = returns.put(departingReturn(returnIntent, value, lineage, target.review_id));
+        window.location.hash = queueReturnHref(token)!;
+      }
       catch (cause) { clear(cause); }
     }}>Portföy kaynak kuyruğuna dön</a>
     {error && <Notice error>{error} Kimlik, erişim ve kayıt yeniden doğrulanmadan incelemeye devam edilemez.</Notice>}
