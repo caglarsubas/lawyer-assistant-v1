@@ -79,6 +79,4 @@ The seven CI jobs, two workers, deadlines and complete backend partition stay
 unchanged. Engineering checks, merge, main CI, deployment, legal qualification and
 lawyer acceptance remain distinct. R03/R05 stay partial.
 
-Next: a guarded explicit handoff from a fresh queue comparison to the exact
-chosen historical event, preserving the receipt's separate observations without
-transferring approval or automatically opening source tools.
+Continuation: [guarded comparison-to-event handoff](COMPARISON_EVENT_HANDOFF.md) now prepares that exact destination while retaining separate observations and current authorization requirements.

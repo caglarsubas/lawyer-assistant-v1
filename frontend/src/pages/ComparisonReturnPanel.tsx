@@ -4,13 +4,14 @@ import type { ComparisonQueueReconciliation, ComparisonReturnReceipt } from '../
 
 const relation = { same: 'Aynı kimlik gözlendi', different: 'Farklı kimlik gözlendi', unknown: 'İlişki doğrulanamadı' };
 const admission = (value: string) => value === 'complete' ? 'Tamamlandı' : value === 'pending' ? 'Bekliyor' : 'Doğrulanamadı';
-export default function ComparisonReturnPanel({ receipt, value }: { receipt: ComparisonReturnReceipt; value: ComparisonQueueReconciliation }) {
+export default function ComparisonReturnPanel({ receipt, value, prepare, busy = false }: { receipt: ComparisonReturnReceipt; value: ComparisonQueueReconciliation; prepare?: () => void; busy?: boolean }) {
   if (value.state === 'not_observed') return <Notice>Seçilen kayıt bu pencerede gözlenmedi. Korunan karşılaştırmanın ayrıntıları açılmadı; güncel erişim veya ilişki kurulmadı.</Notice>;
   const h = receipt.handoff, d = receipt.destination, f = value.fresh, o = receipt.intent.target;
   return <section aria-label="Korunan karşılaştırma ve yeni kuyruk gözlemi">
     <h3>Karşılaştırmadan portföye dönüş</h3>
     <p>Hedef gözleminden yeni kuyruğa — karar başı: {relation[value.head_relation]}. Analizin son sürümü: {relation[value.version_relation]}. Revizyon: {relation[value.revision_relation]}.</p>
     <p className="small muted">Korunan hedef gözlemi: {formatDate(d.metadata.observed_at, true)} · Yeni kuyruk: {formatDate(value.queue_observed_at, true)} · Tam kayıt: {formatDate(f.metadata.observed_at, true)}. Ayrı gözlemler tek atomik an değildir; önceki onay taşınmaz.</p>
+    {prepare && <button className="button secondary" disabled={busy} onClick={prepare}>Karşılaştırmadaki tam karar geçişini ayrıca doğrula</button>}
     <Detail title="Korunan karşılaştırma ve yeni gözlemin tam kimlikleri">
       <h4>Özgün kuyruk gözlemi</h4>
       <p className="reference-id">Özgün baş: {o.head_id || 'Bilinmiyor'} · Son sürüm: {o.current_version_id || 'Bilinmiyor'}</p>

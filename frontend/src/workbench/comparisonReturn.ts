@@ -43,13 +43,30 @@ export function reconcileComparisonReturn(intent: ReturnIntent, receipt: Compari
   if (result.state === 'not_observed') return { state: 'not_observed', queue_observed_at: page.observed_at };
   if (!meta || !history || Date.parse(meta.observed_at) < Date.parse(page.observed_at) || meta.analysis.revision < before.analysis.revision) fail();
   compareReviewPathHandoff(intent, receipt.handoff, history);
-  const head = history.current_head, oldHead = previous.head;
+  const fresh = { metadata: meta, selected: history.selected_review, head: history.current_head };
+  return structuredClone({ state: 'observed', queue_observed_at: page.observed_at, fresh, ...compareDestinationIdentities(previous, fresh) });
+}
+
+/** Both observations must already have passed their exact-context validators. */
+export function compareDestinationIdentities(previous: ReviewPathDestination, fresh: ReviewPathDestination) {
+  const before = previous.metadata, meta = fresh.metadata, head = fresh.head, oldHead = previous.head;
+  if (Date.parse(meta.observed_at) < Date.parse(before.observed_at) || meta.analysis.revision < before.analysis.revision) fail();
   if (head?.integrity === 'verified' && oldHead?.integrity === 'verified' && head.id === oldHead.id && !equal(immutable(head), immutable(oldHead))) fail();
   const knownHeads = head?.integrity === 'verified' && meta.historical_review.state !== 'unknown' && oldHead?.integrity === 'verified' && before.historical_review.state !== 'unknown';
-  return structuredClone({ state: 'observed', queue_observed_at: page.observed_at,
-    fresh: { metadata: meta, selected: history.selected_review, head },
-    head_relation: knownHeads ? head.id === oldHead.id ? 'same' : 'different' : 'unknown',
-    version_relation: before.analysis.current_version_id === null || meta.analysis.current_version_id === null ? 'unknown'
-      : before.analysis.current_version_id === meta.analysis.current_version_id ? 'same' : 'different',
-    revision_relation: before.analysis.revision === meta.analysis.revision ? 'same' : 'different' });
+  return {
+    head_relation: (knownHeads ? head.id === oldHead.id ? 'same' : 'different' : 'unknown') as IdentityRelation,
+    version_relation: (before.analysis.current_version_id === null || meta.analysis.current_version_id === null ? 'unknown'
+      : before.analysis.current_version_id === meta.analysis.current_version_id ? 'same' : 'different') as IdentityRelation,
+    revision_relation: (before.analysis.revision === meta.analysis.revision ? 'same' : 'different') as 'same' | 'different' };
+}
+
+export type ObservedComparison = Extract<ComparisonQueueReconciliation, { state: 'observed' }>;
+export function validateComparisonObservation(intent: ReturnIntent, receipt: ComparisonReturnReceipt, value: ObservedComparison) {
+  validateComparisonReturn(receipt, intent);
+  if (!value || !equal(Object.keys(value).sort(), ['fresh', 'head_relation', 'queue_observed_at', 'revision_relation', 'state', 'version_relation']) || value.state !== 'observed'
+    || typeof value.queue_observed_at !== 'string' || value.queue_observed_at.length > 40 || !Number.isFinite(Date.parse(value.queue_observed_at))) fail();
+  verifyReviewPathDestination(intent, receipt.handoff, value.fresh);
+  if (Date.parse(value.queue_observed_at) < Date.parse(receipt.destination.metadata.observed_at) || Date.parse(value.fresh.metadata.observed_at) < Date.parse(value.queue_observed_at)) fail();
+  const expected = compareDestinationIdentities(receipt.destination, value.fresh);
+  if (!equal(expected, { head_relation: value.head_relation, version_relation: value.version_relation, revision_relation: value.revision_relation })) fail();
 }

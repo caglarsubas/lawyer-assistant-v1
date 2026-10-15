@@ -2734,3 +2734,36 @@ remain partial.
 
 Next: guarded fresh-queue comparison-to-selected-event handoff, retaining exact
 filters, frozen evidence and all separate historical observations.
+
+### R03/R05A guarded comparison-to-event handoff
+
+A successfully reconciled queue comparison can now explicitly prepare a separate
+purpose-bound destination for its exact selected historical review event. Two
+fresh authorized one-record metadata reads must retain the fixed evidence,
+chosen packet, current head/version/revision, admissions and monotonic times.
+Unknown or incomplete current identities and admissions, out-of-window targets,
+changed responses, denied access and retired requests withhold the link. No
+predecessor pointer is followed and no path from a current head is inferred.
+
+The bounded session payload keeps the historical receipt, fresh queue observation
+and preparation metadata separate. Original customer OR, workspace/source dates,
+bucket, unknown baselines and frozen event/evidence pin remain unchanged. Arrival
+requires a fresh exact-event read and rejects redirect, packet and same-head
+substitution or regressive metadata. Later/different/unknown current identities
+are displayed separately; no new head replaces the selected event.
+
+Verified return preserves the original receipt. Unavailable metadata produces
+only a pin-preserving selection return, without inventing a newer observation or
+approval. Current matter-content grants and separate source-tool guards remain
+mandatory. Filter/revision, scope/principal, expiry and navigation retire views,
+links and late replies. No automatic source body, review/write replay, admission
+repair, provider request, backend schema change or public graph mutation is added.
+
+See the [contract](COMPARISON_EVENT_HANDOFF.md) and
+[engineering evidence](evidence/comparison-event-handoff-2026-10-15.json). Seven CI
+jobs, two workers, caps and complete exclusive backend partitions stay unchanged.
+Hosted checks, merge, main CI, deployment and legal acceptance remain separate;
+R03/R05 stay partial.
+
+Next: guarded arrival-observation return and fresh queue reconciliation, retaining
+prior observations and the original receipt without rebasing or approval transfer.
