@@ -3285,3 +3285,28 @@ remain unchanged. Require all eight exact-head checks and measured timing floors
 before ordinary merge. R03/R05 and legal/corpus/rights/lawyer acceptance remain partial.
 Next: separately retain this handoff's new destination and reconcile it against a
 fresh authorized bounded queue, preserving the complete purpose and every dependency.
+
+### R03/R05A guarded handoff-arrival-destination-arrival-destination return reconciliation
+
+Explicit verified UI return separately retains the arrival-preserving handoff's
+new destination without replacing its complete purpose, filters, frozen evidence
+or history. All 28 prior observations stay bound. Fresh authorized bounded queue
+reconciliation compares the new destination independently and preserves every
+older flag. Only a containing target permits the single exact-event metadata GET;
+omission exposes no saved details and triggers no target read or scan.
+
+Strict fixed-depth schemas, known same-ID head packets, exact seven-field/customer-OR
+filters, monotonic time/revision, explicit unknown/pending states and all principal/
+TTL/request fences remain. Public operations revalidate complete history with private
+local checks, without persistent verdict caches. Denial, substitution, regression
+and retired replies clear panels atomically. Withhold the preceding handoff that
+cannot carry the added destination. Original API/return projections stay unchanged.
+No backend/provider/public-graph/deployment change; private metadata stays private.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_RETURN.md) and dated
+synthetic evidence. All prior 2,135 frontend cases/79 files, all 4,521 backend
+identities and the entire workflow/eight jobs/workers/caps/PostgreSQL semantics
+remain unchanged. Require all eight exact-head checks and measured timing floors
+before ordinary merge. R03/R05 and legal/corpus/rights/lawyer acceptance remain partial.
+Next: a dedicated exact-event handoff carrying this complete saved destination
+return unchanged, with fresh bounded preparation and independently qualified CI margins.

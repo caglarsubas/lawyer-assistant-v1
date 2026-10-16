@@ -1,4 +1,5 @@
-import { compareHandoffArrivalDestinationArrivalEvent, returnHandoffArrivalDestinationArrivalEvent, validateHandoffArrivalDestinationArrivalEvent, type HandoffArrivalDestinationArrivalEvent } from '../workbench/handoffArrivalDestinationArrivalEvent';
+import { captureHandoffArrivalDestinationArrivalDestinationReturn } from '../workbench/handoffArrivalDestinationArrivalDestinationReturn';
+import { compareHandoffArrivalDestinationArrivalEvent, validateHandoffArrivalDestinationArrivalEvent, type HandoffArrivalDestinationArrivalEvent } from '../workbench/handoffArrivalDestinationArrivalEvent';
 import HandoffArrivalDestinationArrivalEventPanel from './HandoffArrivalDestinationArrivalEventPanel';
 import { captureHandoffArrivalDestinationArrivalReturn } from '../workbench/handoffArrivalDestinationArrivalReturn';
 import { compareHandoffArrivalDestinationEvent, validateHandoffArrivalDestinationEvent, type HandoffArrivalDestinationEvent } from '../workbench/handoffArrivalDestinationEvent';
@@ -110,8 +111,8 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent, handoffArr
         let token: string;
         if (handoffArrivalDestinationArrivalEvent) {
           const available = !blocked && !busy && observedRevision === revision;
-          const next = returnHandoffArrivalDestinationArrivalEvent(returnIntent, handoffArrivalDestinationArrivalEvent, target, available ? value : null, available ? lineage : null);
-          token = next.observation ? returns.putHandoffArrivalDestinationArrivalReturn(next.intent, next.observation) : returns.put(next.intent);
+          const next = captureHandoffArrivalDestinationArrivalDestinationReturn(returnIntent, handoffArrivalDestinationArrivalEvent, target, available ? value : null, available ? lineage : null);
+          token = next.observation ? returns.putHandoffArrivalDestinationArrivalDestinationReturn(next.intent, next.observation) : returns.put(next.intent);
         } else if (handoffArrivalDestinationEvent) {
           const available = !blocked && !busy && observedRevision === revision;
           const next = captureHandoffArrivalDestinationArrivalReturn(returnIntent, handoffArrivalDestinationEvent, target, available ? value : null, available ? lineage : null);
