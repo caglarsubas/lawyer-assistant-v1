@@ -1,0 +1,190 @@
+{
+  "schema": "handoff-destination-return-engineering-evidence-v1",
+  "qualification_date": "2026-10-16",
+  "recorded_at": "2026-10-16T06:23:11.853386+00:00",
+  "baseline_main_sha": "d98fe17072e51aa50b15ea1d5d057a6258e1ed89",
+  "baseline_pr": 102,
+  "baseline_main_ci": {
+    "run": 38858454788,
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "origin": "invented documents and test-only accounts; simulated rights; disabled providers",
+  "frontend_cases_passed": 1586,
+  "new_cases_passed_in_full_suite": 57,
+  "frontend_full_wall_seconds": 24.48,
+  "frontend_baseline_cases_passed": 1529,
+  "build_passed": true,
+  "ruff_passed": true,
+  "deployment_contracts_passed": 44,
+  "postgres_concurrency_cases_passed": 11,
+  "postgres_pytest_seconds": 7.34,
+  "all_existing_test_bodies_fixtures_and_assertions_unchanged": true,
+  "browser": {
+    "synthetic_only": true,
+    "rights_simulated": true,
+    "production_qualified": false,
+    "legacy_prefix_rehearsed": true,
+    "both_sessions_external_requests_monitored": true,
+    "early_and_late_destinations_preserved_separately": true,
+    "earlier_arrival_history_unchanged": true,
+    "exact_customer_and_all_date_filters_restored": true,
+    "no_reads_or_writes_on_return": true,
+    "containing_window_one_metadata_get": true,
+    "omission_no_event_get_or_scan": true,
+    "new_destination_only_head_packet_substitution_closed": true,
+    "all_panels_atomic_on_conflict_or_denial": true,
+    "late_customer_and_date_responses_retired": true,
+    "unknown_pending_explicit": true,
+    "weaker_preparation_withheld": true,
+    "unavailable_selection_only": true,
+    "reload_closes": true,
+    "narrow_overflow": false,
+    "browser_errors": [],
+    "external_requests": []
+  },
+  "screenshots_visually_checked": [
+    "handoff-destination-wide.png",
+    "handoff-destination-narrow.png"
+  ],
+  "owned_fixture_servers_stopped": true,
+  "contract": {
+    "recipe": "private-arrival-handoff-destination-return-v1",
+    "complete_original_handoff_unchanged": true,
+    "separate_reduced_destination": true,
+    "all_14_prior_observations_plus_latest_queue_and_preparation_checked": true,
+    "new_destination_only_packet_pin_checked": true,
+    "exact_seven_filter_fields_preserved": true,
+    "strict_schema_including_undefined_extra_keys": true,
+    "one_row_with_unchanged_original_projections": true,
+    "principal_entry_limit": 8,
+    "expiry_minutes": 30,
+    "body_reads_or_writes_added": false,
+    "provider_or_public_graph_requests_added": false,
+    "validation_verdict_cache_added": false
+  },
+  "ci": {
+    "diagnosis": "PR102 frontend 268/300s leaves only 32s margin; hosted authority-cohort file used 117.35 call +15.95 setup worker seconds",
+    "fix_before_feature_edits": "return complete27-case authority_trial_cohorts file to existing ARM remainder; x86 retains analysis-cohort32 and firm/proposal48",
+    "receiving_complete_local": {
+      "selection": "exact complete receiving backend remainder",
+      "files": [
+        "backend/tests"
+      ],
+      "cases": 3843,
+      "wall_seconds": 373.37,
+      "exit_code": 0,
+      "cpu_limit": 2,
+      "workers": 2,
+      "memory_limit_mib": 1536,
+      "hard_step_minutes": 18,
+      "hard_job_minutes": 20,
+      "existing_job_limits_or_fixture_logic_changed": false,
+      "hosted_headroom_not_yet_established": true
+    },
+    "human_complete_local": {
+      "selection": "exact complete frontend human review partition",
+      "files": [
+        "backend/tests/test_analysis_cohorts.py"
+      ],
+      "cases": 32,
+      "wall_seconds": 15.58,
+      "exit_code": 0,
+      "cpu_limit": 2,
+      "workers": 2,
+      "memory_limit_mib": 1536,
+      "hard_job_minutes": 5,
+      "existing_job_limits_or_fixture_logic_changed": false,
+      "hosted_headroom_not_yet_established": true
+    },
+    "partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 4521,
+        "runtime": 1,
+        "preflight": 89,
+        "remaining": 3843,
+        "publication": 299,
+        "workspace": 48,
+        "human_review": 32,
+        "model_trials": 20,
+        "final_release": 20,
+        "withdrawal": 15,
+        "candidate": 15,
+        "graph_runtime": 139
+      },
+      "runtime_files": [
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py",
+        "backend/tests/test_source_reviews.py",
+        "backend/tests/test_source_review_effort.py",
+        "backend/tests/test_source_analysis_reviews.py",
+        "backend/tests/test_source_context_renewals.py",
+        "backend/tests/test_source_review_readiness.py",
+        "backend/tests/test_portfolio_source_reviews.py",
+        "backend/tests/test_source_context_navigation.py",
+        "backend/tests/test_source_review_lineage.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_authority_proposals.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_analysis_cohorts.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "b167d772d1b670bc19d2ecd002bb48d4f58a07075b38baef12dd41d9aabc1616",
+      "workflow_sha256": "c3cea8ea9067224bbffaf4c5f85ab1a097bc058e28877866a81a89364a28607e",
+      "job_deadlines_and_worker_counts_unchanged": true,
+      "workspace_workers": 2,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "new_graph_runtime_job_minutes": 6,
+      "new_graph_runtime_workers": 2,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "parsed_invariants": {
+      "all_eight_job_configs_identical": true,
+      "env_only_selector_change": true
+    },
+    "app_image_current_python_files_verified": 122,
+    "jobs": 8,
+    "workers_caps_architectures_and_postgres_semantics_unchanged": true,
+    "all_unchanged_backend_suites_repeated_locally": false,
+    "merge_gate": "all eight successful checks on exact submitted HEAD and >=30s measured frontend/backend job/backend test-step/graph margin",
+    "hosted_results": "recorded in PR body and ignored exact-head merge proof after final run; no docs-only Actions rerun",
+    "billing_savings_established": false
+  },
+  "changed_source_sha256": {
+    ".github/workflows/ci.yml": "c3cea8ea9067224bbffaf4c5f85ab1a097bc058e28877866a81a89364a28607e",
+    "frontend/src/pages/CarriedDestinationArrivalEventDestinationPanel.tsx": "0916522969c6425710afaab4b311696f913798720a702a77d66f6721f9be34b9",
+    "frontend/src/pages/PortfolioReturnQueue.tsx": "48f789a6bd19a8a1697fcbcb41a344979d506b86baf6079fc668b53e1e1763c4",
+    "frontend/src/pages/SelectedSourceReviewPage.tsx": "4aeebe2dcb4b8bb64d844b207777de036359b4cd69c604044238ee481d04f557",
+    "frontend/src/workbench/carriedDestinationArrivalEventHandoff.ts": "ab08e259b0b973d7f031c2fd61a610c370deda568830bfff5acddd185f2cf207",
+    "frontend/src/workbench/portfolioReturn.ts": "4917966682e2f32b67ad89f5e7865e26991a84f60a938544cf6a34ca9b5705f8",
+    "frontend/src/pages/HandoffDestinationReturnPanel.tsx": "1796df7eb22bc4d33a941a6c3098e7268c699c220d99e178baa13336cab7cfed",
+    "frontend/src/workbench/arrivalHandoffDestinationReturn.ts": "de19a84a0a1dbf793a33aabd4f21cecea4354a3f9886f65f23ecbfd62660fe67",
+    "frontend/src/workbench/arrivalHandoffDestinationReturn.test.tsx": "7b44192f63a71505a7313628d38dc83fabef3a66e0630031814d543b8ad019c0"
+  },
+  "limitations": [
+    "Synthetic engineering behavior only; R03/R05 remain partial.",
+    "No legal, national-corpus, production-rights or lawyer-acceptance qualification.",
+    "No deployment, credential, provider or private-matter data changes."
+  ],
+  "next_slice": "dedicated guarded exact-event purpose carrying this complete destination-return record unchanged"
+}

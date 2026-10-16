@@ -14,8 +14,10 @@ env:
     backend/tests/test_runtime_authorization_integration.py
   CI_AUTHORITY_MODEL_TESTS: >-
     backend/tests/test_authority_model_trials.py
+  # Preserve x86 private analysis-review and firm permission coverage. The complete
+  # 27-case authority-cohort file returns to the measured ARM backend remainder.
+  # No cases, jobs, workers, deadlines, fixtures or assertions are removed.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
-    backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_analysis_cohorts.py
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py

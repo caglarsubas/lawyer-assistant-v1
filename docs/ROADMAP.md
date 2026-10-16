@@ -3090,3 +3090,26 @@ the existing complete history validator. Fresh all-eight success and measured ma
 merge gates. See [contract](DESTINATION_ARRIVAL_EVENT_HANDOFF.md) and engineering
 evidence. R03/R05, legal/corpus/lawyer qualification, main CI and deployment remain
 separate. Next: a dedicated return contract for this handoff's new destination.
+
+### R03/R05A guarded handoff-destination return reconciliation
+
+Frontend CI capacity is qualified first: the complete 27-case authority-cohort
+file returns to the existing ARM backend remainder. X86 keeps private analysis
+review and firm/proposal permissions. The full 4,521 identities remain disjoint;
+all eight job configurations, workers, caps, architectures and PostgreSQL race
+semantics remain unchanged. Receiving remainder is 3,843 cases; x86 human review
+is 32. Local completion precedes feature edits; fresh hosted timing remains a gate.
+
+Verified explicit return separately captures the handoff's actual destination
+without replacing the saved arrival or any prior evidence/review observation.
+A fresh authorized bounded queue and existing exact-event metadata GET compare it
+independently. Exact customer/date/source-date/bucket filters, frozen evidence and
+all known packet pins remain bound. Omission discloses no saved details and causes
+no scan. Conflicting, denied or retired responses clear all panels atomically.
+Unknown/pending states remain explicit; the weaker preceding handoff is withheld.
+
+See [contract](HANDOFF_DESTINATION_RETURN.md) and synthetic engineering evidence.
+Eight principal-local entries, thirty-minute expiry and all request fences remain.
+No provider/public graph/source writes or deployment change. R03/R05 and legal,
+corpus and lawyer acceptance remain partial/separate. Next: a dedicated guarded
+handoff that carries this complete destination-return record without rebasing it.

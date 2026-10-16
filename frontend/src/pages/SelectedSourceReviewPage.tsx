@@ -1,4 +1,5 @@
-import { compareCarriedDestinationArrivalEventDestination, returnCarriedDestinationArrivalEvent, validateCarriedDestinationArrivalEventHandoff, type CarriedDestinationArrivalEventHandoff } from '../workbench/carriedDestinationArrivalEventHandoff';
+import { captureArrivalHandoffDestinationReturn } from '../workbench/arrivalHandoffDestinationReturn';
+import { compareCarriedDestinationArrivalEventDestination, validateCarriedDestinationArrivalEventHandoff, type CarriedDestinationArrivalEventHandoff } from '../workbench/carriedDestinationArrivalEventHandoff';
 import CarriedDestinationArrivalEventDestinationPanel from './CarriedDestinationArrivalEventDestinationPanel';
 import { captureCarriedDestinationArrivalReturn } from '../workbench/carriedDestinationArrivalReturn';
 import { compareCarriedDestinationEventDestination, validateCarriedDestinationEventHandoff, type CarriedDestinationEventHandoff } from '../workbench/carriedDestinationEventHandoff';
@@ -94,8 +95,8 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent, destinatio
         let token: string;
         if (destinationArrivalHandoff) {
           const available = !blocked && !busy && observedRevision === revision;
-          const next = returnCarriedDestinationArrivalEvent(returnIntent, destinationArrivalHandoff, target, available ? value : null, available ? lineage : null);
-          token = next.observation ? returns.putCarriedDestinationArrivalReturn(next.intent, next.observation) : returns.put(next.intent);
+          const next = captureArrivalHandoffDestinationReturn(returnIntent, destinationArrivalHandoff, target, available ? value : null, available ? lineage : null);
+          token = next.observation ? returns.putArrivalHandoffDestinationReturn(next.intent, next.observation) : returns.put(next.intent);
         } else if (destinationHandoff) {
           const available = !blocked && !busy && observedRevision === revision;
           const next = captureCarriedDestinationArrivalReturn(returnIntent, destinationHandoff, target, available ? value : null, available ? lineage : null);
