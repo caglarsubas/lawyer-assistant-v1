@@ -3235,3 +3235,27 @@ CI workflow, eight jobs, workers, caps and PostgreSQL semantics are unchanged.
 R03/R05 and legal/corpus/source-rights/lawyer acceptance remain partial/separate.
 Next: a dedicated return contract retaining this handoff's newer arrival separately,
 reconciled against a fresh authorized bounded queue without rebasing prior history.
+
+### R03/R05A guarded handoff-arrival-destination-arrival return reconciliation
+
+Explicit verified return separately retains the destination-preserving handoff's
+new arrival without replacing its complete purpose, filters, evidence or history.
+All 25 prior observations remain bound. Fresh authorized bounded queue reconciliation
+compares the new arrival independently and preserves every earlier flag. Only a
+containing window permits the existing single exact-event metadata GET; omission
+reveals no saved details and causes no target read or scan.
+
+Strict fixed-depth schemas, all known head packets, exact customer/date/source-date/
+bucket filters, monotonic clocks/revisions, explicit unknown/pending states and
+principal/TTL/request fences remain. Public calls validate complete history afresh
+using private local checks, with no persistent verdict cache. Denial, substitution,
+regression and retired replies clear all panels atomically. Withhold the preceding
+handoff that cannot carry the added arrival. Original API/return projections remain
+unchanged; no source/review/provider/public-graph write or deployment change.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_RETURN.md) and dated synthetic
+engineering evidence. All prior 1,961 frontend cases, all 4,521 backend identities
+and the entire CI workflow/eight jobs/workers/caps/PostgreSQL semantics remain.
+R03/R05 and legal/corpus/source-rights/lawyer acceptance remain partial/separate.
+Next: a dedicated guarded exact-event handoff carrying this complete saved arrival
+return unchanged, with newly qualified CI timing margins before merge.

@@ -1,3 +1,4 @@
+import { validateHandoffArrivalDestinationArrivalReturn, type HandoffArrivalDestinationArrivalReturn } from './handoffArrivalDestinationArrivalReturn';
 import { validateHandoffArrivalDestinationEvent, type HandoffArrivalDestinationEvent } from './handoffArrivalDestinationEvent';
 import { validateHandoffArrivalDestinationReturn, type HandoffArrivalDestinationReturn } from './handoffArrivalDestinationReturn';
 import { validateHandoffArrivalEvent, type HandoffArrivalEvent } from './handoffArrivalEvent';
@@ -91,7 +92,7 @@ export function departingReturn(value: ReturnIntent, meta: NavigationMetadata | 
 }
 export const portfolioPart = (value: PortfolioQueueFilters): PortfolioFilters => ({ customer_ids: [...value.customer_ids], date_field: value.date_field, date_from: value.date_from, date_to: value.date_to });
 export class PortfolioReturnBook {
-  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff; reviewPath?: ReviewPathHandoff; comparisonReturn?: ComparisonReturnReceipt; comparisonEvent?: ComparisonEventHandoff; arrivalReturn?: ArrivalReturn; arrivalEvent?: ArrivalEventHandoff; onwardReturn?: OnwardReturn; onwardEvent?: OnwardEventHandoff; carriedArrival?: CarriedArrivalReturn; carriedArrivalEvent?: CarriedArrivalEventHandoff; carriedDestination?: CarriedDestinationReturn; carriedDestinationEvent?: CarriedDestinationEventHandoff; destinationArrival?: CarriedDestinationArrivalReturn; destinationArrivalEvent?: CarriedDestinationArrivalEventHandoff; handoffDestination?: ArrivalHandoffDestinationReturn; handoffDestinationEvent?: HandoffDestinationEvent; handoffDestinationArrival?: HandoffDestinationArrivalReturn; handoffArrivalEvent?: HandoffArrivalEvent; handoffArrivalDestination?: HandoffArrivalDestinationReturn; handoffArrivalDestinationEvent?: HandoffArrivalDestinationEvent }>();
+  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff; reviewPath?: ReviewPathHandoff; comparisonReturn?: ComparisonReturnReceipt; comparisonEvent?: ComparisonEventHandoff; arrivalReturn?: ArrivalReturn; arrivalEvent?: ArrivalEventHandoff; onwardReturn?: OnwardReturn; onwardEvent?: OnwardEventHandoff; carriedArrival?: CarriedArrivalReturn; carriedArrivalEvent?: CarriedArrivalEventHandoff; carriedDestination?: CarriedDestinationReturn; carriedDestinationEvent?: CarriedDestinationEventHandoff; destinationArrival?: CarriedDestinationArrivalReturn; destinationArrivalEvent?: CarriedDestinationArrivalEventHandoff; handoffDestination?: ArrivalHandoffDestinationReturn; handoffDestinationEvent?: HandoffDestinationEvent; handoffDestinationArrival?: HandoffDestinationArrivalReturn; handoffArrivalEvent?: HandoffArrivalEvent; handoffArrivalDestination?: HandoffArrivalDestinationReturn; handoffArrivalDestinationEvent?: HandoffArrivalDestinationEvent; handoffArrivalDestinationArrival?: HandoffArrivalDestinationArrivalReturn }>();
   constructor(private now = () => Date.now(), private nonce = () => crypto.randomUUID().replaceAll('-', '')) {}
   put(value: ReturnIntent, renewal?: RenewalHandoff): string { validateReturn(value); if (renewal) validateRenewalHandoff(renewal, value); this.prune();
     const id = this.nonce(); if (!returnToken(id) || this.rows.has(id)) throw new Error('Dönüş kimliği oluşturulamadı.');
@@ -105,6 +106,11 @@ export class PortfolioReturnBook {
   putComparisonReturn(value: ReturnIntent, receipt: ComparisonReturnReceipt): string {
     validateComparisonReturn(receipt, value); const id = this.put(value); this.rows.get(id)!.comparisonReturn = structuredClone(receipt); return id;
   }
+  putHandoffArrivalDestinationArrivalReturn(value: ReturnIntent, observation: HandoffArrivalDestinationArrivalReturn): string {
+    validateHandoffArrivalDestinationArrivalReturn(observation, value); const id = this.putHandoffArrivalDestinationReturn(value, observation.handoff.observation);
+    this.rows.get(id)!.handoffArrivalDestinationArrival = structuredClone(observation); return id;
+  }
+  getHandoffArrivalDestinationArrivalReturn(id: string): HandoffArrivalDestinationArrivalReturn | null { this.prune(); const row = returnToken(id) ? this.rows.get(id) : undefined; return row?.handoffArrivalDestinationArrival ? structuredClone(row.handoffArrivalDestinationArrival) : null; }
   putHandoffArrivalDestinationEvent(value: ReturnIntent, handoff: HandoffArrivalDestinationEvent): string {
     validateHandoffArrivalDestinationEvent(handoff, value); const id = this.put(value); this.rows.get(id)!.handoffArrivalDestinationEvent = structuredClone(handoff); return id;
   }
