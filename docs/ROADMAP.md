@@ -3452,3 +3452,30 @@ and legal/corpus/source-rights/lawyer acceptance remain partial.
 Next: separately retain this handoff's arrival and reconcile it against a fresh
 authorized bounded queue, preserving the complete 37-observation purpose and every
 earlier observation without rebasing history.
+
+### R03/R05A complete-handoff arrival return reconciliation
+
+Explicit UI return now retains the complete 37-observation handoff and a separately
+verified arrival, with zero action requests/writes: 38 observations. Exact seven-field/
+customer-OR filters, selected packets, frozen evidence and known same-ID head packets
+remain bound. Original exported return APIs and older return projections stay unchanged.
+Every public call validates complete history with private local checks and no cached
+verdict; parent reconciliation avoids duplicate full-history validation in that helper.
+
+A fresh authorized bounded queue permits one exact-event metadata GET only when
+containing the selected record. Omission reveals no saved details and makes no target
+read/retry/scan. Compare the saved arrival independently without rebasing earlier
+observations or flags. Unknown/pending stays explicit; denial, drift and retirement
+clear state. Withhold the preceding handoff that cannot carry the added arrival.
+Principal/TTL/request fences, exact filters and private matter confidentiality remain.
+No backend/provider/public-graph/deployment change.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_RETURN.md)
+and dated synthetic evidence. All prior 2,719 frontend cases/85 files, all 4,521 backend
+identities and the workflow/eight jobs/workers/caps/PostgreSQL semantics remain unchanged.
+No publication workload is added; its last measured 14-second margin remains visible
+for profiling before additions. Require all eight exact-head successes and measured
+timing floors before ordinary merge. R03/R05 and legal/corpus/source-rights/lawyer
+acceptance remain partial.
+Next: a dedicated exact-event handoff carrying the complete 38-observation arrival
+return unchanged, with fresh bounded preparation and independently qualified CI margins.
