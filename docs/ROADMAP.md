@@ -3007,3 +3007,31 @@ body read/write/provider call, public graph mutation or deployment change.
 See [the contract](CARRIED_DESTINATION_RETURN.md) and its synthetic engineering
 evidence. R03/R05 remain partial; legal, corpus and lawyer acceptance are separate.
 Next: guarded destination-preserving exact-event handoff with unchanged history.
+
+### R03/R05A guarded carried-destination-preserving exact-event handoff
+
+A dedicated fixed-depth purpose carries the complete original carried destination
+and every earlier observation unchanged. Its explicit preparation requires a
+fresh authorized containing queue, known current head/version and complete
+admissions, followed by exactly two stable selected-event `window=1` reads.
+All original customer/date/source-date/bucket filters, frozen evidence and
+selected/same-known-head packets remain bound. Failed, denied, drifting or retired
+reads stop without retry; the older weaker preparation remains withheld.
+
+Purpose and exact event are checked before the existing single fresh destination
+GET. Separate comparisons preserve historical unknowns, pending admissions and
+later independent heads/versions without inferring approval or a new path. New
+tokens remount the same event. Verified return restores the original carried
+destination unchanged; unavailable metadata yields selection only. Partial or
+conflicting metadata closes. No automatic bodies, writes, provider calls or
+shared graph mutations are introduced. Eight entries, thirty minutes and all
+principal/scope/revision/request fences remain.
+
+See [contract](CARRIED_DESTINATION_EVENT_HANDOFF.md) and synthetic engineering
+evidence. The qualified seven-job CI allocation and all deadlines remain;
+require at least thirty seconds observed frontend/backend margin as documented
+in [CI headroom](CI_FRONTEND_HEADROOM.md). R03/R05 remain partial. Exact-head CI,
+merge, main CI, deployment and legal/lawyer acceptance stay separate.
+Next: separately capture this handoff's new destination on verified explicit
+return and reconcile it with a fresh authorized bounded queue, preserving all
+original observations through a fixed-depth contract.

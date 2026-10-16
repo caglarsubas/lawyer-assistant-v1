@@ -53,7 +53,10 @@ details or trigger another request.
 
 ## Interaction and qualification
 
-The new destination panel is metadata only, with no actions or forms. The older
+The destination panel is metadata only. Its optional dedicated
+[destination-preserving handoff](CARRIED_DESTINATION_EVENT_HANDOFF.md) requires
+fresh complete metadata and two stable bounded reads. It opens no source form.
+The older
 carried-arrival preparation is withheld on these entries because its contract
 cannot carry the additional destination. Existing separate source actions keep
 their own authorization and evidence checks. Append-only review history remains.
@@ -75,5 +78,6 @@ disjoint partition. Seven jobs, two workers, caps and PostgreSQL settings remain
 See [engineering evidence](evidence/carried-destination-return-2026-10-16.json).
 Exact-head checks, actual merge, main CI, deployment and acceptance are separate.
 
-Next: a dedicated destination-preserving exact-event handoff that retains this
-additional observation and all earlier snapshots without recursive history.
+The dedicated destination-preserving handoff retains this additional observation
+and all earlier snapshots. Its verified return restores this original destination
+unchanged; a new arrival capture is a separate next slice.
