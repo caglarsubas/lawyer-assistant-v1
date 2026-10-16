@@ -121,3 +121,35 @@ Require fresh all-eight-check success and the same >=30-second measured margin
 for frontend, backend job/test step and graph runtime before ordinary exact-head
 merge. Record actual hosted timing in the PR body and next feature documentation;
 do not start another Actions run solely to amend timing prose.
+
+## Handoff-destination return prerequisite
+
+PR102's corrected exact-head run `38857103590` passed all eight jobs. Frontend
+used 268/300 seconds (32s margin), backend 851/1200 (349s), its test step 771/1080
+(309s), and graph runtime 281/360 (79s). The initial frontend timeout was not
+merged. PR102's ordinary squash and complete tested/merged tree match were
+verified; its separate main run `38858454788` subsequently passed all eight jobs.
+
+A 32-second frontend margin is too close to the thirty-second merge floor for
+another slice. Its hosted log attributes 117.35 call + 15.95 setup worker-seconds
+to the complete 27-case `test_authority_trial_cohorts.py` file. That complete file
+returns to the existing ARM backend remainder with measured spare capacity.
+X86 retains all frontend tests, 48 firm/proposal cases and 32 private
+`test_analysis_cohorts.py` cases. Graph runtime remains 139. All 4,521 original
+node IDs are still assigned exactly once, with the same complete identity hash.
+Parsed definitions of all eight jobs are identical; only the central selector
+changes. No worker, deadline, architecture, fixture, assertion, retry or PostgreSQL
+durability setting changes.
+
+Before feature edits, the complete receiving remainder collected 3,843 cases:
+3,746 passed and 97 environment-dependent skips, in 372.36 pytest seconds
+(373.37 container wall). The complete remaining x86 review selection passed all
+32 cases in 15.58 container wall seconds. Both local containers are read-only,
+disconnected, two CPUs/two workers and 1,536 MiB; every current application Python
+file independently matches the image. All 1,529 baseline frontend cases also
+passed unchanged. Local timing is compatibility evidence, not a hosted prediction.
+
+The submitted feature head must still pass all eight checks with at least thirty
+seconds margin in frontend, backend job, backend test step and graph runtime.
+Record actual hosted timing and merge proof in the PR body without a docs-only
+workflow rerun. No universal timing or billing reduction is claimed.

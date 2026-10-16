@@ -72,3 +72,10 @@ snapshot file with publication in this existing job. Graph runtime becomes 139
 cases, frontend human review 59, and the main remainder stays 3,816. All eight job
 configurations and limits remain; complete affected groups require fresh local
 qualification and all exact-head hosted margin gates still apply.
+
+The handoff-destination return prerequisite subsequently returns the complete
+27-case authority-cohort file to the measured backend remainder. Remainder is
+3,843; x86 private analysis review is 32; graph runtime remains 139. The complete
+receiving remainder and remaining review partition pass locally before feature
+edits. All 4,521 IDs, eight parsed job definitions and existing limits remain.
+See [current headroom qualification](CI_FRONTEND_HEADROOM.md).

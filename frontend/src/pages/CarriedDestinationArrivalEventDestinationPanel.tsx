@@ -30,6 +30,6 @@ export default function CarriedDestinationArrivalEventDestinationPanel({ handoff
         <p className="reference-id">Son sürüm: {s.metadata.analysis.current_version_id || 'Bilinmiyor'} · Revizyon: {s.metadata.analysis.revision}</p>
         <p>Kabuller — bağlam: {admission(s.metadata.admission.context_state)}; seçilen karar: {admission(s.selected.admission)}; baş: {admission(s.metadata.admission.review_state)}.</p></div>)}
     </Detail>
-    <p className="small muted">Özgün filtreler, sabit kanıt ve bağımsız inceleme geçmişi korundu. Yalnız özel kimlik metadatası karşılaştırıldı; kaynaklar, hukuki etki veya yeni başa yol doğrulanmadı. Bekleyen kabul tamamlanmadı, başka karar seçilmedi. Doğrulanmış dönüş özgün hedef varışını değişmeden korur; güncel varış bu kaydın yerine geçmez ve ayrıca saklanmaz.</p>
+    <p className="small muted">Özgün filtreler, sabit kanıt ve bağımsız inceleme geçmişi korundu. Yalnız özel kimlik metadatası karşılaştırıldı; kaynaklar, hukuki etki veya yeni başa yol doğrulanmadı. Bekleyen kabul tamamlanmadı, başka karar seçilmedi. Doğrulanmış dönüş özgün hedef varışını değişmeden korur; güncel varış bu kaydın yerine geçmez. Açık dönüş, doğrulanan bu varışı ayrıca saklar; yeni kuyruk ayrıca gözlemlenir.</p>
   </section>;
 }

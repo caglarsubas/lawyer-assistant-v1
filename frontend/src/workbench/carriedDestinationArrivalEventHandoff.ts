@@ -1,7 +1,8 @@
 import { canonicalJson } from '../pages/matter/sourceReviewTypes';
+import type { PortfolioQueuePage } from '../pages/portfolioSourceQueueTypes';
 import type { NavigationMetadata, SourceTarget } from '../pages/sourceContextNavigationTypes';
 import { verifyReviewLineage, type ReviewLineage } from '../pages/sourceReviewLineageTypes';
-import { validateCarriedDestinationArrivalReturn, type CarriedDestinationArrivalReturn } from './carriedDestinationArrivalReturn';
+import { reconcileCarriedDestinationArrivalReturn, validateCarriedDestinationArrivalReturn, type CarriedDestinationArrivalReturn } from './carriedDestinationArrivalReturn';
 import { compareDestinationIdentities, validateDestinationObservation, type ComparisonQueueReconciliation, type ObservedComparison } from './comparisonReturn';
 import type { ReturnIntent } from './portfolioReturn';
 import { returnVerifiedEvent, verifyReturnedEventTarget } from './returnedReviewLineage';
@@ -18,8 +19,7 @@ const admitted = (v: ReviewPathDestination) => v.metadata.tools_available && v.m
 function fail(): never { throw new Error('Hedef varışını koruyan tam karar geçişi doğrulanamadı. Yeni kuyruk gözlemi gerekli; başka kayıt veya önceki sonuç kullanılmadı.'); }
 const stamp = (v: unknown): v is string => typeof v === 'string' && v.length <= 40 && Number.isFinite(Date.parse(v));
 /** Local to one operation; no verdict or checker survives across public calls. */
-function historyChecks(intent: ReturnIntent, observation: CarriedDestinationArrivalReturn) {
-  validateCarriedDestinationArrivalReturn(observation, intent);
+function retainedChecks(intent: ReturnIntent, observation: CarriedDestinationArrivalReturn) {
   const latest = observation.handoff, d = latest.observation, h = d.handoff, c = h.observation;
   const o = c.handoff.observation, old = o.handoff.observation, r = old.handoff.receipt;
   const snapshots = [r.destination, old.arrival, o.handoff.queue.fresh, o.handoff.prepared, o.destination,
@@ -36,6 +36,9 @@ function historyChecks(intent: ReturnIntent, observation: CarriedDestinationArri
     },
   };
 }
+function historyChecks(intent: ReturnIntent, observation: CarriedDestinationArrivalReturn) {
+  validateCarriedDestinationArrivalReturn(observation, intent); return retainedChecks(intent, observation);
+}
 type HistoryChecks = ReturnType<typeof historyChecks>;
 function handoffFields(value: CarriedDestinationArrivalEventHandoff, checks: HistoryChecks) {
   checks.queue(value.queue); checks.destination(value.prepared);
@@ -44,9 +47,11 @@ function handoffFields(value: CarriedDestinationArrivalEventHandoff, checks: His
     || Date.parse(value.observed_at[0]) < Date.parse(value.queue.fresh.metadata.observed_at)
     || Date.parse(value.observed_at[1]) < Date.parse(value.observed_at[0]) || value.prepared.metadata.observed_at !== value.observed_at[1]) fail();
 }
-function verifiedHandoff(value: CarriedDestinationArrivalEventHandoff, intent: ReturnIntent) {
+function handoffShape(value: CarriedDestinationArrivalEventHandoff) {
   if (!value || !equal(Object.keys(value).sort(), ['observation', 'observed_at', 'prepared', 'queue', 'recipe']) || value.recipe !== 'private-carried-destination-arrival-event-handoff-v1') fail();
-  const checks = historyChecks(intent, value.observation); handoffFields(value, checks); return checks;
+}
+function verifiedHandoff(value: CarriedDestinationArrivalEventHandoff, intent: ReturnIntent) {
+  handoffShape(value); const checks = historyChecks(intent, value.observation); handoffFields(value, checks); return checks;
 }
 export function carriedDestinationArrivalEventAvailable(intent: ReturnIntent, observation: CarriedDestinationArrivalReturn, value: ComparisonQueueReconciliation) {
   if (value.state !== 'observed') return false;
@@ -77,18 +82,43 @@ export async function prepareCarriedDestinationArrivalEvent(intent: ReturnIntent
     observed_at: [before.metadata.observed_at, after.metadata.observed_at] };
   handoffFields(result, checks); if (!current()) fail(); return structuredClone(result);
 }
+function destinationFields(handoff: CarriedDestinationArrivalEventHandoff, fresh: ReviewPathDestination, checks: HistoryChecks) {
+  checks.destination(fresh); compareDestinationIdentities(handoff.queue.fresh, fresh);
+  return compareDestinationIdentities(handoff.prepared, fresh);
+}
+/** Stateless reduced-destination validation; the complete history is checked afresh per call. */
+export function verifyCarriedDestinationArrivalEventDestination(intent: ReturnIntent, handoff: CarriedDestinationArrivalEventHandoff, fresh: ReviewPathDestination) {
+  return destinationFields(handoff, fresh, verifiedHandoff(handoff, intent));
+}
 function destination(intent: ReturnIntent, handoff: CarriedDestinationArrivalEventHandoff, target: SourceTarget, history: ReviewLineage, checks: HistoryChecks) {
   verifyReturnedEventTarget(intent, target); verifyReviewLineage(history, target);
   const fresh = { metadata: history.context_navigation, selected: history.selected_review, head: history.current_head };
-  checks.destination(fresh); return structuredClone({ fresh, ...compareDestinationIdentities(handoff.prepared, fresh) });
+  return structuredClone({ fresh, ...destinationFields(handoff, fresh, checks) });
 }
 export function compareCarriedDestinationArrivalEventDestination(intent: ReturnIntent, handoff: CarriedDestinationArrivalEventHandoff, target: SourceTarget, history: ReviewLineage) {
   return destination(intent, handoff, target, history, verifiedHandoff(handoff, intent));
 }
-/** A verified return restores the original observation, never captures or nests a new arrival. */
-export function returnCarriedDestinationArrivalEvent(intent: ReturnIntent, handoff: CarriedDestinationArrivalEventHandoff, target: SourceTarget, meta: NavigationMetadata | null, history: ReviewLineage | null) {
+/** Capture only metadata already verified in this view. No data request or write. */
+export function captureCarriedDestinationArrivalEventReturn(intent: ReturnIntent, handoff: CarriedDestinationArrivalEventHandoff, target: SourceTarget, meta: NavigationMetadata | null, history: ReviewLineage | null) {
   const checks = verifiedHandoff(handoff, intent), next = returnVerifiedEvent(intent, target, meta, history);
-  if (!meta && !history) return { intent: next, observation: null };
-  destination(intent, handoff, target, history!, checks);
-  return { intent: next, observation: structuredClone(handoff.observation) };
+  if (!meta && !history) return { intent: next, destination: null };
+  return { intent: next, destination: destination(intent, handoff, target, history!, checks).fresh };
+}
+/** Original return projection remains unchanged for existing callers. */
+export function returnCarriedDestinationArrivalEvent(intent: ReturnIntent, handoff: CarriedDestinationArrivalEventHandoff, target: SourceTarget, meta: NavigationMetadata | null, history: ReviewLineage | null) {
+  const next = captureCarriedDestinationArrivalEventReturn(intent, handoff, target, meta, history);
+  return { intent: next.intent, observation: next.destination ? structuredClone(handoff.observation) : null };
+}
+/** Reuse the original reconciliation, then check all additional pins within this operation. */
+export function reconcileCarriedDestinationArrivalEventDestination(intent: ReturnIntent, handoff: CarriedDestinationArrivalEventHandoff, saved: ReviewPathDestination,
+  page: PortfolioQueuePage, meta: NavigationMetadata | null, history: ReviewLineage | null, offset = 0): ComparisonQueueReconciliation {
+  handoffShape(handoff);
+  // This existing reconciliation performs the complete retained-history validation.
+  // Private checks below add this purpose and destination; no verdict crosses calls.
+  const value = reconcileCarriedDestinationArrivalReturn(intent, handoff.observation, page, meta, history, offset);
+  const checks = retainedChecks(intent, handoff.observation); handoffFields(handoff, checks); destinationFields(handoff, saved, checks);
+  if (Date.parse(page.observed_at) < Date.parse(saved.metadata.observed_at)) fail();
+  if (value.state === 'not_observed') return value;
+  destinationFields(handoff, value.fresh, checks);
+  return structuredClone({ ...value, ...compareDestinationIdentities(saved, value.fresh) });
 }
