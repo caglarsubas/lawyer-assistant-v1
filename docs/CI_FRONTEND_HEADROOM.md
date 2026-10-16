@@ -84,3 +84,40 @@ all eight exact-head successes and at least thirty seconds observed margin in
 frontend, main backend job/test step and graph job before merge. Carry measured
 hosted results into the next feature's documentation, avoiding a separate run
 solely to update timing text.
+
+
+## Arrival-preserving handoff capacity
+
+[PR101's exact-head run](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/38850758358)
+passed all eight checks: frontend 207/300 seconds (93 seconds margin), backend
+939/1,200 (261), backend test step 850/1,080 (230), graph runtime 258/360 (102).
+Merged-main run 38852168039 separately passed; frontend used 202 seconds, backend
+835 and graph 262. These are measured observations, not universal timing guarantees.
+
+The initial handoff head reached the five-minute frontend job cap: npm tests used
+117 seconds, build 17 and workspace contracts 34; the human-review step was still
+running when the job was cancelled. This head was not merged. The suite had grown,
+and that executor was slower on unchanged contract tests as well.
+
+The correction validates the complete saved history once within each public
+operation, then independently checks every fresh queue/preparation/destination
+against the root identity and all 14 saved observations. No checker or verdict is
+shared across public calls; preparation clones its baseline and awaited replies.
+Existing history validation, every existing test body/fixture and all newly added
+security cases remain. Two new cases exercise mutation across awaited reads.
+
+The complete 17-case Graph B snapshot file also moves to the existing native ARM
+graph job alongside its publication contracts. Human review becomes 59 cases and
+graph runtime 139. The full 4,521 backend identities remain exactly once, and all
+eight parsed job configurations, workers, deadlines, architectures, PostgreSQL
+settings, triggers and concurrency remain identical. Complete affected groups
+pass constrained local qualification before submission: complete human review 59
+in 50.61 seconds and complete graph runtime 139 in 135.95 seconds. Both use two
+CPU shares, two workers and 1,536 MiB; these are local observations, not hosted
+headroom guarantees. Neither fewer cases nor a higher time cap is
+used to obtain a successful run.
+
+Require fresh all-eight-check success and the same >=30-second measured margin
+for frontend, backend job/test step and graph runtime before ordinary exact-head
+merge. Record actual hosted timing in the PR body and next feature documentation;
+do not start another Actions run solely to amend timing prose.

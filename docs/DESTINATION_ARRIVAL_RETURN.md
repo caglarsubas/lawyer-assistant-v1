@@ -47,9 +47,10 @@ request fences. New observation/window/preparation, token/target, expiry,
 principal/scope changes retire views, links and pending replies. Denied or late
 metadata cannot restore retained details.
 
-The new panel is metadata only, with no forms or actions. The older
-destination-preserving preparation is withheld because its contract cannot carry
-the additional arrival. Separate source/review actions keep their own current
+The comparison disclosure is metadata only. A separate explicit
+[arrival-preserving preparation](DESTINATION_ARRIVAL_EVENT_HANDOFF.md) now carries
+the complete saved arrival. The older destination-preserving preparation remains
+withheld because its contract cannot carry that additional arrival. Separate source/review actions keep their own current
 authorization. Review history is append-only; private matter metadata is not
 promoted into shared legal graphs. No automatic body reads, review/renewal/export
 writes, provider calls, public graph mutations or deployment changes are added.
@@ -74,5 +75,6 @@ fresh exact-head checks and margin gates remain mandatory. See
 [CI headroom](CI_FRONTEND_HEADROOM.md) and
 [engineering evidence](evidence/destination-arrival-return-2026-10-16.json).
 
-Next: a dedicated arrival-preserving exact-event handoff with fresh stable
-preparation, retaining this arrival and every earlier observation unchanged.
+The dedicated arrival-preserving handoff retains this arrival and every earlier
+observation unchanged. Separately capturing its new destination remains a future
+return-reconciliation slice.
