@@ -56,3 +56,31 @@ remain, with one additional six-minute, two-worker job selecting 91 complete
 graph cases exactly once. The main remainder becomes 3,816. All eight current
 checks and fresh frontend/backend/graph margins are mandatory before merge.
 The rejected local dispatch-order experiment is not part of the solution.
+
+## Destination-arrival prerequisite
+
+[PR100's corrected run](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/38846573245)
+passed all eight checks. Frontend used 262/300 seconds: npm tests 54, build 16,
+workspace 32 and human review 148. Its 38-second margin leaves only eight seconds
+above the merge floor. Backend used 887/1,200, its test step 805/1,080 and the new
+graph job 247/360. These are observations, not universal timing or billing claims.
+
+Before implementing destination-arrival return, the complete 31-case
+`test_graph_b_publication.py` file moves from the frontend's human-review group
+to the existing native ARM graph group. The frontend retains x86 permission,
+private human-review and Graph B snapshot coverage. The graph group already
+exercises signed snapshots and publication through its component/assembly work.
+
+Human review becomes 76 cases and graph runtime 122; all other allocations stay.
+Independent full collection preserves all 4,521 node IDs and their original hash
+without gaps or overlaps. All eight parsed job configurations, workers, caps,
+architectures, triggers, permissions, concurrency and PostgreSQL settings remain
+identical. No test body, fixture, assertion, scheduler or verdict cache changes.
+
+Both complete affected groups pass the constrained local qualification: review 76
+in 106.83 wall seconds and graph 122 in 212.03. These measurements precede feature
+implementation and do not establish hosted headroom or billing savings. Require
+all eight exact-head successes and at least thirty seconds observed margin in
+frontend, main backend job/test step and graph job before merge. Carry measured
+hosted results into the next feature's documentation, avoiding a separate run
+solely to update timing text.

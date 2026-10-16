@@ -60,3 +60,9 @@ pytest seconds (291.67 wall). Both used two CPU shares, two workers, 1,536 MiB
 memory and read-only current tests. These observations are engineering evidence;
 they do not prove hosted timing or a billing reduction. Fresh exact-head results
 remain the merge gate. See [feature evidence](evidence/carried-destination-event-handoff-2026-10-16.json).
+
+The destination-arrival frontend-headroom prerequisite subsequently adds the
+complete 31-case Graph B publication file to this existing job. Graph runtime is
+122 cases, frontend human review 76, and the main remainder stays 3,816. All eight
+job configurations and deadlines remain unchanged. See the
+[current allocation and qualification](CI_FRONTEND_HEADROOM.md).

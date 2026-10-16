@@ -3037,3 +3037,30 @@ merge, main CI, deployment and legal/lawyer acceptance stay separate.
 Next: separately capture this handoff's new destination on verified explicit
 return and reconcile it with a fresh authorized bounded queue, preserving all
 original observations through a fixed-depth contract.
+
+### R03/R05A guarded destination-arrival return reconciliation
+
+Frontend CI headroom is addressed first: move the complete 31-case Graph B
+publication file to the existing native ARM graph group. Human review becomes 76
+and graph runtime 122; all 4,521 backend identities and eight job configurations,
+workers, caps, architectures and PostgreSQL settings remain. Both complete groups
+are qualified before feature implementation; fresh hosted margin gates remain.
+
+Explicit verified return now captures the destination handoff's actual arrival
+separately, preserving the original destination and every earlier queue,
+preparation and review observation unchanged. Exact customer/date/source-date/
+bucket filters, selected event/packet, frozen evidence and all known historical
+pins remain bound. Unavailable input yields selection only; partial or conflicting
+metadata fails closed without replay or an invented receipt.
+
+A fresh authorized bounded queue and its existing exact-event GET compare the
+new arrival independently. Omitted windows disclose no retained details and
+trigger no scan. Denied, inconsistent or retired observations clear all panels;
+current scope/filter/revision/token fences protect commits. Unknown/pending states
+remain explicit. The older handoff action is withheld because it cannot carry
+this additional arrival. Eight principal-local entries and thirty-minute expiry
+remain; no source bodies, automatic writes, provider calls or public graph updates.
+
+See [contract](DESTINATION_ARRIVAL_RETURN.md) and engineering evidence. R03/R05,
+legal/corpus/lawyer qualification and deployment remain separate. Next: guarded
+arrival-preserving exact-event handoff carrying this complete fixed-depth record.
