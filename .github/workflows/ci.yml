@@ -18,7 +18,6 @@ env:
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_analysis_cohorts.py
     backend/tests/test_graph_b_snapshot.py
-    backend/tests/test_graph_b_publication.py
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_retained_release_inspection.py
@@ -30,7 +29,7 @@ env:
     backend/tests/test_authority_proposals.py
   # Model-cohort cases remain in the full backend remainder. Running them
   # sequentially with x86 workspace/review groups left only 3s of job margin.
-  # Keep every case, seven jobs, two workers, current caps and no retries.
+  # Keep every case, eight jobs, two workers, current caps and no retries.
   # Start the measured 174-second retained assembly first, so it cannot become
   # a late single-worker tail. Full-suite membership, workers and caps stay.
   CI_FINAL_RELEASE_TESTS: >-
@@ -44,6 +43,7 @@ env:
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_release_set_authorization.py
     backend/tests/test_open_validity_publication.py
+    backend/tests/test_graph_b_publication.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py

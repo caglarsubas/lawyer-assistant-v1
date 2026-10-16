@@ -43,8 +43,10 @@ checking every earlier immutable pin. A later head or version is an observation,
 not a replacement selection, established path, legal effect or transferred
 approval. Unknowns and pending admissions remain explicit.
 
-A verified explicit return restores the original `CarriedDestinationReturn`
-unchanged. This slice does not capture this new arrival. Unavailable, loading,
+A verified explicit return preserves the original `CarriedDestinationReturn`
+unchanged. The separate [destination-arrival return](DESTINATION_ARRIVAL_RETURN.md)
+now captures the current arrival independently without replacing that original.
+Unavailable, loading,
 failed, denied, blocked or retired metadata yields selection only; partial or
 conflicting metadata fails closed. Return performs no added GET or write.
 
@@ -76,6 +78,6 @@ PostgreSQL durability settings remain. Require all eight exact-head checks and
 at least thirty seconds observed margin in frontend, backend job/test step and
 the new graph job before merge. Main CI, deployment and acceptance stay separate.
 
-Next: separately retain the newly arrived destination on explicit verified
-return and reconcile it through a fresh bounded queue, preserving this purpose
-and every earlier observation unchanged with another fixed-depth contract.
+The separate destination-arrival capture/reconciliation preserves this purpose
+and every earlier observation unchanged through a fixed-depth contract. A
+dedicated handoff carrying that additional arrival is a separate next slice.
