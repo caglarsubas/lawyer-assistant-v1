@@ -3310,3 +3310,29 @@ remain unchanged. Require all eight exact-head checks and measured timing floors
 before ordinary merge. R03/R05 and legal/corpus/rights/lawyer acceptance remain partial.
 Next: a dedicated exact-event handoff carrying this complete saved destination
 return unchanged, with fresh bounded preparation and independently qualified CI margins.
+
+### R03/R05A guarded handoff-arrival-destination-arrival-destination-preserving exact-event handoff
+
+A dedicated fixed-depth purpose carries the complete saved destination return
+unchanged with a fresh authorized containing queue and exactly two stable metadata
+reads at window one. All 29 retained observations, exact seven-field/customer-OR
+filters, frozen evidence and known same-ID head packets remain bound. Each public
+operation revalidates complete history with private local checks, without a
+persistent verdict cache or weaker-purpose substitution.
+
+Purpose and exact target validate before the destination's single metadata GET;
+a new token remounts the same selected event. New preparation/current destination
+and saved destination compare independently, without rebasing history or implying
+permission, legal effect, approval or a path to a new head. Drift, denial and
+retirement clear state; unknown/pending remains explicit. Explicit verified return
+restores the complete original return unchanged with zero action requests/writes
+and no further capture. Unavailable metadata yields selection only. Principal/TTL/
+request fences and matter confidentiality remain. No backend/provider/graph/deploy change.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_EVENT.md) and dated
+synthetic evidence. All prior 2,222 frontend cases/80 files, all 4,521 backend
+identities and the whole workflow/eight jobs/workers/caps/PostgreSQL semantics
+remain unchanged. Require all eight exact-head checks and measured timing floors
+before ordinary merge. R03/R05 and legal/corpus/rights/lawyer acceptance remain partial.
+Next: separately retain this handoff's new arrival and reconcile it against a fresh
+bounded authorized queue, preserving the complete purpose and every prior observation.
