@@ -43,10 +43,11 @@ source tools keep their existing independent authorization/evidence checks.
 
 ## Return and confidentiality
 
-Verified explicit return restores the original CarriedArrivalReturn unchanged.
-No additional arrival is captured implicitly. Unavailable/loading/failed/denied/
-blocked/retired metadata yields selection only. Partial, conflicting or
-substituted metadata is rejected without fallback, repair or replay.
+Verified explicit return preserves the original CarriedArrivalReturn unchanged
+and [separately captures the observed destination](CARRIED_DESTINATION_RETURN.md).
+No earlier snapshot is replaced. Unavailable/loading/failed/denied/blocked/retired
+metadata yields selection only. Partial, conflicting or substituted metadata is
+rejected without fallback, repair or replay.
 
 New filters/window/preparation, portfolio revision, target/token, scope/principal,
 expiry and navigation retire pending replies and links. Late or denied data
@@ -76,6 +77,5 @@ Keep all seven CI jobs, two workers, deadlines, qualified native ARM PostgreSQL
 settings and the complete exclusive 4,521-case backend selection. Exact-head
 checks, merge, main CI, deployment and professional acceptance remain separate.
 
-Next: separately capture and reconcile this handoff's newly observed destination
-on explicit return, preserving the original carried arrival and every earlier
-observation without recursively appending history.
+The separately captured destination now reconciles against a fresh authorized
+queue. Its own destination-preserving onward purpose remains a following slice.

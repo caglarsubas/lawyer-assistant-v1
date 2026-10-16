@@ -1,4 +1,5 @@
-import { compareCarriedArrivalEventDestination, returnCarriedArrivalEvent, validateCarriedArrivalEventHandoff, type CarriedArrivalEventHandoff } from '../workbench/carriedArrivalEventHandoff';
+import { captureCarriedDestinationReturn } from '../workbench/carriedDestinationReturn';
+import { compareCarriedArrivalEventDestination, validateCarriedArrivalEventHandoff, type CarriedArrivalEventHandoff } from '../workbench/carriedArrivalEventHandoff';
 import CarriedArrivalEventDestinationPanel from './CarriedArrivalEventDestinationPanel';
 import { useEffect, useRef, useState } from 'react';
 import { compareOnwardEventDestination, validateOnwardEventHandoff, type OnwardEventHandoff } from '../workbench/onwardEventHandoff';
@@ -86,8 +87,8 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent, pathHandof
         let token: string;
         if (carriedHandoff) {
           const available = !blocked && !busy && observedRevision === revision;
-          const next = returnCarriedArrivalEvent(returnIntent, carriedHandoff, target, available ? value : null, available ? lineage : null);
-          token = next.observation ? returns.putCarriedArrivalReturn(next.intent, next.observation) : returns.put(next.intent);
+          const next = captureCarriedDestinationReturn(returnIntent, carriedHandoff, target, available ? value : null, available ? lineage : null);
+          token = next.observation ? returns.putCarriedDestinationReturn(next.intent, next.observation) : returns.put(next.intent);
         } else if (onwardHandoff) {
           const available = !blocked && !busy && observedRevision === revision;
           const next = captureCarriedArrivalReturn(returnIntent, onwardHandoff, target, available ? value : null, available ? lineage : null);
