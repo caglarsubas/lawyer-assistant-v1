@@ -3421,3 +3421,34 @@ corpus/source-rights/lawyer acceptance remain partial.
 Next: a dedicated exact-event handoff carrying this complete 35-observation
 destination return unchanged, with fresh bounded preparation and independent
 qualification of CI margins.
+
+### R03/R05A complete destination-preserving exact-event handoff
+
+A dedicated fixed-depth purpose carries the complete 35-observation destination
+return unchanged. A fresh authorized containing queue and exactly two stable
+metadata reads at window one prepare the exact selected event: 37 observations
+in total. Seven-field/customer-OR filters, selected packets, frozen evidence,
+monotonic history and every known same-ID head packet remain bound. Each public
+call validates complete history with private local checks, no cached verdict or
+weaker-purpose substitution; validation precedes token allocation/eviction.
+
+Purpose and exact target validate before the destination's single metadata GET.
+Different tokens remount the same event. New preparation/current destination and
+saved destination compare independently without rebasing earlier identities or
+flags. Unknown/pending remains explicit; failure, denial and retirement clear
+state. Explicit verified return restores only the complete original 35-observation
+return with zero action requests/writes and no further arrival capture. Unavailable
+metadata yields selection only. Principal/TTL/request fences, exact filters and
+private matter confidentiality remain. No backend/provider/public-graph/deployment
+change.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_EVENT.md)
+and dated synthetic evidence. All prior 2,612 frontend cases/84 files and all
+4,521 backend identities remain unchanged, as do the workflow/eight jobs/workers/
+caps/PostgreSQL semantics. No publication workload is added; its last measured
+32-second margin remains visible for profiling before additions. Require all eight
+exact-head successes and measured timing floors before ordinary merge. R03/R05
+and legal/corpus/source-rights/lawyer acceptance remain partial.
+Next: separately retain this handoff's arrival and reconcile it against a fresh
+authorized bounded queue, preserving the complete 37-observation purpose and every
+earlier observation without rebasing history.
