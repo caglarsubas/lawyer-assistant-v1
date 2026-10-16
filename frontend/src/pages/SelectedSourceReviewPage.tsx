@@ -1,4 +1,5 @@
-import { compareHandoffArrivalDestinationArrivalDestinationArrivalEvent, returnHandoffArrivalDestinationArrivalDestinationArrivalEvent, validateHandoffArrivalDestinationArrivalDestinationArrivalEvent, type HandoffArrivalDestinationArrivalDestinationArrivalEvent } from '../workbench/handoffArrivalDestinationArrivalDestinationArrivalEvent';
+import { captureHandoffArrivalDestinationArrivalDestinationArrivalDestinationReturn } from '../workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationReturn';
+import { compareHandoffArrivalDestinationArrivalDestinationArrivalEvent, validateHandoffArrivalDestinationArrivalDestinationArrivalEvent, type HandoffArrivalDestinationArrivalDestinationArrivalEvent } from '../workbench/handoffArrivalDestinationArrivalDestinationArrivalEvent';
 import HandoffArrivalDestinationArrivalDestinationArrivalEventPanel from './HandoffArrivalDestinationArrivalDestinationArrivalEventPanel';
 import { captureHandoffArrivalDestinationArrivalDestinationArrivalReturn } from '../workbench/handoffArrivalDestinationArrivalDestinationArrivalReturn';
 import { compareHandoffArrivalDestinationArrivalDestinationEvent, validateHandoffArrivalDestinationArrivalDestinationEvent, type HandoffArrivalDestinationArrivalDestinationEvent } from '../workbench/handoffArrivalDestinationArrivalDestinationEvent';
@@ -118,8 +119,8 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent, handoffArr
         let token: string;
         if (handoffArrivalDestinationArrivalDestinationArrivalEvent) {
           const available = !blocked && !busy && observedRevision === revision;
-          const next = returnHandoffArrivalDestinationArrivalDestinationArrivalEvent(returnIntent, handoffArrivalDestinationArrivalDestinationArrivalEvent, target, available ? value : null, available ? lineage : null);
-          token = next.observation ? returns.putHandoffArrivalDestinationArrivalDestinationArrivalReturn(next.intent, next.observation) : returns.put(next.intent);
+          const next = captureHandoffArrivalDestinationArrivalDestinationArrivalDestinationReturn(returnIntent, handoffArrivalDestinationArrivalDestinationArrivalEvent, target, available ? value : null, available ? lineage : null);
+          token = next.observation ? returns.putHandoffArrivalDestinationArrivalDestinationArrivalDestinationReturn(next.intent, next.observation) : returns.put(next.intent);
         } else if (handoffArrivalDestinationArrivalDestinationEvent) {
           const available = !blocked && !busy && observedRevision === revision;
           const next = captureHandoffArrivalDestinationArrivalDestinationArrivalReturn(returnIntent, handoffArrivalDestinationArrivalDestinationEvent, target, available ? value : null, available ? lineage : null);

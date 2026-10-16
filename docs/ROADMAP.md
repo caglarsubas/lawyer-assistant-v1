@@ -3393,3 +3393,31 @@ and legal/corpus/source-rights/lawyer acceptance remain partial.
 Next: separately retain this handoff's new destination and reconcile it against a
 fresh authorized bounded queue, preserving the complete purpose and every earlier
 observation without rebasing history.
+
+### R03/R05A complete-handoff destination return reconciliation
+
+Explicit UI return now retains the complete preceding 34-observation handoff and
+a newly verified destination separately, with zero action requests/writes. Exact
+seven-field/customer-OR filters, selected packets, frozen evidence and known same-ID
+head packets stay bound. Original exported return APIs and older return projections
+remain unchanged. Every public call validates complete history using private local
+checks and no persistent verdict cache.
+
+A fresh authorized bounded queue permits one exact-event metadata GET only when
+containing the selected record. Omission reveals no saved details and makes no
+target read/retry/scan. Compare the destination independently without rebasing any
+earlier observation or flag. Unknown/pending stays explicit; denial, drift and
+retirement clear state. Withhold the preceding handoff that cannot carry the added
+destination. Principal/TTL/request fences and private matter confidentiality remain.
+No backend/provider/public-graph/deployment change.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_RETURN.md)
+and dated synthetic evidence. All prior 2,514 frontend cases/83 files, all 4,521
+backend identities and the complete workflow/eight jobs/workers/caps/PostgreSQL
+semantics remain unchanged. No publication workload is added; its prior 22-second
+margin stays visible for profiling before additions. Require all eight exact-head
+successes and measured timing floors before ordinary merge. R03/R05 and legal/
+corpus/source-rights/lawyer acceptance remain partial.
+Next: a dedicated exact-event handoff carrying this complete 35-observation
+destination return unchanged, with fresh bounded preparation and independent
+qualification of CI margins.
