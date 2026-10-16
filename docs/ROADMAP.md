@@ -2981,3 +2981,29 @@ See [the contract](CARRIED_ARRIVAL_EVENT_HANDOFF.md) and its synthetic engineeri
 evidence. R03/R05 remain partial; corpus, legal and lawyer qualification remain
 separate. Next: guarded carried-destination return reconciliation with a separate
 observation of the new destination and unchanged earlier carried arrival.
+
+### R03/R05A guarded carried-destination return reconciliation and CI headroom
+
+The CI headroom prerequisite moves the complete 19-case model-cohort file from
+the frontend workspace group into the existing main backend remainder. The
+complete 4,521-case identity inventory, seven jobs, two workers and every cap
+remain unchanged; no test, fixture logic or verdict is weakened. See
+[the measured allocation contract](CI_FRONTEND_HEADROOM.md).
+
+Explicit return from the carried-arrival handoff now captures a distinct verified
+destination. Preserve the original carried arrival, all earlier snapshots,
+exact customer/date/source-date/bucket filters, frozen evidence and selected
+packet. Unavailable metadata yields selection only; partial or conflicting data
+fails closed. No history or approval is rewritten or inherited.
+
+A fresh authorized bounded queue and exact-event GET compare destination,
+original arrival and preparations independently. Known packet pins and monotonic
+clocks/revisions are checked; unknown/pending states remain explicit. Omitted,
+denied or retired reads expose no retained-detail fallback. All panels commit
+under current scope/revision/token fences. The older preparation is withheld
+because it cannot carry the additional destination. No backend API, automatic
+body read/write/provider call, public graph mutation or deployment change.
+
+See [the contract](CARRIED_DESTINATION_RETURN.md) and its synthetic engineering
+evidence. R03/R05 remain partial; legal, corpus and lawyer acceptance are separate.
+Next: guarded destination-preserving exact-event handoff with unchanged history.

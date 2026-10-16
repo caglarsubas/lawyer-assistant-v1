@@ -84,5 +84,6 @@ the complete exclusive 4,521-case backend selection. Exact-head checks, merge,
 main CI and deployment remain separate evidence states.
 
 The carried-arrival-preserving handoff retains the additional arrival through
-preparation, destination and verified return. A separately captured observation
-of that handoff's new destination remains a following slice.
+preparation, destination and verified return. Its
+[separately captured destination](CARRIED_DESTINATION_RETURN.md) now reconciles
+against a fresh authorized queue without replacing the original carried arrival.

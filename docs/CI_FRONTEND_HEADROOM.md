@@ -1,0 +1,33 @@
+# Frontend CI headroom
+
+PR98's frontend job passed in 297 seconds under its unchanged 300-second cap.
+The hosted timing record attributes 89 seconds to workspace contracts and 147
+to human-review contracts, versus 17 seconds for the build and 18 for frontend
+tests. The expensive model-cohort file alone used 105.99 aggregate worker
+seconds across 19 cases. This is measured scheduling pressure; adding UI cases
+without rebalancing would leave the job vulnerable to normal runner variation.
+
+The complete `test_authority_model_cohorts.py` file now runs in the existing
+main backend remainder instead of the frontend's workspace group. Existing
+central selectors automatically remove it from the remainder's ignore list.
+The frontend retains x86 permission, proposal, human-review and graph coverage;
+model-cohort contracts use the already established native ARM backend executor.
+No production code, test assertion, fixture logic, verdict cache or retry changes.
+
+All seven job names, two-worker limits, architectures, step/job deadlines,
+PostgreSQL storage/durability settings and complete 4,521-case identity inventory
+remain. Only allocation changes: workspace 67 -> 48; main remainder 3,888 -> 3,907.
+All other disjoint groups are unchanged. Independent full collection proves no
+missing, overlapping or additional IDs; the complete inventory hash is unchanged.
+
+A broader redistribution into three-minute jobs was rejected after local
+measurements showed insufficient margin. The chosen receiver is qualified as its
+complete exact workflow partition, not a reduced subset. The existing test image
+was independently matched against every current backend application source file;
+current test files are mounted read-only. Local timing establishes engineering
+behavior only; hosted headroom and billing savings require separate evidence.
+
+See the carried-destination engineering evidence for the complete local and
+hosted results. Never respond to another margin loss by dropping cases, extending
+caps, adding workers, accepting cached verdicts or blindly rerunning suites.
+Re-measure the affected complete partitions before the next allocation change.

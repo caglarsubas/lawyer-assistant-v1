@@ -26,6 +26,6 @@ export default function CarriedArrivalEventDestinationPanel({ handoff, value }: 
       {snapshots.map(([label, s]) => <div key={label}><h4>{label}</h4><p className="reference-id">Baş: {s.head?.id || 'Bilinmiyor'} · Paket: {s.head?.packet_sha256 || 'Doğrulanamadı'}</p>
         <p className="reference-id">Son sürüm: {s.metadata.analysis.current_version_id || 'Bilinmiyor'} · Revizyon: {s.metadata.analysis.revision}</p><p>Kabuller — bağlam: {admission(s.metadata.admission.context_state)}; seçilen karar: {admission(s.selected.admission)}; baş: {admission(s.metadata.admission.review_state)}.</p></div>)}
     </Detail>
-    <p className="small muted">Yalnız özel kimlik metadatası gözlendi. Kaynaklar, hukuki etki veya yeni başa yol doğrulanmadı; bekleyen kabuller tamamlanmadı. Doğrulanmış dönüş özgün taşınan varışı değişmeden korur; yeni varış kendiliğinden eklenmez.</p>
+    <p className="small muted">Yalnız özel kimlik metadatası gözlendi. Kaynaklar, hukuki etki veya yeni başa yol doğrulanmadı; bekleyen kabuller tamamlanmadı. Doğrulanmış dönüş özgün taşınan varışı değişmeden korur; bu varış ayrı bir gözlem olarak saklanır ve önceki kayıtların yerine geçmez.</p>
   </section>;
 }

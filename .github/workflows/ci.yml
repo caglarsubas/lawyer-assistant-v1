@@ -28,7 +28,9 @@ env:
   CI_WORKSPACE_SECURITY_TESTS: >-
     backend/tests/test_firm_admin.py
     backend/tests/test_authority_proposals.py
-    backend/tests/test_authority_model_cohorts.py
+  # Model-cohort cases remain in the full backend remainder. Running them
+  # sequentially with x86 workspace/review groups left only 3s of job margin.
+  # Keep every case, seven jobs, two workers, current caps and no retries.
   # Start the measured 174-second retained assembly first, so it cannot become
   # a late single-worker tail. Full-suite membership, workers and caps stay.
   CI_FINAL_RELEASE_TESTS: >-
@@ -51,6 +53,7 @@ env:
 jobs:
   backend-and-contracts:
     # Standard native ARM executor; the frontend job retains x86 coverage below.
+    # The complete 19-case model-cohort file returns to this existing remainder.
     # Keep the same two pytest workers and the existing test/job deadlines.
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 20
