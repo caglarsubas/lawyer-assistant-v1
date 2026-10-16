@@ -92,3 +92,7 @@ No old test weakening, persistent verdict caches or unchanged-code timing retry.
 All eight checks on the submitted commit plus >=30-second frontend/backend job/
 backend step/graph margins remain merge gates. Synthetic engineering qualification
 is separate from legal/corpus/source-rights/lawyer acceptance, main CI and deployment.
+
+The subsequent [separate destination return](HANDOFF_ARRIVAL_DESTINATION_RETURN.md)
+now governs explicit UI return. The original API projection above remains unchanged;
+no extra destination is captured before that explicit verified action.
