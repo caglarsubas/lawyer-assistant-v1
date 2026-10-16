@@ -77,3 +77,7 @@ semantics. Local engineering results do not predict hosted timing or establish
 legal, corpus, source-rights or lawyer acceptance. All eight exact-head checks
 and >=30-second frontend/backend job/backend step/graph margins remain ordinary
 merge gates. Merge, main CI and deployment remain separate evidence states.
+
+The subsequent [separate arrival return](HANDOFF_DESTINATION_ARRIVAL_RETURN.md)
+now governs the explicit UI return. The original API projection described above
+remains unchanged; no arrival is captured until that explicit, verified action.

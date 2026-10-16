@@ -3139,3 +3139,25 @@ stay disjoint; all eight successful exact-head checks and measured margin gates
 remain mandatory. R03/R05 and legal/corpus/lawyer qualification stay partial and
 separate. Next: separately retain this handoff's fresh arrival on verified return
 and reconcile it with a fresh authorized bounded queue without rebasing history.
+
+### R03/R05A guarded handoff-destination-arrival return reconciliation
+
+Qualify frontend capacity first by removing repeated complete-history validation
+within each operation in two older handoffs, retaining all public-operation checks,
+immutable pins, old tests and fresh awaited-read fences. All eight jobs, workers,
+architectures, caps, 4,521 backend identities and PostgreSQL semantics remain.
+
+Explicit verified return separately retains this handoff's actual arrival while
+preserving the entire original handoff, saved destination and earlier observations.
+Fresh authorized bounded queue reconciliation compares the arrival independently;
+only a containing window permits the existing single exact-event metadata GET.
+Omission reveals no saved details. Exact customer/date filters, frozen evidence,
+all historical packet pins, unknown/pending states, principal/TTL bounds and
+atomic retirement/failure clearing remain. Withhold the preceding handoff that
+cannot carry this added arrival; no weaker-purpose substitution is allowed.
+
+See [contract](HANDOFF_DESTINATION_ARRIVAL_RETURN.md) and dated synthetic engineering
+evidence. No source/provider/public-graph writes or deployment change. R03/R05,
+legal/corpus/lawyer qualification and main CI remain separate. Next: a dedicated
+guarded handoff that carries this complete destination-arrival return unchanged,
+with fresh qualification of frontend and graph timing margins before more work.
