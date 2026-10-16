@@ -88,3 +88,11 @@ retry. Require all eight final submitted-head checks plus at least 30 seconds ea
 of frontend/backend-job/backend-test/graph-runtime margin before ordinary matching-
 head merge. Observed timings are no universal billing guarantee. Main CI, merge,
 deployment and legal acceptance remain separate. No deployment or provider change.
+
+## Separate UI arrival return
+
+[The separate arrival-return contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_RETURN.md)
+now retains this complete handoff and a newly verified arrival on explicit UI return.
+The original exported return API and its complete saved destination projection stay
+unchanged. The fresh authorized queue compares the added arrival independently;
+the preceding handoff action is withheld because it cannot carry that arrival.
