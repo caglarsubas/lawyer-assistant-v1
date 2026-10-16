@@ -4,7 +4,7 @@ import type { HandoffArrivalDestinationArrivalReturn } from '../workbench/handof
 import { compareDestinationIdentities, type ComparisonQueueReconciliation } from '../workbench/comparisonReturn';
 const relation = { same: 'Aynı kimlik gözlendi', different: 'Farklı kimlik gözlendi', unknown: 'İlişki doğrulanamadı' };
 const admission = (v: string) => v === 'complete' ? 'Tamamlandı' : v === 'pending' ? 'Bekliyor' : 'Doğrulanamadı';
-export default function HandoffArrivalDestinationArrivalReturnPanel({ observation, value }: { observation: HandoffArrivalDestinationArrivalReturn; value: ComparisonQueueReconciliation }) {
+export default function HandoffArrivalDestinationArrivalReturnPanel({ observation, value, prepare, busy }: { observation: HandoffArrivalDestinationArrivalReturn; value: ComparisonQueueReconciliation; prepare?: () => void; busy?: boolean }) {
   if (value.state === 'not_observed') return <Notice>Seçilen kayıt bu pencerede gözlenmedi. Hedefi koruyan geçiş varışı ayrıntıları açılmadı; güncel erişim veya ilişki kurulmadı.</Notice>;
   const h = observation.handoff, f = value.fresh, selected = h.prepared.selected;
   const p = compareDestinationIdentities(h.prepared, f), d = compareDestinationIdentities(h.observation.destination, f);
@@ -23,6 +23,7 @@ export default function HandoffArrivalDestinationArrivalReturnPanel({ observatio
         <p className="reference-id">Son sürüm: {s.metadata.analysis.current_version_id || 'Bilinmiyor'} · Revizyon: {s.metadata.analysis.revision}</p>
         <p>Kabuller — bağlam: {admission(s.metadata.admission.context_state)}; seçilen karar: {admission(s.selected.admission)}; baş: {admission(s.metadata.admission.review_state)}.</p></div>)}
     </Detail>
+    {prepare && <button className="button secondary" disabled={busy} onClick={prepare}>Hedef geçişi varışını koruyarak tam karara geçişi hazırla</button>}
     <p className="small muted">Özgün müşteri ve tarih filtreleri, sabit kanıt ve bağımsız inceleme geçmişi değişmeden korundu. Önceki gözlemler ayrı karşılaştırmalarda kalır. Yalnız özel kimlik metadatası karşılaştırıldı; kaynaklar, hukuki etki veya yeni başa yol doğrulanmadı. Bekleyen kabul tamamlanmadı, başka karar seçilmedi. Bu ek varışı taşıyamayan önceki geçiş hazırlığı kapalıdır.</p>
   </section>;
 }

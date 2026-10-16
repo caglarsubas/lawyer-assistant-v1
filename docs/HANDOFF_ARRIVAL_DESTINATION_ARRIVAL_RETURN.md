@@ -90,3 +90,8 @@ weakening, persistent verdict caches or unchanged-code timing retry. All eight
 exact submitted-head checks plus at least thirty seconds of frontend/backend job/
 backend test-step/graph-runtime margin remain merge gates. Main push CI, merge,
 deployment and legal/corpus/rights/lawyer acceptance remain separate evidence states.
+
+The [dedicated arrival-preserving exact-event handoff](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_EVENT.md)
+now carries this complete saved return without rebasing its separate arrival or
+any prior observation. Its explicit verified return restores this original return
+unchanged and captures no further arrival. Older purpose projections remain intact.

@@ -3259,3 +3259,29 @@ and the entire CI workflow/eight jobs/workers/caps/PostgreSQL semantics remain.
 R03/R05 and legal/corpus/source-rights/lawyer acceptance remain partial/separate.
 Next: a dedicated guarded exact-event handoff carrying this complete saved arrival
 return unchanged, with newly qualified CI timing margins before merge.
+
+### R03/R05A guarded handoff-arrival-destination-arrival-preserving exact-event handoff
+
+A dedicated fixed-depth purpose carries the complete saved arrival return unchanged,
+with a new authorized containing queue and exactly two stable selected-event metadata
+reads at window one. All 26 retained observations, exact seven-field/customer-OR
+filters, frozen evidence and known same-ID head packets remain bound. Each public
+operation revalidates complete history, using private local checks without a
+persistent verdict cache or weaker-purpose substitution.
+
+Purpose and exact target validate before the destination's single metadata GET;
+new tokens remount the same event. New preparation/current destination and saved
+arrival compare independently without rebasing history or implying permission,
+legal effect, approval or a path to a new head. Drift, denial and retirement clear
+state; unknown/pending stays explicit. Explicit verified return restores the complete
+original arrival return unchanged with zero requests/writes and no further capture.
+Unavailable metadata yields selection only. Principal/TTL/request fences and private
+matter boundaries remain; no backend/provider/public-graph/deployment change.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_EVENT.md) and dated synthetic
+engineering evidence. All previous 2,043 frontend cases/78 files, all 4,521 backend
+identities and the whole CI workflow/eight jobs/workers/caps/PostgreSQL semantics
+remain unchanged. Require all eight exact-head checks and measured timing floors
+before ordinary merge. R03/R05 and legal/corpus/rights/lawyer acceptance remain partial.
+Next: separately retain this handoff's new destination and reconcile it against a
+fresh authorized bounded queue, preserving the complete purpose and every dependency.
