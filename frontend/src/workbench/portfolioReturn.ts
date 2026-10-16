@@ -1,3 +1,4 @@
+import { validateHandoffArrivalDestinationReturn, type HandoffArrivalDestinationReturn } from './handoffArrivalDestinationReturn';
 import { validateHandoffArrivalEvent, type HandoffArrivalEvent } from './handoffArrivalEvent';
 import { validateHandoffDestinationArrivalReturn, type HandoffDestinationArrivalReturn } from './handoffDestinationArrivalReturn';
 import { validateHandoffDestinationEvent, type HandoffDestinationEvent } from './handoffDestinationEvent';
@@ -89,7 +90,7 @@ export function departingReturn(value: ReturnIntent, meta: NavigationMetadata | 
 }
 export const portfolioPart = (value: PortfolioQueueFilters): PortfolioFilters => ({ customer_ids: [...value.customer_ids], date_field: value.date_field, date_from: value.date_from, date_to: value.date_to });
 export class PortfolioReturnBook {
-  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff; reviewPath?: ReviewPathHandoff; comparisonReturn?: ComparisonReturnReceipt; comparisonEvent?: ComparisonEventHandoff; arrivalReturn?: ArrivalReturn; arrivalEvent?: ArrivalEventHandoff; onwardReturn?: OnwardReturn; onwardEvent?: OnwardEventHandoff; carriedArrival?: CarriedArrivalReturn; carriedArrivalEvent?: CarriedArrivalEventHandoff; carriedDestination?: CarriedDestinationReturn; carriedDestinationEvent?: CarriedDestinationEventHandoff; destinationArrival?: CarriedDestinationArrivalReturn; destinationArrivalEvent?: CarriedDestinationArrivalEventHandoff; handoffDestination?: ArrivalHandoffDestinationReturn; handoffDestinationEvent?: HandoffDestinationEvent; handoffDestinationArrival?: HandoffDestinationArrivalReturn; handoffArrivalEvent?: HandoffArrivalEvent }>();
+  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff; reviewPath?: ReviewPathHandoff; comparisonReturn?: ComparisonReturnReceipt; comparisonEvent?: ComparisonEventHandoff; arrivalReturn?: ArrivalReturn; arrivalEvent?: ArrivalEventHandoff; onwardReturn?: OnwardReturn; onwardEvent?: OnwardEventHandoff; carriedArrival?: CarriedArrivalReturn; carriedArrivalEvent?: CarriedArrivalEventHandoff; carriedDestination?: CarriedDestinationReturn; carriedDestinationEvent?: CarriedDestinationEventHandoff; destinationArrival?: CarriedDestinationArrivalReturn; destinationArrivalEvent?: CarriedDestinationArrivalEventHandoff; handoffDestination?: ArrivalHandoffDestinationReturn; handoffDestinationEvent?: HandoffDestinationEvent; handoffDestinationArrival?: HandoffDestinationArrivalReturn; handoffArrivalEvent?: HandoffArrivalEvent; handoffArrivalDestination?: HandoffArrivalDestinationReturn }>();
   constructor(private now = () => Date.now(), private nonce = () => crypto.randomUUID().replaceAll('-', '')) {}
   put(value: ReturnIntent, renewal?: RenewalHandoff): string { validateReturn(value); if (renewal) validateRenewalHandoff(renewal, value); this.prune();
     const id = this.nonce(); if (!returnToken(id) || this.rows.has(id)) throw new Error('Dönüş kimliği oluşturulamadı.');
@@ -103,6 +104,11 @@ export class PortfolioReturnBook {
   putComparisonReturn(value: ReturnIntent, receipt: ComparisonReturnReceipt): string {
     validateComparisonReturn(receipt, value); const id = this.put(value); this.rows.get(id)!.comparisonReturn = structuredClone(receipt); return id;
   }
+  putHandoffArrivalDestinationReturn(value: ReturnIntent, observation: HandoffArrivalDestinationReturn): string {
+    validateHandoffArrivalDestinationReturn(observation, value); const id = this.putHandoffDestinationArrivalReturn(value, observation.handoff.observation);
+    this.rows.get(id)!.handoffArrivalDestination = structuredClone(observation); return id;
+  }
+  getHandoffArrivalDestinationReturn(id: string): HandoffArrivalDestinationReturn | null { this.prune(); const row = returnToken(id) ? this.rows.get(id) : undefined; return row?.handoffArrivalDestination ? structuredClone(row.handoffArrivalDestination) : null; }
   putHandoffArrivalEvent(value: ReturnIntent, handoff: HandoffArrivalEvent): string {
     validateHandoffArrivalEvent(handoff, value); const id = this.put(value); this.rows.get(id)!.handoffArrivalEvent = structuredClone(handoff); return id;
   }

@@ -1,0 +1,172 @@
+{
+  "schema": "handoff-arrival-destination-return-engineering-evidence-v1",
+  "qualification_date": "2026-10-16",
+  "recorded_at": "2026-10-16T09:59:12.495225+00:00",
+  "baseline_main_sha": "001a9984690155d6b167bed3bd8a626b9acd8733",
+  "baseline_pr": 106,
+  "baseline_main_ci": {
+    "id": 38882525609,
+    "head_sha": "001a9984690155d6b167bed3bd8a626b9acd8733",
+    "status": "in_progress",
+    "conclusion": null
+  },
+  "origin": "invented documents and test-only accounts; simulated rights; disabled providers",
+  "frontend_cases_passed": 1874,
+  "new_cases_passed_in_full_suite": 76,
+  "frontend_full_wall_seconds": 11.83,
+  "focused_cases_passed": 76,
+  "focused_wall_seconds": 3.14,
+  "build_passed": true,
+  "ruff_passed": true,
+  "deployment_contracts_passed": 44,
+  "compose_config_passed_without_local_env": true,
+  "postgres_concurrency_cases_passed": 11,
+  "postgres_pytest_seconds": 12.98,
+  "all_existing_test_bodies_fixtures_and_assertions_unchanged": true,
+  "browser": {
+    "synthetic_only": true,
+    "rights_simulated": true,
+    "production_qualified": false,
+    "legacy_prefix_rehearsed": true,
+    "both_sessions_external_requests_monitored": true,
+    "early_and_late_separate_destinations": true,
+    "actual_two_later_independent_reviews": true,
+    "actual_private_version_edits": true,
+    "exact_filters_and_history_preserved": true,
+    "no_reads_or_writes_on_return": true,
+    "one_containing_window_event_get": true,
+    "omission_no_event_get_or_saved_details": true,
+    "new_destination_only_head_packet_substitution_closed": true,
+    "queue_event_disagreement_closed": true,
+    "atomic_denials": true,
+    "customer_and_date_delays_retired": true,
+    "unknown_pending_explicit": true,
+    "weaker_handoff_withheld": true,
+    "unavailable_selection_only": true,
+    "reload_closes": true,
+    "narrow_overflow": false,
+    "browser_errors": [],
+    "external_requests": []
+  },
+  "browser_harness": {
+    "final_exit_code": 0,
+    "routine_get_auth_me_excluded_only_from_action_counts": true,
+    "complete_review_session_request_log_retained": true,
+    "unconditional_browser_cleanup": true
+  },
+  "screenshots_visually_checked": [
+    "handoff-arrival-destination-return-wide.png",
+    "handoff-arrival-destination-return-narrow.png"
+  ],
+  "owned_fixture_servers_stopped": true,
+  "contract": {
+    "recipe": "private-handoff-arrival-destination-return-v1",
+    "complete_original_handoff_unchanged": true,
+    "retained_observations_checked": 22,
+    "separate_destination_added": true,
+    "exact_seven_filter_fields_preserved": true,
+    "strict_schema_including_undefined_extra_keys": true,
+    "validate_complete_history_per_public_operation": true,
+    "private_operation_local_checks_only": true,
+    "return_data_requests_or_writes": 0,
+    "containing_window_event_gets": 1,
+    "omitted_window_event_gets": 0,
+    "one_row_with_unchanged_earlier_return_projections": true,
+    "principal_entry_limit": 8,
+    "expiry_minutes": 30,
+    "weaker_handoff_withheld": true,
+    "source_body_provider_or_public_graph_requests_added": false
+  },
+  "ci": {
+    "partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 4521,
+        "runtime": 1,
+        "preflight": 89,
+        "remaining": 3843,
+        "publication": 299,
+        "workspace": 48,
+        "human_review": 32,
+        "model_trials": 20,
+        "final_release": 20,
+        "withdrawal": 15,
+        "candidate": 15,
+        "graph_runtime": 139
+      },
+      "runtime_files": [
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py",
+        "backend/tests/test_source_reviews.py",
+        "backend/tests/test_source_review_effort.py",
+        "backend/tests/test_source_analysis_reviews.py",
+        "backend/tests/test_source_context_renewals.py",
+        "backend/tests/test_source_review_readiness.py",
+        "backend/tests/test_portfolio_source_reviews.py",
+        "backend/tests/test_source_context_navigation.py",
+        "backend/tests/test_source_review_lineage.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_authority_proposals.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_analysis_cohorts.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "b167d772d1b670bc19d2ecd002bb48d4f58a07075b38baef12dd41d9aabc1616",
+      "workflow_sha256": "c3cea8ea9067224bbffaf4c5f85ab1a097bc058e28877866a81a89364a28607e",
+      "job_deadlines_and_worker_counts_unchanged": true,
+      "workspace_workers": 2,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "new_graph_runtime_job_minutes": 6,
+      "new_graph_runtime_workers": 2,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "entire_workflow_unchanged": true,
+    "unchanged_head_rerun": false,
+    "exact_head_hosted_checks": "pending submission; local engineering does not establish this",
+    "minimum_margin_seconds": 30,
+    "source_publication_work_added": false
+  },
+  "source_sha256": {
+    "frontend/src/pages/HandoffArrivalDestinationReturnPanel.tsx": "6772175ff9437096fa43d74d6bf80a893301e47d3e319fb061951c5180471254",
+    "frontend/src/pages/HandoffArrivalEventPanel.tsx": "51d27340a922924d5675acd89c7be9c87aa4c372f5abf6803f22179484760da1",
+    "frontend/src/pages/PortfolioReturnQueue.tsx": "d89ae6176afec2c94eb128944879ea8ae9658eb439942fcbe66ee9ad23899647",
+    "frontend/src/pages/SelectedSourceReviewPage.tsx": "ada1afe64954e1bad1119fe7825bd7cc1fc318f41fcaa5b77420c0032b797f4b",
+    "frontend/src/workbench/handoffArrivalDestinationReturn.test.tsx": "f82b1993c846aa25dde8f141a98b845e35aa5eda5427cad36fae2ae16ebf0c86",
+    "frontend/src/workbench/handoffArrivalDestinationReturn.ts": "2cc1d0aff62743dd93d98e3c769d85c8dc6da7f629351fc68632fc1f52644ef0",
+    "frontend/src/workbench/handoffArrivalEvent.ts": "063494ca8b562083e31772b7b6ad95a2a7335ce386f0a03140e9e3424fd24cfa",
+    "frontend/src/workbench/portfolioReturn.ts": "c75e959581184803f7f9ef037682ebff589342e802cb3a670bae744b4c26614b"
+  },
+  "artifact_sha256": {
+    "frontend-final.json": "723f2a149d83579547a42e079fd4563c80efbc9126caa9e511747c25bd4bab07",
+    "focused-browser-checks.json": "33b95555e9ce101bd7330be48cfb380e86cade3a517694fda21821488f9b9cdf",
+    "review-session-requests.json": "642b9bd8927073c40bd29bc4341d9effa2f0c350c0eb6a59323f33ad324938a4",
+    "handoff-arrival-destination-return-wide.png": "c8c04e37bea16147d10afe56d152265077a19894d6865d5608e7fd39075791ba",
+    "handoff-arrival-destination-return-narrow.png": "7a6a0dde1961094fabc1ebf3e0becf009a29cc7a9a4a4bfefe116900677b488a",
+    "ci-partition.json": "a0afb066fdf5d0e06e5429c221aa26bc18eec4c251fa1ec75df4fc043828b10b",
+    "source-review-postgres.log": "46ca8bac84d6ec1181886940d820dbdb94767b837de2863fba85340e14e71b30"
+  },
+  "limitations": [
+    "Synthetic engineering rehearsal only. No legal, corpus, rights or lawyer acceptance.",
+    "R03/R05 remain partial. No deployment or provider change.",
+    "Exact-head checks, merge, main push CI and runtime deployment remain separate."
+  ]
+}
