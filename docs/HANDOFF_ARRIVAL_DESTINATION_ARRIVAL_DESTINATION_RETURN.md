@@ -82,3 +82,8 @@ require all eight checks on the final submitted commit and at least 30 seconds
 of frontend/backend-job/backend-test/graph-runtime headroom. Observed timings
 establish no universal billing guarantee. Main CI, merge, deployment and legal
 acceptance remain separate evidence states. No deployment or live-provider change.
+
+The [dedicated destination-preserving exact-event handoff](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_EVENT.md)
+now carries this complete saved destination return and all 29 observations unchanged.
+Its explicit verified return restores this original return with no further arrival
+capture, while preserving all older API/return projections.
