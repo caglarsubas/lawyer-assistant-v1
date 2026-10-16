@@ -1,0 +1,219 @@
+{
+  "schema": "handoff-arrival-destination-event-engineering-v1",
+  "qualification_date": "2026-10-16",
+  "recorded_at": "2026-10-16T10:48:55.237372+00:00",
+  "baseline_main_sha": "d6ab28f3a83dda3dd06c686d1a83fcae3bb50ca2",
+  "baseline_pr": 107,
+  "baseline_main_ci": {
+    "run": 38886395114,
+    "conclusion": "success",
+    "all_eight_jobs_passed": true
+  },
+  "origin": "synthetic local engineering qualification; invented matters; simulated rights; providers disabled",
+  "frontend_cases_passed": 1961,
+  "frontend_files": 77,
+  "new_cases_passed": 87,
+  "frontend_full_wall_seconds": 22.6,
+  "new_file_wall_seconds": 11.88,
+  "all_76_previous_test_files_fixtures_bodies_assertions_unchanged": true,
+  "build_passed": true,
+  "ruff_exact_ci_configuration_passed": true,
+  "local_lint_note": "Initial broader invocation omitted the CI config and reported pre-existing script diagnostics. Exact CI Ruff invocation passed; no unrelated changes made.",
+  "deployment_contracts_passed": 44,
+  "compose_config_passed_without_local_env": true,
+  "postgres_concurrency_cases_passed": 11,
+  "postgres_pytest_seconds": 33.44,
+  "browser": {
+    "synthetic_only": true,
+    "rights_simulated": true,
+    "production_qualified": false,
+    "legacy_prefix_rehearsed": true,
+    "both_sessions_external_requests_monitored": true,
+    "preserving_exact_event": true,
+    "stable_two_reads": true,
+    "first_and_second_drift": true,
+    "dedicated_denial": true,
+    "preparation_and_destination_retirement": true,
+    "redirects_before_reads": true,
+    "same_event_purpose_remount": true,
+    "original_complete_return_restored": true,
+    "failed_destination_selection_only": true,
+    "early_and_late_separate_destinations": true,
+    "actual_two_later_independent_reviews": true,
+    "actual_private_version_edits": true,
+    "exact_filters_and_history_preserved": true,
+    "no_reads_or_writes_on_return": true,
+    "one_containing_window_event_get": true,
+    "omission_no_event_get_or_saved_details": true,
+    "new_destination_only_head_packet_substitution_closed": true,
+    "queue_event_disagreement_closed": true,
+    "atomic_denials": true,
+    "customer_and_date_delays_retired": true,
+    "unknown_pending_explicit": true,
+    "weaker_handoff_withheld": true,
+    "unavailable_selection_only": true,
+    "reload_closes": true,
+    "narrow_overflow": false,
+    "browser_errors": [],
+    "external_requests": []
+  },
+  "browser_harness": {
+    "complete_fresh_attempts": 5,
+    "one_product_copy_fix": "Distinct newest-preparation comparison label; older wording unchanged.",
+    "three_harness_fixes": [
+      "Assert dedicated redirect rejection instead of expired-token wording",
+      "Construct valid write-flow redirects without a historical review parameter",
+      "Selection-only return requires ordinary queue without retained-history panels"
+    ],
+    "prior_attempts_preserved_locally": true,
+    "fresh_isolated_database_per_attempt": true,
+    "browsers_closed_unconditionally": true,
+    "routine_get_auth_me_separated_from_action_counts": true,
+    "reviewer_page_requests_retained": true
+  },
+  "screenshots_visually_checked": true,
+  "owned_fixture_servers_stopped": true,
+  "contract": {
+    "reviewed_public_operations": [
+      "validate",
+      "available",
+      "prepare",
+      "compare",
+      "return"
+    ],
+    "retained_observations": 23,
+    "preparation_reads": 2,
+    "preparation_window": 1,
+    "destination_metadata_reads": 1,
+    "return_reads": 0,
+    "return_writes": 0,
+    "return_projection": "complete original HandoffArrivalDestinationReturn unchanged",
+    "new_arrival_capture": false,
+    "private_scope": "current active same-firm explicit matter membership; no tag/admin bypass",
+    "principal_token_budget": 8,
+    "ttl_minutes": 30,
+    "cross_call_verdict_cache": false,
+    "exported_unchecked_checker": false,
+    "workflow_changes": false,
+    "old_tests_modified": false,
+    "review_type": "engineering self-review; no legal qualification"
+  },
+  "ci": {
+    "partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 4521,
+        "runtime": 1,
+        "preflight": 89,
+        "remaining": 3843,
+        "publication": 299,
+        "workspace": 48,
+        "human_review": 32,
+        "model_trials": 20,
+        "final_release": 20,
+        "withdrawal": 15,
+        "candidate": 15,
+        "graph_runtime": 139
+      },
+      "runtime_files": [
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py",
+        "backend/tests/test_source_reviews.py",
+        "backend/tests/test_source_review_effort.py",
+        "backend/tests/test_source_analysis_reviews.py",
+        "backend/tests/test_source_context_renewals.py",
+        "backend/tests/test_source_review_readiness.py",
+        "backend/tests/test_portfolio_source_reviews.py",
+        "backend/tests/test_source_context_navigation.py",
+        "backend/tests/test_source_review_lineage.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_authority_proposals.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_analysis_cohorts.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "b167d772d1b670bc19d2ecd002bb48d4f58a07075b38baef12dd41d9aabc1616",
+      "workflow_sha256": "c3cea8ea9067224bbffaf4c5f85ab1a097bc058e28877866a81a89364a28607e",
+      "job_deadlines_and_worker_counts_unchanged": true,
+      "workspace_workers": 2,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "new_graph_runtime_job_minutes": 6,
+      "new_graph_runtime_workers": 2,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "baseline_exact_pr_seconds": {
+      "frontend": 159,
+      "backend": 980,
+      "backend_test": 897,
+      "graph_runtime": 274,
+      "source_publication": 153
+    },
+    "baseline_merged_main_seconds": {
+      "frontend": 157,
+      "backend": 932,
+      "graph_runtime": 267,
+      "source_publication": 163
+    },
+    "source_publication_added_work": false,
+    "all_eight_exact_head_checks_required": true,
+    "frontend_backend_job_backend_step_graph_minimum_margin_seconds": 30,
+    "unchanged_code_timing_retry_allowed": false,
+    "universal_runtime_or_billing_guarantee": false
+  },
+  "source_sha256": {
+    "frontend/src/pages/HandoffArrivalDestinationReturnPanel.tsx": "6cf0cd4120f9e593a6bfacc974ea6d742090d59ab66c2883c6d3863bb8aa282c",
+    "frontend/src/pages/PortfolioReturnQueue.tsx": "8625b2807dd49a48a3d3a8ca8b8c08b4cc3f2cf9fea1f37d7359a1d2d05ce202",
+    "frontend/src/pages/SelectedSourceReviewPage.tsx": "10a15546984d9aa6d636f37febec812a0e28b40c743099fd17653832bd7969ec",
+    "frontend/src/workbench/portfolioReturn.ts": "7d991de49c2ee5bd5b39af2d8a9ea468c4e7ffb59f855aeaa6ef9e70e0433958",
+    "frontend/src/pages/HandoffArrivalDestinationEventPanel.tsx": "cc38f47dc8b29bdae8c527cf77d4f9c2f79c49398fa6fd824b07fd84f982a8e8",
+    "frontend/src/workbench/handoffArrivalDestinationEvent.test.tsx": "319ec59a03abbc9c3b9b9a63b83c7384ab597b46cabe6d86bae6087ab63d176f",
+    "frontend/src/workbench/handoffArrivalDestinationEvent.ts": "2c73ef746934d5c6a99d3f1afd781efc06d0375f2db38c755cd5e9027944e763"
+  },
+  "artifact_sha256": {
+    "focused-browser.cjs": "6ecc2a0d77ce7c8216a890ab77cce5b4f7c556421ae8992ce5b494c1f19867b9",
+    "backend.py": "91402268989ee360f1d6edce4840410cad601e885c6a520d6fe30d2e5b97dae6",
+    "frontend.mjs": "5d762020485c547dc29d9ea29a11d17f460e8b5de92d99f1d876cd5fdd518945",
+    "focused-browser-checks.json": "f1bb882fe6287ab66e437c361c385cfd17a876cfafee3f4784ba37870351f08a",
+    "review-session-requests.json": "a09ddb6c7810911c0049fc03a867cdbfc6ab4ba63483c3e0d1670b53869556c7",
+    "focused-browser.log": "496e3e62edca65ac9fd75395c1e6fff7abb418feded6d38f268b989412728205",
+    "handoff-arrival-destination-event-wide.png": "023d47529fa0abf3d25827c7224369350ecb2c9da50b485486b4d415f22c5c6e",
+    "handoff-arrival-destination-event-narrow.png": "46bfcc1e3bc6760bea08e761910df03854564afeb884629bc1e8f008c42b467d",
+    "frontend-final.json": "186fe1be9c1e92374c15bb869833fdb312689af7ed5a13b5a3d45927d33ae3d2",
+    "build-final.log": "86f59db0c91452cde53725953f2a2f4c7048409625caf200015970710413f5bc",
+    "ruff-ci.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "deploy.log": "a77b4ada4d4c84b9382e9806e02fa9ebc23bb53f89be6690373e52e371f904f6",
+    "compose.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source-review-postgres.log": "09cfa4008d017d2d5d65cf00a7b164df657f01cd966cefd0781ce1f60234d3a2",
+    "ci-partition.json": "a0afb066fdf5d0e06e5429c221aa26bc18eec4c251fa1ec75df4fc043828b10b",
+    "backend-image-source-match.json": "915d7c7b9c4e55b0b27c6481abfa60b0698247b098999e96e450bbf62dfcfc4e",
+    "fixture-cleanup.json": "85886e79ad558e9d2decee78be1798ab7d514f7519602f3f390f4b08d63cafa6",
+    "prior-frontend-test-integrity.json": "64d306d6a032e456b9126e6185f24fea8d548cfb29c52ab3271a50e3836a42ec",
+    "contract-review.json": "70d1f4fedb421513e5008d649a78fed9cc9b8242ce46e183f7f7a416834ec137"
+  },
+  "limitations": [
+    "R03/R05 remain partial",
+    "Synthetic engineering qualification is not legal/corpus/source-rights/lawyer acceptance",
+    "No national corpus completeness claim",
+    "PR exact-head CI and merge still pending at this source evidence capture",
+    "No deployment or provider change"
+  ]
+}

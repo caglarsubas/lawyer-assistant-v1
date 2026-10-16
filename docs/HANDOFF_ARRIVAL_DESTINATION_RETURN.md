@@ -89,3 +89,8 @@ old-test weakening, persistent verdict caches or unchanged-code timing retry.
 All eight checks on this submitted commit plus >=30-second frontend/backend job/
 backend test-step/graph margins remain merge gates. Main CI, merge, deployment
 and legal/corpus/rights/lawyer acceptance remain separate evidence states.
+
+The [dedicated exact-event successor](HANDOFF_ARRIVAL_DESTINATION_EVENT.md) now
+carries this complete saved destination return. Its explicit preparation action
+requires a fresh complete queue and two stable reads. The older arrival-preserving
+purpose remains withheld; all capture and reconciliation semantics above remain.
