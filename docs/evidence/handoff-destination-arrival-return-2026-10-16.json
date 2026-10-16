@@ -1,0 +1,182 @@
+{
+  "schema": "handoff-destination-arrival-return-engineering-evidence-v1",
+  "qualification_date": "2026-10-16",
+  "recorded_at": "2026-10-16T08:42:33.311876+00:00",
+  "baseline_main_sha": "625ae4ffda89cd97a85407d96249352c277b1ed9",
+  "baseline_pr": 104,
+  "baseline_main_ci": {
+    "run": 38869266130,
+    "status": "completed",
+    "conclusion": "success",
+    "frontend_seconds": 144,
+    "backend_seconds": 922,
+    "graph_seconds": 286
+  },
+  "origin": "invented documents and test-only accounts; simulated rights; disabled providers",
+  "frontend_cases_passed": 1716,
+  "new_cases_passed_in_full_suite": 70,
+  "frontend_full_wall_seconds": 6.28,
+  "headroom_before_feature": {
+    "baseline_cases": 1646,
+    "refactor_cases": 1646,
+    "build_passed": true,
+    "public_history_checks_retained": true,
+    "old_tests_unchanged": true,
+    "snapshot_counts": [
+      8,
+      11
+    ],
+    "baseline_local_wall_seconds": 29.73,
+    "refactor_local_wall_seconds": 11.85,
+    "host_load_not_controlled": true,
+    "hosted_speed_or_billing_guarantee": false
+  },
+  "build_passed": true,
+  "ruff_passed": true,
+  "deployment_contracts_passed": 44,
+  "compose_config_passed_without_local_env": true,
+  "postgres_concurrency_cases_passed": 11,
+  "postgres_pytest_seconds": 7.05,
+  "all_existing_test_bodies_fixtures_and_assertions_unchanged": true,
+  "browser": {
+    "synthetic_only": true,
+    "rights_simulated": true,
+    "production_qualified": false,
+    "legacy_prefix_rehearsed": true,
+    "both_sessions_external_requests_monitored": true,
+    "early_and_late_separate_arrivals": true,
+    "actual_later_opposing_review": true,
+    "actual_private_version_edits": true,
+    "exact_filters_and_history_preserved": true,
+    "no_reads_or_writes_on_return": true,
+    "one_containing_window_event_get": true,
+    "omission_no_event_get_or_saved_details": true,
+    "new_arrival_only_packet_substitution_closed": true,
+    "atomic_denials": true,
+    "customer_and_date_delays_retired": true,
+    "unknown_pending_explicit": true,
+    "weaker_handoff_withheld": true,
+    "unavailable_selection_only": true,
+    "reload_closes": true,
+    "narrow_overflow": false,
+    "browser_errors": [],
+    "external_requests": []
+  },
+  "screenshots_visually_checked": [
+    "handoff-arrival-return-wide.png",
+    "handoff-arrival-return-narrow.png"
+  ],
+  "owned_fixture_servers_stopped": true,
+  "contract": {
+    "recipe": "private-handoff-destination-arrival-return-v1",
+    "complete_original_handoff_unchanged": true,
+    "retained_observations_checked": 19,
+    "separate_arrival_added": true,
+    "exact_seven_filter_fields_preserved": true,
+    "strict_schema_including_undefined_extra_keys": true,
+    "validate_complete_history_per_public_operation": true,
+    "private_operation_local_checks_only": true,
+    "return_data_requests_or_writes": 0,
+    "containing_window_event_gets": 1,
+    "omitted_window_event_gets": 0,
+    "one_row_with_unchanged_earlier_return_projections": true,
+    "principal_entry_limit": 8,
+    "expiry_minutes": 30,
+    "weaker_handoff_withheld": true,
+    "source_body_provider_or_public_graph_requests_added": false
+  },
+  "ci": {
+    "partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 4521,
+        "runtime": 1,
+        "preflight": 89,
+        "remaining": 3843,
+        "publication": 299,
+        "workspace": 48,
+        "human_review": 32,
+        "model_trials": 20,
+        "final_release": 20,
+        "withdrawal": 15,
+        "candidate": 15,
+        "graph_runtime": 139
+      },
+      "runtime_files": [
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py",
+        "backend/tests/test_source_reviews.py",
+        "backend/tests/test_source_review_effort.py",
+        "backend/tests/test_source_analysis_reviews.py",
+        "backend/tests/test_source_context_renewals.py",
+        "backend/tests/test_source_review_readiness.py",
+        "backend/tests/test_portfolio_source_reviews.py",
+        "backend/tests/test_source_context_navigation.py",
+        "backend/tests/test_source_review_lineage.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_authority_proposals.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_analysis_cohorts.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "b167d772d1b670bc19d2ecd002bb48d4f58a07075b38baef12dd41d9aabc1616",
+      "workflow_sha256": "c3cea8ea9067224bbffaf4c5f85ab1a097bc058e28877866a81a89364a28607e",
+      "job_deadlines_and_worker_counts_unchanged": true,
+      "workspace_workers": 2,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "new_graph_runtime_job_minutes": 6,
+      "new_graph_runtime_workers": 2,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "entire_workflow_unchanged": true,
+    "unchanged_head_rerun": false,
+    "exact_head_hosted_checks": "pending submission; not established by local checks",
+    "minimum_margin_seconds": 30,
+    "source_publication_work_added": false
+  },
+  "source_sha256": {
+    "frontend/src/pages/HandoffDestinationArrivalReturnPanel.tsx": "1de5482b381cc8333c4e72aa594d5d33d0fe14a8a31b849b4dfc1292e10a66d5",
+    "frontend/src/pages/HandoffDestinationEventPanel.tsx": "a7e64e965a4074f57c7ff3ae7bac5de10f70575ccc3eb8ed4fc3f407dc90df37",
+    "frontend/src/pages/PortfolioReturnQueue.tsx": "68251cd7a84f2b4cf709be523befbcb5329321317a18e57ae7c602332be87cd2",
+    "frontend/src/pages/SelectedSourceReviewPage.tsx": "2db182c2fde03ab454a2f0f72026c0abda9facfd0fc9ddbc6c3de9ae50c0aa1c",
+    "frontend/src/workbench/carriedArrivalEventHandoff.ts": "eee48258a9ebb986a80afcce0e25f520636003dad3740e19013faa335b8f50ae",
+    "frontend/src/workbench/carriedDestinationEventHandoff.ts": "bb2f4751bf5835079c1c52ef62bca3ddad7e6df4c34c74fae16ac150bcce6c38",
+    "frontend/src/workbench/handoffDestinationArrivalReturn.test.tsx": "f589903ca7d81d736d36ee8312879bfc23bd3db82693592f10096279de9451a2",
+    "frontend/src/workbench/handoffDestinationArrivalReturn.ts": "f2d51fa462ee772076b941427f700b9c57c417cdde0548bbced0ca074c22d168",
+    "frontend/src/workbench/handoffDestinationEvent.ts": "5b21cdd9bb000a9c9c33edf1b09866638e44020f5acf5da78f9f67079c13e367",
+    "frontend/src/workbench/portfolioReturn.ts": "1be280ee40ee5d9d31697c90bb52d269553dbd9776b18aeb0715ae76e516d00d"
+  },
+  "artifact_sha256": {
+    "frontend-final.json": "8a3b474eaa82d7ef88f58cfc3b0fa29e1a49954d4f8cc3c865d126fae1cc7e90",
+    "frontend-headroom-final.json": "d04fbc4ac00a5fb5b5d9d608120fb88be64b62d88b6b1248f8705e5657efa3b3",
+    "focused-browser-checks.json": "54f9cbcc29cc63236c3c8a9e0fb137f6bdab53d54d2d59701b9ec4b537e1df9d",
+    "handoff-arrival-return-wide.png": "0a8daaa74ae337b2c57e1f64e4260186d604faf2815be5b536db077b5c06255a",
+    "handoff-arrival-return-narrow.png": "6216db81b95aa1b049f4395f3d1ce22e35064a89ac1e9b5653200030eb1501f7",
+    "ci-partition.json": "a0afb066fdf5d0e06e5429c221aa26bc18eec4c251fa1ec75df4fc043828b10b",
+    "source-review-postgres.log": "ee7b174583413a3fa379949c5c177910cf18765634a798cffd23803d1d620768"
+  },
+  "limitations": [
+    "Synthetic engineering rehearsal only. No legal, corpus, rights or lawyer acceptance.",
+    "R03/R05 remain partial. No deployment or provider change.",
+    "Exact-head hosted checks, merge, main push CI and runtime deployment remain separate."
+  ]
+}
