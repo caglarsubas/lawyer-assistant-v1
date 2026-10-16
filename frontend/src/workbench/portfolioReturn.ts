@@ -1,3 +1,4 @@
+import { validateCarriedDestinationEventHandoff, type CarriedDestinationEventHandoff } from './carriedDestinationEventHandoff';
 import { validateCarriedDestinationReturn, type CarriedDestinationReturn } from './carriedDestinationReturn';
 import { validateCarriedArrivalEventHandoff, type CarriedArrivalEventHandoff } from './carriedArrivalEventHandoff';
 import { validateCarriedArrivalReturn, type CarriedArrivalReturn } from './carriedArrivalReturn';
@@ -82,7 +83,7 @@ export function departingReturn(value: ReturnIntent, meta: NavigationMetadata | 
 }
 export const portfolioPart = (value: PortfolioQueueFilters): PortfolioFilters => ({ customer_ids: [...value.customer_ids], date_field: value.date_field, date_from: value.date_from, date_to: value.date_to });
 export class PortfolioReturnBook {
-  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff; reviewPath?: ReviewPathHandoff; comparisonReturn?: ComparisonReturnReceipt; comparisonEvent?: ComparisonEventHandoff; arrivalReturn?: ArrivalReturn; arrivalEvent?: ArrivalEventHandoff; onwardReturn?: OnwardReturn; onwardEvent?: OnwardEventHandoff; carriedArrival?: CarriedArrivalReturn; carriedArrivalEvent?: CarriedArrivalEventHandoff; carriedDestination?: CarriedDestinationReturn }>();
+  private rows = new Map<string, { expires: number; value: ReturnIntent; renewal?: RenewalHandoff; reviewPath?: ReviewPathHandoff; comparisonReturn?: ComparisonReturnReceipt; comparisonEvent?: ComparisonEventHandoff; arrivalReturn?: ArrivalReturn; arrivalEvent?: ArrivalEventHandoff; onwardReturn?: OnwardReturn; onwardEvent?: OnwardEventHandoff; carriedArrival?: CarriedArrivalReturn; carriedArrivalEvent?: CarriedArrivalEventHandoff; carriedDestination?: CarriedDestinationReturn; carriedDestinationEvent?: CarriedDestinationEventHandoff }>();
   constructor(private now = () => Date.now(), private nonce = () => crypto.randomUUID().replaceAll('-', '')) {}
   put(value: ReturnIntent, renewal?: RenewalHandoff): string { validateReturn(value); if (renewal) validateRenewalHandoff(renewal, value); this.prune();
     const id = this.nonce(); if (!returnToken(id) || this.rows.has(id)) throw new Error('Dönüş kimliği oluşturulamadı.');
@@ -96,6 +97,8 @@ export class PortfolioReturnBook {
   putComparisonReturn(value: ReturnIntent, receipt: ComparisonReturnReceipt): string {
     validateComparisonReturn(receipt, value); const id = this.put(value); this.rows.get(id)!.comparisonReturn = structuredClone(receipt); return id;
   }
+  putCarriedDestinationEvent(value: ReturnIntent, handoff: CarriedDestinationEventHandoff): string { validateCarriedDestinationEventHandoff(handoff, value); const id = this.put(value); this.rows.get(id)!.carriedDestinationEvent = structuredClone(handoff); return id; }
+  getCarriedDestinationEvent(id: string): CarriedDestinationEventHandoff | null { this.prune(); const row = returnToken(id) ? this.rows.get(id) : undefined; return row?.carriedDestinationEvent ? structuredClone(row.carriedDestinationEvent) : null; }
   putCarriedDestinationReturn(value: ReturnIntent, observation: CarriedDestinationReturn): string {
     validateCarriedDestinationReturn(observation, value); const id = this.putCarriedArrivalReturn(value, observation.handoff.observation);
     this.rows.get(id)!.carriedDestination = structuredClone(observation); return id;

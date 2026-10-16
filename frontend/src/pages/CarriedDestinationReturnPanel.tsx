@@ -4,7 +4,7 @@ import type { CarriedDestinationReturn } from '../workbench/carriedDestinationRe
 import { compareDestinationIdentities, type ComparisonQueueReconciliation } from '../workbench/comparisonReturn';
 const relation = { same: 'Aynı kimlik gözlendi', different: 'Farklı kimlik gözlendi', unknown: 'İlişki doğrulanamadı' };
 const admission = (v: string) => v === 'complete' ? 'Tamamlandı' : v === 'pending' ? 'Bekliyor' : 'Doğrulanamadı';
-export default function CarriedDestinationReturnPanel({ observation, value }: { observation: CarriedDestinationReturn; value: ComparisonQueueReconciliation }) {
+export default function CarriedDestinationReturnPanel({ observation, value, prepare, busy = false }: { observation: CarriedDestinationReturn; value: ComparisonQueueReconciliation; prepare?: () => void; busy?: boolean }) {
   if (value.state === 'not_observed') return <Notice>Seçilen kayıt bu pencerede gözlenmedi. Korunan taşınan hedef ayrıntıları açılmadı; güncel erişim veya ilişki kurulmadı.</Notice>;
   const h = observation.handoff, c = h.observation, o = c.handoff.observation, old = o.handoff.observation, r = old.handoff.receipt, f = value.fresh;
   const a = compareDestinationIdentities(c.arrival, f), p = compareDestinationIdentities(h.prepared, f), d = compareDestinationIdentities(o.destination, f);
@@ -16,6 +16,7 @@ export default function CarriedDestinationReturnPanel({ observation, value }: { 
     <h3>Taşınan hedeften portföye dönüş</h3>
     <p>Taşınan hedeften yeni kuyruğa — karar başı: {relation[value.head_relation]}. Analizin son sürümü: {relation[value.version_relation]}. Revizyon: {relation[value.revision_relation]}.</p>
     <p className="small muted">Korunan hedef: {formatDate(observation.destination.metadata.observed_at, true)} · Yeni kuyruk: {formatDate(value.queue_observed_at, true)} · Tam kayıt: {formatDate(f.metadata.observed_at, true)}. Ayrı gözlemler atomik bir an değildir; önceki onay taşınmaz.</p>
+    {prepare && <button className="button secondary" disabled={busy} onClick={prepare}>Taşınan hedefi koruyarak tam seçilen karara geçişi hazırla</button>}
     <Detail title="Taşınan hedef, özgün taşınan varış ve yeni kuyruğun ayrı kimlikleri">
       <p>Özgün taşınan varıştan yeni kuyruğa — baş: {relation[a.head_relation]}; sürüm: {relation[a.version_relation]}; revizyon: {relation[a.revision_relation]}.</p>
       <p>Son hazırlıktan yeni kuyruğa — baş: {relation[p.head_relation]}; sürüm: {relation[p.version_relation]}; revizyon: {relation[p.revision_relation]}.</p>

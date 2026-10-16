@@ -31,3 +31,28 @@ See the carried-destination engineering evidence for the complete local and
 hosted results. Never respond to another margin loss by dropping cases, extending
 caps, adding workers, accepting cached verdicts or blindly rerunning suites.
 Re-measure the affected complete partitions before the next allocation change.
+
+## Observed qualification of the allocation
+
+[PR99's exact-head run](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/38838401590)
+passed all seven jobs at `7ca00e58dbe9dd61f9cc501dec8c8747aad30887`.
+Frontend used 243/300 seconds (57 seconds margin), compared with PR98's 297.
+Workspace contracts used 33 seconds and human-review contracts 151; frontend
+tests used 26 and the build 17. The receiving backend used 1,090/1,200 seconds
+(110 seconds margin); its full backend test step used 1,008/1,080 (72 seconds
+margin). Tested and merged complete trees matched.
+
+These are individual hosted observations, not universal timing or billing
+guarantees. Subsequent feature PRs retain the allocation and require all seven
+successful exact-head checks plus at least 30 seconds observed margin in the
+frontend job, receiving backend job and its full backend test step. A successful
+check with less margin requires investigation before merge; do not raise caps,
+drop tests or rerun merely to obtain a better timing sample.
+
+PR100's first run retained 51 seconds frontend margin but its full backend
+remainder timed out. The [backend graph partition](CI_BACKEND_GRAPH_PARTITION.md)
+supersedes the single-remainder capacity assumption: all seven existing jobs
+remain, with one additional six-minute, two-worker job selecting 91 complete
+graph cases exactly once. The main remainder becomes 3,816. All eight current
+checks and fresh frontend/backend/graph margins are mandatory before merge.
+The rejected local dispatch-order experiment is not part of the solution.

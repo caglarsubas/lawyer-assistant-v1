@@ -4,7 +4,7 @@ import type { NavigationMetadata, SourceTarget } from '../pages/sourceContextNav
 import type { ReviewLineage } from '../pages/sourceReviewLineageTypes';
 import { compareCarriedArrivalEventDestination, returnCarriedArrivalEvent, validateCarriedArrivalEventHandoff, type CarriedArrivalEventHandoff } from './carriedArrivalEventHandoff';
 import { reconcileCarriedArrivalReturn, verifyCarriedArrivalDestination } from './carriedArrivalReturn';
-import { compareDestinationIdentities, type ComparisonQueueReconciliation } from './comparisonReturn';
+import { compareDestinationIdentities, validateDestinationObservation, type ComparisonQueueReconciliation, type ObservedComparison } from './comparisonReturn';
 import type { ReturnIntent } from './portfolioReturn';
 import type { ReviewPathDestination } from './reviewPathHandoff';
 
@@ -34,4 +34,18 @@ export function reconcileCarriedDestinationReturn(intent: ReturnIntent, observat
   if (value.state === 'not_observed') return value;
   compareDestinationIdentities(observation.handoff.prepared, value.fresh);
   return structuredClone({ ...value, ...compareDestinationIdentities(observation.destination, value.fresh) });
+}
+
+/** Check every retained pin without replacing any original observation. */
+export function verifyCarriedDestinationDestination(intent: ReturnIntent, observation: CarriedDestinationReturn, fresh: ReviewPathDestination) {
+  validateCarriedDestinationReturn(observation, intent);
+  verifyCarriedArrivalDestination(intent, observation.handoff.observation, fresh);
+  compareDestinationIdentities(observation.handoff.prepared, fresh);
+  return compareDestinationIdentities(observation.destination, fresh);
+}
+export function validateCarriedDestinationObservation(intent: ReturnIntent, observation: CarriedDestinationReturn, value: ObservedComparison) {
+  validateCarriedDestinationReturn(observation, intent);
+  const receipt = observation.handoff.observation.handoff.observation.handoff.observation.handoff.receipt;
+  validateDestinationObservation(intent, receipt.handoff, observation.destination, value);
+  verifyCarriedDestinationDestination(intent, observation, value.fresh);
 }
