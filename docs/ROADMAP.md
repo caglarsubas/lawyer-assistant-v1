@@ -3209,3 +3209,29 @@ evidence. The entire CI workflow, eight jobs, workers, caps, architectures,
 legal/corpus/source-rights/lawyer acceptance remain partial/separate; no deployment
 change. Next: a dedicated guarded exact-event handoff carrying this complete
 saved destination return unchanged, with newly qualified CI timing margins.
+
+### R03/R05A guarded handoff-arrival-destination-preserving exact-event handoff
+
+A dedicated fixed-depth purpose carries the complete saved destination return
+unchanged, preserving all 23 retained observations. Preparation requires a fresh
+authorized containing queue, complete current admissions and exactly two stable
+selected-event metadata reads. Exact customer/date/source-date/bucket filters,
+selected packet, frozen evidence, known head packets and monotonic time/revision
+remain bound. Full validation per public call uses private local checks, without
+persistent verdict caches or weaker-purpose substitution.
+
+Purpose and exact target are checked before the existing single destination GET;
+new tokens remount the same event. Separate preparation/destination comparisons
+never rebase history, choose a different event or imply a path, permission or
+approval. Drift, denial and retired replies clear state; unknown/pending remains
+explicit. Explicit verified return restores the whole original saved destination
+return unchanged, without another capture, request or write. Unavailable metadata
+yields selection only. All principal/TTL/request fences and confidential boundaries
+remain. No backend API, provider/public-graph write or deployment change.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_EVENT.md) and dated synthetic evidence.
+All previous 1,874 frontend cases and 4,521 backend identities remain; the entire
+CI workflow, eight jobs, workers, caps and PostgreSQL semantics are unchanged.
+R03/R05 and legal/corpus/source-rights/lawyer acceptance remain partial/separate.
+Next: a dedicated return contract retaining this handoff's newer arrival separately,
+reconciled against a fresh authorized bounded queue without rebasing prior history.
