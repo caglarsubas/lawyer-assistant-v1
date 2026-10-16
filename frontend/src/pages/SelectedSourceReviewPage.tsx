@@ -1,4 +1,5 @@
-import { compareHandoffArrivalDestinationEvent, returnHandoffArrivalDestinationEvent, validateHandoffArrivalDestinationEvent, type HandoffArrivalDestinationEvent } from '../workbench/handoffArrivalDestinationEvent';
+import { captureHandoffArrivalDestinationArrivalReturn } from '../workbench/handoffArrivalDestinationArrivalReturn';
+import { compareHandoffArrivalDestinationEvent, validateHandoffArrivalDestinationEvent, type HandoffArrivalDestinationEvent } from '../workbench/handoffArrivalDestinationEvent';
 import HandoffArrivalDestinationEventPanel from './HandoffArrivalDestinationEventPanel';
 import { captureHandoffArrivalDestinationReturn } from '../workbench/handoffArrivalDestinationReturn';
 import { compareHandoffArrivalEvent, validateHandoffArrivalEvent, type HandoffArrivalEvent } from '../workbench/handoffArrivalEvent';
@@ -106,8 +107,8 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent, handoffArr
         let token: string;
         if (handoffArrivalDestinationEvent) {
           const available = !blocked && !busy && observedRevision === revision;
-          const next = returnHandoffArrivalDestinationEvent(returnIntent, handoffArrivalDestinationEvent, target, available ? value : null, available ? lineage : null);
-          token = next.observation ? returns.putHandoffArrivalDestinationReturn(next.intent, next.observation) : returns.put(next.intent);
+          const next = captureHandoffArrivalDestinationArrivalReturn(returnIntent, handoffArrivalDestinationEvent, target, available ? value : null, available ? lineage : null);
+          token = next.observation ? returns.putHandoffArrivalDestinationArrivalReturn(next.intent, next.observation) : returns.put(next.intent);
         } else if (handoffArrivalEvent) {
           const available = !blocked && !busy && observedRevision === revision;
           const next = captureHandoffArrivalDestinationReturn(returnIntent, handoffArrivalEvent, target, available ? value : null, available ? lineage : null);

@@ -90,3 +90,9 @@ All eight exact submitted-head checks plus at least thirty seconds of frontend,
 backend job, backend test-step and graph-runtime margin are merge gates. Individual
 observations establish no universal timing or billing guarantee. Main push CI,
 merge, deployment and legal acceptance remain separate evidence states.
+
+The [separate arrival-return contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_RETURN.md)
+now retains this handoff's currently verified arrival on explicit UI return. It
+keeps all earlier observations unchanged and reconciles independently against a
+fresh authorized bounded queue. The original exported return API above preserves
+its unchanged projection; capture is available only through the new contract.
