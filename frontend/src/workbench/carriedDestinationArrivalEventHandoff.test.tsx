@@ -121,15 +121,16 @@ import CarriedDestinationArrivalEventDestinationPanel from '../pages/CarriedDest
 function rootReceipt(observation: Awaited<ReturnType<typeof savedArrival>>['observation']) {
   const d=observation.handoff.observation,c=d.handoff.observation,o=c.handoff.observation,a=o.handoff.observation;return a.handoff.receipt;
 }
-let originalArrival: Awaited<ReturnType<typeof savedArrival>>;
-beforeAll(async()=>{ originalArrival=await savedArrival(); });
+let originalEvent: { i: ReturnIntent; o: Awaited<ReturnType<typeof savedArrival>>['observation']; q: ReviewLineage; value: ReturnType<typeof reconcileCarriedDestinationArrivalReturn> };
+beforeAll(async()=>{
+  const f=await savedArrival(),q=freshArrival(10);q.context_navigation.analysis={id:'a',current_version_id:'arrival-event-queue',revision:11};
+  originalEvent={i:f.i,o:f.observation,q,value:reconcileCarriedDestinationArrivalReturn(f.i,f.observation,page(q),q.context_navigation,q)};
+});
 async function arrivalEventFixture(d?: ReviewLineage) {
-  const f=structuredClone(originalArrival);
-  if(d) f.observation=captureCarriedDestinationArrivalReturn(f.i,f.h,target(),d.context_navigation,d).observation!;
-  const q=freshArrival(10);q.context_navigation.analysis={id:'a',current_version_id:'arrival-event-queue',revision:11};
-  const o=f.observation,value=reconcileCarriedDestinationArrivalReturn(f.i,o,page(q),q.context_navigation,q);let n=0;
-  const read=vi.fn(async(_url:string)=>{const h=eventDestination(10,1);h.observed_at=h.context_navigation.observed_at=`2026-10-15T02:10:0${++n}Z`;return h;});
-  return {i:f.i,o,q,value,read};
+  const f=structuredClone(originalEvent);
+  if(d){const previous=await prepareDestination(await destinationFixture());f.o=captureCarriedDestinationArrivalReturn(f.i,previous,target(),d.context_navigation,d).observation!;f.value=reconcileCarriedDestinationArrivalReturn(f.i,f.o,page(f.q),f.q.context_navigation,f.q);}
+  let n=0;const read=vi.fn(async(_url:string)=>{const h=eventDestination(10,1);h.observed_at=h.context_navigation.observed_at=`2026-10-15T02:10:0${++n}Z`;return h;});
+  return {...f,read};
 }
 function eventDestination(head=10,window=10){const h=destinationArrival(head,window);h.context_navigation.analysis={id:'a',current_version_id:'arrival-event-queue',revision:11};h.observed_at=h.context_navigation.observed_at='2026-10-15T02:11:00Z';return h;}
 const prepareLatest=(f:Awaited<ReturnType<typeof arrivalEventFixture>>)=>prepareCarriedDestinationArrivalEvent(f.i,f.o,f.value,f.read,()=>true);
@@ -191,5 +192,15 @@ describe('guarded destination-arrival-preserving exact-event handoff',()=>{
   it('rejects a packet substituted for a head known only in the saved arrival',async()=>{
     const d=destinationArrival(9);d.context_navigation.analysis={id:'a',current_version_id:'arrival-only-version',revision:10};const f=await arrivalEventFixture(d),h=await prepareLatest(f),v=eventDestination(9);v.current_head!.packet_sha256='e'.repeat(64);
     expect(()=>compareCarriedDestinationArrivalEventDestination(f.i,h,target(),v)).toThrow();expect(()=>returnCarriedDestinationArrivalEvent(f.i,h,target(),v.context_navigation,v)).toThrow();
+  });
+  it('anchors filter/history/queue clones before either awaited read',async()=>{
+    const f=await arrivalEventFixture(),i=structuredClone(f.i),o=structuredClone(f.o),q=structuredClone(f.value),normal=f.read.getMockImplementation()!;let n=0;
+    f.read.mockImplementation(async u=>{const h=await normal(u);if(++n===1){f.i.filters.customer_ids=['A'];f.o.arrival.metadata.analysis.current_version_id='mutated';if(f.value.state==='observed')f.value.fresh.metadata.analysis.current_version_id='mutated';}return h;});
+    const h=await prepareLatest(f);expect(h.observation).toEqual(o);expect(h.queue).toEqual(q);expect(()=>validateCarriedDestinationArrivalEventHandoff(h,i)).not.toThrow();expect(()=>validateCarriedDestinationArrivalEventHandoff(h,f.i)).toThrow();
+  });
+  it('copies each fresh reply before a later callback can mutate it',async()=>{
+    const f=await arrivalEventFixture(),normal=f.read.getMockImplementation()!;let previous: ReviewLineage|null=null;
+    f.read.mockImplementation(async u=>{if(previous)previous.observed_at=previous.context_navigation.observed_at='2026-10-15T03:00:00Z';const h=await normal(u);previous=h;return h;});
+    const h=await prepareLatest(f);expect(h.observed_at).toEqual(['2026-10-15T02:10:01Z','2026-10-15T02:10:02Z']);expect(f.read).toHaveBeenCalledTimes(2);
   });
 });

@@ -66,3 +66,9 @@ complete 31-case Graph B publication file to this existing job. Graph runtime is
 122 cases, frontend human review 76, and the main remainder stays 3,816. All eight
 job configurations and deadlines remain unchanged. See the
 [current allocation and qualification](CI_FRONTEND_HEADROOM.md).
+
+The arrival-preserving handoff subsequently co-locates the complete 17-case Graph B
+snapshot file with publication in this existing job. Graph runtime becomes 139
+cases, frontend human review 59, and the main remainder stays 3,816. All eight job
+configurations and limits remain; complete affected groups require fresh local
+qualification and all exact-head hosted margin gates still apply.

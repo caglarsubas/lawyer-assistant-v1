@@ -3081,9 +3081,12 @@ Verified return restores only the original arrival; unavailable return is select
 only. No source-body reads, automatic writes, provider calls or public graph updates.
 Eight principal-local entries, thirty-minute expiry and all request fences remain.
 
-CI allocation, coverage, workers and caps stay unchanged. Eliminate redundant new
-validation while checking all 14 retained observations and keeping the existing
-complete history validator. Fresh all-eight success and measured margins remain
+Preserve CI coverage, workers and caps. After the initial frontend job reached
+its five-minute cap, eliminate repeated history validation within each operation
+and move the complete 17-case Graph B snapshot file to the existing graph job.
+Human review becomes 59 cases and graph runtime 139; all 4,521 backend identities
+and eight job configurations remain. Check all 14 retained observations and keep
+the existing complete history validator. Fresh all-eight success and measured margins remain
 merge gates. See [contract](DESTINATION_ARRIVAL_EVENT_HANDOFF.md) and engineering
 evidence. R03/R05, legal/corpus/lawyer qualification, main CI and deployment remain
 separate. Next: a dedicated return contract for this handoff's new destination.

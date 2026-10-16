@@ -53,26 +53,34 @@ public legal graphs, exports and assistant prompts.
 
 ## Validation cost and engineering qualification
 
-The existing complete history validator remains intact. New fresh-observation
-checks validate that history once per call, then check a fixed inventory of all
-14 retained observations against the strictly validated fresh identity. A
-preparation's exact stable equality with the validated queue preserves those
-checked identities; its metadata schema, exact context and separate clock are independently verified. No verdict is cached
-between calls, no mandatory check is removed, and no recursive scan is added.
+The existing complete history validator remains intact. Each public operation
+validates the complete saved history once. Its private operation-local checks
+then validate every fresh identity and compare all 14 retained observations.
+Queue and prepared metadata each pass independent strict schema/context checks,
+with stable equality and separate monotonic clock checks. There is no verdict or
+checker shared between public calls. Awaited preparation uses cloned filters,
+history, queue and replies, preventing callback mutation of the original baseline.
 
-Seventy-four focused cases cover all historical pins, strict schema/depth,
+Seventy-six focused cases cover all historical pins, strict schema/depth,
 prepared identity/schema/clock substitution, exact filters/evidence, unknown and
 pending states, read count/failure ordering, omitted windows, immutable restoration,
-cloning and bounded principal memory. Existing test bodies/fixtures are unchanged.
+cloning and bounded principal memory. All existing test bodies/fixtures are unchanged.
 New cases use independent clones of one constructed baseline instead of repeatedly
 reconstructing already-covered predecessor workflows.
 
-The initial 68-case measurement was 101.97 seconds; the same 68 cases passed in
-23.64 seconds after eliminating redundant work. Six additional preparation-forgery
-cases are included in the complete 1,527-case frontend pass. Workflow allocation,
-all 4,521 backend identities, eight jobs, workers, caps, architectures and PostgreSQL
-semantics remain unchanged. All eight exact-head successes and at least thirty
-seconds measured frontend/backend job/backend step/graph margin gate merge.
+The initial submitted head reached the five-minute frontend job cap; it was not
+merged. Additional operation-local validation removes repeated checks of the same
+unchanged history within one action without removing any fresh-observation check.
+Two added cases cover mutation of inputs/replies during awaited reads. The initial
+74 cases still pass; the complete suite now includes 1,529 frontend cases.
+
+The complete 17-case Graph B snapshot file moves from the frontend human-review
+group to the existing native ARM graph job. Human review becomes 59 cases and
+graph runtime 139. All 4,521 backend identities, eight parsed job configurations,
+workers, caps, architectures and PostgreSQL semantics remain unchanged. Both
+complete affected groups are qualified locally before submission. All eight
+exact-head successes and at least thirty seconds measured frontend/backend
+job/backend step/graph margin gate merge.
 
 Synthetic browser qualification covers two separately prepared arrivals, actual
 later independent review and private edits, exact metadata read counts, token

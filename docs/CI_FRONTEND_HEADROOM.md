@@ -94,15 +94,28 @@ passed all eight checks: frontend 207/300 seconds (93 seconds margin), backend
 Merged-main run 38852168039 separately passed; frontend used 202 seconds, backend
 835 and graph 262. These are measured observations, not universal timing guarantees.
 
-The next handoff leaves the entire workflow and backend test partition unchanged.
-Its initial 68-case local measurement exposed redundant ancestor validation and
-repeated predecessor construction. New checks retain the unchanged complete
-history validator, validate fresh identities once, and compare every one of the
-14 retained observations. Exact stable preparation equality preserves all checked
-fields while separate clocks remain guarded. No cross-call verdict cache is used.
-New tests clone their baseline independently; existing tests/fixtures are unchanged.
-The same 68 cases then passed in 23.64 rather than 101.97 seconds. Six additional
-preparation-forgery cases are included in the full 1,527-case pass.
+The initial handoff head reached the five-minute frontend job cap: npm tests used
+117 seconds, build 17 and workspace contracts 34; the human-review step was still
+running when the job was cancelled. This head was not merged. The suite had grown,
+and that executor was slower on unchanged contract tests as well.
+
+The correction validates the complete saved history once within each public
+operation, then independently checks every fresh queue/preparation/destination
+against the root identity and all 14 saved observations. No checker or verdict is
+shared across public calls; preparation clones its baseline and awaited replies.
+Existing history validation, every existing test body/fixture and all newly added
+security cases remain. Two new cases exercise mutation across awaited reads.
+
+The complete 17-case Graph B snapshot file also moves to the existing native ARM
+graph job alongside its publication contracts. Human review becomes 59 cases and
+graph runtime 139. The full 4,521 backend identities remain exactly once, and all
+eight parsed job configurations, workers, deadlines, architectures, PostgreSQL
+settings, triggers and concurrency remain identical. Complete affected groups
+pass constrained local qualification before submission: complete human review 59
+in 50.61 seconds and complete graph runtime 139 in 135.95 seconds. Both use two
+CPU shares, two workers and 1,536 MiB; these are local observations, not hosted
+headroom guarantees. Neither fewer cases nor a higher time cap is
+used to obtain a successful run.
 
 Require fresh all-eight-check success and the same >=30-second measured margin
 for frontend, backend job/test step and graph runtime before ordinary exact-head
