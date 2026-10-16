@@ -88,3 +88,9 @@ retry on unchanged code. All eight exact submitted-head checks plus at least
 30 seconds of frontend/backend-job/backend-test/graph-runtime headroom are merge
 gates. Observed margins do not establish a universal timing or billing guarantee.
 Main CI, merge, deployment and legal acceptance remain separate evidence states.
+
+The [separate destination-return contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_RETURN.md)
+now captures this handoff's currently verified new destination on explicit UI return.
+It preserves all 28 prior observations and reconciles independently against a fresh
+bounded authorized queue. The original exported return API retains its unchanged
+projection, without a destination capture.
