@@ -3113,3 +3113,29 @@ Eight principal-local entries, thirty-minute expiry and all request fences remai
 No provider/public graph/source writes or deployment change. R03/R05 and legal,
 corpus and lawyer acceptance remain partial/separate. Next: a dedicated guarded
 handoff that carries this complete destination-return record without rebasing it.
+
+### R03/R05A guarded handoff-destination-preserving exact-event handoff
+
+A dedicated fixed-depth purpose carries the complete saved handoff destination
+and every earlier observation unchanged. Explicit preparation requires a fresh
+authorized containing queue, known current head/version and complete current
+admissions, followed by exactly two stable selected-event metadata reads. All
+17 retained observations, exact customer/date/source-date/bucket filters, frozen
+evidence and historical packet pins remain bound. Unknown/pending history stays
+explicit; drift, denial, substitution and retired replies close without retry.
+
+Purpose and exact event are validated before the existing single destination
+GET. New tokens remount the same event. Separate metadata comparisons establish
+no path, selection change or review approval. Verified explicit return restores
+the original complete saved destination unchanged; unavailable metadata yields
+selection only, while partial/conflicting inputs fail closed. No further arrival
+is implicitly captured. Eight principal-local entries, thirty-minute expiry,
+all request fences and the withheld weaker purpose remain.
+
+See [contract](HANDOFF_DESTINATION_EVENT.md) and synthetic engineering evidence.
+No CI job/worker/deadline/architecture change or backend API, source body/write,
+provider/public graph request or deployment change. All 4,521 backend identities
+stay disjoint; all eight successful exact-head checks and measured margin gates
+remain mandatory. R03/R05 and legal/corpus/lawyer qualification stay partial and
+separate. Next: separately retain this handoff's fresh arrival on verified return
+and reconcile it with a fresh authorized bounded queue without rebasing history.
