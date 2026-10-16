@@ -84,3 +84,27 @@ all eight exact-head successes and at least thirty seconds observed margin in
 frontend, main backend job/test step and graph job before merge. Carry measured
 hosted results into the next feature's documentation, avoiding a separate run
 solely to update timing text.
+
+
+## Arrival-preserving handoff capacity
+
+[PR101's exact-head run](https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/38850758358)
+passed all eight checks: frontend 207/300 seconds (93 seconds margin), backend
+939/1,200 (261), backend test step 850/1,080 (230), graph runtime 258/360 (102).
+Merged-main run 38852168039 separately passed; frontend used 202 seconds, backend
+835 and graph 262. These are measured observations, not universal timing guarantees.
+
+The next handoff leaves the entire workflow and backend test partition unchanged.
+Its initial 68-case local measurement exposed redundant ancestor validation and
+repeated predecessor construction. New checks retain the unchanged complete
+history validator, validate fresh identities once, and compare every one of the
+14 retained observations. Exact stable preparation equality preserves all checked
+fields while separate clocks remain guarded. No cross-call verdict cache is used.
+New tests clone their baseline independently; existing tests/fixtures are unchanged.
+The same 68 cases then passed in 23.64 rather than 101.97 seconds. Six additional
+preparation-forgery cases are included in the full 1,527-case pass.
+
+Require fresh all-eight-check success and the same >=30-second measured margin
+for frontend, backend job/test step and graph runtime before ordinary exact-head
+merge. Record actual hosted timing in the PR body and next feature documentation;
+do not start another Actions run solely to amend timing prose.

@@ -1,0 +1,192 @@
+{
+  "schema": "destination-arrival-event-handoff-engineering-evidence-v1",
+  "qualification_date": "2026-10-16",
+  "recorded_at": "2026-10-16T05:25:46.723191+00:00",
+  "baseline_main_sha": "ba3713a6bdb3f68686bce2825a34acb9a7cc3f94",
+  "baseline_pr": 101,
+  "baseline_main_ci": {
+    "run": 38852168039,
+    "status": "completed",
+    "conclusion": "success",
+    "frontend_seconds": 202,
+    "backend_seconds": 835,
+    "graph_seconds": 262
+  },
+  "origin": "invented documents and test-only accounts; simulated rights; disabled providers",
+  "frontend_cases_passed": 1527,
+  "new_focused_cases_passed": 74,
+  "full_frontend_wall_seconds": 27.49,
+  "frontend_build": "passed; existing bundle-size warning retained",
+  "deployment_contracts_passed": 44,
+  "ruff": "passed",
+  "real_postgres_races_passed": 11,
+  "real_postgres_seconds": 9.62,
+  "backend_image_source_match": {
+    "backend_application_files": 122,
+    "all_source_hashes_match": true,
+    "image": "lawyer-assistant-analysis-test:decision-publication",
+    "backend_source_changed": false
+  },
+  "browser": {
+    "synthetic_only": true,
+    "rights_simulated": true,
+    "production_qualified": false,
+    "legacy_prefix_rehearsed": true,
+    "both_sessions_external_requests_monitored": true,
+    "exact_two_preparation_metadata_gets": true,
+    "first_failure_stops_second": true,
+    "second_drift_closed": true,
+    "denied_no_retry": true,
+    "late_scope_retired": true,
+    "same_event_token_remount": true,
+    "purpose_redirect_before_get": true,
+    "one_fresh_destination_get": true,
+    "actual_later_opposing_head": true,
+    "actual_private_version_edits": true,
+    "exact_filters": true,
+    "original_early_and_late_arrivals_restored_unchanged": true,
+    "no_reads_or_writes_on_return": true,
+    "unknown_pending_explicit": true,
+    "saved_and_prepared_packet_substitution_closed": true,
+    "older_purpose_withheld": true,
+    "unavailable_selection_only": true,
+    "reload_closes": true,
+    "narrow_overflow": false,
+    "browser_errors": [],
+    "external_requests": []
+  },
+  "screenshots_visually_checked": [
+    "arrival-event-wide.png",
+    "arrival-event-narrow.png"
+  ],
+  "contract": {
+    "schema": "private-carried-destination-arrival-event-handoff-v1",
+    "fixed_depth": true,
+    "all_earlier_observations_and_exact_filters_scope_evidence_selected_packet_preserved": true,
+    "preparation": "explicit current authorized containing queue; exactly two stable selected-event window=1 metadata GETs",
+    "current_complete_context_selected_head_and_known_version_required": true,
+    "all_fourteen_historical_observations_and_root_selected_head_checked": true,
+    "prepared_schema_exact_context_and_clock_independently_checked": true,
+    "first_failure_denial_drift_retirement_stops_without_retry": true,
+    "purpose_and_exact_target_validated_before_single_existing_destination_get": true,
+    "same_target_different_token_remounts": true,
+    "destination_unknown_pending_or_different_identity_is_not_approval_or_a_path": true,
+    "verified_return": "complete original CarriedDestinationArrivalReturn restored unchanged; no new arrival captured or GET/write added",
+    "unavailable_return": "selection only; partial or conflicting inputs fail closed",
+    "all_current_scope_filter_revision_token_and_request_fences_preserved": true,
+    "entries_max": 8,
+    "minutes": 30,
+    "principal_bound_memory_only": true,
+    "payloads_cloned": true,
+    "validation_before_allocation_eviction": true,
+    "source_bodies_notes_titles_retained": false,
+    "automatic_write_provider_or_public_graph_mutation": false
+  },
+  "validation_cost": {
+    "initial_cases": 68,
+    "initial_local_seconds": 101.97,
+    "same_cases_after_dedup_seconds": 23.64,
+    "final_cases": 74,
+    "additional_cases": "prepared packet/extra/null/clock plus undefined top-level and metadata keys",
+    "existing_history_validator_and_existing_test_bodies_fixtures_unchanged": true,
+    "new_checks": "validate complete saved history once per public call; strict fresh root identity and every fixed historical snapshot; independent strict prepared schema and stable equality",
+    "new_fixture": "independent clones of one constructed baseline; custom historical scenarios captured separately",
+    "persistent_or_cross_call_verdict_cache": false,
+    "mandatory_checks_dropped": false
+  },
+  "confidentiality": "active explicit same-firm matter content grants; customer tags confer no permission; private metadata never promoted into shared legal graphs or assistant prompts",
+  "ci": {
+    "partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 4521,
+        "runtime": 1,
+        "preflight": 89,
+        "remaining": 3816,
+        "publication": 299,
+        "workspace": 48,
+        "human_review": 76,
+        "model_trials": 20,
+        "final_release": 20,
+        "withdrawal": 15,
+        "candidate": 15,
+        "graph_runtime": 122
+      },
+      "runtime_files": [
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py",
+        "backend/tests/test_source_reviews.py",
+        "backend/tests/test_source_review_effort.py",
+        "backend/tests/test_source_analysis_reviews.py",
+        "backend/tests/test_source_context_renewals.py",
+        "backend/tests/test_source_review_readiness.py",
+        "backend/tests/test_portfolio_source_reviews.py",
+        "backend/tests/test_source_context_navigation.py",
+        "backend/tests/test_source_review_lineage.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_authority_proposals.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_authority_trial_cohorts.py",
+        "backend/tests/test_analysis_cohorts.py",
+        "backend/tests/test_graph_b_snapshot.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "b167d772d1b670bc19d2ecd002bb48d4f58a07075b38baef12dd41d9aabc1616",
+      "workflow_sha256": "cc4d5825513c0d0adaaec38ab4dfcd6d83c90805655cd4a609d4223205c8679a",
+      "job_deadlines_and_worker_counts_unchanged": true,
+      "workspace_workers": 2,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "new_graph_runtime_job_minutes": 6,
+      "new_graph_runtime_workers": 2,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "invariants": {
+      "whole_workflow_identical_to_merged_main": true,
+      "workflow_sha256": "cc4d5825513c0d0adaaec38ab4dfcd6d83c90805655cd4a609d4223205c8679a",
+      "all_eight_job_configurations_workers_caps_architectures_unchanged": true,
+      "all_existing_backend_tests_and_fixtures_unchanged": true,
+      "all_existing_frontend_test_files_unchanged": true
+    },
+    "jobs": 8,
+    "workers_caps_architectures_and_postgres_semantics_unchanged": true,
+    "all_unchanged_backend_suites_repeated_locally": false,
+    "merge_gate": "all eight successful checks on exact submitted HEAD and >=30s measured frontend/backend job/backend test-step/graph margin",
+    "hosted_results": "recorded in PR body and ignored exact-head merge proof after final run; no docs-only Actions rerun",
+    "billing_savings_established": false
+  },
+  "changed_source_sha256": {
+    "frontend/src/pages/CarriedDestinationArrivalReturnPanel.tsx": "ff3968fd320c75fdbee809f5b2245055719a682f78c85edc296eb785cf804d98",
+    "frontend/src/pages/PortfolioReturnQueue.tsx": "84e6180236605a5d3abd79e754d625eff90eddc47a37902c4fde75b469d4e7d7",
+    "frontend/src/pages/SelectedSourceReviewPage.tsx": "7d5e74ca14b92fe8da9f55c8e73e11785bba709fab672adc02c1be999d0461f6",
+    "frontend/src/workbench/carriedDestinationArrivalReturn.ts": "61c8f25c021238e1fcf20dc684a27cf8f8d431ed693fd4a334a6d1e587e62d15",
+    "frontend/src/workbench/portfolioReturn.ts": "5ba7cfc845044f1b11375ef4b89ca5654f533b03553840403c548932af583f1e",
+    "frontend/src/workbench/carriedDestinationArrivalEventHandoff.ts": "8d515ab6d6306a03eb7e889e61485d9f6d4f80c4ab2186b307816ce71d89e566",
+    "frontend/src/workbench/carriedDestinationArrivalEventHandoff.test.tsx": "eac84f8e61fac8ec2eedd2e83c43b3bdf23ac884e1f12ccec6556f0ba3b7a088",
+    "frontend/src/pages/CarriedDestinationArrivalEventDestinationPanel.tsx": "dfc86463e2255f7dc112e9d0786156048bb8e30385ede652018af32df7a73b75"
+  },
+  "limitations": [
+    "Synthetic engineering behavior only; R03/R05 remain partial.",
+    "No legal, national-corpus, production-rights or lawyer-acceptance qualification.",
+    "No deployment, credential, provider or private-matter data changes."
+  ],
+  "next_slice": "separately capture this handoff current destination on verified explicit return and reconcile a fresh authorized bounded queue"
+}

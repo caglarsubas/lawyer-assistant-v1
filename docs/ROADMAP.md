@@ -3064,3 +3064,26 @@ remain; no source bodies, automatic writes, provider calls or public graph updat
 See [contract](DESTINATION_ARRIVAL_RETURN.md) and engineering evidence. R03/R05,
 legal/corpus/lawyer qualification and deployment remain separate. Next: guarded
 arrival-preserving exact-event handoff carrying this complete fixed-depth record.
+
+
+### R03/R05A guarded destination-arrival-preserving exact-event handoff
+
+A dedicated fixed-depth purpose carries the complete saved destination arrival,
+a fresh authorized containing queue, two stable exact-event metadata observations
+and a new preparation. Original filters, frozen evidence, all historical packet
+pins and every earlier arrival/destination/preparation remain unchanged. Current
+unknown/pending states cannot prepare; historical states are preserved explicitly.
+
+Destination validates purpose before its existing single fresh metadata GET,
+remounts for a changed token, and compares new observations independently. Redirects,
+substituted packets, regressions, denied access and late scope responses fail closed.
+Verified return restores only the original arrival; unavailable return is selection
+only. No source-body reads, automatic writes, provider calls or public graph updates.
+Eight principal-local entries, thirty-minute expiry and all request fences remain.
+
+CI allocation, coverage, workers and caps stay unchanged. Eliminate redundant new
+validation while checking all 14 retained observations and keeping the existing
+complete history validator. Fresh all-eight success and measured margins remain
+merge gates. See [contract](DESTINATION_ARRIVAL_EVENT_HANDOFF.md) and engineering
+evidence. R03/R05, legal/corpus/lawyer qualification, main CI and deployment remain
+separate. Next: a dedicated return contract for this handoff's new destination.
