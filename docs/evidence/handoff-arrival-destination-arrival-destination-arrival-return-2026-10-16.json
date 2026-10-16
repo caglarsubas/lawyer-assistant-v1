@@ -1,0 +1,183 @@
+{
+  "schema": "handoff-arrival-destination-arrival-destination-arrival-return-engineering-v1",
+  "qualification_date": "2026-10-16",
+  "recorded_at": "2026-10-16T14:39:58.461581+00:00",
+  "baseline_main_sha": "4a26e23ac7ccc67e86e9130abdda6eb84ea5149a",
+  "baseline_pr": 112,
+  "baseline_main_ci": {
+    "run": 38910937671,
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "origin": "synthetic local engineering; invented matters, simulated rights, providers disabled",
+  "frontend_cases_passed": 2412,
+  "frontend_files": 82,
+  "new_cases_passed": 93,
+  "frontend_full_wall_seconds": 15.08,
+  "new_file_wall_seconds": 9.06,
+  "all_81_prior_test_files_fixtures_bodies_assertions_unchanged": true,
+  "build_passed": true,
+  "ruff_exact_ci_configuration_passed": true,
+  "deployment_contracts_passed": 44,
+  "compose_config_passed_without_local_env": true,
+  "postgres_concurrency_cases_passed": 11,
+  "postgres_pytest_seconds": 12.52,
+  "browser": {
+    "synthetic_only": true,
+    "rights_simulated": true,
+    "production_qualified": false,
+    "legacy_foundation_rehearsed": true,
+    "both_sessions_external_requests_monitored": true,
+    "all31_prior_observations_preserved": true,
+    "complete_handoff_preserved": true,
+    "separate_early_late_arrivals": true,
+    "new_arrival_captured_only_on_explicit_return": true,
+    "zero_action_requests_on_capture": true,
+    "independent_preparation_destination_arrival_comparisons": true,
+    "original_return_projections_unchanged": true,
+    "actual_two_later_independent_reviews_before_edits": true,
+    "actual_private_version_edits": true,
+    "exact_customer_date_filters_preserved": true,
+    "one_authorized_queue_and_containing_event_get": true,
+    "omission_no_target_get_or_saved_details": true,
+    "packet_substitution_closed": true,
+    "denial_and_filter_retirement_clear_all": true,
+    "unknown_pending_explicit": true,
+    "failed_destination_selection_only": true,
+    "weaker_handoffs_withheld": true,
+    "reload_closes": true,
+    "narrow_overflow": false,
+    "browser_errors": [],
+    "external_requests": []
+  },
+  "browser_harness": {
+    "fresh_complete_attempts": 2,
+    "first_attempt_correction": "Replace nonexistent /work/scope assertion with exact one GET /customers and one GET /workspaces? scope refresh checks after filters change; retain all authorized reads in counts",
+    "first_attempt_log_and_screenshots_retained": true,
+    "product_changes_for_harness": false,
+    "fresh_database_per_complete_attempt": true,
+    "browsers_closed_unconditionally": true,
+    "successful_both_page_request_logs_retained": true,
+    "routine_get_auth_me_and_status_identified_separately": true
+  },
+  "screenshots_visually_checked": true,
+  "owned_fixture_servers_stopped": true,
+  "contract": {
+    "retained_prior_observations": 31,
+    "including_separate_arrival": 32,
+    "new_record_fields": [
+      "recipe",
+      "handoff",
+      "arrival"
+    ],
+    "capture_action_gets": 0,
+    "capture_action_writes": 0,
+    "fresh_authorized_queue_gets": 1,
+    "containing_exact_event_gets": 1,
+    "omitted_window_target_gets": 0,
+    "complete_handoff_unchanged": true,
+    "original_exported_return_projection_unchanged": true,
+    "complete_history_validated_afresh_per_public_operation": true,
+    "private_operation_local_checks_only": true,
+    "exported_unchecked_checker": false,
+    "persistent_verdict_cache": false,
+    "private_metadata_in_public_graphs_or_provider_prompts": false,
+    "weaker_prepared_purpose_projections": false,
+    "preceding_handoff_withheld": true,
+    "entry_limit": 8,
+    "ttl_minutes": 30
+  },
+  "ci": {
+    "partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 4521,
+        "runtime": 1,
+        "preflight": 89,
+        "remaining": 3843,
+        "publication": 299,
+        "workspace": 48,
+        "human_review": 32,
+        "model_trials": 20,
+        "final_release": 20,
+        "withdrawal": 15,
+        "candidate": 15,
+        "graph_runtime": 139
+      },
+      "runtime_files": [
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py",
+        "backend/tests/test_source_reviews.py",
+        "backend/tests/test_source_review_effort.py",
+        "backend/tests/test_source_analysis_reviews.py",
+        "backend/tests/test_source_context_renewals.py",
+        "backend/tests/test_source_review_readiness.py",
+        "backend/tests/test_portfolio_source_reviews.py",
+        "backend/tests/test_source_context_navigation.py",
+        "backend/tests/test_source_review_lineage.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_authority_proposals.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_analysis_cohorts.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "b167d772d1b670bc19d2ecd002bb48d4f58a07075b38baef12dd41d9aabc1616",
+      "workflow_sha256": "c3cea8ea9067224bbffaf4c5f85ab1a097bc058e28877866a81a89364a28607e",
+      "job_deadlines_and_worker_counts_unchanged": true,
+      "workspace_workers": 2,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "new_graph_runtime_job_minutes": 6,
+      "new_graph_runtime_workers": 2,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "workflow_changed": false,
+    "all_eight_jobs_workers_caps_architectures_unchanged": true,
+    "backend_image_current_app_files": 122,
+    "backend_image_source_match": true,
+    "baseline_publication_seconds": 166,
+    "baseline_publication_cap_seconds": 180,
+    "baseline_publication_margin_seconds": 14,
+    "publication_workload_added": false,
+    "profile_before_adding_publication_work": true,
+    "minimum_final_gate_margin_seconds": 30,
+    "exact_head_required_before_merge": true,
+    "timing_retry_on_unchanged_code": false,
+    "hosted_final_status": "pending at local qualification capture; actual final result belongs in PR description",
+    "billing_savings_guaranteed": false
+  },
+  "source_sha256": {
+    "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalReturn.ts": "189c335f08c6df8d5e0a45cb7e56699554076f3348ff2fc6ee72bed54989e089",
+    "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalReturn.test.tsx": "4b20ed8f2c6dea47e34f4b652629e1fd96490275b9aa305b7799ab1be8685382",
+    "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationEvent.ts": "24807ab7926384e772515dd51bba3c21dc4c299cdc2aab5d56220641c79699e8",
+    "frontend/src/workbench/portfolioReturn.ts": "e7445dd9939eec0ac42d088d1a8783a6558860541e544f640634f7a38e695f9a",
+    "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalReturnPanel.tsx": "29ec8fecd6ba42bd5add55ea01166688e9f85559d0ba6cb7c36f3600d05028e6",
+    "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationEventPanel.tsx": "41e9d8874ddd238f3fdb2c04467c346785b9ae4e8be5b3aafdefe48cbaa3d70b",
+    "frontend/src/pages/PortfolioReturnQueue.tsx": "c23371ea0fe54c78ec993b2f21cd09063881525c33db2512cb1bb41de45fa269",
+    "frontend/src/pages/SelectedSourceReviewPage.tsx": "9991bc1bcc326ceec882cea1a361d8f7f621a108db99c3f111ab184061cbcdce"
+  },
+  "limitations": [
+    "Synthetic engineering qualification only; R03/R05 remain partial",
+    "No legal/corpus/source-rights/lawyer acceptance",
+    "No deployment, provider, credential or primary checkout change",
+    "Successor arrival-preserving exact-event implementation and PR unstarted"
+  ]
+}

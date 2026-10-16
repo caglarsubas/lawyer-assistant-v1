@@ -3336,3 +3336,30 @@ remain unchanged. Require all eight exact-head checks and measured timing floors
 before ordinary merge. R03/R05 and legal/corpus/rights/lawyer acceptance remain partial.
 Next: separately retain this handoff's new arrival and reconcile it against a fresh
 bounded authorized queue, preserving the complete purpose and every prior observation.
+
+### R03/R05A guarded handoff-arrival-destination-arrival-destination-arrival return
+
+Explicit UI return now retains the complete preceding handoff and its verified
+arrival separately with zero action requests/writes. All 31 prior observations,
+exact seven-field/customer-OR filters, frozen evidence and known same-ID head
+packets remain bound. The original exported return API and older return projections
+stay unchanged. Each operation revalidates complete history with private local
+checks and no persistent verdict cache.
+
+A fresh authorized bounded queue permits one exact-event metadata GET only when
+containing the selected record. Omission reveals no saved details and causes no
+target read/retry/scan. Compare the separate arrival independently without rebasing
+history. Unknown/pending stays explicit; denial, drift and retirement clear state.
+Withhold the preceding handoff that cannot carry the new arrival. Principal/TTL/
+request fences and private matter confidentiality remain. No backend/provider/
+public-graph/deployment change.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_RETURN.md)
+and dated synthetic evidence. All prior 2,319 frontend cases/81 files, all 4,521
+backend identities and the entire workflow/eight jobs/workers/caps/PostgreSQL
+semantics remain unchanged. Source publication receives no additional workload;
+its prior 14-second margin requires profiling before adding work there. Require all
+eight exact-head checks and measured timing floors before ordinary merge. R03/R05
+and legal/corpus/rights/lawyer acceptance remain partial.
+Next: a dedicated exact-event handoff carrying this complete 32-observation arrival
+return unchanged, with fresh bounded preparation and independently qualified CI margins.
