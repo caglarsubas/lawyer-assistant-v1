@@ -92,3 +92,12 @@ each of frontend/backend-job/backend-test/graph-runtime margin before ordinary
 matching-head merge. No old-test weakening, larger caps/workers or unchanged-code
 timing retry. Observations do not establish universal timing or billing guarantees.
 Main CI, merge, deployment and legal acceptance remain separate evidence states.
+
+## Separate UI destination return
+
+[The separate destination-return contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_RETURN.md)
+now retains this complete 34-observation handoff and a verified destination on
+explicit UI return. The original exported return API and its complete saved
+32-observation arrival projection stay unchanged. A fresh authorized bounded queue
+compares the destination independently; the preceding handoff action is withheld
+because it cannot carry the additional destination.
