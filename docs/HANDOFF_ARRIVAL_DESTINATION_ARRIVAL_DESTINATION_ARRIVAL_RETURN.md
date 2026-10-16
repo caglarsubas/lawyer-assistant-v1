@@ -82,3 +82,12 @@ frontend/backend-job/backend-test/graph-runtime margin before ordinary matching-
 merge. No old-test weakening, cap/worker increases or unchanged-code timing retry.
 Actual final timings belong in the PR description. Main CI, merge, deployment and
 acceptance are separate evidence states. No billing savings guarantee is implied.
+
+## Dedicated exact-event handoff
+
+[The dedicated arrival-preserving purpose](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_EVENT.md)
+now carries this complete 32-observation return unchanged. It requires a fresh
+containing queue and two stable bounded metadata reads, then compares preparation,
+saved arrival and current destination independently. Older handoffs remain withheld
+because they cannot carry the extra arrival. Explicit verified return restores
+only this complete original return, without an additional destination capture.
