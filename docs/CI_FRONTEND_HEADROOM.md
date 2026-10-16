@@ -48,3 +48,11 @@ successful exact-head checks plus at least 30 seconds observed margin in the
 frontend job, receiving backend job and its full backend test step. A successful
 check with less margin requires investigation before merge; do not raise caps,
 drop tests or rerun merely to obtain a better timing sample.
+
+PR100's first run retained 51 seconds frontend margin but its full backend
+remainder timed out. The [backend graph partition](CI_BACKEND_GRAPH_PARTITION.md)
+supersedes the single-remainder capacity assumption: all seven existing jobs
+remain, with one additional six-minute, two-worker job selecting 91 complete
+graph cases exactly once. The main remainder becomes 3,816. All eight current
+checks and fresh frontend/backend/graph margins are mandatory before merge.
+The rejected local dispatch-order experiment is not part of the solution.

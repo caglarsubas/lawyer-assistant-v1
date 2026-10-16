@@ -69,11 +69,12 @@ version edits, stable preparation, token remount and wide/narrow layouts.
 Rights and accounts are simulated; legal, corpus and lawyer acceptance are not
 established. See [engineering evidence](evidence/carried-destination-event-handoff-2026-10-16.json).
 
-The [qualified CI allocation](CI_FRONTEND_HEADROOM.md), all seven job names,
-two-worker limits, deadlines, architectures and PostgreSQL durability settings
-remain unchanged. Require all exact-head checks and at least thirty seconds
-observed margin in the frontend job, receiving backend job and backend test
-step before merge. Merge, main CI, deployment and acceptance remain separate.
+The [CI graph partition](CI_BACKEND_GRAPH_PARTITION.md) retains the seven existing
+jobs and adds one bounded lane for 91 complete graph cases; the main remainder
+contains 3,816. Existing two-worker limits, deadlines, architectures and
+PostgreSQL durability settings remain. Require all eight exact-head checks and
+at least thirty seconds observed margin in frontend, backend job/test step and
+the new graph job before merge. Main CI, deployment and acceptance stay separate.
 
 Next: separately retain the newly arrived destination on explicit verified
 return and reconcile it through a fresh bounded queue, preserving this purpose

@@ -3028,9 +3028,11 @@ shared graph mutations are introduced. Eight entries, thirty minutes and all
 principal/scope/revision/request fences remain.
 
 See [contract](CARRIED_DESTINATION_EVENT_HANDOFF.md) and synthetic engineering
-evidence. The qualified seven-job CI allocation and all deadlines remain;
-require at least thirty seconds observed frontend/backend margin as documented
-in [CI headroom](CI_FRONTEND_HEADROOM.md). R03/R05 remain partial. Exact-head CI,
+evidence. The seven existing CI jobs and deadlines remain; one additional bounded
+graph lane removes 91 complete cases from the saturated backend remainder.
+Require all eight exact-head checks and at least thirty seconds observed
+frontend/backend/graph margin as documented in
+[CI partition qualification](CI_BACKEND_GRAPH_PARTITION.md). R03/R05 remain partial. Exact-head CI,
 merge, main CI, deployment and legal/lawyer acceptance stay separate.
 Next: separately capture this handoff's new destination on verified explicit
 return and reconcile it with a fresh authorized bounded queue, preserving all

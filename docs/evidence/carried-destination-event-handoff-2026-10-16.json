@@ -11,7 +11,7 @@
   "source_publication_seconds": 69.16,
   "real_postgres_races_passed": 11,
   "real_postgres_seconds": 10.66,
-  "deployment_contracts_passed": 42,
+  "deployment_contracts_passed": 44,
   "ruff": "passed",
   "browser": {
     "synthetic_only": true,
@@ -66,19 +66,83 @@
   },
   "confidentiality": "current explicit same-firm matter content grants; customer tags confer no permission; private metadata separate from public graphs",
   "ci_headroom": {
-    "allocation_unchanged": true,
-    "all_seven_jobs_workers_architectures_caps_and_postgres_settings_unchanged": true,
-    "previous_pr": 99,
-    "previous_exact_head_run": 38838401590,
-    "previous_frontend_seconds": 243,
-    "previous_frontend_margin_seconds": 57,
-    "previous_backend_seconds": 1090,
-    "previous_backend_margin_seconds": 110,
-    "previous_backend_test_step_seconds": 1008,
-    "previous_backend_test_step_margin_seconds": 72,
+    "initial_submitted_head": "b18efa319c09734fce19842736b22ed49a9bdeae",
+    "initial_run": 38841989198,
+    "initial_conclusion": "failure",
+    "initial_frontend_seconds": 249,
+    "initial_frontend_margin_seconds": 51,
+    "initial_backend_step": "timed out after eighteen minutes with 3900 completed cases reported",
+    "initial_merge_performed": false,
+    "selected_fix": "91 complete graph cases isolated in one additional six-minute native ARM job; main remainder3816; original seven job limits and configurations preserved except main exclusions",
+    "new_jobs": 1,
+    "total_checks_required": 8,
+    "workers_per_group": 2,
+    "all_existing_limits_architectures_and_postgres_settings_unchanged": true,
+    "backend_test_bodies_fixtures_assertions_and_schedulers_unchanged": true,
+    "partition": {
+      "missing": 0,
+      "overlap": 0,
+      "extra": 0
+    },
+    "local_full_remainder": {
+      "selection": "exact complete workflow backend remainder",
+      "collected_cases": 3816,
+      "wall_seconds": 629.67,
+      "exit_code": 0,
+      "workers": 2,
+      "cpu_limit": 2,
+      "step_limit_seconds": 1080,
+      "production_source_or_test_logic_changed": false,
+      "hosted_headroom_not_yet_established": true,
+      "scheduling": "unchanged two-worker worksteal; four complete graph files isolated",
+      "passed": 3719,
+      "environment_dependent_skips": 97,
+      "pytest_seconds": 628.08
+    },
+    "local_graph_partition": {
+      "selection": "exact complete graph runtime partition",
+      "files": [
+        "backend/tests/test_declared_graph_assembly.py",
+        "backend/tests/test_graph_b_component_grants.py",
+        "backend/tests/test_release_set_authorization.py",
+        "backend/tests/test_open_validity_publication.py"
+      ],
+      "cases": 91,
+      "wall_seconds": 291.67,
+      "exit_code": 0,
+      "cpu_limit": 2,
+      "workers": 2,
+      "memory_limit_mib": 1536,
+      "hard_job_minutes": 6,
+      "existing_job_limits_or_fixture_logic_changed": false,
+      "hosted_headroom_not_yet_established": true,
+      "passed": 91,
+      "pytest_seconds": 290.14
+    },
+    "parsed_invariants": {
+      "existing_jobs": 7,
+      "all_existing_job_limits_architectures_workers_unchanged": true,
+      "six_existing_job_configurations_identical": true,
+      "backend_change": "add complete graph group to existing exclusions only",
+      "new_job": "graph-runtime-contracts",
+      "new_job_cap_minutes": 6,
+      "new_job_workers": 2,
+      "existing_selectors_unchanged": true,
+      "triggers_permissions_concurrency_unchanged": true,
+      "production_sources_existing_backend_tests_fixtures_and_schedulers_identical": true,
+      "new_deployment_partition_contracts": 2,
+      "no_retries_or_verdict_cache": true
+    },
     "required_current_head_minimum_margin_seconds": 30,
+    "margin_gates": [
+      "frontend job",
+      "main backend job",
+      "main backend test step",
+      "new graph job"
+    ],
     "current_feature_hosted_headroom": "verify separately before merge",
-    "billing_savings_established": false
+    "billing_savings_established": false,
+    "dispatch_order_experiment": "rejected locally and not retained; incomplete run is not a pass"
   },
   "backend_image_source_match": {
     "backend_application_files": 122,
@@ -89,19 +153,20 @@
     "complete": 4521,
     "runtime": 1,
     "preflight": 89,
-    "remaining": 3907,
+    "remaining": 3816,
     "publication": 299,
     "workspace": 48,
     "human_review": 107,
     "model_trials": 20,
     "final_release": 20,
     "withdrawal": 15,
-    "candidate": 15
+    "candidate": 15,
+    "graph_runtime": 91
   },
   "ci_missing": 0,
   "ci_overlap": 0,
   "ci_extra": 0,
-  "ci_workflow_sha256": "582699f9a4f894de34a4a6364d8b50c6124e423cf6bd32640e8207afd092d33d",
+  "ci_workflow_sha256": "104a3e7958f56375a8f9f13e6cbcf46f517d10f5abb6264e760c058c874157fb",
   "ci_complete_node_ids_sha256": "b167d772d1b670bc19d2ecd002bb48d4f58a07075b38baef12dd41d9aabc1616",
   "backend_api_schema_or_test_logic_changed": false,
   "source_files_sha256": {
@@ -113,7 +178,8 @@
     "frontend/src/workbench/carriedDestinationEventHandoff.ts": "38089b53972e3a600e4e79d5d6a8359c8eace734232bd216bb184b308b1ba1d8",
     "frontend/src/workbench/carriedDestinationEventHandoff.test.tsx": "c43a61ee5356c37e179e30b396f8b78ffd7a64e1d6c2e27f0bbcb6f77e2a10c9",
     "frontend/src/pages/CarriedDestinationEventDestinationPanel.tsx": "6dcb0682f69ad4435eba83ef27d5d2517bc6ef7613ea6510276d94c1fc15fb68",
-    ".github/workflows/ci.yml": "582699f9a4f894de34a4a6364d8b50c6124e423cf6bd32640e8207afd092d33d"
+    ".github/workflows/ci.yml": "104a3e7958f56375a8f9f13e6cbcf46f517d10f5abb6264e760c058c874157fb",
+    "deploy/test_ci_partition_contract.py": "13e44637ef3c406f790d68034a749acb9c7dc22dc8dc9e32c928cfcfe13adb14"
   },
   "production_qualified": false,
   "legal_qualification": false,
@@ -121,5 +187,7 @@
   "deployed": false,
   "provider_env_or_credentials_changed": false,
   "hosted_checks_merge_and_main_ci": "verify separately for submitted head and merged tree",
-  "next": "separate fixed-depth new-destination capture and fresh bounded queue reconciliation"
+  "next": "separate fixed-depth new-destination capture and fresh bounded queue reconciliation",
+  "existing_backend_tests_application_sources_and_fixtures_changed": false,
+  "new_deployment_partition_contracts": 2
 }
