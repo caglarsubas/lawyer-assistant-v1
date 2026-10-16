@@ -85,3 +85,7 @@ disjoint. Source publication has limited observed margin and receives no new wor
 All eight exact-head checks plus >=30-second frontend/backend job/backend test-step/
 graph margins remain merge gates. CI, merge, main push CI, deployment and legal
 acceptance are separate evidence states. See the dated engineering evidence.
+
+The subsequent [arrival-preserving handoff](HANDOFF_ARRIVAL_EVENT.md) provides the
+separate dedicated purpose for continuing with this complete return unchanged.
+The earlier handoff that cannot carry the added arrival remains withheld.

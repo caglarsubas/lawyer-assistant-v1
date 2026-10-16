@@ -3161,3 +3161,28 @@ evidence. No source/provider/public-graph writes or deployment change. R03/R05,
 legal/corpus/lawyer qualification and main CI remain separate. Next: a dedicated
 guarded handoff that carries this complete destination-arrival return unchanged,
 with fresh qualification of frontend and graph timing margins before more work.
+
+### R03/R05A guarded handoff-arrival-preserving exact-event handoff
+
+A dedicated fixed-depth purpose carries the complete saved handoff arrival and
+all 20 retained observations unchanged. Explicit preparation requires a fresh
+authorized containing queue, known current head/version and complete admissions,
+followed by exactly two stable selected-event metadata reads. Exact customer/date/
+source-date/bucket filters, selected packet, frozen evidence and historical head
+packets remain bound. Full validation occurs per public operation with private
+local checks, avoiding repeated history work and preserving CI headroom.
+
+Purpose and exact selected event are checked before the destination's existing
+single metadata GET. Separate comparisons never rebase history or infer paths,
+permission or approval. Unknown/pending states remain explicit. Drift, denial,
+substitution and retired replies close without fallback; the weaker prior purpose
+stays withheld. Verified explicit return restores only the entire original saved
+arrival unchanged; unavailable metadata yields selection only. No further arrival
+is captured implicitly. Principal/TTL bounds and all live request fences remain.
+
+See [contract](HANDOFF_ARRIVAL_EVENT.md) and dated synthetic engineering evidence.
+All 4,521 backend identities, eight jobs, workers, caps and PostgreSQL semantics
+remain. No backend API, provider/public-graph/source write or deployment change.
+R03/R05 and legal/corpus/lawyer acceptance stay partial/separate. Next: a dedicated
+return contract retaining this handoff's new destination separately, reconciled
+against a fresh authorized bounded queue without rebasing any prior observation.
