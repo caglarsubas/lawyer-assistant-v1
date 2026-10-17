@@ -3868,3 +3868,28 @@ runtime. Preserve jobs/workers/caps/partitions and PostgreSQL semantics. No new
 publication workload; prior margin28s remains a follow-up before adding work.
 See the complete-handoff arrival-return contract and dated synthetic evidence.
 R03/R05 remain partial; no legal/corpus/rights/lawyer acceptance or deployment.
+
+
+### Guarded complete-arrival exact-event handoff (56 retained observations)
+
+A dedicated58-observation purpose preserves the complete56 arrival return plus
+fresh bounded queue and stable two-read preparation. A single exact destination
+GET compares preparation/current and saved arrival/current independently. Explicit
+verified return restores original56 unchanged with zero action IO, without another
+destination capture. Seven exact customer/date fields/customer OR, frozen evidence
+versions/manifests, all known head packets and independent review history stay bound.
+Whole history is revalidated per public call with private operation-local checks;
+no cached verdict, unchecked export, recursive history model or weaker purpose.
+Preserve membership, eight-entry/30-minute/session/reload/failure closure. Private
+metadata remains outside public graphs/providers/shared caches/telemetry.
+
+Validation: unchanged4,327 cases/99 files plus142 new cases, fresh two-lawyer
+synthetic browser covering actual independent reviews before private edits,
+early/late preparations, redirects, stable reads/fences, unknown/pending, denial,
+zero-IO original return and reload;4,521 unchanged disjoint backend IDs,11 PG races,
+44 deployment contracts and122 application-image hashes. Require all eight exact-
+head checks plus30s frontend/backend job/backend test/graph-runtime margins. Jobs,
+workers/caps/partitions/PG durability unchanged. No publication workload; prior
+publication margin29s requires profiling before additions. See the complete-arrival
+handoff contract and dated evidence. R03/R05 remain partial; no legal/corpus/rights/
+lawyer acceptance or deployment qualification.
