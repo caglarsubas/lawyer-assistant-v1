@@ -3574,3 +3574,35 @@ and legal/corpus/source-rights/lawyer acceptance remain partial.
 Next: separately retain this handoff's arrival and reconcile it against a fresh
 authorized bounded queue, preserving the complete 43-observation purpose and
 every earlier observation without rebasing history.
+
+### R03/R05A complete handoff arrival-return reconciliation
+
+Explicit UI return retains the complete 43-observation purpose unchanged plus one
+separate verified arrival: 44 observations. A fresh authorized bounded queue permits
+one exact-event metadata GET only when it contains the selected record. Omission
+reveals no saved details and triggers no target read, scan or retry. New preparation,
+saved destination, saved arrival and fresh queue compare independently; all historical
+identities/flags, frozen evidence and seven-field/customer-OR filters remain unchanged.
+Unknown/pending remains explicit. Capture makes zero action reads or writes; unavailable
+metadata yields selection only. The original exported 41-observation return and all
+older projections remain unchanged.
+
+Complete history validates afresh per public operation, with private operation-local
+checks and no duplicate full parent validation in one reconciliation helper. Validate
+before nonce allocation/eviction; retain eight entries/thirty minutes/principal/session/
+reload closure and opaque URLs. Withhold the preceding purpose that cannot carry the
+additional arrival. Failure, denial, expiry and retirement clear all panels, comparisons
+and links. No content-access bypass, provider/public-graph metadata, backend change
+or deployment.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_RETURN.md)
+and dated synthetic evidence. All prior 3,159 frontend cases/89 files remain
+byte-identical; 113 new cases cover every retained pin and separate arrival. All 4,521
+backend identities and the workflow/eight jobs/workers/caps/PostgreSQL semantics remain
+unchanged. PR120 exact-head frontend/backend/backend-test/graph-runtime margins were
+76/261/227/71 seconds; publication margin was 17 seconds. No publication workload is
+added; profile before additions. Require eight exact-head successes and measured timing
+floors before ordinary merge. Main CI is separate. R03/R05 and legal/corpus/source-rights/
+lawyer acceptance remain partial.
+Next: a dedicated exact-event handoff carrying this complete 44-observation return
+with fresh bounded preparation, without rebasing any retained identity or flag.
