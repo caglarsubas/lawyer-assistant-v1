@@ -3707,3 +3707,32 @@ and legal/corpus/source-rights/lawyer acceptance remain partial.
 Next: separately retain this handoff's arrival and reconcile it against a fresh
 authorized bounded queue, preserving the complete 49-observation purpose and
 every earlier observation without rebasing history.
+
+
+### R03/R05A whole-handoff arrival return reconciliation
+
+Explicit UI return retains the complete 49-observation handoff and a separate
+verified reduced arrival: 50 observations. Zero action reads/writes or implicit
+refresh. The original exported 47-observation return and older projections remain
+unchanged. A fresh authorized bounded containing queue permits exactly one
+selected-event metadata GET; omission exposes no saved metadata or target read.
+Saved arrival/current queue compares independently, without rebasing older
+identities, frozen evidence, filters, known packets, history or flags.
+
+Full history validates afresh per public operation with private operation-local
+checks; no duplicate full parent validation in one reconciliation helper. Validate
+before allocation/eviction; preserve eight entries/thirty minutes/principal/session/
+reload closure, opaque URLs and explicit same-firm matter membership. Withhold
+weaker handoffs. Failure, denial, expiry and retirement clear panels and links.
+Private metadata stays outside public graphs, providers, shared caches and telemetry.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_RETURN.md) and dated synthetic evidence. All prior 3,639 frontend
+cases/93 files stay byte-identical; 123 new cases cover all 49 retained pins and
+separate arrival. All 4,521 backend identities, workflow/eight jobs/workers/caps and
+PostgreSQL semantics remain unchanged. PR124 frontend/backend/backend-test/graph-runtime
+margins were 153/253/221/91 seconds; publication margin was 29 seconds. No publication
+workload is added; profile before additions. Require eight exact-head successes and
+measured timing floors before ordinary merge. Main CI is separate. R03/R05 and
+legal/corpus/source-rights/lawyer acceptance remain partial. No deployment.
+Next: a dedicated exact-event handoff carrying this complete 50-observation return
+with fresh bounded preparation, preserving every retained observation.
