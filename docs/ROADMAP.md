@@ -3959,3 +3959,38 @@ R03/R05 and legal/corpus/rights/lawyer/deployment acceptance remain partial.
 Next: separately retain this complete61-observation purpose and its verified
 arrival, then reconcile through a fresh authorized bounded queue. That successor
 implementation and PR are unstarted in this slice.
+
+### Guarded complete-destination handoff arrival return (61 retained observations)
+
+Explicit verified UI return now retains the complete61-observation purpose plus
+a separately verified arrival62 with zero action IO. The original59-return API
+body/signature and every older return projection remain unchanged. A fresh
+authorized bounded containing queue permits one exact-event metadata GET; omission
+exposes no saved history or target read. Compare saved arrival/current,
+preparation/current and earlier destination/current independently, preserving
+all61 pins, known/saved-only head packets, frozen evidence versions/manifests,
+chronology, admissions, exact seven customer/date fields/customer OR and independent
+review history without rebasing.
+
+Every public call revalidates complete history afresh, with private local checks
+and one full parent validation per reconciliation. No unchecked checker, cached
+verdict, recursive history model or weaker event purpose. Preserve explicit matter
+membership, eight entries/30minutes/principal/session/reload closure and complete
+failure/filter/scope/window/target retirement. Private metadata stays outside public
+graphs/providers/shared caches/telemetry.
+
+Validation: unchanged4,754 cases/102 files plus143 new cases; fresh two-lawyer
+synthetic early/late arrival captures, actual independent reviews before private
+edits, exact filters, zero-IO capture, metadata-only disclosures, omission, packet
+substitution, denial, unknown/pending, stale replies and reload. Preserve4,521
+backend identities/disjoint partitions,11 PostgreSQL races,44 deployment contracts
+and122 application-image hashes. Pre-publication local profiling measured clean
+TypeScript4.6s/4.2s and two-worker suite50.4s/52.2s before/after. Actual hosted
+qualification still requires all eight successes and30s frontend/backend job/
+backend test/graph-runtime margins. Jobs/workers/caps/partitions/PG semantics stay
+unchanged. No publication workload; profile before additions. See the
+[contract](COMPLETE_DESTINATION_HANDOFF_ARRIVAL_RETURN.md) and dated engineering
+evidence. R03/R05 and legal/corpus/rights/lawyer/deployment acceptance remain partial.
+Next: a full-purpose exact-event handoff carrying the complete62-observation return
+plus fresh queue and preparation observations. That successor implementation and
+PR are unstarted in this slice.
