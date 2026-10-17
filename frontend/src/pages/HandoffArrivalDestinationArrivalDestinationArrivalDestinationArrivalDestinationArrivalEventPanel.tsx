@@ -22,6 +22,6 @@ export default function HandoffArrivalDestinationArrivalDestinationArrivalDestin
         <p>Kabuller — bağlam: {admission(s.metadata.admission.context_state)}; seçilen karar: {admission(s.selected.admission)}; baş: {admission(s.metadata.admission.review_state)}.</p></div>)}
       <HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEventPanel handoff={saved.handoff} value={{ fresh: f, ...compareDestinationIdentities(saved.handoff.prepared, f) }} />
     </Detail>
-    <p className="small muted">Özgün müşteri ve tarih filtreleri, sabit kanıt ve bağımsız inceleme geçmişi değişmeden korundu. Yalnız özel kimlik metadatası karşılaştırıldı; kaynaklar, hukuki etki veya yeni başa yol doğrulanmadı. Açık ve doğrulanmış dönüş bütün özgün hedef dönüşünü değişmeden geri taşır; bu yeni varış ayrıca saklanmaz.</p>
+    <p className="small muted">Özgün müşteri ve tarih filtreleri, sabit kanıt ve bağımsız inceleme geçmişi değişmeden korundu. Yalnız özel kimlik metadatası karşılaştırıldı; kaynaklar, hukuki etki veya yeni başa yol doğrulanmadı. Açık ve doğrulanmış dönüş bütün özgün hedef dönüşünü değişmeden geri taşır; özgün dönüş API’sinde bu yeni hedef ayrıca saklanmaz. Arayüzün açık ve doğrulanmış dönüşünde hedef ayrı saklanır.</p>
   </section>;
 }
