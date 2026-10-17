@@ -1,7 +1,8 @@
+import type { PortfolioQueuePage } from '../pages/portfolioSourceQueueTypes';
 import { canonicalJson } from '../pages/matter/sourceReviewTypes';
 import type { NavigationMetadata, SourceTarget } from '../pages/sourceContextNavigationTypes';
 import { verifyReviewLineage, type ReviewLineage } from '../pages/sourceReviewLineageTypes';
-import { validateHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn, type HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn } from './handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn';
+import { reconcileHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn, validateHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn, type HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn } from './handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn';
 import { compareDestinationIdentities, validateDestinationObservation, type ComparisonQueueReconciliation, type ObservedComparison } from './comparisonReturn';
 import type { ReturnIntent } from './portfolioReturn';
 import { returnVerifiedEvent, verifyReturnedEventTarget } from './returnedReviewLineage';
@@ -96,6 +97,10 @@ function arrivalFields(handoff: HandoffArrivalDestinationArrivalDestinationArriv
   checks.destination(fresh); compareDestinationIdentities(handoff.queue.fresh, fresh);
   return compareDestinationIdentities(handoff.prepared, fresh);
 }
+/** Every public call validates the complete purpose afresh; no unchecked checker escapes. */
+export function verifyHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEventDestination(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, fresh: ReviewPathDestination) {
+  return arrivalFields(handoff, fresh, verified(handoff, intent));
+}
 function destination(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, target: SourceTarget, history: ReviewLineage, checks: HistoryChecks) {
   if (target.kind !== 'selected') fail();
   verifyReturnedEventTarget(intent, target); verifyReviewLineage(history, target);
@@ -105,6 +110,14 @@ function destination(intent: ReturnIntent, handoff: HandoffArrivalDestinationArr
 export function compareHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, target: SourceTarget, history: ReviewLineage) {
   return destination(intent, handoff, target, history, verified(handoff, intent));
 }
+/** Capture only currently verified metadata on explicit return, without reads or writes. */
+export function captureHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEventDestination(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, target: SourceTarget,
+  meta: NavigationMetadata | null, history: ReviewLineage | null) {
+  if (target.kind !== 'selected') fail();
+  const checks = verified(handoff, intent), next = returnVerifiedEvent(intent, target, meta, history);
+  if (!meta && !history) return { intent: next, destination: null };
+  return { intent: next, destination: destination(intent, handoff, target, history!, checks).fresh };
+}
 /** Explicit verified return restores all 56 original observations; no further arrival is captured. */
 export function returnHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, target: SourceTarget,
   meta: NavigationMetadata | null, history: ReviewLineage | null) {
@@ -113,4 +126,17 @@ export function returnHandoffArrivalDestinationArrivalDestinationArrivalDestinat
   if (!meta && !history) return { intent: next, observation: null };
   destination(intent, handoff, target, history!, checks);
   return { intent: next, observation: structuredClone(handoff.observation) };
+}
+
+/** Reconcile complete parent history first, then this purpose and separate destination locally. */
+export function reconcileHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEventDestination(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, saved: ReviewPathDestination,
+  page: PortfolioQueuePage, meta: NavigationMetadata | null, history: ReviewLineage | null, offset = 0): ComparisonQueueReconciliation {
+  shape(handoff);
+  const value = reconcileHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn(intent, handoff.observation, page, meta, history, offset);
+  // Complete parent history was validated in this call; no verdict survives it.
+  const checks = retainedChecks(intent, handoff.observation); fields(handoff, checks); arrivalFields(handoff, saved, checks);
+  if (Date.parse(page.observed_at) < Date.parse(saved.metadata.observed_at)) fail();
+  if (value.state === 'not_observed') return value;
+  arrivalFields(handoff, value.fresh, checks);
+  return structuredClone({ ...value, ...compareDestinationIdentities(saved, value.fresh) });
 }
