@@ -1,4 +1,5 @@
-import { compareHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, returnHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, validateHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, type HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent } from '../workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent';
+import { captureHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn } from '../workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn';
+import { compareHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, validateHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, type HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent } from '../workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent';
 import HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEventPanel from './HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEventPanel';
 import { captureHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn } from '../workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn';
 import { compareHandoffArrivalDestinationArrivalDestinationArrivalDestinationEvent, validateHandoffArrivalDestinationArrivalDestinationArrivalDestinationEvent, type HandoffArrivalDestinationArrivalDestinationArrivalDestinationEvent } from '../workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationEvent';
@@ -126,8 +127,8 @@ function SelectedWorkspace({ target, blocked, revision, returnIntent, handoffArr
         let token: string;
         if (handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent) {
           const available = !blocked && !busy && observedRevision === revision;
-          const next = returnHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent(returnIntent, handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, target, available ? value : null, available ? lineage : null);
-          token = next.observation ? returns.putHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn(next.intent, next.observation) : returns.put(next.intent);
+          const next = captureHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn(returnIntent, handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent, target, available ? value : null, available ? lineage : null);
+          token = next.observation ? returns.putHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn(next.intent, next.observation) : returns.put(next.intent);
         } else if (handoffArrivalDestinationArrivalDestinationArrivalDestinationEvent) {
           const available = !blocked && !busy && observedRevision === revision;
           const next = captureHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn(returnIntent, handoffArrivalDestinationArrivalDestinationArrivalDestinationEvent, target, available ? value : null, available ? lineage : null);
