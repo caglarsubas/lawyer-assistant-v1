@@ -1,22 +1,24 @@
 {
   "schema": "complete-destination-preserving-event-engineering-v1",
   "qualification_date": "2026-10-17",
-  "recorded_at": "2026-10-17T13:25:26.875252+00:00",
+  "recorded_at": "2026-10-17T13:46:30.498847+00:00",
   "baseline_main_sha": "1df8439a00578d4cd2ed47eb8ec4d4724c38b9c8",
   "baseline_pr": 127,
   "baseline_main_ci_at_local_capture": {
     "run": 39035719105,
-    "status": "in_progress",
-    "conclusion": "pending",
-    "successful_jobs": 7,
+    "status": "completed",
+    "conclusion": "success",
+    "successful_jobs": 8,
     "separate_evidence_state": true
   },
   "origin": "synthetic local engineering; invented matters, simulated rights, providers disabled",
-  "frontend_cases_passed": 4159,
-  "frontend_files": 97,
-  "new_cases_passed": 137,
-  "frontend_full_wall_seconds": 34.26,
-  "new_file_wall_seconds": 14.96,
+  "frontend_cases_passed": 4194,
+  "frontend_files": 98,
+  "new_cases_passed": 172,
+  "handoff_cases_passed": 137,
+  "fresh_validation_cases_passed": 35,
+  "frontend_full_wall_seconds": 8.24,
+  "new_file_wall_seconds": 5.1,
   "all_96_prior_test_files_fixtures_bodies_assertions_unchanged": true,
   "build_passed": true,
   "ruff_exact_ci_configuration_passed": true,
@@ -72,7 +74,9 @@
     "external_requests": []
   },
   "browser_harness": {
-    "fresh_complete_attempts": 1,
+    "fresh_complete_attempts": 2,
+    "final_performance_correction_database_suffix": 3,
+    "final_correct_public_readiness_hard_stop": true,
     "preflight_invocations_without_browser_or_requests": 1,
     "readiness_probe_auth_endpoint_corrected": true,
     "health_confirmed_after_complete_attempt_started": true,
@@ -199,16 +203,43 @@
   "source_sha256": {
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent.ts": "656ab05776a7757a024236ec95e04901da84729209a22ef30cf5add5336b14fc",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent.test.tsx": "e61f2bf591ab174fb48628743e3a873fb57ce177ad4af8934a01d4d06950292f",
-    "frontend/src/workbench/portfolioReturn.ts": "6f7e46cfa4a07d94d73f447caeb546a7cbb6bbd8c90e9615a2aaa93e34b6e4b6",
+    "frontend/src/workbench/portfolioReturn.ts": "091c7c9855879fc0e2eb8303fa8400bd96509ccf8650efc4287d42d6e15bbdc4",
     "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEventPanel.tsx": "af81d603f32883d67268bfe6cb9fc75ec3e21680f3ae20a06d3c01be8b5ce542",
     "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturnPanel.tsx": "760643caa5bdd08f85b047bbfa017faf783bb39714c42116aa02df3f49b284da",
     "frontend/src/pages/PortfolioReturnQueue.tsx": "921b11a7598d65bca7f631e3beef1e01d0595304315eb9d1d8324ab0c6c61d84",
-    "frontend/src/pages/SelectedSourceReviewPage.tsx": "4cdc471fed039a4d401d4f1a2035cc64c129efdb6140ca8aea74899c96cfb9dc"
+    "frontend/src/pages/SelectedSourceReviewPage.tsx": "4cdc471fed039a4d401d4f1a2035cc64c129efdb6140ca8aea74899c96cfb9dc",
+    "frontend/src/workbench/privateObservationValidation.ts": "3f1b43e0517238e97acc0186ad6d32c4bfdfd3fbc046ac12f2f7a4c515c02395",
+    "frontend/src/workbench/privateObservationValidation.test.ts": "be3152e308bf022018df9087a5dbc551760cfd8c99aade52ab938e748f038a14",
+    "frontend/src/pages/sourceContextNavigationTypes.ts": "0a5d1a9585903f1cbd84d0882d075693c0b7306b16e6865c2182b3962edbac02",
+    "frontend/src/pages/sourceReviewLineageTypes.ts": "b6b759c88ea73f3f94688463e53323b9d4d94a467566af9eebbef1992d601672"
   },
   "limitations": [
     "Synthetic engineering qualification only; R03/R05 remain partial",
     "No legal/corpus/source-rights/lawyer acceptance",
     "No deployment, provider, credential or primary checkout change",
     "Successor separate-arrival return implementation and PR unstarted"
-  ]
+  ],
+  "validation_performance": {
+    "cause": "CPU profiles identified repeated key sorting/canonical serialization and Date parsing inside fresh full-history validation",
+    "correction": "Stateless exact-own-key and Gregorian calendar primitives; all public full-history checks still execute on each call",
+    "canonical_json_encoding_unchanged": true,
+    "no_validation_verdict_cache": true,
+    "first_head_all_eight_checks": "success",
+    "first_head": "8f6f86354feb76f0095499cd95078f197be87d7a",
+    "first_run": 39036604049,
+    "first_frontend_seconds": 279,
+    "first_frontend_margin_seconds": 21,
+    "first_head_merge_withheld": true,
+    "cancel_attempts": 1,
+    "cancel_result": "403 token scope rejection; old run subsequently completed successfully",
+    "old_97_test_files_byte_identical": true,
+    "new_validation_cases": 35,
+    "gregorian_reference_comparisons": 184800,
+    "isolated_137_case_tests_seconds_before": 6.62,
+    "isolated_137_case_tests_seconds_after": 3.75,
+    "isolated_total_seconds_before": 7.08,
+    "isolated_total_seconds_after": 4.08,
+    "hosted_capacity_requires_fresh_exact_head_ci": true,
+    "billing_savings_guaranteed": false
+  }
 }

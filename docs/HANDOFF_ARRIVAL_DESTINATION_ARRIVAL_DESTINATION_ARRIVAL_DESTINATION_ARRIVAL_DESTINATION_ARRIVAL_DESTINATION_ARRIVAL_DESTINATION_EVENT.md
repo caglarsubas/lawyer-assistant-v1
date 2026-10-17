@@ -93,3 +93,16 @@ graph-runtime margin before ordinary matching-head merge. No cap/worker increase
 old-test weakening, bypass or unchanged-code timing retry. Main CI, merge,
 deployment, corpus/source-rights/legal qualification and lawyer acceptance remain
 separate. R03/R05 remain partial; timings are observations, not billing guarantees.
+
+The first submitted head passed eight checks but its frontend used 279/300 seconds
+(21 seconds margin); merge was withheld. CPU profiles identified repeated key
+sorting/serialization and date parsing in full-history validation. Stateless exact
+enumerable-own-key and Gregorian-date primitives replace those operations without
+changing canonical JSON encoding, per-call validation, tests, workers or limits.
+All 97 test files from that head remain byte-identical. Thirty-five additional
+validation cases compare special key shapes, mutation, lexical boundaries and
+184,800 dates across a complete 400-year cycle with the old reference predicates.
+The final suite passes 4,194 cases across 98 files. The isolated 137-case handoff
+suite changed from 6.62 to 3.75 seconds of tests; hosted capacity still requires
+fresh exact-head qualification. Final browser qualification uses a new database
+and the rebuilt bundle, with public health/readiness checks that stop on failure.

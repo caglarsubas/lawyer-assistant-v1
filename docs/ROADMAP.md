@@ -3833,3 +3833,11 @@ R03/R05 and legal/corpus/source-rights/lawyer acceptance remain partial.
 Next: separately retain this handoff's arrival and reconcile it against a fresh
 authorized bounded queue, preserving the complete 55-observation purpose and
 every earlier observation without rebasing history.
+
+CI capacity correction for this slice: the first eight-check success left only
+21 seconds of frontend margin, so merge was withheld. Profiled stateless shape
+and calendar validation removes repeated sort/serialization/date parsing while
+retaining fresh complete-history checks and unchanged canonical encoding. All
+97 submitted test files remain byte-identical; 35 new boundary/reference cases
+bring the suite to 4,194 cases/98 files. Fresh exact-head hosted qualification
+and a fresh rebuilt two-lawyer browser fixture remain required before merge.
