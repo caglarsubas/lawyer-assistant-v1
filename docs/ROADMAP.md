@@ -3841,3 +3841,30 @@ retaining fresh complete-history checks and unchanged canonical encoding. All
 97 submitted test files remain byte-identical; 35 new boundary/reference cases
 bring the suite to 4,194 cases/98 files. Fresh exact-head hosted qualification
 and a fresh rebuilt two-lawyer browser fixture remain required before merge.
+
+
+### Guarded complete-handoff arrival return (55 retained observations)
+
+An explicit verified return retains the complete55-observation purpose plus a
+separate arrival56, with zero action reads/writes. Fresh authorized bounded queue
+reconciliation uses one exact-event metadata read only when the selected record
+is contained. Omission exposes no history. Preparation, saved arrival, older
+destination and fresh identities remain independently compared; exact seven
+customer/date filters, frozen evidence versions/manifests and independent review
+history remain bound. The old53-observation API/projections remain unchanged.
+Every public operation revalidates complete history afresh; operation-local
+checks avoid duplicate parent validation within reconciliation. No weaker event
+purpose, persistent verdict cache, recursive history model or private metadata
+in public graphs/providers/shared caches/telemetry. Membership and eight-entry/
+30-minute/session/reload/failure closure remain mandatory.
+
+Qualification: unchanged4,194 cases/98 files plus133 new cases, fresh two-lawyer
+synthetic browser with early/late arrivals and actual independent reviews before
+private edits, full request logs, metadata-only disclosures, denial/omission/
+unknown/pending/filter-retirement and reload; all4,521 backend IDs unchanged and
+disjoint,11 PostgreSQL races and122 application-image hashes. Require all eight
+exact-head checks and30s margins on frontend/backend job/backend test/graph
+runtime. Preserve jobs/workers/caps/partitions and PostgreSQL semantics. No new
+publication workload; prior margin28s remains a follow-up before adding work.
+See the complete-handoff arrival-return contract and dated synthetic evidence.
+R03/R05 remain partial; no legal/corpus/rights/lawyer acceptance or deployment.
