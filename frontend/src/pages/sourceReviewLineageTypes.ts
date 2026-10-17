@@ -1,3 +1,4 @@
+import { hasExactKeys as keys } from '../workbench/privateObservationValidation';
 import { canonicalJson } from './matter/sourceReviewTypes';
 import { navigationReviewId, verifyNavigation, type NavigationMetadata, type SourceTarget } from './sourceContextNavigationTypes';
 export type ReviewMetadata = { id: string; state: 'unknown' | 'changes_requested' | 'reviewed_conditional'; sequence: number | null;
@@ -9,7 +10,6 @@ export type ReviewLineage = { recipe: 'private-source-review-lineage-v1'; matter
   lineage: { scope: 'selected_predecessors_only'; status: 'complete_to_first_event' | 'truncated' | 'unavailable'; window: number;
     items: ReviewMetadata[]; next_review_id: string | null; total_count: null; head_reachability: 'not_checked' };
   tools_available: boolean; source_verification: 'not_checked'; legal_readiness: 'not_established'; qualification_granted: false };
-const keys = (value: object, expected: string[]) => canonicalJson(Object.keys(value).sort()) === canonicalJson(expected.sort());
 const sha = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
 const stamp = (value: unknown) => typeof value === 'string' && value.length <= 40 && Number.isFinite(Date.parse(value));
 export function verifyReviewLineage(value: ReviewLineage, target: SourceTarget) {

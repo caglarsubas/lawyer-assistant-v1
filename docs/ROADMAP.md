@@ -3799,3 +3799,45 @@ successes and measured timing floors before ordinary merge. Main CI remains
 separate. R03/R05 and legal/corpus/source-rights/lawyer acceptance remain partial.
 Next: a dedicated exact-event handoff carrying this complete 53-observation return
 with fresh bounded preparation, preserving every retained observation.
+
+
+### R03/R05A complete-destination-preserving exact-event handoff
+
+A dedicated fixed-depth purpose carries the complete 53-observation destination
+return unchanged. One fresh authorized containing queue and exactly two stable
+metadata reads at window one prepare the exact selected event: 55 observations.
+All prior selected packets, frozen evidence, seven-field/customer-OR filters,
+monotonic history and known same-ID head packets stay bound, including heads
+known only to the saved destination. Every public call validates complete history
+using private operation-local checks, with no cached verdict or weaker purpose.
+Validation precedes allocation/eviction.
+
+Purpose and exact target validate before the single destination metadata GET; a
+new opaque token remounts the same selected event. Preparation/current destination
+and saved destination/current destination compare independently. Earlier identities
+and flags remain intact. Unknown/pending stays explicit; failure, denial and
+retirement clear state. Explicit verified return restores only the complete
+original 53-observation return, with zero action reads/writes and no further
+arrival capture. Unavailable metadata yields selection only. Principal/TTL/request
+fences, exact filters and private matter confidentiality remain intact. No backend/
+provider/public-graph/deployment change.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_EVENT.md) and dated synthetic evidence. All prior 4,022 frontend
+cases/96 files remain byte-identical; 137 new cases cover every retained pin and
+bounded preparation. All 4,521 backend identities and workflow/eight jobs/workers/
+caps/PostgreSQL semantics stay unchanged. PR127 frontend/backend/backend-test/
+graph-runtime margins were 133/211/176/77 seconds; publication margin was 28 seconds.
+No publication workload is added; profile before additions. Require eight exact-head
+successes and measured timing floors before ordinary merge. Main CI is separate.
+R03/R05 and legal/corpus/source-rights/lawyer acceptance remain partial.
+Next: separately retain this handoff's arrival and reconcile it against a fresh
+authorized bounded queue, preserving the complete 55-observation purpose and
+every earlier observation without rebasing history.
+
+CI capacity correction for this slice: the first eight-check success left only
+21 seconds of frontend margin, so merge was withheld. Profiled stateless shape
+and calendar validation removes repeated sort/serialization/date parsing while
+retaining fresh complete-history checks and unchanged canonical encoding. All
+97 submitted test files remain byte-identical; 35 new boundary/reference cases
+bring the suite to 4,194 cases/98 files. Fresh exact-head hosted qualification
+and a fresh rebuilt two-lawyer browser fixture remain required before merge.
