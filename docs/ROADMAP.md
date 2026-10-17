@@ -3479,3 +3479,34 @@ timing floors before ordinary merge. R03/R05 and legal/corpus/source-rights/lawy
 acceptance remain partial.
 Next: a dedicated exact-event handoff carrying the complete 38-observation arrival
 return unchanged, with fresh bounded preparation and independently qualified CI margins.
+
+### R03/R05A complete arrival-preserving exact-event handoff
+
+A dedicated fixed-depth purpose carries the complete 38-observation arrival return
+unchanged. One fresh authorized containing queue and exactly two stable metadata
+reads at window one prepare the exact selected event: 40 observations in total.
+All prior selected packets, frozen evidence, seven-field/customer-OR filters,
+monotonic history and known same-ID head packets remain bound. Every public call
+validates complete history with private local checks and no cached verdict or weaker
+purpose. Validation precedes token allocation and eviction.
+
+Purpose and exact target validate before the destination's single metadata GET;
+a new token remounts the same selected event. New preparation/current destination
+and saved arrival compare independently without rebasing earlier identities or
+flags. Unknown/pending stays explicit; failure, denial and retirement clear state.
+Explicit verified return restores only the complete original 38-observation return,
+with zero action requests/writes and no further destination capture. Unavailable
+metadata yields selection only. Principal/TTL/request fences, exact filters and
+private matter confidentiality remain. No backend/provider/public-graph/deployment
+change.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_EVENT.md)
+and dated synthetic evidence. All prior 2,822 frontend cases/86 files, all 4,521
+backend identities and the workflow/eight jobs/workers/caps/PostgreSQL semantics
+remain unchanged. No publication workload is added; its last measured 23-second
+margin remains visible for profiling before additions. Require eight exact-head
+successes and measured timing floors before ordinary merge. R03/R05 and legal/
+corpus/source-rights/lawyer acceptance remain partial.
+Next: separately retain this handoff's destination and reconcile it against a
+fresh authorized bounded queue, preserving the complete 40-observation purpose
+and every earlier observation without rebasing history.
