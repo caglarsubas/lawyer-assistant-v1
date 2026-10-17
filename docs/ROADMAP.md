@@ -3606,3 +3606,37 @@ floors before ordinary merge. Main CI is separate. R03/R05 and legal/corpus/sour
 lawyer acceptance remain partial.
 Next: a dedicated exact-event handoff carrying this complete 44-observation return
 with fresh bounded preparation, without rebasing any retained identity or flag.
+
+
+### R03/R05A whole-arrival-preserving exact-event handoff
+
+A dedicated fixed-depth purpose carries the complete 44-observation arrival
+return unchanged. One fresh authorized containing queue and exactly two stable
+metadata reads at window one prepare the exact selected event: 46 observations.
+All prior selected packets, frozen evidence, seven-field/customer-OR filters,
+monotonic history and known same-ID head packets remain bound. Every public call
+validates complete history with private operation-local checks, no cached verdict
+and no weaker purpose. Validation precedes allocation and eviction.
+
+Purpose and exact target validate before the destination's single metadata GET;
+a new token remounts the same selected event. Preparation/current destination and
+saved arrival/current destination compare independently without rebasing earlier
+identities or flags. Unknown/pending stays explicit; failure, denial and retirement
+clear state. Explicit verified return restores only the complete original
+44-observation return, with zero action reads/writes and no further destination
+capture. Unavailable metadata yields selection only. Principal/TTL/request fences,
+exact filters and private matter confidentiality remain. No backend/provider/
+public-graph/deployment change.
+
+See [contract](HANDOFF_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_DESTINATION_ARRIVAL_EVENT.md)
+and dated synthetic evidence. All prior 3,272 frontend cases/90 files remain
+byte-identical; 122 new cases cover every retained pin and bounded preparation.
+All 4,521 backend identities and the workflow/eight jobs/workers/caps/PostgreSQL
+semantics remain unchanged. PR121 exact-head frontend/backend/backend-test/graph-runtime
+margins were 75/244/201/84 seconds; publication margin was 21 seconds. No publication
+workload is added; profile before additions. Require eight exact-head successes
+and measured timing floors before ordinary merge. Main CI is separate. R03/R05
+and legal/corpus/source-rights/lawyer acceptance remain partial.
+Next: separately retain this handoff's destination and reconcile it against a fresh
+authorized bounded queue, preserving the complete 46-observation purpose and
+every earlier observation without rebasing history.
