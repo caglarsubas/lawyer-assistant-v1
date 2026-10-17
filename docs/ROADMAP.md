@@ -3925,3 +3925,37 @@ profiling before additions. See [contract](COMPLETE_HANDOFF_DESTINATION_RETURN.m
 and dated synthetic evidence. R03/R05 and legal/corpus/rights/lawyer acceptance
 remain partial. Next: prepare an exact-event handoff carrying all59 observations;
 its implementation and PR are unstarted in this slice.
+
+### Guarded complete-destination exact-event handoff (59 retained observations)
+
+A dedicated61-observation purpose preserves the complete59 destination return,
+one fresh queue observation and one stable preparation. Explicit preparation uses
+two exact-event window1 reads with scope/token fences before and after each read;
+the first failure prevents the second read. One fresh destination GET compares
+preparation/current and saved destination/current independently. A verified
+explicit return restores original59 unchanged with zero action IO, without a new
+arrival capture. All59 pins, known/saved-only head packets, frozen evidence
+versions/manifests, exact seven customer/date fields/customer OR, chronology,
+admissions and independent review history remain bound without rebasing.
+
+Every public call revalidates complete history afresh with private operation-local
+checks. No unchecked history export, persistent verdict cache, recursive history
+model or weaker purpose projection. Preserve explicit matter membership, eight
+entries/30minutes/principal/session/reload closure and complete failure/scope/
+filter/window/target retirement. Private metadata remains outside public graphs,
+providers, shared caches and telemetry.
+
+Validation: unchanged4,607 cases/101 files plus147 new cases; a fresh two-lawyer
+synthetic browser with actual independent reviews before private edits, exact
+filters, early/late preparations, bounded reads, redirects, stale replies, denial,
+unknown/pending, zero-IO original return, metadata-only history and reload. Keep
+all4,521 backend identities and disjoint partitions,11 PostgreSQL races,44
+deployment contracts and122 application-image hashes. Require all eight exact-head
+checks and30s frontend/backend job/backend test/graph-runtime margins. Jobs,
+workers/caps/partitions/PG semantics remain unchanged. No publication workload;
+preceding PR publication margin26s requires profiling before additions. See the
+[contract](COMPLETE_DESTINATION_EVENT_HANDOFF.md) and dated synthetic evidence.
+R03/R05 and legal/corpus/rights/lawyer/deployment acceptance remain partial.
+Next: separately retain this complete61-observation purpose and its verified
+arrival, then reconcile through a fresh authorized bounded queue. That successor
+implementation and PR are unstarted in this slice.
