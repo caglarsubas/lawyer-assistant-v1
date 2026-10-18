@@ -14,8 +14,8 @@ env:
     backend/tests/test_runtime_authorization_integration.py
   CI_AUTHORITY_MODEL_TESTS: >-
     backend/tests/test_authority_model_trials.py
-  # Preserve x86 private analysis-review and firm permission coverage. The complete
-  # 27-case authority-cohort file returns to the measured ARM backend remainder.
+  # Keep firm permission/proposal coverage on x86. The complete review-cohort
+  # step uses the measured ARM backend headroom with its original cap/workers.
   # No cases, jobs, workers, deadlines, fixtures or assertions are removed.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_analysis_cohorts.py
@@ -101,6 +101,15 @@ jobs:
         run: |
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
           bash scripts/run_ci_tests.sh pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+      # Complete review group moves from the saturated frontend to measured ARM
+      # backend headroom. Keep all32 cases, two workers and its three-minute cap;
+      # the frontend retains all48 x86 workspace permission/proposal cases.
+      - name: Test confidential human review groups
+        timeout-minutes: 3
+        run: |
+          read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${human_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
+
       - name: Test backend
         timeout-minutes: 18
         run: |
@@ -229,11 +238,6 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
       # The real runtime authorization case returns to the backend partition,
       # whose measured margin protects this runner's five-minute budget.
-      - name: Test confidential human review groups
-        timeout-minutes: 3
-        run: |
-          read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${human_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
 
   final-release-authorization:
     # Existing jobs are within 30 seconds of their caps. New whole-release
