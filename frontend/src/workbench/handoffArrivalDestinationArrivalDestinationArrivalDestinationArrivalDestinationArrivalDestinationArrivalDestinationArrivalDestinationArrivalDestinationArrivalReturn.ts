@@ -1,0 +1,27 @@
+import { canonicalJson } from '../pages/matter/sourceReviewTypes';
+import type { PortfolioQueuePage } from '../pages/portfolioSourceQueueTypes';
+import type { NavigationMetadata, SourceTarget } from '../pages/sourceContextNavigationTypes';
+import type { ReviewLineage } from '../pages/sourceReviewLineageTypes';
+import { captureHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEventArrival, reconcileHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEventArrival, verifyHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEventArrival, type HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent } from './handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent';
+import type { ReturnIntent } from './portfolioReturn';
+import type { ReviewPathDestination } from './reviewPathHandoff';
+
+/** One complete handoff and one separate reduced arrival; no recursive return or window. */
+export type HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn = { recipe: 'private-handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-return-v1'; handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent; arrival: ReviewPathDestination };
+function shape(value: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn) {
+  if (!value || canonicalJson(Object.keys(value).sort()) !== canonicalJson(['arrival', 'handoff', 'recipe']) || value.recipe !== 'private-handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-return-v1')
+    throw new Error('Bütün hedef geçmişini koruyan geçiş varışının dönüş veya yeni kuyruk bağı doğrulanamadı. Yeni gözlem gerekli; önceki sonuç kullanılmadı.');
+}
+export function validateHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn(value: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn, intent: ReturnIntent) {
+  shape(value); verifyHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEventArrival(intent, value.handoff, value.arrival);
+}
+export function captureHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent, target: SourceTarget,
+  meta: NavigationMetadata | null, history: ReviewLineage | null): { intent: ReturnIntent; observation: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn | null } {
+  const next = captureHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEventArrival(intent, handoff, target, meta, history);
+  return { intent: next.intent, observation: next.arrival ? { recipe: 'private-handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-return-v1', handoff: structuredClone(handoff), arrival: next.arrival } : null };
+}
+/** Fresh authorized bounded observations only; omission reveals no saved arrival details. */
+export function reconcileHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn(intent: ReturnIntent, observation: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn,
+  page: PortfolioQueuePage, meta: NavigationMetadata | null, history: ReviewLineage | null, offset = 0) {
+  shape(observation); return reconcileHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEventArrival(intent, observation.handoff, observation.arrival, page, meta, history, offset);
+}
