@@ -3994,3 +3994,26 @@ evidence. R03/R05 and legal/corpus/rights/lawyer/deployment acceptance remain pa
 Next: a full-purpose exact-event handoff carrying the complete62-observation return
 plus fresh queue and preparation observations. That successor implementation and
 PR are unstarted in this slice.
+
+### Complete arrival return to exact-event handoff (62 retained observations)
+
+Explicit preparation retains the complete62 arrival return plus a fresh queue
+and stable preparation, totaling64 observations. Two guarded `window=1` reads
+must agree with the fresh authorized containing queue. Opening performs one
+exact-event metadata GET, with independent preparation/current and saved
+arrival/current comparisons. Verified explicit return restores original62
+unchanged with zero action IO; the new destination is not captured in this slice.
+Omission exposes no saved history or target read. Exact seven customer/date
+fields, customer OR, evidence versions/manifests, all retained packets and review
+history remain intact. No weaker purpose, cached verdict or permission bypass.
+
+Validation adds152 cases to unchanged4,897 cases/103 files, complete frontend
+profiling/build, a fresh two-lawyer synthetic browser rehearsal with18 actual
+private edits,11 PostgreSQL races,44 deployment contracts,4,521 disjoint backend
+identities and122 image-source hashes. CI jobs/workers/caps/partitions/semantics
+stay unchanged; actual exact-head eight-check success and30s frontend/backend
+job/test/graph-runtime margins remain merge gates. No publication workload or
+unchanged-code timing retry. See [contract](COMPLETE_ARRIVAL_EVENT_HANDOFF.md)
+and dated engineering evidence. R03/R05 and legal/corpus/rights/lawyer/deployment
+acceptance remain partial. Next: a separately guarded complete64 destination
+return; its implementation and PR are not included here.
