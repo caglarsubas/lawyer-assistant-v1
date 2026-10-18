@@ -4163,3 +4163,40 @@ billing guarantee. See [contract](COMPLETE_ARRIVAL_HISTORY_EVENT_HANDOFF.md) and
 dated engineering evidence. R03/R05 and legal/corpus/rights/lawyer/deployment
 acceptance remain partial. Next:guarded all70 destination return; implementation
 and PR are unstarted in this slice.
+
+
+
+### Complete arrival-history destination return (70 retained observations)
+
+Explicit verified return retains the original70 purpose unchanged plus one
+separate reduced destination:71 observations, with zero action IO. The original
+70-event return restoring68 and every older API/projection stay unchanged.
+Fresh authorized bounded containing-queue observation permits one exact metadata
+GET; omission exposes no saved history, target read, scan, retry or fallback.
+Saved destination/current, preparation/current and earlier arrival/current
+comparisons remain independent, without rebasing.
+
+Preserve all70 pins, known/saved-only heads, evidence versions/manifests, chronology,
+revisions/flags/admissions, exact seven customer/date/source-date/bucket fields,
+customer OR and independent review history. Full history is revalidated per public
+operation with one complete parent validation within reconciliation. No unchecked
+export, verdict cache, recursive abstraction, weaker event purpose or permission
+bypass. Eight entries/30minutes/principal/session/reload and all retirement fences
+remain intact. Private metadata stays outside public graphs/providers/shared
+caches/telemetry; stateless comparison and canonical fallback remain unchanged.
+
+160 new cases extend unchanged5731 cases/109 files; all5891 cases/110 files and
+build pass. Fresh two-lawyer rehearsal preserves both original70 purposes through
+23 actual private edits following independent reviews. The prepared schedule was
+corrected before rehearsal: stronger71 return102 disables older preparation;
+existing denial probes103..105 remain, then original100/101 produce successful
+returns106/107. No replacement event or weakened earlier assertion. Eleven real
+PG races,44 deployment contracts,4521 disjoint backend identities and122 app-image
+hashes pass. Workflow/eight jobs/workers/caps/architectures/partitions/PG semantics
+remain unchanged. Eight latest exact-head successes and30s frontend/backend job/
+backend test/graph-runtime margins remain merge gates; preceding-main CI is
+qualified separately. No publication workload, unchanged-code timing retry or
+billing guarantee. See [contract](COMPLETE_ARRIVAL_HISTORY_DESTINATION_RETURN.md)
+and dated engineering evidence. R03/R05 and legal/corpus/rights/lawyer/deployment
+acceptance remain partial. Next:all71-preserving exact-event handoff with fresh
+queue and stable preparation; implementation and PR are unstarted in this slice.
