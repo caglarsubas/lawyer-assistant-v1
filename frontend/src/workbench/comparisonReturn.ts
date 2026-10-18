@@ -1,3 +1,4 @@
+import { hasExactKeys, scalarDataRecordsEqual } from './privateObservationValidation';
 import { canonicalJson } from '../pages/matter/sourceReviewTypes';
 import { verifyPortfolioQueue, type PortfolioQueuePage } from '../pages/portfolioSourceQueueTypes';
 import type { NavigationMetadata, SourceTarget } from '../pages/sourceContextNavigationTypes';
@@ -11,9 +12,12 @@ export type ComparisonReturnReceipt = { recipe: 'private-comparison-return-recei
 const equal = (a: unknown, b: unknown) => canonicalJson(a) === canonicalJson(b);
 function fail(): never { throw new Error('Korunan karşılaştırmanın dönüş veya yeni kuyruk bağı doğrulanamadı. Yeni gözlem gerekli; önceki sonuç kullanılmadı.'); }
 const immutable = ({ admission: _admission, integrity: _integrity, ...value }: ReviewMetadata) => value;
+function equalImmutable(left: ReviewMetadata, right: ReviewMetadata) {
+  const a = immutable(left), b = immutable(right); return scalarDataRecordsEqual(a, b) ?? equal(a, b);
+}
 export function validateComparisonReturn(value: ComparisonReturnReceipt, intent: ReturnIntent) {
   validateReturn(intent);
-  if (!value || !equal(Object.keys(value).sort(), ['destination', 'handoff', 'intent', 'recipe'])
+  if (!value || !hasExactKeys(value, ['destination', 'handoff', 'intent', 'recipe'])
     || value.recipe !== 'private-comparison-return-receipt-v1' || !equal(value.intent, intent)) fail();
   verifyReviewPathDestination(intent, value.handoff, value.destination);
 }
@@ -51,7 +55,7 @@ export function reconcileComparisonReturn(intent: ReturnIntent, receipt: Compari
 export function compareDestinationIdentities(previous: ReviewPathDestination, fresh: ReviewPathDestination) {
   const before = previous.metadata, meta = fresh.metadata, head = fresh.head, oldHead = previous.head;
   if (Date.parse(meta.observed_at) < Date.parse(before.observed_at) || meta.analysis.revision < before.analysis.revision) fail();
-  if (head?.integrity === 'verified' && oldHead?.integrity === 'verified' && head.id === oldHead.id && !equal(immutable(head), immutable(oldHead))) fail();
+  if (head?.integrity === 'verified' && oldHead?.integrity === 'verified' && head.id === oldHead.id && !equalImmutable(head, oldHead)) fail();
   const knownHeads = head?.integrity === 'verified' && meta.historical_review.state !== 'unknown' && oldHead?.integrity === 'verified' && before.historical_review.state !== 'unknown';
   return {
     head_relation: (knownHeads ? head.id === oldHead.id ? 'same' : 'different' : 'unknown') as IdentityRelation,
@@ -68,7 +72,7 @@ export function validateComparisonObservation(intent: ReturnIntent, receipt: Com
 
 /** Strict reduced queue observation, bound to its own historical comparison baseline. */
 export function validateDestinationObservation(intent: ReturnIntent, handoff: ReviewPathHandoff, previous: ReviewPathDestination, value: ObservedComparison) {
-  if (!value || !equal(Object.keys(value).sort(), ['fresh', 'head_relation', 'queue_observed_at', 'revision_relation', 'state', 'version_relation']) || value.state !== 'observed'
+  if (!value || !hasExactKeys(value, ['fresh', 'head_relation', 'queue_observed_at', 'revision_relation', 'state', 'version_relation']) || value.state !== 'observed'
     || typeof value.queue_observed_at !== 'string' || value.queue_observed_at.length > 40 || !Number.isFinite(Date.parse(value.queue_observed_at))) fail();
   verifyReviewPathDestination(intent, handoff, value.fresh);
   if (Date.parse(value.queue_observed_at) < Date.parse(previous.metadata.observed_at) || Date.parse(value.fresh.metadata.observed_at) < Date.parse(value.queue_observed_at)) fail();

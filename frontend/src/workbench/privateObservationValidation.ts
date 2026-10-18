@@ -14,3 +14,28 @@ export function validCalendarDay(value: string): boolean {
   const limit = month === 2 ? leap ? 29 : 28 : [4, 6, 9, 11].includes(month) ? 30 : 31;
   return day <= limit;
 }
+
+/** Compare only scalar data records, without sorting, serialization or retained verdicts.
+ * null requires the caller's original canonical-JSON comparison. This is not
+ * observation validation; callers must still validate their complete history.
+ */
+export function scalarDataRecordsEqual(left: unknown, right: unknown): boolean | null {
+  if (!left || !right || typeof left !== 'object' || typeof right !== 'object' || Array.isArray(left) || Array.isArray(right)
+    || Object.hasOwn(Object.prototype, 'toJSON')) return null;
+  for (const value of [left, right]) {
+    const prototype = Object.getPrototypeOf(value);
+    if (prototype !== Object.prototype && prototype !== null) return null;
+  }
+  const a = left as Record<string, unknown>, b = right as Record<string, unknown>;
+  const aKeys = Object.keys(a), bKeys = Object.keys(b);
+  for (const [record, fields] of [[a, aKeys], [b, bKeys]] as const) {
+    for (const field of fields) {
+      const descriptor = Object.getOwnPropertyDescriptor(record, field)!;
+      if (!('value' in descriptor)) return null;
+      const value: unknown = descriptor.value;
+      if (value !== null && typeof value !== 'string' && typeof value !== 'boolean'
+        && !(typeof value === 'number' && Number.isFinite(value))) return null;
+    }
+  }
+  return aKeys.length === bKeys.length && aKeys.every(field => Object.hasOwn(b, field) && a[field] === b[field]);
+}

@@ -1,0 +1,390 @@
+{
+  "schema": "complete-whole-arrival-handoff-destination-return-engineering-v1",
+  "qualification_date": "2026-10-18",
+  "qualification_timezone": "Asia/Shanghai",
+  "recorded_at": "2026-10-18T03:38:44.218048+00:00",
+  "baseline_main_sha": "69c8db8f160d66fe8947da0d921058c616cd17cf",
+  "baseline_pr": 134,
+  "baseline_main_ci_at_local_capture": {
+    "run": 39091395951,
+    "status": "completed",
+    "conclusion": "success",
+    "successful_jobs": 8,
+    "separate_evidence_state": true
+  },
+  "origin": "Synthetic local engineering; invented matters,simulated source rights,providers disabled",
+  "frontend_cases_passed": 5235,
+  "frontend_files": 106,
+  "new_cases_passed": 186,
+  "destination_return_cases_passed": 148,
+  "scalar_comparison_cases_passed": 38,
+  "all_5049_previous_cases_104_files_fixtures_bodies_assertions_byte_identical": true,
+  "all_other_workbench_api_modules_byte_identical_except_declared_feature_and_profiled_primitives": true,
+  "frontend_full_wall_seconds": 105.71,
+  "new_file_wall_seconds": 4.76,
+  "original62_return_api_body_and_signature_byte_integrity": {
+    "base": "69c8db8f160d66fe8947da0d921058c616cd17cf",
+    "file": "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent.ts",
+    "function": "returnHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent",
+    "body_and_signature_sha256": "0ad9083ed396b9bd48a776cc0a8706533d33f20da0c9009bfcd31713d3c56aea",
+    "byte_identical_function_body_and_signature": true
+  },
+  "build_passed": true,
+  "ruff_exact_ci_configuration_passed": true,
+  "deployment_contracts_passed": 44,
+  "compose_config_passed_without_local_env": true,
+  "postgres_concurrency_cases_passed": 11,
+  "postgres_pytest_seconds": 20.09,
+  "browser": {
+    "synthetic_only": true,
+    "rights_simulated": true,
+    "production_qualified": false,
+    "legacy_foundation_rehearsed": true,
+    "both_sessions_external_requests_monitored": true,
+    "all62_prior_observations_preserved": true,
+    "complete_arrival_event_total_observations": 64,
+    "complete62_return_unchanged": true,
+    "eighteen_actual_private_edits": true,
+    "new64_destination_captured_on_current_return": true,
+    "all64_prior_observations_preserved": true,
+    "separate_whole_final_destination_observations": 65,
+    "nineteen_actual_private_edits": true,
+    "fresh_early_late_whole_final_destination_reconciliation": true,
+    "all56_prior_observations_preserved": true,
+    "including_new_queue_preparation_observations": 58,
+    "complete56_return_unchanged": true,
+    "fourteen_actual_private_edits": true,
+    "new_destination_captured_on_current_return": true,
+    "all61_prior_observations_preserved": true,
+    "separate_final_arrival_observations": 62,
+    "seventeen_actual_private_edits": true,
+    "fresh_early_late_final_arrival_reconciliation": true,
+    "current_ui_captures_complete61_plus_arrival": true,
+    "all59_prior_observations_preserved": true,
+    "complete_destination_event_total_observations": 61,
+    "complete59_return_unchanged": true,
+    "sixteen_actual_private_edits": true,
+    "new_arrival_not_captured_on_current_return": true,
+    "all58_prior_observations_preserved": true,
+    "separate_destination_observations": 59,
+    "fifteen_actual_private_edits": true,
+    "fresh_early_late_destination_reconciliation": true,
+    "all55_prior_observations_preserved": true,
+    "separate_arrival_observations": 56,
+    "thirteen_actual_private_edits": true,
+    "fresh_early_late_arrival_reconciliation": true,
+    "all53_prior_observations_preserved": true,
+    "including_queue_preparation_observations": 55,
+    "complete53_return_unchanged": true,
+    "new_arrival_captured_on_explicit_return": true,
+    "complete50_return_unchanged": true,
+    "new_destination_captured": true,
+    "complete47_return_unchanged": true,
+    "new_arrival_captured": true,
+    "complete44_return_unchanged": true,
+    "complete41_return_unchanged": true,
+    "exact_two_stable_window_one_reads": true,
+    "one_exact_destination_get": true,
+    "original_exported35_return_unchanged": true,
+    "complete37_handoff_unchanged": true,
+    "independent_new_preparation_saved_arrival_current_destination": true,
+    "separate_early_late_arrivals": true,
+    "before_read_target_redirects_rejected": true,
+    "dedicated_purpose_same_event_remount": true,
+    "complete_handoff_preserved": true,
+    "separate_early_late_destinations": true,
+    "destination_captured_only_on_explicit_return": true,
+    "zero_action_requests_on_capture": true,
+    "independent_preparation_saved_arrival_destination_comparisons": true,
+    "original_return_projections_unchanged": true,
+    "actual_two_later_independent_reviews_before_edits": true,
+    "actual_private_version_edits": true,
+    "twelve_actual_private_edits": true,
+    "separate_v3_v4_destinations_and_queue_comparisons": true,
+    "exact_customer_date_filters_preserved": true,
+    "one_authorized_queue_and_containing_event_get": true,
+    "omission_no_target_get_or_saved_details": true,
+    "packet_substitution_closed": true,
+    "denial_and_filter_retirement_clear_all": true,
+    "unknown_pending_explicit": true,
+    "failed_destination_selection_only": true,
+    "weaker_handoffs_withheld": true,
+    "reload_closes": true,
+    "narrow_overflow": false,
+    "browser_errors": [],
+    "external_requests": []
+  },
+  "browser_harness": {
+    "complete_attempts": 2,
+    "failed_complete_attempts": 0,
+    "final_fixture_database_suffix": 2,
+    "before_headroom_attempt_passed_and_retained": true,
+    "after_product_change_full_rehearsal_rebuilt_fresh_database": true,
+    "syntax_check_before_browser": true,
+    "public_health_and_frontend_200_before_complete_attempt": true,
+    "fresh_database": true,
+    "final_rebuilt_bundle": true,
+    "both_page_request_logs_including_failures_retained": true,
+    "only_routine_auth_me_and_scheduled_status_gets_separated": true,
+    "scope_refresh_gets_counted": true,
+    "real_independent_reviews_precede_private_version_edits": true,
+    "eight_entry_schedule": "Foundation1..82 retained;65return83 from64purpose81 after edit18;selection-only84..86;all older purpose assertions finish before87;edit19 and late65return87 from64purpose82;entries80..87 retain81/82/83/87;reload83",
+    "browsers_closed_unconditionally": true,
+    "wide_narrow_screenshots_visually_checked": true,
+    "owned_fixture_servers_stopped": true
+  },
+  "local_setup_failures_retained": [
+    "Progress peek preceded browser-log creation",
+    "New comparison test initially used toReversed beyond the existing ES2022 lib;changed only the new test to array-copy reverse;compiler settings unchanged",
+    "Duplicated absolute paths in copied ignored fixture,PostgreSQL and collection helpers;readiness rejected before browser or database creation;fixed paths and retained first logs;no product changes or frontend timing retry at setup; later CI headroom repair is a substantive separately qualified source change"
+  ],
+  "contract": {
+    "retained_prior_observations": 64,
+    "including_separate_destination": 65,
+    "fields": [
+      "recipe",
+      "handoff",
+      "destination"
+    ],
+    "explicit_capture_action_gets": 0,
+    "explicit_capture_action_writes": 0,
+    "fresh_containing_queue_gets": 1,
+    "exact_selected_metadata_gets_when_contained": 1,
+    "omission_target_gets": 0,
+    "omission_saved_history_exposed": false,
+    "original62_return_and_all_older_apis_projections_unchanged": true,
+    "new_destination_captured": true,
+    "both_unavailable_selection_only_partial_conflicting_redirected_reject": true,
+    "all64_selected_pins_and_known_saved_only_heads_checked": true,
+    "separate_destination_preparation_earlier_arrival_current_comparisons": true,
+    "complete_history_validated_afresh_per_public_operation": true,
+    "private_operation_local_checks_only": true,
+    "duplicate_full_parent_validation_in_reconciliation": false,
+    "exported_unchecked_checker": false,
+    "persistent_verdict_cache": false,
+    "recursive_history_abstraction": false,
+    "weaker_event_purpose_projections": false,
+    "exact7_customer_date_filters_customer_or_preserved": true,
+    "frozen_evidence_versions_manifests_and_review_history_preserved": true,
+    "explicit_same_firm_matter_membership": true,
+    "admin_or_customer_tag_bypass": false,
+    "private_metadata_in_public_graphs_providers_shared_caches_telemetry": false,
+    "entry_limit": 8,
+    "ttl_minutes": 30,
+    "browser_persistence": false
+  },
+  "ci": {
+    "partition": {
+      "schema": "complete-ci-partition-v1",
+      "counts": {
+        "complete": 4521,
+        "runtime": 1,
+        "preflight": 89,
+        "remaining": 3843,
+        "publication": 299,
+        "workspace": 48,
+        "human_review": 32,
+        "model_trials": 20,
+        "final_release": 20,
+        "withdrawal": 15,
+        "candidate": 15,
+        "graph_runtime": 139
+      },
+      "runtime_files": [
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "preflight_files": [
+        "backend/tests/test_validation_queries.py",
+        "backend/tests/test_validation_membership.py",
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_validation_syntax.py",
+        "backend/tests/test_rdfs_identifiers.py"
+      ],
+      "publication_files": [
+        "backend/tests/test_publication_cli.py",
+        "backend/tests/test_authority_revalidations.py",
+        "backend/tests/test_source_reviews.py",
+        "backend/tests/test_source_review_effort.py",
+        "backend/tests/test_source_analysis_reviews.py",
+        "backend/tests/test_source_context_renewals.py",
+        "backend/tests/test_source_review_readiness.py",
+        "backend/tests/test_portfolio_source_reviews.py",
+        "backend/tests/test_source_context_navigation.py",
+        "backend/tests/test_source_review_lineage.py"
+      ],
+      "workspace_files": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_authority_proposals.py"
+      ],
+      "human_review_files": [
+        "backend/tests/test_analysis_cohorts.py"
+      ],
+      "model_trial_files": [
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "intersection": 0,
+      "missing": 0,
+      "extra": 0,
+      "complete_node_ids_sha256": "b167d772d1b670bc19d2ecd002bb48d4f58a07075b38baef12dd41d9aabc1616",
+      "workflow_sha256": "c3cea8ea9067224bbffaf4c5f85ab1a097bc058e28877866a81a89364a28607e",
+      "job_deadlines_and_worker_counts_unchanged": true,
+      "workspace_workers": 2,
+      "human_review_workers": 2,
+      "human_review_new_step_minutes": 3,
+      "new_graph_runtime_job_minutes": 6,
+      "new_graph_runtime_workers": 2,
+      "hosted_speedup_or_billing_savings_established": false
+    },
+    "workflow_changed": false,
+    "all_eight_jobs_workers_caps_architectures_partitions_unchanged": true,
+    "backend_image_current_app_files": 122,
+    "backend_image_source_match": true,
+    "initial_run_rejected_for_headroom": {
+      "run": 39092767606,
+      "head": "e7d09b06a7180a37252a7c12af4b086af2f5042f",
+      "frontend_seconds": 272,
+      "margin_seconds": 28,
+      "required_margin_seconds": 30,
+      "cancelled": true,
+      "backend_cancelled_seconds": 542,
+      "merge_attempted": false,
+      "same_code_rerun": false
+    },
+    "stateless_headroom_repair": {
+      "cpu_profile": "CPU samples identified repeated canonical serialization in review-path,comparison-return and comparison-event validation",
+      "schema_key_serialization_removed": true,
+      "scalar_data_record_comparison": true,
+      "fallback_to_original_canonical_json": true,
+      "canonical_serializer_module_unchanged": true,
+      "ten_thousand_reference_record_pairs": true,
+      "no_retained_verdict": true,
+      "benchmark": {
+        "iterations_per_round": 50000,
+        "rounds": 3,
+        "rows": [
+          {
+            "round": 0,
+            "name": "original",
+            "ms": 61.548958999999996
+          },
+          {
+            "round": 0,
+            "name": "candidate",
+            "ms": 13.045749999999998
+          },
+          {
+            "round": 1,
+            "name": "candidate",
+            "ms": 10.916875000000005
+          },
+          {
+            "round": 1,
+            "name": "original",
+            "ms": 60.60779199999999
+          },
+          {
+            "round": 2,
+            "name": "original",
+            "ms": 60.477750000000015
+          },
+          {
+            "round": 2,
+            "name": "candidate",
+            "ms": 10.581124999999986
+          }
+        ],
+        "count": 199998,
+        "matching_outputs": true,
+        "no_cached_verdicts": true,
+        "diagnostic_only": true
+      },
+      "all_5197_previous_cases_105_files_byte_identical": true
+    },
+    "local_clean_tsc_and_two_worker_suite_profile": {
+      "baseline": [
+        {
+          "name": "clean-tsc",
+          "seconds": 5.169,
+          "exit_code": 0
+        },
+        {
+          "name": "two-worker-suite",
+          "seconds": 75.771,
+          "exit_code": 0
+        }
+      ],
+      "initial_before_repair": [
+        {
+          "name": "clean-tsc",
+          "seconds": 7.808,
+          "exit_code": 0
+        },
+        {
+          "name": "two-worker-suite",
+          "seconds": 169.657,
+          "exit_code": 0
+        },
+        {
+          "name": "build",
+          "seconds": 16.525,
+          "exit_code": 0
+        }
+      ],
+      "current": [
+        {
+          "name": "clean-tsc",
+          "seconds": 10.427,
+          "exit_code": 0
+        },
+        {
+          "name": "two-worker-suite",
+          "seconds": 106.355,
+          "exit_code": 0
+        },
+        {
+          "name": "build",
+          "seconds": 14.596,
+          "exit_code": 0
+        }
+      ],
+      "unchanged_architecture_and_worker_count": true,
+      "hosted_timing_guarantee": false,
+      "initial_before_repair_unchanged_file_profile_comparison": {
+        "files": 104,
+        "median_runtime_ratio": 2.398344195335187,
+        "code_causality_established": false
+      }
+    },
+    "publication_workload_added": false,
+    "profile_before_adding_publication_work": true,
+    "preceding_pr_frontend_seconds": 197,
+    "preceding_pr_frontend_margin_seconds": 103,
+    "minimum_final_gate_margin_seconds": 30,
+    "exact_head_required_before_merge": true,
+    "unchanged_code_timing_retries": 0,
+    "hosted_final_status": "Pending at local capture;actual final timings and merge proof retained separately in PR description",
+    "billing_savings_guaranteed": false
+  },
+  "canonical_serializer_module_byte_identical_to_base": true,
+  "source_sha256": {
+    "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturnPanel.tsx": "409b2f6b9474af8b9e4383489a813e83671eea54d06cef7fd242f9cb4968863e",
+    "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEventPanel.tsx": "bcd3d509a30f6686738b959e8ed41ac80d2b8831aa08dfa5a2ea1d0bb27826dd",
+    "frontend/src/pages/PortfolioReturnQueue.tsx": "738272597a961ded495a9df3a8c3bf00542efdd2c299dbc89dd3a70c573f6106",
+    "frontend/src/pages/SelectedSourceReviewPage.tsx": "175dfa8ac2e2ce90d8ce532c1358f3cf0cd8265b27d2672148b344352daf9678",
+    "frontend/src/workbench/comparisonEventHandoff.ts": "7254e25bb80ddf11bf6e6b7b7f7e19cf69d64f8fd6a952c0b4e2db322f759844",
+    "frontend/src/workbench/comparisonReturn.ts": "cedcdefee738879d00a7f6d3fa70dcd9b19a77eb9240e7ccd7e02a324d5f7657",
+    "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn.test.tsx": "1524dc766f0dc791f4929d1e288f7964ba3bceee362ed2e735a12b3df3c4e413",
+    "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn.ts": "67759de60e1e8499e484c2238ee22748d906dcf0fd616ec2fa33c21bb01b7cc1",
+    "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent.ts": "594ab4d155fb8b6412126947e0af0dfbbb3a22a9efa4f7fb2184aaa76d4b4140",
+    "frontend/src/workbench/portfolioReturn.ts": "761c6b4eb2a05f5994d4dd97201936c955fa698529e5553a0b542d4c39065fe4",
+    "frontend/src/workbench/privateObservationValidation.ts": "c630f67f27ccb6796110c3acb2963044cd14a668091179ffc9becf86b1ee016b",
+    "frontend/src/workbench/reviewPathHandoff.ts": "556e892611d051d18abcc43935f4c9c71b94f7d08d44d426ab607623aa5c17b1",
+    "frontend/src/workbench/scalarDataRecordsEqual.test.ts": "c2a93b8fe895707a29a0f8db0403d1196fdde61fa8db500d6705d5334e000b17"
+  },
+  "limitations": [
+    "Synthetic engineering only;R03/R05 remain partial",
+    "No legal,national-corpus,source-rights or lawyer acceptance",
+    "No backend,provider,credential,deployed runtime or dirty primary checkout changes",
+    "Successor complete65 exact-event handoff implementation and PR unstarted"
+  ]
+}

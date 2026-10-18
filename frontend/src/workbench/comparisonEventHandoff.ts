@@ -1,3 +1,4 @@
+import { hasExactKeys } from './privateObservationValidation';
 import { canonicalJson } from '../pages/matter/sourceReviewTypes';
 import type { NavigationMetadata, SourceTarget } from '../pages/sourceContextNavigationTypes';
 import { verifyReviewLineage, type ReviewLineage } from '../pages/sourceReviewLineageTypes';
@@ -21,7 +22,7 @@ export function comparisonEventAvailable(intent: ReturnIntent, receipt: Comparis
   validateComparisonObservation(intent, receipt, value); return admitted(value.fresh);
 }
 export function validateComparisonEventHandoff(value: ComparisonEventHandoff, intent: ReturnIntent) {
-  if (!value || !equal(Object.keys(value).sort(), ['observed_at', 'prepared', 'queue', 'receipt', 'recipe']) || value.recipe !== 'private-comparison-event-handoff-v1') fail();
+  if (!value || !hasExactKeys(value, ['observed_at', 'prepared', 'queue', 'receipt', 'recipe']) || value.recipe !== 'private-comparison-event-handoff-v1') fail();
   validateComparisonObservation(intent, value.receipt, value.queue); verifyReviewPathDestination(intent, value.receipt.handoff, value.prepared);
   if (!admitted(value.queue.fresh) || !admitted(value.prepared) || !equal(stable(value.queue.fresh), stable(value.prepared))
     || !Array.isArray(value.observed_at) || value.observed_at.length !== 2 || value.observed_at.some(time => !stamp(time))

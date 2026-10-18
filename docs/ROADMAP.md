@@ -4017,3 +4017,44 @@ unchanged-code timing retry. See [contract](COMPLETE_ARRIVAL_EVENT_HANDOFF.md)
 and dated engineering evidence. R03/R05 and legal/corpus/rights/lawyer/deployment
 acceptance remain partial. Next: a separately guarded complete64 destination
 return; its implementation and PR are not included here.
+
+### Complete arrival handoff destination return (64 retained observations)
+
+Explicit verified return preserves the complete64 purpose plus a separate reduced
+destination, totaling65 observations, with zero action IO. The original62-return
+function body/signature and every older return projection remain unchanged.
+A fresh authorized bounded containing queue permits one exact-event metadata GET;
+omission exposes no saved history or target read. Saved destination/current,
+preparation/current and earlier arrival/current comparisons remain independent,
+with all64 pins, known/saved-only heads, evidence versions/manifests, exact seven
+customer/date fields/customer OR and independent review history intact.
+
+Public operations validate complete history afresh through private local checks,
+with exactly one complete parent validation in reconciliation. No unchecked
+checker, cached verdict, recursive history model, weaker event purpose or matter
+permission bypass. Preserve eight entries/30minutes/principal/session/reload and
+failure/filter/scope/window/target retirement; private metadata remains outside
+public graphs/providers/shared caches/telemetry.
+
+Validation adds148 destination-return cases and38 scalar-comparison cases to
+unchanged5,049 cases/104 files, clean TypeScript and
+full two-worker profiles/build, a fresh two-lawyer synthetic rehearsal with19
+actual private edits after independent reviews,11 real PostgreSQL races,44
+deployment contracts,4,521 disjoint backend identities and122 image-source hashes.
+Jobs/workers/caps/partitions/PG semantics stay unchanged. Eight exact-head successes
+and30s frontend/backend job/test/graph-runtime margins remain merge gates, with
+preceding-main CI qualified separately. No publication workload or unchanged-code
+timing retry. See [contract](COMPLETE_WHOLE_ARRIVAL_DESTINATION_RETURN.md) and dated
+engineering evidence. R03/R05 and legal/corpus/rights/lawyer/deployment acceptance
+remain partial. Next: a complete65-preserving exact-event handoff plus fresh queue
+and preparation; its implementation and PR are unstarted in this slice.
+
+
+The initial frontend check passed in272/300 seconds but failed the30-second
+headroom gate; it was not merged and remaining CI work was cancelled. Profiling
+identified repeated key and scalar-identity serialization. Stateless exact-key
+and scalar-data comparisons remove that work, with canonical fallback for
+unsupported values, no retained verdict and an unchanged canonical serializer.
+All5,197 existing cases/105 files remain byte-identical;38 new equivalence cases
+cover10,000 record pairs and edge cases. Full suite/build and a fresh complete
+browser rehearsal qualify the substantive fix before new exact-head CI.
