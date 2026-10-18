@@ -4389,7 +4389,7 @@ reduced destination:83 observations. Capture has zero action IO; fresh authorize
 one exact metadata GET reconciles it. Independent comparisons, exact customer/date filters,
 evidence versions, confidentiality and review history remain. Original 80/earlier77 return
 APIs and older projections remain unchanged. Stronger destinations disable weaker preparation.
-All 7,347 frontend cases/119 files and build pass;180 new cases extend unchanged 7,167/118.
+All 7,348 frontend cases/119 files and build pass;181 new cases extend unchanged 7,167/118.
 Fresh two-lawyer rehearsal preserves132/133 in returns138/139 around actualedit31, stronger
 return134 and selection-only135..137. Eleven realPG cases,44 deployment contracts,4,521
 disjoint IDs and 122 app-image hashes pass. Preceding-main eight-job qualification is
@@ -4399,3 +4399,11 @@ No publication workload,timing retry,billing promise or deployment. See
 [contract](COMPLETE_FULL_ARRIVAL_DESTINATION_RETURN.md) and dated evidence. R03/R05 and
 legal/corpus/rights/lawyer acceptance remain partial. Next:original 83 exact-event handoff;
 implementation and PR unstarted.
+
+Initial exact-head CI passed all eight but frontend margin was only20s, below30s;
+merge held. Root handoff CPU profiling drove current-timestamp parse reuse and existing
+stateless scalar comparison reuse with canonical fallback. Complete history validation,
+all118 prior test files, workflow and caps remain unchanged. Changed-source qualification
+adds a 65-boundary differential test, full suite/build and fresh browser rehearsal.
+Local two-worker suite:88.849 to68.679s. Initial and changed-source evidence remain
+separate; new exact-head margins are required.

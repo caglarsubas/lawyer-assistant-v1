@@ -31,8 +31,8 @@
     "old_event_return_signature_complete_body_unchanged": true,
     "stateless_fast_path_20_parity_cases_and_canonical_fallback_unchanged": true,
     "validation_cache_or_recursive_history_model_added": false,
-    "frontend_passed": 7347,
-    "new_cases": 180,
+    "frontend_passed": 7348,
+    "new_cases": 181,
     "frontend_files": 119,
     "production_build_passed": true,
     "prior_profile": [
@@ -50,17 +50,17 @@
     "current_profile": [
       {
         "name": "clean-tsc",
-        "seconds": 6.988,
+        "seconds": 5.957,
         "exit_code": 0
       },
       {
         "name": "two-worker-suite",
-        "seconds": 88.849,
+        "seconds": 68.679,
         "exit_code": 0
       },
       {
         "name": "build",
-        "seconds": 13.76,
+        "seconds": 8.145,
         "exit_code": 0
       }
     ],
@@ -227,7 +227,59 @@
       "resolution": "renamed only the new fixture locals;all118 existing test files untouched",
       "application_behavior_changed": false,
       "browser_fixture_started": false
-    }
+    },
+    "performance_fix": {
+      "source": "frontend/src/workbench/reviewPathHandoff.ts",
+      "cpu_profile": "/Users/caglarsubasi/.codex/worktrees/r05a-authority-context/lawyer-assistant-v1/.data/verification/r03-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-return/cpu-before-summary.json",
+      "unmodified_source": "76e74094ff6a1baf0cf52b8b497b4d869c632ee7",
+      "profiled_full_suite_passed": 7347,
+      "changes": [
+        "reuse existing stateless scalar-data equality, with original canonical fallback",
+        "parse the current timestamp once per callback visit, retaining predecessor comparison and complete fresh validation"
+      ],
+      "new_differential_test": "65 timestamp type, timezone, parse and ordering cases plus mutation freshness",
+      "old_prior_tests_changed": 0,
+      "new_cache_or_skipped_guard": false,
+      "initial_local_profile": [
+        {
+          "name": "clean-tsc",
+          "seconds": 6.988,
+          "exit_code": 0
+        },
+        {
+          "name": "two-worker-suite",
+          "seconds": 88.849,
+          "exit_code": 0
+        },
+        {
+          "name": "build",
+          "seconds": 13.76,
+          "exit_code": 0
+        }
+      ],
+      "changed_local_profile": [
+        {
+          "name": "clean-tsc",
+          "seconds": 5.957,
+          "exit_code": 0
+        },
+        {
+          "name": "two-worker-suite",
+          "seconds": 68.679,
+          "exit_code": 0
+        },
+        {
+          "name": "build",
+          "seconds": 8.145,
+          "exit_code": 0
+        }
+      ],
+      "initial_ci_frontend_seconds": 280,
+      "initial_ci_frontend_margin": 20,
+      "new_exact_head_ci": "pending"
+    },
+    "verification_directory": "/Users/caglarsubasi/.codex/worktrees/r05a-authority-context/lawyer-assistant-v1/.data/verification/r03-83-destination-return-capacity",
+    "initial_verification_directory_retained": "/Users/caglarsubasi/.codex/worktrees/r05a-authority-context/lawyer-assistant-v1/.data/verification/r03-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-return"
   },
   "ci": {
     "preceding_main_run": 39141505924,
@@ -303,17 +355,40 @@
     ],
     "exact_head_ci": "pending;must be verified before merge",
     "unchanged_code_timing_retry": 0,
-    "billing_guarantee": false
+    "billing_guarantee": false,
+    "initial_head_capacity_failure_retained": {
+      "head": "76e74094ff6a1baf0cf52b8b497b4d869c632ee7",
+      "run": 39145918874,
+      "all_eight_checks": "success",
+      "timings": {
+        "graph-runtime-contracts": 274,
+        "graph-candidate-contracts": 116,
+        "postgres-snapshot-concurrency": 227,
+        "source-publication-contracts": 155,
+        "backend-and-contracts": 944,
+        "frontend": 280,
+        "retained-release-withdrawal": 118,
+        "final-release-authorization": 281,
+        "backend_test": 863
+      },
+      "frontend_margin_seconds": 20,
+      "required_margin_seconds": 30,
+      "eligible_for_merge": false,
+      "action": "held;changed source optimization before new CI;no unchanged-code retry",
+      "cancellation": "HTTP403;not cancelled;first run completed success"
+    },
+    "source_optimization_before_new_run": true
   },
   "source_sha256": {
     "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturnPanel.tsx": "85f0adb868351a0077d71fdd4fe9392c125fa9aa7f710bad2a94e7ee6326968a",
     "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEventPanel.tsx": "699345720df01a6e0e3c07df5ccc96b3a5298a3778b699289348030844401004",
     "frontend/src/pages/PortfolioReturnQueue.tsx": "1a1f24f216c0de691e9864e4195457bad2eb7bf1313daa90d860a762ebcede62",
     "frontend/src/pages/SelectedSourceReviewPage.tsx": "b2edc45d29599dd834aa7150a533ee8426b669d8237b7d4ae2067601f83741a2",
-    "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn.test.tsx": "dcc73fad9a133ca4d404aa30022b89aec03b890c9877d5feeeddd3b546a18df5",
+    "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn.test.tsx": "a6e95c49ed7bbf8b71f75b8785949bc66dde617cf146dba3a29dbab57f427b27",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn.ts": "a6c7b3a29e81c4704658948ee8f0201b0ed3f97f7ea697fc02e09eab1af50c91",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent.ts": "300c6190d13463607f93de1c386d08c783c173d158ff7d7067b2012aed5b2c0a",
-    "frontend/src/workbench/portfolioReturn.ts": "982325972439956e3be2c802c939ffdae91dd0337cb0bd9bf9964480ebfff98d"
+    "frontend/src/workbench/portfolioReturn.ts": "982325972439956e3be2c802c939ffdae91dd0337cb0bd9bf9964480ebfff98d",
+    "frontend/src/workbench/reviewPathHandoff.ts": "3bae585b2589a9c5c749497234c3681ef6a4463c3fb54eff56de5a88e609a091"
   },
   "unchanged_critical_sha256": {
     "frontend/src/workbench/plainObservationDataEqual.ts": "ead4b0ffd8e59642b04cb78b23a3de6a0af8884f73e9118c21035b744ec752fd",

@@ -32,7 +32,7 @@ Explicit same-firm matter membership is required. Administrators and customer ta
 grant access. Private metadata stays outside public Graph A/B, providers, shared caches and
 telemetry. Identity snapshots contain neither source bodies nor review notes.
 
-All 7,347 frontend cases/119 files, forced TypeScript and production build pass. The 180
+All 7,348 frontend cases/119 files, forced TypeScript and production build pass. The 181
 new cases extend 7,167 unchanged cases/118 files. Independent original 82 fixtures are cloned
 per case. Tests cover every retained pin, 52 known-head substitutions, a saved-only head,
 all filters, strict shapes including undefined keys, chronology/revisions/flags, per-call
@@ -61,3 +61,22 @@ No unchanged-code timing retry or universal timing/billing guarantee.
 
 Next finite slice: original 83 exact-event handoff; implementation and PR unstarted.
 No backend, provider, credentials, deployment or dirty primary-checkout changes.
+
+## CI capacity correction
+
+The first submitted head passed all eight checks, but frontend used 280/300 seconds,
+leaving only 20 seconds against the required 30. It was held from merge. GitHub denied
+cancellation with HTTP 403; the run completed and remains retained as a capacity failure.
+
+A full 7,347-case CPU profile identified repeated timestamp parsing and canonical sorting
+in the shared root handoff validator. It now parses the current primitive once per visit
+and uses the existing stateless scalar equality helper before the unchanged canonical
+fallback. Every history and predecessor check still runs afresh. No cache, guard removal,
+workflow or deadline changes. The unchanged 118 prior test files remain byte-identical;
+one new differential test exercises 65 timestamp/type/timezone/ordering boundaries and
+subsequent mutation. All 7,348 cases/119 files, forced TypeScript and build pass again.
+The local two-worker suite fell from 88.849 to 68.679 seconds; hosted timing remains a
+separate qualification. A fresh two-lawyer database repeats the complete browser rehearsal.
+First-attempt qualification, CPU profiles, logs and fixtures remain separate from changed-source
+results. New exact-head CI must establish all four 30-second margins before merge.
+No unchanged-code rerun or timing/billing guarantee.

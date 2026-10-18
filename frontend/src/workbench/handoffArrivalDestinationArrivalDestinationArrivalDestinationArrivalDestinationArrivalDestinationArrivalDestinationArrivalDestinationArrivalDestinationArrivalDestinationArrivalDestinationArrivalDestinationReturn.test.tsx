@@ -12,7 +12,7 @@ import type { NavigationMetadata, SourceTarget } from '../pages/sourceContextNav
 import type { ReviewLineage, ReviewMetadata } from '../pages/sourceReviewLineageTypes';
 import type { PortfolioQueuePage } from '../pages/portfolioSourceQueueTypes';
 import { PortfolioReturnBook, PrincipalReturnBook, type ReturnIntent } from './portfolioReturn';
-import type { ReviewPathHandoff } from './reviewPathHandoff';
+import { validateReviewPathHandoff, type ReviewPathHandoff } from './reviewPathHandoff';
 import { captureComparisonReturn, reconcileComparisonReturn, type ComparisonReturnReceipt } from './comparisonReturn';
 
 import { prepareComparisonEvent } from './comparisonEventHandoff';
@@ -491,4 +491,20 @@ describe('guarded handoff-arrival-destination-arrival-destination-arrival-destin
 
   it('does not expose any weaker event-purpose projection from the complete83 return',()=>{const f=completeFullArrivalChainDestinationReturnSaved(),book=new PortfolioReturnBook(),key=book.putHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn(f.i,f.o);for(const value of [book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalDestinationEvent(key),book.getHandoffArrivalDestinationArrivalDestinationArrivalEvent(key),book.getHandoffArrivalDestinationArrivalDestinationEvent(key),book.getHandoffArrivalDestinationArrivalEvent(key),book.getHandoffArrivalDestinationEvent(key),book.getHandoffArrivalEvent(key),book.getHandoffDestinationEvent(key),book.getCarriedDestinationArrivalEvent(key),book.getCarriedDestinationEvent(key),book.getCarriedArrivalEvent(key),book.getOnwardEvent(key),book.getArrivalEvent(key),book.getComparisonEvent(key)])expect(value).toBeNull();});
 
+});
+
+// Differential boundary cases against the retained timestamp-ordering predicate.
+it('retains timestamp acceptance and ordering while parsing each current value once', () => {
+  const values: unknown[] = [stamp, '2026-10-15T02:00:00+01:00', '2026-10-15T00:59:59Z',
+    '2026-10-15T01:00:01Z', '2026-10-15T01:00:00.000Z', 'Thu, 15 Oct 2026 01:00:00 GMT',
+    'invalid', '', 'x'.repeat(41), null, undefined, 0, NaN];
+  for (let index = 0; index < 5; index++) for (const value of values) {
+    const sample = handoff(); sample.observed_at[index] = value as string;
+    const rejects = sample.observed_at.some((time, position) => typeof time !== 'string' || time.length > 40
+      || !Number.isFinite(Date.parse(time)) || position > 0 && Date.parse(time) < Date.parse(sample.observed_at[position - 1]));
+    if (rejects) expect(() => validateReviewPathHandoff(sample, intent())).toThrow();
+    else expect(() => validateReviewPathHandoff(sample, intent())).not.toThrow();
+  }
+  const sample = handoff(); validateReviewPathHandoff(sample, intent());
+  sample.observed_at[2] = 'invalid'; expect(() => validateReviewPathHandoff(sample, intent())).toThrow();
 });

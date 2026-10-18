@@ -11,7 +11,7 @@ export type ReviewPathHandoff = {
   frozen_version_id: string; manifest_sha256: string; selected: ReviewMetadata; head: ReviewMetadata;
   current_version_id: string; revision: number; observed_at: [string, string, string, string, string];
 };
-const equal = (a: unknown, b: unknown) => canonicalJson(a) === canonicalJson(b);
+const equal = (a: unknown, b: unknown) => scalarDataRecordsEqual(a, b) ?? canonicalJson(a) === canonicalJson(b);
 const fail = (): never => { throw new Error('Zincir geçişi ile hedefin tam kimlik gözlemleri doğrulanamadı. Yeni portföy gözlemi gerekli; başka kayıt kullanılmadı.'); };
 const immutable = ({ admission: _admission, integrity: _integrity, ...value }: ReviewMetadata) => value;
 function equalImmutable(left: ReviewMetadata, right: ReviewMetadata) {
@@ -23,7 +23,12 @@ export function validateReviewPathHandoff(value: ReviewPathHandoff, intent: Retu
     || value.recipe !== 'private-review-path-handoff-v1' || value.matter_id !== t.matter_id || value.analysis_id !== t.analysis_id || value.context_id !== t.context_id
     || value.frozen_version_id !== t.version_id || value.manifest_sha256 !== t.manifest_sha256 || !navigationIdentifier(value.current_version_id)
     || !Number.isSafeInteger(value.revision) || value.revision < 1 || !Array.isArray(value.observed_at) || value.observed_at.length !== 5
-    || value.observed_at.some((time, index) => typeof time !== 'string' || time.length > 40 || !Number.isFinite(Date.parse(time)) || index > 0 && Date.parse(time) < Date.parse(value.observed_at[index - 1]))) fail();
+    || value.observed_at.some((time, index) => {
+      if (typeof time !== 'string' || time.length > 40) return true;
+      // Parse this primitive once per visit; no verdict survives this operation.
+      const current = Date.parse(time);
+      return !Number.isFinite(current) || index > 0 && current < Date.parse(value.observed_at[index - 1]);
+    })) fail();
   verifyReviewMetadata(value.selected, t.manifest_sha256); verifyReviewMetadata(value.head, t.manifest_sha256);
   if (!t.review_id || !t.review_packet_sha256 || value.selected.id !== t.review_id || value.selected.packet_sha256 !== t.review_packet_sha256
     || [value.selected, value.head].some(row => row.integrity !== 'verified' || row.admission !== 'complete')
