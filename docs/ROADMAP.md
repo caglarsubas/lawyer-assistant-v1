@@ -4276,3 +4276,27 @@ plain-data fast path at two call sites preserves canonical fallback and complete
 history validation,with all6235 initial cases/112files unchanged. Full local
 suite60.745->53.820s;freshDB/fullbrowser rerun required before corrected submission.
 No workflow/cap/worker/partition change or unchanged-code timing retry.
+
+### Complete arrival-chain exact-event handoff (74 retained observations)
+
+The complete original74 return remains unchanged,including original73 queue/preparation
+and separate arrival. Fresh queue and stable preparation make76 observations. Explicit
+preparation performs two stable window1 reads;opening uses one exact metadata GET.
+Saved arrival/current,preparation/current and earlier saved destination/current remain
+independent. Explicit verified return restores original74 unchanged with zero action IO;
+no further destination capture or weaker purpose is added.
+
+Preserve all74 pins,known/saved-only heads,evidence versions/manifests,history,seven exact
+filters,customer OR and all confidentiality/retirement fences. Complete history is checked
+afresh per public call;stateless equality fast path,20 parity cases and canonical fallback
+are unchanged. All6255 prior cases/113 files remain byte-identical;184 new cases bring
+the passing total to6439/114 files. Fresh two-lawyer rehearsal retains114/115 in116/117
+around actual edit26,zero-IO original74return118 and selection-only119..121.
+
+Eleven realPG races,44 deployment contracts,4521 disjoint backend IDs and122 app-image
+hashes pass. Workflow,eight jobs,workers,caps,architecture,partitions andPG semantics stay.
+Require eight latest exact-head successes and30s frontend/backend job/test/graph margins;
+preceding-main CI qualified separately. No unchanged-code timing retry or billing guarantee.
+See [contract](COMPLETE_ARRIVAL_CHAIN_EVENT_HANDOFF.md) and dated engineering evidence.
+R03/R05 and legal/corpus/rights/lawyer/deployment acceptance remain partial. Next:complete76
+destination return;implementation and PR unstarted in this slice.
