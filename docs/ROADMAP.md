@@ -4058,3 +4058,39 @@ unsupported values, no retained verdict and an unchanged canonical serializer.
 All5,197 existing cases/105 files remain byte-identical;38 new equivalence cases
 cover10,000 record pairs and edge cases. Full suite/build and a fresh complete
 browser rehearsal qualify the substantive fix before new exact-head CI.
+
+
+### Complete destination-history exact-event handoff (65 retained observations)
+
+A dedicated purpose retains the complete65 destination return plus fresh queue
+and stable preparation:67 observations. Explicit preparation uses exactly two
+selected-event window1 metadata GETs with scope/token/operation fences before and
+after both awaits; first failure stops the second. Destination opening uses one
+exact metadata GET. Preparation/current and saved destination/current comparisons
+stay independent. Explicit verified return restores the original65 unchanged,
+without action IO or another arrival capture. Omission exposes no saved history
+or target read; partial, conflicting and redirected inputs reject.
+
+All65 selected pins, known/saved-only heads, evidence versions/manifests, chronology,
+revisions/flags/admissions, exact seven customer/date fields/customer OR and
+independent review history remain intact. Full history is validated afresh per
+public call using private local checks and the unchanged stateless comparison
+primitives/canonical fallback. No unchecked export, cached verdict, recursive
+history model, weaker purpose or permission bypass. Preserve eight entries,
+30minutes, principal/session/reload and failure/filter/window/target retirement;
+private metadata stays outside public graphs/providers/shared caches/telemetry.
+
+Validation adds168 cases to unchanged5,235 cases/106 files; clean TypeScript,
+full two-worker profiles/build and a fresh two-lawyer synthetic rehearsal with20
+actual private edits after independent reviews pass. Two full browser-rehearsal attempts exposed duplicate comparison/disclosure labels;
+distinct new root labels and uniqueness assertions, full rebuild and fresh database
+qualified the fix. Both failed attempts and all earlier assertions remain retained.
+Eleven real PostgreSQL races,44 deployment contracts,4,521 disjoint backend identities
+and122 application-image hashes pass. CI jobs/workers/caps/partitions/PG semantics
+remain unchanged. Eight exact-head successes and30s frontend/backend job/test/graph
+margins remain merge gates; preceding-main CI is qualified separately. No publication
+workload, unchanged-code timing retry or bypass. Actual CI/merge receipts remain
+separate from local capture. See [contract](COMPLETE_DESTINATION_HISTORY_EVENT_HANDOFF.md)
+and dated engineering evidence. R03/R05 and legal/corpus/rights/lawyer/deployment
+acceptance remain partial. Next: guarded complete67 arrival return; its implementation
+and PR are unstarted in this slice.
