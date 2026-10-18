@@ -4363,3 +4363,21 @@ No publication workload,timing retry,billing promise or deployment. See
 [contract](COMPLETE_FULL_DESTINATION_ARRIVAL_RETURN.md) and dated evidence. R03/R05 and
 legal/corpus/rights/lawyer acceptance remain partial. Next:original80 exact-event handoff;
 implementation and PR unstarted.
+
+### Complete arrival-chain exact-event handoff (80 retained observations)
+
+Original 80 remains byte-identical, including complete79 handoff/preparation/queue/stamps and
+separate arrival. Fresh queue and stable preparation make 82 observations. Two stable
+window1 reads prepare; one exact metadata GET opens; verified return restores original 80
+with zero action IO and no destination capture. All evidence pins, filters, review history,
+private-matter confidentiality, independent identity comparisons and retirement fences
+remain. No weaker purpose or cached verdict; stateless comparisons/canonical fallback
+unchanged. All 7,167 tests/118 files and build pass; 194 new cases extend unchanged 6,973/117.
+Fresh two-lawyer rehearsal retains130/131 in132/133 around actualedit30, original 80return134
+and selection-only135..137. Eleven realPG races,44 deployment contracts,4521 disjoint IDs
+and 122 app-image hashes pass. Workflow/eight jobs/workers/caps/architecture/partitions/PG
+semantics unchanged. Require all eight exact-head successes and 30s frontend/backend job/test/
+graph margins; preceding-main CI qualified separately. No publication workload, timing
+retry or billing guarantee. See [contract](COMPLETE_FULL_ARRIVAL_EVENT_HANDOFF.md)
+and dated evidence. R03/R05 and legal/corpus/rights/lawyer/deployment stay partial.
+Next:original 82 destination-return slice; implementation and PR unstarted.
