@@ -9,7 +9,7 @@ import { compareReviewPathHandoff, verifyReviewPathDestination, type ReviewPathD
 
 export type ComparisonEventHandoff = { recipe: 'private-comparison-event-handoff-v1'; receipt: ComparisonReturnReceipt;
   queue: ObservedComparison; prepared: ReviewPathDestination; observed_at: [string, string] };
-const equal = (a: unknown, b: unknown) => canonicalJson(a) === canonicalJson(b);
+const equal = (a: unknown, b: unknown) => plainObservationDataEqual(a, b) ?? canonicalJson(a) === canonicalJson(b);
 function fail(): never { throw new Error('Karşılaştırmadan tam karara geçiş doğrulanamadı. Yeni kuyruk gözlemi gerekli; başka kayıt veya önceki sonuç kullanılmadı.'); }
 const stamp = (v: unknown): v is string => typeof v === 'string' && v.length <= 40 && Number.isFinite(Date.parse(v));
 const stable = (v: ReviewPathDestination) => ({ ...v, metadata: { ...v.metadata, observed_at: null } });
@@ -68,3 +68,4 @@ export function returnComparisonEvent(intent: ReturnIntent, handoff: ComparisonE
   compareComparisonEventArrival(intent, handoff, target, history!);
   return { intent: next, receipt: structuredClone(handoff.receipt) };
 }
+import { plainObservationDataEqual } from './plainObservationDataEqual';

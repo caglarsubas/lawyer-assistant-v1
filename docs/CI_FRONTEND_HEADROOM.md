@@ -153,3 +153,30 @@ The submitted feature head must still pass all eight checks with at least thirty
 seconds margin in frontend, backend job, backend test step and graph runtime.
 Record actual hosted timing and merge proof in the PR body without a docs-only
 workflow rerun. No universal timing or billing reduction is claimed.
+
+
+## Complete destination-chain arrival-return capacity
+
+PR141 source ad2fd282aae9cda5b03e9dca7c3906a630dbd263 passed frontend checks in
+281/300s,leaving19s against the30s merge floor. Npm tests used173s,build23s,
+workspace33s and human review36s. That head was not merged. The remaining-job
+cancellation request was denied by GitHub token permissions;the merge helper
+was stopped and original receipts retained. No authorization workaround is used.
+
+CPU sampling of179 unchanged event cases found repeated canonical JSON sorting
+and serialization at the root intent/stable-observation comparisons. A bounded
+stateless comparator handles plain finite scalar/record/dense-array data up to
+depth4. Accessors,unsupported values/prototypes,JSON hooks,sparse/custom arrays,
+cycles and deeper values retain the original canonical fallback. No identity
+shortcut,cached verdict,serializer change or history model is added. Two existing
+equality call sites use it;all full-history validations remain per operation.
+
+All6235 initial cases/112files remain byte-identical;20 parity cases exercise
+mutation,undefined/NaN/functions,getters,prototype hooks,depth/cycle bounds and
+canonical throws. Focused profile tests4.62->3.55s;local full two-worker suite
+60.745->53.820s. All6255 cases/113files,clean TypeScript and build pass. These
+local timings do not guarantee hosted results. A freshDB/fullbrowser rehearsal
+is required after the predicate change. Existing workflow/eightjobs/caps/workers/
+architectures/partitions/realPG semantics stay unchanged. Require new exact-head
+all8 success and the same four30s margin gates before one ordinary squash. A new
+run must follow actual source correction;never rerun unchanged code for timing.

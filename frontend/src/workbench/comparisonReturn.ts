@@ -9,7 +9,7 @@ import { compareReviewPathHandoff, verifyReviewPathDestination, type ReviewPathD
 import type { IdentityRelation } from './returnComparison';
 
 export type ComparisonReturnReceipt = { recipe: 'private-comparison-return-receipt-v1'; intent: ReturnIntent; handoff: ReviewPathHandoff; destination: ReviewPathDestination };
-const equal = (a: unknown, b: unknown) => canonicalJson(a) === canonicalJson(b);
+const equal = (a: unknown, b: unknown) => plainObservationDataEqual(a, b) ?? canonicalJson(a) === canonicalJson(b);
 function fail(): never { throw new Error('Korunan karşılaştırmanın dönüş veya yeni kuyruk bağı doğrulanamadı. Yeni gözlem gerekli; önceki sonuç kullanılmadı.'); }
 const immutable = ({ admission: _admission, integrity: _integrity, ...value }: ReviewMetadata) => value;
 function equalImmutable(left: ReviewMetadata, right: ReviewMetadata) {
@@ -79,3 +79,4 @@ export function validateDestinationObservation(intent: ReturnIntent, handoff: Re
   const expected = compareDestinationIdentities(previous, value.fresh);
   if (!equal(expected, { head_relation: value.head_relation, version_relation: value.version_relation, revision_relation: value.revision_relation })) fail();
 }
+import { plainObservationDataEqual } from './plainObservationDataEqual';

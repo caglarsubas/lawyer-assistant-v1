@@ -4233,3 +4233,46 @@ guarantee. See [contract](COMPLETE_DESTINATION_CHAIN_EVENT_HANDOFF.md) and dated
 engineering evidence. R03/R05 and legal/corpus/rights/lawyer/deployment acceptance
 remain partial. Next:guarded complete73 arrival return; implementation and PR
 are unstarted in this slice.
+
+
+### Complete destination-chain arrival return (73 retained observations)
+
+Explicit verified return preserves the complete original73 handoff unchanged plus
+one separate reduced arrival:74 observations, with zero action IO. Original
+73-event return restoring71 and all older APIs/projections stay unchanged. Fresh
+authorized bounded containing queue permits one exact metadata GET; omission
+reveals no saved details, target read, scan, retry or fallback. Saved arrival/
+current, preparation/current and earlier saved destination/current remain
+independent, without rebasing.
+
+Preserve all73 pins, known/saved-only heads, evidence versions/manifests, chronology,
+revisions/flags/admissions, seven exact customer/date/source-date/bucket fields,
+customer OR and independent review history. Validate complete history afresh per
+public call, with one complete parent validation within reconciliation. No
+unchecked export, cached verdict, recursive abstraction, weaker event purpose or
+permission bypass. Preserve eight rows/30minutes/principal/session/reload and all
+retirement fences. Private metadata stays outside public graphs/providers/shared
+caches/telemetry; identity comparison rules/canonical fallback remain unchanged.
+
+185 new cases (165 arrival guards plus20 equality parity cases) extend unchanged6070
+cases/111 files; all6255 cases/113 files and
+build pass. Fresh two-lawyer rehearsal preserves original73 early108/late109 in
+successful74 returns114/115 around actual edit25. Stronger return110 disables
+older73 preparation; existing111..113 denial probes remain, with no extra event
+or replaced original. Eleven real PG races,44 deployment contracts,4521 disjoint
+backend identities and122 app-image hashes pass. Workflow/eight jobs/workers/
+caps/architectures/partitions/PG semantics remain unchanged. Require eight latest
+exact-head successes and30s frontend/backend job/backend test/graph-runtime
+margins; preceding-main CI is separately qualified. No publication workload,
+unchanged-code timing retry or billing guarantee. See
+[contract](COMPLETE_DESTINATION_CHAIN_ARRIVAL_RETURN.md) and dated engineering
+evidence. R03/R05 and legal/corpus/rights/lawyer/deployment acceptance remain partial.
+Next:all74-preserving exact-event handoff with fresh queue and stable preparation;
+implementation and PR are unstarted in this slice.
+
+Initial frontend success left19s, below the30s gate;that head was not merged.
+CPU sampling identified repeated root canonical equality. A bounded stateless
+plain-data fast path at two call sites preserves canonical fallback and complete
+history validation,with all6235 initial cases/112files unchanged. Full local
+suite60.745->53.820s;freshDB/fullbrowser rerun required before corrected submission.
+No workflow/cap/worker/partition change or unchanged-code timing retry.
