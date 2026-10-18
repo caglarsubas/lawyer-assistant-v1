@@ -4200,3 +4200,36 @@ billing guarantee. See [contract](COMPLETE_ARRIVAL_HISTORY_DESTINATION_RETURN.md
 and dated engineering evidence. R03/R05 and legal/corpus/rights/lawyer/deployment
 acceptance remain partial. Next:all71-preserving exact-event handoff with fresh
 queue and stable preparation; implementation and PR are unstarted in this slice.
+
+
+### Complete destination-chain exact-event handoff (71 retained observations)
+
+A dedicated purpose retains the complete original71 return unchanged plus fresh
+queue and stable preparation:73 observations. Explicit preparation uses two stable
+selected-event window1 metadata GETs with operation/scope/token fences before and
+after both awaits; first failure stops the second. Opening uses one exact metadata
+GET. Preparation/current and saved destination/current remain independent.
+Explicit verified return restores original71 unchanged with zero action IO; no
+further arrival is captured.
+
+All71 pins, known/saved-only heads, evidence versions/manifests, chronology,
+revisions/flags/admissions, seven exact customer/date/source-date/bucket fields,
+customer OR and independent review history remain intact. Validate full history
+afresh per public call through private local checks and unchanged stateless
+comparisons/canonical fallback. No unchecked export, cached verdict, recursive
+abstraction, weaker purpose or permission bypass. Preserve eight rows/30minutes,
+principal/session/reload and all retirement fences. Private metadata stays outside
+public graphs/providers/shared caches/telemetry.
+
+179 new cases extend unchanged5891 cases/110 files; all6070 cases/111 files and
+build pass. Fresh two-lawyer rehearsal preserves original71 returns106/107 in new73
+purposes108/109 before/after edit24, original71return110 and selection-only111..113.
+Eleven real PG races,44 deployment contracts,4521 disjoint backend identities and
+122 app-image hashes pass. Workflow/eight jobs/workers/caps/architectures/partitions/
+PG semantics stay unchanged. Require eight latest exact-head successes and30s
+frontend/backend job/backend test/graph-runtime margins; qualify preceding-main CI
+separately. No publication workload, unchanged-code timing retry or billing
+guarantee. See [contract](COMPLETE_DESTINATION_CHAIN_EVENT_HANDOFF.md) and dated
+engineering evidence. R03/R05 and legal/corpus/rights/lawyer/deployment acceptance
+remain partial. Next:guarded complete73 arrival return; implementation and PR
+are unstarted in this slice.
