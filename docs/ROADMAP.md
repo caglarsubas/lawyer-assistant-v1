@@ -4300,3 +4300,30 @@ preceding-main CI qualified separately. No unchanged-code timing retry or billin
 See [contract](COMPLETE_ARRIVAL_CHAIN_EVENT_HANDOFF.md) and dated engineering evidence.
 R03/R05 and legal/corpus/rights/lawyer/deployment acceptance remain partial. Next:complete76
 destination return;implementation and PR unstarted in this slice.
+
+### Complete arrival-chain destination return (76 retained observations)
+
+Explicit verified capture retains the entire original76 handoff unchanged, including
+original74, its queue/preparation and both timestamps. One separate reduced destination
+makes77 observations, with zero action IO. The original76 return restoring74 and older
+APIs remain unchanged. One authorized bounded containing queue permits one exact metadata
+GET; omission reveals no history, scan, retry or fallback. Saved destination/current,
+preparation/current and earlier saved arrival/current remain independent.
+
+All76 pins, known/saved-only heads, evidence versions/manifests, history and seven exact
+filters remain. Complete history is checked afresh per public call; reconciliation
+validates one complete parent before private local checks. Stateless fast path,20 parity
+cases and canonical fallback remain. Preserve eight rows/30minutes/principal/session/
+reload and all retirement/confidentiality fences. No weaker event purpose or permission
+bypass; private metadata stays outside public graphs/providers/shared caches/telemetry.
+
+All6609 tests/115 files and build pass;170 new cases extend unchanged6439/114. Fresh
+two-lawyer rehearsal preserves originals116/117 through successful77 returns122/123 around
+actualedit27; stronger return118 disables older preparation, existing119..121 probes remain.
+Eleven realPG races,44 deployment contracts,4521 disjoint backend IDs and122 app-image
+hashes pass. Workflow/eight jobs/workers/caps/architecture/partitions/PG semantics remain.
+Require eight exact-head successes and30s frontend/backend job/test/graph margins;
+preceding-main CI qualified separately. No new publication workload,unchanged-code timing
+retry or billing guarantee. See [contract](COMPLETE_ARRIVAL_CHAIN_DESTINATION_RETURN.md)
+and dated evidence. R03/R05/legal/corpus/rights/lawyer/deployment acceptance remains partial.
+Next:original77 exact-event handoff; implementation and PR unstarted in this slice.
