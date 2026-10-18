@@ -4381,3 +4381,21 @@ graph margins; preceding-main CI qualified separately. No publication workload, 
 retry or billing guarantee. See [contract](COMPLETE_FULL_ARRIVAL_EVENT_HANDOFF.md)
 and dated evidence. R03/R05 and legal/corpus/rights/lawyer/deployment stay partial.
 Next:original 82 destination-return slice; implementation and PR unstarted.
+
+### Complete arrival-chain destination return (82 retained observations)
+
+Explicit verified return preserves the complete original 82 handoff and adds a separate
+reduced destination:83 observations. Capture has zero action IO; fresh authorized queue plus
+one exact metadata GET reconciles it. Independent comparisons, exact customer/date filters,
+evidence versions, confidentiality and review history remain. Original 80/earlier77 return
+APIs and older projections remain unchanged. Stronger destinations disable weaker preparation.
+All 7,347 frontend cases/119 files and build pass;180 new cases extend unchanged 7,167/118.
+Fresh two-lawyer rehearsal preserves132/133 in returns138/139 around actualedit31, stronger
+return134 and selection-only135..137. Eleven realPG cases,44 deployment contracts,4,521
+disjoint IDs and 122 app-image hashes pass. Preceding-main eight-job qualification is
+separate. Merge requires all eight exact-head successes and 30s frontend/backend job/test/graph
+margins;workflow,workers,caps,architecture,partitions andPG semantics remain unchanged.
+No publication workload,timing retry,billing promise or deployment. See
+[contract](COMPLETE_FULL_ARRIVAL_DESTINATION_RETURN.md) and dated evidence. R03/R05 and
+legal/corpus/rights/lawyer acceptance remain partial. Next:original 83 exact-event handoff;
+implementation and PR unstarted.
