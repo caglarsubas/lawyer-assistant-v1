@@ -4394,7 +4394,9 @@ Fresh two-lawyer rehearsal preserves132/133 in returns138/139 around actualedit3
 return134 and selection-only135..137. Eleven realPG cases,44 deployment contracts,4,521
 disjoint IDs and 122 app-image hashes pass. Preceding-main eight-job qualification is
 separate. Merge requires all eight exact-head successes and 30s frontend/backend job/test/graph
-margins;workflow,workers,caps,architecture,partitions andPG semantics remain unchanged.
+margins;all eight jobs,workers,caps,job runners,disjoint node groups andPG semantics remain.
+Complete32-case review step moves from frontend to measured ARM backend headroom;48 x86
+workspace permission cases remain.
 No publication workload,timing retry,billing promise or deployment. See
 [contract](COMPLETE_FULL_ARRIVAL_DESTINATION_RETURN.md) and dated evidence. R03/R05 and
 legal/corpus/rights/lawyer acceptance remain partial. Next:original 83 exact-event handoff;
@@ -4403,7 +4405,13 @@ implementation and PR unstarted.
 Initial exact-head CI passed all eight but frontend margin was only20s, below30s;
 merge held. Root handoff CPU profiling drove current-timestamp parse reuse and existing
 stateless scalar comparison reuse with canonical fallback. Complete history validation,
-all118 prior test files, workflow and caps remain unchanged. Changed-source qualification
+all118 prior test files and caps remain unchanged. Changed-source qualification
 adds a 65-boundary differential test, full suite/build and fresh browser rehearsal.
 Local two-worker suite:88.849 to68.679s. Initial and changed-source evidence remain
 separate; new exact-head margins are required.
+
+Source-only head also held at276s/24s frontend margin. Root CI load correction moves
+the entire unchanged32-case review step to existing backend capacity (previously256s
+job margin), preserving48 x86 workspace cases,all4,521 disjoint node IDs,eight jobs,
+two workers and all caps. LinuxARM32-case verification passes in21.71s. No new
+publication workload;new balanced-head CI must qualify all four receiving margins.

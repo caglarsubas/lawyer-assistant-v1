@@ -336,7 +336,7 @@
       "missing": 0,
       "extra": 0,
       "complete_node_ids_sha256": "b167d772d1b670bc19d2ecd002bb48d4f58a07075b38baef12dd41d9aabc1616",
-      "workflow_sha256": "c3cea8ea9067224bbffaf4c5f85ab1a097bc058e28877866a81a89364a28607e",
+      "workflow_sha256": "079319fb3a86c345afe5d6da240dcdf15e5824918d1cac6f26a2a1d2c1e6bfd4",
       "job_deadlines_and_worker_counts_unchanged": true,
       "workspace_workers": 2,
       "human_review_workers": 2,
@@ -345,7 +345,6 @@
       "new_graph_runtime_workers": 2,
       "hosted_speedup_or_billing_savings_established": false
     },
-    "workflow_eight_jobs_workers_caps_architecture_postgres_semantics_unchanged": true,
     "required_margin_seconds": 30,
     "margin_gates": [
       "frontend",
@@ -353,7 +352,7 @@
       "Test backend",
       "graph-runtime-contracts"
     ],
-    "exact_head_ci": "pending;must be verified before merge",
+    "exact_head_ci": "pending;new balanced head must satisfy all four floors before merge",
     "unchanged_code_timing_retry": 0,
     "billing_guarantee": false,
     "initial_head_capacity_failure_retained": {
@@ -377,7 +376,42 @@
       "action": "held;changed source optimization before new CI;no unchanged-code retry",
       "cancellation": "HTTP403;not cancelled;first run completed success"
     },
-    "source_optimization_before_new_run": true
+    "source_optimization_before_new_run": true,
+    "source_only_head_capacity_failure_retained": {
+      "head": "eaea778d75bf59dbb11f829b9a572dab0fb0a5c5",
+      "run": 39147690893,
+      "frontend_seconds": 276,
+      "frontend_margin_seconds": 24,
+      "required_margin_seconds": 30,
+      "eligible_for_merge": false,
+      "held_before_merge_intent": true,
+      "action": "complete32-case review step moved to existing measured backend headroom before changed-workflow run"
+    },
+    "balance": {
+      "all_other_workflow_semantics_identical": true,
+      "moved_step_byte_equivalent_yaml": true,
+      "moved_case_count": 32,
+      "moved_file": "backend/tests/test_analysis_cohorts.py",
+      "old_job": "frontend",
+      "new_job": "backend-and-contracts",
+      "old_runner": "ubuntu-latest",
+      "new_runner": "ubuntu-24.04-arm",
+      "remaining_x86_permission_cases": 48,
+      "step_timeout_minutes": 3,
+      "two_workers": true,
+      "no_added_removed_or_duplicated_tests": true,
+      "job_caps_workers_trigger_concurrency_services_permissions_unchanged": true,
+      "test_command": "read -r -a human_review_tests <<< \"$CI_HUMAN_REVIEW_GROUP_TESTS\"\nbash scripts/run_ci_tests.sh backend/.venv/bin/pytest \"${human_review_tests[@]}\" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10\n",
+      "local_arm_cases_passed": 32,
+      "local_arm_seconds": 21.71,
+      "first_backend_seconds": 944,
+      "first_backend_margin_seconds": 256,
+      "first_backend_test_seconds": 863,
+      "source_publication_workload_added": false,
+      "front_review_group_step_seconds_before_move": 37
+    },
+    "job_count_caps_workers_trigger_concurrency_services_postgres_semantics_unchanged": true,
+    "complete_node_id_partition_unchanged_step_job_ownership_changed": true
   },
   "source_sha256": {
     "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturnPanel.tsx": "85f0adb868351a0077d71fdd4fe9392c125fa9aa7f710bad2a94e7ee6326968a",

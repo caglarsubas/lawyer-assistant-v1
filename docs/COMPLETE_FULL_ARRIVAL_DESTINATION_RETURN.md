@@ -52,8 +52,10 @@ rights simulated, _env_file=None; local .env unread. Only verified owned fixture
 Eleven real PostgreSQL concurrency cases, 44 deployment contracts, exact CI Ruff and
 Compose without a local env file pass. The 4,521 backend IDs remain disjoint and 122 app
 image hashes match. The isolated exact-source baseline and full two-worker current
-profiles are retained. Workflow, eight jobs, workers, caps, architectures, partitions and
-PostgreSQL semantics remain unchanged; no new publication workload. Preceding main
+profiles are retained. Eight jobs, caps, two workers, job runners, complete disjoint test groups and
+PostgreSQL semantics remain. The complete 32-case review step moves from frontend
+to the existing ARM backend; all 48 x86 workspace permission cases remain. No new
+publication workload. Preceding main
 separately passed all eight before implementation. Merge requires all eight latest
 exact-head checks and at least 30 seconds frontend/backend job/backend test/graph-runtime
 margin, one matching-head squash, and independent complete-tree/remote-main verification.
@@ -72,7 +74,7 @@ A full 7,347-case CPU profile identified repeated timestamp parsing and canonica
 in the shared root handoff validator. It now parses the current primitive once per visit
 and uses the existing stateless scalar equality helper before the unchanged canonical
 fallback. Every history and predecessor check still runs afresh. No cache, guard removal,
-workflow or deadline changes. The unchanged 118 prior test files remain byte-identical;
+deadline changes in that source-only attempt. The unchanged 118 prior test files remain byte-identical;
 one new differential test exercises 65 timestamp/type/timezone/ordering boundaries and
 subsequent mutation. All 7,348 cases/119 files, forced TypeScript and build pass again.
 The local two-worker suite fell from 88.849 to 68.679 seconds; hosted timing remains a
@@ -80,3 +82,17 @@ separate qualification. A fresh two-lawyer database repeats the complete browser
 First-attempt qualification, CPU profiles, logs and fixtures remain separate from changed-source
 results. New exact-head CI must establish all four 30-second margins before merge.
 No unchanged-code rerun or timing/billing guarantee.
+
+The source-only correction also missed hosted headroom: frontend used276/300s,
+leaving24s. It was held, with no merge intent. Its JavaScript suite passed in167s;
+the saturated frontend also ran two Python contract groups. The complete32-case
+review-cohort step now moves, unchanged, to the existing ARM backend job. The first
+backend used944/1200s with256s margin; its backend test used863/1080s. All48 workspace
+permission/proposal cases remain on x86. The moved group passed32 cases locally on
+Linux ARM with two workers in21.71s. The complete4,521 node IDs and their disjoint
+groups have the identical digest; only ownership of that one complete step changes.
+Every other parsed workflow semantic is identical: eight jobs, job runners, worker
+counts, command, three-minute moved-step cap, existing job/step deadlines, trigger,
+concurrency, permissions, services, and PostgreSQL behavior. There is no weakened
+check or extra publication workload. New balanced-head CI must prove the receiving
+backend and frontend margins; measurements are not a universal timing guarantee.
