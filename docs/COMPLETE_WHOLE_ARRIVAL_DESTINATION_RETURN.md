@@ -35,7 +35,8 @@ membership remains required; administrator status and customer tags grant no
 matter-read bypass. Private metadata stays outside public graphs, external
 providers, shared caches and telemetry.
 
-Qualification adds 148 cases while keeping all 5,049 prior cases across 104 files
+Qualification adds 148 destination-return and 38 scalar-comparison cases while
+keeping all 5,049 prior cases across 104 files
 byte-identical. Checks include every retained packet, saved-only heads, strict
 schemas including undefined keys, original return/projections, per-call
 validation, clones, omission, unknown/pending states, allocation/expiry/principal
@@ -47,6 +48,18 @@ independent actual reviews before 19 private edits, exact reads and filters,
 metadata-only disclosures, zero-IO capture, omission, packet substitution, denied
 and retired replies, reload, and wide/narrow layouts. Providers are disabled and
 source rights are simulated.
+
+The first hosted frontend job passed all5,197 tests but used272/300 seconds,
+leaving28 seconds below the required30-second margin. No merge was attempted;
+the remaining backend job was cancelled. CPU profiling identified repeated
+canonical serialization in hot validation paths. Exact-key checks now avoid
+sorting/serialization; immutable scalar data records use a stateless comparison,
+with the original canonical-JSON fallback for unsupported values. The canonical
+serializer module and all5,197 previous test cases remain byte-identical.38 new
+cases include10,000 reference record pairs, accessors, prototypes, undefined
+values, special keys and per-call mutations. Complete history validation and
+source hash generation remain unchanged. Local full-suite measurements before
+and after the repair are retained; actual hosted qualification is still required.
 
 Workflow, eight jobs, workers, caps, architectures, partitions and PostgreSQL
 semantics remain unchanged. Merge requires all eight exact-head checks, separately

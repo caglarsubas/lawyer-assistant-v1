@@ -1,3 +1,4 @@
+import { hasExactKeys, scalarDataRecordsEqual } from './privateObservationValidation';
 import { canonicalJson } from '../pages/matter/sourceReviewTypes';
 import { navigationIdentifier, type NavigationMetadata } from '../pages/sourceContextNavigationTypes';
 import { verifyReviewMetadata, type ReviewLineage, type ReviewMetadata } from '../pages/sourceReviewLineageTypes';
@@ -13,9 +14,12 @@ export type ReviewPathHandoff = {
 const equal = (a: unknown, b: unknown) => canonicalJson(a) === canonicalJson(b);
 const fail = (): never => { throw new Error('Zincir geçişi ile hedefin tam kimlik gözlemleri doğrulanamadı. Yeni portföy gözlemi gerekli; başka kayıt kullanılmadı.'); };
 const immutable = ({ admission: _admission, integrity: _integrity, ...value }: ReviewMetadata) => value;
+function equalImmutable(left: ReviewMetadata, right: ReviewMetadata) {
+  const a = immutable(left), b = immutable(right); return scalarDataRecordsEqual(a, b) ?? equal(a, b);
+}
 export function validateReviewPathHandoff(value: ReviewPathHandoff, intent: ReturnIntent) {
   validateReturn(intent); const t = intent.target;
-  if (!value || !equal(Object.keys(value).sort(), ['recipe', 'matter_id', 'analysis_id', 'context_id', 'frozen_version_id', 'manifest_sha256', 'selected', 'head', 'current_version_id', 'revision', 'observed_at'].sort())
+  if (!value || !hasExactKeys(value, ['recipe', 'matter_id', 'analysis_id', 'context_id', 'frozen_version_id', 'manifest_sha256', 'selected', 'head', 'current_version_id', 'revision', 'observed_at'])
     || value.recipe !== 'private-review-path-handoff-v1' || value.matter_id !== t.matter_id || value.analysis_id !== t.analysis_id || value.context_id !== t.context_id
     || value.frozen_version_id !== t.version_id || value.manifest_sha256 !== t.manifest_sha256 || !navigationIdentifier(value.current_version_id)
     || !Number.isSafeInteger(value.revision) || value.revision < 1 || !Array.isArray(value.observed_at) || value.observed_at.length !== 5
@@ -35,16 +39,16 @@ export type ReviewPathDestination = { metadata: NavigationMetadata; selected: Re
 /** Validate a retained metadata observation without inventing a predecessor window. */
 export function verifyReviewPathDestination(intent: ReturnIntent, handoff: ReviewPathHandoff, value: ReviewPathDestination) {
   validateReviewPathHandoff(handoff, intent);
-  if (!value || !equal(Object.keys(value).sort(), ['head', 'metadata', 'selected'])) fail();
+  if (!value || !hasExactKeys(value, ['head', 'metadata', 'selected'])) fail();
   const m = value.metadata, selected = value.selected, head = value.head;
   verifyReturnSelection(intent, m, null); verifyReviewMetadata(selected, intent.target.manifest_sha256);
-  if (selected.integrity !== 'verified' || !equal(immutable(selected), immutable(handoff.selected))
+  if (selected.integrity !== 'verified' || !equalImmutable(selected, handoff.selected)
     || Date.parse(m.observed_at) < Date.parse(handoff.observed_at[4]) || m.analysis.revision < handoff.revision) fail();
   if (head !== null) {
     verifyReviewMetadata(head, intent.target.manifest_sha256);
     if (head.id !== m.historical_review.id || head.id === selected.id && !equal(head, selected)) fail();
     if (head.integrity === 'verified' && (head.state !== m.historical_review.state || head.admission !== m.admission.review_state
-      || head.id === handoff.head.id && !equal(immutable(head), immutable(handoff.head)))) fail();
+      || head.id === handoff.head.id && !equalImmutable(head, handoff.head))) fail();
   }
 }
 /** Fresh authorized metadata only. Changed current identities are observations, never a new selection. */

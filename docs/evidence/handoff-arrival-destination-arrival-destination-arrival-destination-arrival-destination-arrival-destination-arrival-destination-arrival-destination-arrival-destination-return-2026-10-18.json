@@ -2,7 +2,7 @@
   "schema": "complete-whole-arrival-handoff-destination-return-engineering-v1",
   "qualification_date": "2026-10-18",
   "qualification_timezone": "Asia/Shanghai",
-  "recorded_at": "2026-10-18T03:11:20.041733+00:00",
+  "recorded_at": "2026-10-18T03:38:44.218048+00:00",
   "baseline_main_sha": "69c8db8f160d66fe8947da0d921058c616cd17cf",
   "baseline_pr": 134,
   "baseline_main_ci_at_local_capture": {
@@ -13,13 +13,15 @@
     "separate_evidence_state": true
   },
   "origin": "Synthetic local engineering; invented matters,simulated source rights,providers disabled",
-  "frontend_cases_passed": 5197,
-  "frontend_files": 105,
-  "new_cases_passed": 148,
+  "frontend_cases_passed": 5235,
+  "frontend_files": 106,
+  "new_cases_passed": 186,
+  "destination_return_cases_passed": 148,
+  "scalar_comparison_cases_passed": 38,
   "all_5049_previous_cases_104_files_fixtures_bodies_assertions_byte_identical": true,
-  "all_existing_workbench_api_modules_except_session_book_and_current_handoff_byte_identical": true,
-  "frontend_full_wall_seconds": 169.17,
-  "new_file_wall_seconds": 3.7,
+  "all_other_workbench_api_modules_byte_identical_except_declared_feature_and_profiled_primitives": true,
+  "frontend_full_wall_seconds": 105.71,
+  "new_file_wall_seconds": 4.76,
   "original62_return_api_body_and_signature_byte_integrity": {
     "base": "69c8db8f160d66fe8947da0d921058c616cd17cf",
     "file": "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent.ts",
@@ -113,9 +115,11 @@
     "external_requests": []
   },
   "browser_harness": {
-    "complete_attempts": 1,
+    "complete_attempts": 2,
     "failed_complete_attempts": 0,
-    "final_fixture_database_suffix": 1,
+    "final_fixture_database_suffix": 2,
+    "before_headroom_attempt_passed_and_retained": true,
+    "after_product_change_full_rehearsal_rebuilt_fresh_database": true,
     "syntax_check_before_browser": true,
     "public_health_and_frontend_200_before_complete_attempt": true,
     "fresh_database": true,
@@ -131,7 +135,8 @@
   },
   "local_setup_failures_retained": [
     "Progress peek preceded browser-log creation",
-    "Duplicated absolute paths in copied ignored fixture,PostgreSQL and collection helpers;readiness rejected before browser or database creation;fixed paths and retained first logs;no product changes or frontend timing retry"
+    "New comparison test initially used toReversed beyond the existing ES2022 lib;changed only the new test to array-copy reverse;compiler settings unchanged",
+    "Duplicated absolute paths in copied ignored fixture,PostgreSQL and collection helpers;readiness rejected before browser or database creation;fixed paths and retained first logs;no product changes or frontend timing retry at setup; later CI headroom repair is a substantive separately qualified source change"
   ],
   "contract": {
     "retained_prior_observations": 64,
@@ -234,6 +239,67 @@
     "all_eight_jobs_workers_caps_architectures_partitions_unchanged": true,
     "backend_image_current_app_files": 122,
     "backend_image_source_match": true,
+    "initial_run_rejected_for_headroom": {
+      "run": 39092767606,
+      "head": "e7d09b06a7180a37252a7c12af4b086af2f5042f",
+      "frontend_seconds": 272,
+      "margin_seconds": 28,
+      "required_margin_seconds": 30,
+      "cancelled": true,
+      "backend_cancelled_seconds": 542,
+      "merge_attempted": false,
+      "same_code_rerun": false
+    },
+    "stateless_headroom_repair": {
+      "cpu_profile": "CPU samples identified repeated canonical serialization in review-path,comparison-return and comparison-event validation",
+      "schema_key_serialization_removed": true,
+      "scalar_data_record_comparison": true,
+      "fallback_to_original_canonical_json": true,
+      "canonical_serializer_module_unchanged": true,
+      "ten_thousand_reference_record_pairs": true,
+      "no_retained_verdict": true,
+      "benchmark": {
+        "iterations_per_round": 50000,
+        "rounds": 3,
+        "rows": [
+          {
+            "round": 0,
+            "name": "original",
+            "ms": 61.548958999999996
+          },
+          {
+            "round": 0,
+            "name": "candidate",
+            "ms": 13.045749999999998
+          },
+          {
+            "round": 1,
+            "name": "candidate",
+            "ms": 10.916875000000005
+          },
+          {
+            "round": 1,
+            "name": "original",
+            "ms": 60.60779199999999
+          },
+          {
+            "round": 2,
+            "name": "original",
+            "ms": 60.477750000000015
+          },
+          {
+            "round": 2,
+            "name": "candidate",
+            "ms": 10.581124999999986
+          }
+        ],
+        "count": 199998,
+        "matching_outputs": true,
+        "no_cached_verdicts": true,
+        "diagnostic_only": true
+      },
+      "all_5197_previous_cases_105_files_byte_identical": true
+    },
     "local_clean_tsc_and_two_worker_suite_profile": {
       "baseline": [
         {
@@ -247,7 +313,7 @@
           "exit_code": 0
         }
       ],
-      "current": [
+      "initial_before_repair": [
         {
           "name": "clean-tsc",
           "seconds": 7.808,
@@ -264,9 +330,26 @@
           "exit_code": 0
         }
       ],
+      "current": [
+        {
+          "name": "clean-tsc",
+          "seconds": 10.427,
+          "exit_code": 0
+        },
+        {
+          "name": "two-worker-suite",
+          "seconds": 106.355,
+          "exit_code": 0
+        },
+        {
+          "name": "build",
+          "seconds": 14.596,
+          "exit_code": 0
+        }
+      ],
       "unchanged_architecture_and_worker_count": true,
       "hosted_timing_guarantee": false,
-      "unchanged_file_profile_comparison": {
+      "initial_before_repair_unchanged_file_profile_comparison": {
         "files": 104,
         "median_runtime_ratio": 2.398344195335187,
         "code_causality_established": false
@@ -282,15 +365,21 @@
     "hosted_final_status": "Pending at local capture;actual final timings and merge proof retained separately in PR description",
     "billing_savings_guaranteed": false
   },
+  "canonical_serializer_module_byte_identical_to_base": true,
   "source_sha256": {
     "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturnPanel.tsx": "409b2f6b9474af8b9e4383489a813e83671eea54d06cef7fd242f9cb4968863e",
     "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEventPanel.tsx": "bcd3d509a30f6686738b959e8ed41ac80d2b8831aa08dfa5a2ea1d0bb27826dd",
     "frontend/src/pages/PortfolioReturnQueue.tsx": "738272597a961ded495a9df3a8c3bf00542efdd2c299dbc89dd3a70c573f6106",
     "frontend/src/pages/SelectedSourceReviewPage.tsx": "175dfa8ac2e2ce90d8ce532c1358f3cf0cd8265b27d2672148b344352daf9678",
+    "frontend/src/workbench/comparisonEventHandoff.ts": "7254e25bb80ddf11bf6e6b7b7f7e19cf69d64f8fd6a952c0b4e2db322f759844",
+    "frontend/src/workbench/comparisonReturn.ts": "cedcdefee738879d00a7f6d3fa70dcd9b19a77eb9240e7ccd7e02a324d5f7657",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn.test.tsx": "1524dc766f0dc791f4929d1e288f7964ba3bceee362ed2e735a12b3df3c4e413",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn.ts": "67759de60e1e8499e484c2238ee22748d906dcf0fd616ec2fa33c21bb01b7cc1",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent.ts": "594ab4d155fb8b6412126947e0af0dfbbb3a22a9efa4f7fb2184aaa76d4b4140",
-    "frontend/src/workbench/portfolioReturn.ts": "761c6b4eb2a05f5994d4dd97201936c955fa698529e5553a0b542d4c39065fe4"
+    "frontend/src/workbench/portfolioReturn.ts": "761c6b4eb2a05f5994d4dd97201936c955fa698529e5553a0b542d4c39065fe4",
+    "frontend/src/workbench/privateObservationValidation.ts": "c630f67f27ccb6796110c3acb2963044cd14a668091179ffc9becf86b1ee016b",
+    "frontend/src/workbench/reviewPathHandoff.ts": "556e892611d051d18abcc43935f4c9c71b94f7d08d44d426ab607623aa5c17b1",
+    "frontend/src/workbench/scalarDataRecordsEqual.test.ts": "c2a93b8fe895707a29a0f8db0403d1196fdde61fa8db500d6705d5334e000b17"
   },
   "limitations": [
     "Synthetic engineering only;R03/R05 remain partial",
