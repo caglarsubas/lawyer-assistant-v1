@@ -21,8 +21,10 @@ revision, admission and relationship flag, and independent review history.
 No unchecked history export, persistent verdict cache, recursive history
 abstraction or weaker event-purpose projection is added. Ordinary older return
 views stay unchanged; the stronger arrival return cannot prepare an older event
-that discards its captured arrival. Stateless comparisons and canonical
-fallback/serializer remain unchanged.
+that discards its captured arrival. Identity comparison rules and the canonical
+serializer/fallback remain unchanged. Two profiled equality call sites use a fresh
+bounded plain-data comparison, with unchanged canonical fallback for unsupported
+values; it validates no history and retains no verdict.
 
 Observe one fresh authorized bounded containing queue with all seven exact
 customer/date/source-date/bucket fields and customer OR semantics. A present
@@ -45,7 +47,8 @@ snapshots contain no source bodies or review notes.
 
 ## Qualification and CI
 
-165 new cases extend unchanged 6,070 cases/111 files. All 6,235 cases/112 files
+185 new cases (165 arrival guards and 20 comparison parity cases) extend unchanged
+6,070 cases/111 files. All 6,255 cases/113 files
 and the production build pass. Independently cloned all73 fixtures cover every
 pin and known/saved-only head, exact shapes including undefined keys, all filters,
 flags/times/revisions, per-call validation, cloning, original return APIs, every
@@ -83,3 +86,13 @@ Next finite slice: guarded all74-preserving exact-event handoff plus fresh queue
 and stable preparation, giving 76 observations. Its implementation and PR are
 unstarted in this slice. No backend, provider, credentials, deployed runtime or
 dirty primary checkout change.
+
+The first source passed frontend checks in281/300s, below the30s margin gate.
+It was not merged. A CPU profile attributed repeated root equality work to
+canonical sorting/serialization. The bounded stateless fast path preserves all
+6,235 initial cases/112 files byte-for-byte, adds20 parity cases and preserves
+all full-history checks. Focused profiled tests changed4.62->3.55s; full local
+two-worker suite60.745->53.820s. These are local observations. A fresh database
+and full browser rehearsal qualify the changed predicates before a new source
+commit. Original logs/requests/screenshots/database are retained. Workflow,
+caps/workers/architectures/partitions stay unchanged; no unchanged-code rerun.

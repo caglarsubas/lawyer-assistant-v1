@@ -4252,9 +4252,10 @@ public call, with one complete parent validation within reconciliation. No
 unchecked export, cached verdict, recursive abstraction, weaker event purpose or
 permission bypass. Preserve eight rows/30minutes/principal/session/reload and all
 retirement fences. Private metadata stays outside public graphs/providers/shared
-caches/telemetry; stateless comparisons/canonical fallback remain unchanged.
+caches/telemetry; identity comparison rules/canonical fallback remain unchanged.
 
-165 new cases extend unchanged6070 cases/111 files; all6235 cases/112 files and
+185 new cases (165 arrival guards plus20 equality parity cases) extend unchanged6070
+cases/111 files; all6255 cases/113 files and
 build pass. Fresh two-lawyer rehearsal preserves original73 early108/late109 in
 successful74 returns114/115 around actual edit25. Stronger return110 disables
 older73 preparation; existing111..113 denial probes remain, with no extra event
@@ -4268,3 +4269,10 @@ unchanged-code timing retry or billing guarantee. See
 evidence. R03/R05 and legal/corpus/rights/lawyer/deployment acceptance remain partial.
 Next:all74-preserving exact-event handoff with fresh queue and stable preparation;
 implementation and PR are unstarted in this slice.
+
+Initial frontend success left19s, below the30s gate;that head was not merged.
+CPU sampling identified repeated root canonical equality. A bounded stateless
+plain-data fast path at two call sites preserves canonical fallback and complete
+history validation,with all6235 initial cases/112files unchanged. Full local
+suite60.745->53.820s;freshDB/fullbrowser rerun required before corrected submission.
+No workflow/cap/worker/partition change or unchanged-code timing retry.

@@ -8,7 +8,7 @@
   "schema": "complete-destination-chain-arrival-return-engineering-v1",
   "qualification_date": "2026-10-18",
   "qualification_timezone": "Asia/Shanghai",
-  "recorded_at": "2026-10-18T09:30:49.059220+00:00",
+  "recorded_at": "2026-10-18T09:47:11.821944+00:00",
   "baseline_main_sha": "e66314ea616d0e4b34abd965cfa46a9eb66977e8",
   "baseline_pr": 140,
   "baseline_main_ci": {
@@ -20,11 +20,11 @@
     "separate_evidence_state": true
   },
   "origin": "Synthetic local engineering;invented matters,simulated source rights,providers disabled",
-  "frontend_cases_passed": 6235,
-  "frontend_files": 112,
-  "new_cases_passed": 165,
+  "frontend_cases_passed": 6255,
+  "frontend_files": 113,
+  "new_cases_passed": 185,
   "all_6070_previous_cases_111_files_fixtures_bodies_assertions_byte_identical": true,
-  "older_workbench_modules_byte_identical_except_additive_book_and_current_event_helpers": [
+  "older_workbench_modules_byte_identical_except_book_current_event_and_profiled_comparison_call_sites": [
     "frontend/src/workbench/arrivalEventHandoff.ts",
     "frontend/src/workbench/arrivalHandoffDestinationReturn.ts",
     "frontend/src/workbench/arrivalReturn.ts",
@@ -34,8 +34,6 @@
     "frontend/src/workbench/carriedDestinationArrivalReturn.ts",
     "frontend/src/workbench/carriedDestinationEventHandoff.ts",
     "frontend/src/workbench/carriedDestinationReturn.ts",
-    "frontend/src/workbench/comparisonEventHandoff.ts",
-    "frontend/src/workbench/comparisonReturn.ts",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn.ts",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent.ts",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn.ts",
@@ -223,12 +221,12 @@
       "browser_harness_exit_code": 0,
       "owned_servers": [
         {
-          "pid": 80453,
+          "pid": 92509,
           "command": "backend/.venv/bin/python /Users/caglarsubasi/.codex/worktrees/r05a-authority-context/lawyer-assistant-v1/.data/verification/r03-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-return/backend.py",
           "ownership_verified": true
         },
         {
-          "pid": 80454,
+          "pid": 92510,
           "command": "node /Users/caglarsubasi/.codex/worktrees/r05a-authority-context/lawyer-assistant-v1/.data/verification/r03-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-return/frontend.mjs",
           "ownership_verified": true
         }
@@ -352,17 +350,17 @@
       "current": [
         {
           "name": "clean-tsc",
-          "seconds": 5.305,
+          "seconds": 5.128,
           "exit_code": 0
         },
         {
           "name": "two-worker-suite",
-          "seconds": 60.745,
+          "seconds": 53.82,
           "exit_code": 0
         },
         {
           "name": "build",
-          "seconds": 6.958,
+          "seconds": 8.184,
           "exit_code": 0
         }
       ],
@@ -376,15 +374,95 @@
     "unchanged_code_timing_retries": 0,
     "hosted_final_status": "Pending at local capture;actual exact-head timings and merge proof retained separately in PR description"
   },
+  "stateless_comparison_capacity_fix": {
+    "schema": "stateless-observation-comparison-capacity-fix-v1",
+    "rejected_head": "ad2fd282aae9cda5b03e9dca7c3906a630dbd263",
+    "rejected_run": 39115638829,
+    "rejected_frontend_job": 117640746777,
+    "rejected_frontend_seconds": 281,
+    "cap_seconds": 300,
+    "margin_seconds": 19,
+    "required_margin_seconds": 30,
+    "merge_attempted_on_rejected_capacity": false,
+    "remaining_job_cancellation": {
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "HTTP 403: Resource not accessible by personal access token (https://api.github.com/repos/caglarsubas/lawyer-assistant-v1/actions/runs/39115638829/cancel)\n"
+    },
+    "same_code_timing_rerun": false,
+    "reason_for_new_ci": "material comparison implementation change with parity coverage",
+    "root_cause": "canonical sorting and serialization repeatedly applied to small root intent/stable observation data throughout growing history validation",
+    "cpu_sample": {
+      "before_case_count": 179,
+      "after_case_count": 179,
+      "before_tests_seconds": 4.62,
+      "after_tests_seconds": 3.55,
+      "ordered_self_ms_before": 774.033,
+      "ordered_self_ms_after": 167.249,
+      "diagnostic_only": true
+    },
+    "full_two_worker_before": [
+      {
+        "name": "clean-tsc",
+        "seconds": 5.305,
+        "exit_code": 0
+      },
+      {
+        "name": "two-worker-suite",
+        "seconds": 60.745,
+        "exit_code": 0
+      },
+      {
+        "name": "build",
+        "seconds": 6.958,
+        "exit_code": 0
+      }
+    ],
+    "full_two_worker_after": [
+      {
+        "name": "clean-tsc",
+        "seconds": 5.128,
+        "exit_code": 0
+      },
+      {
+        "name": "two-worker-suite",
+        "seconds": 53.82,
+        "exit_code": 0
+      },
+      {
+        "name": "build",
+        "seconds": 8.184,
+        "exit_code": 0
+      }
+    ],
+    "new_parity_tests": 20,
+    "all_6235_previous_cases_112_files_byte_identical": true,
+    "all_6070_base_cases_111_files_byte_identical": true,
+    "canonical_serializer_byte_identical": true,
+    "existing_scalar_key_calendar_primitives_byte_identical": true,
+    "identity_comparison_function_body_byte_identical": true,
+    "helper_depth_limit": 4,
+    "unsupported_cases_use_unchanged_canonical_fallback": true,
+    "getter_evaluation_before_fallback": false,
+    "cached_validation_verdicts": false,
+    "whole_history_abstraction": false,
+    "workflow_workers_caps_architecture_partitions_changed": false,
+    "hosted_timing_guaranteed": false,
+    "initial_evidence_retained": true
+  },
   "canonical_serializer_byte_identical": true,
   "source_sha256": {
     "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturnPanel.tsx": "1b12fe7ff9338678afbfbf9c78c4902ffb76aa8e373092f136770f73e0fd615c",
     "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEventPanel.tsx": "065c98687bf353839cb1b817be6f1d5505fa996daaf8eb05e37ad68c141ba68e",
     "frontend/src/pages/PortfolioReturnQueue.tsx": "3026929d067fc8aad73bb6cc588df41d5e77b201e18a7da188872d4e9ba58c47",
     "frontend/src/pages/SelectedSourceReviewPage.tsx": "c90caed81d83f679b407efe634fb9a003f96105523d882e389800f7aa352514f",
+    "frontend/src/workbench/comparisonEventHandoff.ts": "7f4860a7506fbb9c85acf0bb5b0d4357aa105986d5769f9e1704c677a587426f",
+    "frontend/src/workbench/comparisonReturn.ts": "0909ab8ec108f511a0041d85a14e4a5bd3ba4ed9afe44c623f3e50675fa5bc95",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn.test.tsx": "cfeb1d64d512cf4f0c7bfb8c2b2a612773ec09f3dc8dbbdb7c419d1cb2d274af",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn.ts": "f9ab869357e47ccbbd6e5e16f5773a95065e1db2dff48e5e9a864a4e5d98e90f",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent.ts": "4415acd2f7685dc973ba646a9bd7527193b941360d3b0bc8cd7252f2d42f6b30",
+    "frontend/src/workbench/plainObservationDataEqual.test.ts": "ab4f585e0fd39fb48ed6ee1199d8860e8d30fb6a29bcfc66f0e96a876a46d6dd",
+    "frontend/src/workbench/plainObservationDataEqual.ts": "ead4b0ffd8e59642b04cb78b23a3de6a0af8884f73e9118c21035b744ec752fd",
     "frontend/src/workbench/portfolioReturn.ts": "126bed5dc72789d8b11e4c908eaf5bf89d191438df63781d3006e108ba902a51"
   },
   "limitations": [
