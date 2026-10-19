@@ -1,3 +1,4 @@
+import { finiteObservationTime } from '../workbench/privateObservationValidation';
 import { hasExactKeys as keys } from '../workbench/privateObservationValidation';
 import { canonicalJson } from './matter/sourceReviewTypes';
 import { navigationReviewId, verifyNavigation, type NavigationMetadata, type SourceTarget } from './sourceContextNavigationTypes';
@@ -11,7 +12,7 @@ export type ReviewLineage = { recipe: 'private-source-review-lineage-v1'; matter
     items: ReviewMetadata[]; next_review_id: string | null; total_count: null; head_reachability: 'not_checked' };
   tools_available: boolean; source_verification: 'not_checked'; legal_readiness: 'not_established'; qualification_granted: false };
 const sha = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
-const stamp = (value: unknown) => typeof value === 'string' && value.length <= 40 && Number.isFinite(Date.parse(value));
+const stamp = (value: unknown) => typeof value === 'string' && value.length <= 40 && finiteObservationTime(value);
 export function verifyReviewLineage(value: ReviewLineage, target: SourceTarget) {
   const fail = () => { throw new Error('Seçilen tarihsel kararın tam kimliği veya sınırlı bağlantıları doğrulanamadı.'); };
   if (!value || !target.review_id || !keys(value, ['recipe', 'matter_id', 'analysis_id', 'context_id', 'review_id', 'observed_at', 'context_navigation', 'selected_review', 'current_head', 'head_relationship', 'lineage', 'tools_available', 'source_verification', 'legal_readiness', 'qualification_granted'])

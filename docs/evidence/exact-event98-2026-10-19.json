@@ -31,9 +31,9 @@
     "ttl_minutes": 30
   },
   "validation": {
-    "frontend_passed": 9612,
-    "frontend_files": 131,
-    "new_cases": 224,
+    "frontend_passed": 9632,
+    "frontend_files": 132,
+    "new_cases": 244,
     "retained_selected_pin_cases": 98,
     "known_head_substitution_cases": 63,
     "old_test_files_byte_identical": 130,
@@ -59,17 +59,17 @@
     "current_profile": [
       {
         "name": "clean-tsc",
-        "seconds": 5.972,
+        "seconds": 5.506,
         "exit_code": 0
       },
       {
         "name": "two-worker-suite",
-        "seconds": 74.143,
+        "seconds": 69.649,
         "exit_code": 0
       },
       {
         "name": "build",
-        "seconds": 7.465,
+        "seconds": 7.024,
         "exit_code": 0
       }
     ],
@@ -105,11 +105,58 @@
       "real_backend_fresh_health": 200,
       "full_legacy_browser_rerun": false,
       "forty_actual_private_edits_repeated": false,
-      "qualification_limitation": "Synthetic metadata UI fixture does not establish backend authorization or legal acceptance"
+      "qualification_limitation": "Synthetic metadata UI fixture does not establish backend authorization or legal acceptance",
+      "fresh_after_production_timestamp_correction": true,
+      "fresh_database_suffix": 2,
+      "metadata_only_requests": 24,
+      "qualification_scope_unchanged": true
     },
     "owned_fixture_ports_closed": true,
     "full_legacy_browser_rerun": false,
     "legal_acceptance": false
+  },
+  "headroom_correction": {
+    "first_feature_head": {
+      "pr": 159,
+      "head": "a3c81b3ed710a8545335e1a2811ea2a3d2be57dc",
+      "base": "c10fef0185e57958cac663374bdb30dfe5845f0e",
+      "run": 39271166660,
+      "url": "https://github.com/caglarsubas/lawyer-assistant-v1/pull/159"
+    },
+    "first_frontend_seconds": 280,
+    "first_margin": 20,
+    "floor": 30,
+    "merge_attempted": false,
+    "profiled_stateless_stamp_fast_path": true,
+    "date_parse_fallback_retained": true,
+    "performance_source_changes": {
+      "frontend/src/workbench/privateObservationValidation.ts": {
+        "previous_sha256": "c630f67f27ccb6796110c3acb2963044cd14a668091179ffc9becf86b1ee016b",
+        "current_sha256": "9834771fbfedf85ba4890dbc183623a13b430ae0b067938d00a32114a7e0ac8d"
+      },
+      "frontend/src/pages/sourceContextNavigationTypes.ts": {
+        "previous_sha256": "0a5d1a9585903f1cbd84d0882d075693c0b7306b16e6865c2182b3962edbac02",
+        "current_sha256": "60c86ef57dbf58e9e6fe3536f5e582a99742569e8bca66b27b8a149bb8b28fe8"
+      },
+      "frontend/src/pages/sourceReviewLineageTypes.ts": {
+        "previous_sha256": "b6b759c88ea73f3f94688463e53323b9d4d94a467566af9eebbef1992d601672",
+        "current_sha256": "17702dfd3738e74c2de776f3b88f4087b1f6a670ee4347d7181155886932a1e1"
+      }
+    },
+    "benchmark": [
+      {
+        "old": 3725.934458,
+        "current": 3430.0405
+      },
+      {
+        "old": 3696.3356249999997,
+        "current": 3439.8655
+      },
+      {
+        "old": 3655.377834000001,
+        "current": 3451.1557079999984
+      }
+    ]
   },
   "ci": {
     "capacity_first_pr": 158,
@@ -188,9 +235,13 @@
     "frontend/src/pages/Handoff98ExactEventPanel.tsx": "13c3b1e67b6ce7093cb7864d721a89e0f52db7b78641c85c17ebd8b7a08dfb63",
     "frontend/src/pages/PortfolioReturnQueue.tsx": "997a9e30e39aad805917612ea5c6f4704583aa7483a39ba737aa2a7a5ec76794",
     "frontend/src/pages/SelectedSourceReviewPage.tsx": "84e4e62950456486181b553b8a979fe562bde212f8220a40f96789683a9cf196",
+    "frontend/src/pages/sourceContextNavigationTypes.ts": "60c86ef57dbf58e9e6fe3536f5e582a99742569e8bca66b27b8a149bb8b28fe8",
+    "frontend/src/pages/sourceReviewLineageTypes.ts": "17702dfd3738e74c2de776f3b88f4087b1f6a670ee4347d7181155886932a1e1",
     "frontend/src/workbench/handoff98ExactEvent.test.tsx": "52e519a2eb438859f2382092604078ad40425fff71120960be2f575ae7b3d20d",
     "frontend/src/workbench/handoff98ExactEvent.ts": "565873da8404a365ada7e2e2bfa63222828a67f3129d2983e59b6046c44613fd",
-    "frontend/src/workbench/portfolioReturn.ts": "9ff5b36e860b6712d52546226c56bfac7f0c9e774b73ab220b4218799e87bf31"
+    "frontend/src/workbench/observationStampCompatibility.test.ts": "499ce8f6f0950f2e55d91ed7408c59bdc6699239bb0ef3501e3966ded8674978",
+    "frontend/src/workbench/portfolioReturn.ts": "e2928bc6166983fb9598b1430453154dd30f75d0b06b0c1ee7d9efa00a6bfbc8",
+    "frontend/src/workbench/privateObservationValidation.ts": "9834771fbfedf85ba4890dbc183623a13b430ae0b067938d00a32114a7e0ac8d"
   },
   "unchanged_critical_sha256": {
     "frontend/src/workbench/AssistantPanel.tsx": "fb9ecb09a829cc9c467fce35e60d4a680f7e94fb4228393090b7623c90289a39",
@@ -323,7 +374,6 @@
     "frontend/src/workbench/portfolio.tsx": "f6b2ed51bfc26e380fdee272263688476c7685caf22c19be2150c1bb3c8bafae",
     "frontend/src/workbench/portfolioReturn.test.tsx": "63232279cf326b78be9c41d83d94b27daab6ddaf60d20f4ac568e807c2513c3c",
     "frontend/src/workbench/privateObservationValidation.test.ts": "be3152e308bf022018df9087a5dbc551760cfd8c99aade52ab938e748f038a14",
-    "frontend/src/workbench/privateObservationValidation.ts": "c630f67f27ccb6796110c3acb2963044cd14a668091179ffc9becf86b1ee016b",
     "frontend/src/workbench/renewalHandoff.test.tsx": "def24563bd17f145de11dd49f5386cbeb7606a9ae9921493c1555d12f94c9094",
     "frontend/src/workbench/renewalHandoff.ts": "cec75af9462d0c43340ef9f0dfa01f5332be464956e11bfea50cc9a77e90e25b",
     "frontend/src/workbench/renewalLineageNavigation.test.tsx": "0e0e4ce4a88aa0699a730127124703274fe11412c7cb7d80e9a1a750add909d8",

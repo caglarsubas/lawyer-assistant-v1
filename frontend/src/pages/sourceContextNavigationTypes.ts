@@ -1,3 +1,4 @@
+import { finiteObservationTime } from '../workbench/privateObservationValidation';
 import { hasExactKeys as keys } from '../workbench/privateObservationValidation';
 export const navigationIdentifier = (value: unknown): value is string => typeof value === 'string' && /^[a-zA-Z0-9_-]{1,64}$/.test(value);
 export const navigationContextId = (value: unknown): value is string => typeof value === 'string' && /^sac-[a-f0-9]{20}-[a-f0-9]{32}$/.test(value);
@@ -33,7 +34,7 @@ export type NavigationMetadata = {
   version_relation: 'same' | 'different' | 'unknown'; integrity: 'verified' | 'unavailable'; tools_available: boolean;
   source_verification: 'not_checked'; legal_readiness: 'not_established'; qualification_granted: false;
 };
-const stamp = (value: unknown) => typeof value === 'string' && value.length <= 40 && Number.isFinite(Date.parse(value));
+const stamp = (value: unknown) => typeof value === 'string' && value.length <= 40 && finiteObservationTime(value);
 const sha = (value: unknown) => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
 export function verifyNavigation(value: NavigationMetadata, target: SourceTarget) {
   const fail = () => { throw new Error('Seçilen kaynak bağlamının tam gezinme bağı doğrulanamadı.'); };

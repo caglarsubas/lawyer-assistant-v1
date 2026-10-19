@@ -39,3 +39,10 @@ export function scalarDataRecordsEqual(left: unknown, right: unknown): boolean |
   }
   return aKeys.length === bKeys.length && aKeys.every(field => Object.hasOwn(b, field) && a[field] === b[field]);
 }
+
+// Calendar-valid in every month; other Date.parse inputs retain the original path.
+const canonicalUtcStamp = /^\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-8])T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{3})?(?:Z|\+00:00)$/;
+/** Stateless finite-time check only; no parsed value or validation verdict is retained. */
+export function finiteObservationTime(value: string): boolean {
+  return canonicalUtcStamp.test(value) || Number.isFinite(Date.parse(value));
+}
