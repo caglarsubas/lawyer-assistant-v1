@@ -4433,3 +4433,20 @@ publication workload, timing retry, billing promise or deployment. See
 [contract](COMPLETE_LAST_DESTINATION_EVENT_HANDOFF.md) and dated evidence.
 R03/R05/legal/corpus/rights/lawyer acceptance remain partial. Next:original 85 arrival-return;
 implementation and PR unstarted. Concise new artifact filenames avoid component-size limits.
+
+### Complete last-destination arrival return (85 retained observations)
+
+Original85 stays unchanged;explicit verified return captures a separate reduced arrival
+for86 observations with zero action IO. Original85 exported return still restores83;
+earlier80/77 APIs and old projections remain. Fresh complete-history validation and separate
+preparation/saved-arrival/earlier-destination comparisons preserve all pins,filters,evidence
+versions,confidentiality and review history. Stronger86 disables weaker preparation.
+All7,732 frontend cases/121 files and build pass;185 new cases extend unchanged7,547/120.
+Fresh two-lawyer rehearsal retains140/141 in146/147 around actualedit33;stronger142 and
+selection-only143..145 remain;reload146 closes access. Eleven realPG cases,44 deployment
+contracts,4,521 disjoint IDs and122 app-image hashes pass. CI jobs/workers/caps/runners/PG
+semantics remain;require all8 exact-head successes and30s frontend/backend job/test/graph
+margins. No publication workload,timing retry,billing promise or deployment. See
+[contract](COMPLETE_LAST_DESTINATION_ARRIVAL_RETURN.md) and dated evidence.
+R03/R05/legal/corpus/rights/lawyer acceptance remain partial. Next:complete86 exact-event
+handoff;implementation and PR unstarted.
