@@ -4520,3 +4520,23 @@ publication workload,timing retry,billing promise or deployment. See
 [contract](COMPLETE_91_ARRIVAL_RETURN.md) and dated evidence. R03/R05/legal/corpus/rights/
 lawyer acceptance remain partial. Next:complete92 exact-event handoff;implementation
 and PR unstarted. Compact branches;stable purpose IDs remain unchanged.
+
+### Complete92 exact-event handoff
+
+The entire original92 remains byte-identical;fresh authorized queue and stable two-read
+preparation form94 observations. One exact selected metadata GET opens;explicit verified
+zero-action return restores original92 without capturing a future destination. Both page
+pre-fetch guards and highest-priority92 preparation preserve all pins,exact customer/date
+filters,evidence versions,confidentiality and independent review history. Original91 return89
+and all older APIs/projections remain unchanged. All8,744/126 frontend cases pass;214 new
+cases extend8,530 unchanged cases/125 byte-identical files. Fresh two-lawyer rehearsal
+retains162/163 in164/165 around edit38;zero-action166 restores92;selection-only167..169;
+stronger158 and159..161 unchanged;reload closes access. Eleven realPG races,44 deployment
+contracts,4,521 disjoint IDs and122 image hashes pass. Workflow hash,measured allocation,
+8 jobs,workers,caps,runners and PG semantics remain unchanged. Require all8 exact-head
+successes plus30s frontend/backend job/test/graph margins and independent base-main success
+before merge. No publication workload,timing retry,billing promise or deployment. See
+[contract](COMPLETE_92_EXACT_EVENT.md) and dated evidence. R03/R05/legal/corpus/rights/lawyer
+acceptance remain partial. Next:complete94 destination return for95 observations;implementation
+and PR unstarted;compact physical filenames required. Keep canonical roadmap and HTML tracker
+synchronized with delivery evidence;CI,merge,main-push,deployment and acceptance remain separate.
