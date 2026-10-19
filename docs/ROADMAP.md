@@ -4466,3 +4466,21 @@ exact-head successes and30s frontend/backend job/test/graph margins. No publicat
 timing retry,billing promise or deployment. See [contract](COMPLETE_LAST_ARRIVAL_EVENT_HANDOFF.md)
 and dated evidence. R03/R05/legal/corpus/rights/lawyer acceptance remain partial.
 Next:original88 destination-return;implementation and PR unstarted.
+
+### Complete last-arrival destination return (88 retained observations)
+
+Original88 stays unchanged;explicit verified return captures a separate reduced destination
+for89 observations with zero action IO. Original88 exported return still restores86;
+original85 return83 and earlier80/77 APIs/projections remain. Fresh complete-history
+validation and separate preparation/destination/earlier-arrival comparisons preserve all
+pins,filters,evidence versions,confidentiality and review history. Stronger89 disables
+weaker preparation. All8,126 frontend cases/123 files and build pass;190 new cases extend
+unchanged7,936/122. Fresh two-lawyer rehearsal retains148/149 in154/155 around actualedit35;
+stronger150 and selection-only151..153 remain;reload154 closes access. Eleven realPG cases,
+44 deployment contracts,4,521 disjoint IDs and122 app-image hashes pass. Jobs/workers/caps/
+runners/PG semantics remain;require all8 exact-head successes and30s frontend/backend job/
+test/graph margins,plus separate base-main success. No publication workload,timing retry,
+billing promise or deployment. See [contract](COMPLETE_LAST_ARRIVAL_DESTINATION_RETURN.md)
+and dated evidence. R03/R05/legal/corpus/rights/lawyer acceptance remain partial.
+Next:complete89 exact-event handoff;implementation and PR unstarted. Compact branch names
+avoid the255-byte ref-component/lock-file limit;stable purpose IDs remain unchanged.
