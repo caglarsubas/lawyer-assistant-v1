@@ -4502,3 +4502,21 @@ job/test/graph margins and separate base-main success. No retries,cap increase,b
 promise or deployment. See [contract](COMPLETE_89_EXACT_EVENT.md) and dated evidence.
 R03/R05/legal/corpus/rights/lawyer acceptance remain partial. Next:complete91 separate
 arrival-return;implementation and PR unstarted. Compact branch names;stable IDs stay.
+
+### Complete91 arrival return
+
+Original91 stays byte-identical;explicit verified return captures one separate reduced
+arrival for92 observations with zero action IO. The original91 exported return still
+restores89;all earlier APIs/projections stay. Fresh complete-history validation and
+separate preparation/arrival/earlier-destination comparisons preserve every pin,exact
+filter,evidence version,confidentiality and review history. Stronger92 disables weaker
+preparation. All8,530/125 frontend tests pass;195 new tests extend unchanged8,335/124.
+Fresh two-lawyer rehearsal retains156/157 in162/163 around edit37;stronger158 and
+selection-only159..161 remain;reload closes access. Eleven realPG races,44 deployment
+contracts,4,521 disjoint IDs and122 image hashes pass. Measured CI allocation,8 jobs,
+workers,caps,runners and PG semantics remain. Require all8 exact-head successes plus
+30s frontend/backend job/test/graph margins and independent base-main success. No
+publication workload,timing retry,billing promise or deployment. See
+[contract](COMPLETE_91_ARRIVAL_RETURN.md) and dated evidence. R03/R05/legal/corpus/rights/
+lawyer acceptance remain partial. Next:complete92 exact-event handoff;implementation
+and PR unstarted. Compact branches;stable purpose IDs remain unchanged.
