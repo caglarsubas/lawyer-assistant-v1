@@ -4602,3 +4602,7 @@ independent base-main success before merge. No timing retry,billing promise or d
 acceptance remain partial. Next:complete98 exact-event handoff for100 observations,implementation
 and PR unstarted. Keep canonical roadmap and HTML tracker current;delivery,main-push CI,qualification
 and next engineering focus remain separate.
+
+### Isolated frontend test-worker capacity
+
+Qualify CI headroom before the complete98 exact-event successor:two isolated thread workers replace two fork workers without changing any of9,388 cases/130 files or385 frontend source/workflow files. Forced TypeScript,full suite and build pass locally;100.428-second suite observation is not a hosted guarantee. Keep8 jobs,all caps,runners,backend allocation and PostgreSQL semantics. Require8 latest exact-head successes,four defined margins≥30s,independently green base-main and one matching-head merge with complete tested/merged tree equality. See[capacity contract](CI_THREAD_HEADROOM.md) and dated evidence. The100-observation handoff remains next,unstarted until capacity qualification. Delivery,main CI,deployment and legal/corpus/lawyer acceptance remain separate.

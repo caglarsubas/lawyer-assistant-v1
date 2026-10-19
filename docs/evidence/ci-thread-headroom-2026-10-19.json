@@ -1,0 +1,48 @@
+{
+  "schema": "ci-thread-headroom-v1",
+  "base": "b401f5d784a719f9541cb4e135ac0dcffcecbb70",
+  "scope": "test execution only;no application behavior change",
+  "change": {
+    "before": "vitest run --maxWorkers=2",
+    "after": "vitest run --pool=threads --maxWorkers=2",
+    "test_isolation": true,
+    "workers": 2,
+    "timeouts_and_jobs_unchanged": true
+  },
+  "validation": {
+    "frontend_passed": 9388,
+    "frontend_files": 130,
+    "identical_case_ids": true,
+    "source_and_workflow_files_byte_identical": 385,
+    "local_profile": [
+      {
+        "name": "clean-tsc",
+        "seconds": 6.359,
+        "exit_code": 0
+      },
+      {
+        "name": "two-worker-suite",
+        "seconds": 100.428,
+        "exit_code": 0
+      },
+      {
+        "name": "build",
+        "seconds": 8.97,
+        "exit_code": 0
+      }
+    ],
+    "earlier_local_fork_suite_seconds": 113.356,
+    "local_speedup_not_hosted_guarantee": true
+  },
+  "source_sha256": {
+    "frontend/package.json": "348c4a77f612e3e32702e5f59baef45ff8f61a8d0c75b76b2cf5e26b2faa2d98"
+  },
+  "qualification": {
+    "requires_all_eight_exact_head_jobs": true,
+    "minimum_four_defined_margins_seconds": 30,
+    "baseline_main_run": 39261222724,
+    "no_unchanged_code_timing_retry": true,
+    "deployed": false,
+    "legal_acceptance": false
+  }
+}
