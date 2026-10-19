@@ -4450,3 +4450,19 @@ margins. No publication workload,timing retry,billing promise or deployment. See
 [contract](COMPLETE_LAST_DESTINATION_ARRIVAL_RETURN.md) and dated evidence.
 R03/R05/legal/corpus/rights/lawyer acceptance remain partial. Next:complete86 exact-event
 handoff;implementation and PR unstarted.
+
+### Complete last-arrival exact-event handoff (86 retained observations)
+
+Original86 stays unchanged,including85 handoff and separate arrival. Fresh queue and stable
+preparation make88 observations;two stable window1 metadata reads prepare and one exact
+metadata GET opens. Explicit return restores original86 with zero action IO and no new
+capture. All pins,filters,evidence versions,confidentiality,review history and retirement
+fences remain. Original85 return83 and earlier80/77 APIs remain unchanged.
+All7,936 frontend cases/122 files and build pass;204 new cases extend unchanged7,732/121.
+Fresh two-lawyer rehearsal retains146/147 in148/149 around actualedit34,zero-action return150
+and selection-only151..153. Eleven realPG cases,44 deployment contracts,4,521 disjoint IDs
+and122 app-image hashes pass. CI jobs/workers/caps/runners/PG semantics remain;require all8
+exact-head successes and30s frontend/backend job/test/graph margins. No publication workload,
+timing retry,billing promise or deployment. See [contract](COMPLETE_LAST_ARRIVAL_EVENT_HANDOFF.md)
+and dated evidence. R03/R05/legal/corpus/rights/lawyer acceptance remain partial.
+Next:original88 destination-return;implementation and PR unstarted.

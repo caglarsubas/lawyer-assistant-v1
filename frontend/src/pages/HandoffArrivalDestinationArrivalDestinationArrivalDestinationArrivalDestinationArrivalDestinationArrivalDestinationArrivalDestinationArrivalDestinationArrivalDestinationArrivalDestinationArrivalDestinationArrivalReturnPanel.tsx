@@ -23,7 +23,7 @@ export default function HandoffArrivalDestinationArrivalDestinationArrivalDestin
         <p className="reference-id">Son sürüm: {s.metadata.analysis.current_version_id || 'Bilinmiyor'} · Revizyon: {s.metadata.analysis.revision}</p>
         <p>Kabuller — bağlam: {admission(s.metadata.admission.context_state)}; seçilen karar: {admission(s.selected.admission)}; baş: {admission(s.metadata.admission.review_state)}.</p></div>)}
     </Detail>
-    {prepare && <button className="button secondary" disabled={busy} onClick={prepare}>Tam varış zincirini koruyarak tam karara geçişi hazırla</button>}
+    {prepare && <button className="button secondary" disabled={busy} onClick={prepare}>Son varışın tüm geçmişini koruyarak tam karara geçişi hazırla</button>}
     <p className="small muted">Özgün müşteri ve tarih filtreleri, sabit kanıt ve bağımsız inceleme geçmişi değişmeden korundu. Önceki gözlemler yukarıdaki ayrı karşılaştırmalarda kalır. Yalnız özel kimlik metadatası karşılaştırıldı; kaynaklar, hukuki etki veya yeni başa yol doğrulanmadı. Bekleyen kabul tamamlanmadı, başka karar seçilmedi. Bu ek varışı taşıyamayan önceki geçiş hazırlığı kapalıdır.</p>
   </section>;
 }
