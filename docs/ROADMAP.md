@@ -4560,3 +4560,22 @@ See[contract](COMPLETE_94_DESTINATION_RETURN.md) and dated evidence. R03/R05/leg
 lawyer acceptance remain partial. Next:complete95 exact-event handoff for97 observations;
 implementation and PR unstarted. Keep canonical roadmap and HTML tracker synchronized with
 actual delivery evidence;next engineering item explicitly selected,qualification separate.
+
+### Complete95 exact-event handoff
+
+Complete original95 is byte-identical;fresh authorized queue plus stable two-read preparation
+forms97 observations. One exact selected metadata GET opens;zero-action verified return restores
+original95 without capturing future arrival. Both pre-fetch guards,highest-priority95 and lower92
+suppression preserve every pin,exact customer/date filter,evidence version,confidentiality and
+review history. Complete94/95 modules and all previous APIs/projections stay unchanged. All9,163
+frontend cases/128 files pass;219 new cases extend8,944 unchanged cases/127 byte-identical files.
+Focused CUA integration of production queue/selected components verifies two independent purposes,
+reads,return,redirect and reload closure at1440/740. Prior full two-lawyer browser evidence remains
+baseline evidence;not rerun and no claim of40 actual edits or172/173 allocation. Eleven realPG
+races,44 deployment contracts,4,521 disjoint IDs and122 image hashes pass. Workflow,caps,runners,
+workers and allocation remain. Require all8 latest exact-head successes plus30s frontend/backend
+job/test/graph margins and independent base-main success before merge. No timing retry,billing
+promise or deployment. See[contract](COMPLETE_95_EXACT_EVENT.md) and dated evidence. R03/R05/legal/
+corpus/rights/lawyer acceptance remain partial. Next:complete97 arrival return for98 observations,
+implementation and PR unstarted. Keep canonical roadmap and HTML tracker current;delivery,
+main-push CI,qualification and next engineering focus remain separate.
