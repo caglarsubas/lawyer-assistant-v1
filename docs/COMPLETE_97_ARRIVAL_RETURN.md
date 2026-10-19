@@ -32,7 +32,7 @@ late-response fences remain. Active same-firm matter membership is required;admi
 role and customer tags grant no access. Private metadata stays outside Graph A/B,providers,
 shared caches and telemetry. No source bodies or review notes enter identity records.
 
-Qualification:9,368 frontend tests/129 files;205 new cases extend9,163 unchanged tests in128
+Qualification:9,388 frontend tests/130 files;225 new cases (205 arrival-return and20 timestamp compatibility) extend9,163 unchanged tests in128
 byte-identical files. Independent complete97 fixtures cover97 pins,62 known-head substitutions
 through65,separate saved-only9,strict undefined keys,all filters,times/revisions,clone isolation,
 fresh validation,old APIs/projections,unknown/pending,TTL,principal and reload. Two distinct97
@@ -67,10 +67,16 @@ used explicit2workers,but the CI npm test script left Vitest at a host-dependent
 Pin npm test to vitest run --maxWorkers=2 to match the qualified pool. All9,368 cases,all
 isolation,workflow,runners,caps and backend allocation remain. CPU profiles of424 representative
 cases are retained. A serializer allocation experiment had no established gain and was reverted;
-production validation/serialization and all128 old test files remain unchanged. The revised full
+serialization and all128 old test files remain unchanged. All validation checks remain;one stateless timestamp comparison gains the strict UTC shortcut described below. The revised full
 qualifier invokes npm test without a worker override,so it exercises the shipped command.
-Browser evidence remains applicable because every production frontend source byte matches the
-browser-qualified first head;only the test command and documentation change. A cancellation
+The two-worker change alone used273/300s and still failed the margin floor. CPU profiles then
+identified repeated timestamp parsing. compareDestinationIdentities now compares equal-precision
+canonical UTC strings lexically only for a strict calendar-valid subset (days01..28,UTC Z or +00:00);all other
+formats retain Date.parse,including offsets,rollovers,variable precision and runtime non-strings.
+It never caches or removes validation. Twenty compatibility tests include2000 varied timestamp
+pairs and mutation/coercion checks. The common-path local benchmark is approximately4x faster;
+that is not a CI or billing guarantee. All other155 protected source files remain byte-identical.
+A fresh complete qualifier and fresh CUA fixture follow this production comparison change. A cancellation
 request for the superseded run was denied HTTP403 by token permissions;no cancellation authority
 or savings is claimed. The changed-head run uses existing concurrency cancellation. This is a
 source correction,not an unchanged-code timing retry. Verify new exact-head margins before merge.

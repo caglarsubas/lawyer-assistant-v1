@@ -28,9 +28,11 @@
     "principal_session_reload_fences_opaque_url_no_persistence": true
   },
   "validation": {
-    "frontend_passed": 9368,
-    "frontend_files": 129,
-    "new_cases": 205,
+    "frontend_passed": 9388,
+    "frontend_files": 130,
+    "new_cases": 225,
+    "arrival_return_new_cases": 205,
+    "timestamp_compatibility_new_cases": 20,
     "retained_selected_pin_cases": 97,
     "known_head_substitution_cases": 62,
     "separate_saved_only_head9_case": true,
@@ -52,17 +54,17 @@
     "current_profile": [
       {
         "name": "clean-tsc",
-        "seconds": 12.885,
+        "seconds": 12.679,
         "exit_code": 0
       },
       {
         "name": "two-worker-suite",
-        "seconds": 88.516,
+        "seconds": 113.356,
         "exit_code": 0
       },
       {
         "name": "build",
-        "seconds": 7.512,
+        "seconds": 10.844,
         "exit_code": 0
       }
     ],
@@ -100,7 +102,11 @@
       "rights_simulated": true,
       "env_file": null,
       "synthetic_metadata_authorization_qualification": false,
-      "real_backend_fresh_health": 200
+      "real_backend_fresh_health": 200,
+      "fresh_fixture_after_production_time_comparison": true,
+      "fresh_database_suffix": 2,
+      "focused_browser_repeated_after_9388_test_qualifier": true,
+      "timestamp_comparison_compatibility_cases": 20
     },
     "visual_review": "1440/740 focused CUA screens inspected",
     "providers_disabled_env_file_none": true,
@@ -118,11 +124,57 @@
       "root_configuration_mismatch": "Local qualification used explicit maxWorkers=2; npm test in CI had no limit and Vitest chooses host availableParallelism minus1. Runner-dependent pool sizing diverged from the qualified budget.",
       "correction": "Pin npm test to vitest run --maxWorkers=2;same suite,isolation,caps,workflow,runners,backend partition.",
       "serializer_experiment": "Reverted;local CPU samples did not establish a gain. No production validator or serializer change retained.",
-      "production_source_equal_to_browser_qualified_first_head": true,
+      "production_source_equal_to_browser_qualified_first_head": false,
       "unchanged_code_hosted_timing_retries": 0,
-      "cancel_request": "HTTP403 token lacks Actions cancellation permission;one attempt only. Changed-head workflow concurrency cancels superseded run if still active."
+      "cancel_request": "HTTP403 token lacks Actions cancellation permission;one attempt only. Changed-head workflow concurrency cancels superseded run if still active.",
+      "second_head": "6fbdffd65da77a92e00330bd3f980e2706442013",
+      "second_run": 39256052424,
+      "second_frontend_seconds": 273,
+      "second_frontend_margin": 27,
+      "worker_limit_alone_restored_margin": false,
+      "additional_correction": "Stateless canonical UTC ordering shortcut in compareDestinationIdentities;strict calendar-valid subset only,Date.parse fallback unchanged for offsets,rollovers,unusual precision and runtime non-strings. Includes both UTC Z and +00:00,with equal precision/format;other offsets retain fallback.",
+      "comparison_compatibility_cases": 20,
+      "differential_timestamp_pairs": 2000,
+      "no_validation_cache_or_history_checks_removed": true,
+      "fresh_qualifier_and_fresh_browser_required": true
     },
-    "production_browser_source_equivalence_to_first_head": true,
+    "production_browser_source_equivalence_to_first_head": false,
+    "fresh_browser_after_timestamp_fix": true,
+    "timestamp_local_benchmark": {
+      "scope": "local common canonical UTC path only;not CI or legal qualification",
+      "trials": [
+        {
+          "original": {
+            "milliseconds": 41.383416000000004,
+            "checksum": 200000
+          },
+          "current": {
+            "milliseconds": 11.075250000000011,
+            "checksum": 200000
+          }
+        },
+        {
+          "original": {
+            "milliseconds": 39.43899999999999,
+            "checksum": 200000
+          },
+          "current": {
+            "milliseconds": 9.748458,
+            "checksum": 200000
+          }
+        },
+        {
+          "original": {
+            "milliseconds": 41.38791699999999,
+            "checksum": 200000
+          },
+          "current": {
+            "milliseconds": 11.229790999999977,
+            "checksum": 200000
+          }
+        }
+      ]
+    },
     "local_development_failures_retained": "integration count assertion,fixed-depth test-reference and duplicated panel label corrected before full qualification;verification harness selector/type-check diagnostics retained;no hosted retry"
   },
   "ci": {
@@ -211,9 +263,11 @@
     "frontend/src/pages/Handoff97ArrivalReturnPanel.tsx": "55709bb1158ac358fbaa909a52c9a938fb5a0ca29878908745e0d10f5be5f193",
     "frontend/src/pages/PortfolioReturnQueue.tsx": "25e6b7d6e229ebe55bfed2b8deb8f5b8396e873b6ab66f8603ea757c574ca5f9",
     "frontend/src/pages/SelectedSourceReviewPage.tsx": "e34923369357f0b202ec27baa5ae9e07ed0014dac3df5a44f429adc06e38cd1c",
+    "frontend/src/workbench/comparisonReturn.ts": "aa5f12b8736c1b8d11716e2d9a57be5ef4f80e14d564e64e0a6be1943f46c641",
     "frontend/src/workbench/handoff95ExactEvent.ts": "ccf3f6811498404ae806379b5e6750ce1008b60fb8b5226d6414b7d0dcdacbf9",
     "frontend/src/workbench/handoff97ArrivalReturn.test.tsx": "cfe85aaaa9c8f3577ce5274f16f5366361c033cca83a0b333321cd22a110791b",
     "frontend/src/workbench/handoff97ArrivalReturn.ts": "f2aaf3c0e73880c431bf5cb3a3bb075fc10f581f2f713057d4eece08710ffe5b",
+    "frontend/src/workbench/observationTimeCompatibility.test.ts": "8fb52ffa936ca96d49d84a737e7a6105edd020375a0694cd4d9ff01c6148115c",
     "frontend/src/workbench/portfolioReturn.ts": "d8ab4140e7c279aae44e83f677906dfb4e431e32d089459c71e56c285cbde37a"
   },
   "unchanged_critical_sha256": {
@@ -241,7 +295,6 @@
     "frontend/src/workbench/comparisonEventHandoff.test.tsx": "42e71ff4bbf1c2314bb67f3c736f6d046edbe33b8d400864757b7b6618e8293f",
     "frontend/src/workbench/comparisonEventHandoff.ts": "7f4860a7506fbb9c85acf0bb5b0d4357aa105986d5769f9e1704c677a587426f",
     "frontend/src/workbench/comparisonReturn.test.tsx": "7c792783169033bc85a56c22e7894be1645838379a0595f3e792d7adbd1f998f",
-    "frontend/src/workbench/comparisonReturn.ts": "0909ab8ec108f511a0041d85a14e4a5bd3ba4ed9afe44c623f3e50675fa5bc95",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn.test.tsx": "005df37a8710a49430f91da8145acd32390545725144d233316a8bbbb6bdf9af",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn.ts": "1245a979620f337c832f7d30386133d08b64636c52e6b6bc8e188cc26ecfda5b",
     "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent.test.tsx": "34af8c32b646f7ceb2a69439f98796b3232768fa7707cb5684398159112037e5",
@@ -373,6 +426,13 @@
     "frontend/src/workbench/handoff94DestinationReturn.ts": "2cff35619ae2f1c28e8e2dbaa401a8366ca2d70615f207446592abae2425eb31",
     "frontend/src/pages/HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEventPanel.tsx": "82ef2b2e9e79c0e75f11bf83f7d38e127f0f2a20f0af278a6ed7614ea60aa138",
     "frontend/src/pages/Handoff94DestinationReturnPanel.tsx": "1e054d39fd8b590f3272fe1874ab8e6491a6fb41288dc8a75f619944ab788039"
+  },
+  "semantically_qualified_performance_source_changes": {
+    "frontend/src/workbench/comparisonReturn.ts": {
+      "previous_sha256": "0909ab8ec108f511a0041d85a14e4a5bd3ba4ed9afe44c623f3e50675fa5bc95",
+      "current_sha256": "aa5f12b8736c1b8d11716e2d9a57be5ef4f80e14d564e64e0a6be1943f46c641",
+      "scope": "Stateless canonical UTC ordering subset only;Date.parse fallback unchanged;20 differential tests,2000 varied pairs;no cache or removed validation"
+    }
   },
   "boundaries": {
     "R03": "partial",

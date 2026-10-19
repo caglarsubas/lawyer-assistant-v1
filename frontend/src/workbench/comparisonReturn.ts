@@ -51,10 +51,21 @@ export function reconcileComparisonReturn(intent: ReturnIntent, receipt: Compari
   return structuredClone({ state: 'observed', queue_observed_at: page.observed_at, fresh, ...compareDestinationIdentities(previous, fresh) });
 }
 
+// This strict subset has a calendar-valid day in every month. Other accepted
+// Date.parse inputs (offsets, rollovers, unusual precision) retain the old path.
+const canonicalUtc = /^\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-8])T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{3})?(?:Z|\+00:00)$/;
+function observedBefore(current: string, previous: string): boolean {
+  if (typeof current === 'string' && typeof previous === 'string') {
+    if (current === previous) return false;
+    if (current.length === previous.length && canonicalUtc.test(current) && canonicalUtc.test(previous)) return current < previous;
+  }
+  return Date.parse(current) < Date.parse(previous);
+}
+
 /** Both observations must already have passed their exact-context validators. */
 export function compareDestinationIdentities(previous: ReviewPathDestination, fresh: ReviewPathDestination) {
   const before = previous.metadata, meta = fresh.metadata, head = fresh.head, oldHead = previous.head;
-  if (Date.parse(meta.observed_at) < Date.parse(before.observed_at) || meta.analysis.revision < before.analysis.revision) fail();
+  if (observedBefore(meta.observed_at, before.observed_at) || meta.analysis.revision < before.analysis.revision) fail();
   if (head?.integrity === 'verified' && oldHead?.integrity === 'verified' && head.id === oldHead.id && !equalImmutable(head, oldHead)) fail();
   const knownHeads = head?.integrity === 'verified' && meta.historical_review.state !== 'unknown' && oldHead?.integrity === 'verified' && before.historical_review.state !== 'unknown';
   return {

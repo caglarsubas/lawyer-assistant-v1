@@ -4588,9 +4588,10 @@ complete94 return92 and all earlier APIs/projections stay. Fresh complete-histor
 separate preparation/arrival/earlier-destination comparisons preserve every pin,exact customer/date
 filter,evidence version,confidentiality and review history. Higher98 disables lower95 preparation.
 The frontend test command is pinned to the locally qualified two-worker pool after the first
-head passed CI but left only29s of required30s headroom;no merge was attempted. Production
-validation/serialization stay unchanged and source matches the focused browser evidence.
-All9,368 frontend tests/129 files pass;205 new cases extend9,163 unchanged tests/128 byte-identical
+head passed CI but left only29s of required30s headroom;no merge was attempted. Serialization and full-history validation stay. The worker pin alone also
+missed the gate;the profiled stateless UTC comparison keeps Date.parse fallback. Twenty
+compatibility tests and2000 varied pairs qualify semantics;fresh CUA checks follow the change.
+All9,388 frontend tests/130 files pass;225 new cases extend9,163 unchanged tests/128 byte-identical
 files. Focused CUA production-component checks verify capture,reconciliation,omission,delayed filter
 response,redirect and reload at1440/740. Baseline full two-lawyer browser evidence remains separate,
 not rerun;no real edit or legacy allocation claims. Eleven realPG races,44 deployment contracts,
