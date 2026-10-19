@@ -58,8 +58,22 @@ pinned to exact baseline and original narrow parsed8723delta. Eight jobs,all cap
 workers,measured48-case workspace allocation and PostgreSQL semantics remain unchanged. No
 publication work added. Require all8 latest exact-head successes and>=30s frontend/backend job/
 Testbackend/graph margins plus independent base-main success before ONE ordinary matching-head
-squash. No timing retries,cap increases,bypass or billing guarantee. Full tested/merged trees
+squash. No unchanged-code timing retries,cap increases,bypass or billing guarantee. Full tested/merged trees
 and remote main must agree. Main-push CI,deployment and acceptance remain separate.
+
+Frontend headroom correction:the first submitted head used271/300s,leaving29s and failing
+the30s engineering gate even though tests passed. No merge was attempted. Local qualification
+used explicit2workers,but the CI npm test script left Vitest at a host-dependent default.
+Pin npm test to vitest run --maxWorkers=2 to match the qualified pool. All9,368 cases,all
+isolation,workflow,runners,caps and backend allocation remain. CPU profiles of424 representative
+cases are retained. A serializer allocation experiment had no established gain and was reverted;
+production validation/serialization and all128 old test files remain unchanged. The revised full
+qualifier invokes npm test without a worker override,so it exercises the shipped command.
+Browser evidence remains applicable because every production frontend source byte matches the
+browser-qualified first head;only the test command and documentation change. A cancellation
+request for the superseded run was denied HTTP403 by token permissions;no cancellation authority
+or savings is claimed. The changed-head run uses existing concurrency cancellation. This is a
+source correction,not an unchanged-code timing retry. Verify new exact-head margins before merge.
 
 Next finite slice:complete98 exact-event handoff for100 observations,implementation and PR
 unstarted. Compact paths,stable IDs/recipes,all observations and exact filters remain. Update

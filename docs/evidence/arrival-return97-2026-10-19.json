@@ -52,17 +52,17 @@
     "current_profile": [
       {
         "name": "clean-tsc",
-        "seconds": 5.793,
+        "seconds": 12.885,
         "exit_code": 0
       },
       {
         "name": "two-worker-suite",
-        "seconds": 84.235,
+        "seconds": 88.516,
         "exit_code": 0
       },
       {
         "name": "build",
-        "seconds": 8.578,
+        "seconds": 7.512,
         "exit_code": 0
       }
     ],
@@ -107,6 +107,22 @@
     "rights": "simulated;not signed corpus qualification",
     "owned_fixture_ports_closed": true,
     "qualification_scope": "Focused production-component CUA integration with deterministic metadata. Baseline full two-lawyer browser retained separately,not rerun;no claim of a real edit or legacy allocation sequence. All old tests and fresh PostgreSQL races rerun.",
+    "headroom_root_cause": {
+      "first_head": "155b9324b0f79ca22b48821fb3f83b319124b79a",
+      "first_run": 39253971601,
+      "frontend_seconds": 271,
+      "required_margin_seconds": 30,
+      "actual_margin_seconds": 29,
+      "merge_attempted": false,
+      "hosted_test_seconds": 231.47,
+      "root_configuration_mismatch": "Local qualification used explicit maxWorkers=2; npm test in CI had no limit and Vitest chooses host availableParallelism minus1. Runner-dependent pool sizing diverged from the qualified budget.",
+      "correction": "Pin npm test to vitest run --maxWorkers=2;same suite,isolation,caps,workflow,runners,backend partition.",
+      "serializer_experiment": "Reverted;local CPU samples did not establish a gain. No production validator or serializer change retained.",
+      "production_source_equal_to_browser_qualified_first_head": true,
+      "unchanged_code_hosted_timing_retries": 0,
+      "cancel_request": "HTTP403 token lacks Actions cancellation permission;one attempt only. Changed-head workflow concurrency cancels superseded run if still active."
+    },
+    "production_browser_source_equivalence_to_first_head": true,
     "local_development_failures_retained": "integration count assertion,fixed-depth test-reference and duplicated panel label corrected before full qualification;verification harness selector/type-check diagnostics retained;no hosted retry"
   },
   "ci": {
@@ -175,7 +191,8 @@
       "hosted_speedup_or_billing_savings_established": false
     },
     "measured_workspace_allocation_retained": true,
-    "workflow_eight_jobs_workers_caps_runners_allocation_postgres_semantics_unchanged": true,
+    "workflow_eight_jobs_caps_runners_backend_allocation_postgres_semantics_unchanged": true,
+    "frontend_test_workers_explicitly_pinned_to_qualified_two": true,
     "required_margin_seconds": 30,
     "margin_gates": [
       "frontend",
@@ -189,6 +206,7 @@
     "billing_guarantee": false
   },
   "source_sha256": {
+    "frontend/package.json": "747bb2e07bd47ecdbc4534d17b689b43b54620ae53ea3c2e0f0595de5d1de8fd",
     "frontend/src/pages/Handoff95ExactEventPanel.tsx": "5694e4ca5f3bee47da56fb30256995c832ef754e66193a4b17d1c8feccc96698",
     "frontend/src/pages/Handoff97ArrivalReturnPanel.tsx": "55709bb1158ac358fbaa909a52c9a938fb5a0ca29878908745e0d10f5be5f193",
     "frontend/src/pages/PortfolioReturnQueue.tsx": "25e6b7d6e229ebe55bfed2b8deb8f5b8396e873b6ab66f8603ea757c574ca5f9",
