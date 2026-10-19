@@ -4415,3 +4415,21 @@ the entire unchanged32-case review step to existing backend capacity (previously
 job margin), preserving48 x86 workspace cases,all4,521 disjoint node IDs,eight jobs,
 two workers and all caps. LinuxARM32-case verification passes in21.71s. No new
 publication workload;new balanced-head CI must qualify all four receiving margins.
+
+### Complete last-destination exact-event handoff (83 retained observations)
+
+Original 83 stays byte-identical, including its complete 82 handoff and separate destination.
+Fresh queue and stable preparation make 85 observations. Two stable window 1 metadata reads
+prepare;one exact metadata GET opens;explicit return restores original 83 with zero action IO
+and no arrival capture. All pins, exact filters/evidence versions, independent review history,
+confidentiality and retirement fences remain. No cached verdict or weaker projection.
+All 7,547 frontend cases/120 files and build pass;199 new cases extend unchanged 7,348/119.
+Fresh two-lawyer rehearsal retains 138/139 in 140/141 around actualedit 32, zero-action return 142
+and selection-only 143..145. Eleven realPG cases,44 deployment contracts,4,521 disjoint IDs
+and 122 application image hashes pass. Eight jobs/workers/caps/runners/PG semantics and the existing
+32-case backend/48-case x 86 allocation remain. Require all 8 exact-head successes and 30 s
+frontend/backend job/test/graph margins;preceding-main CI qualified separately. No new
+publication workload, timing retry, billing promise or deployment. See
+[contract](COMPLETE_LAST_DESTINATION_EVENT_HANDOFF.md) and dated evidence.
+R03/R05/legal/corpus/rights/lawyer acceptance remain partial. Next:original 85 arrival-return;
+implementation and PR unstarted. Concise new artifact filenames avoid component-size limits.
