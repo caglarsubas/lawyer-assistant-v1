@@ -4484,3 +4484,21 @@ billing promise or deployment. See [contract](COMPLETE_LAST_ARRIVAL_DESTINATION_
 and dated evidence. R03/R05/legal/corpus/rights/lawyer acceptance remain partial.
 Next:complete89 exact-event handoff;implementation and PR unstarted. Compact branch names
 avoid the255-byte ref-component/lock-file limit;stable purpose IDs remain unchanged.
+
+### Complete89 exact-event handoff and frontend CI headroom
+
+Original89 is retained unchanged,with fresh authorized queue and stable preparation
+for91 observations. Two window1 reads prepare;one exact metadata GET opens;explicit
+zero-action return restores89. No future arrival capture. Exact customer/date filters,
+evidence versions,confidentiality and review history stay;fresh complete validation
+and both pre-fetch guards apply. All8,335/124 frontend tests pass;209 new tests extend
+unchanged8,126/123. Fresh two-lawyer rehearsal preserves154/155 in156/157 around edit36;
+11 realPG races,44 deployment contracts,4,521 disjoint IDs and122 image hashes pass.
+Frontend's unchanged48-case Python workspace step moves to existing measured ARM
+backend headroom with its original cap/two workers;redundant frontend Python setup is
+removed. Narrow parsed delta and new workflow hash recorded;all8 jobs,other semantics
+and realPG guarantees remain. Require all8 exact-head successes plus30s frontend/backend
+job/test/graph margins and separate base-main success. No retries,cap increase,billing
+promise or deployment. See [contract](COMPLETE_89_EXACT_EVENT.md) and dated evidence.
+R03/R05/legal/corpus/rights/lawyer acceptance remain partial. Next:complete91 separate
+arrival-return;implementation and PR unstarted. Compact branch names;stable IDs stay.
