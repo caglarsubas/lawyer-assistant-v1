@@ -4579,3 +4579,22 @@ promise or deployment. See[contract](COMPLETE_95_EXACT_EVENT.md) and dated evide
 corpus/rights/lawyer acceptance remain partial. Next:complete97 arrival return for98 observations,
 implementation and PR unstarted. Keep canonical roadmap and HTML tracker current;delivery,
 main-push CI,qualification and next engineering focus remain separate.
+
+### Complete97 arrival return
+
+Explicit currently verified return retains the whole97 purpose and captures one separate reduced
+arrival for98 observations with zero action IO. Original97 return95 keeps full signature/body;
+complete94 return92 and all earlier APIs/projections stay. Fresh complete-history validation and
+separate preparation/arrival/earlier-destination comparisons preserve every pin,exact customer/date
+filter,evidence version,confidentiality and review history. Higher98 disables lower95 preparation.
+All9,368 frontend tests/129 files pass;205 new cases extend9,163 unchanged tests/128 byte-identical
+files. Focused CUA production-component checks verify capture,reconciliation,omission,delayed filter
+response,redirect and reload at1440/740. Baseline full two-lawyer browser evidence remains separate,
+not rerun;no real edit or legacy allocation claims. Eleven realPG races,44 deployment contracts,
+4,521 disjoint IDs and122 image hashes pass. Workflow,caps,runners,workers and allocation remain.
+Require all8 latest exact-head successes plus30s frontend/backend job/test/graph margins and
+independent base-main success before merge. No timing retry,billing promise or deployment. See
+[contract](COMPLETE_97_ARRIVAL_RETURN.md) and dated evidence. R03/R05/legal/corpus/rights/lawyer
+acceptance remain partial. Next:complete98 exact-event handoff for100 observations,implementation
+and PR unstarted. Keep canonical roadmap and HTML tracker current;delivery,main-push CI,qualification
+and next engineering focus remain separate.

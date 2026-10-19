@@ -1,7 +1,8 @@
+import type { PortfolioQueuePage } from '../pages/portfolioSourceQueueTypes';
 import { canonicalJson } from '../pages/matter/sourceReviewTypes';
 import type { NavigationMetadata, SourceTarget } from '../pages/sourceContextNavigationTypes';
 import { verifyReviewLineage, type ReviewLineage } from '../pages/sourceReviewLineageTypes';
-import { validateHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn, type HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn } from './handoff94DestinationReturn';
+import { reconcileHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn, validateHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn, type HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn } from './handoff94DestinationReturn';
 import { compareDestinationIdentities, validateDestinationObservation, type ComparisonQueueReconciliation, type ObservedComparison } from './comparisonReturn';
 import type { ReturnIntent } from './portfolioReturn';
 import { returnVerifiedEvent, verifyReturnedEventTarget } from './returnedReviewLineage';
@@ -122,6 +123,9 @@ function arrivalFields(handoff: HandoffArrivalDestinationArrivalDestinationArriv
   checks.destination(fresh); compareDestinationIdentities(handoff.queue.fresh, fresh);
   return compareDestinationIdentities(handoff.prepared, fresh);
 }
+export function verifyHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEventArrival(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent, fresh: ReviewPathDestination) {
+  return arrivalFields(handoff, fresh, verified(handoff, intent));
+}
 function destination(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent, target: SourceTarget, history: ReviewLineage, checks: HistoryChecks) {
   if (target.kind !== 'selected') fail();
   verifyReturnedEventTarget(intent, target); verifyReviewLineage(history, target);
@@ -131,6 +135,14 @@ function destination(intent: ReturnIntent, handoff: HandoffArrivalDestinationArr
 export function compareHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent, target: SourceTarget, history: ReviewLineage) {
   return destination(intent, handoff, target, history, verified(handoff, intent));
 }
+/** Capture only currently verified metadata on explicit return, without reads or writes. */
+export function captureHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEventArrival(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent, target: SourceTarget,
+  meta: NavigationMetadata | null, history: ReviewLineage | null) {
+  if (target.kind !== 'selected') fail();
+  const checks = verified(handoff, intent), next = returnVerifiedEvent(intent, target, meta, history);
+  if (!meta && !history) return { intent: next, arrival: null };
+  return { intent: next, arrival: destination(intent, handoff, target, history!, checks).fresh };
+}
 /** Explicit verified return restores all 95 original observations; no further arrival is captured. */
 export function returnHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent, target: SourceTarget,
   meta: NavigationMetadata | null, history: ReviewLineage | null) {
@@ -139,4 +151,17 @@ export function returnHandoffArrivalDestinationArrivalDestinationArrivalDestinat
   if (!meta && !history) return { intent: next, observation: null };
   destination(intent, handoff, target, history!, checks);
   return { intent: next, observation: structuredClone(handoff.observation) };
+}
+
+/** Reconcile complete parent history first, then this purpose and separate arrival locally. */
+export function reconcileHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEventArrival(intent: ReturnIntent, handoff: HandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationEvent, saved: ReviewPathDestination,
+  page: PortfolioQueuePage, meta: NavigationMetadata | null, history: ReviewLineage | null, offset = 0): ComparisonQueueReconciliation {
+  shape(handoff);
+  const value = reconcileHandoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationReturn(intent, handoff.observation, page, meta, history, offset);
+  // Complete parent history was validated in this call; no verdict survives it.
+  const checks = retainedChecks(intent, handoff.observation); fields(handoff, checks); arrivalFields(handoff, saved, checks);
+  if (Date.parse(page.observed_at) < Date.parse(saved.metadata.observed_at)) fail();
+  if (value.state === 'not_observed') return value;
+  arrivalFields(handoff, value.fresh, checks);
+  return structuredClone({ ...value, ...compareDestinationIdentities(saved, value.fresh) });
 }
