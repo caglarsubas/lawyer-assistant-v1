@@ -4540,3 +4540,23 @@ before merge. No publication workload,timing retry,billing promise or deployment
 acceptance remain partial. Next:complete94 destination return for95 observations;implementation
 and PR unstarted;compact physical filenames required. Keep canonical roadmap and HTML tracker
 synchronized with delivery evidence;CI,merge,main-push,deployment and acceptance remain separate.
+
+### Complete94 destination return
+
+Entire original94 remains byte-identical;explicit currently verified return captures one
+separate reduced destination for95 observations with zero action IO. Original94 return92,
+91 return89 and all earlier APIs/projections stay unchanged. Fresh complete-history validation
+and separate preparation/destination/earlier-arrival comparisons preserve every pin,exact
+customer/date filter,evidence version,confidentiality and independent review history.
+Stronger95 disables lower92 preparation. Compact physical filenames retain stable exported
+IDs and recipes. All8,944/127 frontend cases pass;200 new cases extend8,744 unchanged cases
+in126 byte-identical files. Fresh two-lawyer rehearsal retains164/165 in170/171 around edit39;
+stronger166 and selection-only167..169 remain;reload closes access. Eleven realPG races,
+44 deployment contracts,4,521 disjoint IDs and122 image hashes pass. Workflow hash,measured
+allocation,8 jobs,workers,caps,runners and PG semantics remain unchanged. Require all8 latest
+exact-head successes plus30s frontend/backend job/test/graph margins and independent base-main
+success before merge. No publication workload,timing retry,billing promise or deployment.
+See[contract](COMPLETE_94_DESTINATION_RETURN.md) and dated evidence. R03/R05/legal/corpus/rights/
+lawyer acceptance remain partial. Next:complete95 exact-event handoff for97 observations;
+implementation and PR unstarted. Keep canonical roadmap and HTML tracker synchronized with
+actual delivery evidence;next engineering item explicitly selected,qualification separate.
