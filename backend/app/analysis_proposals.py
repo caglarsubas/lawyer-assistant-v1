@@ -228,6 +228,11 @@ def proposal_messages(content, *, repair=False, review_feedback=None, authority_
                "checks": [{key: item[key] for key in ("code", "target_id", "severity", "message")}
                           for item in content["checks"]["defects"]]}
     system = SYSTEM
+    if content.get("focus_lineage"):
+        origin = content["focus_lineage"]
+        payload["focus_scope"] = {key: origin[key] for key in ("limitation", "omission_note", "replaced_sections")}
+        payload["focus_scope"].update(omitted_counts={key: len(items) for key, items in origin["omitted"].items()},
+                                      narrowed_passages=len(origin["narrowed_ranges"]))
     if authority_feedback:
         payload['selected_authority_findings'] = authority_feedback['findings']
         payload['selected_authorities'] = [{

@@ -4752,3 +4752,28 @@ See [operations](OPERATIONS.md) and the
 [nonprivate installation/recovery record](evidence/context-budget-pilot-install-2026-10-20.json).
 Hosted checks, merge and installed host-tool versions remain separate receipts.
 The owner review and independent source/legal qualification gates remain open.
+
+### Explicit focused analysis within the configured context budget
+
+R05A-07 adds a separate, unreviewed focus analysis from one current application
+step. All alternatives and quotes start selected; any exclusions or narrower
+frozen ranges require explicit choices and an omission note. Complete retained
+rules, conditions, assessment states and premise roles remain fixed. The original
+analysis, documents, failed attempts, review decisions and historical versions
+are preserved. The focused conclusion starts withheld; no review is transferred.
+
+The read-only preview shows the prospective draft, exact evidence, parent-version
+lineage, scope exclusions and the actual first-pass budget. Save re-resolves
+permissions, sources, review head and provider policy, requires the current exact
+fingerprint and rejects overflow. Saving never starts inference; the saved child
+uses the ordinary separately preflighted suggestion flow. Public-contribution
+and nested narrowing remain withheld. Model prompts, later edits, history and
+exports retain the scope warning and immutable creation provenance.
+
+See the [focused-analysis contract](FOCUSED_ANALYSIS.md) and
+[synthetic engineering record](evidence/focused-analysis-2026-10-21.json).
+Existing CI jobs, full case coverage, limits and five reserve gates are unchanged.
+Merge, main-push checks and installed application state remain separate receipts.
+R03-17 still awaits private owner review; real model usefulness, historical law,
+independent rights/publication review and legal-quality metrics are not qualified
+by this engineering slice. No personal-case content belongs in these artifacts.

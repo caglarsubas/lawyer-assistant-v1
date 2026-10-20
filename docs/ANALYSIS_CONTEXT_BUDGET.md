@@ -66,7 +66,10 @@ An oversized analysis is neither shortened nor rewritten. No adverse authority,
 unknown, allegation, condition or source is automatically removed. A lawyer may
 use the existing editor to prepare a separate, focused unreviewed version with
 explicit scope gaps; its exact selections and new history must be inspected.
-This delivery provides no automatic narrowing or larger-context qualification.
+The separate [explicit focused-analysis flow](FOCUSED_ANALYSIS.md) now provides
+scope selection, visible omissions and exact preflight before saving a new
+unreviewed analysis. Neither delivery provides automatic narrowing or
+larger-context qualification.
 
 Prior analyses, review events, failed attempts and private originals remain
 unchanged. Preview and model output cannot confer human or independent review.
