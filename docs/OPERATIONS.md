@@ -757,6 +757,12 @@ one cold point, encrypts the compressed stream without writing a plaintext host
 archive, and restarts only the containers that were running. It refuses to
 overwrite existing archives. A failure removes only its newly created partial
 file. If restarting fails, it reports failure and leaves manual recovery explicit.
+Before downtime, the helper captures the running containers' Compose service
+labels. It restarts the provider relay first, then backing services, then the API
+and finally the web edge. This preserves the relay's fixed IP before dynamic
+clients reconnect and lets the web edge resolve the API's new address. The same
+order applies after an archive failure; no previously stopped service is started,
+no container is recreated and no automatic retry or longer timeout is added.
 The archive includes source image identities and a timestamp, not root `.env` or
 backup identity files. Retain the application encryption key, database password,
 image artifacts and deployment configuration separately; all are needed for a

@@ -1,0 +1,46 @@
+{
+  "schema": "private-pilot-install-and-recovery-evidence.v1",
+  "recorded_on": "2026-10-20",
+  "private_identifiers_or_case_content_in_record": false,
+  "installed_application_commit": "02779d5e0c9ae4c571f23a8fd0e65fd7deb28cf6",
+  "application_installation": {
+    "clean_source_build": true,
+    "disconnected_private_rehearsal": true,
+    "existing_tables_unchanged": true,
+    "memberships_and_permissions_preserved": true,
+    "api_and_web_healthy": true,
+    "supporting_service_identities_preserved": true,
+    "only_loopback_publication": true,
+    "provider_configuration_preserved": true,
+    "read_only_browser_context_preview": "oversized_inputs_withheld",
+    "provider_request": false,
+    "case_or_review_write": false,
+    "disposable_rehearsal_cleanup": true
+  },
+  "recovery": {
+    "encrypted_five_volume_backup": "authenticated_without_restore_writes",
+    "initial_automatic_restart": "failed_due_to_relay_address_collision",
+    "ordered_manual_recovery": "completed_and_healthy",
+    "recovery_identity": "retained_outside_repository",
+    "rollback_images_and_configuration": "retained_privately",
+    "new_helper_full_cold_cycle": "not_repeated_on_private_pilot"
+  },
+  "host_helper_sha256": {
+    "deploy/manage_backup.py": "f75c242dbfb00cba22f6170472b8fc6539523f70724248c2fb067342e07c0515",
+    "deploy/test_backup_restart.py": "74a271e001d56c463364c621116530e4d5af9a70e0a32a0225635608130d94d8",
+    "deploy/test_recovery_contract.py": "7858577c468f5f8b81d71a75a04726f68e3d9e2c2bc1aa2824de7eeb1f3d48d3"
+  },
+  "validation": {
+    "deployment_contracts_passed": 50,
+    "python_lint": "passed",
+    "frontend_changed": false,
+    "ci_jobs_workers_caps_and_case_allocation": "unchanged"
+  },
+  "qualification": {
+    "private_owner_review": "pending",
+    "independent_source_and_legal_review": "pending",
+    "legal_quality_metrics": "unmeasured",
+    "production_approved": false
+  },
+  "hosted_ci_merge_and_operator_tool_installation": "recorded separately against exact head and main"
+}

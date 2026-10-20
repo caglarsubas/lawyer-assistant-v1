@@ -96,6 +96,8 @@ class RecoveryContracts(unittest.TestCase):
 
                 def run(command, **options):
                     commands.append((command, options))
+                    if command[:2] == ["docker", "inspect"]:
+                        return "owned-api api\nowned-postgres postgres"
                     return "owned-api\nowned-postgres" if "ps" in command else ""
 
                 def transfer(command, **options):
@@ -109,7 +111,8 @@ class RecoveryContracts(unittest.TestCase):
                       patch.object(manage_backup.subprocess, "run", side_effect=transfer),
                       contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO())):
                     self.assertEqual(manage_backup.main(), helper_code)
-                self.assertEqual(commands[-1][0], ["docker", "start", "owned-api", "owned-postgres"])
+                self.assertEqual([command for command, _ in commands if command[:2] == ["docker", "start"]],
+                                 [["docker", "start", "owned-postgres"], ["docker", "start", "owned-api"]])
                 self.assertIn((["docker", "stop", "owned-api", "owned-postgres"], {"timeout": 600}), commands)
                 self.assertEqual(archive.exists(), helper_code == 0)
                 self.assertFalse(archive.with_name("backup.age.partial").exists())

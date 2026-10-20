@@ -52,6 +52,32 @@ def inventory(compose=COMPOSE) -> tuple[dict[str, str], dict[str, str]]:
     return containers, images
 
 
+def restart_plan(container_ids: list[str]) -> list[list[str]]:
+    """Keep the relay's reserved address and refresh the web's pinned API IP.
+
+    Capture this before stopping anything. Compose discovery order is not a
+    dependency order: a dynamic API address can claim the stopped relay's IP.
+    Inspect labels only; do not retrieve or print container environments.
+    """
+    if not container_ids:
+        return []
+    if len(set(container_ids)) != len(container_ids):
+        raise ValueError("Running-container restart set contains duplicates")
+    lines = run(["docker", "inspect", "--format",
+                 '{{.Id}} {{index .Config.Labels "com.docker.compose.service"}}', *container_ids]).splitlines()
+    roles = {}
+    for line in lines:
+        parts = line.split()
+        if len(parts) != 2 or parts[0] in roles:
+            raise ValueError("Cannot verify the running containers' restart roles")
+        roles[parts[0]] = parts[1]
+    if set(roles) != set(container_ids):
+        raise ValueError("Cannot verify the complete running-container restart set")
+    priority = {"provider-relay": 0, "api": 2, "web": 3}
+    return [[ident for ident in container_ids if priority.get(roles[ident], 1) == rank]
+            for rank in range(4) if any(priority.get(role, 1) == rank for role in roles.values())]
+
+
 def volume_mounts(containers: dict, *, writable: bool) -> list[str]:
     """Select exactly five named volumes, even when their service mounts are read-only.
 
@@ -104,6 +130,7 @@ def main() -> int:
     parser.add_argument("--env-file", type=Path, help="Explicit Compose env file; /dev/null disables .env loading")
     args = parser.parse_args()
     original_running = []
+    restart_groups = []
     partial = None
     try:
         compose = compose_command(args.project_name, args.compose_file, args.env_file)
@@ -128,9 +155,11 @@ def main() -> int:
             fd = os.open(candidate_partial, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
             partial = candidate_partial
             with os.fdopen(fd, "wb") as output:
-                original_running = run([*compose, "--profile", "*", "ps", "--quiet",
-                                        "--status", "running"]).splitlines()
-                if original_running:
+                running = run([*compose, "--profile", "*", "ps", "--quiet",
+                               "--status", "running"]).splitlines()
+                if running:
+                    restart_groups = restart_plan(running)
+                    original_running = running
                     # Respect each container's configured StopTimeout (API: 240s).
                     # A 60s override can terminate cooperative workers prematurely.
                     run(["docker", "stop", *original_running], timeout=600)
@@ -162,7 +191,8 @@ def main() -> int:
             partial.unlink(missing_ok=True)
         if original_running:
             try:
-                run(["docker", "start", *original_running])
+                for group in restart_groups:
+                    run(["docker", "start", *group])
             except subprocess.SubprocessError:
                 print("Previously running containers need manual restart; do not assume recovery.", file=sys.stderr)
                 return 1

@@ -4727,3 +4727,28 @@ and installation remain separate evidence states in the HTML roadmap. The privat
 pilot still awaits owner review; no personal-case content enters this plan or CI.
 Automatic scope reduction, larger-context evaluation, successful real inference
 and legal/source qualification are not established by preview engineering.
+
+### Guarded pilot installation and cold-backup restart ordering
+
+The exact application candidate from PR #166 was built and installed after a
+disconnected private rehearsal and an authenticated encrypted five-volume cold
+backup. Existing database contents, memberships, effective permissions, evidence
+and review history were checked before and after the additive schema startup.
+Only API/web images changed; supporting service identities, scanner policy,
+provider credentials, network boundaries and loopback publication were preserved.
+The installed browser's read-only context preview withholds oversized inputs;
+no model request, legal decision or automatic evidence reduction was performed.
+
+The cold backup exposed a recovery bug: unordered container starts allowed the
+dynamic API to claim the stopped relay's reserved address. Ordered recovery
+restored the existing services. The host backup helper now captures and validates
+the original running service set before downtime and restarts relay, backing
+services, API and web in order, including after archive failure. It does not
+recreate containers, restart previously stopped services, add retries or increase
+timeouts. Synthetic deployment contracts cover collision prevention, web upstream
+resolution, incomplete inventories, preserved grace and partial-archive cleanup.
+
+See [operations](OPERATIONS.md) and the
+[nonprivate installation/recovery record](evidence/context-budget-pilot-install-2026-10-20.json).
+Hosted checks, merge and installed host-tool versions remain separate receipts.
+The owner review and independent source/legal qualification gates remain open.
