@@ -4709,3 +4709,21 @@ untouched. Nine hosted checks and all five 30-second reserve gates remain requir
 no test, worker, deadline, cap or case allocation changed. See the updated
 [review handoff](MILESTONE_REVIEW_2026-10-20.md) and
 [nonprivate repair record](evidence/scanner-private-pilot-2026-10-20.json).
+
+### Exact-version local proposal context preview
+
+R05A-06 now provides a server-measured, read-only first-pass context preview before
+local analysis suggestions. It shows complete serialized bytes, framing/output
+reserves, remaining space or excess and frozen passage/version references. The
+browser requires a fitting preview; submission resolves the exact inputs again
+and rejects mismatched fingerprints or oversized envelopes before queueing.
+Each later repair pass remains separately measured before transport. No evidence
+is silently shortened, no provider limit is raised and no failed attempt retried.
+
+Synthetic contracts and an isolated browser rehearsal cover fit/overflow, exact
+source and review binding, changed inputs/access and preserved history. See the
+[preview contract](ANALYSIS_CONTEXT_BUDGET.md). Hosted checks, merge, main checks
+and installation remain separate evidence states in the HTML roadmap. The private
+pilot still awaits owner review; no personal-case content enters this plan or CI.
+Automatic scope reduction, larger-context evaluation, successful real inference
+and legal/source qualification are not established by preview engineering.

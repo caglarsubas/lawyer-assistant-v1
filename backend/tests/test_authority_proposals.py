@@ -64,6 +64,25 @@ def complete(workbench, monkeypatch):
     return endpoint, body, analysis, review, permit, reviews, reader, job
 
 
+def test_context_preview_includes_selected_public_quotes_and_rechecks_source_permissions(workbench, monkeypatch):
+    app, client, *_ = workbench
+    endpoint, body, analysis, review, permit, *_ = prepare(workbench, monkeypatch)
+    monkeypatch.setattr(app.state.provider, 'probe', lambda: pytest.fail('Preview cannot probe'))
+    monkeypatch.setattr(app.state.provider, 'suggest_analysis', lambda *_a, **_k: pytest.fail('Preview cannot infer'))
+    monkeypatch.setattr(app.state.research_jobs, 'reserve', lambda: pytest.fail('Preview cannot reserve'))
+    response = client.post(endpoint + '/context-budget', json=body)
+    assert response.status_code == 200, response.text
+    value = response.json()
+    assert value['source_version_id'] == analysis['latest_version_id']
+    private_only = client.post(endpoint + '/context-budget', json={key: val for key, val in body.items()
+                                                                 if key != 'authority_feedback'}).json()
+    assert value['prompt']['utf8_bytes'] > private_only['prompt']['utf8_bytes']
+    quote = review['snapshot']['context_snapshot']['manifest']['sources'][0]['evidence']['text']
+    assert quote not in response.text and 'SYNTHETIC UNSELECTED OVERALL NOTE' not in response.text
+    permit.active = False
+    assert client.post(endpoint + '/context-budget', json=body).status_code == 409
+
+
 def test_explicit_selected_original_evidence_minimal_prompt_and_human_adoption(workbench, monkeypatch):
     app, client, base, *_ = workbench
     endpoint, body, analysis, review, permit, reviews, reader = prepare(workbench, monkeypatch)

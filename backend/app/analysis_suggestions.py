@@ -12,6 +12,7 @@ from sqlalchemy import select
 from . import analysis_reviews, authority_proposals
 from .analysis_feedback import FeedbackSelection, resolve_feedback
 from .analysis_proposals import (
+    FRAMING_RESERVE,
     RECIPE,
     apply_patch,
     critical_ids,
@@ -39,6 +40,7 @@ from .research_jobs import (
 
 PURPOSE = "private_analysis_suggestion"
 RECEIPT = "analysis_suggestion_receipt"
+CONTEXT_RECIPE = "private-analysis-context-budget-v1"
 
 
 class ComparisonReference(StrictInput):
@@ -56,6 +58,7 @@ class SuggestionInput(StrictInput):
     comparison_ref: ComparisonReference | None = None
     authority_feedback: authority_proposals.AuthorityFeedbackSelection | None = None
     authority_trial_ref: ComparisonReference | None = None
+    context_preview_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
 
     @model_validator(mode="after")
     def separate(self):
@@ -84,6 +87,73 @@ def provider_pin(app):
                 "tunnel": settings.provider_tunnel_url, "approved": settings.provider_tunnel_approved,
                 "host": settings.provider_tunnel_approved_host})),
             "transport": app.state.provider.transport_metadata()}
+
+
+def _prepare_suggestion(app, session, matter_id, analysis_id, user, body):
+    """Resolve the same exact inputs for preview and submission; never write."""
+    store = app.state.store
+    row = require_child(session, analysis_id, "practice_analysis", matter_id, user)
+    content = store.view(row)
+    state = {"purpose": PURPOSE, "analysis_id": row.id, "source_revision": body.expected_revision,
+             "source_version_id": body.version_id, "source_content": content,
+             "source_review_id": review_pin(store, session, matter_id, row.id, body.version_id, user),
+             "source_review_recipe": analysis_reviews.RECIPE,
+             "provider_pin": provider_pin(app), "mode": body.mode,
+             "max_passes": 2 if body.mode == "repair" else 1}
+    _source(app, session, matter_id, user, state)
+    if body.review_feedback:
+        state["review_feedback"], state["review_feedback_sha256"] = resolve_feedback(
+            store, session, matter_id, row.id, body.version_id, user, body.review_feedback)
+    if body.authority_feedback:
+        state["authority_feedback"], state["authority_feedback_sha256"] = authority_proposals.resolve(
+            app, session, matter_id, row.id, body.version_id, user, body.authority_feedback)
+    if body.authority_trial_ref:
+        from .authority_model_trials import job_feedback
+
+        state["authority_feedback"], state["authority_feedback_sha256"] = job_feedback(
+            app, session, matter_id, row.id, user, body.authority_trial_ref)
+        state.update(authority_trial_ref=body.authority_trial_ref.model_dump(), comparison_request_id=body.request_id)
+        _source(app, session, matter_id, user, state)
+    if body.comparison_ref:
+        state.update(comparison_ref=body.comparison_ref.model_dump(), comparison_request_id=body.request_id)
+        _source(app, session, matter_id, user, state)
+    if not content["evidence"] or not content["applications"]:
+        raise HTTPException(422, "Model önerisi için özgün pasaj ve uygulama adımı bağlayın.")
+    return state
+
+
+def _first_pass_content(app, session, matter_id, user, state):
+    return _content(app.state.store, session, matter_id, user, draft_input(state["source_content"]),
+                    state["source_content"])
+
+
+def _context_budget(app, session, matter_id, user, body, state):
+    """Measure the real first-pass envelope locally, without probes or queue use."""
+    content = _first_pass_content(app, session, matter_id, user, state)
+    measured = prompt_measurement(proposal_messages(content, review_feedback=state.get("review_feedback"),
+                                                   authority_feedback=state.get("authority_feedback")))
+    limit = state["provider_pin"]["context_limit"]
+    remaining = limit - measured["total_upper_bound_units"]
+    configured = not app.state.provider.configuration_issues()
+    value = {"recipe": CONTEXT_RECIPE, "scope": "exact_first_pass_only",
+             "source_version_id": state["source_version_id"], "source_revision": state["source_revision"],
+             "source_content_sha256": digest(canonical(state["source_content"])),
+             "source_review_id": state["source_review_id"], "mode": state["mode"],
+             "max_passes": state["max_passes"], "model": state["provider_pin"]["model"],
+             "transport": state["provider_pin"]["transport"], "prompt": measured,
+             "framing_reserve_units": FRAMING_RESERVE, "context_limit_units": limit,
+             "remaining_units": max(0, remaining), "excess_units": max(0, -remaining),
+             "fits": remaining >= 0, "configuration_ready": configured,
+             "can_start": remaining >= 0 and configured,
+             "evidence": [{key: item[key] for key in ("evidence_id", "document_revision", "passage_sha256",
+                                                        "quote_sha256", "start", "end")}
+                          for item in content["evidence"]]}
+    # Hashes and source selections are private matter metadata, never public IDs
+    # or a permission token. All inputs/permissions are resolved afresh on start.
+    value["preview_sha256"] = digest(canonical({"value": value, "user_id": user.id,
+        "matter_id": matter_id, "analysis_id": state["analysis_id"], "provider_pin": state["provider_pin"],
+        "request": body.model_dump(exclude={"request_id", "context_preview_sha256"})}))
+    return value
 
 
 def _source(app, session, matter_id, user, state):
@@ -258,7 +328,7 @@ def run_suggestion(app, job_id):
             return
         user = session.get(User, row.owner_id)
         _source(app, session, row.matter_id, user, state)
-        best = _content(store, session, row.matter_id, user, draft_input(state["source_content"]), state["source_content"])
+        best = _first_pass_content(app, session, row.matter_id, user, state)
         best.update(authorship="model_proposal", authored_by=None, requested_by=user.id)
         state.update(status="running", phase="preparing")
         store.update(row, state)
@@ -275,6 +345,8 @@ def run_suggestion(app, job_id):
             _source(app, session, matter_id, user, state)
         messages = proposal_messages(best, repair=index > 0, review_feedback=feedback, authority_feedback=authority_feedback)
         measured = prompt_measurement(messages)
+        if index == 0 and state.get("context_budget") and measured != state["context_budget"]["prompt"]:
+            raise HTTPException(409, "Önizlenen ilk geçiş bağlamı değişti; çalışma bekletiliyor.")
         remaining = (datetime.fromisoformat(state["deadline_at"]) - datetime.now(timezone.utc)).total_seconds()
         if remaining <= 0:
             raise JobStopped("timed_out")
@@ -317,6 +389,8 @@ def run_suggestion(app, job_id):
 def start_suggestion(matter_id: str, analysis_id: str, body: SuggestionInput, request: Request, user=Depends(authenticate)):
     app, store = request.app, request.app.state.store
     request_value = body.model_dump(exclude={"request_id"})
+    if request_value.get("context_preview_sha256") is None:
+        request_value.pop("context_preview_sha256", None)
     if request_value.get("comparison_ref") is None:
         request_value.pop("comparison_ref", None)
     if request_value.get("authority_feedback") is None:
@@ -338,35 +412,16 @@ def start_suggestion(matter_id: str, analysis_id: str, body: SuggestionInput, re
                     raise HTTPException(409, "İstek kimliği farklı bir öneri yüküne bağlı.")
                 job = _require_job(store, session, matter_id, analysis_id, recorded["job_id"], user)
                 return suggestion_view(app, session, matter_id, user, job)
-            row = require_child(session, analysis_id, "practice_analysis", matter_id, user)
-            content = store.view(row)
-            state = {"purpose": PURPOSE, "analysis_id": row.id, "source_revision": body.expected_revision,
-                     "source_version_id": body.version_id, "source_content": content,
-                     "source_review_id": review_pin(store, session, matter_id, row.id, body.version_id, user),
-                     "source_review_recipe": analysis_reviews.RECIPE,
-                     "provider_pin": provider_pin(app), "mode": body.mode,
-                     "max_passes": 2 if body.mode == "repair" else 1}
-            _source(app, session, matter_id, user, state)
-            if body.review_feedback:
-                state["review_feedback"], state["review_feedback_sha256"] = resolve_feedback(
-                    store, session, matter_id, row.id, body.version_id, user, body.review_feedback)
-            if body.authority_feedback:
-                state["authority_feedback"], state["authority_feedback_sha256"] = authority_proposals.resolve(
-                    app, session, matter_id, row.id, body.version_id, user, body.authority_feedback)
-            if body.authority_trial_ref:
-                from .authority_model_trials import job_feedback
-
-                state["authority_feedback"], state["authority_feedback_sha256"] = job_feedback(
-                    app, session, matter_id, row.id, user, body.authority_trial_ref)
-                state.update(authority_trial_ref=body.authority_trial_ref.model_dump(), comparison_request_id=body.request_id)
-                _source(app, session, matter_id, user, state)
+            state = _prepare_suggestion(app, session, matter_id, analysis_id, user, body)
             guards.enter_context(authority_proposals.scope(app, session, matter_id, user, state))
             state["authority_publication_pending"] = bool(authority_proposals.dependencies(state))
-            if body.comparison_ref:
-                state.update(comparison_ref=body.comparison_ref.model_dump(), comparison_request_id=body.request_id)
-                _source(app, session, matter_id, user, state)
-            if not content["evidence"] or not content["applications"]:
-                raise HTTPException(422, "Model önerisi için özgün pasaj ve uygulama adımı bağlayın.")
+            budget = _context_budget(app, session, matter_id, user, body, state)
+            if body.context_preview_sha256 and body.context_preview_sha256 != budget["preview_sha256"]:
+                raise HTTPException(409, "Bağlam önizlemesi değişti; güncel sürüm için yeniden hesaplayın.")
+            if not budget["fits"]:
+                raise HTTPException(422, "Tam analiz bağlamı model sınırını aşıyor; iş başlatılmadı ve metin kesilmedi. "
+                                    "Bağlam bütçesini inceleyin; gerekirse ayrı, odaklı bir taslak sürümü hazırlayın.")
+            state["context_budget"] = budget
             if app.state.provider.configuration_issues():
                 raise HTTPException(503, "Yerel model bağlantısı doğrulanmış değil; elle düzenleme kullanılabilir.")
             with app.state.research_jobs.reserve() as ident:
@@ -400,6 +455,18 @@ def suggestion_router():
                        tags=["private-analysis-proposals"])
 
     router.post("", status_code=202)(start_suggestion)
+
+    @router.post("/context-budget")
+    def context_budget(matter_id: str, analysis_id: str, body: SuggestionInput, request: Request,
+                       user=Depends(authenticate)):
+        app, store = request.app, request.app.state.store
+        with store.session() as session:
+            state = _prepare_suggestion(app, session, matter_id, analysis_id, user, body)
+            with authority_proposals.scope(app, session, matter_id, user, state):
+                value = _context_budget(app, session, matter_id, user, body, state)
+                _source(app, session, matter_id, user, state)
+                require_matter(session, matter_id, user)
+            return value
 
     @router.get("")
     def listing(matter_id: str, analysis_id: str, request: Request, user=Depends(authenticate),

@@ -5,7 +5,8 @@ import { formatDate, isRunning, messageOf, statusLabel } from '../../utils';
 import AuthorityProposalSummary from './AuthorityProposalSummary';
 import { FeedbackResponses, FeedbackSummary, ReviewFindingPicker } from './AnalysisFeedback';
 import { AnalysisContentView } from './AnalysisView';
-import type { AnalysisRecord, AnalysisSuggestion } from './analysisTypes';
+import { AnalysisContextBudget } from './AnalysisContextBudget';
+import type { AnalysisContextPreview, AnalysisRecord, AnalysisSuggestion } from './analysisTypes';
 
 export function ProposalReview({ job, onSource }: { job: AnalysisSuggestion; onSource: (id: string) => void }) {
   if (job.public_source_access === false) return <Notice error>Kamu dayanağı içeriği ve bunu içerebilen model metinleri bekletiliyor. Önceki aday gösterilmez.</Notice>;
@@ -20,6 +21,7 @@ export function ProposalReview({ job, onSource }: { job: AnalysisSuggestion; onS
     {job.review_notes?.length ? <Detail title={`Modelin inceleme notları (${job.review_notes.length})`}><p className="small muted">Kaynak bağlantıları adaydır; notların anlam ve doğruluğu ayrıca incelenmelidir.</p><ul>{job.review_notes.map((note, index) => <li key={index}><strong>{note.target_id} · Geçiş {note.pass}:</strong> {note.text}{note.evidence_ids.map((id) => <button key={id} className="source-link" onClick={() => onSource(id)}>Özgün dayanak</button>)}</li>)}</ul></Detail> : null}
     {job.candidate && <Detail title="Önerilen taslak ve kaynakları"><p className="small muted">{job.status === 'completed' ? 'Öneri çalışması tamamlandı.' : 'Önceki geçişten saklanan kısmi öneri.'} Sabit olgular, kaynaklar, kurallar ve koşullar değiştirilemez; avukatın mevcut taslağı korunur.</p><p className="reference-id">Önerilen bölüm değişiklikleri: {job.candidate.revision_comparison.changed_sections.join(', ') || 'Yok'}</p><AnalysisContentView content={job.candidate} freshness={job.freshness} onSource={onSource} proposed /></Detail>}
     <Detail title="Çalışma bütçesi ve geçiş ayrıntıları">
+      {job.context_budget && <Detail title="Başlangıçta doğrulanan bağlam bütçesi"><p className="small muted">Tarihsel başlangıç kaydıdır; güncel bir başlatma izni değildir.</p><AnalysisContextBudget value={job.context_budget} /></Detail>}
       <p className="reference-id">Kaynak analiz sürümü: {job.source_version_id}</p>
       <p>{job.budget_seconds} saniye · Son sınır: {formatDate(job.deadline_at, true)} · Her geçişte en fazla 1.000 çıktı tokenı. Kontroller beyan edilen yapıyla sınırlıdır.</p>
       {(job.iterations || []).map((item) => <div key={item.pass}><p>Geçiş {item.pass}: {item.outcome === 'rejected_new_critical_checks' ? 'Yeni kritik kontrol nedeniyle öneri değişikliği alınmadı' : 'Yapısal kontrollerden sonra aday olarak saklandı'} · {item.provider_seconds} sn model çağrısı · {item.prompt.utf8_bytes} UTF-8 bayt</p><p className="reference-id">İleti özeti: {item.prompt.messages_sha256}</p>{item.patch?.feedback_responses && item.patch.feedback_responses.length > 0 && <Detail title={`Geçiş ${item.pass} bulgu yanıtları · ${item.outcome === 'rejected_new_critical_checks' ? 'adaya alınmadı' : 'aday'}`}><FeedbackResponses responses={item.patch.feedback_responses} onSource={onSource} /></Detail>}</div>)}
@@ -46,6 +48,14 @@ export function AnalysisSuggestions({ matterId, record, onSource, onAdopt }: { m
   const indices = selection && review && selection.review === review.id ? selection.indices : [];
   const pending = useRef<{ payload: string; id: string } | null>(null);
   const base = `/matters/${encodeURIComponent(matterId)}/analyses/${encodeURIComponent(record.id)}/suggestions`;
+  const body = { expected_revision: record.revision, version_id: record.latest_version_id, mode, ...(review && indices.length ? { review_feedback: { review_id: review.id, finding_indices: indices } } : {}) };
+  const contextKey = JSON.stringify({ base, body, status: record.status, reviewId: record.review?.latest?.id,
+    reviewState: record.review?.effective_state });
+  const latestContext = useRef(contextKey); latestContext.current = contextKey;
+  const previewGeneration = useRef(0);
+  const [preview, setPreview] = useState<{ key: string; value: AnalysisContextPreview } | null>(null);
+  const currentPreview = preview?.key === contextKey ? preview.value : null;
+  useEffect(() => { setPreview(null); setBusy(false); pending.current = null; return () => { previewGeneration.current++; }; }, [contextKey]);
   const active = jobs.filter((job) => isRunning(job.status)).map((job) => job.id).sort().join('|');
   function update(job: AnalysisSuggestion) { setJobs((old) => [job, ...old.filter((item) => item.id !== job.id)]); }
   useEffect(() => {
@@ -63,12 +73,23 @@ export function AnalysisSuggestions({ matterId, record, onSource, onAdopt }: { m
     return () => { controller.abort(); window.clearInterval(timer); };
   }, [active, base]);
   async function history(append = false) { setBusy(true); setError(''); try { const page = await request<AnalysisSuggestion[]>(`${base}?limit=10&offset=${append ? jobs.length : 0}`); setJobs((old) => append ? [...old, ...page.filter((item) => !old.some((job) => job.id === item.id))] : page); setMore(page.length === 10); setLoaded(true); } catch (cause) { setJobs([]); setError(messageOf(cause)); } finally { setBusy(false); } }
-  async function start() { setBusy(true); setError(''); const body = { expected_revision: record.revision, version_id: record.latest_version_id, mode, ...(review && indices.length ? { review_feedback: { review_id: review.id, finding_indices: indices } } : {}) }; const payload = JSON.stringify(body); if (pending.current?.payload !== payload) pending.current = { payload, id: crypto.randomUUID().replaceAll('-', '') }; try { const job = await post<AnalysisSuggestion>(base, { ...body, request_id: pending.current!.id }); update(job); pending.current = null; } catch (cause) { setError(messageOf(cause)); } finally { setBusy(false); } }
+  async function previewContext() {
+    const key = contextKey; const generation = ++previewGeneration.current;
+    setBusy(true); setError(''); setPreview(null);
+    try {
+      const value = await request<AnalysisContextPreview>(`${base}/context-budget`, { method: 'POST', refreshPortfolio: false, body: JSON.stringify({ ...body, request_id: crypto.randomUUID().replaceAll('-', '') }) });
+      if (generation === previewGeneration.current && latestContext.current === key) setPreview({ key, value });
+    } catch (cause) { if (generation === previewGeneration.current && latestContext.current === key) { setPreview(null); setError(messageOf(cause)); } }
+    finally { if (generation === previewGeneration.current) setBusy(false); }
+  }
+  async function start() { if (!currentPreview?.can_start) return; setBusy(true); setError(''); const submission = { ...body, context_preview_sha256: currentPreview.preview_sha256 }; const payload = JSON.stringify(submission); if (pending.current?.payload !== payload) pending.current = { payload, id: crypto.randomUUID().replaceAll('-', '') }; try { const job = await post<AnalysisSuggestion>(base, { ...submission, request_id: pending.current!.id }); update(job); pending.current = null; setPreview(null); } catch (cause) { setPreview(null); setError(messageOf(cause)); } finally { setBusy(false); } }
   return <Detail title="Yerel modelden düzenleme önerisi">
     <p>Kaydedilmiş bu sürüm için uygulama ve geçici sonuç düzenlemeleri isteyin. Olgular, roller, kaynaklar, kurallar, koşullar ve adım bağlantıları sabittir. Öneri mevcut taslağı otomatik değiştirmez.</p>
     <Field label="Öneri bütçesi">{(id) => <select id={id} disabled={busy} value={mode} onChange={(event) => setMode(event.target.value as typeof mode)}><option value="single">Tek model geçişi · en fazla 120 sn</option><option value="repair">Kritik yapısal kontrol kalırsa bir ek geçiş · en fazla 240 sn</option></select>}</Field>
     {review && Boolean(review.findings.length) && <ReviewFindingPicker review={review} indices={indices} disabled={busy || Boolean(active) || record.status === 'stale'} onChange={(next) => setSelection({ review: review.id, indices: next })} onSource={onSource} />}
-    <div className="practice-record-actions"><button className="button secondary" disabled={busy || Boolean(active) || record.status === 'stale'} onClick={() => void start()}>{busy ? 'İşleniyor…' : 'Yerel model önerisi iste'}</button><button className="text-button" disabled={busy} onClick={() => void history()}>{loaded ? 'Önerileri yenile' : 'Öneri geçmişini getir'}</button></div>
+    <p className="small muted">Önce kaydedilmiş tam sürümün bağlam bütçesini hesaplayın. Bu adım sağlayıcıya bağlanmaz ve hiçbir kaynağı otomatik kısaltmaz.</p>
+    <div className="practice-record-actions"><button className="text-button" disabled={busy || Boolean(active) || record.status === 'stale'} onClick={() => void previewContext()}>Bağlam bütçesini hesapla</button><button className="button secondary" disabled={busy || Boolean(active) || record.status === 'stale' || !currentPreview?.can_start} onClick={() => void start()}>{busy ? 'İşleniyor…' : 'Yerel model önerisi iste'}</button><button className="text-button" disabled={busy} onClick={() => void history()}>{loaded ? 'Önerileri yenile' : 'Öneri geçmişini getir'}</button></div>
+    {currentPreview && <AnalysisContextBudget value={currentPreview} />}
     {record.status === 'stale' && <p className="small muted">Önce değişen dayanakları inceleyip güncel analiz sürümünü saklayın.</p>}{error && <Notice error>{error}</Notice>}
     {jobs.map((job) => <ProposalCard key={job.id} job={job} base={base} record={record} onSource={onSource} onAdopt={onAdopt} onUpdate={update} />)}
     {loaded && !jobs.length && <p className="small muted">Bu analize ait öneri kaydı yok.</p>}{more && <button className="text-button" disabled={busy} onClick={() => void history(true)}>Önceki önerileri getir</button>}
