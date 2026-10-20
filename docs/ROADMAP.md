@@ -4671,8 +4671,41 @@ account lawyer acceptance walkthrough. The fresh committed-dossier report record
 27 source families,21 assets,480 pending combined use observations, zero permitted
 use observations and no recorded real calibration measurements or held-out results.
 These are dossier observations, not an inventory of all private operational work.
-No reviews or production approvals are manufactured. The next dependency is named
-reviewers and lawful sample evidence for R01-02/03/04 and R03-06; do not automatically
+No reviews or production approvals are manufactured. The product owner has since
+selected an existing authorized personal-case workspace and will review its private
+pilot; that selection dependency is resolved. Independent public-corpus reviewers
+and lawful source-use evidence remain dependencies for R01-02/03/04 and R03-06; do not automatically
 append another destination/arrival navigation slice. The HTML roadmap keeps this
 waiting item visible separately from engineering delivery, hosted CI, main CI,
-installation and legal qualification. No deployment/provider/credential change.
+installation and legal qualification. That engineering handoff made no deployment,
+provider or credential change; the subsequent scanner-only repair is recorded below.
+
+### Private pilot intake repair and owner analysis review
+
+Compose now defaults missing or blank API scanner addresses to the shipped internal
+scanner, while retaining explicit nonempty overrides and every fail-closed admission
+check. A deployment contract exercises actual Compose interpolation for all three
+cases, seven-day signature policy, read-only databases and the isolated network.
+An expired daily signature package and an empty effective API address were repaired
+locally using fresh cryptographically verified official CVD files. Installed API and
+scanner image IDs, credentials, storage and network boundaries were preserved; the
+application build was not upgraded. Clean-stream acceptance, standard EICAR rejection
+and authenticated UI intake readiness were observed independently.
+
+The selected personal-case originals remain private and unchanged. An AI-attributed
+analysis with frozen source excerpts and a preparation dossier are available for
+owner review; unknown facts, conflicting assertions, missing originals, extraction
+warnings and unverified legal applicability remain explicit. No independent review,
+publication, accepted fact edit or legal conclusion was manufactured. A single bounded
+provider attempt exceeded its configured context limit and published no output;
+preserve that failure and exact source version. Context-budget UX is a concrete next
+engineering finding, separate from the owner's pending substantive review. The
+approved laptop-tunnel exception remains distinct from disconnected operation.
+
+R03's private pilot is waiting for the owner's source-fidelity and substantive review.
+Public corpus rights, historical law/precedent qualification and independent release
+attestation remain open. Existing navigation histories and customer/date filters are
+untouched. Nine hosted checks and all five 30-second reserve gates remain required;
+no test, worker, deadline, cap or case allocation changed. See the updated
+[review handoff](MILESTONE_REVIEW_2026-10-20.md) and
+[nonprivate repair record](evidence/scanner-private-pilot-2026-10-20.json).
