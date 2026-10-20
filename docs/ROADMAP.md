@@ -4,6 +4,21 @@ Baseline: 4 October 2026; research reconciliation: **5 October 2026**. Original 
 
 This is the canonical delivery plan. [Data and knowledge strategy](DATA_KNOWLEDGE_STRATEGY.md) specifies source families, refresh targets and retrieval requirements. [Research reconciliation](PLAN_RECONCILIATION_2026-10-05.md) records adopted proposals and unresolved claims. The same-day user amendment is specified in [legal analysis and sanitized BYOK deep research](LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md). Those research revisions changed planning only. Subsequent implementation progress is recorded below: R01 offline contracts, evidence verification and extraction comparison are delivered; source approvals, legal review and provider activation are not granted by that work.
 
+## Current review milestone — 20 October 2026
+
+The complete104 exact-event handoff closes the currently prepared private
+navigation packet. The next milestone is the [first contracts human review
+handoff](MILESTONE_REVIEW_2026-10-20.md): appoint accountable Turkish legal/source
+and independent reviewers, choose a lawful bounded contracts sample and record
+exact rights, semantic and historical-version decisions. This current sequence
+supersedes earlier ledger entries proposing further automatic handoff/return
+depth. Existing histories, APIs, evidence and security gates remain intact.
+
+Engineering tests cannot supply those human decisions. R01/R03 and legal,
+corpus, customer workflow, deployment and production qualification remain open.
+Continue engineering from review findings or another independently unblocked
+roadmap item; do not generate another history-depth packet automatically.
+
 ## Product contract
 
 ### Delivery authorization amendment — 11 October 2026
@@ -4627,3 +4642,37 @@ The complete101 destination return remains byte-identical. A fresh authorized qu
 ### Complete103 arrival return
 
 Explicit verified return retains the complete103 purpose byte-identically and captures one separate reduced arrival for104 observations with zero action IO. Original103→101 return signature/body,all earlier APIs/ordinary projections,both pre-read guards,all7 exact customer/date/source/bucket filters,evidence versions,private matter confidentiality and independent review history remain. Fresh bounded authorized queue plus exact selected metadata reads reconcile preparation,earlier destination,new arrival and current queue separately. Omission stays generic;higher104 suppresses lower101 preparation. All10,286 frontend cases/135 files pass:215 new cases extend10,071 unchanged cases/134 byte-identical files. Complete disjoint actual shards,forced TypeScript/build,168 protected sources,original return body,122 backend image hashes,11 realPG races,45 deployment contracts,Ruff,4,521 disjoint backend IDs and Compose without.env qualify locally. Fresh CUA production-component checks use invented metadata to verify exact103 JSON,zero-action capture,all7 filters,reads,omission,redirect,reload,late scope responses and1440/740 layouts. Earlier destination and new arrival labels are explicit;full source/browser qualification follows that clarification. Full two-lawyer/real-edit acceptance is not claimed. Capacity qualifies first on the unchanged baseline and independently green preceding main39367634146. Keep9 jobs,two isolated workers per frontend lane,all caps and backend allocation. Require9 latest exact-head successes,all5 margins≥30s,independent base-main and one matching-head merge with entire tested/merged tree equality. See[contract](COMPLETE_103_ARRIVAL_RETURN.md) and dated evidence. R03/R05/legal/corpus/rights/lawyer acceptance remain partial;no deployment/provider/credential change. Next:complete104 exact-event handoff for106 observations,implementation and PR unstarted. Keep canonical roadmap and HTML tracker current.
+
+### Complete104 exact-event handoff
+
+The complete104 arrival return stays byte-identical. A fresh authorized containing
+queue and stable two-read preparation form106 observations; one exact selected
+metadata GET opens, and explicit verified zero-action return restores104 without
+capturing a future destination. Entire current103/104 modules, all older APIs and
+ordinary projections, both pre-read guards, all seven filters, evidence versions,
+confidentiality and independent review history remain. Higher104 preparation
+suppresses lower101. All10,520 frontend cases/136 files pass:234 new cases extend
+10,286 unchanged cases/135 byte-identical files. Full and actual disjoint shard
+case multisets, forced TypeScript/build,174 protected sources,122 backend image
+hashes,11 real PostgreSQL races,45 deployment contracts,Ruff,4,521 disjoint backend
+IDs and Compose without.env qualify locally. Focused CUA checks use invented
+metadata; real two-lawyer/40-edit acceptance is not claimed. The unchanged baseline
+and preceding main39380530411 qualify first. Keep nine jobs, isolated workers,
+all caps and case allocation; require nine latest exact-head successes, all five
+30-second reserve gates and one matching-head ordinary merge with independent
+remote-main/entire-tree equality. See the [contract](COMPLETE_104_EXACT_EVENT.md)
+and dated evidence. Deployment, legal and corpus acceptance remain separate.
+
+### First contracts human review handoff
+
+The [review package](MILESTONE_REVIEW_2026-10-20.md) identifies owners, a proposed
+bounded contracts sample, exact rights/semantic/history decisions and a distinct-
+account lawyer acceptance walkthrough. The fresh committed-dossier report records
+27 source families,21 assets,480 pending combined use observations, zero permitted
+use observations and no recorded real calibration measurements or held-out results.
+These are dossier observations, not an inventory of all private operational work.
+No reviews or production approvals are manufactured. The next dependency is named
+reviewers and lawful sample evidence for R01-02/03/04 and R03-06; do not automatically
+append another destination/arrival navigation slice. The HTML roadmap keeps this
+waiting item visible separately from engineering delivery, hosted CI, main CI,
+installation and legal qualification. No deployment/provider/credential change.
