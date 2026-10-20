@@ -1,0 +1,296 @@
+{
+  "schema": "human-review-milestone-evidence-v1",
+  "recorded_at": "2026-10-20T07:55:00.946715+00:00",
+  "base_commit": "015ef484867524a0ebba9f1d4281f9c98cf6afe7",
+  "command": "backend/.venv/bin/python scripts/qualify_roadmap.py check qualification",
+  "exit_code": 0,
+  "scope": "Committed planning dossier only;not a live corpus or private operational inventory",
+  "report": {
+    "analysis_fixture": {
+      "artifact_state": "Needs review",
+      "counts": {
+        "applications": 1,
+        "conclusions": 1,
+        "corrections": 0,
+        "issues": 1,
+        "premises": 1,
+        "rules": 1,
+        "unresolved_critical_defects": 1
+      },
+      "data_classification": "synthetic_fixture",
+      "legal_approval": "not_granted",
+      "schema_version": "analysis-contract.v1",
+      "validation_scope": "declared_structure_and_references_only"
+    },
+    "catalogs": {
+      "asset_count": 21,
+      "asset_gap_count": 21,
+      "asset_review_pending_count": 42,
+      "asset_type_counts": {
+        "embedding": 3,
+        "evaluation_dataset": 2,
+        "morphology": 1,
+        "ner": 1,
+        "ocr": 1,
+        "parser": 5,
+        "reranker": 1,
+        "vocabulary": 7
+      },
+      "asset_unknown_licence_count": 21,
+      "asset_unknown_version_count": 21,
+      "authority": "none",
+      "reported_use_observation_counts": {
+        "blocked": 0,
+        "pending": 480,
+        "permitted": 0
+      },
+      "schema_version": "qualification-catalog-summary-v1",
+      "source_class_counts": {
+        "conditional": 9,
+        "core": 8,
+        "core_historical": 1,
+        "domain": 6,
+        "enrichment": 3
+      },
+      "source_family_count": 27,
+      "source_gap_count": 27,
+      "source_review_pending_count": 81,
+      "source_unknown_coverage_denominator_count": 27
+    },
+    "components": {
+      "analysis-fixture.json": {
+        "bytes": 3834,
+        "sha256": "6607511a186a712f3827a929a7052e22e62da7419663f050d456589c8ecafca1"
+      },
+      "asset-catalog.json": {
+        "bytes": 102392,
+        "sha256": "cd85badcf8c55c80bb188a15ebc5b539e1b8851ee12fef574d3699468a33eb45"
+      },
+      "research-dossier.json": {
+        "bytes": 14682,
+        "sha256": "ec34fb3343397ceaca9744bf9c9b2f0d2df4b2a42e11c4afb5b1dcb03fdc3dfc"
+      },
+      "scenario-fixture.json": {
+        "bytes": 2758,
+        "sha256": "3f1695c0d45bc642812becee3095f70ba6449e0776a88a518abade3b0e2ecf81"
+      },
+      "source-catalog.json": {
+        "bytes": 151427,
+        "sha256": "43487d262ffb1c33fb4be4bbc74a565c0a786dd1a3e2ffe7a6e887c650ac8b2e"
+      }
+    },
+    "dossier_sha256": "f0912c6dddc17f97d43366e226861ab3717c48df4cae410823350d9dc7355e7b",
+    "limitations": [
+      "Declarations and hashes are not independently verified rights or legal review.",
+      "Schema validation is not a PII detector, legal-fidelity assessment or dispatch approval.",
+      "Synthetic fixtures do not establish legal accuracy or real review throughput.",
+      "Recorded samples require independent evidence and representativeness checks.",
+      "This command does not alter source registries, review ledgers, graphs or provider configuration."
+    ],
+    "production_qualified": false,
+    "purpose": "planning_and_contract_validation_only",
+    "r01_exit_gate": "independent_review_and_evidence_required",
+    "research": {
+      "calibration": {
+        "all_launch_practices_observed_in_real_samples": false,
+        "planned_real_units": {
+          "amendment_chains": 10,
+          "decisions": 30,
+          "pages": 100
+        },
+        "real": {
+          "assessed_items": null,
+          "disagreement_fraction": null,
+          "disagreements": null,
+          "measurement_count": 0,
+          "practices_observed": [],
+          "units": {
+            "amendment_chains": {
+              "elapsed_seconds": null,
+              "elapsed_seconds_per_unit": null,
+              "measurement_count": 0,
+              "observed_units": 0,
+              "population_denominator": null,
+              "population_fraction": null,
+              "reviewer_seconds": null,
+              "reviewer_seconds_per_unit": null,
+              "unreviewed_timing_measurements": 0,
+              "untimed_measurements": 0
+            },
+            "decisions": {
+              "elapsed_seconds": null,
+              "elapsed_seconds_per_unit": null,
+              "measurement_count": 0,
+              "observed_units": 0,
+              "population_denominator": null,
+              "population_fraction": null,
+              "reviewer_seconds": null,
+              "reviewer_seconds_per_unit": null,
+              "unreviewed_timing_measurements": 0,
+              "untimed_measurements": 0
+            },
+            "pages": {
+              "elapsed_seconds": null,
+              "elapsed_seconds_per_unit": null,
+              "measurement_count": 0,
+              "observed_units": 0,
+              "population_denominator": null,
+              "population_fraction": null,
+              "reviewer_seconds": null,
+              "reviewer_seconds_per_unit": null,
+              "unreviewed_timing_measurements": 0,
+              "untimed_measurements": 0
+            }
+          }
+        },
+        "real_sample_count_targets_met": false,
+        "synthetic": {
+          "assessed_items": null,
+          "disagreement_fraction": null,
+          "disagreements": null,
+          "measurement_count": 0,
+          "practices_observed": [],
+          "units": {
+            "amendment_chains": {
+              "elapsed_seconds": null,
+              "elapsed_seconds_per_unit": null,
+              "measurement_count": 0,
+              "observed_units": 0,
+              "population_denominator": null,
+              "population_fraction": null,
+              "reviewer_seconds": null,
+              "reviewer_seconds_per_unit": null,
+              "unreviewed_timing_measurements": 0,
+              "untimed_measurements": 0
+            },
+            "decisions": {
+              "elapsed_seconds": null,
+              "elapsed_seconds_per_unit": null,
+              "measurement_count": 0,
+              "observed_units": 0,
+              "population_denominator": null,
+              "population_fraction": null,
+              "reviewer_seconds": null,
+              "reviewer_seconds_per_unit": null,
+              "unreviewed_timing_measurements": 0,
+              "untimed_measurements": 0
+            },
+            "pages": {
+              "elapsed_seconds": null,
+              "elapsed_seconds_per_unit": null,
+              "measurement_count": 0,
+              "observed_units": 0,
+              "population_denominator": null,
+              "population_fraction": null,
+              "reviewer_seconds": null,
+              "reviewer_seconds_per_unit": null,
+              "unreviewed_timing_measurements": 0,
+              "untimed_measurements": 0
+            }
+          }
+        }
+      },
+      "capacity": {
+        "baseline_fte": 8.0,
+        "baseline_weeks": [
+          30,
+          36
+        ],
+        "measured_delivery_estimate_weeks": null,
+        "real_timing_measurements": 0,
+        "reestimate_required": true,
+        "status": "provisional"
+      },
+      "evaluation": {
+        "comparison_plans": [
+          "correction",
+          "privacy_fidelity",
+          "standard_deep"
+        ],
+        "development_target_tasks": 360,
+        "held_out_target_substantive_claims": 3000,
+        "held_out_target_tasks": 1000,
+        "observed_task_results": null,
+        "planned_slice_count": 11,
+        "separate_inventories": true,
+        "slice_sample_size_counts": {
+          "pending": 11
+        },
+        "unknown_comparison_pair_counts": 3,
+        "unknown_provider_sample_minima": 5
+      },
+      "evidence_authenticated": false,
+      "external_dispatch_authorized": false,
+      "limitations": [
+        "Documentary references do not verify an account, entitlement, retention arrangement or billing readiness.",
+        "Evidence digests and real/synthetic labels are supplied records, not authenticated legal or privacy approvals.",
+        "Synthetic measurements never count toward real calibration throughput or population coverage.",
+        "Targets and paired experiment plans are not observed evaluation results or production qualification.",
+        "Unknown denominators and missing timings remain unknown; samples do not establish corpus completeness.",
+        "The staffing/calendar envelope needs human re-estimation including analysis, privacy, providers and operations."
+      ],
+      "production_qualified": false,
+      "provider_plans": [
+        {
+          "account_configuration": "not_supplied",
+          "dispatch_enabled": false,
+          "documentary_reference_count": 3,
+          "gate_counts": {
+            "blocked": 0,
+            "evidence_recorded": 0,
+            "pending": 12
+          },
+          "provider": "openai",
+          "runtime_qualification": "unqualified"
+        },
+        {
+          "account_configuration": "not_supplied",
+          "dispatch_enabled": false,
+          "documentary_reference_count": 2,
+          "gate_counts": {
+            "blocked": 0,
+            "evidence_recorded": 0,
+            "pending": 12
+          },
+          "provider": "anthropic",
+          "runtime_qualification": "unqualified"
+        },
+        {
+          "account_configuration": "not_supplied",
+          "dispatch_enabled": false,
+          "documentary_reference_count": 2,
+          "gate_counts": {
+            "blocked": 0,
+            "evidence_recorded": 0,
+            "pending": 12
+          },
+          "provider": "gemini",
+          "runtime_qualification": "unqualified"
+        }
+      ],
+      "record_kind": "offline_qualification_plan",
+      "schema_version": "research-qualification-v1"
+    },
+    "runtime_authorization": "none",
+    "scenario_fixture": {
+      "counts": {
+        "actors": 2,
+        "facts": 1,
+        "omissions": 0,
+        "research_questions": 1,
+        "transformations": 1
+      },
+      "data_classification": "synthetic_fixture",
+      "dispatchable": false,
+      "fidelity_assessment": "structural_only",
+      "privacy_assessment": "not_performed",
+      "release_state": "preparation_only",
+      "schema_version": "scenario-contract.v1"
+    },
+    "schema_version": "r01-inspection-v1",
+    "structurally_valid": true
+  },
+  "runtime_or_provider_access": false,
+  "human_review_granted": false,
+  "deployment_verified": false
+}
