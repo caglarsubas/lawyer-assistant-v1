@@ -29,11 +29,21 @@ python3 scripts/scanner_signatures.py import \
 docker compose up -d scanner
 ```
 
-The default Compose bind mount is `.data/clamav-signatures:/var/lib/clamav:ro`. `LA_SCANNER_DATABASE_DIR` can select another approved directory. Set `LA_CLAMAV_HOST=scanner` in the repository-root `.env` and recreate the API after first provisioning.
+The default Compose bind mount is `.data/clamav-signatures:/var/lib/clamav:ro`. `LA_SCANNER_DATABASE_DIR` can select another approved directory. Compose connects the API to `scanner` when `LA_CLAMAV_HOST` is absent or empty; an explicit nonempty address remains supported. Keep `LA_CLAMAV_HOST=scanner` in the repository-root `.env` for clarity and recreate the API after changing its effective configuration. This default does not admit missing, expired or unverified databases: intake still fails closed.
 
 ## Controlled updates
 
 Import or fetch to a **new** destination, for example `.data/clamav-signatures-2026-10-04`. Set `LA_SCANNER_DATABASE_DIR` to that directory and run `docker compose up -d --force-recreate scanner`. Check `docker compose ps scanner` and the application's intake-readiness view before accepting documents. Keep the previous package for bounded rollback, provided its daily signature date still passes policy. Do not replace files inside a currently mounted release or rely on hot reload; runtime `SelfCheck` and automatic updates are disabled.
+
+Treat the signed daily build date as an intake maintenance deadline, even when
+existing workspaces remain readable. An empty API address and an expired loaded
+database are independent blockers: correcting only one is insufficient. Provision
+and verify the next package before expiry; never extend the age limit, enable a
+runtime downloader or change file timestamps to recover intake. A configuration
+repair should preserve the installed images, credentials, volumes and network
+boundaries. Verify the effective API address, scanner health, clean/EICAR stream
+behavior and the authenticated intake-readiness view separately. These checks do
+not establish extraction fidelity, legal accuracy or full workflow acceptance.
 
 Daily signatures may be at most seven days old by default. `LA_SCANNER_MAX_SIGNATURE_AGE_DAYS` accepts 1–14 days, with the same policy applied during import, daemon health checks and **every upload**. Import uses `--max-age-days` when an explicitly chosen different policy is required. The signed build date is checked; changing file modification time cannot make an old package current. Main/bytecode databases may legitimately be older and still require valid official signatures and a positive signature count. Future-dated signatures are rejected beyond five minutes of clock tolerance. Offline operators must arrange approved updates within this window; expiry blocks intake.
 

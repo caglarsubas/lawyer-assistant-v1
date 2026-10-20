@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-10-20",
+  "scope": "Nonprivate engineering and operational checkpoint only",
+  "root_causes": ["Empty effective API scanner address", "Expired loaded daily signatures"],
+  "compose_contract": {
+    "missing_or_empty_address": "scanner",
+    "explicit_nonempty_override_preserved": true,
+    "signature_age_policy_days": 7,
+    "runtime_downloads_enabled": false,
+    "scanner_network_internal_only": true
+  },
+  "local_verification": {
+    "deployment_contracts_passed": 46,
+    "scanner_backend_cases_passed": 55,
+    "official_cvd_signature_verification": "passed in disconnected admission container",
+    "loaded_daily_version": 28159,
+    "loaded_daily_build_utc": "2026-10-20T06:24:12+00:00",
+    "api_scanner_probe": "ready",
+    "clean_stream": "accepted",
+    "standard_eicar_test": "rejected",
+    "authenticated_intake_ui": "available",
+    "full_upload_and_extraction_acceptance": "not established by stream and readiness probes"
+  },
+  "runtime_boundary": {
+    "installed_application_images_preserved": true,
+    "application_build_upgraded": false,
+    "credentials_preserved": true,
+    "matter_volumes_preserved": true,
+    "network_exposure_expanded": false,
+    "cloud_fallback_enabled": false,
+    "original_documents_changed": false
+  },
+  "private_pilot": {
+    "selected_existing_workspace": true,
+    "owner_review_volunteered": true,
+    "source_bound_ai_draft_saved": true,
+    "preparation_dossier_saved": true,
+    "human_review": "pending",
+    "provider_attempt": "withheld_context_limit",
+    "model_output_adopted": false,
+    "facts_accepted_or_overwritten": false,
+    "private_identifiers_or_content_in_this_record": false,
+    "public_search_private_payload": false
+  },
+  "open_gates": [
+    "Owner source-fidelity and substantive review",
+    "Successful bounded inference and measured review benefit",
+    "Historical and current legal authority qualification",
+    "Use-specific public corpus rights and independent publication decisions",
+    "Customer acceptance and product legal-quality qualification"
+  ],
+  "hosted_ci_and_merge": "Recorded separately against the actual submitted head and remote main",
+  "legal_quality_metrics": "unmeasured"
+}

@@ -41,7 +41,9 @@ services:
       LA_OPENSEARCH_URL: http://opensearch:9200
       LA_SEARCH_RELEASE_ID: ${LA_SEARCH_RELEASE_ID:-}
       LA_SEARCH_INDEX: ${LA_SEARCH_INDEX:-law-public-passages}
-      LA_CLAMAV_HOST: ${LA_CLAMAV_HOST:-}
+      # The isolated scanner ships with this stack; blank/missing local settings
+      # must not silently disconnect it. Unavailable/stale scans still fail closed.
+      LA_CLAMAV_HOST: ${LA_CLAMAV_HOST:-scanner}
       LA_CLAMAV_PORT: ${LA_CLAMAV_PORT:-3310}
       LA_SCANNER_TIMEOUT_SECONDS: ${LA_SCANNER_TIMEOUT_SECONDS:-30}
       LA_SCANNER_MAX_SIGNATURE_AGE_DAYS: ${LA_SCANNER_MAX_SIGNATURE_AGE_DAYS:-7}

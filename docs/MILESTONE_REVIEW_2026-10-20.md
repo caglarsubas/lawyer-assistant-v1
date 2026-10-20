@@ -10,6 +10,37 @@ verified separately before any customer workflow acceptance.
 
 ## Decisions needed from the product owner
 
+### Owner steering and private pilot checkpoint
+
+The product owner has volunteered to perform the personal-case pilot review and
+selected documents already uploaded to an authorized workspace. The selection
+dependency is resolved for this private pilot; do not ask for the folder again.
+The workspace identity, originals, claims, citations and assessments remain in
+authorized application storage and are intentionally absent from this handoff.
+This steering does not record a second independent reviewer, use-specific public
+corpus rights, a legal decision or a signed Graph A/B publication approval.
+
+The scanner configuration and signature expiry blockers were repaired without
+changing the installed application images or original matter documents. The API
+now reaches its isolated scanner; a newly verified official signature package,
+clean-stream acceptance, EICAR rejection and the authenticated intake-readiness
+view were checked. Offline signature renewal within the existing age policy is
+still an operational duty. No cloud inference fallback was enabled.
+
+An explicitly AI-attributed source-bound analysis and a separate preparation
+dossier are saved privately for owner review. Allegations, unknowns, adverse
+positions and missing originals remain explicit; human review has not been
+recorded. A bounded provider attempt was withheld for exceeding its configured
+context limit. No model output was adopted; this is an observed pilot limitation,
+not successful inference or legal qualification. A subsequent engineering slice
+can make context budgeting clearer after preserving that attempt and its source
+version. Public legal-source lookups contained only generic legal topics; no
+private case details or originals were sent to public search.
+
+The following numbered decisions remain the public-corpus and later independent
+acceptance requirements. They must not be interpreted as missing private-pilot
+sample selection or as a request to duplicate the owner's existing uploads.
+
 1. Name a Turkish legal ontology/source owner and an independent Turkish legal
    reviewer, with protected review time. Confirm a customer administrator and two
    separate lawyer accounts for later field acceptance. Names and account details
