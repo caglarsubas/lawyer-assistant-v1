@@ -21,7 +21,15 @@ export interface AnalysisChecks {
   dependency_nodes: string[];
 }
 export interface AnalysisFreshness { status: 'current' | 'stale'; reasons: string[]; scope: string }
+export interface AnalysisFocusLineage {
+  recipe: string; scope: 'creation_selection_only'; parent_analysis_id: string; parent_version_id: string;
+  parent_revision: number; parent_content_sha256: string; parent_review_id: string | null; derived_ai: boolean;
+  application_id: string; omission_note: string; limitation: string; review_transferred: false;
+  omitted: Record<string, string[]>; replaced_sections: string[];
+  narrowed_ranges: { evidence_id: string; parent_start: number; parent_end: number; start: number; end: number }[];
+}
 export interface AnalysisContent extends Omit<AnalysisForm, 'evidence'> {
+  focus_lineage?: AnalysisFocusLineage;
   authority_revalidations?: { id: string; sha256: string }[];
   evidence: (AnalysisSelection & { document_id: string; document_revision: number; document_sha256: string | null; name: string; locator: Passage['locator']; passage_sha256: string; quote_sha256: string; text: string; full_passage_length: number })[];
   fact_snapshots: { id: string; revision: number; text: string; status: string; evidence_id: string | null }[];

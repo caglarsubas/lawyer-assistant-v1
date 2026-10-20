@@ -154,7 +154,7 @@ def _context(store, session, matter_id, analysis_id, version_id, user):
         "version_id": version.id, "expected_revision": row.revision,
         "content_sha256": digest(canonical(content)), "expected_review_id": current["latest"]["id"] if current["latest"] else None,
         "recipe": RECIPE, "scope": SCOPE, "criteria": CRITERIA,
-        "ai_contribution_required": bool(content.get("ai_assistance")),
+        "ai_contribution_required": bool(content.get("ai_assistance") or content.get("focus_lineage", {}).get("derived_ai")),
         "current_version": current_version, "freshness": freshness,
         "critical_count": content["checks"]["critical_count"],
         "can_record": current_version,

@@ -23,6 +23,14 @@ export function AnalysisContentView({ content, freshness, review, onSource, prop
   const facts = new Map(content.fact_snapshots.map((fact) => [fact.id, fact]));
   return <>
     <p className="authored-text"><strong>Mesele:</strong> {content.issue}</p>
+    {content.focus_lineage && <Detail title="Odak kapsamı, dışarıda kalanlar ve ana sürüm bağı">
+      <p>{content.focus_lineage.limitation}</p><p>{content.focus_lineage.omission_note}</p>
+      <p className="reference-id">Ana analiz: {content.focus_lineage.parent_analysis_id} · Tam sürüm: {content.focus_lineage.parent_version_id} · İçerik SHA-256: {content.focus_lineage.parent_content_sha256}</p>
+      <p className="small muted">Bu kayıt yalnız oluşturma seçimini açıklar; sonraki düzenlemeler ayrıca incelenmelidir. Ana analizdeki inceleme kararları aktarılmadı. Ana analiz ve özgün belgeler korunur.{content.focus_lineage.derived_ai && ' Ana sürümden türeyen model katkısı ayrıca incelenmelidir.'}</p>
+      <p className="reference-id">Oluşturma sırasında ana inceleme: {content.focus_lineage.parent_review_id || 'Yok'} · Yeniden yazılan bölümler: {content.focus_lineage.replaced_sections.join(', ')}</p>
+      <ul>{Object.entries(content.focus_lineage.omitted).map(([kind, items]) => <li key={kind}>Dışarıda kalan {kind}: {items.join(', ') || 'Yok'}</li>)}</ul>
+      <ul>{content.focus_lineage.narrowed_ranges.map(item => <li key={item.evidence_id}>{item.evidence_id}: [{item.parent_start}, {item.parent_end}) → [{item.start}, {item.end})</li>)}</ul>
+    </Detail>}
     {content.ai_assistance && <Detail title="Model katkısı ve kayıt sınırları"><p>Model: {content.ai_assistance.provider.model} · {content.ai_assistance.passes} geçiş · Hukuki inceleme değildir.</p><p className="reference-id">Öneri: {content.ai_assistance.job_id} · Kaynak sürüm: {content.ai_assistance.source_version_id}</p><p className="small muted">Alınan önerinin doğrulanmamış notları; sonraki avukat değişikliklerini ayrıca inceleyin.</p><ul>{content.ai_assistance.review_notes?.map((note, index) => <li key={index}>{note.target_id} · Geçiş {note.pass}: {note.text}</li>)}</ul></Detail>}
     {content.authority_contributions?.map((item, index) => <Detail key={item.job_id} title={`Saklanan kamu katkısı ${index + 1}`}><p className="small">Model: {item.provider_pin.model} · Önceki katkı, güncel model yanıtı değildir.</p><p className="reference-id">Öneri: {item.job_id} · Kaynak sürüm: {item.source_version_id}</p><AuthorityProposalSummary feedback={item.feedback} responses={item.responses} pass={item.response_pass} /></Detail>)}
     {content.ai_assistance?.review_feedback && <FeedbackSummary feedback={content.ai_assistance.review_feedback} responses={content.ai_assistance.feedback_responses} pass={content.ai_assistance.feedback_response_pass} onSource={onSource} />}

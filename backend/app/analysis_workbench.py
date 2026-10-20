@@ -303,6 +303,10 @@ def _content(store, session, matter_id, user, body, previous=None):
                    status="needs_review", legal_authority=False)
     if (previous or {}).get("ai_assistance"):
         content.update(authorship="user_with_ai_assistance", ai_assistance=previous["ai_assistance"])
+    if (previous or {}).get("focus_lineage"):
+        content["focus_lineage"] = previous["focus_lineage"]
+        if previous["focus_lineage"]["derived_ai"]:
+            content["authorship"] = "user_with_ai_assistance"
     if (previous or {}).get("authority_dependencies"):
         content.update(authority_dependencies=previous["authority_dependencies"],
                        authority_admission_id=previous.get("authority_admission_id"),
@@ -325,9 +329,11 @@ def _content(store, session, matter_id, user, body, previous=None):
 
 
 def _freshness(store, session, matter_id, user, content, *, include_authorities=True):
+    from .analysis_focus import lineage_reasons
     from .authority_proposals import freshness
 
     reasons = freshness(store, session, matter_id, user, content) if include_authorities else []
+    reasons.extend(lineage_reasons(store, session, matter_id, user, content))
     if content["checks"]["recipe"] != RECIPE:
         reasons.append("Kontrol kuralları değişti; yeni sürümde kontrolleri yeniden çalıştırın.")
     for fact in content["fact_snapshots"]:
@@ -383,6 +389,10 @@ def _export_lines(content, snapshot, version, freshness, review=None):
              f"Oluşturulma: {version.created_at}", f"Güncellik: {freshness['status']}", *freshness["reasons"],
              "Mesele: " + content["issue"], "Süreç: " + content["posture"],
              "Olay tarihi: " + (content["event_date"] or "Bilinmiyor"), "Öncüller"]
+    if content.get("focus_lineage"):
+        lines.extend(["ODAK ANALİZİ — oluşturma kapsamı ve dışarıda kalanlar; sonraki sürümleri ayrıca inceleyin.",
+                      json.dumps(content["focus_lineage"], ensure_ascii=False),
+                      "Ana analizdeki inceleme kararları bu analize aktarılmamıştır."])
     if content.get("ai_assistance"):
         lines[1] = "GİZLİ — MODEL ÖNERİSİNDEN UYARLANMIŞ KOŞULLU ANALİZ TASLAĞI"
         lines.extend(["Model katkısı (hukuki inceleme değildir): " + json.dumps(
@@ -472,6 +482,9 @@ def _export_lines(content, snapshot, version, freshness, review=None):
 
 def analysis_router():
     router = APIRouter(prefix="/api/v1/matters/{matter_id}/analyses", tags=["private-analysis-drafts"])
+    from .analysis_focus import register
+
+    register(router)
 
     @router.post("/check")
     def preview(matter_id: str, body: AnalysisInput, request: Request, user=Depends(authenticate)):

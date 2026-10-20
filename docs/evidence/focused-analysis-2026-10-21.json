@@ -1,0 +1,57 @@
+{
+  "schema": "focused-private-analysis-engineering-evidence-v1",
+  "recorded_on": "2026-10-21",
+  "scope": "Synthetic software verification only; no private-case payload or inference",
+  "base_commit": "33d4f0979fbc357e3e34356371b35ddd2b439980",
+  "implementation_sha256": {
+    "backend/app/analysis_focus.py": "f0097b5f6b34852860b80db0cf176f82e8ebf904e76e0b268acadd8cbe04fa9c",
+    "backend/app/analysis_proposals.py": "ac971afc2be639887e9b860f301f55542a5d10b3dab4c83b8697b424582bc5b0",
+    "backend/app/analysis_reviews.py": "b024f58c55d47bc79e426df30d390195b669950151baf34e89ec84f6d2097640",
+    "backend/app/analysis_workbench.py": "fd67ecc62055db67b4f4be01532757b6a0c73deaf5cb77a8ca95b56e601c4a4a",
+    "backend/tests/test_analysis_focus.py": "ac3c687dd585daa3528df45a1adfb28a3cfaec572dd750550de1e90a3c300227",
+    "frontend/src/pages/matter/AnalysisFocus.tsx": "50dca45a3a2ba458c76e22cfaba156a5f1082be6b62f7c784eab6c70036ca7ea",
+    "frontend/src/pages/matter/AnalysisFocus.test.tsx": "047a27481da2f3f2ccaddda39548e02dc5c8fcf98981b96ed934240290975745",
+    "frontend/src/pages/matter/AnalysisPanel.tsx": "8dd96b23a334b2af4b3f4335d7622ec2d30c1a759b2540ba69d861e9e2255d28",
+    "frontend/src/pages/matter/AnalysisView.tsx": "f1087d9faf2995e2a178bf5de335e0c4a38961ec07330d16105dbbd3874bb78c",
+    "frontend/src/pages/matter/analysisTypes.ts": "34cbdd8554f6fa5631a5f17ee4a336f9444d25a90fce001a308486fb7123f9df"
+  },
+  "local_checks": {
+    "focus_backend_cases": 19,
+    "targeted_backend_cases": 220,
+    "frontend_files": 138,
+    "frontend_cases": 10527,
+    "production_build": "passed",
+    "python_lint": "passed",
+    "diff_whitespace": "passed"
+  },
+  "browser": {
+    "environment": "Disposable loopback-only synthetic matter; provider execution disabled",
+    "full_parent_preserved": true,
+    "all_initial_quotes_and_alternatives_selected": true,
+    "save_disabled_before_preview": true,
+    "scope_change_invalidates_preview": true,
+    "focus_saved_as_separate_unreviewed_record": true,
+    "original_quote_unchanged": true,
+    "saved_focus_first_pass_units": 5452,
+    "configured_units": 8192,
+    "remaining_units": 2740,
+    "real_inference_executed": false
+  },
+  "ci_contract": {
+    "jobs": 9,
+    "workers": "unchanged",
+    "timeouts": "unchanged",
+    "retries": "none",
+    "full_test_allocation": "retained",
+    "minimum_required_timing_reserve_seconds": 30
+  },
+  "delivery": {
+    "hosted_exact_head_ci": "Recorded separately after push",
+    "merge": "Not asserted by this record",
+    "main_push_ci": "Recorded separately after merge",
+    "installation": "Not performed by these synthetic checks",
+    "private_case_approval": "Pending owner review",
+    "independent_source_legal_publication": "Not established",
+    "legal_quality_metrics": "Unmeasured"
+  }
+}
