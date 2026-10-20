@@ -229,8 +229,32 @@ jobs:
         working-directory: frontend
       - run: npm run build
         working-directory: frontend
-      - run: npm test
+      - name: Verify complete disjoint frontend discovery
+        run: node scripts/verify_frontend_shards.mjs
+      - run: npm test -- --shard=1/2 --reporter=default --reporter=json --outputFile=${{ runner.temp }}/frontend-results.json
         working-directory: frontend
+      - name: Verify executed frontend shard
+        run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 1
+
+  frontend-history:
+    # Growing history contracts exceeded the single frontend lane's reserve.
+    # Built-in hash sharding preserves all files and per-file isolation. Each
+    # lane retains two workers and the five-minute cap; build runs only once.
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+      - run: npm test -- --shard=2/2 --reporter=default --reporter=json --outputFile=${{ runner.temp }}/frontend-results.json
+        working-directory: frontend
+      - name: Verify executed frontend shard
+        run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
 
   final-release-authorization:
     # Existing jobs are within 30 seconds of their caps. New whole-release

@@ -34,7 +34,7 @@ class PartitionContract(unittest.TestCase):
     def test_graph_lane_is_bounded_and_existing_deadlines_are_preserved(self):
         workflow = (ROOT / ".github/workflows/ci.yml").read_text().split("\njobs:\n", 1)[1]
         blocks = {name: body for name, body in re.findall(r"^  ([a-z-]+):\n(.*?)(?=^  [a-z-]+:\n|\Z)", workflow, re.MULTILINE | re.DOTALL)}
-        caps = {"backend-and-contracts": 20, "postgres-snapshot-concurrency": 5, "frontend": 5,
+        caps = {"backend-and-contracts": 20, "postgres-snapshot-concurrency": 5, "frontend": 5, "frontend-history": 5,
                 "final-release-authorization": 6, "retained-release-withdrawal": 3,
                 "graph-candidate-contracts": 3, "source-publication-contracts": 3, "graph-runtime-contracts": 6}
         self.assertEqual(set(blocks), set(caps))
@@ -44,6 +44,17 @@ class PartitionContract(unittest.TestCase):
         self.assertIn("runs-on: ubuntu-24.04-arm", graph)
         self.assertIn('"${graph_runtime_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', graph)
         self.assertEqual(graph.count("CI_GRAPH_RUNTIME_TESTS"), 1)
+
+    def test_frontend_shards_keep_isolation_workers_and_complete_discovery(self):
+        workflow = (ROOT / ".github/workflows/ci.yml").read_text()
+        package = (ROOT / "frontend/package.json").read_text()
+        self.assertEqual(workflow.count("npm test -- --shard=1/2"), 1)
+        self.assertEqual(workflow.count("npm test -- --shard=2/2"), 1)
+        self.assertEqual(workflow.count("node scripts/verify_frontend_shards.mjs"), 3)
+        self.assertEqual(workflow.count("- run: npm run build"), 1)
+        self.assertIn('"test": "vitest run --pool=threads --maxWorkers=2"', package)
+        self.assertNotIn("--no-isolate", workflow + package)
+        self.assertNotIn("--passWithNoTests", workflow + package)
 
 
 if __name__ == "__main__":
