@@ -33,8 +33,11 @@ positions and missing originals remain explicit; human review has not been
 recorded. A bounded provider attempt was withheld for exceeding its configured
 context limit. No model output was adopted; this is an observed pilot limitation,
 not successful inference or legal qualification. A subsequent engineering slice
-can make context budgeting clearer after preserving that attempt and its source
-version. Public legal-source lookups contained only generic legal topics; no
+now provides a [read-only exact-version context preview](ANALYSIS_CONTEXT_BUDGET.md)
+and pre-queue size gate while preserving that attempt and its source version.
+The preview performs no inference, changes no saved analysis and grants no legal
+approval. Its installation and private-case acceptance remain separate gates.
+Public legal-source lookups contained only generic legal topics; no
 private case details or originals were sent to public search.
 
 The following numbered decisions remain the public-corpus and later independent

@@ -68,12 +68,23 @@ export const ANALYSIS_LABELS: Record<string, string> = {
 };
 
 
+export interface AnalysisContextPreview {
+  recipe: string; scope: 'exact_first_pass_only'; source_version_id: string; source_revision: number;
+  source_content_sha256: string; source_review_id: string | null; mode: 'single' | 'repair'; max_passes: number;
+  model: string; transport: { mode: string; uses_public_network: boolean };
+  prompt: { utf8_bytes: number; total_upper_bound_units: number; completion_tokens: number; messages_sha256: string };
+  framing_reserve_units: number; context_limit_units: number; remaining_units: number; excess_units: number;
+  fits: boolean; configuration_ready: boolean; can_start: boolean; preview_sha256: string;
+  evidence: { evidence_id: string; document_revision: number; passage_sha256: string; quote_sha256: string; start: number; end: number }[];
+}
+
 export interface AnalysisSuggestion {
   id: string; status: string; phase: string; mode: 'single' | 'repair'; max_passes: number;
   source_version_id: string; created_at: string; finished_at?: string; deadline_at: string; budget_seconds: number;
   provider_pin: { model: string; recipe: string; transport: { mode: string; uses_public_network: boolean } };
   candidate?: AnalysisContent; candidate_sha256?: string; can_adopt: boolean; adopted_version_id?: string;
   freshness: AnalysisFreshness; error?: string; public_source_access?: boolean;
+  context_budget?: AnalysisContextPreview;
   review_notes?: { target_id: string; text: string; evidence_ids: string[]; pass: number }[];
   review_feedback?: AnalysisFeedback; feedback_responses?: FeedbackResponse[]; feedback_response_pass?: number | null; authority_feedback?: AuthorityFeedback; authority_responses?: AuthorityResponse[]; authority_response_pass?: number | null;
   comparison_ref?: { id: string; protocol_sha256: string; arm: 'single_pass' | 'bounded_correction' };

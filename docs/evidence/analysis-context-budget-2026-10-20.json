@@ -1,0 +1,56 @@
+{
+  "schema": "analysis-context-budget-engineering-evidence.v1",
+  "recorded_on": "2026-10-20",
+  "data_classification": "synthetic_only",
+  "recipe": "private-analysis-context-budget-v1",
+  "implementation_sha256": {
+    "backend/app/analysis_suggestions.py": "5a2d43bd825cd400b4b58651a23a4e9e5b593764d63b9730e54e0f12c7e85002",
+    "frontend/src/pages/matter/AnalysisSuggestions.tsx": "e60194c06320c87c4104586fad118ba463febae0a7d83568405ef536c3268e9a",
+    "frontend/src/pages/matter/AnalysisContextBudget.tsx": "4712c5f545189ecdebd6b134c4281ddc5e82a7a45f8911e06163d5a502b93f24",
+    "frontend/src/pages/matter/analysisTypes.ts": "136af15edcf3e7c0260fd2d6525d84db6c64f570ba5bad289e640279e48c8cd1",
+    "backend/tests/test_analysis_context_budget.py": "532099fd1a7b981f6a7d1b4fd844ee682544ce5845efeff4f0331ec3dc1aeb49",
+    "backend/tests/test_authority_proposals.py": "a567b3077d1b945c27789f4dbad18beac621cb21ed4ddad96ce85aa435358a64",
+    "frontend/src/pages/matter/AnalysisContextBudget.test.tsx": "e46fa73664886181d8b26e451d4d6e0ba3c63e6672df18820da3b03e195db8e2"
+  },
+  "local_checks": {
+    "python_lint": "passed",
+    "targeted_backend_cases": 181,
+    "targeted_backend_result": "passed",
+    "frontend_files": 137,
+    "frontend_cases": 10522,
+    "frontend_result": "passed",
+    "typescript_and_production_build": "passed",
+    "frontend_discovery": "complete_disjoint_two_shards"
+  },
+  "synthetic_browser_rehearsal": {
+    "loopback_only": true,
+    "initial_start_disabled": true,
+    "oversized_context_visible": true,
+    "oversized_start_disabled": true,
+    "fitting_context_visible": true,
+    "fitting_start_enabled": true,
+    "mode_change_invalidates_preview": true,
+    "frozen_revision_range_and_hashes_visible": true,
+    "repair_pass_limit_explained": true,
+    "provider_execution": false,
+    "private_case_data_used": false
+  },
+  "preserved": {
+    "prior_analysis_versions": true,
+    "prior_review_decisions": true,
+    "previous_failed_attempts": true,
+    "exact_source_revisions_ranges_and_hashes": true,
+    "configured_context_and_output_limits": true,
+    "customer_date_filters_and_navigation_histories": "untouched",
+    "ci_jobs_workers_caps_and_full_case_allocation": "unchanged"
+  },
+  "qualification": {
+    "exact_head_ci": "recorded separately against actual head",
+    "merge_and_main_ci": "recorded separately",
+    "installation": "not performed",
+    "real_inference": "not established",
+    "private_pilot_owner_review": "pending",
+    "legal_quality_metrics": "unmeasured",
+    "production_approved": false
+  }
+}
