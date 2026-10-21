@@ -50,6 +50,7 @@ def test_real_worker_extracts_only_synthetic_document_content():
 
 def test_real_isolated_docx_worker_preserves_body_sequence(tmp_path):
     from docx import Document
+    from docx_note_fixtures import note_part, note_reference
 
     from app.extract import DOCX_BODY_PROFILE
 
@@ -62,6 +63,10 @@ def test_real_isolated_docx_worker_preserves_body_sequence(tmp_path):
     doc.add_paragraph("SENTETİK: Sonra.")
     doc.sections[0].header.paragraphs[0].text = "SENTETİK: Üstbilgi koşulu."
     doc.sections[0].footer.paragraphs[0].text = "SENTETİK: Altbilgi istisnası."
+    note_reference(doc.paragraphs[0], "footnote", 7)
+    note_part(doc, "footnote", [(7, None, "SENTETİK: Dipnot koşulu.")])
+    note_reference(doc.paragraphs[-1], "endnote", 7)
+    note_part(doc, "endnote", [(7, None, "SENTETİK: Sonnot istisnası.")])
     path = tmp_path / "input.docx"
     doc.save(path)
     with TestClient(create_app(TOKEN)) as client:
@@ -73,23 +78,34 @@ def test_real_isolated_docx_worker_preserves_body_sequence(tmp_path):
             "SENTETİK: Önce.", "SENTETİK: Tablo.", "İÇ KOŞUL: Borç kabul edilmedi.",
             "SENTETİK: Hücre sonu.", "SENTETİK: Sonra.",
             "SENTETİK: Üstbilgi koşulu.", "SENTETİK: Altbilgi istisnası.",
+            "SENTETİK: Dipnot koşulu.", "SENTETİK: Sonnot istisnası.",
         ]
         assert data["extraction_profile"] == DOCX_BODY_PROFILE
+        assert data["passages"][-2]["locator"] == (
+            "Dipnot kimlik 7, başvuru 1 (Paragraf 1), paragraf 1"
+        )
 
 
-@pytest.mark.parametrize("story", ["body", "header"])
+@pytest.mark.parametrize("story", ["body", "header", "footnote", "endnote"])
 def test_real_docx_worker_rejects_overdeep_content_without_partial_passages(tmp_path, story):
     from docx import Document
+    from docx_note_fixtures import note_part, note_reference
 
     doc = Document()
     doc.add_paragraph("SENTETİK: Bu başlangıç kısmi çıktı olarak dönmemeli.")
-    if story == "header":
+    if story in {"footnote", "endnote"}:
+        blocks = Document()
+        parent = blocks.add_table(rows=1, cols=1).cell(0, 0)
+    elif story == "header":
         parent = doc.sections[0].header.add_table(rows=1, cols=1, width=1000).cell(0, 0)
     else:
         parent = doc.add_table(rows=1, cols=1).cell(0, 0)
     for _ in range(4):
         parent = parent.add_table(rows=1, cols=1).cell(0, 0)
     parent.text = "GÖNDERİLMEMELİ"
+    if story in {"footnote", "endnote"}:
+        note_reference(doc.paragraphs[0], story, 7)
+        note_part(doc, story, [(7, None, blocks)])
     path = tmp_path / "deep.docx"
     doc.save(path)
     with TestClient(create_app(TOKEN)) as client:
@@ -102,8 +118,24 @@ def test_real_docx_worker_rejects_overdeep_content_without_partial_passages(tmp_
         assert client.post("/extract", content="SENTETİK".encode(), headers=HEADERS).status_code == 200
 
 
+def test_worker_rejects_unresolved_note_without_returning_any_partial_text(tmp_path):
+    from docx import Document
+    from docx_note_fixtures import note_reference
+
+    doc = Document()
+    note_reference(doc.add_paragraph("SENTETİK: Kısmi metin GÖNDERİLMEMELİ."), "endnote", 7)
+    path = tmp_path / "unresolved.docx"
+    doc.save(path)
+    with TestClient(create_app(TOKEN)) as client:
+        response = client.post("/extract", content=path.read_bytes(),
+                               headers={**HEADERS, "X-Document-Suffix": ".docx"})
+        assert response.status_code == 422
+        assert response.json() == {"detail": "Document could not be safely extracted"}
+        assert "GÖNDERİLMEMELİ" not in response.text
+
+
 @pytest.mark.parametrize("profile", [None, "docx-body-order-v0", "docx-body-order-v1",
-                                     "docx-body-tree-v2", "", {}, True])
+                                     "docx-body-tree-v2", "docx-section-stories-v3", "", {}, True])
 def test_docx_client_rejects_unknown_or_missing_profile(monkeypatch, profile):
     payload = result()
     if profile is not None:

@@ -225,6 +225,8 @@ def test_production_intake_requires_worker_and_never_falls_back(workspace, monke
 
 
 def test_docx_upload_keeps_profile_original_and_prior_evidence(workspace):
+    from docx_note_fixtures import note_part, note_reference
+
     from app.extract import DOCX_BODY_PROFILE
 
     app, client, matter = workspace
@@ -240,6 +242,10 @@ def test_docx_upload_keeps_profile_original_and_prior_evidence(workspace):
     doc.add_paragraph("SENTETİK: Sonra.")
     doc.sections[0].header.paragraphs[0].text = "SENTETİK: Üstbilgi koşulu."
     doc.sections[0].footer.paragraphs[0].text = "SENTETİK: Altbilgi istisnası."
+    note_reference(doc.paragraphs[0], "footnote", 7)
+    note_part(doc, "footnote", [(7, None, "SENTETİK: Dipnot koşulu.")])
+    note_reference(doc.paragraphs[-1], "endnote", 7)
+    note_part(doc, "endnote", [(7, None, "SENTETİK: Sonnot istisnası.")])
     stream = io.BytesIO()
     doc.save(stream)
     original = stream.getvalue()
@@ -255,6 +261,7 @@ def test_docx_upload_keeps_profile_original_and_prior_evidence(workspace):
         "SENTETİK: İç koşul; 14.06.2020.", "SENTETİK: İç tablodan sonraki istisna.",
         "SENTETİK: Sonra.",
         "SENTETİK: Üstbilgi koşulu.", "SENTETİK: Altbilgi istisnası.",
+        "SENTETİK: Dipnot koşulu.", "SENTETİK: Sonnot istisnası.",
     ]
     assert detail["status"] == "needs_review"
     assert detail["sha256"] == hashlib.sha256(original).hexdigest()

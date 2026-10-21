@@ -4950,3 +4950,28 @@ installation remain separate receipts. R03-17 stays waiting for the owner's
 exact-version review; F00-04 remains partial pending representative legal-layout,
 footnote/scan/legacy and other format qualification. See [intake contract](DOCUMENT_INTAKE.md)
 and [engineering evidence](evidence/docx-section-stories-2026-10-22.json).
+
+
+### Delivered packet — linked DOCX footnotes/endnotes, 22 October 2026
+
+F00-04 now extracts bounded footnote and endnote paragraph/table appendices with
+exact package IDs and original source-reference contexts. Kinds remain separate;
+repeated references retain each context, marker-only paragraphs keep their XML
+location, and unreferenced/empty definitions stay explicit. System separators
+are excluded by type, and no displayed note number or legal effect is inferred.
+
+New worker/API DOCX intake requires `docx-linked-notes-v4`. Offline calibration
+retains exact historical v1/v2/v3 declarations. Duplicate or malformed identities,
+invalid/external parts, unresolved or nested references, unsupported contexts and
+hostile XML fail without partial successful passages. All existing shared
+text/locator/structural/process/transport limits and four table levels remain.
+
+Synthetic extraction, isolated-worker and upload checks verify the new behavior
+and original-byte preservation. Existing uploads, passage IDs, exact quotations,
+draft versions and review history are not migrated or re-extracted. No private
+inference, new case draft, owner decision or legal approval is created. CI,
+guarded merge, installation and legal qualification remain separate receipts.
+F00-04 stays partial pending representative layout, rendering/numbering, field,
+text-box, scan and legacy qualification; R03-17 owner review remains waiting.
+See the [intake contract](DOCUMENT_INTAKE.md) and
+[engineering evidence](evidence/docx-linked-notes-2026-10-22.json).

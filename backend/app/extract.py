@@ -3,6 +3,7 @@
 import csv
 import io
 import json
+import re
 import resource
 import subprocess
 import sys
@@ -44,7 +45,7 @@ SUPPORTED_SUFFIXES = frozenset(
 )
 ZIP_SUFFIXES = frozenset({".docx", ".xlsx", ".pptx", ".odt", ".ods", ".odp"})
 MAX_TEXT = 2_000_000
-DOCX_BODY_PROFILE = "docx-section-stories-v3"
+DOCX_BODY_PROFILE = "docx-linked-notes-v4"
 MAX_DOCX_TABLE_DEPTH = 4
 MAX_DOCX_BLOCKS = 50_000
 
@@ -116,18 +117,25 @@ def extract(path, suffix):
         if suffix == ".docx":
             from types import SimpleNamespace
 
+            from defusedxml.ElementTree import fromstring
             from docx import Document
             from docx.blkcntnr import BlockItemContainer
+            from docx.opc.constants import CONTENT_TYPE as CT
             from docx.opc.constants import RELATIONSHIP_TYPE as RT
+            from docx.oxml import parse_xml
             from docx.oxml.ns import qn
             from docx.parts.hdrftr import FooterPart, HeaderPart
-            from docx.table import _Cell
+            from docx.table import Table, _Cell
             from docx.text.paragraph import Paragraph
 
             doc = Document(path)
             paragraph_index = table_index = 0
             visited = 0
             has_tables = False
+            references = []
+            observed_references = set()
+            source_roots = [doc.element]
+            note_tags = {qn("w:" + kind + "Reference"): kind for kind in ("footnote", "endnote")}
             revision_tags = {qn("w:" + name) for name in ("ins", "del", "moveFrom", "moveTo")}
             has_revisions = any(node.tag in revision_tags for node in doc.element.iter())
 
@@ -136,6 +144,32 @@ def extract(path, suffix):
                 visited += 1
                 if visited > MAX_DOCX_BLOCKS:
                     raise ValueError("DOCX structural work limit exceeded")
+
+            def note_id(node):
+                raw = node.get(qn("w:id"))
+                if not isinstance(raw, str) or not re.fullmatch(r"[+-]?[0-9]{1,10}", raw):
+                    raise ValueError("DOCX note definition/reference is invalid")
+                value = int(raw)
+                if not -(2 ** 31) <= value < 2 ** 31:
+                    raise ValueError("DOCX note definition/reference is invalid")
+                return value
+
+            def note_references(paragraph, locator):
+                for ref in paragraph._p.iter(*note_tags):
+                    visit()
+                    # Do not attribute an omitted textbox, revision or content
+                    # wrapper to the outer paragraph's extracted text.
+                    run = ref.getparent()
+                    parent = run.getparent()
+                    if (run.tag != qn("w:r") or not (parent is paragraph._p or
+                            (parent.tag == qn("w:hyperlink") and parent.getparent() is paragraph._p))):
+                        raise ValueError("DOCX note reference context is unsupported")
+                    references.append((note_tags[ref.tag], note_id(ref), locator))
+                    observed_references.add(ref)
+
+            def paragraph_text(paragraph, locator):
+                note_references(paragraph, locator)
+                add(locator, paragraph.text)
 
             def table_text(table, locator, depth):
                 nonlocal has_tables
@@ -153,10 +187,11 @@ def extract(path, suffix):
                     row_locator = f"{locator}, satır {ri}"
                     if not any(cell.tables for cell in cells):
                         texts = []
-                        for cell in cells:
+                        for ci, cell in enumerate(cells, 1):
                             paragraphs = []
-                            for inner in cell.iter_inner_content():
+                            for pi, inner in enumerate(cell.iter_inner_content(), 1):
                                 visit()
+                                note_references(inner, f"{row_locator}, hücre {ci}, paragraf {pi}")
                                 paragraphs.append(inner.text)
                             texts.append("\n".join(paragraphs))
                         add(row_locator, " | ".join(texts))
@@ -170,7 +205,7 @@ def extract(path, suffix):
                             visit()
                             if isinstance(inner, Paragraph):
                                 pi += 1
-                                add(f"{cell_locator}, paragraf {pi}", inner.text)
+                                paragraph_text(inner, f"{cell_locator}, paragraf {pi}")
                             else:
                                 ti += 1
                                 table_text(inner, f"{cell_locator}, tablo {ti}", depth + 1)
@@ -181,7 +216,7 @@ def extract(path, suffix):
                 visit()
                 if isinstance(block, Paragraph):
                     paragraph_index += 1
-                    add(f"Paragraf {paragraph_index}", block.text)
+                    paragraph_text(block, f"Paragraf {paragraph_index}")
                 else:
                     table_index += 1
                     table_text(block, f"Tablo {table_index}", 1)
@@ -223,6 +258,7 @@ def extract(path, suffix):
                         part, source_section = definitions[kind, variant]
                         if part not in inspected_parts:
                             has_revisions |= any(node.tag in revision_tags for node in part.element.iter())
+                            source_roots.append(part.element)
                             inspected_parts.add(part)
                         prefix = (f"Bölüm {si}, {label} tanımı "
                                   f"({variant_label}; kaynak bölüm {source_section})")
@@ -234,10 +270,106 @@ def extract(path, suffix):
                             visit()
                             if isinstance(block, Paragraph):
                                 pi += 1
-                                add(f"{prefix}, paragraf {pi}", block.text)
+                                paragraph_text(block, f"{prefix}, paragraf {pi}")
                             else:
                                 ti += 1
                                 table_text(block, f"{prefix}, tablo {ti}", 1)
+
+            # References in unprocessed structural wrappers must not silently
+            # turn into unreferenced notes or acquire a guessed source context.
+            for root in source_roots:
+                for ref in root.iter(*note_tags):
+                    visit()
+                    if ref not in observed_references:
+                        raise ValueError("DOCX note reference context is unsupported")
+
+            # python-docx's relationship map can collapse duplicate XML IDs.
+            # Reject that ambiguity before selecting either note authority part.
+            with zipfile.ZipFile(path) as archive:
+                rel_path = str(doc.part.partname.rels_uri).lstrip("/")
+                if rel_path in archive.namelist():
+                    rel_root = fromstring(archive.read(rel_path), forbid_dtd=True)
+                    rel_ids = set()
+                    for rel in rel_root:
+                        visit()
+                        rid = rel.get("Id")
+                        if not rid or rid in rel_ids:
+                            raise ValueError("DOCX note relationship is invalid")
+                        rel_ids.add(rid)
+
+            notes = {}
+            note_labels = {"footnote": "Dipnot", "endnote": "Sonnot"}
+            for kind in note_labels:
+                relation_type = getattr(RT, kind.upper() + "S")
+                relations = [r for r in doc.part.rels.values() if r.reltype == relation_type]
+                if len(relations) > 1 or any(r.is_external for r in relations):
+                    raise ValueError("DOCX note relationship is invalid")
+                if not relations:
+                    continue
+                visit()
+                part = relations[0].target_part
+                if part.content_type != getattr(CT, "WML_" + kind.upper() + "S"):
+                    raise ValueError("DOCX note relationship is invalid")
+                # Validate hostile XML before constructing typed Word blocks.
+                fromstring(part.blob, forbid_dtd=True)
+                root = parse_xml(part.blob)
+                if root.tag != qn("w:" + kind + "s"):
+                    raise ValueError("DOCX note definition/reference is invalid")
+                has_revisions |= any(node.tag in revision_tags for node in root.iter())
+                identifiers = set()
+                for node in root:
+                    visit()
+                    if node.tag != qn("w:" + kind):
+                        raise ValueError("DOCX note definition/reference is invalid")
+                    identifier = note_id(node)
+                    note_type = node.get(qn("w:type"), "normal")
+                    if identifier in identifiers or note_type not in {
+                        "normal", "separator", "continuationSeparator", "continuationNotice"
+                    }:
+                        raise ValueError("DOCX note definition/reference is invalid")
+                    identifiers.add(identifier)
+                    if any(True for _ in node.iter(*note_tags)):
+                        raise ValueError("DOCX nested note reference is prohibited")
+                    if note_type == "normal":
+                        notes[kind, identifier] = (node, part)
+
+            contexts = {}
+            for ordinal, (kind, identifier, locator) in enumerate(references, 1):
+                if (kind, identifier) not in notes:
+                    raise ValueError("DOCX note definition/reference is invalid")
+                contexts.setdefault((kind, identifier), []).append((ordinal, locator))
+            unreferenced = empty_notes = False
+            for key, (node, part) in notes.items():
+                kind, identifier = key
+                occurrences = contexts.get(key, [(None, None)])
+                unreferenced |= key not in contexts
+                for ordinal, locator in occurrences:
+                    visit()
+                    origin = f"başvuru {ordinal} ({locator})" if ordinal is not None else "başvuru yok"
+                    prefix = f"{note_labels[kind]} kimlik {identifier}, {origin}"
+                    parent = SimpleNamespace(part=part)
+                    pi = ti = 0
+                    before_count = len(passages)
+                    for block in node:
+                        visit()
+                        if block.tag == qn("w:p"):
+                            pi += 1
+                            add(f"{prefix}, paragraf {pi}", Paragraph(block, parent).text)
+                        elif block.tag == qn("w:tbl"):
+                            ti += 1
+                            table_text(Table(block, parent), f"{prefix}, tablo {ti}", 1)
+                        else:
+                            raise ValueError("DOCX note content is unsupported")
+                    empty_notes |= len(passages) == before_count
+            if notes:
+                warnings.append(
+                    "Dipnot/sonnot paket kimliği ve XML başvuru konumu korunur; başvuru sırası gösterilen "
+                    "not numarası değildir. Notlar ayrı ekte tanım sırasıyla, her başvuru bağlamında işlenir."
+                )
+            if unreferenced:
+                warnings.append("Başvurusu bulunmayan not tanımları ayrı gösterildi; gövdeyle ilişkisi kurulmadı.")
+            if empty_notes:
+                warnings.append("Boş not tanımı var; bu tanımdan metin pasajı oluşturulmadı.")
             if has_stories:
                 warnings.append(
                     "Üstbilgi/altbilgi tanımları gövdeden sonra bölüm ve kaynak bölüm bilgisiyle işlendi; "
@@ -251,7 +383,9 @@ def extract(path, suffix):
                 )
             if has_revisions:
                 warnings.append("İzlenen değişiklikler var; kabul edilmiş sürüm doğrulanmadı.")
-            warnings.append("Belgedeki dipnot, sonnot ve metin kutusu tamlığı doğrulanmadı.")
+            warnings.append(
+                "Belgedeki dipnot/sonnot sayfa yerleşimi, gösterilen numaralar ve metin kutusu tamlığı doğrulanmadı."
+            )
         else:
             from openpyxl import load_workbook
 
