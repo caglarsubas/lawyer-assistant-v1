@@ -1,0 +1,62 @@
+{
+  "schema": "document-intake-nested-tables-engineering-v1",
+  "recorded_on": "2026-10-21",
+  "scope": "Invented DOCX nested-table regression, isolated parser and upload contracts only. No private case inputs or model execution.",
+  "implementation_sha256": {
+    "backend/app/extract.py": "c0c1fef3f05a7fb3de79b18302fc40a96355e17dff0739ee266f2f0773f52e0c",
+    "backend/app/extraction_calibration.py": "a7a4ed3450e3a614ab1b830182f8e1c7895dbc9be153e434e06fca12e7a70fc5",
+    "backend/app/extraction_client.py": "5ddfe5c5357370ae00f9f5831afeb1f889dafb1ee28e093c610b3443eab21d66",
+    "backend/app/extraction_worker.py": "abe30d4c02a811aa2da305c6f03429a0e222fce0de4192787d967155cdac0c12",
+    "backend/app/main.py": "a5aacf58de8938137b5937d87f0a5b746cc3334ac411a776355820e9869e5148",
+    "backend/tests/test_extract.py": "44b9f522741eecd9860527ae97ab593b26661bd10e74c294253a600017b9c215",
+    "backend/tests/test_extraction_worker.py": "c649536bae2acc4b9a1227b02a0bf94907b7552ffa89c8cef39051ed49ac48bb",
+    "backend/tests/test_extraction_calibration.py": "2f6a0dd6e8dd4c140f294e32824bbd307c96cce23eea74e310babd37efc25225",
+    "backend/tests/test_workspace.py": "2ae6eaf96d67833fd1e155ea199dc652d17f6db563096558d5f61d28261c17a2"
+  },
+  "local_checks": {
+    "targeted_backend_cases": 159,
+    "targeted_backend_result": "passed",
+    "deployment_contract_cases": 51,
+    "deployment_contract_result": "passed",
+    "ruff": "passed",
+    "diff_check": "passed",
+    "frontend_result": "unchanged; hosted checks required"
+  },
+  "regression": {
+    "base": "dd5ad8f945be1b2a9eac8ff8d8cf8c016bd3eeae",
+    "pre_fix_nested_content_regression": "failed as expected",
+    "post_fix_nested_content_regression": "passed",
+    "only_synthetic_documents": true,
+    "private_files_read": false,
+    "original_bytes_unchanged": true
+  },
+  "profile": "docx-body-tree-v2",
+  "historical_profile_retained_by_calibration": "docx-body-order-v1",
+  "bounds": {
+    "table_levels_including_outer": 4,
+    "visited_structural_blocks": 50000,
+    "existing_process_transport_and_text_limits": "unchanged"
+  },
+  "preserved": [
+    "original bytes",
+    "prior document records and evidence versions",
+    "exact quotations and draft/review history",
+    "historical extraction profile labels",
+    "existing simple-row and body locator numbering",
+    "all CI allocations, workers and deadlines"
+  ],
+  "limits": [
+    "Physical XML order and cell numbering, not verified visual layout or legal meaning.",
+    "Headers, footnotes, floating objects and tracked-change acceptance remain unqualified.",
+    "Excessive nesting/work fails the extraction without partial successful passages.",
+    "No migration or re-extraction of existing uploads.",
+    "Synthetic checks do not establish representative-format or legal qualification."
+  ],
+  "unchanged_CI_sha256": "ee077ec642d2335f014a01dd36d4a66c32c1ed028ef2071882bfb8aa423a992d",
+  "qualification": {
+    "representative_format_qualification": false,
+    "private_pilot_replayed": false,
+    "legal_review_recorded": false,
+    "production_qualified": false
+  }
+}

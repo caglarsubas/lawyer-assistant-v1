@@ -435,7 +435,7 @@ source permission or evidence version is granted by infrastructure maintenance.
 | Graph A ontology | Partial | National category catalog, RDF modules, SKOS, relationship metadata, provenance/time model, SHACL | Legal-owner signoff, source-backed institutions/norms/competence, persistent identity/standards mappings, reviewed aliases and non-equivalent concepts, amendment/transition reconciliation |
 | Graph B jurisprudence | Partial | Proceedings/decisions/opinions/content/citation/treatment types, validated synthetic edge cases | Lawfully acquired decisions, passage roles, duplicate manifestations, institution epochs, historical provision resolution, effect/treatment review, comparable-fact and adverse-authority evaluation |
 | Graph retrieval | Implemented baseline | Eight typed tools, verified immutable serving releases, atomic activation/rollback, independent signed-source checks, bounded traversal, reviewed validity cutoffs with separate evidence and explicit unresolved data | Real-corpus recall, legal-owner-approved serving release, large-corpus startup/indexing/query performance and applicability evaluation |
-| Document intake | Partial | Initial and extended adapters, bounded OCR, isolated scanner/worker, signed offline signatures, live readiness, deployed clean/EICAR checks, encrypted originals and session revalidation; profile-bound DOCX paragraph/table body ordering and explicit nested-table omissions, verified with synthetic fixtures | Representative layout/table/header/footnote and legacy-format qualification, full scan handling, sandbox escape testing, supplied UDF before pilot |
+| Document intake | Partial | Initial and extended adapters, bounded OCR, isolated scanner/worker, signed offline signatures, live readiness, deployed clean/EICAR checks, encrypted originals and session revalidation; profile-bound DOCX body/nested-table ordering with physical-cell traversal and depth/work limits, verified with synthetic fixtures | Representative layout/merged-cell/header/footnote and legacy-format qualification, full scan handling, sandbox escape testing, supplied UDF before pilot |
 | Preparation/review | Partial | Quotations, issue checklists, corrections, claim review, scenarios, contradiction links, argument notes, playbooks, immutable drafts and DOCX/PDF; lawyer-authored private rationale with exact source pins and deterministic structural checks; bounded local proposals with explicit adoption and immutable provenance; exact-version human review decisions/findings and optional source-linked revision adjudication with conditional private-draft scope; registered same-input comparisons, separate assigned-account observations, active effort records and private exports; explicit within-workspace cohort snapshots, incompatible-profile separation, overlap/disagreement/unknown inventories and stale projection; exact public-authority contexts, retained lawyer findings and source-linked revised-draft comparisons with explicit dispositions | Qualified public/legal synthesis, representative semantic/adverse verification, measured correction benefit, calibrated Standard/Deep budgets and multi-step scenarios |
 | Search and reasoning | Partial | Local document excerpt windows and additive graph queries, bounded OpenSearch lexical/vector adapter with release/rights/review prefilters and reciprocal-rank fusion; sealed release-specific index builder, Turkish original/normalized/folded fields, source-verified literal citation occurrences, exact source-span hints and explicit selection | Approved corpus/indexes, citation/alias identity review and Turkish benchmark/ablations, local embedding/reranker qualification, independent adverse search, evaluated issue reasoning and reviewed calculations |
 | Source and corpus operations | Partial | Two registered TBMM acquisition representations; immutable staging, human source/mapping review and single/source-set publication with current private rights; R01 offline source/use/asset catalog and inspection | Actual R01 qualification, lawful RG/MBS/judicial/domain adapters, representative source-set qualification, separate observation/review/import freshness, archive gaps and per-source watermarks |
@@ -4877,3 +4877,24 @@ or legal applicability. R05A-04 remains open for independent representative tria
 R03-17 remains waiting for exact-version owner review. See
 [the model assessment contract](MODEL_ASSESSMENT_PREMISES.md) and
 [synthetic engineering checks](evidence/model-assessment-premises-2026-10-21.json).
+
+
+### Delivered packet — bounded DOCX nested-table intake, 21 October 2026
+
+F00 document intake now traverses nested DOCX tables within each physical cell,
+keeping the paragraphs before and after them and sibling-table order. It avoids
+repeating merged origins, retains simple-row locators and declares
+`docx-body-tree-v2`. Four table levels and 50,000 visited structural blocks,
+including empty cells/paragraphs, bound traversal; a rejected parse yields no
+partial successful passages. Worker/API admission requires the current profile;
+offline calibration retains historical v1 labels without promotion.
+
+Synthetic extraction, real isolated parser-process, strict transport/calibration
+and authorized upload/original-round-trip checks cover the change. Existing
+uploads, passage IDs, exact quotations, draft versions and review history are not
+reprocessed or migrated. No private pilot inference or human review occurs.
+Deployment and hosted CI remain separate receipts in the local tracker. The
+owner's focused draft review remains pending. F00 remains partial pending
+representative layout/merged-cell, header/footnote, scan and legacy-format tests.
+See [intake contract](DOCUMENT_INTAKE.md) and
+[engineering evidence](evidence/docx-nested-tables-2026-10-21.json).

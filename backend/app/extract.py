@@ -44,7 +44,9 @@ SUPPORTED_SUFFIXES = frozenset(
 )
 ZIP_SUFFIXES = frozenset({".docx", ".xlsx", ".pptx", ".odt", ".ods", ".odp"})
 MAX_TEXT = 2_000_000
-DOCX_BODY_PROFILE = "docx-body-order-v1"
+DOCX_BODY_PROFILE = "docx-body-tree-v2"
+MAX_DOCX_TABLE_DEPTH = 4
+MAX_DOCX_BLOCKS = 50_000
 
 
 class PlainHTML(HTMLParser):
@@ -113,22 +115,70 @@ def extract(path, suffix):
     elif suffix in (".docx", ".xlsx"):
         if suffix == ".docx":
             from docx import Document
+            from docx.table import _Cell
             from docx.text.paragraph import Paragraph
 
             doc = Document(path)
             paragraph_index = table_index = 0
+            visited = 0
+
+            def visit():
+                nonlocal visited
+                visited += 1
+                if visited > MAX_DOCX_BLOCKS:
+                    raise ValueError("DOCX structural work limit exceeded")
+
+            def table_text(table, locator, depth):
+                if depth > MAX_DOCX_TABLE_DEPTH:
+                    raise ValueError("DOCX table nesting limit exceeded")
+                # Physical XML cells avoid expanding grid spans or repeating a
+                # merged origin through row.cells. They are not visual columns.
+                for ri, row in enumerate(table._tbl.tr_lst, 1):
+                    visit()
+                    cells = []
+                    for node in row.tc_lst:
+                        visit()
+                        cells.append(_Cell(node, table))
+                    row_locator = f"{locator}, satır {ri}"
+                    if not any(cell.tables for cell in cells):
+                        texts = []
+                        for cell in cells:
+                            paragraphs = []
+                            for inner in cell.iter_inner_content():
+                                visit()
+                                paragraphs.append(inner.text)
+                            texts.append("\n".join(paragraphs))
+                        add(row_locator, " | ".join(texts))
+                        continue
+                    # A nested row cannot be flattened without relocating its
+                    # conditions. Retain each cell's paragraph/table sequence.
+                    for ci, cell in enumerate(cells, 1):
+                        cell_locator = f"{row_locator}, hücre {ci}"
+                        pi = ti = 0
+                        for inner in cell.iter_inner_content():
+                            visit()
+                            if isinstance(inner, Paragraph):
+                                pi += 1
+                                add(f"{cell_locator}, paragraf {pi}", inner.text)
+                            else:
+                                ti += 1
+                                table_text(inner, f"{cell_locator}, tablo {ti}", depth + 1)
+
             # Paragraph/table locators retain independent numbering, including
             # blank paragraphs. Only their emitted body sequence changes.
             for block in doc.iter_inner_content():
+                visit()
                 if isinstance(block, Paragraph):
                     paragraph_index += 1
                     add(f"Paragraf {paragraph_index}", block.text)
                 else:
                     table_index += 1
-                    for ri, row in enumerate(block.rows, 1):
-                        add(f"Tablo {table_index}, satır {ri}", " | ".join(c.text for c in row.cells))
-                        if any(cell.tables for cell in row.cells):
-                            warnings.append("İç içe tabloların içeriği işlenmedi; özgün belgeyle doğrulayın.")
+                    table_text(block, f"Tablo {table_index}", 1)
+            if table_index:
+                warnings.append(
+                    "Tablolar XML satır/hücre sırasıyla işlendi; hücre numarası fiziksel XML hücresidir. "
+                    "Birleştirilmiş hücrelerin anlamı, görsel sütun hizası ve okuma düzeni doğrulanmadı."
+                )
             xml = doc.element.xml
             if "<w:ins" in xml or "<w:del" in xml:
                 warnings.append("İzlenen değişiklikler var; kabul edilmiş sürüm doğrulanmadı.")

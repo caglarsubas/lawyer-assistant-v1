@@ -55,7 +55,10 @@ def test_real_isolated_docx_worker_preserves_body_sequence(tmp_path):
 
     doc = Document()
     doc.add_paragraph("SENTETİK: Önce.")
-    doc.add_table(rows=1, cols=1).cell(0, 0).text = "SENTETİK: Tablo."
+    cell = doc.add_table(rows=1, cols=1).cell(0, 0)
+    cell.text = "SENTETİK: Tablo."
+    cell.add_table(rows=1, cols=1).cell(0, 0).text = "İÇ KOŞUL: Borç kabul edilmedi."
+    cell.add_paragraph("SENTETİK: Hücre sonu.")
     doc.add_paragraph("SENTETİK: Sonra.")
     path = tmp_path / "input.docx"
     doc.save(path)
@@ -65,12 +68,34 @@ def test_real_isolated_docx_worker_preserves_body_sequence(tmp_path):
         assert response.status_code == 200
         data = response.json()
         assert [p["text"] for p in data["passages"]] == [
-            "SENTETİK: Önce.", "SENTETİK: Tablo.", "SENTETİK: Sonra.",
+            "SENTETİK: Önce.", "SENTETİK: Tablo.", "İÇ KOŞUL: Borç kabul edilmedi.",
+            "SENTETİK: Hücre sonu.", "SENTETİK: Sonra.",
         ]
         assert data["extraction_profile"] == DOCX_BODY_PROFILE
 
 
-@pytest.mark.parametrize("profile", [None, "docx-body-order-v0", "", {}, True])
+def test_real_docx_worker_rejects_overdeep_content_without_partial_passages(tmp_path):
+    from docx import Document
+
+    doc = Document()
+    doc.add_paragraph("SENTETİK: Bu başlangıç kısmi çıktı olarak dönmemeli.")
+    parent = doc
+    for _ in range(5):
+        parent = parent.add_table(rows=1, cols=1).cell(0, 0)
+    parent.text = "GÖNDERİLMEMELİ"
+    path = tmp_path / "deep.docx"
+    doc.save(path)
+    with TestClient(create_app(TOKEN)) as client:
+        response = client.post("/extract", content=path.read_bytes(),
+                               headers={**HEADERS, "X-Document-Suffix": ".docx"})
+        assert response.status_code == 422
+        assert response.json() == {"detail": "Document could not be safely extracted"}
+        assert "GÖNDERİLMEMELİ" not in response.text
+        # A rejected parse also releases its bounded slot.
+        assert client.post("/extract", content="SENTETİK".encode(), headers=HEADERS).status_code == 200
+
+
+@pytest.mark.parametrize("profile", [None, "docx-body-order-v0", "docx-body-order-v1", "", {}, True])
 def test_docx_client_rejects_unknown_or_missing_profile(monkeypatch, profile):
     payload = result()
     if profile is not None:

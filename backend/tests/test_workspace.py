@@ -233,7 +233,10 @@ def test_docx_upload_keeps_profile_original_and_prior_evidence(workspace):
     prior = {d["id"]: client.get(base + "/" + d["id"]).json() for d in before}
     doc = Document()
     doc.add_paragraph("SENTETİK: Önce.")
-    doc.add_table(rows=1, cols=1).cell(0, 0).text = "SENTETİK: Koşul kabul edilmedi."
+    cell = doc.add_table(rows=1, cols=1).cell(0, 0)
+    cell.text = "SENTETİK: Koşul kabul edilmedi."
+    cell.add_table(rows=1, cols=1).cell(0, 0).text = "SENTETİK: İç koşul; 14.06.2020."
+    cell.add_paragraph("SENTETİK: İç tablodan sonraki istisna.")
     doc.add_paragraph("SENTETİK: Sonra.")
     stream = io.BytesIO()
     doc.save(stream)
@@ -246,7 +249,9 @@ def test_docx_upload_keeps_profile_original_and_prior_evidence(workspace):
     detail = client.get(base + "/" + item["id"]).json()
     assert detail["extraction_profile"] == DOCX_BODY_PROFILE
     assert [p["text"] for p in detail["passages"]] == [
-        "SENTETİK: Önce.", "SENTETİK: Koşul kabul edilmedi.", "SENTETİK: Sonra.",
+        "SENTETİK: Önce.", "SENTETİK: Koşul kabul edilmedi.",
+        "SENTETİK: İç koşul; 14.06.2020.", "SENTETİK: İç tablodan sonraki istisna.",
+        "SENTETİK: Sonra.",
     ]
     assert detail["status"] == "needs_review"
     assert detail["sha256"] == hashlib.sha256(original).hexdigest()
