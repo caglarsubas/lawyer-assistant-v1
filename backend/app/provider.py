@@ -7,6 +7,11 @@ from urllib.parse import urlsplit
 
 import httpx
 
+from .analysis_output_contract import (
+    admitted_response_format,
+    response_format_for_messages,
+    validate_analysis_output,
+)
 from .evidence_prompt import measure_prompt, quote_messages
 
 PRIVATE_NETWORKS = tuple(ipaddress.ip_network(value) for value in (
@@ -20,7 +25,9 @@ DNS_LABEL = re.compile(r'[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\Z')
 
 
 class ProviderError(Exception):
-    pass
+    def __init__(self, message, *, code="ProviderError"):
+        self.code = code
+        super().__init__(message)
 
 
 class TunnelConfigurationError(ProviderError):
@@ -253,11 +260,16 @@ class Provider:
         if not 0 < budget_seconds <= RESPONSE_BUDGET_SECONDS:
             raise ProviderError("Invalid analysis inference time budget")
         return self._complete(messages, COMPLETION_TOKENS, measured["total_upper_bound_units"],
-                              budget_seconds=budget_seconds, response_bytes=65536)
+                              budget_seconds=budget_seconds, response_bytes=65536,
+                              response_format=response_format_for_messages(messages))
 
     def _complete(self, messages, completion_tokens, context_units, *,
-                  budget_seconds=RESPONSE_BUDGET_SECONDS, response_bytes=MAX_RESPONSE_BYTES):
+                  budget_seconds=RESPONSE_BUDGET_SECONDS, response_bytes=MAX_RESPONSE_BYTES, response_format=None):
         s = self.settings
+        response_format = {"type": "json_object"} if response_format is None else response_format
+        structured = admitted_response_format(response_format)
+        if not structured and response_format != {"type": "json_object"}:
+            raise ProviderError("Unsupported local response contract")
         if not self.configured:
             raise ProviderError("Provider is not configured")
         if not s.provider_identity_verified:
@@ -283,7 +295,7 @@ class Provider:
             with httpx.Client(timeout=httpx.Timeout(min(90, remaining), connect=min(5, remaining)), follow_redirects=False, trust_env=False) as client:
                 with client.stream("POST", base + "/chat/completions", headers=headers, json={
                     "model": s.provider_model, "messages": messages, "temperature": 0,
-                    "max_completion_tokens": completion_tokens, "stream": False, "response_format": {"type": "json_object"},
+                    "max_completion_tokens": completion_tokens, "stream": False, "response_format": response_format,
                 }) as response:
                     if response.status_code != 200:
                         raise ProviderError(f"Provider returned HTTP {response.status_code}")
@@ -312,10 +324,16 @@ class Provider:
                 raise ProviderError("Provider must return exactly one completion")
             choice = choices[0]
             if choice.get("finish_reason") != "stop" or not isinstance(choice.get("message"), dict):
-                raise ProviderError("Provider output was incomplete")
+                raise ProviderError("Provider output was incomplete", code="provider_output_incomplete")
             content = choice["message"].get("content")
             if not isinstance(content, str) or not content.strip() or choice["message"].get("tool_calls"):
                 raise ProviderError("Provider returned an unsupported content shape")
+            if structured:
+                try:
+                    validate_analysis_output(content, response_format)
+                except (ValueError, TypeError, RecursionError):
+                    raise ProviderError("Provider output violated its response contract",
+                                        code="provider_output_contract_invalid") from None
             return content
         except (httpx.HTTPError, KeyError, ValueError, TypeError, IndexError, RecursionError) as exc:
             raise ProviderError("Provider response could not be safely consumed") from exc

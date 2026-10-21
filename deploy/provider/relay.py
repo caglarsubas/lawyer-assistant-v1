@@ -20,6 +20,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import NamedTuple
 from urllib.parse import urlsplit
 
+from app.analysis_output_contract import admitted_response_format
+
 MAX_REQUEST = 256 * 1024
 MAX_RESPONSE = 1024 * 1024
 LOCAL_BACKENDS = {"ollama_http", "llama_cpp", "mlx"}
@@ -160,7 +162,8 @@ def valid_completion(payload, model):
     tokens = payload.get("max_completion_tokens")
     if type(tokens) is not int or not 1 <= tokens <= 1000:
         return False
-    if payload.get("temperature") != 0 or payload.get("response_format") != {"type": "json_object"}:
+    if (payload.get("temperature") != 0 or (payload.get("response_format") != {"type": "json_object"}
+                                          and not admitted_response_format(payload.get("response_format")))):
         return False
     messages = payload.get("messages")
     if not isinstance(messages, list) or not 1 <= len(messages) <= 8:

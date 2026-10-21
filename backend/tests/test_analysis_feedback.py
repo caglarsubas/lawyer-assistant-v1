@@ -302,7 +302,8 @@ def test_provider_accounts_exact_selected_feedback_and_rejects_context_overflow(
     def serve(request):
         seen.append(json.loads(request.content))
         return httpx.Response(200, json={'model': settings.provider_model, 'choices': [
-            {'finish_reason': 'stop', 'message': {'content': json.dumps({'feedback_responses': [response(targets=(), outcome='unresolved')]})}}]})
+            {'finish_reason': 'stop', 'message': {'content': json.dumps({'application_updates': [], 'conclusion_update': None,
+                'review_notes': [], 'feedback_responses': [response(targets=(), outcome='unresolved')]})}}]})
 
     monkeypatch.setattr(httpx, 'Client', lambda **kwargs: client_type(transport=httpx.MockTransport(serve), **kwargs))
     messages = proposal_messages(record, review_feedback=feedback)

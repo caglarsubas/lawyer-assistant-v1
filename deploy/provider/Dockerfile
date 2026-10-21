@@ -5,5 +5,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends iptables gosu c
     && groupadd --gid 10003 relay && useradd --uid 10003 --gid relay --no-create-home relay
 WORKDIR /app
 COPY deploy/provider/relay.py /app/relay.py
+COPY backend/app/analysis_output_contract.py /app/app/analysis_output_contract.py
 COPY --chmod=755 deploy/provider/entrypoint.sh /usr/local/bin/provider-entrypoint
 ENTRYPOINT ["/usr/local/bin/provider-entrypoint"]

@@ -80,7 +80,8 @@ export interface AnalysisContextPreview {
   recipe: string; scope: 'exact_first_pass_only'; source_version_id: string; source_revision: number;
   source_content_sha256: string; source_review_id: string | null; mode: 'single' | 'repair'; max_passes: number;
   model: string; transport: { mode: string; uses_public_network: boolean };
-  prompt: { utf8_bytes: number; total_upper_bound_units: number; completion_tokens: number; messages_sha256: string };
+  prompt: { utf8_bytes: number; total_upper_bound_units: number; completion_tokens: number; messages_sha256: string;
+    response_contract_utf8_bytes?: number; response_contract_sha256?: string };
   framing_reserve_units: number; context_limit_units: number; remaining_units: number; excess_units: number;
   fits: boolean; configuration_ready: boolean; can_start: boolean; preview_sha256: string;
   evidence: { evidence_id: string; document_revision: number; passage_sha256: string; quote_sha256: string; start: number; end: number }[];

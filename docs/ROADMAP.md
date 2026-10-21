@@ -4802,3 +4802,25 @@ independent attestation or benchmark result. Case identities, excerpts, scope
 selections, evidence fingerprints and model payloads remain solely in authorized
 private storage. The next engineering work should follow the retained validation
 failure or concrete owner findings; no further navigation slice is implied.
+
+### Bounded local-model response contract
+
+R05A-08 addresses a synthetically reproduced provider-completion failure with a closed sampling
+schema for private analysis proposals. The API and isolated relay share four exact
+contract variants; arbitrary schemas and expanded output contracts remain
+prohibited. Complete schema bytes and their digest now participate in the exact
+context preview and worker/provider measurements. Original evidence and every
+existing input, review, model, routing, time and completion boundary remain fixed.
+
+Truncated responses remain rejected even if they contain parseable JSON. Complete
+responses must pass independent wire validation and all existing fixed-target,
+source and structural checks. Safe diagnostic codes distinguish incomplete output
+from a wrong response contract without exposing provider text. No automatic retry,
+fallback, schema relaxation or historical-attempt rewrite was added.
+
+The native-provider rehearsal uses only synthetic input through a separately
+isolated relay; private cases remain in authorized storage. Installation and the
+authorized private rerun are verified separately from engineering CI. R03-17 owner
+review, semantic correction quality and independent legal/publication qualification
+remain open. See the [response contract](LOCAL_MODEL_OUTPUT_CONTRACT.md) and
+[engineering record](evidence/bounded-analysis-output-2026-10-21.json).

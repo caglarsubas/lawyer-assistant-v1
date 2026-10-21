@@ -35,7 +35,7 @@ an idempotency receipt; it never starts inference. The usual local suggestion
 flow requires its own fresh saved-version budget preview before a model request.
 Each subsequent repair envelope is checked independently. An oversized focus is
 withheld without trimming, increased limits or fallback. Static accounting units
-are conservative UTF-8 bytes plus the unchanged framing and completion reserves,
+include complete UTF-8 messages and the bounded response schema, plus unchanged framing and completion reserves,
 not observed tokenizer usage or a generation guarantee.
 
 ## Exact source and review contracts

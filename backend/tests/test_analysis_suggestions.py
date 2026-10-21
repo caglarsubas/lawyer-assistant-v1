@@ -49,6 +49,26 @@ def patch():
             'review_notes': [{'target_id': 'a1', 'text': 'Bu öneri hukuki inceleme değildir.', 'evidence_ids': ['synthetic-clause']}]}
 
 
+@pytest.mark.parametrize('code', ['provider_output_incomplete', 'provider_output_contract_invalid'])
+def test_typed_provider_failure_preserves_source_and_does_not_reflect_private_diagnostics(workbench, monkeypatch, code):
+    app, client, base, *_ = workbench
+    record, endpoint = prepare(workbench, monkeypatch)
+    calls = []
+
+    def fail(*args, **kwargs):
+        calls.append(True)
+        raise ProviderError('SYNTHETIC-PRIVATE-PAYLOAD-DO-NOT-REFLECT', code=code)
+
+    monkeypatch.setattr(app.state.provider, 'suggest_analysis', fail)
+    queued, _ = start(client, endpoint, record)
+    job = finished(client, endpoint, queued['id'])
+    assert job['status'] == 'failed' and job['error_code'] == code
+    assert 'SYNTHETIC-PRIVATE-PAYLOAD' not in json.dumps(job)
+    assert len(calls) == 1 and not job.get('candidate') and not job.get('adopted_version_id')
+    current = client.get(base + '/analyses').json()[0]
+    assert current['latest_version_id'] == record['latest_version_id'] and current['evidence'] == record['evidence']
+
+
 def start(client, endpoint, record, *, mode='single', request_id=None):
     body = {'expected_revision': record['revision'], 'version_id': record['latest_version_id'],
             'request_id': request_id or uuid4().hex, 'mode': mode}

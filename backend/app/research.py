@@ -139,6 +139,8 @@ def run_research(app, run_id):
             _run_research(app, run_id)
     except JobStopped as exc:
         finish_run(app.state.store, run_id, exc.outcome)
+    except ProviderError as exc:
+        finish_run(app.state.store, run_id, error_code=exc.code)
     except Exception as exc:
         finish_run(app.state.store, run_id, error_code=type(exc).__name__)
 

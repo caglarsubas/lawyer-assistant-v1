@@ -16,6 +16,16 @@ function preview(fits = true): AnalysisContextPreview {
 }
 
 describe('exact private analysis context budget', () => {
+  it('shows the response-contract reserve and fingerprint while retaining historical previews', () => {
+    const value = preview(); value.prompt.response_contract_utf8_bytes = 1489;
+    value.prompt.response_contract_sha256 = 'f'.repeat(64);
+    value.prompt.total_upper_bound_units += 1489; value.remaining_units -= 1489;
+    const html = renderToStaticMarkup(<AnalysisContextBudget value={value} />);
+    expect(html).toContain('5.745 / 8.192'); expect(html).toContain('Yanıt sözleşmesi: 1.489 UTF-8 bayt');
+    expect(html).toContain('toplam bütçeye dahildir'); expect(html).toContain('Yanıt sözleşmesi SHA-256:');
+    expect(html).toContain('f'.repeat(64));
+    expect(renderToStaticMarkup(<AnalysisContextBudget value={preview()} />)).not.toContain('Yanıt sözleşmesi:');
+  });
   it('shows exact source pins and accounting without implying model or legal verification', () => {
     const html = renderToStaticMarkup(<AnalysisContextBudget value={preview()} />);
     for (const text of ['İlk geçiş bağlama sığıyor', '4.256 / 8.192', '3.936 birim boşluk', 'UTF-8 bayt', 'Çerçeve payı',
