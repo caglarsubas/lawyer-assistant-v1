@@ -6,6 +6,22 @@ The application still checks fixed draft targets, evidence and legal constraints
 
 import copy
 import json
+import re
+
+PROSE_LIMIT = 180
+# Numbered facts and legal/source locators stay in fixed, evidenced fields. The
+# model edits prose only; identifiers remain available in separate link fields.
+PROSE_PATTERN = r"^[^0-9\r\n*`#]{1,179}[.!?]$"
+DANGLING_END = re.compile(
+    r"\b(?:ve|veya|yahut|ancak|ama|fakat|ile|için|gibi|çünkü|rağmen|"
+    r"and|or|but|because|however|although|unless)[.!?]$", re.IGNORECASE)
+ROMAN_LOCATOR = re.compile(
+    r"\b(?:article|art\.?|madde|m\.|sayfa|page|s\.)\s*[ivxlcdm]+\b|"
+    r"\b[ivxlcdm]+\.?\s*(?:madde|sayfa|article|page)\b", re.IGNORECASE)
+
+
+class ProseValidationError(ValueError):
+    """Safe diagnostic only; never include generated text or case identifiers."""
 
 
 def _object(properties):
@@ -21,7 +37,7 @@ def analysis_response_format(review=False, authority=False):
     identifier = {"$ref": "#/$defs/i"}
     text = {"$ref": "#/$defs/t"}
     refs = _array(identifier, 20)
-    application = _object({"id": identifier, "rationale": {"type": ["string", "null"], "minLength": 1, "maxLength": 400},
+    application = _object({"id": identifier, "rationale": {"anyOf": [text, {"type": "null"}]},
         "assessments": _array(_object({"condition_id": identifier,
             "status": {"enum": ["unknown", "met", "not_met"]}, "premise_ids": refs}), 12)})
     conclusion = _object({"text": text, "uncertainty": _array(text, 3), "next_step": text})
@@ -38,8 +54,8 @@ def analysis_response_format(review=False, authority=False):
     suffix = ("_review" if review else "") + ("_authority" if authority else "")
     schema = _object(properties)
     schema["$defs"] = {"i": {"type": "string", "minLength": 1, "maxLength": 129},
-                       "t": {"type": "string", "minLength": 1, "maxLength": 400}}
-    return {"type": "json_schema", "json_schema": {"name": "private_analysis_v1" + suffix,
+                       "t": {"type": "string", "minLength": 2, "maxLength": PROSE_LIMIT, "pattern": PROSE_PATTERN}}
+    return {"type": "json_schema", "json_schema": {"name": "private_analysis_v2" + suffix,
                                                     "strict": True, "schema": schema}}
 
 
@@ -81,6 +97,19 @@ def validate_analysis_output(raw, response_format):
     root = response_format["json_schema"]["schema"]
 
     def check(value, schema):
+        if "anyOf" in schema:
+            # Our only union is the fixed nullable prose field. Preserve the
+            # prose diagnostic if its string alternative fails that guard.
+            failures = []
+            for alternative in schema["anyOf"]:
+                try:
+                    check(value, alternative)
+                    return
+                except ValueError as exc:
+                    failures.append(exc)
+            if any(isinstance(exc, ProseValidationError) for exc in failures):
+                raise ProseValidationError("Unsafe or unfinished proposal prose")
+            raise ValueError("Invalid output union")
         if "$ref" in schema:
             check(value, root["$defs"][schema["$ref"].removeprefix("#/$defs/")])
             return
@@ -105,6 +134,16 @@ def validate_analysis_output(raw, response_format):
         elif isinstance(value, str) and "string" in types:
             if not schema["minLength"] <= len(value) <= schema["maxLength"]:
                 raise ValueError("Invalid output text length")
+            if "pattern" in schema and (
+                    not re.fullmatch(schema["pattern"], value)
+                    or any(char.isnumeric() for char in value)
+                    or not any(char.isalpha() for char in value)
+                    or value != value.strip() or value.endswith("...")
+                    or len(value) == schema["maxLength"]
+                    or DANGLING_END.search(value) or ROMAN_LOCATOR.search(value)):
+                # A forced grammar boundary can end a string mid-sentence even
+                # with finish_reason=stop. Do not add punctuation or rewrite it.
+                raise ProseValidationError("Unsafe or unfinished proposal prose")
         else:
             raise ValueError("Invalid output type")
 

@@ -56,8 +56,9 @@ first worker pass must reproduce its exact measurement. Each later repair pass
 is independently remeasured by the existing provider before transport. Initial
 fit is not a promise that a changed repair envelope will fit or succeed.
 
-The preview recipe remains `private-analysis-context-budget-v1`. R05A-08 upgrades
-the proposal recipe to `private-analysis-proposals-v3` and includes the exact
+The preview recipe remains `private-analysis-context-budget-v1`. R05A-08 adds
+exact schema accounting; R05A-09 uses `private-analysis-proposals-v4` with the
+stricter prose contract. The accounting includes the exact
 [bounded response schema](LOCAL_MODEL_OUTPUT_CONTRACT.md), its byte count and
 digest in every new envelope and fingerprint. Historical previews keep their
 original accounting and remain readable. Old fingerprints cannot authorize a

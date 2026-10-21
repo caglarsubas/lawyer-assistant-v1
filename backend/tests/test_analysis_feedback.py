@@ -49,7 +49,7 @@ def request_feedback(client, endpoint, record, event, *, indices=(0,), mode='sin
     return response.json(), body
 
 
-def response(finding='finding:0', *, targets=('application:a1', 'conclusion'), outcome='proposed_change', text='SYNTHETIC proposed interpretation'):
+def response(finding='finding:0', *, targets=('application:a1', 'conclusion'), outcome='proposed_change', text='SYNTHETIC proposed interpretation.'):
     return {'finding_id': finding, 'outcome': outcome, 'edited_targets': list(targets), 'text': text,
             'evidence_ids': ['synthetic-clause']}
 

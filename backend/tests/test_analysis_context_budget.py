@@ -32,6 +32,18 @@ def storage_snapshot(app):
                 [row.id for row in session.scalars(select(Audit))])
 
 
+def test_prose_limits_never_trim_numbered_or_incomplete_original_quotes(workbench, monkeypatch):
+    record, _ = prepare(workbench, monkeypatch)
+    # Invented quote, independent of any operator's case. Only generated prose
+    # is constrained; the exact source bytes are always sent and accounted.
+    quote = "SYNTHETIC 73. KURAL\n**" + "asıl metin " * 55
+    record["evidence"][0]["text"] = quote
+    messages = proposal_messages(record)
+    assert json.loads(messages[-1]["content"])["evidence"][0]["text"] == quote
+    assert prompt_measurement(messages)["utf8_bytes"] == len(json.dumps(
+        messages, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode())
+
+
 def test_preview_measures_exact_envelope_without_network_queue_or_writes(workbench, monkeypatch):
     app, client, *_ = workbench
     record, endpoint = prepare(workbench, monkeypatch)

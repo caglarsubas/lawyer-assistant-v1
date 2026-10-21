@@ -1,0 +1,59 @@
+{
+  "schema": "bounded-private-analysis-output-engineering-v1",
+  "recorded_on": "2026-10-21",
+  "scope": "Finite proposal prose and reference surfaces; invented native fixture only. No private case data, selections, identifiers, evidence fingerprints or execution measurements.",
+  "implementation_sha256": {
+    "backend/app/analysis_output_contract.py": "26661c2a929d8c44f983a86195644b4f22165bb0d984c9bb41f11698d2ad72be",
+    "backend/app/analysis_proposals.py": "f1f8f3d70e4aee7355b9452f1b4bf8b7f7cc232127c008a4207020158e616a39",
+    "backend/app/provider.py": "2599eb6c9edf1fad5207c0a0fd7b783bc7f19ccd4d406be8544811c0813949fa",
+    "backend/app/research_jobs.py": "28d62f76bbd59e1fe2a2bb6402677440a312d5c9c280cdac166b70ce37cd5aaf",
+    "backend/tests/test_analysis_context_budget.py": "715175346c07053de76208bc2cf1ba5d98f91e09a72d27b5601e39cd044ed94b",
+    "backend/tests/test_analysis_feedback.py": "1951ce39f1a57cf4853a74f7635c1539bb40871362551e872cf62c5cdac93040",
+    "backend/tests/test_analysis_output_contract.py": "6ca2a8f4d37654e52eae5a9a3edb4752b4795494838214281de44392c3cebd65",
+    "backend/tests/test_analysis_suggestions.py": "17a76aee535712fd4cab2a185ab1a66b43714601aa3c40323112b54af0f39f06"
+  },
+  "local_checks": {
+    "targeted_backend_cases": 307,
+    "targeted_backend_result": "passed",
+    "deployment_cases": 50,
+    "deployment_result": "passed",
+    "ruff": "passed",
+    "frontend_result": "not_rerun_frontend_source_unchanged",
+    "production_build": "not_rerun_frontend_source_unchanged"
+  },
+  "synthetic_runtime": {
+    "closed_contract_rehearsal": {
+      "finish_reason": "stop",
+      "completion_tokens": 699,
+      "prompt_tokens": 2456,
+      "context_upper_bound_units": 5435,
+      "provider_seconds": 27.2,
+      "wire_prose_and_fixed_targets": "passed",
+      "numbered_identifiers_and_unknown_assessment": "preserved",
+      "model_pin_and_local_inference": "verified"
+    },
+    "isolated_relay": {
+      "published_ports": 0,
+      "private_volumes": 0,
+      "production_containers_replaced": 0,
+      "removed_after_rehearsal": true
+    },
+    "qualification": "Reference-surface and sentence-boundary engineering only. Other synthetic responses included rejected prose and invented IDs. Even structurally valid output can overstate an unknown condition as invalid; broader semantic correctness is not qualified. This is not a held-out legal benchmark, matched comparison or universal guarantee."
+  },
+  "boundaries": {
+    "context_limit": "unchanged",
+    "completion_tokens": 1000,
+    "call_seconds": 120,
+    "generated_prose_character_ceiling": 180,
+    "numbered_references": "fixed original draft, quotations and typed links only; not generated prose",
+    "evidence_trimming": false,
+    "application_retry": false,
+    "cloud_fallback": false,
+    "arbitrary_schema_admission": false,
+    "automatic_prose_or_reference_repair": false,
+    "historical_attempt_rewrite": false,
+    "legal_review": "not_granted",
+    "CI_jobs_workers_timeouts_and_reserve_gates": "unchanged"
+  },
+  "private_execution": "Recorded only in authorized local operational receipts; not in repository evidence."
+}

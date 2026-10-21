@@ -45,3 +45,40 @@ typed, draft-scoped validation while preserving fixed premises. See the
 merge, guarded installation and the authorized private rerun are separate receipts.
 Owner review and legal/source qualification remain open; case payloads, scope
 selections and evidence fingerprints do not belong in this document or GitHub.
+
+## Finished prose and fixed references
+
+R05A-09 addresses a separate limitation: a normal structured completion can still
+confuse page locations with clause identifiers, or finish a string at its grammar
+limit in the middle of a sentence. JSON validity does not catch these defects.
+
+Proposal recipe `private-analysis-proposals-v4` uses four closed
+`private_analysis_v2` contracts. Each generated prose field has a smaller
+180-character ceiling, a plain-text sentence-ending pattern, and an instruction
+to finish well below that ceiling. Numbered facts and references remain in the
+existing fixed draft, exact source quotations and typed link fields. The model
+cannot restate numerical locators, dates or amounts in editable prose. This
+restriction applies only to model proposal prose; it does not remove numbers,
+formatting, partial sentences or any bytes from original sources, saved versions,
+human-authored drafts or their displays. Source and node identifiers retain their
+separate contract and exact-target validation.
+
+Independent validation rejects prose containing numbers or recognized Roman
+locators, missing terminal punctuation, formatting, a reached character ceiling,
+an ellipsis, empty punctuation or a declared dangling conjunction. It never cuts
+text, appends punctuation, substitutes a guessed reference, or retries a call.
+Failures retain the safe `provider_output_prose_invalid` diagnostic without
+reflecting generated text. Existing attempts and diagnostic codes stay intact.
+
+These are bounded reference-surface and sentence-boundary checks, not a complete
+Turkish grammar checker or proof of entailment. Spelled-out references and other
+unsupported interpretations still need source inspection and lawyer review.
+Accepted candidates remain separate from the saved analysis until explicitly
+adopted into a new unreviewed version. Human review cannot be inferred from a
+machine check, a native rehearsal or an assistant's inspection.
+
+The full changed prompt and schema are measured together; no context, completion
+or time limit increases. A fresh preview is required for the new fingerprint.
+The relay admits only the new four exact contracts, so a guarded installation
+must update the API and relay together while research is idle. No migration or
+rewriting of historical proposals or original documents is required.

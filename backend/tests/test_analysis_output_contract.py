@@ -8,6 +8,8 @@ import pytest
 from test_provider_runtime import relay, settings, transport
 
 from app.analysis_output_contract import (
+    PROSE_LIMIT,
+    ProseValidationError,
     admitted_response_format,
     analysis_response_format,
     validate_analysis_output,
@@ -37,6 +39,8 @@ def test_only_four_finite_local_contracts_are_admitted(review, authority):
     for mutate in (lambda v: v["json_schema"].update(strict=1),
                    lambda v: v["json_schema"]["schema"].update(additionalProperties=True),
                    lambda v: v["json_schema"]["schema"].update({"$ref": "https://external.invalid/schema"}),
+                   lambda v: v["json_schema"]["schema"]["$defs"]["t"].pop("pattern"),
+                   lambda v: v["json_schema"].update(name="private_analysis_v1"),
                    lambda v: v["json_schema"]["schema"]["$defs"]["t"].update(maxLength=100000)):
         changed = copy.deepcopy(form)
         mutate(changed)
@@ -69,9 +73,61 @@ def test_exact_contract_is_in_the_context_budget_and_fingerprint():
     assert prompt_measurement(with_review)["response_contract_sha256"] != measured["response_contract_sha256"]
 
 
+@pytest.mark.parametrize("prose", [
+    "Madde 73 bu koşulu kanıtlar.", "Sayfa 24 bağımsız bir kuraldır.",
+    "The decision applies Article IV.", "IV. madde koşulu karşılar.",
+    "Sözleşmenin ５ maddesi uygulanır.", "المادة ٧ تثبت الشرط.",
+    "Article Ⅳ is decisive.", "Dayanak ² olarak belirtilmiştir.", "...", "Kabul...", " İnceleyin.",
+    "**Kaynakları inceleyin.**", "Kaynakları inceleyin\nve karşılaştırın.",
+    "Asıl belgeler doğrulanmadan ancak", "Asıl belgeler doğrulanmadan ancak.",
+    "The evidence is needed because.",
+    "x" * (PROSE_LIMIT - 1) + ".",
+])
+def test_prose_never_introduces_numbered_locators_or_accepts_clipped_fields(prose):
+    value = output()
+    value["application_updates"][0]["rationale"] = prose
+    with pytest.raises(ProseValidationError):
+        validate_analysis_output(json.dumps(value), analysis_response_format())
+
+
+@pytest.mark.parametrize("field", ["rationale", "conclusion", "uncertainty", "next_step", "note", "feedback", "authority"])
+def test_prose_guard_covers_every_editable_text_surface_and_never_edits_the_response(field):
+    form = analysis_response_format(review=True, authority=True)
+    value = {**output(), "feedback_responses": [], "authority_responses": []}
+    broken = "SYNTHETIC — Ancak"
+    conclusion = {"text": "Belirsizlik sürüyor.", "uncertainty": [], "next_step": "Asıl belgeyi inceleyin."}
+    if field == "rationale":
+        value["application_updates"][0]["rationale"] = broken
+    elif field in {"conclusion", "uncertainty", "next_step"}:
+        value["conclusion_update"] = conclusion
+        conclusion[{"conclusion": "text", "uncertainty": "uncertainty", "next_step": "next_step"}[field]] = (
+            [broken] if field == "uncertainty" else broken)
+    elif field == "note":
+        value["review_notes"] = [{"target_id": "a1", "text": broken, "evidence_ids": ["source-73"]}]
+    else:
+        key = "feedback_responses" if field == "feedback" else "authority_responses"
+        value[key] = [{"finding_id": "finding:0" if field == "feedback" else "authority:0:certainty",
+                       "outcome": "unresolved", "edited_targets": [], "text": broken,
+                       "evidence_ids" if field == "feedback" else "authority_ids": ["source-73"]}]
+    raw = json.dumps(value, ensure_ascii=False)
+    with pytest.raises(ProseValidationError):
+        validate_analysis_output(raw, form)
+    assert raw == json.dumps(value, ensure_ascii=False) and broken in raw
+
+
+def test_identifiers_remain_separate_from_generated_prose():
+    result = output()
+    result["application_updates"][0]["rationale"] = None
+    result["review_notes"] = [{"target_id": "conclusion", "text": "Özgün kaynak ve taraf bağı ayrıca doğrulanmalıdır.",
+                               "evidence_ids": ["source-73-page-24"]}]
+    validate_analysis_output(json.dumps(result), analysis_response_format())
+
+
 @pytest.mark.parametrize("finish,raw,code", [
     ("length", json.dumps(output()), "provider_output_incomplete"),
     ("stop", '{"synthetic":"wrong contract"}', "provider_output_contract_invalid"),
+    ("stop", json.dumps({**output(), "review_notes": [
+        {"target_id": "a1", "text": "Yanıt tamamlanmadan ancak", "evidence_ids": []}]}), "provider_output_prose_invalid"),
 ])
 def test_incomplete_or_wrong_contract_response_is_never_accepted(monkeypatch, finish, raw, code):
     monkeypatch.setattr(Provider, "probe", lambda self: {"ready": True})
