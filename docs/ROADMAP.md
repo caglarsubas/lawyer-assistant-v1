@@ -4824,3 +4824,24 @@ authorized private rerun are verified separately from engineering CI. R03-17 own
 review, semantic correction quality and independent legal/publication qualification
 remain open. See the [response contract](LOCAL_MODEL_OUTPUT_CONTRACT.md) and
 [engineering record](evidence/bounded-analysis-output-2026-10-21.json).
+
+### Finished model prose and fixed reference surfaces
+
+R05A-09 narrows the private proposal surface after protocol validation proved
+insufficient for source-location fidelity and sentence completeness. Generated
+prose must be short, plain and finished; numbered facts and legal/source locators
+remain in the original fixed draft, exact quotations and typed source links.
+Original documents and all evidence bytes, versions, numerical facts and review
+history remain unchanged. A clipped field or unsafe reference surface is rejected
+with a safe diagnostic, without punctuation repair, guessed citations, retries,
+larger context/completion/time limits or cloud fallback.
+
+The four exact response contracts and recipe are versioned together, independently
+validated and fully included in context accounting. This is a bounded engineering
+guard, not a general semantic-correction benchmark or a legal approval. R05A-04
+still requires independent correctness evaluation; R03-17 remains waiting for
+owner review of exact private versions. Native synthetic validation, hosted CI,
+merge, installation and the authorized private rerun retain separate evidence.
+Private case payloads and execution details stay in authorized local receipts.
+See [the output contract](LOCAL_MODEL_OUTPUT_CONTRACT.md#finished-prose-and-fixed-references)
+and [engineering record](evidence/finished-analysis-prose-2026-10-21.json).

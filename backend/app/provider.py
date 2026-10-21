@@ -8,6 +8,7 @@ from urllib.parse import urlsplit
 import httpx
 
 from .analysis_output_contract import (
+    ProseValidationError,
     admitted_response_format,
     response_format_for_messages,
     validate_analysis_output,
@@ -331,6 +332,9 @@ class Provider:
             if structured:
                 try:
                     validate_analysis_output(content, response_format)
+                except ProseValidationError:
+                    raise ProviderError("Provider prose did not preserve reference and sentence boundaries",
+                                        code="provider_output_prose_invalid") from None
                 except (ValueError, TypeError, RecursionError):
                     raise ProviderError("Provider output violated its response contract",
                                         code="provider_output_contract_invalid") from None

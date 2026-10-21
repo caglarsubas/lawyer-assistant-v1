@@ -49,7 +49,7 @@ def patch():
             'review_notes': [{'target_id': 'a1', 'text': 'Bu öneri hukuki inceleme değildir.', 'evidence_ids': ['synthetic-clause']}]}
 
 
-@pytest.mark.parametrize('code', ['provider_output_incomplete', 'provider_output_contract_invalid'])
+@pytest.mark.parametrize('code', ['provider_output_incomplete', 'provider_output_contract_invalid', 'provider_output_prose_invalid'])
 def test_typed_provider_failure_preserves_source_and_does_not_reflect_private_diagnostics(workbench, monkeypatch, code):
     app, client, base, *_ = workbench
     record, endpoint = prepare(workbench, monkeypatch)
