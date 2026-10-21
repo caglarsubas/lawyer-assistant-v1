@@ -29,6 +29,27 @@ def prepare_textboxes(root, visit):
             raise ValueError("DOCX linked text boxes are unsupported")
         if node.tag == BOX and any(a.tag == BOX for a in node.iterancestors()):
             raise ValueError("DOCX nested text boxes are unsupported")
+        if node.tag == BOX:
+            # python-docx omits content controls/revisions and custom run
+            # wrappers. Do not lose a condition while returning the rest of a
+            # box as successful evidence, including inside physical cells.
+            for paragraph in node.iter(qn("w:p")):
+                visit()
+                for ancestor in paragraph.iterancestors():
+                    if ancestor is node:
+                        break
+                    if ancestor.tag not in {qn("w:tbl"), qn("w:tr"), qn("w:tc")}:
+                        raise ValueError("DOCX text-box content is unsupported")
+                for token in paragraph.iter(qn("w:t"), qn("w:delText"), qn("w:tab"),
+                                            qn("w:br"), qn("w:cr"), qn("w:sym")):
+                    visit()
+                    run = token.getparent()
+                    parent = run.getparent()
+                    if token.tag in {qn("w:delText"), qn("w:sym")} or run.tag != qn("w:r") or not (
+                        parent is paragraph or
+                        (parent.tag == qn("w:hyperlink") and parent.getparent() is paragraph)
+                    ):
+                        raise ValueError("DOCX text-box content is unsupported")
 
     def signature(branch):
         boxes = list(branch.iter(BOX))

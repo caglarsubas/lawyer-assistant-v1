@@ -139,7 +139,7 @@ def test_worker_rejects_unresolved_note_without_returning_any_partial_text(tmp_p
         assert "GÖNDERİLMEMELİ" not in response.text
 
 
-@pytest.mark.parametrize("defect", ["disagreement", "nested", "work"])
+@pytest.mark.parametrize("defect", ["disagreement", "nested", "work", "inline_control"])
 def test_real_worker_rejects_unsafe_box_content_without_partial_passages(tmp_path, defect):
     from docx import Document
     from docx.oxml import OxmlElement
@@ -153,6 +153,12 @@ def test_real_worker_rejects_unsafe_box_content_without_partial_passages(tmp_pat
         other = Document()
         other.add_paragraph("GÖNDERİLMEMELİ: Çelişen kopya.")
         alternate_textbox(p, content, other)
+    elif defect == "inline_control":
+        p = content.paragraphs[0]
+        wrapper = OxmlElement("w:sdt")
+        wrapper.append(p.runs[0]._r)
+        p._p.append(wrapper)
+        textbox(doc.paragraphs[0], content)
     elif defect == "nested":
         textbox(content.paragraphs[0], Document())
         textbox(p, content)

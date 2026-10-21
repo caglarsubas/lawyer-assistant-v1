@@ -223,6 +223,32 @@ def test_unsupported_box_block_wrapper_does_not_drop_its_text(tmp_path):
         extracted(doc, tmp_path)
 
 
+@pytest.mark.parametrize("wrapper", ["sdt", "ins", "customXml", "cell_sdt", "symbol"])
+def test_box_inline_or_cell_wrappers_cannot_silently_drop_a_condition(tmp_path, wrapper):
+    doc = Document()
+    content = blocks("SENTETİK: Ödeme kabul edilmedi.")
+    if wrapper == "cell_sdt":
+        cell = content.add_table(rows=1, cols=1).cell(0, 0)
+        p = cell.paragraphs[0]
+        p.text = "SENTETİK: Hücredeki istisna."
+        node = OxmlElement("w:sdt")
+        node.append(p._p)
+        cell._tc.append(node)
+    else:
+        p = content.paragraphs[0]
+        if wrapper == "symbol":
+            p.add_run()._r.append(OxmlElement("w:sym"))
+        else:
+            run = p.runs[0]._r
+            p._p.remove(run)
+            node = OxmlElement("w:" + wrapper)
+            node.append(run)
+            p._p.append(node)
+    textbox(doc.add_paragraph("SENTETİK: Kısmi başarı dönmemeli."), content)
+    with pytest.raises(ValueError, match="^DOCX text-box content is unsupported$"):
+        extracted(doc, tmp_path)
+
+
 def test_reference_in_box_hyperlink_has_exact_box_context(tmp_path):
     doc = Document()
     _, box = textbox(doc.add_paragraph("SENTETİK: Gövde."), blocks())

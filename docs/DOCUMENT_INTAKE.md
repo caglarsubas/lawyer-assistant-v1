@@ -144,7 +144,8 @@ prefix-only differences. Only equivalent box content is admitted; a supported
 `wps` choice is preferred, otherwise an equivalent fallback is required. One
 copy is extracted with a warning, never two independently weighted copies.
 Different text, note IDs or table content, missing/ambiguous alternatives,
-unsupported wrappers, linked/chained boxes and nested boxes fail the complete
+unsupported block/run/cell wrappers, content controls, revision text, symbol-font
+tokens, linked/chained boxes and nested boxes fail the complete
 extraction without partial successful passages. This deliberately conservative
 subset is not a general Markup Compatibility processor or Word renderer.
 Normalization changes only an in-memory tree; original package bytes are retained.

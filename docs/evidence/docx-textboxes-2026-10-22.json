@@ -5,16 +5,16 @@
   "base": "b186dcc82836d40378a28a7be90c8ef163afb127",
   "implementation_sha256": {
     "backend/app/extract.py": "9a0efb28a1afa52eed4aa503bafdeb3eaebbf939df2ac838b6335cd3c9c496f7",
-    "backend/app/docx_textboxes.py": "89b6f8a1baa39fc76a833263cac676e9fdec3226cce4ae84fd6b98f205815639",
+    "backend/app/docx_textboxes.py": "43c49aed095ce5859709c66cca9e72abe304bbb2ae7db2817f01bc17337983a0",
     "backend/app/extraction_calibration.py": "d784ce97f2af983184320dac7c8a49e0e4684a6d0ee45e9edcf218e6542433e0",
     "backend/tests/docx_textbox_fixtures.py": "c96e22a157a0c45964352338cff42e02bbb996e237ed541a2f8cf0662ecc9a7f",
-    "backend/tests/test_docx_textboxes.py": "a642724db52193dce8a3229e5b7515aa736b61e997f83ab9bd4838b6ec0642d9",
-    "backend/tests/test_extraction_worker.py": "555df0a1ba1336b95169939fe6cb6bbfe98236be6018a975bc903eb9309f66a3",
+    "backend/tests/test_docx_textboxes.py": "baefef0ed1f156178e1afa5ebc8ccfee8c06e1b0290181ac6c52f2eb9af9f7bc",
+    "backend/tests/test_extraction_worker.py": "ccae6d65ef6ab22f5f88c82e193693bd8df0d649c98ba8f7c00601a7aa03ba90",
     "backend/tests/test_extraction_calibration.py": "746b37e98fccdd58ee163ffc6d2ece376252fc17bc2b89eba239b3b0f555a8b9",
     "backend/tests/test_workspace.py": "2d2e7df270e52394b7f6013aed78ed4297ac01af9b00714582a4caaacbc4c798"
   },
   "local_checks": {
-    "targeted_backend_cases": 260,
+    "targeted_backend_cases": 266,
     "targeted_backend_result": "passed",
     "deployment_contract_cases": 51,
     "deployment_contract_result": "passed",
@@ -25,7 +25,8 @@
   "regression": {
     "baseline_box_omitted": true,
     "baseline_original_preserved": true,
-    "only_synthetic": true
+    "only_synthetic": true,
+    "pre_guard_inline_condition_omission_reproduced": true
   },
   "profile": "docx-textboxes-v5",
   "historical_profiles_retained_by_calibration": [
@@ -49,6 +50,7 @@
     "Only standalone DrawingML/VML text boxes; exact XML contexts do not establish visual order, page placement, clipping, overflow or field values.",
     "Equivalent modern/fallback box structure is admitted once; different text, attributes, references or table content fails closed.",
     "Unsupported wrappers, nested or chained boxes fail without partial successful passages.",
+    "Inline/cell content controls, revision/custom run wrappers and unrendered symbol-font tokens in boxes fail visibly rather than silently omitting a condition.",
     "Normalization is in memory only; originals remain primary visual evidence.",
     "No migration, re-extraction, private inference or human review.",
     "Rendering, numbering, group layouts, scans, legacy and representative legal completeness remain unqualified."

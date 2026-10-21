@@ -4984,6 +4984,8 @@ preserve the host paragraph, XML box ordinal and contained paragraph/table
 position. Notes inside boxes retain their exact source context. Equivalent
 modern/fallback copies are admitted once; conflicting alternatives, linked or
 nested boxes and unsupported contexts fail without partial successful passages.
+Inline/cell content controls, revision/custom run wrappers and symbol-font tokens
+inside boxes fail visibly instead of silently dropping a condition.
 
 New worker/API admission requires `docx-textboxes-v5`; calibration retains exact
 historical v1–v4 declarations. Four table levels remain shared across box/table
