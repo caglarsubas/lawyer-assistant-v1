@@ -30,13 +30,15 @@ existing account or change the root `.env`. Stop it with Ctrl-C. A current LLM
 credential is not required for this demonstration.
 
 **Container evaluation:** manually copy `.env.example` to the gitignored root
-`.env`, supply unique bootstrap credentials, a random URL-safe PostgreSQL
-password and one persistent Fernet encryption key. Protect `.env` with owner-only
-permissions and store the encryption key separately in your organization's secret
-store. Supply a distinct random `LA_EXTRACTION_TOKEN` with at least 32 characters
-for the isolated parser. Never print `docker compose config` without `--quiet`: the resolved form
-contains secrets. Docker administrators can inspect container environments; use
-mounted secrets and a secret manager before production qualification.
+`.env`, set the bootstrap username and provision a new private secret directory
+only for a new empty vault. Compose now uses scoped mounted files rather than
+literal credentials in its environment. Protect `.env` and secret files with
+owner-only permissions; keep an encrypted recovery copy separately. Follow the
+[secret-isolation and rotation runbook](RUNTIME_SECRET_ROTATION.md). Never print
+resolved configuration, raw inspection or secret files. Use `docker compose config
+--quiet` and the allowlisted `scripts/runtime_diagnostics.py`. Docker/root access
+still permits privileged secret access; production secret-manager qualification
+remains open.
 
 `LA_BOOTSTRAP_PASSWORD` is validated only when the configured username does not
 yet exist: new accounts require at least 16 characters. Subsequent starts preserve
@@ -80,10 +82,11 @@ before `docker compose up -d --no-build`. This affects image building only;
 runtime network restrictions remain in Compose. Disconnected installations
 must receive prebuilt, approved images.
 
-The default PostgreSQL URL uses the supplied password in a URL; keep that password
-URL-safe, or supply an explicitly percent-encoded `LA_DATABASE_URL`. Changing
-`POSTGRES_PASSWORD` after a database already exists does not rotate its role's
-password. No setup/recovery script attempts credential rotation.
+The mounted `database_url` includes a properly escaped PostgreSQL credential.
+Changing `POSTGRES_PASSWORD_FILE` after a database already exists does not rotate
+its role's password. Ordinary setup/recovery commands perform no rotation. The
+separate offline migration requires stopped writers, authenticated backups and
+exact preservation checks; never replace a vault key by editing a setting alone.
 
 The web container serves prebuilt Vite assets through nginx. API `/api/v1/health`
 is a process/service check, not evidence that inference or legal research is

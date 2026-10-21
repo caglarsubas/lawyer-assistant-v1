@@ -8,6 +8,28 @@ from pathlib import Path
 
 
 class ScannerComposeTests(unittest.TestCase):
+    def test_compose_secrets_are_file_scoped_without_literal_credential_interpolation(self):
+        root = Path(__file__).resolve().parents[1]
+        environment = {k: v for k, v in os.environ.items() if not k.startswith(("LA_", "LLM_PROVIDER_"))}
+        environment["LA_BOOTSTRAP_USERNAME"] = "synthetic-admin"
+        marker = "SYNTHETIC-CREDENTIAL-MUST-NOT-ENTER-COMPOSE"
+        for name in ("LA_POSTGRES_PASSWORD", "LA_DATABASE_URL", "LA_ENCRYPTION_KEY",
+                     "LA_BOOTSTRAP_PASSWORD", "LA_EXTRACTION_TOKEN", "LA_GATEWAY_TOKEN", "LLM_PROVIDER_API_KEY"):
+            environment[name] = marker
+        result = subprocess.run(["docker", "compose", "--env-file", "/dev/null", "-f",
+                                 str(root / "compose.yaml"), "--profile", "publication", "--profile", "research",
+                                 "config", "--format", "json"], env=environment,
+                                capture_output=True, text=True, check=True, timeout=20)
+        self.assertNotIn(marker, result.stdout)
+        model = json.loads(result.stdout)
+        grants = {"api": {"database_url", "encryption_key", "bootstrap_password", "extraction_token", "gateway_token", "provider_api_key"},
+                  "extractor": {"extraction_token"}, "postgres": {"postgres_password"},
+                  "publisher": {"database_url", "encryption_key"}, "gateway": {"gateway_token"}}
+        for role, expected in grants.items():
+            self.assertEqual({s["source"] for s in model["services"][role]["secrets"]}, expected)
+        for role in ("web", "scanner", "opensearch", "fuseki"):
+            self.assertFalse(model["services"][role].get("secrets"))
+
     def test_missing_blank_and_explicit_scanner_addresses(self):
         root = Path(__file__).resolve().parents[1]
         # Never inherit application credentials or provider configuration.

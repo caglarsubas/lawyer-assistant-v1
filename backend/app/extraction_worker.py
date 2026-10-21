@@ -24,6 +24,7 @@ from .extraction_client import (
     validate_document,
     validate_result,
 )
+from .runtime_secrets import secret_from_environment
 
 PARSER_TIMEOUT_SECONDS = 60
 UPLOAD_TIMEOUT_SECONDS = 30
@@ -72,7 +73,7 @@ def parse_document(content, suffix):
 
 def create_app(token=None):
     # Never use the main application's dotenv loader or its secret-bearing Settings.
-    token = os.environ.get("LA_EXTRACTION_TOKEN", "") if token is None else token
+    token = secret_from_environment("LA_EXTRACTION_TOKEN") if token is None else token
     if len(token) < 32:
         raise ValueError("LA_EXTRACTION_TOKEN must contain at least 32 characters")
     app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
