@@ -271,3 +271,184 @@ def test_docx_grid_span_is_not_expanded_into_repeated_cells(tmp_path):
     assert extract(path, ".docx")["passages"] == [
         {"locator": "Tablo 1, satır 1", "text": "SENTETİK: Tek fiziksel koşul."},
     ]
+
+
+def test_docx_header_footer_definitions_keep_section_origin_and_block_order(tmp_path):
+    from docx import Document
+    from docx.enum.section import WD_SECTION_START
+
+    doc = Document()
+    doc.add_paragraph("SENTETİK: Gövde; bu borç kabul edilmedi.")
+    header = doc.sections[0].header
+    header.paragraphs[0].text = "SENTETİK: Üst koşul; 14.06.2020."
+    cell = header.add_table(rows=1, cols=1, width=1000).cell(0, 0)
+    cell.text = "SENTETİK: Dış koşul."
+    cell.add_table(rows=1, cols=1).cell(0, 0).text = "SENTETİK: 1.234,56 TL istisnası."
+    cell.add_paragraph("SENTETİK: İç tablodan sonra.")
+    header.add_paragraph("SENTETİK: Üst son.")
+    doc.sections[0].footer.paragraphs[0].text = "SENTETİK: Alt koşul; TEST-0042."
+    doc.add_section(WD_SECTION_START.NEW_PAGE)
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    original = path.read_bytes()
+    result = extract(path, ".docx")
+    header_passages = [p for p in result["passages"] if "üstbilgi" in p["locator"]]
+    assert [p["text"] for p in header_passages] == [
+        "SENTETİK: Üst koşul; 14.06.2020.", "SENTETİK: Dış koşul.",
+        "SENTETİK: 1.234,56 TL istisnası.", "SENTETİK: İç tablodan sonra.",
+        "SENTETİK: Üst son.",
+    ] * 2
+    assert header_passages[0]["locator"] == (
+        "Bölüm 1, üstbilgi tanımı (varsayılan; kaynak bölüm 1), paragraf 1"
+    )
+    assert header_passages[5]["locator"].startswith(
+        "Bölüm 2, üstbilgi tanımı (varsayılan; kaynak bölüm 1)"
+    )
+    assert [p["text"] for p in result["passages"] if "altbilgi" in p["locator"]] == [
+        "SENTETİK: Alt koşul; TEST-0042.", "SENTETİK: Alt koşul; TEST-0042.",
+    ]
+    assert result["passages"][0]["text"].startswith("SENTETİK: Gövde;")
+    assert path.read_bytes() == original and result["page_count"] is None
+    assert any("sayfa" in w and "tanımları" in w for w in result["warnings"])
+
+
+def test_docx_empty_override_stops_header_inheritance_without_replacing_footer(tmp_path):
+    from docx import Document
+    from docx.enum.section import WD_SECTION_START
+
+    doc = Document()
+    doc.sections[0].header.paragraphs[0].text = "SENTETİK: Eski üst koşul."
+    doc.sections[0].footer.paragraphs[0].text = "SENTETİK: Ortak alt koşul."
+    doc.add_section(WD_SECTION_START.NEW_PAGE)
+    blank = doc.add_section(WD_SECTION_START.NEW_PAGE)
+    blank.header.is_linked_to_previous = False
+    doc.add_section(WD_SECTION_START.NEW_PAGE)
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    passages = extract(path, ".docx")["passages"]
+    assert len([p for p in passages if "üstbilgi" in p["locator"]]) == 2
+    assert len([p for p in passages if "altbilgi" in p["locator"]]) == 4
+
+
+def test_docx_first_even_and_default_definitions_do_not_claim_page_activation(tmp_path):
+    from docx import Document
+
+    doc = Document()
+    # Definitions can exist while the first/even-page rendering switches are off.
+    for name in ["header", "first_page_header", "even_page_header",
+                 "footer", "first_page_footer", "even_page_footer"]:
+        getattr(doc.sections[0], name).paragraphs[0].text = "SENTETİK: " + name
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    result = extract(path, ".docx")
+    assert len(result["passages"]) == 6
+    assert {p["text"] for p in result["passages"]} == {
+        "SENTETİK: " + name for name in ["header", "first_page_header", "even_page_header",
+                                      "footer", "first_page_footer", "even_page_footer"]
+    }
+    assert all("tanımı" in p["locator"] for p in result["passages"])
+    assert any("ilk sayfa" in p["locator"] for p in result["passages"])
+    assert any("çift sayfa" in p["locator"] for p in result["passages"])
+    assert any("etkinliği" in w for w in result["warnings"])
+
+
+@pytest.mark.parametrize("broken", [
+    "external", "wrong_kind", "duplicate", "unknown_variant", "missing", "wrong_root",
+])
+def test_docx_invalid_story_reference_rejects_complete_extraction(tmp_path, broken):
+    from docx import Document
+    from docx.opc.constants import RELATIONSHIP_TYPE as RT
+    from docx.oxml import OxmlElement
+    from docx.oxml.ns import qn
+
+    doc = Document()
+    doc.add_paragraph("SENTETİK: Bu kısmi gövde döndürülmemeli.")
+    section = doc.sections[0]
+    section.header.paragraphs[0].text = "SENTETİK: Tanım."
+    ref = section._sectPr.headerReference_lst[0]
+    if broken == "external":
+        ref.set(qn("r:id"), doc.part.relate_to("https://example.invalid/no-fetch", RT.HEADER, True))
+    elif broken == "wrong_kind":
+        section.footer.paragraphs[0].text = "SENTETİK: Yanlış tür."
+        ref.set(qn("r:id"), section._sectPr.footerReference_lst[0].get(qn("r:id")))
+    elif broken == "duplicate":
+        copy = OxmlElement("w:headerReference")
+        copy.attrib.update(ref.attrib)
+        section._sectPr.append(copy)
+    elif broken == "unknown_variant":
+        ref.set(qn("w:type"), "unsupported")
+    elif broken == "missing":
+        ref.set(qn("r:id"), "rIdMissing")
+    else:
+        section.header._element.tag = qn("w:ftr")
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    with pytest.raises(ValueError, match="^DOCX header/footer reference is invalid$"):
+        extract(path, ".docx")
+
+
+@pytest.mark.parametrize("limit", ["depth", "work"])
+def test_docx_header_tables_share_body_depth_and_structural_limits(tmp_path, monkeypatch, limit):
+    from docx import Document
+
+    doc = Document()
+    doc.add_paragraph("SENTETİK: Başlangıç.")
+    header = doc.sections[0].header
+    if limit == "depth":
+        parent = header.add_table(rows=1, cols=1, width=1000).cell(0, 0)
+        for _ in range(4):
+            parent = parent.add_table(rows=1, cols=1).cell(0, 0)
+        message = "DOCX table nesting limit exceeded"
+    else:
+        monkeypatch.setattr("app.extract.MAX_DOCX_BLOCKS", 8)
+        for _ in range(10):
+            header.add_paragraph("")
+        message = "DOCX structural work limit exceeded"
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    with pytest.raises(ValueError, match="^" + message + "$"):
+        extract(path, ".docx")
+
+
+def test_docx_body_and_stories_share_total_text_limit(tmp_path, monkeypatch):
+    from docx import Document
+
+    monkeypatch.setattr("app.extract.MAX_TEXT", 50)
+    doc = Document()
+    doc.add_paragraph("SENTETİK: Gövde 1234567890.")
+    doc.sections[0].header.paragraphs[0].text = "SENTETİK: Üst koşul 1234567890."
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    with pytest.raises(ValueError, match="^Extracted text limit exceeded$"):
+        extract(path, ".docx")
+
+
+@pytest.mark.parametrize("tag", ["ins", "del", "moveFrom", "moveTo"])
+def test_docx_story_revisions_are_reported_without_claiming_an_accepted_version(tmp_path, tag):
+    from docx import Document
+    from docx.oxml import OxmlElement
+
+    doc = Document()
+    doc.add_paragraph("SENTETİK: Gövde.")
+    doc.sections[0].header.paragraphs[0]._p.append(OxmlElement("w:" + tag))
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    assert "İzlenen değişiklikler var; kabul edilmiş sürüm doğrulanmadı." in extract(
+        path, ".docx"
+    )["warnings"]
+
+
+def test_docx_field_instruction_is_not_misclassified_as_a_revision(tmp_path):
+    from docx import Document
+    from docx.oxml import OxmlElement
+
+    doc = Document()
+    doc.add_paragraph("SENTETİK: Gövde.")
+    field = OxmlElement("w:instrText")
+    field.text = "PAGE"
+    doc.sections[0].footer.paragraphs[0].add_run()._r.append(field)
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    warnings = extract(path, ".docx")["warnings"]
+    assert not any("İzlenen değişiklikler var" in w for w in warnings)
+    assert any("alan değerleri doğrulanmadı" in w for w in warnings)

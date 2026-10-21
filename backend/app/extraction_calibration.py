@@ -96,7 +96,9 @@ class ExportedExtraction(StrictInput):
     warnings: list[Annotated[str, Field(min_length=1, max_length=1000)]] = Field(max_length=1000)
     page_count: int | None = Field(ge=1, le=500)
     passage_count: int = Field(ge=0, le=MAX_PASSAGES)
-    extraction_profile: Literal["docx-body-order-v1", "docx-body-tree-v2"] | None = None
+    extraction_profile: Literal[
+        "docx-body-order-v1", "docx-body-tree-v2", "docx-section-stories-v3"
+    ] | None = None
 
     @model_validator(mode="after")
     def bounded_result(self):

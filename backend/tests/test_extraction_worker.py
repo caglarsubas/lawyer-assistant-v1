@@ -60,6 +60,8 @@ def test_real_isolated_docx_worker_preserves_body_sequence(tmp_path):
     cell.add_table(rows=1, cols=1).cell(0, 0).text = "İÇ KOŞUL: Borç kabul edilmedi."
     cell.add_paragraph("SENTETİK: Hücre sonu.")
     doc.add_paragraph("SENTETİK: Sonra.")
+    doc.sections[0].header.paragraphs[0].text = "SENTETİK: Üstbilgi koşulu."
+    doc.sections[0].footer.paragraphs[0].text = "SENTETİK: Altbilgi istisnası."
     path = tmp_path / "input.docx"
     doc.save(path)
     with TestClient(create_app(TOKEN)) as client:
@@ -70,17 +72,22 @@ def test_real_isolated_docx_worker_preserves_body_sequence(tmp_path):
         assert [p["text"] for p in data["passages"]] == [
             "SENTETİK: Önce.", "SENTETİK: Tablo.", "İÇ KOŞUL: Borç kabul edilmedi.",
             "SENTETİK: Hücre sonu.", "SENTETİK: Sonra.",
+            "SENTETİK: Üstbilgi koşulu.", "SENTETİK: Altbilgi istisnası.",
         ]
         assert data["extraction_profile"] == DOCX_BODY_PROFILE
 
 
-def test_real_docx_worker_rejects_overdeep_content_without_partial_passages(tmp_path):
+@pytest.mark.parametrize("story", ["body", "header"])
+def test_real_docx_worker_rejects_overdeep_content_without_partial_passages(tmp_path, story):
     from docx import Document
 
     doc = Document()
     doc.add_paragraph("SENTETİK: Bu başlangıç kısmi çıktı olarak dönmemeli.")
-    parent = doc
-    for _ in range(5):
+    if story == "header":
+        parent = doc.sections[0].header.add_table(rows=1, cols=1, width=1000).cell(0, 0)
+    else:
+        parent = doc.add_table(rows=1, cols=1).cell(0, 0)
+    for _ in range(4):
         parent = parent.add_table(rows=1, cols=1).cell(0, 0)
     parent.text = "GÖNDERİLMEMELİ"
     path = tmp_path / "deep.docx"
@@ -95,7 +102,8 @@ def test_real_docx_worker_rejects_overdeep_content_without_partial_passages(tmp_
         assert client.post("/extract", content="SENTETİK".encode(), headers=HEADERS).status_code == 200
 
 
-@pytest.mark.parametrize("profile", [None, "docx-body-order-v0", "docx-body-order-v1", "", {}, True])
+@pytest.mark.parametrize("profile", [None, "docx-body-order-v0", "docx-body-order-v1",
+                                     "docx-body-tree-v2", "", {}, True])
 def test_docx_client_rejects_unknown_or_missing_profile(monkeypatch, profile):
     payload = result()
     if profile is not None:
