@@ -1,0 +1,75 @@
+{
+  "schema": "backup-restart-preflight-engineering-v1",
+  "recorded_on": "2026-10-22",
+  "base": "0c2615dd8282d88bbd32cf60b8d1c3fd78c51157",
+  "scope": "Bounded restart ordering and fail-closed preflight, with disposable native Docker IP-allocation tests. No private matter inputs, inference, backup or restore.",
+  "implementation_sha256": {
+    "deploy/manage_backup.py": "c64797cf28b8aae5727c8fb660b33403cfd52ba53a1664bf039e12e959d8ba58",
+    "deploy/restart_preflight.py": "89c1e93afe17878fe68b45fd6a59de02cac0ec20e1741c8b71a6414b00ca27ee",
+    "deploy/restart_test_fixtures.py": "7fe22cbaadf94704ef38eb923bd2817217b538f61817b0c1cac95848766548ab",
+    "deploy/test_backup_restart.py": "d22d68d83b8d82fddd684d0b9530a5a6866a3f2ef53d0848493a481c1630bd7a",
+    "deploy/test_recovery_contract.py": "a07c61fa31d4ecefeedb5c6b5c5037d2e7eafc68378b754c45e5cd06c8f17071",
+    "deploy/test_restart_preflight.py": "219ca94249f0e1e39b198ba143008ffeec5eca1b73c441a8209c6b36e572a93c",
+    "deploy/test_restart_drill_contract.py": "cd44dbe139aa1a4f8d65e364764953cc01e8780a3e7699ed2367fb18bd009b3c",
+    "scripts/restart_preflight_drill.py": "e663411477e3347538d2eaa12851f1959c578d5cac901f1152f35e0ef801bf9b"
+  },
+  "local_checks": {
+    "deployment_contract_cases": 75,
+    "deployment_contract_result": "passed",
+    "ruff": "passed",
+    "diff_check": "passed",
+    "backend_application": "unchanged; no additional local full suite",
+    "frontend": "unchanged; hosted checks required"
+  },
+  "native_drill": {
+    "schema": "backup-restart-native-drill-v1",
+    "legacy_collision_observed": true,
+    "static_before_dynamic_verified": true,
+    "exact_isolated_addresses_preserved": true,
+    "cyclic_CLI_preflight_blocked_without_downtime": true,
+    "isolated_containers": 4,
+    "host_ports": 0,
+    "private_mounts": 0,
+    "external_networks": 0,
+    "application_project_mutations": 0,
+    "backup_or_restore_executed": false,
+    "real_data_service_recovery_qualified": false,
+    "cleanup_verified": true
+  },
+  "live_readonly_observation": {
+    "restart_order_verified": false,
+    "blocked_before_downtime": true,
+    "dependency_address_cycle": true,
+    "running_containers": 8,
+    "application_mutations": 0,
+    "backup_executed": false
+  },
+  "bounds": {
+    "running_containers": 128,
+    "endpoints_per_container": 32,
+    "endpoint_metadata_bytes": 524288,
+    "all_CI_allocations_workers_deadlines": "unchanged"
+  },
+  "unchanged_CI_sha256": "ee077ec642d2335f014a01dd36d4a66c32c1ed028ef2071882bfb8aa423a992d",
+  "preserved": [
+    "application images and containers",
+    "original encrypted documents and exact evidence versions",
+    "drafts, user/session state and review history",
+    "root environment and runtime credentials",
+    "prior unrelated worktree edits"
+  ],
+  "limits": [
+    "Point-in-time metadata under exclusive Docker lifecycle control; not an address lease or host-wide lock.",
+    "Unknown roles, manual link-local requests, inconsistent identities and cyclic address/startup dependencies block before downtime.",
+    "Conservative dynamic-allocation constraints do not infer independent pool exclusions.",
+    "The live mixed-address cycle still requires topology remediation.",
+    "Sleeper-container address checks do not qualify PostgreSQL/OpenSearch/Fuseki recovery or production deployment.",
+    "No original upload re-extraction, model pass, legal review or approval."
+  ],
+  "qualification": {
+    "full_data_service_recovery": false,
+    "production_ready": false,
+    "legal_review_recorded": false,
+    "operator_installation": "separate post-merge receipt"
+  }
+}

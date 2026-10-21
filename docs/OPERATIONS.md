@@ -766,12 +766,65 @@ one cold point, encrypts the compressed stream without writing a plaintext host
 archive, and restarts only the containers that were running. It refuses to
 overwrite existing archives. A failure removes only its newly created partial
 file. If restarting fails, it reports failure and leaves manual recovery explicit.
-Before downtime, the helper captures the running containers' Compose service
-labels. It restarts the provider relay first, then backing services, then the API
-and finally the web edge. This preserves the relay's fixed IP before dynamic
-clients reconnect and lets the web edge resolve the API's new address. The same
-order applies after an archive failure; no previously stopped service is started,
-no container is recreated and no automatic retry or longer timeout is added.
+Before downtime, the helper captures only running state, Compose service labels
+and network endpoint metadata. It checks explicit IPv4 and IPv6 requests on
+**every attached network**, using network identities rather than display names.
+Requested addresses must match the current endpoints. Every explicit reservation
+precedes dynamic allocators on that network/address family. Relay → backing
+services → API → web startup constraints remain; this also keeps web resolution
+after API startup. A topological schedule satisfies both sets of constraints.
+
+Relay-first ordering alone is insufficient: a dynamic backing service can take a
+stopped PostgreSQL, API or web address. If the reservation order conflicts with
+startup order, the helper **fails before stopping any container or invoking the
+archive helper**. It also rejects missing, duplicate, inconsistent or unqualified
+metadata, unsupported roles/manual link-local settings and exhausted inspection
+bounds (128 running containers, 32 endpoints each, 512 KiB metadata). There is no
+unsafe-order override. Keep one-off publishers/importers stopped as above.
+The same verified schedule applies after an archive failure. No previously
+stopped service is started, no container is recreated, and no retry or longer
+shutdown timeout is added.
+
+Check restart admission without keys, archive creation or downtime:
+
+```sh
+./scripts/backup.sh --preflight-only
+```
+
+Explicit `--project-name`, `--compose-file` and `--env-file` selections work in
+this mode too. Do not combine it with archive, key, restore or downtime options.
+Success reports only container/group counts and `backup_qualified: false`.
+Preflight does not qualify storage, encryption, restore, health readiness or
+legal correctness. It deliberately assumes the broadest dynamic allocation on a
+shared network; independently excluded IP ranges are not treated as proof that
+reordering is safe. Remediate a rejected topology through an independently tested
+address/startup configuration, then run preflight again. Do not force a restart.
+Exclude concurrent Docker start/connect/network changes throughout backup and
+recovery: inspection is a point-in-time check, not an address lease or host lock.
+
+The disposable [restart drill](../scripts/restart_preflight_drill.py) uses an
+explicitly selected immutable cached Python image, bounded nonroot sleepers and
+a newly created internal bridge, with no published ports, data mounts or secrets.
+It calculates one unused `/28` in the benchmark range `198.19.0.0/16` from Docker
+IPAM inventory; it never prunes networks or iterates creation attempts. Review
+host/VPN routing before running it on another host. It observes dynamic-first
+allocation, checks exact endpoint retention under the new schedule, verifies that
+the read-only CLI blocks a cyclic topology, and verifies cleanup. Example:
+
+```sh
+python3 scripts/restart_preflight_drill.py --image "$LA_RESTART_DRILL_IMAGE_ID" \
+  --report /secure-operator-receipts/restart-drill.json
+```
+
+Only inventoried Compose-labelled drill containers are operated on. The image
+must be trusted and contain Python; set `LA_RESTART_DRILL_IMAGE_ID` to its full
+local `sha256:` image ID. No image is downloaded. Receipts distinguish
+an observed collision from an unobserved one. These sleeper tests do not qualify
+PostgreSQL, OpenSearch or Fuseki recovery, provider behavior or a production
+deployment. The deployed stack's known mixed static/dynamic cycle still requires
+address remediation; this change prevents entering that unsafe backup downtime.
+See [engineering evidence](evidence/backup-restart-preflight-2026-10-22.json).
+
 The archive includes source image identities and a timestamp, not root `.env` or
 backup identity files. Retain the application encryption key, database password,
 image artifacts and deployment configuration separately; all are needed for a
