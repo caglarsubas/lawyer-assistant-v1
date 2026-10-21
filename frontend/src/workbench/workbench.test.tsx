@@ -39,6 +39,8 @@ describe('workbench boundaries', () => {
     expect(markup).toContain('aria-label="Hukuk asistanı tam ekran"');
     expect(markup).toContain('aria-label="Çalışma alanı panelini daralt"');
     expect(markup).toContain('maxLength="2000"');
+    expect(markup).toContain('href="#/account/password"');
+    expect(markup).toContain('aria-label="Parolayı değiştir"');
   });
 });
 

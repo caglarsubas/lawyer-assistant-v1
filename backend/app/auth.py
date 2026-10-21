@@ -45,7 +45,8 @@ def hold_firm_guard(request, firm_id):
             raise HTTPException(401, "Oturum veya kurum değişti")
         return
     guard = request.app.state.firm_authorization.guard(
-        firm_id, exclusive=(request.url.path.startswith("/api/v1/firm-admin")
+        firm_id, exclusive=(request.url.path == "/api/v1/auth/password"
+            or request.url.path.startswith("/api/v1/firm-admin")
             or (request.method not in {"GET", "HEAD", "OPTIONS"} and (
                 request.url.path in {"/api/v1/customers", "/api/v1/workspaces", "/api/v1/matters"}
                 or (request.url.path.startswith("/api/v1/workspaces/") and request.url.path.endswith("/customers"))
