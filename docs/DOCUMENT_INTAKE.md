@@ -30,7 +30,7 @@ The extractor has a dedicated internal network shared only with the API, no data
 | Formats | Implemented extraction | Explicit limitations |
 |---|---|---|
 | PDF | Page text; bounded local Turkish/English OCR fallback | Up to 500 pages, OCR attempts at most three textless pages; unread pages remain listed; no layout or signature validation |
-| DOCX | Body paragraphs and bounded nested table content interleaved in XML order; unique physical cells | Four table levels and 50,000 visited structural blocks; tracked changes flagged; merged-cell meaning, headers, footnotes, text boxes, embedded objects and visual reading order unverified |
+| DOCX | Body/nested tables, section header/footer definitions and linked footnote/endnote appendices | Four table levels and 50,000 shared structural units; exact package IDs/reference contexts; page layout, display numbering, fields, text boxes, embedded objects and legal completeness unverified |
 | XLSX | Sheet/row/cell locators, literal formulas | Formulas and links never executed; charts, objects, formatting and calculated-value correctness unverified |
 | PNG, JPEG, TIFF, BMP, WebP, GIF | Local Turkish/English OCR | 30 million pixel bound; first frame only, remaining frames explicitly omitted; OCR requires visual review |
 | TXT, Markdown, CSV | Strict UTF-8 text; paragraph or CSV-row locators | Encoding mismatch fails visibly; Markdown is data, never executed |
@@ -46,7 +46,7 @@ The extractor has a dedicated internal network shared only with the API, no data
 
 Office/OpenDocument archives have member-count and expanded-size bounds; duplicate members and known macro containers are rejected. Parser responses have independent byte, text, passage, warning and time bounds. An extension never establishes authenticity or complete extraction. Representative Turkish legal-document testing, including large scans and complex tables, remains required before claiming format qualification.
 
-New DOCX extraction uses the declared `docx-section-stories-v3` profile. A table stays
+New DOCX extraction uses the declared `docx-linked-notes-v4` profile. A table stays
 between its surrounding body paragraphs. Rows containing nested tables retain
 each cell's paragraph/table sequence, including paragraphs following an inner
 table and multiple sibling tables. Locators identify the enclosing table, row,
@@ -57,8 +57,9 @@ vertical continuation cells do not repeat the merged origin's content.
 
 Extraction admits at most four table levels, counting the outer table, and
 50,000 visited structural units across the complete body and header/footer
-definitions: sections, references, emitted story instances, blocks, rows, cells
-and cell paragraphs/tables, including empty ones. Exceeding either limit fails the extraction; no partial successful
+definitions and notes: sections, package relationships, note definitions/references,
+emitted story/note instances, blocks, rows, cells and cell paragraphs/tables,
+including empty ones. Exceeding either limit fails the extraction; no partial successful
 passages are returned. Existing file/text/response/process limits also apply.
 Cell numbers identify physical XML cells, not visual column positions. XML order
 does not establish Word pagination, right-to-left visual order, floating-object
@@ -84,17 +85,50 @@ mistaken for inserted revision markup and are never executed.
 These are section definitions, including first/even-page definitions that may be
 inactive. Extraction does not establish which pages display them, render field
 values or interleave them with page-level body content. The result explicitly
-warns about these limits and unverified footnotes, endnotes and text boxes.
+warns about these limits and unverified text-box completeness.
+
+Footnotes and endnotes form separate appendices after the body and section
+stories. Each passage locator preserves the note kind, integer package ID,
+reference occurrence and original paragraph/table-cell context, followed by the
+note's paragraph/nested-table position. Note definitions retain package XML
+order, with repeated content explicitly retained for each reference context.
+Marker-only source paragraphs still have an XML location even when they emit no
+text passage. Original body text and locators are not populated with invented
+note-marker text. A package ID or occurrence ordinal is not Word's displayed
+number, a legal provision identifier or an established legal relationship.
+
+Footnote and endnote IDs occupy separate namespaces. Missing `w:type` means a
+normal note; separator, continuation-separator and continuation-notice definitions
+are excluded by type, not by guessed reserved numbers. A normal note with no
+captured reference is labelled `başvuru yok`, with an explicit warning; no link to
+the body is invented. Empty notes produce a warning and no fabricated text.
+These distinctions follow the [OOXML note-type contract](https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.wordprocessing.footnoteendnotetype.type)
+and [ID matching contract](https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.wordprocessing.footnoteendnoteseparatorreferencetype.id).
+
+Only one internal part of the correct content type and XML root is admitted per
+note kind. Duplicate relationship or definition IDs, missing/unresolved IDs,
+references to system notes, nested note references, unsupported reference contexts
+and unsupported block wrappers fail extraction without returning partial
+successful passages. DTD/entity-bearing note XML is rejected. No remote part or
+linked resource is fetched. Notes share all existing text, locator, passage,
+structural, process and transport limits; their nested tables have the same
+four-level limit. Source references in omitted wrappers are never silently
+attributed to visible body text or converted to orphan notes.
+
+Paragraph/table XML order, exact ID matching and revision warnings do not qualify
+rendered page placement, custom or automatic numbering, fields, text boxes,
+tracked-change acceptance, representative layout fidelity or legal completeness.
+The original document remains the primary visual evidence.
 
 The authenticated worker response carries the profile; the API stores it on the
 new document record. The worker, client and demo intake reject an absent or
 unknown DOCX profile, and reject a DOCX profile on another format. Deploy API and
 extractor together: a new API with an old worker fails new DOCX extraction visibly
-instead of silently labeling old output as v3. The existing `parser_version` identifies
+instead of silently labeling old output as v4. The existing `parser_version` identifies
 the adapter family; the narrower profile identifies this DOCX behavior. Older
-records without a profile or with `docx-body-order-v1` or `docx-body-tree-v2`
-remain historical. Offline calibration retains the exact declared v1, v2 or v3
-profile without upgrading it. Existing records are not backfilled, reordered or re-extracted. Originals, passage IDs, exact
+records without a profile or with `docx-body-order-v1`, `docx-body-tree-v2` or
+`docx-section-stories-v3` remain historical. Offline calibration retains the exact
+declared v1, v2, v3 or v4 profile without upgrading it. Existing records are not backfilled, reordered or re-extracted. Originals, passage IDs, exact
 quotations, draft versions and reviews remain unchanged. A deliberate future
 re-extraction requires a separately recorded evidence version and review.
 
@@ -103,7 +137,8 @@ negation, blank paragraphs, nested/sibling tables, merged cells, structural/dept
 limits with closed worker failures, isolated subprocess parsing,
 strict transport/calibration metadata, original-byte round trips and preservation
 of prior document records. They establish a regression fix, not representative
-format qualification. See [current engineering evidence](evidence/docx-section-stories-2026-10-22.json)
+format qualification. See [current engineering evidence](evidence/docx-linked-notes-2026-10-22.json)
+and [historical v3 record](evidence/docx-section-stories-2026-10-22.json)
 and the [historical v2 record](evidence/docx-nested-tables-2026-10-21.json)
 and the [historical v1 regression record](evidence/docx-body-order-2026-10-21.json).
 

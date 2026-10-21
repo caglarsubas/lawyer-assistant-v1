@@ -452,3 +452,44 @@ def test_docx_field_instruction_is_not_misclassified_as_a_revision(tmp_path):
     warnings = extract(path, ".docx")["warnings"]
     assert not any("İzlenen değişiklikler var" in w for w in warnings)
     assert any("alan değerleri doğrulanmadı" in w for w in warnings)
+
+
+def test_docx_notes_keep_exact_reference_context_kind_and_content_order(tmp_path):
+    from docx import Document
+    from docx_note_fixtures import note_part, note_reference
+
+    doc = Document()
+    first = doc.add_paragraph("SENTETİK: Borç kabul edilmedi.")
+    note_reference(first, "footnote", 7)
+    second = doc.add_paragraph("SENTETİK: Ancak ayrı istisna saklıdır.")
+    note_reference(second, "endnote", 7)
+    third = doc.add_paragraph("SENTETİK: İlk koşula tekrar başvuru.")
+    note_reference(third, "footnote", 7)
+    blocks = Document()
+    blocks.add_paragraph("SENTETİK: 14.06.2020 koşulu.")
+    cell = blocks.add_table(rows=1, cols=1).cell(0, 0)
+    cell.text = "SENTETİK: Dış koşul."
+    cell.add_table(rows=1, cols=1).cell(0, 0).text = "SENTETİK: 1.234,56 TL kabul edilmedi."
+    cell.add_paragraph("SENTETİK: İç istisna saklıdır.")
+    blocks.add_paragraph("SENTETİK: Dipnot sonu; TEST-0042.")
+    note_part(doc, "footnote", [(7, None, blocks)])
+    note_part(doc, "endnote", [(7, "normal", "SENTETİK: Sonnot ayrı koşuldur.")])
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    original = path.read_bytes()
+    result = extract(path, ".docx")
+    footnotes = [p for p in result["passages"] if p["locator"].startswith("Dipnot kimlik 7")]
+    assert [p["text"] for p in footnotes] == [
+        "SENTETİK: 14.06.2020 koşulu.", "SENTETİK: Dış koşul.",
+        "SENTETİK: 1.234,56 TL kabul edilmedi.", "SENTETİK: İç istisna saklıdır.",
+        "SENTETİK: Dipnot sonu; TEST-0042.",
+    ] * 2
+    assert footnotes[0]["locator"] == "Dipnot kimlik 7, başvuru 1 (Paragraf 1), paragraf 1"
+    assert footnotes[5]["locator"].startswith("Dipnot kimlik 7, başvuru 3 (Paragraf 3)")
+    assert result["passages"][-1] == {
+        "locator": "Sonnot kimlik 7, başvuru 2 (Paragraf 2), paragraf 1",
+        "text": "SENTETİK: Sonnot ayrı koşuldur.",
+    }
+    assert result["passages"][0] == {"locator": "Paragraf 1", "text": first.text}
+    assert path.read_bytes() == original and result["page_count"] is None
+    assert any("paket kimliği" in w and "gösterilen" in w for w in result["warnings"])

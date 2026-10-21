@@ -97,7 +97,7 @@ class ExportedExtraction(StrictInput):
     page_count: int | None = Field(ge=1, le=500)
     passage_count: int = Field(ge=0, le=MAX_PASSAGES)
     extraction_profile: Literal[
-        "docx-body-order-v1", "docx-body-tree-v2", "docx-section-stories-v3"
+        "docx-body-order-v1", "docx-body-tree-v2", "docx-section-stories-v3", "docx-linked-notes-v4"
     ] | None = None
 
     @model_validator(mode="after")

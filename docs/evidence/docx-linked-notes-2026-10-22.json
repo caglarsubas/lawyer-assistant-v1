@@ -1,0 +1,65 @@
+{
+  "schema": "document-intake-linked-notes-engineering-v1",
+  "recorded_on": "2026-10-22",
+  "scope": "Invented DOCX note identity, source-context, isolated parser and upload contracts. No private case input or inference.",
+  "base": "2da8121071c629ed9a70b48cdb9de5784422e1f4",
+  "implementation_sha256": {
+    "backend/app/extract.py": "dd6e334f4648313dfd52c554031e1c5e4a58b3b91bfd9f1fef0051e38d4bc4c5",
+    "backend/app/extraction_calibration.py": "d0183ce9258165f53fd39e9e7aa5ff03714675ca664fd1257bcaf932df4f4084",
+    "backend/tests/docx_note_fixtures.py": "47f4956fd307e03cadc0c6d5edf964a1f9f90261408e19cd5f4f058abcab4837",
+    "backend/tests/test_docx_notes.py": "05f8b3cd405c1b46637ac411a024e8ceb07df10041f02b0deb287a825e21ba20",
+    "backend/tests/test_extract.py": "230a138bda7b6c2b75b2a2e7c66283a1780858aa4023c1b7e7bff932fabb3f5d",
+    "backend/tests/test_extraction_worker.py": "3d964e912f74956b0f40f4b4325a7f74cafbddd62485c82865d783e4cf493782",
+    "backend/tests/test_extraction_calibration.py": "3595cb96a975701f1fbdf68b926d72b7f566301fc79f89bd879da991b6218bd7",
+    "backend/tests/test_workspace.py": "494f6caf1f838ac65679f4d1971c11d6340a2baa5b30f6245f6f18ae0b2be742"
+  },
+  "local_checks": {
+    "targeted_backend_cases": 222,
+    "targeted_backend_result": "passed",
+    "deployment_contract_cases": 51,
+    "deployment_contract_result": "passed",
+    "ruff": "passed",
+    "diff_check": "passed",
+    "frontend_result": "unchanged; hosted checks required"
+  },
+  "regression": {
+    "pre_fix_missing_notes_test": "failed as expected",
+    "post_fix_notes_and_intake_suite": "passed",
+    "only_synthetic_documents": true,
+    "private_files_read": false,
+    "original_bytes_unchanged": true
+  },
+  "profile": "docx-linked-notes-v4",
+  "historical_profiles_retained_by_calibration": [
+    "docx-body-order-v1",
+    "docx-body-tree-v2",
+    "docx-section-stories-v3"
+  ],
+  "bounds": {
+    "table_levels_including_outer": 4,
+    "shared_visited_structural_units": 50000,
+    "all_text_locator_process_transport_and_CI_limits": "unchanged"
+  },
+  "preserved": [
+    "existing uploads and original byte streams",
+    "historical profile declarations, passage IDs and exact evidence versions",
+    "quotation ranges, drafts and review history",
+    "body/nested-table/story locator numbering",
+    "all CI allocations, workers, cases and deadlines"
+  ],
+  "limits": [
+    "Appendices retain note kind, integer package identity, reference occurrence and source XML context; not Word display numbering or legal effect.",
+    "Unreferenced normal notes are labelled without invented body links; empty notes produce no invented text.",
+    "System separators are excluded by type, not guessed reserved IDs.",
+    "Malformed or unsupported links, definitions, blocks and hostile XML fail without partial successful passages.",
+    "Page layout, fields, text boxes, tracked-change acceptance and representative legal-document completeness remain unqualified.",
+    "No migration, re-extraction, private inference or human review."
+  ],
+  "unchanged_CI_sha256": "ee077ec642d2335f014a01dd36d4a66c32c1ed028ef2071882bfb8aa423a992d",
+  "qualification": {
+    "representative_format_qualified": false,
+    "private_pilot_replayed": false,
+    "legal_review_recorded": false,
+    "production_qualified": false
+  }
+}
