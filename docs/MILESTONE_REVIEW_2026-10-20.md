@@ -188,3 +188,10 @@ Once owners and a lawful sample are supplied, continue with the first reviewed
 contracts pack and reviewer findings, then measured retrieval/adverse-authority
 and reasoning trials. Retain the existing nine CI jobs, complete case allocation,
 isolated workers and time limits, including the five30-second reserve gates.
+
+While the owner's private draft review is pending, F00 document intake gained a
+separate synthetic regression fix: DOCX body paragraphs and tables retain their
+interleaved sequence, with a pinned extraction profile and explicit nested-table
+omissions. This does not re-extract the selected case or alter its evidence,
+draft or review status. Extended document qualification remains incomplete;
+see [the intake contract](DOCUMENT_INTAKE.md) and its engineering evidence.

@@ -7,7 +7,7 @@ from urllib.parse import urlsplit
 
 import httpx
 
-from .extract import SUPPORTED_SUFFIXES
+from .extract import DOCX_BODY_PROFILE, SUPPORTED_SUFFIXES
 
 ALLOWED_SUFFIXES = SUPPORTED_SUFFIXES
 MAX_DOCUMENT_BYTES = 20 * 1024 * 1024
@@ -56,10 +56,17 @@ def _text(value, maximum):
                         for char in value))
 
 
-def validate_result(result):
+def validate_result(result, suffix=None):
     """Only parsed text and locators cross back; no executable/identity/path fields."""
-    if not isinstance(result, dict) or set(result) != {"passages", "warnings", "page_count", "passage_count"}:
+    fields = {"passages", "warnings", "page_count", "passage_count"}
+    if not isinstance(result, dict) or set(result) not in (fields, fields | {"extraction_profile"}):
         raise ExtractionError("Unsupported extraction result shape")
+    if "extraction_profile" in result and result["extraction_profile"] != DOCX_BODY_PROFILE:
+        raise ExtractionError("Unsupported extraction profile")
+    if suffix == ".docx" and result.get("extraction_profile") != DOCX_BODY_PROFILE:
+        raise ExtractionError("DOCX extraction profile was not established")
+    if suffix is not None and suffix != ".docx" and "extraction_profile" in result:
+        raise ExtractionError("Extraction profile does not match document format")
     passages, warnings = result["passages"], result["warnings"]
     if not isinstance(passages, list) or len(passages) > 20000:
         raise ExtractionError("Extraction passage limit exceeded")
@@ -142,6 +149,6 @@ class ExtractionClient:
                         raw.extend(chunk)
             if time.monotonic() >= deadline:
                 raise ExtractionError("Extraction response exceeded its total time budget")
-            return validate_result(json.loads(raw))
+            return validate_result(json.loads(raw), suffix)
         except (httpx.HTTPError, ValueError, TypeError, RecursionError) as error:
             raise ExtractionError("Extraction response could not be safely consumed") from error

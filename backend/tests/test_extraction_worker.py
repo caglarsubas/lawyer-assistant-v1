@@ -48,6 +48,46 @@ def test_real_worker_extracts_only_synthetic_document_content():
         assert client.get("/health").json() == {"status": "ok"}
 
 
+def test_real_isolated_docx_worker_preserves_body_sequence(tmp_path):
+    from docx import Document
+
+    from app.extract import DOCX_BODY_PROFILE
+
+    doc = Document()
+    doc.add_paragraph("SENTETİK: Önce.")
+    doc.add_table(rows=1, cols=1).cell(0, 0).text = "SENTETİK: Tablo."
+    doc.add_paragraph("SENTETİK: Sonra.")
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    with TestClient(create_app(TOKEN)) as client:
+        response = client.post("/extract", content=path.read_bytes(),
+                               headers={**HEADERS, "X-Document-Suffix": ".docx"})
+        assert response.status_code == 200
+        data = response.json()
+        assert [p["text"] for p in data["passages"]] == [
+            "SENTETİK: Önce.", "SENTETİK: Tablo.", "SENTETİK: Sonra.",
+        ]
+        assert data["extraction_profile"] == DOCX_BODY_PROFILE
+
+
+@pytest.mark.parametrize("profile", [None, "docx-body-order-v0", "", {}, True])
+def test_docx_client_rejects_unknown_or_missing_profile(monkeypatch, profile):
+    payload = result()
+    if profile is not None:
+        payload["extraction_profile"] = profile
+    mock_transport(monkeypatch, payload=payload)
+    with pytest.raises(ExtractionError, match="profile"):
+        ExtractionClient("http://extractor:8002", TOKEN).execute(b"synthetic", ".docx")
+
+
+def test_client_rejects_docx_profile_on_other_format(monkeypatch):
+    from app.extract import DOCX_BODY_PROFILE
+
+    mock_transport(monkeypatch, payload={**result(), "extraction_profile": DOCX_BODY_PROFILE})
+    with pytest.raises(ExtractionError, match="format"):
+        ExtractionClient("http://extractor:8002", TOKEN).execute(b"synthetic", ".txt")
+
+
 def test_unauthorized_worker_call_never_parses(monkeypatch):
     monkeypatch.setattr(extraction_worker, "parse_document", lambda *args: pytest.fail("Parser must not run"))
     with TestClient(create_app(TOKEN)) as client:

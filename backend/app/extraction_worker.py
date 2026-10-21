@@ -65,7 +65,7 @@ def parse_document(content, suffix):
             if len(raw) > MAX_RESPONSE_BYTES:
                 raise ExtractionError("Parser output limit exceeded")
         try:
-            return validate_result(json.loads(raw))
+            return validate_result(json.loads(raw), suffix)
         except (ValueError, TypeError, RecursionError) as error:
             raise ExtractionError("Parser result was invalid") from error
 
@@ -120,7 +120,7 @@ def create_app(token=None):
 
             content = await asyncio.wait_for(read_body(), timeout=UPLOAD_TIMEOUT_SECONDS)
             result = await run_in_threadpool(parse_document, content, suffix)
-            return validate_result(result)
+            return validate_result(result, suffix)
         except (ExtractionError, OSError, subprocess.SubprocessError, TimeoutError):
             raise HTTPException(422, "Document could not be safely extracted") from None
         finally:

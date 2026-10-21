@@ -44,6 +44,7 @@ SUPPORTED_SUFFIXES = frozenset(
 )
 ZIP_SUFFIXES = frozenset({".docx", ".xlsx", ".pptx", ".odt", ".ods", ".odp"})
 MAX_TEXT = 2_000_000
+DOCX_BODY_PROFILE = "docx-body-order-v1"
 
 
 class PlainHTML(HTMLParser):
@@ -112,13 +113,22 @@ def extract(path, suffix):
     elif suffix in (".docx", ".xlsx"):
         if suffix == ".docx":
             from docx import Document
+            from docx.text.paragraph import Paragraph
 
             doc = Document(path)
-            for index, paragraph in enumerate(doc.paragraphs, 1):
-                add(f"Paragraf {index}", paragraph.text)
-            for ti, table in enumerate(doc.tables, 1):
-                for ri, row in enumerate(table.rows, 1):
-                    add(f"Tablo {ti}, satır {ri}", " | ".join(c.text for c in row.cells))
+            paragraph_index = table_index = 0
+            # Paragraph/table locators retain independent numbering, including
+            # blank paragraphs. Only their emitted body sequence changes.
+            for block in doc.iter_inner_content():
+                if isinstance(block, Paragraph):
+                    paragraph_index += 1
+                    add(f"Paragraf {paragraph_index}", block.text)
+                else:
+                    table_index += 1
+                    for ri, row in enumerate(block.rows, 1):
+                        add(f"Tablo {table_index}, satır {ri}", " | ".join(c.text for c in row.cells))
+                        if any(cell.tables for cell in row.cells):
+                            warnings.append("İç içe tabloların içeriği işlenmedi; özgün belgeyle doğrulayın.")
             xml = doc.element.xml
             if "<w:ins" in xml or "<w:del" in xml:
                 warnings.append("İzlenen değişiklikler var; kabul edilmiş sürüm doğrulanmadı.")
@@ -367,12 +377,15 @@ def extract(path, suffix):
         raise ValueError("Format is not qualified; preserve original and convert locally")
     if sum(len(p["text"]) for p in passages) > 2_000_000:
         raise ValueError("Extracted text limit exceeded")
-    return {
+    result = {
         "passages": passages,
         "warnings": list(dict.fromkeys(warnings)),
         "page_count": page_count,
         "passage_count": len(passages),
     }
+    if suffix == ".docx":
+        result["extraction_profile"] = DOCX_BODY_PROFILE
+    return result
 
 
 if __name__ == "__main__":

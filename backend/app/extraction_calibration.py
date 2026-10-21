@@ -96,9 +96,12 @@ class ExportedExtraction(StrictInput):
     warnings: list[Annotated[str, Field(min_length=1, max_length=1000)]] = Field(max_length=1000)
     page_count: int | None = Field(ge=1, le=500)
     passage_count: int = Field(ge=0, le=MAX_PASSAGES)
+    extraction_profile: Literal["docx-body-order-v1"] | None = None
 
     @model_validator(mode="after")
     def bounded_result(self):
+        if "extraction_profile" in self.model_fields_set and self.extraction_profile is None:
+            raise ValueError("invalid_extraction_profile")
         if self.passage_count != len(self.passages):
             raise ValueError("passage_count_mismatch")
         if sum(len(passage.text) for passage in self.passages) > MAX_TEXT_CHARACTERS:
@@ -230,6 +233,8 @@ def evaluate_calibration(
         if hashlib.sha256(content).hexdigest() != getattr(sample, f"{label}_sha256"):
             raise CalibrationError(f"{label}_digest_mismatch")
     extraction = _artifact(extraction_bytes, ExportedExtraction, "extraction")
+    if extraction.extraction_profile is not None and sample.source_suffix != ".docx":
+        raise CalibrationError("extraction_profile_format_mismatch")
     reference = _artifact(reference_bytes, ReferenceTranscription, "reference")
     if reference.raw_sha256 != sample.raw_sha256:
         raise CalibrationError("reference_raw_digest_mismatch")

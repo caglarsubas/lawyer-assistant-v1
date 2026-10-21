@@ -1,0 +1,53 @@
+{
+  "schema": "document-intake-body-order-engineering-v1",
+  "recorded_on": "2026-10-21",
+  "scope": "Synthetic DOCX XML body sequencing and explicit omissions only; no real documents, model calls or legal review.",
+  "implementation_sha256": {
+    "backend/app/extract.py": "d5f3e87d5bf746b081237cf23adf10a7ba143e934a074682132a9d58e474982b",
+    "backend/app/extraction_client.py": "5ddfe5c5357370ae00f9f5831afeb1f889dafb1ee28e093c610b3443eab21d66",
+    "backend/app/extraction_worker.py": "3c40bc929c9fb81ca5b8747ac89b5cbc4a9b74a0842acfaf614fa8ed89bd1cdd",
+    "backend/app/main.py": "a5aacf58de8938137b5937d87f0a5b746cc3334ac411a776355820e9869e5148",
+    "backend/app/extraction_calibration.py": "81404afdfe3c6e2c87a2b1ad3f6ea8c83fa7d46948263a12deec8bbf841ddfad",
+    "backend/tests/test_extract.py": "1d915749cac12477c6d2026bfc962681ebc315698e89ddf80ef435ef0df787d7",
+    "backend/tests/test_extraction_worker.py": "a9c5a78862da4a469501def4c2d2795dc4de01c742e4707157069d976b945153",
+    "backend/tests/test_workspace.py": "23c6e67317d60d6fb8a5c31f764a0275500b2e751cc289ed8f6c22a6d080ba83",
+    "backend/tests/test_extraction_calibration.py": "7a7cbdc97a1390759b60357a266e81a99d555c3ed7b2dd8fa8de603336e29355"
+  },
+  "local_checks": {
+    "targeted_backend_cases": 232,
+    "targeted_backend_result": "passed",
+    "deployment_contract_cases": 50,
+    "deployment_contract_result": "passed",
+    "ruff": "passed",
+    "diff_check": "passed",
+    "frontend_result": "unchanged; hosted checks required"
+  },
+  "regression": {
+    "base": "50e84de60348532b342e713d07f2bdb94eeaf644",
+    "pre_fix_body_order_regression": "failed as expected",
+    "post_fix_body_order_regression": "passed",
+    "only_synthetic_documents": true,
+    "private_files_read": false
+  },
+  "profile": "docx-body-order-v1",
+  "preserved": [
+    "original bytes",
+    "prior document records and evidence",
+    "separate paragraph/table locator numbering",
+    "immutable draft versions and review history",
+    "existing parser-family label",
+    "all CI allocations, workers and deadlines"
+  ],
+  "limits": [
+    "Top-level XML body sequence only; visual layout and floating objects unverified.",
+    "Nested tables are omitted with a warning; headers, footnotes and tracked revisions remain unqualified.",
+    "A declared profile is not independent extraction or legal verification.",
+    "Existing records without a profile are not migrated or silently reprocessed."
+  ],
+  "qualification": {
+    "representative_format_qualification": false,
+    "private_pilot_replayed": false,
+    "legal_review_recorded": false,
+    "production_qualified": false
+  }
+}
