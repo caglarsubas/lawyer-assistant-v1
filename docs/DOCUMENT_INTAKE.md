@@ -30,7 +30,7 @@ The extractor has a dedicated internal network shared only with the API, no data
 | Formats | Implemented extraction | Explicit limitations |
 |---|---|---|
 | PDF | Page text; bounded local Turkish/English OCR fallback | Up to 500 pages, OCR attempts at most three textless pages; unread pages remain listed; no layout or signature validation |
-| DOCX | Body paragraphs and table rows | Tracked changes flagged; headers, footnotes, text boxes, embedded objects and complete reading order unverified |
+| DOCX | Top-level body paragraphs and table rows interleaved in document order | Nested tables explicitly omitted; tracked changes flagged; headers, footnotes, text boxes, embedded objects and visual reading order unverified |
 | XLSX | Sheet/row/cell locators, literal formulas | Formulas and links never executed; charts, objects, formatting and calculated-value correctness unverified |
 | PNG, JPEG, TIFF, BMP, WebP, GIF | Local Turkish/English OCR | 30 million pixel bound; first frame only, remaining frames explicitly omitted; OCR requires visual review |
 | TXT, Markdown, CSV | Strict UTF-8 text; paragraph or CSV-row locators | Encoding mismatch fails visibly; Markdown is data, never executed |
@@ -45,6 +45,30 @@ The extractor has a dedicated internal network shared only with the API, no data
 | Supplied UDF | Not admitted yet | Representative supplied files, format/version identification, parser and signature fixtures are required before pilot qualification |
 
 Office/OpenDocument archives have member-count and expanded-size bounds; duplicate members and known macro containers are rejected. Parser responses have independent byte, text, passage, warning and time bounds. An extension never establishes authenticity or complete extraction. Representative Turkish legal-document testing, including large scans and complex tables, remains required before claiming format qualification.
+
+New DOCX extraction uses the declared `docx-body-order-v1` profile. A table stays
+between the body paragraphs surrounding it; paragraph and table locators retain
+their separate numbering, including blank paragraphs. Nested tables contribute
+no text and produce an explicit omission warning. This is XML body sequence,
+not a claim about Word pagination, floating objects, merged-cell semantics or
+complete visual reading order.
+
+The authenticated worker response carries the profile; the API stores it on the
+new document record. The worker, client and demo intake reject an absent or
+unknown DOCX profile, and reject a DOCX profile on another format. Deploy API and
+extractor together: a new API with an old worker fails new DOCX extraction visibly
+instead of silently labeling old output. The existing `parser_version` identifies
+the adapter family; the narrower profile identifies this DOCX behavior. Older
+records without a profile remain historical and unqualified for the new ordering;
+they are not backfilled, reordered or re-extracted. Originals, passage IDs, exact
+quotations, draft versions and reviews remain unchanged. A deliberate future
+re-extraction requires a separately recorded evidence version and review.
+
+Synthetic checks cover interleaved Turkish clauses/tables, dates, amounts,
+negation, blank paragraphs, nested omissions, isolated subprocess parsing,
+strict transport/calibration metadata, original-byte round trips and preservation
+of prior document records. They establish a regression fix, not representative
+format qualification. See [engineering evidence](evidence/docx-body-order-2026-10-21.json).
 
 Research currently selects bounded exact excerpt windows, retaining source hash, locator and offsets. A document being uploaded does not imply that every passage was examined in a particular research run. Exports retain that distinction.
 

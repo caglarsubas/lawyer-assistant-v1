@@ -608,7 +608,7 @@ def create_app(settings=None):
                         check=False,
                     )
                     extracted = (
-                        validate_result(json.loads(completed.stdout))
+                        validate_result(json.loads(completed.stdout), suffix)
                         if completed.returncode == 0
                         else {"error": "extraction_failed"}
                     )
@@ -634,6 +634,8 @@ def create_app(settings=None):
             "parser_version": "bounded-extractor-2",
             "original_path": target.name,
         }
+        if "extraction_profile" in extracted:
+            data["extraction_profile"] = extracted["extraction_profile"]
         try:
             # Scanning/parsing may outlast logout, expiry or administrative revocation.
             # Keep this inside the cleanup boundary so denied intake leaves no original.

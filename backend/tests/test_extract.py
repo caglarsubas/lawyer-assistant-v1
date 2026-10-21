@@ -109,3 +109,46 @@ def test_xlsx_formula_is_literal_and_csv_keeps_row_locator(tmp_path):
     assert any("çalıştırılmadı" in w for w in result["warnings"])
     result = extract(write(tmp_path, ".csv", "isim,tutar\nörnek,30".encode()), ".csv")
     assert result["passages"][1] == {"locator": "Satır 2", "text": "örnek | 30"}
+
+
+def test_docx_interleaves_tables_with_clauses_without_renumbering(tmp_path):
+    from docx import Document
+
+    from app.extract import DOCX_BODY_PROFILE
+
+    doc = Document()
+    doc.add_paragraph("SENTETİK: Tablodaki tutar kabul edilmedi.")
+    doc.add_table(rows=1, cols=2).rows[0].cells[0].text = "1.234,56 TL"
+    doc.tables[0].cell(0, 1).text = "14.06.2020"
+    doc.add_paragraph("")  # Empty body paragraph still has its own locator.
+    doc.add_paragraph("SENTETİK: Önceki tablodaki tarih kesinleşmedi.")
+    doc.add_table(rows=1, cols=1).cell(0, 0).text = "İkinci tablo: TEST-0042"
+    doc.add_paragraph("SENTETİK: Son hüküm.")
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    original = path.read_bytes()
+    result = extract(path, ".docx")
+    assert result["passages"] == [
+        {"locator": "Paragraf 1", "text": "SENTETİK: Tablodaki tutar kabul edilmedi."},
+        {"locator": "Tablo 1, satır 1", "text": "1.234,56 TL | 14.06.2020"},
+        {"locator": "Paragraf 3", "text": "SENTETİK: Önceki tablodaki tarih kesinleşmedi."},
+        {"locator": "Tablo 2, satır 1", "text": "İkinci tablo: TEST-0042"},
+        {"locator": "Paragraf 4", "text": "SENTETİK: Son hüküm."},
+    ]
+    assert result["extraction_profile"] == DOCX_BODY_PROFILE
+    assert result["passage_count"] == 5 and path.read_bytes() == original
+
+
+def test_docx_nested_tables_remain_explicitly_unprocessed(tmp_path):
+    from docx import Document
+
+    doc = Document()
+    cell = doc.add_table(rows=1, cols=1).cell(0, 0)
+    cell.text = "SENTETİK: Dış hücre."
+    cell.add_table(rows=1, cols=1).cell(0, 0).text = "İç tablo: işlenmemiş koşul."
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    result = extract(path, ".docx")
+    assert [p["text"] for p in result["passages"]] == ["SENTETİK: Dış hücre."]
+    assert any("İç içe tabloların içeriği işlenmedi" in warning for warning in result["warnings"])
+    assert any("dipnot" in warning for warning in result["warnings"])

@@ -201,6 +201,26 @@ def test_extraction_counts_and_text_are_strict(artifacts, field, value):
         _evaluate(artifacts)
 
 
+@pytest.mark.parametrize("profile", [None, "docx-body-order-v0", {}, True])
+def test_unknown_extraction_profiles_cannot_enter_calibration(artifacts, profile):
+    artifacts[1]["extraction_profile"] = profile
+    with pytest.raises(CalibrationError, match="^invalid_extraction_artifact$"):
+        _evaluate(artifacts)
+
+
+def test_declared_docx_profile_is_retained_by_strict_export_model(artifacts):
+    from app.extraction_calibration import ExportedExtraction
+
+    extraction = {**artifacts[1], "extraction_profile": "docx-body-order-v1"}
+    assert ExportedExtraction.model_validate(extraction).extraction_profile == "docx-body-order-v1"
+
+
+def test_calibration_rejects_docx_profile_for_other_sample_format(artifacts):
+    artifacts[1]["extraction_profile"] = "docx-body-order-v1"
+    with pytest.raises(CalibrationError, match="^extraction_profile_format_mismatch$"):
+        _evaluate(artifacts)
+
+
 @pytest.mark.parametrize("field,value", [("source_suffix", ".exe"), ("recorded_on", "2026-02-30"),
                                         ("extraction_elapsed_seconds", float("nan")),
                                         ("extraction_elapsed_seconds", float("inf")),

@@ -224,6 +224,36 @@ def test_production_intake_requires_worker_and_never_falls_back(workspace, monke
     assert set((app.state.settings.data_dir / "documents").glob("*.enc")) == originals_before
 
 
+def test_docx_upload_keeps_profile_original_and_prior_evidence(workspace):
+    from app.extract import DOCX_BODY_PROFILE
+
+    app, client, matter = workspace
+    base = f"/api/v1/matters/{matter}/documents"
+    before = client.get(f"/api/v1/matters/{matter}").json()["documents"]
+    prior = {d["id"]: client.get(base + "/" + d["id"]).json() for d in before}
+    doc = Document()
+    doc.add_paragraph("SENTETİK: Önce.")
+    doc.add_table(rows=1, cols=1).cell(0, 0).text = "SENTETİK: Koşul kabul edilmedi."
+    doc.add_paragraph("SENTETİK: Sonra.")
+    stream = io.BytesIO()
+    doc.save(stream)
+    original = stream.getvalue()
+    response = client.post(base, files={"file": ("synthetic.docx", original,
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document")})
+    assert response.status_code == 201, response.text
+    item = response.json()
+    assert item["extraction_profile"] == DOCX_BODY_PROFILE
+    detail = client.get(base + "/" + item["id"]).json()
+    assert detail["extraction_profile"] == DOCX_BODY_PROFILE
+    assert [p["text"] for p in detail["passages"]] == [
+        "SENTETİK: Önce.", "SENTETİK: Koşul kabul edilmedi.", "SENTETİK: Sonra.",
+    ]
+    assert detail["status"] == "needs_review"
+    assert detail["sha256"] == hashlib.sha256(original).hexdigest()
+    assert client.get(base + "/" + item["id"] + "/original").content == original
+    assert {identifier: client.get(base + "/" + identifier).json() for identifier in prior} == prior
+
+
 def test_draft_export_pins_immutable_version_and_cannot_substitute_other_record(workspace):
     _, client, matter = workspace
     base = f"/api/v1/matters/{matter}/practice/drafts"
