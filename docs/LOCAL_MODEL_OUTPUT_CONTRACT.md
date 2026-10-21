@@ -46,39 +46,53 @@ merge, guarded installation and the authorized private rerun are separate receip
 Owner review and legal/source qualification remain open; case payloads, scope
 selections and evidence fingerprints do not belong in this document or GitHub.
 
-## Finished prose and fixed references
+## Finished prose and source-qualified references
 
-R05A-09 addresses a separate limitation: a normal structured completion can still
-confuse page locations with clause identifiers, or finish a string at its grammar
-limit in the middle of a sentence. JSON validity does not catch these defects.
+R05A-09 separates source-label correctness from JSON shape. Proposal recipe
+`private-analysis-proposals-v11` uses four closed `private_analysis_v7` contracts.
+The ordinary pass proposes at most one application edit and one review note;
+its generated uncertainty array stays empty. Existing uncertainty, facts, roles,
+rules, conditions, links and all other applications remain in the fixed draft.
+Selected review/authority variants retain their bounded multi-finding responses.
 
-Proposal recipe `private-analysis-proposals-v4` uses four closed
-`private_analysis_v2` contracts. Each generated prose field has a smaller
-180-character ceiling, a plain-text sentence-ending pattern, and an instruction
-to finish well below that ceiling. Numbered facts and references remain in the
-existing fixed draft, exact source quotations and typed link fields. The model
-cannot restate numerical locators, dates or amounts in editable prose. This
-restriction applies only to model proposal prose; it does not remove numbers,
-formatting, partial sentences or any bytes from original sources, saved versions,
-human-authored drafts or their displays. Source and node identifiers retain their
-separate contract and exact-target validation.
+Each prose field must finish a plain sentence. The sampling grammar permits
+canonical `m.N` and `s.N` labels inside that sentence, so a legitimate abbreviation
+is not mistaken for its end. The field ceiling is restored to the original 400
+characters; reaching it still causes rejection. This avoids forcing an otherwise
+complete sentence into the unsuccessful smaller ceiling. The overall completion
+allowance remains 1,000 tokens, the call limit 120 seconds, and the configured
+context limit and full-envelope accounting remain unchanged. There is no text
+slicing, punctuation insertion, guessed citation replacement or automatic retry.
 
-Independent validation rejects prose containing numbers or recognized Roman
-locators, missing terminal punctuation, formatting, a reached character ceiling,
-an ellipsis, empty punctuation or a declared dangling conjunction. It never cuts
-text, appends punctuation, substitutes a guessed reference, or retries a call.
-Failures retain the safe `provider_output_prose_invalid` diagnostic without
-reflecting generated text. Existing attempts and diagnostic codes stay intact.
+The wire layer rejects incomplete boundaries, dangling abbreviations, formatting,
+opaque prose citations, placeholders and numbers outside the canonical label
+forms. Fixed-target validation then qualifies each label against its permitted
+source scope. A private contract-clause label requires both the fixed rule's
+explicit label and a matching heading at the beginning of its exact quotation.
+A page label comes only from an exact extractor locator, never from a filename or
+authored inference. A page cannot silently become a clause. Unresolved labels
+fail closed. Public authority numbers require a separately qualified provision
+mapping; the existing exact authority links remain available without inventing
+numbers in prose.
 
-These are bounded reference-surface and sentence-boundary checks, not a complete
-Turkish grammar checker or proof of entailment. Spelled-out references and other
-unsupported interpretations still need source inspection and lawyer review.
-Accepted candidates remain separate from the saved analysis until explicitly
-adopted into a new unreviewed version. Human review cannot be inferred from a
-machine check, a native rehearsal or an assistant's inspection.
+This is lexical source-label qualification, not proof of legal authority,
+applicability or entailment. The sentence guards are not a complete Turkish
+grammar checker. Unknown facts cannot be treated as invalid legal acts merely
+because a response passed these checks. Lawyer review and independent semantic
+qualification remain mandatory; reviewed status is never inferred.
 
-The full changed prompt and schema are measured together; no context, completion
-or time limit increases. A fresh preview is required for the new fingerprint.
-The relay admits only the new four exact contracts, so a guarded installation
-must update the API and relay together while research is idle. No migration or
-rewriting of historical proposals or original documents is required.
+Safe diagnostic categories distinguish reference, boundary, field-limit and
+format failures. Unqualified source labels retain a separate safe code. Historical
+attempts keep their original outcomes; later diagnostics do not retroactively
+classify a previously generic error. Whenever usage is reported, invalid token
+counts or reported completion/context overruns reject the response. Missing usage
+is not a measured zero or evidence of an enforced upstream budget. A provider may
+perform internal work, so one HTTP completion request is not proof of one physical
+model generation; private qualification must inspect the reported aggregate usage.
+
+Full prompt and schema bytes participate in the new fingerprint. API and relay
+must be installed together while research is idle. Private development rehearsals
+use the same source/permission checks in read-only transactions, with encrypted
+receipts and unchanged case/review records. They are separate from application
+jobs, hosted CI, merge, installation, adoption and human review. No case payloads,
+identities, selections, fingerprints or execution measurements belong in GitHub.

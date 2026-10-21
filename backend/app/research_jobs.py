@@ -127,6 +127,13 @@ def finish_run(store, run_id, outcome="failed", error_code=None):
                         "provider_output_incomplete": "Yerel model çıktıyı bütçesinde tamamlayamadı; kesilmiş yanıt kabul edilmedi.",
                         "provider_output_contract_invalid": "Yerel model yanıt sözleşmesine uymadı; öneri kabul edilmedi.",
                         "provider_output_prose_invalid": "Yerel modelin metin veya referans sınırları doğrulanamadı; öneri kabul edilmedi.",
+                        "provider_output_prose_reference": "Yerel model sabit dayanaklar dışında sayısal referans üretti; öneri kabul edilmedi.",
+                        "provider_output_prose_boundary": "Yerel model tek tamamlanmış cümle sınırına uymadı; öneri kabul edilmedi.",
+                        "provider_output_prose_limit": "Yerel modelin metni alan sınırına dayandı; kesilmiş olabilecek öneri kabul edilmedi.",
+                        "provider_output_prose_style": "Yerel model düz metin biçimine uymadı; öneri kabul edilmedi.",
+                        "proposal_reference_unqualified": "Önerideki madde veya sayfa referansı özgün dayanaklarla doğrulanamadı; öneri kabul edilmedi.",
+                        "provider_reported_budget_exceeded": "Sağlayıcının bildirdiği token kullanımı çalışma bütçesini aştı; sonuç kabul edilmedi.",
+                        "provider_usage_invalid": "Sağlayıcının token kullanım bilgisi doğrulanamadı; sonuç kabul edilmedi.",
                     }
                     state.update(error=messages.get(error_code, "Çıktı doğrulanamadı; sonuç yayımlanmadı."),
                                  error_code=error_code or "research_worker_failed")
