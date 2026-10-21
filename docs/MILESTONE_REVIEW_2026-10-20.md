@@ -40,6 +40,17 @@ approval. Its installation and private-case acceptance remain separate gates.
 Public legal-source lookups contained only generic legal topics; no
 private case details or originals were sent to public search.
 
+The installed pilot subsequently saved a separate document-focused assistant
+draft with exact evidence-version bindings and explicit scope exclusions. Its
+unchanged context gate permitted one bounded local-provider pass, but output
+validation failed and no model proposal was accepted or adopted. The private
+failure record and original documents, analyses, preparation drafts, versions
+and reviews remain preserved. The companion draft is available for owner
+review; this is not successful model generation, a formal derivative lineage,
+human approval or independent qualification. Further engineering should address
+that observed limitation or the owner's recorded findings. The detailed case,
+budget, evidence fingerprints and selections remain private.
+
 The following numbered decisions remain the public-corpus and later independent
 acceptance requirements. They must not be interpreted as missing private-pilot
 sample selection or as a request to duplicate the owner's existing uploads.
