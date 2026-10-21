@@ -6,6 +6,26 @@ public source/graph approval and legal-quality qualification. Its scope is alway
 `conditional_private_draft_only`; it cannot approve jurisdiction, historical law,
 binding effect or a public authority. Manual review performs no inference or search.
 
+## Writing the review rationale
+
+**İnceleme kararının gerekçesi** asks why the reviewer finds this exact draft
+suitable within its limits or requests changes. Suggest 2–4 sentences covering
+what was checked, the overall assessment, and corrections or uncertainties.
+Individual issues belong in **İnceleme bulguları → Bulgu ekle**; the rationale
+summarizes the decision. Saving a review records the declaration without
+rewriting the analysis text.
+
+The form includes optional, fictional Turkish examples for **Değişiklik gerekli**
+and **Koşullu özel taslak incelendi**. Missing documentation must not be promoted
+into an established fact in the example scenario. Examples do not describe the
+user's case, supply findings or attest that a review occurred. The reviewer must
+use only checks actually performed and findings actually observed. Examples are
+read-only and do not populate the field, select a decision, change criteria,
+submit a request or create a draft/review version. The short guidance is linked
+to the textarea for assistive technology; the longer examples remain collapsible.
+Existing API payloads, validation, exact-version bindings and immutable history
+are unchanged.
+
 ## Workflow
 
 In **Çalışma notları → Yapılandırılmış analiz taslakları**, open **Avukat inceleme

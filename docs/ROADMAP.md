@@ -21,6 +21,18 @@ roadmap item; do not generate another history-depth packet automatically.
 
 ## Product contract
 
+### Review rationale guidance — 21 October 2026
+
+The [private analysis review form](ANALYSIS_REVIEWS.md#writing-the-review-rationale)
+now explains how to write the overall review rationale and distinguishes it from
+individual findings. Optional fictional Turkish examples cover requested changes
+and conditional draft review, with an explicit reminder to claim only checks
+actually performed. The field remains empty; examples cannot fill it, select a
+decision or save a review. Exact evidence/version bindings, source inspection,
+review validation and immutable history remain unchanged. Hosted checks, merge,
+local installation and human review are recorded separately; these explanations
+do not supply the owner's review or legal approval.
+
 ### Account password self-service — 21 October 2026
 
 The [self-service password change contract](PASSWORD_CHANGE.md) adds a signed-in
