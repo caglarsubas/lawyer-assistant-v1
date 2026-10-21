@@ -8,16 +8,20 @@
     "backend/app/research.py": "75076d7424fb6f7482562d25a8b8309e7e429dbe5b6b84ad17be934f9987feb8",
     "backend/app/research_jobs.py": "94fcd713d5b58b2dc9a737c25adeb80179efa519d1f1dce6762b9952443497e0",
     "backend/tests/test_analysis_assessment_guard.py": "29963658b4a08b57d59aa9cd8053b6c1e3b4a1df7c4c5a9f0b6dc464a0498ac4",
-    "backend/tests/test_analysis_suggestions.py": "9baaa11c2acd98574fb06221435af6db33da736f70cf93603ea725e4d021ca9c"
+    "backend/tests/test_analysis_suggestions.py": "9baaa11c2acd98574fb06221435af6db33da736f70cf93603ea725e4d021ca9c",
+    "backend/tests/test_research_jobs_postgres.py": "5f44106d110f206eab1776ae9f07ccad5fb4ef49c069df2179834ac72fe4c137"
   },
   "local_checks": {
-    "targeted_backend_cases": 366,
+    "targeted_backend_cases": 439,
     "targeted_backend_result": "passed",
     "deployment_contract_cases": 50,
     "deployment_contract_result": "passed",
     "ruff": "passed",
     "diff_check": "passed",
-    "frontend_result": "unchanged; hosted checks required"
+    "frontend_result": "unchanged; hosted checks required",
+    "postgres_targeted_race_cases": 4,
+    "postgres_targeted_race_result": "passed",
+    "comparison_and_cohort_cases": 73
   },
   "regression": {
     "pre_fix_unknown_to_met": "accepted; regression failed before guard",
@@ -50,7 +54,8 @@
       "repair"
     ],
     "worker_safe_error_code": "proposal_unsettled_assessment",
-    "worker_retries": 0
+    "worker_retries": 0,
+    "concurrency_fixture": "The comparison-head race now supplies a selected documented fact required by its definite mock. All original concurrency assertions remain; unsettled-premise rejection has separate negative tests."
   },
   "unchanged_boundaries": {
     "message_constructor_system_accounting_completion_and_framing_unchanged": true,
