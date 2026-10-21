@@ -1,0 +1,34 @@
+{
+  "schema": "review-rationale-guidance-engineering-v1",
+  "recorded_on": "2026-10-21",
+  "scope": "Static Turkish help and fictional examples for a version-bound human review form; no private sample or review submission",
+  "base": "faae5a098fbf80c2fe3f2c6762bcb5f677fcb630",
+  "implementation_sha256": {
+    "frontend/src/pages/matter/AnalysisReviews.tsx": "97900787a9286d63d91632f747fd547f56040a4c557eec6b1fae4cbb91fb51ec",
+    "frontend/src/pages/matter/AnalysisReviews.test.tsx": "8e6d34490386f60e9ef716df5d1e09f40894503b862b1812a892f860eea4c327"
+  },
+  "local_checks": {
+    "frontend_files": 139,
+    "frontend_cases": 10532,
+    "production_build": "passed",
+    "review_form_cases": 7,
+    "review_form_result": "passed",
+    "frontend_shards_complete_and_disjoint": true,
+    "diff_check": "passed"
+  },
+  "preserved": [
+    "empty rationale field and explicit human decisions",
+    "exact evidence/version binding and API payload",
+    "existing validation and immutable review history",
+    "all backend and deployment source",
+    "all CI jobs, worker counts, allocations and timeouts"
+  ],
+  "boundaries": {
+    "samples_fictional_and_read_only": true,
+    "no_auto_fill_or_submission": true,
+    "legal_review_recorded": false,
+    "private_case_inputs_in_source": false,
+    "inference_executed": false
+  },
+  "qualification": "Engineering checks only; hosted CI, merge, installation and owner legal review remain separate evidence states."
+}

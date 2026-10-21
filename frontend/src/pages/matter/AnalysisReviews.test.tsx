@@ -40,11 +40,20 @@ describe('version-bound human review', () => {
     expect(html).toContain('Bulgunun özgün dayanağı'); expect(html).toContain('Kaynağın bağlamını koruyun.');
   });
   it('starts with no attested criteria and a disabled save, explaining the exact source comparison', () => {
-    const html = renderToStaticMarkup(<AnalysisReviewForm context={context()} onSource={() => {}} onSubmit={async () => {}} busy={false} />);
+    const data = context(); const before = JSON.stringify(data);
+    const html = renderToStaticMarkup(<AnalysisReviewForm context={data} onSource={() => {}} onSubmit={async () => {}} busy={false} />);
     expect(html).toContain('value="changes_requested" selected');
     expect(html).not.toContain('value="confirmed" selected');
     expect(html).not.toContain('value="reviewed_conditional" selected');
     expect(html).toMatch(/type="submit" disabled=""/);
+    const rationale = html.match(/<textarea[^>]*aria-describedby="([^"]+)"[^>]*>(.*?)<\/textarea>/);
+    expect(rationale).not.toBeNull();
+    expect(rationale![2]).toBe('');
+    expect(html).toContain(`id="${rationale![1]}"`);
+    expect(html).toContain('temsili örneklerdir');
+    expect(html).toContain('Örnekleri okumak incelemeyi tamamlamaz');
+    expect(html).not.toContain('Örneği uygula');
+    expect(JSON.stringify(data)).toBe(before);
     for (const text of ['SYNTHETIC.txt', '[2, 60)', 'basmak inceleme yaptığınızı kanıtlamaz', 'Bu sürümde model katkısı yok', 'Yeni metin sürümü yeniden inceleme gerektirir']) expect(html).toContain(text);
   });
   it('disallows conditional acceptance for critical drafts and forbids skipping AI contribution review', () => {
