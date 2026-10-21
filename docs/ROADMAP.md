@@ -5003,3 +5003,30 @@ no private inference, case draft or review decision is created. Hosted checks,
 guarded merge and paired API/extractor installation have separate receipts.
 See the [intake contract](DOCUMENT_INTAKE.md) and
 [engineering evidence](evidence/docx-textboxes-2026-10-22.json).
+
+### Delivered packet — guarded backup restart preflight, 22 October 2026
+
+F00-06 now checks every running service's explicit IPv4/IPv6 requests on every
+attached network before any cold-backup stop. The planner preserves relay,
+backing-service, API and web startup order and requires reserved endpoints to
+precede dynamic allocators sharing their network/address family. Inconsistent
+metadata or cyclic constraints fail before downtime or archive-helper execution.
+The read-only `--preflight-only` mode needs no archive or keys and performs no
+container start/stop. No override, retry, recreation or timeout increase is added.
+
+Synthetic contract checks cover the PostgreSQL reservation hazard, the web/API
+dependency cycle, secondary networks, IPv6, duplicate/mismatched identities and
+failure before encryption. A disposable native Docker drill reproduced the
+dynamic-first collision, verified exact endpoint retention with the new order,
+blocked a cyclic CLI plan without downtime and verified cleanup. Its sleepers
+had no private mounts, published ports, credentials or external network.
+
+Read-only inspection of the deployed stack correctly rejects its mixed-address
+cycle. Address remediation and a representative encrypted data-service recovery
+drill remain required; F00-06 stays waiting. The current application image and
+all private originals, evidence versions, credentials and review history remain
+unchanged. No private analysis, model request, case re-extraction or legal review
+is performed. R03-17 remains waiting for the owner's exact-version decision.
+CI, guarded merge and operator-source installation retain separate receipts.
+See [operations](OPERATIONS.md#encrypted-cold-backup) and
+[engineering evidence](evidence/backup-restart-preflight-2026-10-22.json).

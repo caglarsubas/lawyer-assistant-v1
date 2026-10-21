@@ -30,7 +30,7 @@ The extractor has a dedicated internal network shared only with the API, no data
 | Formats | Implemented extraction | Explicit limitations |
 |---|---|---|
 | PDF | Page text; bounded local Turkish/English OCR fallback | Up to 500 pages, OCR attempts at most three textless pages; unread pages remain listed; no layout or signature validation |
-| DOCX | Body/nested tables, section header/footer definitions and linked footnote/endnote appendices | Four table levels and 50,000 shared structural units; exact package IDs/reference contexts; page layout, display numbering, fields, text boxes, embedded objects and legal completeness unverified |
+| DOCX | Body/nested tables, section header/footer definitions, linked footnote/endnote appendices and standalone text boxes | Four table levels and 50,000 shared structural units; exact source contexts and historical profiles; rendered layout/numbering, fields, chained/group shapes, embedded objects and legal completeness unverified |
 | XLSX | Sheet/row/cell locators, literal formulas | Formulas and links never executed; charts, objects, formatting and calculated-value correctness unverified |
 | PNG, JPEG, TIFF, BMP, WebP, GIF | Local Turkish/English OCR | 30 million pixel bound; first frame only, remaining frames explicitly omitted; OCR requires visual review |
 | TXT, Markdown, CSV | Strict UTF-8 text; paragraph or CSV-row locators | Encoding mismatch fails visibly; Markdown is data, never executed |

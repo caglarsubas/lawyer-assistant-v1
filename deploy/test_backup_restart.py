@@ -6,16 +6,18 @@ from pathlib import Path
 from unittest.mock import patch
 
 import manage_backup as backup
+from restart_test_fixtures import role_metadata
 
 
 class BackupRestartTests(unittest.TestCase):
     def test_relay_reservation_and_web_api_resolution_survive_reversed_discovery(self):
         roles = {"edge": "web", "application": "api", "database": "postgres", "relay": "provider-relay"}
         discovery = list(roles)
-        with patch.object(backup, "run", return_value="\n".join(f"{k} {v}" for k, v in roles.items())) as inspect:
+        with patch.object(backup, "run", return_value=role_metadata(roles)) as inspect:
             plan = backup.restart_plan(discovery)
         self.assertIn('com.docker.compose.service', inspect.call_args.args[0][3])
         self.assertNotIn('Env', inspect.call_args.args[0][3])
+        self.assertIn('NetworkSettings.Networks', inspect.call_args.args[0][3])
         started, address_owner = set(), None
         for group in plan:
             for ident in group:
@@ -32,7 +34,7 @@ class BackupRestartTests(unittest.TestCase):
         self.assertEqual(sum(len(group) for group in plan), len(discovery))
 
     def test_optional_relay_absence_and_previously_stopped_services_do_not_add_starts(self):
-        with patch.object(backup, "run", return_value="edge web\napplication api"):
+        with patch.object(backup, "run", return_value=role_metadata({"edge": "web", "application": "api"})):
             self.assertEqual(backup.restart_plan(["edge", "application"]), [["application"], ["edge"]])
         with patch.object(backup, "run") as run:
             self.assertEqual(backup.restart_plan([]), [])
@@ -61,7 +63,7 @@ class BackupRestartTests(unittest.TestCase):
                 if "--status" in command:
                     return "edge\napplication\nrelay"
                 if command[:2] == ["docker", "inspect"]:
-                    return "edge web\napplication api\nrelay provider-relay"
+                    return role_metadata({"edge": "web", "application": "api", "relay": "provider-relay"})
                 if command[:2] == ["docker", "start"]:
                     starts.append(command[2:])
                 return ""

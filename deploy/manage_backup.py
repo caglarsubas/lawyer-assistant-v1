@@ -8,6 +8,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from restart_preflight import MAX_CONTAINERS, plan_restarts
+
 ROOT = Path(__file__).resolve().parents[1]
 SERVICES = ("api", "postgres", "opensearch", "fuseki")
 COMPOSE = ["docker", "compose", "--project-directory", str(ROOT), "-f", str(ROOT / "compose.yaml")]
@@ -53,29 +55,17 @@ def inventory(compose=COMPOSE) -> tuple[dict[str, str], dict[str, str]]:
 
 
 def restart_plan(container_ids: list[str]) -> list[list[str]]:
-    """Keep the relay's reserved address and refresh the web's pinned API IP.
-
-    Capture this before stopping anything. Compose discovery order is not a
-    dependency order: a dynamic API address can claim the stopped relay's IP.
-    Inspect labels only; do not retrieve or print container environments.
-    """
+    """Check startup dependencies and every explicit shared-network endpoint."""
     if not container_ids:
         return []
-    if len(set(container_ids)) != len(container_ids):
+    if len(container_ids) > MAX_CONTAINERS or len(set(container_ids)) != len(container_ids):
         raise ValueError("Running-container restart set contains duplicates")
-    lines = run(["docker", "inspect", "--format",
-                 '{{.Id}} {{index .Config.Labels "com.docker.compose.service"}}', *container_ids]).splitlines()
-    roles = {}
-    for line in lines:
-        parts = line.split()
-        if len(parts) != 2 or parts[0] in roles:
-            raise ValueError("Cannot verify the running containers' restart roles")
-        roles[parts[0]] = parts[1]
-    if set(roles) != set(container_ids):
-        raise ValueError("Cannot verify the complete running-container restart set")
-    priority = {"provider-relay": 0, "api": 2, "web": 3}
-    return [[ident for ident in container_ids if priority.get(roles[ident], 1) == rank]
-            for rank in range(4) if any(priority.get(role, 1) == rank for role in roles.values())]
+    # Retrieve only allowlisted fields, never a raw inspect or environment dump.
+    metadata = run(["docker", "inspect", "--format",
+                    '{"id":{{json .Id}},"role":{{json (index .Config.Labels "com.docker.compose.service")}},'
+                    '"running":{{json .State.Running}},"networks":{{json .NetworkSettings.Networks}}}',
+                    *container_ids])
+    return plan_restarts(container_ids, metadata)
 
 
 def volume_mounts(containers: dict, *, writable: bool) -> list[str]:
@@ -119,7 +109,9 @@ def helper(containers: dict, images: dict, action: str, key_file: Path, archive:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["backup", "restore"])
-    parser.add_argument("archive", type=Path)
+    parser.add_argument("archive", type=Path, nargs="?")
+    parser.add_argument("--preflight-only", action="store_true",
+                        help="Read-only restart-order check; no archive, keys or downtime")
     parser.add_argument("--recipients-file", type=Path)
     parser.add_argument("--identity-file", type=Path)
     parser.add_argument("--stop-services", action="store_true", help="Acknowledge backup downtime")
@@ -134,6 +126,18 @@ def main() -> int:
     partial = None
     try:
         compose = compose_command(args.project_name, args.compose_file, args.env_file)
+        if args.preflight_only:
+            if (args.action != "backup" or args.archive is not None or args.stop_services or args.fresh_target
+                    or args.recipients_file is not None or args.identity_file is not None):
+                raise ValueError("Preflight-only accepts no archive, keys, downtime or restore options")
+            running = run([*compose, "--profile", "*", "ps", "--quiet", "--status", "running"]).splitlines()
+            groups = restart_plan(running)
+            print(json.dumps({"schema": "backup-restart-preflight-v1", "restart_order_verified": True,
+                              "running_containers": len(running), "restart_groups": len(groups),
+                              "backup_qualified": False, "changes_performed": False}))
+            return 0
+        if args.archive is None:
+            raise ValueError("Supply an archive path or use --preflight-only")
         archive = args.archive.expanduser().resolve()
         key_file = args.recipients_file if args.action == "backup" else args.identity_file
         if key_file is None or not key_file.expanduser().is_file():

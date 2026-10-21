@@ -97,7 +97,9 @@ class RecoveryContracts(unittest.TestCase):
                 def run(command, **options):
                     commands.append((command, options))
                     if command[:2] == ["docker", "inspect"]:
-                        return "owned-api api\nowned-postgres postgres"
+                        from restart_test_fixtures import role_metadata
+
+                        return role_metadata({"owned-api": "api", "owned-postgres": "postgres"})
                     return "owned-api\nowned-postgres" if "ps" in command else ""
 
                 def transfer(command, **options):
