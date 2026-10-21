@@ -49,7 +49,9 @@ def patch():
             'review_notes': [{'target_id': 'a1', 'text': 'Bu öneri hukuki inceleme değildir.', 'evidence_ids': ['synthetic-clause']}]}
 
 
-@pytest.mark.parametrize('code', ['provider_output_incomplete', 'provider_output_contract_invalid', 'provider_output_prose_invalid'])
+@pytest.mark.parametrize('code', ['provider_output_incomplete', 'provider_output_contract_invalid', 'provider_output_prose_invalid',
+                                  'provider_output_prose_reference', 'provider_output_prose_boundary',
+                                  'provider_output_prose_limit', 'provider_output_prose_style'])
 def test_typed_provider_failure_preserves_source_and_does_not_reflect_private_diagnostics(workbench, monkeypatch, code):
     app, client, base, *_ = workbench
     record, endpoint = prepare(workbench, monkeypatch)
@@ -64,6 +66,24 @@ def test_typed_provider_failure_preserves_source_and_does_not_reflect_private_di
     job = finished(client, endpoint, queued['id'])
     assert job['status'] == 'failed' and job['error_code'] == code
     assert 'SYNTHETIC-PRIVATE-PAYLOAD' not in json.dumps(job)
+    assert len(calls) == 1 and not job.get('candidate') and not job.get('adopted_version_id')
+    current = client.get(base + '/analyses').json()[0]
+    assert current['latest_version_id'] == record['latest_version_id'] and current['evidence'] == record['evidence']
+
+
+def test_unqualified_source_label_fails_with_safe_code_and_retains_original_version(workbench, monkeypatch):
+    _, client, base, *_ = workbench
+    record, endpoint = prepare(workbench, monkeypatch)
+    calls = []
+
+    def suggest(*_args, **_kwargs):
+        calls.append(True)
+        return json.dumps({'application_updates': [{'id': 'a1', 'rationale': 'm.73 koşulu incelenmelidir.', 'assessments': []}]})
+
+    monkeypatch.setattr(workbench[0].state.provider, 'suggest_analysis', suggest)
+    queued, _ = start(client, endpoint, record)
+    job = finished(client, endpoint, queued['id'])
+    assert job['status'] == 'failed' and job['error_code'] == 'proposal_reference_unqualified'
     assert len(calls) == 1 and not job.get('candidate') and not job.get('adopted_version_id')
     current = client.get(base + '/analyses').json()[0]
     assert current['latest_version_id'] == record['latest_version_id'] and current['evidence'] == record['evidence']
@@ -375,8 +395,10 @@ def test_provider_sends_exact_measured_envelope_accepted_by_existing_relay(workb
 
     def serve(request):
         seen.append(request)
+        result = patch()
+        result['conclusion_update']['uncertainty'] = []
         return httpx.Response(200, json={'model': 'SYNTHETIC-local-model', 'choices': [
-            {'finish_reason': 'stop', 'message': {'content': json.dumps(patch())}}]})
+            {'finish_reason': 'stop', 'message': {'content': json.dumps(result)}}]})
 
     monkeypatch.setattr(httpx, 'Client', lambda **kwargs: client_type(transport=httpx.MockTransport(serve), **kwargs))
     assert parse_patch(app.state.provider.suggest_analysis(record, budget_seconds=10)).application_updates

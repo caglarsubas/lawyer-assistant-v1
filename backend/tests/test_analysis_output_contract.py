@@ -81,6 +81,8 @@ def test_exact_contract_is_in_the_context_budget_and_fingerprint():
     "**Kaynakları inceleyin.**", "Kaynakları inceleyin\nve karşılaştırın.",
     "Asıl belgeler doğrulanmadan ancak", "Asıl belgeler doğrulanmadan ancak.",
     "The evidence is needed because.",
+    "İlk cümle tamamlandı. İkinci cümle yarım",
+    "Kaynak incelendi; koşul bilinmiyor.", "m.NUM incelenmelidir.", "ev.ABC kaynak olarak gösterildi.",
     "x" * (PROSE_LIMIT - 1) + ".",
 ])
 def test_prose_never_introduces_numbered_locators_or_accepts_clipped_fields(prose):
@@ -123,11 +125,17 @@ def test_identifiers_remain_separate_from_generated_prose():
     validate_analysis_output(json.dumps(result), analysis_response_format())
 
 
+def test_a_complete_sentence_keeps_its_qualified_reference_punctuation():
+    result = output()
+    result['application_updates'][0]['rationale'] = 'm.73 ve s.24 birlikte incelenmelidir.'
+    validate_analysis_output(json.dumps(result), analysis_response_format())
+
+
 @pytest.mark.parametrize("finish,raw,code", [
     ("length", json.dumps(output()), "provider_output_incomplete"),
     ("stop", '{"synthetic":"wrong contract"}', "provider_output_contract_invalid"),
     ("stop", json.dumps({**output(), "review_notes": [
-        {"target_id": "a1", "text": "Yanıt tamamlanmadan ancak", "evidence_ids": []}]}), "provider_output_prose_invalid"),
+        {"target_id": "a1", "text": "Yanıt tamamlanmadan ancak", "evidence_ids": []}]}), "provider_output_prose_boundary"),
 ])
 def test_incomplete_or_wrong_contract_response_is_never_accepted(monkeypatch, finish, raw, code):
     monkeypatch.setattr(Provider, "probe", lambda self: {"ready": True})
@@ -138,3 +146,34 @@ def test_incomplete_or_wrong_contract_response_is_never_accepted(monkeypatch, fi
                                        response_format=analysis_response_format())
     assert caught.value.code == code and len(seen) == 1
     assert "wrong contract" not in str(caught.value)
+
+
+@pytest.mark.parametrize("text,reason", [
+    ("Madde 73 uygulanır.", "reference"),
+    ("İlk cümle bitti. İkincisi yarım", "boundary"),
+    ("x" * (PROSE_LIMIT - 1) + ".", "limit"),
+    ("**Aslı incelenmelidir.**", "style"),
+])
+def test_prose_diagnostics_are_finite_categories_without_output_or_identifiers(text, reason):
+    value = output()
+    value["application_updates"][0]["rationale"] = text
+    with pytest.raises(ProseValidationError) as caught:
+        validate_analysis_output(json.dumps(value), analysis_response_format())
+    assert caught.value.reason == reason and text not in str(caught.value)
+    assert "73" not in str(caught.value)
+
+
+@pytest.mark.parametrize('usage,code', [
+    ({'completion_tokens': 1001, 'total_tokens': 2000}, 'provider_reported_budget_exceeded'),
+    ({'completion_tokens': 200, 'total_tokens': 999999}, 'provider_reported_budget_exceeded'),
+    ({'completion_tokens': True}, 'provider_usage_invalid'),
+    ({'completion_tokens': -1}, 'provider_usage_invalid'),
+])
+def test_reported_usage_overrun_or_invalid_accounting_cannot_publish_a_candidate(monkeypatch, usage, code):
+    monkeypatch.setattr(Provider, 'probe', lambda self: {'ready': True})
+    seen = transport(monkeypatch, httpx.Response(200, json={'model': 'local-model', 'usage': usage, 'choices': [
+        {'finish_reason': 'stop', 'message': {'content': json.dumps(output())}}]}))
+    with pytest.raises(ProviderError) as caught:
+        Provider(settings())._complete([{'role': 'user', 'content': 'SYNTHETIC'}], 1000, 4000,
+                                       response_format=analysis_response_format())
+    assert caught.value.code == code and len(seen) == 1

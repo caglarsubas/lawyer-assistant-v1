@@ -4825,23 +4825,29 @@ review, semantic correction quality and independent legal/publication qualificat
 remain open. See the [response contract](LOCAL_MODEL_OUTPUT_CONTRACT.md) and
 [engineering record](evidence/bounded-analysis-output-2026-10-21.json).
 
-### Finished model prose and fixed reference surfaces
+### Finished model prose and source-qualified references
 
-R05A-09 narrows the private proposal surface after protocol validation proved
-insufficient for source-location fidelity and sentence completeness. Generated
-prose must be short, plain and finished; numbered facts and legal/source locators
-remain in the original fixed draft, exact quotations and typed source links.
-Original documents and all evidence bytes, versions, numerical facts and review
-history remain unchanged. A clipped field or unsafe reference surface is rejected
-with a safe diagnostic, without punctuation repair, guessed citations, retries,
-larger context/completion/time limits or cloud fallback.
+R05A-09 retains bounded model proposals while separating sentence shape from
+reference correctness. The current contract permits a complete sentence with
+canonical clause/page labels and then qualifies those labels against fixed,
+exact source evidence. A page locator cannot become a clause label, and an
+ambiguous authority is not silently resolved. Opaque generated citations and
+placeholders are rejected. Original evidence, numerical facts and uncertainty
+remain in the saved draft; ordinary proposals make at most one application edit
+and add no generated uncertainty. Selected review workflows retain their separate
+bounded responses.
 
-The four exact response contracts and recipe are versioned together, independently
-validated and fully included in context accounting. This is a bounded engineering
-guard, not a general semantic-correction benchmark or a legal approval. R05A-04
-still requires independent correctness evaluation; R03-17 remains waiting for
-owner review of exact private versions. Native synthetic validation, hosted CI,
-merge, installation and the authorized private rerun retain separate evidence.
-Private case payloads and execution details stay in authorized local receipts.
-See [the output contract](LOCAL_MODEL_OUTPUT_CONTRACT.md#finished-prose-and-fixed-references)
-and [engineering record](evidence/finished-analysis-prose-2026-10-21.json).
+The original 400-character field allowance provides room to finish a sentence;
+reaching the ceiling is still rejected. Overall context, 1,000-token completion,
+120-second call, model/routing and CI reserve limits remain unchanged. Reported
+invalid or excessive token usage also rejects a response. No sources are trimmed,
+text repaired, old attempts rewritten, model results automatically adopted, or
+legal reviews manufactured.
+
+Read-only private rehearsals retain encrypted operational receipts and verify
+permissions and exact versions before and after the call. They do not replace an
+application job or human review. Hosted CI, guarded merge, installation and the
+authorized application rerun remain separate evidence states. R05A-04 still needs
+independent semantic evaluation; R03-17 remains waiting for exact-version owner
+review. See [the output contract](LOCAL_MODEL_OUTPUT_CONTRACT.md#finished-prose-and-source-qualified-references) and
+[synthetic engineering checks](evidence/source-qualified-analysis-prose-2026-10-21.json).

@@ -1,0 +1,51 @@
+{
+  "schema": "bounded-private-analysis-output-engineering-v1",
+  "recorded_on": "2026-10-21",
+  "scope": "Synthetic regression and engineering validation only; no personal-case payloads, selections, evidence fingerprints or private execution measurements.",
+  "implementation_sha256": {
+    "backend/app/analysis_output_contract.py": "02b9700f3661351ba622de994bd35da71ce1d60d80b08804f0013b706e9b9b2b",
+    "backend/app/analysis_reference_contract.py": "c45ab1d79e1fa9def8a20b437d536a8d2156a855d65a0ee23564aeacf286993c",
+    "backend/app/analysis_proposals.py": "32cb4d29f5f58dd1e4d437ba7289df01d19c47686c368cd83413f57288316101",
+    "backend/app/provider.py": "fdca22668aad5bef290c75690eab27cfeed0cb7cdcd80821f04892cbcddc1e93",
+    "backend/app/research.py": "fff2002c2153e8c101267b36458a01cde15fc9b9cf003f309c9109085436b00f",
+    "backend/app/research_jobs.py": "bff06a8c55af1694c5475842c10013d45194319217ce5e4599b26aafe3a1b940",
+    "backend/tests/test_analysis_output_contract.py": "aa7ebc8617620699703774dfd96827087fbea19107a45122a7d856e0dd8e671d",
+    "backend/tests/test_analysis_references.py": "40b4723e9a792b9d07a60f932a7034390f1a45e1cba6c9201a574d75b1326592",
+    "backend/tests/test_analysis_suggestions.py": "6ed108043239c95c1a88a884b9cb16255f2c737705d1c08b0b2e19adf2b42aed",
+    "deploy/provider/Dockerfile": "44f839031c0f708e407e822c956d08a3b584d2c6d04ad5c40eb7f7e3078e2a19",
+    "deploy/provider/relay.py": "3bc5b76dc6537fa17f7dd3d1fbfb7da3db05424c4c998ea0c91bf1e5d220a35a"
+  },
+  "local_checks": {
+    "targeted_backend_cases": 338,
+    "targeted_backend_result": "passed",
+    "deployment_contract_cases": 50,
+    "deployment_contract_result": "passed",
+    "ruff": "passed",
+    "diff_check": "passed",
+    "frontend_result": "unchanged; hosted checks required"
+  },
+  "boundaries": {
+    "context_completion_and_time_limits": "unchanged",
+    "ordinary_application_updates_maximum": 1,
+    "ordinary_generated_uncertainties_maximum": 0,
+    "ordinary_review_notes_maximum": 1,
+    "original_uncertainties": "preserved",
+    "per_field_characters": 400,
+    "ceiling_reached": "reject",
+    "source_labels": "exact rule/quotation-qualified clause or extractor page; no inferred public provision mapping",
+    "evidence_trimming": false,
+    "text_repair": false,
+    "application_retry": false,
+    "cloud_fallback": false,
+    "arbitrary_schema_admission": false,
+    "legal_review": "not_granted",
+    "CI_jobs_workers_timeouts_and_reserve_gates": "unchanged"
+  },
+  "limitations": [
+    "Lexical source-label qualification and sentence-boundary guards do not establish entailment, legal applicability or full Turkish grammar correctness.",
+    "Reported invalid or excessive usage rejects output; missing usage is unknown, not proof of budget compliance.",
+    "One HTTP completion request is not proof of one physical generation.",
+    "Private read-only rehearsals, application jobs, adoption, human review, CI, merge and installation are separate receipts."
+  ],
+  "private_execution": "Retained only in authorized local encrypted operational receipts, excluded from repository evidence."
+}

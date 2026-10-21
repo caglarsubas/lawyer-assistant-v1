@@ -324,6 +324,17 @@ class Provider:
             if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict):
                 raise ProviderError("Provider must return exactly one completion")
             choice = choices[0]
+            usage = result.get("usage")
+            if isinstance(usage, dict):
+                for name, maximum in (("completion_tokens", completion_tokens),
+                                      ("total_tokens", s.provider_context_limit)):
+                    if name in usage:
+                        count = usage[name]
+                        if type(count) is not int or count < 0:
+                            raise ProviderError("Provider token accounting was invalid", code="provider_usage_invalid")
+                        if count > maximum:
+                            raise ProviderError("Provider reported usage beyond the requested budget",
+                                                code="provider_reported_budget_exceeded")
             if choice.get("finish_reason") != "stop" or not isinstance(choice.get("message"), dict):
                 raise ProviderError("Provider output was incomplete", code="provider_output_incomplete")
             content = choice["message"].get("content")
@@ -332,9 +343,9 @@ class Provider:
             if structured:
                 try:
                     validate_analysis_output(content, response_format)
-                except ProseValidationError:
+                except ProseValidationError as exc:
                     raise ProviderError("Provider prose did not preserve reference and sentence boundaries",
-                                        code="provider_output_prose_invalid") from None
+                                        code="provider_output_prose_" + exc.reason) from None
                 except (ValueError, TypeError, RecursionError):
                     raise ProviderError("Provider output violated its response contract",
                                         code="provider_output_contract_invalid") from None

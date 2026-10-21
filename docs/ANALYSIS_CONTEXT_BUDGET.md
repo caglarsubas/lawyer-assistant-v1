@@ -57,7 +57,7 @@ is independently remeasured by the existing provider before transport. Initial
 fit is not a promise that a changed repair envelope will fit or succeed.
 
 The preview recipe remains `private-analysis-context-budget-v1`. R05A-08 adds
-exact schema accounting; R05A-09 uses `private-analysis-proposals-v4` with the
+exact schema accounting; R05A-09 uses `private-analysis-proposals-v11` with the
 stricter prose contract. The accounting includes the exact
 [bounded response schema](LOCAL_MODEL_OUTPUT_CONTRACT.md), its byte count and
 digest in every new envelope and fingerprint. Historical previews keep their
