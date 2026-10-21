@@ -4777,3 +4777,28 @@ Merge, main-push checks and installed application state remain separate receipts
 R03-17 still awaits private owner review; real model usefulness, historical law,
 independent rights/publication review and legal-quality metrics are not qualified
 by this engineering slice. No personal-case content belongs in these artifacts.
+
+### Bounded private analysis prepared for owner review
+
+The installed pilot now contains a separate, explicitly AI-attributed,
+document-focused analysis ready for the owner's review. Its complete selected
+passage retains the exact document revision, passage hash and character range;
+the original documents, earlier analyses, preparation drafts, versions and review
+history remain preserved. Broader issues are explicitly outside this draft, and
+the original broader analysis remains available. This is a separately authored
+companion draft, not a saved derivative or a transferred review decision.
+
+The exact saved draft passed the unchanged first-pass context gate. One bounded
+local-provider attempt then failed output validation; no model proposal was
+accepted or adopted, and the failed attempt remains recorded privately. There
+was no unchanged retry, automatic trimming, context increase or cloud fallback.
+The engineering size gate worked; useful structured model output remains an
+observed pilot limitation. Existing generated products were marked stale through
+the normal dependency invalidation rather than silently rewritten.
+
+R03-17 remains waiting for the owner's source-fidelity and substantive review.
+The saved assistant draft is not a human review, verified legal conclusion,
+independent attestation or benchmark result. Case identities, excerpts, scope
+selections, evidence fingerprints and model payloads remain solely in authorized
+private storage. The next engineering work should follow the retained validation
+failure or concrete owner findings; no further navigation slice is implied.
