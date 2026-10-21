@@ -49,7 +49,7 @@ selections and evidence fingerprints do not belong in this document or GitHub.
 ## Finished prose and source-qualified references
 
 R05A-09 separates source-label correctness from JSON shape. Proposal recipe
-`private-analysis-proposals-v11` uses four closed `private_analysis_v7` contracts.
+`private-analysis-proposals-v12` uses four closed `private_analysis_v7` contracts.
 The ordinary pass proposes at most one application edit and one review note;
 its generated uncertainty array stays empty. Existing uncertainty, facts, roles,
 rules, conditions, links and all other applications remain in the fixed draft.
@@ -96,3 +96,8 @@ use the same source/permission checks in read-only transactions, with encrypted
 receipts and unchanged case/review records. They are separate from application
 jobs, hosted CI, merge, installation, adoption and human review. No case payloads,
 identities, selections, fingerprints or execution measurements belong in GitHub.
+
+The [model assessment premise-state guard](MODEL_ASSESSMENT_PREMISES.md) additionally
+rejects new definite condition statuses based on unsettled or unselected premises.
+It preserves unknowns and literal unchanged assessments without establishing
+substantive support or legal applicability.
