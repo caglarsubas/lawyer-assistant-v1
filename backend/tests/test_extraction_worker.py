@@ -51,11 +51,15 @@ def test_real_worker_extracts_only_synthetic_document_content():
 def test_real_isolated_docx_worker_preserves_body_sequence(tmp_path):
     from docx import Document
     from docx_note_fixtures import note_part, note_reference
+    from docx_textbox_fixtures import alternate_textbox
 
     from app.extract import DOCX_BODY_PROFILE
 
     doc = Document()
     doc.add_paragraph("SENTETİK: Önce.")
+    box = Document()
+    box.add_paragraph("SENTETİK: Kutu istisnası.")
+    alternate_textbox(doc.paragraphs[0], box)
     cell = doc.add_table(rows=1, cols=1).cell(0, 0)
     cell.text = "SENTETİK: Tablo."
     cell.add_table(rows=1, cols=1).cell(0, 0).text = "İÇ KOŞUL: Borç kabul edilmedi."
@@ -75,12 +79,13 @@ def test_real_isolated_docx_worker_preserves_body_sequence(tmp_path):
         assert response.status_code == 200
         data = response.json()
         assert [p["text"] for p in data["passages"]] == [
-            "SENTETİK: Önce.", "SENTETİK: Tablo.", "İÇ KOŞUL: Borç kabul edilmedi.",
+            "SENTETİK: Önce.", "SENTETİK: Kutu istisnası.", "SENTETİK: Tablo.", "İÇ KOŞUL: Borç kabul edilmedi.",
             "SENTETİK: Hücre sonu.", "SENTETİK: Sonra.",
             "SENTETİK: Üstbilgi koşulu.", "SENTETİK: Altbilgi istisnası.",
             "SENTETİK: Dipnot koşulu.", "SENTETİK: Sonnot istisnası.",
         ]
         assert data["extraction_profile"] == DOCX_BODY_PROFILE
+        assert data["passages"][1]["locator"] == "Paragraf 1, metin kutusu 1, paragraf 1"
         assert data["passages"][-2]["locator"] == (
             "Dipnot kimlik 7, başvuru 1 (Paragraf 1), paragraf 1"
         )
@@ -134,8 +139,40 @@ def test_worker_rejects_unresolved_note_without_returning_any_partial_text(tmp_p
         assert "GÖNDERİLMEMELİ" not in response.text
 
 
+@pytest.mark.parametrize("defect", ["disagreement", "nested", "work"])
+def test_real_worker_rejects_unsafe_box_content_without_partial_passages(tmp_path, defect):
+    from docx import Document
+    from docx.oxml import OxmlElement
+    from docx_textbox_fixtures import alternate_textbox, textbox
+
+    doc = Document()
+    p = doc.add_paragraph("GÖNDERİLMEMELİ: Kısmi gövde.")
+    content = Document()
+    content.add_paragraph("GÖNDERİLMEMELİ: Kutu.")
+    if defect == "disagreement":
+        other = Document()
+        other.add_paragraph("GÖNDERİLMEMELİ: Çelişen kopya.")
+        alternate_textbox(p, content, other)
+    elif defect == "nested":
+        textbox(content.paragraphs[0], Document())
+        textbox(p, content)
+    else:
+        shape, _ = textbox(p, content)
+        for _ in range(50001):
+            shape.append(OxmlElement("w:r"))
+    path = tmp_path / "unsafe-box.docx"
+    doc.save(path)
+    with TestClient(create_app(TOKEN)) as client:
+        response = client.post("/extract", content=path.read_bytes(),
+                               headers={**HEADERS, "X-Document-Suffix": ".docx"})
+        assert response.status_code == 422
+        assert response.json() == {"detail": "Document could not be safely extracted"}
+        assert "GÖNDERİLMEMELİ" not in response.text
+        assert client.post("/extract", content=b"SENTETIK", headers=HEADERS).status_code == 200
+
+
 @pytest.mark.parametrize("profile", [None, "docx-body-order-v0", "docx-body-order-v1",
-                                     "docx-body-tree-v2", "docx-section-stories-v3", "", {}, True])
+                                     "docx-body-tree-v2", "docx-section-stories-v3", "docx-linked-notes-v4", "", {}, True])
 def test_docx_client_rejects_unknown_or_missing_profile(monkeypatch, profile):
     payload = result()
     if profile is not None:

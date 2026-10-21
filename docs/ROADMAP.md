@@ -4975,3 +4975,29 @@ F00-04 stays partial pending representative layout, rendering/numbering, field,
 text-box, scan and legacy qualification; R03-17 owner review remains waiting.
 See the [intake contract](DOCUMENT_INTAKE.md) and
 [engineering evidence](evidence/docx-linked-notes-2026-10-22.json).
+
+### Delivered packet — bounded DOCX text boxes, 22 October 2026
+
+F00-04 now extracts standalone modern DrawingML and legacy VML text boxes in
+body paragraphs, table cells, section definitions and normal notes. Locators
+preserve the host paragraph, XML box ordinal and contained paragraph/table
+position. Notes inside boxes retain their exact source context. Equivalent
+modern/fallback copies are admitted once; conflicting alternatives, linked or
+nested boxes and unsupported contexts fail without partial successful passages.
+
+New worker/API admission requires `docx-textboxes-v5`; calibration retains exact
+historical v1–v4 declarations. Four table levels remain shared across box/table
+boundaries, and XML scanning/comparison consumes the existing structural work
+budget. All text, locator, process, transport and CI limits remain unchanged.
+Original packages are never edited; no existing upload, evidence version,
+quotation, draft or review is migrated or re-extracted.
+
+Synthetic parser, isolated-worker and authorized upload checks cover source
+locations, alternative ambiguity, resource limits and original-byte preservation.
+They do not qualify Word rendering, chained/group layouts, fields, numbering,
+scans, legacy formats or representative legal-document completeness. F00-04
+remains partial. R03-17 remains waiting for the owner's version-specific review;
+no private inference, case draft or review decision is created. Hosted checks,
+guarded merge and paired API/extractor installation have separate receipts.
+See the [intake contract](DOCUMENT_INTAKE.md) and
+[engineering evidence](evidence/docx-textboxes-2026-10-22.json).

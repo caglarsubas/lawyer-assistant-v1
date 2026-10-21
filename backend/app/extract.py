@@ -45,7 +45,7 @@ SUPPORTED_SUFFIXES = frozenset(
 )
 ZIP_SUFFIXES = frozenset({".docx", ".xlsx", ".pptx", ".odt", ".ods", ".odp"})
 MAX_TEXT = 2_000_000
-DOCX_BODY_PROFILE = "docx-linked-notes-v4"
+DOCX_BODY_PROFILE = "docx-textboxes-v5"
 MAX_DOCX_TABLE_DEPTH = 4
 MAX_DOCX_BLOCKS = 50_000
 
@@ -128,6 +128,8 @@ def extract(path, suffix):
             from docx.table import Table, _Cell
             from docx.text.paragraph import Paragraph
 
+            from app.docx_textboxes import BOX, prepare_textboxes, validate_box_context
+
             doc = Document(path)
             paragraph_index = table_index = 0
             visited = 0
@@ -138,12 +140,16 @@ def extract(path, suffix):
             note_tags = {qn("w:" + kind + "Reference"): kind for kind in ("footnote", "endnote")}
             revision_tags = {qn("w:" + name) for name in ("ins", "del", "moveFrom", "moveTo")}
             has_revisions = any(node.tag in revision_tags for node in doc.element.iter())
+            observed_boxes = set()
+            has_boxes = empty_boxes = False
 
             def visit():
                 nonlocal visited
                 visited += 1
                 if visited > MAX_DOCX_BLOCKS:
                     raise ValueError("DOCX structural work limit exceeded")
+
+            has_alternatives = prepare_textboxes(doc.element, visit)
 
             def note_id(node):
                 raw = node.get(qn("w:id"))
@@ -157,8 +163,10 @@ def extract(path, suffix):
             def note_references(paragraph, locator):
                 for ref in paragraph._p.iter(*note_tags):
                     visit()
-                    # Do not attribute an omitted textbox, revision or content
-                    # wrapper to the outer paragraph's extracted text.
+                    # A box's own paragraph gets its own exact context below.
+                    owner = next((a for a in ref.iterancestors() if a.tag == qn("w:p")), None)
+                    if owner is not paragraph._p:
+                        continue
                     run = ref.getparent()
                     parent = run.getparent()
                     if (run.tag != qn("w:r") or not (parent is paragraph._p or
@@ -167,9 +175,35 @@ def extract(path, suffix):
                     references.append((note_tags[ref.tag], note_id(ref), locator))
                     observed_references.add(ref)
 
-            def paragraph_text(paragraph, locator):
+            def paragraph_boxes(paragraph, locator, table_depth):
+                nonlocal has_boxes, empty_boxes
+                bi = 0
+                for box in paragraph._p.iter(BOX):
+                    visit()
+                    validate_box_context(box, paragraph._p)
+                    observed_boxes.add(box)
+                    has_boxes = True
+                    bi += 1
+                    prefix = f"{locator}, metin kutusu {bi}"
+                    parent = SimpleNamespace(part=paragraph.part)
+                    pi = ti = 0
+                    before = len(passages)
+                    for block in box:
+                        visit()
+                        if block.tag == qn("w:p"):
+                            pi += 1
+                            paragraph_text(Paragraph(block, parent), f"{prefix}, paragraf {pi}", table_depth)
+                        elif block.tag == qn("w:tbl"):
+                            ti += 1
+                            table_text(Table(block, parent), f"{prefix}, tablo {ti}", table_depth + 1)
+                        elif block.tag not in {qn("w:bookmarkStart"), qn("w:bookmarkEnd"), qn("w:proofErr")}:
+                            raise ValueError("DOCX text-box content is unsupported")
+                    empty_boxes |= len(passages) == before
+
+            def paragraph_text(paragraph, locator, table_depth=0):
                 note_references(paragraph, locator)
                 add(locator, paragraph.text)
+                paragraph_boxes(paragraph, locator, table_depth)
 
             def table_text(table, locator, depth):
                 nonlocal has_tables
@@ -187,14 +221,18 @@ def extract(path, suffix):
                     row_locator = f"{locator}, satır {ri}"
                     if not any(cell.tables for cell in cells):
                         texts = []
+                        box_paragraphs = []
                         for ci, cell in enumerate(cells, 1):
                             paragraphs = []
                             for pi, inner in enumerate(cell.iter_inner_content(), 1):
                                 visit()
                                 note_references(inner, f"{row_locator}, hücre {ci}, paragraf {pi}")
+                                box_paragraphs.append((inner, f"{row_locator}, hücre {ci}, paragraf {pi}"))
                                 paragraphs.append(inner.text)
                             texts.append("\n".join(paragraphs))
                         add(row_locator, " | ".join(texts))
+                        for inner, context in box_paragraphs:
+                            paragraph_boxes(inner, context, depth)
                         continue
                     # A nested row cannot be flattened without relocating its
                     # conditions. Retain each cell's paragraph/table sequence.
@@ -205,7 +243,7 @@ def extract(path, suffix):
                             visit()
                             if isinstance(inner, Paragraph):
                                 pi += 1
-                                paragraph_text(inner, f"{cell_locator}, paragraf {pi}")
+                                paragraph_text(inner, f"{cell_locator}, paragraf {pi}", depth)
                             else:
                                 ti += 1
                                 table_text(inner, f"{cell_locator}, tablo {ti}", depth + 1)
@@ -258,6 +296,7 @@ def extract(path, suffix):
                         part, source_section = definitions[kind, variant]
                         if part not in inspected_parts:
                             has_revisions |= any(node.tag in revision_tags for node in part.element.iter())
+                            has_alternatives |= prepare_textboxes(part.element, visit)
                             source_roots.append(part.element)
                             inspected_parts.add(part)
                         prefix = (f"Bölüm {si}, {label} tanımı "
@@ -274,14 +313,6 @@ def extract(path, suffix):
                             else:
                                 ti += 1
                                 table_text(block, f"{prefix}, tablo {ti}", 1)
-
-            # References in unprocessed structural wrappers must not silently
-            # turn into unreferenced notes or acquire a guessed source context.
-            for root in source_roots:
-                for ref in root.iter(*note_tags):
-                    visit()
-                    if ref not in observed_references:
-                        raise ValueError("DOCX note reference context is unsupported")
 
             # python-docx's relationship map can collapse duplicate XML IDs.
             # Reject that ambiguity before selecting either note authority part.
@@ -316,6 +347,11 @@ def extract(path, suffix):
                 if root.tag != qn("w:" + kind + "s"):
                     raise ValueError("DOCX note definition/reference is invalid")
                 has_revisions |= any(node.tag in revision_tags for node in root.iter())
+                # A note cannot contain another note, including in an unselected
+                # shape alternative. Validate before normalization.
+                if any(True for _ in root.iter(*note_tags)):
+                    raise ValueError("DOCX nested note reference is prohibited")
+                has_alternatives |= prepare_textboxes(root, visit)
                 identifiers = set()
                 for node in root:
                     visit()
@@ -332,6 +368,7 @@ def extract(path, suffix):
                         raise ValueError("DOCX nested note reference is prohibited")
                     if note_type == "normal":
                         notes[kind, identifier] = (node, part)
+                        source_roots.append(node)
 
             contexts = {}
             for ordinal, (kind, identifier, locator) in enumerate(references, 1):
@@ -354,13 +391,34 @@ def extract(path, suffix):
                         visit()
                         if block.tag == qn("w:p"):
                             pi += 1
-                            add(f"{prefix}, paragraf {pi}", Paragraph(block, parent).text)
+                            paragraph_text(Paragraph(block, parent), f"{prefix}, paragraf {pi}")
                         elif block.tag == qn("w:tbl"):
                             ti += 1
                             table_text(Table(block, parent), f"{prefix}, tablo {ti}", 1)
                         else:
                             raise ValueError("DOCX note content is unsupported")
                     empty_notes |= len(passages) == before_count
+            # Never assign an omitted wrapper's text or references to a guessed
+            # host. Every selected box and source reference must be accounted for.
+            for root in source_roots:
+                for node in root.iter(BOX, *note_tags):
+                    visit()
+                    if node.tag == BOX and node not in observed_boxes:
+                        raise ValueError("DOCX text-box context is unsupported")
+                    if node.tag in note_tags and node not in observed_references:
+                        raise ValueError("DOCX note reference context is unsupported")
+            if has_boxes:
+                warnings.append(
+                    "Metin kutuları bağlayıcı paragraf ve XML kutu sırasıyla ayrı pasajlarda işlendi; "
+                    "görsel okuma sırası, sayfa konumu, taşan/gizlenen metin ve alan değerleri doğrulanmadı."
+                )
+            if has_alternatives:
+                warnings.append(
+                    "Metin kutusunun eşdeğer XML alternatiflerinden biri işlendi; yinelenen kopya "
+                    "ayrı kanıt sayılmadı. Bu işlem Word görünümünü doğrulamaz."
+                )
+            if empty_boxes:
+                warnings.append("Boş metin kutusu var; bu kutudan metin pasajı oluşturulmadı.")
             if notes:
                 warnings.append(
                     "Dipnot/sonnot paket kimliği ve XML başvuru konumu korunur; başvuru sırası gösterilen "
@@ -384,7 +442,7 @@ def extract(path, suffix):
             if has_revisions:
                 warnings.append("İzlenen değişiklikler var; kabul edilmiş sürüm doğrulanmadı.")
             warnings.append(
-                "Belgedeki dipnot/sonnot sayfa yerleşimi, gösterilen numaralar ve metin kutusu tamlığı doğrulanmadı."
+                "Belgedeki dipnot/sonnot sayfa yerleşimi, gösterilen numaralar ve çizim/görünüm tamlığı doğrulanmadı."
             )
         else:
             from openpyxl import load_workbook

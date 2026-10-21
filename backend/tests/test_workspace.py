@@ -226,6 +226,7 @@ def test_production_intake_requires_worker_and_never_falls_back(workspace, monke
 
 def test_docx_upload_keeps_profile_original_and_prior_evidence(workspace):
     from docx_note_fixtures import note_part, note_reference
+    from docx_textbox_fixtures import alternate_textbox
 
     from app.extract import DOCX_BODY_PROFILE
 
@@ -235,6 +236,9 @@ def test_docx_upload_keeps_profile_original_and_prior_evidence(workspace):
     prior = {d["id"]: client.get(base + "/" + d["id"]).json() for d in before}
     doc = Document()
     doc.add_paragraph("SENTETİK: Önce.")
+    box = Document()
+    box.add_paragraph("SENTETİK: Kutu istisnası.")
+    alternate_textbox(doc.paragraphs[0], box)
     cell = doc.add_table(rows=1, cols=1).cell(0, 0)
     cell.text = "SENTETİK: Koşul kabul edilmedi."
     cell.add_table(rows=1, cols=1).cell(0, 0).text = "SENTETİK: İç koşul; 14.06.2020."
@@ -257,7 +261,7 @@ def test_docx_upload_keeps_profile_original_and_prior_evidence(workspace):
     detail = client.get(base + "/" + item["id"]).json()
     assert detail["extraction_profile"] == DOCX_BODY_PROFILE
     assert [p["text"] for p in detail["passages"]] == [
-        "SENTETİK: Önce.", "SENTETİK: Koşul kabul edilmedi.",
+        "SENTETİK: Önce.", "SENTETİK: Kutu istisnası.", "SENTETİK: Koşul kabul edilmedi.",
         "SENTETİK: İç koşul; 14.06.2020.", "SENTETİK: İç tablodan sonraki istisna.",
         "SENTETİK: Sonra.",
         "SENTETİK: Üstbilgi koşulu.", "SENTETİK: Altbilgi istisnası.",

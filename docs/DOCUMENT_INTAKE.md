@@ -46,7 +46,7 @@ The extractor has a dedicated internal network shared only with the API, no data
 
 Office/OpenDocument archives have member-count and expanded-size bounds; duplicate members and known macro containers are rejected. Parser responses have independent byte, text, passage, warning and time bounds. An extension never establishes authenticity or complete extraction. Representative Turkish legal-document testing, including large scans and complex tables, remains required before claiming format qualification.
 
-New DOCX extraction uses the declared `docx-linked-notes-v4` profile. A table stays
+New DOCX extraction uses the declared `docx-textboxes-v5` profile. A table stays
 between its surrounding body paragraphs. Rows containing nested tables retain
 each cell's paragraph/table sequence, including paragraphs following an inner
 table and multiple sibling tables. Locators identify the enclosing table, row,
@@ -57,7 +57,8 @@ vertical continuation cells do not repeat the merged origin's content.
 
 Extraction admits at most four table levels, counting the outer table, and
 50,000 visited structural units across the complete body and header/footer
-definitions and notes: sections, package relationships, note definitions/references,
+definitions, notes and text boxes: scanned XML elements (including empty shape
+wrappers and alternative comparisons), sections, package relationships, note definitions/references,
 emitted story/note instances, blocks, rows, cells and cell paragraphs/tables,
 including empty ones. Exceeding either limit fails the extraction; no partial successful
 passages are returned. Existing file/text/response/process limits also apply.
@@ -85,7 +86,7 @@ mistaken for inserted revision markup and are never executed.
 These are section definitions, including first/even-page definitions that may be
 inactive. Extraction does not establish which pages display them, render field
 values or interleave them with page-level body content. The result explicitly
-warns about these limits and unverified text-box completeness.
+warns about these limits and unverified rendered drawing completeness.
 
 Footnotes and endnotes form separate appendices after the body and section
 stories. Each passage locator preserves the note kind, integer package ID,
@@ -116,19 +117,49 @@ four-level limit. Source references in omitted wrappers are never silently
 attributed to visible body text or converted to orphan notes.
 
 Paragraph/table XML order, exact ID matching and revision warnings do not qualify
-rendered page placement, custom or automatic numbering, fields, text boxes,
+rendered page placement, custom or automatic numbering, fields,
 tracked-change acceptance, representative layout fidelity or legal completeness.
 The original document remains the primary visual evidence.
+
+Standalone modern DrawingML `wps:txbx/w:txbxContent` and legacy VML
+`v:textbox/w:txbxContent` are extracted in the body, physical table cells,
+header/footer definitions and normal notes. Each box follows its containing
+paragraph (or combined row passage), with a locator carrying that paragraph's
+exact context, XML box ordinal and inner paragraph/table position. Blank hosts
+and empty boxes still consume ordinals; empty boxes generate a warning rather
+than invented text. Equal text in separate boxes remains separate evidence.
+Inherited header/footer boxes retain each section's source context.
+
+This is source XML order, not inferred page placement or visual reading order.
+Boxes can contain paragraphs and bounded nested tables; table levels continue
+across the containing table/box boundary. Notes referenced inside a box retain
+that box's exact paragraph context, without attaching them to the outer host.
+Nested note references remain prohibited, including inside boxes in notes.
+These containers follow the [OOXML text-box content definition](https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.wordprocessing.textboxcontent)
+and [Word shape text-story definition](https://learn.microsoft.com/en-us/openspecs/office_standards/ms-odrawxml/9ef316cc-3b39-4765-89ac-f8524fab383b).
+
+Modern/legacy `mc:AlternateContent` representations are compared by expanded
+element names, attributes, text and structure, ignoring XML indentation and
+prefix-only differences. Only equivalent box content is admitted; a supported
+`wps` choice is preferred, otherwise an equivalent fallback is required. One
+copy is extracted with a warning, never two independently weighted copies.
+Different text, note IDs or table content, missing/ambiguous alternatives,
+unsupported wrappers, linked/chained boxes and nested boxes fail the complete
+extraction without partial successful passages. This deliberately conservative
+subset is not a general Markup Compatibility processor or Word renderer.
+Normalization changes only an in-memory tree; original package bytes are retained.
+Drawings, group layouts, clipping, overflow, field values and rendered completeness
+remain unqualified. No external drawing, relationship or embedded code is executed.
 
 The authenticated worker response carries the profile; the API stores it on the
 new document record. The worker, client and demo intake reject an absent or
 unknown DOCX profile, and reject a DOCX profile on another format. Deploy API and
 extractor together: a new API with an old worker fails new DOCX extraction visibly
-instead of silently labeling old output as v4. The existing `parser_version` identifies
+instead of silently labeling old output as v5. The existing `parser_version` identifies
 the adapter family; the narrower profile identifies this DOCX behavior. Older
 records without a profile or with `docx-body-order-v1`, `docx-body-tree-v2` or
-`docx-section-stories-v3` remain historical. Offline calibration retains the exact
-declared v1, v2, v3 or v4 profile without upgrading it. Existing records are not backfilled, reordered or re-extracted. Originals, passage IDs, exact
+`docx-section-stories-v3` or `docx-linked-notes-v4` remain historical. Offline calibration retains the exact
+declared v1, v2, v3, v4 or v5 profile without upgrading it. Existing records are not backfilled, reordered or re-extracted. Originals, passage IDs, exact
 quotations, draft versions and reviews remain unchanged. A deliberate future
 re-extraction requires a separately recorded evidence version and review.
 
@@ -137,7 +168,8 @@ negation, blank paragraphs, nested/sibling tables, merged cells, structural/dept
 limits with closed worker failures, isolated subprocess parsing,
 strict transport/calibration metadata, original-byte round trips and preservation
 of prior document records. They establish a regression fix, not representative
-format qualification. See [current engineering evidence](evidence/docx-linked-notes-2026-10-22.json)
+format qualification. See [current engineering evidence](evidence/docx-textboxes-2026-10-22.json)
+and [historical v4 record](evidence/docx-linked-notes-2026-10-22.json)
 and [historical v3 record](evidence/docx-section-stories-2026-10-22.json)
 and the [historical v2 record](evidence/docx-nested-tables-2026-10-21.json)
 and the [historical v1 regression record](evidence/docx-body-order-2026-10-21.json).

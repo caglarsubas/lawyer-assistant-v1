@@ -1,0 +1,63 @@
+{
+  "schema": "document-intake-textboxes-engineering-v1",
+  "recorded_on": "2026-10-22",
+  "scope": "Invented DOCX text-box source contexts, equivalent alternatives, isolated parser and upload contracts. No private case input or inference.",
+  "base": "b186dcc82836d40378a28a7be90c8ef163afb127",
+  "implementation_sha256": {
+    "backend/app/extract.py": "9a0efb28a1afa52eed4aa503bafdeb3eaebbf939df2ac838b6335cd3c9c496f7",
+    "backend/app/docx_textboxes.py": "89b6f8a1baa39fc76a833263cac676e9fdec3226cce4ae84fd6b98f205815639",
+    "backend/app/extraction_calibration.py": "d784ce97f2af983184320dac7c8a49e0e4684a6d0ee45e9edcf218e6542433e0",
+    "backend/tests/docx_textbox_fixtures.py": "c96e22a157a0c45964352338cff42e02bbb996e237ed541a2f8cf0662ecc9a7f",
+    "backend/tests/test_docx_textboxes.py": "a642724db52193dce8a3229e5b7515aa736b61e997f83ab9bd4838b6ec0642d9",
+    "backend/tests/test_extraction_worker.py": "555df0a1ba1336b95169939fe6cb6bbfe98236be6018a975bc903eb9309f66a3",
+    "backend/tests/test_extraction_calibration.py": "746b37e98fccdd58ee163ffc6d2ece376252fc17bc2b89eba239b3b0f555a8b9",
+    "backend/tests/test_workspace.py": "2d2e7df270e52394b7f6013aed78ed4297ac01af9b00714582a4caaacbc4c798"
+  },
+  "local_checks": {
+    "targeted_backend_cases": 260,
+    "targeted_backend_result": "passed",
+    "deployment_contract_cases": 51,
+    "deployment_contract_result": "passed",
+    "ruff": "passed",
+    "diff_check": "passed",
+    "frontend_result": "unchanged; hosted checks required"
+  },
+  "regression": {
+    "baseline_box_omitted": true,
+    "baseline_original_preserved": true,
+    "only_synthetic": true
+  },
+  "profile": "docx-textboxes-v5",
+  "historical_profiles_retained_by_calibration": [
+    "docx-body-order-v1",
+    "docx-body-tree-v2",
+    "docx-section-stories-v3",
+    "docx-linked-notes-v4"
+  ],
+  "bounds": {
+    "table_levels_including_outer": 4,
+    "shared_visited_structural_units": 50000,
+    "all_text_locator_process_transport_and_CI_limits": "unchanged"
+  },
+  "preserved": [
+    "existing uploads and original byte streams",
+    "historical profiles, passage IDs and exact evidence versions",
+    "quotation ranges, drafts and review history",
+    "all CI allocations, workers, cases and deadlines"
+  ],
+  "limits": [
+    "Only standalone DrawingML/VML text boxes; exact XML contexts do not establish visual order, page placement, clipping, overflow or field values.",
+    "Equivalent modern/fallback box structure is admitted once; different text, attributes, references or table content fails closed.",
+    "Unsupported wrappers, nested or chained boxes fail without partial successful passages.",
+    "Normalization is in memory only; originals remain primary visual evidence.",
+    "No migration, re-extraction, private inference or human review.",
+    "Rendering, numbering, group layouts, scans, legacy and representative legal completeness remain unqualified."
+  ],
+  "unchanged_CI_sha256": "ee077ec642d2335f014a01dd36d4a66c32c1ed028ef2071882bfb8aa423a992d",
+  "qualification": {
+    "representative_format_qualified": false,
+    "private_pilot_replayed": false,
+    "legal_review_recorded": false,
+    "production_qualified": false
+  }
+}
