@@ -1,5 +1,11 @@
 # Local deployment and recovery
 
+Signed-in users change their own password through the top-bar shield icon or
+`#/account/password`; see [password self-service](PASSWORD_CHANGE.md). The current
+password is required, and success ends every session for that account. Deployment
+bootstrap configuration does not reset an existing account and is not rewritten
+by this feature. Encrypted documents and review history are preserved.
+
 [Reference-case intake](REFERENCE_CASE_INTAKE.md) is an offline qualification tool,
 not a deployment command or runtime permission. Keep real inventories, artifacts
 and reports in confidential storage outside Git. Use new owner-only destinations

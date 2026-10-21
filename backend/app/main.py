@@ -63,6 +63,7 @@ from .governance import governance_router
 from .graph import GraphBackendError, GraphService
 from .graph_b_review import graph_b_review_router
 from .human_workflow import workflow_router
+from .password_change import password_router
 from .policy import POLICY_VERSION, evaluate, request_digest
 from .portfolio import portfolio_router
 from .portfolio_source_reviews import portfolio_source_review_router
@@ -355,6 +356,7 @@ def create_app(settings=None):
     app.include_router(decision_identities_router())
     app.include_router(decision_equivalence_router())
     app.include_router(graph_b_review_router())
+    app.include_router(password_router())
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request, exc):
@@ -451,10 +453,14 @@ def create_app(settings=None):
                 session.add(Audit(actor_id="anonymous", action="login_failed", object_id=client_id))
                 session.commit()
                 raise HTTPException(401, "Kullanıcı adı veya parola hatalı")
+            verified_hash = user.password_hash
             hold_firm_guard(request, user.firm_id)
             session.refresh(user)
-            if not user.active:
-                raise HTTPException(401, "Oturum geçersiz")
+            if (not user.active or user.firm_id != request.state.guard_firm_id
+                    or user.password_hash != verified_hash):
+                session.add(Audit(actor_id="anonymous", action="login_failed", object_id=client_id))
+                session.commit()
+                raise HTTPException(401, "Kullanıcı adı veya parola hatalı")
             token, csrf = create_session(session, user, settings.session_hours)
             response.set_cookie(
                 "la_session",

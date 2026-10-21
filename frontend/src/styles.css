@@ -948,3 +948,7 @@ textarea { resize: vertical; }
 .source-original-view h4 { font-size: .9rem; }
 .source-original-code { margin-block: 16px; max-height: 28rem; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .8rem; line-height: 1.7; unicode-bidi: plaintext; }
 .source-original-view .source-passage-pagination { padding-block: 12px; }
+
+.password-settings { max-width: 640px; }
+.password-settings .inline-form { display: grid; gap: 20px; }
+.password-settings .form-actions { flex-wrap: wrap; }

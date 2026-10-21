@@ -21,6 +21,19 @@ roadmap item; do not generate another history-depth packet automatically.
 
 ## Product contract
 
+### Account password self-service — 21 October 2026
+
+The [self-service password change contract](PASSWORD_CHANGE.md) adds a signed-in
+screen with current-password verification, exact new-password confirmation and
+atomic revocation of every session for that account. Login rechecks the verified
+hash after authorization admission. Encrypted originals, exact evidence versions,
+permissions and review history are preserved; deployment credentials and
+bootstrap files are not changed by the feature. Synthetic verification, hosted
+exact-head CI, guarded merge, installed runtime and owner acceptance are separate
+states. The private focused draft version 3 still awaits the owner's legal review.
+This scoped account capability does not qualify recovery, MFA/SSO or the wider
+security/pilot release gate. See the interactive tracker for current receipts.
+
 ### Delivery authorization amendment — 11 October 2026
 
 After reporting PR #49 merged, the user authorized the development agent to merge
