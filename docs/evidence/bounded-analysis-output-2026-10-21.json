@@ -1,0 +1,62 @@
+{
+  "schema": "bounded-private-analysis-output-engineering-v1",
+  "recorded_on": "2026-10-21",
+  "scope": "Synthetic local-provider protocol and engineering validation only; no personal-case data, scope selections or evidence fingerprints.",
+  "implementation_sha256": {
+    "backend/app/analysis_output_contract.py": "f19ac6ae3475b558c1ed24af9fef50142a20290770353b7c20a7451d6c3c9b30",
+    "backend/app/analysis_proposals.py": "7d1cb9afd9bac3ee334c6bb93e658355fff604016aa2c8f9f6b7a406f6e1bfbe",
+    "backend/app/provider.py": "7494506ba87f844aec67abdf9d6aeddd64361d8729dc5ad402b0b8600643a786",
+    "backend/app/research.py": "9c9589af7b4ee9873f88e239301412ee12abbc51b436cc8fd0896c45c3670cdc",
+    "backend/app/research_jobs.py": "6cd63d31cf461f1d9776ea8ba9b168a3d053a68d4ad7f904a1e8657672804137",
+    "backend/tests/test_analysis_output_contract.py": "661e33ef5fa92fa92a8242fad9c85d2716a2e7982b5968113478976b4e913255",
+    "backend/tests/test_analysis_feedback.py": "d68f21edcae1ee98438829ad6e984ea42a1fc333ff6897f70281a8426c0f1609",
+    "backend/tests/test_analysis_suggestions.py": "8fba20987248667ea290f469332f25c90e80faf981e914840e01a9d43d3fcb55",
+    "deploy/provider/Dockerfile": "44f839031c0f708e407e822c956d08a3b584d2c6d04ad5c40eb7f7e3078e2a19",
+    "deploy/provider/relay.py": "3bc5b76dc6537fa17f7dd3d1fbfb7da3db05424c4c998ea0c91bf1e5d220a35a",
+    "frontend/src/pages/matter/AnalysisContextBudget.tsx": "37659730efe491a1a166c7ac71f9f30c1248243b33adfa848afd97289d066751",
+    "frontend/src/pages/matter/AnalysisContextBudget.test.tsx": "dc608f8bbaaa5212a32aa4df55a92aaaeeafc8a1d2d9def310d1b6c804f137cc",
+    "frontend/src/pages/matter/analysisTypes.ts": "b26e9562669bcfff9b9f7794d8215f879b46535b6f69af74a34fe81ca64257b0"
+  },
+  "local_checks": {
+    "targeted_backend_cases": 275,
+    "targeted_backend_result": "passed",
+    "frontend_cases": 10528,
+    "frontend_files": 138,
+    "frontend_result": "passed",
+    "production_build": "passed",
+    "ruff": "passed"
+  },
+  "synthetic_runtime": {
+    "generic_json_diagnostic": {
+      "finish_reason": "length",
+      "completion_tokens": 1000,
+      "valid_json": false
+    },
+    "closed_contract_rehearsal": {
+      "finish_reason": "stop",
+      "completion_tokens": 493,
+      "prompt_tokens": 700,
+      "context_upper_bound_units": 5392,
+      "provider_seconds": 23.42,
+      "typed_patch_and_fixed_targets": "passed",
+      "fixed_premises": "preserved",
+      "model_pin_and_local_inference": "verified"
+    },
+    "isolated_relay": {
+      "published_ports": 0,
+      "private_volumes": 0,
+      "production_containers_replaced": 0
+    },
+    "limitation": "Diagnostic reproduction and one synthetic success, not a matched comparison, private-case acceptance, legal evaluation or universal success guarantee. Historical generic ProviderError remains unreclassified."
+  },
+  "boundaries": {
+    "context_and_completion_limits": "unchanged",
+    "evidence_trimming": false,
+    "application_retry": false,
+    "cloud_fallback": false,
+    "arbitrary_schema_admission": false,
+    "legal_review": "not_granted",
+    "CI_jobs_workers_timeouts_and_reserve_gates": "unchanged"
+  },
+  "private_execution": "Recorded only in authorized local operational receipts; not in repository evidence."
+}

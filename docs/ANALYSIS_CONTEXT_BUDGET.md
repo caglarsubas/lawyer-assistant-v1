@@ -11,7 +11,7 @@ retry that attempt, change its source version, or establish successful inference
 2. Choose **Bağlam bütçesini hesapla**. The server resolves the exact authorized
    saved version, its source and review dependencies, and the configured provider
    pin. It performs no provider probe, generation, queue reservation or record write.
-3. Inspect full serialized-message size, framing and completion reserves, space
+3. Inspect full serialized-message and response-contract sizes, framing and completion reserves, space
    remaining or excess, and frozen passage revisions, ranges and hashes.
 4. Request a suggestion only if the first pass fits and configuration checks pass.
    The browser submits the preview fingerprint; the server resolves and measures
@@ -31,8 +31,8 @@ does not consume that ID or create an idempotency receipt. The result includes:
 
 - Exact source version/revision, content digest and current review identity.
 - Mode, maximum pass count, model and approved transport disclosure.
-- The unchanged `proposal_messages` / `prompt_measurement` result: complete
-  canonical JSON message bytes, a 256-unit framing reserve and 1,000-unit output
+- The `proposal_messages` / `prompt_measurement` result: complete
+  canonical JSON message and response-contract bytes, a 256-unit framing reserve and 1,000-unit output
   reserve, measured against the existing configured context bound.
 - Exact frozen private evidence references and a context fingerprint bound to the
   requesting user, matter, analysis, options, resolved envelope and provider pin.
@@ -56,8 +56,12 @@ first worker pass must reproduce its exact measurement. Each later repair pass
 is independently remeasured by the existing provider before transport. Initial
 fit is not a promise that a changed repair envelope will fit or succeed.
 
-The preview recipe is `private-analysis-context-budget-v1`; the model envelope
-and proposal recipe are unchanged. No context limit, completion allowance,
+The preview recipe remains `private-analysis-context-budget-v1`. R05A-08 upgrades
+the proposal recipe to `private-analysis-proposals-v3` and includes the exact
+[bounded response schema](LOCAL_MODEL_OUTPUT_CONTRACT.md), its byte count and
+digest in every new envelope and fingerprint. Historical previews keep their
+original accounting and remain readable. Old fingerprints cannot authorize a
+changed envelope. No context limit, completion allowance,
 timeout, model, transport, credential, fallback or permission is increased.
 
 ## Overflow and preservation

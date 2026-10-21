@@ -123,7 +123,11 @@ def finish_run(store, run_id, outcome="failed", error_code=None):
                     state.update(error="Araştırma hizmet durduğu için kesildi; yeniden başlatın.",
                                  error_code="research_interrupted")
                 elif outcome == "failed":
-                    state.update(error="Çıktı doğrulanamadı; sonuç yayımlanmadı.",
+                    messages = {
+                        "provider_output_incomplete": "Yerel model çıktıyı bütçesinde tamamlayamadı; kesilmiş yanıt kabul edilmedi.",
+                        "provider_output_contract_invalid": "Yerel model yanıt sözleşmesine uymadı; öneri kabul edilmedi.",
+                    }
+                    state.update(error=messages.get(error_code, "Çıktı doğrulanamadı; sonuç yayımlanmadı."),
                                  error_code=error_code or "research_worker_failed")
                 store.update(record, state)
                 session.commit()
