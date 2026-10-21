@@ -139,16 +139,135 @@ def test_docx_interleaves_tables_with_clauses_without_renumbering(tmp_path):
     assert result["passage_count"] == 5 and path.read_bytes() == original
 
 
-def test_docx_nested_tables_remain_explicitly_unprocessed(tmp_path):
+def test_docx_nested_tables_preserve_exact_cell_block_sequence(tmp_path):
     from docx import Document
 
     doc = Document()
     cell = doc.add_table(rows=1, cols=1).cell(0, 0)
-    cell.text = "SENTETİK: Dış hücre."
-    cell.add_table(rows=1, cols=1).cell(0, 0).text = "İç tablo: işlenmemiş koşul."
+    cell.text = "SENTETİK: Önceki koşul kabul edilmedi."
+    cell.add_table(rows=1, cols=1).cell(0, 0).text = "İç tablo: 1.234,56 TL; 14.06.2020."
+    cell.add_paragraph("SENTETİK: Ancak TEST-0042 istisnası saklıdır.")
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    original = path.read_bytes()
+    result = extract(path, ".docx")
+    assert result["passages"] == [
+        {"locator": "Tablo 1, satır 1, hücre 1, paragraf 1",
+         "text": "SENTETİK: Önceki koşul kabul edilmedi."},
+        {"locator": "Tablo 1, satır 1, hücre 1, tablo 1, satır 1",
+         "text": "İç tablo: 1.234,56 TL; 14.06.2020."},
+        {"locator": "Tablo 1, satır 1, hücre 1, paragraf 3",
+         "text": "SENTETİK: Ancak TEST-0042 istisnası saklıdır."},
+    ]
+    assert path.read_bytes() == original
+    assert any("fiziksel XML" in warning for warning in result["warnings"])
+    assert any("dipnot" in warning for warning in result["warnings"])
+
+
+def test_docx_nested_rows_keep_sibling_cells_tables_and_body_order(tmp_path):
+    from docx import Document
+
+    doc = Document()
+    doc.add_paragraph("ÖNCE")
+    row = doc.add_table(rows=2, cols=2).rows[0]
+    row.cells[0].text = "HÜCRE-A"
+    nested = row.cells[0].add_table(rows=1, cols=1).cell(0, 0)
+    nested.text = "İÇ-ÖNCE"
+    nested.add_table(rows=1, cols=1).cell(0, 0).text = "DERİN-KOŞUL"
+    nested.add_paragraph("İÇ-SONRA")
+    row.cells[0].add_table(rows=1, cols=1).cell(0, 0).text = "İKİNCİ-İÇ-TABLO"
+    row.cells[1].text = "HÜCRE-B"
+    doc.tables[0].cell(1, 0).text = "SATIR-2"
+    doc.add_paragraph("SONRA")
     path = tmp_path / "input.docx"
     doc.save(path)
     result = extract(path, ".docx")
-    assert [p["text"] for p in result["passages"]] == ["SENTETİK: Dış hücre."]
-    assert any("İç içe tabloların içeriği işlenmedi" in warning for warning in result["warnings"])
-    assert any("dipnot" in warning for warning in result["warnings"])
+    assert [p["text"] for p in result["passages"]] == [
+        "ÖNCE", "HÜCRE-A", "İÇ-ÖNCE", "DERİN-KOŞUL", "İÇ-SONRA",
+        "İKİNCİ-İÇ-TABLO", "HÜCRE-B", "SATIR-2 |", "SONRA",
+    ]
+    assert len({p["locator"] for p in result["passages"]}) == result["passage_count"]
+    assert "hücre 1, tablo 2" in result["passages"][5]["locator"]
+    assert result["passages"][6]["locator"] == "Tablo 1, satır 1, hücre 2, paragraf 1"
+
+
+@pytest.mark.parametrize("direction", ["horizontal", "vertical"])
+def test_docx_merged_cell_content_is_not_duplicated(tmp_path, direction):
+    from docx import Document
+
+    doc = Document()
+    table = doc.add_table(rows=2, cols=2)
+    table.cell(0, 0).text = "BİRLEŞMİŞ-ÖZGÜN-KOŞUL"
+    table.cell(0, 0).merge(table.cell(0, 1) if direction == "horizontal" else table.cell(1, 0))
+    table.cell(1, 1).text = "BAĞIMSIZ-KOŞUL"
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    result = extract(path, ".docx")
+    text = "\n".join(p["text"] for p in result["passages"])
+    assert text.count("BİRLEŞMİŞ-ÖZGÜN-KOŞUL") == text.count("BAĞIMSIZ-KOŞUL") == 1
+    assert any("Birleştirilmiş" in w for w in result["warnings"])
+
+
+@pytest.mark.parametrize("depth,admitted", [(4, True), (5, False)])
+def test_docx_nesting_budget_never_returns_partial_content(tmp_path, depth, admitted):
+    from docx import Document
+
+    doc = Document()
+    doc.add_paragraph("BAŞLANGIÇ; kısmi başarı olarak dönmemeli.")
+    parent = doc
+    for _ in range(depth):
+        parent = parent.add_table(rows=1, cols=1).cell(0, 0)
+    parent.text = "EN-DERİN"
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    if admitted:
+        result = extract(path, ".docx")
+        assert result["passages"][-1]["text"] == "EN-DERİN"
+        assert max(len(p["locator"]) for p in result["passages"]) <= 400
+    else:
+        with pytest.raises(ValueError, match="^DOCX table nesting limit exceeded$"):
+            extract(path, ".docx")
+
+
+def test_docx_structural_budget_counts_empty_cells(tmp_path, monkeypatch):
+    from docx import Document
+
+    monkeypatch.setattr("app.extract.MAX_DOCX_BLOCKS", 5)
+    doc = Document()
+    doc.add_table(rows=1, cols=4)  # Six visited blocks, even with no text.
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    with pytest.raises(ValueError, match="^DOCX structural work limit exceeded$"):
+        extract(path, ".docx")
+
+
+def test_docx_structural_budget_counts_empty_paragraphs_in_plain_cells(tmp_path, monkeypatch):
+    from docx import Document
+
+    monkeypatch.setattr("app.extract.MAX_DOCX_BLOCKS", 6)
+    doc = Document()
+    cell = doc.add_table(rows=1, cols=1).cell(0, 0)
+    for _ in range(4):
+        cell.add_paragraph("")
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    with pytest.raises(ValueError, match="^DOCX structural work limit exceeded$"):
+        extract(path, ".docx")
+
+
+def test_docx_grid_span_is_not_expanded_into_repeated_cells(tmp_path):
+    from docx import Document
+    from docx.oxml import OxmlElement
+    from docx.oxml.ns import qn
+
+    doc = Document()
+    cell = doc.add_table(rows=1, cols=1).cell(0, 0)
+    cell.text = "SENTETİK: Tek fiziksel koşul."
+    span = OxmlElement("w:gridSpan")
+    span.set(qn("w:val"), "1000000000")
+    cell._tc.get_or_add_tcPr().append(span)
+    path = tmp_path / "input.docx"
+    doc.save(path)
+    assert extract(path, ".docx")["passages"] == [
+        {"locator": "Tablo 1, satır 1", "text": "SENTETİK: Tek fiziksel koşul."},
+    ]
