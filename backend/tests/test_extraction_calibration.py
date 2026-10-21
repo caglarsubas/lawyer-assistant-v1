@@ -209,7 +209,7 @@ def test_unknown_extraction_profiles_cannot_enter_calibration(artifacts, profile
 
 
 @pytest.mark.parametrize("profile", ["docx-body-order-v1", "docx-body-tree-v2", "docx-section-stories-v3",
-                                     "docx-linked-notes-v4"])
+                                     "docx-linked-notes-v4", "docx-textboxes-v5"])
 def test_declared_docx_profile_is_retained_by_strict_export_model(artifacts, profile):
     from app.extraction_calibration import ExportedExtraction
 
@@ -218,7 +218,7 @@ def test_declared_docx_profile_is_retained_by_strict_export_model(artifacts, pro
 
 
 @pytest.mark.parametrize("profile", ["docx-body-order-v1", "docx-body-tree-v2", "docx-section-stories-v3",
-                                     "docx-linked-notes-v4"])
+                                     "docx-linked-notes-v4", "docx-textboxes-v5"])
 def test_calibration_rejects_docx_profile_for_other_sample_format(artifacts, profile):
     artifacts[1]["extraction_profile"] = profile
     with pytest.raises(CalibrationError, match="^extraction_profile_format_mismatch$"):
