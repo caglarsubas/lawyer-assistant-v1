@@ -418,6 +418,14 @@ staffing/calendar without measurement.
 
 `Implemented` means executable code exists with targeted local checks. `Partial` means a usable foundation exists but the described end capability is incomplete. `Pending` means no completion claim. Legal and customer review are recorded separately from software tests.
 
+Runtime secret isolation now provides scoped mounted files, allowlisted diagnostics
+and a fail-closed offline rotation/recovery path for the qualified private-record
+profile. Existing encryption must be migrated and verified; a changed key setting
+alone is unsafe. Retention, other populated encrypted-ledger profiles, physical
+erasure, HA rotation and full production secret-manager qualification remain open
+under R07. See the [rotation runbook](RUNTIME_SECRET_ROTATION.md). No legal review,
+source permission or evidence version is granted by infrastructure maintenance.
+
 | Workstream | State | Delivered baseline | Remaining release work |
 |---|---|---|---|
 | Matter foundation | Implemented baseline | Authenticated sessions, CSRF, explicit direct/client scopes and case responsibilities, encrypted records/originals, audit metadata, offline user/member administration, session revocation | SSO/MFA, customer identity integration, broader concurrency/load qualification |

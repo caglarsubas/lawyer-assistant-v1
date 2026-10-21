@@ -149,6 +149,9 @@ class Audit(Base):
 class Store:
     def __init__(self, settings):
         settings.data_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+        if ((settings.data_dir / ".runtime-key-rotation").exists()
+                or (settings.data_dir / ".runtime-key-rotation").is_symlink()):
+            raise ValueError("Offline key maintenance requires recovery before application startup")
         key = settings.encryption_key
         if not key and settings.demo_mode:
             key_file = settings.data_dir / "demo-encryption.key"

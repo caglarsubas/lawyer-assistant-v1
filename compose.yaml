@@ -19,13 +19,14 @@ services:
     tmpfs: ["/tmp:size=256m,mode=1777"]
     networks: [private, extraction, scanning, provider]
     sysctls: {net.ipv4.ip_forward: "0", net.ipv6.conf.all.forwarding: "0"}
+    secrets: [database_url, encryption_key, bootstrap_password, extraction_token, gateway_token, provider_api_key]
     environment:
       LA_DEMO_MODE: "false"
-      LA_DATABASE_URL: ${LA_DATABASE_URL:-postgresql+psycopg://lawyer:${LA_POSTGRES_PASSWORD:?Set LA_POSTGRES_PASSWORD in .env}@postgres:5432/lawyer}
+      LA_DATABASE_URL_FILE: /run/secrets/database_url
       LA_DATA_DIR: /data
-      LA_ENCRYPTION_KEY: ${LA_ENCRYPTION_KEY:?Set LA_ENCRYPTION_KEY in .env}
+      LA_ENCRYPTION_KEY_FILE: /run/secrets/encryption_key
       LA_BOOTSTRAP_USERNAME: ${LA_BOOTSTRAP_USERNAME:?Set LA_BOOTSTRAP_USERNAME in .env}
-      LA_BOOTSTRAP_PASSWORD: ${LA_BOOTSTRAP_PASSWORD:?Set LA_BOOTSTRAP_PASSWORD in .env}
+      LA_BOOTSTRAP_PASSWORD_FILE: /run/secrets/bootstrap_password
       LA_ALLOWED_ORIGINS: ${LA_ALLOWED_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
       LA_COOKIE_SECURE: ${LA_COOKIE_SECURE:-false}
       LA_RESEARCH_BUDGET_SECONDS: ${LA_RESEARCH_BUDGET_SECONDS:-300}
@@ -48,13 +49,13 @@ services:
       LA_SCANNER_TIMEOUT_SECONDS: ${LA_SCANNER_TIMEOUT_SECONDS:-30}
       LA_SCANNER_MAX_SIGNATURE_AGE_DAYS: ${LA_SCANNER_MAX_SIGNATURE_AGE_DAYS:-7}
       LA_EXTRACTION_URL: http://extractor:8002
-      LA_EXTRACTION_TOKEN: ${LA_EXTRACTION_TOKEN:?Set a distinct LA_EXTRACTION_TOKEN in .env}
+      LA_EXTRACTION_TOKEN_FILE: /run/secrets/extraction_token
       LA_GATEWAY_URL: http://gateway:8001
-      LA_GATEWAY_TOKEN: ${LA_GATEWAY_TOKEN:-}
+      LA_GATEWAY_TOKEN_FILE: /run/secrets/gateway_token
       LA_GATEWAY_ENABLED: ${LA_GATEWAY_ENABLED:-false}
       LA_GATEWAY_ALLOWLIST: ${LA_GATEWAY_ALLOWLIST:-www.mevzuat.gov.tr,mevzuat.gov.tr,www.resmigazete.gov.tr,resmigazete.gov.tr}
       LLM_PROVIDER_BASE_URL: ${LLM_PROVIDER_BASE_URL:-}
-      LLM_PROVIDER_API_KEY: ${LLM_PROVIDER_API_KEY:-}
+      LLM_PROVIDER_API_KEY_FILE: /run/secrets/provider_api_key
       LLM_PROVIDER_TENANT_ID: ${LLM_PROVIDER_TENANT_ID:-lawyer-assistant-v1}
       LLM_PROVIDER_ORG_ID: ${LLM_PROVIDER_ORG_ID:-org-lawyer}
       LLM_PROVIDER_KEY_ID: ${LLM_PROVIDER_KEY_ID:-lawyer-assistant-v1-primary}
@@ -96,11 +97,12 @@ services:
     tmpfs: ["/tmp:size=256m,mode=1777,noexec,nosuid,nodev"]
     entrypoint: [python, /app/scripts/graph_releases.py]
     command: [--help]
+    secrets: [database_url, encryption_key]
     environment:
       LA_DEMO_MODE: "false"
-      LA_DATABASE_URL: ${LA_DATABASE_URL:-postgresql+psycopg://lawyer:${LA_POSTGRES_PASSWORD:?Set LA_POSTGRES_PASSWORD in .env}@postgres:5432/lawyer}
+      LA_DATABASE_URL_FILE: /run/secrets/database_url
       LA_DATA_DIR: /data
-      LA_ENCRYPTION_KEY: ${LA_ENCRYPTION_KEY:?Set LA_ENCRYPTION_KEY in .env}
+      LA_ENCRYPTION_KEY_FILE: /run/secrets/encryption_key
       LA_PUBLIC_SOURCE_DIR: /public-sources
       LA_GRAPH_RELEASE_DIR: /graph-releases
       LA_GRAPH_SERVING_REVIEW_ROLE: ${LA_GRAPH_SERVING_REVIEW_ROLE:-component}
@@ -133,8 +135,9 @@ services:
     pids_limit: 96
     ulimits: {nofile: {soft: 512, hard: 512}}
     # No matter volume, database route, provider route, or broader application secret.
+    secrets: [extraction_token]
     environment:
-      LA_EXTRACTION_TOKEN: ${LA_EXTRACTION_TOKEN:?Set a distinct LA_EXTRACTION_TOKEN in .env}
+      LA_EXTRACTION_TOKEN_FILE: /run/secrets/extraction_token
     healthcheck:
       test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health', timeout=3)"]
       interval: 15s
@@ -222,10 +225,11 @@ services:
     image: postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74
     # The vendor entrypoint starts as root to set new-volume ownership, then drops to postgres.
     cap_add: [CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+    secrets: [postgres_password]
     environment:
       POSTGRES_DB: lawyer
       POSTGRES_USER: lawyer
-      POSTGRES_PASSWORD: ${LA_POSTGRES_PASSWORD:?Set LA_POSTGRES_PASSWORD in .env}
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
       POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256 --auth-local=scram-sha-256
     volumes: [postgres:/var/lib/postgresql/data]
     healthcheck:
@@ -289,8 +293,9 @@ services:
     tmpfs: ["/tmp:size=64m,mode=1777"]
     networks: [private, research]
     # No matter volume, database URL, encryption key, bootstrap secret, or provider key.
+    secrets: [gateway_token]
     environment:
-      LA_GATEWAY_TOKEN: ${LA_GATEWAY_TOKEN:-}
+      LA_GATEWAY_TOKEN_FILE: /run/secrets/gateway_token
       LA_GATEWAY_ENABLED: ${LA_GATEWAY_ENABLED:-false}
       LA_GATEWAY_ALLOWLIST: ${LA_GATEWAY_ALLOWLIST:-www.mevzuat.gov.tr,mevzuat.gov.tr,www.resmigazete.gov.tr,resmigazete.gov.tr}
 
@@ -320,3 +325,20 @@ volumes:
   postgres:
   opensearch:
   graphs:
+
+# Files are provisioned locally; Compose and inspect contain paths, never values.
+secrets:
+  database_url:
+    file: ${LA_SECRET_DIRECTORY:-./.data/runtime-secrets/active}/database_url
+  encryption_key:
+    file: ${LA_SECRET_DIRECTORY:-./.data/runtime-secrets/active}/encryption_key
+  bootstrap_password:
+    file: ${LA_SECRET_DIRECTORY:-./.data/runtime-secrets/active}/bootstrap_password
+  extraction_token:
+    file: ${LA_SECRET_DIRECTORY:-./.data/runtime-secrets/active}/extraction_token
+  gateway_token:
+    file: ${LA_SECRET_DIRECTORY:-./.data/runtime-secrets/active}/gateway_token
+  provider_api_key:
+    file: ${LA_SECRET_DIRECTORY:-./.data/runtime-secrets/active}/provider_api_key
+  postgres_password:
+    file: ${LA_SECRET_DIRECTORY:-./.data/runtime-secrets/active}/postgres_password

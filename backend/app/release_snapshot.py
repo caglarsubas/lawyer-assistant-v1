@@ -89,6 +89,9 @@ def readonly_store(settings):
     """Open existing storage only; never initialize a schema, user or key file."""
     engine = None
     try:
+        if ((settings.data_dir / ".runtime-key-rotation").exists()
+                or (settings.data_dir / ".runtime-key-rotation").is_symlink()):
+            raise SnapshotError("Offline key maintenance requires recovery before review reads")
         database_url = settings.database_url
         if database_url == "sqlite:///./.data/workspace.db":
             database_url = f"sqlite:///{settings.data_dir / 'workspace.db'}"
