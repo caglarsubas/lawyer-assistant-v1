@@ -4851,3 +4851,21 @@ authorized application rerun remain separate evidence states. R05A-04 still need
 independent semantic evaluation; R03-17 remains waiting for exact-version owner
 review. See [the output contract](LOCAL_MODEL_OUTPUT_CONTRACT.md#finished-prose-and-source-qualified-references) and
 [synthetic engineering checks](evidence/source-qualified-analysis-prose-2026-10-21.json).
+
+
+### Model condition assessments preserve declared premise roles
+
+R05A-10 closes a synthetic counterexample in which a model patch could turn an
+unknown or assumed premise into a definite condition assessment. New or changed
+`met`/`not_met` statuses require nonempty, fixed, documented fact premises with
+exact snapshot revisions and selected evidence links. Mixed unsettled support
+fails as a whole. Explicit unknowns, unchanged historical assessments and manual
+lawyer drafting remain available; originals and prior review records are preserved.
+
+The versioned proposal policy adds a safe worker outcome without changing prompt
+messages, response schemas or any model/CI budgets. No private case is rerun for
+this guard. A declared documented role is not semantic entailment, fact verification
+or legal applicability. R05A-04 remains open for independent representative trials;
+R03-17 remains waiting for exact-version owner review. See
+[the model assessment contract](MODEL_ASSESSMENT_PREMISES.md) and
+[synthetic engineering checks](evidence/model-assessment-premises-2026-10-21.json).

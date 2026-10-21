@@ -449,3 +449,33 @@ def test_second_pass_cancellation_preserves_partial_candidate_without_allowing_a
     assert job['status'] == 'cancelled' and len(job['iterations']) == 1 and not job['can_adopt']
     assert job['candidate']['applications'][0]['rationale'] == 'SYNTHETIC partial'
     assert adopt(client, endpoint, record, job).status_code == 409
+
+
+@pytest.mark.parametrize('mode', ['single', 'repair'])
+def test_unknown_premise_cannot_become_a_settled_model_assessment(workbench, monkeypatch, mode):
+    app, client, base, payload, *_ = workbench
+    prepare(workbench, monkeypatch)
+    body = copy.deepcopy(payload)
+    body['premises'] = [{'id': 'p1', 'kind': 'unknown', 'text': 'SYNTHETIC-PRIVATE-UNKNOWN event.'}]
+    for item in body['applications'][0]['assessments']:
+        item['status'] = 'unknown'
+    record = client.post(base + '/analyses', json=body).json()
+    endpoint = base + '/analyses/' + record['id'] + '/suggestions'
+    calls = []
+
+    def suggest(*_args, **_kwargs):
+        calls.append(True)
+        return json.dumps({'application_updates': [{'id': 'a1', 'rationale': 'SYNTHETIC model claim.',
+            'assessments': [{'condition_id': 'c1', 'status': 'met', 'premise_ids': ['p1']}]}]})
+
+    monkeypatch.setattr(app.state.provider, 'suggest_analysis', suggest)
+    queued, _ = start(client, endpoint, record, mode=mode)
+    job = finished(client, endpoint, queued['id'])
+    assert job['status'] == 'failed' and job['error_code'] == 'proposal_unsettled_assessment'
+    assert len(calls) == 1 and not job.get('candidate') and not job.get('adopted_version_id')
+    assert 'SYNTHETIC-PRIVATE-UNKNOWN' not in job['error']
+    current = next(item for item in client.get(base + '/analyses').json() if item['id'] == record['id'])
+    assert current['latest_version_id'] == record['latest_version_id']
+    assert current['premises'] == record['premises'] and current['evidence'] == record['evidence']
+    assert current['applications'] == record['applications']
+    assert [v['id'] for v in client.get(base + '/analyses/' + record['id'] + '/versions').json()] == [record['latest_version_id']]

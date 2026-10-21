@@ -3,6 +3,7 @@ from contextlib import contextmanager
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 
+from .analysis_assessment_contract import AssessmentValidationError
 from .analysis_reference_contract import ReferenceValidationError
 from .auth import require_matter
 from .context_packing import pack_private_context
@@ -142,7 +143,7 @@ def run_research(app, run_id):
         finish_run(app.state.store, run_id, exc.outcome)
     except ProviderError as exc:
         finish_run(app.state.store, run_id, error_code=exc.code)
-    except ReferenceValidationError as exc:
+    except (ReferenceValidationError, AssessmentValidationError) as exc:
         finish_run(app.state.store, run_id, error_code=exc.code)
     except Exception as exc:
         finish_run(app.state.store, run_id, error_code=type(exc).__name__)

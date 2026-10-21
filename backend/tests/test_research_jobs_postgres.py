@@ -343,11 +343,16 @@ def test_comparison_own_head_serializes_conflicts_and_identical_replays(workspac
         document = app.state.store.add(session, 'document', user, {
             'name': 'SYNTHETIC.txt', 'status': 'extracted', 'sha256': digest(text),
             'passages': [{'id': 'synthetic-clause', 'text': text, 'locator': 'SYNTHETIC §1'}]}, matter)
+        # This test exercises head serialization, not unknown-to-definite model
+        # promotion. Supply the documented source binding its shared mock needs.
+        fact = app.state.store.add(session, 'fact', user, {
+            'text': 'SYNTHETIC declared delivery record.', 'status': 'documented',
+            'evidence_id': 'synthetic-clause'}, matter)
         session.commit()
     payload = {'title': 'SYNTHETIC comparison race', 'issue': 'SYNTHETIC delivery and notice issue',
         'evidence': [{'evidence_id': 'synthetic-clause', 'passage_sha256': digest(text),
                       'document_revision': document.revision, 'start': 0, 'end': len(text)}],
-        'premises': [{'id': 'p1', 'kind': 'assumption', 'text': 'SYNTHETIC unverified delivery'}],
+        'premises': [{'id': 'p1', 'kind': 'fact', 'fact_id': fact.id, 'fact_revision': fact.revision}],
         'rules': [{'id': 'r1', 'kind': 'contract_clause', 'text': 'SYNTHETIC payment candidate',
             'evidence_ids': ['synthetic-clause'], 'conditions': [{'id': 'c1', 'text': 'SYNTHETIC delivery'},
                                                                {'id': 'c2', 'text': 'SYNTHETIC notice'}]}],

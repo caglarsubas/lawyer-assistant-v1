@@ -11,6 +11,7 @@ from typing import Literal
 
 from pydantic import Field, model_validator
 
+from .analysis_assessment_contract import validate_patch_assessments
 from .analysis_output_contract import response_format_for_messages
 from .analysis_reference_contract import validate_patch_references
 from .analysis_workbench import AnalysisInput, Assessment, NodeID, Text
@@ -18,7 +19,7 @@ from .db import digest
 from .evidence_prompt import canonical
 from .practice import StrictInput
 
-RECIPE = "private-analysis-proposals-v11"
+RECIPE = "private-analysis-proposals-v12"
 MAX_OUTPUT_BYTES = 32768
 COMPLETION_TOKENS = 1000
 FRAMING_RESERVE = 256
@@ -146,6 +147,7 @@ def apply_patch(content, patch, *, review_feedback=None, authority_feedback=None
     _validate_feedback(content, result, patch, review_feedback)
     _validate_authorities(content, result, patch, authority_feedback)
     validate_patch_references(content, patch)
+    validate_patch_assessments(content, patch)
     return result
 
 

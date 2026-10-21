@@ -51,6 +51,14 @@ human approval or independent qualification. Further engineering should address
 that observed limitation or the owner's recorded findings. The detailed case,
 budget, evidence fingerprints and selections remain private.
 
+Later closed-response and source-qualified prose slices retain these historical
+attempts and their original outcomes. The current private pilot has a subsequent
+AI-assisted unreviewed draft with exact evidence bindings; its current delivery,
+installation and owner-review state are recorded in the local roadmap. R05A
+engineering checks do not supply a human review decision. The
+[model assessment guard](MODEL_ASSESSMENT_PREMISES.md) is separately tested with
+invented data and does not replay or modify that private draft.
+
 The following numbered decisions remain the public-corpus and later independent
 acceptance requirements. They must not be interpreted as missing private-pilot
 sample selection or as a request to duplicate the owner's existing uploads.

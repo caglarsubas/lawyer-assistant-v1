@@ -132,6 +132,7 @@ def finish_run(store, run_id, outcome="failed", error_code=None):
                         "provider_output_prose_limit": "Yerel modelin metni alan sınırına dayandı; kesilmiş olabilecek öneri kabul edilmedi.",
                         "provider_output_prose_style": "Yerel model düz metin biçimine uymadı; öneri kabul edilmedi.",
                         "proposal_reference_unqualified": "Önerideki madde veya sayfa referansı özgün dayanaklarla doğrulanamadı; öneri kabul edilmedi.",
+                        "proposal_unsettled_assessment": "Öneri, belirsiz veya seçili özgün dayanağı olmayan bir öncülden kesin koşul durumu üretti; öneri kabul edilmedi.",
                         "provider_reported_budget_exceeded": "Sağlayıcının bildirdiği token kullanımı çalışma bütçesini aştı; sonuç kabul edilmedi.",
                         "provider_usage_invalid": "Sağlayıcının token kullanım bilgisi doğrulanamadı; sonuç kabul edilmedi.",
                     }
