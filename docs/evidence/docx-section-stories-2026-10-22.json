@@ -1,0 +1,62 @@
+{
+  "schema": "document-intake-section-stories-engineering-v1",
+  "recorded_on": "2026-10-22",
+  "scope": "Synthetic bounded DOCX header/footer extraction and exact historical profile preservation. No private source, inference or review submission.",
+  "base": "f0a2f5cc4273903111959fbc23d594e6a8acb554",
+  "implementation_sha256": {
+    "backend/app/extract.py": "136a37379116e56864be75776047e0a5d0b9b9951e1b632c407ac88aa1986b42",
+    "backend/app/extraction_calibration.py": "be8aaa5d2c6ce0740edfef38c6fc9627489c83d102b35d2dfe5900ad9bdfd017",
+    "backend/tests/test_extract.py": "8e632798800796374b537e849a973e7e4920040aaf39707813575e1cad5147fe",
+    "backend/tests/test_extraction_worker.py": "e97887d864afa3a9eba5fa4bb76d49301a79a8bea8f7ef2208724aa7c339a276",
+    "backend/tests/test_extraction_calibration.py": "2e6f92a1b0ceb728e06ba1eb530eb294db9fe350c6567d0b3e0da3f6c0de1a02",
+    "backend/tests/test_workspace.py": "5984848e106f418a4cda43ab4909585f3357fffb9981b43b30ca39799e9e9de8"
+  },
+  "local_checks": {
+    "targeted_backend_cases": 180,
+    "targeted_backend_result": "passed",
+    "deployment_contract_cases": 51,
+    "deployment_contract_result": "passed",
+    "ruff": "passed",
+    "diff_check": "passed",
+    "frontend_result": "unchanged; hosted checks required"
+  },
+  "regression": {
+    "pre_fix_missing_header_test": "failed as expected",
+    "post_fix_header_footer_suite": "passed",
+    "only_synthetic_documents": true,
+    "private_files_read": false,
+    "original_bytes_unchanged": true
+  },
+  "profile": "docx-section-stories-v3",
+  "historical_profiles_retained_by_calibration": [
+    "docx-body-order-v1",
+    "docx-body-tree-v2"
+  ],
+  "bounds": {
+    "table_levels_including_outer": 4,
+    "shared_visited_structural_units": 50000,
+    "existing_process_transport_and_text_limits": "unchanged"
+  },
+  "preserved": [
+    "all prior uploads, passage identifiers and exact evidence versions",
+    "original bytes and historical extraction profile labels",
+    "draft versions and independent human review history",
+    "body and nested-table locator numbering",
+    "CI allocations, coverage, workers and deadlines"
+  ],
+  "limits": [
+    "Section definitions form a separate appendix after the complete body; not page-level rendering or interleaving.",
+    "Inherited definitions appear once per applicable section context with source section retained.",
+    "First/even variants may be inactive; page activation and field values remain unverified.",
+    "Footnotes, endnotes, floating/textbox content and representative layout fidelity remain unqualified.",
+    "Invalid references or exhausted budgets fail without partial successful passages.",
+    "No migration, re-extraction or private pilot rerun."
+  ],
+  "unchanged_CI_sha256": "ee077ec642d2335f014a01dd36d4a66c32c1ed028ef2071882bfb8aa423a992d",
+  "qualification": {
+    "representative_format_qualification": false,
+    "private_pilot_replayed": false,
+    "legal_review_recorded": false,
+    "production_qualified": false
+  }
+}

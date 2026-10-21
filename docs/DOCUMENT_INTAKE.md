@@ -46,7 +46,7 @@ The extractor has a dedicated internal network shared only with the API, no data
 
 Office/OpenDocument archives have member-count and expanded-size bounds; duplicate members and known macro containers are rejected. Parser responses have independent byte, text, passage, warning and time bounds. An extension never establishes authenticity or complete extraction. Representative Turkish legal-document testing, including large scans and complex tables, remains required before claiming format qualification.
 
-New DOCX extraction uses the declared `docx-body-tree-v2` profile. A table stays
+New DOCX extraction uses the declared `docx-section-stories-v3` profile. A table stays
 between its surrounding body paragraphs. Rows containing nested tables retain
 each cell's paragraph/table sequence, including paragraphs following an inner
 table and multiple sibling tables. Locators identify the enclosing table, row,
@@ -56,23 +56,45 @@ physical cell's paragraphs in order. Horizontal spans are not expanded and
 vertical continuation cells do not repeat the merged origin's content.
 
 Extraction admits at most four table levels, counting the outer table, and
-50,000 visited body blocks, rows, cells and cell paragraphs/tables, including
-empty ones. Exceeding either limit fails the extraction; no partial successful
+50,000 visited structural units across the complete body and header/footer
+definitions: sections, references, emitted story instances, blocks, rows, cells
+and cell paragraphs/tables, including empty ones. Exceeding either limit fails the extraction; no partial successful
 passages are returned. Existing file/text/response/process limits also apply.
 Cell numbers identify physical XML cells, not visual column positions. XML order
 does not establish Word pagination, right-to-left visual order, floating-object
 placement, merged-cell meaning, tracked-change acceptance or complete extraction.
 The result retains an explicit table-layout warning.
 
+Header and footer definitions form a separate appendix after the complete body,
+ordered by section, then header/footer and default/first/even-page variant.
+Locators identify the section, definition kind, variant, source section and
+paragraph/table position. Missing references inherit only the same kind/variant
+from preceding sections; an explicitly empty definition stops that inheritance.
+Shared definitions appear once for each applicable section context, with their
+original source section retained. An absent definition is never synthesized.
+
+Only internal package relationships of the expected type, part class and XML
+root are admitted. Missing, external, duplicate or malformed references fail the
+whole extraction. No linked resource is fetched. Nested tables share the body's
+four-level depth limit, structural work and text budgets; no partial successful
+passages are returned after a failure. Revision markup in either the body or a
+definition retains the accepted-version warning. Field instructions are not
+mistaken for inserted revision markup and are never executed.
+
+These are section definitions, including first/even-page definitions that may be
+inactive. Extraction does not establish which pages display them, render field
+values or interleave them with page-level body content. The result explicitly
+warns about these limits and unverified footnotes, endnotes and text boxes.
+
 The authenticated worker response carries the profile; the API stores it on the
 new document record. The worker, client and demo intake reject an absent or
 unknown DOCX profile, and reject a DOCX profile on another format. Deploy API and
 extractor together: a new API with an old worker fails new DOCX extraction visibly
-instead of silently labeling old output as v2. The existing `parser_version` identifies
+instead of silently labeling old output as v3. The existing `parser_version` identifies
 the adapter family; the narrower profile identifies this DOCX behavior. Older
-records without a profile or with `docx-body-order-v1` remain historical. The
-offline calibration model retains the exact declared v1 or v2 profile, without
-upgrading it. Existing records are not backfilled, reordered or re-extracted. Originals, passage IDs, exact
+records without a profile or with `docx-body-order-v1` or `docx-body-tree-v2`
+remain historical. Offline calibration retains the exact declared v1, v2 or v3
+profile without upgrading it. Existing records are not backfilled, reordered or re-extracted. Originals, passage IDs, exact
 quotations, draft versions and reviews remain unchanged. A deliberate future
 re-extraction requires a separately recorded evidence version and review.
 
@@ -81,7 +103,8 @@ negation, blank paragraphs, nested/sibling tables, merged cells, structural/dept
 limits with closed worker failures, isolated subprocess parsing,
 strict transport/calibration metadata, original-byte round trips and preservation
 of prior document records. They establish a regression fix, not representative
-format qualification. See [current engineering evidence](evidence/docx-nested-tables-2026-10-21.json)
+format qualification. See [current engineering evidence](evidence/docx-section-stories-2026-10-22.json)
+and the [historical v2 record](evidence/docx-nested-tables-2026-10-21.json)
 and the [historical v1 regression record](evidence/docx-body-order-2026-10-21.json).
 
 Research currently selects bounded exact excerpt windows, retaining source hash, locator and offsets. A document being uploaded does not imply that every passage was examined in a particular research run. Exports retain that distinction.

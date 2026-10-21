@@ -4923,3 +4923,30 @@ owner's focused draft review remains pending. F00 remains partial pending
 representative layout/merged-cell, header/footnote, scan and legacy-format tests.
 See [intake contract](DOCUMENT_INTAKE.md) and
 [engineering evidence](evidence/docx-nested-tables-2026-10-21.json).
+
+
+### Delivered packet — bounded DOCX header/footer definitions, 22 October 2026
+
+F00-04 now extracts explicit header and footer definitions, including default,
+first-page and even-page variants, as a separate appendix after the complete
+body. Each locator preserves the section, inherited definition's source section,
+variant and exact paragraph/table position. Empty overrides stop inheritance;
+missing definitions are not created. Body/nested-table locators remain stable.
+The new `docx-section-stories-v3` profile is mandatory for new worker/API DOCX
+admission, while offline calibration retains exact historical v1/v2 labels.
+
+Relationships must be internal, unambiguous and match the declared story kind,
+part and XML root. Invalid references fail without partial successful passages.
+The shared structural/text budgets and four-level table limit are unchanged.
+Warnings distinguish definitions from actual page placement, inactive variants,
+unverified field values, footnotes, endnotes and text boxes. Revision markup in
+stories remains unqualified; field instructions are not executed.
+
+Synthetic Turkish regressions, isolated worker rejection and authorized upload
+checks cover ordering, inheritance, blank overrides, variants, exact original
+bytes and retention of prior evidence records. No existing upload is reprocessed;
+no private model pass, draft or human review is created. Hosted checks, merge and
+installation remain separate receipts. R03-17 stays waiting for the owner's
+exact-version review; F00-04 remains partial pending representative legal-layout,
+footnote/scan/legacy and other format qualification. See [intake contract](DOCUMENT_INTAKE.md)
+and [engineering evidence](evidence/docx-section-stories-2026-10-22.json).

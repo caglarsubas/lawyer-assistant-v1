@@ -44,7 +44,7 @@ SUPPORTED_SUFFIXES = frozenset(
 )
 ZIP_SUFFIXES = frozenset({".docx", ".xlsx", ".pptx", ".odt", ".ods", ".odp"})
 MAX_TEXT = 2_000_000
-DOCX_BODY_PROFILE = "docx-body-tree-v2"
+DOCX_BODY_PROFILE = "docx-section-stories-v3"
 MAX_DOCX_TABLE_DEPTH = 4
 MAX_DOCX_BLOCKS = 50_000
 
@@ -114,13 +114,22 @@ def extract(path, suffix):
                 add(f"Paragraf {index}", paragraph)
     elif suffix in (".docx", ".xlsx"):
         if suffix == ".docx":
+            from types import SimpleNamespace
+
             from docx import Document
+            from docx.blkcntnr import BlockItemContainer
+            from docx.opc.constants import RELATIONSHIP_TYPE as RT
+            from docx.oxml.ns import qn
+            from docx.parts.hdrftr import FooterPart, HeaderPart
             from docx.table import _Cell
             from docx.text.paragraph import Paragraph
 
             doc = Document(path)
             paragraph_index = table_index = 0
             visited = 0
+            has_tables = False
+            revision_tags = {qn("w:" + name) for name in ("ins", "del", "moveFrom", "moveTo")}
+            has_revisions = any(node.tag in revision_tags for node in doc.element.iter())
 
             def visit():
                 nonlocal visited
@@ -129,6 +138,8 @@ def extract(path, suffix):
                     raise ValueError("DOCX structural work limit exceeded")
 
             def table_text(table, locator, depth):
+                nonlocal has_tables
+                has_tables = True
                 if depth > MAX_DOCX_TABLE_DEPTH:
                     raise ValueError("DOCX table nesting limit exceeded")
                 # Physical XML cells avoid expanding grid spans or repeating a
@@ -174,15 +185,73 @@ def extract(path, suffix):
                 else:
                     table_index += 1
                     table_text(block, f"Tablo {table_index}", 1)
-            if table_index:
+
+            # Resolve only explicit package relationships. Accessing a missing
+            # python-docx header can create a new definition; do not synthesize
+            # source content or recursively follow inherited section wrappers.
+            definitions = {}
+            inspected_parts = set()
+            has_stories = False
+            variants = {"default": "varsayılan", "first": "ilk sayfa", "even": "çift sayfa"}
+            story_types = (("header", "üstbilgi", RT.HEADER, HeaderPart),
+                           ("footer", "altbilgi", RT.FOOTER, FooterPart))
+            for si, section in enumerate(doc.sections, 1):
+                visit()
+                for kind, label, relation_type, part_type in story_types:
+                    seen = set()
+                    for ref in section._sectPr.findall(qn("w:" + kind + "Reference")):
+                        visit()
+                        variant = ref.get(qn("w:type"))
+                        if variant not in variants or variant in seen:
+                            raise ValueError("DOCX header/footer reference is invalid")
+                        seen.add(variant)
+                        relation = doc.part.rels.get(ref.get(qn("r:id")))
+                        if (relation is None or relation.is_external
+                                or relation.reltype != relation_type):
+                            raise ValueError("DOCX header/footer reference is invalid")
+                        part = relation.target_part
+                        if (not isinstance(part, part_type)
+                                or part.element.tag != qn("w:hdr" if kind == "header" else "w:ftr")):
+                            raise ValueError("DOCX header/footer reference is invalid")
+                        # An explicitly empty part overrides prior content too.
+                        definitions[kind, variant] = (part, si)
+                    for variant, variant_label in variants.items():
+                        if (kind, variant) not in definitions:
+                            continue
+                        visit()
+                        has_stories = True
+                        part, source_section = definitions[kind, variant]
+                        if part not in inspected_parts:
+                            has_revisions |= any(node.tag in revision_tags for node in part.element.iter())
+                            inspected_parts.add(part)
+                        prefix = (f"Bölüm {si}, {label} tanımı "
+                                  f"({variant_label}; kaynak bölüm {source_section})")
+                        # Definitions follow the complete body as a separate
+                        # appendix. Their locators never assert page placement.
+                        container = BlockItemContainer(part.element, SimpleNamespace(part=part))
+                        pi = ti = 0
+                        for block in container.iter_inner_content():
+                            visit()
+                            if isinstance(block, Paragraph):
+                                pi += 1
+                                add(f"{prefix}, paragraf {pi}", block.text)
+                            else:
+                                ti += 1
+                                table_text(block, f"{prefix}, tablo {ti}", 1)
+            if has_stories:
+                warnings.append(
+                    "Üstbilgi/altbilgi tanımları gövdeden sonra bölüm ve kaynak bölüm bilgisiyle işlendi; "
+                    "miras alınan tanım her ilgili bölümde ayrı gösterilir. Gerçek sayfa yerleşimi, "
+                    "ilk/çift sayfa etkinliği ve alan değerleri doğrulanmadı."
+                )
+            if has_tables:
                 warnings.append(
                     "Tablolar XML satır/hücre sırasıyla işlendi; hücre numarası fiziksel XML hücresidir. "
                     "Birleştirilmiş hücrelerin anlamı, görsel sütun hizası ve okuma düzeni doğrulanmadı."
                 )
-            xml = doc.element.xml
-            if "<w:ins" in xml or "<w:del" in xml:
+            if has_revisions:
                 warnings.append("İzlenen değişiklikler var; kabul edilmiş sürüm doğrulanmadı.")
-            warnings.append("Üstbilgi, altbilgi, dipnot ve metin kutusu tamlığı doğrulanmadı.")
+            warnings.append("Belgedeki dipnot, sonnot ve metin kutusu tamlığı doğrulanmadı.")
         else:
             from openpyxl import load_workbook
 
