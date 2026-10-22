@@ -13,7 +13,7 @@ from .analysis_output_contract import (
     response_format_for_messages,
     validate_analysis_output,
 )
-from .evidence_prompt import measure_prompt, quote_messages
+from .evidence_prompt import measure_prompt, quote_messages, resolve_quote_selection
 
 PRIVATE_NETWORKS = tuple(ipaddress.ip_network(value) for value in (
     "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "fc00::/7",
@@ -249,7 +249,11 @@ class Provider:
             measured = measure_prompt(question, passages)
         except (ValueError, TypeError):
             raise ProviderError("Invalid private quotation context") from None
-        return self._complete(messages, 1000, measured["total_upper_bound_units"])
+        content = self._complete(messages, 1000, measured["total_upper_bound_units"])
+        try:
+            return resolve_quote_selection(content, passages)
+        except (ValueError, TypeError, RecursionError):
+            raise ProviderError("Provider selected an unverified source excerpt", code="provider_quote_selection_invalid") from None
 
     def suggest_analysis(self, content, *, repair=False, budget_seconds=120, review_feedback=None, authority_feedback=None):
         from .analysis_proposals import COMPLETION_TOKENS, prompt_measurement, proposal_messages

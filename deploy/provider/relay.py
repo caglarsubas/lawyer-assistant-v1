@@ -4,6 +4,7 @@ No credentials in its environment/files, no access logging, no redirects,
 arbitrary URLs, administration routes, or cloud model names. Network policy is
 installed independently by entrypoint.sh before this unprivileged process runs.
 """
+import errno
 import hashlib
 import hmac
 import http.client
@@ -24,8 +25,29 @@ from app.analysis_output_contract import admitted_response_format
 
 MAX_REQUEST = 256 * 1024
 MAX_RESPONSE = 1024 * 1024
+MAX_CONNECTIONS = 12  # Five metadata + five completion lifetimes + health headroom.
+MAX_UPSTREAM = 2  # Generation backpressure; never changes shared-engine limits.
 LOCAL_BACKENDS = {"ollama_http", "llama_cpp", "mlx"}
 LOCAL_FORMATS = {"ollama_http", "gguf", "mlx"}
+FAILURE_CODES = frozenset({
+    "provider_upstream_http_error", "provider_encoding_rejected", "provider_response_budget_exceeded",
+    "provider_model_rejected", "provider_response_invalid", "provider_tls_failed",
+    "provider_upstream_timeout", "provider_upstream_transport_failed", "provider_http_protocol_failed",
+    "provider_connection_closed", "provider_connection_reset", "provider_connection_refused",
+    "provider_network_denied", "provider_network_unreachable", "provider_transport_resource_exhausted",
+})
+
+
+def transport_failure(error):
+    if isinstance(error, http.client.RemoteDisconnected):
+        return "provider_connection_closed"
+    return {
+        errno.ECONNRESET: "provider_connection_reset", errno.ECONNREFUSED: "provider_connection_refused",
+        errno.EACCES: "provider_network_denied", errno.EPERM: "provider_network_denied",
+        errno.ENETUNREACH: "provider_network_unreachable", errno.EHOSTUNREACH: "provider_network_unreachable",
+        errno.EMFILE: "provider_transport_resource_exhausted", errno.ENFILE: "provider_transport_resource_exhausted",
+        errno.ENOMEM: "provider_transport_resource_exhausted", errno.ENOBUFS: "provider_transport_resource_exhausted",
+    }.get(error.errno, "provider_upstream_transport_failed")
 PRIVATE_NETWORKS = tuple(ipaddress.ip_network(value) for value in (
     "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16",
 ))
@@ -145,12 +167,30 @@ class PinnedHTTPSConnection(http.client.HTTPSConnection):
         # directly so this request cannot trigger DNS or follow a changed answer.
         raw = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            raw.settimeout(self.timeout)
+            raw.settimeout(self.remaining())
             raw.connect((self.pinned_address, 443))
+            if getattr(self, "deadline", None) is not None:
+                raw.settimeout(self.remaining())
             self.sock = self._context.wrap_socket(raw, server_hostname=self.host)
         except BaseException:
             raw.close()
             raise
+
+    def remaining(self):
+        deadline = getattr(self, "deadline", None)
+        if deadline is None:
+            return self.timeout
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise socket.timeout()
+        return min(self.timeout, remaining)
+
+    def send(self, data):
+        if self.sock is None:
+            self.connect()
+        if getattr(self, "deadline", None) is not None:
+            self.sock.settimeout(self.remaining())
+        super().send(data)
 
 
 def valid_completion(payload, model):
@@ -194,8 +234,34 @@ class Server(ThreadingHTTPServer):
     def __init__(self, address, upstream, model):
         self.upstream = upstream if isinstance(upstream, Upstream) else Upstream(private_address(upstream))
         self.model = model
-        self.slots = threading.BoundedSemaphore(5)
+        self.slots = threading.BoundedSemaphore(MAX_CONNECTIONS)
+        self.upstream_slots = threading.BoundedSemaphore(MAX_UPSTREAM)
+        self.metadata_slots = threading.BoundedSemaphore(2)
+        self.metadata_lock = threading.Lock()
+        self.metadata_flights = {}
         super().__init__(address, Handler)
+
+    def join_metadata(self, auth):
+        # No bearer or matter data is retained. Only overlapping requests with
+        # the same credential, route and model share this read-only operation.
+        key = hashlib.sha256((auth + "\0" + self.model + "\0" + str(self.upstream.route_sha256)).encode()).digest()
+        with self.metadata_lock:
+            flight = self.metadata_flights.get(key)
+            leader = flight is None
+            if leader:
+                flight = {"ready": threading.Event(), "result": None}
+                self.metadata_flights[key] = flight
+            return key, flight, leader
+
+    def publish_metadata(self, key, flight, result):
+        with self.metadata_lock:
+            if flight["result"] is None:
+                flight["result"] = result
+                # Remove before waking participants: later requests must probe
+                # afresh, even if an earlier client is still receiving its reply.
+                if self.metadata_flights.get(key) is flight:
+                    del self.metadata_flights[key]
+                flight["ready"].set()
 
     def process_request(self, request, client_address):
         if not self.slots.acquire(blocking=False):
@@ -230,6 +296,9 @@ class Handler(BaseHTTPRequestHandler):
         pass
 
     def send_json(self, status, payload):
+        flight = getattr(self, "metadata_flight", None)
+        if flight is not None:
+            self.server.publish_metadata(self.metadata_key, flight, (status, payload))
         encoded = json.dumps(payload, ensure_ascii=False).encode()
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
@@ -239,8 +308,11 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(encoded)
 
-    def fail(self, status):
-        self.send_json(status, {"error": "Local provider request could not be admitted"})
+    def fail(self, status, code=None):
+        payload = {"error": "Local provider request could not be admitted"}
+        if code in FAILURE_CODES:
+            payload["code"] = code
+        self.send_json(status, payload)
 
     def do_GET(self):
         if self.path == "/health":
@@ -279,26 +351,46 @@ class Handler(BaseHTTPRequestHandler):
                 or not 8 < len(auth) <= 4096 or any(ord(char) < 33 or ord(char) > 126 for char in auth[7:])):
             return self.fail(401)
         connection = None
+        acquired = False
+        slots = self.server.metadata_slots if body is None else self.server.upstream_slots
+        # Leave response-delivery headroom inside the API's existing 5s/90s
+        # socket budgets. Queue wait, TLS and body reads share one deadline.
+        deadline = time.monotonic() + (4 if body is None else 85)
+        if body is None:
+            key, flight, leader = self.server.join_metadata(auth)
+            if not leader:
+                if not flight["ready"].wait(timeout=max(0, deadline - time.monotonic())):
+                    return self.fail(503, "provider_upstream_timeout")
+                return self.send_json(*flight["result"])
+            self.metadata_key, self.metadata_flight = key, flight
         try:
-            timeout = 5 if body is None else 90
+            acquired = slots.acquire(timeout=max(0, deadline - time.monotonic()))
+            if not acquired:
+                return self.fail(503, "provider_upstream_timeout")
+            timeout = deadline - time.monotonic()
+            if timeout <= 0:
+                return self.fail(503, "provider_upstream_timeout")
             upstream = self.server.upstream
             connection = (PinnedHTTPSConnection(upstream, timeout) if upstream.hostname else
                           http.client.HTTPConnection(upstream.address, 8080, timeout=timeout))
+            connection.deadline = deadline
             connection.request(self.command, self.path, body=body, headers={
                 "Authorization": auth, "Content-Type": "application/json", "Accept-Encoding": "identity",
                 "x-engine-model-substitution": "off", "Connection": "close",
             })
+            self.remaining_timeout(connection, deadline)
             response = connection.getresponse()
             if response.status != 200:
-                return self.fail(response.status if response.status in {400, 401, 403, 404, 429, 503} else 502)
+                return self.fail(response.status if response.status in {400, 401, 403, 404, 429, 503} else 502,
+                                 "provider_upstream_http_error")
             if response.getheader("Content-Encoding", "identity").lower() != "identity":
-                return self.fail(502)
+                return self.fail(502, "provider_encoding_rejected")
             payload = bytearray()
-            start = time.monotonic()
             while True:
+                self.remaining_timeout(connection, deadline, response)
                 chunk = response.read1(65536)
-                if len(payload) + len(chunk) > MAX_RESPONSE or time.monotonic() - start > 120:
-                    return self.fail(502)
+                if len(payload) + len(chunk) > MAX_RESPONSE or time.monotonic() >= deadline:
+                    return self.fail(502, "provider_response_budget_exceeded")
                 payload.extend(chunk)
                 if not chunk:
                     break
@@ -308,14 +400,44 @@ class Handler(BaseHTTPRequestHandler):
             elif (not isinstance(result, dict) or result.get("model") != self.server.model
                   or result.get("request_key_source", "local-inference") != "local-inference"
                   or any(result.get(key) for key in ("fallback_from_model", "fallback_reason", "substitution_reason"))):
-                return self.fail(502)
+                return self.fail(502, "provider_model_rejected")
             result["relay_transport"] = self.server.upstream.metadata
             return self.send_json(200, result)
-        except (OSError, http.client.HTTPException, ValueError, TypeError, RecursionError):
-            return self.fail(502)
+        except ssl.SSLError:
+            return self.fail(502, "provider_tls_failed")
+        except socket.timeout:
+            return self.fail(502, "provider_upstream_timeout")
+        except OSError as error:
+            return self.fail(502, transport_failure(error))
+        except http.client.HTTPException:
+            return self.fail(502, "provider_http_protocol_failed")
+        except (ValueError, TypeError, RecursionError):
+            return self.fail(502, "provider_response_invalid")
         finally:
-            if connection is not None:
-                connection.close()
+            try:
+                if connection is not None:
+                    connection.close()
+            finally:
+                if acquired:
+                    slots.release()
+                flight = getattr(self, "metadata_flight", None)
+                if flight is not None:
+                    self.server.publish_metadata(self.metadata_key, flight, (502, {
+                        "error": "Local provider request could not be admitted", "code": "provider_upstream_transport_failed"}))
+
+    @staticmethod
+    def remaining_timeout(connection, deadline, response=None):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise socket.timeout()
+        # HTTPConnection may transfer ownership to a Connection: close response.
+        # Its retained file/socket still needs the shrinking absolute deadline.
+        sock = getattr(connection, "sock", None)
+        if sock is None and response is not None and getattr(response, "fp", None) is not None:
+            raw = getattr(response.fp, "raw", None)
+            sock = getattr(raw, "_sock", None)
+        if sock is not None:
+            sock.settimeout(remaining)
 
 
 if __name__ == "__main__":

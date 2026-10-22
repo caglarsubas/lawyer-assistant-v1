@@ -101,7 +101,8 @@ def test_filename_paths_and_extra_metadata_do_not_consume_model_budget_or_enter_
     result = pack_private_context("Ödeme", [item])
     payload = json.loads(quote_messages("Ödeme", result["evidence"])[1]["content"])
     assert set(payload) == {"question", "evidence"}
-    assert set(payload["evidence"][0]) == {"id", "text", "partial"}
+    assert set(payload["evidence"][0]) == {"id", "text", "partial", "quotes"}
+    assert all(set(q) == {"id", "start", "end"} for q in payload["evidence"][0]["quotes"])
     assert payload["evidence"][0]["partial"] is False
     assert not any(value in canonical(payload) for value in ["PRIVATE NAME", "DISPATCH", "/never", "not-a-provider-key"])
     assert result["evidence"][0]["original_path"] == "/never/transmit"
@@ -164,7 +165,7 @@ def test_packing_and_prompt_recipes_are_exact_governance_dependencies():
         "recipe": manifest["recipe"], "prompt_recipe": manifest["prompt"]["recipe"],
         "messages_sha256": manifest["prompt"]["messages_sha256"]}},
         "summary": "Prose never becomes a release dependency"}
-    assert dependency_ids(product)["release"] == {"private-evidence-pack-v1", "private-quotes-v2"}
+    assert dependency_ids(product)["release"] == {"private-evidence-pack-v1", "private-quotes-v3-extractive"}
 
 
 @pytest.mark.parametrize("inputs", [

@@ -24,7 +24,7 @@ from app.evidence_prompt import measure_prompt  # noqa: E402
 from app.provider import Provider, ProviderError  # noqa: E402
 
 MARKER = "lawyer-provider-context-five-callers-v1"
-QUESTION = "SENTETİK TEST. İlk kaynaktan yalnızca ilk kısa cümleyi birebir alıntıla; tek claim ve boş summary üret."
+QUESTION = "SENTETİK TEST. İlk kaynaktaki örnek tutar kaydını seç."
 TEXT = "SENTETİK TEST: Örnek tutar 100 birimdir."
 IDENTITY = ("lawyer-assistant-v1", "org-lawyer", "lawyer-assistant-v1-primary")
 
@@ -48,8 +48,20 @@ def fixture(total_units=None):
             raise ValueError("Unsupported bounded synthetic context")
         # Fixed synthetic ASCII padding; never truncate or select real evidence.
         passages.append({"id": "synthetic-padding", "text": "SYNTHETIC padding."})
-        while measure_prompt(QUESTION, passages)["total_upper_bound_units"] < total_units:
+        while measure_prompt(QUESTION, passages)["total_upper_bound_units"] != total_units:
             remaining = total_units - measure_prompt(QUESTION, passages)["total_upper_bound_units"]
+            if remaining < 0:
+                # Numeric character offsets add digits at 10/100/1000. Step
+                # below the boundary, then fill identities without changing spans.
+                passages[-1]["text"] = passages[-1]["text"][:remaining - 2]
+                remaining = total_units - measure_prompt(QUESTION, passages)["total_upper_bound_units"]
+            identity_room = sum(128 - len(p["id"]) for p in passages)
+            if 0 <= remaining <= identity_room:
+                for passage in reversed(passages):
+                    size = min(remaining, 128 - len(passage["id"]))
+                    passage["id"] += "x" * size
+                    remaining -= size
+                break
             room = 6000 - len(passages[-1]["text"].encode())
             if room == 0:
                 passages.append({"id": f"synthetic-padding-{len(passages)}", "text": "SYNTHETIC padding."})
