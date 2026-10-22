@@ -2,7 +2,7 @@
   "schema": "frozen-native-acceptance-preparation-evidence-v1",
   "date": "2026-10-22",
   "qualification": "offline_frozen_plan_and_grading_contract_only_not_native_or_legal_acceptance",
-  "frozen_plan_path": "qualification/frozen-native-acceptance-plan-v1.json",
+  "frozen_plan_path": "docs/evidence/frozen-native-acceptance-plan-v1.json",
   "frozen_plan_sha256": "455dbba16a3a22482a1c083a4ce7ec60be64a98e2ff2605b77496cb3cd6a01c9",
   "suite_sha256": "b2e28d8c895af7b9524479bb1f8b56e3818898fe0412618ca33c7c1eed6f5854",
   "implementation_sha256": {
@@ -21,9 +21,11 @@
     "backend/app/analysis_output_contract.py": "02b9700f3661351ba622de994bd35da71ce1d60d80b08804f0013b706e9b9b2b",
     "backend/pyproject.toml": "fc258b67b26246b547e1af3e0e93c13a59d9e068e44c5c9a03054f5803427728",
     "backend/uv.lock": "cde13f1ccee8a439e9ddfea7c15dcb26960c2e9bebffec7c2582ac1386b4b23f",
-    "docs/NATIVE_ACCEPTANCE_PLAN.md": "a6df506feec229bff8a1334a206d5d758492cda7d2714e742fbadad31f819ae3",
-    "qualification/frozen-native-acceptance-plan-v1.json": "c3a38ac99547ed84bbfa2ae6dd06b9d92aae63a26dff06117c397e4de2856ed2",
-    "deploy/test_native_acceptance_plan.py": "f1f790dbe5475fafe7a7032ea1362291aea919b088998b99c3327fdab0f3a413"
+    "docs/NATIVE_ACCEPTANCE_PLAN.md": "114160f7f3cf641352696b6bafb140c42dac83ce48732f56a50f64940c0e67e9",
+    "docs/evidence/frozen-native-acceptance-plan-v1.json": "c3a38ac99547ed84bbfa2ae6dd06b9d92aae63a26dff06117c397e4de2856ed2",
+    "deploy/test_native_acceptance_plan.py": "39de465c8c640ec8f7ade7ed69bb0d408c416d0b53c0833df2670dd3927d3fbe",
+    "docs/evidence/native-acceptance-rules-before-location-repair-2026-10-22.md": "a6df506feec229bff8a1334a206d5d758492cda7d2714e742fbadad31f819ae3",
+    ".github/workflows/ci.yml": "7977fef22e4d57661d737ca48cb41b8d170d912c4a606b1cc9708e500af9ce49"
   },
   "pre_grade_freeze_sha256": "298b604a7c9a4342fd87f744161831426a7f70520f580a4e8a03fef4fd41196d",
   "preflight": {
@@ -463,7 +465,7 @@
     "production_activation": false
   },
   "linux_offline": {
-    "tests_passed": 12,
+    "tests_passed": 14,
     "network": "none",
     "filesystem": "read_only",
     "private_runtime_or_provider_mounts": false,
@@ -474,9 +476,10 @@
   },
   "local_verification": {
     "lint_passed": true,
-    "deployment_contracts": 199,
+    "deployment_contracts": 201,
     "context_research_policy_provider_cases": 167,
-    "new_contract_tests": 12
+    "new_contract_tests": 14,
+    "qualification_and_calibration_cases": 39
   },
   "native_execution": {
     "performed": false,
@@ -487,5 +490,42 @@
   },
   "production_activation": false,
   "owner_version_3_review": "pending",
-  "ci_gate": "all_nine_exact_head_jobs_and_five_existing_30_second_reserves_before_merge"
+  "ci_gate": "all_nine_exact_head_jobs_and_five_existing_30_second_reserves_before_merge",
+  "initial_linux_offline": {
+    "tests_passed": 12,
+    "network": "none",
+    "filesystem": "read_only",
+    "private_runtime_or_provider_mounts": false,
+    "host_linux_declaration_exact": true,
+    "host_linux_preflight_exact": true,
+    "model_calls": 0,
+    "http_calls": 0
+  },
+  "location_repair": {
+    "reason": "extra native plan file violated unchanged closed five-file R01 inventory",
+    "failed_head": "2b3c77ae1347158d18adf24c92b9ee54f82128c3",
+    "failed_run": 39806897500,
+    "old_artifact_path": "qualification/frozen-native-acceptance-plan-v1.json",
+    "new_artifact_path": "docs/evidence/frozen-native-acceptance-plan-v1.json",
+    "artifact_bytes_sha256": "c3a38ac99547ed84bbfa2ae6dd06b9d92aae63a26dff06117c397e4de2856ed2",
+    "artifact_bytes_unchanged": true,
+    "original_rules_sha256": "a6df506feec229bff8a1334a206d5d758492cda7d2714e742fbadad31f819ae3",
+    "original_rules_retained": "docs/evidence/native-acceptance-rules-before-location-repair-2026-10-22.md",
+    "current_rules_change": "only artifact-path text; grading and all other rule bytes unchanged",
+    "planner_fixtures_criteria_wire_model_intent_and_first_preflight_unchanged": true,
+    "ci_change": "move existing R01 check before full backend exactly once; no job/cap/worker/coverage changes"
+  },
+  "initial_ci": {
+    "head": "2b3c77ae1347158d18adf24c92b9ee54f82128c3",
+    "id": 39806897500,
+    "conclusion": "failure",
+    "successful_jobs": 8,
+    "failed_job": "backend-and-contracts",
+    "failed_tests": [
+      "test_qualification_cli.py::test_seed_report_is_deterministic_non_authorizing_and_content_free",
+      "test_calibration_cli.py::test_empty_evidence_is_not_a_vacuous_verification"
+    ],
+    "merge_attempts": 0,
+    "reason": "extra native plan file violated unchanged closed five-file R01 inventory"
+  }
 }

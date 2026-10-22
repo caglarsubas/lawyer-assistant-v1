@@ -1,6 +1,7 @@
 """Frozen plan, denominator, exact-version and non-execution contracts."""
 
 import copy
+import hashlib
 import json
 import os
 import subprocess
@@ -18,12 +19,13 @@ from native_acceptance_plan import build_plan, validate_plan  # noqa: E402
 
 from app.evidence_prompt import canonical  # noqa: E402
 from app.provider import Provider  # noqa: E402
+from app.qualification import inspect_dossier  # noqa: E402
 
 
 class NativeAcceptancePlanContracts(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.plan = json.loads((ROOT / "qualification/frozen-native-acceptance-plan-v1.json").read_text())
+        cls.plan = json.loads((ROOT / "docs/evidence/frozen-native-acceptance-plan-v1.json").read_text())
 
     def row(self, key):
         return next(c for c in self.plan["cases"] if c["id"] == key)
@@ -55,6 +57,23 @@ class NativeAcceptancePlanContracts(unittest.TestCase):
         self.assertEqual(s["attempts_per_case"], 1)
         self.assertEqual(s["completion_requests_upper_bound"], 11)
         self.assertEqual(s["total_metadata_requests_upper_bound"], 35)
+
+    def test_plan_does_not_expand_the_closed_r01_dossier_or_delay_its_ci_gate(self):
+        report = inspect_dossier(ROOT / "qualification")
+        self.assertTrue(report["structurally_valid"])
+        self.assertFalse(report["production_qualified"])
+        self.assertFalse((ROOT / "qualification/frozen-native-acceptance-plan-v1.json").exists())
+        workflow = (ROOT / ".github/workflows/ci.yml").read_text()
+        gate = "- name: Validate R01 planning contracts (not legal or runtime approval)"
+        self.assertEqual(workflow.count(gate), 1)
+        self.assertLess(workflow.index(gate), workflow.index("- name: Test backend"))
+
+    def test_location_repair_retains_original_rules_and_changes_no_grading_rule(self):
+        original = (ROOT / "docs/evidence/native-acceptance-rules-before-location-repair-2026-10-22.md").read_bytes()
+        self.assertEqual(hashlib.sha256(original).hexdigest(), "a6df506feec229bff8a1334a206d5d758492cda7d2714e742fbadad31f819ae3")
+        expected = original.replace(b"qualification/frozen-native-acceptance-plan-v1.json",
+                                    b"docs/evidence/frozen-native-acceptance-plan-v1.json")
+        self.assertEqual(expected, (ROOT / "docs/NATIVE_ACCEPTANCE_PLAN.md").read_bytes())
 
     def test_expected_groups_stay_outside_exact_wire_payload(self):
         for row in self.plan["cases"]:

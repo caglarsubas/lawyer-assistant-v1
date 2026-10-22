@@ -5670,13 +5670,13 @@ not abstention. Control transport success does not turn a positive no-candidate 
 blocked request into quality success. This frozen plan cannot establish full
 acceptance with those gaps; do not spend repeated native calls trying to pass it.
 
-Twelve new contract tests verify frozen reconstruction, drift/tamper rejection,
+Fourteen contract tests verify frozen reconstruction, drift/tamper rejection,
 expected-group separation, complete conditions, adverse and revision distinctions,
 empty-selection rules, strict IDs, no settings/network access, unchanged originals
 and exclusive artifact creation. They also prove that a fabricated perfect
 selection cannot become verified native evidence. The full declaration and
 preflight report reproduce exactly in read-only, network-disabled Linux with
-public code only. All 199 deployment contracts and 167 relevant context/research/
+public code only. All 201 deployment contracts and 167 relevant context/research/
 policy/provider cases pass locally. Nine exact-head CI jobs and five existing
 timing-reserve gates remain mandatory; jobs, caps, workers and coverage are unchanged.
 
@@ -5689,7 +5689,15 @@ before any authorized native trial. Preserve this declaration and first prefligh
 as historical evidence. Native selection quality, sustained five-job capacity,
 the historical HTTP 502 root cause, reviewed corpus, isolated intake, OCR/layout,
 offline operation, graph rollback and production RPO/RTO remain open. See the
-[frozen declaration](../qualification/frozen-native-acceptance-plan-v1.json),
+[frozen declaration](evidence/frozen-native-acceptance-plan-v1.json),
 [acceptance rules](NATIVE_ACCEPTANCE_PLAN.md),
 [operator procedure](OPERATIONS.md#fresh-frozen-native-acceptance-plan) and
 [dated preflight evidence](evidence/native-acceptance-plan-2026-10-22.json).
+
+The initial PR head's CI rejected the declaration's placement inside the closed
+five-file R01 dossier. No merge was attempted. The sealed JSON was relocated
+byte-for-byte to the evidence directory; the original rules are retained and
+their current document changes only the artifact path. Sources, code, wire,
+criteria, plan seal and first preflight are unchanged. A new regression protects
+the closed dossier, and the existing R01 gate now runs once before the costly
+backend suite. No guard, coverage, job, cap or worker count was weakened.

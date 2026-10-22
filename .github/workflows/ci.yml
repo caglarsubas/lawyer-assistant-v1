@@ -118,6 +118,10 @@ jobs:
           read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
 
+      # The R01 dossier is a closed five-file inventory. Reject misplaced files
+      # before the costly backend suite; keep this same gate exactly once.
+      - name: Validate R01 planning contracts (not legal or runtime approval)
+        run: python scripts/qualify_roadmap.py check qualification
       - name: Test backend
         timeout-minutes: 18
         run: |
@@ -140,8 +144,6 @@ jobs:
         run: python -m unittest discover -s deploy -p 'test_*.py'
       - name: Validate RDF and SHACL contract
         run: python scripts/validate_ontology.py
-      - name: Validate R01 planning contracts (not legal or runtime approval)
-        run: python scripts/qualify_roadmap.py check qualification
       - name: Compare actual synthetic extraction with independent reference
         run: |
           python scripts/build_calibration_fixture.py "$RUNNER_TEMP/r01-calibration"

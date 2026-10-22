@@ -1683,7 +1683,7 @@ The prior native failures and historical HTTP 502 diagnosis remain unresolved.
 ## Fresh frozen native acceptance plan
 
 `scripts/native_acceptance_plan.py` prepares the immutable synthetic-only
-declaration in `qualification/frozen-native-acceptance-plan-v1.json`. It does not
+declaration in `docs/evidence/frozen-native-acceptance-plan-v1.json`. It does not
 load runtime settings, keys or private matters and has no inference runner.
 `scripts/native_acceptance_grading.py` validates that declaration against current
 public code, original fixture bytes, complete inventory, exact wire messages and
@@ -1708,9 +1708,19 @@ acceptance. Transport-control success cannot erase quality misses. No native or
 HTTP calls are made in this milestone. Never replay exposed cases until successful
 or silently promote a controlled/fabricated selection into a native result.
 
-Twelve new tests and identical host/Linux declaration/preflight results qualify
+Fourteen tests and identical host/Linux declaration/preflight results qualify
 offline preparation and rule enforcement only. Linux runs read-only with network
 disabled and public source only. Keep all nine exact-head CI jobs, existing caps,
 workers and five timing reserves; verify merged-main separately and audit unchanged
 originals, evidence versions, encrypted bytes and review history. Update the live
 roadmap without marking F00-06 complete or changing the owner's pending v3 review.
+
+The initial PR head misplaced the new declaration inside the closed five-file
+R01 dossier. CI correctly rejected it; no merge was attempted. The declaration
+was moved byte-for-byte to `docs/evidence/frozen-native-acceptance-plan-v1.json`.
+Its seal, sources, planner, wire messages, criteria and first preflight are
+unchanged. The original rule document is retained in
+`evidence/native-acceptance-rules-before-location-repair-2026-10-22.md`; the current
+rule document changes only that artifact path. The existing R01 validation step
+now runs once before the full backend suite, with the same command, closed-file
+guard, jobs, caps, workers and coverage. No whitelist expansion masks the error.

@@ -15,7 +15,7 @@ criteria digest, implementation/dependency hashes and fixed schedule for every
 case. The entire declaration is sealed and rebuilt for validation. Earlier
 fixtures, failures, prompts and production packing remain unchanged.
 
-`qualification/frozen-native-acceptance-plan-v1.json` is the canonical prepared
+`docs/evidence/frozen-native-acceptance-plan-v1.json` is the canonical prepared
 artifact. Expected groups stay in the separate fixture/grader: a later executor
 must send only each case's exact `messages`, never the declaration or expected
 groups. All fixture facts are invented. Their document hashes identify synthetic
