@@ -23,6 +23,7 @@ sys.path.insert(0, str(ROOT / "deploy"))
 sys.path.insert(0, str(ROOT / "scripts"))
 from manage_backup import SERVICES, compose_command, inventory, volume_mounts  # noqa: E402
 from recovery_fixture import code_fingerprint  # noqa: E402
+from restart_preflight_drill import unused_drill_subnet  # noqa: E402
 
 POSTGRES = "postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"
 OPENSEARCH = "opensearchproject/opensearch:2.19.3@sha256:e96cc6ae1500a073d973c0906f30f7cf4d9c461f32f855f9242a2da933660cdd"
@@ -37,10 +38,18 @@ def command(argv, *, timeout=300, expected=0):
     return result.stdout.strip()
 
 
-def compose_definition(images, encryption_key, password):
+def compose_definition(images, encryption_key, password, subnet=None):
+    import ipaddress
+
+    network = ipaddress.ip_network(subnet) if subnet else None
+    if network and (network.version != 4 or network.prefixlen != 28):
+        raise ValueError("Recovery requires an explicit isolated IPv4 /28")
     restricted = {"restart": "no", "networks": ["isolated"], "cap_drop": ["ALL"],
                   "security_opt": ["no-new-privileges:true"], "pids_limit": 256, "cpus": "2.0"}
     services = {name: {**restricted, "image": images[name], "pull_policy": "never"} for name in SERVICES}
+    if network:
+        for offset, name in enumerate(("postgres", "opensearch", "fuseki", "api"), 2):
+            services[name]["networks"] = {"isolated": {"ipv4_address": str(network.network_address + offset)}}
     services["api"].update({
         "read_only": True, "tmpfs": ["/tmp:size=256m,mode=1777"], "mem_limit": "1g",
         "stop_grace_period": "240s",
@@ -74,7 +83,7 @@ def compose_definition(images, encryption_key, password):
         "healthcheck": {"test": ["CMD", "curl", "--fail", "--silent", "http://localhost:3030/structural/query?query=ASK%7B%7D"],
                         "interval": "2s", "timeout": "3s", "retries": 30},
     })
-    return {"services": services, "networks": {"isolated": {"internal": True}},
+    return {"services": services, "networks": {"isolated": {"internal": True, **({"ipam": {"config": [{"subnet": subnet}]}} if network else {})}},
             "volumes": {name: {} for name in ("documents", "postgres", "opensearch", "graphs", "public_sources")}}
 
 
@@ -136,6 +145,10 @@ def main():
             raise ValueError("API image source differs from this checkout; rebuild before running the drill")
         report["api_source"] = fingerprint
         report["host_backup_tool_sha256"] = hashlib.sha256((ROOT / "deploy/manage_backup.py").read_bytes()).hexdigest()
+        report["host_operator_dependencies"] = {
+            name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
+            for name in ("deploy/manage_backup.py", "deploy/restart_preflight.py", "deploy/manage_addresses.py",
+                         "scripts/qualify_recovery.py", "scripts/restart_preflight_drill.py")}
         report["checkout_commit"] = command(["git", "-C", str(ROOT), "rev-parse", "HEAD"])
         report["checkout_dirty"] = bool(command(["git", "-C", str(ROOT), "status", "--porcelain"]))
         hardware = '{"cpus":{{.NCPU}},"memory_bytes":{{.MemTotal}},"os":{{json .OSType}},"architecture":{{json .Architecture}},"server_version":{{json .ServerVersion}}}'
@@ -143,13 +156,19 @@ def main():
                           "docker": json.loads(command(["docker", "info", "--format", hardware]))}
         with tempfile.TemporaryDirectory(prefix="lawyer-recovery-") as directory:
             work = Path(directory)
-            config = work / "compose.json"
-            definition = compose_definition(images, base64.urlsafe_b64encode(secrets.token_bytes(32)).decode(), secrets.token_hex(24))
-            config.write_text(json.dumps(definition))
+            source_subnet = unused_drill_subnet()
+            target_subnet = unused_drill_subnet(excluded=[source_subnet])
+            configs = [work / (name + ".json") for name in ("source", "target")]
+            encryption_key, password = base64.urlsafe_b64encode(secrets.token_bytes(32)).decode(), secrets.token_hex(24)
+            for config, subnet in zip(configs, (source_subnet, target_subnet), strict=True):
+                definition = compose_definition(images, encryption_key, password, subnet)
+                config.write_text(json.dumps(definition))
+            report["checks"]["distinct_explicit_isolated_subnets"] = source_subnet != target_subnet
             report["resource_limits"] = {name: {key: service[key] for key in ("cpus", "mem_limit", "pids_limit")}
                                          for name, service in definition["services"].items()}
             names = ["lawyer-recovery-" + secrets.token_hex(6) + suffix for suffix in ("-source", "-target")]
-            source, target = [compose_command(name, [config], Path("/dev/null")) for name in names]
+            source, target = [compose_command(name, [config], Path("/dev/null"))
+                              for name, config in zip(names, configs, strict=True)]
             for name in names:
                 fresh_project(name)
             # Cleanup must run while configuration/secrets still exist.
@@ -179,7 +198,8 @@ def main():
                 def transfer(action, project, path, *, expected=0):
                     flags = ["--recipients-file", str(recipients), "--stop-services"] if action == "backup" else ["--identity-file", str(key), "--fresh-target"]
                     return command([sys.executable, str(ROOT / "deploy/manage_backup.py"), action, str(path), *flags,
-                                    "--project-name", project, "--compose-file", str(config), "--env-file", "/dev/null"], timeout=600, expected=expected)
+                                    "--project-name", project, "--compose-file", str(configs[names.index(project)]),
+                                    "--env-file", "/dev/null"], timeout=600, expected=expected)
 
                 stage = "cold_backup"
                 started = time.monotonic()
@@ -220,12 +240,22 @@ def main():
                 # A second backup tests the operator's downtime path. Deliberately
                 # leave Fuseki stopped: backup must not start an idle service.
                 command([*source, "up", "-d", "--wait", "--wait-timeout", "150", "api", "postgres", "opensearch"], timeout=180)
+                endpoint_format = '{{json .NetworkSettings.Networks}}'
+                running_ids = command([*source, "ps", "--quiet", "--status", "running"]).splitlines()
+                endpoint_before = command(["docker", "inspect", "--format", endpoint_format, *running_ids])
                 transfer("backup", names[0], work / "running-backup.age")
                 for service, container in source_containers.items():
                     running = command(["docker", "inspect", "--format", "{{.State.Running}}", container])
                     if running != ("false" if service == "fuseki" else "true"):
                         raise ValueError("Backup changed the previously running service set")
                 command([*source, "up", "-d", "--wait", "--wait-timeout", "150", "api", "postgres", "opensearch"], timeout=180)
+                endpoint_after = command(["docker", "inspect", "--format", endpoint_format, *running_ids])
+                def addresses_only(raw):
+                    return [[(name, e["NetworkID"], e["IPAddress"], e["IPAMConfig"], e["Aliases"])
+                             for name, e in sorted(json.loads(line).items())] for line in raw.splitlines()]
+                if addresses_only(endpoint_before) != addresses_only(endpoint_after):
+                    raise ValueError("Cold restart changed the pinned service addresses")
+                report["checks"]["cold_restart_preserves_pinned_addresses"] = True
                 report["checks"]["backup_restarts_only_previously_running_services"] = True
                 report["status"] = "passed"
             finally:

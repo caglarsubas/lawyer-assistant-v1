@@ -18,6 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "deploy"))
+import manage_addresses as addresses  # noqa: E402
 import manage_backup as backup  # noqa: E402
 
 OWNER = "lawyer-assistant.restart-preflight-drill"
@@ -53,12 +54,12 @@ def inspect_node(ident):
                            '"networks":{{json .NetworkSettings.Networks}}}', ident]).stdout)
 
 
-def unused_drill_subnet():
+def unused_drill_subnet(excluded=()):
     """One calculated benchmark-range subnet; no retry grid or network pruning."""
     ids = run(["docker", "network", "ls", "--quiet"]).stdout.split()
     if len(ids) > 1024 or any(not re.fullmatch(r"[0-9a-f]{12,64}", ident) for ident in ids):
         raise RuntimeError("Cannot bound the Docker network inventory")
-    allocated = []
+    allocated = [ipaddress.ip_network(value) for value in excluded]
     if ids:
         raw = run(["docker", "network", "inspect", "--format", "{{json .IPAM.Config}}", *ids]).stdout
         if len(raw.encode()) > 512 * 1024:
@@ -147,6 +148,8 @@ def drill(image, directory):
     try:
         selected_subnet = unused_drill_subnet()
         network = run(["docker", "network", "create", "--driver", "bridge", "--internal", "--label", OWNER + "=" + token,
+                       "--label", "com.docker.compose.project=" + project,
+                       "--label", "com.docker.compose.network=isolated",
                        "--subnet", selected_subnet, project]).stdout.strip()
         net = inspect_network(network)
         if (net["labels"].get(OWNER) != token or len(net["ipam"]) != 1
@@ -197,10 +200,42 @@ def drill(image, directory):
             raise RuntimeError("Read-only preflight changed an isolated container")
         if not all(value["running"] for value in before.values()):
             raise RuntimeError("The blocked drill did not retain every running container")
+        snapshot = addresses.capture(project)
+        plan = addresses.make_plan(project, snapshot, addresses.networks_for(snapshot))
+        journal = directory / "address-journal.json"
+        real_run = addresses.run
+        interrupted = False
+
+        def interrupt_once(argv, **kwargs):
+            nonlocal interrupted
+            if argv[:3] == ["docker", "network", "connect"] and not interrupted:
+                interrupted = True
+                raise RuntimeError("Disposable simulated interruption after disconnect")
+            return real_run(argv, **kwargs)
+
+        addresses.run = interrupt_once
+        try:
+            addresses.apply(plan, journal)
+        except RuntimeError:
+            if not interrupted or any(n["running"] for n in addresses.capture(project)):
+                raise RuntimeError("Interrupted pinning did not remain safely stopped") from None
+        finally:
+            addresses.run = real_run
+        if not interrupted:
+            raise RuntimeError("The interrupted endpoint fixture was not exercised")
+        addresses.apply(plan, journal, resume=True)
+        after_pin = addresses.capture(project)
+        backup.restart_plan(nodes)
+        if ({n["id"]: n["posture"] for n in after_pin} != {n["id"]: n["posture"] for n in snapshot}
+                or json.loads(journal.read_text())["phase"] != "complete"):
+            raise RuntimeError("Resumed address maintenance did not preserve container posture")
         # Avoid claiming that metadata checks qualify data-service recovery.
         return {"schema": "backup-restart-native-drill-v1", "legacy_collision_observed": collision,
                 "static_before_dynamic_verified": True, "exact_isolated_addresses_preserved": True,
                 "cyclic_CLI_preflight_blocked_without_downtime": True, "isolated_containers": len(nodes),
+                "address_pinning_preserves_containers_and_posture": True,
+                "interrupted_pinning_resumed_from_exact_checkpoint": True,
+                "pinned_restart_order_verified": True,
                 "host_ports": 0, "private_mounts": 0, "external_networks": 0,
                 "application_project_mutations": 0, "backup_or_restore_executed": False,
                 "real_data_service_recovery_qualified": False, "cleanup_verified": False}

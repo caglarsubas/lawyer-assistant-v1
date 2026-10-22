@@ -5030,3 +5030,37 @@ is performed. R03-17 remains waiting for the owner's exact-version decision.
 CI, guarded merge and operator-source installation retain separate receipts.
 See [operations](OPERATIONS.md#encrypted-cold-backup) and
 [engineering evidence](evidence/backup-restart-preflight-2026-10-22.json).
+
+### Delivered packet — existing-address remediation and encrypted recovery, 22 October 2026
+
+F00-06 gains a separately reviewed, hash-bound address maintenance plan for the
+existing deployment. It pins current IPv4 endpoints on their existing networks
+without recreating containers, moving volumes, changing images or accessing
+private document content. Snapshot drift, ambiguous ownership, unsupported
+endpoint options and unknown services block maintenance. Consumers stop before
+dependencies; pinned endpoints start in dependency order with health checks.
+Private checkpoints support an interrupted disconnect/connect and partial-start
+resume toward the same exact plan. A per-host Compose network override preserves
+the planned addresses on later, independently verified recreation. The backup
+restart guard remains mandatory.
+
+The native disposable drill reproduced the old collision, blocked cyclic
+admission without downtime and qualified interrupted pinning/resume with the
+same containers, configuration, addresses and DNS alias sets. A separate local
+PostgreSQL/OpenSearch/Fuseki drill restored encrypted synthetic records and all
+five volume inventories, rejected truncated/nonempty restores without writes,
+preserved pinned endpoints through cold backup and verified disposable cleanup.
+The source and target have distinct explicit internal subnets, no host ports,
+live environment, private cases or inference. Host operator dependencies are
+hash-bound in the recovery receipt. Routine CI allocations and deadlines remain
+unchanged; exact-head hosted checks and timing reserve are separate merge gates.
+
+F00-06 remains **partial**. A live read-only plan covers eight services and four
+remaining dynamic endpoints; applying it, revalidating an authenticated recovery
+point and auditing private record/original preservation require separate runtime
+receipts. Fixture success does not qualify production RPO/RTO, populated graph
+recovery, five-job load, provider context or tunnel policy. R03-17 remains waiting
+for the owner's exact-version legal review. No draft, extraction, inference or
+review decision is created by this packet.
+See [operator instructions](OPERATIONS.md#preserve-existing-addresses-before-cold-recovery)
+and [engineering evidence](evidence/address-recovery-2026-10-22.json).
