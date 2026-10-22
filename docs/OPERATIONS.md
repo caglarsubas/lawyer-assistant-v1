@@ -1547,3 +1547,46 @@ alternate wording/adverse-source coverage and a disposable native adapter before
 fresh native trial or production proposal. Owner version-3 review and historical 502
 diagnosis remain open.
 See [dated evidence](evidence/budgeted-quotation-bundles-2026-10-22.json).
+
+
+### Disposable bundle adapter and alternate/adverse-source evaluation
+
+`disposable_bundle_adapter.py` is an explicit opt-in Python adapter, with no app
+factory, environment activation, production route or native-execution CLI. It
+requires a `Provider`, `mode=MARKER`, an exact source inventory and its complete
+sealed bundle plan. It reconstructs and hash-checks the existing offline message
+envelope before calling the provider's guarded completion function. Source and
+plan changes during transport discard the result. Outputs are separate exact
+bundle parts with roles, boundary flags and fallback labels; they are not synthesized
+claims or reviewed work products. Never join parts into an invented quotation.
+
+Run only the fixed invented suites for this qualification:
+
+```sh
+PYTHONPATH=backend:scripts backend/.venv/bin/python scripts/evaluate_alternate_adverse_quotes.py --output /tmp/new-alternate-adverse-report.json
+backend/.venv/bin/python -m unittest discover -s deploy -p test_disposable_bundle_adapter.py
+```
+
+The output path must not exist. The test fixture uses `httpx.MockTransport` and a
+synthetic credential; it opens no sockets and reads no runtime configuration,
+private matter, provider key or mounted secret. The fixed adapter evaluator selects
+all nominated bundles under a controlled rule: nine mock metadata plus nine mock
+completion requests across twelve cases. Regression tests make additional mock
+requests. Neither count represents inference. Five barrier-synchronized mock
+selections test source isolation only. A network-disabled, read-only Linux run
+must reproduce both entire evaluator reports, not just their summary counts.
+
+Retain the original suite/source hashes before grading. Expected source groups
+belong to the evaluator only. Current results are 13/18 groups, 2/4 alternate-wording
+cases and both sides in 4/7 adverse-source cases, with twelve fitting prompts. Keep
+the missed paraphrases, missed unmatching adverse source, budget-excluded adverse
+source and unlinked condition visible. Hostile source instructions remain data;
+exact-copy/schema guards do not establish model instruction resistance or complete
+adverse-authority discovery. Empty nomination is not model abstention.
+
+Do not activate this contract in production or run native inference merely because
+mock tests pass. A fresh native trial needs a separately frozen acceptance plan,
+source and envelope identities, no expected-answer hints, explicit model/transport
+scope and retained failure receipts. Do not replay earlier exposed failures until
+passing. Preserve the private pilot and its pending owner review. Historical 502
+cause, legal correctness and sustained native capacity remain open.

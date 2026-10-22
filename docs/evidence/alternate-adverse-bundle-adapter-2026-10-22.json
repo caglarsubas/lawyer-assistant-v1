@@ -1,0 +1,1042 @@
+{
+  "schema": "alternate-adverse-disposable-bundle-record-v1",
+  "recorded_on": "2026-10-22",
+  "qualification": "offline_coverage_and_mock_adapter_only_not_production_qualified",
+  "implementation_sha256": {
+    "scripts/disposable_bundle_adapter.py": "6a43692b7a3c8ead6338cae92ad5a8804b781951da0bd3e9b54a4eb1beca1d28",
+    "scripts/alternate_adverse_quote_cases.py": "6206297e7e65d8aa708a518aa81bd556d4029d011142f4c89f2a90dadcb5e4bb",
+    "scripts/evaluate_alternate_adverse_quotes.py": "7d4150a6a7acc324d3c8411649f910553e733fe44077086df88bb444fd880fd7",
+    "scripts/bundle_adapter_fixture.py": "fb54f5299331415afcf977598bfbd2250b7cd85815a5bf8dd95b706d24eb8e88",
+    "scripts/evaluate_disposable_bundle_adapter.py": "d0084ac2892f4d83372ed6b23c7a34c56071833a49b3b150754396c03d8b4f4a",
+    "deploy/test_disposable_bundle_adapter.py": "1d4960f4e260c7de11e8f6068dd6d57a0cd74bdd6a40bed0fb488e9a657abc71",
+    "scripts/budgeted_quote_bundles.py": "18e59c03a18bae46a3c6282663937c974101b008033ef59d1dc6e00d0f8cfce4",
+    "scripts/offline_quotation_boundaries.py": "17cafee58eb58b874638b4a1c62a111d423b0ae71293a2b11f9f14d514d640a1",
+    "backend/app/context_packing.py": "7e78fb51fd680d53691cc62505c288095bb5014d93fcf69ad6c1cf9637805d9d",
+    "backend/app/provider.py": "68a54bae7879b47d5a193a752448d71ce5835d8efdad8d27a18f45ece92019c4",
+    "backend/app/evidence_prompt.py": "8bca934696e575eaa0959d37a22588e8236ea80293c56523e641baf34b1bb82a"
+  },
+  "evaluation": {
+    "offline": {
+      "schema": "alternate-adverse-bundles-evaluation-v1",
+      "suite": "synthetic-alternate-adverse-bundles-v1",
+      "suite_sha256": "ffc38e56c98b954851aec6995d7a81a43deafefe8616b7be8f030ab4311af35c",
+      "inference_calls": 0,
+      "http_calls": 0,
+      "private_documents": 0,
+      "review_decisions": 0,
+      "production_changes": 0,
+      "native_or_legal_qualification": false,
+      "cases": [
+        {
+          "case": "P1101",
+          "kind": "alternate_wording",
+          "source_inventory_sha256": "2d1c4690b30b10dbccfc064e1441484c7c3b2c4ee5f49240827846ef0ce604be",
+          "source_pins": [
+            {
+              "evidence_id": "P1101-dispatch",
+              "document_id": "P1101-doc-dispatch",
+              "document_revision": 1,
+              "document_sha256": "116d8353fd167e79add0b08db91c8bcca0aab2170748394fee4ca490e8dfb643",
+              "original_text_sha256": "f4e73f92ff4aaad492f4c14104faeecfb93681ed141ff6c202d54f52ceddd5e5",
+              "excerpt_text_sha256": "f4e73f92ff4aaad492f4c14104faeecfb93681ed141ff6c202d54f52ceddd5e5",
+              "excerpt_start": 0,
+              "excerpt_end": 31,
+              "full_passage_length": 31
+            }
+          ],
+          "plan_sha256": "e2724df23d90a5fd639e6fb0a9f8c7d68437942379a9668abb963aee41cfc2b1",
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "7924234cf8587432f45a042ed3325b6bb211b4b61f3fc80b4e5fdd7972522c1a",
+            "utf8_bytes": 450,
+            "total_upper_bound_units": 1906,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "adapter_messages_sha256": "7924234cf8587432f45a042ed3325b6bb211b4b61f3fc80b4e5fdd7972522c1a",
+          "groups": [
+            {
+              "source_id": "P1101-dispatch",
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "bundles": 0,
+          "omissions": [],
+          "unused_initial_evidence_ids": [
+            "P1101-dispatch"
+          ],
+          "all_declared_groups_available": false,
+          "source_versions_spans_and_originals_exact": true,
+          "selection_quality_measured": false
+        },
+        {
+          "case": "P1102",
+          "kind": "alternate_wording",
+          "source_inventory_sha256": "3606b4e500dfd5014d15758a122f9bd393b67032ed8d784b598d681a126b5af9",
+          "source_pins": [
+            {
+              "evidence_id": "P1102-refund",
+              "document_id": "P1102-doc-refund",
+              "document_revision": 2,
+              "document_sha256": "a2cc924b7e9eff8773a436d69733312a9401dece901091ee1ee7a69b948e9594",
+              "original_text_sha256": "74d5bcc39528a7f52ae306cc862f8ba7b35d74f55a7168055950803819edb778",
+              "excerpt_text_sha256": "74d5bcc39528a7f52ae306cc862f8ba7b35d74f55a7168055950803819edb778",
+              "excerpt_start": 0,
+              "excerpt_end": 39,
+              "full_passage_length": 39
+            }
+          ],
+          "plan_sha256": "315b9a46ba2982c1a746fb40ade65de5d00565f6c447949e1cf7efbfc0c5616e",
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "4ade33ebd3db76f9ed86f4dab1e4ff668a8ac62df678aee915f5ca66a1ac078b",
+            "utf8_bytes": 444,
+            "total_upper_bound_units": 1900,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "adapter_messages_sha256": "4ade33ebd3db76f9ed86f4dab1e4ff668a8ac62df678aee915f5ca66a1ac078b",
+          "groups": [
+            {
+              "source_id": "P1102-refund",
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "bundles": 0,
+          "omissions": [],
+          "unused_initial_evidence_ids": [
+            "P1102-refund"
+          ],
+          "all_declared_groups_available": false,
+          "source_versions_spans_and_originals_exact": true,
+          "selection_quality_measured": false
+        },
+        {
+          "case": "P1103",
+          "kind": "alternate_wording",
+          "source_inventory_sha256": "503696ffefb66418580e0ade6af05b3ffb7987cec9a9ccc3a447af37121a86cb",
+          "source_pins": [
+            {
+              "evidence_id": "P1103-return",
+              "document_id": "P1103-doc-return",
+              "document_revision": 3,
+              "document_sha256": "1ed624fc5b3c8827d8e1d18d0f7500f09043e7180807d9686486d9a281810af4",
+              "original_text_sha256": "95dd84975f32301a9977a94387c2bf1bc352d6841bd0e1832b87f2dfc6d7bf58",
+              "excerpt_text_sha256": "95dd84975f32301a9977a94387c2bf1bc352d6841bd0e1832b87f2dfc6d7bf58",
+              "excerpt_start": 0,
+              "excerpt_end": 83,
+              "full_passage_length": 83
+            }
+          ],
+          "plan_sha256": "ca629bb2aa2376477a490abac3d3a5257f8b21c0521d2a08da70f433d8ae579a",
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "d4be23a917ea724ebc588bc421b3f352525badd3613ed4c52e5604a81db61cf6",
+            "utf8_bytes": 819,
+            "total_upper_bound_units": 2275,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "adapter_messages_sha256": "d4be23a917ea724ebc588bc421b3f352525badd3613ed4c52e5604a81db61cf6",
+          "groups": [
+            {
+              "source_id": "P1103-return",
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "bundles": 1,
+          "omissions": [],
+          "unused_initial_evidence_ids": [],
+          "all_declared_groups_available": true,
+          "source_versions_spans_and_originals_exact": true,
+          "selection_quality_measured": false
+        },
+        {
+          "case": "P1104",
+          "kind": "alternate_wording",
+          "source_inventory_sha256": "d12c3cb597162b34d459191ac683523717eb15e745d3044dbfe169bec57fae36",
+          "source_pins": [
+            {
+              "evidence_id": "P1104-receipt",
+              "document_id": "P1104-doc-receipt",
+              "document_revision": 2,
+              "document_sha256": "8477512593d66f61468e9c259b9db7494e1cf73aa887ada800882eaba307558c",
+              "original_text_sha256": "3ed9089f6d60f86b8bd0a4b6941cbc8c9d804cbefaef161678e75c851fc9ddd5",
+              "excerpt_text_sha256": "3ed9089f6d60f86b8bd0a4b6941cbc8c9d804cbefaef161678e75c851fc9ddd5",
+              "excerpt_start": 0,
+              "excerpt_end": 61,
+              "full_passage_length": 61
+            }
+          ],
+          "plan_sha256": "6f1b1ce82fcf82123c8307a51d9eed6c0bfccc4583cf157829dde0e2d2687d71",
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "633f88a0ecc4625bbd5ffe622363536d2b2588f46983519f55a61389b7ea45d0",
+            "utf8_bytes": 699,
+            "total_upper_bound_units": 2155,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "adapter_messages_sha256": "633f88a0ecc4625bbd5ffe622363536d2b2588f46983519f55a61389b7ea45d0",
+          "groups": [
+            {
+              "source_id": "P1104-receipt",
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "bundles": 1,
+          "omissions": [],
+          "unused_initial_evidence_ids": [],
+          "all_declared_groups_available": true,
+          "source_versions_spans_and_originals_exact": true,
+          "selection_quality_measured": false
+        },
+        {
+          "case": "P1105",
+          "kind": "adverse_sources",
+          "source_inventory_sha256": "62c853546db5bc3cb726bd071e4b112b607429b457b1e253009f82297e0c69bb",
+          "source_pins": [
+            {
+              "evidence_id": "P1105-sender",
+              "document_id": "P1105-doc-sender",
+              "document_revision": 1,
+              "document_sha256": "2aff7a9453e0a8bef38446a910e34ff34f66ff1243acdad01d533b7e6f8c3dc7",
+              "original_text_sha256": "a36909c818e1cebb29dae707073b35a6a209c75f4fac630f2d3c634e4689b6e7",
+              "excerpt_text_sha256": "a36909c818e1cebb29dae707073b35a6a209c75f4fac630f2d3c634e4689b6e7",
+              "excerpt_start": 0,
+              "excerpt_end": 75,
+              "full_passage_length": 75
+            },
+            {
+              "evidence_id": "P1105-recipient",
+              "document_id": "P1105-doc-recipient",
+              "document_revision": 4,
+              "document_sha256": "89e74d86c63db5d49b0c0fc0bb479154f323416e946ffa7666f90ef4cf87d3a6",
+              "original_text_sha256": "95f61365a036e21c28eaf2b64e7fe3276ada2ebcaf9bc95a8927532edb42d91c",
+              "excerpt_text_sha256": "95f61365a036e21c28eaf2b64e7fe3276ada2ebcaf9bc95a8927532edb42d91c",
+              "excerpt_start": 0,
+              "excerpt_end": 84,
+              "full_passage_length": 84
+            }
+          ],
+          "plan_sha256": "93a0877e4ec71561ab0818a2779e50044999a34dc2024cd86094b9fcdc5690fe",
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "6e290d2c8aa463b85901b0414435c2a44347794baf0956d4cbb60dcadb4fc5b3",
+            "utf8_bytes": 1173,
+            "total_upper_bound_units": 2629,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "adapter_messages_sha256": "6e290d2c8aa463b85901b0414435c2a44347794baf0956d4cbb60dcadb4fc5b3",
+          "groups": [
+            {
+              "source_id": "P1105-sender",
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "source_id": "P1105-recipient",
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "bundles": 2,
+          "omissions": [],
+          "unused_initial_evidence_ids": [],
+          "all_declared_groups_available": true,
+          "source_versions_spans_and_originals_exact": true,
+          "selection_quality_measured": false
+        },
+        {
+          "case": "P1106",
+          "kind": "adverse_sources",
+          "source_inventory_sha256": "d10a6a2e2a5cff9df87467adb30298a5955e28a89b42b824872821d3f7879e9b",
+          "source_pins": [
+            {
+              "evidence_id": "P1106-ledger",
+              "document_id": "P1106-doc-ledger",
+              "document_revision": 5,
+              "document_sha256": "53b1b7f4b3bc1e55707a21da48366ee259fb5d2ee1afccf508f2fe94e21be09b",
+              "original_text_sha256": "1922d28aca28e5c13852794b23636aca9f4d952d696f7c0ef47ed5dd577c1589",
+              "excerpt_text_sha256": "1922d28aca28e5c13852794b23636aca9f4d952d696f7c0ef47ed5dd577c1589",
+              "excerpt_start": 0,
+              "excerpt_end": 32,
+              "full_passage_length": 32
+            },
+            {
+              "evidence_id": "P1106-bank",
+              "document_id": "P1106-doc-bank",
+              "document_revision": 2,
+              "document_sha256": "b2146cdb7195f74bdd7123de732aa4da45a1f1e7c94e558b320b1643194199bf",
+              "original_text_sha256": "d5591e4e648ff8c970304178b2c8d06fc5ca6246faf4d3bec77814e4211c5aff",
+              "excerpt_text_sha256": "d5591e4e648ff8c970304178b2c8d06fc5ca6246faf4d3bec77814e4211c5aff",
+              "excerpt_start": 0,
+              "excerpt_end": 66,
+              "full_passage_length": 66
+            }
+          ],
+          "plan_sha256": "71da78a02ca87a3f0a2e23e32e5e0da101ade866238e3d954e501825b1e0e7ae",
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "9389ff72d1b7e8ab2e95a47000f31c198270bb5c56e3cc90f0b3e6d1df753694",
+            "utf8_bytes": 1011,
+            "total_upper_bound_units": 2467,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "adapter_messages_sha256": "9389ff72d1b7e8ab2e95a47000f31c198270bb5c56e3cc90f0b3e6d1df753694",
+          "groups": [
+            {
+              "source_id": "P1106-ledger",
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "source_id": "P1106-bank",
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "bundles": 2,
+          "omissions": [],
+          "unused_initial_evidence_ids": [],
+          "all_declared_groups_available": true,
+          "source_versions_spans_and_originals_exact": true,
+          "selection_quality_measured": false
+        },
+        {
+          "case": "P1107",
+          "kind": "adverse_sources",
+          "source_inventory_sha256": "69c010e44c218024c0196aea5c7b8eb55c5fdb6b2b3b1591521115d9a3cf0ca1",
+          "source_pins": [
+            {
+              "evidence_id": "P1107-request",
+              "document_id": "P1107-doc-request",
+              "document_revision": 1,
+              "document_sha256": "6a3fd32bdd33acb3b1a09138327e59f3cdbc576867daea8193c018cb48ab75c8",
+              "original_text_sha256": "f5ee6f8125e7caba9244a6e4d22c221f68637aee4ca676e5f90ea8200fa55642",
+              "excerpt_text_sha256": "f5ee6f8125e7caba9244a6e4d22c221f68637aee4ca676e5f90ea8200fa55642",
+              "excerpt_start": 0,
+              "excerpt_end": 36,
+              "full_passage_length": 36
+            },
+            {
+              "evidence_id": "P1107-exception",
+              "document_id": "P1107-doc-exception",
+              "document_revision": 7,
+              "document_sha256": "2cb64daa86de62df326c93b2f1399b9476770e2a60f45f4bd06f4bc56931ad40",
+              "original_text_sha256": "13ea42bba01c0c13b910c7d33a092442400094257ca6d5353192728461811696",
+              "excerpt_text_sha256": "13ea42bba01c0c13b910c7d33a092442400094257ca6d5353192728461811696",
+              "excerpt_start": 0,
+              "excerpt_end": 74,
+              "full_passage_length": 74
+            }
+          ],
+          "plan_sha256": "63b3d7a0450c943276791bcca12f127bfdd0ec9eb8e7b8f26fbef0d1d5d05cb4",
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "1686bdede57f471904ce5502587d92d9e0899fe6d3db991dabd3d6e8c10c1803",
+            "utf8_bytes": 1054,
+            "total_upper_bound_units": 2510,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "adapter_messages_sha256": "1686bdede57f471904ce5502587d92d9e0899fe6d3db991dabd3d6e8c10c1803",
+          "groups": [
+            {
+              "source_id": "P1107-request",
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "source_id": "P1107-exception",
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "bundles": 2,
+          "omissions": [],
+          "unused_initial_evidence_ids": [],
+          "all_declared_groups_available": true,
+          "source_versions_spans_and_originals_exact": true,
+          "selection_quality_measured": false
+        },
+        {
+          "case": "P1108",
+          "kind": "adverse_sources",
+          "source_inventory_sha256": "343891fc400f0c2e549857bc3af8b05b1d132c5f9170893bc515fd3bd108f835",
+          "source_pins": [
+            {
+              "evidence_id": "P1108-log",
+              "document_id": "P1108-doc-log",
+              "document_revision": 1,
+              "document_sha256": "0b2d13c39d813159fc850a56772844d654d763470a3564268b1a4ff8018cb969",
+              "original_text_sha256": "82e865f1e66b8360f82098ccfa0cbd865562c6b99b8a4f85f504733e3e79db96",
+              "excerpt_text_sha256": "82e865f1e66b8360f82098ccfa0cbd865562c6b99b8a4f85f504733e3e79db96",
+              "excerpt_start": 0,
+              "excerpt_end": 30,
+              "full_passage_length": 30
+            },
+            {
+              "evidence_id": "P1108-objection",
+              "document_id": "P1108-doc-objection",
+              "document_revision": 2,
+              "document_sha256": "8e19894be28293f10080cd8d4020c68779c34ebf3ce255cdb3f1fd63a9473bd0",
+              "original_text_sha256": "2c8803dca72b5164b3f8a72f963b06616d9c0e98d7306d044c046dab2736a4f4",
+              "excerpt_text_sha256": "2c8803dca72b5164b3f8a72f963b06616d9c0e98d7306d044c046dab2736a4f4",
+              "excerpt_start": 0,
+              "excerpt_end": 43,
+              "full_passage_length": 43
+            }
+          ],
+          "plan_sha256": "60a0a15dbd52df7a8892228195eb265d6a8a8f7ba5439f68b923b568f4300e52",
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "3b0d03211a8bfe2bd40127e3dc4442cea2f2060c960fd4a5e0468d98f09b92f7",
+            "utf8_bytes": 676,
+            "total_upper_bound_units": 2132,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "adapter_messages_sha256": "3b0d03211a8bfe2bd40127e3dc4442cea2f2060c960fd4a5e0468d98f09b92f7",
+          "groups": [
+            {
+              "source_id": "P1108-log",
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "source_id": "P1108-objection",
+              "side": "adverse",
+              "available_in_one_bundle": false
+            }
+          ],
+          "bundles": 1,
+          "omissions": [],
+          "unused_initial_evidence_ids": [
+            "P1108-objection"
+          ],
+          "all_declared_groups_available": false,
+          "source_versions_spans_and_originals_exact": true,
+          "selection_quality_measured": false
+        },
+        {
+          "case": "P1109",
+          "kind": "hostile_adverse",
+          "source_inventory_sha256": "97812c760a335b1e08c5fadf94802554d2073210297cc5cea45bf2360f803fcf",
+          "source_pins": [
+            {
+              "evidence_id": "P1109-count",
+              "document_id": "P1109-doc-count",
+              "document_revision": 3,
+              "document_sha256": "9b02bcb11e1b686b224f29133623b7f65a51ab499780a90e349f636e9a15f411",
+              "original_text_sha256": "46150683bb3170f1300b5150c8c87358a835224654108628767afd602e9306e7",
+              "excerpt_text_sha256": "46150683bb3170f1300b5150c8c87358a835224654108628767afd602e9306e7",
+              "excerpt_start": 0,
+              "excerpt_end": 27,
+              "full_passage_length": 27
+            },
+            {
+              "evidence_id": "P1109-hostile",
+              "document_id": "P1109-doc-hostile",
+              "document_revision": 6,
+              "document_sha256": "650c0a88c17b6c14df5656f698b9b33f2d5c0a7504686e5d87131ef9fa2bddf4",
+              "original_text_sha256": "83eb958ca4cd301bb3ea559d681e65ac2256a65a650b9038c6f5107218e331e5",
+              "excerpt_text_sha256": "83eb958ca4cd301bb3ea559d681e65ac2256a65a650b9038c6f5107218e331e5",
+              "excerpt_start": 0,
+              "excerpt_end": 89,
+              "full_passage_length": 89
+            }
+          ],
+          "plan_sha256": "99cd860ab6efa87186c0b46047bc447bb12adc25d37c3ad20ada0f45fc4faccc",
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "aaf180dd0bd3b94a590e9e5a44317e60331e60889e05664fd5a2e33602dcd676",
+            "utf8_bytes": 1049,
+            "total_upper_bound_units": 2505,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "adapter_messages_sha256": "aaf180dd0bd3b94a590e9e5a44317e60331e60889e05664fd5a2e33602dcd676",
+          "groups": [
+            {
+              "source_id": "P1109-count",
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "source_id": "P1109-hostile",
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "bundles": 2,
+          "omissions": [],
+          "unused_initial_evidence_ids": [],
+          "all_declared_groups_available": true,
+          "source_versions_spans_and_originals_exact": true,
+          "selection_quality_measured": false
+        },
+        {
+          "case": "P1110",
+          "kind": "absent_information",
+          "source_inventory_sha256": "e4a1a0da72ce5f0fc8846d9c24c4910317f10f4ce23605516e8bc1395ea15c9d",
+          "source_pins": [
+            {
+              "evidence_id": "P1110-inventory",
+              "document_id": "P1110-doc-inventory",
+              "document_revision": 1,
+              "document_sha256": "6562e05b7fbd32f5acdd19b2fb1560a4b6b6ca54530b375bbab951133a9de588",
+              "original_text_sha256": "8d49432b77a8cf449f76b5c1c7da55134c939f2645688ed6e8a23c50f48d0508",
+              "excerpt_text_sha256": "8d49432b77a8cf449f76b5c1c7da55134c939f2645688ed6e8a23c50f48d0508",
+              "excerpt_start": 0,
+              "excerpt_end": 46,
+              "full_passage_length": 46
+            }
+          ],
+          "plan_sha256": "bc5690d5aa9d9bb8269714990753dd31aed5d78cac2014ad4483002ae48ccb21",
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "851cbb095fdbb7e6521395f4ec7cdc1dd3153f7a487469b45ff7301aaed426f5",
+            "utf8_bytes": 432,
+            "total_upper_bound_units": 1888,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "adapter_messages_sha256": "851cbb095fdbb7e6521395f4ec7cdc1dd3153f7a487469b45ff7301aaed426f5",
+          "groups": [],
+          "bundles": 0,
+          "omissions": [],
+          "unused_initial_evidence_ids": [
+            "P1110-inventory"
+          ],
+          "all_declared_groups_available": false,
+          "source_versions_spans_and_originals_exact": true,
+          "selection_quality_measured": false
+        },
+        {
+          "case": "P1111",
+          "kind": "adverse_budget_pressure",
+          "source_inventory_sha256": "e89fed303e5b0f466bedaad057517b0af181e05265222ee60581f2fe20a9a47c",
+          "source_pins": [
+            {
+              "evidence_id": "P1111-bulk",
+              "document_id": "P1111-doc-bulk",
+              "document_revision": 1,
+              "document_sha256": "99dac220cfb0248f704c3f790aa5dc28b9413f2976d4a6025e4d35a89f894969",
+              "original_text_sha256": "0038868c60ee11639a5405e9faf6a86de0295a8a012f943531480fc2969c0e44",
+              "excerpt_text_sha256": "0038868c60ee11639a5405e9faf6a86de0295a8a012f943531480fc2969c0e44",
+              "excerpt_start": 0,
+              "excerpt_end": 1654,
+              "full_passage_length": 1654
+            },
+            {
+              "evidence_id": "P1111-counter",
+              "document_id": "P1111-doc-counter",
+              "document_revision": 9,
+              "document_sha256": "3c075bc1859ad1b91574a93b3017e2b913ae8a42706dbf9d5759537d036d27fb",
+              "original_text_sha256": "3b1acdce480f3889b0609ffbb21237d6509df05a41340c49ebe07a43f377787a",
+              "excerpt_text_sha256": "3b1acdce480f3889b0609ffbb21237d6509df05a41340c49ebe07a43f377787a",
+              "excerpt_start": 0,
+              "excerpt_end": 74,
+              "full_passage_length": 74
+            }
+          ],
+          "plan_sha256": "556a94a53e7f235a24f32d5e9c7f2c321436c8505665e7c25b9e74ab4819e989",
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "cfa087af267edb183d868d15bf3f62adc39fe7c794318ff635fea9387d12706a",
+            "utf8_bytes": 3025,
+            "total_upper_bound_units": 4481,
+            "context_limit_units": 4600,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "adapter_messages_sha256": "cfa087af267edb183d868d15bf3f62adc39fe7c794318ff635fea9387d12706a",
+          "groups": [
+            {
+              "source_id": "P1111-bulk",
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "source_id": "P1111-counter",
+              "side": "adverse",
+              "available_in_one_bundle": false
+            }
+          ],
+          "bundles": 3,
+          "omissions": [
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B4",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B5",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B6",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B7",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B8",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B9",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B10",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B11",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B12",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B13",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B14",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B15",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B16",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B17",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B18",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B19",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B20",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B21",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B22",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B23",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B24",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B25",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B26",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B27",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B28",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B29",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B30",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B31",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B32",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B33",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B34",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B35",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B36",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B37",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B38",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B39",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B40",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B41",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B42",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B43",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B44",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-bulk",
+              "bundle_id": "B45",
+              "reason": "whole_bundle_prompt_budget"
+            },
+            {
+              "evidence_id": "P1111-counter",
+              "bundle_id": "B46",
+              "reason": "whole_bundle_prompt_budget"
+            }
+          ],
+          "unused_initial_evidence_ids": [
+            "P1111-counter"
+          ],
+          "all_declared_groups_available": false,
+          "source_versions_spans_and_originals_exact": true,
+          "selection_quality_measured": false
+        },
+        {
+          "case": "P1112",
+          "kind": "unlinked_adverse",
+          "source_inventory_sha256": "322981226f5404c17714fce51983db4cb043a9ce1ba3508a3eb1c495e3c89503",
+          "source_pins": [
+            {
+              "evidence_id": "P1112-main",
+              "document_id": "P1112-doc-main",
+              "document_revision": 1,
+              "document_sha256": "8133be227a167d67deccd05540aca869b8869108d15d3ce6c3d2cb10990fce3d",
+              "original_text_sha256": "1e4736261a80316af262cd1cec70c0532e3182a750ed131dde2e1edbcd9263cd",
+              "excerpt_text_sha256": "1e4736261a80316af262cd1cec70c0532e3182a750ed131dde2e1edbcd9263cd",
+              "excerpt_start": 0,
+              "excerpt_end": 27,
+              "full_passage_length": 27
+            },
+            {
+              "evidence_id": "P1112-separate",
+              "document_id": "P1112-doc-separate",
+              "document_revision": 2,
+              "document_sha256": "c2cef3d17f5d9bc6ef0f5600e73685ef0c8ef7ad4bc976ba8430872bf4643550",
+              "original_text_sha256": "a60117968f97ad0daead3cc0637938b4978fe34bdea843aaf6f1bbcd1e73f9d7",
+              "excerpt_text_sha256": "a60117968f97ad0daead3cc0637938b4978fe34bdea843aaf6f1bbcd1e73f9d7",
+              "excerpt_start": 0,
+              "excerpt_end": 90,
+              "full_passage_length": 90
+            }
+          ],
+          "plan_sha256": "4a9c43c3de45179b11aaf5282d3148602c47583da4fb1577a82806dc964ce43f",
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "77969a1daa2de9df6ed335edb7bc5f5b6bb822db5e8338e1443212301170bde1",
+            "utf8_bytes": 1195,
+            "total_upper_bound_units": 2651,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "adapter_messages_sha256": "77969a1daa2de9df6ed335edb7bc5f5b6bb822db5e8338e1443212301170bde1",
+          "groups": [
+            {
+              "source_id": "P1112-main",
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "source_id": "P1112-separate",
+              "side": "adverse",
+              "available_in_one_bundle": false
+            }
+          ],
+          "bundles": 3,
+          "omissions": [],
+          "unused_initial_evidence_ids": [],
+          "all_declared_groups_available": false,
+          "source_versions_spans_and_originals_exact": true,
+          "selection_quality_measured": false
+        }
+      ],
+      "summary": {
+        "cases": 12,
+        "expected_groups": 18,
+        "available_groups": 13,
+        "alternate_wording_cases": 4,
+        "alternate_wording_all_groups_available": 2,
+        "adverse_source_cases": 7,
+        "both_sides_available_cases": 4,
+        "within_budget": 12
+      },
+      "conclusion": "offline_nomination_and_adapter_envelope_only_not_native_or_legal_qualification"
+    },
+    "adapter": {
+      "schema": "disposable-bundle-adapter-mock-evaluation-v1",
+      "suite_sha256": "ffc38e56c98b954851aec6995d7a81a43deafefe8616b7be8f030ab4311af35c",
+      "cases": [
+        {
+          "case": "P1101",
+          "plan_sha256": "e2724df23d90a5fd639e6fb0a9f8c7d68437942379a9668abb963aee41cfc2b1",
+          "result_sha256": "0e723e84c5fa9fce736951e4719c112bdddf07a5b9cd1c0ae8f167c0a7281d2a",
+          "state": "no_candidates_no_call",
+          "all_nominated_bundles_copied": true,
+          "source_inventory_unchanged": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        {
+          "case": "P1102",
+          "plan_sha256": "315b9a46ba2982c1a746fb40ade65de5d00565f6c447949e1cf7efbfc0c5616e",
+          "result_sha256": "19e27e5ba7bf43db4a9c20bb83f1bdb0289d2b1e24009a8ede9ef8c917814370",
+          "state": "no_candidates_no_call",
+          "all_nominated_bundles_copied": true,
+          "source_inventory_unchanged": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        {
+          "case": "P1103",
+          "plan_sha256": "ca629bb2aa2376477a490abac3d3a5257f8b21c0521d2a08da70f433d8ae579a",
+          "result_sha256": "ca8dc56ec751dfbdf81b60a503ff39d126f50971c22e0f2f3e559bc5e9d8363a",
+          "state": "selection_returned",
+          "all_nominated_bundles_copied": true,
+          "source_inventory_unchanged": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        {
+          "case": "P1104",
+          "plan_sha256": "6f1b1ce82fcf82123c8307a51d9eed6c0bfccc4583cf157829dde0e2d2687d71",
+          "result_sha256": "0bc5660a1f5a9e810a9a1f66b6909e4304980ddcc83348d77e3dd15932334f5a",
+          "state": "selection_returned",
+          "all_nominated_bundles_copied": true,
+          "source_inventory_unchanged": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        {
+          "case": "P1105",
+          "plan_sha256": "93a0877e4ec71561ab0818a2779e50044999a34dc2024cd86094b9fcdc5690fe",
+          "result_sha256": "ea08fb9150f515db73367bd36c7b17e234047420b4de71782d9e4f8547d8e9f3",
+          "state": "selection_returned",
+          "all_nominated_bundles_copied": true,
+          "source_inventory_unchanged": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        {
+          "case": "P1106",
+          "plan_sha256": "71da78a02ca87a3f0a2e23e32e5e0da101ade866238e3d954e501825b1e0e7ae",
+          "result_sha256": "a667c922402551c4c74e660dd563d9a17e56ba295f422b847b153189500f2366",
+          "state": "selection_returned",
+          "all_nominated_bundles_copied": true,
+          "source_inventory_unchanged": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        {
+          "case": "P1107",
+          "plan_sha256": "63b3d7a0450c943276791bcca12f127bfdd0ec9eb8e7b8f26fbef0d1d5d05cb4",
+          "result_sha256": "cc405b06233b5e33d3b11e68be7359e2cb1d71282c2a4f9bd46ae2cbdc922d34",
+          "state": "selection_returned",
+          "all_nominated_bundles_copied": true,
+          "source_inventory_unchanged": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        {
+          "case": "P1108",
+          "plan_sha256": "60a0a15dbd52df7a8892228195eb265d6a8a8f7ba5439f68b923b568f4300e52",
+          "result_sha256": "66ce7d6a407e23ff86aae54587685c757ee764cf7c22e7542dc046e2bc9f948d",
+          "state": "selection_returned",
+          "all_nominated_bundles_copied": true,
+          "source_inventory_unchanged": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        {
+          "case": "P1109",
+          "plan_sha256": "99cd860ab6efa87186c0b46047bc447bb12adc25d37c3ad20ada0f45fc4faccc",
+          "result_sha256": "80c93d5800c338a366b78040580e3e2c59aa5eb89e1e134726e94e3823b55d99",
+          "state": "selection_returned",
+          "all_nominated_bundles_copied": true,
+          "source_inventory_unchanged": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        {
+          "case": "P1110",
+          "plan_sha256": "bc5690d5aa9d9bb8269714990753dd31aed5d78cac2014ad4483002ae48ccb21",
+          "result_sha256": "a37b26f0bad7da4c7c9bc8e7ade8a2b4cbc02a04574236a020467b56e1e3bc26",
+          "state": "no_candidates_no_call",
+          "all_nominated_bundles_copied": true,
+          "source_inventory_unchanged": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        {
+          "case": "P1111",
+          "plan_sha256": "556a94a53e7f235a24f32d5e9c7f2c321436c8505665e7c25b9e74ab4819e989",
+          "result_sha256": "6fdfc3ef81fba6fd4868ea89b7a59caf6417f060aba445505cdc7881a0ae062d",
+          "state": "selection_returned",
+          "all_nominated_bundles_copied": true,
+          "source_inventory_unchanged": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        {
+          "case": "P1112",
+          "plan_sha256": "4a9c43c3de45179b11aaf5282d3148602c47583da4fb1577a82806dc964ce43f",
+          "result_sha256": "4c2c356d2968ece94971a63ab8b005b3dcf6833288a76c8305a9cceb56e6aa39",
+          "state": "selection_returned",
+          "all_nominated_bundles_copied": true,
+          "source_inventory_unchanged": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        }
+      ],
+      "counts": {
+        "mock_metadata_requests": 9,
+        "mock_completion_requests": 9,
+        "network_http_calls": 0,
+        "inference_calls": 0
+      },
+      "production_changes": 0,
+      "private_documents": 0,
+      "review_decisions": 0,
+      "native_or_legal_qualification": false
+    }
+  },
+  "linux_offline": {
+    "tests_passed": 10,
+    "network": "none",
+    "read_only": true,
+    "host_linux_report_exact": true,
+    "private_runtime_or_provider_mounts": false,
+    "base_image_sha256": "7a67b0bf06799c403b9a7b5363faeb85f14fca0d6836eb167d13acc086c224d2"
+  },
+  "local_checks": {
+    "deployment_contracts_passed": 165,
+    "context_research_policy_provider_cases_passed": 167,
+    "new_regression_tests": 10,
+    "new_tests_seconds": 0.085,
+    "full_deployment_contracts_seconds": 17.402,
+    "context_provider_seconds": 7.51,
+    "lint": "passed"
+  },
+  "scope": {
+    "fixtures": "fresh_invented_P1101_through_P1112",
+    "expected_groups_sent_to_planner_or_adapter": false,
+    "inference_calls": 0,
+    "network_http_calls": 0,
+    "mock_requests_scope": "nine metadata and nine completion requests in the fixed 12-case adapter evaluator; regression tests make additional controlled requests",
+    "five_concurrent_selections": "mock transport barrier only, not native capacity",
+    "production_changes": 0,
+    "private_inputs": 0,
+    "review_decisions": 0,
+    "production_recipe_unchanged": true
+  },
+  "retained_failures": [
+    "two_identifier_free_paraphrases_not_nominated",
+    "unmatched_adverse_source_not_nominated",
+    "budget_pressure_excludes_adverse_source",
+    "wide_separator_cannot_support_joint_context",
+    "historical_502_root_cause_unresolved",
+    "prior_native_failures_not_retested_or_reclassified"
+  ],
+  "next_gate": "Generalize nomination/source-diversity policy offline on a new frozen suite; separately declare and freeze native acceptance before any model run. No production activation or legal qualification."
+}
