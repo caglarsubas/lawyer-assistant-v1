@@ -1453,3 +1453,45 @@ Do not force a nonempty answer, rerun these cases until passing, silently retry 
 matter, original, evidence version, review history, secret or live service is modified
 by this tooling. Owner version-3 review and broader capacity/legal gates stay open.
 See [dated evidence](evidence/long-page-quotes-2026-10-22.json).
+
+### Offline quotation-boundary evaluation
+
+Run the fixed synthetic suite with
+`PYTHONPATH=backend:scripts backend/.venv/bin/python scripts/evaluate_quotation_boundaries.py --output <new-report.json>`.
+The output path must be new. There is no private-input path, provider profile, key,
+model, network request or application installation option. It compares the unchanged
+production catalog against an offline neighboring-line prototype over the same
+candidate-v2 packed excerpts. It never installs that packer or catalog in production.
+The source cases, expected groups, suite hash, exact original and selected-span pins,
+catalog/prompt seals, omissions and measured budgets remain in the dated evidence.
+
+The prototype uses contiguous physical lines with at most one neighbor on each side.
+It preserves CRLF/Unicode and code-point offsets exactly, never crossing a blank or
+source/page boundary. Partially clipped physical lines, windows over 768 UTF-8 bytes
+and candidates beyond the 64-quote cap are omitted with fixed reasons. There is no
+smaller automatic fallback that could discard a condition. Measure the actual
+serialized envelope, including quote metadata and existing framing/completion
+reserves, against 8,192 conservative units. A fitting text excerpt does not imply a
+fitting candidate catalog. Source grouping and geometric availability do not confer
+legal association, relevance, authority or full context.
+
+The frozen ten-case comparison reports 11/11 groups in coarse baseline quotes and
+8/11 in candidate windows; two candidate prompts exceed budget. The late-PDF fact
+gets a smaller 199-byte covering window but an inadmissible 8,464-unit prompt. The
+overlong-line, blank-separated joint-context and dense count-cap cases remain open.
+Six cases meet geometry-only checks, including the missing-information fixture;
+neither model abstention nor document-instruction resistance has been measured.
+The nine regression tests also run in a network-disabled, read-only Linux container
+with public code only and no provider/private mounts, producing the exact host report.
+
+The offline resolver revalidates the full plan against frozen evidence/originals,
+then accepts only existing unique quote IDs (at most 20). A stale revision, edited
+hash/span/plan or unknown reference fails. Resolution is a test utility, not an
+execution or legal authorization. Preserve the original files and earlier native
+failure receipts. Do not promote this exploratory suite to held-out legal acceptance,
+raise limits, trim conditions or retry earlier model tasks to obtain a pass.
+Next evaluate budget-aware nomination and explicitly retained companion context
+offline, with a fresh declared native gate required before any production candidate.
+Owner version-3 review, historical 502 diagnosis and broader legal/capacity gates stay
+open. No live service, document, evidence version, secret or review record changes.
+See [dated evidence](evidence/offline-quotation-boundaries-2026-10-22.json).

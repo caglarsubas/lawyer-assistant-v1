@@ -5342,3 +5342,57 @@ Reviewed corpus, sustained legal capacity, isolated production intake, OCR/layou
 offline operation, populated graph rollback and production RPO/RTO remain open.
 See [operator procedure](OPERATIONS.md#long-page-quote-selection-and-per-call-diagnostics)
 and [dated evidence](evidence/long-page-quotes-2026-10-22.json).
+
+
+### F00-06 offline quotation-boundary comparison — 22 October 2026
+
+A separate offline prototype evaluates neighboring whole-line quotation windows on
+ten fresh synthetic cases: late PDF facts, Unicode/CRLF negation and conditions in
+both orders, conflicting passages, absent information, document instructions,
+overlong lines, blank-separated conditions, page-separated records and dense inputs.
+Expected source-text groups were specified before evaluation. Both catalogs receive
+the same exact v2-packed evidence, isolating catalog geometry from retrieval changes.
+Production packing v1 and extractive recipe v3 remain unchanged. No application,
+provider, gateway or deployment path imports or enables the prototype.
+
+The candidate preserves code-point spans, original document hashes and revisions,
+excerpt hashes, CRLF and Unicode without normalization. It nominates an anchor line
+and at most one adjacent physical line on each side. This is proximity, not legal
+association. It never joins sources/pages or crosses blank separators, splits an
+overlong window, silently expands the catalog cap or treats a clipped physical line
+as complete. Omissions and the exact serialized prompt cost are explicit. Offline
+resolution rebuilds the catalog from frozen inputs and rejects changed versions,
+hashes, offsets, unknown/duplicate references and forged plans.
+
+**The candidate is not admitted for production.** Coarse baseline quotes contain
+all 11 required groups; the smaller-window candidate contains 8/11. Two candidate
+prompts exceed the unchanged 8,192-unit UTF-8-plus-reserves budget. A late fact has a
+199-byte covering candidate instead of a 1,800-byte coarse quote, but its total
+candidate prompt costs 8,464 units and must be rejected. An overlong whole line is
+omitted; blank-separated statements remain individually available but lack the
+required joint quote; the dense case reaches the 64-quote cap and exceeds budget.
+Six cases meet only the prototype's geometry/coverage/budget checks. That count
+includes a missing-information fixture and **does not measure model relevance,
+abstention, instruction resistance, legal completeness or accuracy**.
+
+Nine new offline regression contracts retain both benefits and failure boundaries.
+All 146 deployment contracts and 84 context/research/provider cases pass locally.
+The nine new tests also pass in a read-only, network-disabled Linux container with
+only public evaluation code mounted; its complete report matches the host report.
+There are zero model/HTTP calls, provider credentials, private inputs or review
+decisions in this evaluation. Nine CI jobs, complete coverage, unchanged caps and
+five timing reserves remain merge requirements. All eight live services, originals,
+exact evidence, encrypted bytes, credentials, sessions and review history remain
+intact. R03-17 still awaits the owner's version-3 review; F00-06 remains partial.
+
+Next design budget-aware candidate nomination with explicit companion context and
+fallback/omission records, preserving exact source spans and negations/conditions.
+Evaluate that design offline on independent cases before any separately declared
+native acceptance. Do not reduce a condition to make a budget pass, silently join
+pages, tune exposed cases into an acceptance set or enable the prototype in
+production. The earlier 3/5 native long-page and failed volume/mixed profiles retain
+their scopes; historical HTTP 502 cause remains unresolved. Reviewed corpus,
+sustained legal capacity, isolated intake, OCR/layout, offline operation, graph
+rollback and production RPO/RTO remain open.
+See [operator procedure](OPERATIONS.md#offline-quotation-boundary-evaluation)
+and [dated evidence](evidence/offline-quotation-boundaries-2026-10-22.json).
