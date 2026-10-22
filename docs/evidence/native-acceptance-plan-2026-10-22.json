@@ -1,0 +1,531 @@
+{
+  "schema": "frozen-native-acceptance-preparation-evidence-v1",
+  "date": "2026-10-22",
+  "qualification": "offline_frozen_plan_and_grading_contract_only_not_native_or_legal_acceptance",
+  "frozen_plan_path": "docs/evidence/frozen-native-acceptance-plan-v1.json",
+  "frozen_plan_sha256": "455dbba16a3a22482a1c083a4ce7ec60be64a98e2ff2605b77496cb3cd6a01c9",
+  "suite_sha256": "b2e28d8c895af7b9524479bb1f8b56e3818898fe0412618ca33c7c1eed6f5854",
+  "implementation_sha256": {
+    "scripts/native_acceptance_cases.py": "7ef3866e4192a9af565d6b97bc04a8b9f81a6019cd143f1a28723eed09f55b71",
+    "scripts/native_acceptance_plan.py": "294e647d7579e236a1f8e472676ba98452a10a2da8acf9617db214cb21101ed4",
+    "scripts/native_acceptance_grading.py": "81e8576faad7b24a5c061b55c671c448e926d140f12781563ab550fec08419ac",
+    "scripts/diverse_quote_bundles.py": "bdfe59ca895c22ccc40aa28652202ef3867a2847860d1b9d1482a19cfce763f0",
+    "scripts/disposable_diverse_adapter.py": "ac8ceb67bd6cede720ffa9b5ad1f5b2869e5d250de3fcd9a75550319065be2c3",
+    "scripts/disposable_bundle_adapter.py": "6a43692b7a3c8ead6338cae92ad5a8804b781951da0bd3e9b54a4eb1beca1d28",
+    "scripts/budgeted_quote_bundles.py": "18e59c03a18bae46a3c6282663937c974101b008033ef59d1dc6e00d0f8cfce4",
+    "scripts/offline_quotation_boundaries.py": "17cafee58eb58b874638b4a1c62a111d423b0ae71293a2b11f9f14d514d640a1",
+    "backend/app/context_packing.py": "7e78fb51fd680d53691cc62505c288095bb5014d93fcf69ad6c1cf9637805d9d",
+    "backend/app/evidence_prompt.py": "8bca934696e575eaa0959d37a22588e8236ea80293c56523e641baf34b1bb82a",
+    "backend/app/provider.py": "68a54bae7879b47d5a193a752448d71ce5835d8efdad8d27a18f45ece92019c4",
+    "backend/app/config.py": "66ce5d360d0f2b712f625611595740f7bb9fc4617fcb7f9cad86a90411408fad",
+    "backend/app/analysis_output_contract.py": "02b9700f3661351ba622de994bd35da71ce1d60d80b08804f0013b706e9b9b2b",
+    "backend/pyproject.toml": "fc258b67b26246b547e1af3e0e93c13a59d9e068e44c5c9a03054f5803427728",
+    "backend/uv.lock": "cde13f1ccee8a439e9ddfea7c15dcb26960c2e9bebffec7c2582ac1386b4b23f",
+    "docs/NATIVE_ACCEPTANCE_PLAN.md": "114160f7f3cf641352696b6bafb140c42dac83ce48732f56a50f64940c0e67e9",
+    "docs/evidence/frozen-native-acceptance-plan-v1.json": "c3a38ac99547ed84bbfa2ae6dd06b9d92aae63a26dff06117c397e4de2856ed2",
+    "deploy/test_native_acceptance_plan.py": "39de465c8c640ec8f7ade7ed69bb0d408c416d0b53c0833df2670dd3927d3fbe",
+    "docs/evidence/native-acceptance-rules-before-location-repair-2026-10-22.md": "a6df506feec229bff8a1334a206d5d758492cda7d2714e742fbadad31f819ae3",
+    ".github/workflows/ci.yml": "7977fef22e4d57661d737ca48cb41b8d170d912c4a606b1cc9708e500af9ce49"
+  },
+  "pre_grade_freeze_sha256": "298b604a7c9a4342fd87f744161831426a7f70520f580a4e8a03fef4fd41196d",
+  "preflight": {
+    "schema": "native-acceptance-offline-preflight-v1",
+    "plan_sha256": "455dbba16a3a22482a1c083a4ce7ec60be64a98e2ff2605b77496cb3cd6a01c9",
+    "mode": "select_all_candidate_upper_bound_not_model_results",
+    "cases": [
+      {
+        "case": "P1401",
+        "kind": "serial_smoke",
+        "disposition": "native_candidate",
+        "groups": [
+          {
+            "source_key": "receipt",
+            "revision": 3,
+            "side": "relevant",
+            "available": true,
+            "selected": true
+          }
+        ],
+        "expects_empty": false,
+        "selected_ids": [
+          "D1"
+        ],
+        "selection_quality_rule_pass": true,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "e9a7a5b5fa38abc1d3824d49cb9cd99725031f83b6600aeb11d6f508ec55f484",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 0,
+        "partial_source_bundles": 0,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1402",
+        "kind": "revision_conflict",
+        "disposition": "native_candidate",
+        "groups": [
+          {
+            "source_key": "ledger",
+            "revision": 1,
+            "side": "support",
+            "available": true,
+            "selected": true
+          },
+          {
+            "source_key": "ledger",
+            "revision": 7,
+            "side": "adverse",
+            "available": true,
+            "selected": true
+          }
+        ],
+        "expects_empty": false,
+        "selected_ids": [
+          "D1",
+          "D2"
+        ],
+        "selection_quality_rule_pass": true,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "37f6288d0c05902a444e2e59dea0ce4e14a98c27046d9584976a3436c679a989",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 0,
+        "partial_source_bundles": 1,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1403",
+        "kind": "alternate_wording",
+        "disposition": "native_candidate",
+        "groups": [
+          {
+            "source_key": "dispatch",
+            "revision": 2,
+            "side": "relevant",
+            "available": true,
+            "selected": true
+          }
+        ],
+        "expects_empty": false,
+        "selected_ids": [
+          "D1",
+          "D2"
+        ],
+        "selection_quality_rule_pass": true,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "6abe5bf701301e6ed1d7c683289d9dc102871a5ceae2450bd7326d64eebc04ba",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 2,
+        "partial_source_bundles": 0,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1404",
+        "kind": "unicode_condition",
+        "disposition": "native_candidate",
+        "groups": [
+          {
+            "source_key": "conditions",
+            "revision": 6,
+            "side": "relevant",
+            "available": true,
+            "selected": true
+          }
+        ],
+        "expects_empty": false,
+        "selected_ids": [
+          "D1"
+        ],
+        "selection_quality_rule_pass": true,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "44045ad3994861d3831a34e55116f3bb24d93d10763b8f2c9552ff052ec89cda",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 0,
+        "partial_source_bundles": 1,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1405",
+        "kind": "adverse_source",
+        "disposition": "native_candidate",
+        "groups": [
+          {
+            "source_key": "dispatch",
+            "revision": 4,
+            "side": "support",
+            "available": true,
+            "selected": true
+          },
+          {
+            "source_key": "response",
+            "revision": 2,
+            "side": "adverse",
+            "available": true,
+            "selected": true
+          }
+        ],
+        "expects_empty": false,
+        "selected_ids": [
+          "D1",
+          "D2"
+        ],
+        "selection_quality_rule_pass": true,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "23b8e851a5919579a546b5f2f9abcdc1a363d35f05b8229855af89c007b82e82",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 1,
+        "partial_source_bundles": 1,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1406",
+        "kind": "absent_information",
+        "disposition": "native_candidate",
+        "groups": [],
+        "expects_empty": true,
+        "selected_ids": [
+          "D1"
+        ],
+        "selection_quality_rule_pass": false,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "617e90090c31f0e9a8fa35e1a3a138e8bd78d4021d3777d4f99a0e2b57c71ba2",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 1,
+        "partial_source_bundles": 0,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1407",
+        "kind": "table_conflict",
+        "disposition": "native_candidate",
+        "groups": [
+          {
+            "source_key": "table",
+            "revision": 2,
+            "side": "support",
+            "available": true,
+            "selected": true
+          },
+          {
+            "source_key": "correction",
+            "revision": 8,
+            "side": "adverse",
+            "available": true,
+            "selected": true
+          }
+        ],
+        "expects_empty": false,
+        "selected_ids": [
+          "D1",
+          "D2"
+        ],
+        "selection_quality_rule_pass": true,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "26eabeeda30deb7845511521175b0ce2063e1af49974c4fce24456229f47cf8a",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 0,
+        "partial_source_bundles": 2,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1408",
+        "kind": "wide_condition",
+        "disposition": "native_candidate",
+        "groups": [
+          {
+            "source_key": "terms",
+            "revision": 9,
+            "side": "relevant",
+            "available": false,
+            "selected": false
+          }
+        ],
+        "expects_empty": false,
+        "selected_ids": [
+          "D1",
+          "D2"
+        ],
+        "selection_quality_rule_pass": false,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "0bc48e2c1866685e9e296ef8981969cb04c6da4ce9b483405912aaf6eff62348",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 0,
+        "partial_source_bundles": 2,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1409",
+        "kind": "late_paraphrase",
+        "disposition": "native_candidate",
+        "groups": [
+          {
+            "source_key": "register",
+            "revision": 3,
+            "side": "relevant",
+            "available": false,
+            "selected": false
+          }
+        ],
+        "expects_empty": false,
+        "selected_ids": [
+          "D1"
+        ],
+        "selection_quality_rule_pass": false,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "9a08234e2797d81aeb60e42401ed6d78f9a0a1f771fac814c86e42040034c83c",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 1,
+        "partial_source_bundles": 1,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1410",
+        "kind": "hostile_source",
+        "disposition": "native_candidate",
+        "groups": [
+          {
+            "source_key": "stock",
+            "revision": 1,
+            "side": "support",
+            "available": true,
+            "selected": true
+          },
+          {
+            "source_key": "denial",
+            "revision": 4,
+            "side": "adverse",
+            "available": true,
+            "selected": true
+          }
+        ],
+        "expects_empty": false,
+        "selected_ids": [
+          "D1",
+          "D2"
+        ],
+        "selection_quality_rule_pass": true,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "6efb21f4cbf16facbcf903d89f41b07a0e0d7da15ced4d4978cd1e767e6c9ebc",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 0,
+        "partial_source_bundles": 2,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1411",
+        "kind": "source_volume",
+        "disposition": "native_candidate",
+        "groups": [
+          {
+            "source_key": "register0",
+            "revision": 1,
+            "side": "relevant",
+            "available": true,
+            "selected": true
+          },
+          {
+            "source_key": "register1",
+            "revision": 2,
+            "side": "relevant",
+            "available": true,
+            "selected": true
+          },
+          {
+            "source_key": "register7",
+            "revision": 2,
+            "side": "relevant",
+            "available": true,
+            "selected": true
+          },
+          {
+            "source_key": "register12",
+            "revision": 1,
+            "side": "relevant",
+            "available": false,
+            "selected": false
+          },
+          {
+            "source_key": "register23",
+            "revision": 3,
+            "side": "relevant",
+            "available": false,
+            "selected": false
+          }
+        ],
+        "expects_empty": false,
+        "selected_ids": [
+          "D1",
+          "D2",
+          "D3",
+          "D4",
+          "D5",
+          "D6",
+          "D7",
+          "D8"
+        ],
+        "selection_quality_rule_pass": false,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "81284dcea4bc8a40274a3b2e357ce73d429d15a3257c53b5d0cc794551bf4ac1",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 0,
+        "partial_source_bundles": 8,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1412",
+        "kind": "blocked_control",
+        "disposition": "blocked_before_transport",
+        "groups": [
+          {
+            "source_key": "date",
+            "revision": 2,
+            "side": "relevant",
+            "available": false,
+            "selected": false
+          }
+        ],
+        "expects_empty": false,
+        "selected_ids": [],
+        "selection_quality_rule_pass": false,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 0,
+        "partial_source_bundles": 0,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1413",
+        "kind": "empty_control",
+        "disposition": "no_candidates_no_call",
+        "groups": [],
+        "expects_empty": true,
+        "selected_ids": [],
+        "selection_quality_rule_pass": true,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 0,
+        "partial_source_bundles": 0,
+        "not_native_or_legal_qualification": true
+      },
+      {
+        "case": "P1414",
+        "kind": "overlong_control",
+        "disposition": "no_candidates_no_call",
+        "groups": [
+          {
+            "source_key": "long",
+            "revision": 1,
+            "side": "relevant",
+            "available": false,
+            "selected": false
+          }
+        ],
+        "expects_empty": false,
+        "selected_ids": [],
+        "selection_quality_rule_pass": false,
+        "native_execution_verified": false,
+        "exact_selected_bundle_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "all_selected_spans_versions_exact": true,
+        "unmatched_fallback_bundles": 0,
+        "partial_source_bundles": 0,
+        "not_native_or_legal_qualification": true
+      }
+    ],
+    "summary": {
+      "cases": 14,
+      "required_groups": 20,
+      "available_groups": 14,
+      "unavailable_groups": 6,
+      "source_passages": 113,
+      "source_versions": 41,
+      "dispositions": {
+        "blocked_before_transport": 1,
+        "native_candidate": 11,
+        "no_candidates_no_call": 2
+      },
+      "explicit_empty_cases": 2,
+      "candidate_upper_bound_failing_cases": [
+        "P1406",
+        "P1408",
+        "P1409",
+        "P1411",
+        "P1412",
+        "P1414"
+      ]
+    },
+    "native_execution_verified": false,
+    "native_qualification": false,
+    "legal_qualification": false,
+    "counts": {
+      "native_calls": 0,
+      "http_calls": 0,
+      "private_documents": 0,
+      "review_decisions": 0
+    },
+    "production_activation": false
+  },
+  "linux_offline": {
+    "tests_passed": 14,
+    "network": "none",
+    "filesystem": "read_only",
+    "private_runtime_or_provider_mounts": false,
+    "host_linux_declaration_exact": true,
+    "host_linux_preflight_exact": true,
+    "model_calls": 0,
+    "http_calls": 0
+  },
+  "local_verification": {
+    "lint_passed": true,
+    "deployment_contracts": 201,
+    "context_research_policy_provider_cases": 167,
+    "new_contract_tests": 14,
+    "qualification_and_calibration_cases": 39
+  },
+  "native_execution": {
+    "performed": false,
+    "execution_authorized": false,
+    "model_digest_attested": false,
+    "transport_origin_attested": false,
+    "native_or_legal_acceptance": false
+  },
+  "production_activation": false,
+  "owner_version_3_review": "pending",
+  "ci_gate": "all_nine_exact_head_jobs_and_five_existing_30_second_reserves_before_merge",
+  "initial_linux_offline": {
+    "tests_passed": 12,
+    "network": "none",
+    "filesystem": "read_only",
+    "private_runtime_or_provider_mounts": false,
+    "host_linux_declaration_exact": true,
+    "host_linux_preflight_exact": true,
+    "model_calls": 0,
+    "http_calls": 0
+  },
+  "location_repair": {
+    "reason": "extra native plan file violated unchanged closed five-file R01 inventory",
+    "failed_head": "2b3c77ae1347158d18adf24c92b9ee54f82128c3",
+    "failed_run": 39806897500,
+    "old_artifact_path": "qualification/frozen-native-acceptance-plan-v1.json",
+    "new_artifact_path": "docs/evidence/frozen-native-acceptance-plan-v1.json",
+    "artifact_bytes_sha256": "c3a38ac99547ed84bbfa2ae6dd06b9d92aae63a26dff06117c397e4de2856ed2",
+    "artifact_bytes_unchanged": true,
+    "original_rules_sha256": "a6df506feec229bff8a1334a206d5d758492cda7d2714e742fbadad31f819ae3",
+    "original_rules_retained": "docs/evidence/native-acceptance-rules-before-location-repair-2026-10-22.md",
+    "current_rules_change": "only artifact-path text; grading and all other rule bytes unchanged",
+    "planner_fixtures_criteria_wire_model_intent_and_first_preflight_unchanged": true,
+    "ci_change": "move existing R01 check before full backend exactly once; no job/cap/worker/coverage changes"
+  },
+  "initial_ci": {
+    "head": "2b3c77ae1347158d18adf24c92b9ee54f82128c3",
+    "id": 39806897500,
+    "conclusion": "failure",
+    "successful_jobs": 8,
+    "failed_job": "backend-and-contracts",
+    "failed_tests": [
+      "test_qualification_cli.py::test_seed_report_is_deterministic_non_authorizing_and_content_free",
+      "test_calibration_cli.py::test_empty_evidence_is_not_a_vacuous_verification"
+    ],
+    "merge_attempts": 0,
+    "reason": "extra native plan file violated unchanged closed five-file R01 inventory"
+  }
+}
