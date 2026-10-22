@@ -5701,3 +5701,67 @@ their current document changes only the artifact path. Sources, code, wire,
 criteria, plan seal and first preflight are unchanged. A new regression protects
 the closed dossier, and the existing R01 gate now runs once before the costly
 backend suite. No guard, coverage, job, cap or worker count was weakened.
+
+
+### F00-06 whole-passage packet inventory and cost evaluation — 23 October 2026
+
+A separately versioned offline candidate preserves complete original passages,
+including whitespace, CRLF, wide separators and long physical lines, and places
+them into bounded packets. It does not clip conditions, join separate passages,
+infer semantic relations or change a document revision. Each whole passage is an
+inventory candidate, not a relevance finding, and carries explicit uncertainty
+about document completeness. Query-overlap ranking and source-version round robin
+precede bounded first-fit placement. The full inventory, source pins, exact packet
+messages, omissions and limits are sealed; resolution rebuilds the plan and
+rejects stale unused evidence, altered wires, invalid/cross-packet IDs or a changed
+context. Selected original text is copied separately without synthesis.
+
+The evaluated profile retains 8192 conservative accounting units, 4000 copied
+UTF-8 bytes and eight original passages per envelope. Up to eight packets permit
+additional work: ceilings of 65536 units, 32000 copied bytes and eight future
+completion requests per question. Aggregate cost is explicit. This is not a free
+increase in capacity or a larger single request. No application hook, provider
+client, selector transport, matter authorization or execution permission is added.
+Any later boundary must independently enforce both evaluated per-request and
+aggregate budgets and acquire an authorized immutable evidence context.
+
+Sixteen fresh invented cases were frozen before their first grade: 294 passages,
+117 source versions and 23 required groups. On this same new suite the unchanged
+v2 single-envelope planner exposes 9/23 groups, the whole-passage candidate with
+one packet 13/23, and with up to eight packets 18/23. The one-versus-eight comparison
+changes packet capacity only and retains byte-identical first packets. Comparison
+with v2 also changes nomination and atomization, so it supplies no causal accuracy
+claim. None of these counts is semantic recall or legal correctness.
+
+The capacity gain costs **32 planned envelopes versus 12**, with total conservative
+units increasing from 42018 to 144178 and copied text from 5776 to 15794 bytes.
+Five groups remain unavailable: an oversized passage, a condition spread across
+unlinked passages, an over-cap source, late evidence beyond packet depth and the
+undersized envelope. One envelope is blocked and three inventories have no
+candidates. All omissions stay in the denominator. The three expected-empty cases
+have no model result; irrelevant inventory nomination does not qualify abstention.
+Hostile text is preserved as source data, not proof of instruction resistance.
+
+The candidate, fixtures, evaluator, rules and first report stay unchanged after
+grading. Fourteen new contracts test exact copies, complete boundaries, separate
+versions/passages, all budgets, packet isolation, stale/forged context, work bounds,
+preparation races, unknown/legacy IDs, and rejection by the existing native
+adapter. The previous native acceptance declaration still validates byte-for-byte
+and is not reused for this different recipe. The entire report reproduces exactly
+in read-only, network-disabled Linux with public code only. All 215 deployment
+contracts and 206 context/research/provider/qualification/calibration cases pass
+locally. Existing CI jobs, caps, workers, coverage, the early R01 check and five
+timing reserves remain merge requirements.
+
+The experiment makes zero model or HTTP calls. Production, originals, exact
+evidence versions, encrypted bytes, runtime secrets, sessions and review history
+remain unchanged. F00-06 is partial and the owner's focused-analysis v3 review is
+pending. Next qualify a separately marked disposable packet selector with a
+trusted context snapshot and aggregate-budget boundary before declaring a new
+native trial. Require fresh acceptance inputs and model/transport identity binding;
+do not reuse the prior frozen trial's eleven-call budget or exposed cases. Missing
+groups, model relevance/abstention, historical HTTP 502 cause, sustained five-job
+capacity, reviewed corpus, legal qualification and production activation remain
+open. See [declared experiment](WHOLE_PASSAGE_PACKET_EVALUATION.md),
+[operator procedure](OPERATIONS.md#whole-passage-packet-evaluation) and
+[dated evidence](evidence/whole-passage-packets-2026-10-23.json).
