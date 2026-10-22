@@ -18,17 +18,21 @@ from qualify_load import ResourceSampler, compose_definition  # noqa: E402
 
 class LoadContracts(unittest.TestCase):
     def test_isolated_definition_excludes_live_env_ports_binds_and_driver_secrets(self):
-        definition = compose_definition({"api": "sha256:api", "postgres": "sha256:postgres"}, "test-key", "test-password", "t" * 32)
+        definition = compose_definition({"api": "sha256:api", "postgres": "sha256:postgres"}, "test-key", "test-password", "t" * 32,
+                                        "198.19.0.0/28")
         self.assertEqual(set(definition["services"]), {"api", "postgres", "driver"})
         self.assertEqual(set(definition["volumes"]), {"documents", "postgres"})
-        self.assertEqual(definition["networks"], {"isolated": {"internal": True}})
+        self.assertEqual(definition["networks"], {"isolated": {"internal": True, "ipam": {"config": [{"subnet": "198.19.0.0/28"}]}}})
+        addresses = []
         for service in definition["services"].values():
             self.assertNotIn("ports", service)
             self.assertNotIn("env_file", service)
             self.assertNotIn("network_mode", service)
             self.assertEqual(service["pull_policy"], "never")
-            self.assertEqual(service["networks"], ["isolated"])
+            addresses.append(service["networks"]["isolated"]["ipv4_address"])
             self.assertTrue(all(mount.split(":")[0] in definition["volumes"] for mount in service.get("volumes", [])))
+        self.assertEqual(set(addresses), {"198.19.0.2", "198.19.0.5", "198.19.0.6"})
+        self.assertEqual(len(addresses), len(set(addresses)))
         api, driver = (definition["services"][name] for name in ("api", "driver"))
         self.assertNotIn("volumes", driver)
         self.assertNotIn("LA_ENCRYPTION_KEY", driver["environment"])

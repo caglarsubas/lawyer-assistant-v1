@@ -1,0 +1,238 @@
+{
+  "base": "baf2c6963c2bfdaee8ee57719073d2b057dcd4e8",
+  "configured_provider_experiment": {
+    "boundary_exact_quote_verified": true,
+    "boundary_measurement": {
+      "accounting": "utf8_bytes_plus_fixed_reserves",
+      "completion_reserve_units": 1200,
+      "input_upper_bound_units": 6992,
+      "messages_sha256": "47826779c380203e49b3e5b8820947796789d719531d6ff1e004b54bd9fd7c08",
+      "recipe": "private-quotes-v2",
+      "total_upper_bound_units": 8192,
+      "utf8_bytes": 6736
+    },
+    "boundary_seconds": 3.345813,
+    "caller_counters": {
+      "active": 0,
+      "attempts": 5,
+      "peak": 5
+    },
+    "configuration_ready": true,
+    "configured_context_units": 8192,
+    "failure_code": "qualification_failed",
+    "failure_stage": "five_callers",
+    "finished_at": "2026-10-22T02:03:25.109722+00:00",
+    "five_callers": [
+      {
+        "seconds": 4.270865,
+        "status": "passed"
+      },
+      {
+        "seconds": 4.276447,
+        "status": "passed"
+      },
+      {
+        "seconds": 6.628822,
+        "status": "passed"
+      },
+      {
+        "failure_code": "provider_rejected_response",
+        "seconds": 2.755303,
+        "status": "failed"
+      },
+      {
+        "seconds": 6.636126,
+        "status": "passed"
+      }
+    ],
+    "generation_attempts": 6,
+    "model": {
+      "backend": "ollama_http",
+      "context_limit": 32768,
+      "id": "ministral-3:8b"
+    },
+    "not_qualified": [
+      "legal correctness or private case approval",
+      "sustained or production capacity",
+      "GPU parallel execution",
+      "end-to-end five-job real-corpus research",
+      "independent fallback, tunnel retention or tokenizer attestation"
+    ],
+    "oversized_rejected_before_readiness": true,
+    "runtime_code": {
+      "analysis_output_contract.py": "02b9700f3661351ba622de994bd35da71ce1d60d80b08804f0013b706e9b9b2b",
+      "evidence_prompt.py": "7ea25cf0ba572dced10141b8a91a214ba8d7c7f684a8b7bd005e36c8b1e38d33",
+      "provider.py": "fdca22668aad5bef290c75690eab27cfeed0cb7cdcd80821f04892cbcddc1e93"
+    },
+    "schema": "lawyer-provider-context-five-callers-v1",
+    "started_at": "2026-10-22T02:03:13.856782+00:00",
+    "status": "failed",
+    "synthetic_only": true,
+    "transport": {
+      "air_gapped": false,
+      "mode": "approved_laptop_tunnel",
+      "uses_public_network": true
+    },
+    "wave_seconds": 6.637462
+  },
+  "controlled_provider_application_drill": {
+    "api_image": "sha256:b700810b41921f7c4041c34f4ed83dd14569f0a5af40bce7d4ce78a25b79c0cd",
+    "candidate_source_binding": "all application/load execution inputs match; later qualifier-only CLI exception guard is separately unit tested",
+    "checks": {
+      "cancellation_blocks_output_and_changed_evidence_marks_outputs_stale": true,
+      "five_uploads_complete_while_five_jobs_active": true,
+      "five_workers_ten_admissions_and_clean_overflow": true,
+      "fresh_waves_use_current_evidence_and_exact_quotes": true,
+      "queued_cancellations_removed_without_execution": true,
+      "running_cancellation_retains_capacity_until_unwind": true,
+      "worker_concurrency_never_exceeds_five": true
+    },
+    "cleanup": {
+      "complete": true
+    },
+    "explicit_isolated_subnet": true,
+    "fresh_jobs": {
+      "count": 15,
+      "execution_seconds": {
+        "max": 0.876799,
+        "median": 0.733659,
+        "min": 0.578791,
+        "p95_nearest_rank": 0.876799,
+        "samples": 15
+      },
+      "job_seconds": {
+        "max": 0.912925,
+        "median": 0.781598,
+        "min": 0.646682,
+        "p95_nearest_rank": 0.912925,
+        "samples": 15
+      },
+      "jobs_per_second": 5.697169,
+      "queue_seconds": {
+        "max": 0.073391,
+        "median": 0.032691,
+        "min": 0.01761,
+        "p95_nearest_rank": 0.073391,
+        "samples": 15
+      },
+      "wave_seconds": [
+        0.870706000001519,
+        0.9815604589966824,
+        0.7806201670027804
+      ]
+    },
+    "report_sha256": "337499a9a1c84c8540246738064bc0a4be972841aad461c07423fb0702f8f64a",
+    "resources": {
+      "method": "docker stats --no-stream plus 1s pause; sampled peaks may miss short bursts; driver excluded",
+      "sampling_errors": 0,
+      "services": {
+        "api": {
+          "kernel": {
+            "cpu_since_container_start": {
+              "burst_usec": 0,
+              "nice_usec": 0,
+              "nr_bursts": 0,
+              "nr_periods": 175,
+              "nr_throttled": 7,
+              "system_usec": 2111101,
+              "throttled_usec": 1311114,
+              "usage_usec": 18133427,
+              "user_usec": 16022325
+            },
+            "memory_limit_bytes": 1073741824,
+            "memory_peak_bytes": 211288064,
+            "pids_limit": 256,
+            "pids_peak": 21,
+            "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+          },
+          "memory_limit_bytes": 1073741824,
+          "sampled_peak_cpu_percent": 141.06,
+          "sampled_peak_memory_bytes": 147534643,
+          "sampled_peak_pids": 15,
+          "samples": 6
+        },
+        "postgres": {
+          "kernel": {
+            "cpu_since_container_start": {
+              "burst_usec": 0,
+              "nice_usec": 0,
+              "nr_bursts": 0,
+              "nr_periods": 129,
+              "nr_throttled": 0,
+              "system_usec": 1002877,
+              "throttled_usec": 0,
+              "usage_usec": 2629164,
+              "user_usec": 1626287
+            },
+            "memory_limit_bytes": 1073741824,
+            "memory_peak_bytes": 123797504,
+            "pids_limit": 256,
+            "pids_peak": 21,
+            "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+          },
+          "memory_limit_bytes": 1073741824,
+          "sampled_peak_cpu_percent": 42.28,
+          "sampled_peak_memory_bytes": 71093452,
+          "sampled_peak_pids": 21,
+          "samples": 6
+        }
+      },
+      "valid": true
+    },
+    "services_running_without_oom": true,
+    "source_fingerprint_at_measurement": {
+      "files": 197,
+      "sha256": "00da39252fe7793bc7c4841f6a2ead5c797d8b92a8ee553c6d3ba82cb9d459d1"
+    },
+    "status": "passed"
+  },
+  "implementation_sha256": {
+    "deploy/test_load_contract.py": "33e0ed37fde160ed742d59ef04174660f50e98eb6b865509a603db928723550d",
+    "deploy/test_provider_qualification.py": "7520017974f65522324f4bdb79c9ef5edaa279643f18840113aec8284d5435a4",
+    "scripts/qualify_load.py": "aadc05ca4364d423f6f0e6d54150a1adab36c47ae06790bade55975a0f370d70",
+    "scripts/qualify_provider.py": "86f38ccd37d62bfb59923e66589e4c56701fb131f6439b8bceb903051f5bac24"
+  },
+  "local_checks": {
+    "deployment_contract_cases": 93,
+    "deployment_contract_result": "passed",
+    "diff_check": "passed",
+    "ruff": "passed"
+  },
+  "native_operator_binding": {
+    "candidate_cli_exception_guard_added_after_measurement": true,
+    "executed_script_sha256": "43e49f3cc8136b0b3682926687e5df76be408057b921ef2d2d793f09604e7da3",
+    "runtime_adapter_hashes_match_checkout": true
+  },
+  "prior_experiments": {
+    "diagnostic_found_exact_source_substring_with_correct_reference": true,
+    "independent_strict_attempts": 6,
+    "initial_strict_attempts": 1,
+    "no_retry_after_final_failed_wave": true,
+    "retained_final_attempts": 6,
+    "shape_only_diagnostic_attempts": 1,
+    "total_synthetic_generation_attempts": 14
+  },
+  "qualification": {
+    "application_fixture": true,
+    "legal_review": false,
+    "next": "localize transport/admission rejection, then qualify bounded consumer backpressure without replay or shared-provider limit increases",
+    "provider_context_boundary": true,
+    "real_corpus_five_jobs": false,
+    "real_provider_five_callers": false,
+    "sustained_production_capacity": false
+  },
+  "recorded_on": "2026-10-22",
+  "runtime_preservation": {
+    "active_jobs": 0,
+    "all_database_rows_exact": true,
+    "credentials_and_sessions_exact": true,
+    "decrypted_evidence_and_originals_exact": true,
+    "private_case_model_calls": 0,
+    "review_decisions": 0,
+    "review_history_exact": true,
+    "same_healthy_services": 8,
+    "vault_bytes_exact": true
+  },
+  "schema": "provider-context-load-engineering-v1",
+  "unchanged_CI_sha256": "ee077ec642d2335f014a01dd36d4a66c32c1ed028ef2071882bfb8aa423a992d"
+}

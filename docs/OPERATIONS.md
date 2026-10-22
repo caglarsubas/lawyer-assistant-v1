@@ -430,6 +430,11 @@ fingerprint must match the checkout. Docker must expose cgroup v2 `memory.peak`,
 measurements fail the drill. API and PostgreSQL each have two CPUs, 1 GiB memory
 and 256 PIDs; the separate driver has one CPU, 768 MiB and 128 PIDs. Allow about
 4 GiB free Docker memory plus image/data storage. These limits describe the fixture.
+The runner selects one unused explicit IPv4 `/28` from the benchmark range using
+the bounded Docker network inventory. All three fixture endpoints are pinned;
+the network stays internal. Exhausted default Docker address pools do not require
+pruning other projects. A conflicting address allocation fails instead of retrying
+across networks. Only this generated project's resources are removed.
 
 The fixed profile creates five workspaces and uploads 20 files: TXT, DOCX, XLSX
 and text PDF, each containing 64 synthetic paragraphs/rows. Five research jobs
@@ -456,6 +461,54 @@ the configured cap. Passing means this bounded fixture completed with no observe
 OOM/service failure; it does not establish a sustained stress ceiling or a latency
 SLO. No malware scanner, production extractor service, OCR, Fuseki corpus, OpenSearch
 retrieval or real inference is qualified by this drill.
+
+### Configured provider/context and five concurrent callers
+
+`scripts/qualify_provider.py` is a separate opt-in experiment against the deployed
+consumer adapter. Run it inside the existing API container, using the script from
+the reviewed checkout via standard input. It reads server-side settings and mounted
+secrets in memory; it never opens the matter store, original documents or review
+records. `--help` does not load settings. It accepts no user prompt or document path.
+
+```sh
+umask 077
+docker exec -i <api-container-id> python - \
+  --expected-model ministral-3:8b --expected-context 8192 --execute-synthetic \
+  < scripts/qualify_provider.py > .data/verification/provider-context-new.json
+```
+
+Use the exact owned API container ID and a new owner-only output file. No key is
+passed on the command line. The model and application budget must match the declared
+experiment; the qualifier does not change them. Verify the report's imported adapter,
+envelope and validator hashes against the reviewed source. Bind the operator script
+hash separately when it is streamed rather than installed. This command uses the
+existing authorized transport; the approved laptop tunnel uses the public network
+and does **not** constitute disconnected operation.
+
+Authenticated model metadata is checked first. A synthetic context one unit above
+the configured limit must reject before the readiness probe. One real completion
+then uses exactly the application's conservative UTF-8/reserve boundary, followed
+by one wave of five concurrent synthetic callers. Each actual call keeps the existing
+120-second adapter budget and 1,000-token completion ceiling. There is no retry,
+context increase, cloud fallback or shared-provider administration. The report keeps
+all six outcomes independently and requires every call to pass; four successes
+cannot qualify a five-caller wave. Five callers do not prove five parallel GPU
+executions, and these prompts do not qualify end-to-end real-corpus research.
+
+Outputs must have one bounded, complete source excerpt and the exact first evidence
+identifier, with an empty summary. A valid source substring need not repeat the
+fixture's label prefix. Paraphrases, unknown references, clipped sentences, extra
+claims and incomplete completions fail. Response bodies and exception messages are
+never exported. Reports contain only fixed failure codes, timings, synthetic prompt
+digests and code/model/transport metadata. Conservative units are not measured
+tokenizer counts. Tenant binding and absence of fallback remain separate operator
+attestations; model metadata does not independently prove either condition.
+
+The 22 October 2026 measurement passed the exact 8,192-unit boundary and over-budget
+guard, but the real five-caller wave returned four valid responses and one adapter
+rejection. Keep provider burst qualification open; do not replay until success or
+silently raise relay/engine limits. The isolated controlled-provider application
+drill passed separately. See [qualification evidence](evidence/provider-load-2026-10-22.json).
 
 The driver has a 240-second outer timeout, 30-second HTTP timeouts and a 60-second
 provider gate/terminal-wait limit. Cleanup removes only the generated project and
