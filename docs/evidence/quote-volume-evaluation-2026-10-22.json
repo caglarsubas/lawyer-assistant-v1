@@ -1,0 +1,759 @@
+{
+  "schema": "representative-volume-quote-evaluation-v1",
+  "recorded_on": "2026-10-22",
+  "qualification": "not_qualified",
+  "implementation_sha256": {
+    "backend/app/context_packing.py": "7e78fb51fd680d53691cc62505c288095bb5014d93fcf69ad6c1cf9637805d9d",
+    "backend/tests/test_context_packing.py": "7b8ceb51f6c24194a918f80d49d9d3a053a7a7cf63b71d49cf605a4087cb6a37",
+    "scripts/provider_job_checks.py": "282c5b02925a391b8239afc2816870962c8e5651f6c9f8a2437f64b281b24bbe",
+    "scripts/provider_job_fixture.py": "f94b609a4c2c64f9f5447b0d1bf6598e41032a2253787849dff97126392cd3e0",
+    "scripts/qualify_provider_jobs.py": "6d16aeaae01eb569557fb731e9fc622389ba360bbe6849c9822095a38e3be4e7",
+    "scripts/quote_volume_cases.py": "5c39b2530643e6ce73263adb89061542950d2c2ae80c5312c777754a482717e8",
+    "scripts/quote_volume_driver.py": "c576bca1148c94912c37ad0a8f60df8bac131d07f47d6e03a376a74d498c171b",
+    "deploy/test_quote_volume_evaluation.py": "a3974bcc9f2b9f4bb2eb9ef10acf5c8aa977bcc2a5d0a994d57f7cf030107f14",
+    "deploy/fixtures/quote-volume-packing-references.json": "344848df2ffb9ea0e81bed315799360f0517642f77b85ce4827601a13ee3fd01"
+  },
+  "profile": {
+    "suite": "quote-volume-v1",
+    "suite_sha256": "9c15b1f723c6119e5a29f98bf004cd130eee3b9d1cad4a2d5d27c91b9ed05a09",
+    "synthetic_only": true,
+    "workspaces": 5,
+    "documents": 20,
+    "formats": [
+      "txt",
+      "docx",
+      "xlsx",
+      "pdf"
+    ],
+    "records_per_format": 64,
+    "long_unicode_txt_paragraphs": 5,
+    "corpus_bytes": 269431,
+    "extracted_passages": 975,
+    "tasks": 15,
+    "answerable": 10,
+    "expected_abstentions": 5,
+    "waves": 3,
+    "maximum_concurrency": 5,
+    "context_limit": 8192,
+    "model": "ministral-3:8b",
+    "attempts_per_task": 1,
+    "automatic_retries": 0,
+    "private_documents": 0,
+    "review_decisions": 0,
+    "statistical_representativeness_established": false
+  },
+  "preflight_before_candidate": {
+    "stage": "offline_preflight",
+    "model_calls": 0,
+    "suite_sha256": "9c15b1f723c6119e5a29f98bf004cd130eee3b9d1cad4a2d5d27c91b9ed05a09",
+    "packer_sha256": "43572a9b2aa9a5fb0dcb80d2b990a9126d72e7af6494cc397fb97b49cb041b81",
+    "benchmark_sha256": "5c39b2530643e6ce73263adb89061542950d2c2ae80c5312c777754a482717e8",
+    "results": [
+      {
+        "case": "V731-payment",
+        "oracle_visible": false,
+        "context_units": 6789
+      },
+      {
+        "case": "V731-conflict",
+        "oracle_visible": true,
+        "context_units": 6772
+      },
+      {
+        "case": "V731-missing",
+        "oracle_visible": true,
+        "context_units": 6786
+      },
+      {
+        "case": "V732-payment",
+        "oracle_visible": false,
+        "context_units": 6792
+      },
+      {
+        "case": "V732-conflict",
+        "oracle_visible": true,
+        "context_units": 6725
+      },
+      {
+        "case": "V732-missing",
+        "oracle_visible": true,
+        "context_units": 6818
+      },
+      {
+        "case": "V733-payment",
+        "oracle_visible": false,
+        "context_units": 6792
+      },
+      {
+        "case": "V733-conflict",
+        "oracle_visible": true,
+        "context_units": 6725
+      },
+      {
+        "case": "V733-missing",
+        "oracle_visible": true,
+        "context_units": 6821
+      },
+      {
+        "case": "V734-payment",
+        "oracle_visible": true,
+        "context_units": 6792
+      },
+      {
+        "case": "V734-conflict",
+        "oracle_visible": true,
+        "context_units": 6806
+      },
+      {
+        "case": "V734-missing",
+        "oracle_visible": true,
+        "context_units": 6820
+      },
+      {
+        "case": "V735-payment",
+        "oracle_visible": false,
+        "context_units": 6789
+      },
+      {
+        "case": "V735-conflict",
+        "oracle_visible": true,
+        "context_units": 6772
+      },
+      {
+        "case": "V735-missing",
+        "oracle_visible": true,
+        "context_units": 6786
+      }
+    ],
+    "missing_expected_cases": 4
+  },
+  "native_trial": {
+    "status": "failed",
+    "started_at": "2026-10-22T06:09:02.203635+00:00",
+    "finished_at": "2026-10-22T06:09:45.651455+00:00",
+    "api_source": {
+      "files": 205,
+      "sha256": "09d762433b45fe66db9551327828861c64c497d2095959ca4fe81b8271bad541"
+    },
+    "images": {
+      "api": "sha256:70809de2c6d9c3c1c88455e036cda1b01c777c2597dda89edfacd36f9c23bbe3",
+      "postgres": "sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"
+    },
+    "relay_image": "sha256:56a8fa3293b64666ed7a420e07ac357fd6467d9017dceb2f3c970c28b030c40e",
+    "cleanup": {
+      "complete": true,
+      "original_provider_members_restored": true
+    }
+  },
+  "native_workload": {
+    "attempts_per_task": 1,
+    "automatic_retries": 0,
+    "corpus": [
+      {
+        "bytes": 9285,
+        "format": "txt",
+        "frozen_source_sha256": "bf85b4f963ea1a2d98b783989dd17ab013c8b8e98778649037f9e47857cbedbf",
+        "passages": 65,
+        "revision": 1,
+        "sha256": "0009b6cc1a101fb3e98f4888b395b9e4f55bfebab3ccadde4960158ca36b1bae",
+        "workspace": "V731"
+      },
+      {
+        "bytes": 36884,
+        "format": "docx",
+        "frozen_source_sha256": "4cdba67c4844e8ffab8b53ad29c8e87b0879ed89aa2232b7c5d2eba40755e7cb",
+        "passages": 64,
+        "revision": 1,
+        "sha256": "00f10280147c32c21310a3c37c9545a7fdb2ffbcf38f6eb4e530babaaca5e97b",
+        "workspace": "V731"
+      },
+      {
+        "bytes": 5471,
+        "format": "xlsx",
+        "frozen_source_sha256": "0f5da50c1c94bef33f9a12cd0cbaeecff877d50ee06ca65e15e52e332890c59c",
+        "passages": 64,
+        "revision": 1,
+        "sha256": "59bf396457accb340b43cbed3bc23e4911cba5e0d9a431cbd69b836fe81ed6f2",
+        "workspace": "V731"
+      },
+      {
+        "bytes": 2228,
+        "format": "pdf",
+        "frozen_source_sha256": "ef895fe543366e1b92318a37164e47bea7a2296bb83a210990a3d7bd42a8ae0c",
+        "passages": 2,
+        "revision": 1,
+        "sha256": "f98cb5a597a1000409ce0f0a4810002adefd624a14b95108439255aa56146ab6",
+        "workspace": "V731"
+      },
+      {
+        "bytes": 9321,
+        "format": "txt",
+        "frozen_source_sha256": "45adff9bea880af70328e397f36aa722beedc2deefb051888c2bd9ebf8c2d0f6",
+        "passages": 65,
+        "revision": 1,
+        "sha256": "78baab062fd7289a63440a39442a0cf486ac10e1caa62c3152dcd2285c0cb297",
+        "workspace": "V732"
+      },
+      {
+        "bytes": 36884,
+        "format": "docx",
+        "frozen_source_sha256": "5db967581ff24db9f55c6f3345358422ae8412a43d369e20b812b34bf77e44c0",
+        "passages": 64,
+        "revision": 1,
+        "sha256": "4d3650e49939c40b351fd65413230bf72944559ede46585fe666a89ebc5ea503",
+        "workspace": "V732"
+      },
+      {
+        "bytes": 5471,
+        "format": "xlsx",
+        "frozen_source_sha256": "3c712109e3580d5b398dc24a78a3d0da207033301a4e75f9686165f49298dc66",
+        "passages": 64,
+        "revision": 1,
+        "sha256": "bf5468c32225a3642c99e42b3b61a8baacbc54b3e455c0e3c721481109b9fe30",
+        "workspace": "V732"
+      },
+      {
+        "bytes": 2266,
+        "format": "pdf",
+        "frozen_source_sha256": "07a3fc712e376a49a90341e34e72ceded9b403568db94d460c73d2c6194b87d6",
+        "passages": 2,
+        "revision": 1,
+        "sha256": "7c0740bc1c2e1f89bc4c8c4ebb6ae727e1a8359f265bd4edd2a2c5d2f663c552",
+        "workspace": "V732"
+      },
+      {
+        "bytes": 9290,
+        "format": "txt",
+        "frozen_source_sha256": "7f4e5acd7b6c08f94a5b3a64802f9df1a743a81553d74542e8d4c5e6cdf41384",
+        "passages": 65,
+        "revision": 1,
+        "sha256": "fd8e0248a0a47bce44d6125f047d16323f7f9ce64e243f2a6f97f73c95134574",
+        "workspace": "V733"
+      },
+      {
+        "bytes": 36857,
+        "format": "docx",
+        "frozen_source_sha256": "74b3a8d497a2dc647e90d61b9d3d4606ed7b98d51e7b6dea505de8b1f17b8c0c",
+        "passages": 64,
+        "revision": 1,
+        "sha256": "7849ac7f3c4645d374f7b36ac51b7f8d4dcf8777a5c2f9543a2badf311aa85a5",
+        "workspace": "V733"
+      },
+      {
+        "bytes": 5469,
+        "format": "xlsx",
+        "frozen_source_sha256": "27c3ba2ffefc6f7f156ec255fc1ab2f555d492587607585f58d6ed9c5418028c",
+        "passages": 64,
+        "revision": 1,
+        "sha256": "d5920e346d8e1030f23c1863fde74c37c1f26b3f15b1aa9208555a1b69af7b95",
+        "workspace": "V733"
+      },
+      {
+        "bytes": 2264,
+        "format": "pdf",
+        "frozen_source_sha256": "dbc9adbe785823a657a562733e5c81d515c30a23d33a88ba4b273979dda7a554",
+        "passages": 2,
+        "revision": 1,
+        "sha256": "5a619c48e29a908f0910ddb43e5240dfb823d60f5a7c8d2ecd1ec8f26646ceed",
+        "workspace": "V733"
+      },
+      {
+        "bytes": 9287,
+        "format": "txt",
+        "frozen_source_sha256": "2dbe7ac4ed22a77755319de645254c55504f2e66ca30ecfa0f517e6c2497685e",
+        "passages": 65,
+        "revision": 1,
+        "sha256": "ebcf85affdc50695cd360bb2a95a64f49e8c29ea186018cc6665cf6659ffa1cd",
+        "workspace": "V734"
+      },
+      {
+        "bytes": 36884,
+        "format": "docx",
+        "frozen_source_sha256": "79c6c7e60a5496cbf474b0a8029f78e194b86d82a4989df1837da82ee221236a",
+        "passages": 64,
+        "revision": 1,
+        "sha256": "9e61d02ec2707f42f1a0f2b4e9ec1060b33109e9bcda74c515f2cc3182b45425",
+        "workspace": "V734"
+      },
+      {
+        "bytes": 5441,
+        "format": "xlsx",
+        "frozen_source_sha256": "21c286555fd8b4738ae2224d856dd285089fb9d6b25d98fee7dcfea417e42475",
+        "passages": 64,
+        "revision": 1,
+        "sha256": "7e21cab2d6a10a0d1bb27b7baec0e39e2fa46747551499e1bf4cfa7edf0d860f",
+        "workspace": "V734"
+      },
+      {
+        "bytes": 2263,
+        "format": "pdf",
+        "frozen_source_sha256": "f7e6e2ee484bf9cd1184fa5994a84a7f6032832f548319ff18d7ee31d6f55712",
+        "passages": 2,
+        "revision": 1,
+        "sha256": "b2dc6dc0d1b6c9ea925b91fe81bbd75fc928478caa47e6b441037d12e4d9ec25",
+        "workspace": "V734"
+      },
+      {
+        "bytes": 9285,
+        "format": "txt",
+        "frozen_source_sha256": "fb0dd77d8b13b978be7bcc0d0a37e262af4dd6c63735e7d611335ee4f22b0689",
+        "passages": 65,
+        "revision": 1,
+        "sha256": "eef26454268138942a75cda4aaf05144ffefec0e415e5536a29e9b0bb3a182b1",
+        "workspace": "V735"
+      },
+      {
+        "bytes": 36884,
+        "format": "docx",
+        "frozen_source_sha256": "669235f234043d8968bab73793aa0791f60a4797940a19bb2b95cfebaa577e86",
+        "passages": 64,
+        "revision": 1,
+        "sha256": "0cb6865fce2103f775ba0c390893d08e580473fceff13fad8c582ea87475c8b8",
+        "workspace": "V735"
+      },
+      {
+        "bytes": 5471,
+        "format": "xlsx",
+        "frozen_source_sha256": "5e51a836c7540ac3128a3b898345a833f0d7bb0e4dc5a5382e08313311525348",
+        "passages": 64,
+        "revision": 1,
+        "sha256": "fbb2784b71bdd949143bae0285cd48c074dbd322331171d61530cecbae54782e",
+        "workspace": "V735"
+      },
+      {
+        "bytes": 2226,
+        "format": "pdf",
+        "frozen_source_sha256": "7be8a2552918a062dfc94a93f9d90d9cd6b2c767e2684deb39ba8829c3ba7502",
+        "passages": 2,
+        "revision": 1,
+        "sha256": "484e88a1ce239f6229734d441dce4061a4403b2207419ba426e6ea809c85185f",
+        "workspace": "V735"
+      }
+    ],
+    "failure_code": "volume_evaluation_failed",
+    "failure_stage": "evaluation_gate",
+    "frozen_inventory_sha256": "41bfced43e3fd4f9e6709dbd7a2c57d191c00baa21a9b9573a753c0a5d67469e",
+    "maximum_concurrency": 5,
+    "originals_and_versions_unchanged": true,
+    "passed_tasks": 12,
+    "private_documents": 0,
+    "review_decisions": 0,
+    "status": "failed",
+    "suite": "quote-volume-v1",
+    "suite_sha256": "9c15b1f723c6119e5a29f98bf004cd130eee3b9d1cad4a2d5d27c91b9ed05a09",
+    "synthetic_only": true,
+    "tasks_declared": 15,
+    "waves": [
+      {
+        "counters": {
+          "admitted_jobs": 0,
+          "provider": {
+            "active": 0,
+            "calls": 5,
+            "diagnostics": {
+              "empty_quote_selection": 1
+            },
+            "failures": 0,
+            "peak": 5
+          }
+        },
+        "http_observations": {
+          "completion_http_200": 5,
+          "metadata_http_200": 5
+        },
+        "index": 0,
+        "peak_application_calls": 5,
+        "results": [
+          {
+            "case": "V731-payment",
+            "evidence_check": {
+              "context_units": 6970,
+              "input_passages": 195,
+              "omitted_passages": 187,
+              "selected_documents": 4,
+              "selected_passages": 8,
+              "shortened_passages": 3
+            },
+            "expected_abstention": false,
+            "failure_code": null,
+            "observed_abstention": false,
+            "oracle_visible": true,
+            "product_sha256": "b87fb890e9e4ccc77c22fa592de33a76a4ff6f77065723e5d5dc370e968159a6",
+            "prompt_sha256": "754503a7a42d9c28bcc9f25c53a1bbdf038a6800bad07be52adced212809c5cf",
+            "selected_claims": 1,
+            "selected_manifest_sha256": "956fd6985cfec13d25155ecfed63768ea2715030a65c045ba8f37e6ee10bb0fe",
+            "selection_passed": true,
+            "source_snapshot_sha256": "8b4c0458d9e971068637720f7a50117323e6395b5a9fcc2d6a6339cbb9693402",
+            "status": "passed"
+          },
+          {
+            "case": "V732-payment",
+            "evidence_check": {
+              "context_units": 6785,
+              "input_passages": 195,
+              "omitted_passages": 189,
+              "selected_documents": 4,
+              "selected_passages": 6,
+              "shortened_passages": 4
+            },
+            "expected_abstention": false,
+            "failure_code": null,
+            "observed_abstention": false,
+            "oracle_visible": true,
+            "product_sha256": "ef745468fa3eced1fc2cb2e122b8b9fee13827bfcd13017a042c4704422670b9",
+            "prompt_sha256": "9f0892b5ac2ffc1f389c89c7783ee8fd33b13db5e6c133f18325d4a6d8807298",
+            "selected_claims": 1,
+            "selected_manifest_sha256": "421fac54e40f6a94d1a21d8496edf42b7a15cc8fb23652807c6eeb956f15e375",
+            "selection_passed": true,
+            "source_snapshot_sha256": "22bc134b923b77ca333f6eaa3d20cdefd0c7e5f4a29b6c9bce6fb9172fa186b6",
+            "status": "passed"
+          },
+          {
+            "case": "V733-payment",
+            "evidence_check": {
+              "context_units": 6895,
+              "input_passages": 195,
+              "omitted_passages": 188,
+              "selected_documents": 4,
+              "selected_passages": 7,
+              "shortened_passages": 4
+            },
+            "expected_abstention": false,
+            "failure_code": null,
+            "observed_abstention": false,
+            "oracle_visible": true,
+            "product_sha256": "f682180ed47789d172d834d9ba7d2f547ffa96234d5168f241704433f7f5e044",
+            "prompt_sha256": "c23801c35f792d170d0419715e359b53fa1ffe1a817990e8335cfd622baeff2b",
+            "selected_claims": 1,
+            "selected_manifest_sha256": "cdb825ea3d467318e05bf435a04ebcf3818f86ad28ecf8215c5b9374116c9420",
+            "selection_passed": true,
+            "source_snapshot_sha256": "fbbd101fb69093c30b4ca0820615643c4795f73ca88e3eb614a12630803a2bf7",
+            "status": "passed"
+          },
+          {
+            "case": "V734-payment",
+            "expected_abstention": false,
+            "failure_code": "product_claim_grounding_failed",
+            "observed_abstention": true,
+            "oracle_visible": true,
+            "selected_claims": 0,
+            "selection_passed": false,
+            "status": "failed"
+          },
+          {
+            "case": "V735-payment",
+            "evidence_check": {
+              "context_units": 6970,
+              "input_passages": 195,
+              "omitted_passages": 187,
+              "selected_documents": 4,
+              "selected_passages": 8,
+              "shortened_passages": 3
+            },
+            "expected_abstention": false,
+            "failure_code": null,
+            "observed_abstention": false,
+            "oracle_visible": true,
+            "product_sha256": "22f6973d025f7c180fe2cde3db51f48812de82c30477c8dae5631de07385ee9e",
+            "prompt_sha256": "d3f117be74440841f158566b547369dd1a48a87f10012877f6198f2e00ed0207",
+            "selected_claims": 1,
+            "selected_manifest_sha256": "e47898f5cfdef8d867cf0b7a8dcbc05cdd5c7ec22e721db4953b06ac08add15f",
+            "selection_passed": true,
+            "source_snapshot_sha256": "73502a78ca6c731033586eb2c427b83e89f75a6005b2bfde0d0ebf5e7f5a9f1b",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "counters": {
+          "admitted_jobs": 0,
+          "provider": {
+            "active": 0,
+            "calls": 10,
+            "diagnostics": {
+              "empty_quote_selection": 1
+            },
+            "failures": 0,
+            "peak": 5
+          }
+        },
+        "http_observations": {
+          "completion_http_200": 10,
+          "metadata_http_200": 10
+        },
+        "index": 1,
+        "peak_application_calls": 5,
+        "results": [
+          {
+            "case": "V731-conflict",
+            "evidence_check": {
+              "context_units": 6915,
+              "input_passages": 195,
+              "omitted_passages": 187,
+              "selected_documents": 4,
+              "selected_passages": 8,
+              "shortened_passages": 2
+            },
+            "expected_abstention": false,
+            "failure_code": null,
+            "observed_abstention": false,
+            "oracle_visible": true,
+            "product_sha256": "392dd5d7f7bc6e0e30e16b98323fbb60f3fbfc67b9045ffb108f96cd2255123b",
+            "prompt_sha256": "8c827c3d8fdbbee68bb8a7d0a4d646ab7fe6896bf32b3fa7afc384ec5ef5e67f",
+            "selected_claims": 2,
+            "selected_manifest_sha256": "a023dcdee888e8abd9d4cb6094ed50c1fdcf8c202b567a399fb1ac46b1d6aaf0",
+            "selection_passed": true,
+            "source_snapshot_sha256": "8b4c0458d9e971068637720f7a50117323e6395b5a9fcc2d6a6339cbb9693402",
+            "status": "passed"
+          },
+          {
+            "case": "V732-conflict",
+            "evidence_check": {
+              "context_units": 6987,
+              "input_passages": 195,
+              "omitted_passages": 187,
+              "selected_documents": 4,
+              "selected_passages": 8,
+              "shortened_passages": 3
+            },
+            "expected_abstention": false,
+            "failure_code": null,
+            "observed_abstention": false,
+            "oracle_visible": true,
+            "product_sha256": "49a42b4cefa1cafc69b9ed1d86efb8f2ec989cda4b30097fbf65197fb89c7d12",
+            "prompt_sha256": "9b3a4dba36746b8edf2506388c0e9212f0c3ef2b2ac060f85d109efca02fef90",
+            "selected_claims": 2,
+            "selected_manifest_sha256": "1cd2f78bc4fc42db1b916fb235e7d81efb7d03747eea9252d4c3cd6ecfec7a68",
+            "selection_passed": true,
+            "source_snapshot_sha256": "22bc134b923b77ca333f6eaa3d20cdefd0c7e5f4a29b6c9bce6fb9172fa186b6",
+            "status": "passed"
+          },
+          {
+            "case": "V733-conflict",
+            "evidence_check": {
+              "context_units": 7008,
+              "input_passages": 195,
+              "omitted_passages": 187,
+              "selected_documents": 4,
+              "selected_passages": 8,
+              "shortened_passages": 2
+            },
+            "expected_abstention": false,
+            "failure_code": "selection_relevance_failed",
+            "observed_abstention": false,
+            "oracle_visible": true,
+            "product_sha256": "f2766406d947c01123a756e157b8757ebb1f943e8f675ed46d4ca2f13a2bae5e",
+            "prompt_sha256": "d448ded011c630b6577cedc757d829f0b4d6033edaf3ef1a9730b1c89531bee1",
+            "selected_claims": 2,
+            "selected_manifest_sha256": "d1025698d901109f97898feef32c16f48951e22d7cbb977cbcf2398fdbdb0aad",
+            "selection_passed": false,
+            "source_snapshot_sha256": "fbbd101fb69093c30b4ca0820615643c4795f73ca88e3eb614a12630803a2bf7",
+            "status": "failed"
+          },
+          {
+            "case": "V734-conflict",
+            "evidence_check": {
+              "context_units": 7007,
+              "input_passages": 195,
+              "omitted_passages": 187,
+              "selected_documents": 4,
+              "selected_passages": 8,
+              "shortened_passages": 2
+            },
+            "expected_abstention": false,
+            "failure_code": null,
+            "observed_abstention": false,
+            "oracle_visible": true,
+            "product_sha256": "cf3ff0412c893b7905db021c57de47690f00a9eec565216c80d4b402e6689ce3",
+            "prompt_sha256": "2150b6fcfff4a88308d840495ba5d7b993591a8cd4f5b6464b27b639871e0f96",
+            "selected_claims": 2,
+            "selected_manifest_sha256": "ff6b843af14406ed7bc175faa314c8ef927842a037ea80cb8d08c20d0d64e1b3",
+            "selection_passed": true,
+            "source_snapshot_sha256": "2376cbf1dfb8da09e767f5c6ea6698ac69f265a0477745b5657b00d35237209e",
+            "status": "passed"
+          },
+          {
+            "case": "V735-conflict",
+            "evidence_check": {
+              "context_units": 6915,
+              "input_passages": 195,
+              "omitted_passages": 187,
+              "selected_documents": 4,
+              "selected_passages": 8,
+              "shortened_passages": 2
+            },
+            "expected_abstention": false,
+            "failure_code": null,
+            "observed_abstention": false,
+            "oracle_visible": true,
+            "product_sha256": "6dd6a180de65f17a2f8ad4351887deced37ecfbd92773e1eccf8406425eb16f2",
+            "prompt_sha256": "8dc49b15c53d170512856b002e03a439ba408f2f9684e1c88963be2a4c36ecc0",
+            "selected_claims": 2,
+            "selected_manifest_sha256": "79e9c5a6e531b165d1ca8e0e85090350e49f3a250a1682acd19b39f0f0e3b168",
+            "selection_passed": true,
+            "source_snapshot_sha256": "73502a78ca6c731033586eb2c427b83e89f75a6005b2bfde0d0ebf5e7f5a9f1b",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "counters": {
+          "admitted_jobs": 0,
+          "provider": {
+            "active": 0,
+            "calls": 15,
+            "diagnostics": {
+              "empty_quote_selection": 5,
+              "relay_provider_connection_closed": 1,
+              "upstream_502": 1
+            },
+            "failures": 1,
+            "peak": 5
+          }
+        },
+        "http_observations": {
+          "completion_http_200": 14,
+          "completion_http_502": 1,
+          "metadata_http_200": 15
+        },
+        "index": 2,
+        "peak_application_calls": 5,
+        "results": [
+          {
+            "case": "V731-missing",
+            "evidence_check": {
+              "context_units": 6995,
+              "input_passages": 195,
+              "omitted_passages": 187,
+              "selected_documents": 4,
+              "selected_passages": 8,
+              "shortened_passages": 3
+            },
+            "expected_abstention": true,
+            "failure_code": null,
+            "observed_abstention": true,
+            "oracle_visible": true,
+            "product_sha256": "bc0d824840098e6b31cf01c7a559e882bde4f3480a6af0467d10a077a1b2b5e9",
+            "prompt_sha256": "20817952e66b11f71b4797a407b05dd93d5308e84ef4d137d197dc0140ca75f6",
+            "selected_claims": 0,
+            "selected_manifest_sha256": "b401dc11ea6d626179d93d5575789f840b71100b2aa22e61d28ccd6424b35b00",
+            "selection_passed": true,
+            "source_snapshot_sha256": "8b4c0458d9e971068637720f7a50117323e6395b5a9fcc2d6a6339cbb9693402",
+            "status": "passed"
+          },
+          {
+            "case": "V732-missing",
+            "evidence_check": {
+              "context_units": 7030,
+              "input_passages": 195,
+              "omitted_passages": 187,
+              "selected_documents": 4,
+              "selected_passages": 8,
+              "shortened_passages": 3
+            },
+            "expected_abstention": true,
+            "failure_code": null,
+            "observed_abstention": true,
+            "oracle_visible": true,
+            "product_sha256": "a6611ebcfa65d5344219e0b5c63d6545fcdb2b9f3a389d9637640582689570e9",
+            "prompt_sha256": "105ff4e57b901eadfeb5103cec0ea07a8f30f352f4590a512f0e7b0e93f6f593",
+            "selected_claims": 0,
+            "selected_manifest_sha256": "5bb77a86a5a7d775b28fbb47745b5fb3b9675bfb9ce409df66ad48fdae711979",
+            "selection_passed": true,
+            "source_snapshot_sha256": "22bc134b923b77ca333f6eaa3d20cdefd0c7e5f4a29b6c9bce6fb9172fa186b6",
+            "status": "passed"
+          },
+          {
+            "case": "V733-missing",
+            "failure_code": "application_job_failed",
+            "status": "failed"
+          },
+          {
+            "case": "V734-missing",
+            "evidence_check": {
+              "context_units": 6923,
+              "input_passages": 195,
+              "omitted_passages": 188,
+              "selected_documents": 4,
+              "selected_passages": 7,
+              "shortened_passages": 4
+            },
+            "expected_abstention": true,
+            "failure_code": null,
+            "observed_abstention": true,
+            "oracle_visible": true,
+            "product_sha256": "c1284451242141f5e0623afe59fd91d8a5beec5d6d7d26b12783f5103318b7ed",
+            "prompt_sha256": "da06517389584da65d507063764bd756d1aa548a4bca972c9f3504876c00c848",
+            "selected_claims": 0,
+            "selected_manifest_sha256": "d3f1e0d9df224467664808bbedea2a8f87b55837a605fd7ae72977711cba1e9f",
+            "selection_passed": true,
+            "source_snapshot_sha256": "2376cbf1dfb8da09e767f5c6ea6698ac69f265a0477745b5657b00d35237209e",
+            "status": "passed"
+          },
+          {
+            "case": "V735-missing",
+            "evidence_check": {
+              "context_units": 6995,
+              "input_passages": 195,
+              "omitted_passages": 187,
+              "selected_documents": 4,
+              "selected_passages": 8,
+              "shortened_passages": 3
+            },
+            "expected_abstention": true,
+            "failure_code": null,
+            "observed_abstention": true,
+            "oracle_visible": true,
+            "product_sha256": "d066d6a78de8e1d9e84956df13ac5cbfb92f343464d0a9b44fd2b0fe15e6c0c9",
+            "prompt_sha256": "3e1c87e4f9d8bb8b361f150b8fcc3f15a1b9b045013eec6d676bb3f740f4165d",
+            "selected_claims": 0,
+            "selected_manifest_sha256": "2afd25d5fa5436c754b3311ffbaf3e35965a9767705aa8adb7a6b3c685b2432e",
+            "selection_passed": true,
+            "source_snapshot_sha256": "73502a78ca6c731033586eb2c427b83e89f75a6005b2bfde0d0ebf5e7f5a9f1b",
+            "status": "passed"
+          }
+        ]
+      }
+    ],
+    "waves_declared": 3
+  },
+  "source_isolation_after_trial": {
+    "native_trial_used_pre_isolation_candidate_default": true,
+    "production_default_recipe": "private-evidence-pack-v1",
+    "candidate_recipe": "private-evidence-pack-v2-folded-anchors",
+    "candidate_activation": "Only explicit guarded disposable volume factory; production does not enable it",
+    "retained_native_candidate_source_sha256": "8321e7784f48d81208f6fd908b9ac565c8eb76aa68d29b8a908a693abc4e4728",
+    "default_v1_reference_cases_equal": 15,
+    "candidate_reference_cases_equal": 15,
+    "final_wrapper_exercised_offline_not_with_another_model_trial": true,
+    "independent_reference_file": "deploy/fixtures/quote-volume-packing-references.json"
+  },
+  "local_checks": {
+    "deployment_contracts": 130,
+    "context_packing_cases": 36,
+    "full_authenticated_volume_driver_with_controlled_oracle_pass_and_fail": true,
+    "inference_in_ci": false
+  },
+  "preservation": {
+    "healthy_services": 8,
+    "same_live_container_ids_images_configuration_secrets_database_originals_evidence_and_history": true,
+    "preexisting_primary_tracked_edits_preserved": 31,
+    "owner_v3_review_unchanged_and_pending": true
+  },
+  "interpretation": [
+    "12/15 is the task pass count for this exposed synthetic benchmark, not a legal accuracy or capacity guarantee.",
+    "All expected facts were present with the candidate, but one positive abstained and one conflict output failed relevance.",
+    "Four of five expected negative tasks abstained correctly; the fifth failed transport.",
+    "All three waves had five measured overlapping application provider calls; generation leases stay two.",
+    "One completion HTTP 502 was classified by the relay as RemoteDisconnected/provider_connection_closed; engine/tunnel/root cause and historical errno remain unresolved.",
+    "The failed original mixed profile and earlier seven-task result retain their independent scopes.",
+    "No retry, provider/model/relay/deadline change, production deployment or private-case regeneration occurred.",
+    "Post-trial isolation restores the exact default-v1 manifests while the candidate matches the retained native prototype manifests for all fifteen frozen cases."
+  ],
+  "next": [
+    "Evaluate relevance and abstention over long extracted PDF page quotations with a new independent test set; do not tune or rerun exposed failed cases until pass.",
+    "Localize connection closure across the existing tunnel/provider boundary using bounded synthetic-only correlation and fixed error metadata.",
+    "Keep candidate packing opt-in until its broader gate is cleared.",
+    "Reviewed corpus, sustained capacity, malware/isolation, OCR fidelity, offline operation and production RPO/RTO remain separate gates."
+  ]
+}
