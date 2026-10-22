@@ -909,6 +909,19 @@ configuration and scanner mounts are excluded. Backup respects each container's
 configured shutdown grace (240 seconds for the API) instead of overriding it with
 a shorter stop timeout.
 
+Offline restore also retains set-group-ID directory modes, which control group
+inheritance in shared publication storage. Its fresh-target helper includes
+`FSETID` with `CHOWN`, `FOWNER` and `DAC_OVERRIDE`; without it Linux can silently
+strip the group-inheritance bit when restoring a numeric group outside the
+helper's supplementary groups. This capability is confined to the networkless
+restore helper and synthetic fixture setup. Backup readers and all application
+containers retain their existing capability sets. The recovery drill includes
+non-member-group `2775` directories and compares all volume bytes, ownership and
+permission modes; matching content alone does not qualify recovery.
+The [Linux capabilities manual](https://man7.org/linux/man-pages/man7/capabilities.7.html)
+documents this distinction between ownership and set-group-ID permission.
+See [permission-restoration evidence](evidence/restore-setgid-2026-10-22.json).
+
 Both scripts accept `--project-name NAME`, repeated `--compose-file PATH` and
 `--env-file PATH`. Pass the same explicit configuration used to create the target;
 `--env-file /dev/null` prevents root `.env` loading for a fully specified drill

@@ -96,7 +96,9 @@ def helper(containers: dict, images: dict, action: str, key_file: Path, archive:
                "--cap-add", "DAC_OVERRIDE", "--tmpfs", "/tmp:size=64m,mode=1777",
                "--env", "LA_ARCHIVE_IMAGES=" + json.dumps(images, sort_keys=True)]
     if action == "restore":
-        command += ["--cap-add", "CHOWN", "--cap-add", "FOWNER"]
+        # Without FSETID Linux can silently strip a directory's S_ISGID when
+        # its numeric group is not in the helper's supplementary groups.
+        command += ["--cap-add", "CHOWN", "--cap-add", "FOWNER", "--cap-add", "FSETID"]
     command += volume_mounts(containers, writable=action == "restore")
     key_target = "backup-recipients" if action == "backup" else "backup-identity"
     command += ["--mount", f"type=bind,src={key_file},dst=/run/secrets/{key_target},readonly"]

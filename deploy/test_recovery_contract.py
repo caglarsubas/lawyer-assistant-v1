@@ -140,6 +140,20 @@ class RecoveryContracts(unittest.TestCase):
         with patch.dict("os.environ", {}, clear=True), self.assertRaises(ValueError):
             fixture.require_drill()
 
+    def test_sgid_restoration_is_restricted_to_offline_restore_and_fixture_setup(self):
+        with patch.object(manage_backup, "volume_mounts", return_value=[]):
+            for action in ("backup", "restore"):
+                command = manage_backup.helper({}, {"api": "sha256:fixture"}, action, Path("/key"), Path("/archive"))
+                self.assertEqual("FSETID" in command, action == "restore")
+                self.assertIn("none", command)
+                self.assertIn("--read-only", command)
+                self.assertIn("ALL", command)
+        for action in ("inventory", "empty", "seed-volumes"):
+            with (patch.object(drill, "volume_mounts", return_value=[]),
+                  patch.object(drill, "command", return_value="{}") as command):
+                drill.probe({}, "sha256:fixture", action)
+                self.assertEqual("FSETID" in command.call_args.args[0], action == "seed-volumes")
+
     def test_image_fingerprint_detects_source_and_lock_changes_without_reading_env(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -5064,3 +5064,30 @@ for the owner's exact-version legal review. No draft, extraction, inference or
 review decision is created by this packet.
 See [operator instructions](OPERATIONS.md#preserve-existing-addresses-before-cold-recovery)
 and [engineering evidence](evidence/address-recovery-2026-10-22.json).
+
+### Recovery follow-up — preserve shared graph directory permissions, 22 October 2026
+
+The guarded address plan was applied to all thirteen existing endpoints across
+eight unchanged application containers. Default backup admission now passes,
+and a fresh encrypted cold backup authenticated successfully. An isolated
+actual-data restore exposed a separate recovery defect: Linux silently cleared
+the set-group-ID bit on two shared graph directories. All file contents and
+numeric ownership matched, but recovery was withheld because group inheritance
+is part of the source permission model. The live stack recovered healthy and
+temporary targets were removed.
+
+The networkless fresh-target restore helper now receives `FSETID` alongside its
+existing ownership-restoration capabilities. Backup readers and application
+containers receive no extra capabilities. The native recovery fixture requires
+two `2775` directories with a numeric group outside the helper's groups, then
+compares complete five-volume content, owner/group and permission inventories.
+Authenticated preflight, fresh-target checks, publication-epoch invalidation and
+the address guard remain mandatory. There is no permission-normalization or
+content-only override.
+
+F00-06 remains partial: measured local cold recovery is distinct from provider,
+context, representative concurrency, populated graph rollback, power-loss and
+production RPO/RTO qualification. Originals, exact evidence versions and review
+history remain private and unchanged; no case inference or legal review is
+performed. R03-17 still waits for the owner's exact-version review.
+See [permission-restoration evidence](evidence/restore-setgid-2026-10-22.json).
