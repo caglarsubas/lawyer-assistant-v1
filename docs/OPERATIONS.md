@@ -1724,3 +1724,44 @@ unchanged. The original rule document is retained in
 rule document changes only that artifact path. The existing R01 validation step
 now runs once before the full backend suite, with the same command, closed-file
 guard, jobs, caps, workers and coverage. No whitelist expansion masks the error.
+
+## Whole-passage packet evaluation
+
+`scripts/whole_passage_packets.py` is a separate offline inventory candidate with
+exact whole passages and bounded multi-packet preparation. It adds no application
+route, live selector, inference or private-matter authorization. Every packet's
+original spans, text hashes, source-version aliases, membership and wire messages
+are sealed against the entire original inventory. Resolver inputs must match a
+fresh full rebuild; cross-packet, unknown and legacy identifiers fail. Documents
+may still be incomplete and separate passages have no automatic semantic link.
+
+For the evaluated 8192-unit profile, each envelope retains at most 4000 copied
+UTF-8 bytes and eight passages; up to eight envelopes increase total future cost.
+Report per-packet measurements, aggregate units/bytes/call bounds and all omitted
+sources. The later execution boundary must independently enforce the evaluated
+profile, whole-job budget and trusted immutable matter context. A plan hash alone
+is not permission, live-context verification or native acceptance.
+
+Freeze the new P1501–P1516 fixtures, labels, implementation/evaluator and
+[rules](WHOLE_PASSAGE_PACKET_EVALUATION.md) before the first offline grade. Run
+`PYTHONPATH=backend:scripts backend/.venv/bin/python
+scripts/evaluate_passage_packets.py --output <new-path>`; existing output files
+are never overwritten. Keep prior suites and the frozen native trial unchanged.
+Do not put evidence into the closed five-file `qualification` directory.
+
+The retained first comparison finds 9/23 groups in unchanged v2, 13/23 with one
+whole-passage packet and 18/23 with up to eight packets. First packets remain
+byte-identical in the capacity ablation. The latter costs 32 versus 12 planned
+envelopes and 144178 versus 42018 conservative units across the suite. Five groups
+remain unavailable and all negative-case model outcomes are unmeasured. These
+numbers describe availability, not accuracy, abstention, legal truth or native
+capacity. A larger aggregate budget is not a free single-request improvement.
+
+Fourteen new contracts and an identical network-disabled, read-only Linux report
+qualify offline integrity only. All 215 deployment contracts and 206 relevant
+context/provider/qualification cases pass locally. Keep all nine exact-head CI
+jobs, existing caps/workers/coverage, the early R01 guard and five timing reserves.
+Verify merged main and preserve originals, exact evidence, encrypted bytes,
+credentials, sessions and review history. Keep owner v3 review and F00-06 pending.
+A separately marked disposable selector, aggregate-budget/context boundary, fresh
+native declaration and exact model/transport binding remain later gates.
