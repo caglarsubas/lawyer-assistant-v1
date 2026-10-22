@@ -91,6 +91,9 @@ def probe(containers, image, action):
     args = ["docker", "run", "--rm", "--network", "none", "--read-only", "--user", "0:0",
             "--cap-drop", "ALL", "--cap-add", "DAC_OVERRIDE", "--security-opt", "no-new-privileges:true",
             "--env", f"LA_RECOVERY_DRILL={MARKER}"]
+    if action == "seed-volumes":
+        # Fixture-only setup reproduces the deployed shared graph directories.
+        args += ["--cap-add", "FOWNER", "--cap-add", "FSETID"]
     args += volume_mounts(containers, writable=action == "seed-volumes")
     return json.loads(command([*args, "--entrypoint", "python", image, "/app/scripts/recovery_fixture.py", action]))
 
@@ -181,7 +184,9 @@ def main():
                 source_containers, _ = inventory(source)
                 # Stop all owners before hashing or writing fixture epoch/sentinels.
                 command([*source, "stop"], timeout=300)
-                probe(source_containers, images["api"], "seed-volumes")
+                permissions = probe(source_containers, images["api"], "seed-volumes")
+                if permissions.get("nonmember_group_sgid_directories") != 2:
+                    raise ValueError("Missing shared-group directory fixture")
                 before = probe(source_containers, images["api"], "inventory")
                 if not before["epoch_exists"]:
                     raise ValueError("Missing source epoch fixture")
@@ -225,6 +230,7 @@ def main():
                 if after["volumes"] != before["volumes"] or after["epoch_exists"]:
                     raise ValueError("Restored bytes/metadata or publication invalidation differ")
                 report["checks"]["five_volume_bytes_and_metadata_match_except_epoch"] = True
+                report["checks"]["nonmember_group_sgid_directory_modes_restored"] = True
                 stage = "reject_nonempty_target"
                 transfer("restore", names[1], archive, expected=1)
                 if probe(target_containers, images["api"], "inventory") != after:

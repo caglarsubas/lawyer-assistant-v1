@@ -70,6 +70,18 @@ def file_inventory(roots):
 def seed_volumes():
     from volume_archive import ROOTS
 
+    graph_root = ROOTS["graphs"]
+    if graph_root.stat().st_gid == os.getegid():
+        raise ValueError("SGID recovery fixture requires a non-member graph group")
+    os.chmod(graph_root, 0o2775)
+    shared = graph_root / "SYNTHETIC-SHARED-GROUP"
+    shared.mkdir()
+    os.chmod(shared, 0o2775)
+    if (stat.S_IMODE(graph_root.stat().st_mode) != 0o2775
+            or stat.S_IMODE(shared.stat().st_mode) != 0o2775
+            or shared.stat().st_gid != graph_root.stat().st_gid):
+        raise ValueError("SGID recovery fixture was not established")
+    (shared / "SYNTHETIC-GROUP-INHERITANCE.txt").write_bytes(PAYLOAD)
     for family in ("graphs", "public_sources"):
         target = ROOTS[family] / "SYNTHETIC-RECOVERY-SENTINEL.txt"
         with target.open("xb") as stream:
@@ -80,7 +92,7 @@ def seed_volumes():
     reviews = ROOTS["documents"] / "release-authorizations"
     reviews.mkdir(exist_ok=True)
     (reviews / "SYNTHETIC-NOT-AN-AUTHORIZATION.txt").write_bytes(PAYLOAD)
-    return {"synthetic_sentinels": True, "epoch_created": True}
+    return {"synthetic_sentinels": True, "epoch_created": True, "nonmember_group_sgid_directories": 2}
 
 
 @contextmanager
