@@ -2,6 +2,7 @@
 
 import argparse
 import base64
+import ipaddress
 import json
 import os
 import platform
@@ -22,10 +23,11 @@ from manage_backup import compose_command  # noqa: E402
 from qualify_recovery import POSTGRES, cleanup_project, command, fresh_project  # noqa: E402
 from qualify_recovery import compose_definition as recovery_definition  # noqa: E402
 from recovery_fixture import code_fingerprint  # noqa: E402
+from restart_preflight_drill import unused_drill_subnet  # noqa: E402
 
 
-def compose_definition(images, key, password, token):
-    definition = recovery_definition({**images, "fuseki": images["api"], "opensearch": images["api"]}, key, password)
+def compose_definition(images, key, password, token, subnet):
+    definition = recovery_definition({**images, "fuseki": images["api"], "opensearch": images["api"]}, key, password, subnet)
     services = definition["services"]
     del services["fuseki"], services["opensearch"]
     environment = {"LA_LOAD_DRILL": MARKER, "LA_LOAD_CONTROL_TOKEN": token,
@@ -37,7 +39,8 @@ def compose_definition(images, key, password, token):
     services["postgres"]["environment"]["POSTGRES_DB"] = "lawyer_load_drill"
     services["postgres"]["healthcheck"]["test"][-1] = "lawyer_load_drill"
     services["driver"] = {"image": images["api"], "pull_policy": "never", "profiles": ["driver"],
-        "command": ["python", "/app/scripts/load_driver.py"], "restart": "no", "networks": ["isolated"],
+        "command": ["python", "/app/scripts/load_driver.py"], "restart": "no", "networks": {"isolated": {
+            "ipv4_address": str(ipaddress.ip_network(subnet).network_address + 6)}},
         "environment": {name: value for name, value in environment.items() if name != "LA_ENCRYPTION_KEY"},
         "read_only": True, "tmpfs": ["/tmp:size=64m,mode=1777"], "cap_drop": ["ALL"],
         "security_opt": ["no-new-privileges:true"], "cpus": "1.0", "mem_limit": "768m", "pids_limit": 128}
@@ -122,8 +125,9 @@ def main():
         with tempfile.TemporaryDirectory(prefix="lawyer-load-") as directory:
             config = Path(directory) / "compose.json"
             definition = compose_definition(images, base64.urlsafe_b64encode(secrets.token_bytes(32)).decode(),
-                                            secrets.token_hex(24), secrets.token_hex(32))
+                                            secrets.token_hex(24), secrets.token_hex(32), unused_drill_subnet())
             config.write_text(json.dumps(definition))
+            report["explicit_isolated_subnet"] = True
             report["resource_limits"] = {name: {key: service[key] for key in ("cpus", "mem_limit", "pids_limit")}
                                          for name, service in definition["services"].items()}
             project = "lawyer-load-" + secrets.token_hex(6)

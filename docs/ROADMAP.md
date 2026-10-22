@@ -5091,3 +5091,39 @@ production RPO/RTO qualification. Originals, exact evidence versions and review
 history remain private and unchanged; no case inference or legal review is
 performed. R03-17 still waits for the owner's exact-version review.
 See [permission-restoration evidence](evidence/restore-setgid-2026-10-22.json).
+
+### F00-06 provider/context and five-job qualification — 22 October 2026
+
+The opt-in application load runner now uses one explicit unused isolated benchmark
+subnet with pinned endpoints, preserving other projects when Docker's default pools
+are exhausted. A fresh target-host drill passed five workers, ten admissions,
+nonpersistent overflow rejection, queued/running cancellation, observed PostgreSQL
+lock contention, overlapping uploads, staleness and fifteen fresh grounded jobs.
+Resource samples and kernel high-water marks passed; owned test resources were
+removed. This remains a synthetic controlled-provider application baseline.
+
+A separate payload-free qualifier exercises the deployed local provider with no
+matter-store access. Authenticated `ministral-3:8b` metadata advertises 32,768 tokens;
+the unchanged application budget is 8,192 conservative UTF-8/reserve units. Exact
+boundary inference and rejection one unit above that budget passed. The final
+five-caller wave produced four valid exact-source excerpts and one adapter rejection
+within the existing per-call limits. **Real-provider five-caller qualification did
+not pass.** The report preserves every outcome with no automatic retry or limit
+increase; transport/admission failure localization and bounded consumer backpressure
+are the next engineering step. A failed wave is not production capacity evidence.
+
+Earlier strict qualifier failures are retained. A single diagnostic established that
+the model's correctly referenced source substring omitted the fixture label prefix;
+the qualifier now accepts complete exact source excerpts, consistent with the
+product grounding rule. Paraphrases, invented identifiers and clipped text still
+fail. No application, relay or shared-provider configuration was changed.
+
+F00-06 remains partial. End-to-end five-job model/corpus research, sustained load,
+tunnel retention/disconnected operation, populated graph rollback, power-loss and
+production RPO/RTO remain separate gates. All originals, exact evidence versions,
+credentials, session and review history remained byte/semantically unchanged across
+eight healthy live services. R03-17 remains waiting for the owner's version-3 review;
+this synthetic engineering work supplies no legal or source-rights approval.
+CI retains all nine jobs, existing caps and coverage, with the five required reserve
+gates checked before merge. See [operator procedure](OPERATIONS.md#configured-providercontext-and-five-concurrent-callers)
+and [qualification evidence](evidence/provider-load-2026-10-22.json).
