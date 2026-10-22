@@ -1410,3 +1410,46 @@ private matter was changed. The earlier profiles and owner v3 review remain inta
 Next use independent long-page relevance cases and bounded synthetic-only transport
 correlation; production/representative-corpus/legal acceptance stays open.
 See [dated evidence](evidence/quote-volume-evaluation-2026-10-22.json).
+
+### Long-page quote selection and per-call diagnostics
+
+Use `--workload long-page-quotes-v1` with the existing qualifier's protected
+image/profile/key/network/relay/output arguments and `--execute-real-provider`.
+It uses five invented, deterministic ASCII text PDFs with three pages of 48 lines
+each, plus Turkish task questions. The tasks cover late facts, a contradictory pair,
+absent information, document instructions and a negation with its adjacent condition.
+Required evidence must be visible in the packed quotation catalog before any model
+call. This profile alone opts into the disposable v2 packer; production stays v1.
+It retains frozen source, prompt, manifest and product seals before outcome grading,
+then rechecks all original bytes and document views after the full five-task wave.
+One attempt per case, no retries, the same context budget and all existing provider,
+task and driver deadlines apply. Exact-source matching cannot excuse irrelevant
+quotes, omitted contradictory records or an omitted condition.
+
+The token-protected fixture event endpoint now contains at most 64 caller records,
+each with a synthetic question SHA-256, sequence, start/end, at most eight finite
+HTTP stage/status/elapsed entries, fixed diagnostic codes and adapter outcome.
+Correlation rejects duplicate/missing cases, unknown fields/codes, invalid statuses,
+nonfinite intervals and out-of-interval observations. Thread-local accumulation keeps
+concurrent calls separate; no prompt, document text, successful body, URL, header,
+credential or arbitrary upstream message is retained. Question digests are research
+metadata and must remain restricted to this synthetic fixture. These endpoints and
+observers are absent from production startup. A returned adapter answer can still
+fail the independent relevance or legal-review gate.
+
+The native 22 October trial passed 3/5 and remains **unqualified**. A visible delivery
+fact produced no quote; a second answer did not include both negation and condition.
+The conflicting pair, missing-information abstention and hostile-instruction case
+passed. All ten HTTP responses were 200, all five callers overlapped, original/version
+checks passed and cleanup restored the original provider network. Controlled tests
+exercise completion 502 plus `relay_provider_connection_closed` on one concurrent
+call without leaking its arbitrary response text. This validates bounded caller-side
+localization, not the historical socket cause, engine behavior or tunnel trace.
+
+Retain all failed outcomes. Next investigate atomic quotation boundaries offline on
+independent examples, preserving condition/negation context and exact source spans.
+Do not force a nonempty answer, rerun these cases until passing, silently retry a
+502, enable the candidate in production or change model/deadline settings. No private
+matter, original, evidence version, review history, secret or live service is modified
+by this tooling. Owner version-3 review and broader capacity/legal gates stay open.
+See [dated evidence](evidence/long-page-quotes-2026-10-22.json).

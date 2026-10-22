@@ -5,7 +5,7 @@ import os
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
-from threading import Lock
+from threading import Lock, local
 
 import httpx
 from load_fixture import fixture_settings
@@ -27,6 +27,10 @@ RELAY_FAILURE_CODES = frozenset({
     "provider_connection_reset", "provider_connection_refused", "provider_network_denied",
     "provider_network_unreachable", "provider_transport_resource_exhausted",
 })
+DIAGNOSTIC_CODES = frozenset({"relay_" + code for code in RELAY_FAILURE_CODES}) | {
+    "empty_quote_selection", "unknown_reference", "unmatched_quote", "schema_invalid",
+    "readiness_failed", "upstream_502", "context_exceeded", "adapter_failure",
+}
 
 
 def observe_relay_failure(response, note):
@@ -108,6 +112,7 @@ class MeasuredProvider(Provider):
         self.diagnostics = {}
         self.http_observations = {}
         self.events = []
+        self.current = local()
 
     def event_snapshot(self):
         with self.lock:
@@ -123,6 +128,10 @@ class MeasuredProvider(Provider):
         with self.lock:
             name = stage + "_http_" + code
             self.http_observations[name] = self.http_observations.get(name, 0) + 1
+        observation = getattr(self.current, "observation", None)
+        if observation is not None and len(observation["http"]) < 8:
+            observation["http"].append({"stage": stage, "status": status if code != "other" else "other",
+                "elapsed_seconds": round(time.monotonic() - observation["started"], 6)})
 
     def http_snapshot(self):
         with self.lock:
@@ -134,8 +143,13 @@ class MeasuredProvider(Provider):
                     "diagnostics": dict(self.diagnostics)}
 
     def note(self, code):
+        if not isinstance(code, str) or code not in DIAGNOSTIC_CODES:
+            return
         with self.lock:
             self.diagnostics[code] = self.diagnostics.get(code, 0) + 1
+        observation = getattr(self.current, "observation", None)
+        if observation is not None:
+            observation["diagnostics"][code] = observation["diagnostics"].get(code, 0) + 1
 
     def generate(self, question, passages):
         with self.lock:
@@ -143,6 +157,9 @@ class MeasuredProvider(Provider):
             self.calls += 1
             self.peak = max(self.peak, self.active)
             sequence, started = self.calls, time.monotonic()
+        import hashlib
+        self.current.observation = {"sequence": sequence, "started": started,
+            "question_sha256": hashlib.sha256(question.encode()).hexdigest(), "http": [], "diagnostics": {}, "outcome": "failed"}
         try:
             response = super().generate(question, passages)
             from app.research import GeneratedAnswer
@@ -158,6 +175,7 @@ class MeasuredProvider(Provider):
                         self.note("unmatched_quote")
             except Exception:
                 self.note("schema_invalid")
+            self.current.observation["outcome"] = "returned"
             return response
         except Exception as error:
             self.note({"Provider authentication and local model readiness could not be verified": "readiness_failed",
@@ -170,7 +188,8 @@ class MeasuredProvider(Provider):
             with self.lock:
                 self.active -= 1
                 if len(self.events) < 64:
-                    self.events.append({"sequence": sequence, "started": started, "finished": time.monotonic()})
+                    self.events.append({**self.current.observation, "finished": time.monotonic()})
+            del self.current.observation
 
 
 def create_app():
