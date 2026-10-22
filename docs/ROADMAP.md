@@ -5296,3 +5296,49 @@ sustained capacity, production intake isolation, OCR fidelity, offline operation
 populated graph rollback and production RPO/RTO remain open.
 See [operator procedure](OPERATIONS.md#representative-volume-quote-selection-evaluation)
 and [dated evidence](evidence/quote-volume-evaluation-2026-10-22.json).
+
+
+### F00-06 long-page quote selection and per-call transport diagnostics — 22 October 2026
+
+Five fresh, independently specified tasks now exercise five deterministic text PDFs,
+three long pages each: a late delivery fact, conflicting rent amounts, absent insurance
+information, a hostile document instruction and a negated payment with its adjacent
+condition. All expected facts must survive partial-context packing before inference.
+The disposable profile explicitly opts into candidate packing v2; production default
+v1 and the existing extractive quotation recipe remain unchanged. Received products
+retain prompt, selected-manifest, source-snapshot and artifact seals before grading,
+including empty answers. Full original downloads and source versions are rechecked
+after all tasks, including failed evaluations. No task is retried or replaced.
+
+**The native long-page profile remains unqualified: 3/5 tasks passed.** The late
+delivery task abstained despite visible evidence; the negation/condition task did not
+select both required statements. Conflict, missing-information and instruction-versus-
+record cases passed. All five metadata and five completion responses were HTTP 200,
+with five overlapping application provider calls. No 502 recurred. Per-call bounded
+diagnostics now correlate each synthetic question digest, caller interval, finite
+HTTP stage/status, fixed error codes and adapter outcome. Controlled concurrent tests
+link a completion 502/relay connection-closure code to only the affected case and
+discard unknown diagnostic text. This is caller-side correlation, **not an engine or
+tunnel trace**; the historical native connection closure's root cause remains open.
+
+Seven new offline contracts cover real long-page parsing, completeness/abstention,
+instruction rejection, changed versions/spans/prompts/references and authenticated
+passing, empty-answer and failed-transport runs. All 137 deployment contracts and 84
+context/research/provider cases pass locally. CI keeps nine jobs, full membership,
+existing caps and five timing reserves; it performs no inference. Native and final
+runtime source fingerprints match. Owned fixture resources were removed and the
+original provider-network membership restored. All eight live services, originals,
+exact evidence, encrypted bytes, credentials, sessions and review history are intact.
+No private-case inference, review decision or production rollout occurred; R03-17
+still awaits the owner's exact version-3 review.
+
+F00-06 stays partial. Next evaluate atomic quotation-catalog boundaries offline on
+independent cases, retaining negations, adjacent conditions, exact spans and honest
+abstention. Any new production candidate needs fresh declared native acceptance;
+do not tune or rerun these exposed cases until passing. Preserve the earlier failed
+volume/mixed profiles and seven-task result with their original scopes. Retain the
+new per-call diagnostics if 502 recurs without treating later success as a repair.
+Reviewed corpus, sustained legal capacity, isolated production intake, OCR/layout,
+offline operation, populated graph rollback and production RPO/RTO remain open.
+See [operator procedure](OPERATIONS.md#long-page-quote-selection-and-per-call-diagnostics)
+and [dated evidence](evidence/long-page-quotes-2026-10-22.json).

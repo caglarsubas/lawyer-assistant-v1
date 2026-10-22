@@ -30,7 +30,7 @@ def definition(images, key, password, token, subnet, profile_file, key_file, net
     api = result["services"]["api"]
     api["command"][1] = "provider_job_fixture:create_app"
     api["environment"]["LA_LOAD_REAL_PROVIDER"] = MARKER
-    if workload == "quote-volume-v1":
+    if workload in {"quote-volume-v1", "long-page-quotes-v1"}:
         api["environment"]["LA_QUOTE_VOLUME_CANDIDATE"] = MARKER
     api["volumes"] += [
         {"type": "bind", "source": str(profile_file), "target": "/run/secrets/provider-profile.json", "read_only": True},
@@ -38,7 +38,8 @@ def definition(images, key, password, token, subnet, profile_file, key_file, net
     api["networks"]["provider"] = {"ipv4_address": "172.30.240.14"}
     result["networks"]["provider"] = {"external": True, "name": network}
     driver = {"quote-selection-v1": "quote_selection_driver.py",
-              "quote-volume-v1": "quote_volume_driver.py"}.get(workload, "provider_job_driver.py")
+              "quote-volume-v1": "quote_volume_driver.py",
+              "long-page-quotes-v1": "long_page_driver.py"}.get(workload, "provider_job_driver.py")
     result["services"]["driver"]["command"] = ["python", "/app/scripts/" + driver]
     result["services"]["driver"]["environment"].update(
         LA_REAL_JOB_WORKLOAD=workload, LA_REAL_JOB_CONTEXT_UNITS=str(context_limit))
