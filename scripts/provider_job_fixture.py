@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from threading import Lock
 
+import httpx
 from load_fixture import fixture_settings
 
 from app.provider import Provider
@@ -15,6 +16,57 @@ PROFILE_FIELDS = {"provider_base_url", "provider_model", "provider_context_limit
                   "provider_identity_verified", "provider_cloud_fallback_disabled", "provider_tenant_id",
                   "provider_org_id", "provider_key_id", "provider_tunnel_url", "provider_tunnel_approved",
                   "provider_tunnel_approved_host"}
+
+
+# Only this disposable factory installs the observer; production keeps httpx unchanged.
+RELAY_FAILURE_CODES = frozenset({
+    "provider_upstream_http_error", "provider_encoding_rejected", "provider_response_budget_exceeded",
+    "provider_model_rejected", "provider_response_invalid", "provider_tls_failed", "provider_upstream_timeout",
+    "provider_upstream_transport_failed", "provider_http_protocol_failed", "provider_connection_closed",
+    "provider_connection_reset", "provider_connection_refused", "provider_network_denied",
+    "provider_network_unreachable", "provider_transport_resource_exhausted",
+})
+
+
+def observe_relay_failure(response, note):
+    """Read only a bounded failed response; export an exact enum, never arbitrary text."""
+    if response.status_code == 200:
+        return
+    try:
+        length = response.headers.get("content-length", "")
+        if not length.isdigit() or not 0 < int(length) <= 512 or response.headers.get("content-encoding", "identity") != "identity":
+            return
+        body = bytearray()
+        for chunk in response.iter_bytes(512):
+            if len(body) + len(chunk) > 512:
+                return
+            body.extend(chunk)
+        value = json.loads(body)
+        code = value.get("code") if isinstance(value, dict) else None
+        if isinstance(code, str) and code in RELAY_FAILURE_CODES:
+            note("relay_" + code)
+    except (httpx.HTTPError, ValueError, TypeError, RecursionError):
+        pass  # The provider still rejects the original failed HTTP status.
+
+
+def install_relay_observer(provider):
+    import app.provider as module
+
+    if os.environ.get("LA_LOAD_REAL_PROVIDER") != MARKER:
+        raise ValueError("Relay observation requires an explicit disposable factory")
+
+    class ObservedHTTPX:
+        Timeout, HTTPError = httpx.Timeout, httpx.HTTPError
+
+        @staticmethod
+        def Client(*args, **kwargs):
+            client = httpx.Client(*args, **kwargs)
+            client.event_hooks["response"].append(lambda response: observe_relay_failure(response, provider.note))
+            return client
+
+    # Replace only the provider module's local namespace in this fixture process.
+    # No global httpx patch, accepted-body interception, transport replacement or retry.
+    module.httpx = ObservedHTTPX
 
 
 def real_settings(profile, key):
@@ -62,6 +114,8 @@ class MeasuredProvider(Provider):
             from app.research import GeneratedAnswer
             try:
                 answer = GeneratedAnswer.model_validate_json(response)
+                if not answer.claims:
+                    self.note("empty_quote_selection")
                 evidence = {p["id"]: p["text"] for p in passages}
                 for claim in answer.claims:
                     if any(ref not in evidence for ref in claim.evidence_ids):
@@ -100,6 +154,7 @@ def create_app():
     app = application(settings)
     original = app.router.lifespan_context
     provider = MeasuredProvider(settings)
+    install_relay_observer(provider)
 
     @asynccontextmanager
     async def lifespan(app):

@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "scripts"), str(ROOT / "deploy"), str(ROOT / "backend")]
 from load_metrics import cgroup_peaks  # noqa: E402
 from manage_backup import compose_command  # noqa: E402
+from provider_job_checks import WORKLOADS  # noqa: E402
 from provider_job_fixture import MARKER, PROFILE_FIELDS  # noqa: E402
 from qualify_load import ResourceSampler, compose_definition  # noqa: E402
 from qualify_recovery import POSTGRES, cleanup_project, command, fresh_project  # noqa: E402
@@ -22,7 +23,9 @@ from recovery_fixture import code_fingerprint  # noqa: E402
 from restart_preflight_drill import unused_drill_subnet  # noqa: E402
 
 
-def definition(images, key, password, token, subnet, profile_file, key_file, network):
+def definition(images, key, password, token, subnet, profile_file, key_file, network, *, workload="short-txt-v1", context_limit=8192):
+    if workload not in WORKLOADS or type(context_limit) is not int or not 3072 <= context_limit <= 16384:
+        raise ValueError("Invalid declared workload")
     result = compose_definition(images, key, password, token, subnet)
     api = result["services"]["api"]
     api["command"][1] = "provider_job_fixture:create_app"
@@ -33,6 +36,8 @@ def definition(images, key, password, token, subnet, profile_file, key_file, net
     api["networks"]["provider"] = {"ipv4_address": "172.30.240.14"}
     result["networks"]["provider"] = {"external": True, "name": network}
     result["services"]["driver"]["command"] = ["python", "/app/scripts/provider_job_driver.py"]
+    result["services"]["driver"]["environment"].update(
+        LA_REAL_JOB_WORKLOAD=workload, LA_REAL_JOB_CONTEXT_UNITS=str(context_limit))
     return result
 
 
@@ -43,16 +48,18 @@ def main():
     parser.add_argument("--provider-key-file", required=True, type=Path)
     parser.add_argument("--provider-network", required=True)
     parser.add_argument("--relay-container", required=True)
+    parser.add_argument("--workload", choices=WORKLOADS, default="short-txt-v1")
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--execute-real-provider", required=True, action="store_true")
     args = parser.parse_args()
     os.umask(0o077)
     with args.output.open("x") as stream:
         stream.write('{"status":"incomplete"}\n')
-    report = {"schema": MARKER, "status": "failed", "synthetic_documents_only": True,
+    report = {"schema": MARKER, "status": "failed", "synthetic_documents_only": True, "workload_profile": args.workload,
               "started_at": datetime.now(timezone.utc).isoformat(),
               "not_qualified": ["private case review", "reviewed public-corpus research", "production or sustained capacity",
-                                "GPU parallelism", "tunnel retention or disconnected operation"]}
+                                "GPU parallelism", "tunnel retention or disconnected operation",
+                                "malware scanning", "production isolated extraction service", "OCR or visual fidelity"]}
     stage = "preflight"
     try:
         for path, maximum in ((args.provider_profile, 16384), (args.provider_key_file, 4096)):
@@ -87,7 +94,8 @@ def main():
         with tempfile.TemporaryDirectory(prefix="lawyer-provider-jobs-") as directory:
             path = Path(directory) / "compose.json"
             value = definition(images, base64.urlsafe_b64encode(secrets.token_bytes(32)).decode(), secrets.token_hex(24),
-                secrets.token_hex(32), unused_drill_subnet(), args.provider_profile.resolve(), args.provider_key_file.resolve(), args.provider_network)
+                secrets.token_hex(32), unused_drill_subnet(), args.provider_profile.resolve(), args.provider_key_file.resolve(), args.provider_network,
+                workload=args.workload, context_limit=profile["provider_context_limit"])
             path.write_text(json.dumps(value))
             project = "lawyer-provider-jobs-" + secrets.token_hex(6)
             fresh_project(project)
