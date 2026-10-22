@@ -35,7 +35,8 @@ def definition(images, key, password, token, subnet, profile_file, key_file, net
         {"type": "bind", "source": str(key_file), "target": "/run/secrets/provider-key", "read_only": True}]
     api["networks"]["provider"] = {"ipv4_address": "172.30.240.14"}
     result["networks"]["provider"] = {"external": True, "name": network}
-    result["services"]["driver"]["command"] = ["python", "/app/scripts/provider_job_driver.py"]
+    driver = "quote_selection_driver.py" if workload == "quote-selection-v1" else "provider_job_driver.py"
+    result["services"]["driver"]["command"] = ["python", "/app/scripts/" + driver]
     result["services"]["driver"]["environment"].update(
         LA_REAL_JOB_WORKLOAD=workload, LA_REAL_JOB_CONTEXT_UNITS=str(context_limit))
     return result

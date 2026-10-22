@@ -1316,3 +1316,50 @@ service. OCR, rendered layout, footnote/text-box fidelity, actual legal corpus,
 sustained load, native-engine resource limits and disconnected operation require
 separate qualification. No private matter volume is mounted and no review is written.
 A failed native qualification is retained even when engineering CI passes.
+
+### Quote-selection evaluation and HTTP stage diagnostics
+
+Use `scripts/qualify_provider_jobs.py --workload quote-selection-v1` with the same
+explicit image, protected profile/key paths, owned relay/network, fresh output path
+and `--execute-real-provider` acknowledgement described above. This chooses a
+separate driver; the short-TXT and mixed-format load profiles retain their original
+questions, sources and nonempty-answer gates. No private matter mounts or cloud
+fallback are added. The default profile is still `short-txt-v1`.
+
+`scripts/quote_selection_cases.py` freezes seven invented tasks and a suite digest
+before inference. Five are answerable, including two contradictory amounts; two
+require abstention. The fragment/natural pair shares four source documents, but the
+selected context may differ. The driver verifies that all required oracle text is
+available in the packed quotation catalog before any inference. It checks exact
+versions, spans, original and passage hashes, context measurements, coverage and
+pending review state separately from task relevance. An irrelevant exact quotation
+fails; an empty positive answer fails; a negative answer must be empty. Expected
+answers are not passed to the model. Never force a nonempty selection.
+
+Each of the seven tasks runs once, with at most five concurrent application calls.
+The driver records each outcome even if another case fails, drains admitted work,
+and rechecks every original/version before the final gate. Completing a different
+declared case is not a retry of a failed task. No failed result is replaced or
+reclassified by later success. The eight offline contracts exercise parsing,
+adversarial relevance, budget/version failures and the complete authenticated driver
+with both passing and deliberately failing controlled answers. CI never uses a key.
+
+The guarded disposable API exposes `/_provider_jobs/http` only with its control
+token, on the isolated fixture network. Counters have fixed metadata/completion stage
+names and finite HTTP status buckets. Success bodies are not inspected by this
+observer. Failed responses retain only the existing exact relay-code allowlist,
+bounded to 512 identity-encoded bytes; unknown diagnostic bodies are discarded.
+Production startup installs no observer or diagnostic endpoint. Preserve the report
+if a 502 occurs; a stage/status narrows localization, but does not prove the original
+socket cause. Do not log upstream messages, hostnames, headers or credentials.
+
+The 22 October native run passed all seven tasks without transport failure or retry.
+Both expected abstentions were empty; five answerable cases returned exact relevant
+quotations. Seven metadata and seven completion HTTP 200 responses were observed,
+peak application overlap was five, and cleanup restored the original provider
+network. This small exposed synthetic matrix is not a held-out legal acceptance
+suite, representative-volume mixed-load qualification, sustained capacity, OCR/layout
+or malware/extractor-isolation qualification. It does not clear the earlier failed
+mixed workload or diagnose a nonrecurring 502. The production prompt/model/relay and
+all private data, sessions, credentials and pending v3 review remain unchanged.
+See [dated evidence](evidence/quote-selection-evaluation-2026-10-22.json).

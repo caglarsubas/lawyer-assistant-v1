@@ -5202,3 +5202,49 @@ remain open. CI keeps nine jobs, complete coverage, existing caps and all five t
 reserves; engineering merge is separate from native/provider/legal qualification.
 See [operator procedure](OPERATIONS.md#mixed-format-real-provider-qualification) and
 [dated evidence](evidence/mixed-format-load-2026-10-22.json).
+
+
+### F00-06 quote-selection evaluation and HTTP stage diagnostics — 22 October 2026
+
+A separately declared seven-task synthetic benchmark now evaluates the existing
+extractive quotation recipe against independently specified relevance expectations.
+It covers a short Turkish payment record, fragment/natural-language questions over
+the same four-format documents, a missing fact, an unrelated source, hostile document
+instructions and two contradictory amounts. Every required answer must be available
+in the packed quotation catalog before inference. Exact original hashes, revisions,
+source spans, prompt seals, coverage gaps and pending review status remain mandatory.
+An exact quotation can still be irrelevant; positive tasks require their expected
+evidence and both contradictory records, while negative tasks require abstention.
+
+**The declared seven-task evaluation passed on the configured local model:** five
+answerable tasks returned the expected exact evidence and two insufficient-evidence
+tasks correctly returned no claims. Seven metadata and seven completion responses
+were HTTP 200, with five application calls overlapping at peak. There was one attempt
+per task and no retry. The driver rechecks all synthetic originals and versions
+after all tasks, including when a case fails; its controlled integration verifies
+both successful and failed evaluations. Owned fixture resources were removed.
+Eight new offline contracts include real four-format parsing, adversarial relevance
+checks and the entire authenticated driver with a controlled oracle; all 121
+deployment contracts pass without CI inference.
+
+The disposable fixture now records only finite metadata/completion HTTP status counts
+and existing allowlisted relay error categories. It never logs raw upstream messages,
+URLs, credentials or successful bodies. **No 502 recurred, so the historical cause is
+still unresolved.** No production prompt, sampling schema, model, timeout, relay,
+provider setting or application service was changed. This is evaluation and bounded
+diagnostic tooling, not a production repair or a new legal-accuracy guarantee.
+
+F00-06 stays partial. The earlier repeated-record mixed load trial remains explicitly
+unqualified; this distinct, much smaller relevance benchmark cannot replace it. The
+fragment/natural pair shares source documents but packing may differ; one sample of
+each does not isolate a causal prompt effect. These exposed examples must not become
+held-out legal acceptance data for later tuning. Next: a separately declared
+representative-volume relevance benchmark, with independent answer expectations,
+and fixed-code localization if 502 recurs. Sustained capacity, reviewed corpus,
+production intake isolation, OCR fidelity, tunnel/offline operation, populated graph
+rollback and production RPO/RTO remain open. Eight live services, originals, exact
+evidence, credentials, sessions and review history remain unchanged; R03-17 still
+waits for the owner's version-3 review. Nine CI jobs, complete coverage, existing caps
+and all five timing reserves remain required before merge.
+See [operator procedure](OPERATIONS.md#quote-selection-evaluation-and-http-stage-diagnostics)
+and [dated evidence](evidence/quote-selection-evaluation-2026-10-22.json).
