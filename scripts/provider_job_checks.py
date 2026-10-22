@@ -4,7 +4,7 @@ import hashlib
 
 from app.evidence_prompt import measure_prompt
 
-WORKLOADS = ("short-txt-v1", "mixed-formats-v1", "quote-selection-v1")
+WORKLOADS = ("short-txt-v1", "mixed-formats-v1", "quote-selection-v1", "quote-volume-v1")
 QUESTION = "SYNTHETIC payment odeme evidence"
 
 REJECTION_CODES = {'Review state changed': 'product_review_state_changed', 'Source version not retained': 'product_source_version_not_retained', 'Actual provider use not established': 'product_actual_provider_use_not_established', 'Ambiguous context selection': 'product_ambiguous_context_selection', 'Evidence inventory differs': 'product_evidence_inventory_differs', 'Invalid source span': 'product_invalid_source_span', 'Evidence differs from frozen original passage': 'product_evidence_differs_from_frozen_original_passage', 'Source identity differs': 'product_source_identity_differs', 'Evidence hash differs': 'product_evidence_hash_differs', 'Excerpt boundaries differ': 'product_excerpt_boundaries_differ', 'Measured context exceeds declared budget': 'product_measured_context_exceeds_declared_budget', 'Prompt seal differs': 'product_prompt_seal_differs', 'Coverage counts differ': 'product_coverage_counts_differ', 'Document coverage differs': 'product_document_coverage_differs', 'Claim grounding failed': 'product_claim_grounding_failed', 'Legal coverage limitation lost': 'product_legal_coverage_limitation_lost'}

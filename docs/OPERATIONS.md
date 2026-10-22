@@ -1363,3 +1363,50 @@ or malware/extractor-isolation qualification. It does not clear the earlier fail
 mixed workload or diagnose a nonrecurring 502. The production prompt/model/relay and
 all private data, sessions, credentials and pending v3 review remain unchanged.
 See [dated evidence](evidence/quote-selection-evaluation-2026-10-22.json).
+
+### Representative-volume quote-selection evaluation
+
+Select `--workload quote-volume-v1` using the existing guarded qualifier's explicit
+image/profile/key/network/relay/output arguments and `--execute-real-provider`.
+It creates five disposable workspaces and twenty deterministic synthetic files:
+TXT/DOCX/XLSX/text-PDF, 64 records each, plus one long Unicode paragraph per TXT.
+It retains corpus byte hashes, revisions, frozen-source seals, per-product prompt,
+selection and source-snapshot seals. Original downloads and complete document views
+are rechecked after all declared tasks, including a failed evaluation.
+
+Fifteen distinct tasks are frozen up front: five payments, five conflicting pairs
+and five missing court identities, in three waves of five. All required positive
+facts must be visible before inference; later tasks do not replace earlier failures.
+Positive empty output, irrelevant exact quotations, one-sided conflicts, changed
+versions or incorrect budgets fail. Negative tasks require abstention. The existing
+120-second provider budget, 60-second task wait, 240-second driver bound and all
+context/source limits remain unchanged. No retries or alternative models are used.
+
+The opt-in volume factory requires both real-provider and volume-candidate markers
+before selecting `private-evidence-pack-v2-folded-anchors`. Only that disposable
+process's research packing reference is changed. Production startup ignores the
+fixture marker, API requests cannot select the candidate, and default packing stays
+exactly v1. The candidate uses exact terms before folded Turkish/ASCII terms for
+nomination; rarer matched terms anchor long excerpts. Source text/identities are never
+normalized. A new recipe records the candidate profile and Unicode version. The
+independent reference file preserves default-v1 and native-prototype-v2 manifests
+for all fifteen cases. The post-trial isolation refactor is verified offline; the
+failed native trial is not represented as execution of the final wrapper.
+
+The token-protected fixture `/_provider_jobs/events` exposes at most 64 finite caller
+intervals, without prompt, document, credential or URL data. Each wave's overlap is
+computed independently; missing/invalid intervals fail qualification. These intervals
+measure application provider calls including readiness/queueing, not GPU generations.
+Existing finite HTTP stage/status and bounded failed-relay-code diagnostics apply.
+
+The 22 October trial passed 12/15 tasks and remains **unqualified**. All three waves
+peaked at five callers, but one positive abstained, one conflicting-pair answer failed
+relevance, and one negative task failed completion HTTP 502. The relay classified
+the latter as `provider_connection_closed` (`RemoteDisconnected`). This establishes
+observed connection closure, not why it occurred or which upstream component caused
+it. Keep all failures and do not silently retry, force quotations, increase deadlines
+or promote technical completion to usefulness. No production image/configuration or
+private matter was changed. The earlier profiles and owner v3 review remain intact.
+Next use independent long-page relevance cases and bounded synthetic-only transport
+correlation; production/representative-corpus/legal acceptance stays open.
+See [dated evidence](evidence/quote-volume-evaluation-2026-10-22.json).

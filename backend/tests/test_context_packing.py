@@ -168,6 +168,38 @@ def test_packing_and_prompt_recipes_are_exact_governance_dependencies():
     assert dependency_ids(product)["release"] == {"private-evidence-pack-v1", "private-quotes-v3-extractive"}
 
 
+def test_folded_candidates_preserve_exact_turkish_ascii_sources_and_literal_precedence():
+    inputs = [passage("folded", "Odeme kaydi.", "a"), passage("literal", "Ödeme kaydı.", "a")]
+    before = copy.deepcopy(inputs)
+    result = pack_private_context("Ödeme kaydı", inputs, candidate_profile=True)
+    assert result["evidence"][0]["id"] == "literal"
+    assert result["evidence"][1]["text"] == "Odeme kaydi."
+    assert inputs == before
+    folded = result["manifest"]["selected"][1]
+    assert folded["matched_query_terms"] == 0 and folded["matched_folded_query_terms"] == 2
+    assert result["manifest"]["candidate_profile"] == "turkish-exact-then-folded-v1"
+
+
+def test_rarest_matched_term_anchors_later_fact_instead_of_repeated_common_word():
+    text = "hukuki arsiv kaydi.\n" * 180 + "Odeme V731 odenen tutar 823 birimdir.\n" + "hukuki arsiv kaydi.\n" * 180
+    result = pack_private_context("hukuki Ödeme V731 ödenen tutar", [passage(text=text)], text_byte_budget=200, candidate_profile=True)
+    selected = result["evidence"][0]
+    assert "Odeme V731 odenen tutar 823 birimdir." in selected["text"]
+    assert selected["text"] == text[selected["excerpt_start"]:selected["excerpt_end"]]
+
+
+def test_legacy_manifest_export_and_dependency_identity_are_not_upgraded_in_place():
+    from app.context_packing import context_export_lines
+    from app.governance import dependency_ids
+
+    old = pack_private_context("Ödeme", [passage()])["manifest"]
+    old["recipe"] = "private-evidence-pack-v1"
+    before = copy.deepcopy(old)
+    assert any("private-evidence-pack-v1" in line for line in context_export_lines(old))
+    assert dependency_ids({"snapshots": {"context_pack": {"recipe": old["recipe"]}}})["release"] == {"private-evidence-pack-v1"}
+    assert old == before
+
+
 @pytest.mark.parametrize("inputs", [
     [passage(), passage()], [passage(id="")], [passage(id="a" * 129)],
     [passage(text=None)], [passage(text="\ud800")], [passage(document_id=0)], [None],

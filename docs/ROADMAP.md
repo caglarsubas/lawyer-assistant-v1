@@ -5248,3 +5248,51 @@ waits for the owner's version-3 review. Nine CI jobs, complete coverage, existin
 and all five timing reserves remain required before merge.
 See [operator procedure](OPERATIONS.md#quote-selection-evaluation-and-http-stage-diagnostics)
 and [dated evidence](evidence/quote-selection-evaluation-2026-10-22.json).
+
+
+### F00-06 representative-volume quote evaluation and connection-closure localization — 22 October 2026
+
+A new declared synthetic volume profile uses five workspaces, twenty four-format
+documents and 975 extracted passages, with 64 records per format and long Unicode
+TXT paragraphs. Fifteen distinct tasks run in three waves: five payment facts, five
+two-sided stock-record conflicts and five absent court identities. Expected answers
+are frozen before inference; every original, source revision, selected span, prompt
+seal, omitted/shortened coverage and pending review state is checked. Deterministic
+synthetic Office bytes, corpus hashes and result seals make the trial inspectable.
+This matches the earlier profile's document/passage scale; statistical or legal
+representativeness is not established.
+
+The initial offline preflight missed four expected facts. A candidate packing v2
+adds lossy Turkish/ASCII candidate nomination after exact-match priority and anchors
+long windows at rarer matched terms. It leaves originals, evidence text, identities
+and offsets unchanged; all fifteen required context checks then pass. **Production
+default packing stays v1.** After the trial, v2 was isolated behind an explicit
+disposable-fixture opt-in. Independent retained manifests verify exact v1 default
+equivalence and v2 equivalence to the native prototype on all fifteen frozen cases.
+The final isolation wrapper was tested offline without repeating model inference.
+
+**The native volume profile remains unqualified: 12 of 15 tasks passed.** One payment
+task abstained despite visible evidence; one conflict task failed relevance despite
+exact-source matching. Four absent-information tasks correctly abstained; the fifth
+failed transport. All three waves recorded five overlapping application provider
+calls. There were fifteen metadata HTTP 200 responses, fourteen completion HTTP 200
+responses and one completion HTTP 502, classified as
+`relay_provider_connection_closed` (`RemoteDisconnected`). This localizes the observed
+failure to an upstream connection closure; it does not identify the engine/tunnel
+root cause or retroactively establish the historical 502's cause. No task was retried
+or replaced, and all owned fixture resources were removed.
+
+F00-06 remains partial. Next: independent long-PDF-page relevance/abstention evaluation
+and bounded synthetic correlation of connection closures across the provider/tunnel
+boundary. Do not tune or rerun exposed cases until they pass. The earlier failed
+mixed profile and seven-task result retain their scopes. All 130 deployment contracts
+and 36 private-context cases pass locally, including full authenticated passing and
+failing volume-driver runs without inference. Nine CI jobs, existing caps, complete
+coverage and five timing reserves remain merge gates. No production deployment,
+provider/model/relay/deadline change or private-case regeneration is made. Eight live
+services, originals, exact evidence, credentials, sessions and review history remain
+unchanged; R03-17 still awaits the owner's exact version-3 review. Reviewed corpus,
+sustained capacity, production intake isolation, OCR fidelity, offline operation,
+populated graph rollback and production RPO/RTO remain open.
+See [operator procedure](OPERATIONS.md#representative-volume-quote-selection-evaluation)
+and [dated evidence](evidence/quote-volume-evaluation-2026-10-22.json).

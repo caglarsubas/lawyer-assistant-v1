@@ -8,12 +8,14 @@ occurs here. The caller owns those boundaries.
 
 import hashlib
 import re
+import unicodedata
 from bisect import bisect_right
 from collections import Counter, defaultdict
 
 from .evidence_prompt import measure_prompt
 
 PACK_RECIPE = "private-evidence-pack-v1"
+CANDIDATE_PACK_RECIPE = "private-evidence-pack-v2-folded-anchors"
 MAX_CANDIDATES = 2000
 MAX_SCANNED_CODE_POINTS = 2_000_000
 MAX_PASSAGES = 8
@@ -27,6 +29,13 @@ WORD = re.compile(r"\w+")
 
 def _word(value):
     return value.replace("I", "ı").replace("İ", "i").casefold()
+
+
+def _fold(value):
+    # Lossy candidate nomination only. Original text, identities and offsets are
+    # never normalized; every selected span still addresses the exact source.
+    return "".join(c for c in unicodedata.normalize("NFD", value)
+                   if unicodedata.category(c)[0] != "M").replace("ı", "i")
 
 
 def _digest(text):
@@ -90,13 +99,15 @@ def _window(text, anchor, budget):
     return start, end, "token_fragment"
 
 
-def pack_private_context(question, passages, *, context_limit=None, text_byte_budget=TEXT_BYTE_BUDGET):
+def pack_private_context(question, passages, *, context_limit=None, text_byte_budget=TEXT_BYTE_BUDGET, candidate_profile=False):
     if (not isinstance(passages, list) or type(text_byte_budget) is not int
             or not 0 <= text_byte_budget <= TEXT_BYTE_BUDGET
+            or type(candidate_profile) is not bool
             or (context_limit is not None and (type(context_limit) is not int or context_limit <= 0))):
         raise ValueError("Invalid evidence packing limits")
     base_prompt = measure_prompt(question, [])
     query = {_word(match.group()) for match in WORD.finditer(question)} - STOP_WORDS
+    folded_query = {_fold(word) for word in query} if candidate_profile else set()
     buckets, identities = defaultdict(list), set()
     scanned, scanned_points = 0, 0
     for ordinal, passage in enumerate(passages[:MAX_CANDIDATES]):
@@ -112,20 +123,31 @@ def pack_private_context(question, passages, *, context_limit=None, text_byte_bu
         identities.add(identity)
         scanned += 1
         scanned_points += len(text)
-        matches, anchor = set(), None
+        matches, folded_matches, positions, anchor = set(), set(), {}, None
         for match in WORD.finditer(text):
             word = _word(match.group())
             if word in query:
                 matches.add(word)
                 if anchor is None:
                     anchor = match.start()
+            if candidate_profile:
+                folded = _fold(word)
+                if folded in folded_query:
+                    folded_matches.add(folded)
+                    count, first, exact = positions.get(folded, (0, match.start(), word in query))
+                    positions[folded] = (count + 1, first, exact)
         document = passage.get("document_id", identity)
         if not isinstance(document, str) or not 1 <= len(document) <= 128:
             raise ValueError("Invalid private document identity")
         first_token = TOKEN.search(text)
+        # A common word at the start of a long page must not anchor every
+        # window away from a rarer case identifier or requested fact later on.
+        if candidate_profile and positions:
+            anchor = min(positions.values(), key=lambda item: (item[0], not item[2], item[1]))[1]
         if anchor is None:
             anchor = first_token.start() if first_token else 0
-        candidate = (len(matches), ordinal, anchor, passage)
+        score = len(matches) * (len(folded_query) + 1) + len(folded_matches)
+        candidate = (score, ordinal, anchor, passage, len(matches), len(folded_matches))
         buckets[document].append(candidate)
     # Equal scores preserve input order. First visit each document's best candidate;
     # subsequent rounds visit its next candidate. This is diversity, not adverse-law
@@ -141,7 +163,7 @@ def pack_private_context(question, passages, *, context_limit=None, text_byte_bu
         for document in documents:
             if depth >= len(buckets[document]):
                 continue
-            score, _, anchor, original = buckets[document][depth]
+            score, _, anchor, original, exact_count, folded_count = buckets[document][depth]
             text = original["text"]
             reason = None
             if not text.strip():
@@ -177,7 +199,8 @@ def pack_private_context(question, passages, *, context_limit=None, text_byte_bu
                             "excerpt_text_sha256": _digest(excerpt["text"]),
                             "excerpt_start": start, "excerpt_end": end,
                             "full_passage_length": len(text), "boundary": boundary,
-                            "utf8_bytes": size, "matched_query_terms": score,
+                            "utf8_bytes": size, "matched_query_terms": exact_count,
+                            **({"matched_folded_query_terms": folded_count, "selection_rank_score": score} if candidate_profile else {}),
                         })
                         break
                     reason = "prompt_budget"
@@ -195,7 +218,9 @@ def pack_private_context(question, passages, *, context_limit=None, text_byte_bu
     if unexamined:
         reasons["scan_budget"] = unexamined
     return {"evidence": selected, "manifest": {
-        "recipe": PACK_RECIPE, "scope": "private_document_quotes",
+        "recipe": CANDIDATE_PACK_RECIPE if candidate_profile else PACK_RECIPE, "scope": "private_document_quotes",
+        **({"candidate_profile": "turkish-exact-then-folded-v1", "unicode_version": unicodedata.unidata_version,
+            "anchor_policy": "rarest_matched_term_v1"} if candidate_profile else {}),
         "offset_unit": "unicode_code_points",
         "limits": {
             "max_candidates": MAX_CANDIDATES, "max_scanned_code_points": MAX_SCANNED_CODE_POINTS,

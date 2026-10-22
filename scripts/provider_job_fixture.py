@@ -2,6 +2,7 @@
 
 import json
 import os
+import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 from threading import Lock
@@ -89,6 +90,16 @@ def real_settings(profile, key):
     return settings, token
 
 
+def install_volume_packing():
+    """Opt-in fixture process only; never enabled by production configuration."""
+    import app.research as research
+    from app.context_packing import pack_private_context
+
+    if os.environ.get("LA_LOAD_REAL_PROVIDER") != MARKER or os.environ.get("LA_QUOTE_VOLUME_CANDIDATE") != MARKER:
+        raise ValueError("Candidate packing requires explicit disposable volume mode")
+    research.pack_private_context = lambda *args, **kwargs: pack_private_context(*args, **kwargs, candidate_profile=True)
+
+
 class MeasuredProvider(Provider):
     def __init__(self, settings):
         super().__init__(settings)
@@ -96,6 +107,11 @@ class MeasuredProvider(Provider):
         self.active = self.peak = self.calls = self.failures = 0
         self.diagnostics = {}
         self.http_observations = {}
+        self.events = []
+
+    def event_snapshot(self):
+        with self.lock:
+            return list(self.events)
 
     def observe_http(self, response):
         """Finite stage/status counters only; never record a URL or successful body."""
@@ -126,6 +142,7 @@ class MeasuredProvider(Provider):
             self.active += 1
             self.calls += 1
             self.peak = max(self.peak, self.active)
+            sequence, started = self.calls, time.monotonic()
         try:
             response = super().generate(question, passages)
             from app.research import GeneratedAnswer
@@ -152,6 +169,8 @@ class MeasuredProvider(Provider):
         finally:
             with self.lock:
                 self.active -= 1
+                if len(self.events) < 64:
+                    self.events.append({"sequence": sequence, "started": started, "finished": time.monotonic()})
 
 
 def create_app():
@@ -168,6 +187,8 @@ def create_app():
     if profile_file.stat().st_size > 16384 or key_file.stat().st_size > 4096:
         raise ValueError("Fixture profile exceeded its bound")
     settings, token = real_settings(json.loads(profile_file.read_text()), key_file.read_text().strip())
+    if os.environ.get("LA_QUOTE_VOLUME_CANDIDATE"):
+        install_volume_packing()
     app = application(settings)
     original = app.router.lifespan_context
     provider = MeasuredProvider(settings)
@@ -195,5 +216,11 @@ def create_app():
         if not secrets.compare_digest(x_load_token, token):
             raise HTTPException(403, "Synthetic control denied")
         return provider.http_snapshot()
+
+    @app.get("/_provider_jobs/events")
+    def events(x_load_token: str = Header(default="")):
+        if not secrets.compare_digest(x_load_token, token):
+            raise HTTPException(403, "Synthetic control denied")
+        return provider.event_snapshot()
 
     return app
