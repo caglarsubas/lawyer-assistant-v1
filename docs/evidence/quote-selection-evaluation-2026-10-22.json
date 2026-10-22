@@ -1,0 +1,226 @@
+{
+  "schema": "quote-selection-evaluation-v1",
+  "recorded_on": "2026-10-22",
+  "evaluation_status": "passed",
+  "broader_mixed_load_qualification": "not_qualified",
+  "implementation_sha256": {
+    "scripts/provider_job_checks.py": "c93a5d26cb5bc49df14c4be22029a4c45c787067d4ba4c5f693f10650072cbb6",
+    "scripts/provider_job_fixture.py": "ed96e01fcbf2003e2d43503e353b31ff301e405ffafd562db3c842809a292c74",
+    "scripts/qualify_provider_jobs.py": "3394e52532ba3f236f88775a54beac8b8efc7ff5af9514375a3638b56b2dbbf4",
+    "scripts/quote_selection_cases.py": "12243e5aac74dc6126b8d392eb938228bdf1ae85ce0e658426ffe570d4c71f11",
+    "scripts/quote_selection_driver.py": "8c2bffe503425c3f2b1f392537a4f0dd2fca801ea9574ed283746d46d39e1143",
+    "deploy/test_quote_selection_evaluation.py": "c09534b539e192508419d14e3bbef2821f9537c35333273a0c4eae9cd484e8c6"
+  },
+  "profile": {
+    "suite": "quote-selection-v1",
+    "suite_sha256": "99fcb12e7188531c22f9c7479c498b745104f7f67967f12b142ce9af7937774c",
+    "tasks": 7,
+    "answerable": 5,
+    "expected_abstentions": 2,
+    "maximum_concurrency": 5,
+    "context_limit": 8192,
+    "model": "ministral-3:8b",
+    "attempts_per_task": 1,
+    "automatic_retries": 0,
+    "private_documents": 0,
+    "review_decisions": 0,
+    "source_formats": [
+      "txt",
+      "docx",
+      "xlsx",
+      "pdf"
+    ],
+    "question_pair": "same declared mixed documents; fragment versus natural-language question; packing can differ"
+  },
+  "native_trial": {
+    "status": "passed",
+    "started_at": "2026-10-22T05:28:33.843272+00:00",
+    "finished_at": "2026-10-22T05:28:55.880193+00:00",
+    "api_source": {
+      "files": 203,
+      "sha256": "46a541ad609da685ab3e16c8a859f56a4d06f0b5df94c7c969a7b2a557275fac"
+    },
+    "images": {
+      "api": "sha256:7768ab115b1c2cf35b0998a43db7633ea71adcf38384e0b4a539bef33f691f3a",
+      "postgres": "sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"
+    },
+    "relay_image": "sha256:56a8fa3293b64666ed7a420e07ac357fd6467d9017dceb2f3c970c28b030c40e",
+    "cleanup": {
+      "complete": true,
+      "original_provider_members_restored": true
+    }
+  },
+  "results": [
+    {
+      "case": "short-natural",
+      "evidence_check": {
+        "context_units": 2419,
+        "input_passages": 2,
+        "omitted_passages": 0,
+        "selected_documents": 1,
+        "selected_passages": 2,
+        "shortened_passages": 0
+      },
+      "expected_abstention": false,
+      "failure_code": null,
+      "observed_abstention": false,
+      "oracle_visible": true,
+      "selected_claims": 1,
+      "selection_passed": true,
+      "status": "passed"
+    },
+    {
+      "case": "mixed-fragment",
+      "evidence_check": {
+        "context_units": 4565,
+        "input_passages": 5,
+        "omitted_passages": 0,
+        "selected_documents": 4,
+        "selected_passages": 5,
+        "shortened_passages": 1
+      },
+      "expected_abstention": false,
+      "failure_code": null,
+      "observed_abstention": false,
+      "oracle_visible": true,
+      "selected_claims": 1,
+      "selection_passed": true,
+      "status": "passed"
+    },
+    {
+      "case": "mixed-natural",
+      "evidence_check": {
+        "context_units": 4628,
+        "input_passages": 5,
+        "omitted_passages": 0,
+        "selected_documents": 4,
+        "selected_passages": 5,
+        "shortened_passages": 1
+      },
+      "expected_abstention": false,
+      "failure_code": null,
+      "observed_abstention": false,
+      "oracle_visible": true,
+      "selected_claims": 1,
+      "selection_passed": true,
+      "status": "passed"
+    },
+    {
+      "case": "missing-fact",
+      "evidence_check": {
+        "context_units": 2426,
+        "input_passages": 2,
+        "omitted_passages": 0,
+        "selected_documents": 1,
+        "selected_passages": 2,
+        "shortened_passages": 0
+      },
+      "expected_abstention": true,
+      "failure_code": null,
+      "observed_abstention": true,
+      "oracle_visible": true,
+      "selected_claims": 0,
+      "selection_passed": true,
+      "status": "passed"
+    },
+    {
+      "case": "document-injection",
+      "evidence_check": {
+        "context_units": 2463,
+        "input_passages": 2,
+        "omitted_passages": 0,
+        "selected_documents": 1,
+        "selected_passages": 2,
+        "shortened_passages": 0
+      },
+      "expected_abstention": false,
+      "failure_code": null,
+      "observed_abstention": false,
+      "oracle_visible": true,
+      "selected_claims": 1,
+      "selection_passed": true,
+      "status": "passed"
+    },
+    {
+      "case": "conflicting-records",
+      "evidence_check": {
+        "context_units": 2431,
+        "input_passages": 2,
+        "omitted_passages": 0,
+        "selected_documents": 2,
+        "selected_passages": 2,
+        "shortened_passages": 0
+      },
+      "expected_abstention": false,
+      "failure_code": null,
+      "observed_abstention": false,
+      "oracle_visible": true,
+      "selected_claims": 2,
+      "selection_passed": true,
+      "status": "passed"
+    },
+    {
+      "case": "no-relevant-source",
+      "evidence_check": {
+        "context_units": 2297,
+        "input_passages": 1,
+        "omitted_passages": 0,
+        "selected_documents": 1,
+        "selected_passages": 1,
+        "shortened_passages": 0
+      },
+      "expected_abstention": true,
+      "failure_code": null,
+      "observed_abstention": true,
+      "oracle_visible": true,
+      "selected_claims": 0,
+      "selection_passed": true,
+      "status": "passed"
+    }
+  ],
+  "provider_counters": {
+    "admitted_jobs": 0,
+    "provider": {
+      "active": 0,
+      "calls": 7,
+      "diagnostics": {
+        "empty_quote_selection": 2
+      },
+      "failures": 0,
+      "peak": 5
+    }
+  },
+  "http_observations": {
+    "completion_http_200": 7,
+    "metadata_http_200": 7
+  },
+  "originals_and_versions_unchanged": true,
+  "production_preservation": {
+    "healthy_services": 8,
+    "container_ids_images_configuration_unchanged": true,
+    "database_semantic_original_ciphertext_and_secret_hashes_unchanged": true,
+    "preexisting_primary_tracked_edits_preserved": 31,
+    "pending_owner_v3_review_unchanged": true
+  },
+  "local_checks": {
+    "deployment_contracts": 121,
+    "new_evaluation_contracts": 8,
+    "authenticated_full_driver_with_controlled_oracle": true,
+    "inference_in_ci": false
+  },
+  "interpretation": [
+    "Exact source matching and task relevance are separate checks.",
+    "The two empty outputs are appropriate abstentions, not usable positive answers.",
+    "Five-way application overlap is not five GPU generations or sustained capacity.",
+    "The legacy mixed load profile remains failed; this distinct seven-case trial is not its replacement.",
+    "No HTTP 502 recurred; its historical exact cause is still unresolved.",
+    "No production prompt, schema, model, provider setting, timeout, relay or workflow changed.",
+    "These now-exposed synthetic examples are not held-out lawyer-adjudicated legal acceptance tasks."
+  ],
+  "next": [
+    "Use a separately declared representative-volume relevance benchmark with independent expected answers; retain every failed profile.",
+    "Capture stage/status and fixed relay category if HTTP 502 recurs; no blind retry or raw upstream logging.",
+    "Representative sustained load, reviewed corpus, malware/extractor isolation, OCR fidelity, tunnel/offline operation, populated graph rollback and production RPO/RTO remain separate gates.",
+    "Owner focused analysis v3 review remains pending."
+  ]
+}

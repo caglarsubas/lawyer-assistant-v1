@@ -61,6 +61,7 @@ def install_relay_observer(provider):
         @staticmethod
         def Client(*args, **kwargs):
             client = httpx.Client(*args, **kwargs)
+            client.event_hooks["response"].append(provider.observe_http)
             client.event_hooks["response"].append(lambda response: observe_relay_failure(response, provider.note))
             return client
 
@@ -94,6 +95,22 @@ class MeasuredProvider(Provider):
         self.lock = Lock()
         self.active = self.peak = self.calls = self.failures = 0
         self.diagnostics = {}
+        self.http_observations = {}
+
+    def observe_http(self, response):
+        """Finite stage/status counters only; never record a URL or successful body."""
+        stage = {"/v1/models": "metadata", "/v1/chat/completions": "completion"}.get(response.request.url.path)
+        if stage is None:
+            return
+        status = response.status_code
+        code = str(status) if status in {200, 400, 401, 403, 408, 413, 429, 500, 502, 503, 504} else "other"
+        with self.lock:
+            name = stage + "_http_" + code
+            self.http_observations[name] = self.http_observations.get(name, 0) + 1
+
+    def http_snapshot(self):
+        with self.lock:
+            return dict(self.http_observations)
 
     def snapshot(self):
         with self.lock:
@@ -172,5 +189,11 @@ def create_app():
         with jobs._condition:
             admitted = len(jobs._jobs)
         return {"provider": provider.snapshot(), "admitted_jobs": admitted}
+
+    @app.get("/_provider_jobs/http")
+    def http_state(x_load_token: str = Header(default="")):
+        if not secrets.compare_digest(x_load_token, token):
+            raise HTTPException(403, "Synthetic control denied")
+        return provider.http_snapshot()
 
     return app
