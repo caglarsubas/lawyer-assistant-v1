@@ -5565,3 +5565,71 @@ intake, OCR/layout, offline operation, graph rollback and production RPO/RTO rem
 open. See [declared experiment](SOURCE_DIVERSITY_EVALUATION.md),
 [operator procedure](OPERATIONS.md#frozen-source-diversity-comparison) and
 [dated evidence](evidence/source-diversity-frozen-2026-10-22.json).
+
+
+### F00-06 disposable v2 wire adapter and fresh broader fixtures — 22 October 2026
+
+The frozen v2 planner's system prompt contains a `B1` selector example while its
+actual identifiers are `D…`. The new, explicit disposable adapter uses a separately
+versioned wire contract that changes only that system example to `D1`. The original
+planner, its prompt digest and all previous evaluation records remain reproducible.
+The wire prompt has a distinct recorded digest and identical UTF-8/accounting size;
+source text is untouched. Returned `B…` identifiers are rejected, never translated.
+
+Preparation returns a read-only sealed wire manifest with the complete planner
+identity, original and actual prompt digests, question, source inventory, budget
+and nominated identifiers. Preparation is not execution authorization. Selection
+requires an exact rebuild and rejects changed sources, including unused sources,
+forged manifests, altered companions, stale questions/budgets, unknown or duplicate
+IDs, prose and anchor-only IDs. Context is checked immediately before and after
+transport. A source/wire/provider-limit change discards the result without retries
+or overwriting history. Existing provider authentication, local-model, context,
+no-fallback and bounded-completion safeguards remain in force.
+
+Every selected bundle copies all exact parts, roles, source-version aliases,
+nomination labels, boundary flags and partial-source status separately. The result
+records selected versus omitted nominated bundles and source versions as confidential
+metadata. A valid subset or empty selection does not establish adverse completeness,
+relevance, abstention or legal correctness. There is no synthesis, source joining,
+review decision, application route or production configuration activation.
+
+**Fourteen fresh invented cases were frozen before grading**, covering alternate
+wording, tables, CRLF/Unicode conditions, conflicting revisions, hostile text,
+coarse/overlong lines, late paraphrases, missing/empty sources, budget pressure and
+a 40-source/200-passage pool. Across the suite there are 215 passages and 55 source
+versions. Thirteen of twenty required groups are available; both sides occur in
+all three adverse-source cases. Seven groups remain unavailable: an unlinked
+condition, an overlong physical line without complete fallback, a late paraphrase,
+three required over-cap sources and the undersized envelope. An absent-information
+case still has an unmatched fallback; this is not qualified abstention. This new
+suite differs from prior suites and supplies no causal accuracy comparison.
+
+The fixed evaluator uses controlled select-all responses over in-process mock HTTP:
+eleven metadata and eleven completion requests. One envelope is blocked before
+transport, and two cases have no candidates and make no call. The experiment makes
+zero network HTTP or model calls. Its first report, fixtures and implementation
+remain unchanged after grading; expected groups never enter the planner or adapter.
+Twelve new regression tests cover exact wire identity, preserved evidence, source
+and manifest races, bounded/schema rejection, subset coverage, existing provider
+guards and five simultaneous mock selections. These concurrent tests establish
+protocol isolation, not native five-job capacity or instruction resistance.
+
+All 187 deployment contracts and 167 context/research/policy/provider cases pass
+locally. The twelve new tests pass in read-only, network-disabled Linux with public
+code only; its entire report equals the retained first host report. Nine exact-head
+CI jobs and five timing reserves remain merge gates, with unchanged jobs, caps,
+workers and coverage. Production packing, services and previous adapters remain
+unchanged. Originals, exact evidence, encrypted bytes, credentials, sessions and
+review history remain preserved; the owner's v3 review stays pending and F00-06
+remains partial.
+
+Next declare and freeze a fresh native acceptance plan with exact source, planner,
+wire and grading identities before execution. Preserve unavailable-source and
+fallback risks; do not tune these exposed cases into acceptance or replay earlier
+native failures until passing. Mock protocol success supplies no native, legal or
+production authorization. Earlier native/volume failures, historical HTTP 502
+cause, reviewed corpus, sustained legal capacity, isolated intake, OCR/layout,
+offline operation, graph rollback and production RPO/RTO remain open. See the
+[declared contract](DIVERSE_ADAPTER_QUALIFICATION.md),
+[operator procedure](OPERATIONS.md#disposable-v2-wire-adapter) and
+[dated evidence](evidence/disposable-diverse-wire-2026-10-22.json).

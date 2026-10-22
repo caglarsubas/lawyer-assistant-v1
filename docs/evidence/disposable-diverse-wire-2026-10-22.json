@@ -1,0 +1,3139 @@
+{
+  "schema": "disposable-diverse-wire-record-v1",
+  "recorded_on": "2026-10-22",
+  "qualification": "frozen_synthetic_coverage_and_mock_wire_only_not_native_or_legal_qualification",
+  "implementation_sha256": {
+    "docs/DIVERSE_ADAPTER_QUALIFICATION.md": "cf4e289827b7567882ee3f262c98deba131e272f92d006de006bd3b68ec7714e",
+    "scripts/diverse_adapter_cases.py": "6072d0c87dc120a0b87335417151c4becf69d68aaf24d7a66817ec93f5f54efa",
+    "scripts/disposable_diverse_adapter.py": "ac8ceb67bd6cede720ffa9b5ad1f5b2869e5d250de3fcd9a75550319065be2c3",
+    "scripts/evaluate_diverse_adapter.py": "8f2f69907c96b039a0aac0454db46ec67680c3568b78f6dbc461eff962e85a36",
+    "scripts/diverse_quote_bundles.py": "bdfe59ca895c22ccc40aa28652202ef3867a2847860d1b9d1482a19cfce763f0",
+    "scripts/disposable_bundle_adapter.py": "6a43692b7a3c8ead6338cae92ad5a8804b781951da0bd3e9b54a4eb1beca1d28",
+    "scripts/bundle_adapter_fixture.py": "fb54f5299331415afcf977598bfbd2250b7cd85815a5bf8dd95b706d24eb8e88",
+    "scripts/evaluate_source_diversity.py": "53273ae2cfbc674c3f7d5b983444f11916c1a68463228cb7c82b95bb3c7e6de8",
+    "backend/app/provider.py": "68a54bae7879b47d5a193a752448d71ce5835d8efdad8d27a18f45ece92019c4",
+    "deploy/test_disposable_diverse_adapter.py": "da88b93e67e9096818595a88f709fcda98acbe46e51bc62670fd6397da8e1669"
+  },
+  "pre_grade_freeze_sha256": "79569252f5aa8cbeb39fd5e303faf2d8413e54c81763c98a8129a318a1683f5c",
+  "evaluation": {
+    "schema": "disposable-diverse-adapter-evaluation-v1",
+    "suite": "synthetic-diverse-adapter-wire-v1",
+    "suite_sha256": "3f753ee96f34dbad30a12f67632dcd98f1e212b4024c40ad2bd9f4c0d29445de",
+    "cases": [
+      {
+        "case": "P1301",
+        "kind": "alternate_wording",
+        "source_inventory_sha256": "334c3f8b613b1011db9236efd439f189d7a25fd6ff386694dc96ca4ccc9faafe",
+        "source_pins": [
+          {
+            "id": "P1301-dispatch-v4-0",
+            "document_id": "P1301-doc-dispatch",
+            "document_revision": 4,
+            "document_sha256": "9896847b32519fb29f218b719d38461665ebd95ad02d9e10ea50a77715b99496",
+            "text_sha256": "b2ae74bab3f9cdcd4952c105ad3b2044c7fc04b4b1b145451261ed408fb39037"
+          }
+        ],
+        "inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 29,
+          "nonblank_physical_lines": 1,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 31
+        },
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "3fc8fed9e579b8c09b8a0686809188fdbf24fac63cb3cada51b2974338debe90",
+          "source_inventory_sha256": "334c3f8b613b1011db9236efd439f189d7a25fd6ff386694dc96ca4ccc9faafe",
+          "question_sha256": "02bc13b607bff2add6bf1218e2746dc17b40e98ffae4828d153ffabc1c81396e",
+          "context_limit_units": 8192,
+          "planner_messages_sha256": "0929993df8148791f4926f3224e264458e8b99421b5d3c8c8f2330ac8bf69c32",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "1281399e6926d0dcdf2cc3796e129c316edce86321d0d61b25e1b50670d46c9f",
+            "utf8_bytes": 919,
+            "total_upper_bound_units": 2375,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [
+            "D1"
+          ],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "016960bdc7e9a9f90ed62326b39645e60fdd1c52c2598df98df1429fe076c0bd"
+        },
+        "selection": {
+          "state": "selection_returned",
+          "result_sha256": "c00741930bf574864c2d970e625ef31fb155f3318c489856305e622bcd1ad36e",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "3fc8fed9e579b8c09b8a0686809188fdbf24fac63cb3cada51b2974338debe90",
+          "groups": [
+            {
+              "document_id": "P1301-doc-dispatch",
+              "document_revision": 4,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "0929993df8148791f4926f3224e264458e8b99421b5d3c8c8f2330ac8bf69c32",
+            "utf8_bytes": 919,
+            "total_upper_bound_units": 2375,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 1,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1302",
+        "kind": "revision_conflict",
+        "source_inventory_sha256": "8878899afe00b6b166d2333807ee1b0d2eb4e8d60ac69568f55e97eb2b934c27",
+        "source_pins": [
+          {
+            "id": "P1302-ledger-v2-0",
+            "document_id": "P1302-doc-ledger",
+            "document_revision": 2,
+            "document_sha256": "31ae7947d1a9a8905ea025be0f0be5f4be5077aec84b6d5f3ca9d3c8ca0c3c7b",
+            "text_sha256": "cf3dac5d04b24320b5614cacf18d6be55fb640a9a63875c31b06d043ad0d3b07"
+          },
+          {
+            "id": "P1302-ledger-v8-0",
+            "document_id": "P1302-doc-ledger",
+            "document_revision": 8,
+            "document_sha256": "8e822ee2db4b440d6d52a24058dd02bb76537caac7a900b6c97a512cc22c130d",
+            "text_sha256": "6761a6eace6fa246011bc26728941d2d2c9e98faa4da6331279a25528449db40"
+          }
+        ],
+        "inventory": {
+          "source_passages": 2,
+          "source_versions": 2,
+          "scanned_code_points": 85,
+          "nonblank_physical_lines": 3,
+          "proposed_bundles": 2,
+          "selected_bundles": 2,
+          "selected_evidence_passages": 2,
+          "copied_text_utf8_bytes": 89
+        },
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "5201d5e5a71cde9c89f56d7e3f7a8b76ad95b20d60c046e9a9dcb9c048542288",
+          "source_inventory_sha256": "8878899afe00b6b166d2333807ee1b0d2eb4e8d60ac69568f55e97eb2b934c27",
+          "question_sha256": "ec99626fbff54728124ffeb62086246d23c91ff3926afe685ebb9bd636bfe79c",
+          "context_limit_units": 8192,
+          "planner_messages_sha256": "60c3abe2a6ec7799e682d43fb8373ec17be0136d2758c76227bbd6ad5faa63e2",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "5d8dfdd5cbdf807c8845c9dad12c3b2939c5f856b7937b667600b731d7bfe48d",
+            "utf8_bytes": 1314,
+            "total_upper_bound_units": 2770,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [
+            "D1",
+            "D2"
+          ],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "2b4043c74913d8485d8b77ed144bb53e22834304191b4eae00da6e6066767077"
+        },
+        "selection": {
+          "state": "selection_returned",
+          "result_sha256": "c611d29dea7b0151b973814ab61b309b4bfabbb0514bd8b0682a8d92fcd1990b",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "5201d5e5a71cde9c89f56d7e3f7a8b76ad95b20d60c046e9a9dcb9c048542288",
+          "groups": [
+            {
+              "document_id": "P1302-doc-ledger",
+              "document_revision": 2,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1302-doc-ledger",
+              "document_revision": 8,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "60c3abe2a6ec7799e682d43fb8373ec17be0136d2758c76227bbd6ad5faa63e2",
+            "utf8_bytes": 1314,
+            "total_upper_bound_units": 2770,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 2,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1303",
+        "kind": "table_layout",
+        "source_inventory_sha256": "bd11a2269d3e8e4b9bce4d4b0e8859ebdf5700e140e760c91c6db88f70d95e51",
+        "source_pins": [
+          {
+            "id": "P1303-table-v1-0",
+            "document_id": "P1303-doc-table",
+            "document_revision": 1,
+            "document_sha256": "71bf9af6e9eb1fcd208258785bf87e587e0a6d979813582070224b40748d1db6",
+            "text_sha256": "7a3ed05e8904690574d948bb6d98aad16a8de93d7b94c6b9b9f411ec12871123"
+          },
+          {
+            "id": "P1303-counter-v3-0",
+            "document_id": "P1303-doc-counter",
+            "document_revision": 3,
+            "document_sha256": "c694fd93b93fc4fde66bf898fa1485e16f9be3ad903eaf8fe202cc90f5a19f90",
+            "text_sha256": "844551f9553283367927900e8bdc2ec6a9d4ba088825bcac6c665f35b41b7d2b"
+          }
+        ],
+        "inventory": {
+          "source_passages": 2,
+          "source_versions": 2,
+          "scanned_code_points": 141,
+          "nonblank_physical_lines": 4,
+          "proposed_bundles": 2,
+          "selected_bundles": 2,
+          "selected_evidence_passages": 2,
+          "copied_text_utf8_bytes": 149
+        },
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "c29226c1074224ee05628fddd5aea4a46069a15c87f72e2971b97cab6a4c79a7",
+          "source_inventory_sha256": "bd11a2269d3e8e4b9bce4d4b0e8859ebdf5700e140e760c91c6db88f70d95e51",
+          "question_sha256": "3f92390a17b72dc21d1b72c3016d860053a1ae83d62552d5e3096dbf063dfd49",
+          "context_limit_units": 8192,
+          "planner_messages_sha256": "694b8233e8c47a1e6161d9ea5c9322b4e129210702bee70075b324b2cd52318b",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "f6a1161a3d825790a6ad3b9237e263e1358aec1eb2f02f4ddbbe8277e764ed70",
+            "utf8_bytes": 1479,
+            "total_upper_bound_units": 2935,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [
+            "D1",
+            "D2"
+          ],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "695252cfcfa97dccd2e7c5798e0275a5c1614fb5592fb9e6c0aede9c3282ae1e"
+        },
+        "selection": {
+          "state": "selection_returned",
+          "result_sha256": "cd62d9930e50ee6af7a0b19ff75e2bb448983e374b3a9c3da16b0d3f85032ff1",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "c29226c1074224ee05628fddd5aea4a46069a15c87f72e2971b97cab6a4c79a7",
+          "groups": [
+            {
+              "document_id": "P1303-doc-table",
+              "document_revision": 1,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1303-doc-counter",
+              "document_revision": 3,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "694b8233e8c47a1e6161d9ea5c9322b4e129210702bee70075b324b2cd52318b",
+            "utf8_bytes": 1479,
+            "total_upper_bound_units": 2935,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 2,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1304",
+        "kind": "wide_separator",
+        "source_inventory_sha256": "b8eff468fcb55ebb1cf19e2ce559c59644904a1e8c1219ae97b04a367e896432",
+        "source_pins": [
+          {
+            "id": "P1304-terms-v5-0",
+            "document_id": "P1304-doc-terms",
+            "document_revision": 5,
+            "document_sha256": "f8413bc213649b3d09200cbce0b5b7327cd79d11a73cb38462891151316752a0",
+            "text_sha256": "02d01a36c6894351cfef3a57d1f2fe29fdb800ef5699336686d6ba5da3cb8979"
+          }
+        ],
+        "inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 90,
+          "nonblank_physical_lines": 2,
+          "proposed_bundles": 2,
+          "selected_bundles": 2,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 94
+        },
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "0ead902af9322c66d0d098c6f839518563d0cb80ea962824b8b9c0e9badc2ada",
+          "source_inventory_sha256": "b8eff468fcb55ebb1cf19e2ce559c59644904a1e8c1219ae97b04a367e896432",
+          "question_sha256": "427fad068a21e11616c50249a88f3d547ba4c4bbe680aa9aa8856245206134e9",
+          "context_limit_units": 8192,
+          "planner_messages_sha256": "dea7053b8e74ae45ea191d7755fd5edbe400faee3c470b43ebd4dbb693d31d4e",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "374fd29d42667f60399065430dafe484419ef9a784c5ab5efd9954f773e81ba8",
+            "utf8_bytes": 1270,
+            "total_upper_bound_units": 2726,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [
+            "D1",
+            "D2"
+          ],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "2f3f5370afd78940accd1556c29425d7d154c2730a0a5d2ca91633f6e07dbcf8"
+        },
+        "selection": {
+          "state": "selection_returned",
+          "result_sha256": "2e1d1f498adaa7659e3f182f34730b56d79f2db2ad93f6c750e01643c37c71f6",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "0ead902af9322c66d0d098c6f839518563d0cb80ea962824b8b9c0e9badc2ada",
+          "groups": [
+            {
+              "document_id": "P1304-doc-terms",
+              "document_revision": 5,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "dea7053b8e74ae45ea191d7755fd5edbe400faee3c470b43ebd4dbb693d31d4e",
+            "utf8_bytes": 1270,
+            "total_upper_bound_units": 2726,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 2,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked",
+            "separator_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1305",
+        "kind": "coarse_fallback",
+        "source_inventory_sha256": "72062676766747c6e4adea00b2c6422f49726ebf417a1a4e2427bb66f3857db7",
+        "source_pins": [
+          {
+            "id": "P1305-long-v2-0",
+            "document_id": "P1305-doc-long",
+            "document_revision": 2,
+            "document_sha256": "eb8ae521d669cf444eab27311cd52a5c70a7b0ec0618722cc04e95162d734a8b",
+            "text_sha256": "26a4f42c05cd78ab4554af42ed8973532c0229d7efeded653f4a9413a51affb1"
+          }
+        ],
+        "inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 915,
+          "nonblank_physical_lines": 1,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 918
+        },
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "c4ac0d3bd4d7fea36b306cdaf964543654e07117cb19e33022813450412385ec",
+          "source_inventory_sha256": "72062676766747c6e4adea00b2c6422f49726ebf417a1a4e2427bb66f3857db7",
+          "question_sha256": "a4aeced10355a2ee4dee9f8ba72b02517d220bda82b7381d5d975b5615e1e57f",
+          "context_limit_units": 8192,
+          "planner_messages_sha256": "8ad5acf4447f6db8fc0d9c8df17aeacb2fb15a0ac8b7aab49ae2bce298d75334",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "ad54c6a7302d2441c6b621284562ce435f8b53e65ddb57824a289b09d611106d",
+            "utf8_bytes": 1791,
+            "total_upper_bound_units": 3247,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [
+            "D1"
+          ],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "3b538ffa7ef82e71fdee7c28fbd66a14db1228942dee9446fbb942f090ea7705"
+        },
+        "selection": {
+          "state": "selection_returned",
+          "result_sha256": "b660ae018a0aa8623d5efa1ab786ed7f06449d1d95062062953ef323474df3a3",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "c4ac0d3bd4d7fea36b306cdaf964543654e07117cb19e33022813450412385ec",
+          "groups": [
+            {
+              "document_id": "P1305-doc-long",
+              "document_revision": 2,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "8ad5acf4447f6db8fc0d9c8df17aeacb2fb15a0ac8b7aab49ae2bce298d75334",
+            "utf8_bytes": 1791,
+            "total_upper_bound_units": 3247,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1306",
+        "kind": "oversize_line",
+        "source_inventory_sha256": "b780b4ef2aa5575a11666847f7d91c5f3497f782f93c6bd31f036789adbf0acb",
+        "source_pins": [
+          {
+            "id": "P1306-huge-v1-0",
+            "document_id": "P1306-doc-huge",
+            "document_revision": 1,
+            "document_sha256": "8c51e0734a63a677d25d053a1a0bc45c4aada2d78183e8bc2cf4f7d28007484b",
+            "text_sha256": "e459bef1264854e73ef8161888018861efb5e49a86e02c3576370238a284218c"
+          }
+        ],
+        "inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 2943,
+          "nonblank_physical_lines": 1,
+          "proposed_bundles": 0,
+          "selected_bundles": 0,
+          "selected_evidence_passages": 0,
+          "copied_text_utf8_bytes": 0
+        },
+        "unrepresented_source_versions": [
+          {
+            "document_id": "P1306-doc-huge",
+            "document_revision": 1,
+            "document_sha256": "8c51e0734a63a677d25d053a1a0bc45c4aada2d78183e8bc2cf4f7d28007484b"
+          }
+        ],
+        "unrepresented_evidence_ids": [
+          "P1306-huge-v1-0"
+        ],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "5a2b06ee36bd9debd7de5795fd5d677facdb71123e016077e9eab7cadb1c78bb",
+          "source_inventory_sha256": "b780b4ef2aa5575a11666847f7d91c5f3497f782f93c6bd31f036789adbf0acb",
+          "question_sha256": "5513524503a9d6269e04dfc6c7da749e4b7851d690d4e6b4db3f9e3fb114d1d2",
+          "context_limit_units": 8192,
+          "planner_messages_sha256": "4b72e8b8a365245c337483c4be0ec99f1ce851447f254b3b0512fc1bc45844ca",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "67098e62f2ba45a381a3f44676c1e6af614c96413f3300ed3f355700624c2308",
+            "utf8_bytes": 578,
+            "total_upper_bound_units": 2034,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "d1e0e8c1676a70d56b8e591121d9ed6b5978f71906a223308e4f7f53c9afa979"
+        },
+        "selection": {
+          "state": "no_candidates_no_call",
+          "result_sha256": "7850c4330eeea20997224c9fbd5badd913445a354a2eca7ad3141b85e56570e4",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "5a2b06ee36bd9debd7de5795fd5d677facdb71123e016077e9eab7cadb1c78bb",
+          "groups": [
+            {
+              "document_id": "P1306-doc-huge",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "4b72e8b8a365245c337483c4be0ec99f1ce851447f254b3b0512fc1bc45844ca",
+            "utf8_bytes": 578,
+            "total_upper_bound_units": 2034,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 0,
+          "selected_source_versions": 0,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {
+            "no_complete_coarse_fallback": 1
+          },
+          "boundary_flags": [],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1307",
+        "kind": "late_paraphrase",
+        "source_inventory_sha256": "4de0805658045e224edb9549f80cfbd97b2f7c8045dcd529496e85692093d9c8",
+        "source_pins": [
+          {
+            "id": "P1307-archive-v6-0",
+            "document_id": "P1307-doc-archive",
+            "document_revision": 6,
+            "document_sha256": "630c80de7e1aeabc5a7eb3ba79ed3926ebb1aaff06bbda2c35c32078cdebe62c",
+            "text_sha256": "04c54a8b441f5c3fb3b0a8e873efec74e58d39ab5cf214119b2bb13b9fd15687"
+          }
+        ],
+        "inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 2115,
+          "nonblank_physical_lines": 46,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 100
+        },
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "55dec53fe1f901034fc904185b04658b0b4576ee0ae1f52dc0c8a2228c0ebe4b",
+          "source_inventory_sha256": "4de0805658045e224edb9549f80cfbd97b2f7c8045dcd529496e85692093d9c8",
+          "question_sha256": "0d245b9809d70e9631a32ccb31b7686a104c5d3d2f0919dcff3b428ee36a18a5",
+          "context_limit_units": 8192,
+          "planner_messages_sha256": "b8039ed8b392760aec73c2341bc06db756be7825f342acf8ba149eb8d9639ee6",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "76e6c34f5a3a4acaa8eea0a12a30928e54a3e21af1283eeea7d8e4dc387d6c34",
+            "utf8_bytes": 1087,
+            "total_upper_bound_units": 2543,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [
+            "D1"
+          ],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "65e2e124a117bf1f1d2675c718b58db5c31dc6a52c2a965c7d77c1699a7d3a09"
+        },
+        "selection": {
+          "state": "selection_returned",
+          "result_sha256": "bbc7101bf42b80c626247e0ea7faef2610c4abbf2645ec39ccd179a40be2f479",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "55dec53fe1f901034fc904185b04658b0b4576ee0ae1f52dc0c8a2228c0ebe4b",
+          "groups": [
+            {
+              "document_id": "P1307-doc-archive",
+              "document_revision": 6,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "b8039ed8b392760aec73c2341bc06db756be7825f342acf8ba149eb8d9639ee6",
+            "utf8_bytes": 1087,
+            "total_upper_bound_units": 2543,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 1,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1308",
+        "kind": "absent_information",
+        "source_inventory_sha256": "5053c4cdda4b83db8e6a8d318aec7b5434e45ed636d7e83d04ce277ffeee69b0",
+        "source_pins": [
+          {
+            "id": "P1308-color-v1-0",
+            "document_id": "P1308-doc-color",
+            "document_revision": 1,
+            "document_sha256": "777b20d502385bfb1d88f4f13a632f2c8cd8bcbb1ac041c9068f6b504b1b326b",
+            "text_sha256": "a085a896f61d42eaa9d900439493f9de3a64c1fe7e7c1eccce8d1a426fb19847"
+          }
+        ],
+        "inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 24,
+          "nonblank_physical_lines": 1,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 25
+        },
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "460eb4e1d0ebbede944355441981e1119cd8f4a8bcf500cc268403beb5e137b0",
+          "source_inventory_sha256": "5053c4cdda4b83db8e6a8d318aec7b5434e45ed636d7e83d04ce277ffeee69b0",
+          "question_sha256": "ddd2b25e44b1bd2041830b009f6ee609abeb8c91254b4b1da43c1bdd855caaa4",
+          "context_limit_units": 8192,
+          "planner_messages_sha256": "698a110c69d2cbfd2f80ce979faa8d31e9be1d39b67c170584fd445704af549e",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "5774b85e394c02b3e50ec35e22a87a9dcb1088bb1c914c171d25bba55f2fcb4f",
+            "utf8_bytes": 886,
+            "total_upper_bound_units": 2342,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [
+            "D1"
+          ],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "f3dc583f798e0c7e91ca0e9d996059b188e2d3ea043d6238a56f7a7d7fb7e0c4"
+        },
+        "selection": {
+          "state": "selection_returned",
+          "result_sha256": "4ca9e5d211787a895c95978f656177d028c25fb48a0c85f97fdb0ceb0b9f5708",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "460eb4e1d0ebbede944355441981e1119cd8f4a8bcf500cc268403beb5e137b0",
+          "groups": [],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "698a110c69d2cbfd2f80ce979faa8d31e9be1d39b67c170584fd445704af549e",
+            "utf8_bytes": 886,
+            "total_upper_bound_units": 2342,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 1,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1309",
+        "kind": "empty_inventory",
+        "source_inventory_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "source_pins": [],
+        "inventory": {
+          "source_passages": 0,
+          "source_versions": 0,
+          "scanned_code_points": 0,
+          "nonblank_physical_lines": 0,
+          "proposed_bundles": 0,
+          "selected_bundles": 0,
+          "selected_evidence_passages": 0,
+          "copied_text_utf8_bytes": 0
+        },
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "43cb8ab1ac2fed447f639d713b4ee3bb1cc6d0135a8fd9178ba060e7dfb23376",
+          "source_inventory_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "question_sha256": "799c4236ff47d8c28b49a853884cd5c3a183a3405c2d307d9f5e6d1b5d9100c7",
+          "context_limit_units": 8192,
+          "planner_messages_sha256": "848c087fbca640c65e7e69f31907f8a4b48fb8beb3f57526452efee859f48cf3",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "30ddf2421841b578cf207d54cb6784bb6e715f24d50cf8f7fb98a1c74a7640fb",
+            "utf8_bytes": 591,
+            "total_upper_bound_units": 2047,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "f9a36e232e33ee2412db8e8288b51a721ab7bf801b104e985aef7fff95b734a1"
+        },
+        "selection": {
+          "state": "no_candidates_no_call",
+          "result_sha256": "c3928f43aba014be222d409f291d6c69ec35a12b913cff0bb8c933d014b9748e",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "43cb8ab1ac2fed447f639d713b4ee3bb1cc6d0135a8fd9178ba060e7dfb23376",
+          "groups": [],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "848c087fbca640c65e7e69f31907f8a4b48fb8beb3f57526452efee859f48cf3",
+            "utf8_bytes": 591,
+            "total_upper_bound_units": 2047,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 0,
+          "selected_source_versions": 0,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1310",
+        "kind": "hostile_source",
+        "source_inventory_sha256": "408deca0b7bc5a4d30eb4996ea9a6cd206ab4ea09da06a8f20456b743b234d1b",
+        "source_pins": [
+          {
+            "id": "P1310-stock-v2-0",
+            "document_id": "P1310-doc-stock",
+            "document_revision": 2,
+            "document_sha256": "2036a5725143bd5fba195b34b2ee1fd955dda4569347d972b903f33b54a9f6dd",
+            "text_sha256": "4e3265d23ac38ee63b011e6287d4213d90425bb5687159704c552beaa063af16"
+          }
+        ],
+        "inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 80,
+          "nonblank_physical_lines": 2,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 83
+        },
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "c49da5acdd178a641b315f67f72273f64ecdbf0a309cd0deddc8f765be921cdd",
+          "source_inventory_sha256": "408deca0b7bc5a4d30eb4996ea9a6cd206ab4ea09da06a8f20456b743b234d1b",
+          "question_sha256": "e4364d0b9d661f2c06aa1a069232bceb877ff3b242758f6a226f34d4fbd590a5",
+          "context_limit_units": 8192,
+          "planner_messages_sha256": "1f28f99394723bbded55f67cead0ce7599dca99b695a7a3d5385b1a32821ce09",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "64d8572cea589f2cace94758dbec79561e6b106212778ca9d69f69f17800f1e3",
+            "utf8_bytes": 1050,
+            "total_upper_bound_units": 2506,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [
+            "D1"
+          ],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "15ff2b409d448a521cd79d620b5c059a820b43f18303d1d5a8906f18f8828402"
+        },
+        "selection": {
+          "state": "selection_returned",
+          "result_sha256": "5d007273d114d711649580e96af37366617933d58937d101b81d1b73781f73cf",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "c49da5acdd178a641b315f67f72273f64ecdbf0a309cd0deddc8f765be921cdd",
+          "groups": [
+            {
+              "document_id": "P1310-doc-stock",
+              "document_revision": 2,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "1f28f99394723bbded55f67cead0ce7599dca99b695a7a3d5385b1a32821ce09",
+            "utf8_bytes": 1050,
+            "total_upper_bound_units": 2506,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1311",
+        "kind": "unicode_condition",
+        "source_inventory_sha256": "fdb95dc35e86227a128df053afe15b6d62691510f7e99be1f93906ef55743d1d",
+        "source_pins": [
+          {
+            "id": "P1311-terms-v9-0",
+            "document_id": "P1311-doc-terms",
+            "document_revision": 9,
+            "document_sha256": "bca51fdac4584f66d4420b9549bb1bb17d6abf207c0fb1ed4b214f8536fbba81",
+            "text_sha256": "12efe79472c465fe9f8b6ce8009222314b6f2059db63b4c0058d4f36567ef878"
+          }
+        ],
+        "inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 92,
+          "nonblank_physical_lines": 2,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 102
+        },
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "8a8d13a8862407f5cf6b0c29c1dbbdee0c36cece7241cf6f3621c2fc61a2b8d2",
+          "source_inventory_sha256": "fdb95dc35e86227a128df053afe15b6d62691510f7e99be1f93906ef55743d1d",
+          "question_sha256": "1127a74f67b293d46b611f8cda407927f689e1f942c8b5ec4146a3288edd2b89",
+          "context_limit_units": 8192,
+          "planner_messages_sha256": "d4ccf2ef65f88d06dd6be9f83ac179cdc42f27acb1f6f4e081511d4ee7ad1759",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "abfc9afc36ae4f18e79ca443c6e6b374c74daf923b6b61c64a8a361badbe7087",
+            "utf8_bytes": 1057,
+            "total_upper_bound_units": 2513,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [
+            "D1"
+          ],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "5a69be0f12091163035a35c8c2ef065efb45edc5bec7a1719c9e1be07f7b6f8f"
+        },
+        "selection": {
+          "state": "selection_returned",
+          "result_sha256": "87f97729c809567e860a9be1d31809e22fe8997afbdadc18118b8e908b33348e",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "8a8d13a8862407f5cf6b0c29c1dbbdee0c36cece7241cf6f3621c2fc61a2b8d2",
+          "groups": [
+            {
+              "document_id": "P1311-doc-terms",
+              "document_revision": 9,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "d4ccf2ef65f88d06dd6be9f83ac179cdc42f27acb1f6f4e081511d4ee7ad1759",
+            "utf8_bytes": 1057,
+            "total_upper_bound_units": 2513,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1312",
+        "kind": "blocked_budget",
+        "source_inventory_sha256": "9acb749e4f55d45e98ea8ad5f569f71fadd7cb7c52ee50f63dfb625d8c92b9e0",
+        "source_pins": [
+          {
+            "id": "P1312-date-v1-0",
+            "document_id": "P1312-doc-date",
+            "document_revision": 1,
+            "document_sha256": "71e128b4ccd9dbd449d2a337b23f325ee653def5e4530370e7bb4dbe9157edd6",
+            "text_sha256": "d8cee0dd76e34519eeeddc66ddc50ac9a611c8218ecb34fc27c5c213c4353053"
+          }
+        ],
+        "inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 36,
+          "nonblank_physical_lines": 1,
+          "proposed_bundles": 1,
+          "selected_bundles": 0,
+          "selected_evidence_passages": 0,
+          "copied_text_utf8_bytes": 0
+        },
+        "unrepresented_source_versions": [
+          {
+            "document_id": "P1312-doc-date",
+            "document_revision": 1,
+            "document_sha256": "71e128b4ccd9dbd449d2a337b23f325ee653def5e4530370e7bb4dbe9157edd6"
+          }
+        ],
+        "unrepresented_evidence_ids": [
+          "P1312-date-v1-0"
+        ],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "3f19456f0dc3f174030fcce0d699cdbbc6c21ea7607e1a61f6ffa30ce5374f56",
+          "source_inventory_sha256": "9acb749e4f55d45e98ea8ad5f569f71fadd7cb7c52ee50f63dfb625d8c92b9e0",
+          "question_sha256": "9587ef8382dd69dcf1c93859c660a2ffcd2de23e126a4a5d200ac63ad785a33b",
+          "context_limit_units": 1536,
+          "planner_messages_sha256": "4858c6fd72ab410b8cad6ec4cce890c2bce6d45b74120c0169539a8fa37b55c1",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "7c80be9cf19eabf365f4b763a60dcb85894a967a17a4f3bce7d09fa8b2ce58ea",
+            "utf8_bytes": 583,
+            "total_upper_bound_units": 2039,
+            "context_limit_units": 1536,
+            "within_budget": false,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [],
+          "admission": "blocked_envelope",
+          "not_execution_authorization": true,
+          "wire_sha256": "10455a1b67222709fd62d4c7f24f5e6e275d0ee1d74181008caa058ceafebcb3"
+        },
+        "selection": {
+          "state": "blocked_before_transport",
+          "selection_policy": "no_call"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "3f19456f0dc3f174030fcce0d699cdbbc6c21ea7607e1a61f6ffa30ce5374f56",
+          "groups": [
+            {
+              "document_id": "P1312-doc-date",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "4858c6fd72ab410b8cad6ec4cce890c2bce6d45b74120c0169539a8fa37b55c1",
+            "utf8_bytes": 583,
+            "total_upper_bound_units": 2039,
+            "context_limit_units": 1536,
+            "within_budget": false,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 0,
+          "selected_source_versions": 0,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {
+            "whole_bundle_prompt_budget": 1
+          },
+          "boundary_flags": [],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1313",
+        "kind": "bounded_source_pool",
+        "source_inventory_sha256": "6b179aad9fb57de9328f4872cc26ad69699f7b78e02040d0b3a6610f7cf4fcb8",
+        "source_pins": [
+          {
+            "id": "P1313-source0-v1-0",
+            "document_id": "P1313-doc-source0",
+            "document_revision": 1,
+            "document_sha256": "bd79e8d51319384446b8e510c1ebb29ff209b21ad0873312166037062e4da848",
+            "text_sha256": "6a0aa38f54e96dbffa0a32a1954ca7b0d462821b5062f593506be2c70d8b85d6"
+          },
+          {
+            "id": "P1313-source0-v1-1",
+            "document_id": "P1313-doc-source0",
+            "document_revision": 1,
+            "document_sha256": "bd79e8d51319384446b8e510c1ebb29ff209b21ad0873312166037062e4da848",
+            "text_sha256": "c15226ca17be2a452940a2fb2cb828f3baa08ce496745df6cc1cd24a59e149ca"
+          },
+          {
+            "id": "P1313-source0-v1-2",
+            "document_id": "P1313-doc-source0",
+            "document_revision": 1,
+            "document_sha256": "bd79e8d51319384446b8e510c1ebb29ff209b21ad0873312166037062e4da848",
+            "text_sha256": "d6b2425cac489a2b299792524ef914e8b79d35b58c19770c13738d3e70d350fd"
+          },
+          {
+            "id": "P1313-source0-v1-3",
+            "document_id": "P1313-doc-source0",
+            "document_revision": 1,
+            "document_sha256": "bd79e8d51319384446b8e510c1ebb29ff209b21ad0873312166037062e4da848",
+            "text_sha256": "22d73a4d92229b24403b363c5f33457f3db870eac964e7d1ad664380e74e6150"
+          },
+          {
+            "id": "P1313-source0-v1-4",
+            "document_id": "P1313-doc-source0",
+            "document_revision": 1,
+            "document_sha256": "bd79e8d51319384446b8e510c1ebb29ff209b21ad0873312166037062e4da848",
+            "text_sha256": "4b7ab026a7c392de589e49afc53c6db93fd21a5a0df68a8d65bd30f05eae8c87"
+          },
+          {
+            "id": "P1313-source1-v2-0",
+            "document_id": "P1313-doc-source1",
+            "document_revision": 2,
+            "document_sha256": "ba8d40bb54b372a757c6e6b52b344ea979ae6b5d423396df369a62f84bb12ae7",
+            "text_sha256": "25bebe1aae6f2fa82de0b03f35e2a35f8c6102672eacaf811fff9ec60ec96639"
+          },
+          {
+            "id": "P1313-source1-v2-1",
+            "document_id": "P1313-doc-source1",
+            "document_revision": 2,
+            "document_sha256": "ba8d40bb54b372a757c6e6b52b344ea979ae6b5d423396df369a62f84bb12ae7",
+            "text_sha256": "934bdeb7629182fc4556a06d1a3a917e4524e9c123616cb648602e82d96962ed"
+          },
+          {
+            "id": "P1313-source1-v2-2",
+            "document_id": "P1313-doc-source1",
+            "document_revision": 2,
+            "document_sha256": "ba8d40bb54b372a757c6e6b52b344ea979ae6b5d423396df369a62f84bb12ae7",
+            "text_sha256": "2195d5c9d4d1b83ef89bdf40c2525a6f59ae920783a74a8efa1b7ee671674359"
+          },
+          {
+            "id": "P1313-source1-v2-3",
+            "document_id": "P1313-doc-source1",
+            "document_revision": 2,
+            "document_sha256": "ba8d40bb54b372a757c6e6b52b344ea979ae6b5d423396df369a62f84bb12ae7",
+            "text_sha256": "2a7617afa1fa0d905f1c88d3cb245b4f1473ff62fe7354b043d373e63abfbfda"
+          },
+          {
+            "id": "P1313-source1-v2-4",
+            "document_id": "P1313-doc-source1",
+            "document_revision": 2,
+            "document_sha256": "ba8d40bb54b372a757c6e6b52b344ea979ae6b5d423396df369a62f84bb12ae7",
+            "text_sha256": "44f5405c8327fab0b61528ab2e0cf7ed0fe217544734e53dc27494fe46ba6a66"
+          },
+          {
+            "id": "P1313-source2-v3-0",
+            "document_id": "P1313-doc-source2",
+            "document_revision": 3,
+            "document_sha256": "82da8b68b310ca01420daed25c6406eee335b13d858fb944770956898c1386a3",
+            "text_sha256": "a14ad52648ebe25fc36d8d9395b13afd7852b1ffc94d1314087d8f7cba5eebe2"
+          },
+          {
+            "id": "P1313-source2-v3-1",
+            "document_id": "P1313-doc-source2",
+            "document_revision": 3,
+            "document_sha256": "82da8b68b310ca01420daed25c6406eee335b13d858fb944770956898c1386a3",
+            "text_sha256": "29789aafcc6df9174f68f3f89c26c2e07397831c4a4ab7cb965081a87eded4eb"
+          },
+          {
+            "id": "P1313-source2-v3-2",
+            "document_id": "P1313-doc-source2",
+            "document_revision": 3,
+            "document_sha256": "82da8b68b310ca01420daed25c6406eee335b13d858fb944770956898c1386a3",
+            "text_sha256": "813c472b4020c574f3029161c58f21d6d7411cd233b526434a6e4d8a235bbdd9"
+          },
+          {
+            "id": "P1313-source2-v3-3",
+            "document_id": "P1313-doc-source2",
+            "document_revision": 3,
+            "document_sha256": "82da8b68b310ca01420daed25c6406eee335b13d858fb944770956898c1386a3",
+            "text_sha256": "117fae5d7410a97656c4ada71725c890e258b70903db9d386a0a09030bc3f27f"
+          },
+          {
+            "id": "P1313-source2-v3-4",
+            "document_id": "P1313-doc-source2",
+            "document_revision": 3,
+            "document_sha256": "82da8b68b310ca01420daed25c6406eee335b13d858fb944770956898c1386a3",
+            "text_sha256": "65f858152f253368e90d80aea427dd1c657327d6789255f2e7e07d7799fabf3b"
+          },
+          {
+            "id": "P1313-source3-v4-0",
+            "document_id": "P1313-doc-source3",
+            "document_revision": 4,
+            "document_sha256": "18196ef8e1b16aa307e939aab2eb50de38e658005e45da025991e43596a3de82",
+            "text_sha256": "1e28028546e54b316eac8a0ca606118f67461809dc69169a221b190e2281ff27"
+          },
+          {
+            "id": "P1313-source3-v4-1",
+            "document_id": "P1313-doc-source3",
+            "document_revision": 4,
+            "document_sha256": "18196ef8e1b16aa307e939aab2eb50de38e658005e45da025991e43596a3de82",
+            "text_sha256": "4b11b2af4f2f9ed13a0a2fe3683f2377accad7fef1aa3b7f93373d6ef8d5d309"
+          },
+          {
+            "id": "P1313-source3-v4-2",
+            "document_id": "P1313-doc-source3",
+            "document_revision": 4,
+            "document_sha256": "18196ef8e1b16aa307e939aab2eb50de38e658005e45da025991e43596a3de82",
+            "text_sha256": "c71cc8f0a348128a4146de323dea878b31c8fbd8096a4b13757e5ca451913964"
+          },
+          {
+            "id": "P1313-source3-v4-3",
+            "document_id": "P1313-doc-source3",
+            "document_revision": 4,
+            "document_sha256": "18196ef8e1b16aa307e939aab2eb50de38e658005e45da025991e43596a3de82",
+            "text_sha256": "cd9f676d2c20ae8c66ed7bba14916b6fac97939450ab20346f7b73e15a9491e9"
+          },
+          {
+            "id": "P1313-source3-v4-4",
+            "document_id": "P1313-doc-source3",
+            "document_revision": 4,
+            "document_sha256": "18196ef8e1b16aa307e939aab2eb50de38e658005e45da025991e43596a3de82",
+            "text_sha256": "2ed013259f7c06ae29591b0663cae87d4f234bc7a7f6bc3f0e75391863b31481"
+          },
+          {
+            "id": "P1313-source4-v1-0",
+            "document_id": "P1313-doc-source4",
+            "document_revision": 1,
+            "document_sha256": "c626f38d88a11ed5935cfb1aecacaa5910c0c4753e7724f80ac2796251e56921",
+            "text_sha256": "8940b9374041ec5f2d67c3d70b4ddcd21661eb71883e0e3e7eece252ffdcc2f9"
+          },
+          {
+            "id": "P1313-source4-v1-1",
+            "document_id": "P1313-doc-source4",
+            "document_revision": 1,
+            "document_sha256": "c626f38d88a11ed5935cfb1aecacaa5910c0c4753e7724f80ac2796251e56921",
+            "text_sha256": "2dcb2665e65cb35c280efb6e49345648c6384aedba6381ad890cd05283369139"
+          },
+          {
+            "id": "P1313-source4-v1-2",
+            "document_id": "P1313-doc-source4",
+            "document_revision": 1,
+            "document_sha256": "c626f38d88a11ed5935cfb1aecacaa5910c0c4753e7724f80ac2796251e56921",
+            "text_sha256": "381326f33569ee81a29eacf1aaa0cb280bd8c3542c3c21ae6537a98b2af8cbd2"
+          },
+          {
+            "id": "P1313-source4-v1-3",
+            "document_id": "P1313-doc-source4",
+            "document_revision": 1,
+            "document_sha256": "c626f38d88a11ed5935cfb1aecacaa5910c0c4753e7724f80ac2796251e56921",
+            "text_sha256": "290cdde6782c81a853044865f7d3bcfe609a6516653e683f84003ce27acf6a0e"
+          },
+          {
+            "id": "P1313-source4-v1-4",
+            "document_id": "P1313-doc-source4",
+            "document_revision": 1,
+            "document_sha256": "c626f38d88a11ed5935cfb1aecacaa5910c0c4753e7724f80ac2796251e56921",
+            "text_sha256": "ac0ee5639e4830488a5dd1aeaf7745f67c983a772379d3fd36a7203be41d3871"
+          },
+          {
+            "id": "P1313-source5-v2-0",
+            "document_id": "P1313-doc-source5",
+            "document_revision": 2,
+            "document_sha256": "b657e5b9a14467666dd6dae45acaef26d96058fdbde96dea63333a4778e2f97a",
+            "text_sha256": "e011cba6a8814279a07b7759ab62c93dd503d152f71bf22b04fc3c45d7167d33"
+          },
+          {
+            "id": "P1313-source5-v2-1",
+            "document_id": "P1313-doc-source5",
+            "document_revision": 2,
+            "document_sha256": "b657e5b9a14467666dd6dae45acaef26d96058fdbde96dea63333a4778e2f97a",
+            "text_sha256": "7694a1797544f5729b6ebeb5184d83ae43a28501f02e8c7236c8586b313dad48"
+          },
+          {
+            "id": "P1313-source5-v2-2",
+            "document_id": "P1313-doc-source5",
+            "document_revision": 2,
+            "document_sha256": "b657e5b9a14467666dd6dae45acaef26d96058fdbde96dea63333a4778e2f97a",
+            "text_sha256": "e33263d59f333dd066ab1073e9660b0731dd9ad65f4e41dafdd0a5523ba29baa"
+          },
+          {
+            "id": "P1313-source5-v2-3",
+            "document_id": "P1313-doc-source5",
+            "document_revision": 2,
+            "document_sha256": "b657e5b9a14467666dd6dae45acaef26d96058fdbde96dea63333a4778e2f97a",
+            "text_sha256": "919dbac462f2d6324422099a3359cc4884e25d8942412ae9e3ba1150687ea742"
+          },
+          {
+            "id": "P1313-source5-v2-4",
+            "document_id": "P1313-doc-source5",
+            "document_revision": 2,
+            "document_sha256": "b657e5b9a14467666dd6dae45acaef26d96058fdbde96dea63333a4778e2f97a",
+            "text_sha256": "383c19cfe546d02e31b6b03302258dd2cc7d0913a0d5cfe9a732e527159733ae"
+          },
+          {
+            "id": "P1313-source6-v3-0",
+            "document_id": "P1313-doc-source6",
+            "document_revision": 3,
+            "document_sha256": "e9f55bc2340efe50f62dbb9793b82012a4cf7eed8c747d60e6d5b924e140b4a2",
+            "text_sha256": "94e344dac0a137b662c7707ab6599557cd549c6bd0cedba0e33bda88d175f84c"
+          },
+          {
+            "id": "P1313-source6-v3-1",
+            "document_id": "P1313-doc-source6",
+            "document_revision": 3,
+            "document_sha256": "e9f55bc2340efe50f62dbb9793b82012a4cf7eed8c747d60e6d5b924e140b4a2",
+            "text_sha256": "9e845f226ad7e61b9e6fc573228f5bed1e78828e3a082e132af37b1f93ed7d7a"
+          },
+          {
+            "id": "P1313-source6-v3-2",
+            "document_id": "P1313-doc-source6",
+            "document_revision": 3,
+            "document_sha256": "e9f55bc2340efe50f62dbb9793b82012a4cf7eed8c747d60e6d5b924e140b4a2",
+            "text_sha256": "e2cf99a319ffcd6c6d1d981a50aa7a35f9c13524c799dea7815998cc06113cf8"
+          },
+          {
+            "id": "P1313-source6-v3-3",
+            "document_id": "P1313-doc-source6",
+            "document_revision": 3,
+            "document_sha256": "e9f55bc2340efe50f62dbb9793b82012a4cf7eed8c747d60e6d5b924e140b4a2",
+            "text_sha256": "1d77685c78872fbd567259fb0d7e9798973a0d5dbe3686e56067182f7c029398"
+          },
+          {
+            "id": "P1313-source6-v3-4",
+            "document_id": "P1313-doc-source6",
+            "document_revision": 3,
+            "document_sha256": "e9f55bc2340efe50f62dbb9793b82012a4cf7eed8c747d60e6d5b924e140b4a2",
+            "text_sha256": "0cdc552aea23d943b9f8a422d2133e2b1e21de90c4ae8b8f4c34d28f58a87d6c"
+          },
+          {
+            "id": "P1313-source7-v4-0",
+            "document_id": "P1313-doc-source7",
+            "document_revision": 4,
+            "document_sha256": "fc4ba5e33cdb4ec5de8faefdebd3c1c8e54f6ac0927eda2ecf39c6e2460e6a43",
+            "text_sha256": "a42a9efd01aae365186dcefa30b73ef20e6405d89807e71118a11b3995f3ea68"
+          },
+          {
+            "id": "P1313-source7-v4-1",
+            "document_id": "P1313-doc-source7",
+            "document_revision": 4,
+            "document_sha256": "fc4ba5e33cdb4ec5de8faefdebd3c1c8e54f6ac0927eda2ecf39c6e2460e6a43",
+            "text_sha256": "1c4c913387484b6bfb08c4e53d3ed85021fe83b8577928c63773c10321d73287"
+          },
+          {
+            "id": "P1313-source7-v4-2",
+            "document_id": "P1313-doc-source7",
+            "document_revision": 4,
+            "document_sha256": "fc4ba5e33cdb4ec5de8faefdebd3c1c8e54f6ac0927eda2ecf39c6e2460e6a43",
+            "text_sha256": "a8ae6c4b07db9cd09be5e83649cf141ab0c8f0ebf282818eb6189b6ea328b991"
+          },
+          {
+            "id": "P1313-source7-v4-3",
+            "document_id": "P1313-doc-source7",
+            "document_revision": 4,
+            "document_sha256": "fc4ba5e33cdb4ec5de8faefdebd3c1c8e54f6ac0927eda2ecf39c6e2460e6a43",
+            "text_sha256": "6d619fb1222cb39440286164bd047c839c34028728968e40911594f197b53422"
+          },
+          {
+            "id": "P1313-source7-v4-4",
+            "document_id": "P1313-doc-source7",
+            "document_revision": 4,
+            "document_sha256": "fc4ba5e33cdb4ec5de8faefdebd3c1c8e54f6ac0927eda2ecf39c6e2460e6a43",
+            "text_sha256": "7453cd956c1634d49dd2172da523f55f71755f356a17755cfa07da12d3effdcd"
+          },
+          {
+            "id": "P1313-source8-v1-0",
+            "document_id": "P1313-doc-source8",
+            "document_revision": 1,
+            "document_sha256": "e755d6e4776300548334885d560abcb754bf679a8d3f262b566314589b8baaf6",
+            "text_sha256": "3556b7bf7471fbf14334a11eccf3486032fb2c6338598605544b042cde3383dc"
+          },
+          {
+            "id": "P1313-source8-v1-1",
+            "document_id": "P1313-doc-source8",
+            "document_revision": 1,
+            "document_sha256": "e755d6e4776300548334885d560abcb754bf679a8d3f262b566314589b8baaf6",
+            "text_sha256": "a9560ee7c18bfca48fa7099ad9d27040c263a5ea75412dd93b058003c3667c36"
+          },
+          {
+            "id": "P1313-source8-v1-2",
+            "document_id": "P1313-doc-source8",
+            "document_revision": 1,
+            "document_sha256": "e755d6e4776300548334885d560abcb754bf679a8d3f262b566314589b8baaf6",
+            "text_sha256": "8f7002d61685cb2835ca67117f4dbf91d2198b781838ac311d576a25939e9385"
+          },
+          {
+            "id": "P1313-source8-v1-3",
+            "document_id": "P1313-doc-source8",
+            "document_revision": 1,
+            "document_sha256": "e755d6e4776300548334885d560abcb754bf679a8d3f262b566314589b8baaf6",
+            "text_sha256": "970e2889c5a6ac7029bfd07fefa0f45a6ac6270ca9d2f041550fa28f80c8a705"
+          },
+          {
+            "id": "P1313-source8-v1-4",
+            "document_id": "P1313-doc-source8",
+            "document_revision": 1,
+            "document_sha256": "e755d6e4776300548334885d560abcb754bf679a8d3f262b566314589b8baaf6",
+            "text_sha256": "7f64a30108d9abc1fcd4faea8950b648196fc3a8a30a7c1253c92ff087936453"
+          },
+          {
+            "id": "P1313-source9-v2-0",
+            "document_id": "P1313-doc-source9",
+            "document_revision": 2,
+            "document_sha256": "fbc6f06531b6bcd4fd15c8c1f5d0d0221623ae6bc18d67f3603ead7779ff4dd4",
+            "text_sha256": "ee02e68e5ac0777be7d293be195fd38a5f3b62e3a9ad16879b5fcdcacac05f24"
+          },
+          {
+            "id": "P1313-source9-v2-1",
+            "document_id": "P1313-doc-source9",
+            "document_revision": 2,
+            "document_sha256": "fbc6f06531b6bcd4fd15c8c1f5d0d0221623ae6bc18d67f3603ead7779ff4dd4",
+            "text_sha256": "2b2780a3a03984ff7aa1b6616f391702942d78cfa60e37e016f8f992743a7a02"
+          },
+          {
+            "id": "P1313-source9-v2-2",
+            "document_id": "P1313-doc-source9",
+            "document_revision": 2,
+            "document_sha256": "fbc6f06531b6bcd4fd15c8c1f5d0d0221623ae6bc18d67f3603ead7779ff4dd4",
+            "text_sha256": "87ae1a60d1f0b46598fe61d88b76e56bafbb5c3494d653680f38417015616277"
+          },
+          {
+            "id": "P1313-source9-v2-3",
+            "document_id": "P1313-doc-source9",
+            "document_revision": 2,
+            "document_sha256": "fbc6f06531b6bcd4fd15c8c1f5d0d0221623ae6bc18d67f3603ead7779ff4dd4",
+            "text_sha256": "c6613b8dba6126bd71764438cd2c409d586dd0571ee5e4cb2b96699f0b96f332"
+          },
+          {
+            "id": "P1313-source9-v2-4",
+            "document_id": "P1313-doc-source9",
+            "document_revision": 2,
+            "document_sha256": "fbc6f06531b6bcd4fd15c8c1f5d0d0221623ae6bc18d67f3603ead7779ff4dd4",
+            "text_sha256": "b0126c7bf89e12ccffbb4b6c3c9a32a435b50c3a1b87aefa098d69fd722d10d7"
+          },
+          {
+            "id": "P1313-source10-v3-0",
+            "document_id": "P1313-doc-source10",
+            "document_revision": 3,
+            "document_sha256": "5bbf3866a85d854077484ec430c48536e5b31424ea3d5537a9524b30aae67503",
+            "text_sha256": "08f86ce01ebc19e1aca80ec52141c09f19febfbebb32593aec85beb48496e08b"
+          },
+          {
+            "id": "P1313-source10-v3-1",
+            "document_id": "P1313-doc-source10",
+            "document_revision": 3,
+            "document_sha256": "5bbf3866a85d854077484ec430c48536e5b31424ea3d5537a9524b30aae67503",
+            "text_sha256": "af501bb8b5dd0ba78c50d6b64e1cf7db9d73221b39ea9fe5e27201f9d5bbc11f"
+          },
+          {
+            "id": "P1313-source10-v3-2",
+            "document_id": "P1313-doc-source10",
+            "document_revision": 3,
+            "document_sha256": "5bbf3866a85d854077484ec430c48536e5b31424ea3d5537a9524b30aae67503",
+            "text_sha256": "785a40bb327323a9bbc9ae3f42cb2a3551dea2e8a7e991541ce21110029a8768"
+          },
+          {
+            "id": "P1313-source10-v3-3",
+            "document_id": "P1313-doc-source10",
+            "document_revision": 3,
+            "document_sha256": "5bbf3866a85d854077484ec430c48536e5b31424ea3d5537a9524b30aae67503",
+            "text_sha256": "61b9ead01e3f7fd14d96d83ba232f8377a2f22835bc27c5ac8c5757de99d5079"
+          },
+          {
+            "id": "P1313-source10-v3-4",
+            "document_id": "P1313-doc-source10",
+            "document_revision": 3,
+            "document_sha256": "5bbf3866a85d854077484ec430c48536e5b31424ea3d5537a9524b30aae67503",
+            "text_sha256": "bbc0d54dfd352779431704ca187d0a5a37c5bea349df5f6031427d7b8300c8d0"
+          },
+          {
+            "id": "P1313-source11-v4-0",
+            "document_id": "P1313-doc-source11",
+            "document_revision": 4,
+            "document_sha256": "d8556b424b21ddba1c73d33775a1685908a9ee19a4b13eab8c54943dacc8d9ad",
+            "text_sha256": "f526c60fca7fccda9753ca201d93b8f32f5da860808b88f67bf0b6c9cac8cbd6"
+          },
+          {
+            "id": "P1313-source11-v4-1",
+            "document_id": "P1313-doc-source11",
+            "document_revision": 4,
+            "document_sha256": "d8556b424b21ddba1c73d33775a1685908a9ee19a4b13eab8c54943dacc8d9ad",
+            "text_sha256": "89145c49cd4be60cbcd692220bc558fdb182f6483ac70ce69fe908e16d5e470b"
+          },
+          {
+            "id": "P1313-source11-v4-2",
+            "document_id": "P1313-doc-source11",
+            "document_revision": 4,
+            "document_sha256": "d8556b424b21ddba1c73d33775a1685908a9ee19a4b13eab8c54943dacc8d9ad",
+            "text_sha256": "44b49e12f89f05fbfaa8b748a3efaa358144d80072dbe6d4a69103463ba37459"
+          },
+          {
+            "id": "P1313-source11-v4-3",
+            "document_id": "P1313-doc-source11",
+            "document_revision": 4,
+            "document_sha256": "d8556b424b21ddba1c73d33775a1685908a9ee19a4b13eab8c54943dacc8d9ad",
+            "text_sha256": "926d3f3df21cccedeaf985f46c9fd684081a238a480b0d4d1c2bc063bd149707"
+          },
+          {
+            "id": "P1313-source11-v4-4",
+            "document_id": "P1313-doc-source11",
+            "document_revision": 4,
+            "document_sha256": "d8556b424b21ddba1c73d33775a1685908a9ee19a4b13eab8c54943dacc8d9ad",
+            "text_sha256": "ce2f336f4cf7b56245fdc9a16ac409189151a26c783000901cbfcfbd0d0f5977"
+          },
+          {
+            "id": "P1313-source12-v1-0",
+            "document_id": "P1313-doc-source12",
+            "document_revision": 1,
+            "document_sha256": "9bc51364f0ec0f85615619681660e4987dc0e21b65ab8ccf280ca2bf8b98c360",
+            "text_sha256": "35011b646fcde00449f8ccb27b0696bf55d41ffc260528f36d4deef109e1b19e"
+          },
+          {
+            "id": "P1313-source12-v1-1",
+            "document_id": "P1313-doc-source12",
+            "document_revision": 1,
+            "document_sha256": "9bc51364f0ec0f85615619681660e4987dc0e21b65ab8ccf280ca2bf8b98c360",
+            "text_sha256": "b26650feb76873ace26f4c9246b672847632ba5051bbe915d0477513f07bd7c9"
+          },
+          {
+            "id": "P1313-source12-v1-2",
+            "document_id": "P1313-doc-source12",
+            "document_revision": 1,
+            "document_sha256": "9bc51364f0ec0f85615619681660e4987dc0e21b65ab8ccf280ca2bf8b98c360",
+            "text_sha256": "4ebb82b790eebd084776ccfaf60e5e3e27ec09e3059b46e980e070cf2c9d6b7a"
+          },
+          {
+            "id": "P1313-source12-v1-3",
+            "document_id": "P1313-doc-source12",
+            "document_revision": 1,
+            "document_sha256": "9bc51364f0ec0f85615619681660e4987dc0e21b65ab8ccf280ca2bf8b98c360",
+            "text_sha256": "c516f9e1e1ac19fe9030d64c9230da8c771a79c75661ea7d3ed2b4a214eeb6bc"
+          },
+          {
+            "id": "P1313-source12-v1-4",
+            "document_id": "P1313-doc-source12",
+            "document_revision": 1,
+            "document_sha256": "9bc51364f0ec0f85615619681660e4987dc0e21b65ab8ccf280ca2bf8b98c360",
+            "text_sha256": "92439799ec38a42adf5b3b9128c554b36e0680332ea579c80bf8da993e9307ed"
+          },
+          {
+            "id": "P1313-source13-v2-0",
+            "document_id": "P1313-doc-source13",
+            "document_revision": 2,
+            "document_sha256": "f641437bd08da4ada2ab16fe9e40902de819b96ce14915c7ef47b29f11e08201",
+            "text_sha256": "5183f203046bc4fd526feb51c0e1d6cc478ccecd36262c75cf8c68e6e894b112"
+          },
+          {
+            "id": "P1313-source13-v2-1",
+            "document_id": "P1313-doc-source13",
+            "document_revision": 2,
+            "document_sha256": "f641437bd08da4ada2ab16fe9e40902de819b96ce14915c7ef47b29f11e08201",
+            "text_sha256": "4c4db02fd37279e55f1aa8c93e45a6228fe9bf409158cb4b01033b265844a698"
+          },
+          {
+            "id": "P1313-source13-v2-2",
+            "document_id": "P1313-doc-source13",
+            "document_revision": 2,
+            "document_sha256": "f641437bd08da4ada2ab16fe9e40902de819b96ce14915c7ef47b29f11e08201",
+            "text_sha256": "9302a74e98aa444c8a36f6bd9f084449cb6302a6c17b7b1b333b737a66032e53"
+          },
+          {
+            "id": "P1313-source13-v2-3",
+            "document_id": "P1313-doc-source13",
+            "document_revision": 2,
+            "document_sha256": "f641437bd08da4ada2ab16fe9e40902de819b96ce14915c7ef47b29f11e08201",
+            "text_sha256": "4a0e57e0d7622e7d5ed50d31bd415c8aff617467a5185e393b80e82e22bb524b"
+          },
+          {
+            "id": "P1313-source13-v2-4",
+            "document_id": "P1313-doc-source13",
+            "document_revision": 2,
+            "document_sha256": "f641437bd08da4ada2ab16fe9e40902de819b96ce14915c7ef47b29f11e08201",
+            "text_sha256": "7c33abfb47de39b32638df03e9844967e6de43e5f5c14c6d5d92e47d9747ab43"
+          },
+          {
+            "id": "P1313-source14-v3-0",
+            "document_id": "P1313-doc-source14",
+            "document_revision": 3,
+            "document_sha256": "39b67f343fa073f74de5ce8639c6f9aa013e9247d827b9edf474aaa5ee74bdf5",
+            "text_sha256": "0768a028acc592e98b3cb61f129cbceec1e352debb88a428fb04d2d33801bae1"
+          },
+          {
+            "id": "P1313-source14-v3-1",
+            "document_id": "P1313-doc-source14",
+            "document_revision": 3,
+            "document_sha256": "39b67f343fa073f74de5ce8639c6f9aa013e9247d827b9edf474aaa5ee74bdf5",
+            "text_sha256": "2642aacafd68cbd37846fcf5b46e0b44f88e1e395afb3505caf5ed29a4fc4e43"
+          },
+          {
+            "id": "P1313-source14-v3-2",
+            "document_id": "P1313-doc-source14",
+            "document_revision": 3,
+            "document_sha256": "39b67f343fa073f74de5ce8639c6f9aa013e9247d827b9edf474aaa5ee74bdf5",
+            "text_sha256": "b7ac4c498465829556a345ecb07975593c9c4d046fcfc44647066c102e602249"
+          },
+          {
+            "id": "P1313-source14-v3-3",
+            "document_id": "P1313-doc-source14",
+            "document_revision": 3,
+            "document_sha256": "39b67f343fa073f74de5ce8639c6f9aa013e9247d827b9edf474aaa5ee74bdf5",
+            "text_sha256": "306697c4ecfbe91e5ab84e33e778aa8407d636562abc9b11ab26f5c4c5e74e55"
+          },
+          {
+            "id": "P1313-source14-v3-4",
+            "document_id": "P1313-doc-source14",
+            "document_revision": 3,
+            "document_sha256": "39b67f343fa073f74de5ce8639c6f9aa013e9247d827b9edf474aaa5ee74bdf5",
+            "text_sha256": "8562442eb725cc3c419629325b154cd8be461fb9ae1a6aa0fa24d48662afc562"
+          },
+          {
+            "id": "P1313-source15-v4-0",
+            "document_id": "P1313-doc-source15",
+            "document_revision": 4,
+            "document_sha256": "cb26cc9fb0431c86d6d2b78fa6746a9e06edfd264e3d7f8a92b2541241cd885c",
+            "text_sha256": "25a986a3171117e7a767645ec9903c8ec71a7c3153da326761fce19bf4974de5"
+          },
+          {
+            "id": "P1313-source15-v4-1",
+            "document_id": "P1313-doc-source15",
+            "document_revision": 4,
+            "document_sha256": "cb26cc9fb0431c86d6d2b78fa6746a9e06edfd264e3d7f8a92b2541241cd885c",
+            "text_sha256": "9593850e97fe49d7cc15d8967676fe176ed80d5900ec75107d507504adbb3d29"
+          },
+          {
+            "id": "P1313-source15-v4-2",
+            "document_id": "P1313-doc-source15",
+            "document_revision": 4,
+            "document_sha256": "cb26cc9fb0431c86d6d2b78fa6746a9e06edfd264e3d7f8a92b2541241cd885c",
+            "text_sha256": "1136a841fa4ad1a56987f67403195db5bccd0d0c63b4acbc7120153bad5d0b9b"
+          },
+          {
+            "id": "P1313-source15-v4-3",
+            "document_id": "P1313-doc-source15",
+            "document_revision": 4,
+            "document_sha256": "cb26cc9fb0431c86d6d2b78fa6746a9e06edfd264e3d7f8a92b2541241cd885c",
+            "text_sha256": "72028406933d7be5a39f2f1007dfcef08aa310454918fd48b42e2acf8ff7f950"
+          },
+          {
+            "id": "P1313-source15-v4-4",
+            "document_id": "P1313-doc-source15",
+            "document_revision": 4,
+            "document_sha256": "cb26cc9fb0431c86d6d2b78fa6746a9e06edfd264e3d7f8a92b2541241cd885c",
+            "text_sha256": "c653defe78e5ab526ff2a3a7db7a3ec468dd018595b5866bb923f91ae0398acc"
+          },
+          {
+            "id": "P1313-source16-v1-0",
+            "document_id": "P1313-doc-source16",
+            "document_revision": 1,
+            "document_sha256": "89f8a1321d758173118972f2427465c01acf07f5f7880069370ddbadcfdfe1d7",
+            "text_sha256": "253f8b27d497f13f48922ead93bd53d672091837f370082acde4310ef41dad9f"
+          },
+          {
+            "id": "P1313-source16-v1-1",
+            "document_id": "P1313-doc-source16",
+            "document_revision": 1,
+            "document_sha256": "89f8a1321d758173118972f2427465c01acf07f5f7880069370ddbadcfdfe1d7",
+            "text_sha256": "0ce5eed13d72854b67ece9921073c09d8ff1bf97f4e66953a09753358da2564f"
+          },
+          {
+            "id": "P1313-source16-v1-2",
+            "document_id": "P1313-doc-source16",
+            "document_revision": 1,
+            "document_sha256": "89f8a1321d758173118972f2427465c01acf07f5f7880069370ddbadcfdfe1d7",
+            "text_sha256": "b3285a4ef59025dc8cebe3fa627eae317c76521adbb6c024022ccc939341f85b"
+          },
+          {
+            "id": "P1313-source16-v1-3",
+            "document_id": "P1313-doc-source16",
+            "document_revision": 1,
+            "document_sha256": "89f8a1321d758173118972f2427465c01acf07f5f7880069370ddbadcfdfe1d7",
+            "text_sha256": "57fe2ee212fcdc0a1df4a0527f9563aee058c181fe460e93c0f6c5375e6e5c69"
+          },
+          {
+            "id": "P1313-source16-v1-4",
+            "document_id": "P1313-doc-source16",
+            "document_revision": 1,
+            "document_sha256": "89f8a1321d758173118972f2427465c01acf07f5f7880069370ddbadcfdfe1d7",
+            "text_sha256": "836a7eb10a9f822b7f547825a4ec2db236ac3bf56254f061af312cf3c2daff65"
+          },
+          {
+            "id": "P1313-source17-v2-0",
+            "document_id": "P1313-doc-source17",
+            "document_revision": 2,
+            "document_sha256": "a75221ccb7c765b4efdd9f7a8d12f9e477926dc754bd2e9dc492b9e8affb02a9",
+            "text_sha256": "aab4b31a4ab977c2ab9d3ff938cbdf977ceee25ca568d1dd834acdc2df109ad7"
+          },
+          {
+            "id": "P1313-source17-v2-1",
+            "document_id": "P1313-doc-source17",
+            "document_revision": 2,
+            "document_sha256": "a75221ccb7c765b4efdd9f7a8d12f9e477926dc754bd2e9dc492b9e8affb02a9",
+            "text_sha256": "2aba9e0eec415252776e48dc983b303e724bb18b362f1fbfc643ed7a6d938e62"
+          },
+          {
+            "id": "P1313-source17-v2-2",
+            "document_id": "P1313-doc-source17",
+            "document_revision": 2,
+            "document_sha256": "a75221ccb7c765b4efdd9f7a8d12f9e477926dc754bd2e9dc492b9e8affb02a9",
+            "text_sha256": "b5e31a73335b207403ef15cdda8d9f4cb13da598b5d469d9eb8215a79ec69b26"
+          },
+          {
+            "id": "P1313-source17-v2-3",
+            "document_id": "P1313-doc-source17",
+            "document_revision": 2,
+            "document_sha256": "a75221ccb7c765b4efdd9f7a8d12f9e477926dc754bd2e9dc492b9e8affb02a9",
+            "text_sha256": "39cc0d5e91228e0aaf97c16128f7dd82c23fa85c23ccaae8352154fbb7117694"
+          },
+          {
+            "id": "P1313-source17-v2-4",
+            "document_id": "P1313-doc-source17",
+            "document_revision": 2,
+            "document_sha256": "a75221ccb7c765b4efdd9f7a8d12f9e477926dc754bd2e9dc492b9e8affb02a9",
+            "text_sha256": "59fe9fbf2eec3efffa92a253fea6ec1598be87c1eb95862dd0fe3b7a2a55f86b"
+          },
+          {
+            "id": "P1313-source18-v3-0",
+            "document_id": "P1313-doc-source18",
+            "document_revision": 3,
+            "document_sha256": "76364c6f5d1f834415fea5de29d7dcc1c3bb5c158cc029a8feae76b395cda903",
+            "text_sha256": "3fbd9fdde418fe4befa5e70a9b011a82ffa6042ec621bd274a78881fb2cd3354"
+          },
+          {
+            "id": "P1313-source18-v3-1",
+            "document_id": "P1313-doc-source18",
+            "document_revision": 3,
+            "document_sha256": "76364c6f5d1f834415fea5de29d7dcc1c3bb5c158cc029a8feae76b395cda903",
+            "text_sha256": "62fdf74304be22b3e6632314933f76bf9e494f4b8c8d296b89207afcf7a24009"
+          },
+          {
+            "id": "P1313-source18-v3-2",
+            "document_id": "P1313-doc-source18",
+            "document_revision": 3,
+            "document_sha256": "76364c6f5d1f834415fea5de29d7dcc1c3bb5c158cc029a8feae76b395cda903",
+            "text_sha256": "2dd4fab4d32ef8194ce3c3781c9a7f2b30254e9af9a8c5c06e8dea158a1a3329"
+          },
+          {
+            "id": "P1313-source18-v3-3",
+            "document_id": "P1313-doc-source18",
+            "document_revision": 3,
+            "document_sha256": "76364c6f5d1f834415fea5de29d7dcc1c3bb5c158cc029a8feae76b395cda903",
+            "text_sha256": "f6da0a6a0782fa220cdff67d29af5d758e0a5e8478e0d52d768d3f80f1768e67"
+          },
+          {
+            "id": "P1313-source18-v3-4",
+            "document_id": "P1313-doc-source18",
+            "document_revision": 3,
+            "document_sha256": "76364c6f5d1f834415fea5de29d7dcc1c3bb5c158cc029a8feae76b395cda903",
+            "text_sha256": "d164d524dd8582d525c44918c0bad9b906afe06705898d8d2fd1b4e71606a3c1"
+          },
+          {
+            "id": "P1313-source19-v4-0",
+            "document_id": "P1313-doc-source19",
+            "document_revision": 4,
+            "document_sha256": "34d633044025fc6f857bbbb1ff2879ebfcba31a00968b2f31377539ff2b2e12b",
+            "text_sha256": "84ee1f7e7d6b45d343447054f577f9ee488d8c35f9e8d94246b6969c8b29b27d"
+          },
+          {
+            "id": "P1313-source19-v4-1",
+            "document_id": "P1313-doc-source19",
+            "document_revision": 4,
+            "document_sha256": "34d633044025fc6f857bbbb1ff2879ebfcba31a00968b2f31377539ff2b2e12b",
+            "text_sha256": "8ffedeff6ebdd1cfbdeba898b93410a556ecd575e5d275faba89d9cf0ff14e4d"
+          },
+          {
+            "id": "P1313-source19-v4-2",
+            "document_id": "P1313-doc-source19",
+            "document_revision": 4,
+            "document_sha256": "34d633044025fc6f857bbbb1ff2879ebfcba31a00968b2f31377539ff2b2e12b",
+            "text_sha256": "43400713998b15d4f774bc454207209dc1abe640ba3a9fd8a0bfda9d1d77e13e"
+          },
+          {
+            "id": "P1313-source19-v4-3",
+            "document_id": "P1313-doc-source19",
+            "document_revision": 4,
+            "document_sha256": "34d633044025fc6f857bbbb1ff2879ebfcba31a00968b2f31377539ff2b2e12b",
+            "text_sha256": "7ba1bfe8740fa4639e5d3079946f88b0dce4a667a4e98136d8cf4b5ba30d86b3"
+          },
+          {
+            "id": "P1313-source19-v4-4",
+            "document_id": "P1313-doc-source19",
+            "document_revision": 4,
+            "document_sha256": "34d633044025fc6f857bbbb1ff2879ebfcba31a00968b2f31377539ff2b2e12b",
+            "text_sha256": "0cb25d0fe3e36005be819138a8ca15b3d9b38cd1f494603c545ec240799e87ff"
+          },
+          {
+            "id": "P1313-source20-v1-0",
+            "document_id": "P1313-doc-source20",
+            "document_revision": 1,
+            "document_sha256": "678e726a7584f844b775af848fb1736bb9956066b1be76ccc4c883d47e692178",
+            "text_sha256": "402f4ccf3f570984501a9c4987cdfbf6f1916bca4467a702932955834984d50a"
+          },
+          {
+            "id": "P1313-source20-v1-1",
+            "document_id": "P1313-doc-source20",
+            "document_revision": 1,
+            "document_sha256": "678e726a7584f844b775af848fb1736bb9956066b1be76ccc4c883d47e692178",
+            "text_sha256": "65b6c3a4cc564854d730103f77c0dd611c74e8d2f898deea2c70edbc09fffa2d"
+          },
+          {
+            "id": "P1313-source20-v1-2",
+            "document_id": "P1313-doc-source20",
+            "document_revision": 1,
+            "document_sha256": "678e726a7584f844b775af848fb1736bb9956066b1be76ccc4c883d47e692178",
+            "text_sha256": "8562df312811d81abd7039ad00ad1d9654aace9427013511bda88959e4d20360"
+          },
+          {
+            "id": "P1313-source20-v1-3",
+            "document_id": "P1313-doc-source20",
+            "document_revision": 1,
+            "document_sha256": "678e726a7584f844b775af848fb1736bb9956066b1be76ccc4c883d47e692178",
+            "text_sha256": "4857afab297eb0b95684cd25dadc2866c47ed643bbbb4531da2798d5f59d7f0c"
+          },
+          {
+            "id": "P1313-source20-v1-4",
+            "document_id": "P1313-doc-source20",
+            "document_revision": 1,
+            "document_sha256": "678e726a7584f844b775af848fb1736bb9956066b1be76ccc4c883d47e692178",
+            "text_sha256": "549e620e18e92ca75fa1e78ad27d383ee59d311a47621cf2f0dc1b3ac3e0107e"
+          },
+          {
+            "id": "P1313-source21-v2-0",
+            "document_id": "P1313-doc-source21",
+            "document_revision": 2,
+            "document_sha256": "612d728d456fd727209532f8e482ea551b47d926f9b49d7022482d45a57daea9",
+            "text_sha256": "a63d8e30f6e5375bd43c82f9aadee93da40cef006109cd123b9d4347800357e8"
+          },
+          {
+            "id": "P1313-source21-v2-1",
+            "document_id": "P1313-doc-source21",
+            "document_revision": 2,
+            "document_sha256": "612d728d456fd727209532f8e482ea551b47d926f9b49d7022482d45a57daea9",
+            "text_sha256": "04db3609d8080c56dbc9d4c9438037bef5251b154ae67ff148440fd8a5edea1b"
+          },
+          {
+            "id": "P1313-source21-v2-2",
+            "document_id": "P1313-doc-source21",
+            "document_revision": 2,
+            "document_sha256": "612d728d456fd727209532f8e482ea551b47d926f9b49d7022482d45a57daea9",
+            "text_sha256": "9396e643d9b81dff6a5afcaaee5389f5aaa8afdabfa6ae64a318347c83e81824"
+          },
+          {
+            "id": "P1313-source21-v2-3",
+            "document_id": "P1313-doc-source21",
+            "document_revision": 2,
+            "document_sha256": "612d728d456fd727209532f8e482ea551b47d926f9b49d7022482d45a57daea9",
+            "text_sha256": "333ea22a596f0c3f0d60b7172465cba01539b89f4f8f622c1a3a38ff8fb390a6"
+          },
+          {
+            "id": "P1313-source21-v2-4",
+            "document_id": "P1313-doc-source21",
+            "document_revision": 2,
+            "document_sha256": "612d728d456fd727209532f8e482ea551b47d926f9b49d7022482d45a57daea9",
+            "text_sha256": "d8e778c3dac04635571d931526d14b699a0e542f59f2c3e1321f84f872452b9d"
+          },
+          {
+            "id": "P1313-source22-v3-0",
+            "document_id": "P1313-doc-source22",
+            "document_revision": 3,
+            "document_sha256": "f5053f9eabe7bf016bb166562d3f16bd17be4860cb1b99760bec458c45120a91",
+            "text_sha256": "4339cd5a99897ef65307044a6a6743b4e9769da17d45d82552501bb4691e6f83"
+          },
+          {
+            "id": "P1313-source22-v3-1",
+            "document_id": "P1313-doc-source22",
+            "document_revision": 3,
+            "document_sha256": "f5053f9eabe7bf016bb166562d3f16bd17be4860cb1b99760bec458c45120a91",
+            "text_sha256": "6d7189cce743ef0eeaa3d0a277781a948e4d18d2540ac14f20f1cace060cdfb9"
+          },
+          {
+            "id": "P1313-source22-v3-2",
+            "document_id": "P1313-doc-source22",
+            "document_revision": 3,
+            "document_sha256": "f5053f9eabe7bf016bb166562d3f16bd17be4860cb1b99760bec458c45120a91",
+            "text_sha256": "fbb09e5b25bcce80385d96f019206a72ea69b50061b6b76b6ebb2d821292fb9a"
+          },
+          {
+            "id": "P1313-source22-v3-3",
+            "document_id": "P1313-doc-source22",
+            "document_revision": 3,
+            "document_sha256": "f5053f9eabe7bf016bb166562d3f16bd17be4860cb1b99760bec458c45120a91",
+            "text_sha256": "f29dd6d42f90a5e9c570bb104647b6ab70ecfd2e69f95a25271c0a16cee1a078"
+          },
+          {
+            "id": "P1313-source22-v3-4",
+            "document_id": "P1313-doc-source22",
+            "document_revision": 3,
+            "document_sha256": "f5053f9eabe7bf016bb166562d3f16bd17be4860cb1b99760bec458c45120a91",
+            "text_sha256": "357f746d327ccb26bb5423aa4a12ec3dc4364a6b1d01e4c9f1081989c65da97f"
+          },
+          {
+            "id": "P1313-source23-v4-0",
+            "document_id": "P1313-doc-source23",
+            "document_revision": 4,
+            "document_sha256": "d281979c13683e548b553be1e07dedc382c2487c23467d0559e10704433e11ac",
+            "text_sha256": "c87f5dc614f36928b1f9d7429e78ce9e2f916b9112ce3e6e4ed658d9448743b2"
+          },
+          {
+            "id": "P1313-source23-v4-1",
+            "document_id": "P1313-doc-source23",
+            "document_revision": 4,
+            "document_sha256": "d281979c13683e548b553be1e07dedc382c2487c23467d0559e10704433e11ac",
+            "text_sha256": "ff76c1e5a416e62588940db91e2dd15096fa89bd8c2835c251f54cd0e14d44ca"
+          },
+          {
+            "id": "P1313-source23-v4-2",
+            "document_id": "P1313-doc-source23",
+            "document_revision": 4,
+            "document_sha256": "d281979c13683e548b553be1e07dedc382c2487c23467d0559e10704433e11ac",
+            "text_sha256": "2af2dfa411e9109a6296ab1a287c1b26fa4de69196d183a59d2844c561bafcad"
+          },
+          {
+            "id": "P1313-source23-v4-3",
+            "document_id": "P1313-doc-source23",
+            "document_revision": 4,
+            "document_sha256": "d281979c13683e548b553be1e07dedc382c2487c23467d0559e10704433e11ac",
+            "text_sha256": "d47e9f2012bdaba3bda81d0dc8bd3641b105b17ff5f1b8c93438338a2bdd07a3"
+          },
+          {
+            "id": "P1313-source23-v4-4",
+            "document_id": "P1313-doc-source23",
+            "document_revision": 4,
+            "document_sha256": "d281979c13683e548b553be1e07dedc382c2487c23467d0559e10704433e11ac",
+            "text_sha256": "f16a8d26a687b4fa3ef8708315231b87a0beda076ebfff60dcb9e36a9a66649b"
+          },
+          {
+            "id": "P1313-source24-v1-0",
+            "document_id": "P1313-doc-source24",
+            "document_revision": 1,
+            "document_sha256": "97df6c434c37c59e62757136fa73712544df9840b5b2d6c45020e5e6f907effb",
+            "text_sha256": "784dad282ffb5a9244b844fb0c7128b692bfde914c98478cf117cd3edf223fc5"
+          },
+          {
+            "id": "P1313-source24-v1-1",
+            "document_id": "P1313-doc-source24",
+            "document_revision": 1,
+            "document_sha256": "97df6c434c37c59e62757136fa73712544df9840b5b2d6c45020e5e6f907effb",
+            "text_sha256": "2d2537ec96dd236c67fca068a2a009ce00538320f6e72ec53180a49edaef6074"
+          },
+          {
+            "id": "P1313-source24-v1-2",
+            "document_id": "P1313-doc-source24",
+            "document_revision": 1,
+            "document_sha256": "97df6c434c37c59e62757136fa73712544df9840b5b2d6c45020e5e6f907effb",
+            "text_sha256": "7f3a0edd4edd600edebf9d0aa18a92d6e1aa8d241df1f26691a763df3776aad3"
+          },
+          {
+            "id": "P1313-source24-v1-3",
+            "document_id": "P1313-doc-source24",
+            "document_revision": 1,
+            "document_sha256": "97df6c434c37c59e62757136fa73712544df9840b5b2d6c45020e5e6f907effb",
+            "text_sha256": "85fb2b83e6a2b921a603f2eb4a03d69d18eafc42d8b4c83412a1ba02751a4095"
+          },
+          {
+            "id": "P1313-source24-v1-4",
+            "document_id": "P1313-doc-source24",
+            "document_revision": 1,
+            "document_sha256": "97df6c434c37c59e62757136fa73712544df9840b5b2d6c45020e5e6f907effb",
+            "text_sha256": "1fea6f02c1975a56cff84ad361bed61de533575530e4f98001af443c3ddb7384"
+          },
+          {
+            "id": "P1313-source25-v2-0",
+            "document_id": "P1313-doc-source25",
+            "document_revision": 2,
+            "document_sha256": "16d0f782a44d9c767552d7ca66eb63484c30b5781a0cfeb265169ec00f70066a",
+            "text_sha256": "7e96412c9611b63dcac8a7aaa51af8ddc16ebcd18454fca0df4e93dd9303cd68"
+          },
+          {
+            "id": "P1313-source25-v2-1",
+            "document_id": "P1313-doc-source25",
+            "document_revision": 2,
+            "document_sha256": "16d0f782a44d9c767552d7ca66eb63484c30b5781a0cfeb265169ec00f70066a",
+            "text_sha256": "d035c6df0c4e3d54d1fd8491eecadccec74253ff1830e864d09dd61d2f8faf28"
+          },
+          {
+            "id": "P1313-source25-v2-2",
+            "document_id": "P1313-doc-source25",
+            "document_revision": 2,
+            "document_sha256": "16d0f782a44d9c767552d7ca66eb63484c30b5781a0cfeb265169ec00f70066a",
+            "text_sha256": "b73456d051f0c7a2adc97082aabd7d5048145e06ebda1efa2317b3fe8f7a7507"
+          },
+          {
+            "id": "P1313-source25-v2-3",
+            "document_id": "P1313-doc-source25",
+            "document_revision": 2,
+            "document_sha256": "16d0f782a44d9c767552d7ca66eb63484c30b5781a0cfeb265169ec00f70066a",
+            "text_sha256": "5545a8238a9420a910bd723a42974cfb10cee6cd11c43196569c0541a52f9037"
+          },
+          {
+            "id": "P1313-source25-v2-4",
+            "document_id": "P1313-doc-source25",
+            "document_revision": 2,
+            "document_sha256": "16d0f782a44d9c767552d7ca66eb63484c30b5781a0cfeb265169ec00f70066a",
+            "text_sha256": "c5ac8f305176837a9532defb2e124e94f8e44805717e3217c964c3342d90377f"
+          },
+          {
+            "id": "P1313-source26-v3-0",
+            "document_id": "P1313-doc-source26",
+            "document_revision": 3,
+            "document_sha256": "552861342ae19ddd42c1f9fe5ae736386abcc9a85e4dec841e531b712ca35cfe",
+            "text_sha256": "321b68743b47292f4be2f88f79e3fa5669fa49887200ddff2481d3dd15683831"
+          },
+          {
+            "id": "P1313-source26-v3-1",
+            "document_id": "P1313-doc-source26",
+            "document_revision": 3,
+            "document_sha256": "552861342ae19ddd42c1f9fe5ae736386abcc9a85e4dec841e531b712ca35cfe",
+            "text_sha256": "f58558c277a5089571ca1618931e72a62e3992d3beb2ffcc0d17cb8331ab24b0"
+          },
+          {
+            "id": "P1313-source26-v3-2",
+            "document_id": "P1313-doc-source26",
+            "document_revision": 3,
+            "document_sha256": "552861342ae19ddd42c1f9fe5ae736386abcc9a85e4dec841e531b712ca35cfe",
+            "text_sha256": "a0c616ab98fc09bf0b8ff426eb65c9b0d5d41430e0f771f00824990ac9b155fc"
+          },
+          {
+            "id": "P1313-source26-v3-3",
+            "document_id": "P1313-doc-source26",
+            "document_revision": 3,
+            "document_sha256": "552861342ae19ddd42c1f9fe5ae736386abcc9a85e4dec841e531b712ca35cfe",
+            "text_sha256": "4be32179dea8d18436dabf9fd3a3edfa4f66991b4c55b1da7051f0b3bdd398d7"
+          },
+          {
+            "id": "P1313-source26-v3-4",
+            "document_id": "P1313-doc-source26",
+            "document_revision": 3,
+            "document_sha256": "552861342ae19ddd42c1f9fe5ae736386abcc9a85e4dec841e531b712ca35cfe",
+            "text_sha256": "a614ba033c0c6dec773feafd8a82b94b6b82845e794d36dfb63fe793a3861b20"
+          },
+          {
+            "id": "P1313-source27-v4-0",
+            "document_id": "P1313-doc-source27",
+            "document_revision": 4,
+            "document_sha256": "0d1fc89a351df9cef34cc6053edc34f632fa779c8eebc59b9de2d84f11937a09",
+            "text_sha256": "7b333e1d49cba272ce2d9c62808382e14c3c1c9810c6c26d4743f4beb3a9682a"
+          },
+          {
+            "id": "P1313-source27-v4-1",
+            "document_id": "P1313-doc-source27",
+            "document_revision": 4,
+            "document_sha256": "0d1fc89a351df9cef34cc6053edc34f632fa779c8eebc59b9de2d84f11937a09",
+            "text_sha256": "39742f4a6714a214e4c3d3c9679125fef43dd281603b90177fa1dcc1eb7101f1"
+          },
+          {
+            "id": "P1313-source27-v4-2",
+            "document_id": "P1313-doc-source27",
+            "document_revision": 4,
+            "document_sha256": "0d1fc89a351df9cef34cc6053edc34f632fa779c8eebc59b9de2d84f11937a09",
+            "text_sha256": "563efbf81e27df8d6dc8acb71511f2bc950a6c64e1f7dccb3b33e63e339c1d99"
+          },
+          {
+            "id": "P1313-source27-v4-3",
+            "document_id": "P1313-doc-source27",
+            "document_revision": 4,
+            "document_sha256": "0d1fc89a351df9cef34cc6053edc34f632fa779c8eebc59b9de2d84f11937a09",
+            "text_sha256": "a394bbb356db43f3ccdeecc11e07882a2b51fcaa915423be2b72faa01d5b5abc"
+          },
+          {
+            "id": "P1313-source27-v4-4",
+            "document_id": "P1313-doc-source27",
+            "document_revision": 4,
+            "document_sha256": "0d1fc89a351df9cef34cc6053edc34f632fa779c8eebc59b9de2d84f11937a09",
+            "text_sha256": "1dbe73fe64d150414a89e54ea5ede7db3ef39ebf4b662b389b8b7fc73ef69b0a"
+          },
+          {
+            "id": "P1313-source28-v1-0",
+            "document_id": "P1313-doc-source28",
+            "document_revision": 1,
+            "document_sha256": "ece265d87b683af5a6222d59ae8ee7694b19f48af4b578a58dc4dd98e0d93d38",
+            "text_sha256": "108199f1b5874ebb303e0bcb4fe8b170f4e6055940e89d4a33388479cc71bbb6"
+          },
+          {
+            "id": "P1313-source28-v1-1",
+            "document_id": "P1313-doc-source28",
+            "document_revision": 1,
+            "document_sha256": "ece265d87b683af5a6222d59ae8ee7694b19f48af4b578a58dc4dd98e0d93d38",
+            "text_sha256": "bcc802c311c02e3f3c41bc4dbcd744ed52d8106e2b124d9d398bc4a6dc05d89b"
+          },
+          {
+            "id": "P1313-source28-v1-2",
+            "document_id": "P1313-doc-source28",
+            "document_revision": 1,
+            "document_sha256": "ece265d87b683af5a6222d59ae8ee7694b19f48af4b578a58dc4dd98e0d93d38",
+            "text_sha256": "0b71842ef66bf7c8df49c78c9324e2e6bc16da5cec01391d23f53126ae47d60c"
+          },
+          {
+            "id": "P1313-source28-v1-3",
+            "document_id": "P1313-doc-source28",
+            "document_revision": 1,
+            "document_sha256": "ece265d87b683af5a6222d59ae8ee7694b19f48af4b578a58dc4dd98e0d93d38",
+            "text_sha256": "d338575153d7917062ff84a14f5cda2e7cb265afb2d5c349d258a519441e3586"
+          },
+          {
+            "id": "P1313-source28-v1-4",
+            "document_id": "P1313-doc-source28",
+            "document_revision": 1,
+            "document_sha256": "ece265d87b683af5a6222d59ae8ee7694b19f48af4b578a58dc4dd98e0d93d38",
+            "text_sha256": "f5112720b0800d7be3d3a1ef3de9371b79e079cf7ecf32bb9abe8d55daf930f9"
+          },
+          {
+            "id": "P1313-source29-v2-0",
+            "document_id": "P1313-doc-source29",
+            "document_revision": 2,
+            "document_sha256": "f36ca94f6fb7f421c1d66b1795f51258b73325db240dc506b74653ada7840643",
+            "text_sha256": "fe99061e308f703c1066ad47f9582e76916fdfc080500862f448f8f785e94824"
+          },
+          {
+            "id": "P1313-source29-v2-1",
+            "document_id": "P1313-doc-source29",
+            "document_revision": 2,
+            "document_sha256": "f36ca94f6fb7f421c1d66b1795f51258b73325db240dc506b74653ada7840643",
+            "text_sha256": "4882d36fb85ebd0a1e497dadeab00435f01025e1b11775c3b707608b9b7c27bb"
+          },
+          {
+            "id": "P1313-source29-v2-2",
+            "document_id": "P1313-doc-source29",
+            "document_revision": 2,
+            "document_sha256": "f36ca94f6fb7f421c1d66b1795f51258b73325db240dc506b74653ada7840643",
+            "text_sha256": "9a2e9ca854d1160c8cf90e22f051c4cad1e6b2e781c443d8869489925234b014"
+          },
+          {
+            "id": "P1313-source29-v2-3",
+            "document_id": "P1313-doc-source29",
+            "document_revision": 2,
+            "document_sha256": "f36ca94f6fb7f421c1d66b1795f51258b73325db240dc506b74653ada7840643",
+            "text_sha256": "1993e611e49799181f655c526ef1be79d5c67acd2f4b18e1f141150ba02c2fea"
+          },
+          {
+            "id": "P1313-source29-v2-4",
+            "document_id": "P1313-doc-source29",
+            "document_revision": 2,
+            "document_sha256": "f36ca94f6fb7f421c1d66b1795f51258b73325db240dc506b74653ada7840643",
+            "text_sha256": "667d18da5e2f3c6d33e9f2fbf858f07dd5bc55c1fc60eea158d4ea155ffcf82e"
+          },
+          {
+            "id": "P1313-source30-v3-0",
+            "document_id": "P1313-doc-source30",
+            "document_revision": 3,
+            "document_sha256": "5de069b399e58b6841722d8e7dcf4d90d59640de17c3eafeaf553b33dd86286a",
+            "text_sha256": "8f1d601c47e98e041dac0a56bd847b85312aee4b6b8c7c3c677414e180449e86"
+          },
+          {
+            "id": "P1313-source30-v3-1",
+            "document_id": "P1313-doc-source30",
+            "document_revision": 3,
+            "document_sha256": "5de069b399e58b6841722d8e7dcf4d90d59640de17c3eafeaf553b33dd86286a",
+            "text_sha256": "bfca616c372700a9f0037fe56b3447853b81681c81fc2670eb098a2367546679"
+          },
+          {
+            "id": "P1313-source30-v3-2",
+            "document_id": "P1313-doc-source30",
+            "document_revision": 3,
+            "document_sha256": "5de069b399e58b6841722d8e7dcf4d90d59640de17c3eafeaf553b33dd86286a",
+            "text_sha256": "fec13234533aa7a16b4768689758a79fda8ee86ebd53804a50f16dbbc53d781d"
+          },
+          {
+            "id": "P1313-source30-v3-3",
+            "document_id": "P1313-doc-source30",
+            "document_revision": 3,
+            "document_sha256": "5de069b399e58b6841722d8e7dcf4d90d59640de17c3eafeaf553b33dd86286a",
+            "text_sha256": "dc98f9bf02b0f448347e2048d4af4ceb97215946cf9ba84c7918ad118c255485"
+          },
+          {
+            "id": "P1313-source30-v3-4",
+            "document_id": "P1313-doc-source30",
+            "document_revision": 3,
+            "document_sha256": "5de069b399e58b6841722d8e7dcf4d90d59640de17c3eafeaf553b33dd86286a",
+            "text_sha256": "612585e0b8ded807130215f8346ab78369171db562947efa9d05c6dc3fc4c529"
+          },
+          {
+            "id": "P1313-source31-v4-0",
+            "document_id": "P1313-doc-source31",
+            "document_revision": 4,
+            "document_sha256": "e4219813a25eb25a7e9bf6c46ae129958a032e2ba840b6e0c54e72453322c59f",
+            "text_sha256": "91a97300b151586dbf2a93f35dd75c38701d3a3505374c9876e009bef8de1a1f"
+          },
+          {
+            "id": "P1313-source31-v4-1",
+            "document_id": "P1313-doc-source31",
+            "document_revision": 4,
+            "document_sha256": "e4219813a25eb25a7e9bf6c46ae129958a032e2ba840b6e0c54e72453322c59f",
+            "text_sha256": "5e9acf75c1c0b266303e8e57878ca8e9b22d739cefeed75d6a0737bbe6398ad8"
+          },
+          {
+            "id": "P1313-source31-v4-2",
+            "document_id": "P1313-doc-source31",
+            "document_revision": 4,
+            "document_sha256": "e4219813a25eb25a7e9bf6c46ae129958a032e2ba840b6e0c54e72453322c59f",
+            "text_sha256": "24478a566b82f1243bc2b9a9520dbafcccfb6779d28f24c5c9cbeaeef78f3f99"
+          },
+          {
+            "id": "P1313-source31-v4-3",
+            "document_id": "P1313-doc-source31",
+            "document_revision": 4,
+            "document_sha256": "e4219813a25eb25a7e9bf6c46ae129958a032e2ba840b6e0c54e72453322c59f",
+            "text_sha256": "fd9dad0cf72128b8685dfaed0c826c5cbae90f853cd3ab0f9d2fb8da91cb4274"
+          },
+          {
+            "id": "P1313-source31-v4-4",
+            "document_id": "P1313-doc-source31",
+            "document_revision": 4,
+            "document_sha256": "e4219813a25eb25a7e9bf6c46ae129958a032e2ba840b6e0c54e72453322c59f",
+            "text_sha256": "945e156e9ef41b0e1e8a177e77d4865552d88ff6c0b3708b4dfbb37edb2785d0"
+          },
+          {
+            "id": "P1313-source32-v1-0",
+            "document_id": "P1313-doc-source32",
+            "document_revision": 1,
+            "document_sha256": "faac7ed5958cb94f7aef8463c21fb1b5ff9d5dc1b47f7874fdf2b792fd03ff22",
+            "text_sha256": "e6bd049de136a09ddce0ca0685e8ff7b3b1f6c8008a08a86fd92e3c1fbd2db65"
+          },
+          {
+            "id": "P1313-source32-v1-1",
+            "document_id": "P1313-doc-source32",
+            "document_revision": 1,
+            "document_sha256": "faac7ed5958cb94f7aef8463c21fb1b5ff9d5dc1b47f7874fdf2b792fd03ff22",
+            "text_sha256": "df91c57bd55413e2de8efd464dbc73ec69f6d1388ddf0f17262e2ffdf705352b"
+          },
+          {
+            "id": "P1313-source32-v1-2",
+            "document_id": "P1313-doc-source32",
+            "document_revision": 1,
+            "document_sha256": "faac7ed5958cb94f7aef8463c21fb1b5ff9d5dc1b47f7874fdf2b792fd03ff22",
+            "text_sha256": "57d439b981fa11ec3986153e3d6e6ab86e27ce35c290c3af4396c9c7d4b0cbfc"
+          },
+          {
+            "id": "P1313-source32-v1-3",
+            "document_id": "P1313-doc-source32",
+            "document_revision": 1,
+            "document_sha256": "faac7ed5958cb94f7aef8463c21fb1b5ff9d5dc1b47f7874fdf2b792fd03ff22",
+            "text_sha256": "c1569194ede59c58b958e61ff958641f3ada2d6a326d4d82e462afdb3800f598"
+          },
+          {
+            "id": "P1313-source32-v1-4",
+            "document_id": "P1313-doc-source32",
+            "document_revision": 1,
+            "document_sha256": "faac7ed5958cb94f7aef8463c21fb1b5ff9d5dc1b47f7874fdf2b792fd03ff22",
+            "text_sha256": "408535844e1fc5e120068ce962a53b244824d9c0f91ed75c43507b166ae04b3c"
+          },
+          {
+            "id": "P1313-source33-v2-0",
+            "document_id": "P1313-doc-source33",
+            "document_revision": 2,
+            "document_sha256": "ead5828f364fb665cb75bb0086177dc1dba4d45453a54ba94a462270d5023071",
+            "text_sha256": "d880848fc650dc966bba0fd4cc5b527b1aec4e7f916410568634faf1b0123e65"
+          },
+          {
+            "id": "P1313-source33-v2-1",
+            "document_id": "P1313-doc-source33",
+            "document_revision": 2,
+            "document_sha256": "ead5828f364fb665cb75bb0086177dc1dba4d45453a54ba94a462270d5023071",
+            "text_sha256": "576a213bb9248925bfe820951dec5e694eaad408cad409784a8539f94b7aff27"
+          },
+          {
+            "id": "P1313-source33-v2-2",
+            "document_id": "P1313-doc-source33",
+            "document_revision": 2,
+            "document_sha256": "ead5828f364fb665cb75bb0086177dc1dba4d45453a54ba94a462270d5023071",
+            "text_sha256": "57eb146c1e89c18f5892def6318fcfa23eb32d32120ee42870f718322c441d13"
+          },
+          {
+            "id": "P1313-source33-v2-3",
+            "document_id": "P1313-doc-source33",
+            "document_revision": 2,
+            "document_sha256": "ead5828f364fb665cb75bb0086177dc1dba4d45453a54ba94a462270d5023071",
+            "text_sha256": "667c626454e32ab8fc7d91058d0cbe92a521ac93c5c72eba7b0d4b74c8a9d706"
+          },
+          {
+            "id": "P1313-source33-v2-4",
+            "document_id": "P1313-doc-source33",
+            "document_revision": 2,
+            "document_sha256": "ead5828f364fb665cb75bb0086177dc1dba4d45453a54ba94a462270d5023071",
+            "text_sha256": "d2747fce8c73c0b3f1deee5e1b3c838084e0de241eaf2c8da8e16e6266ceb7f7"
+          },
+          {
+            "id": "P1313-source34-v3-0",
+            "document_id": "P1313-doc-source34",
+            "document_revision": 3,
+            "document_sha256": "803ac0fda77f836aad7b02938ba073c6212c4a26bb92c5ca0186d2744c44db63",
+            "text_sha256": "7233a5363ff7f6ddfe0490bd23ab9becae15f67e70764a0597845c27085e521c"
+          },
+          {
+            "id": "P1313-source34-v3-1",
+            "document_id": "P1313-doc-source34",
+            "document_revision": 3,
+            "document_sha256": "803ac0fda77f836aad7b02938ba073c6212c4a26bb92c5ca0186d2744c44db63",
+            "text_sha256": "347c22d76036d5881ac18e9201079a09b4d622574b6a7e78b666058c3f6a09d9"
+          },
+          {
+            "id": "P1313-source34-v3-2",
+            "document_id": "P1313-doc-source34",
+            "document_revision": 3,
+            "document_sha256": "803ac0fda77f836aad7b02938ba073c6212c4a26bb92c5ca0186d2744c44db63",
+            "text_sha256": "cf7254126930cffbc83688a806ce2564e62ecb9018d81447fa5686c9d5f7d2f7"
+          },
+          {
+            "id": "P1313-source34-v3-3",
+            "document_id": "P1313-doc-source34",
+            "document_revision": 3,
+            "document_sha256": "803ac0fda77f836aad7b02938ba073c6212c4a26bb92c5ca0186d2744c44db63",
+            "text_sha256": "514b8eef9aa51fe520a82cb8f36f5fc3bf6e7ecf741f5b8c194302c4a609bd6f"
+          },
+          {
+            "id": "P1313-source34-v3-4",
+            "document_id": "P1313-doc-source34",
+            "document_revision": 3,
+            "document_sha256": "803ac0fda77f836aad7b02938ba073c6212c4a26bb92c5ca0186d2744c44db63",
+            "text_sha256": "1cd85bca84966c002b4ef17a27c6c7d998eb1b248f0c04e6d4ed195a0a6d96ce"
+          },
+          {
+            "id": "P1313-source35-v4-0",
+            "document_id": "P1313-doc-source35",
+            "document_revision": 4,
+            "document_sha256": "94c65e07deaffa896d4c11d9fdeb154d454c336c1ec42f3cb8d7962827521fb7",
+            "text_sha256": "0c7647594eb5837045201d639bd9b37559b413b14f3ae27e04797082ade60afd"
+          },
+          {
+            "id": "P1313-source35-v4-1",
+            "document_id": "P1313-doc-source35",
+            "document_revision": 4,
+            "document_sha256": "94c65e07deaffa896d4c11d9fdeb154d454c336c1ec42f3cb8d7962827521fb7",
+            "text_sha256": "e2a876928bf705dee004d8b39c5a52d9ba88ebeaaa75179f8efd05befe8a10cb"
+          },
+          {
+            "id": "P1313-source35-v4-2",
+            "document_id": "P1313-doc-source35",
+            "document_revision": 4,
+            "document_sha256": "94c65e07deaffa896d4c11d9fdeb154d454c336c1ec42f3cb8d7962827521fb7",
+            "text_sha256": "e31573ff531dd11e144d08656b882be435dae4ee7086ab64c1016349e5896cc8"
+          },
+          {
+            "id": "P1313-source35-v4-3",
+            "document_id": "P1313-doc-source35",
+            "document_revision": 4,
+            "document_sha256": "94c65e07deaffa896d4c11d9fdeb154d454c336c1ec42f3cb8d7962827521fb7",
+            "text_sha256": "f07f2a396a945300579433fe9aadad9bb3a9f29443503998412cde0285ab9141"
+          },
+          {
+            "id": "P1313-source35-v4-4",
+            "document_id": "P1313-doc-source35",
+            "document_revision": 4,
+            "document_sha256": "94c65e07deaffa896d4c11d9fdeb154d454c336c1ec42f3cb8d7962827521fb7",
+            "text_sha256": "50540b80421ea898330f4f3512a5ff73e7fb744c814de5d529153f1bbcbcb575"
+          },
+          {
+            "id": "P1313-source36-v1-0",
+            "document_id": "P1313-doc-source36",
+            "document_revision": 1,
+            "document_sha256": "09827e3eb80984439fff836414e4d40dd64f2998b16e52401852498de7df09ad",
+            "text_sha256": "dedac3a9f5c94279dea33418e043578d2ebf2214fb1848125aca46ffd68f1eaa"
+          },
+          {
+            "id": "P1313-source36-v1-1",
+            "document_id": "P1313-doc-source36",
+            "document_revision": 1,
+            "document_sha256": "09827e3eb80984439fff836414e4d40dd64f2998b16e52401852498de7df09ad",
+            "text_sha256": "e6c2e6e0e49ac24ee39ae693eaab3a2d4e37e7d26d773c4d755710fc69626848"
+          },
+          {
+            "id": "P1313-source36-v1-2",
+            "document_id": "P1313-doc-source36",
+            "document_revision": 1,
+            "document_sha256": "09827e3eb80984439fff836414e4d40dd64f2998b16e52401852498de7df09ad",
+            "text_sha256": "2917ca24700380ec9dc832e183f22cb37133334397bc5d719d8db05ec552e7de"
+          },
+          {
+            "id": "P1313-source36-v1-3",
+            "document_id": "P1313-doc-source36",
+            "document_revision": 1,
+            "document_sha256": "09827e3eb80984439fff836414e4d40dd64f2998b16e52401852498de7df09ad",
+            "text_sha256": "ef2ff6cc26d9cd4f3a95960cf9acce437318014f9c0a865864e6d9d16aa8c013"
+          },
+          {
+            "id": "P1313-source36-v1-4",
+            "document_id": "P1313-doc-source36",
+            "document_revision": 1,
+            "document_sha256": "09827e3eb80984439fff836414e4d40dd64f2998b16e52401852498de7df09ad",
+            "text_sha256": "b63c1fe702f538b710091f4ab7a33681e7a8c771e0eb021babc739ec4f73bbbd"
+          },
+          {
+            "id": "P1313-source37-v2-0",
+            "document_id": "P1313-doc-source37",
+            "document_revision": 2,
+            "document_sha256": "00af42061747b2edeccedbe09d182c0dfa61e949422d2360feefc9e0577a1cb8",
+            "text_sha256": "2bb90f2f58bfb00b153375d1484471e22b400e8e17d9c125acad9f6ff88eb144"
+          },
+          {
+            "id": "P1313-source37-v2-1",
+            "document_id": "P1313-doc-source37",
+            "document_revision": 2,
+            "document_sha256": "00af42061747b2edeccedbe09d182c0dfa61e949422d2360feefc9e0577a1cb8",
+            "text_sha256": "b8e9eeb2683595a301512956ddb259d01d180f2673a8966903be48fc8e9fc3b7"
+          },
+          {
+            "id": "P1313-source37-v2-2",
+            "document_id": "P1313-doc-source37",
+            "document_revision": 2,
+            "document_sha256": "00af42061747b2edeccedbe09d182c0dfa61e949422d2360feefc9e0577a1cb8",
+            "text_sha256": "4e9059fa8aec0990bdc741a31909b7b097f396dd6d5e76e7b3bed82e494b41d7"
+          },
+          {
+            "id": "P1313-source37-v2-3",
+            "document_id": "P1313-doc-source37",
+            "document_revision": 2,
+            "document_sha256": "00af42061747b2edeccedbe09d182c0dfa61e949422d2360feefc9e0577a1cb8",
+            "text_sha256": "4a60db7cc4afeca0685cc6ca3ccf608b334df60637a46d9b9fcdc12f34771396"
+          },
+          {
+            "id": "P1313-source37-v2-4",
+            "document_id": "P1313-doc-source37",
+            "document_revision": 2,
+            "document_sha256": "00af42061747b2edeccedbe09d182c0dfa61e949422d2360feefc9e0577a1cb8",
+            "text_sha256": "799ff5f13e3314756a309da4d4d2c8398e327eaa2cc6f0e04da4c232eeefc4d8"
+          },
+          {
+            "id": "P1313-source38-v3-0",
+            "document_id": "P1313-doc-source38",
+            "document_revision": 3,
+            "document_sha256": "f115cb4dd7d88d571c43cde074d9f4cf0a4b3f0dcdeb80a2cbdb3977f4967c77",
+            "text_sha256": "bcf8712cb5cf6c11cc12d410d4a2190551455b5b3750330e0981649a90e8b956"
+          },
+          {
+            "id": "P1313-source38-v3-1",
+            "document_id": "P1313-doc-source38",
+            "document_revision": 3,
+            "document_sha256": "f115cb4dd7d88d571c43cde074d9f4cf0a4b3f0dcdeb80a2cbdb3977f4967c77",
+            "text_sha256": "beba0cc1b028b04596d57371982ecaf7469d26e0c1bdd41f90989d04d0b64da0"
+          },
+          {
+            "id": "P1313-source38-v3-2",
+            "document_id": "P1313-doc-source38",
+            "document_revision": 3,
+            "document_sha256": "f115cb4dd7d88d571c43cde074d9f4cf0a4b3f0dcdeb80a2cbdb3977f4967c77",
+            "text_sha256": "06b150089ff83651c530432d56ff3dc6dd06529f4cdd890898a47acd1f73b6f4"
+          },
+          {
+            "id": "P1313-source38-v3-3",
+            "document_id": "P1313-doc-source38",
+            "document_revision": 3,
+            "document_sha256": "f115cb4dd7d88d571c43cde074d9f4cf0a4b3f0dcdeb80a2cbdb3977f4967c77",
+            "text_sha256": "735ab2ce47742c8bca33922a2218ff3ae762c71ce671b20d72c34ab5b77bddb8"
+          },
+          {
+            "id": "P1313-source38-v3-4",
+            "document_id": "P1313-doc-source38",
+            "document_revision": 3,
+            "document_sha256": "f115cb4dd7d88d571c43cde074d9f4cf0a4b3f0dcdeb80a2cbdb3977f4967c77",
+            "text_sha256": "147d99638ce1f762410f5bb0cb52e13b229edd3ffc094a867535adffc0e3a103"
+          },
+          {
+            "id": "P1313-source39-v4-0",
+            "document_id": "P1313-doc-source39",
+            "document_revision": 4,
+            "document_sha256": "a198c73a720d1f0d2174f964da9b96aa10729d613db89688ffb16110ad71cb3a",
+            "text_sha256": "18ebcbb93e1a40e20885b1336f71ced782df16b7204ae4ff04ab574b1ed3e9a6"
+          },
+          {
+            "id": "P1313-source39-v4-1",
+            "document_id": "P1313-doc-source39",
+            "document_revision": 4,
+            "document_sha256": "a198c73a720d1f0d2174f964da9b96aa10729d613db89688ffb16110ad71cb3a",
+            "text_sha256": "e929d0d161fd791bda1aa336618cf6ca1197eec612021e3dab3f41ed5d6bd956"
+          },
+          {
+            "id": "P1313-source39-v4-2",
+            "document_id": "P1313-doc-source39",
+            "document_revision": 4,
+            "document_sha256": "a198c73a720d1f0d2174f964da9b96aa10729d613db89688ffb16110ad71cb3a",
+            "text_sha256": "93fe1b2294e7eaa88c521a227101d411fc05ee10910948f527eb192c8eedea69"
+          },
+          {
+            "id": "P1313-source39-v4-3",
+            "document_id": "P1313-doc-source39",
+            "document_revision": 4,
+            "document_sha256": "a198c73a720d1f0d2174f964da9b96aa10729d613db89688ffb16110ad71cb3a",
+            "text_sha256": "6578cdf9948072aec87465846b6580a095c8bda35263a42e346953b97773bb9c"
+          },
+          {
+            "id": "P1313-source39-v4-4",
+            "document_id": "P1313-doc-source39",
+            "document_revision": 4,
+            "document_sha256": "a198c73a720d1f0d2174f964da9b96aa10729d613db89688ffb16110ad71cb3a",
+            "text_sha256": "e904c4476ad4b01b1cf3058153395605e6c3d3e1fd4f8032fcef3161faadec5f"
+          }
+        ],
+        "inventory": {
+          "source_passages": 200,
+          "source_versions": 40,
+          "scanned_code_points": 13950,
+          "nonblank_physical_lines": 400,
+          "proposed_bundles": 200,
+          "selected_bundles": 8,
+          "selected_evidence_passages": 8,
+          "copied_text_utf8_bytes": 584
+        },
+        "unrepresented_source_versions": [
+          {
+            "document_id": "P1313-doc-source8",
+            "document_revision": 1,
+            "document_sha256": "e755d6e4776300548334885d560abcb754bf679a8d3f262b566314589b8baaf6"
+          },
+          {
+            "document_id": "P1313-doc-source9",
+            "document_revision": 2,
+            "document_sha256": "fbc6f06531b6bcd4fd15c8c1f5d0d0221623ae6bc18d67f3603ead7779ff4dd4"
+          },
+          {
+            "document_id": "P1313-doc-source10",
+            "document_revision": 3,
+            "document_sha256": "5bbf3866a85d854077484ec430c48536e5b31424ea3d5537a9524b30aae67503"
+          },
+          {
+            "document_id": "P1313-doc-source11",
+            "document_revision": 4,
+            "document_sha256": "d8556b424b21ddba1c73d33775a1685908a9ee19a4b13eab8c54943dacc8d9ad"
+          },
+          {
+            "document_id": "P1313-doc-source12",
+            "document_revision": 1,
+            "document_sha256": "9bc51364f0ec0f85615619681660e4987dc0e21b65ab8ccf280ca2bf8b98c360"
+          },
+          {
+            "document_id": "P1313-doc-source13",
+            "document_revision": 2,
+            "document_sha256": "f641437bd08da4ada2ab16fe9e40902de819b96ce14915c7ef47b29f11e08201"
+          },
+          {
+            "document_id": "P1313-doc-source14",
+            "document_revision": 3,
+            "document_sha256": "39b67f343fa073f74de5ce8639c6f9aa013e9247d827b9edf474aaa5ee74bdf5"
+          },
+          {
+            "document_id": "P1313-doc-source15",
+            "document_revision": 4,
+            "document_sha256": "cb26cc9fb0431c86d6d2b78fa6746a9e06edfd264e3d7f8a92b2541241cd885c"
+          },
+          {
+            "document_id": "P1313-doc-source16",
+            "document_revision": 1,
+            "document_sha256": "89f8a1321d758173118972f2427465c01acf07f5f7880069370ddbadcfdfe1d7"
+          },
+          {
+            "document_id": "P1313-doc-source17",
+            "document_revision": 2,
+            "document_sha256": "a75221ccb7c765b4efdd9f7a8d12f9e477926dc754bd2e9dc492b9e8affb02a9"
+          },
+          {
+            "document_id": "P1313-doc-source18",
+            "document_revision": 3,
+            "document_sha256": "76364c6f5d1f834415fea5de29d7dcc1c3bb5c158cc029a8feae76b395cda903"
+          },
+          {
+            "document_id": "P1313-doc-source19",
+            "document_revision": 4,
+            "document_sha256": "34d633044025fc6f857bbbb1ff2879ebfcba31a00968b2f31377539ff2b2e12b"
+          },
+          {
+            "document_id": "P1313-doc-source20",
+            "document_revision": 1,
+            "document_sha256": "678e726a7584f844b775af848fb1736bb9956066b1be76ccc4c883d47e692178"
+          },
+          {
+            "document_id": "P1313-doc-source21",
+            "document_revision": 2,
+            "document_sha256": "612d728d456fd727209532f8e482ea551b47d926f9b49d7022482d45a57daea9"
+          },
+          {
+            "document_id": "P1313-doc-source22",
+            "document_revision": 3,
+            "document_sha256": "f5053f9eabe7bf016bb166562d3f16bd17be4860cb1b99760bec458c45120a91"
+          },
+          {
+            "document_id": "P1313-doc-source23",
+            "document_revision": 4,
+            "document_sha256": "d281979c13683e548b553be1e07dedc382c2487c23467d0559e10704433e11ac"
+          },
+          {
+            "document_id": "P1313-doc-source24",
+            "document_revision": 1,
+            "document_sha256": "97df6c434c37c59e62757136fa73712544df9840b5b2d6c45020e5e6f907effb"
+          },
+          {
+            "document_id": "P1313-doc-source25",
+            "document_revision": 2,
+            "document_sha256": "16d0f782a44d9c767552d7ca66eb63484c30b5781a0cfeb265169ec00f70066a"
+          },
+          {
+            "document_id": "P1313-doc-source26",
+            "document_revision": 3,
+            "document_sha256": "552861342ae19ddd42c1f9fe5ae736386abcc9a85e4dec841e531b712ca35cfe"
+          },
+          {
+            "document_id": "P1313-doc-source27",
+            "document_revision": 4,
+            "document_sha256": "0d1fc89a351df9cef34cc6053edc34f632fa779c8eebc59b9de2d84f11937a09"
+          },
+          {
+            "document_id": "P1313-doc-source28",
+            "document_revision": 1,
+            "document_sha256": "ece265d87b683af5a6222d59ae8ee7694b19f48af4b578a58dc4dd98e0d93d38"
+          },
+          {
+            "document_id": "P1313-doc-source29",
+            "document_revision": 2,
+            "document_sha256": "f36ca94f6fb7f421c1d66b1795f51258b73325db240dc506b74653ada7840643"
+          },
+          {
+            "document_id": "P1313-doc-source30",
+            "document_revision": 3,
+            "document_sha256": "5de069b399e58b6841722d8e7dcf4d90d59640de17c3eafeaf553b33dd86286a"
+          },
+          {
+            "document_id": "P1313-doc-source31",
+            "document_revision": 4,
+            "document_sha256": "e4219813a25eb25a7e9bf6c46ae129958a032e2ba840b6e0c54e72453322c59f"
+          },
+          {
+            "document_id": "P1313-doc-source32",
+            "document_revision": 1,
+            "document_sha256": "faac7ed5958cb94f7aef8463c21fb1b5ff9d5dc1b47f7874fdf2b792fd03ff22"
+          },
+          {
+            "document_id": "P1313-doc-source33",
+            "document_revision": 2,
+            "document_sha256": "ead5828f364fb665cb75bb0086177dc1dba4d45453a54ba94a462270d5023071"
+          },
+          {
+            "document_id": "P1313-doc-source34",
+            "document_revision": 3,
+            "document_sha256": "803ac0fda77f836aad7b02938ba073c6212c4a26bb92c5ca0186d2744c44db63"
+          },
+          {
+            "document_id": "P1313-doc-source35",
+            "document_revision": 4,
+            "document_sha256": "94c65e07deaffa896d4c11d9fdeb154d454c336c1ec42f3cb8d7962827521fb7"
+          },
+          {
+            "document_id": "P1313-doc-source36",
+            "document_revision": 1,
+            "document_sha256": "09827e3eb80984439fff836414e4d40dd64f2998b16e52401852498de7df09ad"
+          },
+          {
+            "document_id": "P1313-doc-source37",
+            "document_revision": 2,
+            "document_sha256": "00af42061747b2edeccedbe09d182c0dfa61e949422d2360feefc9e0577a1cb8"
+          },
+          {
+            "document_id": "P1313-doc-source38",
+            "document_revision": 3,
+            "document_sha256": "f115cb4dd7d88d571c43cde074d9f4cf0a4b3f0dcdeb80a2cbdb3977f4967c77"
+          },
+          {
+            "document_id": "P1313-doc-source39",
+            "document_revision": 4,
+            "document_sha256": "a198c73a720d1f0d2174f964da9b96aa10729d613db89688ffb16110ad71cb3a"
+          }
+        ],
+        "unrepresented_evidence_ids": [
+          "P1313-source0-v1-1",
+          "P1313-source0-v1-2",
+          "P1313-source0-v1-3",
+          "P1313-source0-v1-4",
+          "P1313-source1-v2-1",
+          "P1313-source1-v2-2",
+          "P1313-source1-v2-3",
+          "P1313-source1-v2-4",
+          "P1313-source2-v3-1",
+          "P1313-source2-v3-2",
+          "P1313-source2-v3-3",
+          "P1313-source2-v3-4",
+          "P1313-source3-v4-1",
+          "P1313-source3-v4-2",
+          "P1313-source3-v4-3",
+          "P1313-source3-v4-4",
+          "P1313-source4-v1-1",
+          "P1313-source4-v1-2",
+          "P1313-source4-v1-3",
+          "P1313-source4-v1-4",
+          "P1313-source5-v2-1",
+          "P1313-source5-v2-2",
+          "P1313-source5-v2-3",
+          "P1313-source5-v2-4",
+          "P1313-source6-v3-1",
+          "P1313-source6-v3-2",
+          "P1313-source6-v3-3",
+          "P1313-source6-v3-4",
+          "P1313-source7-v4-1",
+          "P1313-source7-v4-2",
+          "P1313-source7-v4-3",
+          "P1313-source7-v4-4",
+          "P1313-source8-v1-0",
+          "P1313-source8-v1-1",
+          "P1313-source8-v1-2",
+          "P1313-source8-v1-3",
+          "P1313-source8-v1-4",
+          "P1313-source9-v2-0",
+          "P1313-source9-v2-1",
+          "P1313-source9-v2-2",
+          "P1313-source9-v2-3",
+          "P1313-source9-v2-4",
+          "P1313-source10-v3-0",
+          "P1313-source10-v3-1",
+          "P1313-source10-v3-2",
+          "P1313-source10-v3-3",
+          "P1313-source10-v3-4",
+          "P1313-source11-v4-0",
+          "P1313-source11-v4-1",
+          "P1313-source11-v4-2",
+          "P1313-source11-v4-3",
+          "P1313-source11-v4-4",
+          "P1313-source12-v1-0",
+          "P1313-source12-v1-1",
+          "P1313-source12-v1-2",
+          "P1313-source12-v1-3",
+          "P1313-source12-v1-4",
+          "P1313-source13-v2-0",
+          "P1313-source13-v2-1",
+          "P1313-source13-v2-2",
+          "P1313-source13-v2-3",
+          "P1313-source13-v2-4",
+          "P1313-source14-v3-0",
+          "P1313-source14-v3-1",
+          "P1313-source14-v3-2",
+          "P1313-source14-v3-3",
+          "P1313-source14-v3-4",
+          "P1313-source15-v4-0",
+          "P1313-source15-v4-1",
+          "P1313-source15-v4-2",
+          "P1313-source15-v4-3",
+          "P1313-source15-v4-4",
+          "P1313-source16-v1-0",
+          "P1313-source16-v1-1",
+          "P1313-source16-v1-2",
+          "P1313-source16-v1-3",
+          "P1313-source16-v1-4",
+          "P1313-source17-v2-0",
+          "P1313-source17-v2-1",
+          "P1313-source17-v2-2",
+          "P1313-source17-v2-3",
+          "P1313-source17-v2-4",
+          "P1313-source18-v3-0",
+          "P1313-source18-v3-1",
+          "P1313-source18-v3-2",
+          "P1313-source18-v3-3",
+          "P1313-source18-v3-4",
+          "P1313-source19-v4-0",
+          "P1313-source19-v4-1",
+          "P1313-source19-v4-2",
+          "P1313-source19-v4-3",
+          "P1313-source19-v4-4",
+          "P1313-source20-v1-0",
+          "P1313-source20-v1-1",
+          "P1313-source20-v1-2",
+          "P1313-source20-v1-3",
+          "P1313-source20-v1-4",
+          "P1313-source21-v2-0",
+          "P1313-source21-v2-1",
+          "P1313-source21-v2-2",
+          "P1313-source21-v2-3",
+          "P1313-source21-v2-4",
+          "P1313-source22-v3-0",
+          "P1313-source22-v3-1",
+          "P1313-source22-v3-2",
+          "P1313-source22-v3-3",
+          "P1313-source22-v3-4",
+          "P1313-source23-v4-0",
+          "P1313-source23-v4-1",
+          "P1313-source23-v4-2",
+          "P1313-source23-v4-3",
+          "P1313-source23-v4-4",
+          "P1313-source24-v1-0",
+          "P1313-source24-v1-1",
+          "P1313-source24-v1-2",
+          "P1313-source24-v1-3",
+          "P1313-source24-v1-4",
+          "P1313-source25-v2-0",
+          "P1313-source25-v2-1",
+          "P1313-source25-v2-2",
+          "P1313-source25-v2-3",
+          "P1313-source25-v2-4",
+          "P1313-source26-v3-0",
+          "P1313-source26-v3-1",
+          "P1313-source26-v3-2",
+          "P1313-source26-v3-3",
+          "P1313-source26-v3-4",
+          "P1313-source27-v4-0",
+          "P1313-source27-v4-1",
+          "P1313-source27-v4-2",
+          "P1313-source27-v4-3",
+          "P1313-source27-v4-4",
+          "P1313-source28-v1-0",
+          "P1313-source28-v1-1",
+          "P1313-source28-v1-2",
+          "P1313-source28-v1-3",
+          "P1313-source28-v1-4",
+          "P1313-source29-v2-0",
+          "P1313-source29-v2-1",
+          "P1313-source29-v2-2",
+          "P1313-source29-v2-3",
+          "P1313-source29-v2-4",
+          "P1313-source30-v3-0",
+          "P1313-source30-v3-1",
+          "P1313-source30-v3-2",
+          "P1313-source30-v3-3",
+          "P1313-source30-v3-4",
+          "P1313-source31-v4-0",
+          "P1313-source31-v4-1",
+          "P1313-source31-v4-2",
+          "P1313-source31-v4-3",
+          "P1313-source31-v4-4",
+          "P1313-source32-v1-0",
+          "P1313-source32-v1-1",
+          "P1313-source32-v1-2",
+          "P1313-source32-v1-3",
+          "P1313-source32-v1-4",
+          "P1313-source33-v2-0",
+          "P1313-source33-v2-1",
+          "P1313-source33-v2-2",
+          "P1313-source33-v2-3",
+          "P1313-source33-v2-4",
+          "P1313-source34-v3-0",
+          "P1313-source34-v3-1",
+          "P1313-source34-v3-2",
+          "P1313-source34-v3-3",
+          "P1313-source34-v3-4",
+          "P1313-source35-v4-0",
+          "P1313-source35-v4-1",
+          "P1313-source35-v4-2",
+          "P1313-source35-v4-3",
+          "P1313-source35-v4-4",
+          "P1313-source36-v1-0",
+          "P1313-source36-v1-1",
+          "P1313-source36-v1-2",
+          "P1313-source36-v1-3",
+          "P1313-source36-v1-4",
+          "P1313-source37-v2-0",
+          "P1313-source37-v2-1",
+          "P1313-source37-v2-2",
+          "P1313-source37-v2-3",
+          "P1313-source37-v2-4",
+          "P1313-source38-v3-0",
+          "P1313-source38-v3-1",
+          "P1313-source38-v3-2",
+          "P1313-source38-v3-3",
+          "P1313-source38-v3-4",
+          "P1313-source39-v4-0",
+          "P1313-source39-v4-1",
+          "P1313-source39-v4-2",
+          "P1313-source39-v4-3",
+          "P1313-source39-v4-4"
+        ],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "01f7b0fd501a32ab4e6c15110fa04b86cca972a3b495950839d9939d224d0e4f",
+          "source_inventory_sha256": "6b179aad9fb57de9328f4872cc26ad69699f7b78e02040d0b3a6610f7cf4fcb8",
+          "question_sha256": "3656357c9731c6fd4317aa70c097069176991d85128ecdc97a33b3cdbf0c4464",
+          "context_limit_units": 8192,
+          "planner_messages_sha256": "920c9bc65af795ef3a5b6e47b06b8ed772c685e33aaf8e165483733c87ff67eb",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "192474e648dd6d6a0de20c06b4bdfa6d8f400a03eeecae6bdbe83da226902720",
+            "utf8_bytes": 4117,
+            "total_upper_bound_units": 5573,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D6",
+            "D7",
+            "D8"
+          ],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "9bb91f0e9510ccb8ebffb7d90137e9f8ef5802abadbc2444ec021aa46e72075a"
+        },
+        "selection": {
+          "state": "selection_returned",
+          "result_sha256": "b0b7bba7ce56d7eb917e4a08ab347882ae5a62f375a20c6d8865b4990bdee701",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "01f7b0fd501a32ab4e6c15110fa04b86cca972a3b495950839d9939d224d0e4f",
+          "groups": [
+            {
+              "document_id": "P1313-doc-source0",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1313-doc-source1",
+              "document_revision": 2,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1313-doc-source7",
+              "document_revision": 4,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1313-doc-source8",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            },
+            {
+              "document_id": "P1313-doc-source20",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            },
+            {
+              "document_id": "P1313-doc-source39",
+              "document_revision": 4,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "920c9bc65af795ef3a5b6e47b06b8ed772c685e33aaf8e165483733c87ff67eb",
+            "utf8_bytes": 4117,
+            "total_upper_bound_units": 5573,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 8,
+          "selected_source_versions": 8,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {
+            "evidence_passage_limit": 192
+          },
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      },
+      {
+        "case": "P1314",
+        "kind": "adverse_pressure",
+        "source_inventory_sha256": "e3b51ca92d4192700ab8a9eb2bfd861570853fd3479a566d02d533f0bed236fe",
+        "source_pins": [
+          {
+            "id": "P1314-many-v3-0",
+            "document_id": "P1314-doc-many",
+            "document_revision": 3,
+            "document_sha256": "11c0f13a9644bc023139ce505edb9ce3a3647160cb6e7eb8725f4b2958453c94",
+            "text_sha256": "7d82f16834d1d0060351882ed4bca2f5fb095fe760a8f423ff2f4090e459ec9f"
+          },
+          {
+            "id": "P1314-denial-v8-0",
+            "document_id": "P1314-doc-denial",
+            "document_revision": 8,
+            "document_sha256": "e20303097b4b3b58596795bfc7d1de00999aa3cb60bc6aebf7303d130cb701b0",
+            "text_sha256": "5a80b44a8ab225a0d44c9a15bd1e0e129d4a2daeb552cc3406f4a82184cfe9de"
+          }
+        ],
+        "inventory": {
+          "source_passages": 2,
+          "source_versions": 2,
+          "scanned_code_points": 1681,
+          "nonblank_physical_lines": 52,
+          "proposed_bundles": 51,
+          "selected_bundles": 5,
+          "selected_evidence_passages": 2,
+          "copied_text_utf8_bytes": 450
+        },
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "wire": {
+          "recipe": "disposable-diverse-source-selection-v1",
+          "planner_recipe": "offline-diverse-source-bundles-v2",
+          "planner_plan_sha256": "933a855aa4c812160374b6a46a4458b3b7a46a3e1638f1e18d70273b518b64d6",
+          "source_inventory_sha256": "e3b51ca92d4192700ab8a9eb2bfd861570853fd3479a566d02d533f0bed236fe",
+          "question_sha256": "8a81a9a2c660c2271677c4d20d35ebc5d52d48f837000ef3ed8eda302eb08609",
+          "context_limit_units": 4600,
+          "planner_messages_sha256": "a9dea34f3258f5a29537c7a51b4b778af7974763318711b664fd97aa6f17588e",
+          "measurement": {
+            "recipe": "disposable-diverse-D-selector-wire-v1",
+            "messages_sha256": "4e66f538e863eca26125775f2eb8b8cbd37a8b1ec1fdd7474fcaa7c0bf1cee24",
+            "utf8_bytes": 3080,
+            "total_upper_bound_units": 4536,
+            "context_limit_units": 4600,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "bundle_ids": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5"
+          ],
+          "admission": "prepared_only",
+          "not_execution_authorization": true,
+          "wire_sha256": "a71d8f4b064a726767bf30d3088982746a5c64670c436893f7420c1de4c2088c"
+        },
+        "selection": {
+          "state": "selection_returned",
+          "result_sha256": "8428e03ef617b33f6eab1421a5674e41b6bcbb455a04b6407c61aaf53583f299",
+          "all_nominated_bundles_copied": true,
+          "selection_policy": "controlled_select_all_not_a_model"
+        },
+        "coverage": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "933a855aa4c812160374b6a46a4458b3b7a46a3e1638f1e18d70273b518b64d6",
+          "groups": [
+            {
+              "document_id": "P1314-doc-many",
+              "document_revision": 3,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1314-doc-denial",
+              "document_revision": 8,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "a9dea34f3258f5a29537c7a51b4b778af7974763318711b664fd97aa6f17588e",
+            "utf8_bytes": 3080,
+            "total_upper_bound_units": 4536,
+            "context_limit_units": 4600,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 5,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 1,
+          "omission_counts": {
+            "whole_bundle_prompt_budget": 46
+          },
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "originals_unchanged": true
+      }
+    ],
+    "summary": {
+      "cases": 14,
+      "source_passages": 215,
+      "source_versions": 55,
+      "expected_groups": 20,
+      "available_groups": 13,
+      "adverse_source_cases": 3,
+      "both_sides_available": 3,
+      "blocked_before_transport": 1,
+      "no_candidates_no_call": 2,
+      "unmatched_fallback_bundles": 4
+    },
+    "counts": {
+      "mock_metadata_requests": 11,
+      "mock_completion_requests": 11,
+      "network_http_calls": 0,
+      "inference_calls": 0
+    },
+    "private_documents": 0,
+    "production_changes": 0,
+    "review_decisions": 0,
+    "native_or_legal_qualification": false,
+    "conclusion": "frozen_synthetic_coverage_and_mock_wire_only_not_native_or_legal_qualification"
+  },
+  "linux_offline": {
+    "tests_passed": 12,
+    "network": "none",
+    "read_only": true,
+    "host_linux_report_exact": true,
+    "first_report_retained": true,
+    "private_runtime_or_provider_mounts": false,
+    "base_image_sha256": "7a67b0bf06799c403b9a7b5363faeb85f14fca0d6836eb167d13acc086c224d2"
+  },
+  "local_checks": {
+    "deployment_contracts_passed": 187,
+    "deployment_seconds": 15.609,
+    "context_research_policy_provider_cases_passed": 167,
+    "context_provider_seconds": 7.47,
+    "new_regression_tests": 12,
+    "lint": "passed"
+  },
+  "scope": {
+    "expected_groups_sent_to_planner_or_adapter": false,
+    "first_report_fixture_and_implementation_unchanged_after_grade": true,
+    "planner_and_production_unchanged": true,
+    "wire_example_change": "B1 example to D1 in system message only; separately sealed digest, identical UTF8/accounting size",
+    "native_model_calls": 0,
+    "network_http_calls": 0,
+    "mock_request_scope": "11 metadata plus 11 completion requests in the fixed evaluator; regression tests make additional controlled requests",
+    "five_concurrent_selections": "mock transport barrier only, not native capacity",
+    "private_documents": 0,
+    "review_decisions": 0,
+    "production_changes": 0
+  },
+  "retained_limits": [
+    "unlinked_condition",
+    "overlong_physical_line_without_complete_fallback",
+    "late_paraphrase",
+    "three_required_source_versions_beyond_nomination_cap",
+    "undersized_envelope",
+    "irrelevant_unmatched_fallback_on_absent_information",
+    "prior_native_failures_and_historical_502_root_cause_unresolved"
+  ],
+  "next_gate": "Declare and freeze a fresh native acceptance plan with exact planner/wire/source identities and independent grading before execution; do not promote mock selection or replay exposed failures until passing."
+}
