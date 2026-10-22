@@ -1220,3 +1220,56 @@ not flip bits, strip evidence or retry to force completion. Export remains close
 There is no override or automatic repair. Confidential JSON handling after download
 remains the firm's responsibility. Deployment/restore/offline acceptance and real
 legal/model/source qualification remain separate gates.
+
+
+### Provider burst repair and real five-job qualification — 22 October 2026
+
+The relay admits twelve connection lifetimes for five caller workflows plus health
+headroom, while limiting upstream generation to two leases and metadata to two
+separate leases. Only overlapping metadata probes with the same credential, route
+and model share a result; the entry is removed before publication wakes waiters.
+Later probes authenticate afresh. Generation requests authenticate independently.
+Queue, connect, TLS and response reads share a shrinking deadline within existing
+caller timeouts. Failures expose fixed categories, never upstream text, credentials
+or document bodies. There are no automatic inference retries or cloud fallback.
+
+The private quotation recipe `private-quotes-v3-extractive` offers source-span IDs
+and copies the selected original text on the server. Unknown, duplicate or augmented
+selectors fail. Legacy prose still faces the unchanged exact-reference/quotation
+guards; it is not approximately repaired. Full selected passages remain in the
+measured prompt, and long unbroken text is not silently clipped. Existing stored
+products, original documents and focused-analysis review versions are not rewritten.
+
+For an explicitly authorized, real local-provider workload, build the current API
+image and invoke `scripts/qualify_provider_jobs.py --execute-real-provider` using the
+backend virtual environment. Supply `--api-image`, `--provider-profile` (an owner-only
+JSON file containing exactly the twelve nonsecret fields in `PROFILE_FIELDS`),
+`--provider-key-file` (the existing protected key file), `--provider-network`,
+`--relay-container`, and a fresh protected `--output` path. Never pass a key value as
+an argument. The runner rejects an image whose code fingerprint differs from the
+checkout, an unexpected relay or provider network, or an occupied fixture address.
+It uses the fixed relay-only internal provider subnet and temporary endpoint .14;
+qualify a different network design separately rather than relaxing that assertion.
+
+Only the disposable API joins that provider network and mounts the two inputs
+read-only. Its fresh database/document volumes contain invented TXT sources; the
+driver and PostgreSQL have no provider network or key mount, and nothing publishes
+a host port. Both explicit fixture markers are required, and production startup
+does not expose fixture counters. Three declared waves of five research jobs must
+all complete, retain exact source revisions, ground every returned claim, and stay
+Needs review. A failed wave stops qualification and remains a failed receipt.
+Cleanup must remove only owned resources and restore the original network members.
+No legal review or private-case inference is performed.
+
+The measured 15/15 result qualifies this synthetic, short-TXT, fixed-model/context
+profile and five overlapping application calls. Upstream generation is deliberately
+bounded to two; five application jobs do not imply five GPU generations. Kernel
+memory/PID peaks and sampled CPU/memory are reported separately; native-engine
+resource use, sustained throughput, real-corpus quality and offline operation remain
+unqualified. Retain failed diagnostic profiles as well as the passing profile.
+
+Both frontend CI lanes now limit locked dependency installation to one minute with
+bounded registry requests. All nine jobs, two test workers, disjoint shard coverage,
+lockfiles, existing job caps and five merge timing reserves remain. A dependency
+network failure fails early instead of consuming the whole test job. It does not
+retry inference or hide failing tests.

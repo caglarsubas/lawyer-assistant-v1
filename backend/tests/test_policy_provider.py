@@ -183,7 +183,8 @@ def test_minimal_envelope_keeps_nine_portfolio_records_but_excludes_arbitrary_me
     messages = json.loads(seen[0].content)["messages"]
     evidence = json.loads(messages[1]["content"])["evidence"]
     assert len(evidence) == 9  # Guide plus eight existing workspace records remain supported.
-    assert all(set(item) == {"id", "text", "partial"} for item in evidence)
+    assert all(set(item) == {"id", "text", "partial", "quotes"} for item in evidence)
+    assert all(set(q) == {"id", "start", "end"} for item in evidence for q in item["quotes"])
     assert "NEVER DISPATCH" not in json.dumps(messages)
 
 

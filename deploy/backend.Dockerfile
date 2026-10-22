@@ -17,6 +17,10 @@ COPY ontology /app/ontology
 COPY scripts /app/scripts
 COPY qualification/source-catalog.json qualification/asset-catalog.json qualification/analysis-fixture.json qualification/scenario-fixture.json qualification/research-dossier.json /app/qualification/
 COPY deploy/volume_archive.py /app/deploy/volume_archive.py
+# Git checkout under a protective host umask may leave source files at 0600.
+# Normalize code inputs in the image; mounted runtime secrets are never copied.
+RUN chmod -R a+rX /app/scripts /app/ontology /app/qualification /app/deploy \
+    /app/backend/app /app/backend/pyproject.toml /app/backend/uv.lock
 USER 10001:10001
 EXPOSE 8000
 CMD ["uvicorn", "app.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]

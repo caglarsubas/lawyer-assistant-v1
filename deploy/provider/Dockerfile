@@ -6,5 +6,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends iptables gosu c
 WORKDIR /app
 COPY deploy/provider/relay.py /app/relay.py
 COPY backend/app/analysis_output_contract.py /app/app/analysis_output_contract.py
+RUN chmod -R a+rX /app
 COPY --chmod=755 deploy/provider/entrypoint.sh /usr/local/bin/provider-entrypoint
 ENTRYPOINT ["/usr/local/bin/provider-entrypoint"]

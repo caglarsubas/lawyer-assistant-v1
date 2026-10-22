@@ -83,7 +83,8 @@ def test_actual_serialized_model_envelope_matches_retained_record_and_exports(wo
     assert product["claims"][0]["text"] == selected["text"]
     assert "UNSUPPORTED MODEL PROSE" not in json.dumps(product)
     transmitted = json.loads(payload["messages"][1]["content"])["evidence"][0]
-    assert set(transmitted) == {"id", "text", "partial"} and transmitted["partial"]
+    assert set(transmitted) == {"id", "text", "partial", "quotes"} and transmitted["partial"]
+    assert all(set(q) == {"id", "start", "end"} for q in transmitted["quotes"])
     assert "document_name" not in canonical(payload["messages"])
     export = f"/api/v1/matters/{matter}/products/{product['id']}/export"
     response = client.get(export + "?format=docx")

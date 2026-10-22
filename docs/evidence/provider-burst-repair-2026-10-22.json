@@ -1,0 +1,191 @@
+{
+  "schema": "provider-burst-repair-v1",
+  "date": "2026-10-22",
+  "implementation_sha256": {
+    "deploy/provider/relay.py": "ad36edcc56988af8f281c049fd1173c1a5bdb3e1ec5831f2cd9b9477ef1dd765",
+    "deploy/provider/Dockerfile": "0090d625b3123ca957badc4bda7ffe0fb7037505fe0bce1ca9baef9c5db33cb3",
+    "deploy/backend.Dockerfile": "c070389ca669ece4e5f32d00eeec555756437a5dd34612db7865ba2a39ba3707",
+    "backend/app/evidence_prompt.py": "8bca934696e575eaa0959d37a22588e8236ea80293c56523e641baf34b1bb82a",
+    "backend/app/provider.py": "68a54bae7879b47d5a193a752448d71ce5835d8efdad8d27a18f45ece92019c4",
+    "scripts/qualify_provider.py": "617cad67a03392002a4b3f185359c5db530f8fd9e9f0c468da282a41a1b2c680",
+    "scripts/provider_job_fixture.py": "5adc85dee4fefa31539124c82dd576f5c34e34fc150a6d213ad99d49f7620d98",
+    "scripts/provider_job_driver.py": "b0b2181cd07d4950a2e205c70366ef1440f5e95e78b71f2da8464cb37bbc4d16",
+    "scripts/qualify_provider_jobs.py": "aa4f5578c01ce44071569b69edfa4cfa8b02ba6ee9346c9b38fb58e4baf93204",
+    "deploy/test_provider_backpressure.py": "ffba62b5121349a6e2bd87b1fabbb09a237d08123bbe4774efa52cc0b6b0bb37",
+    ".github/workflows/ci.yml": "029f2df862959a1e64ced66d5cdac04cf037980c957639f373709aa97794b956"
+  },
+  "real_provider_qualification": {
+    "status": "passed",
+    "model": "ministral-3:8b",
+    "context_units": 8192,
+    "api_source": {
+      "files": 200,
+      "sha256": "414081c558fdce07d13f3b7e537eb55168b786ca5008c5dc2e321e45624f9ed0"
+    },
+    "images": {
+      "api": "sha256:25d5776a9170eedb72591d646053551ec2ce3c8a4160c8085adf41e4cf30aa5a",
+      "postgres": "sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"
+    },
+    "relay_image": "sha256:56a8fa3293b64666ed7a420e07ac357fd6467d9017dceb2f3c970c28b030c40e",
+    "started_at": "2026-10-22T03:31:30.265479+00:00",
+    "finished_at": "2026-10-22T03:31:57.200850+00:00",
+    "completed_jobs": 15,
+    "waves": 3,
+    "application_concurrency": 5,
+    "upstream_generation_leases": 2,
+    "failures": 0,
+    "automatic_retries": 0,
+    "all_claims_grounded": true,
+    "exact_source_revision_maps": true,
+    "products_need_review": true,
+    "private_documents": 0,
+    "review_decisions": 0,
+    "wave_seconds": {
+      "max": 6.379061,
+      "median": 5.624507,
+      "min": 5.21751,
+      "p95_nearest_rank": 6.379061,
+      "samples": 3
+    },
+    "docker_host": {
+      "architecture": "aarch64",
+      "cpus": 16,
+      "memory_bytes": 50427305984,
+      "os": "linux"
+    },
+    "resources": {
+      "method": "docker stats --no-stream plus 1s pause; sampled peaks may miss short bursts; driver excluded",
+      "sampling_errors": 0,
+      "services": {
+        "api": {
+          "kernel": {
+            "cpu_since_container_start": {
+              "burst_usec": 0,
+              "nice_usec": 0,
+              "nr_bursts": 0,
+              "nr_periods": 209,
+              "nr_throttled": 8,
+              "system_usec": 1968263,
+              "throttled_usec": 2363044,
+              "usage_usec": 15445518,
+              "user_usec": 13477254
+            },
+            "memory_limit_bytes": 1073741824,
+            "memory_peak_bytes": 150577152,
+            "pids_limit": 256,
+            "pids_peak": 21,
+            "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+          },
+          "memory_limit_bytes": 1073741824,
+          "sampled_peak_cpu_percent": 118.36,
+          "sampled_peak_memory_bytes": 131491430,
+          "sampled_peak_pids": 15,
+          "samples": 7
+        },
+        "postgres": {
+          "kernel": {
+            "cpu_since_container_start": {
+              "burst_usec": 0,
+              "nice_usec": 0,
+              "nr_bursts": 0,
+              "nr_periods": 202,
+              "nr_throttled": 0,
+              "system_usec": 1551418,
+              "throttled_usec": 0,
+              "usage_usec": 4409126,
+              "user_usec": 2857708
+            },
+            "memory_limit_bytes": 1073741824,
+            "memory_peak_bytes": 118636544,
+            "pids_limit": 256,
+            "pids_peak": 21,
+            "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+          },
+          "memory_limit_bytes": 1073741824,
+          "sampled_peak_cpu_percent": 29.45,
+          "sampled_peak_memory_bytes": 46881832,
+          "sampled_peak_pids": 14,
+          "samples": 7
+        },
+        "provider-relay": {
+          "kernel": {
+            "cpu_since_container_start": {
+              "burst_usec": 0,
+              "nice_usec": 0,
+              "nr_bursts": 0,
+              "nr_periods": 144,
+              "nr_throttled": 0,
+              "system_usec": 126040,
+              "throttled_usec": 0,
+              "usage_usec": 1891612,
+              "user_usec": 1765572
+            },
+            "memory_limit_bytes": 134217728,
+            "memory_peak_bytes": 37908480,
+            "pids_limit": 32,
+            "pids_peak": 10,
+            "scope": "cgroup v2 high-water marks since startup, including small exec/probe overhead"
+          },
+          "memory_limit_bytes": 134217728,
+          "sampled_peak_cpu_percent": 13.84,
+          "sampled_peak_memory_bytes": 23792189,
+          "sampled_peak_pids": 6,
+          "samples": 7
+        }
+      },
+      "valid": true
+    },
+    "cleanup": {
+      "complete": true,
+      "original_provider_members_restored": true
+    }
+  },
+  "retained_failures": [
+    "Original five-caller result 4/5; upstream transport error did not reveal exact errno.",
+    "Injected connection-cleanup race proves a hazard, not the exact cause of original 502.",
+    "Real job profile exposed model-normalized quotations; unchanged grounding withheld four products.",
+    "Separate metadata leases alone retained an intermittent readiness failure; overlapping-probe single-flight added.",
+    "Five products passed after coalescing; harness incorrectly expected a list rather than the actual source-revision map. Corrected harness then ran the declared three-wave profile.",
+    "Initial fixture image preflight failed before inference because code copied under restrictive umask was unreadable to nonroot; image-only code permissions corrected."
+  ],
+  "local_checks": {
+    "deployment_contracts": 105,
+    "affected_backend_tests": 308,
+    "ruff": "backend configuration",
+    "no_test_removal": true
+  },
+  "ci": {
+    "jobs": 9,
+    "existing_job_caps_unchanged": true,
+    "full_disjoint_frontend_and_backend_coverage": true,
+    "required_timing_reserves_seconds": 30,
+    "dependency_installation_step_cap_seconds": 60,
+    "dependency_request_timeout_seconds": 15,
+    "dependency_fetch_retries": 1,
+    "inference_retries": 0
+  },
+  "not_qualified": [
+    "private case review",
+    "reviewed public-corpus research",
+    "production or sustained capacity",
+    "GPU parallelism",
+    "tunnel retention or disconnected operation",
+    "power loss",
+    "populated graph rollback",
+    "production RPO/RTO",
+    "legal or source-rights approval"
+  ],
+  "preservation_contract": [
+    "Originals and exact evidence versions remain unchanged",
+    "Existing review/history/session records are preserved",
+    "Fresh encrypted authenticated cold backup precedes API installation",
+    "Only nonsecret image pointers may change in root env",
+    "Private case analysis v3 remains pending review"
+  ],
+  "preinstallation_backup": {
+    "encrypted": true,
+    "authenticated": true,
+    "eight_original_containers_healthy_after_restart": true,
+    "all_database_rows_decrypted_semantics_original_files_and_secret_hashes_equal": true
+  }
+}

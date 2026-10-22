@@ -5127,3 +5127,41 @@ this synthetic engineering work supplies no legal or source-rights approval.
 CI retains all nine jobs, existing caps and coverage, with the five required reserve
 gates checked before merge. See [operator procedure](OPERATIONS.md#configured-providercontext-and-five-concurrent-callers)
 and [qualification evidence](evidence/provider-load-2026-10-22.json).
+
+
+### F00-06 provider burst repair and real five-job profile — 22 October 2026
+
+The earlier 4/5 wave remains a failed result. Status-only diagnostics localized
+intermittent failures to relay upstream transport; they did not establish an exact
+socket errno. A separate deterministic connection-lifetime race is a demonstrated
+hazard, not proof of the original HTTP 502's precise cause. Resource counters did
+not show an OOM or PID limit event. The repair adds bounded connection headroom,
+separate metadata/generation leases, overlapping-probe single-flight without a TTL,
+and shrinking queue/TCP/TLS/read deadlines. Credentials, model pin, context budget,
+shared-engine limits and cloud-fallback prohibition remain unchanged.
+
+Real end-to-end research then exposed model normalization of quotation text; strict
+grounding correctly withheld those products. The new extractive recipe asks the
+model to select declared exact source spans and copies their text server-side.
+Unknown or altered selections still fail, legacy prose remains strictly verified,
+and full prompt accounting preserves the configured budget. Prior focused-analysis
+versions and review records are not regenerated or overwritten.
+
+A declared three-wave profile completed **15 of 15 real-provider jobs**, five
+application calls overlapping in each wave, on the configured `ministral-3:8b` at
+8,192 conservative context units. Every product retained its exact synthetic source
+revision, nonempty exact-source claims and Needs review status. There were zero
+provider failures or retries, and owned disposable resources were removed. This
+qualifies short synthetic TXT retrieval/extraction, not deep legal analysis,
+reviewed public-corpus applicability or five parallel GPU generations. Prior failed
+trials and the harness's corrected source-revision-map check remain recorded.
+
+F00-06 stays partial: sustained/representative load, tunnel retention and disconnected
+operation, populated graph rollback, power loss and production RPO/RTO are open.
+The owner review of focused analysis v3 (R03-17) stays waiting. Engineering provides
+no legal/source-rights approval. Preserve all originals, exact evidence versions,
+credentials, sessions and review history through backup and guarded installation.
+CI changes only bounded frontend dependency installation; nine jobs, complete test
+coverage, existing caps and all five reserve gates remain required before merge.
+See [operator procedure](OPERATIONS.md#provider-burst-repair-and-real-five-job-qualification--22-october-2026)
+and [dated evidence](evidence/provider-burst-repair-2026-10-22.json).
