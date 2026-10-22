@@ -5396,3 +5396,57 @@ sustained legal capacity, isolated intake, OCR/layout, offline operation, graph
 rollback and production RPO/RTO remain open.
 See [operator procedure](OPERATIONS.md#offline-quotation-boundary-evaluation)
 and [dated evidence](evidence/offline-quotation-boundaries-2026-10-22.json).
+
+
+### F00-06 offline budgeted quotation bundles — 22 October 2026
+
+A new, separately versioned offline planner nominates source anchors using folded
+query overlap and inverse line frequency. Each selected bundle retains the anchor
+and its bounded neighboring context as separate exact spans; the resolver copies
+all parts together. A companion across one blank line is labeled as source proximity,
+never a legal association. Cross-page context is not automatically linked. Complete
+overlong lines can use a labeled whole-excerpt fallback within the existing 1,800-byte
+limit; clipped physical lines are omitted. No condition is trimmed to fit a budget.
+
+The planner measures the actual serialized bundle envelope before admitting a whole
+bundle. Unused initial excerpts are excluded from that prompt and listed explicitly;
+all original documents, initial-pack coverage and source versions remain retained.
+The complete input inventory, question, policy, context limit, spans and prompt are
+sealed. A change to even an unused source version invalidates the plan. Unknown,
+duplicate or anchor-only references, altered companions, forged plans, invalid version
+types and over-budget envelopes cannot resolve. This is an offline contract with a
+distinct `bundle_ids` schema, not an enabled production response recipe or execution
+authorization. Production packing v1, quotation recipe v3 and all services stay intact.
+
+**The twelve-case synthetic evaluation is not production qualification.** Eleven
+planned prompts fit their declared budgets; the controlled 1,536-unit envelope is
+blocked. Nine of twelve required groups occur within one complete bundle. The late
+shipment PDF and dense rare-anchor cases fit at 4,070 and 6,298 conservative units,
+respectively, within the unchanged default 8,192-unit budget. There is one complete
+coarse fallback. Cross-page joint context, a clipped physical line and the undersized
+envelope remain unavailable. An empty nomination on absent information does not
+measure model abstention; hostile text remains untrusted source data. No model
+relevance, instruction resistance, legal association or legal completeness is tested.
+This fresh suite and bundle contract differ from the prior single-quote study; their
+group counts are not a causal accuracy comparison or replacement for earlier failures.
+
+Nine new regression tests pass, including whole-bundle budget rejection, atomic
+companions, exact Unicode/source spans, unused-version invalidation and fail-closed
+selection. All 155 deployment contracts and 84 context/research/provider cases pass
+locally. The nine new tests pass in a read-only, network-disabled Linux container
+with public code only; its complete report matches the host. There are zero inference
+or HTTP calls, private inputs or review decisions. All eight live services, encrypted
+originals, exact evidence, credentials, sessions and review history remain unchanged.
+Nine CI jobs, all existing tests/caps and five timing reserves remain merge gates.
+R03-17 still awaits the owner's version-3 review; F00-06 remains partial.
+
+Next evaluate alternate wording and adverse-source coverage independently, preserving
+unlinked boundaries and all omissions. Before a fresh declared native trial, implement
+and qualify a disposable-only adapter for atomic bundle selection; no production
+recipe switch follows from offline budget compliance. Do not rerun exposed model
+failures until passing, hide unused evidence, infer legal associations from proximity
+or promote an offline nomination to a reviewed answer. Historical HTTP 502 cause,
+reviewed corpus, sustained legal capacity, isolated intake, OCR/layout, offline
+operation, graph rollback and production RPO/RTO remain open.
+See [operator procedure](OPERATIONS.md#offline-budgeted-quotation-bundles)
+and [dated evidence](evidence/budgeted-quotation-bundles-2026-10-22.json).
