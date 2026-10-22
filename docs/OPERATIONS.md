@@ -1495,3 +1495,55 @@ offline, with a fresh declared native gate required before any production candid
 Owner version-3 review, historical 502 diagnosis and broader legal/capacity gates stay
 open. No live service, document, evidence version, secret or review record changes.
 See [dated evidence](evidence/offline-quotation-boundaries-2026-10-22.json).
+
+### Offline budgeted quotation bundles
+
+Run `PYTHONPATH=backend:scripts backend/.venv/bin/python scripts/evaluate_budgeted_quotes.py --output <new-report.json>`.
+Only fixed invented fixtures are accepted; there is no provider/key/private-input or
+installation option. The twelve fresh cases retain source and plan seals, initial-pack
+coverage, unused excerpts, exact budget measurements, fallbacks and explicit omissions.
+No inference or HTTP call is made. The earlier reports and exposed native failures
+remain immutable evidence with their original scopes.
+
+The planner ranks anchors by folded query overlap and inverse line frequency over
+the already packed excerpts. This is a lexical heuristic, not authority or relevance.
+Each selected bundle contains the full anchor plus neighboring nonblank physical
+lines within a maximum line distance of two. Blank-separated companions retain their
+own spans and a boundary flag. No cross-source/page join is synthesized. If a required
+part exceeds 768 UTF-8 bytes, a complete whole-excerpt fallback may preserve it within
+the existing 1,800-byte limit. An incomplete physical line is omitted. The planner
+never drops a companion to keep an anchor.
+
+Serialize the actual question, selected evidence, bundle metadata and source-boundary
+flags, adding the unchanged framing/completion reserves. Enforce the declared budget,
+20 bundles and 64 parts. A bundle that does not fit is omitted whole with a fixed
+reason. Only excerpts referenced by selected bundles enter this envelope; unused
+initial evidence IDs and full initial-pack coverage stay in the plan. Their exclusion
+can hide relevant or adverse facts, so the original inventory stays accessible and
+this heuristic cannot establish corpus completeness. Question, policy, context limit,
+complete source inventory (including unused versions), spans and prompt seals bind
+the plan. Admission is `prepared_only`, never execution authorization.
+
+The offline resolver rebuilds and canonically compares the plan against the current
+frozen inputs. It accepts only unique selected bundle IDs and returns every part
+with its original offsets, hash and role. It rejects stale versions, edited companions,
+anchor-only IDs and insufficient envelopes. Parts are returned separately; proximity
+does not create a legal relationship. A future native adapter must independently
+qualify the distinct `bundle_ids` schema, parser and exact-source product checks.
+Production startup and provider fixtures do not enable this prototype.
+
+The fresh comparison has 9/12 group availability; eleven prompts fit and the explicit
+1,536-unit envelope is blocked. Late-shipment and dense-anchor prompts cost 4,070 and
+6,298 units within the default 8,192. Cross-page joint context and a clipped physical
+line remain unresolved; one complete coarse fallback preserves an overlong line.
+Missing-information nomination and hostile-source fixtures do not measure model
+abstention or instruction resistance. These geometry/contract results are not a direct
+accuracy comparison to the earlier single-quote study or a legal acceptance pass.
+
+The nine new tests also pass in a read-only container with networking disabled and
+only public code mounted, matching the complete host report. Private matter originals,
+evidence versions, secrets, sessions and review history remain untouched. Next qualify
+alternate wording/adverse-source coverage and a disposable native adapter before any
+fresh native trial or production proposal. Owner version-3 review and historical 502
+diagnosis remain open.
+See [dated evidence](evidence/budgeted-quotation-bundles-2026-10-22.json).
