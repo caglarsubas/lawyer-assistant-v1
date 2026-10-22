@@ -1,0 +1,941 @@
+{
+  "schema": "offline-quotation-boundary-record-v1",
+  "recorded_on": "2026-10-22",
+  "qualification": "offline_candidate_not_production_qualified",
+  "implementation_sha256": {
+    "scripts/quotation_boundary_cases.py": "134454cb14558636619b8f85654c7599a25dd41b8bd170b7e9c46b30d40c2e16",
+    "scripts/offline_quotation_boundaries.py": "17cafee58eb58b874638b4a1c62a111d423b0ae71293a2b11f9f14d514d640a1",
+    "scripts/evaluate_quotation_boundaries.py": "a932014e95b6e12767f71b1e16f6128fcce24e7692698a197d612e4350c4fb7c",
+    "deploy/test_quotation_boundaries.py": "7df8431625f648d6d1d9dac065fb156d15df0878695fee57326556270afffafe"
+  },
+  "evaluation": {
+    "schema": "offline-quotation-boundary-evaluation-v1",
+    "suite": "offline-quotation-boundaries-v1",
+    "suite_sha256": "df6de3a02ff0a9416e9c0fb1f3e515bf4d9a861eceff36cc73fc1dca986e0c12",
+    "scope": "synthetic_boundary_geometry_only",
+    "inference_calls": 0,
+    "http_calls": 0,
+    "private_documents": 0,
+    "review_decisions": 0,
+    "production_changes": 0,
+    "native_or_legal_qualification": false,
+    "context_limit_units": 8192,
+    "cases": [
+      {
+        "case": "late-pdf-record",
+        "format": "text_pdf",
+        "original_bytes_sha256": "3d70ac9a525769bdda7ec84086524d88d8c24ab1bb8b0d5f9759a1391a655f73",
+        "source_inventory_sha256": "d280520976623cad63f7d22f497e88fbb690a28b5991e9299dc3d3050993c052",
+        "source_pins": [
+          {
+            "evidence_id": "late-pdf-record-2",
+            "document_id": "late-pdf-record-doc",
+            "document_revision": 1,
+            "document_sha256": "3d70ac9a525769bdda7ec84086524d88d8c24ab1bb8b0d5f9759a1391a655f73",
+            "original_text_sha256": "f57f37b2f2397c03cdac1cd6d42ae3793d9400e7f9020308b80544e72a9523bb",
+            "excerpt_text_sha256": "921db7bae931e8c3de16cff95fa3effed55a72d64b04971be365ac3c62e2f15e",
+            "excerpt_start": 1269,
+            "excerpt_end": 3069,
+            "full_passage_length": 3069
+          },
+          {
+            "evidence_id": "late-pdf-record-0",
+            "document_id": "late-pdf-record-doc",
+            "document_revision": 1,
+            "document_sha256": "3d70ac9a525769bdda7ec84086524d88d8c24ab1bb8b0d5f9759a1391a655f73",
+            "original_text_sha256": "1fdc5ff7cfe27bc8c5d97aa25fc409221bf9ee753f66d3130e63c1ba5258e960",
+            "excerpt_text_sha256": "62a0dc908315ac2b454b81e4a891e6181ae3614e2dc6e88df7d7c8ddbc781949",
+            "excerpt_start": 0,
+            "excerpt_end": 1782,
+            "full_passage_length": 3061
+          },
+          {
+            "evidence_id": "late-pdf-record-1",
+            "document_id": "late-pdf-record-doc",
+            "document_revision": 1,
+            "document_sha256": "3d70ac9a525769bdda7ec84086524d88d8c24ab1bb8b0d5f9759a1391a655f73",
+            "original_text_sha256": "846ed65e6e3c563f95f5c3dbd6f5fc9144967dc45bea5418db9a72a75239f94d",
+            "excerpt_text_sha256": "7bc0a6e1eb2eb53f5bb060a8e16a23043128c28d5c8d986fd9718c4765f68ef2",
+            "excerpt_start": 0,
+            "excerpt_end": 378,
+            "full_passage_length": 3061
+          }
+        ],
+        "packed_inventory": {
+          "input_passages": 3,
+          "examined_passages": 3,
+          "unexamined_passages": 0,
+          "selected_passages": 3,
+          "omitted_passages": 0,
+          "shortened_passages": 3,
+          "selected_documents": 1,
+          "examined_documents": 1,
+          "scanned_code_points": 9191,
+          "evidence_utf8_bytes": 3960
+        },
+        "pack_recipe": "private-evidence-pack-v2-folded-anchors",
+        "pack_manifest_sha256": "729107754e08c35eb27ed63cf8e9ef02ceaf4df2fdfd6a1ac0b93e8d9d60cb54",
+        "baseline": {
+          "expected_groups": 1,
+          "available_groups": 1,
+          "group_available": [
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            1800
+          ],
+          "oracle_applicable": true,
+          "quotes": 3,
+          "prompt": {
+            "recipe": "private-quotes-v3-extractive",
+            "messages_sha256": "35a91d150d515602b20b7c679a2f6e4dd488d392ad0c053214de89376b7314a7",
+            "utf8_bytes": 4910,
+            "input_upper_bound_units": 5166,
+            "completion_reserve_units": 1200,
+            "total_upper_bound_units": 6366,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          }
+        },
+        "candidate": {
+          "expected_groups": 1,
+          "available_groups": 1,
+          "group_available": [
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            199
+          ],
+          "oracle_applicable": true,
+          "quotes": 62,
+          "prompt": {
+            "recipe": "offline-neighbor-line-quotes-v1",
+            "messages_sha256": "798932861b982bded528a77c3c4ea7b8e5366d11b222c44e32d065fe42736512",
+            "utf8_bytes": 7008,
+            "total_upper_bound_units": 8464,
+            "context_limit_units": 8192,
+            "within_budget": false,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "omission_counts": {},
+          "catalog_sha256": "8ebeee99ea2c75751bd8e4ce02faff109bb68b5f57b74d21605cac1498481d2b",
+          "geometry_admitted": false
+        },
+        "source_spans_and_versions_exact": true,
+        "originals_unchanged": true,
+        "model_selection_relevance_abstention_or_injection_resistance_measured": false
+      },
+      {
+        "case": "unicode-crlf-negative",
+        "format": "exact_text_fixture",
+        "original_bytes_sha256": "ee68f8f5c740756a160798bb89565823890d13fa3da6f53e0e0d2d71ca2fa35f",
+        "source_inventory_sha256": "f25e8e240cd2bc1356226d76194072276c1387132896e40813d76105d0648b62",
+        "source_pins": [
+          {
+            "evidence_id": "unicode-crlf-negative-0",
+            "document_id": "unicode-crlf-negative-doc",
+            "document_revision": 1,
+            "document_sha256": "ee68f8f5c740756a160798bb89565823890d13fa3da6f53e0e0d2d71ca2fa35f",
+            "original_text_sha256": "b47c09c7fbe4124f869edeb02cb4945bd3b61153afd0f72cf1ac65dc6b248510",
+            "excerpt_text_sha256": "87ed8bdb9d92a91a7ae7eba9dddbbf3e7f747076a6287b6d6e1e1d21238bf161",
+            "excerpt_start": 1328,
+            "excerpt_end": 3000,
+            "full_passage_length": 3199
+          }
+        ],
+        "packed_inventory": {
+          "input_passages": 1,
+          "examined_passages": 1,
+          "unexamined_passages": 0,
+          "selected_passages": 1,
+          "omitted_passages": 0,
+          "shortened_passages": 1,
+          "selected_documents": 1,
+          "examined_documents": 1,
+          "scanned_code_points": 3199,
+          "evidence_utf8_bytes": 1751
+        },
+        "pack_recipe": "private-evidence-pack-v2-folded-anchors",
+        "pack_manifest_sha256": "e6839a221c3fddf9320e8c2f4e2adbdd9bff97a73caf94f49ef3420b9a2edcf0",
+        "baseline": {
+          "expected_groups": 1,
+          "available_groups": 1,
+          "group_available": [
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            1751
+          ],
+          "oracle_applicable": true,
+          "quotes": 1,
+          "prompt": {
+            "recipe": "private-quotes-v3-extractive",
+            "messages_sha256": "dd6913fb67154923b63d866b6ee6934548390ffdf604d9132e2cf3893bd09326",
+            "utf8_bytes": 2509,
+            "input_upper_bound_units": 2765,
+            "completion_reserve_units": 1200,
+            "total_upper_bound_units": 3965,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          }
+        },
+        "candidate": {
+          "expected_groups": 1,
+          "available_groups": 1,
+          "group_available": [
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            207
+          ],
+          "oracle_applicable": true,
+          "quotes": 25,
+          "prompt": {
+            "recipe": "offline-neighbor-line-quotes-v1",
+            "messages_sha256": "458bdfab85b3a5ae52936efe4a16dd444b31102fa921a54153b688839404146f",
+            "utf8_bytes": 3358,
+            "total_upper_bound_units": 4814,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "omission_counts": {},
+          "catalog_sha256": "7e2444605b43363168ed362e6346ddde27d1d247bd7656ee1ab4f4e8d0ba6dfc",
+          "geometry_admitted": true
+        },
+        "source_spans_and_versions_exact": true,
+        "originals_unchanged": true,
+        "model_selection_relevance_abstention_or_injection_resistance_measured": false
+      },
+      {
+        "case": "condition-before-record",
+        "format": "exact_text_fixture",
+        "original_bytes_sha256": "b58444051b7de370e6210f26287fab555e6b18bc144d6e2d7c2487960a75dce7",
+        "source_inventory_sha256": "28e0747a470a0183a78c39d5483566c9780c97a7a90b57647b97520d3cdb3166",
+        "source_pins": [
+          {
+            "evidence_id": "condition-before-record-0",
+            "document_id": "condition-before-record-doc",
+            "document_revision": 1,
+            "document_sha256": "b58444051b7de370e6210f26287fab555e6b18bc144d6e2d7c2487960a75dce7",
+            "original_text_sha256": "8e5ec9a1fac6211394b404f8f4e4a6be7185390c97c2a10a55f0609c4049cfa5",
+            "excerpt_text_sha256": "28cf9f7f64b91e3a7765ec593f25d9b5b4e26687222c288f671d372ea001117d",
+            "excerpt_start": 575,
+            "excerpt_end": 2308,
+            "full_passage_length": 3087
+          }
+        ],
+        "packed_inventory": {
+          "input_passages": 1,
+          "examined_passages": 1,
+          "unexamined_passages": 0,
+          "selected_passages": 1,
+          "omitted_passages": 0,
+          "shortened_passages": 1,
+          "selected_documents": 1,
+          "examined_documents": 1,
+          "scanned_code_points": 3087,
+          "evidence_utf8_bytes": 1791
+        },
+        "pack_recipe": "private-evidence-pack-v2-folded-anchors",
+        "pack_manifest_sha256": "614a7cda19189ac06c2ee4afa8118db00e50eb6ebb3a7552c7874ff3ee16412b",
+        "baseline": {
+          "expected_groups": 1,
+          "available_groups": 1,
+          "group_available": [
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            1791
+          ],
+          "oracle_applicable": true,
+          "quotes": 1,
+          "prompt": {
+            "recipe": "private-quotes-v3-extractive",
+            "messages_sha256": "9d64587ad3db80fcef2da22d8320e3fc543d25c0ecb0bc9d2132eaf410881b84",
+            "utf8_bytes": 2531,
+            "input_upper_bound_units": 2787,
+            "completion_reserve_units": 1200,
+            "total_upper_bound_units": 3987,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          }
+        },
+        "candidate": {
+          "expected_groups": 1,
+          "available_groups": 1,
+          "group_available": [
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            182
+          ],
+          "oracle_applicable": true,
+          "quotes": 27,
+          "prompt": {
+            "recipe": "offline-neighbor-line-quotes-v1",
+            "messages_sha256": "9ae9e30ed46efcd3f54f3988fe0b4a5e33e39710d600acb7c340400a7a678589",
+            "utf8_bytes": 3452,
+            "total_upper_bound_units": 4908,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "omission_counts": {},
+          "catalog_sha256": "a7296ec9d8779ce96382564ae4a76fe4d936ce1dde4952514806b27a16a9ac7a",
+          "geometry_admitted": true
+        },
+        "source_spans_and_versions_exact": true,
+        "originals_unchanged": true,
+        "model_selection_relevance_abstention_or_injection_resistance_measured": false
+      },
+      {
+        "case": "conflicting-sources",
+        "format": "exact_text_fixture",
+        "original_bytes_sha256": "150e98798c798f6fd04bdf27bb5af51b72f182ac275ece52565cbec1c29d8acb",
+        "source_inventory_sha256": "9f97abb9eb0742750d7884801cd399b4233345e4d929eda61e97de87e2f3ccd5",
+        "source_pins": [
+          {
+            "evidence_id": "conflicting-sources-0",
+            "document_id": "conflicting-sources-doc",
+            "document_revision": 1,
+            "document_sha256": "150e98798c798f6fd04bdf27bb5af51b72f182ac275ece52565cbec1c29d8acb",
+            "original_text_sha256": "a0e30703b0814a9ef19e500afd6696422f2c04b124fdc4d31833a244003f158e",
+            "excerpt_text_sha256": "a0e30703b0814a9ef19e500afd6696422f2c04b124fdc4d31833a244003f158e",
+            "excerpt_start": 0,
+            "excerpt_end": 550,
+            "full_passage_length": 550
+          },
+          {
+            "evidence_id": "conflicting-sources-1",
+            "document_id": "conflicting-sources-doc",
+            "document_revision": 1,
+            "document_sha256": "150e98798c798f6fd04bdf27bb5af51b72f182ac275ece52565cbec1c29d8acb",
+            "original_text_sha256": "345464ff0060d2571fbad1985fe06979f0e6aad626261886870e80ea9ef474c9",
+            "excerpt_text_sha256": "345464ff0060d2571fbad1985fe06979f0e6aad626261886870e80ea9ef474c9",
+            "excerpt_start": 0,
+            "excerpt_end": 553,
+            "full_passage_length": 553
+          }
+        ],
+        "packed_inventory": {
+          "input_passages": 2,
+          "examined_passages": 2,
+          "unexamined_passages": 0,
+          "selected_passages": 2,
+          "omitted_passages": 0,
+          "shortened_passages": 0,
+          "selected_documents": 1,
+          "examined_documents": 1,
+          "scanned_code_points": 1103,
+          "evidence_utf8_bytes": 1103
+        },
+        "pack_recipe": "private-evidence-pack-v2-folded-anchors",
+        "pack_manifest_sha256": "514b4890f135f8536b586c6d49c51d5943ee124d83e86c6144a19fd5db96cbaa",
+        "baseline": {
+          "expected_groups": 2,
+          "available_groups": 2,
+          "group_available": [
+            true,
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            550,
+            553
+          ],
+          "oracle_applicable": true,
+          "quotes": 2,
+          "prompt": {
+            "recipe": "private-quotes-v3-extractive",
+            "messages_sha256": "a39c47a1d5e39a66d80692d2f1fd0e79b0c8084133d8f8a3bfcfe46eaee10905",
+            "utf8_bytes": 1928,
+            "input_upper_bound_units": 2184,
+            "completion_reserve_units": 1200,
+            "total_upper_bound_units": 3384,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          }
+        },
+        "candidate": {
+          "expected_groups": 2,
+          "available_groups": 2,
+          "group_available": [
+            true,
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            172,
+            175
+          ],
+          "oracle_applicable": true,
+          "quotes": 18,
+          "prompt": {
+            "recipe": "offline-neighbor-line-quotes-v1",
+            "messages_sha256": "f7454ebaef9f13c1d38ba1cb1aaa2373223b7d6b56b84d1de74ea05a879693f9",
+            "utf8_bytes": 2475,
+            "total_upper_bound_units": 3931,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "omission_counts": {},
+          "catalog_sha256": "469af5377beea96da20e7a18072d25f71017ea184f740bc8c2e5f9ce61bd8304",
+          "geometry_admitted": true
+        },
+        "source_spans_and_versions_exact": true,
+        "originals_unchanged": true,
+        "model_selection_relevance_abstention_or_injection_resistance_measured": false
+      },
+      {
+        "case": "missing-registration",
+        "format": "exact_text_fixture",
+        "original_bytes_sha256": "e94075b0e9db3739136145ddcfab91d96dbf341d339d8d2c0fe126ec45650a0b",
+        "source_inventory_sha256": "46ee8760454a8625b218979390b987f894f468b4f79c5cc1dbce07e4b0d81555",
+        "source_pins": [
+          {
+            "evidence_id": "missing-registration-0",
+            "document_id": "missing-registration-doc",
+            "document_revision": 1,
+            "document_sha256": "e94075b0e9db3739136145ddcfab91d96dbf341d339d8d2c0fe126ec45650a0b",
+            "original_text_sha256": "eaf8fe5c721da4b1ef5105d2970e57b0aaef0a6263ccaa70b04b66ce0b1721a0",
+            "excerpt_text_sha256": "eaf8fe5c721da4b1ef5105d2970e57b0aaef0a6263ccaa70b04b66ce0b1721a0",
+            "excerpt_start": 0,
+            "excerpt_end": 566,
+            "full_passage_length": 566
+          }
+        ],
+        "packed_inventory": {
+          "input_passages": 1,
+          "examined_passages": 1,
+          "unexamined_passages": 0,
+          "selected_passages": 1,
+          "omitted_passages": 0,
+          "shortened_passages": 0,
+          "selected_documents": 1,
+          "examined_documents": 1,
+          "scanned_code_points": 566,
+          "evidence_utf8_bytes": 566
+        },
+        "pack_recipe": "private-evidence-pack-v2-folded-anchors",
+        "pack_manifest_sha256": "0c058f5d0bdecc0ec0678724e3d6917addfa5c38d7f6bf1ba84748ffa725898f",
+        "baseline": {
+          "expected_groups": 0,
+          "available_groups": 0,
+          "group_available": [],
+          "smallest_covering_quote_utf8_bytes": [],
+          "oracle_applicable": false,
+          "quotes": 1,
+          "prompt": {
+            "recipe": "private-quotes-v3-extractive",
+            "messages_sha256": "1448b75cda41b0769370bec474b6a701bd4beda8f4668f8afbfeb5a2bbe3947a",
+            "utf8_bytes": 1277,
+            "input_upper_bound_units": 1533,
+            "completion_reserve_units": 1200,
+            "total_upper_bound_units": 2733,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          }
+        },
+        "candidate": {
+          "expected_groups": 0,
+          "available_groups": 0,
+          "group_available": [],
+          "smallest_covering_quote_utf8_bytes": [],
+          "oracle_applicable": false,
+          "quotes": 9,
+          "prompt": {
+            "recipe": "offline-neighbor-line-quotes-v1",
+            "messages_sha256": "3266205cf2e6970c8f60b86af59bf50eb8e724480932f7d901a5875650a15435",
+            "utf8_bytes": 1546,
+            "total_upper_bound_units": 3002,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "omission_counts": {},
+          "catalog_sha256": "17ce8e961ce8c381d1fbb9c8bd9b9a1e622163cc6f8bdfd75c4bc8c8318d5dd8",
+          "geometry_admitted": true
+        },
+        "source_spans_and_versions_exact": true,
+        "originals_unchanged": true,
+        "model_selection_relevance_abstention_or_injection_resistance_measured": false
+      },
+      {
+        "case": "hostile-document",
+        "format": "exact_text_fixture",
+        "original_bytes_sha256": "71e8f71d997fdbc1e53ccbd8b6cb90b779a0ff55050b5807a5e02062129c5fdc",
+        "source_inventory_sha256": "cabd21ff14d58eec66c9592e4cdeb1c7eb3f9194ac514160186955a21ec93072",
+        "source_pins": [
+          {
+            "evidence_id": "hostile-document-0",
+            "document_id": "hostile-document-doc",
+            "document_revision": 1,
+            "document_sha256": "71e8f71d997fdbc1e53ccbd8b6cb90b779a0ff55050b5807a5e02062129c5fdc",
+            "original_text_sha256": "530a5f73c335484e5ae0f0ded135d1d6141a09e8240d8e20ce002ed35e352d71",
+            "excerpt_text_sha256": "530a5f73c335484e5ae0f0ded135d1d6141a09e8240d8e20ce002ed35e352d71",
+            "excerpt_start": 0,
+            "excerpt_end": 702,
+            "full_passage_length": 702
+          }
+        ],
+        "packed_inventory": {
+          "input_passages": 1,
+          "examined_passages": 1,
+          "unexamined_passages": 0,
+          "selected_passages": 1,
+          "omitted_passages": 0,
+          "shortened_passages": 0,
+          "selected_documents": 1,
+          "examined_documents": 1,
+          "scanned_code_points": 702,
+          "evidence_utf8_bytes": 702
+        },
+        "pack_recipe": "private-evidence-pack-v2-folded-anchors",
+        "pack_manifest_sha256": "78287560f74c2a0d84bff7e402cebd2da37941f1e7377a8bf35e5c1042188bcf",
+        "baseline": {
+          "expected_groups": 1,
+          "available_groups": 1,
+          "group_available": [
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            702
+          ],
+          "oracle_applicable": true,
+          "quotes": 1,
+          "prompt": {
+            "recipe": "private-quotes-v3-extractive",
+            "messages_sha256": "23c85387a2516a9648c610a5150c899b069f6ec754413edfc00f8be346503309",
+            "utf8_bytes": 1393,
+            "input_upper_bound_units": 1649,
+            "completion_reserve_units": 1200,
+            "total_upper_bound_units": 2849,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          }
+        },
+        "candidate": {
+          "expected_groups": 1,
+          "available_groups": 1,
+          "group_available": [
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            181
+          ],
+          "oracle_applicable": true,
+          "quotes": 11,
+          "prompt": {
+            "recipe": "offline-neighbor-line-quotes-v1",
+            "messages_sha256": "95bba16ec43e83f954fdfbffd98d8b012fd7fb2864d46565f603cf69b1315ff8",
+            "utf8_bytes": 1732,
+            "total_upper_bound_units": 3188,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "omission_counts": {},
+          "catalog_sha256": "35bb357a954fe911910b7a04a2bf956b34d5d3ade6b87bffd17ed05f0934a27b",
+          "geometry_admitted": true
+        },
+        "source_spans_and_versions_exact": true,
+        "originals_unchanged": true,
+        "model_selection_relevance_abstention_or_injection_resistance_measured": false
+      },
+      {
+        "case": "overlong-whole-line",
+        "format": "exact_text_fixture",
+        "original_bytes_sha256": "67e0341e6430a98a7df36059a7cf22dad5930fe149e667112589cc01a65455b5",
+        "source_inventory_sha256": "10258648c0bb2cda534dbe4605547f645147b65ef528255ad523125e1f444bb7",
+        "source_pins": [
+          {
+            "evidence_id": "overlong-whole-line-0",
+            "document_id": "overlong-whole-line-doc",
+            "document_revision": 1,
+            "document_sha256": "67e0341e6430a98a7df36059a7cf22dad5930fe149e667112589cc01a65455b5",
+            "original_text_sha256": "4f354bf35ccdb5884c003d4f66c2fa428b263eb9f8da1ca68d8bed0e73937487",
+            "excerpt_text_sha256": "4f354bf35ccdb5884c003d4f66c2fa428b263eb9f8da1ca68d8bed0e73937487",
+            "excerpt_start": 0,
+            "excerpt_end": 1161,
+            "full_passage_length": 1161
+          }
+        ],
+        "packed_inventory": {
+          "input_passages": 1,
+          "examined_passages": 1,
+          "unexamined_passages": 0,
+          "selected_passages": 1,
+          "omitted_passages": 0,
+          "shortened_passages": 0,
+          "selected_documents": 1,
+          "examined_documents": 1,
+          "scanned_code_points": 1161,
+          "evidence_utf8_bytes": 1161
+        },
+        "pack_recipe": "private-evidence-pack-v2-folded-anchors",
+        "pack_manifest_sha256": "6a4e94b50a4a488fc737aea36c474f6994735e604cae19d1a262f48d62fde47c",
+        "baseline": {
+          "expected_groups": 1,
+          "available_groups": 1,
+          "group_available": [
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            1161
+          ],
+          "oracle_applicable": true,
+          "quotes": 1,
+          "prompt": {
+            "recipe": "private-quotes-v3-extractive",
+            "messages_sha256": "091c27313631a6e710008fa74dd9b8bb9e4a772d6bfa96c5edbd79e44227f858",
+            "utf8_bytes": 1858,
+            "input_upper_bound_units": 2114,
+            "completion_reserve_units": 1200,
+            "total_upper_bound_units": 3314,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          }
+        },
+        "candidate": {
+          "expected_groups": 1,
+          "available_groups": 0,
+          "group_available": [
+            false
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            null
+          ],
+          "oracle_applicable": true,
+          "quotes": 0,
+          "prompt": {
+            "recipe": "offline-neighbor-line-quotes-v1",
+            "messages_sha256": "167ff97e2de18a03f7d4dfd93ea05aa643a7055068da04b96d75ec4e5a4ae8cb",
+            "utf8_bytes": 1826,
+            "total_upper_bound_units": 3282,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "omission_counts": {
+            "whole_window_byte_limit": 1
+          },
+          "catalog_sha256": "08167cae1a73e09fa4f476fc0f71247ed629fe5722f195ce2ce3fcd5e2e42429",
+          "geometry_admitted": false
+        },
+        "source_spans_and_versions_exact": true,
+        "originals_unchanged": true,
+        "model_selection_relevance_abstention_or_injection_resistance_measured": false
+      },
+      {
+        "case": "blank-separated-condition",
+        "format": "exact_text_fixture",
+        "original_bytes_sha256": "0e60cbc62bd2bc41d3ef73ad3c7529a1df6d923a43983d304bb1d1400a426cfa",
+        "source_inventory_sha256": "3c004bab8d9b2a61a7a474e9c17e0366da2dce58b3058ad662eb01653f125a33",
+        "source_pins": [
+          {
+            "evidence_id": "blank-separated-condition-0",
+            "document_id": "blank-separated-condition-doc",
+            "document_revision": 1,
+            "document_sha256": "0e60cbc62bd2bc41d3ef73ad3c7529a1df6d923a43983d304bb1d1400a426cfa",
+            "original_text_sha256": "547c920bf3b9edf42cc852a7c6547e3da715248b8372a9c90bca536f7bc7e674",
+            "excerpt_text_sha256": "547c920bf3b9edf42cc852a7c6547e3da715248b8372a9c90bca536f7bc7e674",
+            "excerpt_start": 0,
+            "excerpt_end": 99,
+            "full_passage_length": 99
+          }
+        ],
+        "packed_inventory": {
+          "input_passages": 1,
+          "examined_passages": 1,
+          "unexamined_passages": 0,
+          "selected_passages": 1,
+          "omitted_passages": 0,
+          "shortened_passages": 0,
+          "selected_documents": 1,
+          "examined_documents": 1,
+          "scanned_code_points": 99,
+          "evidence_utf8_bytes": 99
+        },
+        "pack_recipe": "private-evidence-pack-v2-folded-anchors",
+        "pack_manifest_sha256": "8e9fbf82ca667cbeae672efcccffb64996d817e530b759a6b3861e81621637aa",
+        "baseline": {
+          "expected_groups": 1,
+          "available_groups": 1,
+          "group_available": [
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            99
+          ],
+          "oracle_applicable": true,
+          "quotes": 1,
+          "prompt": {
+            "recipe": "private-quotes-v3-extractive",
+            "messages_sha256": "4bec0245afbbf05cf1b2eebc38da6095d975d717a17c90b3f89b4dc67afd39c8",
+            "utf8_bytes": 802,
+            "input_upper_bound_units": 1058,
+            "completion_reserve_units": 1200,
+            "total_upper_bound_units": 2258,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          }
+        },
+        "candidate": {
+          "expected_groups": 1,
+          "available_groups": 0,
+          "group_available": [
+            false
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            null
+          ],
+          "oracle_applicable": true,
+          "quotes": 2,
+          "prompt": {
+            "recipe": "offline-neighbor-line-quotes-v1",
+            "messages_sha256": "b0eaa311a84962e5ff988aec4f902014465a29d24c4ca7be31092921a51c0c4d",
+            "utf8_bytes": 834,
+            "total_upper_bound_units": 2290,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "omission_counts": {},
+          "catalog_sha256": "83164db7e6c94de8a7c8cb1b8d06236188773e7bab2f74a5e06b5808dfba329b",
+          "geometry_admitted": false
+        },
+        "source_spans_and_versions_exact": true,
+        "originals_unchanged": true,
+        "model_selection_relevance_abstention_or_injection_resistance_measured": false
+      },
+      {
+        "case": "page-separated-condition",
+        "format": "text_pdf",
+        "original_bytes_sha256": "7ff93832e904aef370ef7b9b587029b2c13f0fc1b2577cbb5edd66432e5d4ac5",
+        "source_inventory_sha256": "bf8c79e3c5ffef313533afbf362b511350d02e97f530a16d1646ee0a5a379df6",
+        "source_pins": [
+          {
+            "evidence_id": "page-separated-condition-1",
+            "document_id": "page-separated-condition-doc",
+            "document_revision": 1,
+            "document_sha256": "7ff93832e904aef370ef7b9b587029b2c13f0fc1b2577cbb5edd66432e5d4ac5",
+            "original_text_sha256": "91b2c4fa30fd03fdf55deebfe2510bb039a0f4aa78cf82c90954a7dec26b4a34",
+            "excerpt_text_sha256": "1b52f85fee507cf23b675f21c17285a2ffaf970efc3cedad93a005a992a8f28a",
+            "excerpt_start": 0,
+            "excerpt_end": 1776,
+            "full_passage_length": 3055
+          },
+          {
+            "evidence_id": "page-separated-condition-0",
+            "document_id": "page-separated-condition-doc",
+            "document_revision": 1,
+            "document_sha256": "7ff93832e904aef370ef7b9b587029b2c13f0fc1b2577cbb5edd66432e5d4ac5",
+            "original_text_sha256": "2980b57cf66313f61f254e45304fa7718af8940d3ca16018c7905ff184e1a9f3",
+            "excerpt_text_sha256": "070bc80c347beca55cbaf8ecd372b9307a6341424a4b3c1b775d355db6d737e4",
+            "excerpt_start": 1269,
+            "excerpt_end": 3036,
+            "full_passage_length": 3036
+          }
+        ],
+        "packed_inventory": {
+          "input_passages": 2,
+          "examined_passages": 2,
+          "unexamined_passages": 0,
+          "selected_passages": 2,
+          "omitted_passages": 0,
+          "shortened_passages": 2,
+          "selected_documents": 1,
+          "examined_documents": 1,
+          "scanned_code_points": 6091,
+          "evidence_utf8_bytes": 3543
+        },
+        "pack_recipe": "private-evidence-pack-v2-folded-anchors",
+        "pack_manifest_sha256": "31b6c60dd22037468951cb078e322fd2c0b71c932f8c08de073c29d83ebb2963",
+        "baseline": {
+          "expected_groups": 2,
+          "available_groups": 2,
+          "group_available": [
+            true,
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            1767,
+            1776
+          ],
+          "oracle_applicable": true,
+          "quotes": 2,
+          "prompt": {
+            "recipe": "private-quotes-v3-extractive",
+            "messages_sha256": "38a3af262c27d5981a60783b71cf55a51f4fa9e13c55d5b1e57fad28bc4f1379",
+            "utf8_bytes": 4431,
+            "input_upper_bound_units": 4687,
+            "completion_reserve_units": 1200,
+            "total_upper_bound_units": 5887,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          }
+        },
+        "candidate": {
+          "expected_groups": 2,
+          "available_groups": 2,
+          "group_available": [
+            true,
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            102,
+            119
+          ],
+          "oracle_applicable": true,
+          "quotes": 56,
+          "prompt": {
+            "recipe": "offline-neighbor-line-quotes-v1",
+            "messages_sha256": "3aa754363cfbed5fe2c56f00e8d356e46242057a7367d581034401d7dbd12860",
+            "utf8_bytes": 6356,
+            "total_upper_bound_units": 7812,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "omission_counts": {},
+          "catalog_sha256": "87e08da05a5e06135f60e2f16a9f2e850d2a6e6559b4559f3c867aa7e59d1e08",
+          "geometry_admitted": true
+        },
+        "source_spans_and_versions_exact": true,
+        "originals_unchanged": true,
+        "model_selection_relevance_abstention_or_injection_resistance_measured": false
+      },
+      {
+        "case": "dense-budget-and-cap",
+        "format": "exact_text_fixture",
+        "original_bytes_sha256": "5a25edd2b2568448024bfe29e2260ec9445cd6e244cadfc4cd584bc351d7d1ac",
+        "source_inventory_sha256": "bd6acc4c0fc1694d3cb6e193f871e56458e807bceca5872c662ac52b6cb6b6eb",
+        "source_pins": [
+          {
+            "evidence_id": "dense-budget-and-cap-0",
+            "document_id": "dense-budget-and-cap-doc",
+            "document_revision": 1,
+            "document_sha256": "5a25edd2b2568448024bfe29e2260ec9445cd6e244cadfc4cd584bc351d7d1ac",
+            "original_text_sha256": "5ad5e04be5e3e18cd5b1413204f464636c0a9c34fcdc235546f1ae4499992af5",
+            "excerpt_text_sha256": "a0a4ee9f992b9aa8800ad34f9cd9bcd1520a85a5654b95cbc6f853b312620600",
+            "excerpt_start": 394,
+            "excerpt_end": 2190,
+            "full_passage_length": 2190
+          },
+          {
+            "evidence_id": "dense-budget-and-cap-1",
+            "document_id": "dense-budget-and-cap-doc",
+            "document_revision": 1,
+            "document_sha256": "5a25edd2b2568448024bfe29e2260ec9445cd6e244cadfc4cd584bc351d7d1ac",
+            "original_text_sha256": "62acb1880a6cd3e396ed1989e4df5b0c67b3c69e0f892869c8169a7233f6f4e6",
+            "excerpt_text_sha256": "bc6a59900f5f3d1243266444f1cdd5cf0dd24ec6838e3ce43cf4063241ac7beb",
+            "excerpt_start": 0,
+            "excerpt_end": 1772,
+            "full_passage_length": 2149
+          }
+        ],
+        "packed_inventory": {
+          "input_passages": 8,
+          "examined_passages": 8,
+          "unexamined_passages": 0,
+          "selected_passages": 2,
+          "omitted_passages": 6,
+          "shortened_passages": 2,
+          "selected_documents": 1,
+          "examined_documents": 1,
+          "scanned_code_points": 17233,
+          "evidence_utf8_bytes": 3568
+        },
+        "pack_recipe": "private-evidence-pack-v2-folded-anchors",
+        "pack_manifest_sha256": "a7425a3918772df292fcedd2a45e1d7539577017055f51f4b083b17662647803",
+        "baseline": {
+          "expected_groups": 1,
+          "available_groups": 1,
+          "group_available": [
+            true
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            1796
+          ],
+          "oracle_applicable": true,
+          "quotes": 2,
+          "prompt": {
+            "recipe": "private-quotes-v3-extractive",
+            "messages_sha256": "a681d2bc5e2f8cdab67cc32a6e41a931a6db425ea658945d7524fc61b23cdce7",
+            "utf8_bytes": 6730,
+            "input_upper_bound_units": 6986,
+            "completion_reserve_units": 1200,
+            "total_upper_bound_units": 8186,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          }
+        },
+        "candidate": {
+          "expected_groups": 1,
+          "available_groups": 0,
+          "group_available": [
+            false
+          ],
+          "smallest_covering_quote_utf8_bytes": [
+            null
+          ],
+          "oracle_applicable": true,
+          "quotes": 64,
+          "prompt": {
+            "recipe": "offline-neighbor-line-quotes-v1",
+            "messages_sha256": "7d0b8ed028fa26a7f80aadff9db82ee181159315bbc8d98a09e719ab6e1d52a7",
+            "utf8_bytes": 8941,
+            "total_upper_bound_units": 10397,
+            "context_limit_units": 8192,
+            "within_budget": false,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "omission_counts": {
+            "catalog_count_limit": 68
+          },
+          "catalog_sha256": "d023d0fed83e08639105c490604e8e932c62038172dd3ec21ef7ac57bb1b97bb",
+          "geometry_admitted": false
+        },
+        "source_spans_and_versions_exact": true,
+        "originals_unchanged": true,
+        "model_selection_relevance_abstention_or_injection_resistance_measured": false
+      }
+    ],
+    "summary": {
+      "cases": 10,
+      "expected_groups": 11,
+      "baseline_available_groups": 11,
+      "candidate_available_groups": 8,
+      "candidate_geometry_admitted_cases": 6,
+      "candidate_budget_exceeded_cases": 2,
+      "candidate_omissions_present_cases": 2
+    },
+    "conclusion": "offline_candidate_not_production_qualified"
+  },
+  "linux_offline": {
+    "tests_passed": 9,
+    "network": "none",
+    "root_read_only": true,
+    "capabilities": "none",
+    "private_runtime_or_provider_mounts": false,
+    "host_linux_report_exact": true,
+    "image": "sha256:7a67b0bf06799c403b9a7b5363faeb85f14fca0d6836eb167d13acc086c224d2",
+    "synthetic_only": true
+  },
+  "local_checks": {
+    "deployment_contracts_passed": 146,
+    "new_offline_contracts": 9,
+    "context_research_provider_cases_passed": 84,
+    "python_lint": "passed",
+    "native_inference_calls": 0,
+    "http_calls": 0
+  },
+  "preservation": {
+    "healthy_services": 8,
+    "originals_ciphertext_evidence_review_sessions_credentials_configuration_exact": true,
+    "prior_edits_preserved": 31,
+    "production_services_recreated": false,
+    "private_case_inference_calls": 0
+  },
+  "limitations": [
+    "Required-group availability means all declared text fragments occur in one candidate quotation; it is not model selection or legal correctness",
+    "Six geometry-only admissions include an absent-information fixture and do not establish abstention or instruction resistance",
+    "Prototype windows contain 8/11 required groups; coarse baseline quotes contain 11/11 over identical v2-packed evidence",
+    "Two candidate prompts exceed the unchanged 8192-unit budget; quote metadata cost is included",
+    "Blank-separated statements are individually available but not together in one candidate window",
+    "No candidate has been enabled in production, no private case has been regenerated and the owner version-3 review is unchanged",
+    "Fresh synthetic fixtures are exploratory exposed cases, not lawyer-reviewed or held-out acceptance data",
+    "Earlier failed native long-page/volume/mixed profiles retain their scopes; historical HTTP 502 root cause unresolved"
+  ],
+  "next_gate": "Offline budget-aware nomination with explicitly retained companion context and fallback/omission records, preserving source spans and negations/conditions; any later production candidate needs fresh declared native acceptance."
+}
