@@ -5504,3 +5504,64 @@ success is not production authorization. Reviewed corpus, sustained legal capaci
 isolated intake, OCR/layout, offline operation, graph rollback and production
 RPO/RTO remain open. See [operator procedure](OPERATIONS.md#disposable-bundle-adapter-and-alternateadverse-source-evaluation)
 and [dated evidence](evidence/alternate-adverse-bundle-adapter-2026-10-22.json).
+
+
+### F00-06 frozen alternate-wording and source-diversity comparison — 22 October 2026
+
+A new offline v2 candidate visits one bundle per source version before revisiting
+a source. For a passage with no query overlap, it nominates the first nonblank line
+as a labeled unmatched-source fallback. This broadens consideration of otherwise
+ignored short sources without a synonym table, semantic model or legal inference.
+It can also nominate irrelevant text and miss later paraphrases. Distinct document
+revisions remain separate sources; one document/revision cannot alias two hashes.
+
+The new recipe scans complete original passages within 2,000 passages, 2,000,000
+code points and a 20,000 nonblank-line work cap; larger inputs fail closed before
+nomination. It copies complete anchor/companion spans, preserves conditions, marks
+unlinked separators and allows a complete coarse fallback within 1,800 bytes.
+Admission keeps the existing limits of 20 bundles, 64 parts, eight evidence passages,
+4,000 copied UTF-8 bytes and 768 bytes per ordinary part. The actual serialized
+prompt includes only selected parts and explicit source-version aliases. No
+condition is trimmed to pass a budget, and every omitted candidate or unrepresented
+source version remains inspectable. Complete inventory, versions, question, limits,
+spans and prompt are sealed; changed unused sources also invalidate resolution.
+
+**The fresh sixteen-case suite was frozen before either planner was graded.**
+Fixtures, expected source groups, implementations and evaluator hashes were retained;
+the first report and all its failures remain unchanged. Both planners see the same
+invented evidence and declared budgets. The retained v1 planner has 21/31 source
+groups available; v2 has 26/31. Alternate-wording cases with all required groups
+available rise from 0/3 to 2/3; both sides in adverse-source cases rise from 4/7 to
+6/7. Each planner has fifteen fitting envelopes and one blocked undersized envelope.
+This is a descriptive comparison of differing nomination, envelope and admission
+recipes, not a causal isolation of source ordering, semantic accuracy or legal recall.
+
+The five unavailable groups remain visible: a late paraphrase, an unlinked joint
+condition, two sources beyond the eight-passage cap and the blocked envelope. Five
+v2 bundles use unmatched-source fallback, including one on absent information;
+there is no model-abstention or relevance claim. Hostile source text remains
+untrusted data. No native model selection, instruction resistance, legal association
+or legal completeness is measured. Earlier native failures and unresolved historical
+HTTP 502 cause keep their scopes.
+
+Ten new regression tests cover the frozen report, distinct revisions, source
+rotation, atomic conditions, Unicode spans, work limits, tampered/unused-source
+versions and rejection by the existing disposable adapter. All 175 deployment
+contracts and 167 context/research/policy/provider cases pass locally. The ten new
+tests pass in read-only, network-disabled Linux with public code only; its entire
+report exactly matches the retained first host report. There are zero model/HTTP
+calls, private inputs or review decisions. All nine exact-head CI jobs and five
+required timing reserves remain merge gates; no jobs, caps or workers change.
+
+Production packing, quotation recipe, services and the existing disposable adapter
+remain unchanged. The new v2 recipe has no application or provider hook. Originals,
+exact evidence, encrypted bytes, credentials, sessions and review history remain
+preserved. R03-17 still awaits the owner's version-3 review; F00-06 remains partial.
+Next broaden frozen wording/layout/source-volume coverage and qualify a
+recipe-specific disposable adapter before a separately declared native acceptance
+trial. Do not tune these exposed cases into an acceptance set or replay previous
+native failures until passing. Reviewed corpus, sustained legal capacity, isolated
+intake, OCR/layout, offline operation, graph rollback and production RPO/RTO remain
+open. See [declared experiment](SOURCE_DIVERSITY_EVALUATION.md),
+[operator procedure](OPERATIONS.md#frozen-source-diversity-comparison) and
+[dated evidence](evidence/source-diversity-frozen-2026-10-22.json).

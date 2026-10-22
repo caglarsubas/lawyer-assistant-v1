@@ -1590,3 +1590,47 @@ source and envelope identities, no expected-answer hints, explicit model/transpo
 scope and retained failure receipts. Do not replay earlier exposed failures until
 passing. Preserve the private pilot and its pending owner review. Historical 502
 cause, legal correctness and sustained native capacity remain open.
+
+
+### Frozen source-diversity comparison
+
+The separate `offline-diverse-source-bundles-v2` recipe has no provider or application
+hook. The existing disposable adapter rejects its plans before transport; it cannot
+silently adopt the new prompt or selection policy. See the
+[declared policy](SOURCE_DIVERSITY_EVALUATION.md) before extending this experiment.
+
+```sh
+PYTHONPATH=backend:scripts backend/.venv/bin/python scripts/evaluate_source_diversity.py --output /tmp/new-source-diversity-report.json
+backend/.venv/bin/python -m unittest discover -s deploy -p test_source_diversity.py
+```
+
+The output must not already exist. This evaluator accepts no external/private source
+option and makes zero model/HTTP calls. Keep expected groups outside both planners.
+Freeze fixtures, expected groups, code and evaluator before grading; retain the
+first report. Later changes require a new declared experiment and must not erase
+exposed failures. The current policy and sixteen fixtures were frozen before grading;
+no fixture or planner changes followed the first report. A pre-grade physical-line
+work cap bounds scanning without cutting a source into an apparently complete scan.
+
+Current comparison: 21/31 source groups available in v1, 26/31 in v2; alternate
+wording 0/3 versus 2/3; both sides in adverse-source cases 4/7 versus 6/7. Both have
+fifteen fitting prompts and one blocked undersized envelope. Recipes differ in
+nomination, envelope layout and admission, so this does not isolate a causal effect
+of source rotation or establish model/legal accuracy. The later paraphrase, unlinked
+condition, two over-cap sources and undersized envelope remain unavailable.
+
+Unmatched-source fallback copies the first nonblank line and its bounded companions;
+it does not imply relevance, factual absence or model abstention. The missing-
+information case deliberately has a fallback candidate. Source proximity does not
+establish a legal relationship. Preserve complete conditions, exact Unicode spans,
+all source revisions, unrepresented-source lists and omission reasons. Rebuild the
+complete plan before resolution, including unused sources. Reject ambiguous
+revision/hash pairs, tampered plans and blocked envelopes.
+
+Qualify new contracts in read-only, network-disabled Linux with public code only,
+no provider or private-runtime mounts, and compare the complete report against the
+retained first host result. All existing deployment and provider/context checks,
+nine exact-head CI jobs and five timing reserves remain required. No test removal,
+timeout increase, retry or production switch follows from improved offline counts.
+A new disposable adapter and separately frozen native acceptance trial remain later
+gates. Keep the private pilot and owner version-3 review pending.

@@ -1,0 +1,1948 @@
+{
+  "schema": "offline-source-diversity-record-v1",
+  "recorded_on": "2026-10-22",
+  "qualification": "offline_frozen_comparison_only_not_semantic_native_or_legal_qualification",
+  "implementation_sha256": {
+    "docs/SOURCE_DIVERSITY_EVALUATION.md": "292ccb19e50ffbf27543abf9f80947b29d4b8ebad1a0f43a4f3971f3f7a1189c",
+    "scripts/source_diversity_cases.py": "7721eafb181aa2eca60c4446b431b229c8c710990f5799c898f9d1e15c53d42f",
+    "scripts/diverse_quote_bundles.py": "bdfe59ca895c22ccc40aa28652202ef3867a2847860d1b9d1482a19cfce763f0",
+    "scripts/evaluate_source_diversity.py": "53273ae2cfbc674c3f7d5b983444f11916c1a68463228cb7c82b95bb3c7e6de8",
+    "scripts/budgeted_quote_bundles.py": "18e59c03a18bae46a3c6282663937c974101b008033ef59d1dc6e00d0f8cfce4",
+    "backend/app/context_packing.py": "7e78fb51fd680d53691cc62505c288095bb5014d93fcf69ad6c1cf9637805d9d",
+    "backend/app/evidence_prompt.py": "8bca934696e575eaa0959d37a22588e8236ea80293c56523e641baf34b1bb82a",
+    "scripts/offline_quotation_boundaries.py": "17cafee58eb58b874638b4a1c62a111d423b0ae71293a2b11f9f14d514d640a1",
+    "deploy/test_source_diversity.py": "9303cf771f3ca0fdab4e97acbc4977d8e6c350649efa69937c6adc6d142aec2e"
+  },
+  "pre_grade_freeze_sha256": "b0ff030e44982ddd171a706bb7889ac62a02018cd4984ec7da6afe5eb6f4a15a",
+  "evaluation": {
+    "schema": "offline-source-diversity-evaluation-v1",
+    "suite": "synthetic-source-diversity-frozen-v1",
+    "suite_sha256": "d392cf5a72e166bf5cdbd6d3425d3a55f8e944e5cdec6edf231944c7ab033174",
+    "inference_calls": 0,
+    "http_calls": 0,
+    "private_documents": 0,
+    "review_decisions": 0,
+    "production_changes": 0,
+    "native_or_legal_qualification": false,
+    "cases": [
+      {
+        "case": "P1201",
+        "kind": "alternate_wording",
+        "context_limit_units": 8192,
+        "source_inventory_sha256": "27687156f7a00007e0405311d8ba4c723de4d004460e778af35fe4b3ffcd2926",
+        "source_pins": [
+          {
+            "id": "P1201-dispatch-v2-0",
+            "document_id": "P1201-doc-dispatch",
+            "document_revision": 2,
+            "document_sha256": "6884bb836cf925c6df93ba5f60ddd4150b6ed650c4af6c65a9f41a61307f6fdf",
+            "text_sha256": "fa4aacf198cbc0044cfd26d2c71bdefb56067c8058e63e2191689892e0ef360c"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 30,
+          "nonblank_physical_lines": 1,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 33
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "c4a67f6c21ee525d747bdd10ea6e549286a1bc2bbd4f6368352646c080e430c9",
+          "groups": [
+            {
+              "document_id": "P1201-doc-dispatch",
+              "document_revision": 2,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "70ec06ff50f60a8bc447b711fce46b11eddb349e2a52af03a65cf44bfe27e2f8",
+            "utf8_bytes": 454,
+            "total_upper_bound_units": 1910,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 0,
+          "selected_source_versions": 0,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "9ede0d751ae6b2f55b4ba3283518dac41457de7918c9be9835f370e4c9a2683c",
+          "groups": [
+            {
+              "document_id": "P1201-doc-dispatch",
+              "document_revision": 2,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "6bdad0adb812e6fab2c67b5b12bfce7f515eb23d16c901d9f5612c80fc64ba37",
+            "utf8_bytes": 921,
+            "total_upper_bound_units": 2377,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 1,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1202",
+        "kind": "alternate_wording",
+        "context_limit_units": 8192,
+        "source_inventory_sha256": "383dcc556c0d0761704d577d834aae4cf0405d1b9e2a39e307659ec6ad71014b",
+        "source_pins": [
+          {
+            "id": "P1202-refund-v3-0",
+            "document_id": "P1202-doc-refund",
+            "document_revision": 3,
+            "document_sha256": "505ff3b47e96f3c184b7cae3e51a15be658133df0a96960f2215e58fe8a88fb5",
+            "text_sha256": "7cac320dc0e86e807165566d6792b2b8b24fb9ea74b81394552da26c7185a8ea"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 91,
+          "nonblank_physical_lines": 2,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 104
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "63f11089db4dd8b9d962242a960f2d03ff0f00b40a8db703d5c9fa6bb5a4dc73",
+          "groups": [
+            {
+              "document_id": "P1202-doc-refund",
+              "document_revision": 3,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "3586e02aad224fb64459e4c9b341ade8dedad419b31d31156b11120184b78a84",
+            "utf8_bytes": 440,
+            "total_upper_bound_units": 1896,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 0,
+          "selected_source_versions": 0,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "fc9808bf920efaed40a3677cefca495d5913108652435efa06f7f08f0c85d427",
+          "groups": [
+            {
+              "document_id": "P1202-doc-refund",
+              "document_revision": 3,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "59bf95112c7ce7736fd39777d70443ac32a4a42bc25dfe07c0c224a24bdfc1eb",
+            "utf8_bytes": 1078,
+            "total_upper_bound_units": 2534,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 1,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1203",
+        "kind": "late_paraphrase",
+        "context_limit_units": 8192,
+        "source_inventory_sha256": "4ac0f4a7ab252bf505a9685b167185d9dc5d322b978b8d6119f95f12f88b21da",
+        "source_pins": [
+          {
+            "id": "P1203-record-v1-0",
+            "document_id": "P1203-doc-record",
+            "document_revision": 1,
+            "document_sha256": "dcfccdf7e80c34e7f1a3967bcd432ae9da63314263f2e6533ee741fe828a47c9",
+            "text_sha256": "b9aabe8e10cd7eb5144470ca798a67c74d0870243f39f39ef167569238f12460"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 2580,
+          "nonblank_physical_lines": 66,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 84
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "b5dd482af849098da712a3c37ebc450d61ece23edac39b0a98b901a985bec215",
+          "groups": [
+            {
+              "document_id": "P1203-doc-record",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "10dfa31a2fb97a14d91851fc686b4e9054fc442ecd2028a26c308aa52cc3be18",
+            "utf8_bytes": 451,
+            "total_upper_bound_units": 1907,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 0,
+          "selected_source_versions": 0,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "7a11d09a91c8e6fbf07c803389923dafb0d287b9fc4581d17187076bd2aec1e6",
+          "groups": [
+            {
+              "document_id": "P1203-doc-record",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "ab9919216d36e7569dfa9b2f3a86d38915f67f1e60b22e206befcf3728701d3a",
+            "utf8_bytes": 1069,
+            "total_upper_bound_units": 2525,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 1,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1204",
+        "kind": "adverse_pressure",
+        "context_limit_units": 4600,
+        "source_inventory_sha256": "7e7a45126314962e33f3eee3fe811c7616e73813a6eca2d8570e7d5b515f6887",
+        "source_pins": [
+          {
+            "id": "P1204-bulk-v1-0",
+            "document_id": "P1204-doc-bulk",
+            "document_revision": 1,
+            "document_sha256": "0d7844c198999e84853291d126dffd090a234ae205a3ef2dcc9621dd9294c4e3",
+            "text_sha256": "53735bbd681cb25e730b1e3dc0f0ce9f32179d6b9b482873201f60076fbe0628"
+          },
+          {
+            "id": "P1204-denial-v5-0",
+            "document_id": "P1204-doc-denial",
+            "document_revision": 5,
+            "document_sha256": "002a8e8ff81503e1dbcb728a74019e798741faa4e129701352db91c6c5121dcf",
+            "text_sha256": "0a169682b6da29a7a6139ee569fc398a8ee5d09edfa5a1d3221b6021337fdca3"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 2,
+          "source_versions": 2,
+          "scanned_code_points": 1515,
+          "nonblank_physical_lines": 44,
+          "proposed_bundles": 43,
+          "selected_bundles": 5,
+          "selected_evidence_passages": 2,
+          "copied_text_utf8_bytes": 489
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "9fd856351b2e7aaa27ef502a68f33cce56f92b01fd38502d0db10cfbad7ac02c",
+          "groups": [
+            {
+              "document_id": "P1204-doc-bulk",
+              "document_revision": 1,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1204-doc-denial",
+              "document_revision": 5,
+              "side": "adverse",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "15a74c08ef53bee36e3fe6a1fe9684abb496b223c6cb62c5dc1566d06eda505c",
+            "utf8_bytes": 3142,
+            "total_upper_bound_units": 4598,
+            "context_limit_units": 4600,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 4,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {
+            "whole_bundle_prompt_budget": 38
+          },
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "7ef78385bab4e17ec06d39eb913cf5957687b27ce42126c7af3578fdd3c0a14f",
+          "groups": [
+            {
+              "document_id": "P1204-doc-bulk",
+              "document_revision": 1,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1204-doc-denial",
+              "document_revision": 5,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "48274c7a91bd42100821d26618bd7b6677dd9809d4b59492bf7448efa303968e",
+            "utf8_bytes": 3132,
+            "total_upper_bound_units": 4588,
+            "context_limit_units": 4600,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 5,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 1,
+          "omission_counts": {
+            "whole_bundle_prompt_budget": 38
+          },
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1205",
+        "kind": "multiple_passages",
+        "context_limit_units": 5100,
+        "source_inventory_sha256": "2c35e4b62045844bf2dd1cfe8bf72a9b7ef051ac4547c6afa89499d5bb39e58c",
+        "source_pins": [
+          {
+            "id": "P1205-many-v2-0",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "12149829802d7762b7a2f255b5263f7cda7a2ed47124cf636ed64e7763ece91a"
+          },
+          {
+            "id": "P1205-many-v2-1",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "db353bc92967d197f6a4197cfa076701905cd9cfeedb6016b03991c6ce15051b"
+          },
+          {
+            "id": "P1205-many-v2-2",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "a4b5a252f7689f22ce6deea7c833599152c23399e9bbc9e0ad6fb03cd7acb434"
+          },
+          {
+            "id": "P1205-many-v2-3",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "1e98929a3b9544f4964ecce11f7a55a1ce9ba3f3fd2c0af50a422d74ffa431dc"
+          },
+          {
+            "id": "P1205-many-v2-4",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "08ee3e976ea51cc27260454dd3956bf4b6cd78b14e8b48820262949e0ce3f75d"
+          },
+          {
+            "id": "P1205-many-v2-5",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "618f35987ea18041ab8a536cf77cbb7d2760777e87216bf5d181980af4c24e95"
+          },
+          {
+            "id": "P1205-many-v2-6",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "b2bd5e337e31a9c020f082e08e5ea39b64dfe76376269f7ec23835978597b66c"
+          },
+          {
+            "id": "P1205-many-v2-7",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "da97ae9e9afc249280f63422baef2b04bbddec4a8ad220ac031e9b57aa23ce03"
+          },
+          {
+            "id": "P1205-many-v2-8",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "e7c771978b63575eca5c66273050f917ba501ce0d40f96af07bdcdd13e2d8d54"
+          },
+          {
+            "id": "P1205-many-v2-9",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "8844c8733f66e7bab5a0bc2f1a934988d805ffbbd5e1c2384b8557d577fab285"
+          },
+          {
+            "id": "P1205-many-v2-10",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "eb3350c34a66a85fd79912d22cffd965d2fc563c7dca11377a60c0122687d42d"
+          },
+          {
+            "id": "P1205-many-v2-11",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "e279f9e41a927dcd43c331dc0d334a78ccb4b71efa1b520c5382beeddd225746"
+          },
+          {
+            "id": "P1205-many-v2-12",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "db1df3429df73b1fc042e3c9d43253f6f972034ddec211d457298e93efd21cf2"
+          },
+          {
+            "id": "P1205-many-v2-13",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "9dad397e83ae04852ada1fdcfbc00b2af5c846cde2556f941fe51da648612f1a"
+          },
+          {
+            "id": "P1205-many-v2-14",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "ea521d60ee1592ccc4658d5a9ed9075601502719385798e52e98c5f9eed6b706"
+          },
+          {
+            "id": "P1205-many-v2-15",
+            "document_id": "P1205-doc-many",
+            "document_revision": 2,
+            "document_sha256": "0e144c6981803ef5777d81110da56685b019cac714ec82afd4d4f5cb50ce9a47",
+            "text_sha256": "a0df896a83cd09b2d21b2854d0b4de49edaca48f10652f408dae5dacf729d716"
+          },
+          {
+            "id": "P1205-counter-v4-0",
+            "document_id": "P1205-doc-counter",
+            "document_revision": 4,
+            "document_sha256": "8b8af9d9413b82541deb4a6f823f719b2bd4f6a8ca1afac1d16683388ba10d39",
+            "text_sha256": "7e9410a729b243265ed87e751b93716661deee99cf7cb34f39f50b1008f4190b"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [
+          "P1205-many-v2-7",
+          "P1205-many-v2-8",
+          "P1205-many-v2-9",
+          "P1205-many-v2-10",
+          "P1205-many-v2-11",
+          "P1205-many-v2-12",
+          "P1205-many-v2-13",
+          "P1205-many-v2-14",
+          "P1205-many-v2-15"
+        ],
+        "candidate_inventory": {
+          "source_passages": 17,
+          "source_versions": 2,
+          "scanned_code_points": 637,
+          "nonblank_physical_lines": 18,
+          "proposed_bundles": 17,
+          "selected_bundles": 8,
+          "selected_evidence_passages": 8,
+          "copied_text_utf8_bytes": 350
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "3f38905d4dc7967e221e06af882daa32916d5e148cf714d8d7383f9818c78c54",
+          "groups": [
+            {
+              "document_id": "P1205-doc-many",
+              "document_revision": 2,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1205-doc-counter",
+              "document_revision": 4,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "9a334e4b486676564dab53ebb8fc0bb2bc5c757e409eef23f7d3e9f6490d40d7",
+            "utf8_bytes": 2565,
+            "total_upper_bound_units": 4021,
+            "context_limit_units": 5100,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 8,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "47c7bdc3a20ff622fd459068026451135243805394c0f066f6b471b405cb21cc",
+          "groups": [
+            {
+              "document_id": "P1205-doc-many",
+              "document_revision": 2,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1205-doc-counter",
+              "document_revision": 4,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "f8c2ea08232161d03b49592f615bfbbc99c2ae69dfec7a0ab55397ae69dd0ecc",
+            "utf8_bytes": 3153,
+            "total_upper_bound_units": 4609,
+            "context_limit_units": 5100,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 8,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {
+            "evidence_passage_limit": 9
+          },
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1206",
+        "kind": "distinct_revisions",
+        "context_limit_units": 8192,
+        "source_inventory_sha256": "9d8af88c78a3240c401bfb74c75015fc942dd08d174c97deda47f8f2d086f5b6",
+        "source_pins": [
+          {
+            "id": "P1206-ledger-v2-0",
+            "document_id": "P1206-doc-ledger",
+            "document_revision": 2,
+            "document_sha256": "53a85315257074af7945e5f8f6be7fc467cf631ff4ba4eb97cfb960cb35b317c",
+            "text_sha256": "f6e5c35e734cf9fe8f594eca2eedc927a9b6e801bc36b41f484f4118ef27dff9"
+          },
+          {
+            "id": "P1206-ledger-v6-0",
+            "document_id": "P1206-doc-ledger",
+            "document_revision": 6,
+            "document_sha256": "5bb540b5775a86de940607f9336ad155aa636f0973da2968374d3eac593bf394",
+            "text_sha256": "a25e88dcfdf710413ff9f22109cfa9c36b87c6ca69c750a3d7fd97a8d0b3c5d2"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 2,
+          "source_versions": 2,
+          "scanned_code_points": 89,
+          "nonblank_physical_lines": 3,
+          "proposed_bundles": 2,
+          "selected_bundles": 2,
+          "selected_evidence_passages": 2,
+          "copied_text_utf8_bytes": 92
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "03b4d6ea1306d0581833699de017f77f04ec80e23a0fe76ceecd95a06cb946e1",
+          "groups": [
+            {
+              "document_id": "P1206-doc-ledger",
+              "document_revision": 2,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1206-doc-ledger",
+              "document_revision": 6,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "7299e3f4db612e53a40896caa290d6b1998fd98545f1aa4824d1de768b9f43c3",
+            "utf8_bytes": 1038,
+            "total_upper_bound_units": 2494,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 2,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "5d9ee53793bd6c41f1c4bf488cbdd13eb185bcd984d1d102aee5175086955623",
+          "groups": [
+            {
+              "document_id": "P1206-doc-ledger",
+              "document_revision": 2,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1206-doc-ledger",
+              "document_revision": 6,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "4b4be647203647fc32d5cafc739b4a8020b0b7fcaceafeac30de4a353bd88eaa",
+            "utf8_bytes": 1319,
+            "total_upper_bound_units": 2775,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 2,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1207",
+        "kind": "hostile_adverse",
+        "context_limit_units": 8192,
+        "source_inventory_sha256": "8318846d3fd35ddebfa35605c1024b9c687251c1c15500a903261e436d522f04",
+        "source_pins": [
+          {
+            "id": "P1207-pass-v3-0",
+            "document_id": "P1207-doc-pass",
+            "document_revision": 3,
+            "document_sha256": "3370da972c7d6a534f279c07a1044c86eb5f332deb0ad3bdb9973a9ce11fc06d",
+            "text_sha256": "6db22a7db0fb8bb63fe83b4224701cfb16fe92ae4943fc90cba409bb3ba476e9"
+          },
+          {
+            "id": "P1207-fail-v7-0",
+            "document_id": "P1207-doc-fail",
+            "document_revision": 7,
+            "document_sha256": "cd93b7600128d490cd587f9ee058800c9b8a4f377e20a42d6b7ebb30049cd042",
+            "text_sha256": "4e42a9346f42b9e294951a156b78e4134f9ce6e23b8ccdae80919d2aea36656f"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 2,
+          "source_versions": 2,
+          "scanned_code_points": 131,
+          "nonblank_physical_lines": 3,
+          "proposed_bundles": 2,
+          "selected_bundles": 2,
+          "selected_evidence_passages": 2,
+          "copied_text_utf8_bytes": 142
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "176fccc9ff76914663737a5a062810bf71b77a88a65dc452ab8f7ceae08a3d0f",
+          "groups": [
+            {
+              "document_id": "P1207-doc-pass",
+              "document_revision": 3,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1207-doc-fail",
+              "document_revision": 7,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "2e4e9c905d05ae801bd5459cc95a936b634874ddebd07085e1fbb9ed67364ab3",
+            "utf8_bytes": 1073,
+            "total_upper_bound_units": 2529,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 2,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "e911ed8e55c2298057ce39a0f4df0fa8cc24f43cbba1fc93d0f0945041f18b69",
+          "groups": [
+            {
+              "document_id": "P1207-doc-pass",
+              "document_revision": 3,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1207-doc-fail",
+              "document_revision": 7,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "d3d0684647c129e5e7e123967ae0ede0d92471cec264e089242936c352038cb4",
+            "utf8_bytes": 1358,
+            "total_upper_bound_units": 2814,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 2,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1208",
+        "kind": "absent_information",
+        "context_limit_units": 8192,
+        "source_inventory_sha256": "0527d8fa78cbe7dd07290bb30dbb470e69864c74146f32946353afd80a738f57",
+        "source_pins": [
+          {
+            "id": "P1208-colors-v1-0",
+            "document_id": "P1208-doc-colors",
+            "document_revision": 1,
+            "document_sha256": "1b9b115f9e61dadac58f629d2e0ea5170c1beb6315e3146fd22c7dff8ceb2160",
+            "text_sha256": "4f7ac73ff60554445693025fac5b6895b14c91e78e1853cb59003215dd131575"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 31,
+          "nonblank_physical_lines": 1,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 33
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "e01640513f334d919517b2e37f4f4388c202c62cdea1cc46941eea7656b8cc26",
+          "groups": [],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "1afb1710757077b809964ed803134ec7d3ef9c5b8fbb0d1721515176fedfc462",
+            "utf8_bytes": 433,
+            "total_upper_bound_units": 1889,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 0,
+          "selected_source_versions": 0,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "bec9e7b97b84c9f9b3e7097c84d8d21d486793bebb2b1742215c6b3cd07ebf81",
+          "groups": [],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "554406466caac8f95113fa0e52988394e0bb5810ecc57279e3d809e04eda2375",
+            "utf8_bytes": 898,
+            "total_upper_bound_units": 2354,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 1,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1209",
+        "kind": "wide_separator",
+        "context_limit_units": 8192,
+        "source_inventory_sha256": "640660806ad75eb0a2d935ffb3b6fa3c133b0697be092fc40d71ed59a8a100e0",
+        "source_pins": [
+          {
+            "id": "P1209-accept-v1-0",
+            "document_id": "P1209-doc-accept",
+            "document_revision": 1,
+            "document_sha256": "1aba0c3ba83493f7a3dff604f145fceaef0ef2d5c4d138e45557fcec3332ad08",
+            "text_sha256": "aa8c0bac4ac78f78e17fcfcf60fee9bf2ab4e003e006466b9df3d6f29cf8efd6"
+          },
+          {
+            "id": "P1209-condition-v4-0",
+            "document_id": "P1209-doc-condition",
+            "document_revision": 4,
+            "document_sha256": "b28cf0d1d2211972e8b4da68a9b9321c9e72b2551f6ad994db6001c89e43eb8c",
+            "text_sha256": "45efd18f47883a98f35138955c8230e2589d35f654b8f972de1cc282f8701d35"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 2,
+          "source_versions": 2,
+          "scanned_code_points": 127,
+          "nonblank_physical_lines": 3,
+          "proposed_bundles": 3,
+          "selected_bundles": 3,
+          "selected_evidence_passages": 2,
+          "copied_text_utf8_bytes": 135
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "3867fe00dda39c8e8f71b797d6b2864ee89c16beed46eff27004ca3b684286ed",
+          "groups": [
+            {
+              "document_id": "P1209-doc-accept",
+              "document_revision": 1,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1209-doc-condition",
+              "document_revision": 4,
+              "side": "adverse",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "d27bcf7babd3aa727dc0e0583a2bedffbe55944bce469003f53481b650ec7c42",
+            "utf8_bytes": 1235,
+            "total_upper_bound_units": 2691,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 3,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked",
+            "separator_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "091d9ff1276dbb6b1afe9573dd75a9a5a73edf3ddf90cfa263157318b1570cc6",
+          "groups": [
+            {
+              "document_id": "P1209-doc-accept",
+              "document_revision": 1,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1209-doc-condition",
+              "document_revision": 4,
+              "side": "adverse",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "d785ed1e3d88b847d14a1993bc9bcfce1fbdd1c116519ce87474419ea6d500fe",
+            "utf8_bytes": 1582,
+            "total_upper_bound_units": 3038,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 3,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked",
+            "separator_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1210",
+        "kind": "complete_coarse_fallback",
+        "context_limit_units": 8192,
+        "source_inventory_sha256": "9046157e611bcd53ce3d5f30202f759136f1e9275dc6b2fa86120f97c3cf4784",
+        "source_pins": [
+          {
+            "id": "P1210-long-v1-0",
+            "document_id": "P1210-doc-long",
+            "document_revision": 1,
+            "document_sha256": "bd1e8fd87b4fef25b82fbf3c123906ad4785a1cc22ce5e4635770dbe28ec0717",
+            "text_sha256": "ad5aec224065f3210d049a62a19f5e501d12f3577561419c139d61b5524a5c65"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 928,
+          "nonblank_physical_lines": 1,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 999
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "d1d5592337650e4d64c89d4d61c69cb8eaec2113c52a04a462aba1949e0e7794",
+          "groups": [
+            {
+              "document_id": "P1210-doc-long",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "e197904f489ca337b3e9e1fe70f245b111242a4704b60c35544a7440c09b2be6",
+            "utf8_bytes": 1662,
+            "total_upper_bound_units": 3118,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "92ffdd6afb8664d42b725975794f976cd6b5920ca772ebbce9fa968df63af2f7",
+          "groups": [
+            {
+              "document_id": "P1210-doc-long",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "1ffedcdf4a2c347e0bdc48668ef9c6f867731be4cddd71a3a56ece2b8835fb21",
+            "utf8_bytes": 1871,
+            "total_upper_bound_units": 3327,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1211",
+        "kind": "blocked_budget",
+        "context_limit_units": 1536,
+        "source_inventory_sha256": "ca959d8a4d44227363bb0e1933b582ce3f72954a0363ae0cf159ccf8825bed95",
+        "source_pins": [
+          {
+            "id": "P1211-date-v1-0",
+            "document_id": "P1211-doc-date",
+            "document_revision": 1,
+            "document_sha256": "7831ab05ea12bde10b1ce2ad2ab389198ac0cf231a296b5a331f76ad0e185a38",
+            "text_sha256": "614a63f6d5f352dc486e0e3a50f54d85830ef43aaf42d16d51c98e2214329e66"
+          }
+        ],
+        "unrepresented_source_versions": [
+          {
+            "document_id": "P1211-doc-date",
+            "document_revision": 1,
+            "document_sha256": "7831ab05ea12bde10b1ce2ad2ab389198ac0cf231a296b5a331f76ad0e185a38"
+          }
+        ],
+        "unrepresented_evidence_ids": [
+          "P1211-date-v1-0"
+        ],
+        "candidate_inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 32,
+          "nonblank_physical_lines": 1,
+          "proposed_bundles": 1,
+          "selected_bundles": 0,
+          "selected_evidence_passages": 0,
+          "copied_text_utf8_bytes": 0
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "a48a1cfac0f4877ce68a3bdeed5eb9b83040f6cf6c5fef86459f72510c1fb763",
+          "groups": [
+            {
+              "document_id": "P1211-doc-date",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "e099979a72a2851035902164e361d3a42e64f1ac7fe3cd48f8b285abbd9196ea",
+            "utf8_bytes": 420,
+            "total_upper_bound_units": 1876,
+            "context_limit_units": 1536,
+            "within_budget": false,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 0,
+          "selected_source_versions": 0,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "a17bc8975839ea6baab5f5fe52b141c9e5805cc2158aeb66ed28812f10d70bf5",
+          "groups": [
+            {
+              "document_id": "P1211-doc-date",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "d7d16e63184ac5ed3001a3d78b145ff4bb5a71881249e4f77ea4be100dacbfd3",
+            "utf8_bytes": 577,
+            "total_upper_bound_units": 2033,
+            "context_limit_units": 1536,
+            "within_budget": false,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 0,
+          "selected_source_versions": 0,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {
+            "whole_bundle_prompt_budget": 1
+          },
+          "boundary_flags": [],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1212",
+        "kind": "source_cap",
+        "context_limit_units": 8192,
+        "source_inventory_sha256": "67a61a8d9c90ec3ee966741cdcc98cbc6435bc2efb99917dbc6ca41f4cb3dfdc",
+        "source_pins": [
+          {
+            "id": "P1212-source0-v1-0",
+            "document_id": "P1212-doc-source0",
+            "document_revision": 1,
+            "document_sha256": "e08589d1e6a13556e4bf6a505aa7cdef7717be7de268a1e270c3663dfc40d85f",
+            "text_sha256": "2d61c410cc44c0263397af45124e65c2dada83dd79f1e7ce36716dc7797834af"
+          },
+          {
+            "id": "P1212-source1-v1-0",
+            "document_id": "P1212-doc-source1",
+            "document_revision": 1,
+            "document_sha256": "032f8ac6c2442e5e61e405751e7638ad7ffe558414a1f361f2af0f3f480bf785",
+            "text_sha256": "917801330855cf38b6c8e65662600e6f27ebc60b7698bed06e3e0a01dbdacadd"
+          },
+          {
+            "id": "P1212-source2-v1-0",
+            "document_id": "P1212-doc-source2",
+            "document_revision": 1,
+            "document_sha256": "e136034ebd2990529ec016ed97c3cfa546775000f776ae671a9092e024507f0b",
+            "text_sha256": "a9a1ab56f6a74ee6248e786450d9f12767a060e74335b6ce34eaa3767398986b"
+          },
+          {
+            "id": "P1212-source3-v1-0",
+            "document_id": "P1212-doc-source3",
+            "document_revision": 1,
+            "document_sha256": "195539fa4c663b546d487893d9746a0806c1269a1e15c6ec406ae1542ab4ed41",
+            "text_sha256": "e4164232cd6bfc76da9a2ce93c04881da835d708b4f75ed98fee325f60328a28"
+          },
+          {
+            "id": "P1212-source4-v1-0",
+            "document_id": "P1212-doc-source4",
+            "document_revision": 1,
+            "document_sha256": "3b4480ea4c2b84f8deddb3570172ede3a53f07c3043b081348cd48958cbc4ee8",
+            "text_sha256": "73d17ad49310cc8896689b267a4cf1914a0e367e10c7ec8f99d360dd44cd83cd"
+          },
+          {
+            "id": "P1212-source5-v1-0",
+            "document_id": "P1212-doc-source5",
+            "document_revision": 1,
+            "document_sha256": "e0047578df05d1409fec01610537156565c81beb2ab148c53e5ed7d0f7d2ed2a",
+            "text_sha256": "f40fd7be5863cc20817bc66895da4ce958f83d33b370eec0f09ec8f91d7d79d1"
+          },
+          {
+            "id": "P1212-source6-v1-0",
+            "document_id": "P1212-doc-source6",
+            "document_revision": 1,
+            "document_sha256": "1c042c8e5f4309255fe106ef52ed511d585b54207db98d94d9f29aa61492df74",
+            "text_sha256": "baa58a02ebdb86266ba2c2a0c6caca52749253d4edc950b21533345d6a3edd4a"
+          },
+          {
+            "id": "P1212-source7-v1-0",
+            "document_id": "P1212-doc-source7",
+            "document_revision": 1,
+            "document_sha256": "17c1414dc9541efbebc3bfb9bbe129a184809ac0b9ced8b3032456193282784b",
+            "text_sha256": "c05f165bcaf5174fd64b4fff6a1fa69e73b39ec43751259a88b942bd762a2af0"
+          },
+          {
+            "id": "P1212-source8-v1-0",
+            "document_id": "P1212-doc-source8",
+            "document_revision": 1,
+            "document_sha256": "eac958c0070932c0ebb1c8c7cf7c69c9c5b36da349f59d5945d048dc3ed72e83",
+            "text_sha256": "38af0138efed3502c4ecb788b43405a3aeaf615a74a255ef094187dfab81cf07"
+          },
+          {
+            "id": "P1212-source9-v1-0",
+            "document_id": "P1212-doc-source9",
+            "document_revision": 1,
+            "document_sha256": "5d1d02f67f21f85c82d3e1b99f754384bfe7c893e43b5d1660e1940aae506e52",
+            "text_sha256": "529116e33be2c36c5b70d366f947484c62373e2a9599e74311de9b7d366a6f33"
+          }
+        ],
+        "unrepresented_source_versions": [
+          {
+            "document_id": "P1212-doc-source8",
+            "document_revision": 1,
+            "document_sha256": "eac958c0070932c0ebb1c8c7cf7c69c9c5b36da349f59d5945d048dc3ed72e83"
+          },
+          {
+            "document_id": "P1212-doc-source9",
+            "document_revision": 1,
+            "document_sha256": "5d1d02f67f21f85c82d3e1b99f754384bfe7c893e43b5d1660e1940aae506e52"
+          }
+        ],
+        "unrepresented_evidence_ids": [
+          "P1212-source8-v1-0",
+          "P1212-source9-v1-0"
+        ],
+        "candidate_inventory": {
+          "source_passages": 10,
+          "source_versions": 10,
+          "scanned_code_points": 340,
+          "nonblank_physical_lines": 10,
+          "proposed_bundles": 10,
+          "selected_bundles": 8,
+          "selected_evidence_passages": 8,
+          "copied_text_utf8_bytes": 280
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "b1d3e35f7d0a74e50d0dbfbb8ac89a2f70a6e1c067fc0ddd094c2b8d07879e44",
+          "groups": [
+            {
+              "document_id": "P1212-doc-source0",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source1",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source2",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source3",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source4",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source5",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source6",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source7",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source8",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            },
+            {
+              "document_id": "P1212-doc-source9",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "a3c31a428216f6828fba6aadb91e4722b7b71a703fd412ed2ed9bc937c1c0e10",
+            "utf8_bytes": 2443,
+            "total_upper_bound_units": 3899,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 8,
+          "selected_source_versions": 8,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "131cb4ab820f468904b0686079cc7f4a81ec5f500bae336a889935cab950caa7",
+          "groups": [
+            {
+              "document_id": "P1212-doc-source0",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source1",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source2",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source3",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source4",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source5",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source6",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source7",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1212-doc-source8",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            },
+            {
+              "document_id": "P1212-doc-source9",
+              "document_revision": 1,
+              "side": "relevant",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "539b022edb12d34bf84c5d0715e5ab633d6640fa9e4df05d4262c9bf78f0845d",
+            "utf8_bytes": 2985,
+            "total_upper_bound_units": 4441,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 8,
+          "selected_source_versions": 8,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {
+            "evidence_passage_limit": 2
+          },
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1213",
+        "kind": "unicode_condition",
+        "context_limit_units": 8192,
+        "source_inventory_sha256": "ad9dc28397d93d96ea28d5e08a6e2f529be4c84a5cb8fec75127771b24993003",
+        "source_pins": [
+          {
+            "id": "P1213-condition-v8-0",
+            "document_id": "P1213-doc-condition",
+            "document_revision": 8,
+            "document_sha256": "067da5dd3bc3a586b9ac265259329ff534be7d7df7071e6a4db8d63ef75a0f28",
+            "text_sha256": "faa0a5df579a037c2b9b8815ffd37a7a3b0b72fb523da875e4510a4ad79b43ec"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 100,
+          "nonblank_physical_lines": 2,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 109
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "a6361a526adaafdcb75c82e33505e9d08a64b996384754c0afe651ab1d15eea0",
+          "groups": [
+            {
+              "document_id": "P1213-doc-condition",
+              "document_revision": 8,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "21bc6fa31b12773ddb7aaa0ef4096231c5e9e10d5fe184d9e0511b4486c2c4c1",
+            "utf8_bytes": 852,
+            "total_upper_bound_units": 2308,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "ec0cd4d714bd9bac8c383169b6f5ce32c8caeefe5ff7ad2727c706c2273a5cc0",
+          "groups": [
+            {
+              "document_id": "P1213-doc-condition",
+              "document_revision": 8,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "ad95c2d2d837d7792ea22dc9463cc9984abb92f8727e8bb7e0a1a383c641a207",
+            "utf8_bytes": 1079,
+            "total_upper_bound_units": 2535,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1214",
+        "kind": "reversed_adverse_pressure",
+        "context_limit_units": 4600,
+        "source_inventory_sha256": "92503c2b12af6007f65ff772ce0f6ffdf3c46a1860e375124ef6196ba123df65",
+        "source_pins": [
+          {
+            "id": "P1214-counter-v9-0",
+            "document_id": "P1214-doc-counter",
+            "document_revision": 9,
+            "document_sha256": "f1b7080b5c584eb32d21a768b5e214ab54604d1086bb75196d52ab7c636020f6",
+            "text_sha256": "cb0003de1f21adbe338969b58474fb57c24139daaba13e60bc1986575683fb57"
+          },
+          {
+            "id": "P1214-bulk-v1-0",
+            "document_id": "P1214-doc-bulk",
+            "document_revision": 1,
+            "document_sha256": "c84611a2a25b9e7f0749e86fef3fbb75052494975923df7ddd78e6250a25c94d",
+            "text_sha256": "165976326dcfa64575094bdf65d67bac0d2d2dd721ba15f435671712e0db6a2e"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 2,
+          "source_versions": 2,
+          "scanned_code_points": 1535,
+          "nonblank_physical_lines": 50,
+          "proposed_bundles": 49,
+          "selected_bundles": 5,
+          "selected_evidence_passages": 2,
+          "copied_text_utf8_bytes": 401
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "0c53b9060206f99e58628ff3e139d98c1d04710228adfa44ada00fbe42392c12",
+          "groups": [
+            {
+              "document_id": "P1214-doc-bulk",
+              "document_revision": 1,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1214-doc-counter",
+              "document_revision": 9,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "894a3afe3af8a1340917ca0230552d2cab4dda49763bc9f8a04bbe5fc053e81e",
+            "utf8_bytes": 2966,
+            "total_upper_bound_units": 4422,
+            "context_limit_units": 4600,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 3,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {
+            "whole_bundle_prompt_budget": 46
+          },
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "0cd6728bfaecf1cfc5bebb3c0b756dcfb94c325b88bd29a4988b26164eb2e33f",
+          "groups": [
+            {
+              "document_id": "P1214-doc-bulk",
+              "document_revision": 1,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1214-doc-counter",
+              "document_revision": 9,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "b6c196bb6efb3c375e68770f24abd3df43887f49aba2160cf55d09b956f779c1",
+            "utf8_bytes": 3019,
+            "total_upper_bound_units": 4475,
+            "context_limit_units": 4600,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 5,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {
+            "whole_bundle_prompt_budget": 44
+          },
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1215",
+        "kind": "lexically_similar_distractors",
+        "context_limit_units": 4600,
+        "source_inventory_sha256": "deef5e7f5d733f06ec083a8ee410e33cab2fcf48d1902b13e286b1c512ce1e3a",
+        "source_pins": [
+          {
+            "id": "P1215-noise-v1-0",
+            "document_id": "P1215-doc-noise",
+            "document_revision": 1,
+            "document_sha256": "a322afd31366cbd106a14160f662a91f3b5ccbc6b06566b4c9afa7c999e0de9e",
+            "text_sha256": "ab2d30040d739438c8f680a9b627530875fb8b0fc76bbfe7e02863279751fb78"
+          },
+          {
+            "id": "P1215-receipt-v2-0",
+            "document_id": "P1215-doc-receipt",
+            "document_revision": 2,
+            "document_sha256": "d123870335a32e7af462f5ec19b4b9a90bdc77c277b55c80da864621cef7a28c",
+            "text_sha256": "4450ecbcc6fa1c14dec53a21abb866a759f43894297a395766c949047140537b"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 2,
+          "source_versions": 2,
+          "scanned_code_points": 3024,
+          "nonblank_physical_lines": 57,
+          "proposed_bundles": 56,
+          "selected_bundles": 5,
+          "selected_evidence_passages": 2,
+          "copied_text_utf8_bytes": 612
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "bbd4bca39a3ac3f75bf70b086c2eb03b49d9fbf54ef45749bb05c92dadd34181",
+          "groups": [
+            {
+              "document_id": "P1215-doc-receipt",
+              "document_revision": 2,
+              "side": "support",
+              "available_in_one_bundle": false
+            },
+            {
+              "document_id": "P1215-doc-noise",
+              "document_revision": 1,
+              "side": "adverse",
+              "available_in_one_bundle": false
+            }
+          ],
+          "all_groups_available": false,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "3a24d13049ee84f8bdb544ba4d66ab911d29083586ae2571b974b32b03e6de0f",
+            "utf8_bytes": 3082,
+            "total_upper_bound_units": 4538,
+            "context_limit_units": 4600,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 3,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {
+            "whole_bundle_prompt_budget": 30
+          },
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "d3bf946d84a7fb4a8d6b8860947581fb5d1e0b7fa4073ef1374f1bb91aed7578",
+          "groups": [
+            {
+              "document_id": "P1215-doc-receipt",
+              "document_revision": 2,
+              "side": "support",
+              "available_in_one_bundle": true
+            },
+            {
+              "document_id": "P1215-doc-noise",
+              "document_revision": 1,
+              "side": "adverse",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "87910934cc513110c6dacf926f7eb01d87c28b1eaa1a622b94542e3f19b5d4f3",
+            "utf8_bytes": 3142,
+            "total_upper_bound_units": 4598,
+            "context_limit_units": 4600,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 5,
+          "selected_source_versions": 2,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {
+            "whole_bundle_prompt_budget": 51
+          },
+          "boundary_flags": [
+            "passage_edge_context_not_linked"
+          ],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      },
+      {
+        "case": "P1216",
+        "kind": "late_exact_anchor",
+        "context_limit_units": 8192,
+        "source_inventory_sha256": "908aa77166dc5313e7c4f0a548d3e0e543dca5bfd0bdb7eb475b020e60733dc5",
+        "source_pins": [
+          {
+            "id": "P1216-late-v4-0",
+            "document_id": "P1216-doc-late",
+            "document_revision": 4,
+            "document_sha256": "fe85508d651a58eaf046663c5691ada1f1de7add98b1897b331a4c5fc66c4baa",
+            "text_sha256": "d98be63f230bb3898a27cbbd0ee0603609059ffa9d07f99ec3f1f9a7e5d41572"
+          }
+        ],
+        "unrepresented_source_versions": [],
+        "unrepresented_evidence_ids": [],
+        "candidate_inventory": {
+          "source_passages": 1,
+          "source_versions": 1,
+          "scanned_code_points": 2663,
+          "nonblank_physical_lines": 72,
+          "proposed_bundles": 1,
+          "selected_bundles": 1,
+          "selected_evidence_passages": 1,
+          "copied_text_utf8_bytes": 126
+        },
+        "v1": {
+          "recipe": "offline-budgeted-source-bundles-v1",
+          "plan_sha256": "417bac64676eae6f836bfa30ee3b88c797d30946c2cb91ab3d24c92e4317a066",
+          "groups": [
+            {
+              "document_id": "P1216-doc-late",
+              "document_revision": 4,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-budgeted-source-bundles-v1",
+            "messages_sha256": "561abe7515bef11668dbaffe64ad66a0c47e056d0e999095eec7b3f3c19f4ef2",
+            "utf8_bytes": 2581,
+            "total_upper_bound_units": 4037,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        },
+        "v2": {
+          "recipe": "offline-diverse-source-bundles-v2",
+          "plan_sha256": "05afddd1867143c03606911df0a074e72abfa0b295e3851fae8772debec8bcae",
+          "groups": [
+            {
+              "document_id": "P1216-doc-late",
+              "document_revision": 4,
+              "side": "relevant",
+              "available_in_one_bundle": true
+            }
+          ],
+          "all_groups_available": true,
+          "measurement": {
+            "recipe": "offline-diverse-source-bundles-v2",
+            "messages_sha256": "225c27d537d2808289c84417f6d70002e691ced091248c1be824e5bbdf0f2d35",
+            "utf8_bytes": 1160,
+            "total_upper_bound_units": 2616,
+            "context_limit_units": 8192,
+            "within_budget": true,
+            "accounting": "utf8_bytes_plus_fixed_reserves"
+          },
+          "selected_bundles": 1,
+          "selected_source_versions": 1,
+          "unmatched_fallback_bundles": 0,
+          "omission_counts": {},
+          "boundary_flags": [],
+          "source_spans_versions_and_originals_exact": true,
+          "model_relevance_or_legal_quality_measured": false
+        }
+      }
+    ],
+    "summary": {
+      "cases": 16,
+      "expected_groups": 31,
+      "v1": {
+        "available_groups": 21,
+        "alternate_wording_cases": 3,
+        "alternate_all_groups_available": 0,
+        "adverse_source_cases": 7,
+        "both_sides_available": 4,
+        "prompts_within_budget": 15,
+        "blocked_envelopes": 1,
+        "unmatched_fallback_bundles": 0
+      },
+      "v2": {
+        "available_groups": 26,
+        "alternate_wording_cases": 3,
+        "alternate_all_groups_available": 2,
+        "adverse_source_cases": 7,
+        "both_sides_available": 6,
+        "prompts_within_budget": 15,
+        "blocked_envelopes": 1,
+        "unmatched_fallback_bundles": 5
+      }
+    },
+    "conclusion": "offline_candidate_comparison_only_not_semantic_native_or_legal_qualification"
+  },
+  "linux_offline": {
+    "tests_passed": 10,
+    "network": "none",
+    "read_only": true,
+    "host_linux_report_exact": true,
+    "first_report_retained": true,
+    "private_runtime_or_provider_mounts": false,
+    "base_image_sha256": "7a67b0bf06799c403b9a7b5363faeb85f14fca0d6836eb167d13acc086c224d2"
+  },
+  "local_checks": {
+    "deployment_contracts_passed": 175,
+    "deployment_seconds": 12.835,
+    "context_research_policy_provider_cases_passed": 167,
+    "context_provider_seconds": 6.83,
+    "new_regression_tests": 10,
+    "lint": "passed"
+  },
+  "scope": {
+    "expected_groups_sent_to_planners": false,
+    "first_evaluation_retained_without_fixture_or_implementation_changes": true,
+    "no_synonym_table_or_semantic_model": true,
+    "descriptive_comparison_not_source_order_ablation": true,
+    "inference_calls": 0,
+    "http_calls": 0,
+    "private_documents": 0,
+    "review_decisions": 0,
+    "production_changes": 0,
+    "production_and_existing_disposable_adapter_unchanged": true
+  },
+  "retained_limits": [
+    "later_paraphrase_not_nominated",
+    "wide_separator_condition_not_in_one_bundle",
+    "two_source_versions_beyond_eight_passage_cap",
+    "undersized_envelope_blocked",
+    "absent_information_has_unmatched_fallback_not_qualified_abstention",
+    "earlier_native_failures_and_historical_502_root_cause_unresolved"
+  ],
+  "next_gate": "Broader frozen wording/layout/source-volume coverage and a recipe-specific disposable adapter before separately declared native acceptance; retain owner version-3 review as pending."
+}
