@@ -1680,3 +1680,37 @@ wire/planner/model/transport identities, task and grading criteria, output/sourc
 checks and failure handling. Do not pass expected-answer hints to the selector,
 retry failures into success, activate production or alter the pending private review.
 The prior native failures and historical HTTP 502 diagnosis remain unresolved.
+## Fresh frozen native acceptance plan
+
+`scripts/native_acceptance_plan.py` prepares the immutable synthetic-only
+declaration in `qualification/frozen-native-acceptance-plan-v1.json`. It does not
+load runtime settings, keys or private matters and has no inference runner.
+`scripts/native_acceptance_grading.py` validates that declaration against current
+public code, original fixture bytes, complete inventory, exact wire messages and
+separate expected groups before pure offline grading. Never treat a changed-code
+rebuild as the same frozen plan. Use a new version and fresh acceptance set for
+repairs; retain the original declaration and first preflight.
+
+The fourteen-case declaration contains one serial smoke, two five-job batches and
+three no-call controls. Its intended model is declared, but native model digest,
+context and approved transport origin are not yet attested. Any later execution
+needs a separate fresh authorization/binding receipt, isolated synthetic-only
+inputs and the exact request/response/timing/identity evidence specified in
+[the acceptance rules](NATIVE_ACCEPTANCE_PLAN.md). Do not mount production data or
+configuration into an experiment or expose credentials in receipts. Only exact
+case messages may enter the model; grading fields must remain outside its context.
+
+The retained first preflight finds fourteen of twenty groups available across 113
+passages/41 versions; all six missing groups stay in the denominator. The select-all
+upper bound also fails the absent-information case. This is not native execution,
+abstention accuracy or legal qualification, and the current gaps prevent full
+acceptance. Transport-control success cannot erase quality misses. No native or
+HTTP calls are made in this milestone. Never replay exposed cases until successful
+or silently promote a controlled/fabricated selection into a native result.
+
+Twelve new tests and identical host/Linux declaration/preflight results qualify
+offline preparation and rule enforcement only. Linux runs read-only with network
+disabled and public source only. Keep all nine exact-head CI jobs, existing caps,
+workers and five timing reserves; verify merged-main separately and audit unchanged
+originals, evidence versions, encrypted bytes and review history. Update the live
+roadmap without marking F00-06 complete or changing the owner's pending v3 review.

@@ -5633,3 +5633,63 @@ offline operation, graph rollback and production RPO/RTO remain open. See the
 [declared contract](DIVERSE_ADAPTER_QUALIFICATION.md),
 [operator procedure](OPERATIONS.md#disposable-v2-wire-adapter) and
 [dated evidence](evidence/disposable-diverse-wire-2026-10-22.json).
+
+
+### F00-06 fresh frozen native acceptance plan — 22 October 2026
+
+The next native selection trial now has an immutable, separately sealed
+declaration covering fourteen fresh invented cases, 113 source passages and 41
+source versions. It freezes the original text and revisions, question, full v2
+planner and D-ID wire messages, conservative byte budget, expected-group digest,
+implementation/dependency hashes, schedule, request bounds, grading rules and
+stop conditions. Expected groups stay outside the model messages. Prior suites,
+production packing and earlier failure records remain unchanged. These synthetic
+text collections do not qualify document formats, OCR or real legal reasoning.
+
+The fixed schedule has one serial smoke test, two batches of five concurrent jobs
+and three no-call controls. There is one attempt per case, at most eleven
+completion requests, eleven adapter metadata requests and twenty-four separately
+bound identity-metadata requests. Five-way barriers and observed request overlap
+are required to substantiate concurrency. Provider deadlines, response bounds,
+no-retry/no-fallback checks and fail-closed cancellation remain explicit. Failures,
+cancelled and unstarted cases remain in the report rather than being replaced.
+
+**This milestone performs no native trial.** The intended model/tenant contract
+is declared, but the actual model digest, context and approved transport origin
+still require a separate fresh execution-binding receipt. The declaration has no
+runner or execution authorization. The approved laptop tunnel remains a permitted
+transport exception, not proof of disconnected operation. Private documents and
+provider credentials are not inputs to preparation or grading.
+
+The first offline preflight, retained without fixture or implementation changes,
+finds **14/20 required groups available**. Six are unavailable: a condition across
+a wide separator, a late paraphrase, two over-cap sources, an undersized envelope
+and an overlong line. These remain in the full denominator. Select-all candidate
+grading also fails the absent-information case, because an irrelevant fallback is
+not abstention. Control transport success does not turn a positive no-candidate or
+blocked request into quality success. This frozen plan cannot establish full
+acceptance with those gaps; do not spend repeated native calls trying to pass it.
+
+Twelve new contract tests verify frozen reconstruction, drift/tamper rejection,
+expected-group separation, complete conditions, adverse and revision distinctions,
+empty-selection rules, strict IDs, no settings/network access, unchanged originals
+and exclusive artifact creation. They also prove that a fabricated perfect
+selection cannot become verified native evidence. The full declaration and
+preflight report reproduce exactly in read-only, network-disabled Linux with
+public code only. All 199 deployment contracts and 167 relevant context/research/
+policy/provider cases pass locally. Nine exact-head CI jobs and five existing
+timing-reserve gates remain mandatory; jobs, caps, workers and coverage are unchanged.
+
+Production services, originals, exact evidence versions, encrypted bytes, runtime
+credentials, sessions and review history stay unchanged. F00-06 remains partial;
+the owner's focused-analysis v3 review stays pending. Next address the explicit
+availability gaps through a separately versioned candidate and new frozen tests,
+then implement and qualify a disposable identity-binding/execution receipt boundary
+before any authorized native trial. Preserve this declaration and first preflight
+as historical evidence. Native selection quality, sustained five-job capacity,
+the historical HTTP 502 root cause, reviewed corpus, isolated intake, OCR/layout,
+offline operation, graph rollback and production RPO/RTO remain open. See the
+[frozen declaration](../qualification/frozen-native-acceptance-plan-v1.json),
+[acceptance rules](NATIVE_ACCEPTANCE_PLAN.md),
+[operator procedure](OPERATIONS.md#fresh-frozen-native-acceptance-plan) and
+[dated preflight evidence](evidence/native-acceptance-plan-2026-10-22.json).
