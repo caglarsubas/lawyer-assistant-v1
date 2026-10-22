@@ -5450,3 +5450,57 @@ reviewed corpus, sustained legal capacity, isolated intake, OCR/layout, offline
 operation, graph rollback and production RPO/RTO remain open.
 See [operator procedure](OPERATIONS.md#offline-budgeted-quotation-bundles)
 and [dated evidence](evidence/budgeted-quotation-bundles-2026-10-22.json).
+
+
+### F00-06 alternate wording, adverse sources and disposable bundle adapter — 22 October 2026
+
+Twelve fresh invented cases keep expected source groups outside the planner and
+adapter. They use distinct source documents and revisions, alternate wording,
+opposing records, negations, conditions, hostile text, absent information and
+budget pressure. **13/18 required groups are available; 2/4 alternate-wording cases
+and both sides in 4/7 adverse-source cases are covered.** All twelve serialized
+bundle prompts fit their declared limits. Those counts measure nomination and
+source geometry, not model selection, legal relevance or task success.
+
+The misses remain release evidence: two identifier-free paraphrases have no
+nominated bundle; an adverse source without matching terms is missed; budget
+pressure excludes a separately acquired adverse source; and a wide separator
+prevents one bundle from retaining the full declared condition. No synonym list,
+source-ranking change or expected-answer lookup was introduced to repair this
+exposed suite. Nomination diversity and alternate wording need further work.
+
+A separate disposable adapter accepts only an explicit mode and a full frozen
+bundle plan. It reconstructs the exact measured envelope, checks its digest and
+budget, and uses the existing provider's authentication, local-model, context,
+no-fallback, bounded-response and completion checks. It accepts only unique known
+`bundle_ids`, copies every selected part separately, and rejects malformed JSON,
+extra/duplicate fields, anchor-only IDs, unknown references, clipped completions,
+wrong model/usage, stale context and version changes during transport. There is
+no retry, application hook, production schema switch or reviewed-answer creation.
+No candidates means no call; an empty selection is explicitly unqualified.
+
+The fixed twelve-case adapter evaluation makes nine metadata and nine completion
+requests **over in-process mock HTTP**, selecting all nominated bundles by a
+controlled rule. It makes zero network HTTP or model calls. The ten new regression
+tests additionally cover five simultaneous mock selections with separate source
+contexts; this is not native five-job capacity qualification. All 165 deployment
+contracts and 167 context/research/policy/provider cases pass locally. Ten new tests
+also pass in network-disabled, read-only Linux with public code only, and both
+complete reports match the host exactly. Existing CI jobs, full coverage and timeout
+caps remain unchanged; all nine exact-head jobs and five timing reserves are still
+required before merge.
+
+Production services and quotation recipe remain unchanged. Originals, exact source
+versions, encrypted bytes, credentials, sessions and review history are preserved.
+R03-17 still awaits the owner's version-3 review; F00-06 remains partial. The earlier
+native long-page/volume/mixed failures and unresolved historical HTTP 502 cause
+retain their scopes. Controlled 502 rejection tests do not establish a native fix.
+
+Next generalize alternate-wording nomination and source diversity under budget
+pressure, retaining omissions and unlinked boundaries, then evaluate on a new
+frozen suite. A separately declared native acceptance trial must freeze sources,
+prompts, selection contract and grading before execution; this adapter's mock
+success is not production authorization. Reviewed corpus, sustained legal capacity,
+isolated intake, OCR/layout, offline operation, graph rollback and production
+RPO/RTO remain open. See [operator procedure](OPERATIONS.md#disposable-bundle-adapter-and-alternateadverse-source-evaluation)
+and [dated evidence](evidence/alternate-adverse-bundle-adapter-2026-10-22.json).
