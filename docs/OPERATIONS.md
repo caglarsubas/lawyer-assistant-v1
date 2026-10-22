@@ -1634,3 +1634,49 @@ nine exact-head CI jobs and five timing reserves remain required. No test remova
 timeout increase, retry or production switch follows from improved offline counts.
 A new disposable adapter and separately frozen native acceptance trial remain later
 gates. Keep the private pilot and owner version-3 review pending.
+
+
+### Disposable v2 wire adapter
+
+`disposable_diverse_adapter.py` has no app hook, native CLI, environment activation
+or production setting. Use its explicit v2 marker and call `prepare_diverse_selection`
+to retain a complete wire manifest before selection. A prepared manifest is not
+execution authorization. Keep the planner's original prompt digest alongside the
+actual wire digest. Only the system's `B1` example becomes `D1`; source text and
+other message bytes stay unchanged, as does the measured budget. Unknown `D…` and
+legacy `B…` responses fail; there is no automatic ID translation.
+
+Run only the fixed invented qualification suite for this experiment:
+
+```sh
+PYTHONPATH=backend:scripts backend/.venv/bin/python scripts/evaluate_diverse_adapter.py --output /tmp/new-diverse-adapter-report.json
+backend/.venv/bin/python -m unittest discover -s deploy -p test_disposable_diverse_adapter.py
+```
+
+The output path must not exist. The evaluator accepts no private-source or provider
+configuration option. Freeze code, fixtures, expected groups and evaluator before
+grading. Retain the first report and every unavailable group; expected groups stay
+outside planner and adapter. A read-only, network-disabled Linux run with public
+code only must reproduce the entire report, not just its counts.
+
+Current scope: 14 cases, 215 passages, 55 source versions, 13/20 required groups
+available, both sides in 3/3 adverse-source cases. Seven groups remain unavailable
+across separator, overlong-line, late-paraphrase, cap and budget cases. Four bundles
+use unmatched-source fallback, including absent information. The controlled
+select-all evaluator makes 11 mock metadata plus 11 mock completion requests;
+regression tests make additional mock requests. There are zero network HTTP or
+native/model calls in this experiment. Two no-candidate cases make no call; one
+undersized envelope is blocked. Empty/subset selection and source proximity do
+not establish relevance, abstention, legal effect or adverse-source completeness.
+
+Validate the full manifest, original sources and budget before transport and
+recheck caller sources, plan, wire and provider limit after transport. Discard
+raced results. Keep all parts and conditions intact. Selected/omitted nominated
+bundles and source-version aliases are confidential metadata and stay with the
+exact manifest. Five concurrent mock selections test context isolation only.
+
+Before any native trial, separately declare and freeze fresh sources, prompts,
+wire/planner/model/transport identities, task and grading criteria, output/source
+checks and failure handling. Do not pass expected-answer hints to the selector,
+retry failures into success, activate production or alter the pending private review.
+The prior native failures and historical HTTP 502 diagnosis remain unresolved.
