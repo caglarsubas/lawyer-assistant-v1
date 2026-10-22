@@ -1273,3 +1273,46 @@ bounded registry requests. All nine jobs, two test workers, disjoint shard cover
 lockfiles, existing job caps and five merge timing reserves remain. A dependency
 network failure fails early instead of consuming the whole test job. It does not
 retry inference or hide failing tests.
+
+
+### Mixed-format real-provider qualification
+
+Use the existing opt-in `scripts/qualify_provider_jobs.py` procedure with
+`--workload mixed-formats-v1`. The default `short-txt-v1` profile remains available
+and explicitly identified in receipts. The mixed profile creates five disposable
+workspaces, each containing TXT, DOCX, XLSX and text PDF fixtures. Each format has
+64 invented records; TXT adds a long Turkish Unicode paragraph. These are synthetic
+application/parser exercises, not representative legal judgments or client cases.
+
+Three declared waves of five real-model research jobs must all pass. Before and
+after research, authenticated original downloads must match the uploaded SHA256,
+and document revisions and extracted passage hashes must remain exact. Each
+product must remain Needs review, retain every source revision, and use actual
+local-provider output. The verifier checks selected evidence against frozen original
+passage offsets and hashes, recomputes the transmitted prompt/budget, verifies
+coverage counts and requires nonempty, exactly supported quotations. The mixed
+profile additionally requires all four documents represented, explicit omitted
+passages and at least one shortened passage. It does not infer that all material
+was read, or that quotations establish legal applicability.
+
+A technically completed job with an empty selection fails this answerable fixture's
+usefulness gate. `product_claim_grounding_failed` covers both absent and unsupported
+claims; inspect the fixed `empty_quote_selection` counter to distinguish absence.
+A model may properly abstain on other tasks; never force acceptance by fabricating
+quotes, reducing the source inventory, treating empty output as success or rerunning
+a failed wave until it passes. Preserve each declared profile and failed result.
+
+The explicitly guarded disposable factory can observe failed relay responses with
+Content-Length at most 512 bytes. It counts only fixed diagnostic enums and never
+records request bodies, authorization, URLs, upstream messages or accepted response
+text. Its provider-local HTTP client namespace adds observation only; production
+startup and the global HTTPX module are unchanged. No retry or alternate transport
+is installed. Unknown/oversized/compressed diagnostics are ignored while the
+original HTTP failure still fails the job.
+
+This fixture uses demo authentication and real parser subprocesses in fresh local
+volumes. It does not exercise production malware scanning or the isolated extraction
+service. OCR, rendered layout, footnote/text-box fidelity, actual legal corpus,
+sustained load, native-engine resource limits and disconnected operation require
+separate qualification. No private matter volume is mounted and no review is written.
+A failed native qualification is retained even when engineering CI passes.

@@ -1,0 +1,175 @@
+{
+  "schema": "mixed-format-real-provider-qualification-v1",
+  "recorded_on": "2026-10-22",
+  "qualification": "not_qualified",
+  "implementation_sha256": {
+    "scripts/provider_job_checks.py": "5a1030dbfeff3eaf60acb26f4171732c7d0b89d6803c8800865a284a7db21af0",
+    "scripts/provider_job_driver.py": "08293c1ac8b25be809c984f7b740ec4fe87251031b5d29a2d500f21bd59baa96",
+    "scripts/provider_job_fixture.py": "d7f9c43e096ce351953b4646c144620917577f1a0a7971cda086264e918b07ea",
+    "scripts/qualify_provider_jobs.py": "df0c7ee830806815ba7db76e56be8ab9e7e4001721f7caba8e81e82d72a8f684",
+    "deploy/test_provider_mixed_workload.py": "781e1fd3b9e653c40814930a419d00b2ee787372991f7680c6a08c11979450b8"
+  },
+  "profile": {
+    "name": "mixed-formats-v1",
+    "workspaces": 5,
+    "files": 20,
+    "formats": [
+      "txt",
+      "docx",
+      "xlsx",
+      "pdf"
+    ],
+    "paragraphs_per_format": 64,
+    "long_unicode_txt_paragraph": true,
+    "corpus_bytes": 275506,
+    "extracted_passages": 975,
+    "context_limit": 8192,
+    "model": "ministral-3:8b",
+    "declared_waves": 3,
+    "concurrency": 5,
+    "upstream_generation_leases": 2,
+    "automatic_retries": 0,
+    "private_documents": 0,
+    "review_decisions": 0
+  },
+  "trials": [
+    {
+      "status": "failed",
+      "api_source": {
+        "files": 201,
+        "sha256": "13e7861a8af57c03a541d1eaf0695adf67fbbec5c7a5265a14295e335d711d91"
+      },
+      "images": {
+        "api": "sha256:28cac1f004958b7e2ca8f93d32561d217453736faa27681cd5af53d9830d7fdf",
+        "postgres": "sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"
+      },
+      "started_at": "2026-10-22T04:38:17.018672+00:00",
+      "finished_at": "2026-10-22T04:38:43.944509+00:00",
+      "failure_stage": "real_provider_jobs",
+      "failure_code": null,
+      "wave_statuses": [
+        [
+          "failed",
+          "completed",
+          "failed",
+          "completed",
+          "completed"
+        ]
+      ],
+      "diagnostics": {
+        "active": 0,
+        "calls": 5,
+        "diagnostics": {
+          "upstream_502": 2
+        },
+        "failures": 2,
+        "peak": 5
+      },
+      "cleanup": {
+        "complete": true,
+        "original_provider_members_restored": true
+      }
+    },
+    {
+      "status": "failed",
+      "api_source": {
+        "files": 201,
+        "sha256": "b89d709f68f88276ea2bc8b78b2eae4b961f0ac67ed4877c0bfae82bc49f9c10"
+      },
+      "images": {
+        "api": "sha256:1dbfe78c754054d7eb72f7a950e3521800038ddb9f74f8168a46521c6f9301a1",
+        "postgres": "sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"
+      },
+      "started_at": "2026-10-22T04:44:37.304447+00:00",
+      "finished_at": "2026-10-22T04:45:01.838965+00:00",
+      "failure_stage": "product_verification",
+      "failure_code": null,
+      "wave_statuses": [
+        [
+          "completed",
+          "completed",
+          "completed",
+          "completed",
+          "completed"
+        ]
+      ],
+      "diagnostics": {
+        "active": 0,
+        "calls": 5,
+        "diagnostics": {},
+        "failures": 0,
+        "peak": 5
+      },
+      "cleanup": {
+        "complete": true,
+        "original_provider_members_restored": true
+      }
+    },
+    {
+      "status": "failed",
+      "api_source": {
+        "files": 201,
+        "sha256": "d8d9e38af7f469794d6d4635979ed38ed7c23a398538198ebc4dc2d283836bb5"
+      },
+      "images": {
+        "api": "sha256:49178a0ed67e1c219cb790a24b5c5ad2e1f66ad39b625cf10c296aa3e4c7956f",
+        "postgres": "sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"
+      },
+      "started_at": "2026-10-22T04:48:13.089288+00:00",
+      "finished_at": "2026-10-22T04:48:35.269786+00:00",
+      "failure_stage": "product_verification",
+      "failure_code": "product_claim_grounding_failed",
+      "wave_statuses": [
+        [
+          "completed",
+          "completed",
+          "completed",
+          "completed",
+          "completed"
+        ]
+      ],
+      "diagnostics": {
+        "active": 0,
+        "calls": 5,
+        "diagnostics": {
+          "empty_quote_selection": 5
+        },
+        "failures": 0,
+        "peak": 5
+      },
+      "cleanup": {
+        "complete": true,
+        "original_provider_members_restored": true
+      }
+    }
+  ],
+  "local_checks": {
+    "deployment_contracts": 113,
+    "real_parser_formats": 4,
+    "source_documents_represented": 4,
+    "observed_context_units": 6827,
+    "input_passages_per_workspace": 195,
+    "selected_passages": 7,
+    "omitted_passages": 188,
+    "shortened_passages": 4,
+    "actual_research_route_without_inference": "passed",
+    "adversarial_frozen_version_span_quote_hash_budget_and_coverage_checks": "passed",
+    "ruff": "passed"
+  },
+  "production_change": false,
+  "CI_contract": {
+    "jobs": 9,
+    "workflow_unchanged": true,
+    "frontend_backend_dependencies_and_model_pins_unchanged": true,
+    "minimum_five_required_reserves_seconds": 30
+  },
+  "limitations": [
+    "First native wave had two HTTP 502 failures; exact cause unresolved.",
+    "Later completed native jobs returned empty quotations; not usable answers.",
+    "Later raw metadata/transport success is diagnostic only.",
+    "No native qualification follows from CI success.",
+    "Demo parser subprocesses do not qualify malware scanning or production extractor isolation.",
+    "No OCR, rendered fidelity, actual legal-corpus or sustained capacity qualification."
+  ],
+  "next": "Evaluate a pinned quote-selection response contract and retain appropriate abstention; capture fixed codes on recurring 502."
+}

@@ -5165,3 +5165,40 @@ CI changes only bounded frontend dependency installation; nine jobs, complete te
 coverage, existing caps and all five reserve gates remain required before merge.
 See [operator procedure](OPERATIONS.md#provider-burst-repair-and-real-five-job-qualification--22-october-2026)
 and [dated evidence](evidence/provider-burst-repair-2026-10-22.json).
+
+
+### F00-06 mixed-format qualification and observable abstention — 22 October 2026
+
+The new explicit mixed-format profile extends the earlier short-TXT experiment to
+five disposable workspaces and twenty invented TXT/DOCX/XLSX/text-PDF documents.
+The first TXT paragraph is long Unicode text; all formats include 64 synthetic
+records. Original download hashes, document/passage revisions, exact excerpt spans,
+full prompt measurements, omitted/shortened coverage and pending review state are
+checked independently of technical job completion. Unknown source references,
+changed versions, altered spans, invented quotes, changed coverage and empty output
+cannot qualify. Local real-parser and authenticated research-route integration
+checks pass without inference. All production application, relay, frontend,
+dependency and workflow sources remain unchanged.
+
+**The expanded native profile is not qualified.** The first wave completed three
+jobs and failed two with HTTP 502. A subsequent instrumented wave completed five
+jobs but failed product verification. The final declared diagnostic trial completed
+five jobs, with zero transport failures and five empty quote selections; the first
+product failed the nonempty supported-claim gate, and no later wave ran. Fixed relay
+error categories and empty-selection counters are retained without upstream messages
+or private inputs. Later metadata/raw-transport success is diagnostic evidence, not
+a repair or replacement for the failed application trials. The original 502's exact
+cause remains unresolved; empty selections establish a separate usability gap.
+
+All owned fixture resources were removed. F00-06 remains partial and the short-TXT
+15/15 receipt from PR #186 retains its narrow scope. Next: evaluate an explicit
+quote-selection response contract against both short and mixed inputs, retain proper
+abstention and exact-source checks, and localize any recurring 502 using fixed codes.
+No live model, provider limits, credential, prompt, source or review record is changed
+by this qualification-tooling step. R03-17 still waits for the owner's exact v3 review.
+Malware/isolated-service intake, OCR/visual fidelity, reviewed corpus and sustained
+capacity, tunnel/offline operation, populated graph rollback and production RPO/RTO
+remain open. CI keeps nine jobs, complete coverage, existing caps and all five timing
+reserves; engineering merge is separate from native/provider/legal qualification.
+See [operator procedure](OPERATIONS.md#mixed-format-real-provider-qualification) and
+[dated evidence](evidence/mixed-format-load-2026-10-22.json).
