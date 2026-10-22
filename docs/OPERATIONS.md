@@ -821,9 +821,76 @@ must be trusted and contain Python; set `LA_RESTART_DRILL_IMAGE_ID` to its full
 local `sha256:` image ID. No image is downloaded. Receipts distinguish
 an observed collision from an unobserved one. These sleeper tests do not qualify
 PostgreSQL, OpenSearch or Fuseki recovery, provider behavior or a production
-deployment. The deployed stack's known mixed static/dynamic cycle still requires
-address remediation; this change prevents entering that unsafe backup downtime.
+deployment. A mixed static/dynamic cycle requires separate address remediation;
+the backup guard continues to prevent entering that unsafe downtime.
 See [engineering evidence](evidence/backup-restart-preflight-2026-10-22.json).
+
+#### Preserve existing addresses before cold recovery
+
+The [address operator](../deploy/manage_addresses.py) prepares a read-only,
+owner-only plan for the selected existing Compose project. It freezes each
+endpoint at its **current** IPv4 address on its existing bridge. The plan binds
+container and network identities, image/configuration/mount fingerprints, DNS
+aliases, original endpoint requests and a complete dependency order. It does not
+create networks, move data, recreate containers, change secrets or select new
+subnets. Inspect the private plan separately before applying it; do not paste it
+into logs, Git, shared reports or screenshots.
+
+```sh
+python3 deploy/manage_addresses.py plan --project-name lawyer-assistant-v1 \
+  --plan /secure-operator-receipts/address-plan.json
+python3 deploy/manage_addresses.py apply --project-name lawyer-assistant-v1 \
+  --plan /secure-operator-receipts/address-plan.json \
+  --expected-sha256 "$LA_REVIEWED_ADDRESS_PLAN_SHA256" --stop-services
+```
+
+Use the semantic plan hash printed by `plan`, after reviewing that exact plan.
+Apply rejects snapshot drift before stopping consumers, then stops web, API,
+backing services and relay in dependency order with their existing graceful
+limits. With services stopped it disconnects/reconnects only unpinned endpoints,
+requests their original addresses and preserves the DNS alias set. Existing
+static endpoints need no reconnection. It starts relay, backing services, API and
+web in order and waits for each group's existing health checks. Docker may
+regenerate endpoint IDs and MAC addresses; these are not evidence identities.
+Image, environment, capabilities, mounts, original documents and application
+encryption keys are untouched.
+
+Only unique, running, known service roles on exclusively owned IPv4 bridge
+networks qualify. IPv6, custom endpoint options, nonzero gateway priorities,
+legacy links, unknown roles, stopped service owners, foreign network consumers,
+ambiguous identities and address conflicts require separate operator review.
+Duplicate aliases preserve the same DNS set. No broad fallback is attempted.
+Retain an authenticated recovery point and exclude all other Docker lifecycle,
+publisher and import operations throughout the maintenance window. The plan lock
+serializes invocations of that plan; it is not a daemon-wide Docker lock.
+
+An interruption while pinning leaves the authorized services stopped. Retain
+the plan and its `.journal.json` checkpoint. `resume` accepts the same plan hash
+and downtime flags, verifies identities/configuration and only original, pinned
+or disconnected endpoints, then finishes that exact plan. It also handles partial
+startup by first quiescing the same authorized set. A complete checkpoint cannot
+be replayed. Do not recreate containers or restore dynamic requests to guess a
+rollback order. Unexpected ownership/configuration changes require inspection.
+
+Successful CLI application verifies endpoint and configuration preservation;
+its report still says `health_and_recovery_qualified: false` because a startup
+check is not a recovery qualification. The generated `.compose-lock.json` is a
+per-host **override**, containing only network names, static addresses and DNS
+aliases. Retain it with the verified full deployment configuration and use it on
+future recreation; never run it standalone or combine it with an older Compose
+file. Validate only with `docker compose ... config --quiet`. Admission must
+still pass `backup --preflight-only` against the matching deployment. The guard
+remains mandatory after remediation and on later upgrades.
+
+The native restart drill also tests interrupted pinning and exact-checkpoint
+resume. The separate five-volume recovery drill now chooses distinct unused
+explicit `/28` subnets for source/target, pins all fixture endpoints, verifies
+address preservation through cold backup and retains hashes of its host
+operator dependencies. It never prunes existing Docker networks or uses the
+live `.env`, private documents or provider. Its small encrypted synthetic restore
+qualifies only the documented fixture scope, not populated legal graphs,
+production RPO/RTO, legal quality or five-job load.
+See [address/recovery evidence](evidence/address-recovery-2026-10-22.json).
 
 The archive includes source image identities and a timestamp, not root `.env` or
 backup identity files. Retain the application encryption key, database password,

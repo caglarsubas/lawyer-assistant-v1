@@ -120,14 +120,15 @@ class RecoveryContracts(unittest.TestCase):
                 self.assertFalse(archive.with_name("backup.age.partial").exists())
 
     def test_drill_has_no_host_ports_bind_mounts_or_external_network(self):
-        definition = drill.compose_definition(dict.fromkeys(manage_backup.SERVICES, "sha256:fixture"), "key", "password")
-        self.assertEqual(definition["networks"], {"isolated": {"internal": True}})
+        definition = drill.compose_definition(dict.fromkeys(manage_backup.SERVICES, "sha256:fixture"), "key", "password", "198.19.255.240/28")
+        self.assertEqual(definition["networks"], {"isolated": {"internal": True, "ipam": {"config": [{"subnet": "198.19.255.240/28"}]}}})
         self.assertEqual(len(definition["volumes"]), 5)
         for service in definition["services"].values():
             self.assertNotIn("ports", service)
             self.assertNotIn("env_file", service)
             self.assertEqual(service["pull_policy"], "never")
-            self.assertEqual(service["networks"], ["isolated"])
+            self.assertEqual(list(service["networks"]), ["isolated"])
+            self.assertIn("ipv4_address", service["networks"]["isolated"])
             self.assertGreater(service["pids_limit"], 0)
             self.assertTrue(all(mount.split(":")[0] in definition["volumes"] for mount in service["volumes"]))
         self.assertEqual(definition["services"]["api"]["stop_grace_period"], "240s")

@@ -1,0 +1,112 @@
+{
+  "schema": "address-recovery-engineering-v1",
+  "recorded_on": "2026-10-22",
+  "base": "b2dad879cedebf8e388883315ff67cae8ef8416d",
+  "scope": "Existing IPv4 endpoint pinning and interrupted resume; disposable encrypted five-volume recovery, with no private case or inference.",
+  "implementation_sha256": {
+    "deploy/manage_addresses.py": "5942f262e82f98f14be78787ea7bb8927a925d7a8f20cd6b2a2d8f0cac39bf79",
+    "deploy/test_address_maintenance.py": "b5eca247aeed756685c0210eb2dfa7c16f24d05c05223ddf7631bb429a9627c6",
+    "deploy/manage_backup.py": "c64797cf28b8aae5727c8fb660b33403cfd52ba53a1664bf039e12e959d8ba58",
+    "deploy/restart_preflight.py": "89c1e93afe17878fe68b45fd6a59de02cac0ec20e1741c8b71a6414b00ca27ee",
+    "deploy/test_recovery_contract.py": "4944f62094cf31367b354df82498bd0efa6f433860f80034ce9a709b4d74efa8",
+    "scripts/qualify_recovery.py": "e906fe11ce8c4087d495d7004f00af4843544bfbe70487de6d121dddee81d090",
+    "scripts/restart_preflight_drill.py": "0bf85481b7c5b3fef2983b551625f48738b72994bd56bf42183406f0db7b57a5"
+  },
+  "local_checks": {
+    "deployment_contract_cases": 84,
+    "deployment_contract_result": "passed",
+    "ruff": "passed",
+    "diff_check": "passed"
+  },
+  "native_drill": {
+    "schema": "backup-restart-native-drill-v1",
+    "legacy_collision_observed": true,
+    "static_before_dynamic_verified": true,
+    "exact_isolated_addresses_preserved": true,
+    "cyclic_CLI_preflight_blocked_without_downtime": true,
+    "isolated_containers": 4,
+    "address_pinning_preserves_containers_and_posture": true,
+    "interrupted_pinning_resumed_from_exact_checkpoint": true,
+    "pinned_restart_order_verified": true,
+    "host_ports": 0,
+    "private_mounts": 0,
+    "external_networks": 0,
+    "application_project_mutations": 0,
+    "backup_or_restore_executed": false,
+    "real_data_service_recovery_qualified": false,
+    "cleanup_verified": true
+  },
+  "synthetic_recovery": {
+    "status": "passed",
+    "scope": "encrypted five-volume cold restore; empty Fuseki corpus; fixture-only research without inference",
+    "checks": {
+      "authenticated": true,
+      "backup_restarts_only_previously_running_services": true,
+      "cold_restart_preserves_pinned_addresses": true,
+      "completed_job_unchanged": true,
+      "completed_product_unchanged": true,
+      "distinct_explicit_isolated_subnets": true,
+      "encrypted_records_decoded": 9,
+      "five_volume_bytes_and_metadata_match_except_epoch": true,
+      "fuseki_empty_datasets_available": 2,
+      "historical_epoch_absent": true,
+      "interrupted_without_replay": 3,
+      "nonempty_target_rejected_without_changes": true,
+      "opensearch_document_restored": true,
+      "original_document_decrypted": true,
+      "private_review_bytes_retained": true,
+      "truncated_archive_rejected_without_writes": true
+    },
+    "timings_seconds": {
+      "cold_backup": 4.007,
+      "restore": 1.099,
+      "restored_startup": 6.428
+    },
+    "cleanup": {
+      "complete": true,
+      "remaining_projects": []
+    },
+    "not_qualified": [
+      "production RPO/RTO",
+      "five-job throughput",
+      "ingestion overlap",
+      "populated graph rollback",
+      "real source rights or legal review",
+      "real process crash or power-loss recovery"
+    ],
+    "host_operator_dependencies": {
+      "deploy/manage_addresses.py": "5942f262e82f98f14be78787ea7bb8927a925d7a8f20cd6b2a2d8f0cac39bf79",
+      "deploy/manage_backup.py": "c64797cf28b8aae5727c8fb660b33403cfd52ba53a1664bf039e12e959d8ba58",
+      "deploy/restart_preflight.py": "89c1e93afe17878fe68b45fd6a59de02cac0ec20e1741c8b71a6414b00ca27ee",
+      "scripts/qualify_recovery.py": "e906fe11ce8c4087d495d7004f00af4843544bfbe70487de6d121dddee81d090",
+      "scripts/restart_preflight_drill.py": "0bf85481b7c5b3fef2983b551625f48738b72994bd56bf42183406f0db7b57a5"
+    }
+  },
+  "live_readonly_preview": {
+    "services": 8,
+    "endpoints": 13,
+    "dynamic_endpoints_to_pin": 4,
+    "projected_start_layers": 4,
+    "changes_performed": false
+  },
+  "unchanged_CI_sha256": "ee077ec642d2335f014a01dd36d4a66c32c1ed028ef2071882bfb8aa423a992d",
+  "qualification": {
+    "production_RPO_RTO": false,
+    "populated_legal_graph_recovery": false,
+    "five_job_load": false,
+    "legal_review_recorded": false,
+    "runtime_installation": "separate post-merge receipt"
+  },
+  "preservation_contract": [
+    "Same existing containers, images, secret mounts and volumes",
+    "Current IPv4 addresses and DNS alias sets",
+    "Original documents, exact evidence versions and review history",
+    "Pending owner review stays pending"
+  ],
+  "limitations": [
+    "Existing exclusively owned IPv4 bridge networks only; unsupported options fail closed.",
+    "Exclusive Docker maintenance required; plan mutex is not a daemon-wide lock.",
+    "Future recreation requires the generated network override with separately verified full configuration.",
+    "Fixture recovery is distinct from runtime, provider, legal and production qualification."
+  ]
+}
