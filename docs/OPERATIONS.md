@@ -1991,3 +1991,50 @@ state and configuration before/after. Originals, exact evidence versions, creden
 sessions and pending owner review stay intact. All nine exact-head checks and five
 timing reserves remain mandatory before merge; no deployment follows. See
 [declared boundary](METADATA_PHASE_DIAGNOSTICS.md).
+
+
+### Read-only local-origin and approved-route comparison — 2026-10-23
+
+F00-06 remains **partial**. A disposable host diagnostic verifies the current
+loopback listener, host UID, engine cwd, virtual-environment interpreter and exact
+uvicorn arguments before one fixed-path metadata GET. The approved route is
+observed separately by relay UID 10003 with verified deployed source, current
+bootstrap pin, unchanged firewall and certificate-verified TLS/SNI/Host. Three
+bounded two-second ownership inspections fail closed. Each network observation
+has one shrinking four-second budget; aggregate at most two connections/two GETs,
+zero inference or completion POSTs. Existing credentials stay in memory/stdin;
+reports contain no addresses, model names, bodies, keys or exception text.
+
+Both fresh sequential observations returned **HTTP 200** and passed the configured
+local-model metadata checks without exhausting their budgets. Origin is host
+loopback plaintext; the approved route retains verified HTTPS. These are different
+execution contexts, and the child bypasses serving queue/coalescing/filtering.
+Current metadata availability does not reproduce or explain the earlier 502 or
+pre-header closure, identify a responsible component, authenticate tenant/model
+execution identity, bind an inference response or establish five-job native
+capacity. Prior timeout and closure records remain exact; no retry was made.
+
+Ten fresh invented path-comparison cases produced ten expected results on first
+grading. The original six contracts passed; an added regression exposed acceptance
+of contradictory counters/TLS flags in report inputs. The comparison projector
+now rejects those inputs. Original six test methods, cases, evaluator, declaration,
+first candidate/report and failed added regression are retained. All seven final
+contracts and the unchanged full report reproduce in read-only network-disabled
+Linux with public code and temporary scratch only. The live observations used the
+initial candidate; retained fixed reports pass the stricter projector without
+another network request. All 342 deployment contracts, 206 relevant backend cases
+and configured lint pass locally. All 307 prior frozen files remain exact. CI jobs,
+workers, caps, coverage and five protected timing reserves remain unchanged.
+
+No provider/relay change, restart, route alteration, deadline extension, new key,
+container recreation, production install, private analysis regeneration or review
+decision occurs. All eight services remain healthy. Originals, exact evidence
+versions, encrypted bytes, confidential records, credentials, sessions,
+configuration, 31 earlier edits and review history remain unchanged; owner focused-
+analysis v3 review remains pending. Next declare the provider/relay challenge and
+signed execution-identity/response-binding contract with independently provisioned
+trust before any fresh native trial. Current metadata success is insufficient to
+reuse prior native allowances. Historical 502 cause, packet availability gaps,
+sustained five-job native capacity, semantic/legal quality, reviewed corpus and
+production activation remain open. See [declared boundary](ORIGIN_ROUTE_COMPARISON.md)
+and [dated evidence](evidence/origin-route-comparison-2026-10-23.json).
