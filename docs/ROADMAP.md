@@ -6173,3 +6173,71 @@ historical 502 cause, packet gaps, sustained five-job native capacity, reviewed
 corpus, semantic/legal quality and production activation remain open. See the
 [wire, adapter and activation contract](SIGNED_PROVIDER_CONTRACT.md) and
 [dated evidence](evidence/signed-provider-contract-2026-10-24.json).
+
+
+### Staged provider adapters and independent trust enrollment — 2026-10-24
+
+F00-06 remains **partial**. Concrete staged adapters use the inspected provider's
+loaded auth snapshot and manager interface, without importing provider configuration,
+reloading keys, using cached Request identity or logging bearer fragments. The auth
+record's actual AST matches the public-source fixture. Runtime qualification checks
+current principal, registered pin, local backend/endpoint/context/digest and exact
+immutable execution references. The inspected provider's mutable-tag dispatch is
+rejected; a registry digest cannot establish which weights executed. No model is
+loaded, resolved, refreshed or run by these adapters.
+
+A confidential SQLite ledger provides prepared/finalizing/completed/consumed receipt
+states, unique challenges and atomic one-use consumption across process restart and
+concurrent reads. Failed or interrupted finalization remains unusable. Trusted hooks
+must supply the exact request/response hashes, identity, pin, execution reference,
+single-attempt count and bounded times. Original prompts, responses and credentials
+are not stored. This is not truthful backend attestation, rollback-resistant campaign
+admission, or permission to execute. An immutable backend hook remains necessary.
+
+A dedicated encrypted PKCS8 Ed25519 signing key, password file and empty receipt
+ledger are staged in an owner-only gitignored issuer directory. A separate consumer
+directory receives only the public export. No key material enters Git, logs, command
+arguments, an image, the live provider, mounted secrets or `.env`. Key integrity is
+checked locally without issuing a provider identity proof. The consumer candidate
+remains **pending independent public-fingerprint confirmation**; it is not trusted
+or active. Enrollment requires an explicit independently verified fingerprint,
+reviewer and time; confirmation is immutable and expires after 24 hours. Revocation
+adds a separate fail-closed marker. Existing files cannot be overwritten; symlinks,
+hard links and broad permissions are rejected. Key/password co-location protects
+staging ownership, not against compromise of the owning account or as an HSM.
+
+A portable six-file provider package includes only declared public code and a hash/
+interface manifest. The frozen v2 contract changes imports only; extracted validators
+remove application dependencies. Producer-to-original-consumer interoperability and
+standalone imports without the application succeed in read-only network-disabled
+Linux. No private material or provider volume is mounted. The initial bundle is
+retained; a separately named hardened bundle is the latest staged artifact.
+
+Twelve fresh invented cases and fourteen original contracts pass first grading.
+An added regression then exposes a policy gap: pin flags alone cannot establish
+that cloud fallback, upstream retries and substitution are disabled. The hardened
+adapter checks the actual staged settings and fails closed on missing or permissive
+policy. The fixture explicitly describes a hypothetical strict future backend.
+Original fourteen methods, first candidate/report, cases, evaluator, declaration
+and initial bundle remain exact and retained. Fifteen final contracts and the
+unchanged full report reproduce in offline Linux. All 369 deployment contracts,
+206 relevant backend cases and configured lint pass. All 321 prior frozen files
+remain exact. CI jobs, workers, caps, coverage and five timing reserves are unchanged.
+
+All eight services remain healthy. Originals, exact evidence versions, encrypted
+bytes, private records, credentials, sessions, configuration, 31 earlier edits and
+review history remain exact. No native inference, live metadata request, provider/
+relay install, restart, route change, timeout increase, existing-key rotation,
+analysis regeneration or review decision occurs. The owner's focused-analysis v3
+review stays pending. Provider source and its existing untracked file are untouched.
+
+Next implement and qualify a real immutable single-attempt backend hook and a
+separately staged signed route, preserving other tenants and current origin controls.
+Independently confirm the public fingerprint and registered runtime pin, then qualify
+relay forwarding, trust lifecycle/restore and fresh bounded native admission. Do not
+change shared live provider settings as a shortcut, self-confirm a generated key,
+reuse exposed cases or reuse the old eleven-call allowance. Live signed identity,
+historical 502 cause, sustained five-job capacity, reviewed corpus, semantic/legal
+quality and production activation remain open. See
+[staging and enrollment procedure](PROVIDER_ADAPTER_STAGE.md) and
+[dated evidence](evidence/provider-adapter-stage-2026-10-24.json).
