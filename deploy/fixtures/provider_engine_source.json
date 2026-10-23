@@ -1,0 +1,16 @@
+{
+  "provider_commit": "13962b3",
+  "source_sha256": {
+    "src/inference_engine/auth.py": "85d104eddb8dac01e6ae72f67629c7aca42b55e92609a14016bc757435c2d72d",
+    "src/inference_engine/manager.py": "77d0955ea73efd478c5db6e33d7437e6c51650685f6eb361c93cf8fe17e28ccb",
+    "src/inference_engine/registry/ollama_http.py": "ea943c2b182b9143a2bf9bda44b3bea71bdd9a864d814efcb517a971cda50f0b",
+    "src/inference_engine/adapters/ollama_http.py": "290bd4e794802578a43b205d858079320eddbfc22135885a4edae9f41b52f3cb"
+  },
+  "observed_interfaces": [
+    "loaded auth snapshot with explicit key_id and active_at",
+    "manager.iter_loaded read-only snapshot",
+    "Ollama descriptor digest and mutable model_id",
+    "adapter _model_id, _endpoint, _num_ctx; generate has retry paths"
+  ],
+  "immutable_execution_identity_proven": false
+}

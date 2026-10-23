@@ -1,0 +1,10 @@
+{
+  "provider_config_sha256": "5258efd2f426e8519c60548c231945ea6514576d141969a1a8deb55f2b4ca248",
+  "required_staged_policy": {
+    "openrouter_fallback_enabled": false,
+    "upstream_retry_enabled": false,
+    "model_substitution_groups": ""
+  },
+  "source_defaults_are_not_runtime_evidence": true,
+  "live_settings_not_read_or_changed": true
+}
