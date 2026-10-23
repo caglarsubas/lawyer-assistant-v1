@@ -2,11 +2,11 @@
   "date": "2026-10-23",
   "qualification": "readonly_routed_diagnostics_only_not_upstream_phase_root_cause_or_native_identity",
   "implementation_sha256": {
-    "scripts/routed_metadata_diagnostics.py": "35cb544d2781a58e673101ad7356c25e13f730d7119f51946f85e57ea65811c3",
+    "scripts/routed_metadata_diagnostics.py": "ea596adec4151aa75e2f80d3cc72c3343eadf3e9c0aa6ef78d4bbee852d9f24a",
     "scripts/routed_metadata_cases.py": "94cdfce69212dba6cf54dc887b413c369ab7a5e017f7d2d0421c7113b5a018ed",
     "scripts/routed_metadata_fixture.py": "132ca018e2642ee3c997a17a47ea5d640b58aafa7f68473eab7b75a88566a45a",
     "scripts/evaluate_routed_metadata.py": "eabc2b131999fbba725a9787b76f7de61f7f28e1a64e6dd3617eb908dfbe1765",
-    "deploy/test_routed_metadata_diagnostics.py": "13b3afe739894b4379d675255801feb8cc78163b317776732857088facef6697",
+    "deploy/test_routed_metadata_diagnostics.py": "a56d8e2a836b8067ec0fbb938aeb1f37ec9aa36a68d78642dc056e1b088685d6",
     "docs/ROUTED_METADATA_DIAGNOSTICS.md": "ba436e048109bb5b162926c98af2b7e42b234db14f394c6e7e7654e5c18b5c5a"
   },
   "pre_grade_freeze": {
@@ -613,19 +613,18 @@
     "ultimate_network_or_legal_cause_established": false
   },
   "linux_offline": {
-    "after_import_annotations_and_grouping_repair": true,
+    "after_import_and_nonfinite_exponent_repairs": true,
     "host_linux_report_exact": true,
     "image": "sha256:acda6820b352df676f10e07896a5879a75a0df8edabc7b9e4d47c2f08364f712",
     "network": "none",
-    "normalized_imports_and_other_statements_exact": true,
     "private_runtime_or_provider_mounts": false,
     "read_only": true,
     "temporary_scratch_only": true,
-    "tests_passed": 20
+    "tests_passed": 21
   },
   "local_checks": {
     "exact_CI_lint": "passed",
-    "new_contracts": 20,
+    "new_contracts": 21,
     "deployment": {
       "first": {
         "tests": 312,
@@ -636,11 +635,17 @@
         "tests": 312,
         "seconds": 20.628,
         "result": "passed"
+      },
+      "after_nonfinite_guard": {
+        "tests": 313,
+        "seconds": 20.418,
+        "result": "passed"
       }
     },
     "relevant_backend_cases": 206,
     "relevant_backend_seconds": 8.1,
-    "relevant_backend_result": "passed"
+    "relevant_backend_result": "passed",
+    "first_grade_new_contracts": 20
   },
   "live_diagnostic": {
     "client_error": null,
@@ -669,10 +674,63 @@
     "This observation cannot explain the historical HTTP 502 incident.",
     "No qualified served-model/tenant identity, native inference, private document transmission or production activation.",
     "No provider/relay changes, new credentials, alternate routes, retries or increased timeouts.",
-    "Owner focused-analysis v3 review remains pending."
+    "Owner focused-analysis v3 review remains pending.",
+    "Retained live observation belongs to the pre-fix observer; discarded body cannot be revalidated and no second live GET occurred. Final guard live behavior is unmeasured."
   ],
   "CI": {
     "topology_caps_workers_coverage_unchanged": true,
     "nine_exact_head_checks_and_five_timing_reserves_required": true
-  }
+  },
+  "nonfinite_regression_repair": {
+    "diagnostic_before_fix": {
+      "client_error": null,
+      "completion_POST_requests": 0,
+      "error_body_state": "allowlisted_code",
+      "http_status": 502,
+      "identity_issue": null,
+      "metadata_GET_attempts": 1,
+      "metadata_accepted": false,
+      "native_execution_authorization": false,
+      "native_inference_calls": 0,
+      "production_activation": false,
+      "qualified_identity": false,
+      "recipe": "readonly-routed-metadata-diagnostics-v1",
+      "relay_code": "provider_connection_closed",
+      "stage": "http_status_rejected"
+    },
+    "final_implementation_sha256": {
+      "deploy/test_routed_metadata_diagnostics.py": "a56d8e2a836b8067ec0fbb938aeb1f37ec9aa36a68d78642dc056e1b088685d6",
+      "scripts/routed_metadata_diagnostics.py": "ea596adec4151aa75e2f80d3cc72c3343eadf3e9c0aa6ef78d4bbee852d9f24a"
+    },
+    "first_report_and_twelve_cases_unchanged": true,
+    "frozen_cases_fixtures_evaluator_declaration_and_first_report_unchanged": true,
+    "live_request_repeated": false,
+    "new_contracts": 21,
+    "observed_rule_violation": "Finite relay code admitted from a body containing overflowing JSON exponent 1e999",
+    "original_implementation_sha256": {
+      "deploy/test_routed_metadata_diagnostics.py": "13b3afe739894b4379d675255801feb8cc78163b317776732857088facef6697",
+      "scripts/routed_metadata_diagnostics.py": "35cb544d2781a58e673101ad7356c25e13f730d7119f51946f85e57ea65811c3"
+    },
+    "original_twenty_contract_methods_retained": true,
+    "real_network_calls": 0,
+    "repair": "Reject nonfinite float values anywhere in a decoded error document, including overflowing exponents and nested values"
+  },
+  "linux_offline_before_nonfinite_fix": {
+    "after_import_annotations_and_grouping_repair": true,
+    "host_linux_report_exact": true,
+    "image": "sha256:acda6820b352df676f10e07896a5879a75a0df8edabc7b9e4d47c2f08364f712",
+    "network": "none",
+    "normalized_imports_and_other_statements_exact": true,
+    "private_runtime_or_provider_mounts": false,
+    "read_only": true,
+    "temporary_scratch_only": true,
+    "tests_passed": 20
+  },
+  "live_diagnostic_implementation_sha256": {
+    "deploy/test_routed_metadata_diagnostics.py": "13b3afe739894b4379d675255801feb8cc78163b317776732857088facef6697",
+    "scripts/routed_metadata_diagnostics.py": "35cb544d2781a58e673101ad7356c25e13f730d7119f51946f85e57ea65811c3"
+  },
+  "live_response_body_retained": false,
+  "live_response_revalidated_after_nonfinite_fix": false,
+  "final_guard_live_behavior_measured": false
 }

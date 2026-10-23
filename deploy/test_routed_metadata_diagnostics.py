@@ -191,6 +191,14 @@ class Contracts(unittest.TestCase):
                                       "metadata_GET_attempts", "completion_POST_requests", "native_inference_calls", "metadata_accepted",
                                       "identity_issue", "qualified_identity", "native_execution_authorization", "production_activation"})
 
+    def test_overflowing_json_exponents_reject_entire_error_document(self):
+        for field in ('"n":1e999', '"n":-1e999', '"n":{"nested":[1e999]}'):
+            raw = ('{"code":"provider_connection_closed",' + field + '}').encode()
+            result = self.custom(httpx.Response(502, content=raw))
+            self.assertEqual(result["error_body_state"], "invalid_json")
+            self.assertIsNone(result["relay_code"])
+            self.assertEqual(result["stage"], "http_status_rejected")
+
 
 if __name__ == "__main__":
     unittest.main()

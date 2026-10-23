@@ -1,5 +1,6 @@
 """One approved model-list GET with fixed diagnostics, never inference or identity authority."""
 
+import math
 import time
 from contextlib import contextmanager
 
@@ -68,6 +69,15 @@ class Observation:
                 self.error_body_state = "budget_exceeded"
                 return
             payload = decode(bytes(raw), MAX_ERROR_BYTES)
+            pending = [payload]
+            while pending:
+                item = pending.pop()
+                if isinstance(item, float) and not math.isfinite(item):
+                    raise ValueError("Nonfinite diagnostic JSON number")
+                if isinstance(item, dict):
+                    pending.extend(item.values())
+                elif isinstance(item, list):
+                    pending.extend(item)
             value = payload.get("code") if isinstance(payload, dict) else None
             if isinstance(value, str) and value in RELAY_CODES:
                 self.relay_code, self.error_body_state = value, "allowlisted_code"

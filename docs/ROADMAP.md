@@ -5991,15 +5991,24 @@ private-document request occurred. Metadata and immutable served identity remain
 unqualified. Raw error bodies were discarded; only the fixed report is retained.
 
 Twelve fresh invented cases yield twelve expected diagnostic stages from twelve
-mock GETs, zero POSTs and zero qualified identities. Twenty new contracts and the
+mock GETs, zero POSTs and zero qualified identities. Twenty-one contracts and the
 full report reproduce in read-only network-disabled Linux with temporary scratch
-and public code only. All 312 deployment contracts and 206 relevant backend cases
+and public code only. All 313 deployment contracts and 206 relevant backend cases
 pass locally. An initial unconfigured broad lint command and the configured lint's
-import-grouping/test-bootstrap errors are retained. Only import ordering and explicit
-E402 annotations were repaired; normalized imports and all other statements match.
-Configured CI lint and the repaired contracts/Linux report pass; cases, fixtures,
-evaluator, declared rules and first report remain frozen. All 293 prior frozen files
+import-grouping/test-bootstrap errors are retained. The lint repair changes only
+import ordering and E402 annotations; normalized imports and other statements match.
+A later offline witness exposed overflowing JSON exponents decoding to infinity.
+Before merge, the observer was repaired to reject nonfinite floats anywhere in an
+error document, with one additional regression contract; the original twenty test
+methods, candidate, failure and first report are retained. Configured CI lint and
+the repaired contracts/Linux report pass; cases, fixtures, evaluator, declared rules
+and first report remain frozen. All 293 prior frozen files
 are unchanged. CI jobs, caps, workers, coverage and five timing reserves stay intact.
+
+The live report belongs to the pre-fix observer version. Its original body was
+discarded and cannot be revalidated; no second live request was made. The final
+guard's live behavior therefore remains unmeasured. A synthetic reconstruction
+of the retained allowlisted code is not a replay of that original response.
 
 No provider/relay modification, container recreation, production installation,
 native inference, private analysis regeneration or review decision occurs. Originals,

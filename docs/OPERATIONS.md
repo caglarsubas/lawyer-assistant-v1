@@ -1935,8 +1935,13 @@ origin, TLS, confidentiality and request-budget rules. Signed provider/relay
 identity and response binding with independent trust remain mandatory before a
 fresh native trial; the old eleven-call plan cannot authorize it.
 
-Retain the first report, frozen inputs, lint failures and mechanical import/annotation
-repair. Use the exact CI lint configuration, rather than altering older frozen files
+Retain the first report, frozen inputs, lint failures, mechanical import/annotation
+repair and subsequent nonfinite-exponent regression witness/fix. The final guard
+also rejects overflowing JSON exponents anywhere in error documents; 21 contracts
+include the original twenty methods plus the added regression. The live report is
+from before this guard fix; the discarded original body cannot be revalidated.
+No second live GET was made, so final-guard live behavior remains unmeasured.
+Use the exact CI lint configuration, rather than altering older frozen files
 to satisfy a different configuration. Preserve originals, evidence versions and review
 history; compare the full private state and configuration before/after observation.
 All nine exact-head CI checks and five timing reserves remain merge gates. No
