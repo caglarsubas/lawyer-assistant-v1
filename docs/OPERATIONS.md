@@ -1800,3 +1800,38 @@ Retain the first test failure and its test-only serialization repair, frozen inp
 full mock report and network-disabled Linux reproduction. Exact-head CI and five
 existing timing reserves remain mandatory before merge. No deploy/restart follows
 this protocol-only milestone. See [declaration](DISPOSABLE_PACKET_SELECTOR.md).
+
+
+## Durable disposable campaigns
+
+This accounting candidate has no inference CLI, provider dispatch, app route or
+production installation. Exercise only the invented temporary-store qualification:
+
+```sh
+PYTHONPATH=backend backend/.venv/bin/python scripts/evaluate_durable_campaign.py
+backend/.venv/bin/python -m unittest discover -s deploy -p 'test_durable_packet_campaign.py' -q
+```
+
+No `.env`, provider key, matter identifier, original file or production mount is
+needed. The mock-only bridge recreates old selector sessions and reserves in a
+separate temporary ledger before each fixed synthetic exchange. Its always-true
+issuer is a fixture, never production permission. Report comparisons and process
+crash tests establish accounting behavior, not native capacity or legal quality.
+
+For any future approved integration, pin a single authority store identity in
+trusted configuration, an exact issuer-approved grant and acquired evidence
+context. A 0700 directory and 0600 file are mandatory. Never recreate a missing
+store, refund a reserved packet, replay an ambiguous effect or issue a replacement
+grant to recover failed budget. A denied transaction has not authorized dispatch;
+a returned reservation has already consumed cost. Terminal digests contain no
+source/answer and are caller assertions, not independent provider receipts.
+
+Store copying/backup rollback, hostile host administration and reissuance of intent
+are not solved by SQLite. Require external restore fencing and issuer one-use
+intent enforcement, current model/transport binding and an end-to-end native
+admission boundary before any native execution. The older eleven-call acceptance
+plan cannot authorize these packets. Existing production backup/restore policy,
+private data and owner v3 review remain unchanged. Preserve the first report,
+pre-grade hashes and retained I001 formatting repair. Exact-head CI and the five
+existing timing reserves are mandatory before merge; no deploy/restart follows.
+See [declared trust boundary](DURABLE_PACKET_CAMPAIGNS.md).
