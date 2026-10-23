@@ -5811,3 +5811,51 @@ Historical HTTP 502 cause, sustained five-job model capacity, reviewed corpus,
 legal qualification and production activation remain open. See [boundary and
 frozen rules](DISPOSABLE_PACKET_SELECTOR.md), [operator procedure](OPERATIONS.md#disposable-packet-selection)
 and [dated evidence](evidence/disposable-packet-selector-2026-10-23.json).
+
+
+### Durable disposable campaign admission and crash-safe accounting — 2026-10-23
+
+F00-06 remains **partial**. A separately versioned accounting candidate now binds
+exact whole-passage evidence/plan/question and wire hashes, packet costs and full
+allowance to a one-use campaign grant. An injected trusted issuer authorizes each
+exact action; hashes and structural validity do not establish source rights,
+production matter permissions, independent review or native execution authority.
+No provider dispatch, inference CLI, app route or production installation is added.
+
+One explicitly created local SQLite store uses pinned authority identity, private
+0700 directory/0600 single-link file, DELETE journaling, FULL synchronous commits,
+foreign keys, immediate transactions and bounded lock waits. Missing, substituted,
+unsafe or corrupt stores fail closed rather than recreate themselves. Grant IDs
+cannot be readmitted or changed after reopening. Reservations commit before
+returning and retain consumed attempt/unit/copied-byte cost through crashes,
+failures and session recreation. Ambiguous reservations never resume or refund.
+Terminal metadata is one-time and contains only a caller result digest. Durable
+revocation blocks new reservations and successful terminal publication. The old
+8192 per-request and eight-attempt/65536-unit/32000-byte aggregate caps stay intact.
+
+Six fresh invented cases exercise seven mock exchanges through recreated selector
+sessions, four rejected duplicate reservations and two no-candidate inventories;
+all original passage copies remain exact. Twenty contracts include separate-process
+crashes before/after a synthetic effect, duplicate and distinct process races,
+authorization rollback, terminal/revocation behavior, every allowance dimension,
+stale unused evidence, forged wire/cost, store identity/integrity/permissions,
+bounded contention and unsupported journal mode. The full report and contracts
+reproduce in read-only network-disabled Linux with temporary scratch only. All
+252 deployment contracts and 206 relevant backend cases pass locally. The initial
+I001 import-format failure and purely mechanical repair are retained; fixtures,
+evaluator, contracts, rules and first report remain frozen. No CI jobs, caps,
+workers or coverage change; all five existing timing reserves remain merge gates.
+
+This is not protection against a malicious host administrator or rollback to an
+older valid backup. A trusted issuer must prevent replacement grants/stores from
+recreating spent intent, and restore requires external fencing/epoch policy before
+native use. The synthetic bridge is not a native inference executor. No real
+network inference, private case, production store, original or review record is
+changed; the owner's focused-analysis v3 review remains pending. Prior frozen
+trials and five packet availability gaps remain unchanged. Next qualify issuer-bound
+one-use intent, exact current model/transport identity and restore fencing before
+a freshly declared, separately authorized native trial. Historical HTTP 502 cause,
+sustained five-job model capacity, semantic/abstention/legal quality, reviewed
+corpus and production activation remain open. See [trust boundary and frozen
+rules](DURABLE_PACKET_CAMPAIGNS.md), [operator procedure](OPERATIONS.md#durable-disposable-campaigns)
+and [dated evidence](evidence/durable-packet-campaign-2026-10-23.json).
