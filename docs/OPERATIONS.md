@@ -1835,3 +1835,38 @@ private data and owner v3 review remain unchanged. Preserve the first report,
 pre-grade hashes and retained I001 formatting repair. Exact-head CI and the five
 existing timing reserves are mandatory before merge; no deploy/restart follows.
 See [declared trust boundary](DURABLE_PACKET_CAMPAIGNS.md).
+
+
+## Campaign authority guard qualification
+
+The disposable boundary has no live identity collector, native dispatch, app route
+or production install. Run only the invented temporary-store qualification:
+
+```sh
+PYTHONPATH=backend backend/.venv/bin/python scripts/evaluate_campaign_authority.py
+backend/.venv/bin/python -m unittest discover -s deploy -p 'test_campaign_authority.py' -q
+```
+
+No `.env`, API key, private original, production ledger or provider mount is used.
+A mock observer supplies invented immutable model/route identities; it does not
+attest the running provider. Select-all mock success does not measure relevance,
+abstention, native capacity or legal truth. Retain the first report and I001 test
+spacing repair; do not tune frozen candidate/cases against observations.
+
+For later approved integration, pin the authority separately and keep it current
+outside campaign restore. Issuers must assign stable one-use intent IDs and approve
+the exact evidence, grant, action and runtime pin. Never replace an intent/grant,
+reset an epoch or recreate a missing authority to recover spent allowance. Commit
+issuer cost/expected checkpoint before the campaign write and return only after
+exact reconciliation. A pending operation is ambiguous and consumed: do not retry,
+resume, refund or auto-finalize it. Fence before restore; all old intents then stay
+unusable, even if unspent. Fresh admission requires a separate explicit approval.
+
+Restoring both stores or hostile host administration is outside this boundary.
+It supplies no external immutable witness, production IAM or signature. A complete
+live pin requires immutable weight digest and independently verified route/tenant
+identity; the existing provider probe alone cannot provide it. Require a trusted
+read-only collector, provider-response binding and fresh native trial/authority
+before execution. This milestone changes no production restore policy or private
+review history. Exact-head CI and five timing reserves remain mandatory; no
+container recreation/deploy follows. See [trust model](CAMPAIGN_AUTHORITY_GUARDS.md).

@@ -5859,3 +5859,56 @@ sustained five-job model capacity, semantic/abstention/legal quality, reviewed
 corpus and production activation remain open. See [trust boundary and frozen
 rules](DURABLE_PACKET_CAMPAIGNS.md), [operator procedure](OPERATIONS.md#durable-disposable-campaigns)
 and [dated evidence](evidence/durable-packet-campaign-2026-10-23.json).
+
+
+### Campaign issuer, restore and runtime identity guard qualification — 2026-10-23
+
+F00-06 remains **partial**. A separately versioned disposable boundary adds a
+pinned authority outside campaign backups, one-use issuer intent IDs, unique grant
+bindings, monotonic per-ledger restore epochs, spent costs and exact checkpoints.
+The issuer must approve the exact acquired evidence/context and action. Hashes,
+identity labels and a fixture authorizer do not establish production permissions,
+cryptographic attestation, independent review or native execution authority.
+
+The complete runtime pin requires model ID plus immutable weight digest, local
+backend/format, model/application context limits, tenant/org/key IDs, exact route,
+explicit approved transport and disabled cloud fallback. A trusted observer must
+supply a current exact match around each phase; missing or changed evidence fails
+closed. The existing provider probe lacks immutable model digest evidence and is
+insufficient alone. No live identity collector or provider-response binding is
+implemented here. The approved laptop tunnel remains an explicit bounded mode.
+
+Issuer reservations and the expected campaign checkpoint commit first. Only an
+exact matching campaign write can finish the operation and return a reservation.
+Crashes between commits leave a consumed pending intent, without retry, refund,
+resume or automatic finalization. Unexpected writes or rollback to an older
+campaign receipt fail against the independent checkpoint, including for unused
+packets. An authorized restore fence increments the epoch and invalidates all old
+intents, retaining spent IDs and costs; fresh admission needs a new explicit
+issuer approval. This relies on the authority remaining current outside the
+restored snapshot. Host administration or restoring both authorities is not solved.
+No production backup policy, private store, provider route or inference hook changes.
+
+Six fresh invented cases exercise six mock exchanges and two no-candidate
+inventories; all original copies remain exact. Twenty new contracts cover full
+pin changes/absence, current issuer denial and races, one-use IDs/grants, rollback
+detection, epoch fencing, two real process-crash windows, duplicate concurrent
+reservations, unexpected writes, changed mid-operation model identity, exact
+terminal metadata, totals after reopen and confidential metadata boundaries.
+The full report and contracts reproduce in read-only network-disabled Linux with
+temporary scratch only. All 272 deployment contracts and 206 relevant backend
+cases pass locally. The retained I001 test import-spacing repair changes no
+semantics; candidate, fixtures, evaluator, rules and first report stay frozen.
+Existing CI jobs, caps, workers, coverage and five timing reserves remain intact.
+
+No native inference, real identity observation, private case, production install
+or review decision occurs. Originals, exact evidence versions, credentials,
+encrypted bytes, review history and prior frozen experiments stay unchanged; the
+owner's focused-analysis v3 review is pending. Next qualify a trustworthy read-only
+live identity collector, immutable digest acquisition and provider/response binding,
+then declare a fresh bounded native acceptance trial and execution authority.
+Do not reuse prior exposed cases or the eleven-call allowance. Prior five packet
+gaps, historical HTTP 502 cause, sustained five-job native capacity, semantic and
+legal quality, reviewed corpus and production activation remain open. See
+[declared boundary](CAMPAIGN_AUTHORITY_GUARDS.md), [operator procedure](OPERATIONS.md#campaign-authority-guard-qualification)
+and [dated evidence](evidence/campaign-authority-guards-2026-10-23.json).
