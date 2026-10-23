@@ -5765,3 +5765,49 @@ capacity, reviewed corpus, legal qualification and production activation remain
 open. See [declared experiment](WHOLE_PASSAGE_PACKET_EVALUATION.md),
 [operator procedure](OPERATIONS.md#whole-passage-packet-evaluation) and
 [dated evidence](evidence/whole-passage-packets-2026-10-23.json).
+
+
+### Disposable packet selection and aggregate-budget qualification — 2026-10-23
+
+F00-06 remains **partial**. A separately marked, isolated W-ID selector now
+rebuilds an immutable serialized snapshot, validates all evidence including unused
+sources, and rechecks an injected trusted acquisition authorizer and local provider
+settings around transport. It returns exact full passages, offsets and source pins
+without changing originals or review decisions. Hashes alone confer no authority;
+production matter permission wiring is not implemented by this candidate.
+
+The entire plan must fit explicit completion-attempt, conservative-unit and copied
+byte allowances before transport. The independent per-request ceiling remains
+8192 units, with eight passages/4000 copied bytes. Aggregate ceilings remain eight
+attempts/65536 units/32000 bytes. Locked one-shot reservations consume their whole
+cost even on cancellation, revocation, invalid output or failure. No refunds,
+retries, fallback, ID translation or synthesis are introduced. The in-memory ledger
+is not durable across process/session recreation and is not native campaign
+permission. Existing Provider model, local-route, timeout and response checks stay
+unchanged; no application or CLI inference hook is added.
+
+Six fresh invented protocol fixtures produce six mock metadata and six mock
+completion exchanges, two no-candidate cases and exact copies throughout. The
+report reproduces byte-equivalently as parsed JSON in read-only, network-disabled
+Linux with no provider/private mounts. Seventeen contracts include stale unused
+sources/wires, strict authorizer denial/revocation, races, each budget dimension,
+invalid/cross-packet IDs, simulated 502/model/metadata failure, consumed cancellation,
+duplicate reservation and five concurrent mock packets with exact totals. This is
+protocol evidence, not relevance, abstention, instruction resistance, legal quality
+or native capacity. The first contract run exposed a test-only JSON serialization
+error for the Allowance dataclass; its original hash/error is retained and only
+the assertion serialization was repaired. Candidate, fixtures, evaluator, rules
+and first report stayed frozen. All 232 deployment contracts and 206 relevant
+context/provider cases pass locally; CI jobs, time limits, workers and coverage
+remain unchanged, with the existing five timing reserves required before merge.
+
+No network inference, private documents, production mutation or review decision
+occurs. All prior frozen experiments, including five whole-passage availability
+gaps and the older native declaration, remain unchanged. The owner's focused-analysis
+v3 review is pending. Next implement and qualify durable one-use campaign admission
+and bind exact local model/transport identity before a separately authorized fresh
+native trial. Do not reuse the exposed prior cases or eleven-call allowance.
+Historical HTTP 502 cause, sustained five-job model capacity, reviewed corpus,
+legal qualification and production activation remain open. See [boundary and
+frozen rules](DISPOSABLE_PACKET_SELECTOR.md), [operator procedure](OPERATIONS.md#disposable-packet-selection)
+and [dated evidence](evidence/disposable-packet-selector-2026-10-23.json).

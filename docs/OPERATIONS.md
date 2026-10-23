@@ -1765,3 +1765,38 @@ Verify merged main and preserve originals, exact evidence, encrypted bytes,
 credentials, sessions and review history. Keep owner v3 review and F00-06 pending.
 A separately marked disposable selector, aggregate-budget/context boundary, fresh
 native declaration and exact model/transport binding remain later gates.
+
+
+## Disposable packet selection
+
+The `disposable-whole-passage-selector-v1` candidate is not wired to the app or an
+inference CLI. Run only its invented mock evaluation for this qualification:
+
+```sh
+PYTHONPATH=backend backend/.venv/bin/python scripts/evaluate_packet_selector.py
+backend/.venv/bin/python -m unittest discover -s deploy -p 'test_disposable_packet_selector.py' -q
+```
+
+No `.env`, provider key, original document, matter identifier or production mount
+is needed. The in-process mock serves the unchanged Provider; its synthetic model
+never runs. The six-case select-all report tests protocol and exact copying only.
+Keep source/review context private if evaluating any future authorized matter;
+returned bundles contain text and must never be published in CI or roadmap data.
+
+Native use is not authorized by this report. First supply a trusted acquisition
+and permission boundary for immutable versions, durable one-use campaign admission,
+current model/transport identity binding and a fresh declared acceptance trial.
+Do not use an always-true fixture authorizer with private evidence. Plan hashes do
+not prove source rights, matter authorization or blob integrity. The in-memory
+session allowance cannot enforce aggregate campaign cost across crash/recreation.
+
+Require the entire plan to fit all three explicit allowance dimensions. Fail closed
+on a blocked per-request envelope, stale evidence/wire, revocation, changed provider
+profile, unknown/cross-packet ID or exhausted allowance. Reservations are consumed
+on failure; never retry or recreate a session to recover failed-attempt budget.
+Metadata GETs are counted separately from completion attempts. Preserve originals,
+prior plans and review decisions; a returned selection is never legal approval.
+Retain the first test failure and its test-only serialization repair, frozen inputs,
+full mock report and network-disabled Linux reproduction. Exact-head CI and five
+existing timing reserves remain mandatory before merge. No deploy/restart follows
+this protocol-only milestone. See [declaration](DISPOSABLE_PACKET_SELECTOR.md).
