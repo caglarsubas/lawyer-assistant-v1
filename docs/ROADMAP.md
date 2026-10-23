@@ -5912,3 +5912,58 @@ gaps, historical HTTP 502 cause, sustained five-job native capacity, semantic an
 legal quality, reviewed corpus and production activation remain open. See
 [declared boundary](CAMPAIGN_AUTHORITY_GUARDS.md), [operator procedure](OPERATIONS.md#campaign-authority-guard-qualification)
 and [dated evidence](evidence/campaign-authority-guards-2026-10-23.json).
+
+
+### Read-only provider identity collection and response binding — 2026-10-23
+
+F00-06 remains **partial**. A frozen standalone collector performs one bounded
+authenticated model-metadata GET through the existing approved route, without
+retry, redirects, completion POSTs or inference. A separate optional fixed-loopback
+Ollama manifest observation does not establish the selected routed engine or
+executed weights. Configured tenant/org/key labels and operator flags remain
+explicitly separate from server-authenticated identity. No app route, provider or
+relay change, container restart, production installation or new key is added.
+
+The prospective signed contract requires an independently provisioned Ed25519
+public trust key, fresh challenge, complete immutable model/tenant/route/context
+pin and bounded certificate validity. The response verifier revalidates that
+certificate and binds exact request bytes, nonce, identity/pin hashes, expiry and
+canonical response payload. It retains a separate exact raw-response hash and
+consumes the expectation once even on rejection. Forged records, foreign signers,
+replays, swapped requests/nonces, changed payloads, legacy unsigned responses,
+fallback/substitution, clipping and over-budget reported usage fail closed.
+Signatures establish the trusted signer's claims, not physical execution alone;
+future provider and relay support must bind the resolved model and authenticated
+caller during execution. This verifier does not replace durable campaign guards.
+
+Eight fresh invented cases produce the declared two bound synthetic responses,
+four rejected responses and two unqualified identities, with eight mock GETs and
+zero POSTs. Twenty new contracts and the full report reproduce in read-only,
+network-disabled Linux with temporary scratch and public code only. All 292
+deployment contracts and 206 relevant backend cases pass locally. Candidate,
+fixtures, evaluator, contracts, rules and first report remain frozen; all 286 prior
+frozen files are unchanged. CI jobs, caps, workers, coverage and five timing reserves
+remain unchanged. Empty selection does not establish appropriate abstention.
+
+The separate live drill attempted one routed metadata GET and one independent
+loopback manifest GET. Routed collection failed safely despite passing static
+configuration checks and was not retried; no immutable served-model/tenant pin
+was qualified. The local manifest observation succeeded but is not routed
+execution proof. The precise routed rejection/HTTP cause remains unresolved.
+Source inspection also identifies missing signed identity/response fields in the
+engine and challenge/proof forwarding in the relay; source contracts are not
+deployed capability proof. Native admission remains blocked. Raw observations
+stay in protected local receipts; public evidence contains capability flags only.
+
+No private document is sent, analysis regenerated or review decision made.
+Originals, exact evidence versions, encrypted bytes, sessions, credentials,
+configuration, private records and review history remain unchanged; the owner's
+focused-analysis v3 review is pending. Next localize the routed metadata rejection
+without inference, then implement and qualify provider/relay attestation with
+independent trust provisioning before a fresh bounded native acceptance trial.
+Do not reuse exposed cases or the old eleven-call allowance. Prior packet gaps,
+historical HTTP 502 cause, sustained five-job native capacity, semantic/legal
+quality, reviewed corpus and production activation remain open. See
+[contract and frozen rules](PROVIDER_IDENTITY_RESPONSE_BINDING.md),
+[operator procedure](OPERATIONS.md#read-only-provider-identity-and-response-binding)
+and [dated evidence](evidence/provider-identity-binding-2026-10-23.json).

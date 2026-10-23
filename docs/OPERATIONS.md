@@ -1870,3 +1870,40 @@ read-only collector, provider-response binding and fresh native trial/authority
 before execution. This milestone changes no production restore policy or private
 review history. Exact-head CI and five timing reserves remain mandatory; no
 container recreation/deploy follows. See [trust model](CAMPAIGN_AUTHORITY_GUARDS.md).
+
+
+## Read-only provider identity and response binding
+
+Run the invented, no-socket qualification without credentials or private mounts:
+
+```sh
+PYTHONPATH=backend backend/.venv/bin/python scripts/evaluate_provider_binding.py
+backend/.venv/bin/python -m unittest discover -s deploy -p 'test_provider_identity_binding.py' -q
+```
+
+The optional live collector is a library, without an inference CLI or production
+hook. Use the app's existing effective settings only in memory and a protected
+operator receipt. It permits one model-list GET on the vetted route, bounded body
+and elapsed time, without redirects, retry or completion POST. Keep raw metadata,
+configuration, credentials and research identifiers out of logs, public evidence
+and arguments. Emit only allowlisted capability flags. The separate optional local
+manifest GET is fixed to loopback; it does not prove the routed executed model.
+
+Missing or invalid signed proof yields no qualified pin. Never construct one from
+configured tenant labels, operator flags, successful authentication or an independent
+Ollama tag. Provision the public trust key independently; never trust a key named
+by the response. Future provider/relay changes must carry the fresh challenge and
+sign the resolved model and authenticated caller. Bind the exact request and returned
+canonical payload, preserving the raw response hash separately. Any failed response
+verification consumes its in-memory expectation. Durable issuer intent, restore
+fencing, evidence permissions and campaign allowance remain separate mandatory gates.
+
+The live routed collection failed safely and was not retried; its exact rejection
+cause remains open. The independent local manifest observation succeeded, without
+qualifying served identity. No native trial is admitted. Preserve the first report,
+frozen inputs, protected observations and all original evidence and review history.
+Localize that rejection and qualify provider/relay attestation before declaring a
+fresh bounded native trial; the old eleven-call plan cannot authorize it. All nine
+exact-head checks and five timing reserves remain merge gates. No install, container
+recreation or private-case regeneration follows this milestone. See
+[declared boundary](PROVIDER_IDENTITY_RESPONSE_BINDING.md).
