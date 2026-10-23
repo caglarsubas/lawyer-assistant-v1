@@ -2038,3 +2038,54 @@ reuse prior native allowances. Historical 502 cause, packet availability gaps,
 sustained five-job native capacity, semantic/legal quality, reviewed corpus and
 production activation remain open. See [declared boundary](ORIGIN_ROUTE_COMPARISON.md)
 and [dated evidence](evidence/origin-route-comparison-2026-10-23.json).
+
+
+### Signed provider identity and exact response binding contract — 2026-10-24
+
+F00-06 remains **partial**. A new offline v2 issuer, pure relay codec and one-shot
+consumer implement domain-separated Ed25519 identity and exact request/response
+byte binding. The independently supplied public key, issuer ID, expected pin and
+fresh challenges anchor verification. The issuer resolves the authenticated caller
+and current runtime through a trusted adapter; it re-authenticates before signing
+and requires a separate completed execution receipt. The receipt must match the
+model/digest/backend/context/caller/route pin, exact request/response hashes,
+response challenge, identity hash and bounded execution times, with local execution
+and no substitution. An adapter copying configuration, client fields, unsigned
+metadata or a model-generated claim cannot establish production trust.
+
+The signed envelope carries bounded original response bytes, preserving whitespace
+in the binding. Strict finite JSON, duplicate rejection, exact shapes, expiry,
+local-model/stop checks, complete integer token accounting and one-shot failure/
+concurrency guards reject altered, stale, ambiguous or unsupported data. The pure
+relay codec admits only bounded Authorization/challenge headers and preserves
+opaque proof bytes unchanged; recipients must still verify signatures. The serving
+relay and application provider remain untouched. v1 and all prior protocols stay
+exact; no v2 proof grants native execution or legal approval.
+
+Fourteen fresh invented P2301–P2314 cases and twelve contracts pass on their first
+run. They cover valid producer-to-relay-to-consumer binding, wrong caller/key/nonce,
+missing/changed/stale execution, wire/request changes, expiry, duplicate challenge,
+fallback and nonfinite JSON. The full report and contracts match in read-only,
+network-disabled Linux with public code and temporary scratch only. All 354
+deployment contracts, 206 relevant backend cases and configured lint pass locally.
+Ephemeral synthetic keys never leave memory; reports contain only outcomes and
+fixed flags. All 313 prior frozen files and seven pre-grade files remain exact.
+CI jobs, workers, coverage, caps and five protected timing reserves are unchanged.
+
+No private document, live metadata GET, completion POST, native inference, runtime
+key provisioning, provider/relay install, restart, route change, timeout increase,
+analysis regeneration or review decision occurs. Originals, exact evidence
+versions, encrypted bytes, confidential records, credentials, sessions,
+configuration, 31 earlier edits and review history remain exact; all eight services
+remain healthy. The owner's focused-analysis v3 review remains pending.
+
+Next stage provider authentication/resolved-model/completed-execution adapters,
+independent signing-key/trust-anchor provisioning and revocation policy, then
+challenge/proof forwarding in a separately qualified provider/relay build. Only
+then declare fresh bounded native acceptance under durable campaign admission;
+in-memory replay locks and invented receipts cannot replace that gate. Do not
+reuse exposed cases or the old eleven-call allowance. Signed live identity,
+historical 502 cause, packet gaps, sustained five-job native capacity, reviewed
+corpus, semantic/legal quality and production activation remain open. See the
+[wire, adapter and activation contract](SIGNED_PROVIDER_CONTRACT.md) and
+[dated evidence](evidence/signed-provider-contract-2026-10-24.json).
