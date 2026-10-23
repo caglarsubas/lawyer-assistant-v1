@@ -5967,3 +5967,51 @@ quality, reviewed corpus and production activation remain open. See
 [contract and frozen rules](PROVIDER_IDENTITY_RESPONSE_BINDING.md),
 [operator procedure](OPERATIONS.md#read-only-provider-identity-and-response-binding)
 and [dated evidence](evidence/provider-identity-binding-2026-10-23.json).
+
+
+### Read-only routed metadata rejection diagnostics — 2026-10-23
+
+F00-06 remains **partial**. A separate observer wraps the unchanged frozen identity
+collector and allows one GET to the exact vetted model-list route. Fixed stages
+distinguish configuration, HTTP status, client transport, encoding/JSON, approved
+relay transport, model inventory/selection, local context and changed configuration.
+Reports contain only finite fields, bounded status, allowlisted relay codes and
+counters. They exclude credentials, URLs, model names, exception text/traces, raw
+bodies and arbitrary server fields. Non-200 body inspection is bounded to 4096
+bytes and the shared ten-second deadline; invalid, encoded, incomplete or excessive
+bodies cannot supply a code. There is no retry, POST, inference or identity grant.
+
+The live diagnostic made exactly one GET through the existing approved route. It
+received **HTTP 502** and the allowlisted code **`provider_upstream_timeout`**.
+That localizes this observation to a relay-reported upstream timeout, before model
+metadata validation. It does not distinguish connection, TLS, first-byte or body
+phase, independently prove ultimate upstream cause, or explain the older 502
+incident. No retry, alternate destination, timeout increase, credential change or
+private-document request occurred. Metadata and immutable served identity remain
+unqualified. Raw error bodies were discarded; only the fixed report is retained.
+
+Twelve fresh invented cases yield twelve expected diagnostic stages from twelve
+mock GETs, zero POSTs and zero qualified identities. Twenty new contracts and the
+full report reproduce in read-only network-disabled Linux with temporary scratch
+and public code only. All 312 deployment contracts and 206 relevant backend cases
+pass locally. An initial unconfigured broad lint command and the configured lint's
+import-grouping/test-bootstrap errors are retained. Only import ordering and explicit
+E402 annotations were repaired; normalized imports and all other statements match.
+Configured CI lint and the repaired contracts/Linux report pass; cases, fixtures,
+evaluator, declared rules and first report remain frozen. All 293 prior frozen files
+are unchanged. CI jobs, caps, workers, coverage and five timing reserves stay intact.
+
+No provider/relay modification, container recreation, production installation,
+native inference, private analysis regeneration or review decision occurs. Originals,
+exact evidence versions, encrypted bytes, confidential records, sessions,
+credentials, configuration, 31 earlier tracked edits and review history remain
+unchanged; the owner's focused-analysis v3 review remains pending. Next qualify
+bounded read-only phase diagnostics for the reported upstream timeout, then
+provider/relay challenge forwarding and signed execution identity/response binding
+with independently provisioned trust before a fresh bounded native trial. Do not
+reuse exposed cases or the old eleven-call allowance. Historical 502 cause, packet
+availability gaps, sustained five-job native capacity, semantic/legal quality,
+reviewed corpus and production activation remain open. See
+[declared diagnostic boundary](ROUTED_METADATA_DIAGNOSTICS.md),
+[operator procedure](OPERATIONS.md#read-only-routed-metadata-rejection-diagnostics)
+and [dated evidence](evidence/routed-metadata-diagnostics-2026-10-23.json).

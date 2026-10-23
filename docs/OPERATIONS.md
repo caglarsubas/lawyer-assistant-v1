@@ -1907,3 +1907,38 @@ fresh bounded native trial; the old eleven-call plan cannot authorize it. All ni
 exact-head checks and five timing reserves remain merge gates. No install, container
 recreation or private-case regeneration follows this milestone. See
 [declared boundary](PROVIDER_IDENTITY_RESPONSE_BINDING.md).
+
+
+## Read-only routed metadata rejection diagnostics
+
+Run the invented no-socket qualification without credentials or private mounts:
+
+```sh
+PYTHONPATH=backend backend/.venv/bin/python scripts/evaluate_routed_metadata.py
+backend/.venv/bin/python -m unittest discover -s deploy -p 'test_routed_metadata_diagnostics.py' -q
+```
+
+For an explicitly requested live observation, call `diagnose` with the app's existing
+effective Provider settings held only in memory. Each call permits one exact-route
+model-list GET, never a retry or completion POST. Keep the fixed report in an
+owner-only receipt. The observer discards raw response bodies and arbitrary error
+content; finite relay codes are read only from bounded, complete strict JSON.
+Never print settings, secrets, headers, exception traces or URLs. Do not add logs,
+destinations, credentials, increased timeouts or production hooks as a workaround.
+
+The first live report received HTTP 502 with `provider_upstream_timeout`. This is a
+relay-reported upstream timeout for that observation, not proof of its exact phase
+or ultimate cause, and not resolution of the older incident. No retry was made.
+Keep metadata and execution identity unqualified. Qualify bounded read-only phase
+diagnostics next, preserving the approved laptop-tunnel exception and all current
+origin, TLS, confidentiality and request-budget rules. Signed provider/relay
+identity and response binding with independent trust remain mandatory before a
+fresh native trial; the old eleven-call plan cannot authorize it.
+
+Retain the first report, frozen inputs, lint failures and mechanical import/annotation
+repair. Use the exact CI lint configuration, rather than altering older frozen files
+to satisfy a different configuration. Preserve originals, evidence versions and review
+history; compare the full private state and configuration before/after observation.
+All nine exact-head CI checks and five timing reserves remain merge gates. No
+production install or private-case regeneration follows this diagnostic milestone.
+See [declared rules](ROUTED_METADATA_DIAGNOSTICS.md).
