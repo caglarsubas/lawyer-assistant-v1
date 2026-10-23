@@ -6024,3 +6024,54 @@ reviewed corpus and production activation remain open. See
 [declared diagnostic boundary](ROUTED_METADATA_DIAGNOSTICS.md),
 [operator procedure](OPERATIONS.md#read-only-routed-metadata-rejection-diagnostics)
 and [dated evidence](evidence/routed-metadata-diagnostics-2026-10-23.json).
+
+
+### Bounded read-only metadata phase diagnostics — 2026-10-23
+
+F00-06 remains **partial**. A separate stdlib-only child distinguishes TCP connect,
+TLS handshake, request send, response headers, body and metadata validation. It
+uses the serving relay's verified source, existing bootstrap pin and UID 10003
+inside the unchanged firewall, with the same shared four-second metadata budget.
+The API's vetted provider context is held only in memory and protected stdin pipes.
+No credentials, URLs, IPs, model names, bodies or exception text enter reports.
+No request DNS, proxy, redirect, retry, new destination, TLS weakening, completion
+POST, inference, installed source or serving-process change is introduced.
+
+The live child made one connection and one metadata GET. TCP connect, certificate-
+verified TLS and request send completed. The connection then closed while waiting
+for HTTP response headers, producing **`provider_connection_closed`** with **no HTTP
+status**. The deadline was not exhausted. This fresh observation localizes a
+pre-header closure on that approved path; it does not explain the earlier relay-
+reported timeout, identify the responsible tunnel/origin component, establish
+credential acceptance, or qualify model metadata or immutable execution identity.
+The child bypasses relay queue/coalescing/filtering, so it is not an instrumented
+trace of a serving request. No retry or private document was sent.
+
+Eight frozen invented cases cover every timeout phase, success, redirect and
+nonfinite JSON. The first run retained six of eight expected matches and four
+contract failures. Two compatibility repairs preserve the exact HTTPS Host header
+and stop correctly after a completed known-length closing response while rejecting
+truncation. The original twenty test methods, first candidate/failures/report,
+cases, fixture, evaluator and declaration are retained. Two additional regressions
+cover truncated bodies and pre-header EOF. All eight expected results and 22
+contracts reproduce in read-only network-disabled Linux with temporary scratch
+and public code only. All 335 deployment contracts and 206 relevant backend cases
+pass locally; configured CI lint passes. The live probe used the repaired candidate,
+which remains unchanged. All 300 prior frozen files are exact; CI jobs, caps,
+workers, coverage and five protected timing reserves remain unchanged.
+
+Originals, exact evidence versions, encrypted bytes, confidential records, sessions,
+credentials, configuration, 31 earlier tracked edits and review history remain
+unchanged; the owner's focused-analysis v3 review remains pending. All eight
+services remain healthy. No provider/relay modification, container recreation,
+production installation, private analysis regeneration or review decision occurs.
+Next declare a bounded read-only comparison of the local origin and approved route
+to distinguish current origin availability from path behavior, without assuming
+the earlier timeout's cause. Do not retry automatically, alter routes, increase
+timeouts or restart shared services. Then qualify signed provider/relay identity
+and response binding with independent trust before a fresh native trial. Prior
+packet gaps, historical 502 cause, sustained five-job native capacity, semantic/legal
+quality, reviewed corpus and production activation remain open. See
+[declared boundary](METADATA_PHASE_DIAGNOSTICS.md),
+[operator procedure](OPERATIONS.md#bounded-read-only-metadata-phase-diagnostics)
+and [dated evidence](evidence/metadata-phase-diagnostics-2026-10-23.json).

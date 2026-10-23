@@ -1947,3 +1947,47 @@ history; compare the full private state and configuration before/after observati
 All nine exact-head CI checks and five timing reserves remain merge gates. No
 production install or private-case regeneration follows this diagnostic milestone.
 See [declared rules](ROUTED_METADATA_DIAGNOSTICS.md).
+
+
+## Bounded read-only metadata phase diagnostics
+
+Run only invented fake-socket/TLS cases without credentials or private mounts:
+
+```sh
+PYTHONPATH=backend backend/.venv/bin/python scripts/evaluate_metadata_phases.py
+backend/.venv/bin/python -m unittest discover -s deploy -p 'test_metadata_phase_probe.py' -q
+```
+
+For a separately declared live observation, verify the actual deployed relay source
+hash and read its bounded current process environment as UID 10003. Validate the
+bootstrap pin against the API's existing vetted provider route/model/context. Keep
+the existing key solely in memory and protected stdin pipes: never print it, put it
+in an argument, or persist a generated program containing it. Run the isolated child
+as the relay's existing unprivileged user within its unchanged firewall. Unavailable
+or inconsistent source/context evidence fails closed without resolving a replacement
+pin or using broader privileges. Install no code and recreate no container.
+
+Allow one connection and at most one fixed-path metadata GET, with one shrinking
+four-second deadline. Keep origin, TLS/SNI/Host, port, fallback and confidentiality
+rules intact. No retry, redirect, proxy, request DNS, alternate route or inference.
+The report contains only fixed phases, finite failure codes, booleans, HTTP status
+if actually received and counters. Error bodies are not read; successful metadata
+stays bounded, strict and unqualified. Do not interpret TLS success as model/tenant
+identity or credential acceptance. This child bypasses serving queue/coalescing and
+filtering, and does not establish production end-to-end behavior or capacity.
+
+The first live phase probe completed TCP, verified TLS and sent one GET; the
+connection closed before HTTP response headers, with no HTTP status. Its code is
+`provider_connection_closed`, not a reproduced timeout. No retry occurred. The
+specific responsible component and historical timeout cause remain unknown. Next
+declare a bounded read-only local-origin/approved-route comparison; do not change
+routes, extend deadlines or restart a shared service as a diagnostic shortcut.
+
+Retain the first six-of-eight report, four initial contract failures, candidate and
+two compatibility repairs, plus all original twenty methods and the two added
+regressions. The repaired eight-case report and 22 contracts reproduce in offline
+Linux; original frozen cases and prior trials stay unchanged. Compare full private
+state and configuration before/after. Originals, exact evidence versions, credentials,
+sessions and pending owner review stay intact. All nine exact-head checks and five
+timing reserves remain mandatory before merge; no deployment follows. See
+[declared boundary](METADATA_PHASE_DIAGNOSTICS.md).
