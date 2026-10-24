@@ -1,0 +1,13 @@
+{
+  "commit": "675150d6ad2747df1e218ef59de9194bc4a7e538",
+  "source_sha256": {
+    "server/routes.go": "28034a9f11df5d5c3ce8d3d4786d62d2efd78feb5fc3c7d4a7a5231ec17f12b3",
+    "server/images.go": "68dcf67c7d5b4addd80248627d80b950d0807bb252510fd0fecaf5cdb5415197",
+    "types/model/name.go": "5a57960ce67a46383dc8a0e96df648be7e137ffa6510c39982e74dea793a0cd7",
+    "manifest/manifest.go": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec"
+  },
+  "inspection": "public commit-pinned source snapshot; not the installed binary or a native compatibility test",
+  "stage_reference": "sha256:<full manifest digest>",
+  "source_path": "local single-manifest digest branch; no named model fallback",
+  "qualification": "staged protocol and transport only; executed weights and installed Ollama reference compatibility remain unqualified"
+}

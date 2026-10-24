@@ -2157,3 +2157,63 @@ historical 502 cause, sustained five-job capacity, reviewed corpus, semantic/leg
 quality and production activation remain open. See
 [staging and enrollment procedure](PROVIDER_ADAPTER_STAGE.md) and
 [dated evidence](evidence/provider-adapter-stage-2026-10-24.json).
+
+
+## Immutable execution hook and staged signed route — 2026-10-24
+
+F00-06 remains **partial**. A concrete staged hook owns the full manifest digest,
+local native URL, request translation and single send. It verifies an explicit
+owner-only snapshot of the manifest, configuration and every referenced blob;
+rejects remote configurations, manifest lists, unsupported layers and mutable tag
+substitution; and repeats artifact checks after dispatch. No symlinks, hard links
+or broad file permissions are accepted. No live model store is opened or copied.
+The hook uses one loopback `/api/chat` POST, explicit context/completion limits,
+no caller credential forwarding, environment proxy, redirects, retry, repair,
+alternative model or cloud-fallback path. Bounded uncompressed native JSON must
+identify the exact digest reference, finish with stop and provide complete integer
+usage. Native error text and document contents never enter diagnostics.
+
+An unregistered ASGI route implements only staged identity and completion paths.
+Exact paths, one bearer header, strict JSON, bounded request bodies/fragments/time,
+independently registered identity/pin and exact request bytes are checked before
+execution. The response nonce is durably reserved before dispatch; failures and
+cancellation cannot silently dispatch again under it. Current authentication and
+runtime are rechecked before receipt finalization and signed response binding.
+Cancellation propagates and releases capacity; busy staged requests fail promptly.
+The retained v2 consumer verifies the exact signed response bytes and request hash.
+This single-completion staging limit is not five-job capacity qualification.
+
+Sixteen fresh invented H2401–H2416 outcomes and twelve contracts pass first grading.
+The first candidate and complete report stay retained; the full report and twelve
+contracts reproduce in network-disabled read-only Linux with public sources and
+scratch only. All 381 deployment contracts, 206 relevant backend cases and lint
+pass. An eight-file portable package imports independently of the application and
+its file hashes match across host and Linux. All 332 earlier frozen files remain
+exact. CI jobs, workers, caps, coverage and five timing reserves stay unchanged.
+
+The public source snapshot contains a distinct digest-reference resolution path;
+it does not identify the installed binary or prove the wire reference works there.
+Synthetic blobs are not a real model. Hashes, HTTP responses and signatures are not
+hardware attestation or proof of executed weights. Full-size hash work, tokenizer/
+truncation behavior, an isolated read-only store and an honest qualified backend
+remain necessary. Unsupported digest references fail closed without trying a tag.
+Live identity, historical 502 cause and sustained five-job capacity stay open.
+
+All eight live services stay healthy. Original documents, encrypted bytes, exact
+evidence versions, private records, credentials, sessions, configuration, 31 earlier
+edits and review history stay exact. No native inference, live provider metadata
+or completion request, route registration, provider/relay install, restart, setting
+change, existing-secret access for signing, analysis regeneration or review decision
+occurs. Existing encrypted issuer material and the separate public candidate remain
+unchanged; independent fingerprint confirmation is still pending. Owner focused-
+analysis v3 review stays pending. The provider repository remains untouched.
+
+Next independently confirm the public fingerprint and registered runtime pin;
+qualify backend build/artifacts and actual immutable-reference support in an isolated
+staged build. Then qualify scoped relay forwarding, trust lifecycle/restore,
+full-size verification work and fresh durable native admission before any trial.
+Do not activate consumer trust, change shared live provider settings, self-confirm
+a generated key, reuse exposed cases or reuse historical inference allowances.
+Reviewed corpus, semantic/legal quality and production activation remain open. See
+[staged route procedure](IMMUTABLE_PROVIDER_ROUTE.md) and
+[dated evidence](evidence/immutable-provider-route-2026-10-24.json).
