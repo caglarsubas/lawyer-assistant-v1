@@ -1,0 +1,925 @@
+{
+  "schema": "readonly-backend-reference-evidence-v1",
+  "date": "2026-10-24",
+  "qualification": "read_only_backend_identity_and_rejected_metadata_reference_not_native_execution",
+  "prior_base": "bf8e0c6a686968efb0e7b33a50db7a1acc52433b",
+  "previous_frozen_files_sha256": {
+    "deploy/fixtures/immutable_ollama_source.json": "e2ba78cc8cf924ef60dcaf588f60d29bc318656c5ea51a1621db84ac67072e17",
+    "deploy/fixtures/provider_engine_contract.py": "e7acd51431db319e72d719737b84ab49ff66b2f56851a6cf903d8bbf05557545",
+    "deploy/fixtures/provider_engine_source.json": "86afec43f328bf23edc7e61a26333f4efafcc96e33fce122becf6fc18693960c",
+    "deploy/fixtures/provider_stage_policy.json": "6acfaa5be4e76f994acc63edecd20a75032decbd2da4b6e23e761fed7c2a3977",
+    "deploy/test_immutable_route.py": "b435ec095e8958b2eb9a44dec151809a09a8594251ea5579fb5d67e2d9491bfa",
+    "deploy/test_metadata_phase_probe.py": "3832c761b8d33cb465cf894074cfaf05393e73ea4acc856918cfc355b592075d",
+    "deploy/test_origin_route_comparison.py": "7a76ce7010cd89a8fe87b285bfc08f574de6d9a4672881271b5339eddefcabd5",
+    "deploy/test_provider_identity_binding.py": "35d723b62960f541e438787de238f7510c823d6f2ea586974c74f76c5ea28bce",
+    "deploy/test_provider_stage.py": "64a7c17641f108550a9c5baf37dfba1d2835c8722f8b67db4b35853349c66d9b",
+    "deploy/test_routed_metadata_diagnostics.py": "a56d8e2a836b8067ec0fbb938aeb1f37ec9aa36a68d78642dc056e1b088685d6",
+    "deploy/test_signed_provider_contract.py": "425a9310ae8eb703cdda915b46d629119f23027647475161262fed3e2e61810f",
+    "docs/CAMPAIGN_AUTHORITY_GUARDS.md": "bf4a27b3da3be6f740469bae06daae5bf49c45d0aa4e8870fe7d2f81d379d501",
+    "docs/DISPOSABLE_PACKET_SELECTOR.md": "8d66aa53c253d341e5887c25776d280b4a470adc95b5ad055ce5805ef3a380df",
+    "docs/DURABLE_PACKET_CAMPAIGNS.md": "b409a86eb2f3e8cfc820e45d871f6239da53f43cc5d8fd067436e3a8c1d2aafc",
+    "docs/IMMUTABLE_PROVIDER_ROUTE.md": "db7a1d5795bb013fe394e50c6fc5ddbec0120c1876b86ef651446257df620db1",
+    "docs/METADATA_PHASE_DIAGNOSTICS.md": "c51a1c67096bad6d9b13f27a01663efa4958bc6faa8405dfeea1687bceaa5e49",
+    "docs/NATIVE_ACCEPTANCE_PLAN.md": "114160f7f3cf641352696b6bafb140c42dac83ce48732f56a50f64940c0e67e9",
+    "docs/ORIGIN_ROUTE_COMPARISON.md": "ba65f83b9996105c1c658bbaf23d28041fac2efb4f199a79672c9332c6ed8e9a",
+    "docs/PROVIDER_ADAPTER_STAGE.md": "c8e8e61d03b858c2cd410369d831c0dc4232752acbbc259ebaf7fd917def9c07",
+    "docs/PROVIDER_IDENTITY_RESPONSE_BINDING.md": "6f2112f5f9e0641a214973b0dc8a41ece5dd3e7c8e247620cb0249609f1fc8c5",
+    "docs/ROUTED_METADATA_DIAGNOSTICS.md": "ba436e048109bb5b162926c98af2b7e42b234db14f394c6e7e7654e5c18b5c5a",
+    "docs/SIGNED_PROVIDER_CONTRACT.md": "496f3aae8f102df699c4bcf856aa07136ab7f4cf133b32e342cbf1246c258dd5",
+    "docs/WHOLE_PASSAGE_PACKET_EVALUATION.md": "71f193d1c567d8e17b1d285faa4ad5ece886a502d7e5eedbf5a2d1aa4e6d35dd",
+    "docs/evidence/address-recovery-2026-10-22.json": "e6ba8b4d45db1db499b14193d1b771ecd5f9385f5357282c5be133d9180b0022",
+    "docs/evidence/alternate-adverse-bundle-adapter-2026-10-22.json": "0193a125881008ecfeefadff9ed15407e4f863cfe5823469d85c77bbbf0b2b52",
+    "docs/evidence/analysis-context-budget-2026-10-20.json": "a66518fd0d3e9fbae8323fcecd20ddf3a18a1a59b7ba48e3572f95ba39c1b0ec",
+    "docs/evidence/arrival-event-handoff-2026-10-15.json": "3d1b5becb508ab60743970bf4aaf1e6d3470b4ea97cbe2baf1d06be8f9d27ca5",
+    "docs/evidence/arrival-return-reconciliation-2026-10-15.json": "c79a2b8c8c87ffb38c7dcb602c23f187242f7ec7abecc61c9e1a42c4713a9961",
+    "docs/evidence/arrival-return103-2026-10-20.json": "15d829d2e1b234efec0d3a33672ccefed9f7c6881f6a34aa627cb9002153f3e5",
+    "docs/evidence/arrival-return85-2026-10-19.json": "9cf985550e5ae0e30d667761464f160693356ad21293d967be5ebd1fdbdec0d5",
+    "docs/evidence/arrival-return91-2026-10-19.json": "45d5a9ae2e92d708054066b9bdd23a2041e2dea443ebdd7aca0d39cd9fa83a33",
+    "docs/evidence/arrival-return97-2026-10-19.json": "5689a5d504b6f08afac20e339c23480438f8a70a1e6430156e88a76960466f99",
+    "docs/evidence/authority-model-cohorts-verification-2026-10-10.json": "bd74950f277770fa41e923b1fa8081e4884d8ab9820117a5e23960c3b1b32f9c",
+    "docs/evidence/authority-model-trials-verification-2026-10-10.json": "fce45753992fc886a9941a03a1fb3375a845df9b74349a4832614d7dec730af7",
+    "docs/evidence/aym-decision-intake-2026-10-11.json": "fe3f2a0325b8fc6215b3a5020105b3be52b641f2208b4227106bde28c1b3bb12",
+    "docs/evidence/backup-restart-preflight-2026-10-22.json": "d5d821b3e3ec13e6f3babfe3d6564193cf5b84735a0909752d9b1223f5c36688",
+    "docs/evidence/bounded-analysis-output-2026-10-21.json": "099a475cafe0d1c573b0e215434beb7ba15b562a82318c66ffc09ca517abb21c",
+    "docs/evidence/budgeted-quotation-bundles-2026-10-22.json": "880c4cc00a7508c8e2549d0866f8b287b065b097721d3c99d02bf56c699939ab",
+    "docs/evidence/campaign-authority-guards-2026-10-23.json": "3691dd130e2c0ec780c3605e6c253c926b0a8675b8dd80fe72609707cfff3839",
+    "docs/evidence/canonical-decisions-2026-10-11.json": "f77619f640cde05d3303f414b5804c310c0e7c64b744a45be883c7e9ac3beb67",
+    "docs/evidence/carried-arrival-event-handoff-2026-10-16.json": "735ce8d4bcb989d562dd798691e43537786eb5bbce6a98bfc5a148c214979abf",
+    "docs/evidence/carried-arrival-return-2026-10-15.json": "a8bf29ccdc7b9855b6ba1443a4cdff1f0a710a5b513e77bfea26f3f48bf7940e",
+    "docs/evidence/carried-destination-event-handoff-2026-10-16.json": "4d71d453a229ceb3c32da121e306f2904a4c3f68af63deec03a037d1ae72d8e3",
+    "docs/evidence/carried-destination-return-2026-10-16.json": "34afa06d3fab202ffc3f325e58e341c8383cec18c7e6af44e81b3682ccef8677",
+    "docs/evidence/ci-frontend-shards-2026-10-20.json": "44a1d0abb38e775bfd81b2ad9e64e50f4aea6cea8e840deb5f30ae9c941ae6fb",
+    "docs/evidence/ci-release-seeds-2026-10-12.json": "6c5f2e028caa6054ad4a7610b4db657c125303429275695de9b5a5820c948d52",
+    "docs/evidence/ci-thread-headroom-2026-10-19.json": "51173feea4fbe2801558c1b31e08091e3e42b9484abcf05c4a2e8dfeb6fad966",
+    "docs/evidence/client-case-responsibilities-verification-2026-10-09.json": "b3a3417e4ae6a5efd252f1e579ed936611eb1238f23b964fb012bdeff8e1c65b",
+    "docs/evidence/comparison-event-handoff-2026-10-15.json": "9189b32d072308470b269e7336a86bd973620dfdd9a13e25b831cb515d8df13b",
+    "docs/evidence/comparison-renewal-handoff-2026-10-15.json": "fc0b1117f7e5e7c8fa6563a0c1147a956bd181865f264bda2d267d7323b9da55",
+    "docs/evidence/comparison-return-reconciliation-2026-10-15.json": "ba236b86ac807d66c2ec227658d93d5a757d58490a4bbbeb500e9c475db8f034",
+    "docs/evidence/context-budget-pilot-install-2026-10-20.json": "5c1bc2cc202cb83afbe6abf7d43ecd0ded44519edddc0980af8da3d561647f6a",
+    "docs/evidence/curator-active-effort-2026-10-10.json": "0876cd9f6d4215214c8817368f6502ee5ab2c738df727243b716613c0423f28a",
+    "docs/evidence/decision-curator-2026-10-11.json": "3393b537a2c261298c66916fc185443cbb9e9319d31987445f88074f0dfab64b",
+    "docs/evidence/decision-dossier-2026-10-11.json": "5276610566a6afb94ce46446809f0a9fe6dff7eb2bbcccbc2788433ecf031764",
+    "docs/evidence/decision-equivalence-2026-10-12.json": "b3b7b0081f6771a4ae9de59e40272d82f76696e702035e7736e286a8db65d8f7",
+    "docs/evidence/declared-graph-assembly-2026-10-13.json": "9fe93def6ac803f97d947844dcd9d63527063dd231d6d316429bbc85f65ceef2",
+    "docs/evidence/destination-arrival-event-handoff-2026-10-16.json": "62e9afd36383cacd09e4db0a96493564ec26e1452f86090ae452226094c69111",
+    "docs/evidence/destination-arrival-return-2026-10-16.json": "d2955fb882d63c82655cead3c7ee7e8271b15a79d5f76a2cfe948fa3f940eaaf",
+    "docs/evidence/destination-return100-2026-10-20.json": "9a2ea98d9ba277c9f3fdf2350634518ebec414aba8d734865962c57ee1bf0b5b",
+    "docs/evidence/destination-return88-2026-10-19.json": "dff4a9931479756d1a42a7dcc8d5f38c3064cabaed85d417aef4a08fe8131c7d",
+    "docs/evidence/destination-return94-2026-10-19.json": "bce9433a56add8b39349fd11ce8ec2d0e3cc405c5b81e046ea1c7f5c45bd0dc7",
+    "docs/evidence/disposable-diverse-wire-2026-10-22.json": "831ca44dd2d253cfa883e3256b61ca9df805412e2fd8c059147b8b3ed535942d",
+    "docs/evidence/disposable-packet-selector-2026-10-23.json": "4eca9276774272fa0b17c01a2fac6aacd2df47a176b45ea1f26c9dca72b196fa",
+    "docs/evidence/docx-body-order-2026-10-21.json": "975ac4f81f5af91351d10309fa9c957bc3c58b99c102ebd67fed7674ee2f7896",
+    "docs/evidence/docx-linked-notes-2026-10-22.json": "3f42351b30491b52635d9a970f85400dd7367459b008a41c6be98ebf0d8d87a2",
+    "docs/evidence/docx-nested-tables-2026-10-21.json": "c6b75f65ac3e7bd39c4c0f69a90d9ffec33a5640b8ec9da2704fcd7290c6bfec",
+    "docs/evidence/docx-section-stories-2026-10-22.json": "a97b219c1250588c2b9e9ccfc4ba3b2fde52a2c9bd2a99cb897b00ac9235e29f",
+    "docs/evidence/docx-textboxes-2026-10-22.json": "16fc0d1a748df0e4b051b1608ac2e81f335a9c959e386d9b2ddc3812391ede7e",
+    "docs/evidence/durable-packet-campaign-2026-10-23.json": "e7255ed7765547ab870bfcfc1899466fa805f1a342c818705bec8cf817605ff1",
+    "docs/evidence/equivalence-graph-b-handoff-2026-10-12.json": "8edb737bc8215a1bd581a9d601070b79632b249d69230f7bc1de9b821a73264f",
+    "docs/evidence/exact-event101-2026-10-20.json": "5e349be6a514ca29949f7ffa405358d0ad658e038f47662aebba9192baa06616",
+    "docs/evidence/exact-event104-2026-10-20.json": "79fe9fcaa656f5284677cfc5586c6570cde34fa3ffeddc83a583d3f0a7278a9c",
+    "docs/evidence/exact-event83-2026-10-19.json": "477a213297ae0ada01470edc7f22b285f6f1374fd7df234223e608678bf47517",
+    "docs/evidence/exact-event86-2026-10-19.json": "9c835065df536642114f5bfaedf24e003b0991b19bfc940413fa988777fb486c",
+    "docs/evidence/exact-event89-2026-10-19.json": "66b6adffb8124fe3cf9859048e14cb9c67ec0ba8869c7904dedafc8b8154ba57",
+    "docs/evidence/exact-event92-2026-10-19.json": "0ab5e478e0f3078762377305426e342f45d68d9930a2d7c2e710d00d5c51d353",
+    "docs/evidence/exact-event95-2026-10-19.json": "31b570931dbe7c14bfefaf2f081925536045f319236f2fcb0bec187020c6e594",
+    "docs/evidence/exact-event98-2026-10-19.json": "893451d11049c79ed68a33e9efa8ca2f176646997a3a42b9c9786632f63bb2bc",
+    "docs/evidence/exact-historical-review-lineage-2026-10-14.json": "4da1ae3749814b4f1547e52458ebd7407cfbce026aec596e1c98d87a0a07f0a9",
+    "docs/evidence/exact-source-context-navigation-2026-10-14.json": "ae3d6c1550dc85a88143491b131b301f72b64323d5cf0518090d15d2ff9f12ee",
+    "docs/evidence/exact-source-discovery-2026-10-14.json": "e03a1e6ae93e8b1b36d71a7a666bf43b7c08b88efe49919cd502301345ef2392",
+    "docs/evidence/final-graph-candidates-2026-10-13.json": "6550ed7a4df68db8924a7b648779a81f92792e142b08e27d9eab939b71c12356",
+    "docs/evidence/finished-analysis-prose-2026-10-21.json": "871cecc5bd0e99913c777d32cc7fb7e5b1a9bb23f15abcede933a1436ebb67b0",
+    "docs/evidence/firm-administration-verification-2026-10-09.json": "4d59f0355a5cd18dfbc1804298f82f7d8b91f3802a640e76fed0632026d74086",
+    "docs/evidence/five-job-drill-2026-10-06.json": "e5c2c71b245befd32d6c9fb3a794e57ab8c60882727cbb6c62b5c1ae05425209",
+    "docs/evidence/focused-analysis-2026-10-21.json": "1e4c09ed3c5ef304c0f6a9cd6ae3d90667370ebb10a18c9ee3616c96d76ee137",
+    "docs/evidence/frozen-native-acceptance-plan-v1.json": "c3a38ac99547ed84bbfa2ae6dd06b9d92aae63a26dff06117c397e4de2856ed2",
+    "docs/evidence/graph-b-component-grants-2026-10-13.json": "5a24bcd66c461346ab98fe529799f1623de86ea0f27d08c071e6cf9cb1ce9046",
+    "docs/evidence/graph-b-handoff-2026-10-11.json": "1cd813dff096e645db94eb5e688a76d146713565ae93936c2f9a7458a64f4c21",
+    "docs/evidence/graph-b-publication-2026-10-12.json": "b3ccc8c9465f0996b803d635a07af7cd0680a397d27b2a2bdebbf78b35321fb6",
+    "docs/evidence/graph-b-snapshot-2026-10-12.json": "3cc784b73a6434184496052027aa591be75faaf78148c10f73205b0cc602a896",
+    "docs/evidence/graph-lifecycle-drill-2026-10-06.json": "1b9404c8935a27cd356a598b462a6f4321b387aeaec7bca32517731f6a90c44e",
+    "docs/evidence/guarded-portfolio-source-return-2026-10-14.json": "2a53b50d5ff702012acef88a1333a7402100ceb1a62910585cbcf3513120508d",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-return-2026-10-19.json": "910cfb32beb9e229468ff61f914bcf377160a9816f0a5abfb6a6509234252a79",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-event-2026-10-18.json": "3e74009518fca388b1c837767e9b26ac5291659e5a194b9fec390d1346f02163",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-return-2026-10-18.json": "9a7c823fa3b49255607e21e7c8c9bdf4d5932dd5aacf159e826b14fc7748ce8e",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-event-2026-10-18.json": "c08411572bc677ca0391e51d238a45de9d99f528d9ee9b4e4cd206398c274e57",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-return-2026-10-18.json": "97f2b06f59bae8bb46a51edf5495a3dadcdeed9369bd9b959945667b9b87dcd0",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-event-2026-10-18.json": "d72ae7c83f8025702d4812a01419f27a3a39e35d6a979efa8220fe477354a4d4",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-return-2026-10-18.json": "50bac4ec0fe4e129673d3081b56dd31e8f05373a60b7b253717409d0d2136d56",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-event-2026-10-18.json": "bc06b6bb647feeb8ea428b47a3a68145b7678143ba6bf5b3c1030d8d70763f7b",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-return-2026-10-18.json": "635afd22f57a8fb927296f4c0f47ef4c49560797c45ec8369025434904188b58",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-event-2026-10-18.json": "f9b7ab76022cc1942e5f20ac8cdc90e92030f748ada6bfc5deed39872f6f6fe0",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-return-2026-10-18.json": "81479006530a48cce7753f2247fa71bb5d9b545c9e6dca0f332f04a84f643d1f",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-event-2026-10-18.json": "515814f032354e6e1f5dcc6dd3a121073a8ef655ee48e198cc56e66cd4b4b3d1",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-return-2026-10-18.json": "1aff6e65702da8e7c1086fbb49445f78b25bd416f4ddb36878b38effdab79640",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-event-2026-10-18.json": "2b5373b1fbc688b6469a348fc1ef108166da7059206c03d598db14d30fac5102",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-return-2026-10-18.json": "d6fb6819b57bc4051b1906b1c24a9067507118f0e4cb1d6345f57ccb91812383",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-event-2026-10-18.json": "fea0e1fba75019b9fa6e19f881e9a0d0507164f0d2a9e47bdac647fdf905ad1f",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-return-2026-10-17.json": "6d55e2d54fff1c849aea8a28d45c21bc2effa1b15317c022d75ad95ca36a9d92",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-event-2026-10-17.json": "dd515fb87d08a7d999b33582700bd986ae9b7ff2713c5aeff70dde03c7c03b73",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-return-2026-10-17.json": "419c3f2ec1a04b78949b9cc555f3c3cb2a4e3cf290d5ce226d1e9249defec5fa",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-event-2026-10-17.json": "5d8e9738d483bb0c1393d4affe974b7fe7b87658f94c3a79788500eaa5764b3b",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-return-2026-10-17.json": "72a4623a5be4261d39d5f7c0e715640a224df6b109559060c9c107b13c2987ce",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-event-2026-10-17.json": "5a0f2340fcbc09675b0dc2b995aa5aae6c31c7f7a1c7f65db484f72b4c722d67",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-return-2026-10-17.json": "818c3544445560920ed296e32b750405d8a031aa72b244d6fb7a555169defc12",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-event-2026-10-17.json": "e438573907d163f1b0ed5de89de1fd785e676d9c619ae2568fdeb00f4ffd46f5",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-destination-return-2026-10-17.json": "4e8a21b3882fde6f82c8501f121f5bdb76b62fdfd2724e43bec472aa59fa3945",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-event-2026-10-17.json": "169a4cc046e28e56669cfb473cb2cb532f1b66f77a0da52da04f4e6c8574ef7c",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-arrival-return-2026-10-17.json": "3061294597d555b03e9b4ea3edb3732877284c4d22b299c4d5768d67e5210ebe",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-event-2026-10-17.json": "f302039eee70675e968302dab562ac7c57308aace2dcf4615bd19ee14dd140da",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-destination-return-2026-10-17.json": "698427d6f9206199a09176b4ae0923ba116897e30fd19e4a18483036ba59465c",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-event-2026-10-17.json": "b7c012fbce51658a3bbccd0110c9d9490e443a99a5b01eed013f83aca5802d97",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-arrival-return-2026-10-17.json": "2ca7e28605113a81562660637cb793476bff75fe6668c561ec7188aad6da4f86",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-event-2026-10-17.json": "a89b7caf98bf9234f9ed6d8480107e840c50d9a1a0d51bc215b0d5bed544b75d",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-destination-return-2026-10-16.json": "17f951ee7d2621f460d343b19d4f59e24883721415691416949e73633fdb24de",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-event-2026-10-16.json": "4a26916f5668afb507b37995dbc480803a5e0d9f71aec5eb287eeaa9ced7dc58",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-arrival-return-2026-10-16.json": "cc7e644f35b55791cc3bcfb743eca26f6c53d40e24cd5e208c8f2234cce43a2b",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-event-2026-10-16.json": "b6887467ce7a8f2a6ffe4f9fb1eb73657397e794eb96b4b8754abf784655ace2",
+    "docs/evidence/handoff-arrival-destination-arrival-destination-return-2026-10-16.json": "bf11403d8a84479c26daf037d883889a457ef50a9bdf1933474552e27488b24f",
+    "docs/evidence/handoff-arrival-destination-arrival-event-2026-10-16.json": "0121e0c6cf51c2c12dcd45c18a63d38d08e8d51dcef36e50f0ef2a446f2d35f6",
+    "docs/evidence/handoff-arrival-destination-arrival-return-2026-10-16.json": "0260cd08b2b2b458321fee0a8d0666d450dfbd4b10262e006df7fe9b2526c619",
+    "docs/evidence/handoff-arrival-destination-event-2026-10-16.json": "185f864f58d77db4492c589fd1ebfbb96df8c1aad0de9db4684d0848c73e17a4",
+    "docs/evidence/handoff-arrival-destination-return-2026-10-16.json": "aeb12ee87cd3b4f8c007fd17a2185e0d04fc5507facf2d4e713b8511b3c01a95",
+    "docs/evidence/handoff-arrival-event-2026-10-16.json": "d107d06305ef48920e563384474be19744d959451206f273f6bcdb7920bf469a",
+    "docs/evidence/handoff-destination-arrival-return-2026-10-16.json": "5b366a41fe5772dba1e35029275958c7e63260009bdd9766a7948ea333bde5fe",
+    "docs/evidence/handoff-destination-comparison-2026-10-15.json": "07e7c0aeb7443ce814bfc09c273373760d217e25b2a58d175c082735e564ddef",
+    "docs/evidence/handoff-destination-event-2026-10-16.json": "6874dba2250c79b3b3f7a5a8d3bdb85bf0e40d8e199aac39df5d06c61e18a3c2",
+    "docs/evidence/handoff-destination-return-2026-10-16.json": "5babb43bf494301c725002172db80e2475d030def8030f7af031af54f349b72d",
+    "docs/evidence/human-workflow-verification-2026-10-09.json": "a4fbbae263abf955252f52512c2026207313418e8d5f7ec03665bd3f910aacb4",
+    "docs/evidence/independent-review-outcome-reconciliation-2026-10-15.json": "7c2ff429d898fa0d45928996bf4cad46c45778d7fbfc3498a61ec757305cc00b",
+    "docs/evidence/jurisprudence-occurrences-2026-10-11.json": "2542ac99e326afd4b05725abe4b67bbba0ddda2065b9b3521b53476f781dc7a5",
+    "docs/evidence/literal-citation-drill-2026-10-07.json": "0c0fb05234397f9569c504a62f277abb51c0414d2a5556feac146df3b9ff7cc1",
+    "docs/evidence/long-page-quotes-2026-10-22.json": "58e82d335ece708370e762167ac069be3136563409c6484c0ff58f30e7d526bb",
+    "docs/evidence/matter-authorization-cost-verification-2026-10-10.json": "81973e8766d19a06bf5abfcf8310dc59fb12b6bf27f623a115d6d6c7d417075a",
+    "docs/evidence/metadata-phase-diagnostics-2026-10-23.json": "c00671ec99f1f47c12f29915d47e07043930bb2e4ee51bdc6805ff3243686370",
+    "docs/evidence/mixed-format-load-2026-10-22.json": "01d5a0121d514fc401287cd2ca3769cc0ade80edf66264821d77c2be5c3692e5",
+    "docs/evidence/mixed-graph-snapshots-2026-10-13.json": "dc7868ca771f2d641812f2073ee5b525cf4bd3510ac5eac768e113fd099af716",
+    "docs/evidence/model-assessment-premises-2026-10-21.json": "3d6e513d9a9dd1ceb54127caef2bef682f506e999af280e3b6ecad0c73dc720d",
+    "docs/evidence/native-acceptance-plan-2026-10-22.json": "e7e570f0529230259df0e3fe1cd15c4b3241a4a6f7d839c355ccb1ff34c69140",
+    "docs/evidence/native-acceptance-rules-before-location-repair-2026-10-22.md": "a6df506feec229bff8a1334a206d5d758492cda7d2714e742fbadad31f819ae3",
+    "docs/evidence/offline-quotation-boundaries-2026-10-22.json": "c19a64034833e730f1c260b82494d79e3f627c824b51ce656f34b1ebb12fafd9",
+    "docs/evidence/onward-destination-return-2026-10-15.json": "6f0c75f7f0143e45d9210d1a6d52f3b9e9527e8ba9f5d3bd8f8aff5aafc8b09e",
+    "docs/evidence/onward-return-event-handoff-2026-10-15.json": "fa995aab3c91be35dc1280bfe7126addf5f87b03c18eab4f0a7aa86a39187ff7",
+    "docs/evidence/origin-route-comparison-2026-10-23.json": "b3559aa167350efcc22778deb8ec5301b1cd68e2a0ba618b0aa87a66f7376f7b",
+    "docs/evidence/parent-lineage-successor-review-2026-10-15.json": "431f6b2e364f4d3731337f146cc2a671c578e4a20794d1092f66be7722540684",
+    "docs/evidence/password-self-service-2026-10-21.json": "c53c62c45e55a49b4d7ad0d1b78d4f1d4213b51af81ba8a82cf3d3f67f6e8090",
+    "docs/evidence/pdf-original-inspection-2026-10-11.json": "184af8c7cd8c0345dc830b0a412cfb33054203adac4eccdc2067489f303e3679",
+    "docs/evidence/portfolio-return-comparison-2026-10-15.json": "da3289f67ffe5037197e299af400710fafe925bc69ad24767293d22d64c00519",
+    "docs/evidence/pr30-ci-identifiers-verification-2026-10-09.json": "42e575ae086f0c886932f4f0fa11344b0442b7ae417597e1b8392d8d5cb7b572",
+    "docs/evidence/pr30-ci-workload-verification-2026-10-09.json": "6eca86db402400f7da1beb22f859964b68e7557e5ca471b8db9931cd9fb7d6d8",
+    "docs/evidence/private-analysis-adjudication-verification-2026-10-07.json": "6a0bb4df293e1118c8ffc9b169838381fc62ac80cab4f33688b4eff68746250e",
+    "docs/evidence/private-analysis-authority-context-verification-2026-10-08.json": "fb01f01e3f946827ed6c2a8c8e17c27ef81be9fc2fabb2427ac29302f798aece",
+    "docs/evidence/private-analysis-cohort-verification-2026-10-08.json": "6538da0019a53e266f4be8121cdfc6e366507517592efcf3997f43f294842855",
+    "docs/evidence/private-analysis-comparison-verification-2026-10-07.json": "a0eb182d424fc46dd2421772a62c1c78159f1963a7f998973c8bdb92cdb1395b",
+    "docs/evidence/private-analysis-feedback-verification-2026-10-07.json": "14afd737f2edc8dadf58364e3452cbb52b571a6debe403024a43a2d984efdd7b",
+    "docs/evidence/private-analysis-reviews-verification-2026-10-07.json": "d03933654a2a171cb3607c3591c2aa354b000807cedb1aee8e5388ed9c036a67",
+    "docs/evidence/private-analysis-suggestions-verification-2026-10-07.json": "2f2ac0b5c25f8267409d08f3c61a3fa628f58033b462fb06521a7c171f893711",
+    "docs/evidence/private-analysis-verification-2026-10-07.json": "56f0ea27bb5db5b11adfd255c7fdb572c5e6c883cc26d74691698c59de19b2df",
+    "docs/evidence/private-authority-adjudications-verification-2026-10-08.json": "4805fb62be17c60e71690d982459506b60d91629c9fe3c547d8832129eb5e2b9",
+    "docs/evidence/private-authority-cohorts-verification-2026-10-09.json": "16c9d490fde63cb070e5cc4904014c82d6542eb788edce686d0df485f29767a7",
+    "docs/evidence/private-authority-comparisons-verification-2026-10-08.json": "491ca97bb4d6d92a893db1e38f4e1575345392f51bc3a3c6f9bb8de80fa46709",
+    "docs/evidence/private-authority-findings-verification-2026-10-08.json": "8859a17e7fb2213fb6f2d8f62c99fa1d0f729a10b3e6eb59a92c4a38e8fdf3b9",
+    "docs/evidence/private-authority-proposals-verification-2026-10-09.json": "05b40f89e1cf8bdb265d804c90ac68786ea021bd7663419e92c476dbc858cc44",
+    "docs/evidence/private-authority-trials-verification-2026-10-09.json": "e4e4c120bce4924323bda589626d9073693725b7c0aa6be4af95c516a993b6c2",
+    "docs/evidence/private-context-verification-2026-10-07.json": "fd42a534f0718203f23a0e61e714783c75ae32061f0bfa1b21b921d42814aa4b",
+    "docs/evidence/private-research-sources-2026-10-13.json": "07e30aa0d16980218e64d34e3ee178cdfa101cca0353247e1ca5b5d8a4953900",
+    "docs/evidence/private-source-analysis-review-2026-10-14.json": "38c0eef4e6605f2202bbbc091c6863c253031c5863f9250111c7a7d87522ef99",
+    "docs/evidence/provider-burst-repair-2026-10-22.json": "0d9cb0a432e4e5346ffcfbb8c3d4a0d0a37b304b323085ea8869f494b5708ac3",
+    "docs/evidence/provider-identity-binding-2026-10-23.json": "402bdf69fb1a30992dca255c4aece846c84f6339fad48737c78053da77c0ca40",
+    "docs/evidence/provider-load-2026-10-22.json": "91a9d49e112042c7075044dc30673f8820f71c3a4535d961683c4d44ac469e32",
+    "docs/evidence/qualified-graph-b-signing-2026-10-12.json": "391c5a50e7ec1a8daa47f84f1e41d368494e15d083707ac8d15769130bc85c22",
+    "docs/evidence/quote-selection-evaluation-2026-10-22.json": "299b1990a27f26af0847fd50b987c41a3474fed0cc60943a1e22e977b7655c2c",
+    "docs/evidence/quote-volume-evaluation-2026-10-22.json": "68dab0e310a32c0a67f29d1b23d553190e11324502a0add5e935b6ca26513fb7",
+    "docs/evidence/reconciled-review-portfolio-return-2026-10-15.json": "72bd17d3c536abf93f6632e66606081d723451f44b521a667443833138660611",
+    "docs/evidence/recovery-drill-2026-10-06.json": "71d8dae42107fcfbb9883224270df54ef46b0fb0f587856e3a17b05f2f965341",
+    "docs/evidence/reference-case-intake-verification-2026-10-10.json": "a3a3642784429986a6b993193f6ee3ce96b184fc0711ef66c07833292309a379",
+    "docs/evidence/registered-domain-intake-2026-10-11.json": "912d029d6a89104ca9b851fa99c5cca7bc0b910c5d30e613985d9334488e820c",
+    "docs/evidence/registered-pdf-intake-2026-10-11.json": "1c23145752c0fb62d6101bc4bff1474afcc9550a2054f75accb0c072e8fc5e7b",
+    "docs/evidence/registered-source-preparation-2026-10-10.json": "f6344fd23cd759f6f356930f8569a82708a7d338c32701cd7d61b2dfd933ca37",
+    "docs/evidence/registration-witness-verification-2026-10-10.json": "19acd34079c435f04a517d08601498824d697a0720b8337c85b549878143ed15",
+    "docs/evidence/renewal-reconciliation-lineage-2026-10-15.json": "cd16315d6b04d5432147cd97450569816d2c3878384adadaddb73276d2c462f6",
+    "docs/evidence/restore-setgid-2026-10-22.json": "130e21d1dc56122ad46fe951446ca10c2076ec338852e5ddb122e207640acf44",
+    "docs/evidence/retained-source-comparison-2026-10-11.json": "b932ac8f5c94bab15a1cbc89be3950f5b92a82945703cd8e30d2ba926be834dd",
+    "docs/evidence/retrieval-benchmark-drill-2026-10-07.json": "3e4a947554138ab40836f829ea64a0904c9c3bb9c59cc697a5597430ddea6a23",
+    "docs/evidence/returned-review-head-lineage-2026-10-15.json": "9080518a89092f31cf059934cb6d8e66a6ac0c66f673da131655206c084a172c",
+    "docs/evidence/review-milestone-2026-10-20.json": "56dd54b8686387811256581e764bd2dd5e9393059ae7fefb32db8efbd372ab21",
+    "docs/evidence/review-rationale-guidance-2026-10-21.json": "d1d799132234ba3b33b8dfcbad7da8169f1d28acc07c13d61da7b002b370614f",
+    "docs/evidence/routed-metadata-diagnostics-2026-10-23.json": "b5909606a5e4a1f6feada377e4765724bae9818f80cd6f3f8bbd9711740f420f",
+    "docs/evidence/runtime-secret-isolation-2026-10-21.json": "7adc990a76aee522b991b3978e337344467e5b1854db61d2d8fa5a50758a8595",
+    "docs/evidence/scanner-private-pilot-2026-10-20.json": "da27da8d6a33322d039d221deb3ff67e6f02c6ec475b3301fde06f8dc7e43cdc",
+    "docs/evidence/search-index-drill-2026-10-06.json": "d32a3d9c781bedccf5e11a8fef50241742749ff787e4dd44a28afde3cde8723a",
+    "docs/evidence/search-postgres-concurrency-2026-10-06.json": "6934bd0b43fcbf90db4dc29e25ed372840e68fce570ed6628b8f6a31cd9c21e5",
+    "docs/evidence/signed-graph-b-review-2026-10-12.json": "717230a24e69fe42123bf026995eb6c1d1b16d2b14b7ae665255b9456949a797",
+    "docs/evidence/signed-provider-contract-2026-10-24.json": "5a86f630b779687e4e2f16a1dca6ae6cca18e5ebea96fb3fb885a443a4bf807f",
+    "docs/evidence/source-context-renewal-2026-10-14.json": "e1020e033d55c39056ce3d598efc8023c5f1a7b01d3dbff23971571d2ca576f5",
+    "docs/evidence/source-diversity-frozen-2026-10-22.json": "91dd2bee71a6d507835c57b7c8aca178af14cbce52d037cab47f4f42f6560e02",
+    "docs/evidence/source-original-inspection-2026-10-10.json": "3942689de1632e6751c94061e3dafee62c799c9c41ea4aa298328e64e9e14a93",
+    "docs/evidence/source-qualified-analysis-prose-2026-10-21.json": "15aee805d13009ec0cadcce7ad22f2844b0eb2cbfa0c7974b2d6698861f051ed",
+    "docs/evidence/source-qualified-corpus-2026-10-13.json": "54e0f90ffcf469b892f2608e28836645183c32d2fe20b6da5e38d26d381acf9c",
+    "docs/evidence/source-relationship-review-2026-10-11.json": "9994c6dd8aef517bb7cc79dde8556bbfe06bd63f4340b3156ee98bc6f1fd4faa",
+    "docs/evidence/source-review-panel-2026-10-14.json": "1f034c6f09e5215ba076b9dd6cfeee9f6dcae9fa64d028acca19ec96a25319a3",
+    "docs/evidence/source-selection-handoff-2026-10-11.json": "3db19416cd3003e30b377503377c251e0131387a5616e7aefafb8d7427bfa9c2",
+    "docs/evidence/turkish-retrieval-drill-2026-10-06.json": "8e0f6e6f533c1422a66d1d4824bd9fcedfea24830e98bfa3c3b489c5e28b24d6",
+    "docs/evidence/verified-review-path-navigation-2026-10-15.json": "1ac362ce8e4d01799b8bfe4cf6525eeb3a74b2c5144dccf027c411dcc0dea111",
+    "docs/evidence/whole-passage-packets-2026-10-23.json": "b297e46783bcd6a579baad1c137116563af4e289b94fa1fc23f035ec1e47bdd9",
+    "scripts/acquire_public_source.py": "eeeb463ecaba24e3c8741f979b052d39da9550cba749791624d4d90b036d5622",
+    "scripts/alternate_adverse_quote_cases.py": "6206297e7e65d8aa708a518aa81bd556d4029d011142f4c89f2a90dadcb5e4bb",
+    "scripts/assemble_legal_graphs.py": "3001b2fb3658a5e592321c164fb3d78bf159e125067ba623a023ccbe2803e788",
+    "scripts/backup.sh": "d049161521dec67275f819e861bf68d27bc744b98638a37457da053dda082497",
+    "scripts/benchmark_retrieval.py": "2d451fa29f6ea5e351c0940a96d1f822537e2fa151933da4ee2a7e17ed4602b5",
+    "scripts/budgeted_quote_bundles.py": "18e59c03a18bae46a3c6282663937c974101b008033ef59d1dc6e00d0f8cfce4",
+    "scripts/budgeted_quote_cases.py": "f44135b5aaff62db943df0cc84877381f5e9010f2faa16690be6d7c1beab73ea",
+    "scripts/build_calibration_fixture.py": "72a35f6ba5b6134637b9920e87bd9fe08670274a4fbd0a9b9bd305ba66fad086",
+    "scripts/build_calibration_study_fixture.py": "733417a58ee0b718c9c535c6793ff747f0d3e1af8a735069e516ea90f3cbc17c",
+    "scripts/build_evaluation_fixture.py": "0cf736d0303f01fef62edfdc01a44c4670bed1fabf893294d9948c063e5b2b03",
+    "scripts/build_provider_stage.py": "f62608284b063c2567a3aae5383a0d8828da9240fb398d8c672e4786b74a8492",
+    "scripts/build_reference_case_fixture.py": "b506f4a0040e3228b93805ad2486eb214a1d0c908dbc6f927c67ccf421b86fdf",
+    "scripts/build_retrieval_benchmark_fixture.py": "1f2b46dd83fe693b9c97ab6dcceedcc46691292d4b2a7351607cde4e3d219fcc",
+    "scripts/build_search_index.py": "f05b9c659cb1e7f9016d839a636e4b7a7744c988281e5acd811d5446177c28a0",
+    "scripts/build_signed_route_stage.py": "0f20260f5eb359491abcd78b2c0f723e91f086007de12c7fddbc227cfe574a16",
+    "scripts/bundle_adapter_fixture.py": "fb54f5299331415afcf977598bfbd2250b7cd85815a5bf8dd95b706d24eb8e88",
+    "scripts/campaign_authority.py": "cf4299d602e069cc820fb545c401cc088145fbe36d4f4e105d57f58aeaad00c5",
+    "scripts/campaign_authority_cases.py": "e021b89fcdc2c226332fd1b925282a7ad085461559b75c8414fd9947ac11be81",
+    "scripts/dev.sh": "f015a94a77ce23f06fd8d65681ee8e4029288ddfd31cce21ce10a6d1ec0bcf5b",
+    "scripts/disposable_bundle_adapter.py": "6a43692b7a3c8ead6338cae92ad5a8804b781951da0bd3e9b54a4eb1beca1d28",
+    "scripts/disposable_diverse_adapter.py": "ac8ceb67bd6cede720ffa9b5ad1f5b2869e5d250de3fcd9a75550319065be2c3",
+    "scripts/disposable_packet_selector.py": "7ee00a0bff898220e5186d952f9b149b102016703e99b814f28bd06e4a2d6057",
+    "scripts/diverse_adapter_cases.py": "6072d0c87dc120a0b87335417151c4becf69d68aaf24d7a66817ec93f5f54efa",
+    "scripts/diverse_quote_bundles.py": "bdfe59ca895c22ccc40aa28652202ef3867a2847860d1b9d1482a19cfce763f0",
+    "scripts/durable_campaign_cases.py": "efe748886e6394c33b72616606148ecb8f448d848276d7d0a9b9a0244f981439",
+    "scripts/durable_packet_campaign.py": "27da7b36b53ebd269cdc79f42fbd9889c87b34278aa0e6f3c7a66ec143ad51ef",
+    "scripts/evaluate_alternate_adverse_quotes.py": "7d4150a6a7acc324d3c8411649f910553e733fe44077086df88bb444fd880fd7",
+    "scripts/evaluate_budgeted_quotes.py": "4661b7764b90826bf150e0913ad4f878ee262803e6b5038123372b579de64016",
+    "scripts/evaluate_campaign_authority.py": "eb34564e6bee31cb3a9317ba514471054137281d07efe9cfc75d1c0c55ce9bd0",
+    "scripts/evaluate_disposable_bundle_adapter.py": "d0084ac2892f4d83372ed6b23c7a34c56071833a49b3b150754396c03d8b4f4a",
+    "scripts/evaluate_diverse_adapter.py": "8f2f69907c96b039a0aac0454db46ec67680c3568b78f6dbc461eff962e85a36",
+    "scripts/evaluate_durable_campaign.py": "6ea55732a73619eb3ea65b70f3550be8b6ec3bf94f0f7c846ec0c8f7994fc996",
+    "scripts/evaluate_immutable_route.py": "0dc3a6c312a9bc60d1361b45190793cf45367b36139c364b539e9f8718d9914f",
+    "scripts/evaluate_metadata_phases.py": "d4e501788d53fc5a876730549602b4325e6eb50223026f85d5d81bc542c90a0e",
+    "scripts/evaluate_origin_route.py": "654cc6aff2b8a374ed2a1a00edc262b989d0824c7aa5a41c717c0b30fd0e3d08",
+    "scripts/evaluate_packet_selector.py": "c18b5f64c8228198856ae91c48c8913bf9a84adfd1c14e776e28e937e0b67d02",
+    "scripts/evaluate_passage_packets.py": "69355c6efcc3e9528c100c8ac683b2cf8c32c33f1a145e9ac15dbc9645010959",
+    "scripts/evaluate_provider_binding.py": "58fc4205b1ed903ff95d140bb4b84a6e20cb551e455878ed5b09761c71e393f9",
+    "scripts/evaluate_provider_stage.py": "e831023ae37e3b62da3d5872db50b383f994304270ed1c2668f28b38fd80a38f",
+    "scripts/evaluate_quotation_boundaries.py": "a932014e95b6e12767f71b1e16f6128fcce24e7692698a197d612e4350c4fb7c",
+    "scripts/evaluate_release.py": "7bc06bc99b96878239ad5599b14a299d89ae053c2ba88487540debfbf1acd005",
+    "scripts/evaluate_routed_metadata.py": "eabc2b131999fbba725a9787b76f7de61f7f28e1a64e6dd3617eb908dfbe1765",
+    "scripts/evaluate_signed_provider.py": "c791dca1a33ed946e0daf80ef0cbfbe21a7d2c00d1255fbada98f10014a831a5",
+    "scripts/evaluate_source_diversity.py": "53273ae2cfbc674c3f7d5b983444f11916c1a68463228cb7c82b95bb3c7e6de8",
+    "scripts/graph_drill_fixture.py": "40a1842988adfc89a078a1a8b8d50a6e75f5b0d01e130987fa914b9084df9628",
+    "scripts/graph_releases.py": "f4d5bc22305402d1e2f550b9019b0a85d4f8b21c017d1c8a3c742f6b62248627",
+    "scripts/immutable_provider_hook.py": "3365bb53121c068dda46edddab06e4bd28aa1c001da08d3aa2e955aa21241d1a",
+    "scripts/immutable_route_cases.py": "0662fca742f890661dac94d3c3e6e75fb979cb1e8263e7f38749770d6a88718c",
+    "scripts/immutable_route_fixture.py": "3108a40ea54e6a020348a308c0a69269d977306a5b9bc994e1d9733c255f5418",
+    "scripts/inspect_final_transition.py": "e2c3dbfdc4596fced9961b7d45cefc6d09f5ee0706956369c3544de68deb2ab4",
+    "scripts/inspect_retained_dependencies.py": "c1fb7fa0eb50196d6d34980c72025fd61a29bf6bcc2ec69209bc1fc43919eadd",
+    "scripts/inspect_review_set.py": "76c8149bc89a46db787f4773cb4abdae35e13720df5402caac61843d836b4a87",
+    "scripts/load_driver.py": "f49da66c563d4090b638e344938b97ad68283a7a9e8647cda27ffaad7d7ff8d4",
+    "scripts/load_fixture.py": "dff7a5e3e3ff0d7dbb548dc9d9b3c95cdaf2420f71811f0f1f7e113687c5e45e",
+    "scripts/load_metrics.py": "3cfe619b90ca07aad7a174017c6f7e62e4237d5065eae818d2ab8fcfb653c78d",
+    "scripts/long_page_cases.py": "38dc0ce1ce391bf8f9a29f083ef753fd34dac71d24efa3f9f087a2665f4e7122",
+    "scripts/long_page_driver.py": "d91b931fb3ae4925b0e54feebdea445549338b474d01b5fa8426f15fd7d7c619",
+    "scripts/manage_users.py": "74f8a1fa5283e8b9ab45742fa8762fcab9b6f8ef4d9e0226bcdb310b5ee759b9",
+    "scripts/metadata_phase_cases.py": "d91e466c1681547e16304d90f8d84d52ce79542c9f5ca16067e2b6b2e498acb8",
+    "scripts/metadata_phase_fixture.py": "12812e207339ab3c33c5490bd513635c3cc61b07c3e76c08eda5166caee5986d",
+    "scripts/metadata_phase_probe.py": "1997c8d80e3911f1abba63f5196c436ba4212ff59169d2703cee401c66caf19f",
+    "scripts/native_acceptance_cases.py": "7ef3866e4192a9af565d6b97bc04a8b9f81a6019cd143f1a28723eed09f55b71",
+    "scripts/native_acceptance_grading.py": "81e8576faad7b24a5c061b55c671c448e926d140f12781563ab550fec08419ac",
+    "scripts/native_acceptance_plan.py": "294e647d7579e236a1f8e472676ba98452a10a2da8acf9617db214cb21101ed4",
+    "scripts/offline_quotation_boundaries.py": "17cafee58eb58b874638b4a1c62a111d423b0ae71293a2b11f9f14d514d640a1",
+    "scripts/origin_route_cases.py": "5dcbfad9232c92344da624449233df9e080777bef1718338637a1a10b56de2b0",
+    "scripts/origin_route_comparison.py": "c89e0343fe95787dbe542fbf7f65c91a35016fc43fd57690e15d7f35886d89bb",
+    "scripts/packet_selector_cases.py": "0b963ee3c0f626fddd4658fdc37c5ef768d6722db745e451b4a6e70a95c51587",
+    "scripts/passage_packet_cases.py": "7e40e48230456040e8f063599b615727c003b5985ba73e232c809bc22b5012ec",
+    "scripts/prepare_final_graph_release.py": "48a5f466e49f6aebcf26ee86fc9a503f71d662a6699cf86c886850d2e6a9b89d",
+    "scripts/prepare_graph_b_publication.py": "f2e016b65eb2a136c863e0df22fe2260a8b7ff4478f7eed70adf6e7b88e86207",
+    "scripts/prepare_legal_review.py": "7a47b1e1855cdc46adfa4381253a3d614975ea6e31e23a7f3a921975c99457d0",
+    "scripts/prepare_public_source.py": "d25cabdb84c4b7cc67a6003d22f373bdb474e61d56b6540ef97278d78b1b3a31",
+    "scripts/prepare_review_set.py": "7612c131794b96fe599cdcf9ca3165f6c1e5737378b4f8f9eeb54cf2031fb509",
+    "scripts/provider_binding_cases.py": "025ef35233a3fccb83ebda4b343125003b9648802d780b5e67bb9a548aaeb006",
+    "scripts/provider_binding_fixture.py": "9b35453eca7d17524d89aa96963368c32a2afa6c816521f310827893b94e05d5",
+    "scripts/provider_call_checks.py": "313d8d16e2ac62b26276f70c2cac7796c0405bde12d4e5d7aa2ceba808137131",
+    "scripts/provider_identity_binding.py": "7023434ffa6140674a2e88fb737414ee8f91d973acd0a8f0f68071795367ba15",
+    "scripts/provider_job_checks.py": "ebe1f481d0c3df4a6455768a3ac4b01354ac4b788ba12e4e060ace19c2be3018",
+    "scripts/provider_job_driver.py": "08293c1ac8b25be809c984f7b740ec4fe87251031b5d29a2d500f21bd59baa96",
+    "scripts/provider_job_fixture.py": "f7c29efee94a544b3a5088b81641c2fb7813ef672b2a5b1fbad87887a02a884d",
+    "scripts/provider_preflight.py": "cdff6807603ef116e87555734b0b87c12a2b872d26f5dcb9c82001ed0c0e8cb4",
+    "scripts/provider_stage_adapters.py": "b242953c6b554d301c7be150b1c234bc38297fd032459e9188fe97c1df30fa4c",
+    "scripts/provider_stage_cases.py": "06a0cdd87c392f4102aebd4d67fffaf4809ee6e48167c070f53745a4389e6da7",
+    "scripts/provider_stage_fixture.py": "61947a1df29becd59c66ac67716177b7c5d59921b4fb1bf2731bc4ce730641df",
+    "scripts/provider_trust_stage.py": "4e4e303173f8a1650c51b97c38018a967d2948e9f247d2be698c77a5d57dcfd1",
+    "scripts/provision_runtime_secrets.py": "6241df1c5f40efad277776861f628909a35fd13c94a43224239b5fc7ec21d491",
+    "scripts/public_sources.py": "ff5e78e0f29efe129b69660a96432bd43e9b0ec12bc7055e02b836a893646f41",
+    "scripts/qualify_graph.py": "ed5867f66d69176b8de33da6f696d87a145c4ac7ea67230b518902237fcfa462",
+    "scripts/qualify_load.py": "aadc05ca4364d423f6f0e6d54150a1adab36c47ae06790bade55975a0f370d70",
+    "scripts/qualify_provider.py": "617cad67a03392002a4b3f185359c5db530f8fd9e9f0c468da282a41a1b2c680",
+    "scripts/qualify_provider_jobs.py": "afadbb701367f937f86ca51bba1b93776ff0e60f8559387756cbaf6198c16f11",
+    "scripts/qualify_recovery.py": "42795841b1ea5b3a9a3fb64970e4fd994f242d169e27b88fa5259209e66570b6",
+    "scripts/qualify_reference_cases.py": "ab310f31e87f339dbd8983ed2307a6a570519a8762e190f5aeb74e5df136e7a6",
+    "scripts/qualify_roadmap.py": "dcff1e3465c40790c7113303d666e22b098be100bb76f140bc3356459a40d368",
+    "scripts/qualify_search_index.py": "5fd63f0e76dd7e02f152753ebc8894f81e834e8f55aeec46701df839326afecb",
+    "scripts/quotation_boundary_cases.py": "134454cb14558636619b8f85654c7599a25dd41b8bd170b7e9c46b30d40c2e16",
+    "scripts/quote_selection_cases.py": "12243e5aac74dc6126b8d392eb938228bdf1ae85ce0e658426ffe570d4c71f11",
+    "scripts/quote_selection_driver.py": "8c2bffe503425c3f2b1f392537a4f0dd2fca801ea9574ed283746d46d39e1143",
+    "scripts/quote_volume_cases.py": "5c39b2530643e6ce73263adb89061542950d2c2ae80c5312c777754a482717e8",
+    "scripts/quote_volume_driver.py": "c576bca1148c94912c37ad0a8f60df8bac131d07f47d6e03a376a74d498c171b",
+    "scripts/recovery_fixture.py": "941f002ccce49a0a5bf275e274beaaebe8a33bf33331a111dc8c42d381239d81",
+    "scripts/restart_preflight_drill.py": "0bf85481b7c5b3fef2983b551625f48738b72994bd56bf42183406f0db7b57a5",
+    "scripts/restore.sh": "b98e1651869ab249b490a4844032b93a47a95ad573f7f7af54e4017c8de031c8",
+    "scripts/review_final_publication.py": "2cca0ff15eec795cd07b072154223c5da264c62b476304b3ebcdd8125d86c90d",
+    "scripts/review_graph_b_component.py": "0d3eaeda1663d746ca8e35e6f6d30c48bad2482aa91c896b3de6dd9829dbfccf",
+    "scripts/review_publication.py": "1fdec614b4d1d1e83c1a9e6acb76483c571946861d7b3c1bd101585b53896b55",
+    "scripts/review_set_publication.py": "d13e91aee97969ed9455d1015d0441587afdd880669dc01ccd892e368d85f9c6",
+    "scripts/rotate_private_key.py": "3575d2643a23c193f2e63529360f943ad38b5216f55786ce6b96d82cdbfbddfe",
+    "scripts/routed_metadata_cases.py": "94cdfce69212dba6cf54dc887b413c369ab7a5e017f7d2d0421c7113b5a018ed",
+    "scripts/routed_metadata_diagnostics.py": "ea596adec4151aa75e2f80d3cc72c3343eadf3e9c0aa6ef78d4bbee852d9f24a",
+    "scripts/routed_metadata_fixture.py": "132ca018e2642ee3c997a17a47ea5d640b58aafa7f68473eab7b75a88566a45a",
+    "scripts/run_ci_tests.sh": "0d0ead29c1f856fb56e35ae2fd533ebbbd78b155f904d573889983fca3d0fa69",
+    "scripts/runtime_diagnostics.py": "423c5cef5cfe1852c6a3060444c0774d8f88dd6fe3aea11b298ab89a87d7c1b7",
+    "scripts/scanner_signatures.py": "d2334326b53cee64b6aeccfbb643af6be156a35bfd912d155f81824ea32a59b7",
+    "scripts/signed_provider_cases.py": "0c25c1bd00e2f031ab97e97cf1fbe46430b4b8e4683ec1442257a41e2be74872",
+    "scripts/signed_provider_contract.py": "d75900f716a9a0714828901bfee5a75d6bb5aec0de082f204e013847f3aa7939",
+    "scripts/signed_provider_fixture.py": "82924206985e50ec185d3d94fc31b392ccf23147bf0270e5046f9da68018c4bd",
+    "scripts/signed_provider_handoff.py": "1f79a22c6547e2dc89703254a22384d4723457a1d3047b3b107bf73b9d995309",
+    "scripts/source_diversity_cases.py": "7721eafb181aa2eca60c4446b431b229c8c710990f5799c898f9d1e15c53d42f",
+    "scripts/staged_signed_route.py": "06ac4dd6361e78f04f1d607233de2c212e1a432dee145848080bf953ac835169",
+    "scripts/validate_ontology.py": "da8beb73e57372b25bfbe3d813714b019fabfbd8c8841914beffc70cff693f63",
+    "scripts/verify_frontend_shards.mjs": "e344fa6b33655ba1c975266d6bfaa0e74242d9055499ef4130349a360e6a92da",
+    "scripts/whole_passage_packets.py": "f32f2d10e5700e5948823c1741e024a3af51281fe4bb1d9e6c5e01096cf2ddac"
+  },
+  "pre_grade_freeze": {
+    "deploy/test_backend_reference_inspection.py": "ecb541494c955b45e7acf8282166eeb0b7af0465b5310ae1a4426f36168c3fbd",
+    "docs/BACKEND_REFERENCE_INSPECTION.md": "73c3cc73123960fe071334f30f44c5c2b7666cd58969a96e30c927f1c900733a",
+    "scripts/backend_reference_cases.py": "0dfaadcb33ac00e53e3588cb4f616cc35662bb0c39e93dd091dcbc5bccd45699",
+    "scripts/backend_reference_fixture.py": "8fee095f13fb7ba743acec6d5b00da02d56fb97d3a46dba28791ae43791c224e",
+    "scripts/backend_reference_inspection.py": "21117fd67a8eeb2d30c8ba379b3a0a039b0f16f01cad7fbe0deda40442563966",
+    "scripts/evaluate_backend_reference.py": "dec178a7bab5c8dc2c2af7ed28a0774868552bd91096cd1b1294b6613d833d92"
+  },
+  "pre_grade_freeze_sha256": "ff6f04d641d7ccb3485b6099871da6464831dc59ed9ac9933f19d27061617feb",
+  "cloud_hardening": {
+    "reason": "Prevent explicit cloud-source metadata delegation before any live collection",
+    "changed_sha256": {
+      "deploy/test_backend_reference_inspection.py": "23eb2de22d94969f9b4834d1a435ec7df71a71c50cec6f9c44bf42d111834837",
+      "scripts/backend_reference_inspection.py": "bb57ecf52458e9792900f9e69876efec11d7051c4702f360156a0da716e7d70c"
+    },
+    "original_ten_test_method_ASTs_unchanged": true,
+    "initial_cases_evaluator_report_and_candidate_retained": true
+  },
+  "failing_regression_sha256": "eadad5818ca9384a547d56031c384614df62248ec9e6ffc02655610c65eea660",
+  "first_evaluation": {
+    "suite_sha256": "ef23406c642ab9ddc110b0980d5665827cee24c66a9711ba08cfdf312e3caaa1",
+    "cases": [
+      {
+        "case": "I2401",
+        "expected": [
+          "lookup_resolved",
+          7
+        ],
+        "actual": [
+          "lookup_resolved",
+          7
+        ]
+      },
+      {
+        "case": "I2402",
+        "expected": [
+          "lookup_rejected",
+          7
+        ],
+        "actual": [
+          "lookup_rejected",
+          7
+        ]
+      },
+      {
+        "case": "I2403",
+        "expected": [
+          "metadata_mismatch",
+          7
+        ],
+        "actual": [
+          "metadata_mismatch",
+          7
+        ]
+      },
+      {
+        "case": "I2404",
+        "expected": [
+          "observation_changed",
+          7
+        ],
+        "actual": [
+          "observation_changed",
+          7
+        ]
+      },
+      {
+        "case": "I2405",
+        "expected": [
+          "observation_changed",
+          7
+        ],
+        "actual": [
+          "observation_changed",
+          7
+        ]
+      },
+      {
+        "case": "I2406",
+        "expected": [
+          "metadata_unmeasured",
+          1
+        ],
+        "actual": [
+          "metadata_unmeasured",
+          1
+        ]
+      },
+      {
+        "case": "I2407",
+        "expected": [
+          "metadata_unmeasured",
+          1
+        ],
+        "actual": [
+          "metadata_unmeasured",
+          1
+        ]
+      },
+      {
+        "case": "I2408",
+        "expected": [
+          "metadata_unmeasured",
+          1
+        ],
+        "actual": [
+          "metadata_unmeasured",
+          1
+        ]
+      },
+      {
+        "case": "I2409",
+        "expected": [
+          "metadata_unmeasured",
+          2
+        ],
+        "actual": [
+          "metadata_unmeasured",
+          2
+        ]
+      },
+      {
+        "case": "I2410",
+        "expected": [
+          "metadata_unmeasured",
+          7
+        ],
+        "actual": [
+          "metadata_unmeasured",
+          7
+        ]
+      },
+      {
+        "case": "I2411",
+        "expected": [
+          "observation_changed",
+          7
+        ],
+        "actual": [
+          "observation_changed",
+          7
+        ]
+      },
+      {
+        "case": "I2412",
+        "expected": [
+          "metadata_unmeasured",
+          7
+        ],
+        "actual": [
+          "metadata_unmeasured",
+          7
+        ]
+      }
+    ],
+    "summary": {
+      "cases": 12,
+      "expected_results": 12
+    },
+    "real_network_calls": 0,
+    "native_inference_calls": 0,
+    "native_execution_compatibility": "not_tested",
+    "production_activation": false
+  },
+  "final_evaluation": {
+    "suite_sha256": "ef23406c642ab9ddc110b0980d5665827cee24c66a9711ba08cfdf312e3caaa1",
+    "cases": [
+      {
+        "case": "I2401",
+        "expected": [
+          "lookup_resolved",
+          7
+        ],
+        "actual": [
+          "lookup_resolved",
+          7
+        ]
+      },
+      {
+        "case": "I2402",
+        "expected": [
+          "lookup_rejected",
+          7
+        ],
+        "actual": [
+          "lookup_rejected",
+          7
+        ]
+      },
+      {
+        "case": "I2403",
+        "expected": [
+          "metadata_mismatch",
+          7
+        ],
+        "actual": [
+          "metadata_mismatch",
+          7
+        ]
+      },
+      {
+        "case": "I2404",
+        "expected": [
+          "observation_changed",
+          7
+        ],
+        "actual": [
+          "observation_changed",
+          7
+        ]
+      },
+      {
+        "case": "I2405",
+        "expected": [
+          "observation_changed",
+          7
+        ],
+        "actual": [
+          "observation_changed",
+          7
+        ]
+      },
+      {
+        "case": "I2406",
+        "expected": [
+          "metadata_unmeasured",
+          1
+        ],
+        "actual": [
+          "metadata_unmeasured",
+          1
+        ]
+      },
+      {
+        "case": "I2407",
+        "expected": [
+          "metadata_unmeasured",
+          1
+        ],
+        "actual": [
+          "metadata_unmeasured",
+          1
+        ]
+      },
+      {
+        "case": "I2408",
+        "expected": [
+          "metadata_unmeasured",
+          1
+        ],
+        "actual": [
+          "metadata_unmeasured",
+          1
+        ]
+      },
+      {
+        "case": "I2409",
+        "expected": [
+          "metadata_unmeasured",
+          2
+        ],
+        "actual": [
+          "metadata_unmeasured",
+          2
+        ]
+      },
+      {
+        "case": "I2410",
+        "expected": [
+          "metadata_unmeasured",
+          7
+        ],
+        "actual": [
+          "metadata_unmeasured",
+          7
+        ]
+      },
+      {
+        "case": "I2411",
+        "expected": [
+          "observation_changed",
+          7
+        ],
+        "actual": [
+          "observation_changed",
+          7
+        ]
+      },
+      {
+        "case": "I2412",
+        "expected": [
+          "metadata_unmeasured",
+          7
+        ],
+        "actual": [
+          "metadata_unmeasured",
+          7
+        ]
+      }
+    ],
+    "summary": {
+      "cases": 12,
+      "expected_results": 12
+    },
+    "real_network_calls": 0,
+    "native_inference_calls": 0,
+    "native_execution_compatibility": "not_tested",
+    "production_activation": false
+  },
+  "first_contracts": {
+    "passed": 10,
+    "failed": 0
+  },
+  "final_contracts": {
+    "passed": 11,
+    "failed": 0
+  },
+  "deployment_contracts": {
+    "passed": 392,
+    "failed": 0
+  },
+  "backend_targeted": {
+    "passed": 206
+  },
+  "lint": "passed",
+  "offline_linux": {
+    "report": {
+      "suite_sha256": "ef23406c642ab9ddc110b0980d5665827cee24c66a9711ba08cfdf312e3caaa1",
+      "cases": [
+        {
+          "case": "I2401",
+          "expected": [
+            "lookup_resolved",
+            7
+          ],
+          "actual": [
+            "lookup_resolved",
+            7
+          ]
+        },
+        {
+          "case": "I2402",
+          "expected": [
+            "lookup_rejected",
+            7
+          ],
+          "actual": [
+            "lookup_rejected",
+            7
+          ]
+        },
+        {
+          "case": "I2403",
+          "expected": [
+            "metadata_mismatch",
+            7
+          ],
+          "actual": [
+            "metadata_mismatch",
+            7
+          ]
+        },
+        {
+          "case": "I2404",
+          "expected": [
+            "observation_changed",
+            7
+          ],
+          "actual": [
+            "observation_changed",
+            7
+          ]
+        },
+        {
+          "case": "I2405",
+          "expected": [
+            "observation_changed",
+            7
+          ],
+          "actual": [
+            "observation_changed",
+            7
+          ]
+        },
+        {
+          "case": "I2406",
+          "expected": [
+            "metadata_unmeasured",
+            1
+          ],
+          "actual": [
+            "metadata_unmeasured",
+            1
+          ]
+        },
+        {
+          "case": "I2407",
+          "expected": [
+            "metadata_unmeasured",
+            1
+          ],
+          "actual": [
+            "metadata_unmeasured",
+            1
+          ]
+        },
+        {
+          "case": "I2408",
+          "expected": [
+            "metadata_unmeasured",
+            1
+          ],
+          "actual": [
+            "metadata_unmeasured",
+            1
+          ]
+        },
+        {
+          "case": "I2409",
+          "expected": [
+            "metadata_unmeasured",
+            2
+          ],
+          "actual": [
+            "metadata_unmeasured",
+            2
+          ]
+        },
+        {
+          "case": "I2410",
+          "expected": [
+            "metadata_unmeasured",
+            7
+          ],
+          "actual": [
+            "metadata_unmeasured",
+            7
+          ]
+        },
+        {
+          "case": "I2411",
+          "expected": [
+            "observation_changed",
+            7
+          ],
+          "actual": [
+            "observation_changed",
+            7
+          ]
+        },
+        {
+          "case": "I2412",
+          "expected": [
+            "metadata_unmeasured",
+            7
+          ],
+          "actual": [
+            "metadata_unmeasured",
+            7
+          ]
+        }
+      ],
+      "summary": {
+        "cases": 12,
+        "expected_results": 12
+      },
+      "real_network_calls": 0,
+      "native_inference_calls": 0,
+      "native_execution_compatibility": "not_tested",
+      "production_activation": false
+    },
+    "contracts": 11,
+    "network": "none",
+    "read_only_root": true,
+    "private_or_runtime_mounts": false
+  },
+  "live_observation": {
+    "schema": "readonly-backend-reference-v1",
+    "model_id_sha256": "cc8d84af9a23617a156ffe3acd3b7ac714af9b2ef2354ab8bffb9472b9534ef1",
+    "classification": "lookup_rejected",
+    "reported_version": "0.32.14",
+    "manifest_digest_sha256": "1922accd5827ebe6829e536369195db25eaf664528dc66206d646ea3bb386b71",
+    "backend_identity_observed": true,
+    "backend_identity_stable": true,
+    "binary_sha256": "63b2a1c4714b6f7f9363afd77b20eb92d88145dc842b91d44304590eab22c5ea",
+    "reference_lookup_resolved": false,
+    "named_reference_metadata_equal": null,
+    "running_inventory_stable": true,
+    "metadata_requests": [
+      {
+        "method": "GET",
+        "path": "/api/version",
+        "status": 200,
+        "body_sha256": "d1263fd8fc5bda539535fdd348a1a9002a9a7b7b783e2986a92757d127c3b785"
+      },
+      {
+        "method": "GET",
+        "path": "/api/tags",
+        "status": 200,
+        "body_sha256": "a11abb42cfa6dba44c508add4774cb550c10899e51a3c75990f92cff8ebb22c1"
+      },
+      {
+        "method": "GET",
+        "path": "/api/ps",
+        "status": 200,
+        "body_sha256": "a6fe9ec6e26a38d99fca418b69826e0238b7a2bb319ff05eb153a6fcfd1fa28d"
+      },
+      {
+        "method": "POST",
+        "path": "/api/show",
+        "status": 200,
+        "body_sha256": "d651637f3b25650353a93e5a1b79573b304dfdd1353af41bf6f8da93cfdb7f11"
+      },
+      {
+        "method": "POST",
+        "path": "/api/show",
+        "status": 404,
+        "body_sha256": "334fde428e654a3733971cc0dbf048946f95bf0ff5528e5931e660a741c458b4"
+      },
+      {
+        "method": "GET",
+        "path": "/api/tags",
+        "status": 200,
+        "body_sha256": "a11abb42cfa6dba44c508add4774cb550c10899e51a3c75990f92cff8ebb22c1"
+      },
+      {
+        "method": "GET",
+        "path": "/api/ps",
+        "status": 200,
+        "body_sha256": "a6fe9ec6e26a38d99fca418b69826e0238b7a2bb319ff05eb153a6fcfd1fa28d"
+      }
+    ],
+    "show_comparison_excludes": [
+      "modified_at"
+    ],
+    "running_comparison_excludes": [
+      "expires_at"
+    ],
+    "error": null,
+    "generation_requests": 0,
+    "native_inference_calls": 0,
+    "signed_identity_qualified": false,
+    "executed_weights_qualified": false,
+    "native_execution_compatibility": "not_tested",
+    "native_admission": false,
+    "production_activation": false
+  },
+  "private_receipt_sha256": "bfd5b5d521ee469eef18d7eeca64fe56f67f64f943bf55ddffed32bf428406f0",
+  "single_live_collection_intent_sha256": "28f0db5bfc136c851b772d2133cf2a9583fcd88d76b1f6adaaf90fe7359b0794",
+  "preservation": {
+    "healthy_services": 8,
+    "originals_exact": true,
+    "encrypted_bytes_exact": true,
+    "evidence_versions_exact": true,
+    "confidential_review_history_exact": true,
+    "database_users_sessions_exact": true,
+    "configuration_credentials_exact": true,
+    "prior_edits_preserved": 31,
+    "prior_staged_keys_exact": true,
+    "independent_confirmation_pending": true,
+    "owner_v3_review_pending": true
+  },
+  "runtime_metadata_GETs": 5,
+  "readonly_show_POSTs": 2,
+  "provider_completion_POSTs": 0,
+  "native_inference_calls": 0,
+  "new_runtime_routes": 0,
+  "runtime_keys_loaded_for_signing": 0,
+  "production_installation": false,
+  "production_activation": false,
+  "signed_runtime_identity_qualified": false,
+  "native_execution_compatible": "not_tested",
+  "executed_weights_qualified": false,
+  "historical_502_cause_qualified": false,
+  "five_job_capacity_qualified": false,
+  "CI_jobs_workers_caps_coverage_changed": false
+}
