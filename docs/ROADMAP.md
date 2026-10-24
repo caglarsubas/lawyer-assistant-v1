@@ -6473,3 +6473,64 @@ confirmation remains required. Historical 502 cause, sustained five-job capacity
 corpus/legal quality and production activation remain open. See
 [procedure](ISOLATED_MANIFEST_INTEGRITY.md) and
 [dated evidence](evidence/manifest-integrity-2026-10-24.json).
+
+
+## Isolated complete-server build and fresh frozen metadata HTTP tests — 2026-10-24
+
+F00-06 remains **partial**. A complete production CLI/server binary is built from
+the pinned upstream snapshot: all 1,513 original files are Git-blob verified and
+SHA-256 inventoried. Production Go code changes only in `manifest/manifest.go`,
+using the retained integrity patch. Original source and prior negative evidence
+remain exact. Initial dependency acquisition stops before tests because checksum
+cache and lock updates are unavailable on read-only inputs. That receipt is kept.
+A separate public-only acquisition stage verifies 31 added checksum lines through
+Go's checksum service without changing `go.mod`, versions or original checksums.
+The complete build and module verification then run offline with read-only inputs,
+pinned Go 1.26.10 Linux/ARM64, CGO enabled and an explicit isolated version label.
+
+Twenty-six fresh S2601–S2626 cases, the controller, build/fixture identity and twelve
+contract methods are frozen before server startup. One actual campaign passes
+26/26 first grading with one request per case and no repairs or retuning. It tests
+the actual complete server process and loopback HTTP, rather than a reduced package
+or mocked handler. Bounded readiness probes are recorded separately. SIGTERM yields
+exit code zero without forced termination. The child executable hash before/after
+HTTP work matches the produced binary, and the synthetic read-only store is exact.
+
+The real HTTP resolver accepts colon, dash, bare, prefix and uppercase references
+to the same manifest, clarifying the distinction from raw package name parsing.
+Named metadata, exact listing digest, empty running-model inventory, verbose
+zero-tensor metadata, missing references, corrupted manifests, direct symlinks,
+no alias fallback, legacy named versus blob lookup, malformed/missing input,
+wrong method/route, invalid runner, cloud-disabled cases and invalid GGUF metadata
+match their frozen expectations. The integrity cases return expected HTTP 500 JSON
+errors. Reference comparison uses explicitly declared metadata fields; every complete
+request/response retains its original independent hash and exact wire bytes.
+
+All fixtures are invented metadata with zero tensors and no model weights. No
+generation/completion/admin request, private case, tenant credential or existing
+signing key enters the campaign. Its container has no network, host ports, privileges,
+host devices or private/runtime mounts; source/binary/fixtures are read-only and
+only bounded scratch/empty receipts are writable. The child has an explicit clean
+environment with cloud and pruning disabled. Any normal startup key is disposable
+inside tmpfs, never enrolled or promoted. Private server logs stay outside Git.
+The stopped owned container is removed after verified shutdown.
+
+A thirteenth contract rechecks the retained actual synthetic wire/report bindings;
+the original twelve methods/helpers and all frozen inputs remain exact. All 426
+deployment contracts and lint pass; 919 prior source/configuration files stay exact.
+Nine CI jobs, workers, caps, coverage and five timing reserves remain unchanged.
+All eight live services, originals, encrypted bytes, exact evidence versions,
+credentials, sessions, confidential review history, 31 earlier tracked edits and
+staged issuer/public candidate remain exact. Provider source stays unchanged.
+Owner focused-analysis v3 review and independent trust confirmation remain pending.
+
+The complete disposable Go CLI/server build and tested metadata HTTP subset are qualified.
+Separate native inference-runner executables are not built or qualified here.
+Completion/context/tokenizer/truncation behavior, executed weights, installed
+backend, complete artifact-store integrity, full-size/concurrent work and legal/
+production acceptance remain open. Next qualify the read-only complete artifact
+store and work budgets, then scoped relay/trust/restore and fresh durable native
+admission. Independent fingerprint/runtime-pin confirmation is still required.
+Historical 502 cause and sustained five-job capacity remain open. See
+[procedure](ISOLATED_SERVER_HTTP.md) and
+[dated evidence](evidence/server-http-2026-10-24.json).

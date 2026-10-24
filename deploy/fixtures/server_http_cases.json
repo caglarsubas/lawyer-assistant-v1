@@ -1,0 +1,204 @@
+{
+  "schema": "frozen-server-http-cases-v1",
+  "invented_only": true,
+  "scope": "complete isolated server process; metadata HTTP only, no completion/inference qualification",
+  "cases": [
+    {
+      "id": "S2601",
+      "method": "GET",
+      "path": "/api/version",
+      "fixture": "version",
+      "expected_status": 200
+    },
+    {
+      "id": "S2602",
+      "method": "GET",
+      "path": "/api/tags",
+      "fixture": "tags",
+      "expected_status": 200
+    },
+    {
+      "id": "S2603",
+      "method": "GET",
+      "path": "/api/ps",
+      "fixture": "empty_inventory",
+      "expected_status": 200
+    },
+    {
+      "id": "S2604",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "named",
+      "expected_status": 200
+    },
+    {
+      "id": "S2605",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "colon",
+      "expected_status": 200
+    },
+    {
+      "id": "S2606",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "dash",
+      "expected_status": 200
+    },
+    {
+      "id": "S2607",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "bare",
+      "expected_status": 200
+    },
+    {
+      "id": "S2608",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "prefix",
+      "expected_status": 200
+    },
+    {
+      "id": "S2609",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "uppercase",
+      "expected_status": 200
+    },
+    {
+      "id": "S2610",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "absent_digest",
+      "expected_status": 404
+    },
+    {
+      "id": "S2611",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "absent_name",
+      "expected_status": 404
+    },
+    {
+      "id": "S2612",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "corrupt_manifest",
+      "expected_status": 500
+    },
+    {
+      "id": "S2613",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "direct_link",
+      "expected_status": 500
+    },
+    {
+      "id": "S2614",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "alias_no_fallback",
+      "expected_status": 404
+    },
+    {
+      "id": "S2615",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "legacy_named",
+      "expected_status": 200
+    },
+    {
+      "id": "S2616",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "legacy_digest",
+      "expected_status": 404
+    },
+    {
+      "id": "S2617",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "malformed_json",
+      "expected_status": 400
+    },
+    {
+      "id": "S2618",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "missing_model",
+      "expected_status": 400
+    },
+    {
+      "id": "S2619",
+      "method": "GET",
+      "path": "/api/show",
+      "fixture": "wrong_method",
+      "expected_status": 405
+    },
+    {
+      "id": "S2620",
+      "method": "GET",
+      "path": "/qualification-not-found",
+      "fixture": "unknown_route",
+      "expected_status": 404
+    },
+    {
+      "id": "S2621",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "named_cloud",
+      "expected_status": 403
+    },
+    {
+      "id": "S2622",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "digest_cloud",
+      "expected_status": 400
+    },
+    {
+      "id": "S2623",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "bad_gguf",
+      "expected_status": 500
+    },
+    {
+      "id": "S2624",
+      "method": "GET",
+      "path": "/api/ps",
+      "fixture": "empty_inventory",
+      "expected_status": 200
+    },
+    {
+      "id": "S2625",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "verbose",
+      "expected_status": 200
+    },
+    {
+      "id": "S2626",
+      "method": "POST",
+      "path": "/api/show",
+      "fixture": "invalid_runner",
+      "expected_status": 400
+    }
+  ],
+  "comparison_fields": [
+    "model_info",
+    "details",
+    "parameters",
+    "template",
+    "system",
+    "messages",
+    "capabilities",
+    "renderer",
+    "parser",
+    "template_source",
+    "thinking"
+  ],
+  "comparison_scope": "explicit metadata field projection; full raw responses retain exact independent wire hashes; no signature/executed-weight attestation",
+  "generation_requests_authorized": 0
+}
