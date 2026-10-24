@@ -1,0 +1,159 @@
+{
+  "schema": "guarded-route-qualification-v1",
+  "cases": [
+    {
+      "id": "G01_valid",
+      "status": 200,
+      "simulated_backend_sends": 1
+    },
+    {
+      "id": "G02_replay",
+      "status": 400,
+      "simulated_backend_sends": 1
+    },
+    {
+      "id": "G03_revoked_parent",
+      "status": 400,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G04_before_admission",
+      "status": 400,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G05_after_admission",
+      "status": 400,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G06_during_backend",
+      "status": 400,
+      "simulated_backend_sends": 1
+    },
+    {
+      "id": "G07_before_complete",
+      "status": 400,
+      "simulated_backend_sends": 1
+    },
+    {
+      "id": "G08_before_consume",
+      "status": 400,
+      "simulated_backend_sends": 1
+    },
+    {
+      "id": "G09_before_release",
+      "status": 400,
+      "simulated_backend_sends": 1
+    },
+    {
+      "id": "G10_foreign_auth",
+      "status": 400,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G11_auth_before_admission",
+      "status": 400,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G12_auth_during_backend",
+      "status": 400,
+      "simulated_backend_sends": 1
+    },
+    {
+      "id": "G13_wrong_record",
+      "status": "setup_rejected",
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G14_wrong_journal",
+      "status": "setup_rejected",
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G15_unsealed",
+      "status": "setup_rejected",
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G16_writable",
+      "status": "setup_rejected",
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G17_context_override",
+      "status": 400,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G18_backend_502",
+      "status": 400,
+      "simulated_backend_sends": 1
+    },
+    {
+      "id": "G19_context_budget",
+      "status": 400,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G20_commit_gap",
+      "status": 400,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G21_lost_admission",
+      "status": 400,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G22_receipt_rollback",
+      "status": 400,
+      "simulated_backend_sends": 1
+    },
+    {
+      "id": "G23_direct_hook",
+      "status": "direct_rejected",
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G24_concurrent",
+      "status": 503,
+      "simulated_backend_sends": 1
+    },
+    {
+      "id": "G25_clipped",
+      "status": 400,
+      "simulated_backend_sends": 1
+    },
+    {
+      "id": "G26_changed_pin",
+      "status": 400,
+      "simulated_backend_sends": 1
+    },
+    {
+      "id": "G27_legacy_journal",
+      "status": "setup_rejected",
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G28_expired",
+      "status": 400,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "G29_exact_wire",
+      "status": 200,
+      "simulated_backend_sends": 1
+    }
+  ],
+  "single_native_attempt": true,
+  "actual_native_inference": false,
+  "backend_transport": "explicit_httpx_mock_only",
+  "real_provider_requests": 0,
+  "real_trust_confirmed": false,
+  "runtime_installation": false,
+  "production_activation": false,
+  "model_verification_seconds": 20,
+  "loopback_HTTP_only": true
+}
