@@ -1,0 +1,127 @@
+{
+  "schema": "fresh-manifest-integrity-cases-v1",
+  "invented_only": true,
+  "cases": [
+    {
+      "id": "U2501",
+      "fixture": "valid_dash",
+      "reader": "parse",
+      "expected": "matched"
+    },
+    {
+      "id": "U2502",
+      "fixture": "appended_space",
+      "reader": "parse",
+      "expected": "rejected"
+    },
+    {
+      "id": "U2503",
+      "fixture": "same_length_change",
+      "reader": "data",
+      "expected": "rejected"
+    },
+    {
+      "id": "U2504",
+      "fixture": "replacement",
+      "reader": "file",
+      "expected": "rejected"
+    },
+    {
+      "id": "U2505",
+      "fixture": "corrupt_prefix",
+      "reader": "parse",
+      "expected": "rejected"
+    },
+    {
+      "id": "U2506",
+      "fixture": "valid_bare",
+      "reader": "data",
+      "expected": "matched"
+    },
+    {
+      "id": "U2507",
+      "fixture": "uppercase_reference",
+      "reader": "parse",
+      "expected": "matched"
+    },
+    {
+      "id": "U2508",
+      "fixture": "absent",
+      "reader": "parse",
+      "expected": "missing"
+    },
+    {
+      "id": "U2509",
+      "fixture": "malformed_json",
+      "reader": "parse",
+      "expected": "rejected"
+    },
+    {
+      "id": "U2510",
+      "fixture": "named_regular",
+      "reader": "parse",
+      "expected": "matched"
+    },
+    {
+      "id": "U2511",
+      "fixture": "named_formatting",
+      "reader": "data",
+      "expected": "matched"
+    },
+    {
+      "id": "U2512",
+      "fixture": "named_digestlike_tag",
+      "reader": "parse",
+      "expected": "matched"
+    },
+    {
+      "id": "U2513",
+      "fixture": "named_symlink",
+      "reader": "file",
+      "expected": "matched"
+    },
+    {
+      "id": "U2514",
+      "fixture": "direct_symlink_other",
+      "reader": "parse",
+      "expected": "rejected"
+    },
+    {
+      "id": "U2515",
+      "fixture": "direct_symlink_outside",
+      "reader": "file",
+      "expected": "rejected"
+    },
+    {
+      "id": "U2516",
+      "fixture": "direct_directory",
+      "reader": "parse",
+      "expected": "rejected"
+    },
+    {
+      "id": "U2517",
+      "fixture": "missing_layer",
+      "reader": "parse",
+      "expected": "matched"
+    },
+    {
+      "id": "U2518",
+      "fixture": "valid_file",
+      "reader": "file",
+      "expected": "matched"
+    },
+    {
+      "id": "U2519",
+      "fixture": "truncated",
+      "reader": "data",
+      "expected": "rejected"
+    },
+    {
+      "id": "U2520",
+      "fixture": "alias_no_fallback",
+      "reader": "parse",
+      "expected": "missing"
+    }
+  ],
+  "scope": "fixed-scratch manifest lookup only; no model is executable; no HTTP/full-store/native/legal qualification"
+}

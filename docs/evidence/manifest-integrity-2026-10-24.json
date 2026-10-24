@@ -1,0 +1,589 @@
+{
+  "CI_jobs_workers_caps_coverage_changed": false,
+  "actual_grading_attempts": {
+    "baseline": 1,
+    "patched": 1
+  },
+  "baseline": {
+    "cases": [
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2501",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "mismatched",
+        "expected": "rejected",
+        "id": "U2502",
+        "matches_expected": false,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "mismatched",
+        "expected": "rejected",
+        "id": "U2503",
+        "matches_expected": false,
+        "reader": "data",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "mismatched",
+        "expected": "rejected",
+        "id": "U2504",
+        "matches_expected": false,
+        "reader": "file",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "mismatched",
+        "expected": "rejected",
+        "id": "U2505",
+        "matches_expected": false,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2506",
+        "matches_expected": true,
+        "reader": "data",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2507",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "missing",
+        "expected": "missing",
+        "id": "U2508",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "rejected",
+        "expected": "rejected",
+        "id": "U2509",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2510",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2511",
+        "matches_expected": true,
+        "reader": "data",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2512",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2513",
+        "matches_expected": true,
+        "reader": "file",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "mismatched",
+        "expected": "rejected",
+        "id": "U2514",
+        "matches_expected": false,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "matched",
+        "expected": "rejected",
+        "id": "U2515",
+        "matches_expected": false,
+        "reader": "file",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "rejected",
+        "expected": "rejected",
+        "id": "U2516",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2517",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2518",
+        "matches_expected": true,
+        "reader": "file",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "mismatched",
+        "expected": "rejected",
+        "id": "U2519",
+        "matches_expected": false,
+        "reader": "data",
+        "store_unchanged": true,
+        "variant": "baseline"
+      },
+      {
+        "actual": "missing",
+        "expected": "missing",
+        "id": "U2520",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "baseline"
+      }
+    ],
+    "executed_weights_qualified": false,
+    "expected_results": 13,
+    "failed_results": 7,
+    "installed_backend_qualified": false,
+    "owner_review_completed": false,
+    "production_activation": false,
+    "raw_log_sha256": "464850c4cc403d4480fb67c4ee87d6da950a1cfc7b52d32e996bef1162df6801",
+    "scope": "fixed-scratch Linux manifest package tests; no HTTP/native/full-store qualification",
+    "scratch_store_unchanged": true,
+    "variant": "baseline"
+  },
+  "build_receipts": {
+    "baseline": {
+      "cases_sha256": "90ff5c2faf67edd2b2e96437d3797390add3ede292fcdde26d5dfb7bead5dfe5",
+      "generated_sha256": {
+        "LICENSE": "5934ed2ce0d15154bcdb9c85203210abac0da4314af34081e36df4599f90b226",
+        "envconfig/config.go": "0b0ea669b31cfe2b54313427257326a2b7a909bbc7bf8a671035efc446fb1895",
+        "go.mod": "025e64c6f54a7629dfa33fb7512f82f776d767dcb60468aa8bf7501998306aba",
+        "manifest/integrity_cases.json": "90ff5c2faf67edd2b2e96437d3797390add3ede292fcdde26d5dfb7bead5dfe5",
+        "manifest/integrity_frozen_test.go": "ac557e49765801a8399da7a8ff1f826b3e91fb920103ce458bd9d6eb0c7b2fd5",
+        "manifest/layer.go": "fedf9d4f134cd0c0c02c323c6702fe95318500f0f1e24179ac85142c3072559b",
+        "manifest/manifest.go": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec",
+        "manifest/paths.go": "ce16336074693e19fa8c75147c67b155b9be03542a5dd77500e8be42dba8ff04",
+        "types/model/capability.go": "1e2a4aa2bd38e35707ce7e0354662391123a80046a10bbc1fac9a148927d19a6",
+        "types/model/config.go": "bdfe2d5564cc06d67b3eb421188ec2a2debcd43b4611a97541c4c8a4106330ec",
+        "types/model/generation.go": "2e71ffa86336871e7926dc96bdc2658eca848bf90d64a5496a295a4946de408d",
+        "types/model/name.go": "5a57960ce67a46383dc8a0e96df648be7e137ffa6510c39982e74dea793a0cd7",
+        "types/model/thinking.go": "7c54a7758d3a3e900a903228337e79f7896c0ae96444223e00f7e0d7f4fd2a5e"
+      },
+      "modified_upstream_paths": [],
+      "native_inference_calls": 0,
+      "patch_sha256": null,
+      "production_activation": false,
+      "schema": "isolated-manifest-integrity-build-v1",
+      "scope": "isolated Linux manifest package only; no full server or live installation",
+      "test_sha256": "ac557e49765801a8399da7a8ff1f826b3e91fb920103ce458bd9d6eb0c7b2fd5",
+      "upstream_commit": "675150d6ad2747df1e218ef59de9194bc4a7e538",
+      "upstream_source_sha256": {
+        "LICENSE": "5934ed2ce0d15154bcdb9c85203210abac0da4314af34081e36df4599f90b226",
+        "envconfig/config.go": "0b0ea669b31cfe2b54313427257326a2b7a909bbc7bf8a671035efc446fb1895",
+        "go.mod": "32c3cd993ece27ec115d0eb1c932dfc58831ad1022588d712d426f103720e027",
+        "manifest/layer.go": "fedf9d4f134cd0c0c02c323c6702fe95318500f0f1e24179ac85142c3072559b",
+        "manifest/manifest.go": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec",
+        "manifest/paths.go": "ce16336074693e19fa8c75147c67b155b9be03542a5dd77500e8be42dba8ff04",
+        "server/images.go": "68dcf67c7d5b4addd80248627d80b950d0807bb252510fd0fecaf5cdb5415197",
+        "server/routes.go": "28034a9f11df5d5c3ce8d3d4786d62d2efd78feb5fc3c7d4a7a5231ec17f12b3",
+        "types/model/capability.go": "1e2a4aa2bd38e35707ce7e0354662391123a80046a10bbc1fac9a148927d19a6",
+        "types/model/config.go": "bdfe2d5564cc06d67b3eb421188ec2a2debcd43b4611a97541c4c8a4106330ec",
+        "types/model/generation.go": "2e71ffa86336871e7926dc96bdc2658eca848bf90d64a5496a295a4946de408d",
+        "types/model/name.go": "5a57960ce67a46383dc8a0e96df648be7e137ffa6510c39982e74dea793a0cd7",
+        "types/model/thinking.go": "7c54a7758d3a3e900a903228337e79f7896c0ae96444223e00f7e0d7f4fd2a5e"
+      },
+      "variant": "baseline"
+    },
+    "patched": {
+      "cases_sha256": "90ff5c2faf67edd2b2e96437d3797390add3ede292fcdde26d5dfb7bead5dfe5",
+      "generated_sha256": {
+        "LICENSE": "5934ed2ce0d15154bcdb9c85203210abac0da4314af34081e36df4599f90b226",
+        "envconfig/config.go": "0b0ea669b31cfe2b54313427257326a2b7a909bbc7bf8a671035efc446fb1895",
+        "go.mod": "025e64c6f54a7629dfa33fb7512f82f776d767dcb60468aa8bf7501998306aba",
+        "manifest/integrity_cases.json": "90ff5c2faf67edd2b2e96437d3797390add3ede292fcdde26d5dfb7bead5dfe5",
+        "manifest/integrity_frozen_test.go": "ac557e49765801a8399da7a8ff1f826b3e91fb920103ce458bd9d6eb0c7b2fd5",
+        "manifest/layer.go": "fedf9d4f134cd0c0c02c323c6702fe95318500f0f1e24179ac85142c3072559b",
+        "manifest/manifest.go": "faa5f8c28031a5866a8491f5cca893da8471c67b4cdaf47b96cf905f7a1b705f",
+        "manifest/paths.go": "ce16336074693e19fa8c75147c67b155b9be03542a5dd77500e8be42dba8ff04",
+        "types/model/capability.go": "1e2a4aa2bd38e35707ce7e0354662391123a80046a10bbc1fac9a148927d19a6",
+        "types/model/config.go": "bdfe2d5564cc06d67b3eb421188ec2a2debcd43b4611a97541c4c8a4106330ec",
+        "types/model/generation.go": "2e71ffa86336871e7926dc96bdc2658eca848bf90d64a5496a295a4946de408d",
+        "types/model/name.go": "5a57960ce67a46383dc8a0e96df648be7e137ffa6510c39982e74dea793a0cd7",
+        "types/model/thinking.go": "7c54a7758d3a3e900a903228337e79f7896c0ae96444223e00f7e0d7f4fd2a5e"
+      },
+      "modified_upstream_paths": [
+        "manifest/manifest.go"
+      ],
+      "native_inference_calls": 0,
+      "patch_sha256": "e675337c9f16a060c68eb63b448a5a3f298d5000e244068d9a5d5861440779dd",
+      "production_activation": false,
+      "schema": "isolated-manifest-integrity-build-v1",
+      "scope": "isolated Linux manifest package only; no full server or live installation",
+      "test_sha256": "ac557e49765801a8399da7a8ff1f826b3e91fb920103ce458bd9d6eb0c7b2fd5",
+      "upstream_commit": "675150d6ad2747df1e218ef59de9194bc4a7e538",
+      "upstream_source_sha256": {
+        "LICENSE": "5934ed2ce0d15154bcdb9c85203210abac0da4314af34081e36df4599f90b226",
+        "envconfig/config.go": "0b0ea669b31cfe2b54313427257326a2b7a909bbc7bf8a671035efc446fb1895",
+        "go.mod": "32c3cd993ece27ec115d0eb1c932dfc58831ad1022588d712d426f103720e027",
+        "manifest/layer.go": "fedf9d4f134cd0c0c02c323c6702fe95318500f0f1e24179ac85142c3072559b",
+        "manifest/manifest.go": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec",
+        "manifest/paths.go": "ce16336074693e19fa8c75147c67b155b9be03542a5dd77500e8be42dba8ff04",
+        "server/images.go": "68dcf67c7d5b4addd80248627d80b950d0807bb252510fd0fecaf5cdb5415197",
+        "server/routes.go": "28034a9f11df5d5c3ce8d3d4786d62d2efd78feb5fc3c7d4a7a5231ec17f12b3",
+        "types/model/capability.go": "1e2a4aa2bd38e35707ce7e0354662391123a80046a10bbc1fac9a148927d19a6",
+        "types/model/config.go": "bdfe2d5564cc06d67b3eb421188ec2a2debcd43b4611a97541c4c8a4106330ec",
+        "types/model/generation.go": "2e71ffa86336871e7926dc96bdc2658eca848bf90d64a5496a295a4946de408d",
+        "types/model/name.go": "5a57960ce67a46383dc8a0e96df648be7e137ffa6510c39982e74dea793a0cd7",
+        "types/model/thinking.go": "7c54a7758d3a3e900a903228337e79f7896c0ae96444223e00f7e0d7f4fd2a5e"
+      },
+      "variant": "patched"
+    }
+  },
+  "compiler": {
+    "go": "go1.26.10 linux/arm64",
+    "id": "sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af"
+  },
+  "complete_server_HTTP_qualified": false,
+  "date": "2026-10-24",
+  "deployment_contracts": {
+    "failed": 0,
+    "passed": 413
+  },
+  "earlier_tracked_edits_exact": 31,
+  "executed_weights_qualified": false,
+  "final_contracts": {
+    "failed": 0,
+    "passed": 11
+  },
+  "first_contracts": {
+    "failed": 0,
+    "passed": 10
+  },
+  "five_job_capacity_qualified": false,
+  "full_artifact_store_qualified": false,
+  "healthy_application_services": 8,
+  "historical_502_cause_qualified": false,
+  "independent_fingerprint_confirmation_completed": false,
+  "installed_backend_source_qualified": false,
+  "isolation": {
+    "all_directory_content_link_inventories_unchanged": true,
+    "cpus": 2,
+    "credentials_or_models": false,
+    "memory_gib": 2,
+    "network": "none",
+    "nonroot": true,
+    "operator_timeout_seconds": 150,
+    "pids": 128,
+    "published_ports": false,
+    "scratch": "disposable_only",
+    "sentinel": "fresh invented invalid-as-model GGUF bytes",
+    "source_and_root": "read_only",
+    "test_timeout_seconds": 20
+  },
+  "lint": "passed",
+  "live_backend_metadata_requests": 0,
+  "native_inference_calls": 0,
+  "new_runtime_routes": 0,
+  "original_ten_contract_methods_unchanged": true,
+  "originals_exact_evidence_encrypted_bytes_credentials_sessions_config_review_history_exact": true,
+  "owner_review_completed": false,
+  "patch": {
+    "after_sha256": "faa5f8c28031a5866a8491f5cca893da8471c67b4cdaf47b96cf905f7a1b705f",
+    "before_sha256": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec",
+    "commit": "675150d6ad2747df1e218ef59de9194bc4a7e538",
+    "path": "manifest/manifest.go",
+    "replacements": [
+      {
+        "after": "\t\"github.com/ollama/ollama/envconfig\"\n\t\"github.com/ollama/ollama/types/model\"",
+        "before": "\t\"github.com/ollama/ollama/types/model\""
+      },
+      {
+        "after": "// unverifiedManifestFile binds content-addressed files to their expected digest.\n// Ordinary named regular files are hashed to establish their current identity.\n// A direct blob must be regular and match the digest encoded in its filename.",
+        "before": "// unverifiedManifestFile keeps the opened bytes with the digest required for\n// a content-addressed symlink. Regular files have no expected digest; their\n// contents are hashed to establish their identity when read."
+      },
+      {
+        "after": "\t// A direct content-addressed lookup must not inherit a symlink target\n\t// identity. Named-manifest symlinks retain their existing checked behavior.\n\tabsPath, err := filepath.Abs(path)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tblobsRoot, err := filepath.Abs(filepath.Join(envconfig.Models(), \"blobs\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\texpectedDigest := \"\"\n\tif filepath.Dir(absPath) == blobsRoot {\n\t\tbase := filepath.Base(absPath)\n\t\tif !info.Mode().IsRegular() || !blobFilenamePattern.MatchString(base) {\n\t\t\treturn nil, errors.New(\"invalid regular manifest blob\")\n\t\t}\n\t\texpectedDigest = strings.ToLower(strings.TrimPrefix(base, \"sha256-\"))\n\t}\n\n\ttarget, err := evalAbs(path)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tif info.Mode()&os.ModeSymlink != 0 {",
+        "before": "\ttarget, err := evalAbs(path)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tif info.Mode()&os.ModeSymlink != 0 {"
+      },
+      {
+        "after": "\treturn &unverifiedManifestFile{file: f, expectedDigest: expectedDigest}, nil",
+        "before": "\treturn &unverifiedManifestFile{file: f}, nil"
+      }
+    ],
+    "schema": "isolated-manifest-integrity-patch-v1",
+    "scope": "regular direct manifest blob content hash, direct symlink rejection; no live install, HTTP or full-store qualification"
+  },
+  "patch_cases_harness_stager_unchanged_after_freeze": true,
+  "patched": {
+    "cases": [
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2501",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "rejected",
+        "expected": "rejected",
+        "id": "U2502",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "rejected",
+        "expected": "rejected",
+        "id": "U2503",
+        "matches_expected": true,
+        "reader": "data",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "rejected",
+        "expected": "rejected",
+        "id": "U2504",
+        "matches_expected": true,
+        "reader": "file",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "rejected",
+        "expected": "rejected",
+        "id": "U2505",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2506",
+        "matches_expected": true,
+        "reader": "data",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2507",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "missing",
+        "expected": "missing",
+        "id": "U2508",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "rejected",
+        "expected": "rejected",
+        "id": "U2509",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2510",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2511",
+        "matches_expected": true,
+        "reader": "data",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2512",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2513",
+        "matches_expected": true,
+        "reader": "file",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "rejected",
+        "expected": "rejected",
+        "id": "U2514",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "rejected",
+        "expected": "rejected",
+        "id": "U2515",
+        "matches_expected": true,
+        "reader": "file",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "rejected",
+        "expected": "rejected",
+        "id": "U2516",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2517",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "matched",
+        "expected": "matched",
+        "id": "U2518",
+        "matches_expected": true,
+        "reader": "file",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "rejected",
+        "expected": "rejected",
+        "id": "U2519",
+        "matches_expected": true,
+        "reader": "data",
+        "store_unchanged": true,
+        "variant": "patched"
+      },
+      {
+        "actual": "missing",
+        "expected": "missing",
+        "id": "U2520",
+        "matches_expected": true,
+        "reader": "parse",
+        "store_unchanged": true,
+        "variant": "patched"
+      }
+    ],
+    "executed_weights_qualified": false,
+    "expected_results": 20,
+    "failed_results": 0,
+    "installed_backend_qualified": false,
+    "owner_review_completed": false,
+    "production_activation": false,
+    "raw_log_sha256": "b682766803386e5e5060709366c9b68b66e6d93b99cfd0471ca6ce1324eee70f",
+    "scope": "fixed-scratch Linux manifest package tests; no HTTP/native/full-store qualification",
+    "scratch_store_unchanged": true,
+    "variant": "patched"
+  },
+  "pre_grade_freeze": {
+    "deploy/fixtures/manifest_integrity_cases.json": "90ff5c2faf67edd2b2e96437d3797390add3ede292fcdde26d5dfb7bead5dfe5",
+    "deploy/fixtures/manifest_integrity_patch.json": "e675337c9f16a060c68eb63b448a5a3f298d5000e244068d9a5d5861440779dd",
+    "deploy/fixtures/manifest_integrity_qualifier.go": "ac557e49765801a8399da7a8ff1f826b3e91fb920103ce458bd9d6eb0c7b2fd5",
+    "deploy/test_manifest_integrity.py": "0d261ac0e3bd88be1e3f4397e920e929c7f560324550c9068d0e0cd4d25e2692",
+    "scripts/manifest_integrity_stage.py": "6300f8f06e176d57a37ed6f24bd4d2db33cdd3c8001b8b4d3b3e7a04f0649fb6"
+  },
+  "pre_grade_freeze_sha256": "38c9949e0a88b686fc5484c5c15a634b7aa16d9cb72e22c0a05947065cbae8fb",
+  "previous_negative_qualification_unchanged": {
+    "evidence_sha256": "9748425601ac8438eacfba11948d17daa8381b8ee76de48d4dce9b3b7463062f",
+    "expected_Q2412": "rejected",
+    "failed_log_sha256": "3a55e2e24a9a3aaf371dd088bad3b508ae4307f85c4372e56ea3ff4521aca5b2",
+    "historical_actual_Q2412": "mismatched",
+    "source_sha256": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec"
+  },
+  "previous_source_files": {
+    "all_exact": true,
+    "count": 912,
+    "inventory_sha256": "013ba687a642c7eaf2795cf7d9f46ae607dc699c95527814cac87fbe90e2ac29"
+  },
+  "private_or_runtime_mounts": false,
+  "production_activation": false,
+  "production_installation": false,
+  "provider_completion_POSTs": 0,
+  "provider_repository_changed": false,
+  "qualification": "scoped_fixed_scratch_Linux_manifest_content_regression_passed_not_full_backend",
+  "remaining": "Fresh frozen complete disposable server/HTTP and real digest normalization with explicit build identity; read-only store and hardlink/race boundaries, complete artifact/config/layer integrity and full-size verification work; independent fingerprint/runtime pin, relay/trust/restore and fresh native admission. Owner review, legal/corpus and production acceptance remain open.",
+  "runtime_keys_loaded_for_signing": 0,
+  "schema": "isolated-manifest-integrity-evidence-v1",
+  "source_commit": "675150d6ad2747df1e218ef59de9194bc4a7e538",
+  "staged_materials_exact": true
+}

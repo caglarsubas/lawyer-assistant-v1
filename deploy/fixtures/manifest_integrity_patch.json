@@ -1,0 +1,26 @@
+{
+  "schema": "isolated-manifest-integrity-patch-v1",
+  "commit": "675150d6ad2747df1e218ef59de9194bc4a7e538",
+  "path": "manifest/manifest.go",
+  "before_sha256": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec",
+  "after_sha256": "faa5f8c28031a5866a8491f5cca893da8471c67b4cdaf47b96cf905f7a1b705f",
+  "replacements": [
+    {
+      "before": "\t\"github.com/ollama/ollama/types/model\"",
+      "after": "\t\"github.com/ollama/ollama/envconfig\"\n\t\"github.com/ollama/ollama/types/model\""
+    },
+    {
+      "before": "// unverifiedManifestFile keeps the opened bytes with the digest required for\n// a content-addressed symlink. Regular files have no expected digest; their\n// contents are hashed to establish their identity when read.",
+      "after": "// unverifiedManifestFile binds content-addressed files to their expected digest.\n// Ordinary named regular files are hashed to establish their current identity.\n// A direct blob must be regular and match the digest encoded in its filename."
+    },
+    {
+      "before": "\ttarget, err := evalAbs(path)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tif info.Mode()&os.ModeSymlink != 0 {",
+      "after": "\t// A direct content-addressed lookup must not inherit a symlink target\n\t// identity. Named-manifest symlinks retain their existing checked behavior.\n\tabsPath, err := filepath.Abs(path)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tblobsRoot, err := filepath.Abs(filepath.Join(envconfig.Models(), \"blobs\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\texpectedDigest := \"\"\n\tif filepath.Dir(absPath) == blobsRoot {\n\t\tbase := filepath.Base(absPath)\n\t\tif !info.Mode().IsRegular() || !blobFilenamePattern.MatchString(base) {\n\t\t\treturn nil, errors.New(\"invalid regular manifest blob\")\n\t\t}\n\t\texpectedDigest = strings.ToLower(strings.TrimPrefix(base, \"sha256-\"))\n\t}\n\n\ttarget, err := evalAbs(path)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tif info.Mode()&os.ModeSymlink != 0 {"
+    },
+    {
+      "before": "\treturn &unverifiedManifestFile{file: f}, nil",
+      "after": "\treturn &unverifiedManifestFile{file: f, expectedDigest: expectedDigest}, nil"
+    }
+  ],
+  "scope": "regular direct manifest blob content hash, direct symlink rejection; no live install, HTTP or full-store qualification"
+}
