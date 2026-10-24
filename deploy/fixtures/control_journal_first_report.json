@@ -1,0 +1,818 @@
+{
+  "schema": "control-journal-native-receipt-v1",
+  "policy_sha256": "03c34572e2d0486e262c1191c9cbdc8ee4b7149eb10b2fc0c1d3e08d5cedd2e8",
+  "candidate": {
+    "source": {
+      "scripts/artifact_store.py": "ad31a738079edebcb4af0e53ad4557eecd7ae36ff751ace442a261433c362d69",
+      "scripts/sealed_volume.py": "de52337616ffbffc9d09a0f61c2f2037c7a9c36e145c13553cc5717ab0526ad5",
+      "scripts/sealed_relay_handoff.py": "25dfff9d9a3308648a7856f5a36798dc1b43504b479d8a88bf28bed8120c7a73",
+      "scripts/sealed_handoff_qualification.py": "274609b940c8a0ca61e0b35f47b20ab2d0dbe9b41ef2f3a1b2600cc6a0f83072",
+      "scripts/sealed_control_journal.py": "b8c30b3b3637720d3882ee4a69caf2ca4fd04ee6150ac613f0ee0b6eb57f88e3",
+      "scripts/control_journal_qualification.py": "063c4e3a4317bc98f5d5b58e9fbcf1832674cb40c9d4730b519897e35cc9cc1e",
+      "scripts/control_journal_native.py": "2c8816dc4e00c3c30c1899dae23647e818b3affd8051a29b1e095dfd88dd8bbe",
+      "scripts/signed_provider_contract.py": "d75900f716a9a0714828901bfee5a75d6bb5aec0de082f204e013847f3aa7939",
+      "scripts/signed_provider_handoff.py": "1f79a22c6547e2dc89703254a22384d4723457a1d3047b3b107bf73b9d995309",
+      "scripts/provider_identity_binding.py": "7023434ffa6140674a2e88fb737414ee8f91d973acd0a8f0f68071795367ba15",
+      "scripts/metadata_phase_probe.py": "1997c8d80e3911f1abba63f5196c436ba4212ff59169d2703cee401c66caf19f"
+    },
+    "controller": {
+      "artifact_store.py": "ad31a738079edebcb4af0e53ad4557eecd7ae36ff751ace442a261433c362d69",
+      "sealed_volume.py": "de52337616ffbffc9d09a0f61c2f2037c7a9c36e145c13553cc5717ab0526ad5",
+      "sealed_relay_handoff.py": "25dfff9d9a3308648a7856f5a36798dc1b43504b479d8a88bf28bed8120c7a73",
+      "sealed_handoff_qualification.py": "274609b940c8a0ca61e0b35f47b20ab2d0dbe9b41ef2f3a1b2600cc6a0f83072",
+      "sealed_control_journal.py": "b8c30b3b3637720d3882ee4a69caf2ca4fd04ee6150ac613f0ee0b6eb57f88e3",
+      "control_journal_qualification.py": "063c4e3a4317bc98f5d5b58e9fbcf1832674cb40c9d4730b519897e35cc9cc1e",
+      "control_journal_native.py": "2c8816dc4e00c3c30c1899dae23647e818b3affd8051a29b1e095dfd88dd8bbe",
+      "signed_provider_contract.py": "d75900f716a9a0714828901bfee5a75d6bb5aec0de082f204e013847f3aa7939",
+      "signed_provider_handoff.py": "1f79a22c6547e2dc89703254a22384d4723457a1d3047b3b107bf73b9d995309",
+      "provider_identity_binding.py": "7023434ffa6140674a2e88fb737414ee8f91d973acd0a8f0f68071795367ba15",
+      "metadata_phase_probe.py": "1997c8d80e3911f1abba63f5196c436ba4212ff59169d2703cee401c66caf19f"
+    },
+    "launcher_sha256": "a8eae5eabb4e3ca4c1b056db43d2e787ecf32d37a92704828855e3794399596d",
+    "single_attempt": true,
+    "new_volumes_only": true,
+    "real_credentials_or_inputs": false,
+    "production_activation": false
+  },
+  "preparation": {
+    "info": {
+      "bundle_index_sha256": "e99b7d9a3e9cedffd57024c9345465f3e55eb6e6d80db95a868b23167f517e3c",
+      "manifest_digest": "sha256:fc2af3eadcef322c7ee08bc7b7d3dda80c3613314ccee934f0557c5ee6123d6b",
+      "content_sha256": "6a6f3e8b7e55d7b7252aeb0fa67f6969746cab584028e26bb303aadb3ab69e84"
+    },
+    "filesystems": {
+      "fixtures": "ext4",
+      "work": "ext4",
+      "anchors": "ext4",
+      "backups": "ext4"
+    },
+    "synthetic_only": true,
+    "tensor_count": 0
+  },
+  "cases": [
+    {
+      "id": "C01_separate_anchor",
+      "expected": "aligned",
+      "observed": "aligned",
+      "evidence": {
+        "database_sha256": "ba4e1ffd777f787990f7f23999e69f297cd68a25c8344a6c710542d7bb046961",
+        "anchor_sha256": "7fdc51b9f3ccc63a2a020d51de2c67a2d5ca211d41014105b3d9eed434109075",
+        "operation_states": {
+          "sealed": 1
+        },
+        "nonce_states": {},
+        "history_events": 3,
+        "audit_commits": 4,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C02_readonly_history",
+      "expected": "unchanged",
+      "observed": "unchanged",
+      "evidence": {
+        "database_sha256": "8ac96f84244f0639ab4d8f8888733434d0ad6085687f21ef4e89dede2d187b5f",
+        "anchor_sha256": "309f9fb28f849f91eb2c228485fe204e95aa1c5562b88af70ab47ddb8d42ee97",
+        "operation_states": {
+          "sealed": 1
+        },
+        "nonce_states": {},
+        "history_events": 3,
+        "audit_commits": 4,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C03_atomic_descendant_revocation",
+      "expected": "revoked",
+      "observed": "revoked",
+      "evidence": {
+        "database_sha256": "fcc3af7ce545cd283e5e6adcb0202f7ace61698ee30a3a4ac8f39760f0ff3bd0",
+        "anchor_sha256": "fed3a6a66069ea2e21fdf154dbaf0f15854339d9be841b5e6791c664b361b773",
+        "operation_states": {
+          "revoked": 4,
+          "sealed": 1
+        },
+        "nonce_states": {
+          "reserved": 1
+        },
+        "history_events": 16,
+        "audit_commits": 15,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C04_branch_isolation",
+      "expected": "isolated",
+      "observed": "isolated",
+      "evidence": {
+        "database_sha256": "8daef26a05c60a79fe88535acf48573738687b1de9019a0804792714d6f17fbb",
+        "anchor_sha256": "a8845f70257c3f70baf4711c6c88b2a7888430e674118d57560de295cd1ee020",
+        "operation_states": {
+          "copying": 1,
+          "revoked": 2,
+          "sealed": 2
+        },
+        "nonce_states": {
+          "reserved": 1
+        },
+        "history_events": 14,
+        "audit_commits": 15,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C05_new_descendant",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "0a60ae7b7ce6a12820f3c78066fe6ba445ce0035fa9cce6c8fd3adfd84a93d38",
+        "anchor_sha256": "117ac3834acbddb4e83f04b2baf5ca68e81d745b607c58764a3e0522146878db",
+        "operation_states": {
+          "revoked": 3
+        },
+        "nonce_states": {
+          "reserved": 1
+        },
+        "history_events": 11,
+        "audit_commits": 11,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C06_prepare_revoked",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "5e1eff380659a9c74006cbf7f3c106dcfaf2bd8f75354f5bdc5d9f5695dbcd53",
+        "anchor_sha256": "7da8516c4c29ed3d4e4af4d0b8f77d0afd15d9b8dcb11a1f44e245a512df41bd",
+        "operation_states": {
+          "revoked": 3
+        },
+        "nonce_states": {
+          "reserved": 1
+        },
+        "history_events": 10,
+        "audit_commits": 10,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C07_seal_revoked",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "bbdf247ac85749747e2c3d42124d26b65cc04a740b2af2380bc0fd2d77a86291",
+        "anchor_sha256": "039d1637153f7ffa3b62ea2264bc543cef081f7ec742b57bc2413a37491782e4",
+        "operation_states": {
+          "revoked": 3
+        },
+        "nonce_states": {
+          "reserved": 1
+        },
+        "history_events": 11,
+        "audit_commits": 11,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C08_reserve_revoked",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "1f4ad31931b46763c433b44b16e54fb610f187950df5b5580214107c25afe99b",
+        "anchor_sha256": "430cc9749582492fca63cae277bf7d6c7208fe2882fcc8491a8eec20054c7a39",
+        "operation_states": {
+          "revoked": 3
+        },
+        "nonce_states": {
+          "reserved": 1
+        },
+        "history_events": 11,
+        "audit_commits": 11,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C09_consume_revoked",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "ffc31a070cf4ffe4c1ae2021f85947d228dc35944ea6d8951b13013f2dee7f97",
+        "anchor_sha256": "5b8f616a2589df13687145bd68acc5c3a37c167ebf57f953ab664b4e640c9a27",
+        "operation_states": {
+          "revoked": 3
+        },
+        "nonce_states": {
+          "reserved": 1
+        },
+        "history_events": 11,
+        "audit_commits": 11,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C10_repeat_revoke",
+      "expected": "unchanged",
+      "observed": "unchanged",
+      "evidence": {
+        "database_sha256": "50d98ad1f37ce4525fb75dbe28982b77906124d3d0b9307dc3bfc35854803aeb",
+        "anchor_sha256": "1924480f62fecf0dd9a3da0bc573ca84f2185e76d80a30d2ef70461abe44cfeb",
+        "operation_states": {
+          "revoked": 3
+        },
+        "nonce_states": {
+          "reserved": 1
+        },
+        "history_events": 11,
+        "audit_commits": 11,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C11_cycle_tamper",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "f5b5885fed7a6a422f3117d6693b655d4f72509ef751aaf375864448fb42cf17",
+        "anchor_sha256": "7ee26b776cc08b0870a8f5dc4ce288164e8ac11c205520e2970292702fdbb867",
+        "operation_states": {
+          "sealed": 2
+        },
+        "nonce_states": {},
+        "history_events": 6,
+        "audit_commits": 7,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C12_anchor_rollback",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "45f5c55061e3ea6a2f95937e5e49ff48f1066f6e1c0713cb7c4e143e634c9b4b",
+        "anchor_sha256": "51c10887b78fd7285eb8f8529345942b45bf88ec397a165badef8013fc2e8bf0",
+        "operation_states": {
+          "sealed": 2
+        },
+        "nonce_states": {
+          "reserved": 1
+        },
+        "history_events": 6,
+        "audit_commits": 8,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C13_database_rollback",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "170882e20b2d944c0af3efb0ec366295b44984c2ed1defc3f1775383247cafe5",
+        "anchor_sha256": "707cdcf2d94196d279a7ebcdbbfb2d4897d8a00fc22613b04b30ee630e93d174",
+        "operation_states": {
+          "sealed": 2
+        },
+        "nonce_states": {},
+        "history_events": 6,
+        "audit_commits": 7,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C18_corrupt_anchor",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "f78a2d3aa220e0a03b3a75e1f70746bc4c061cfc60cd83f1e0e4ab894d6f0a94",
+        "anchor_sha256": "f4cb66d47a779991ef15d0555d59dcd010061b1c7f1cdbb4d80e1505779172f6",
+        "operation_states": {
+          "sealed": 2
+        },
+        "nonce_states": {},
+        "history_events": 6,
+        "audit_commits": 7,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C19_corrupt_database",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "f4cb66d47a779991ef15d0555d59dcd010061b1c7f1cdbb4d80e1505779172f6",
+        "anchor_sha256": "20c53b9ce4434d4061734a1c795b197ed796de6a271e143bd99317243cc43ee9",
+        "readable_without_repair": false,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C20_pending_read",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "1b341a6178064774ef41dabb914f9f48ed33910380d6334bd06c4951a241438b",
+        "anchor_sha256": "dc270bd92532493b8f21470f0734e5891039057e9ac6fa9fce810175cc489c30",
+        "operation_states": {
+          "revoked": 2
+        },
+        "nonce_states": {},
+        "history_events": 8,
+        "audit_commits": 8,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C21_before_commit_crash",
+      "expected": "rolled_back",
+      "observed": "rolled_back",
+      "evidence": {
+        "database_sha256": "3d2817ddbd55f565e8af0cbaa4d2f86cc66263a87f9548528db3fff953d9c9f2",
+        "anchor_sha256": "38a100fad2ef33d52aa340a5b5134d7c6324fa4dce7cf700b8cf7e31e120107a",
+        "operation_states": {
+          "sealed": 2
+        },
+        "nonce_states": {},
+        "history_events": 6,
+        "audit_commits": 7,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C22_commit_anchor_gap",
+      "expected": "retained",
+      "observed": "retained",
+      "evidence": {
+        "database_sha256": "6e833f027cd9fed5f659d514484b3d10aafc961dc1028897a62e1eeb2b2bd6e2",
+        "anchor_sha256": "cb3e085cc64e1c062e4b7da99d3eda008db3127c1625b05f926a23150f5d0427",
+        "operation_states": {
+          "revoked": 2
+        },
+        "nonce_states": {},
+        "history_events": 8,
+        "audit_commits": 8,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C23_after_anchor_crash",
+      "expected": "retained",
+      "observed": "retained",
+      "evidence": {
+        "database_sha256": "21977bff1c56c8f843e7231d87e3332f33f994a1d124985ce2b0da4c52dcf5d3",
+        "anchor_sha256": "bf8329869f0630aee3fb12472b30d7c24295b22d0a0049852301099daf29372f",
+        "operation_states": {
+          "revoked": 2
+        },
+        "nonce_states": {},
+        "history_events": 8,
+        "audit_commits": 8,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C24_nonce_commit_gap",
+      "expected": "burned",
+      "observed": "burned",
+      "evidence": {
+        "database_sha256": "510f68bbebb3dc4783dec52f0d6f6e5b517addee5f27f3ddaa20f2049f908dcc",
+        "anchor_sha256": "ac3d018fcc9b9007432c4c3395ff144622b1ed08fadbc2b72573625496ff0e15",
+        "operation_states": {
+          "sealed": 2
+        },
+        "nonce_states": {
+          "reserved": 1
+        },
+        "history_events": 6,
+        "audit_commits": 8,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C25_restore_revoke_race",
+      "expected": "blocked",
+      "observed": "blocked",
+      "evidence": {
+        "database_sha256": "222858a228820f5be03a0e53c89fd2925acd430a0662808606bcd1ee02d9ce19",
+        "anchor_sha256": "9a43005fe5da7c3062aa4809e5f194e367fa4983e5aac57a49e0c1fed72323b3",
+        "operation_states": {
+          "revoked": 3
+        },
+        "nonce_states": {},
+        "history_events": 12,
+        "audit_commits": 11,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C26_forked_database_race",
+      "expected": "single_writer",
+      "observed": "single_writer",
+      "evidence": {
+        "database_sha256": "062b44ad93f771e0e5908e075bd9cec960de60404a396ecf03fd7329f6131750",
+        "anchor_sha256": "3a5cc71440598b0641e054463760d1fe06be12703004342d716abd6d25207791",
+        "operation_states": {
+          "sealed": 2
+        },
+        "nonce_states": {},
+        "history_events": 6,
+        "audit_commits": 7,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C27_depth_bound",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "4b9c59c6c5a4b1090c8a3fb6a46be97b4cec978283fc215fee2a9e365ac20155",
+        "anchor_sha256": "2631af4770af41498bb3335e8dabfddd3f0fd971ed4c8e2ae02131b552186310",
+        "operation_states": {
+          "sealed": 32
+        },
+        "nonce_states": {},
+        "history_events": 96,
+        "audit_commits": 97,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C28_count_bound",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "a5c5df2652ce5034ebadbfda06940d0cc46a8c46e942486e2a5eb34705eac663",
+        "anchor_sha256": "6f21c4ee11a80a318a3366608cd72bc4eb41612c21ed1957cd6eee64ae627925",
+        "operation_states": {
+          "copying": 510,
+          "sealed": 2
+        },
+        "nonce_states": {},
+        "history_events": 516,
+        "audit_commits": 8,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C29_hot_journal_read",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "1d4465cc51cc0901597023df2d9c11c0eab0a40ef65dbe260899ec8a988d23e0",
+        "anchor_sha256": "e8bb66082160b70880be82d61558361aa11f4ba3e3519256194f80dd47d911dd",
+        "readable_without_repair": false,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C30_torn_anchor",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "f78ea419a4cd3e817a558e66f98ff8264ffd168194332e392cabbe37786b96dd",
+        "anchor_sha256": "c1fb63263c04fdc581c8a183ea205712311fb9e394902ba6a7baccf680a63ade",
+        "operation_states": {
+          "sealed": 2
+        },
+        "nonce_states": {},
+        "history_events": 6,
+        "audit_commits": 7,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C31_missing_anchor",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "da1944abfbe838a37392450523110eaa379b3f338f3ee3893da6a7cc41058942",
+        "anchor_sha256": null,
+        "operation_states": {
+          "sealed": 2
+        },
+        "nonce_states": {},
+        "history_events": 6,
+        "audit_commits": 7,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C32_colocated_anchor",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": null,
+        "anchor_sha256": null,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C14_exact_backup_nonce",
+      "expected": "preserved",
+      "observed": "preserved",
+      "evidence": {
+        "database_sha256": "021d9359aed29a9000d2f30a5c9fa6e241dd52c4e19d956d02b335329f457111",
+        "anchor_sha256": "0bb47c85caeefc4edf16f3e14a12f86448bc101e5768565b9785b2b4996b1544",
+        "operation_states": {
+          "sealed": 1
+        },
+        "nonce_states": {
+          "consumed": 1
+        },
+        "history_events": 3,
+        "audit_commits": 6,
+        "readable_without_repair": true,
+        "restore_published": true,
+        "restored_nonce_states": {
+          "consumed": 1
+        }
+      }
+    },
+    {
+      "id": "C15_stale_backup",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "d11a7aeabb025ba2daed78c44c68db22d489f98ff3a8de916323229864679933",
+        "anchor_sha256": "03d5dfcd3b9fb471e29a43ceed671b5ce408de3ab585019ec2a3146576e40407",
+        "operation_states": {
+          "sealed": 1
+        },
+        "nonce_states": {
+          "consumed": 1
+        },
+        "history_events": 3,
+        "audit_commits": 6,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C16_foreign_journal",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "d13d2b9ee2da0b82a909cc49af2a9ba46724c93c997809ac57cef69863716629",
+        "anchor_sha256": "93a419c3b10ecf7291ef0c3fa815e5b949489e575cd5c8fdf1dc35d06c8b3fb1",
+        "operation_states": {
+          "sealed": 1
+        },
+        "nonce_states": {
+          "consumed": 1
+        },
+        "history_events": 3,
+        "audit_commits": 6,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    },
+    {
+      "id": "C17_wrong_backup_hash",
+      "expected": "rejected",
+      "observed": "rejected",
+      "evidence": {
+        "database_sha256": "ac0cbc9df82b8206f3e9232bb53ef7e97e75d902fdfe73b57d043ab7d2dbb570",
+        "anchor_sha256": "6379d7923ca7eb5692174329bf0bcdd9ff93d213705f7f45363a77d156bef589",
+        "operation_states": {
+          "sealed": 1
+        },
+        "nonce_states": {
+          "consumed": 1
+        },
+        "history_events": 3,
+        "audit_commits": 6,
+        "readable_without_repair": true,
+        "restore_published": false
+      }
+    }
+  ],
+  "backup_packet": {
+    "C14_exact_backup_nonce": {
+      "journal_id": "fb9239be056c9167f330fc06e56bac1b",
+      "latest": {
+        "anchor_in_backup": false,
+        "backup_sha256": "0d415300b4f577c92baaa8c3a762d79b6d2bc19c142c40fc4cdc92dca7911adc",
+        "fence": {
+          "head": "967397bc8ceedb777fb5109d85082f029386202623be8e3ca6d3a399e785ab61",
+          "journal_id": "fb9239be056c9167f330fc06e56bac1b",
+          "previous": "d7a09181f98cdaddcfae300ebdeafa6984917c384189baf3d2428218bd6290e5",
+          "seq": 5
+        },
+        "production_activation": false
+      },
+      "nonce": "36856c6337717502d63b0f59337e6223",
+      "older": {
+        "anchor_in_backup": false,
+        "backup_sha256": "f61183467cf7b822d60ffcc43c851af3d53bf907a23896c98bc81be3168bda56",
+        "fence": {
+          "head": "ea5030f93880493400e9453a1f86bbbf598b06d83689b22fd75f3f5a24912bba",
+          "journal_id": "fb9239be056c9167f330fc06e56bac1b",
+          "previous": "bfd119eb6fb384499a3c9be656895e2dcd3267c759284c198913de3f3c5f5875",
+          "seq": 3
+        },
+        "production_activation": false
+      },
+      "operation": "e892b39c3ff6f17e9eef336386c9b0bd"
+    },
+    "C15_stale_backup": {
+      "journal_id": "6360b9f0958b4518e371dfef40c9e8b4",
+      "latest": {
+        "anchor_in_backup": false,
+        "backup_sha256": "fec1e43f0090d06400dbec094112c57af865200778432f4b2e3aeec3ca12ba49",
+        "fence": {
+          "head": "0c183c8e57922766d94a2050630317ec9160750084a79926ad4205861aa1b301",
+          "journal_id": "6360b9f0958b4518e371dfef40c9e8b4",
+          "previous": "031d4f02a7a2744dc8ff770fe367c0b5eaa53260cdb53ba7af2c8b6cc64c5325",
+          "seq": 5
+        },
+        "production_activation": false
+      },
+      "nonce": "a3743982a5fdb141c4280ac7e290d81e",
+      "older": {
+        "anchor_in_backup": false,
+        "backup_sha256": "944b085c073b26ba267f9a9ad9c74acb3a1bd78f194453142067506d9d0d8f48",
+        "fence": {
+          "head": "a780dd65b48ef1694a34e6d920981cd24134fabe923c32d2d16c5d77214cec94",
+          "journal_id": "6360b9f0958b4518e371dfef40c9e8b4",
+          "previous": "fc3bf8b0f79185395cfa03a8f38404a08722ef5f92640fa804bcf4434aee5fc0",
+          "seq": 3
+        },
+        "production_activation": false
+      },
+      "operation": "45a5a4ff7a74999d06f9fc574f3f0eca"
+    },
+    "C16_foreign_journal": {
+      "journal_id": "44a8e6dc2996c62360b6f774c87f43ef",
+      "latest": {
+        "anchor_in_backup": false,
+        "backup_sha256": "7937c073c8a30a8e2b768feb124e9235c01ecc5f91b71e40cbc85c53caea4c93",
+        "fence": {
+          "head": "ab3febc3c3a6dec8f95ba9a2d7e229d95a6e274b19cd479f8255ffd2726abae0",
+          "journal_id": "44a8e6dc2996c62360b6f774c87f43ef",
+          "previous": "6ca4eca80108b945e8e3aecd503a389c3084a3925e235faf91281155b17c3358",
+          "seq": 5
+        },
+        "production_activation": false
+      },
+      "nonce": "2f7471469221fdfb6f911c130fe1d3d5",
+      "older": {
+        "anchor_in_backup": false,
+        "backup_sha256": "ec7bd7e86a7a91cdc4eb16f4fd1c34c1e6bad8f654858809f3d7e63d207fd5a8",
+        "fence": {
+          "head": "293ba47afd1b7db19c58a7825d9699274ea04e8df26e4221fa4f312faf6bd0bc",
+          "journal_id": "44a8e6dc2996c62360b6f774c87f43ef",
+          "previous": "048cfe1fa9249e03f30e5f1e374b621c011b5105e100fa7535ff7056476ee48d",
+          "seq": 3
+        },
+        "production_activation": false
+      },
+      "operation": "ed6ae48851c7e8679d226650c1b2e664"
+    },
+    "C17_wrong_backup_hash": {
+      "journal_id": "13aa05395d683ff7a5ef396af8f4d422",
+      "latest": {
+        "anchor_in_backup": false,
+        "backup_sha256": "dccbecad4d0a7a991362ae046d426dc0e9dc175a696b9b294cfd5a855f387daf",
+        "fence": {
+          "head": "2c898a2798259313d66fb00f3592944ff0a0f18b7b70669523bb78c2697b9b7b",
+          "journal_id": "13aa05395d683ff7a5ef396af8f4d422",
+          "previous": "847762a80645efbf4781f0144d2b6ca44d5b5f3cbc3dc153dc63d32cfd0d4995",
+          "seq": 5
+        },
+        "production_activation": false
+      },
+      "nonce": "501ee1bc5b55b9bf5e317c4dafdd174f",
+      "older": {
+        "anchor_in_backup": false,
+        "backup_sha256": "9e94da3050d9e5791816a8d178095b5c4aebd3d5c5378e2688173d60793f0a92",
+        "fence": {
+          "head": "96383114a005f9f659dc043805e9f269f02c9cff1e326d3c7201cb2ce2bfd6c1",
+          "journal_id": "13aa05395d683ff7a5ef396af8f4d422",
+          "previous": "86b07b8bbb307eeefeee2f5aa49717712a32c76bb0ac37c5da98f1a645be6ac7",
+          "seq": 3
+        },
+        "production_activation": false
+      },
+      "operation": "5cbd18973ee523b9eb4ab241f5b732cc"
+    }
+  },
+  "fixture_proofs": [
+    {
+      "GGUF_header_only": true,
+      "artifacts": [
+        {
+          "bytes": 557,
+          "digest": "sha256:fc2af3eadcef322c7ee08bc7b7d3dda80c3613314ccee934f0557c5ee6123d6b"
+        },
+        {
+          "bytes": 261,
+          "digest": "sha256:c4f7986a5b0cb864cc6242af037223f7a6c334435775a9d9b67ac9bf64bd4cb5"
+        },
+        {
+          "bytes": 65561,
+          "digest": "sha256:22f448652c51a5de5bb0710e3188e8baa263674bb4aa6f73752127a7f5415b25"
+        },
+        {
+          "bytes": 69,
+          "digest": "sha256:ba9607ed2dccbb4cd282e5abd5655f3d128cd3adb1ad285e04a90d3e0d6e48ae"
+        }
+      ],
+      "bytes_hashed": 66448,
+      "content_identity_sha256": "6a6f3e8b7e55d7b7252aeb0fa67f6969746cab584028e26bb303aadb3ab69e84",
+      "elapsed_seconds": 0.00030975003028288484,
+      "executed_weights_qualified": false,
+      "kernel_readonly": true,
+      "manifest_digest": "sha256:fc2af3eadcef322c7ee08bc7b7d3dda80c3613314ccee934f0557c5ee6123d6b",
+      "mapped_bytes": 65561,
+      "mapped_model_digest": "sha256:22f448652c51a5de5bb0710e3188e8baa263674bb4aa6f73752127a7f5415b25",
+      "mapped_windows": 1,
+      "peak_rss_kib": 39272,
+      "production_activation": false,
+      "read_strategy": "windowed-pinned-v1",
+      "retained_blob_descriptors": 4,
+      "retained_descriptors_rechecked": true,
+      "schema": "readonly-artifact-proof-v3",
+      "stable_observation_window": true,
+      "tensor_layout_or_weights_qualified": false
+    },
+    {
+      "GGUF_header_only": true,
+      "artifacts": [
+        {
+          "bytes": 557,
+          "digest": "sha256:fc2af3eadcef322c7ee08bc7b7d3dda80c3613314ccee934f0557c5ee6123d6b"
+        },
+        {
+          "bytes": 261,
+          "digest": "sha256:c4f7986a5b0cb864cc6242af037223f7a6c334435775a9d9b67ac9bf64bd4cb5"
+        },
+        {
+          "bytes": 65561,
+          "digest": "sha256:22f448652c51a5de5bb0710e3188e8baa263674bb4aa6f73752127a7f5415b25"
+        },
+        {
+          "bytes": 69,
+          "digest": "sha256:ba9607ed2dccbb4cd282e5abd5655f3d128cd3adb1ad285e04a90d3e0d6e48ae"
+        }
+      ],
+      "bytes_hashed": 66448,
+      "content_identity_sha256": "6a6f3e8b7e55d7b7252aeb0fa67f6969746cab584028e26bb303aadb3ab69e84",
+      "elapsed_seconds": 0.00029925000853836536,
+      "executed_weights_qualified": false,
+      "kernel_readonly": true,
+      "manifest_digest": "sha256:fc2af3eadcef322c7ee08bc7b7d3dda80c3613314ccee934f0557c5ee6123d6b",
+      "mapped_bytes": 65561,
+      "mapped_model_digest": "sha256:22f448652c51a5de5bb0710e3188e8baa263674bb4aa6f73752127a7f5415b25",
+      "mapped_windows": 1,
+      "peak_rss_kib": 39080,
+      "production_activation": false,
+      "read_strategy": "windowed-pinned-v1",
+      "retained_blob_descriptors": 4,
+      "retained_descriptors_rechecked": true,
+      "schema": "readonly-artifact-proof-v3",
+      "stable_observation_window": true,
+      "tensor_layout_or_weights_qualified": false
+    }
+  ],
+  "independent_anchor_volume": true,
+  "backup_volume_readonly_for_restore": true,
+  "profile": {
+    "filesystem": "ext4",
+    "cpu": 2,
+    "memory_mib": 768,
+    "network": "none",
+    "process_environment_cleared": true,
+    "single_attempt": true
+  },
+  "private_inputs": false,
+  "provider_requests": 0,
+  "inference_calls": 0,
+  "real_keys_or_trust": false,
+  "production_activation": false,
+  "model_performance_retested": false
+}

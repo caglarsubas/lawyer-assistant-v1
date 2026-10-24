@@ -1,0 +1,55 @@
+{
+  "schema": "control-journal-evidence-v1",
+  "date": "2026-10-25",
+  "scope": "unregistered synthetic model-control metadata only",
+  "results": {
+    "native_cases": 32,
+    "expected_rejections": 20,
+    "crash_and_recovery_cases": 6,
+    "fresh_backup_cases": 4,
+    "metadata_only": true,
+    "retained_nonce_and_revocation_history": true,
+    "production_activation": false
+  },
+  "retained_report_sha256": "efd7abe4a404e295c16de515bc60d162aed798cf1e60b1b39693c379e8001750",
+  "policy_sha256": "03c34572e2d0486e262c1191c9cbdc8ee4b7149eb10b2fc0c1d3e08d5cedd2e8",
+  "deployment_contracts": {
+    "passed": 518,
+    "failed": 0,
+    "seconds": 25.682
+  },
+  "new_contracts": 18,
+  "prior_implementation_and_config_exact": 960,
+  "first_native_attempt_pass": true,
+  "frozen_inputs_unchanged": true,
+  "native_profile": {
+    "filesystem": "ext4",
+    "cpu": 2,
+    "memory_mib": 768,
+    "network": "none",
+    "process_environment_cleared": true,
+    "single_attempt": true
+  },
+  "native_test_containers_removed": 3,
+  "native_test_volumes_removed": 4,
+  "original_reader_hook_relay_and_CI_topology_workers_caps_coverage_unchanged": true,
+  "real_keys_used": false,
+  "private_case_inputs": false,
+  "provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_installation": false,
+  "production_activation": false,
+  "owner_review_completed": false,
+  "independent_trust_confirmed": false,
+  "native_model_performance_retested": false,
+  "privileged_joint_anchor_database_rollback_qualified": false,
+  "large_IO_added_to_CI": false,
+  "remaining": [
+    "Explicit guarded V2 controller integration with staged signed route and immutable execution hook",
+    "Independent real issuer-fingerprint and runtime-pin confirmation before activation",
+    "Long-lived retention/capacity and independent anchor operational policy",
+    "Installed/executed weights, completion/context/tokenizer/truncation, sustained actual native jobs",
+    "Cold-storage and host-bind profiles, historical HTTP 502 cause",
+    "Owner v3 review and legal/production acceptance"
+  ]
+}

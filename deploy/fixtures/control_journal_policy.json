@@ -1,0 +1,148 @@
+{
+  "schema": "control-journal-qualification-v1",
+  "cases": [
+    {
+      "id": "C01_separate_anchor",
+      "expected": "aligned"
+    },
+    {
+      "id": "C02_readonly_history",
+      "expected": "unchanged"
+    },
+    {
+      "id": "C03_atomic_descendant_revocation",
+      "expected": "revoked"
+    },
+    {
+      "id": "C04_branch_isolation",
+      "expected": "isolated"
+    },
+    {
+      "id": "C05_new_descendant",
+      "expected": "rejected"
+    },
+    {
+      "id": "C06_prepare_revoked",
+      "expected": "rejected"
+    },
+    {
+      "id": "C07_seal_revoked",
+      "expected": "rejected"
+    },
+    {
+      "id": "C08_reserve_revoked",
+      "expected": "rejected"
+    },
+    {
+      "id": "C09_consume_revoked",
+      "expected": "rejected"
+    },
+    {
+      "id": "C10_repeat_revoke",
+      "expected": "unchanged"
+    },
+    {
+      "id": "C11_cycle_tamper",
+      "expected": "rejected"
+    },
+    {
+      "id": "C12_anchor_rollback",
+      "expected": "rejected"
+    },
+    {
+      "id": "C13_database_rollback",
+      "expected": "rejected"
+    },
+    {
+      "id": "C14_exact_backup_nonce",
+      "expected": "preserved"
+    },
+    {
+      "id": "C15_stale_backup",
+      "expected": "rejected"
+    },
+    {
+      "id": "C16_foreign_journal",
+      "expected": "rejected"
+    },
+    {
+      "id": "C17_wrong_backup_hash",
+      "expected": "rejected"
+    },
+    {
+      "id": "C18_corrupt_anchor",
+      "expected": "rejected"
+    },
+    {
+      "id": "C19_corrupt_database",
+      "expected": "rejected"
+    },
+    {
+      "id": "C20_pending_read",
+      "expected": "rejected"
+    },
+    {
+      "id": "C21_before_commit_crash",
+      "expected": "rolled_back"
+    },
+    {
+      "id": "C22_commit_anchor_gap",
+      "expected": "retained"
+    },
+    {
+      "id": "C23_after_anchor_crash",
+      "expected": "retained"
+    },
+    {
+      "id": "C24_nonce_commit_gap",
+      "expected": "burned"
+    },
+    {
+      "id": "C25_restore_revoke_race",
+      "expected": "blocked"
+    },
+    {
+      "id": "C26_forked_database_race",
+      "expected": "single_writer"
+    },
+    {
+      "id": "C27_depth_bound",
+      "expected": "rejected"
+    },
+    {
+      "id": "C28_count_bound",
+      "expected": "rejected"
+    },
+    {
+      "id": "C29_hot_journal_read",
+      "expected": "rejected"
+    },
+    {
+      "id": "C30_torn_anchor",
+      "expected": "rejected"
+    },
+    {
+      "id": "C31_missing_anchor",
+      "expected": "rejected"
+    },
+    {
+      "id": "C32_colocated_anchor",
+      "expected": "rejected"
+    }
+  ],
+  "max_operations": 512,
+  "max_depth": 32,
+  "max_events": 8192,
+  "max_nonces": 8192,
+  "max_commits": 8192,
+  "lock_seconds": 2,
+  "crash_points": [
+    "before_commit",
+    "committed_unanchored",
+    "anchored"
+  ],
+  "attempts_per_native_case": 1,
+  "native_model_performance_retested": false,
+  "real_trust_confirmed": false,
+  "production_activation": false
+}

@@ -6714,3 +6714,63 @@ context/tokenizer/truncation behavior, sustained native/research jobs, cold stor
 historical HTTP 502 cause and legal/production acceptance remain open. See
 [procedure and boundaries](SEALED_VOLUME_HANDOFF.md) and
 [dated evidence](evidence/sealed-volume-handoff-2026-10-25.json).
+
+## Control-journal recovery and descendant revocation — 2026-10-25
+
+F00-06 remains **partial**. An unregistered V2 model-control journal now checks its
+exact logical state and bounded hash chain against a separately retained anchor.
+Every guarded read validates identity, history and checkpoint agreement. Mutations
+serialize against the anchor and use immediate SQLite transactions with FULL
+synchronization. Ordinary reads refuse an unanchored commit or stale database.
+The original V1 journal/default, sealed-volume transfer, signed relay and execution
+hook remain unchanged; no live provider or private matter is migrated.
+
+Explicit recovery can let SQLite roll back an interrupted uncommitted transaction
+or retain exactly one validated commit and advance its anchor. It never replays
+semantic changes or silently promotes orphans. Corrupt/missing/torn anchors,
+foreign journals, older databases and unexplained gaps reject. The separately
+retained anchor is an operational checkpoint, not a hardware monotonic counter;
+privileged rollback of both files remains outside qualification.
+
+Backups exclude the anchor and bind exact bytes and journal identity. An approved
+kernel-read-only latest backup can restore into a fresh location only when it
+matches the current anchor, preserving consumed/reserved nonces and revocations.
+Older/foreign/mis-hashed backups reject without changing the current journal or
+anchor. Multiple journal copies sharing an anchor cannot both advance. Model
+restores retain the earlier requirement for a fresh model generation.
+
+Restore creation, preparation, sealing and nonce use now check current ancestors
+within their transactions. Revocation updates the complete retained subtree
+atomically, including Copying, Prepared and Sealed descendants, preserving proofs,
+generations, exact content, events and nonce history. Other branches remain
+unchanged; repeated revocation is a no-op. Concurrent creation either fails or is
+included in the cascade. The existing signed receiver rejects revoked descendants
+and revocation after nonce reservation. Bounds are 32 ancestry nodes, 512 operations
+and 8,192 events/nonces/commits; full histories are never truncated to admit work.
+
+The first frozen native run passes **32/32 cases** on four new ext4 Docker volumes,
+with two CPUs/768 MiB, no network or runtime mounts and a cleared environment.
+Actual process exits cover pre-commit, committed-but-unanchored, anchored and nonce
+failure windows; a fault-only SQLite cache forces hot-journal recovery. Tests also
+cover exact/stale backups, forked writers, subtree isolation, tampering and bounds.
+The backup writer exits before a read-only restore reader starts. All three owned
+containers and four volumes are removed. Only invented control metadata and a
+65,561-byte zero-tensor fixture are used; model/load performance is not retested or
+newly qualified. The original 20-second verifier budget stays unchanged.
+
+All **518 deployment contracts** (18 new), full Python lint and retained-report
+replay pass. The first candidate, cases and native inputs remain exact; all 960
+prior implementation/configuration files, CI jobs/workers/deadlines/coverage,
+original hook/reader/relay, provider source and real staged trust remain unchanged.
+Originals, encrypted bytes, exact evidence versions and confidential private review
+history remain outside the campaign. Owner focused-analysis v3 review and real
+independent trust confirmation remain pending.
+
+Next integrate the guarded V2 controller and its explicitly bound external anchor
+with the staged signed HTTP route/immutable execution hook, using disposable
+identities and data first. Require independent real issuer/runtime-pin confirmation
+before activation. Long-lived retention/capacity, installed/executed weights, real
+completion/context/tokenizer/truncation, sustained native/research jobs, cold
+storage/host-bind profiles, historical HTTP 502 cause and legal/production
+acceptance remain open. See [procedure and boundary](CONTROL_JOURNAL_RECOVERY.md)
+and [dated evidence](evidence/control-journal-2026-10-25.json).
