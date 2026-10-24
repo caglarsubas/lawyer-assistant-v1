@@ -2354,3 +2354,41 @@ artifacts, full-size work, scoped relay/trust/restore and fresh native admission
 No installed/native/legal/production qualification is inferred. See
 [procedure](ISOLATED_MANIFEST_INTEGRITY.md) and
 [dated evidence](evidence/manifest-integrity-2026-10-24.json).
+
+## Isolated complete-server build and metadata HTTP qualification — 2026-10-24
+
+Verify all 1,513 pinned upstream files and preserve the original snapshot. Apply
+only the retained manifest patch as Go code. Keep `go.mod` and dependency versions
+exact. An initial failed dependency-acquisition receipt remains retained. A separate
+public-only writable lock/cache stage obtains 31 verified checksum additions;
+offline `go mod verify` and the complete production build then use read-only inputs
+and pinned Go 1.26.10/CGO. Build inputs, version label, image and executable are frozen.
+
+The first and only metadata campaign starts that complete binary with read-only
+synthetic fixtures and no private/runtime mounts, host network/ports, credentials,
+privileges or host devices. Nonroot CPU/memory/PID and time limits are inspected
+before startup. Cloud/pruning are disabled. Only bounded scratch and empty receipts
+are writable. Any newly created child-local startup key stays in disposable HOME;
+no existing issuer key is loaded, enrolled or used. Keep raw server logs private.
+
+All 26 fresh frozen HTTP cases pass first grading. Case calls are single-attempt;
+bounded startup probes are separate. Exact request/response hashes, actual server
+normalization, scoped metadata equivalence, empty model inventory, child executable
+hashes and unchanged fixture inventory are retained. SIGTERM exits zero with no
+forced kill. Remove only the stopped owned container. No generation, completion,
+real model, client document, install or live provider request occurs.
+
+The thirteenth contract rechecks the actual invented wire/report evidence. Original
+twelve methods/helpers and frozen inputs remain exact; all 426 deployment contracts
+and lint pass. Preserve nine CI jobs/workers/caps/coverage and five timing reserves.
+All eight services, originals, encrypted bytes, exact evidence, credentials, sessions,
+private history, prior edits, 919 retained files and staged issuer/public candidate
+remain exact. Provider repository and pending owner v3 review are unchanged.
+
+Qualification covers the complete disposable build and metadata HTTP subset only.
+Next qualify the read-only complete artifact-store boundary and full-size/concurrent
+verification work, then scoped relay/trust/restore and fresh native admission.
+Independent public-fingerprint/runtime-pin confirmation remains required; installed
+backend, completion behavior, executed weights and legal/production acceptance stay
+open. See [procedure](ISOLATED_SERVER_HTTP.md) and
+[dated evidence](evidence/server-http-2026-10-24.json).
