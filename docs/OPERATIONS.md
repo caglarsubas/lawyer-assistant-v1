@@ -2217,3 +2217,67 @@ a generated key, reuse exposed cases or reuse historical inference allowances.
 Reviewed corpus, semantic/legal quality and production activation remain open. See
 [staged route procedure](IMMUTABLE_PROVIDER_ROUTE.md) and
 [dated evidence](evidence/immutable-provider-route-2026-10-24.json).
+
+
+## Read-only backend identity and immutable-reference checks — 2026-10-24
+
+F00-06 remains **partial**. A fixed loopback collector observes the Ollama listener,
+process start/UID/command name and a bounded executable SHA-256 hash before and after
+metadata inspection. It never reads process arguments/environment, executes the
+binary, uses provider credentials or loads a signer. Missing or ambiguous process
+identity remains unmeasured. Disk executable identity and a reported HTTP version
+are distinct unsigned observations; neither attests loaded code or executed weights.
+
+The request inventory is limited to five GETs (`/api/version`, `/api/tags`, `/api/ps`)
+and two read-only POST `/api/show` lookups for the selected name and full manifest
+digest. There are at most seven requests, one direct loopback connection per request,
+strict bounded uncompressed JSON, four-second request deadlines and no proxies,
+redirects, retries, prompt bodies, generation, downloads or administrative routes.
+The model comes from the application's existing nonsecret setting; the private case
+is not an input. Raw model metadata, templates, local paths and process records stay
+in protected gitignored receipts. Public evidence exposes allowlisted states/hashes.
+
+Twelve fresh invented outcomes and ten original contracts pass first grading.
+Before live collection, source inspection identifies that a local metadata endpoint
+can delegate an explicit cloud reference. An added failing regression leads to
+rejection of cloud suffixes, URL references and embedded source modifiers before any
+connection. Original methods, candidate, cases, evaluator and first report stay
+retained and exact. Eleven final contracts and the unchanged complete report match
+read-only network-disabled Linux with public code and scratch only. All 392
+deployment contracts, 206 relevant backend cases and lint pass. All 341 earlier
+frozen files remain exact. CI jobs, workers, caps, coverage and five reserves stay.
+
+The single live collection observes Ollama **0.32.14** with stable process/binary
+identity, stable selected tag digest and stable loaded-model inventory. The named
+model-details lookup returns **200**; `sha256:<selected full manifest digest>` returns
+**404**. All five GETs return 200. The result is **lookup_rejected**, not native
+execution compatibility. This is evidence about that selected metadata lookup on
+this installation, not a generation test or a universal version-support claim.
+The missing lookup could involve reference/parser or model-store support; no cause
+is guessed, no model alias fallback is attempted and no further live trial occurs.
+
+Comparison rules were frozen before collection: exclude only `modified_at` from
+model-details comparison and `expires_at` from loaded-inventory comparison, retaining
+full raw wire hashes. Templates, parameters, model info and other differences are
+not normalized away. Process/tag/inventory drift, mismatches, explicit rejection
+and unmeasured errors remain separate. No observed result can create native
+admission, a signed identity, a runtime pin, public trust or legal approval.
+
+All eight application services remain healthy. Originals, encrypted bytes, exact
+evidence versions, credentials, sessions, configuration, 31 earlier edits and
+confidential review history stay exact after collection. Existing staged keys and
+the separate public candidate remain unchanged and independently unconfirmed. No
+inference, completion request, live route registration, provider/relay install,
+restart, binary/model-store/configuration change, analysis regeneration or review
+decision occurs. Owner focused-analysis v3 review stays pending. The provider
+repository remains untouched. Current staged execution/route/trust stay inactive.
+
+Next qualify the rejected reference in a separate isolated backend build, inspecting
+version/reference/parser and artifact-store requirements without changing the live
+backend or materializing aliases/manifests there. Independently confirm public trust
+and runtime pin; qualify read-only artifacts, full-size verification work, scoped
+relay/trust/restore and fresh bounded native admission before any inference trial.
+Executed weights, historical 502 cause, sustained five-job capacity, reviewed corpus,
+semantic/legal correctness and production rollout remain open. See
+[read-only inspection procedure](BACKEND_REFERENCE_INSPECTION.md) and
+[dated evidence](evidence/backend-reference-inspection-2026-10-24.json).
