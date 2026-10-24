@@ -1,0 +1,604 @@
+{
+  "schema": "pinned-profile-v1",
+  "profile": "candidate",
+  "single": {
+    "id": "single",
+    "proofs": [
+      {
+        "GGUF_header_only": true,
+        "artifacts": [
+          {
+            "bytes": 853,
+            "digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9"
+          },
+          {
+            "bytes": 409,
+            "digest": "sha256:0591f48cbef0d885786b8bf742d8703ffb22836c867159908899a714a6352d97"
+          },
+          {
+            "bytes": 8589934592,
+            "digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1"
+          },
+          {
+            "bytes": 45,
+            "digest": "sha256:77f8adff4b382bae1c90e6b8ab5fff88e035b25a03fbc46394dc22193f1794a5"
+          },
+          {
+            "bytes": 45,
+            "digest": "sha256:0153dbee949c7909fbb3b5b1130a81de2f573f06305737183707b8e423064e7a"
+          },
+          {
+            "bytes": 45,
+            "digest": "sha256:b056c3b3bf689da71120281e4d5b51d52289ff95f8993e81a78443ea7bec8dbc"
+          }
+        ],
+        "bytes_hashed": 8589935989,
+        "content_identity_sha256": "752b4bf2c764276d912489833e5e0854f66f453975878f43daa25d8862d9a97a",
+        "elapsed_seconds": 4.665067335998174,
+        "executed_weights_qualified": false,
+        "kernel_readonly": true,
+        "manifest_digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9",
+        "mapped_bytes": 8589934592,
+        "mapped_model_digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1",
+        "mapped_windows": 512,
+        "peak_rss_kib": 45700,
+        "production_activation": false,
+        "read_strategy": "windowed-pinned-v1",
+        "retained_blob_descriptors": 6,
+        "retained_descriptors_rechecked": true,
+        "schema": "readonly-artifact-proof-v3",
+        "stable_observation_window": true,
+        "tensor_layout_or_weights_qualified": false
+      },
+      {
+        "GGUF_header_only": true,
+        "artifacts": [
+          {
+            "bytes": 853,
+            "digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9"
+          },
+          {
+            "bytes": 409,
+            "digest": "sha256:0591f48cbef0d885786b8bf742d8703ffb22836c867159908899a714a6352d97"
+          },
+          {
+            "bytes": 8589934592,
+            "digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1"
+          },
+          {
+            "bytes": 45,
+            "digest": "sha256:77f8adff4b382bae1c90e6b8ab5fff88e035b25a03fbc46394dc22193f1794a5"
+          },
+          {
+            "bytes": 45,
+            "digest": "sha256:0153dbee949c7909fbb3b5b1130a81de2f573f06305737183707b8e423064e7a"
+          },
+          {
+            "bytes": 45,
+            "digest": "sha256:b056c3b3bf689da71120281e4d5b51d52289ff95f8993e81a78443ea7bec8dbc"
+          }
+        ],
+        "bytes_hashed": 8589935989,
+        "content_identity_sha256": "752b4bf2c764276d912489833e5e0854f66f453975878f43daa25d8862d9a97a",
+        "elapsed_seconds": 4.99784166799509,
+        "executed_weights_qualified": false,
+        "kernel_readonly": true,
+        "manifest_digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9",
+        "mapped_bytes": 8589934592,
+        "mapped_model_digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1",
+        "mapped_windows": 512,
+        "peak_rss_kib": 45704,
+        "production_activation": false,
+        "read_strategy": "windowed-pinned-v1",
+        "retained_blob_descriptors": 6,
+        "retained_descriptors_rechecked": true,
+        "schema": "readonly-artifact-proof-v3",
+        "stable_observation_window": true,
+        "tensor_layout_or_weights_qualified": false
+      }
+    ],
+    "elapsed_seconds": 10.117522586981067,
+    "error": null
+  },
+  "jobs": [
+    {
+      "id": 0,
+      "proofs": [
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 853,
+              "digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9"
+            },
+            {
+              "bytes": 409,
+              "digest": "sha256:0591f48cbef0d885786b8bf742d8703ffb22836c867159908899a714a6352d97"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:77f8adff4b382bae1c90e6b8ab5fff88e035b25a03fbc46394dc22193f1794a5"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:0153dbee949c7909fbb3b5b1130a81de2f573f06305737183707b8e423064e7a"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:b056c3b3bf689da71120281e4d5b51d52289ff95f8993e81a78443ea7bec8dbc"
+            }
+          ],
+          "bytes_hashed": 8589935989,
+          "content_identity_sha256": "752b4bf2c764276d912489833e5e0854f66f453975878f43daa25d8862d9a97a",
+          "elapsed_seconds": 18.957673383993097,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9",
+          "mapped_bytes": 8589934592,
+          "mapped_model_digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1",
+          "mapped_windows": 512,
+          "peak_rss_kib": 44972,
+          "production_activation": false,
+          "read_strategy": "windowed-pinned-v1",
+          "retained_blob_descriptors": 6,
+          "retained_descriptors_rechecked": true,
+          "schema": "readonly-artifact-proof-v3",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        },
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 853,
+              "digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9"
+            },
+            {
+              "bytes": 409,
+              "digest": "sha256:0591f48cbef0d885786b8bf742d8703ffb22836c867159908899a714a6352d97"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:77f8adff4b382bae1c90e6b8ab5fff88e035b25a03fbc46394dc22193f1794a5"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:0153dbee949c7909fbb3b5b1130a81de2f573f06305737183707b8e423064e7a"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:b056c3b3bf689da71120281e4d5b51d52289ff95f8993e81a78443ea7bec8dbc"
+            }
+          ],
+          "bytes_hashed": 8589935989,
+          "content_identity_sha256": "752b4bf2c764276d912489833e5e0854f66f453975878f43daa25d8862d9a97a",
+          "elapsed_seconds": 15.393275923008332,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9",
+          "mapped_bytes": 8589934592,
+          "mapped_model_digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1",
+          "mapped_windows": 512,
+          "peak_rss_kib": 45116,
+          "production_activation": false,
+          "read_strategy": "windowed-pinned-v1",
+          "retained_blob_descriptors": 6,
+          "retained_descriptors_rechecked": true,
+          "schema": "readonly-artifact-proof-v3",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        }
+      ],
+      "elapsed_seconds": 36.06797010000446,
+      "error": null
+    },
+    {
+      "id": 1,
+      "proofs": [
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 853,
+              "digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9"
+            },
+            {
+              "bytes": 409,
+              "digest": "sha256:0591f48cbef0d885786b8bf742d8703ffb22836c867159908899a714a6352d97"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:77f8adff4b382bae1c90e6b8ab5fff88e035b25a03fbc46394dc22193f1794a5"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:0153dbee949c7909fbb3b5b1130a81de2f573f06305737183707b8e423064e7a"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:b056c3b3bf689da71120281e4d5b51d52289ff95f8993e81a78443ea7bec8dbc"
+            }
+          ],
+          "bytes_hashed": 8589935989,
+          "content_identity_sha256": "752b4bf2c764276d912489833e5e0854f66f453975878f43daa25d8862d9a97a",
+          "elapsed_seconds": 18.95515984299709,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9",
+          "mapped_bytes": 8589934592,
+          "mapped_model_digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1",
+          "mapped_windows": 512,
+          "peak_rss_kib": 44784,
+          "production_activation": false,
+          "read_strategy": "windowed-pinned-v1",
+          "retained_blob_descriptors": 6,
+          "retained_descriptors_rechecked": true,
+          "schema": "readonly-artifact-proof-v3",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        },
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 853,
+              "digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9"
+            },
+            {
+              "bytes": 409,
+              "digest": "sha256:0591f48cbef0d885786b8bf742d8703ffb22836c867159908899a714a6352d97"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:77f8adff4b382bae1c90e6b8ab5fff88e035b25a03fbc46394dc22193f1794a5"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:0153dbee949c7909fbb3b5b1130a81de2f573f06305737183707b8e423064e7a"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:b056c3b3bf689da71120281e4d5b51d52289ff95f8993e81a78443ea7bec8dbc"
+            }
+          ],
+          "bytes_hashed": 8589935989,
+          "content_identity_sha256": "752b4bf2c764276d912489833e5e0854f66f453975878f43daa25d8862d9a97a",
+          "elapsed_seconds": 15.37602704798337,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9",
+          "mapped_bytes": 8589934592,
+          "mapped_model_digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1",
+          "mapped_windows": 512,
+          "peak_rss_kib": 45280,
+          "production_activation": false,
+          "read_strategy": "windowed-pinned-v1",
+          "retained_blob_descriptors": 6,
+          "retained_descriptors_rechecked": true,
+          "schema": "readonly-artifact-proof-v3",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        }
+      ],
+      "elapsed_seconds": 36.06590134999715,
+      "error": null
+    },
+    {
+      "id": 2,
+      "proofs": [
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 853,
+              "digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9"
+            },
+            {
+              "bytes": 409,
+              "digest": "sha256:0591f48cbef0d885786b8bf742d8703ffb22836c867159908899a714a6352d97"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:77f8adff4b382bae1c90e6b8ab5fff88e035b25a03fbc46394dc22193f1794a5"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:0153dbee949c7909fbb3b5b1130a81de2f573f06305737183707b8e423064e7a"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:b056c3b3bf689da71120281e4d5b51d52289ff95f8993e81a78443ea7bec8dbc"
+            }
+          ],
+          "bytes_hashed": 8589935989,
+          "content_identity_sha256": "752b4bf2c764276d912489833e5e0854f66f453975878f43daa25d8862d9a97a",
+          "elapsed_seconds": 18.954627758997958,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9",
+          "mapped_bytes": 8589934592,
+          "mapped_model_digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1",
+          "mapped_windows": 512,
+          "peak_rss_kib": 44988,
+          "production_activation": false,
+          "read_strategy": "windowed-pinned-v1",
+          "retained_blob_descriptors": 6,
+          "retained_descriptors_rechecked": true,
+          "schema": "readonly-artifact-proof-v3",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        },
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 853,
+              "digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9"
+            },
+            {
+              "bytes": 409,
+              "digest": "sha256:0591f48cbef0d885786b8bf742d8703ffb22836c867159908899a714a6352d97"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:77f8adff4b382bae1c90e6b8ab5fff88e035b25a03fbc46394dc22193f1794a5"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:0153dbee949c7909fbb3b5b1130a81de2f573f06305737183707b8e423064e7a"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:b056c3b3bf689da71120281e4d5b51d52289ff95f8993e81a78443ea7bec8dbc"
+            }
+          ],
+          "bytes_hashed": 8589935989,
+          "content_identity_sha256": "752b4bf2c764276d912489833e5e0854f66f453975878f43daa25d8862d9a97a",
+          "elapsed_seconds": 15.391218049015151,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9",
+          "mapped_bytes": 8589934592,
+          "mapped_model_digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1",
+          "mapped_windows": 512,
+          "peak_rss_kib": 45112,
+          "production_activation": false,
+          "read_strategy": "windowed-pinned-v1",
+          "retained_blob_descriptors": 6,
+          "retained_descriptors_rechecked": true,
+          "schema": "readonly-artifact-proof-v3",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        }
+      ],
+      "elapsed_seconds": 36.06547405800666,
+      "error": null
+    },
+    {
+      "id": 3,
+      "proofs": [
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 853,
+              "digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9"
+            },
+            {
+              "bytes": 409,
+              "digest": "sha256:0591f48cbef0d885786b8bf742d8703ffb22836c867159908899a714a6352d97"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:77f8adff4b382bae1c90e6b8ab5fff88e035b25a03fbc46394dc22193f1794a5"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:0153dbee949c7909fbb3b5b1130a81de2f573f06305737183707b8e423064e7a"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:b056c3b3bf689da71120281e4d5b51d52289ff95f8993e81a78443ea7bec8dbc"
+            }
+          ],
+          "bytes_hashed": 8589935989,
+          "content_identity_sha256": "752b4bf2c764276d912489833e5e0854f66f453975878f43daa25d8862d9a97a",
+          "elapsed_seconds": 18.95275471700006,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9",
+          "mapped_bytes": 8589934592,
+          "mapped_model_digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1",
+          "mapped_windows": 512,
+          "peak_rss_kib": 45048,
+          "production_activation": false,
+          "read_strategy": "windowed-pinned-v1",
+          "retained_blob_descriptors": 6,
+          "retained_descriptors_rechecked": true,
+          "schema": "readonly-artifact-proof-v3",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        },
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 853,
+              "digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9"
+            },
+            {
+              "bytes": 409,
+              "digest": "sha256:0591f48cbef0d885786b8bf742d8703ffb22836c867159908899a714a6352d97"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:77f8adff4b382bae1c90e6b8ab5fff88e035b25a03fbc46394dc22193f1794a5"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:0153dbee949c7909fbb3b5b1130a81de2f573f06305737183707b8e423064e7a"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:b056c3b3bf689da71120281e4d5b51d52289ff95f8993e81a78443ea7bec8dbc"
+            }
+          ],
+          "bytes_hashed": 8589935989,
+          "content_identity_sha256": "752b4bf2c764276d912489833e5e0854f66f453975878f43daa25d8862d9a97a",
+          "elapsed_seconds": 15.394033922988456,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9",
+          "mapped_bytes": 8589934592,
+          "mapped_model_digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1",
+          "mapped_windows": 512,
+          "peak_rss_kib": 44752,
+          "production_activation": false,
+          "read_strategy": "windowed-pinned-v1",
+          "retained_blob_descriptors": 6,
+          "retained_descriptors_rechecked": true,
+          "schema": "readonly-artifact-proof-v3",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        }
+      ],
+      "elapsed_seconds": 36.06519572500838,
+      "error": null
+    },
+    {
+      "id": 4,
+      "proofs": [
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 853,
+              "digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9"
+            },
+            {
+              "bytes": 409,
+              "digest": "sha256:0591f48cbef0d885786b8bf742d8703ffb22836c867159908899a714a6352d97"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:77f8adff4b382bae1c90e6b8ab5fff88e035b25a03fbc46394dc22193f1794a5"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:0153dbee949c7909fbb3b5b1130a81de2f573f06305737183707b8e423064e7a"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:b056c3b3bf689da71120281e4d5b51d52289ff95f8993e81a78443ea7bec8dbc"
+            }
+          ],
+          "bytes_hashed": 8589935989,
+          "content_identity_sha256": "752b4bf2c764276d912489833e5e0854f66f453975878f43daa25d8862d9a97a",
+          "elapsed_seconds": 18.947187592013506,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9",
+          "mapped_bytes": 8589934592,
+          "mapped_model_digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1",
+          "mapped_windows": 512,
+          "peak_rss_kib": 44592,
+          "production_activation": false,
+          "read_strategy": "windowed-pinned-v1",
+          "retained_blob_descriptors": 6,
+          "retained_descriptors_rechecked": true,
+          "schema": "readonly-artifact-proof-v3",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        },
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 853,
+              "digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9"
+            },
+            {
+              "bytes": 409,
+              "digest": "sha256:0591f48cbef0d885786b8bf742d8703ffb22836c867159908899a714a6352d97"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:77f8adff4b382bae1c90e6b8ab5fff88e035b25a03fbc46394dc22193f1794a5"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:0153dbee949c7909fbb3b5b1130a81de2f573f06305737183707b8e423064e7a"
+            },
+            {
+              "bytes": 45,
+              "digest": "sha256:b056c3b3bf689da71120281e4d5b51d52289ff95f8993e81a78443ea7bec8dbc"
+            }
+          ],
+          "bytes_hashed": 8589935989,
+          "content_identity_sha256": "752b4bf2c764276d912489833e5e0854f66f453975878f43daa25d8862d9a97a",
+          "elapsed_seconds": 15.393893381988164,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:9935e3db356cd81ef72f31720e3be1875d0030822d5554bebfcdc18f7a5ae1c9",
+          "mapped_bytes": 8589934592,
+          "mapped_model_digest": "sha256:5a3b12e14c2f71ae5da6e0410ba9f76316b6373817831fb19460adf055e1ede1",
+          "mapped_windows": 512,
+          "peak_rss_kib": 44984,
+          "production_activation": false,
+          "read_strategy": "windowed-pinned-v1",
+          "retained_blob_descriptors": 6,
+          "retained_descriptors_rechecked": true,
+          "schema": "readonly-artifact-proof-v3",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        }
+      ],
+      "elapsed_seconds": 36.06745955799124,
+      "error": null
+    }
+  ],
+  "wave_elapsed_seconds": 36.07560468398151,
+  "attempts": 1,
+  "children_reaped": true,
+  "cache_condition": "warm_creation_and_prior_read_no_eviction"
+}

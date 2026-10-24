@@ -6589,3 +6589,68 @@ completion/context/tokenizer/truncation behavior, installed/executed weights,
 sustained native load, historical 502 cause and legal/production acceptance remain
 open. See [boundary and procedure](READONLY_ARTIFACT_STORE.md) and
 [dated evidence](evidence/artifact-store-2026-10-24.json).
+
+## Guarded windowed verification with retained descriptors — 2026-10-24
+
+F00-06 remains **partial**. A new opt-in reader hashes the entire model through
+16 MiB read-only mapping windows. Metadata/text limits, exact SHA-256 identities,
+kernel read-only requirements, namespace/permission/link checks, byte/time budgets,
+single-attempt supervision and cancellation stay enforced. The default remains
+the original stream reader; no app/provider route or live store uses the candidate.
+
+The first frozen candidate passes 25 new native cases and its single job in 9.38
+seconds. Five concurrent jobs reject with `changed`, so only two observations
+produce proof; their timings do not count as successful verification. A fresh
+2 GiB observational diagnostic localizes the rejection to final manifest namespace
+identity: the guest inode differs after its earlier descriptor has closed, while
+other recorded identity fields match. The negative result stays retained. No
+identity field is dropped, rounded or treated as optional.
+
+The next candidate keeps validated blob descriptors alive through final checks,
+hashing through temporary duplicates. It retains at most eighteen blob descriptors
+plus four directories, checks both each live descriptor and namespace entry, and
+closes them on success/failure. V3 proof binds retained/rechecked descriptor count;
+v1/v2 proof cannot satisfy a pinned request. Actual path replacement still rejects.
+Thirteen fresh native cases pass, including real descriptor exhaustion. All twelve
+8 GiB observations complete on the second corpus, but concurrent jobs reach 36.07
+seconds (single 10.12s). That host-bind profile still misses the frozen 20-second
+target and remains unqualified for it.
+
+A third, separately frozen storage profile uses identical verifier code and limits
+on a new read-only VM-local ext4 volume, with fresh seed 20261028. The original
+reader is compared on that same snapshot. An owned preparer exits and is removed
+before the read-only campaign; no app/provider volume is mounted. Pre-start
+capability/path normalization rejections and a 768 MiB preparer OOM are retained.
+No benchmark ran in those failed preparations. Bounded fsync/eviction every 64 MiB
+and a rename instead of a model copy fix preparation without extra memory. Exact
+Docker path aliases and a bidirectional nonsecret nonce verify the receipts bind.
+
+The first actual VM-volume campaign passes the unchanged target: **8.30 seconds
+for one pre/post job and at most 18.94 seconds for five concurrent jobs**, with an
+18.95-second wave and 45,412 KiB peak worker RSS. All twelve observations verify
+103,079,231,760 artifact bytes and 6,144 model windows. The paired original reader
+takes 8.88 seconds singly and reaches 24.07 seconds concurrently. Both use two CPUs,
+768 MiB, 60-second shared job limits, a 75-second wave limit and 128 MiB worker RSS
+target. This qualifies one synthetic **warm VM-local volume profile**, not host
+binds, cold storage, a universal latency SLA or actual research/inference capacity.
+There are no measured-profile reruns, post-result threshold changes, digest reuse
+or skipped bytes. All earlier misses remain visible.
+
+Fourteen initial mapped contracts (after a retained host-alignment test correction),
+eight descriptor-retention contracts and seven report replay/tamper contracts pass.
+All **472 deployment contracts** and full Python lint pass. Large I/O stays local;
+CI receives only small tests and retained-report validation. All 931 other prior
+implementation/configuration files stay exact; only the shared unregistered reader
+changes intentionally. CI jobs/workers/caps/coverage, original execution hook,
+provider source, routes, keys and trust staging remain unchanged. Owned test
+containers/volumes are removed. Private originals, evidence versions and review
+history never enter these campaigns; owner focused-analysis v3 review stays pending.
+
+Next qualify sealed-volume import/restore and the signed relay handoff against
+this explicit storage profile, with independent issuer fingerprint/runtime-pin
+confirmation before activation. Keep the live provider, current staged trust,
+originals and private review unchanged. Host-bind/cold-storage performance, sustained
+native/research load, completion/context/tokenizer behavior, installed/executed
+weights, historical 502 cause, hostile-host isolation and legal/production acceptance
+remain open. See [candidate procedure](WINDOWED_STORE_CANDIDATE.md) and
+[dated evidence](evidence/windowed-verification-2026-10-24.json).
