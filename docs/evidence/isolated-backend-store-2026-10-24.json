@@ -1,0 +1,438 @@
+{
+  "CI_jobs_workers_caps_coverage_changed": false,
+  "additional_contract": "reject_retained_actual_candidate_failure",
+  "additional_fixture_sha256": "3a55e2e24a9a3aaf371dd088bad3b508ae4307f85c4372e56ea3ff4521aca5b2",
+  "candidate_integrity": "failed_Q2412_tampered_regular_manifest_blob_returns_mismatched_digest",
+  "case_catalog_sha256": "2c48a2208c6f6d2354c571643a78da91c4367729130258b34864656a96ec4922",
+  "compiler": {
+    "id": "sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af",
+    "module_scope": "stdlib-only unmodified packages; no full server build",
+    "tag": "golang:1.26.10-bookworm"
+  },
+  "corrected_container_launches": {
+    "first_actual_grading_per_profile": 1,
+    "only_change": "exec_on_disposable_tmpfs",
+    "profiles": 2,
+    "source_and_expected_outcomes_unchanged": true
+  },
+  "current_colon_wire_reference": "ordinary_model_tag_not_immutable",
+  "current_contracts": {
+    "failed": 0,
+    "passed": 10
+  },
+  "date": "2026-10-24",
+  "deployment_contract_seconds": 18.322,
+  "deployment_contracts": {
+    "failed": 0,
+    "passed": 402
+  },
+  "earlier_tracked_edits_exact": 31,
+  "executed_weights_qualified": false,
+  "first_container_launches": {
+    "cases_run": 0,
+    "profiles": 2,
+    "reason": "non_executable_temporary_mount",
+    "retained_log_sha256": {
+      "candidate": "a9a7d082f284d3a1bb5b2562dcd5ea0561242da70d4fe262f14adcd48f6296dc",
+      "release": "c328e16338c34ac77fac912c1327f4ac5f267c0aa12bf569feb44f1b56816888"
+    }
+  },
+  "five_job_capacity_qualified": false,
+  "healthy_application_services": 8,
+  "historical_502_cause_qualified": false,
+  "independent_fingerprint_confirmation_completed": false,
+  "installed_backend_source_qualified": false,
+  "isolation": {
+    "all_scratch_lookup_inventories_unchanged": true,
+    "cpus": 2,
+    "memory_gib": 2,
+    "model_sentinel": "invented bytes, not a model",
+    "network": "none",
+    "nonroot": true,
+    "operator_timeout_seconds": 150,
+    "pids": 128,
+    "private_or_runtime_mounts": false,
+    "published_ports": false,
+    "scratch": "disposable_only",
+    "source": "read_only",
+    "test_timeout_seconds": 20
+  },
+  "lint": "passed",
+  "live_backend_metadata_requests": 0,
+  "native_compatibility": "not_tested",
+  "native_inference_calls": 0,
+  "new_runtime_routes": 0,
+  "next": "Separate isolated source integrity fix and explicit full-digest wire contract with fresh frozen adversarial tests; complete server/HTTP and read-only store qualification, full-size budgets, independent fingerprint/runtime pin, relay/trust/restore and fresh native admission remain required.",
+  "nonconfigured_python_environment_failure_retained": {
+    "reason": "missing development dependencies",
+    "retuned_cases": false,
+    "test_errors": 24
+  },
+  "original_contract_methods_unchanged": true,
+  "original_contracts": {
+    "failed": 0,
+    "passed": 9
+  },
+  "originals_evidence_encrypted_bytes_credentials_sessions_config_review_history_exact": true,
+  "owner_review_completed": false,
+  "pre_grade_freeze": {
+    "deploy/fixtures/backend_store_cases.json": "2c48a2208c6f6d2354c571643a78da91c4367729130258b34864656a96ec4922",
+    "deploy/fixtures/backend_store_qualifier.go": "76057744d52250822deb062d40308890999922b35b2212d26dad80cd97ac2f6e",
+    "deploy/fixtures/backend_store_sources.json": "14303acbd27213ec55a283ab5c5aee80706da942d6af72006ec59ec97c4b674b",
+    "deploy/test_backend_store.py": "fae4e149a388cc539ac0e1bc75d9a1808039a835d472ce3e8ed0543dcf753276",
+    "scripts/qualify_backend_store.py": "efd5fc4b578637c2980934a090b05aa8480f4c7a9cb97bea884ed701f9f66a20"
+  },
+  "pre_grade_freeze_sha256": "d11644e8b1d4ea639308d42097a9abad488094c0e5ca001b6047cd16c22edd12",
+  "production_activation": false,
+  "production_installation": false,
+  "profiles": {
+    "candidate": {
+      "build_receipt": {
+        "commit": "675150d6ad2747df1e218ef59de9194bc4a7e538",
+        "generated_sha256": {
+          "LICENSE": "5934ed2ce0d15154bcdb9c85203210abac0da4314af34081e36df4599f90b226",
+          "envconfig/config.go": "0b0ea669b31cfe2b54313427257326a2b7a909bbc7bf8a671035efc446fb1895",
+          "go.mod": "025e64c6f54a7629dfa33fb7512f82f776d767dcb60468aa8bf7501998306aba",
+          "manifest/layer.go": "fedf9d4f134cd0c0c02c323c6702fe95318500f0f1e24179ac85142c3072559b",
+          "manifest/manifest.go": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec",
+          "manifest/paths.go": "ce16336074693e19fa8c75147c67b155b9be03542a5dd77500e8be42dba8ff04",
+          "qualifier/cases.json": "2c48a2208c6f6d2354c571643a78da91c4367729130258b34864656a96ec4922",
+          "qualifier/qualifier_test.go": "76057744d52250822deb062d40308890999922b35b2212d26dad80cd97ac2f6e",
+          "types/model/capability.go": "1e2a4aa2bd38e35707ce7e0354662391123a80046a10bbc1fac9a148927d19a6",
+          "types/model/config.go": "bdfe2d5564cc06d67b3eb421188ec2a2debcd43b4611a97541c4c8a4106330ec",
+          "types/model/generation.go": "2e71ffa86336871e7926dc96bdc2658eca848bf90d64a5496a295a4946de408d",
+          "types/model/name.go": "5a57960ce67a46383dc8a0e96df648be7e137ffa6510c39982e74dea793a0cd7",
+          "types/model/thinking.go": "7c54a7758d3a3e900a903228337e79f7896c0ae96444223e00f7e0d7f4fd2a5e"
+        },
+        "model_files_copied": false,
+        "module_scope": "unmodified envconfig, types/model and manifest package source; generated offline test module; not a server build or installed binary attestation",
+        "native_inference_calls": 0,
+        "profile": "candidate",
+        "schema": "isolated-backend-build-v1",
+        "server_built": false,
+        "source_sha256": {
+          "LICENSE": "5934ed2ce0d15154bcdb9c85203210abac0da4314af34081e36df4599f90b226",
+          "envconfig/config.go": "0b0ea669b31cfe2b54313427257326a2b7a909bbc7bf8a671035efc446fb1895",
+          "go.mod": "32c3cd993ece27ec115d0eb1c932dfc58831ad1022588d712d426f103720e027",
+          "manifest/layer.go": "fedf9d4f134cd0c0c02c323c6702fe95318500f0f1e24179ac85142c3072559b",
+          "manifest/manifest.go": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec",
+          "manifest/paths.go": "ce16336074693e19fa8c75147c67b155b9be03542a5dd77500e8be42dba8ff04",
+          "server/images.go": "68dcf67c7d5b4addd80248627d80b950d0807bb252510fd0fecaf5cdb5415197",
+          "server/routes.go": "28034a9f11df5d5c3ce8d3d4786d62d2efd78feb5fc3c7d4a7a5231ec17f12b3",
+          "types/model/capability.go": "1e2a4aa2bd38e35707ce7e0354662391123a80046a10bbc1fac9a148927d19a6",
+          "types/model/config.go": "bdfe2d5564cc06d67b3eb421188ec2a2debcd43b4611a97541c4c8a4106330ec",
+          "types/model/generation.go": "2e71ffa86336871e7926dc96bdc2658eca848bf90d64a5496a295a4946de408d",
+          "types/model/name.go": "5a57960ce67a46383dc8a0e96df648be7e137ffa6510c39982e74dea793a0cd7",
+          "types/model/thinking.go": "7c54a7758d3a3e900a903228337e79f7896c0ae96444223e00f7e0d7f4fd2a5e"
+        },
+        "upstream_go_requirement": "1.26.10"
+      },
+      "cases": [
+        {
+          "actual": "valid",
+          "expected": "valid",
+          "id": "Q2401",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "ordinary_tag",
+          "expected": "ordinary_tag",
+          "id": "Q2402",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "valid",
+          "expected": "valid",
+          "id": "Q2403",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "missing",
+          "expected": "missing",
+          "id": "Q2404",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "matched",
+          "expected": "matched",
+          "id": "Q2405",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "missing",
+          "expected": "missing",
+          "id": "Q2406",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "missing",
+          "expected": "missing",
+          "id": "Q2407",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "matched",
+          "expected": "matched",
+          "id": "Q2408",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "matched",
+          "expected": "matched",
+          "id": "Q2409",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "matched",
+          "expected": "matched",
+          "id": "Q2410",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "rejected",
+          "expected": "rejected",
+          "id": "Q2411",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "mismatched",
+          "expected": "rejected",
+          "id": "Q2412",
+          "matches_expected": false,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "mismatched",
+          "expected": "mismatched",
+          "id": "Q2413",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "matched",
+          "expected": "matched",
+          "id": "Q2414",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        },
+        {
+          "actual": "rejected",
+          "expected": "rejected",
+          "id": "Q2415",
+          "matches_expected": true,
+          "profile": "candidate",
+          "store_unchanged": true
+        }
+      ],
+      "expected_results": 14,
+      "failed_results": 1,
+      "first_actual_grading_raw_sha256": "3a55e2e24a9a3aaf371dd088bad3b508ae4307f85c4372e56ea3ff4521aca5b2",
+      "qualification_reader_accepts_log": false
+    },
+    "release": {
+      "build_receipt": {
+        "commit": "d67ad83426633195089509347ffd4fe795120198",
+        "generated_sha256": {
+          "LICENSE": "5934ed2ce0d15154bcdb9c85203210abac0da4314af34081e36df4599f90b226",
+          "envconfig/config.go": "2263acbd4a6f93607594abe5632e5dbc1e17d69a804d55aa7245613bca05b2a7",
+          "go.mod": "025e64c6f54a7629dfa33fb7512f82f776d767dcb60468aa8bf7501998306aba",
+          "manifest/layer.go": "b2a4cc677bfe1795beb83607867a47e978069108b4743a3fe69247d3d4cafc80",
+          "manifest/manifest.go": "0950d0560180168ed850250dec991630321299396069b3b526b4d977020030b8",
+          "manifest/paths.go": "7a56ba9df6d1d40aeb5f1b0696fcbe3febdf24bc57d5eb93b3f1a56ba01d33c2",
+          "qualifier/cases.json": "2c48a2208c6f6d2354c571643a78da91c4367729130258b34864656a96ec4922",
+          "qualifier/qualifier_test.go": "76057744d52250822deb062d40308890999922b35b2212d26dad80cd97ac2f6e",
+          "types/model/capability.go": "572770b1fd0a27301879eb8d6a0911f3f30e1b6b71479391a11c8155788f2c1b",
+          "types/model/config.go": "bbba8a36a1833ed4d365a9c7abd16d9288ff57c8de72123b7f5b6a6dc041ac9e",
+          "types/model/name.go": "5a57960ce67a46383dc8a0e96df648be7e137ffa6510c39982e74dea793a0cd7"
+        },
+        "model_files_copied": false,
+        "module_scope": "unmodified envconfig, types/model and manifest package source; generated offline test module; not a server build or installed binary attestation",
+        "native_inference_calls": 0,
+        "profile": "release",
+        "schema": "isolated-backend-build-v1",
+        "server_built": false,
+        "source_sha256": {
+          "LICENSE": "5934ed2ce0d15154bcdb9c85203210abac0da4314af34081e36df4599f90b226",
+          "envconfig/config.go": "2263acbd4a6f93607594abe5632e5dbc1e17d69a804d55aa7245613bca05b2a7",
+          "go.mod": "1795c1c2c37b3f43ad43945396c33c610167ce2541281d6158ab3586c885a70b",
+          "manifest/layer.go": "b2a4cc677bfe1795beb83607867a47e978069108b4743a3fe69247d3d4cafc80",
+          "manifest/manifest.go": "0950d0560180168ed850250dec991630321299396069b3b526b4d977020030b8",
+          "manifest/paths.go": "7a56ba9df6d1d40aeb5f1b0696fcbe3febdf24bc57d5eb93b3f1a56ba01d33c2",
+          "server/images.go": "c64835bf9a495e18284cb71ec5b4ace5bf921e8baeabdadcaa8b98c356935609",
+          "server/routes.go": "fc6a8a980168973dd1aec86aafde7ab8bbc12f56aa2f71e04a7773dc95916c42",
+          "types/model/capability.go": "572770b1fd0a27301879eb8d6a0911f3f30e1b6b71479391a11c8155788f2c1b",
+          "types/model/config.go": "bbba8a36a1833ed4d365a9c7abd16d9288ff57c8de72123b7f5b6a6dc041ac9e",
+          "types/model/name.go": "5a57960ce67a46383dc8a0e96df648be7e137ffa6510c39982e74dea793a0cd7"
+        },
+        "upstream_go_requirement": "1.26.0"
+      },
+      "cases": [
+        {
+          "actual": "valid",
+          "expected": "valid",
+          "id": "Q2401",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "ordinary_tag",
+          "expected": "ordinary_tag",
+          "id": "Q2402",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "valid",
+          "expected": "valid",
+          "id": "Q2403",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "missing",
+          "expected": "missing",
+          "id": "Q2404",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "matched",
+          "expected": "matched",
+          "id": "Q2405",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "missing",
+          "expected": "missing",
+          "id": "Q2406",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "missing",
+          "expected": "missing",
+          "id": "Q2407",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "missing",
+          "expected": "missing",
+          "id": "Q2408",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "missing",
+          "expected": "missing",
+          "id": "Q2409",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "missing",
+          "expected": "missing",
+          "id": "Q2410",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "missing",
+          "expected": "missing",
+          "id": "Q2411",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "missing",
+          "expected": "missing",
+          "id": "Q2412",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "mismatched",
+          "expected": "mismatched",
+          "id": "Q2413",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "matched",
+          "expected": "matched",
+          "id": "Q2414",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        },
+        {
+          "actual": "rejected",
+          "expected": "rejected",
+          "id": "Q2415",
+          "matches_expected": true,
+          "profile": "release",
+          "store_unchanged": true
+        }
+      ],
+      "expected_results": 15,
+      "failed_results": 0,
+      "first_actual_grading_raw_sha256": "4e1aa706d86fbdf5655874bc6ff7186eb0ae544e8d2ff83294af05abfeb62738",
+      "qualification_reader_accepts_log": true
+    }
+  },
+  "provider_completion_POSTs": 0,
+  "provider_repository_changed": false,
+  "qualification": "negative_immutable_execution_qualification_from_isolated_upstream_packages",
+  "retained_sources": {
+    "all_exact": true,
+    "count": 906,
+    "inventory_sha256": "651536847964284a0e55ed4061419a9c6bbfc425433afd00143e6d7c2f5f2267"
+  },
+  "runtime_keys_loaded_for_signing": 0,
+  "safe_immutable_execution_qualified": false,
+  "schema": "isolated-backend-store-evidence-v1",
+  "signed_runtime_identity_qualified": false,
+  "source_lock_sha256": "14303acbd27213ec55a283ab5c5aee80706da942d6af72006ec59ec97c4b674b",
+  "source_matching_observed_version": "release tag string only; installed binary provenance unqualified",
+  "source_package_scope": "unmodified types/model, envconfig and manifest; generated stdlib-only test module; no full backend/server build",
+  "staged_materials_exact": true
+}

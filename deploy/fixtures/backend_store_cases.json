@@ -1,0 +1,127 @@
+{
+  "schema": "isolated-backend-cases-v1",
+  "invented_only": true,
+  "cases": [
+    {
+      "id": "Q2401",
+      "fixture": "named_parser",
+      "expected": {
+        "release": "valid",
+        "candidate": "valid"
+      }
+    },
+    {
+      "id": "Q2402",
+      "fixture": "colon_parser",
+      "expected": {
+        "release": "ordinary_tag",
+        "candidate": "ordinary_tag"
+      }
+    },
+    {
+      "id": "Q2403",
+      "fixture": "dash_parser",
+      "expected": {
+        "release": "valid",
+        "candidate": "valid"
+      }
+    },
+    {
+      "id": "Q2404",
+      "fixture": "empty_named",
+      "expected": {
+        "release": "missing",
+        "candidate": "missing"
+      }
+    },
+    {
+      "id": "Q2405",
+      "fixture": "legacy_named",
+      "expected": {
+        "release": "matched",
+        "candidate": "matched"
+      }
+    },
+    {
+      "id": "Q2406",
+      "fixture": "colon_blob",
+      "expected": {
+        "release": "missing",
+        "candidate": "missing"
+      }
+    },
+    {
+      "id": "Q2407",
+      "fixture": "dash_legacy_only",
+      "expected": {
+        "release": "missing",
+        "candidate": "missing"
+      }
+    },
+    {
+      "id": "Q2408",
+      "fixture": "dash_blob",
+      "expected": {
+        "release": "missing",
+        "candidate": "matched"
+      }
+    },
+    {
+      "id": "Q2409",
+      "fixture": "bare_blob",
+      "expected": {
+        "release": "missing",
+        "candidate": "matched"
+      }
+    },
+    {
+      "id": "Q2410",
+      "fixture": "short_blob",
+      "expected": {
+        "release": "missing",
+        "candidate": "matched"
+      }
+    },
+    {
+      "id": "Q2411",
+      "fixture": "ambiguous_prefix",
+      "expected": {
+        "release": "missing",
+        "candidate": "rejected"
+      }
+    },
+    {
+      "id": "Q2412",
+      "fixture": "tampered_blob",
+      "expected": {
+        "release": "missing",
+        "candidate": "rejected"
+      }
+    },
+    {
+      "id": "Q2413",
+      "fixture": "colon_alias",
+      "expected": {
+        "release": "mismatched",
+        "candidate": "mismatched"
+      }
+    },
+    {
+      "id": "Q2414",
+      "fixture": "missing_layer_named",
+      "expected": {
+        "release": "matched",
+        "candidate": "matched"
+      }
+    },
+    {
+      "id": "Q2415",
+      "fixture": "invalid_json_named",
+      "expected": {
+        "release": "rejected",
+        "candidate": "rejected"
+      }
+    }
+  ],
+  "scope": "parser/manifest lookup only; matched never implies layer verification or native execution"
+}

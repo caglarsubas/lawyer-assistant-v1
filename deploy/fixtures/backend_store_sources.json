@@ -1,0 +1,65 @@
+{
+  "schema": "isolated-backend-source-v1",
+  "repository": "https://github.com/ollama/ollama",
+  "profiles": {
+    "release": {
+      "commit": "d67ad83426633195089509347ffd4fe795120198",
+      "reference": "v0.32.14",
+      "source_sha256": {
+        "LICENSE": "5934ed2ce0d15154bcdb9c85203210abac0da4314af34081e36df4599f90b226",
+        "envconfig/config.go": "2263acbd4a6f93607594abe5632e5dbc1e17d69a804d55aa7245613bca05b2a7",
+        "go.mod": "1795c1c2c37b3f43ad43945396c33c610167ce2541281d6158ab3586c885a70b",
+        "manifest/layer.go": "b2a4cc677bfe1795beb83607867a47e978069108b4743a3fe69247d3d4cafc80",
+        "manifest/manifest.go": "0950d0560180168ed850250dec991630321299396069b3b526b4d977020030b8",
+        "manifest/paths.go": "7a56ba9df6d1d40aeb5f1b0696fcbe3febdf24bc57d5eb93b3f1a56ba01d33c2",
+        "server/images.go": "c64835bf9a495e18284cb71ec5b4ace5bf921e8baeabdadcaa8b98c356935609",
+        "server/routes.go": "fc6a8a980168973dd1aec86aafde7ab8bbc12f56aa2f71e04a7773dc95916c42",
+        "types/model/capability.go": "572770b1fd0a27301879eb8d6a0911f3f30e1b6b71479391a11c8155788f2c1b",
+        "types/model/config.go": "bbba8a36a1833ed4d365a9c7abd16d9288ff57c8de72123b7f5b6a6dc041ac9e",
+        "types/model/name.go": "5a57960ce67a46383dc8a0e96df648be7e137ffa6510c39982e74dea793a0cd7"
+      },
+      "compile_paths": [
+        "envconfig/config.go",
+        "manifest/layer.go",
+        "manifest/manifest.go",
+        "manifest/paths.go",
+        "types/model/capability.go",
+        "types/model/config.go",
+        "types/model/name.go"
+      ],
+      "upstream_go_requirement": "1.26.0"
+    },
+    "candidate": {
+      "commit": "675150d6ad2747df1e218ef59de9194bc4a7e538",
+      "reference": "retained_stage_snapshot",
+      "source_sha256": {
+        "LICENSE": "5934ed2ce0d15154bcdb9c85203210abac0da4314af34081e36df4599f90b226",
+        "envconfig/config.go": "0b0ea669b31cfe2b54313427257326a2b7a909bbc7bf8a671035efc446fb1895",
+        "go.mod": "32c3cd993ece27ec115d0eb1c932dfc58831ad1022588d712d426f103720e027",
+        "manifest/layer.go": "fedf9d4f134cd0c0c02c323c6702fe95318500f0f1e24179ac85142c3072559b",
+        "manifest/manifest.go": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec",
+        "manifest/paths.go": "ce16336074693e19fa8c75147c67b155b9be03542a5dd77500e8be42dba8ff04",
+        "server/images.go": "68dcf67c7d5b4addd80248627d80b950d0807bb252510fd0fecaf5cdb5415197",
+        "server/routes.go": "28034a9f11df5d5c3ce8d3d4786d62d2efd78feb5fc3c7d4a7a5231ec17f12b3",
+        "types/model/capability.go": "1e2a4aa2bd38e35707ce7e0354662391123a80046a10bbc1fac9a148927d19a6",
+        "types/model/config.go": "bdfe2d5564cc06d67b3eb421188ec2a2debcd43b4611a97541c4c8a4106330ec",
+        "types/model/generation.go": "2e71ffa86336871e7926dc96bdc2658eca848bf90d64a5496a295a4946de408d",
+        "types/model/name.go": "5a57960ce67a46383dc8a0e96df648be7e137ffa6510c39982e74dea793a0cd7",
+        "types/model/thinking.go": "7c54a7758d3a3e900a903228337e79f7896c0ae96444223e00f7e0d7f4fd2a5e"
+      },
+      "compile_paths": [
+        "envconfig/config.go",
+        "manifest/layer.go",
+        "manifest/manifest.go",
+        "manifest/paths.go",
+        "types/model/capability.go",
+        "types/model/config.go",
+        "types/model/generation.go",
+        "types/model/name.go",
+        "types/model/thinking.go"
+      ],
+      "upstream_go_requirement": "1.26.10"
+    }
+  },
+  "build_scope": "unmodified envconfig, types/model and manifest package source; generated offline test module; not a server build or installed binary attestation"
+}
