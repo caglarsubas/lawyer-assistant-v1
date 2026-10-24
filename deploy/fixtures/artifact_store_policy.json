@@ -1,0 +1,171 @@
+{
+  "schema": "artifact-store-qualification-v1",
+  "cases": [
+    {
+      "id": "valid",
+      "expected": "ok"
+    },
+    {
+      "id": "writable",
+      "expected": "readonly"
+    },
+    {
+      "id": "root_link",
+      "expected": "root"
+    },
+    {
+      "id": "blobs_link",
+      "expected": "root"
+    },
+    {
+      "id": "manifest_link",
+      "expected": "links"
+    },
+    {
+      "id": "config_link",
+      "expected": "links"
+    },
+    {
+      "id": "model_link",
+      "expected": "links"
+    },
+    {
+      "id": "config_hardlink",
+      "expected": "links"
+    },
+    {
+      "id": "model_hardlink",
+      "expected": "links"
+    },
+    {
+      "id": "missing_config",
+      "expected": "missing"
+    },
+    {
+      "id": "missing_model",
+      "expected": "missing"
+    },
+    {
+      "id": "corrupt_manifest",
+      "expected": "digest"
+    },
+    {
+      "id": "corrupt_config",
+      "expected": "digest"
+    },
+    {
+      "id": "corrupt_model",
+      "expected": "digest"
+    },
+    {
+      "id": "wrong_size",
+      "expected": "size"
+    },
+    {
+      "id": "boolean_size",
+      "expected": "descriptor"
+    },
+    {
+      "id": "duplicate_layer",
+      "expected": "duplicates"
+    },
+    {
+      "id": "duplicate_json_key",
+      "expected": "invalid"
+    },
+    {
+      "id": "remote",
+      "expected": "remote"
+    },
+    {
+      "id": "manifest_list",
+      "expected": "manifest"
+    },
+    {
+      "id": "adapter",
+      "expected": "model_type"
+    },
+    {
+      "id": "projector",
+      "expected": "model_type"
+    },
+    {
+      "id": "bad_header",
+      "expected": "gguf_header"
+    },
+    {
+      "id": "bad_version",
+      "expected": "gguf_header"
+    },
+    {
+      "id": "extra_blob",
+      "expected": "inventory"
+    },
+    {
+      "id": "alias",
+      "expected": "inventory"
+    },
+    {
+      "id": "extra_root",
+      "expected": "inventory"
+    },
+    {
+      "id": "root_mode",
+      "expected": "permissions"
+    },
+    {
+      "id": "file_mode",
+      "expected": "links"
+    },
+    {
+      "id": "byte_budget",
+      "expected": "byte_budget"
+    },
+    {
+      "id": "deadline",
+      "expected": "deadline"
+    },
+    {
+      "id": "cancelled",
+      "expected": "cancelled"
+    },
+    {
+      "id": "bad_config",
+      "expected": "config"
+    },
+    {
+      "id": "bad_rootfs",
+      "expected": "config"
+    },
+    {
+      "id": "foreign_digest",
+      "expected": "manifest_identity"
+    },
+    {
+      "id": "config_oversize",
+      "expected": "size"
+    },
+    {
+      "id": "model_directory",
+      "expected": "links"
+    },
+    {
+      "id": "model_fifo",
+      "expected": "links"
+    }
+  ],
+  "chunk_bytes": 1048576,
+  "max_model_bytes": 8589934592,
+  "max_total_bytes": 9663676416,
+  "small_case_seconds": 5,
+  "large_model_bytes": 8589934592,
+  "large_verification_seconds": 60,
+  "shared_pre_post_job_seconds": 60,
+  "five_job_wave_seconds": 75,
+  "pre_post_target_seconds": 20,
+  "peak_worker_rss_limit_kib": 131072,
+  "jobs": 5,
+  "attempts": 1,
+  "cold_cache_qualified": false,
+  "native_inference_qualified": false
+}
