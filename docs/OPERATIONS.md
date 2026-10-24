@@ -2320,3 +2320,37 @@ wire contract with fresh tests, then complete server/HTTP, read-only store, full
 work, relay/trust/restore and fresh native admission. See
 [procedure](ISOLATED_BACKEND_STORE.md) and
 [dated evidence](evidence/isolated-backend-store-2026-10-24.json).
+
+## Isolated manifest-integrity fix and fresh frozen tests — 2026-10-24
+
+Stage only explicit hash-locked public source in a new owner-only destination.
+`manifest_integrity_stage.py` applies four exact preimage replacements to the new
+build's `manifest/manifest.go`; source, patch, case and harness pins reject drift.
+There is no downloader, process launcher, arbitrary patch execution or fuzzy match.
+Original upstream source and the prior failed qualification stay unchanged.
+
+Direct regular blobs must match their full filename digest in both byte and file
+readers; direct symlinks reject before following. Checked named symlinks and ordinary
+named regular files retain their tested Linux behavior. No live alias, fallback,
+model-store change, provider install, restart, signing or trust activation occurs.
+
+Freeze the twenty fresh cases, patch, harness, stager and ten original methods before
+grading. Run once per variant in resource-bounded nonroot network-disabled Linux
+with read-only source/root and scratch only. Untouched source matches 13/20 and
+fails seven; the isolated patch matches 20/20 first grading. Store inventories remain
+exact. Retain both actual logs. An eleventh contract rejects baseline acceptance;
+the ten original methods and frozen inputs stay exact. All 413 deployment contracts
+and lint pass; CI jobs/workers/caps/coverage and five reserves stay unchanged.
+
+All eight services, originals, encrypted bytes, exact evidence, credentials, sessions,
+private history, 31 earlier tracked edits, 912 prior source/configuration files and
+staged issuer/public candidate remain exact. Provider repository remains unchanged.
+Owner v3 review and independent public-fingerprint confirmation stay pending.
+
+The result qualifies fixed-scratch Linux manifest content checks only. Next qualify
+the full disposable server/HTTP normalization/request path and explicit build
+identity with fresh tests, then read-only store isolation, hardlinks/races, complete
+artifacts, full-size work, scoped relay/trust/restore and fresh native admission.
+No installed/native/legal/production qualification is inferred. See
+[procedure](ISOLATED_MANIFEST_INTEGRITY.md) and
+[dated evidence](evidence/manifest-integrity-2026-10-24.json).

@@ -6422,3 +6422,54 @@ before any inference trial. Installed compatibility, executed weights, historica
 502 cause, sustained five-job capacity, corpus/legal quality and production
 activation remain open. See [procedure](ISOLATED_BACKEND_STORE.md) and
 [dated evidence](evidence/isolated-backend-store-2026-10-24.json).
+
+
+## Isolated manifest-integrity fix and fresh frozen tests — 2026-10-24
+
+F00-06 stays **partial**. A hash-locked, four-replacement patch changes only
+`manifest/manifest.go` in a new disposable build of the retained upstream snapshot.
+The original source, earlier negative qualification and Q2412 failed log/expectation
+remain exact. No live backend, model store, provider route or trust is changed.
+
+Direct regular manifest blobs now bind both the byte reader and verified-file
+reader to the full digest in their filename. Mismatch rejects before returning
+bytes or a file. Direct symlinks reject before following their targets. Ordinary
+named regular manifests, digest-looking ordinary tags and checked named symlinks
+retain their tested Linux behavior. Lookups create no aliases or fallback paths.
+The raw package parser and HTTP server-normalization layer remain distinct.
+
+Twenty fresh U2501–U2520 cases, the patch, harness, stager and ten original contract
+methods are frozen before either build is graded. Untouched source matches 13/20
+expected outcomes and fails seven. The isolated patch matches 20/20 on its first
+grading, with identical expectations and unchanged scratch inventories. Cases cover
+byte/parse/file readers, same-size edits, whitespace, replacement, truncation,
+prefixes, missing blobs, malformed content, direct links inside/outside the store,
+directories and ordinary named lookup semantics. An absent model layer deliberately
+still parses, preserving the boundary with complete artifact verification.
+
+Both first logs are retained. An eleventh contract rechecks those actual invented
+results and rejects the failed baseline as acceptance evidence; the ten original
+methods and all frozen patch/case/harness/stager inputs stay exact. All 413 deployment
+contracts and lint pass. All 912 prior source/configuration files remain exact.
+CI jobs, workers, caps, coverage and five required timing reserves are unchanged.
+
+Only public source and invented, non-model bytes enter nonroot, network-disabled
+Go 1.26.10 Linux containers. Sources/root are read-only; bounded disposable scratch
+is the only writable area. No private/runtime mounts, credentials, model downloads,
+live metadata, inference, signing, install, restart, analysis regeneration or review
+decision occurs. All eight services stay healthy. Originals, encrypted bytes, exact
+evidence versions, credentials, sessions, confidential review history, 31 earlier
+tracked edits and staged issuer/public candidate remain exact. The provider
+repository stays untouched. Owner focused-analysis v3 review remains pending.
+
+The scoped Linux manifest-content regression is cleared. Complete server/HTTP,
+installed backend identity, hostile mutable-filesystem races, hardlink/store-root
+isolation, full config/layer integrity, remote/list restrictions, full-size work,
+Windows behavior and executed weights remain unqualified. Next qualify a complete
+disposable server/HTTP path with its actual digest normalization, fresh frozen tests
+and explicit build identity, then a read-only complete artifact store, relay/trust/
+restore and fresh durable native admission. Independent fingerprint/runtime-pin
+confirmation remains required. Historical 502 cause, sustained five-job capacity,
+corpus/legal quality and production activation remain open. See
+[procedure](ISOLATED_MANIFEST_INTEGRITY.md) and
+[dated evidence](evidence/manifest-integrity-2026-10-24.json).
