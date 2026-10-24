@@ -1,0 +1,58 @@
+{
+  "schema": "guarded-controller-evidence-v1",
+  "date": "2026-10-25",
+  "scope": "unregistered controller and actual loopback HTTP with mock model backend only",
+  "results": {
+    "native_cases": 29,
+    "loopback_servers": 24,
+    "actual_HTTP_requests": 53,
+    "verified_signed_frames": 2,
+    "factory_rejections": 5,
+    "direct_hook_rejection": true,
+    "read_only_model_inventory_exact": true,
+    "mock_backend_only": true,
+    "native_inference_qualified": false,
+    "production_activation": false
+  },
+  "retained_report_sha256": "78ce30e714554dcdb90b521b43803b7c5ae12164fc306cb958ac1d8b994c4b50",
+  "policy_sha256": "aa2d51100f65ab4b5d7b91efe621ccc6c12044d9a2ac3bb4aefa867f16b2b8d1",
+  "deployment_contracts": {
+    "passed": 534,
+    "failed": 0,
+    "seconds": 22.07
+  },
+  "new_contracts": 16,
+  "original_methods_retained": 8,
+  "prior_implementation_and_config_exact": 968,
+  "first_native_attempt_pass": true,
+  "native_frozen_sources_exact": true,
+  "profile": {
+    "filesystem": "ext4",
+    "cpu": 2,
+    "memory_mib": 768,
+    "network": "none",
+    "process_environment_cleared": true,
+    "single_attempt": true
+  },
+  "owned_containers_removed": 2,
+  "owned_volumes_removed": 3,
+  "original_route_hook_reader_journal_and_CI_workers_caps_coverage_unchanged": true,
+  "real_provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_keys_used": false,
+  "private_case_inputs": false,
+  "runtime_installation": false,
+  "production_activation": false,
+  "owner_review_completed": false,
+  "independent_real_trust_confirmed": false,
+  "model_performance_retested": false,
+  "large_IO_added_to_CI": false,
+  "remaining": [
+    "Versioned portable controller package and explicit binding/enrollment readiness",
+    "Independent real issuer/runtime-pin confirmation before activation",
+    "Long-lived retention/capacity and independent anchor operational policy",
+    "Installed/executed weights, completion/context/tokenizer/truncation, sustained actual native jobs",
+    "Cold-storage and host-bind profiles, historical HTTP 502 cause",
+    "Owner v3 review and legal/production acceptance"
+  ]
+}

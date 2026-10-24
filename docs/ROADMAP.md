@@ -6774,3 +6774,65 @@ completion/context/tokenizer/truncation, sustained native/research jobs, cold
 storage/host-bind profiles, historical HTTP 502 cause and legal/production
 acceptance remain open. See [procedure and boundary](CONTROL_JOURNAL_RECOVERY.md)
 and [dated evidence](evidence/control-journal-2026-10-25.json).
+
+## Guarded controller and signed-route integration — 2026-10-25
+
+F00-06 remains **partial**. An explicit unregistered factory now composes the V2
+controller/anchor with the retained signed ASGI route and immutable execution hook.
+The original V1/default, route, hook, reader and journal code remain unchanged.
+The staged factory requires an explicit mock model backend; it has no real socket
+backend default, live provider registration, key loader or trust activation.
+
+A trusted binding fixes journal/operation identity, exact record, read-only volume
+mapping and runtime pin outside request JSON. Actual bounded V3 model verification
+checks the sealed store before use and through the original hook. Per-request
+contexts isolate credentials and one-use state. Current auth/runtime, sealed
+ancestry and the external anchor are rechecked at the relevant boundaries.
+Requests cannot choose an operation, journal path, arbitrary query or grant.
+
+The V2 journal reserves the exact response challenge before the older receipt
+store begins. Dispatch admission atomically verifies ancestry and consumes the
+challenge, binding the immutable-digest request bytes and destination. Failure,
+cancellation or a lost acknowledgement cannot retry. Rolling back the older
+receipt store does not rewind V2 state. A commit/anchor gap requires explicit
+recovery that preserves the reservation without replaying work.
+
+Receipt finalization/consumption check current eligibility. Signed success stays
+buffered until a final release check; revocation before release returns only a
+masked no-store error. Already admitted work or bytes whose release has begun
+cannot be recalled. Retained signatures are not future execution authority or an
+offline revocation lookup. No native weights or legal correctness are inferred.
+
+The first frozen native campaign passes **29/29 cases**, using **24 actual Uvicorn
+loopback servers and 53 HTTP requests**. Five cases reject at factory construction
+and one probes direct-hook rejection. Revocation windows, auth/pin changes,
+wrong/unsealed/writable bindings, context/expiry, HTTP 502, clipped output, receipt
+rollback, lost admission, anchor recovery, replay and bounded concurrency pass.
+Two signed responses resolve through the retained consumer, including original
+request whitespace. Only invented control data and a 65,561-byte zero-tensor model
+fixture are used; backend sends are mocks. Model inventory stays exact.
+
+The profile uses three new ext4 volumes, two CPUs/768 MiB, no external network or
+runtime mounts, no host ports and a cleared environment. Preparation exits before
+read-only model use; the anchor occupies its own volume. Both owned containers and
+all three volumes are removed. Model performance and actual inference are not
+retested; the existing 20-second verifier limit stays unchanged.
+
+All **534 deployment contracts** (16 new), full Python lint and retained-report
+replay pass. The eight first contracts and native sources remain retained; an
+additional test checks that failed release never returns buffered signed bytes.
+All 968 earlier implementation/configuration files, original defaults, CI jobs,
+workers/deadlines/coverage, provider source and real staged trust remain exact.
+Originals, encrypted bytes, exact evidence versions and confidential review history
+never enter the campaign. Owner focused-analysis v3 review and independent real
+issuer/runtime-pin confirmation remain pending.
+
+Next create a versioned portable guarded-controller package and explicit binding/
+enrollment readiness checks with disposable identities. Preserve current-anchor,
+revocation, nonce and exact-version dependencies at effect/release boundaries.
+Independent real trust confirmation is required before activation. Long-lived
+retention/capacity, installed/executed weights, real completion/context/tokenizer/
+truncation, sustained native/research jobs, cold storage/host-bind profiles,
+historical HTTP 502 cause and legal/production acceptance remain open. See
+[procedure and boundary](GUARDED_CONTROLLER_ROUTE.md) and
+[dated evidence](evidence/guarded-controller-2026-10-25.json).
