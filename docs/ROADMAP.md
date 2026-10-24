@@ -6534,3 +6534,58 @@ admission. Independent fingerprint/runtime-pin confirmation is still required.
 Historical 502 cause and sustained five-job capacity remain open. See
 [procedure](ISOLATED_SERVER_HTTP.md) and
 [dated evidence](evidence/server-http-2026-10-24.json).
+
+## Read-only artifact-store integrity and verification budgets — 2026-10-24
+
+F00-06 remains **partial**. An unregistered verifier observes one sealed model
+snapshot with exact manifest/config/layer SHA-256 identities and a closed blob
+inventory. Root/child directories and files require kernel read-only mounts,
+owner-only permissions, unlinked paths and regular single-link blobs. Aliases,
+missing/corrupt blobs, wrong sizes/types, remote configs, manifest lists,
+adapters/projectors, duplicate references/JSON keys and unreferenced content are
+rejected. Descriptor-relative file access, before/after identity checks and final
+entry/directory checks bind the observation window. This is not a universal
+hostile mutable-store or indefinite-immutability guarantee; the trusted host and
+sealed snapshot remain separate prerequisites. Only GGUF header sanity is checked,
+not tensor layout, model usability, weights or execution identity.
+
+One spawned worker hashes incrementally under aggregate-byte and absolute-time
+budgets. Cancelled, partial, malformed or late replies cannot become proof. The
+supervisor uses one attempt, bounded termination/reaping and no retry/fallback.
+Before native grading, 38 expected boundary outcomes, source/controller, 13 unit
+methods and performance limits are frozen. The failed first unit run is retained:
+move regular-file validation before the file wrapper, and select the model inode
+in a change-detection test instead of an incorrect literal fixture size. Expected
+case outcomes, controller and performance policy remain exact. Corrected unit
+regression passes 13/13; all 38 cases pass the first actual Linux campaign.
+
+A fully written/fsynced deterministic 8 GiB synthetic blob has zero tensors and
+arbitrary padding, with no real model weights. One pre/post job then five concurrent
+pre/post jobs verify 103,079,222,328 bytes in twelve complete observations. The
+single job takes 22.45 seconds; concurrent jobs take 27.62 seconds each, with a
+27.63-second wave and peak worker RSS 30,900 KiB. All 60-second shared job limits,
+75-second wave limit and 128 MiB memory target pass. **The separate frozen
+20-second pre/post target fails** for the single and concurrent jobs and stays
+open. No threshold is raised and no used performance case is rerun or retuned.
+Measurements are warm-cache, on a two-CPU/768 MiB network-disabled disposable
+container. They do not establish cold-storage, native-hook or five-research-job
+capacity. The read-only fixture inventory stays exact and the container exits zero.
+
+Four additional contracts revalidate the retained actual reports, prevent promotion
+of the missed target, and test blocked-worker cleanup and late cancellation. All
+17 new and 443 total deployment contracts pass using the existing backend Python
+environment; an earlier system-Python discovery with missing dependencies remains
+retained as unqualified. Large synthetic I/O runs locally; CI receives only small
+contracts and report replay. All 926 earlier implementation/configuration files,
+CI jobs/workers/caps/coverage, original execution hook, live routes/trust and provider
+source remain exact. Private originals, evidence versions and review history never
+enter the campaign. Owner focused-analysis v3 review remains pending.
+
+Next freeze a fresh budget/admission candidate under an explicitly trusted snapshot
+boundary and test unseen cases before integrating it with the immutable execution
+hook. The missed 20-second target, hostile mutable-store isolation, signed scoped
+relay/trust/restore, independent public-fingerprint/runtime-pin confirmation,
+completion/context/tokenizer/truncation behavior, installed/executed weights,
+sustained native load, historical 502 cause and legal/production acceptance remain
+open. See [boundary and procedure](READONLY_ARTIFACT_STORE.md) and
+[dated evidence](evidence/artifact-store-2026-10-24.json).

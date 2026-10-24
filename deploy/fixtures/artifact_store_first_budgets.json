@@ -1,0 +1,409 @@
+{
+  "schema": "artifact-store-budgets-v1",
+  "single": {
+    "id": "single",
+    "proofs": [
+      {
+        "GGUF_header_only": true,
+        "artifacts": [
+          {
+            "bytes": 415,
+            "digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3"
+          },
+          {
+            "bytes": 187,
+            "digest": "sha256:57d8124659cec050c160ed55c1623aaa0e1a558f28c05431de1b63cf5613cfbb"
+          },
+          {
+            "bytes": 8589934592,
+            "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a"
+          }
+        ],
+        "bytes_hashed": 8589935194,
+        "content_identity_sha256": "2f28d61d7f65edca0b781f47d4578f789235d4df7a8c0fc5e1334ac12db1d279",
+        "elapsed_seconds": 10.56537175399717,
+        "executed_weights_qualified": false,
+        "kernel_readonly": true,
+        "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+        "peak_rss_kib": 30400,
+        "production_activation": false,
+        "schema": "readonly-artifact-proof-v1",
+        "stable_observation_window": true,
+        "tensor_layout_or_weights_qualified": false
+      },
+      {
+        "GGUF_header_only": true,
+        "artifacts": [
+          {
+            "bytes": 415,
+            "digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3"
+          },
+          {
+            "bytes": 187,
+            "digest": "sha256:57d8124659cec050c160ed55c1623aaa0e1a558f28c05431de1b63cf5613cfbb"
+          },
+          {
+            "bytes": 8589934592,
+            "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a"
+          }
+        ],
+        "bytes_hashed": 8589935194,
+        "content_identity_sha256": "2f28d61d7f65edca0b781f47d4578f789235d4df7a8c0fc5e1334ac12db1d279",
+        "elapsed_seconds": 11.226451755006565,
+        "executed_weights_qualified": false,
+        "kernel_readonly": true,
+        "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+        "peak_rss_kib": 30396,
+        "production_activation": false,
+        "schema": "readonly-artifact-proof-v1",
+        "stable_observation_window": true,
+        "tensor_layout_or_weights_qualified": false
+      }
+    ],
+    "elapsed_seconds": 22.453751260996796,
+    "error": null,
+    "within_job_limit": true,
+    "within_pre_post_target": false,
+    "within_rss_target": true
+  },
+  "jobs": [
+    {
+      "id": 0,
+      "proofs": [
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 415,
+              "digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3"
+            },
+            {
+              "bytes": 187,
+              "digest": "sha256:57d8124659cec050c160ed55c1623aaa0e1a558f28c05431de1b63cf5613cfbb"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a"
+            }
+          ],
+          "bytes_hashed": 8589935194,
+          "content_identity_sha256": "2f28d61d7f65edca0b781f47d4578f789235d4df7a8c0fc5e1334ac12db1d279",
+          "elapsed_seconds": 14.318775922991335,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+          "peak_rss_kib": 30060,
+          "production_activation": false,
+          "schema": "readonly-artifact-proof-v1",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        },
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 415,
+              "digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3"
+            },
+            {
+              "bytes": 187,
+              "digest": "sha256:57d8124659cec050c160ed55c1623aaa0e1a558f28c05431de1b63cf5613cfbb"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a"
+            }
+          ],
+          "bytes_hashed": 8589935194,
+          "content_identity_sha256": "2f28d61d7f65edca0b781f47d4578f789235d4df7a8c0fc5e1334ac12db1d279",
+          "elapsed_seconds": 11.897317755996482,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+          "peak_rss_kib": 29888,
+          "production_activation": false,
+          "schema": "readonly-artifact-proof-v1",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        }
+      ],
+      "elapsed_seconds": 27.620145138003863,
+      "error": null,
+      "within_job_limit": true,
+      "within_pre_post_target": false,
+      "within_rss_target": true
+    },
+    {
+      "id": 1,
+      "proofs": [
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 415,
+              "digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3"
+            },
+            {
+              "bytes": 187,
+              "digest": "sha256:57d8124659cec050c160ed55c1623aaa0e1a558f28c05431de1b63cf5613cfbb"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a"
+            }
+          ],
+          "bytes_hashed": 8589935194,
+          "content_identity_sha256": "2f28d61d7f65edca0b781f47d4578f789235d4df7a8c0fc5e1334ac12db1d279",
+          "elapsed_seconds": 14.32021179801086,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+          "peak_rss_kib": 30864,
+          "production_activation": false,
+          "schema": "readonly-artifact-proof-v1",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        },
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 415,
+              "digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3"
+            },
+            {
+              "bytes": 187,
+              "digest": "sha256:57d8124659cec050c160ed55c1623aaa0e1a558f28c05431de1b63cf5613cfbb"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a"
+            }
+          ],
+          "bytes_hashed": 8589935194,
+          "content_identity_sha256": "2f28d61d7f65edca0b781f47d4578f789235d4df7a8c0fc5e1334ac12db1d279",
+          "elapsed_seconds": 11.904214131005574,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+          "peak_rss_kib": 30644,
+          "production_activation": false,
+          "schema": "readonly-artifact-proof-v1",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        }
+      ],
+      "elapsed_seconds": 27.620520304015372,
+      "error": null,
+      "within_job_limit": true,
+      "within_pre_post_target": false,
+      "within_rss_target": true
+    },
+    {
+      "id": 2,
+      "proofs": [
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 415,
+              "digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3"
+            },
+            {
+              "bytes": 187,
+              "digest": "sha256:57d8124659cec050c160ed55c1623aaa0e1a558f28c05431de1b63cf5613cfbb"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a"
+            }
+          ],
+          "bytes_hashed": 8589935194,
+          "content_identity_sha256": "2f28d61d7f65edca0b781f47d4578f789235d4df7a8c0fc5e1334ac12db1d279",
+          "elapsed_seconds": 14.320023798005423,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+          "peak_rss_kib": 30736,
+          "production_activation": false,
+          "schema": "readonly-artifact-proof-v1",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        },
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 415,
+              "digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3"
+            },
+            {
+              "bytes": 187,
+              "digest": "sha256:57d8124659cec050c160ed55c1623aaa0e1a558f28c05431de1b63cf5613cfbb"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a"
+            }
+          ],
+          "bytes_hashed": 8589935194,
+          "content_identity_sha256": "2f28d61d7f65edca0b781f47d4578f789235d4df7a8c0fc5e1334ac12db1d279",
+          "elapsed_seconds": 11.901141923008254,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+          "peak_rss_kib": 30768,
+          "production_activation": false,
+          "schema": "readonly-artifact-proof-v1",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        }
+      ],
+      "elapsed_seconds": 27.619627971027512,
+      "error": null,
+      "within_job_limit": true,
+      "within_pre_post_target": false,
+      "within_rss_target": true
+    },
+    {
+      "id": 3,
+      "proofs": [
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 415,
+              "digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3"
+            },
+            {
+              "bytes": 187,
+              "digest": "sha256:57d8124659cec050c160ed55c1623aaa0e1a558f28c05431de1b63cf5613cfbb"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a"
+            }
+          ],
+          "bytes_hashed": 8589935194,
+          "content_identity_sha256": "2f28d61d7f65edca0b781f47d4578f789235d4df7a8c0fc5e1334ac12db1d279",
+          "elapsed_seconds": 14.242923006007914,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+          "peak_rss_kib": 30220,
+          "production_activation": false,
+          "schema": "readonly-artifact-proof-v1",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        },
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 415,
+              "digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3"
+            },
+            {
+              "bytes": 187,
+              "digest": "sha256:57d8124659cec050c160ed55c1623aaa0e1a558f28c05431de1b63cf5613cfbb"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a"
+            }
+          ],
+          "bytes_hashed": 8589935194,
+          "content_identity_sha256": "2f28d61d7f65edca0b781f47d4578f789235d4df7a8c0fc5e1334ac12db1d279",
+          "elapsed_seconds": 11.900067338981899,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+          "peak_rss_kib": 30236,
+          "production_activation": false,
+          "schema": "readonly-artifact-proof-v1",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        }
+      ],
+      "elapsed_seconds": 27.619110803992953,
+      "error": null,
+      "within_job_limit": true,
+      "within_pre_post_target": false,
+      "within_rss_target": true
+    },
+    {
+      "id": 4,
+      "proofs": [
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 415,
+              "digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3"
+            },
+            {
+              "bytes": 187,
+              "digest": "sha256:57d8124659cec050c160ed55c1623aaa0e1a558f28c05431de1b63cf5613cfbb"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a"
+            }
+          ],
+          "bytes_hashed": 8589935194,
+          "content_identity_sha256": "2f28d61d7f65edca0b781f47d4578f789235d4df7a8c0fc5e1334ac12db1d279",
+          "elapsed_seconds": 14.236967923003249,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+          "peak_rss_kib": 30436,
+          "production_activation": false,
+          "schema": "readonly-artifact-proof-v1",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        },
+        {
+          "GGUF_header_only": true,
+          "artifacts": [
+            {
+              "bytes": 415,
+              "digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3"
+            },
+            {
+              "bytes": 187,
+              "digest": "sha256:57d8124659cec050c160ed55c1623aaa0e1a558f28c05431de1b63cf5613cfbb"
+            },
+            {
+              "bytes": 8589934592,
+              "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a"
+            }
+          ],
+          "bytes_hashed": 8589935194,
+          "content_identity_sha256": "2f28d61d7f65edca0b781f47d4578f789235d4df7a8c0fc5e1334ac12db1d279",
+          "elapsed_seconds": 11.897792339004809,
+          "executed_weights_qualified": false,
+          "kernel_readonly": true,
+          "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+          "peak_rss_kib": 30900,
+          "production_activation": false,
+          "schema": "readonly-artifact-proof-v1",
+          "stable_observation_window": true,
+          "tensor_layout_or_weights_qualified": false
+        }
+      ],
+      "elapsed_seconds": 27.618309429002693,
+      "error": null,
+      "within_job_limit": true,
+      "within_pre_post_target": false,
+      "within_rss_target": true
+    }
+  ],
+  "wave_elapsed_seconds": 27.631983304017922,
+  "within_wave_limit": true,
+  "children_reaped": true,
+  "attempts": 1,
+  "cache_condition": "warm_creation_and_prior_read_no_cache_eviction",
+  "cold_cache_qualified": false,
+  "native_inference_qualified": false,
+  "research_jobs_qualified": false
+}

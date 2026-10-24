@@ -1,0 +1,304 @@
+{
+  "schema": "readonly-artifact-store-evidence-v1",
+  "date": "2026-10-24",
+  "base_commit": "e0656015511e8d7a1e59896bde3c9a9579a8a36c",
+  "policy": {
+    "schema": "artifact-store-qualification-v1",
+    "cases": [
+      {
+        "id": "valid",
+        "expected": "ok"
+      },
+      {
+        "id": "writable",
+        "expected": "readonly"
+      },
+      {
+        "id": "root_link",
+        "expected": "root"
+      },
+      {
+        "id": "blobs_link",
+        "expected": "root"
+      },
+      {
+        "id": "manifest_link",
+        "expected": "links"
+      },
+      {
+        "id": "config_link",
+        "expected": "links"
+      },
+      {
+        "id": "model_link",
+        "expected": "links"
+      },
+      {
+        "id": "config_hardlink",
+        "expected": "links"
+      },
+      {
+        "id": "model_hardlink",
+        "expected": "links"
+      },
+      {
+        "id": "missing_config",
+        "expected": "missing"
+      },
+      {
+        "id": "missing_model",
+        "expected": "missing"
+      },
+      {
+        "id": "corrupt_manifest",
+        "expected": "digest"
+      },
+      {
+        "id": "corrupt_config",
+        "expected": "digest"
+      },
+      {
+        "id": "corrupt_model",
+        "expected": "digest"
+      },
+      {
+        "id": "wrong_size",
+        "expected": "size"
+      },
+      {
+        "id": "boolean_size",
+        "expected": "descriptor"
+      },
+      {
+        "id": "duplicate_layer",
+        "expected": "duplicates"
+      },
+      {
+        "id": "duplicate_json_key",
+        "expected": "invalid"
+      },
+      {
+        "id": "remote",
+        "expected": "remote"
+      },
+      {
+        "id": "manifest_list",
+        "expected": "manifest"
+      },
+      {
+        "id": "adapter",
+        "expected": "model_type"
+      },
+      {
+        "id": "projector",
+        "expected": "model_type"
+      },
+      {
+        "id": "bad_header",
+        "expected": "gguf_header"
+      },
+      {
+        "id": "bad_version",
+        "expected": "gguf_header"
+      },
+      {
+        "id": "extra_blob",
+        "expected": "inventory"
+      },
+      {
+        "id": "alias",
+        "expected": "inventory"
+      },
+      {
+        "id": "extra_root",
+        "expected": "inventory"
+      },
+      {
+        "id": "root_mode",
+        "expected": "permissions"
+      },
+      {
+        "id": "file_mode",
+        "expected": "links"
+      },
+      {
+        "id": "byte_budget",
+        "expected": "byte_budget"
+      },
+      {
+        "id": "deadline",
+        "expected": "deadline"
+      },
+      {
+        "id": "cancelled",
+        "expected": "cancelled"
+      },
+      {
+        "id": "bad_config",
+        "expected": "config"
+      },
+      {
+        "id": "bad_rootfs",
+        "expected": "config"
+      },
+      {
+        "id": "foreign_digest",
+        "expected": "manifest_identity"
+      },
+      {
+        "id": "config_oversize",
+        "expected": "size"
+      },
+      {
+        "id": "model_directory",
+        "expected": "links"
+      },
+      {
+        "id": "model_fifo",
+        "expected": "links"
+      }
+    ],
+    "chunk_bytes": 1048576,
+    "max_model_bytes": 8589934592,
+    "max_total_bytes": 9663676416,
+    "small_case_seconds": 5,
+    "large_model_bytes": 8589934592,
+    "large_verification_seconds": 60,
+    "shared_pre_post_job_seconds": 60,
+    "five_job_wave_seconds": 75,
+    "pre_post_target_seconds": 20,
+    "peak_worker_rss_limit_kib": 131072,
+    "jobs": 5,
+    "attempts": 1,
+    "cold_cache_qualified": false,
+    "native_inference_qualified": false
+  },
+  "pre_grade_freeze": {
+    "scripts/artifact_store.py": "f3b5220800fa4660351a099585aae7190e147e768452bf94b8b96cd861da01f8",
+    "scripts/artifact_store_qualification.py": "55ec4a40542be1fe432297b266cbc8866699af1ddff24ef68835b0ad637268e4",
+    "deploy/test_artifact_store.py": "a3bbca094a214ae74d1682fa7df4f63aad7eaa2c5043ab8a6ab186d9c22fbc03",
+    "deploy/fixtures/artifact_store_policy.json": "2cc4cf36fa5bf5affc18caa0c5274d4a893bf9443d75ea6dc0ed3aba2ebc50fd",
+    "campaign.py": "c110f720221d1bd6fe447eaa5630aa39401878dc40de1f086a847eb01c380ce3"
+  },
+  "corrected_pre_campaign_freeze": {
+    "scripts/artifact_store.py": "0ebb0f6485825591e9511aeec7d028e541e096b0ba641519eba213f41cab91e1",
+    "scripts/artifact_store_qualification.py": "55ec4a40542be1fe432297b266cbc8866699af1ddff24ef68835b0ad637268e4",
+    "deploy/test_artifact_store.py": "b78146f7b9dbb42ccc4b88c1a3cc84f6a41ce1461555422fdbd7d8d565370726",
+    "deploy/fixtures/artifact_store_policy.json": "2cc4cf36fa5bf5affc18caa0c5274d4a893bf9443d75ea6dc0ed3aba2ebc50fd",
+    "campaign.py": "c110f720221d1bd6fe447eaa5630aa39401878dc40de1f086a847eb01c380ce3"
+  },
+  "initial_contract_run": {
+    "tests": 13,
+    "failures": 2,
+    "failed_test_methods": [
+      "test_changed_entry_fails_closed",
+      "test_frozen_small_case_matrix"
+    ],
+    "original_output_sha256": "d930b4129a65f28a641dd137dee1b5c044ccd816687b3255bfe16a3714086edc",
+    "root_causes": [
+      "Regular-file check occurred after fdopen accepted the file descriptor; fdopen rejects directory descriptors with the generic invalid code. Move the type check before fdopen and close rejected descriptors.",
+      "Test assumed a fixed fixture size of 44 instead of selecting the actual model inode. Replace the literal-size condition with the actual inode; do not change expected outcome."
+    ]
+  },
+  "corrected_contract_run": {
+    "passed": 13,
+    "failed": 0,
+    "output_sha256": "bd2ecda8e41808b6a308f5ace3ca205b1eb100437ac8414cea79186bbc447a59"
+  },
+  "final_new_contracts": 17,
+  "deployment_contracts": {
+    "passed": 443,
+    "failed": 0,
+    "seconds": 20.161
+  },
+  "wrong_interpreter_discovery_attempt": {
+    "errors": 24,
+    "reason": "System Python lacks application dependencies; retained unqualified attempt, then use existing locked backend Python environment.",
+    "output_sha256": "10730b507b4d0c3b11f9d073ea77943bc8e3b3a71f9c45e0b4de9f9862de159d"
+  },
+  "first_native_campaign": {
+    "attempts": 1,
+    "functional": {
+      "passed": 38,
+      "total": 38,
+      "kernel_readonly_qualification": true
+    },
+    "budget_results": {
+      "completed_verifications": 12,
+      "hard_budget_pass": true,
+      "twenty_second_pre_post_target_pass": false,
+      "memory_target_pass": true,
+      "native_inference_qualified": false,
+      "research_jobs_qualified": false
+    },
+    "single_pre_post_seconds": 22.453751260996796,
+    "concurrent_pre_post_seconds": [
+      27.620145138003863,
+      27.620520304015372,
+      27.619627971027512,
+      27.619110803992953,
+      27.618309429002693
+    ],
+    "wave_seconds": 27.631983304017922,
+    "peak_worker_rss_kib": 30900,
+    "total_bytes_hashed": 103079222328,
+    "cache_condition": "warm_creation_and_prior_read_no_cache_eviction",
+    "store_unchanged": true,
+    "children_reaped": true,
+    "container_exit": 0,
+    "forced_container_termination": false
+  },
+  "synthetic_artifact": {
+    "mediaType": "application/vnd.ollama.image.model",
+    "digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a",
+    "size": 8589934592,
+    "bytes_written": 8589934592,
+    "blocks_512": 16799744,
+    "real_model_weights": false,
+    "GGUF_tensors": 0,
+    "manifest_digest": "sha256:72c40e83439992b05747bebf77d88e14a965325185fb094d1ad7cb1bac9339c3",
+    "model_digest": "sha256:ba921d62da2029d3d6c9fd961524a532382ba029c23db0af7db7c682986f185a",
+    "variant": "valid"
+  },
+  "runtime_container": {
+    "container_id": "d7c96b893f69684a028f8a5daa47f7f7e538356d46001d0d9b334229f98f2a57",
+    "network": "none",
+    "no_published_ports": true,
+    "read_only_root": true,
+    "capabilities_dropped": true,
+    "nonroot": true,
+    "cpu_limit": 2,
+    "memory_limit_mib": 768,
+    "mounts": [
+      "public_controller_readonly",
+      "invented_fixtures_readonly",
+      "empty_receipts_writable"
+    ],
+    "private_or_runtime_mounts": false,
+    "image_sha256": "sha256:f85c5697265c178cc6887276c55fe16cf3d14ca35c3df6a5eab3b360534a55d2"
+  },
+  "case_report_sha256": "e59615ed9cb78920c7164ca21bc3fba3cf2321ec7b2c2801587a28e435d690bd",
+  "budget_report_sha256": "98fd77c504d604b3bb51ef7c7b4983edd1a568e40fed254bf2f393fee84d5eac",
+  "fixture_stat_inventory_sha256": "3e23bd522101d63bacf6b1818c373bf5e22c795e8deb063092149d191c6c23b9",
+  "fixture_stat_inventory_after_sha256": "3e23bd522101d63bacf6b1818c373bf5e22c795e8deb063092149d191c6c23b9",
+  "retained_source_files_exact": 926,
+  "large_work_added_to_CI": false,
+  "CI_jobs_workers_caps_coverage_changed": false,
+  "original_execution_hook_modified": false,
+  "registered_runtime_verifier": false,
+  "live_store_inputs": false,
+  "provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_keys_used": 0,
+  "private_case_inputs": false,
+  "production_installation": false,
+  "production_activation": false,
+  "cold_cache_qualified": false,
+  "hostile_mutable_store_qualified": false,
+  "full_artifact_store_production_qualified": false,
+  "native_inference_qualified": false,
+  "five_research_jobs_qualified": false,
+  "twenty_second_pre_post_target_qualified": false,
+  "owner_review_completed": false,
+  "independent_trust_confirmed": false
+}

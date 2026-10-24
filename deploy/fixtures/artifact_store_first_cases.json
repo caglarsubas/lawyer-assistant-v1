@@ -1,0 +1,379 @@
+{
+  "schema": "artifact-store-cases-v1",
+  "cases": [
+    {
+      "id": "valid",
+      "expected": "ok",
+      "observed": "ok",
+      "matches": true,
+      "proof": {
+        "GGUF_header_only": true,
+        "artifacts": [
+          {
+            "bytes": 407,
+            "digest": "sha256:8909159f80dfb99c0d4368b3457d8ad2257caad6aa36f7d090b0659e889e080a"
+          },
+          {
+            "bytes": 187,
+            "digest": "sha256:0836edba04c7fee99a6f5474068672d49f3a2893edb6a8aca1fc29621fc77d62"
+          },
+          {
+            "bytes": 45,
+            "digest": "sha256:080255050e234c6d1738e62e5b518304fa1681edb1502d2d085c046d2e0fa186"
+          }
+        ],
+        "bytes_hashed": 639,
+        "content_identity_sha256": "bbfb2913bc45527f99981acbbeb11a8cbede1caf85dc164619b8fc9a528d73b2",
+        "elapsed_seconds": 0.0018557500152383,
+        "executed_weights_qualified": false,
+        "kernel_readonly": true,
+        "manifest_digest": "sha256:8909159f80dfb99c0d4368b3457d8ad2257caad6aa36f7d090b0659e889e080a",
+        "peak_rss_kib": 28932,
+        "production_activation": false,
+        "schema": "readonly-artifact-proof-v1",
+        "stable_observation_window": true,
+        "tensor_layout_or_weights_qualified": false
+      },
+      "elapsed_seconds": 0.27856574999168515,
+      "children_reaped": true
+    },
+    {
+      "id": "writable",
+      "expected": "readonly",
+      "observed": "readonly",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.22086154198041186,
+      "children_reaped": true
+    },
+    {
+      "id": "root_link",
+      "expected": "root",
+      "observed": "root",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.23089325000182725,
+      "children_reaped": true
+    },
+    {
+      "id": "blobs_link",
+      "expected": "root",
+      "observed": "root",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.2060803750064224,
+      "children_reaped": true
+    },
+    {
+      "id": "manifest_link",
+      "expected": "links",
+      "observed": "links",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.1938046670111362,
+      "children_reaped": true
+    },
+    {
+      "id": "config_link",
+      "expected": "links",
+      "observed": "links",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.18423954100580886,
+      "children_reaped": true
+    },
+    {
+      "id": "model_link",
+      "expected": "links",
+      "observed": "links",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.20710079098353162,
+      "children_reaped": true
+    },
+    {
+      "id": "config_hardlink",
+      "expected": "links",
+      "observed": "links",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.21969458399689756,
+      "children_reaped": true
+    },
+    {
+      "id": "model_hardlink",
+      "expected": "links",
+      "observed": "links",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.2043918340059463,
+      "children_reaped": true
+    },
+    {
+      "id": "missing_config",
+      "expected": "missing",
+      "observed": "missing",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.19924083299702033,
+      "children_reaped": true
+    },
+    {
+      "id": "missing_model",
+      "expected": "missing",
+      "observed": "missing",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.19930537501932122,
+      "children_reaped": true
+    },
+    {
+      "id": "corrupt_manifest",
+      "expected": "digest",
+      "observed": "digest",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.18066237500170246,
+      "children_reaped": true
+    },
+    {
+      "id": "corrupt_config",
+      "expected": "digest",
+      "observed": "digest",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.19726295801228844,
+      "children_reaped": true
+    },
+    {
+      "id": "corrupt_model",
+      "expected": "digest",
+      "observed": "digest",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.20338529100990854,
+      "children_reaped": true
+    },
+    {
+      "id": "wrong_size",
+      "expected": "size",
+      "observed": "size",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.20923895802116022,
+      "children_reaped": true
+    },
+    {
+      "id": "boolean_size",
+      "expected": "descriptor",
+      "observed": "descriptor",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.21297166700242087,
+      "children_reaped": true
+    },
+    {
+      "id": "duplicate_layer",
+      "expected": "duplicates",
+      "observed": "duplicates",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.20938179199583828,
+      "children_reaped": true
+    },
+    {
+      "id": "duplicate_json_key",
+      "expected": "invalid",
+      "observed": "invalid",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.20274700000300072,
+      "children_reaped": true
+    },
+    {
+      "id": "remote",
+      "expected": "remote",
+      "observed": "remote",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.19002987499698065,
+      "children_reaped": true
+    },
+    {
+      "id": "manifest_list",
+      "expected": "manifest",
+      "observed": "manifest",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.20129733299836516,
+      "children_reaped": true
+    },
+    {
+      "id": "adapter",
+      "expected": "model_type",
+      "observed": "model_type",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.201211500010686,
+      "children_reaped": true
+    },
+    {
+      "id": "projector",
+      "expected": "model_type",
+      "observed": "model_type",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.2186602080182638,
+      "children_reaped": true
+    },
+    {
+      "id": "bad_header",
+      "expected": "gguf_header",
+      "observed": "gguf_header",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.19452279200777411,
+      "children_reaped": true
+    },
+    {
+      "id": "bad_version",
+      "expected": "gguf_header",
+      "observed": "gguf_header",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.18410970800323412,
+      "children_reaped": true
+    },
+    {
+      "id": "extra_blob",
+      "expected": "inventory",
+      "observed": "inventory",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.1894473749853205,
+      "children_reaped": true
+    },
+    {
+      "id": "alias",
+      "expected": "inventory",
+      "observed": "inventory",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.19029862599563785,
+      "children_reaped": true
+    },
+    {
+      "id": "extra_root",
+      "expected": "inventory",
+      "observed": "inventory",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.192051708989311,
+      "children_reaped": true
+    },
+    {
+      "id": "root_mode",
+      "expected": "permissions",
+      "observed": "permissions",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.22303637501318008,
+      "children_reaped": true
+    },
+    {
+      "id": "file_mode",
+      "expected": "links",
+      "observed": "links",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.20938099999330007,
+      "children_reaped": true
+    },
+    {
+      "id": "byte_budget",
+      "expected": "byte_budget",
+      "observed": "byte_budget",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.20287533299415372,
+      "children_reaped": true
+    },
+    {
+      "id": "deadline",
+      "expected": "deadline",
+      "observed": "deadline",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.0003827500040642917,
+      "children_reaped": true
+    },
+    {
+      "id": "cancelled",
+      "expected": "cancelled",
+      "observed": "cancelled",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 1.6874982975423336e-05,
+      "children_reaped": true
+    },
+    {
+      "id": "bad_config",
+      "expected": "config",
+      "observed": "config",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.18625995799084194,
+      "children_reaped": true
+    },
+    {
+      "id": "bad_rootfs",
+      "expected": "config",
+      "observed": "config",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.18989666699781083,
+      "children_reaped": true
+    },
+    {
+      "id": "foreign_digest",
+      "expected": "manifest_identity",
+      "observed": "manifest_identity",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.19466675000148825,
+      "children_reaped": true
+    },
+    {
+      "id": "config_oversize",
+      "expected": "size",
+      "observed": "size",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.19978466600878164,
+      "children_reaped": true
+    },
+    {
+      "id": "model_directory",
+      "expected": "links",
+      "observed": "links",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.20911387499654666,
+      "children_reaped": true
+    },
+    {
+      "id": "model_fifo",
+      "expected": "links",
+      "observed": "links",
+      "matches": true,
+      "proof": null,
+      "elapsed_seconds": 0.19005470801494084,
+      "children_reaped": true
+    }
+  ],
+  "attempts": 1,
+  "passed": 38,
+  "total": 38,
+  "provider_requests": 0,
+  "native_inference_calls": 0
+}
