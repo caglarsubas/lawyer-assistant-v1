@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import mmap
 import multiprocessing
 import os
 import re
@@ -10,6 +11,7 @@ import stat
 import struct
 import sys
 import time
+from contextlib import closing
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -17,6 +19,7 @@ from metadata_phase_probe import strict_json
 
 GIB = 1024**3
 CHUNK = 1024 * 1024
+WINDOW = 16 * CHUNK
 META = 65536
 MAX_MODEL = 8 * GIB
 MAX_TOTAL = 9 * GIB
@@ -71,6 +74,31 @@ def names(fd, limit):
     return result
 
 
+def validate_strategy(strategy):
+    if type(strategy) is not str or strategy not in {"stream", "windowed", "windowed-pinned"}:
+        raise StoreRejected("strategy")
+
+
+def blocks(stream, size, strategy, *, check=None):
+    """A mapped block stays live only until its consumer advances or closes."""
+    validate_strategy(strategy)
+    if strategy in {"windowed", "windowed-pinned"}:
+        for offset in range(0, size, WINDOW):
+            if check is not None:
+                check()
+            with mmap.mmap(stream.fileno(), min(WINDOW, size - offset),
+                           access=mmap.ACCESS_READ, offset=offset) as block:
+                yield block
+    else:
+        while True:
+            if check is not None:
+                check()
+            block = stream.read(CHUNK)
+            if not block:
+                break
+            yield block
+
+
 def config_valid(config, layer_digests):
     allowed = {"model_format", "model_family", "model_families", "model_type", "file_type",
                "architecture", "os", "rootfs", "remote_host", "remote_model"}
@@ -91,9 +119,10 @@ def config_valid(config, layer_digests):
         raise StoreRejected("config")
 
 
-def verify_core(root, manifest_digest, budget, deadline, *, clock=time.monotonic):
+def verify_core(root, manifest_digest, budget, deadline, *, clock=time.monotonic, strategy="stream"):
     """Observe one closed read-only snapshot; a proof is not indefinite trust."""
     budget.validate()
+    validate_strategy(strategy)
     if not isinstance(manifest_digest, str) or not SHA.fullmatch(manifest_digest):
         raise StoreRejected("manifest_identity")
     root = Path(root).absolute()
@@ -101,6 +130,7 @@ def verify_core(root, manifest_digest, budget, deadline, *, clock=time.monotonic
         raise StoreRejected("root")
     opened, directories, file_states, artifacts = [], {}, {}, []
     consumed = 0
+    mapped = {"windows": 0, "bytes": 0, "digest": None}
     started = clock()
 
     def check():
@@ -140,7 +170,11 @@ def verify_core(root, manifest_digest, budget, deadline, *, clock=time.monotonic
         if not stat.S_ISREG(before.st_mode):
             os.close(fd)
             raise StoreRejected("links")
-        with os.fdopen(fd, "rb", buffering=0) as stream:
+        pin = strategy == "windowed-pinned"
+        if pin:
+            opened.append(fd)
+        stream_fd = os.dup(fd) if pin else fd
+        with os.fdopen(stream_fd, "rb", buffering=0) as stream:
             if (not stat.S_ISREG(before.st_mode) or before.st_nlink != 1
                     or before.st_uid != os.getuid() or stat.S_IMODE(before.st_mode) != 0o600
                     or before.st_dev != os.fstat(blobs_fd).st_dev):
@@ -153,20 +187,23 @@ def verify_core(root, manifest_digest, budget, deadline, *, clock=time.monotonic
             if consumed + before.st_size > budget.max_bytes:
                 raise StoreRejected("byte_budget")
             count, h, parts, head = 0, hashlib.sha256(), [], b""
-            while True:
-                check()
-                block = stream.read(CHUNK)
-                if not block:
-                    break
-                count += len(block)
-                consumed += len(block)
-                if consumed > budget.max_bytes or count > before.st_size:
-                    raise StoreRejected("byte_budget")
-                h.update(block)
-                if len(head) < 24:
-                    head = (head + block)[:24]
-                if collect:
-                    parts.append(block)
+            reader = "windowed" if model and strategy != "stream" else "stream"
+            with closing(blocks(stream, before.st_size, reader, check=check)) as chunks:
+                for block in chunks:
+                    check()
+                    count += len(block)
+                    consumed += len(block)
+                    if consumed > budget.max_bytes or count > before.st_size:
+                        raise StoreRejected("byte_budget")
+                    h.update(block)
+                    if len(head) < 24:
+                        head += block[:24 - len(head)]
+                    if collect:
+                        parts.append(block)
+                    if reader == "windowed":
+                        mapped["windows"] += 1
+                        mapped["bytes"] += len(block)
+                        mapped["digest"] = reference
             check()
             after = os.fstat(fd)
             entry = os.stat(name, dir_fd=blobs_fd, follow_symlinks=False)
@@ -176,7 +213,7 @@ def verify_core(root, manifest_digest, budget, deadline, *, clock=time.monotonic
                 raise StoreRejected("digest")
             if model and (len(head) != 24 or head[:4] != b"GGUF" or struct.unpack("<I", head[4:8])[0] not in {2, 3}):
                 raise StoreRejected("gguf_header")
-            file_states[name] = identity(after)
+            file_states[name] = (identity(after), fd if pin else None)
             artifacts.append({"digest": reference, "bytes": count})
             return b"".join(parts)
 
@@ -228,8 +265,9 @@ def verify_core(root, manifest_digest, budget, deadline, *, clock=time.monotonic
         for desc in manifest["layers"]:
             blob(desc["digest"], desc["size"], model=desc["mediaType"] == MODEL)
         check()
-        for name, saved in file_states.items():
-            if identity(os.stat(name, dir_fd=blobs_fd, follow_symlinks=False)) != saved:
+        for name, (saved, pinned_fd) in file_states.items():
+            if (identity(os.stat(name, dir_fd=blobs_fd, follow_symlinks=False)) != saved
+                    or (pinned_fd is not None and (identity(os.fstat(pinned_fd)) != saved or not readonly(pinned_fd)))):
                 raise StoreRejected("changed")
         for fd, saved in directories.items():
             if identity(os.fstat(fd)) != saved or not readonly(fd):
@@ -246,6 +284,13 @@ def verify_core(root, manifest_digest, budget, deadline, *, clock=time.monotonic
                   "GGUF_header_only": True, "tensor_layout_or_weights_qualified": False,
                   "executed_weights_qualified": False, "production_activation": False}
         result["content_identity_sha256"] = digest(canonical({"manifest": manifest_digest, "artifacts": artifacts}))
+        if strategy in {"windowed", "windowed-pinned"}:
+            result.update(schema="readonly-artifact-proof-v2", read_strategy="windowed-v1",
+                          mapped_windows=mapped["windows"], mapped_bytes=mapped["bytes"],
+                          mapped_model_digest=mapped["digest"])
+        if strategy == "windowed-pinned":
+            result.update(schema="readonly-artifact-proof-v3", read_strategy="windowed-pinned-v1",
+                          retained_blob_descriptors=len(file_states), retained_descriptors_rechecked=True)
         return result
     except StoreRejected:
         raise
@@ -256,9 +301,9 @@ def verify_core(root, manifest_digest, budget, deadline, *, clock=time.monotonic
             os.close(fd)
 
 
-def _worker(connection, root, manifest_digest, budget, deadline):
+def _worker(connection, root, manifest_digest, budget, deadline, strategy):
     try:
-        proof = verify_core(root, manifest_digest, budget, deadline)
+        proof = verify_core(root, manifest_digest, budget, deadline, strategy=strategy)
         rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
         proof["peak_rss_kib"] = int(rss / 1024 if sys.platform == "darwin" else rss)
         result = {"ok": True, "proof": proof}
@@ -272,13 +317,14 @@ def _worker(connection, root, manifest_digest, budget, deadline):
         connection.close()
 
 
-def supervised_verify(root, manifest_digest, budget=Budget(), *, cancelled=None):
+def supervised_verify(root, manifest_digest, budget=Budget(), *, cancelled=None, strategy="stream"):
     """One worker/attempt; a late, partial or cancelled result never becomes proof."""
     budget.validate()
+    validate_strategy(strategy)
     deadline = time.monotonic() + budget.seconds
     context = multiprocessing.get_context("spawn")
     parent, child = context.Pipe(duplex=False)
-    process = context.Process(target=_worker, args=(child, str(root), manifest_digest, budget, deadline))
+    process = context.Process(target=_worker, args=(child, str(root), manifest_digest, budget, deadline, strategy))
     started = False
     try:
         if cancelled is not None and cancelled():
@@ -308,7 +354,7 @@ def supervised_verify(root, manifest_digest, budget=Budget(), *, cancelled=None)
                         code = "worker"
                     raise StoreRejected(code)
                 proof = result.get("proof")
-                validate_proof(proof, manifest_digest, budget)
+                validate_proof(proof, manifest_digest, budget, strategy=strategy)
                 if cancelled is not None and cancelled():
                     raise StoreRejected("cancelled")
                 if time.monotonic() >= deadline:
@@ -333,13 +379,21 @@ def supervised_verify(root, manifest_digest, budget=Budget(), *, cancelled=None)
             process.close()
 
 
-def validate_proof(proof, manifest_digest, budget):
+def validate_proof(proof, manifest_digest, budget, *, strategy="stream"):
+    validate_strategy(strategy)
     keys = {"schema", "manifest_digest", "artifacts", "bytes_hashed", "kernel_readonly",
             "stable_observation_window", "elapsed_seconds", "GGUF_header_only",
             "tensor_layout_or_weights_qualified", "executed_weights_qualified",
             "production_activation", "content_identity_sha256", "peak_rss_kib"}
+    version = "readonly-artifact-proof-v1"
+    if strategy in {"windowed", "windowed-pinned"}:
+        version = "readonly-artifact-proof-v2"
+        keys |= {"read_strategy", "mapped_windows", "mapped_bytes", "mapped_model_digest"}
+    if strategy == "windowed-pinned":
+        version = "readonly-artifact-proof-v3"
+        keys |= {"retained_blob_descriptors", "retained_descriptors_rechecked"}
     if (not isinstance(proof, dict) or set(proof) != keys
-            or proof["schema"] != "readonly-artifact-proof-v1"
+            or proof["schema"] != version
             or proof["manifest_digest"] != manifest_digest
             or any(proof[k] is not True for k in ("kernel_readonly", "stable_observation_window", "GGUF_header_only"))
             or any(proof[k] is not False for k in ("tensor_layout_or_weights_qualified", "executed_weights_qualified", "production_activation"))
@@ -359,4 +413,16 @@ def validate_proof(proof, manifest_digest, budget):
             or type(proof["bytes_hashed"]) is not int or proof["bytes_hashed"] != total
             or total > budget.max_bytes
             or proof["content_identity_sha256"] != digest(canonical({"manifest": manifest_digest, "artifacts": proof["artifacts"]}))):
+        raise StoreRejected("proof")
+    if strategy in {"windowed", "windowed-pinned"}:
+        model = next((v for v in proof["artifacts"] if v["digest"] == proof["mapped_model_digest"]), None)
+        expected_reader = "windowed-pinned-v1" if strategy == "windowed-pinned" else "windowed-v1"
+        if (proof["read_strategy"] != expected_reader or model is None
+                or type(proof["mapped_bytes"]) is not int or proof["mapped_bytes"] != model["bytes"]
+                or type(proof["mapped_windows"]) is not int
+                or proof["mapped_windows"] != (model["bytes"] + WINDOW - 1) // WINDOW):
+            raise StoreRejected("proof")
+    if strategy == "windowed-pinned" and (type(proof["retained_blob_descriptors"]) is not int
+                                           or proof["retained_blob_descriptors"] != len(proof["artifacts"])
+                                           or proof["retained_descriptors_rechecked"] is not True):
         raise StoreRejected("proof")

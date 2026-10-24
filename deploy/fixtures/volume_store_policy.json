@@ -1,0 +1,25 @@
+{
+  "schema": "vm-volume-store-acceptance-v1",
+  "fresh_seed": 20261028,
+  "filesystem": "ext4",
+  "model_bytes": 8589934592,
+  "window_bytes": 16777216,
+  "pre_post_target_seconds": 20,
+  "shared_job_seconds": 60,
+  "wave_seconds": 75,
+  "rss_kib": 131072,
+  "cpu_limit": 2,
+  "memory_limit_mib": 768,
+  "jobs": 5,
+  "order": [
+    "candidate",
+    "baseline"
+  ],
+  "attempts_per_profile": 1,
+  "storage": "new_owned_VM_local_volume_readonly_after_preparer_exit",
+  "preparation_flush_bytes": 67108864,
+  "preparation_model_copies": 0,
+  "marker": "lawyer-disposable-windowed-volume-v1",
+  "native_inference_qualified": false,
+  "cold_cache_qualified": false
+}

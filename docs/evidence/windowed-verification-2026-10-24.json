@@ -1,0 +1,565 @@
+{
+  "schema": "windowed-verification-evidence-v1",
+  "date": "2026-10-24",
+  "base_commit": "553c2e8fb7d25e0537a23ac329f144f4ae64e122",
+  "first_pre_grade_freeze": {
+    "scripts/artifact_store.py": "cee3a2765534240b3da629311aafa70572107b5d9ac961413fe4937666178857",
+    "scripts/windowed_store_qualification.py": "ffbb697054467baa1f1ed5ef826a6f3885948b2fd6e125946fd2bd5515a9cad6",
+    "deploy/test_windowed_store.py": "fa41b831f36eb25f2f952c67b56b82add562e988a08bde49a9ed34943621e70b",
+    "deploy/fixtures/windowed_store_policy.json": "9a2ef6aabc4834e3d5c2a64d15db3fbf8e59da75adfdf2a87ad3a0915b238dce",
+    "campaign.py": "35a217f3dfcec6049c68e434afe3a6ee029b3362da88b9c992b477b9d18ab0d5",
+    "original-artifact_store.py": "0ebb0f6485825591e9511aeec7d028e541e096b0ba641519eba213f41cab91e1"
+  },
+  "first_corrected_pre_campaign_freeze": {
+    "scripts/artifact_store.py": "cee3a2765534240b3da629311aafa70572107b5d9ac961413fe4937666178857",
+    "scripts/windowed_store_qualification.py": "ffbb697054467baa1f1ed5ef826a6f3885948b2fd6e125946fd2bd5515a9cad6",
+    "deploy/test_windowed_store.py": "ec5be067b6914926000f7d652f0ea775b6e926fb1a1f95b24e50348b6ef33b02",
+    "deploy/fixtures/windowed_store_policy.json": "9a2ef6aabc4834e3d5c2a64d15db3fbf8e59da75adfdf2a87ad3a0915b238dce",
+    "campaign.py": "35a217f3dfcec6049c68e434afe3a6ee029b3362da88b9c992b477b9d18ab0d5",
+    "original-artifact_store.py": "0ebb0f6485825591e9511aeec7d028e541e096b0ba641519eba213f41cab91e1"
+  },
+  "pinned_pre_grade_freeze": {
+    "scripts/artifact_store.py": "ad31a738079edebcb4af0e53ad4557eecd7ae36ff751ace442a261433c362d69",
+    "scripts/pinned_store_qualification.py": "5a0adb93c1fba4726cd0d6b40eb2d833cf249ca4467cc43aec851d822833b571",
+    "deploy/test_pinned_store.py": "d2dfe3b32290ba3503765154be494f2cec3a2ae31dc712663ae427ada5b6a43e",
+    "deploy/fixtures/pinned_store_policy.json": "435cc8bea7ed5782c8587cdc90a3025fc340fa25cbe4a69340b26dae0f6e25f8",
+    "campaign.py": "56e994c0fe06f07a5030ae4052e4f84c6803613922792514b342bf8abb3dafcf",
+    "original-artifact_store.py": "0ebb0f6485825591e9511aeec7d028e541e096b0ba641519eba213f41cab91e1"
+  },
+  "VM_pre_grade_freeze": {
+    "scripts/artifact_store.py": "ad31a738079edebcb4af0e53ad4557eecd7ae36ff751ace442a261433c362d69",
+    "scripts/pinned_store_qualification.py": "5a0adb93c1fba4726cd0d6b40eb2d833cf249ca4467cc43aec851d822833b571",
+    "scripts/volume_store_qualification.py": "3591e900ca7e76c39eec2dc887773c93c561c47da4971e706148d193fff1db1e",
+    "scripts/metadata_phase_probe.py": "1997c8d80e3911f1abba63f5196c436ba4212ff59169d2703cee401c66caf19f",
+    "original-artifact_store.py": "0ebb0f6485825591e9511aeec7d028e541e096b0ba641519eba213f41cab91e1",
+    "deploy/fixtures/volume_store_policy.json": "c59f027d9619dceaaca62d8715735957c860c5b720fbf20c1798107911e7dc84",
+    "prepare.py": "3b36c73e67847d5629abe764cce2fb0dadf3bb58d3052934679de5b6e35ad9c1",
+    "campaign.py": "eaa486a3249788c9c93c96ff690e2b2e8288a2e4237c29d8c6109e01441cbab5",
+    "binding.json": "15dd67922abb4546cf884372629855e56979dd3cf80a7f5fb3111d6636108ed0"
+  },
+  "policies": {
+    "first": {
+      "schema": "windowed-store-acceptance-v1",
+      "cases": [
+        {
+          "id": "W01_multilayer",
+          "expected": "ok"
+        },
+        {
+          "id": "W02_window_plus_tail",
+          "expected": "ok"
+        },
+        {
+          "id": "W03_exact_window",
+          "expected": "ok"
+        },
+        {
+          "id": "W04_window_minus_byte",
+          "expected": "ok"
+        },
+        {
+          "id": "W05_tail_corrupt",
+          "expected": "digest"
+        },
+        {
+          "id": "W06_middle_corrupt",
+          "expected": "digest"
+        },
+        {
+          "id": "W07_missing_text",
+          "expected": "missing"
+        },
+        {
+          "id": "W08_remote_model",
+          "expected": "remote"
+        },
+        {
+          "id": "W09_short_digest",
+          "expected": "descriptor"
+        },
+        {
+          "id": "W10_short_size",
+          "expected": "size"
+        },
+        {
+          "id": "W11_oversize_text",
+          "expected": "size"
+        },
+        {
+          "id": "W12_inert_text",
+          "expected": "ok"
+        },
+        {
+          "id": "W13_model_symlink",
+          "expected": "links"
+        },
+        {
+          "id": "W14_v2_alias",
+          "expected": "inventory"
+        },
+        {
+          "id": "W15_writable",
+          "expected": "readonly"
+        },
+        {
+          "id": "W16_cancel_after_start",
+          "expected": "cancelled"
+        },
+        {
+          "id": "W17_expired",
+          "expected": "deadline"
+        },
+        {
+          "id": "W18_aggregate_budget",
+          "expected": "byte_budget"
+        },
+        {
+          "id": "W19_reordered_rootfs",
+          "expected": "config"
+        },
+        {
+          "id": "W20_duplicate_config_key",
+          "expected": "invalid"
+        },
+        {
+          "id": "W21_boolean_schema",
+          "expected": "manifest"
+        },
+        {
+          "id": "W22_blobs_symlink",
+          "expected": "root"
+        },
+        {
+          "id": "W23_model_hardlink",
+          "expected": "links"
+        },
+        {
+          "id": "W24_model_mode",
+          "expected": "links"
+        },
+        {
+          "id": "W25_unknown_strategy",
+          "expected": "strategy"
+        }
+      ],
+      "candidate_strategy": "windowed",
+      "candidate_window_bytes": 16777216,
+      "baseline_strategy": "original_PR212_stream",
+      "fresh_seed": 20261025,
+      "small_case_seconds": 5,
+      "model_bytes": 8589934592,
+      "verification_seconds": 60,
+      "shared_pre_post_job_seconds": 60,
+      "five_job_wave_seconds": 75,
+      "pre_post_target_seconds": 20,
+      "peak_worker_rss_limit_kib": 131072,
+      "jobs": 5,
+      "order": [
+        "candidate",
+        "baseline"
+      ],
+      "attempts_per_profile": 1,
+      "cpu_limit": 2,
+      "memory_limit_mib": 768,
+      "cache_condition": "warm_creation_and_prior_read_no_eviction",
+      "native_inference_qualified": false,
+      "cold_cache_qualified": false
+    },
+    "pinned": {
+      "schema": "pinned-windowed-acceptance-v1",
+      "cases": [
+        {
+          "id": "P01_tiny",
+          "expected": "ok"
+        },
+        {
+          "id": "P02_two_windows_tail",
+          "expected": "ok"
+        },
+        {
+          "id": "P03_exact_three_windows",
+          "expected": "ok"
+        },
+        {
+          "id": "P04_below_window",
+          "expected": "ok"
+        },
+        {
+          "id": "P05_maximum_layers",
+          "expected": "ok"
+        },
+        {
+          "id": "P06_maximum_text",
+          "expected": "ok"
+        },
+        {
+          "id": "P07_corrupt_config",
+          "expected": "digest"
+        },
+        {
+          "id": "P08_boolean_text_size",
+          "expected": "descriptor"
+        },
+        {
+          "id": "P09_missing_final_text",
+          "expected": "missing"
+        },
+        {
+          "id": "P10_model_symlink",
+          "expected": "links"
+        },
+        {
+          "id": "P11_writable",
+          "expected": "readonly"
+        },
+        {
+          "id": "P12_cancel_after_start",
+          "expected": "cancelled"
+        },
+        {
+          "id": "P13_descriptor_exhaustion",
+          "expected": "invalid"
+        }
+      ],
+      "fresh_seed": 20261027,
+      "strategy": "windowed-pinned",
+      "window_bytes": 16777216,
+      "model_bytes": 8589934592,
+      "pre_post_target_seconds": 20,
+      "shared_job_seconds": 60,
+      "wave_seconds": 75,
+      "rss_kib": 131072,
+      "jobs": 5,
+      "cpu_limit": 2,
+      "memory_limit_mib": 768,
+      "order": [
+        "candidate",
+        "baseline"
+      ],
+      "attempts_per_profile": 1,
+      "cache_condition": "warm_creation_and_prior_read_no_eviction",
+      "descriptor_failure_soft_limit": 24,
+      "max_pinned_blobs": 18,
+      "native_inference_qualified": false,
+      "cold_cache_qualified": false
+    },
+    "VM": {
+      "schema": "vm-volume-store-acceptance-v1",
+      "fresh_seed": 20261028,
+      "filesystem": "ext4",
+      "model_bytes": 8589934592,
+      "window_bytes": 16777216,
+      "pre_post_target_seconds": 20,
+      "shared_job_seconds": 60,
+      "wave_seconds": 75,
+      "rss_kib": 131072,
+      "cpu_limit": 2,
+      "memory_limit_mib": 768,
+      "jobs": 5,
+      "order": [
+        "candidate",
+        "baseline"
+      ],
+      "attempts_per_profile": 1,
+      "storage": "new_owned_VM_local_volume_readonly_after_preparer_exit",
+      "preparation_flush_bytes": 67108864,
+      "preparation_model_copies": 0,
+      "marker": "lawyer-disposable-windowed-volume-v1",
+      "native_inference_qualified": false,
+      "cold_cache_qualified": false
+    }
+  },
+  "results": {
+    "first_mapped": {
+      "cases": {
+        "passed": 25,
+        "total": 25
+      },
+      "candidate": {
+        "completed_verifications": 2,
+        "total_bytes_hashed": 17179871462,
+        "hard_budget_pass": false,
+        "twenty_second_pre_post_target_pass": false,
+        "memory_target_pass": false,
+        "native_inference_qualified": false,
+        "research_jobs_qualified": false
+      },
+      "baseline": {
+        "completed_verifications": 12,
+        "total_bytes_hashed": 103079228772,
+        "hard_budget_pass": true,
+        "twenty_second_pre_post_target_pass": false,
+        "memory_target_pass": true,
+        "native_inference_qualified": false,
+        "research_jobs_qualified": false
+      }
+    },
+    "pinned_host_bind": {
+      "cases": {
+        "passed": 13,
+        "total": 13
+      },
+      "candidate": {
+        "completed_verifications": 12,
+        "total_bytes_hashed": 103079231868,
+        "hard_budget_pass": true,
+        "twenty_second_pre_post_target_pass": false,
+        "memory_target_pass": true,
+        "native_inference_qualified": false,
+        "research_jobs_qualified": false
+      },
+      "baseline": {
+        "completed_verifications": 12,
+        "total_bytes_hashed": 103079231868,
+        "hard_budget_pass": true,
+        "twenty_second_pre_post_target_pass": false,
+        "memory_target_pass": true,
+        "native_inference_qualified": false,
+        "research_jobs_qualified": false
+      }
+    },
+    "VM_local_volume": {
+      "candidate": {
+        "completed_verifications": 12,
+        "total_bytes_hashed": 103079231760,
+        "hard_budget_pass": true,
+        "twenty_second_pre_post_target_pass": true,
+        "memory_target_pass": true,
+        "native_inference_qualified": false,
+        "research_jobs_qualified": false
+      },
+      "baseline": {
+        "completed_verifications": 12,
+        "total_bytes_hashed": 103079231760,
+        "hard_budget_pass": true,
+        "twenty_second_pre_post_target_pass": false,
+        "memory_target_pass": true,
+        "native_inference_qualified": false,
+        "research_jobs_qualified": false
+      }
+    }
+  },
+  "timings": {
+    "first_mapped": {
+      "single_seconds": 9.376135377999162,
+      "concurrent_job_seconds": [
+        10.186657921003643,
+        10.184842379996553,
+        10.184478879993549,
+        10.18493733802461,
+        10.187137463013642
+      ],
+      "wave_seconds": 10.193397796014324,
+      "baseline_single_seconds": 11.952925338991918,
+      "baseline_concurrent_seconds": [
+        24.000217594002606,
+        23.998031719005667,
+        23.999770385999,
+        23.997862761025317,
+        23.997407593997195
+      ]
+    },
+    "pinned_host_bind": {
+      "single_seconds": 10.117522586981067,
+      "concurrent_job_seconds": [
+        36.06797010000446,
+        36.06590134999715,
+        36.06547405800666,
+        36.06519572500838,
+        36.06745955799124
+      ],
+      "wave_seconds": 36.07560468398151,
+      "baseline_single_seconds": 15.751594256988028,
+      "baseline_concurrent_seconds": [
+        37.7245212259877,
+        37.71882064201054,
+        37.723846684006276,
+        37.72178384999279,
+        37.718188183993334
+      ]
+    },
+    "VM_local_volume": {
+      "single_seconds": 8.296599544992205,
+      "concurrent_job_seconds": [
+        18.94178859202657,
+        18.94388375899871,
+        18.940230216976488,
+        18.940784718026407,
+        18.9409051759867
+      ],
+      "wave_seconds": 18.948746676003793,
+      "baseline_single_seconds": 8.877976628020406,
+      "baseline_concurrent_seconds": [
+        23.77409967701533,
+        24.065490052016685,
+        22.32511417599744,
+        22.74856563398498,
+        22.323144843016053
+      ],
+      "worker_peak_rss_kib": 45412,
+      "mapped_windows": 6144
+    }
+  },
+  "initial_contracts": {
+    "tests": 14,
+    "errors": 1,
+    "reason": "Mapping-boundary test assumed 4 KiB alignment on macOS; use host allocation granularity. Source/controller/policy unchanged.",
+    "output_sha256": "39505bee776777a7a4e28f18103bb2e15c0ed8bff12a9ed26d65f0cf3e593158"
+  },
+  "corrected_initial_contracts": {
+    "passed": 14,
+    "failed": 0
+  },
+  "pinned_initial_contracts": {
+    "passed": 8,
+    "failed": 0
+  },
+  "diagnostic": {
+    "purpose": "Observational only; no performance acceptance",
+    "fresh_model_bytes": 2147483648,
+    "jobs": 5,
+    "stopped_on_first_rejection": true,
+    "identity_recheck_failures": 5,
+    "localized_to": "final manifest namespace identity recheck",
+    "different_field": "guest inode",
+    "other_recorded_identity_fields_equal": true,
+    "source_sha256": "cee3a2765534240b3da629311aafa70572107b5d9ac961413fe4937666178857",
+    "source_inventory_unchanged": true,
+    "universal_filesystem_cause_claimed": false
+  },
+  "prior_negative_evidence_sha256": {
+    "pre-grade-freeze.json": "53cc9241960370dd8894a1ac3b5a957623ce20e10e376f59cde95375c13a3de9",
+    "corrected-pre-campaign-freeze.json": "09925f925c7e1e4348177ead45c152208a1c900ab7191d9d1479a0ab841a93e1",
+    "first-contracts.stderr": "d930b4129a65f28a641dd137dee1b5c044ccd816687b3255bfe16a3714086edc",
+    "receipts/cases.json": "e59615ed9cb78920c7164ca21bc3fba3cf2321ec7b2c2801587a28e435d690bd",
+    "receipts/budgets.json": "98fd77c504d604b3bb51ef7c7b4983edd1a568e40fed254bf2f393fee84d5eac",
+    "first-qualified-result.json": "c7a68877e4f36238fb8e30e87da4c3a4bb9238e5544ec0190420f0b85363ed36",
+    "first-candidate/scripts/artifact_store.py": "f3b5220800fa4660351a099585aae7190e147e768452bf94b8b96cd861da01f8",
+    "corrected-candidate/scripts/artifact_store.py": "0ebb0f6485825591e9511aeec7d028e541e096b0ba641519eba213f41cab91e1"
+  },
+  "retained_prior_files": 932,
+  "intentionally_changed_prior_files": [
+    "scripts/artifact_store.py"
+  ],
+  "all_other_931_prior_files_exact": true,
+  "native_campaigns": {
+    "first_mapped": 1,
+    "pinned_host_bind": 1,
+    "VM_local_volume": 1
+  },
+  "premeasurement_failures_retained": [
+    {
+      "stage": "capability readback",
+      "benchmark_started": false,
+      "cleanup_verified": true
+    },
+    {
+      "stage": "volume preparation",
+      "exit": 137,
+      "OOM_killed": true,
+      "memory_limit_MiB": 768,
+      "benchmark_started": false,
+      "cleanup_verified": true
+    },
+    {
+      "stage": "normalized mount readback",
+      "benchmark_started": false,
+      "cleanup_verified": true
+    },
+    {
+      "stage": "normalized HostConfig mount readback",
+      "benchmark_started": false,
+      "cleanup_verified": true
+    }
+  ],
+  "VM_preparation": {
+    "info": {
+      "manifest_digest": "sha256:4f0da6222f1afcf13e271e018ea9ce5440361a078f2fdf661d57b19530cc79fc",
+      "model_digest": "sha256:4e1c6ccecfd4deeba111e5d09f207c886f7473a1dfd61d0a185a4185d5a0597b",
+      "model_bytes": 8589934592,
+      "artifact_count": 6
+    },
+    "fresh_seed": 20261028,
+    "bytes_written": 8589934592,
+    "model_blocks_512": 16777224,
+    "stored_digest_verified": true,
+    "fsynced": true,
+    "model_copies": 0,
+    "filesystem": "ext4",
+    "owner_uid": 501,
+    "owner_gid": 20,
+    "real_model_weights": false,
+    "GGUF_tensors": 0
+  },
+  "VM_runtime_container": {
+    "container_id": "ca769c6d33e923bc495b66254e022460912abd4a2f894d283e411d1cc9ddb485",
+    "role": "campaign",
+    "network": "none",
+    "root_readonly": true,
+    "CPU": 2,
+    "memory_MiB": 768,
+    "pids": 96,
+    "no_ports_or_devices": true,
+    "no_privileges": true,
+    "sole_added_capability": null,
+    "qualification_volume": "lawyer-window-volume-fc0521699866",
+    "private_or_runtime_mounts": false,
+    "image_sha256": "sha256:f85c5697265c178cc6887276c55fe16cf3d14ca35c3df6a5eab3b360534a55d2"
+  },
+  "VM_preparer_container": {
+    "container_id": "1f437bb7d3d6afdf0720971172612880201a3925b002bc381687a3a6d48f1777",
+    "role": "prepare",
+    "network": "none",
+    "root_readonly": true,
+    "CPU": 2,
+    "memory_MiB": 768,
+    "pids": 96,
+    "no_ports_or_devices": true,
+    "no_privileges": true,
+    "sole_added_capability": "CHOWN",
+    "qualification_volume": "lawyer-window-volume-fc0521699866",
+    "private_or_runtime_mounts": false,
+    "image_sha256": "sha256:f85c5697265c178cc6887276c55fe16cf3d14ca35c3df6a5eab3b360534a55d2"
+  },
+  "VM_preparer_exited_before_readonly_campaign": true,
+  "VM_receipt_round_trip_nonce_verified": true,
+  "VM_owned_volume_cleanup": {
+    "volume": "lawyer-window-volume-fc0521699866",
+    "only_new_owned_volume_removed": true,
+    "not_preexisting": true,
+    "removed": true
+  },
+  "qualified_scope": "One fresh synthetic warm-cache VM-local read-only ext4 volume, same two-CPU/768-MiB limits, full per-job pre/post hashing. No host-bind or universal latency qualification.",
+  "full_native_inference_qualified": false,
+  "five_research_jobs_qualified": false,
+  "production_installation": false,
+  "production_activation": false,
+  "private_case_inputs": false,
+  "provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_keys_used": 0,
+  "owner_review_completed": false,
+  "independent_trust_confirmed": false,
+  "large_IO_added_to_CI": false,
+  "first_reports": {
+    "cases": "a932554ec74687781305c43d2b1a72a9fb67469e937d698ae696bc4572fccf07",
+    "candidate": "79ebe8ebddceba2ba16a5f65cf1ae9632f8795ad08edbdd99cc5713e480844d6",
+    "baseline": "bfb04cf0eb1775c3532e8a88fff2096040dea9a75c1ca3a9fc5c9a5ab3d607f4"
+  },
+  "pinned_reports": {
+    "cases": "6bdf3af2fcfc7dfd46c277c9e2fc2a8293a55db86aa135b18767bcf86b2bc94b",
+    "candidate": "06bf1974e6a10ca24af7ef1f18f53b2863f8ad7c97dbf55a46fb8317d0121494",
+    "baseline": "0b57a00e1dbf28d78fa9d592635a7e9b3d0be679985f9e6a4be48029da074db7"
+  },
+  "VM_report_sha256": "b8dacad3d305e0f068e6e3f9a9dac0e9165148a6e88357e42c6492b6e501cd59",
+  "deployment_contracts": {
+    "passed": 472,
+    "failed": 0,
+    "seconds": 19.835
+  },
+  "new_contracts": 29,
+  "report_replay_contracts": 7,
+  "CI_execution_topology_and_caps_unchanged": true,
+  "CI_existing_coverage_preserved": true,
+  "CI_small_contract_coverage_added": 29
+}

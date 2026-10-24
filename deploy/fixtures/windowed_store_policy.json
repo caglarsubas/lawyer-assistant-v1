@@ -1,0 +1,127 @@
+{
+  "schema": "windowed-store-acceptance-v1",
+  "cases": [
+    {
+      "id": "W01_multilayer",
+      "expected": "ok"
+    },
+    {
+      "id": "W02_window_plus_tail",
+      "expected": "ok"
+    },
+    {
+      "id": "W03_exact_window",
+      "expected": "ok"
+    },
+    {
+      "id": "W04_window_minus_byte",
+      "expected": "ok"
+    },
+    {
+      "id": "W05_tail_corrupt",
+      "expected": "digest"
+    },
+    {
+      "id": "W06_middle_corrupt",
+      "expected": "digest"
+    },
+    {
+      "id": "W07_missing_text",
+      "expected": "missing"
+    },
+    {
+      "id": "W08_remote_model",
+      "expected": "remote"
+    },
+    {
+      "id": "W09_short_digest",
+      "expected": "descriptor"
+    },
+    {
+      "id": "W10_short_size",
+      "expected": "size"
+    },
+    {
+      "id": "W11_oversize_text",
+      "expected": "size"
+    },
+    {
+      "id": "W12_inert_text",
+      "expected": "ok"
+    },
+    {
+      "id": "W13_model_symlink",
+      "expected": "links"
+    },
+    {
+      "id": "W14_v2_alias",
+      "expected": "inventory"
+    },
+    {
+      "id": "W15_writable",
+      "expected": "readonly"
+    },
+    {
+      "id": "W16_cancel_after_start",
+      "expected": "cancelled"
+    },
+    {
+      "id": "W17_expired",
+      "expected": "deadline"
+    },
+    {
+      "id": "W18_aggregate_budget",
+      "expected": "byte_budget"
+    },
+    {
+      "id": "W19_reordered_rootfs",
+      "expected": "config"
+    },
+    {
+      "id": "W20_duplicate_config_key",
+      "expected": "invalid"
+    },
+    {
+      "id": "W21_boolean_schema",
+      "expected": "manifest"
+    },
+    {
+      "id": "W22_blobs_symlink",
+      "expected": "root"
+    },
+    {
+      "id": "W23_model_hardlink",
+      "expected": "links"
+    },
+    {
+      "id": "W24_model_mode",
+      "expected": "links"
+    },
+    {
+      "id": "W25_unknown_strategy",
+      "expected": "strategy"
+    }
+  ],
+  "candidate_strategy": "windowed",
+  "candidate_window_bytes": 16777216,
+  "baseline_strategy": "original_PR212_stream",
+  "fresh_seed": 20261025,
+  "small_case_seconds": 5,
+  "model_bytes": 8589934592,
+  "verification_seconds": 60,
+  "shared_pre_post_job_seconds": 60,
+  "five_job_wave_seconds": 75,
+  "pre_post_target_seconds": 20,
+  "peak_worker_rss_limit_kib": 131072,
+  "jobs": 5,
+  "order": [
+    "candidate",
+    "baseline"
+  ],
+  "attempts_per_profile": 1,
+  "cpu_limit": 2,
+  "memory_limit_mib": 768,
+  "cache_condition": "warm_creation_and_prior_read_no_eviction",
+  "native_inference_qualified": false,
+  "cold_cache_qualified": false
+}

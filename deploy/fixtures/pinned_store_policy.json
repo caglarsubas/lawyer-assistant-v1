@@ -1,0 +1,78 @@
+{
+  "schema": "pinned-windowed-acceptance-v1",
+  "cases": [
+    {
+      "id": "P01_tiny",
+      "expected": "ok"
+    },
+    {
+      "id": "P02_two_windows_tail",
+      "expected": "ok"
+    },
+    {
+      "id": "P03_exact_three_windows",
+      "expected": "ok"
+    },
+    {
+      "id": "P04_below_window",
+      "expected": "ok"
+    },
+    {
+      "id": "P05_maximum_layers",
+      "expected": "ok"
+    },
+    {
+      "id": "P06_maximum_text",
+      "expected": "ok"
+    },
+    {
+      "id": "P07_corrupt_config",
+      "expected": "digest"
+    },
+    {
+      "id": "P08_boolean_text_size",
+      "expected": "descriptor"
+    },
+    {
+      "id": "P09_missing_final_text",
+      "expected": "missing"
+    },
+    {
+      "id": "P10_model_symlink",
+      "expected": "links"
+    },
+    {
+      "id": "P11_writable",
+      "expected": "readonly"
+    },
+    {
+      "id": "P12_cancel_after_start",
+      "expected": "cancelled"
+    },
+    {
+      "id": "P13_descriptor_exhaustion",
+      "expected": "invalid"
+    }
+  ],
+  "fresh_seed": 20261027,
+  "strategy": "windowed-pinned",
+  "window_bytes": 16777216,
+  "model_bytes": 8589934592,
+  "pre_post_target_seconds": 20,
+  "shared_job_seconds": 60,
+  "wave_seconds": 75,
+  "rss_kib": 131072,
+  "jobs": 5,
+  "cpu_limit": 2,
+  "memory_limit_mib": 768,
+  "order": [
+    "candidate",
+    "baseline"
+  ],
+  "attempts_per_profile": 1,
+  "cache_condition": "warm_creation_and_prior_read_no_eviction",
+  "descriptor_failure_soft_limit": 24,
+  "max_pinned_blobs": 18,
+  "native_inference_qualified": false,
+  "cold_cache_qualified": false
+}
