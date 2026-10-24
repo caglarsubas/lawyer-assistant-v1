@@ -6654,3 +6654,63 @@ native/research load, completion/context/tokenizer behavior, installed/executed
 weights, historical 502 cause, hostile-host isolation and legal/production acceptance
 remain open. See [candidate procedure](WINDOWED_STORE_CANDIDATE.md) and
 [dated evidence](evidence/windowed-verification-2026-10-24.json).
+
+## Sealed model-volume import/restore and signed metadata handoff — 2026-10-25
+
+F00-06 remains **partial**. A staged, unregistered candidate exports an independently
+approved canonical model bundle, imports it into a fresh VM-local volume, and
+restores the exact same content into a separate generation. No application/provider
+installation, native inference or private-case operation is performed.
+
+The strict index permits only manifest/artifact digests, sizes and content identity;
+it contains no paths, keys, trust, database, reviews or control state. Imports
+reserve a fresh destination, hash every copied byte, fsync and rename the staged
+snapshot, then stop at Prepared. Only a later kernel-read-only reader can freshly
+verify and seal it. A separate live control journal retains generations, lineage,
+revocation and durable one-use nonce state. Copy/rename crashes remain quarantined;
+read-only recovery cannot silently promote an orphan or replay an operation.
+Restore retains its sealed parent at creation and uses fresh operation, destination
+and generation identifiers. It does not restore the control journal or authorize
+production activation. Retention and descendant revocation policy still need
+qualification before runtime integration.
+
+The signed metadata envelope binds exact identity/tenant/model/route/context,
+index, content, destination, generation, receipt and verification bytes. Provider
+identity and storage-handoff keys are separately supplied by trusted caller context.
+The opaque relay codec preserves exact bytes; the receiver checks signature,
+identity, key availability, lifetime and live state, reserves a nonce durably,
+re-verifies the local read-only store, then checks again. Crashes burn reserved
+nonces. Old-generation messages, wrong destinations, replays, revoked keys/state,
+changed identities and cross-kind certificates reject. This is a metadata-only
+handoff; HTTP relay serving and the immutable execution hook remain unintegrated.
+
+The first actual frozen native campaign passes **35/35 cases**, including all
+29 expected rejections, interrupted copy/rename, durable nonce crash and fresh
+restore lineage. It uses a fully written synthetic 8 GiB zero-tensor fixture on
+new ext4 volumes, two CPUs/768 MiB, no network and a cleared process environment.
+Each export/import/restore copies **8,589,935,484 exact artifact bytes**. The retained
+import and restore seal observations take **4.32s and 4.44s**, within the unchanged
+20-second verification limit. Transfer has a separate 90-second budget; these are
+warm local observations, not an end-to-end latency SLA, cold-storage result or
+actual native-research capacity. Two failed preparations (missing dependency and
+ownership finalization) executed no acceptance cases and remain retained. Neither
+resources nor targets were raised. All 21 new owned volumes and their containers
+are removed with ownership checks.
+
+All **500 deployment contracts** (28 new), Python lint and signed-report replay
+pass. Large model I/O remains local; CI receives only small tests and public
+synthetic receipts. All 951 earlier implementation/configuration files, CI topology,
+workers, deadlines, coverage, original verifier/default and execution hook remain
+exact. Real runtime keys/trust are unused and unmodified. Originals, exact evidence
+versions and confidential review history stay outside the campaign. Owner focused
+analysis v3 review and independent real issuer/runtime-pin confirmation remain
+pending.
+
+Next qualify retained control-journal recovery and descendant revocation before
+connecting the sealed metadata receipt to a staged HTTP relay/immutable execution
+hook. Preserve the explicit volume boundary and require independent real trust
+confirmation before activation. Installed/executed weights, real inference and
+context/tokenizer/truncation behavior, sustained native/research jobs, cold storage,
+historical HTTP 502 cause and legal/production acceptance remain open. See
+[procedure and boundaries](SEALED_VOLUME_HANDOFF.md) and
+[dated evidence](evidence/sealed-volume-handoff-2026-10-25.json).

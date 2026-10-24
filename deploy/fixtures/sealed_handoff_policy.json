@@ -1,0 +1,167 @@
+{
+  "schema": "sealed-volume-handoff-qualification-v1",
+  "fresh_seed": 20261029,
+  "model_bytes": 8589934592,
+  "small_model_bytes": 65561,
+  "transfer_seconds": 90,
+  "transfer_max_bytes": 9663676416,
+  "verification_seconds": 20,
+  "cpu_limit": 2,
+  "memory_limit_mib": 768,
+  "filesystem": "ext4",
+  "transfer_cases": [
+    {
+      "id": "T01_import",
+      "expected": "prepared"
+    },
+    {
+      "id": "T02_wrong_index",
+      "expected": "rejected"
+    },
+    {
+      "id": "T03_unknown_index_field",
+      "expected": "rejected"
+    },
+    {
+      "id": "T04_duplicate_artifact",
+      "expected": "rejected"
+    },
+    {
+      "id": "T05_boolean_size",
+      "expected": "rejected"
+    },
+    {
+      "id": "T06_path_digest",
+      "expected": "rejected"
+    },
+    {
+      "id": "T07_missing_blob",
+      "expected": "rejected"
+    },
+    {
+      "id": "T08_corrupt_blob",
+      "expected": "rejected"
+    },
+    {
+      "id": "T09_symlink_blob",
+      "expected": "rejected"
+    },
+    {
+      "id": "T10_hardlink_blob",
+      "expected": "rejected"
+    },
+    {
+      "id": "T11_extra_blob",
+      "expected": "rejected"
+    },
+    {
+      "id": "T12_control_in_bundle",
+      "expected": "rejected"
+    },
+    {
+      "id": "T13_nonempty_target",
+      "expected": "rejected"
+    },
+    {
+      "id": "T14_byte_budget",
+      "expected": "rejected"
+    },
+    {
+      "id": "T15_cancelled",
+      "expected": "rejected"
+    },
+    {
+      "id": "T16_writable_bundle",
+      "expected": "rejected"
+    }
+  ],
+  "handoff_cases": [
+    {
+      "id": "H01_valid",
+      "expected": "verified"
+    },
+    {
+      "id": "H02_replay",
+      "expected": "rejected"
+    },
+    {
+      "id": "H03_foreign_key",
+      "expected": "rejected"
+    },
+    {
+      "id": "H04_wrong_binding",
+      "expected": "rejected"
+    },
+    {
+      "id": "H05_wrong_model",
+      "expected": "rejected"
+    },
+    {
+      "id": "H06_expired",
+      "expected": "rejected"
+    },
+    {
+      "id": "H07_signature_tamper",
+      "expected": "rejected"
+    },
+    {
+      "id": "H08_revoked_key",
+      "expected": "rejected"
+    },
+    {
+      "id": "H10_cross_identity_kind",
+      "expected": "rejected"
+    },
+    {
+      "id": "H11_wrong_tenant",
+      "expected": "rejected"
+    },
+    {
+      "id": "H09_revoked_operation",
+      "expected": "rejected"
+    }
+  ],
+  "lifecycle_cases": [
+    {
+      "id": "S01_writable_seal",
+      "expected": "rejected"
+    },
+    {
+      "id": "S02_operation_replay",
+      "expected": "rejected"
+    },
+    {
+      "id": "S03_copy_crash",
+      "expected": "quarantined"
+    },
+    {
+      "id": "S04_rename_crash",
+      "expected": "quarantined"
+    },
+    {
+      "id": "S05_nonce_crash",
+      "expected": "burned"
+    },
+    {
+      "id": "S06_restore_generation",
+      "expected": "verified"
+    },
+    {
+      "id": "S07_prior_handoff_restore",
+      "expected": "rejected"
+    },
+    {
+      "id": "S08_revoked_parent_restore",
+      "expected": "rejected"
+    }
+  ],
+  "crash_checkpoints": [
+    "copied_blob",
+    "renamed",
+    "reserved_nonce"
+  ],
+  "attempts_per_case": 1,
+  "real_signers_or_credentials": false,
+  "native_inference_qualified": false,
+  "production_activation": false
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "sealed-volume-handoff-evidence-v1",
+  "date": "2026-10-25",
+  "candidate_scope": "unregistered disposable model-only transfer and signed metadata relay codec",
+  "results": {
+    "native_cases": 35,
+    "expected_rejections": 29,
+    "signature_report_replays": 3,
+    "import_seal_seconds": 4.316449793986976,
+    "restore_seal_seconds": 4.443703210999956,
+    "fresh_restore_generation": true,
+    "exact_artifact_bytes_per_copy": 8589935484,
+    "metadata_handoff_only": true,
+    "native_execution_authorized": false,
+    "production_activation": false
+  },
+  "retained_report_sha256": "536e3ce2eb931ff17ba5355915b4e069cad4b3ddb68f2e72419ef2614a603d93",
+  "policy_sha256": "5fd12d46de41d462783b364e7bb82e20ceac6637b4ea458aa9c0fe8d12986e31",
+  "deployment_contracts": {
+    "passed": 500,
+    "failed": 0,
+    "seconds": 19.149
+  },
+  "new_contracts": 28,
+  "prior_implementation_and_config_exact": 951,
+  "existing_ci_topology_workers_caps_and_coverage_unchanged": true,
+  "native_frozen_attempts": {
+    "preparation_dependency_rejection": {
+      "graded_cases": 0,
+      "cleaned_up": true
+    },
+    "preparation_ownership_rejection": {
+      "graded_cases": 0,
+      "cleaned_up": true
+    },
+    "completed_profile": {
+      "case_attempts": 1,
+      "cases": 35,
+      "all_expected": true,
+      "cpu": 2,
+      "memory_mib": 768,
+      "filesystem": "ext4",
+      "network": "none",
+      "cleared_process_environment": true,
+      "model_bytes": 8589934592,
+      "tensor_count": 0,
+      "transfer_seconds_cap": 90,
+      "verification_seconds_cap": 20
+    }
+  },
+  "all_21_new_owned_volumes_removed": true,
+  "all_owned_containers_removed": true,
+  "private_case_inputs": false,
+  "real_keys_used": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "production_installation": false,
+  "production_activation": false,
+  "owner_review_completed": false,
+  "independent_trust_confirmed": false,
+  "HTTP_relay_serving_qualified": false,
+  "hostile_host_or_control_journal_rollback_qualified": false,
+  "cold_storage_or_sustained_load_qualified": false,
+  "large_IO_added_to_CI": false,
+  "remaining": [
+    "Independent real issuer fingerprint and runtime-pin confirmation",
+    "Staged HTTP route and immutable execution-hook integration",
+    "Live control-journal retention and descendant revocation policy before activation",
+    "Installed/executed weights, native inference/context/tokenizer/truncation and sustained actual jobs",
+    "Cold-storage/host-bind profile and historical HTTP 502 cause",
+    "Owner focused-analysis v3 review and legal/production acceptance"
+  ]
+}
