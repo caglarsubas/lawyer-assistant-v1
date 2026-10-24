@@ -2281,3 +2281,42 @@ Executed weights, historical 502 cause, sustained five-job capacity, reviewed co
 semantic/legal correctness and production rollout remain open. See
 [read-only inspection procedure](BACKEND_REFERENCE_INSPECTION.md) and
 [dated evidence](evidence/backend-reference-inspection-2026-10-24.json).
+
+## Isolated backend reference, parser and store qualification — 2026-10-24
+
+Only explicit public upstream source is staged; no live backend or model store is
+queried or copied. A hash-locked builder prepares unmodified parser/manifest/envconfig
+packages and a generated stdlib-only Go module. Both source revisions and compiler
+image are pinned; Go 1.26.10 meets their minimums. Source is read-only in nonroot,
+network-disabled resource-bounded containers with scratch only and no credentials,
+runtime mounts, ports, devices or Docker socket. This is not a full server build,
+HTTP test, installed binary attestation or native execution qualification.
+
+Preserve the frozen fifteen cases and nine original methods. The first container
+launches run no cases because temporary storage is non-executable; retain those
+blocked logs. Correcting only executable scratch yields first actual grading of
+15/15 release outcomes and 14/15 candidate outcomes. Candidate Q2412 fails its
+unchanged expected rejection: a tampered regular manifest blob returns a different
+digest. Retain that failed source, expectation and actual log. The added tenth
+contract requires its rejection by the qualification reader. All 402 deployment
+contracts and lint pass; engineering CI does not clear this negative qualification.
+
+The colon spelling is an ordinary model/tag in both parsers. The newer source
+resolves dash/bare digest references only when the manifest exists as a blob; a
+legacy named manifest alone is insufficient. It does not compare regular blob
+content to its digest filename on the tested path. Named parsing also does not
+verify model-layer presence. Do not infer safe immutable dispatch from successful
+parsing or fix the current live store by creating aliases. No frozen hook/route,
+source expectation or currently inactive trust is changed.
+
+All eight application services, originals, encrypted bytes, exact evidence versions,
+credentials, sessions, private history, staged issuer/public candidate, 31 earlier
+tracked edits and 906 retained source/configuration files remain exact. No live
+metadata, inference, signing, install, restart, analysis regeneration or owner
+review occurs. Provider repository remains untouched. Owner v3 review and independent
+public-fingerprint confirmation remain pending. Keep CI jobs/workers/caps/coverage
+and five timing reserves. Next qualify an isolated integrity fix and full-digest
+wire contract with fresh tests, then complete server/HTTP, read-only store, full-size
+work, relay/trust/restore and fresh native admission. See
+[procedure](ISOLATED_BACKEND_STORE.md) and
+[dated evidence](evidence/isolated-backend-store-2026-10-24.json).

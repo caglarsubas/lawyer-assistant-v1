@@ -6365,3 +6365,60 @@ Executed weights, historical 502 cause, sustained five-job capacity, reviewed co
 semantic/legal correctness and production rollout remain open. See
 [read-only inspection procedure](BACKEND_REFERENCE_INSPECTION.md) and
 [dated evidence](evidence/backend-reference-inspection-2026-10-24.json).
+
+
+## Isolated backend reference, parser and store qualification — 2026-10-24
+
+F00-06 stays **partial**. Two explicit public source snapshots are compiled as
+unmodified `types/model`, `manifest` and `envconfig` packages in a generated,
+stdlib-only Go test module: release `v0.32.14` at `d67ad83426633195089509347ffd4fe795120198`
+and the retained staged snapshot `675150d6ad2747df1e218ef59de9194bc4a7e538`.
+The source lock checks every byte, original license and contextual route/module
+source. Go 1.26.10 satisfies both upstream Go minimums. This is package-level
+qualification, not a complete backend/server build, HTTP endpoint test, signed
+release verification or proof of the installed executable's source provenance.
+
+Fifteen fresh invented cases and nine contracts are frozen before grading. Initial
+container launches are blocked by non-executable temporary mounts and run no cases;
+their logs remain retained. Correcting disposable executable scratch leaves source,
+expectations and the first candidate exact. First actual release grading matches
+15/15 outcomes; candidate grading matches 14/15. Q2412 expects rejection of a
+tampered regular manifest blob but observes a different content digest returned.
+The candidate remains failed. No source or expected result is retuned; a tenth
+contract checks that the qualification reader rejects the actual retained failure.
+All 402 deployment contracts and lint pass. Nine original methods and 906 retained
+source/configuration files remain exact. CI jobs, workers, caps, coverage and five
+required timing reserves remain unchanged.
+
+Both parsers interpret `sha256:<64 hex>` as an ordinary model/tag. With a matching
+manifest blob alone, colon lookup misses; an invented different named alias can
+return another digest. The release packages have no digest-store resolution.
+The newer packages resolve dash/bare full digests from a manifest blob, but not
+from a legacy named manifest alone; ambiguous prefixes reject. Their regular-blob
+path computes a digest without comparing it to the digest filename. Named
+manifest parsing also succeeds with an absent model layer. These observations
+explain source-level limitations consistent with the earlier live 404, without
+claiming the live binary runs either inspected commit. Neither source qualifies
+the current immutable execution contract, and changing wire spelling alone cannot
+clear the retained integrity failure. The frozen colon-addressing hook stays inactive.
+
+Containers have no network, credentials, runtime mounts, ports, devices or Docker
+socket. Sources are read-only; only disposable scratch is writable, with nonroot
+execution, bounded CPU/memory/PIDs and explicit test/operator deadlines. All stores
+contain invented JSON and a non-model GGUF sentinel; directory/content inventories
+stay exact across lookups. No live backend metadata, prompt, model-store access,
+inference, signing, provider/relay install, restart or configuration change occurs.
+All eight services stay healthy; originals, encrypted bytes, exact evidence versions,
+credentials, sessions, private review history, 31 earlier tracked edits, staged
+issuer material and unconfirmed public candidate remain exact. The provider
+repository is untouched. Owner focused-analysis v3 review stays pending.
+
+Next qualify a separate source-level integrity fix and explicit full-digest wire
+contract with fresh frozen adversarial tests, then a complete disposable server/HTTP
+build and read-only artifact store. Qualify linked-file boundaries, config/layer
+integrity and full-size work budgets. Independently confirm issuer fingerprint and
+runtime pin, then scoped relay/trust/restore and fresh durable native admission
+before any inference trial. Installed compatibility, executed weights, historical
+502 cause, sustained five-job capacity, corpus/legal quality and production
+activation remain open. See [procedure](ISOLATED_BACKEND_STORE.md) and
+[dated evidence](evidence/isolated-backend-store-2026-10-24.json).

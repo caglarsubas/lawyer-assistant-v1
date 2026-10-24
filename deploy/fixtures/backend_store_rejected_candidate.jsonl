@@ -1,0 +1,84 @@
+{"Time":"2026-10-24T04:32:09.088220804Z","Action":"start","Package":"github.com/ollama/ollama/qualifier"}
+{"Time":"2026-10-24T04:32:09.089426929Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences"}
+{"Time":"2026-10-24T04:32:09.089445013Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences","Output":"=== RUN   TestFrozenReferences\n"}
+{"Time":"2026-10-24T04:32:09.089693638Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2401"}
+{"Time":"2026-10-24T04:32:09.089699388Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2401","Output":"=== RUN   TestFrozenReferences/Q2401\n"}
+{"Time":"2026-10-24T04:32:09.089813429Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2401","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2401\",\"profile\":\"candidate\",\"actual\":\"valid\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.089844888Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2401","Output":"--- PASS: TestFrozenReferences/Q2401 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.089852888Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2401","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.089855554Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2402"}
+{"Time":"2026-10-24T04:32:09.089856471Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2402","Output":"=== RUN   TestFrozenReferences/Q2402\n"}
+{"Time":"2026-10-24T04:32:09.089934221Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2402","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2402\",\"profile\":\"candidate\",\"actual\":\"ordinary_tag\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.089943096Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2402","Output":"--- PASS: TestFrozenReferences/Q2402 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.089947929Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2402","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.089949429Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2403"}
+{"Time":"2026-10-24T04:32:09.089950304Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2403","Output":"=== RUN   TestFrozenReferences/Q2403\n"}
+{"Time":"2026-10-24T04:32:09.090035638Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2403","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2403\",\"profile\":\"candidate\",\"actual\":\"valid\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.090063471Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2403","Output":"--- PASS: TestFrozenReferences/Q2403 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.090071013Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2403","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.090072429Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2404"}
+{"Time":"2026-10-24T04:32:09.090073429Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2404","Output":"=== RUN   TestFrozenReferences/Q2404\n"}
+{"Time":"2026-10-24T04:32:09.090145304Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2404","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2404\",\"profile\":\"candidate\",\"actual\":\"missing\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.090198346Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2404","Output":"--- PASS: TestFrozenReferences/Q2404 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.090207179Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2404","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.090208304Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2405"}
+{"Time":"2026-10-24T04:32:09.090209054Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2405","Output":"=== RUN   TestFrozenReferences/Q2405\n"}
+{"Time":"2026-10-24T04:32:09.090458054Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2405","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2405\",\"profile\":\"candidate\",\"actual\":\"matched\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.090483054Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2405","Output":"--- PASS: TestFrozenReferences/Q2405 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.090487429Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2405","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.090488763Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2406"}
+{"Time":"2026-10-24T04:32:09.090489679Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2406","Output":"=== RUN   TestFrozenReferences/Q2406\n"}
+{"Time":"2026-10-24T04:32:09.090560721Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2406","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2406\",\"profile\":\"candidate\",\"actual\":\"missing\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.090594388Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2406","Output":"--- PASS: TestFrozenReferences/Q2406 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.090604596Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2406","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.090606096Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2407"}
+{"Time":"2026-10-24T04:32:09.090607138Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2407","Output":"=== RUN   TestFrozenReferences/Q2407\n"}
+{"Time":"2026-10-24T04:32:09.090715513Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2407","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2407\",\"profile\":\"candidate\",\"actual\":\"missing\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.090814763Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2407","Output":"--- PASS: TestFrozenReferences/Q2407 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.090823138Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2407","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.090824179Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2408"}
+{"Time":"2026-10-24T04:32:09.090825013Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2408","Output":"=== RUN   TestFrozenReferences/Q2408\n"}
+{"Time":"2026-10-24T04:32:09.090972763Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2408","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2408\",\"profile\":\"candidate\",\"actual\":\"matched\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.091012096Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2408","Output":"--- PASS: TestFrozenReferences/Q2408 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.091018054Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2408","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.091019388Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2409"}
+{"Time":"2026-10-24T04:32:09.091020388Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2409","Output":"=== RUN   TestFrozenReferences/Q2409\n"}
+{"Time":"2026-10-24T04:32:09.091169888Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2409","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2409\",\"profile\":\"candidate\",\"actual\":\"matched\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.091190179Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2409","Output":"--- PASS: TestFrozenReferences/Q2409 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.091193054Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2409","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.091201138Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2410"}
+{"Time":"2026-10-24T04:32:09.091202179Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2410","Output":"=== RUN   TestFrozenReferences/Q2410\n"}
+{"Time":"2026-10-24T04:32:09.091317138Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2410","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2410\",\"profile\":\"candidate\",\"actual\":\"matched\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.091324971Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2410","Output":"--- PASS: TestFrozenReferences/Q2410 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.091337638Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2410","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.091341888Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2411"}
+{"Time":"2026-10-24T04:32:09.091342763Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2411","Output":"=== RUN   TestFrozenReferences/Q2411\n"}
+{"Time":"2026-10-24T04:32:09.091439596Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2411","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2411\",\"profile\":\"candidate\",\"actual\":\"rejected\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.091463221Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2411","Output":"--- PASS: TestFrozenReferences/Q2411 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.091468179Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2411","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.091469388Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2412"}
+{"Time":"2026-10-24T04:32:09.091470096Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2412","Output":"=== RUN   TestFrozenReferences/Q2412\n"}
+{"Time":"2026-10-24T04:32:09.091570638Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2412","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2412\",\"profile\":\"candidate\",\"actual\":\"mismatched\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.091576221Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2412","Output":"    qualifier_test.go:204: unexpected package outcome or scratch-store mutation\n"}
+{"Time":"2026-10-24T04:32:09.091598429Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2412","Output":"--- FAIL: TestFrozenReferences/Q2412 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.091603346Z","Action":"fail","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2412","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.091604596Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2413"}
+{"Time":"2026-10-24T04:32:09.091605304Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2413","Output":"=== RUN   TestFrozenReferences/Q2413\n"}
+{"Time":"2026-10-24T04:32:09.091730221Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2413","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2413\",\"profile\":\"candidate\",\"actual\":\"mismatched\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.091756221Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2413","Output":"--- PASS: TestFrozenReferences/Q2413 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.091764346Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2413","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.091766554Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2414"}
+{"Time":"2026-10-24T04:32:09.091767554Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2414","Output":"=== RUN   TestFrozenReferences/Q2414\n"}
+{"Time":"2026-10-24T04:32:09.091849679Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2414","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2414\",\"profile\":\"candidate\",\"actual\":\"matched\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.091884388Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2414","Output":"--- PASS: TestFrozenReferences/Q2414 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.091890346Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2414","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.091891596Z","Action":"run","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2415"}
+{"Time":"2026-10-24T04:32:09.091892429Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2415","Output":"=== RUN   TestFrozenReferences/Q2415\n"}
+{"Time":"2026-10-24T04:32:09.092018971Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2415","Output":"    qualifier_test.go:202: QUALIFIER_RESULT {\"id\":\"Q2415\",\"profile\":\"candidate\",\"actual\":\"rejected\",\"store_unchanged\":true}\n"}
+{"Time":"2026-10-24T04:32:09.092030263Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2415","Output":"--- PASS: TestFrozenReferences/Q2415 (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.092055013Z","Action":"pass","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences/Q2415","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.092092888Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences","Output":"--- FAIL: TestFrozenReferences (0.00s)\n"}
+{"Time":"2026-10-24T04:32:09.092095596Z","Action":"fail","Package":"github.com/ollama/ollama/qualifier","Test":"TestFrozenReferences","Elapsed":0}
+{"Time":"2026-10-24T04:32:09.092096596Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Output":"FAIL\n"}
+{"Time":"2026-10-24T04:32:09.092222263Z","Action":"output","Package":"github.com/ollama/ollama/qualifier","Output":"FAIL\tgithub.com/ollama/ollama/qualifier\t0.004s\n"}
+{"Time":"2026-10-24T04:32:09.092229388Z","Action":"fail","Package":"github.com/ollama/ollama/qualifier","Elapsed":0.004}
