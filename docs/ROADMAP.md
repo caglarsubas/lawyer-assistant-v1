@@ -7322,3 +7322,70 @@ off-host and joint-rollback/key-loss recovery, native provider/context/five-job
 qualification, historical 502 root cause and legal/production acceptance remain
 open. See the [inventory/withdrawal contract](ENROLLMENT_INVENTORY_REVOCATION.md)
 and [dated evidence](evidence/enrollment-revocation-2026-10-25.json).
+
+
+## Withdrawal-journal backup/restore and read-only fence reconciliation — 2026-10-25
+
+F00-06 remains **partial**. An unregistered disposable archive wrapper encrypts
+bounded original withdrawal-journal metadata/event bytes and retains an independent
+manifest binding the exact journal, scope, current fence and lifecycle/control
+context. Enrolled key contents and physical namespace are checked. Keys, accounts,
+case documents, external anchors and admission intents stay outside the bundle.
+Only an assigned preparer can create a backup or exclusive new staging attempt.
+Original records, encrypted evidence, old attempts and review history stay intact.
+
+Staging scans the restored log against the current independent anchor/intents.
+An assigned, distinct reviewer observes and pins the exact intent/receipt before
+a read-only comparison. Current actor/session/role and source versions are rechecked.
+The comparison creates no legal decision, restore grant, reader binding, renewed
+approval or activation. A lost reply is reconciled without replay. Missing receipts
+remain incomplete. Stale snapshots, changed sources/roles, clock rollback, tampering,
+replaced keys, missing external controls and competing restores fail closed.
+The original wrapper continues blocking withdrawn lineages and pending renewals.
+
+The accepted frozen native profile passes **26 cases, 52 actual server processes
+and 448 HTTP requests** in 96.83 seconds under the unchanged 180-second budget,
+with app session/RBAC/origin/CSRF and four separate ext4 mounts. Two CPUs/768 MiB,
+readonly model/package storage and disabled external networking remain. Four earlier
+native profiles remain rejected: a shared-mount fixture namespace collision, an
+ext4 inode-recycling fault setup, and two controller-budget timeouts. The corrected
+fault holds the original inode until replacement. Partial output/per-case progress
+is retained; parallel initialization of the same two workers removes serialized
+startup without raising resources, retries or deadlines. The one-case probe is
+diagnostic only; its output is not stitched into the accepted full campaign.
+Policy/outcome expectations and service implementation stay exact across native
+candidates. Local inode/hash custody does not attest privileged inode-generation
+reuse or joint rollback. All 12 owned containers and 24 fresh volumes are removed.
+
+All **622 deployment contracts** pass through the complete source-bound manifest,
+305/317, exactly once. The local x86 pair passes 5,299 frontend cases/70 files with
+305 contracts in 110.44 seconds. Nine CI jobs, existing worker budgets, x86 coverage,
+all 139 frontend files and deadlines remain. The new sequential archive method
+uses the existing x86 contract lane, which had 100 seconds of reserve on the base
+head. Native durability remains separate from bounded unit scratch. Merge requires
+nine exact-head checks, five timing reserves, a pinned-head merge and independently
+fetched-main full-tree equality. The 14-module package and 1,080 prior source files
+remain exact; three intentional prior-file edits update the test manifest/placement.
+
+The interactive roadmap always displays done/open/blocked-waiting/deferred
+before/current counts, deltas and percentages against the previous verified
+delivery. Pending heads and repeated refreshes retain that baseline. Scope and
+individual status transitions remain visible even at zero net change. All **93**
+items stay in the denominator: **42 done, 21 open, 24 blocked/waiting, 6 deferred**,
+all **Δ0** for this delivery. Open means in progress + planned; blocked/waiting
+retains the existing waiting category, including reviews and dependent gates.
+The engineering ledger grows **241 → 242**; no broader checklist gate is closed.
+These item shares do not measure effort, legal approval or release readiness.
+
+Eight live services, originals, ciphertext, exact evidence, private reviews/history,
+credentials/sessions, real staged material and 31 prior edits remain preserved.
+There is no real account/case input, provider call, inference, installation, trust
+enrollment, production activation or owner review decision. Owner focused-analysis
+v3 review and genuine operator/issuer/runtime confirmation remain pending.
+
+Next qualify explicit, independently authorized staged-reader binding and
+withdrawal-fence cutover with disposable identities. Production IdP/PostgreSQL
+fencing, real custody/appointments, physical/off-host and privileged joint-rollback/
+key-loss recovery, native provider/context/five-job load, historical 502 root cause
+and legal/production acceptance remain open. See the [archive contract](WITHDRAWAL_HISTORY_BACKUP.md),
+[dated evidence](evidence/withdrawal-backup-2026-10-25.json) and [progress assets](tracker/README.md).

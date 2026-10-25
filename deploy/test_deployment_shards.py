@@ -19,6 +19,7 @@ class DeploymentShardContracts(unittest.TestCase):
         manifest = json.loads(runner.MANIFEST.read_text())
         a, b = [{test.id() for test in runner.plan(tests, manifest, n)} for n in (1, 2)]
         self.assertTrue(runner.ARM_AFFINITY <= b)
+        self.assertTrue(runner.X86_AFFINITY <= a)
         self.assertFalse(a & b)
         self.assertEqual(a | b, {test.id() for test in tests})
 

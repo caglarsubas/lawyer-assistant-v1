@@ -487,6 +487,11 @@
     "test_restore_lifecycle_report.LifecycleReportContracts.test_frozen_actual_process_campaign",
     "test_restore_lifecycle_report.LifecycleReportContracts.test_live_activation_or_real_accounts_are_refused",
     "test_restore_lifecycle_report.LifecycleReportContracts.test_unbound_custody_or_rewritten_originals_are_refused",
+    "test_roadmap_progress.RoadmapProgressContracts.test_net_zero_keeps_individual_transitions",
+    "test_roadmap_progress.RoadmapProgressContracts.test_partition_and_explicit_deferred_denominator",
+    "test_roadmap_progress.RoadmapProgressContracts.test_pending_heads_and_repeated_refresh_keep_verified_baseline",
+    "test_roadmap_progress.RoadmapProgressContracts.test_same_source_rewrite_and_history_rewind_are_refused",
+    "test_roadmap_progress.RoadmapProgressContracts.test_scope_changes_and_unknown_status_are_visible",
     "test_routed_metadata_diagnostics.Contracts.test_all_finite_relay_codes",
     "test_routed_metadata_diagnostics.Contracts.test_allowlist_matches_restricted_relay_source",
     "test_routed_metadata_diagnostics.Contracts.test_changed_configuration_is_not_success",
@@ -610,6 +615,13 @@
     "test_windowed_store.Contracts.test_strategy_and_full_mapped_coverage_bound_into_proof",
     "test_windowed_store.Contracts.test_text_cap_stays_one_mebibyte",
     "test_windowed_store.Contracts.test_unknown_strategy_rejected_before_worker_or_file_access",
-    "test_windowed_store.Contracts.test_window_boundaries_hash_every_byte_and_close_each_mapping"
+    "test_windowed_store.Contracts.test_window_boundaries_hash_every_byte_and_close_each_mapping",
+    "test_withdrawal_backup.WithdrawalBackupContracts.test_frozen_archive_and_fence_cases",
+    "test_withdrawal_backup.WithdrawalBackupContracts.test_frozen_policy_and_retained_model_budget",
+    "test_withdrawal_backup.WithdrawalBackupContracts.test_separate_backup_mount_keeps_case_namespaces_disjoint",
+    "test_withdrawal_backup_report.WithdrawalBackupReportContracts.test_frozen_native_archive_campaign",
+    "test_withdrawal_backup_report.WithdrawalBackupReportContracts.test_missing_history_or_independent_controls_is_refused",
+    "test_withdrawal_backup_report.WithdrawalBackupReportContracts.test_mutation_or_activation_claim_is_refused",
+    "test_withdrawal_backup_report.WithdrawalBackupReportContracts.test_real_account_and_provider_execution_is_refused"
   ]
 }
