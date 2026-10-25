@@ -6884,3 +6884,56 @@ native research load, retention/capacity, cold and host-bind profiles, historica
 502 cause and legal/production acceptance remain open. See
 [procedure and boundary](PORTABLE_CONTROLLER_READINESS.md) and
 [dated evidence](evidence/portable-controller-2026-10-25.json).
+
+## Operator evidence packet and read-only enrollment reconciliation — 2026-10-25
+
+F00-06 remains **partial**. A separately trusted operator layer now creates bounded,
+unsigned expectation packets and reconciles the unchanged fourteen-module portable
+controller package. Exact external packet/package approval hashes bind the V2
+journal/operation/record/volume/runtime pin and public candidate/confirmation bytes.
+Packets have a maximum 900-second lifetime, no path or secret fields, and every
+authority flag remains false.
+Opaque reviewer/provisioner expectations must differ; labels and producer hashes
+are not authenticated human decisions or independent trust approval.
+
+Owner-only stable file reads reject symlinks, hardlinks, FIFOs, wrong permissions,
+unknown fields/material, duplicate JSON, expired/future packets and illicit flags.
+A closed public inventory is checked before opening allowed records. The retained
+readiness preflight verifies actual read-only package/model storage, bounded V3
+content, exact binding, sealed ancestry and current anchor. Fresh exit checks reject
+packet/public/history replacement, expiry, revocation or clock rollback. The
+original 20-second verifier limit remains unchanged. Cached observations never
+replace current effect/release authorization and one-use checks.
+
+Reconciliation performs no writes. Explicit caller retention uses a fresh exclusive
+owner-only filename, preserving original packets and historical observations.
+Previous observations need independent exact-byte approval and the same packet
+identity. Metadata comparisons retain unchanged/changed/not-comparable states.
+A newly observed unapproved confirmation is reported as changed while status stays
+waiting. No private signer, credential, inference, provider, enrollment or runtime
+installation is invoked; every authority flag remains false.
+
+The first frozen native campaign passes **39/39 cases** using invented public
+identities, in-memory ephemeral keys and the retained 65,561-byte zero-tensor model
+fixture. No application/engine modules load. Read-only calls preserve metadata;
+four cases inject external writes and three inject time changes explicitly.
+Caller retention is measured after each read-only call. The model/package inventory
+remains exact. Two CPUs/768 MiB, no external network/runtime mounts or host ports,
+a read-only root, cleared environment and three new ext4 volumes bound the profile.
+Both owned containers and all three volumes are removed.
+
+All **557 deployment contracts** (12 new), full Python lint and retained-report
+replay pass. All 986 earlier implementation/configuration files, the complete
+portable package, CI jobs/workers/caps/coverage, provider source and real staged
+material remain exact. Live originals, encrypted bytes, exact evidence versions,
+confidential review history, credentials/sessions and prior checkout edits are
+preserved. Owner focused-analysis v3 review remains pending.
+
+Next implement an authenticated operator-review handoff using disposable identities,
+with approvals bound to exact packet/observation hashes and explicit reviewer-role
+and staleness evidence. Genuine independent issuer/runtime-pin confirmation,
+installation/executed weights, completion/context/tokenizer/truncation, sustained
+five-job native research load, retention/capacity, cold/host-bind profiles,
+historical 502 root cause and legal/production acceptance remain open. See
+[operator contract](OPERATOR_ENROLLMENT_RECONCILIATION.md) and
+[dated evidence](evidence/operator-enrollment-2026-10-25.json).

@@ -1,0 +1,30 @@
+{
+  "schema": "operator-enrollment-evidence-v1",
+  "client_date": "2026-10-25",
+  "base_commit": "cdae5ee376e5613928f792060b3e784151c45ced",
+  "status": "partial",
+  "retained_report_sha256": "0c84d0f73fb1c7d445745670bc66072836d48565a8bd2335d08b38260a570e1b",
+  "unchanged_package_manifest_sha256": "8884b082f361f6333e813eef9b7677e24542db6862dabba2b87a002b7874888b",
+  "results": {
+    "cases_passed": 39,
+    "read_only_model_inventory_exact": true,
+    "previous_package_modules_exact": 14,
+    "packet_max_lifetime_seconds": 900,
+    "retained_history_comparisons": 2,
+    "real_provider_requests": 0,
+    "native_inference_calls": 0,
+    "trust_enrolled": false,
+    "runtime_installation": false,
+    "legal_qualification": false
+  },
+  "prior_implementation_files_exact": 986,
+  "new_contracts": 12,
+  "deployment_contracts": {
+    "passed": 557
+  },
+  "native_acceptance_attempts_per_case": 1,
+  "CI_configuration_unchanged": true,
+  "private_case_or_documents_used": false,
+  "owner_focused_analysis_v3_review": "pending",
+  "independent_real_issuer_and_runtime_pin_confirmation": "pending"
+}

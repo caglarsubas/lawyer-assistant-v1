@@ -1,0 +1,171 @@
+{
+  "schema": "operator-enrollment-qualification-v1",
+  "cases": [
+    {
+      "id": "E01_candidate_only",
+      "expected": "waiting"
+    },
+    {
+      "id": "E02_confirmed",
+      "expected": "reconciled_for_disposable_mock_validation"
+    },
+    {
+      "id": "E03_tampered_packet",
+      "expected": "blocked"
+    },
+    {
+      "id": "E04_wrong_approval",
+      "expected": "blocked"
+    },
+    {
+      "id": "E05_unknown_field",
+      "expected": "blocked"
+    },
+    {
+      "id": "E06_expired",
+      "expected": "blocked"
+    },
+    {
+      "id": "E07_future",
+      "expected": "blocked"
+    },
+    {
+      "id": "E08_lifetime",
+      "expected": "blocked"
+    },
+    {
+      "id": "E09_duplicate",
+      "expected": "blocked"
+    },
+    {
+      "id": "E10_symlink",
+      "expected": "blocked"
+    },
+    {
+      "id": "E11_hardlink",
+      "expected": "blocked"
+    },
+    {
+      "id": "E12_permissions",
+      "expected": "blocked"
+    },
+    {
+      "id": "E13_record",
+      "expected": "blocked"
+    },
+    {
+      "id": "E14_pin",
+      "expected": "blocked"
+    },
+    {
+      "id": "E15_journal",
+      "expected": "blocked"
+    },
+    {
+      "id": "E16_unsealed",
+      "expected": "blocked"
+    },
+    {
+      "id": "E17_candidate_version",
+      "expected": "blocked"
+    },
+    {
+      "id": "E18_fingerprint",
+      "expected": "blocked"
+    },
+    {
+      "id": "E19_unapproved_confirmation",
+      "expected": "waiting"
+    },
+    {
+      "id": "E20_confirmation_hash",
+      "expected": "blocked"
+    },
+    {
+      "id": "E21_packet_expires_during_check",
+      "expected": "blocked"
+    },
+    {
+      "id": "E22_revoked_during_check",
+      "expected": "blocked"
+    },
+    {
+      "id": "E23_packet_replaced",
+      "expected": "blocked"
+    },
+    {
+      "id": "E24_candidate_replaced",
+      "expected": "blocked"
+    },
+    {
+      "id": "E25_ancestor_state_changed",
+      "expected": "blocked"
+    },
+    {
+      "id": "E26_previous_unchanged",
+      "expected": "reconciled_for_disposable_mock_validation"
+    },
+    {
+      "id": "E27_foreign_previous",
+      "expected": "blocked"
+    },
+    {
+      "id": "E28_previous_tampered",
+      "expected": "blocked"
+    },
+    {
+      "id": "E29_previous_permissions",
+      "expected": "blocked"
+    },
+    {
+      "id": "E30_missing_candidate",
+      "expected": "waiting"
+    },
+    {
+      "id": "E31_unexpected_private_material",
+      "expected": "blocked"
+    },
+    {
+      "id": "E32_no_privileged_helpers",
+      "expected": "reconciled_for_disposable_mock_validation"
+    },
+    {
+      "id": "E33_fifo",
+      "expected": "blocked"
+    },
+    {
+      "id": "E34_illicit_authority",
+      "expected": "blocked"
+    },
+    {
+      "id": "E35_previous_approval",
+      "expected": "blocked"
+    },
+    {
+      "id": "E36_writable_package",
+      "expected": "blocked"
+    },
+    {
+      "id": "E37_new_unapproved_confirmation",
+      "expected": "waiting"
+    },
+    {
+      "id": "E38_clock_rollback",
+      "expected": "blocked"
+    },
+    {
+      "id": "E39_confirmation_expires_during_check",
+      "expected": "blocked"
+    }
+  ],
+  "attempts_per_native_case": 1,
+  "packet_max_bytes": 32768,
+  "packet_max_lifetime_seconds": 900,
+  "model_verification_seconds": 20,
+  "model_tensor_count": 0,
+  "real_provider_requests": 0,
+  "native_inference_calls": 0,
+  "trust_enrolled": false,
+  "runtime_installation_authorized": false,
+  "production_activation": false
+}
