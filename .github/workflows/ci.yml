@@ -82,6 +82,20 @@ jobs:
           python -m pip install uv==0.8.15
           uv sync --project backend --frozen --extra dev
           echo "$GITHUB_WORKSPACE/backend/.venv/bin" >> "$GITHUB_PATH"
+      # The two five-minute frontend lanes retain tests only. Build exactly
+      # once in the existing backend job's measured reserve, before pytest;
+      # runner/worker counts and every test/job deadline remain unchanged.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install locked build dependencies
+        timeout-minutes: 1
+        run: npm ci --prefer-offline --no-audit --no-fund --fetch-retries=1 --fetch-timeout=15000 --fetch-retry-mintimeout=1000 --fetch-retry-maxtimeout=3000
+        working-directory: frontend
+      - run: npm run build
+        working-directory: frontend
       - name: Lint Python
         run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
       - name: Record nonsecret test runtime characteristics
@@ -228,10 +242,6 @@ jobs:
       - name: Install locked frontend dependencies
         timeout-minutes: 1
         run: npm ci --prefer-offline --no-audit --no-fund --fetch-retries=1 --fetch-timeout=15000 --fetch-retry-mintimeout=1000 --fetch-retry-maxtimeout=3000
-        working-directory: frontend
-      # Complete campaign discovery restores x86 headroom. Keep the only
-      # production build here, avoiding the measured ARM setup/build tail.
-      - run: npm run build
         working-directory: frontend
       - name: Verify complete disjoint frontend discovery
         run: node scripts/verify_frontend_shards.mjs

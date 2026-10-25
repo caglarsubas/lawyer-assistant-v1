@@ -7464,15 +7464,18 @@ their bytes, physical identities, ownership, permissions and links per case.
 Every account, session, key, journal, work root, client, authorization check and
 event loop stays fresh; services and integrity verdicts are not cached.
 
-An intermediate **2:3** weighting passed both lanes, but ARM retained only
-**13 seconds** of reserve after its 27-second build; reject that profile as well.
-Restore the original stable **half hash partition for every test ID**, without
-architecture overrides. Move the single production build to x86, whose measured
-reserve was **83 seconds**, and preserve both lanes and all worker/deadline caps.
+Two measured intermediate profiles passed both frontend lanes but failed the
+separate reserve gate: ARM retained only **13 seconds** after its 27-second build;
+moving the build to x86 left only **5 seconds** there under a slower run. Both
+profiles remain rejected. Move the single production build to the existing backend
+job's measured reserve, before Python tests, and leave both frontend lanes with
+their two-worker test pairs. Retain a stable **2:3 x86/ARM** hash weighting for
+closed frozen-case IDs and the original half partition for ordinary contracts.
+No job, executor, concurrent worker or deadline is added.
 No case is dropped. The complete manifest grows **630 → 826** methods: seven
 monoliths become 199 cases, plus four helper contracts. This is test granularity,
 not 199 new product capabilities. All **826** pass locally exactly once,
-**403 / 423**, with **85.34 / 91.67** summed case seconds. Start/completion
+**383 / 443**, with **106.6 / 140.56** summed case seconds. Start/completion
 records identify interrupted work using public test IDs.
 
 All nine jobs, both frontend lanes, worker budgets, architecture coverage, the

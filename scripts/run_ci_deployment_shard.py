@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import re
 import sys
 import time
 import unittest
@@ -33,7 +34,10 @@ def collect():
 
 
 def shard(test_id):
-    return int.from_bytes(hashlib.sha256(test_id.encode()).digest()[:4], "big") % 2 + 1
+    key = int.from_bytes(hashlib.sha256(test_id.encode()).digest()[:4], "big")
+    # Measured authenticated cases use a stable 2:3 x86/ARM weighting.
+    # Ordinary contracts keep the original half partition; no ID is omitted.
+    return (1 if key % 5 < 2 else 2) if re.search(r"\.test_case_[A-Z][0-9]{2}_", test_id) else key % 2 + 1
 
 
 def digest(ids):
