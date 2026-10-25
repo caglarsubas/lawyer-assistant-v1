@@ -1,0 +1,61 @@
+{
+  "schema": "roadmap-dual-progress-views-v1",
+  "client_date": "2026-10-25",
+  "base_commit": "0f0897976c99366b867073fd7dec754620b2fcf1",
+  "scope": "development tracker only; no product runtime or private matter mutation",
+  "validation": {
+    "deployment_contracts": 630,
+    "contract_shards": [
+      306,
+      324
+    ],
+    "affected_contracts_replayed": 8,
+    "lint": "passed",
+    "javascript_syntax": "passed",
+    "browser_views_and_exact_PR_search": "passed",
+    "readiness_filter": "9 partial / 14; 0 ready / 14"
+  },
+  "verified_example": {
+    "baseline_PR": 224,
+    "current_PR": 225,
+    "completed_engineering_before": 223,
+    "completed_engineering_after": 224,
+    "completed_engineering_delta": 1,
+    "historical_open_and_blocked_before": "unknown; never fabricated",
+    "observed_current_open_PRs": 0,
+    "observed_current_blocked_PRs": 0
+  },
+  "readiness": {
+    "workstreams": 14,
+    "ready": 0,
+    "partial": 9,
+    "waiting": 4,
+    "planned": 1
+  },
+  "unchanged_checklist": {
+    "total": 93,
+    "done": 42,
+    "open": 21,
+    "blocked_waiting": 24,
+    "deferred": 6
+  },
+  "prior_code_configuration_files_exact": 1094,
+  "intentional_prior_code_change": [
+    "deploy/fixtures/deployment_test_manifest.json"
+  ],
+  "implementation_sha256": {
+    "scripts/roadmap_delivery.py": "431f8c6c1061cbcac8b7eff4b5bdbc9993c1e1ac1ddcf1e23e9bb989dc898ec0",
+    "scripts/collect_roadmap_delivery.py": "4a6d48ff5f209b4deeeca484fe784ea74d172ec0fc2e9f4003f78508ff19e3e4",
+    "deploy/test_roadmap_delivery.py": "a7b8043c87c9eb987d04d01fc48a4f91dc6b6a490c9c69a62b9a3458c38fda31",
+    "deploy/fixtures/deployment_test_manifest.json": "332bc1c49fdb59b11c791b9049c4d4580abdf45dc971b109f6348237ac78df3f",
+    "docs/tracker/progress.js": "0c633db602347b37021874cc3deb7635500b6832e0a4235968d19d04c12e04e3",
+    "docs/tracker/delivery-views.js": "f598770daf0d005f6c49a3dbae02f818d412ed2b128bf44cbe5293a1d98c37aa",
+    "docs/tracker/delivery-views.css": "ae489f8277b20456b9be2f8d0006c61c9797b5c4db64772ec69cbd51a0ff3f34",
+    "docs/tracker/README.md": "4da01612f8d35dc82da64ece535850b8dedb4f23577626edd30287ab1988d683"
+  },
+  "owner_review_pending": true,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_installation": false,
+  "production_activation": false
+}
