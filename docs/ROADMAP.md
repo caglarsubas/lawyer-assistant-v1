@@ -7185,3 +7185,63 @@ physical recovery, key/control loss, privileged joint rollback, native executed
 weights/context/five-job load, historical 502 root cause and legal/production
 acceptance remain separate open gates. See the [restore authorization contract](RESTORE_AUTHORIZATION.md)
 and [dated evidence](evidence/restore-authorization-2026-10-25.json).
+
+
+## Restore-target retirement and key-enrollment renewal — 2026-10-25
+
+F00-06 remains **partial**. The unregistered disposable wrapper now binds every
+restore/lifecycle action to the current enrollment and shared lifecycle fence.
+An exact metadata observation precedes a preparer proposal and independent current
+reviewer decision. Retirement pins the generation, operation, original intent/
+receipt, directory identity and restore-control version. Approval withdraws the
+target from serving and selection without deleting or rewriting target bytes,
+original reviews, evidence, backups, keys or independent controls. Historical
+retirement status remains exact-decision-bound and readable after renewal.
+
+Renewal selects a successor only from a bounded trusted catalog outside HTTP. Key
+identity/fingerprint/inode/purpose/scope must stay exact and the successor extends
+validity within 24 hours. Independent approval supersedes the enrollment; its
+restore-control journal starts empty. Old contexts fail closed, original decisions
+remain retained, and another restore requires fresh authorization, one-time
+consumption and exact selection. This changes no encryption key and copies no
+approval. Expired predecessors do not regain validity. Proposals expire within
+300 seconds; stale pins, changed actors/keys/receipts, replay and concurrent decisions
+are rejected. Lost replies reconcile without replay. One admitted unanchored event
+needs explicit observed pins; until then, normal actions remain blocked and the
+last anchored enrollment stays current.
+
+The first frozen native campaign passes **24 cases, 48 actual server processes
+and 402 HTTP requests** in 125.21 seconds. Two independent worker instances per
+case use actual app session/RBAC/origin/CSRF checks and invented identities. Four
+separate ext4 mounts retain readonly model/package bytes, work, independent keys/
+controls and encrypted bundles under two CPUs/768 MiB with external network off.
+Two owned containers and all four fresh volumes are removed. All **604 deployment
+contracts** pass. The 14-module package and 1,050 prior source/configuration files
+stay byte-exact; six intentional prior-file edits provide the journal schema hook
+and CI placement/guards. Originals, exact evidence, private reviews/history,
+credentials, sessions and live services are preserved. Owner focused-analysis v3
+review and real issuer/runtime-pin confirmation stay pending; no private case,
+real account, key rotation, provider request, inference, enrollment/install or
+production activation.
+
+Before adding CI load, the prior history lane's 206-second complete contract worker
+was identified as the growing tail. A committed **604-test manifest** now splits
+execution disjointly across both existing frontend jobs, 294/310 tests. Each lane
+uses one Vitest worker and one sequential unittest worker within its prior two-worker
+budget. Discovery must match the same source manifest on both architectures and
+all assigned IDs must actually execute. Both local worker pairs pass all 604 contracts
+exactly once and all 10,532 frontend cases across 139 files; the production build
+passes. A local collector-only two-JSON-line parsing error was corrected while
+retaining the first successful pair and running only the second. All 139 frontend
+files, isolation, failure
+propagation, bounded unit scratch, nine jobs and original caps remain. Native
+durability remains separate on ext4. Merge still requires nine exact-head checks,
+five timing reserves, a pinned-head merge and fetched-main full-tree equality.
+
+Next qualify read-only lifecycle inventory and explicit enrollment-revocation
+rehearsal with disposable identities. Retain original backup/review/control chains
+and measured CI reserves. Genuine operator/key custody, IdP/PostgreSQL revocation
+fencing, physical/off-host recovery, key/control loss, privileged joint rollback,
+real provider/native context and five-job load, historical 502 root cause and legal/
+production acceptance remain open. See the [lifecycle contract](RESTORE_LIFECYCLE.md)
+and [dated evidence](evidence/restore-lifecycle-2026-10-25.json).

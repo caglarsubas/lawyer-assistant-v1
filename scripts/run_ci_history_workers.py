@@ -1,4 +1,4 @@
-"""Overlap one isolated Vitest worker and one complete unittest worker; no retries."""
+"""Overlap one isolated Vitest worker and one manifest-bound unittest shard; no retries."""
 
 import os
 import signal
@@ -15,10 +15,12 @@ def commands(arguments):
         raise ValueError("Two explicit bounded commands required")
     split = arguments.index(":::")
     node, contracts = arguments[:split], arguments[split + 1:]
-    if (node[:6] != ["node", "node_modules/vitest/vitest.mjs", "run", "--pool=threads", "--maxWorkers=1", "--shard=2/2"] or len(node) != 9
-            or node[6:8] != ["--reporter=default", "--reporter=json"] or not node[8].startswith("--outputFile=")
-            or contracts != ["bash", "scripts/run_ci_contracts.sh", "backend/.venv/bin/python", "-m", "unittest", "discover", "-s", "deploy", "-p", "test_*.py"]):
-        raise ValueError("Complete discovery and exactly two test workers required")
+    if (node[:5] != ["node", "node_modules/vitest/vitest.mjs", "run", "--pool=threads", "--maxWorkers=1"] or len(node) != 9
+            or node[5] not in {"--shard=1/2", "--shard=2/2"} or node[6:8] != ["--reporter=default", "--reporter=json"]
+            or not node[8].startswith("--outputFile=") or len(contracts) != 6
+            or contracts[:4] != ["bash", "scripts/run_ci_contracts.sh", "backend/.venv/bin/python", "scripts/run_ci_deployment_shard.py"]
+            or contracts[4] != "--shard=" + node[5][8] or not contracts[5].startswith("--report=") or not contracts[5][9:]):
+        raise ValueError("Complete manifest shards and exactly two test workers required")
     return node, contracts
 
 

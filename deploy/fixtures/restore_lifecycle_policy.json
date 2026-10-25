@@ -1,0 +1,114 @@
+{
+  "schema": "restore-lifecycle-qualification-v1",
+  "cases": [
+    {
+      "id": "N01_retire_selected",
+      "expected": 200
+    },
+    {
+      "id": "N02_self_retirement",
+      "expected": 409
+    },
+    {
+      "id": "N03_wrong_target_pin",
+      "expected": 409
+    },
+    {
+      "id": "N04_declined_retirement",
+      "expected": 200
+    },
+    {
+      "id": "N05_expired_restore_retirement",
+      "expected": 200
+    },
+    {
+      "id": "N06_retirement_race",
+      "expected": 409
+    },
+    {
+      "id": "N07_retirement_lost_ack",
+      "expected": 200
+    },
+    {
+      "id": "N08_changed_target_receipt",
+      "expected": 409
+    },
+    {
+      "id": "N09_renew_and_fresh_restore",
+      "expected": 200
+    },
+    {
+      "id": "N10_self_renewal",
+      "expected": 409
+    },
+    {
+      "id": "N11_declined_renewal",
+      "expected": 200
+    },
+    {
+      "id": "N12_expired_predecessor",
+      "expected": 200
+    },
+    {
+      "id": "N13_unknown_candidate",
+      "expected": 409
+    },
+    {
+      "id": "N14_changed_key",
+      "expected": 400
+    },
+    {
+      "id": "N15_changed_enrollment",
+      "expected": 400
+    },
+    {
+      "id": "N16_changed_preparer_role",
+      "expected": 403
+    },
+    {
+      "id": "N17_renewal_replay",
+      "expected": 409
+    },
+    {
+      "id": "N18_renewal_race",
+      "expected": 409
+    },
+    {
+      "id": "N19_unanchored_renewal",
+      "expected": 200
+    },
+    {
+      "id": "N20_retired_history_after_renewal",
+      "expected": 200
+    },
+    {
+      "id": "N21_unassigned",
+      "expected": 403
+    },
+    {
+      "id": "N22_missing_csrf",
+      "expected": 400
+    },
+    {
+      "id": "N23_stale_lifecycle_head",
+      "expected": 409
+    },
+    {
+      "id": "N24_missing_lifecycle_intent",
+      "expected": 400
+    }
+  ],
+  "native_attempts_per_case": 1,
+  "min_distinct_worker_processes": 2,
+  "max_control_events": 256,
+  "max_proposal_seconds": 300,
+  "max_enrollment_seconds": 86400,
+  "max_configured_enrollments": 8,
+  "disposable_accounts_only": true,
+  "model_verification_seconds": 20,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "real_trust_enrolled": false,
+  "runtime_installation": false,
+  "production_activation": false
+}

@@ -1,0 +1,106 @@
+{
+  "schema": "restore-lifecycle-evidence-v1",
+  "client_date": "2026-10-25",
+  "base_commit": "4d0b35588eb08a470354637e4a6bd57466ec363d",
+  "status": "partial",
+  "retained_report_sha256": "a466d5b3ebf5128e8a2587a4a44ed95be71afea03f32ebd88baf423221d228a3",
+  "results": {
+    "cases_passed": 24,
+    "actual_loopback_servers": 48,
+    "actual_HTTP_requests": 402,
+    "actual_app_session_and_RBAC_checks": true,
+    "disposable_accounts_only": true,
+    "key_rotation": false,
+    "native_inference_calls": 0,
+    "runtime_installation": false,
+    "legal_qualification": false
+  },
+  "deployment_contracts": {
+    "passed": 604
+  },
+  "new_contracts": 10,
+  "accepted_profile_attempts_per_case": 1,
+  "native_campaign_seconds": 125.21,
+  "storage_profile": "four separate ext4 mounts; readonly models/package, working state, independent keys/manifests/controls, encrypted backups",
+  "original_restore_and_lifecycle_expectations_unchanged_after_native_freeze": true,
+  "prior_source_files_exact": 1050,
+  "intentional_prior_source_changes": [
+    ".github/workflows/ci.yml",
+    "deploy/test_ci_history_workers.py",
+    "deploy/test_ci_partition_contract.py",
+    "deploy/test_deployment_ci_placement.py",
+    "scripts/restore_control_log.py",
+    "scripts/run_ci_history_workers.py"
+  ],
+  "portable_package_modules_unchanged": 14,
+  "all_owned_containers_removed": 2,
+  "all_owned_volumes_removed": 4,
+  "CI_change": "Split the complete source-bound deployment test manifest across both existing frontend jobs, one Vitest and one sequential unittest worker per lane. Existing nine jobs, two-worker budgets, full frontend file isolation, caps and failure cleanup remain. Exact executed test IDs are required.",
+  "base_history_contract_seconds": 206.377,
+  "complete_contract_manifest": 604,
+  "contract_shard_counts": [
+    294,
+    310
+  ],
+  "private_case_or_live_accounts_used": false,
+  "owner_focused_analysis_v3_review": "pending",
+  "production_key_custody_IdP_PostgreSQL_and_offhost_recovery": "not qualified",
+  "real_trust_enrolled": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "key_rotation": false,
+  "runtime_installation": false,
+  "production_activation": false,
+  "local_CI_pairs": {
+    "all_604_contracts_executed_once": true,
+    "complete_disjoint_manifest": true,
+    "two_worker_budget_per_lane": true,
+    "frontend_build": "passed",
+    "local_unit_filesystem_not_native_durability": true,
+    "lanes": [
+      {
+        "lane": 1,
+        "seconds": null,
+        "retained_completed_first_pair": true,
+        "contract_count": 294,
+        "frontend_verification": [
+          {
+            "shard": 1,
+            "passed_cases": 5299,
+            "executed_files": 70
+          },
+          {
+            "files": 139,
+            "shards": [
+              70,
+              69
+            ],
+            "disjoint": true
+          }
+        ]
+      },
+      {
+        "lane": 2,
+        "seconds": 77.78,
+        "retained_completed_first_pair": false,
+        "contract_count": 310,
+        "frontend_verification": [
+          {
+            "shard": 2,
+            "passed_cases": 5233,
+            "executed_files": 69
+          },
+          {
+            "files": 139,
+            "shards": [
+              70,
+              69
+            ],
+            "disjoint": true
+          }
+        ]
+      }
+    ]
+  },
+  "local_receipt_collector": "The first successful worker pair emitted two verifier JSON lines; the receipt collector was corrected without repeating those tests. The second pair then ran once. Both retained reports match the same complete manifest."
+}
