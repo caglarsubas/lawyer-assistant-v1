@@ -64,7 +64,8 @@ encrypted bundles are separated from working state. Unit/ASGI checks are separat
 from this process/storage evidence. No real account, case, provider request, model
 execution, trust enrollment or live activation is involved.
 
-CI keeps nine jobs and the original deadlines. Each existing frontend lane now
+CI keeps nine jobs and the original deadlines. The single build runs on the ARM
+history lane; x86 frontend test coverage remains. Each existing frontend lane now
 uses one Vitest worker and one sequential deployment-test shard, within its prior
 two-worker budget. A committed complete test-ID manifest must match discovery on
 both architectures. Hash assignment partitions that manifest disjointly; the

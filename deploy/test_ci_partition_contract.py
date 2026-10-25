@@ -52,6 +52,10 @@ class PartitionContract(unittest.TestCase):
         self.assertEqual(workflow.count("--shard=2/2"), 1)
         self.assertEqual(workflow.count("node scripts/verify_frontend_shards.mjs"), 3)
         self.assertEqual(workflow.count("- run: npm run build"), 1)
+        frontend = workflow.split("  frontend:\n", 1)[1].split("  frontend-history:", 1)[0]
+        history = workflow.split("  frontend-history:\n", 1)[1].split("  final-release-authorization:", 1)[0]
+        self.assertNotIn("npm run build", frontend)
+        self.assertIn("npm run build", history)
         self.assertIn('"test": "vitest run --pool=threads --maxWorkers=2"', package)
         self.assertIn("node node_modules/vitest/vitest.mjs run --pool=threads --maxWorkers=1 --shard=2/2", workflow)
         self.assertEqual(workflow.count("python scripts/run_ci_history_workers.py"), 2)

@@ -7243,7 +7243,12 @@ all 604 IDs once against the corrected source; retained frontend tests/build rem
 applicable because every frontend source file is unchanged. All 139 frontend
 files, isolation, failure
 propagation, bounded unit scratch, nine jobs and original caps remain. Native
-durability remains separate on ext4. Merge still requires nine exact-head checks,
+durability remains separate on ext4. The first corrected-source head passed both
+frontend jobs but left only 17 seconds in x86 frontend. Its 26-second build before
+a 241-second worker pair was the tail; that head is not accepted. The single build
+moves to ARM history's measured 85-second reserve while all x86 tests, test IDs,
+workers, jobs and caps remain. Fresh-head timing qualification is required.
+Merge still requires nine exact-head checks,
 five timing reserves, a pinned-head merge and fetched-main full-tree equality.
 
 Next qualify read-only lifecycle inventory and explicit enrollment-revocation

@@ -35,7 +35,7 @@
   "portable_package_modules_unchanged": 14,
   "all_owned_containers_removed": 4,
   "all_owned_volumes_removed": 8,
-  "CI_change": "Split the complete source-bound deployment test manifest across both existing frontend jobs, one Vitest and one sequential unittest worker per lane. Existing nine jobs, two-worker budgets, full frontend file isolation, caps and failure cleanup remain. Exact executed test IDs are required.",
+  "CI_change": "Split the complete source-bound deployment test manifest across both existing frontend jobs, one Vitest and one sequential unittest worker per lane. Existing nine jobs, two-worker budgets, full frontend file isolation, caps and failure cleanup remain. Exact executed test IDs are required. The single build moves from x86 frontend to ARM history after measured 17-second frontend reserve; no cap or worker count changes.",
   "base_history_contract_seconds": 206.377,
   "complete_contract_manifest": 604,
   "contract_shard_counts": [
@@ -126,5 +126,17 @@
     "native_cases": 26,
     "servers": 52,
     "HTTP_requests": 456
+  },
+  "CI_headroom_rejected_source": {
+    "head": "ee975cceaaa99dd0bfc9b626440cf2d17eb8b0a3",
+    "run": 40182193168,
+    "accepted": false,
+    "frontend_job_seconds": 283,
+    "frontend_build_seconds": 26,
+    "frontend_worker_pair_seconds": 241,
+    "frontend_reserve_seconds": 17,
+    "frontend_history_seconds": 215,
+    "frontend_history_reserve_seconds": 85,
+    "fix": "Move the single build to ARM history; retain x86 test coverage, both worker budgets, all jobs/caps and exact test manifests."
   }
 }
