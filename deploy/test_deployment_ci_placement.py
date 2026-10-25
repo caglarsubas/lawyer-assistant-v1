@@ -23,6 +23,16 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("runs-on: ubuntu-latest", blocks["frontend"])
         self.assertIn("timeout-minutes: 18", blocks["backend-and-contracts"])
 
+    def test_bounded_scratch_preserves_full_command_exit_and_cleanup(self):
+        script = (ROOT / "scripts/run_ci_contracts.sh").read_text()
+        self.assertIn('size=1024m,mode=1777,nosuid,nodev', script)
+        self.assertIn('TMPDIR="$scratch" "$@"', script)
+        self.assertIn('trap cleanup EXIT', script)
+        self.assertIn('umount "$scratch"', script)
+        self.assertIn('exit "$status"', script)
+        self.assertNotIn('|| true', script)
+        self.assertNotIn('retry', script)
+
 
 if __name__ == "__main__":
     unittest.main()

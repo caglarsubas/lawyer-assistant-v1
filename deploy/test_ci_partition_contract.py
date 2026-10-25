@@ -49,10 +49,12 @@ class PartitionContract(unittest.TestCase):
         workflow = (ROOT / ".github/workflows/ci.yml").read_text()
         package = (ROOT / "frontend/package.json").read_text()
         self.assertEqual(workflow.count("npm test -- --shard=1/2"), 1)
-        self.assertEqual(workflow.count("npm test -- --shard=2/2"), 1)
+        self.assertEqual(workflow.count("--shard=2/2"), 1)
         self.assertEqual(workflow.count("node scripts/verify_frontend_shards.mjs"), 3)
         self.assertEqual(workflow.count("- run: npm run build"), 1)
         self.assertIn('"test": "vitest run --pool=threads --maxWorkers=2"', package)
+        self.assertIn("node node_modules/vitest/vitest.mjs run --pool=threads --maxWorkers=1 --shard=2/2", workflow)
+        self.assertIn("python scripts/run_ci_history_workers.py", workflow)
         self.assertNotIn("--no-isolate", workflow + package)
         self.assertNotIn("--passWithNoTests", workflow + package)
 

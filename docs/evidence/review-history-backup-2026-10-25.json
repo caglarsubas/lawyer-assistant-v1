@@ -1,0 +1,65 @@
+{
+  "schema": "review-history-backup-evidence-v1",
+  "client_date": "2026-10-25",
+  "base_commit": "dfec9b572b6f743ed18e375d239ed8fafd1c77d4",
+  "status": "partial",
+  "retained_report_sha256": "eefdc4838cf3c61cd3abb99e3c01cd403127db992215fd4fdb3aa2f23ea67e34",
+  "results": {
+    "cases_passed": 26,
+    "actual_loopback_servers": 57,
+    "actual_HTTP_requests": 155,
+    "min_distinct_worker_processes": 2,
+    "actual_app_session_and_RBAC_checks": true,
+    "disposable_accounts_only": true,
+    "read_only_model_and_package_exact": true,
+    "native_inference_calls": 0,
+    "real_trust_enrolled": false,
+    "runtime_installation": false,
+    "legal_qualification": false
+  },
+  "deployment_contracts": {
+    "passed": 588
+  },
+  "new_contracts": 13,
+  "storage_profiles_completed": 2,
+  "external_storage_profile_is_release_evidence": true,
+  "attempts_per_case_per_profile": 1,
+  "case_expectations_and_test_method_bodies_unchanged": true,
+  "source_files_exact": 1031,
+  "intentional_prior_source_changes": [
+    ".github/workflows/ci.yml",
+    "deploy/test_deployment_ci_placement.py",
+    "deploy/test_ci_partition_contract.py"
+  ],
+  "portable_package_modules_unchanged": 14,
+  "all_owned_containers_removed": 4,
+  "all_owned_volumes_removed": 7,
+  "CI_change": "Overlap one isolated Vitest worker and one full unittest worker within the existing two-worker budget; preserve complete discovery/report verification, all nine jobs/caps and no retries. Bounded unit tmpfs remains separate from native ext4 qualification.",
+  "private_case_or_live_accounts_used": false,
+  "owner_focused_analysis_v3_review": "pending",
+  "independent_real_issuer_and_runtime_pin_confirmation": "pending",
+  "independent_physical_media_offhost_disaster_recovery": "not qualified",
+  "production_key_custody_and_cross_process_revocation_fencing": "not qualified",
+  "initial_CI": {
+    "run": 40170317076,
+    "all_contracts_passed": 585,
+    "contract_seconds": 169.929,
+    "frontend_seconds": 106,
+    "job_cap_seconds": 300,
+    "accepted": false
+  },
+  "initial_overlap_CI": {
+    "run": 40171141460,
+    "failure": "Duplicate npm worker limits before any tests",
+    "accepted": false
+  },
+  "local_overlap": {
+    "exit": 0,
+    "seconds": 80.441,
+    "frontend_workers": 1,
+    "contract_workers": 1,
+    "storage": "local scratch, not native durability qualification",
+    "contracts_passed": 588,
+    "frontend_discovery_verified": true
+  }
+}
