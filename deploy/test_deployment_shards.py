@@ -18,10 +18,15 @@ class DeploymentShardContracts(unittest.TestCase):
         tests = runner.collect()
         manifest = json.loads(runner.MANIFEST.read_text())
         a, b = [{test.id() for test in runner.plan(tests, manifest, n)} for n in (1, 2)]
-        self.assertTrue(runner.ARM_AFFINITY <= b)
-        self.assertTrue(runner.X86_AFFINITY <= a)
         self.assertFalse(a & b)
         self.assertEqual(a | b, {test.id() for test in tests})
+        for module, cls, policy in [("test_enrollment_revocation", "EnrollmentRevocationContracts", "enrollment_revocation_policy.json"),
+                                    ("test_withdrawal_backup", "WithdrawalBackupContracts", "withdrawal_backup_policy.json")]:
+            prefix = module + "." + cls + ".test_case_"
+            expected = {prefix + row["id"] for row in json.loads((ROOT / "deploy/fixtures" / policy).read_text())["cases"]}
+            self.assertEqual({name for name in a | b if name.startswith(prefix)}, expected)
+            self.assertTrue(expected & a)
+            self.assertTrue(expected & b)
 
     def test_omitted_or_duplicate_test_is_rejected_before_execution(self):
         tests = [unittest.FunctionTestCase(lambda: None), unittest.FunctionTestCase(lambda: None)]

@@ -4,18 +4,12 @@ import argparse
 import hashlib
 import json
 import sys
+import time
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "deploy/fixtures/deployment_test_manifest.json"
-# Keep the retained inventory campaign on ARM and the archive campaign on x86,
-# which had a measured 100-second reserve on the base head. Both lanes retain
-# one Vitest and one unit worker and the same five-minute caps.
-ARM_AFFINITY = {"test_enrollment_revocation.EnrollmentRevocationContracts.test_frozen_inventory_and_withdrawal_cases"}
-X86_AFFINITY = {"test_withdrawal_backup.WithdrawalBackupContracts.test_frozen_archive_and_fence_cases"}
-
-
 
 def flatten(suite):
     result = []
@@ -39,10 +33,6 @@ def collect():
 
 
 def shard(test_id):
-    if test_id in X86_AFFINITY:
-        return 1
-    if test_id in ARM_AFFINITY:
-        return 2
     return int.from_bytes(hashlib.sha256(test_id.encode()).digest()[:4], "big") % 2 + 1
 
 
@@ -53,7 +43,7 @@ def digest(ids):
 def plan(tests, manifest, selected):
     ids = [test.id() for test in tests]
     if (selected not in {1, 2} or manifest != {"schema": "complete-deployment-test-manifest-v1", "test_ids": ids}
-            or ids != sorted(set(ids)) or not ids or not (ARM_AFFINITY | X86_AFFINITY) <= set(ids) or ARM_AFFINITY & X86_AFFINITY):
+            or ids != sorted(set(ids)) or not ids):
         raise ValueError("Source-bound complete test manifest required")
     sets = [{ident for ident in ids if shard(ident) == lane} for lane in (1, 2)]
     if not all(sets) or sets[0] & sets[1] or sets[0] | sets[1] != set(ids):
@@ -65,10 +55,19 @@ class ExecutedResult(unittest.TextTestResult):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.executed_ids = []
+        self.case_seconds = {}
 
     def startTest(self, test):
         self.executed_ids.append(test.id())
+        self.case_started = time.monotonic()
+        print(json.dumps({"contract_started": test.id()}), flush=True)
         super().startTest(test)
+
+    def stopTest(self, test):
+        elapsed = round(time.monotonic() - self.case_started, 3)
+        self.case_seconds[test.id()] = elapsed
+        print(json.dumps({"contract_completed": test.id(), "seconds": elapsed}), flush=True)
+        super().stopTest(test)
 
 
 def verify(result, expected):
@@ -89,6 +88,7 @@ def main():
     report = {"schema": "deployment-shard-result-v1", "shard": args.shard, "total_shards": 2,
               "manifest_sha256": hashlib.sha256(raw).hexdigest(), "complete_suite_sha256": digest([test.id() for test in tests]),
               "selected_ids": expected, "executed_ids": result.executed_ids, "tests_run": result.testsRun,
+              "case_seconds": result.case_seconds,
               "complete_count": len(tests), "success": result.wasSuccessful()}
     with args.report.open("x") as stream:
         json.dump(report, stream, indent=2)

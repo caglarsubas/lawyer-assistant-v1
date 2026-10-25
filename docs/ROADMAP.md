@@ -7436,3 +7436,47 @@ remain preserved. F00-06 and owner focused-analysis v3 review stay pending. The
 prepared next product slice remains independently authorized staged-reader binding
 and withdrawal-fence cutover with disposable identities. See [tracker contract](tracker/README.md)
 and [dated evidence](evidence/roadmap-progress-views-2026-10-25.json).
+
+
+## Frozen campaign case discovery and CI headroom — 2026-10-26
+
+Before extending the prepared staged-reader slice, correct the measured CI
+prerequisite. The main repeat after PR #226 ended **cancelled**, with eight jobs
+successful. Its frontend worker passed all 70 assigned files and 5,299 tests in
+248.17 seconds; the deployment worker was still inside a 26-case archive method
+when the five-minute job deadline expired. The successful nine-check PR run and
+independently verified merged-main tree remain separate evidence from that repeat.
+
+The two frozen inventory/archive campaigns now expose all **46** original cases
+as separate asynchronous unittest methods. Their fixture IDs, expected statuses,
+case bodies, assertions and cleanup remain exact; structural comparison confirms
+the unchanged bodies. Both original policies, native reports and graders remain
+unchanged. Remove the two campaign-level architecture overrides and distribute
+the individual methods with the existing stable hash rule. No case is dropped.
+The complete source-bound manifest grows **630 → 676** methods: two monolithic
+methods become 46, and two helper contracts are added. This change does not
+represent 46 new product capabilities. All **676** methods pass locally exactly
+once, **329 / 347**, with 145.03 / 115.08 summed case seconds.
+
+Per-case start/completion records and elapsed seconds identify any interrupted
+tail using public test IDs. All nine jobs, both existing frontend lanes, worker
+budgets, architecture coverage, the single frontend build, all 139 frontend files
+and 10,532 tests, deadlines and retry policy stay unchanged. Merge still requires
+nine exact-head checks, the five designated 30-second reserves, a pinned-head
+merge and independently fetched-main tree equality. The cancelled historical
+repeat is retained; no duplicate run is requested to conceal it.
+
+Engineering completion is published only after verified merge. The 14 readiness
+states remain **0 ready, 9 partial, 4 waiting, 1 planned**; the 93 checklist items
+remain **42 done, 21 open, 24 waiting, 6 deferred**, all **Δ0**. The ledger grows
+**243 → 244**. No parent gate, legal review or live provider qualification closes.
+Of 1,098 prior code/configuration files, 1,093 remain exact; five intentional
+changes update deployment discovery, its verification and progress diagnostics.
+Originals, encrypted evidence, exact versions, confidential case data, sessions
+and private review history remain preserved. This delivery creates no provider
+call, inference, trust enrollment, application deployment or review decision.
+
+Next qualify the independently authorized staged-reader binding and withdrawal-
+fence cutover with disposable identities. F00-06 and owner focused-analysis v3
+review remain pending. See the [CI contract](CI_CASE_GRANULARITY.md) and
+[dated evidence](evidence/ci-case-granularity-2026-10-26.json).

@@ -1,0 +1,83 @@
+{
+  "schema": "ci-campaign-granularity-evidence-v1",
+  "client_date": "2026-10-26",
+  "base_commit": "962e0fc4542bed1214eb84210775ac8a832fae7d",
+  "historical_main_repeat": {
+    "run": 40204489795,
+    "conclusion": "cancelled",
+    "successful_jobs": 8,
+    "frontend_vitest_files": 70,
+    "frontend_vitest_tests": 5299,
+    "frontend_vitest_seconds": 248.17,
+    "unfinished_worker": "deployment archive campaign"
+  },
+  "baseline_verified_PR": {
+    "number": 226,
+    "head": "473373dc149758bd96eab58a4a9f5aa11222492b",
+    "run": 40203030174,
+    "successful_jobs": 9,
+    "merged_main_tree_equal": true
+  },
+  "deployment_contracts": {
+    "passed": 676,
+    "before_methods": 630,
+    "after_methods": 676,
+    "frozen_campaign_cases_preserved": 46,
+    "replaced_monolithic_methods": 2,
+    "helper_contracts_added": 2,
+    "shard_counts": [
+      329,
+      347
+    ],
+    "local_summed_case_seconds": [
+      145.03,
+      115.08
+    ],
+    "every_manifest_ID_once": true,
+    "original_case_bodies_AST_equal": true,
+    "frozen_policies_native_reports_and_graders_unchanged": true
+  },
+  "retained_source_files": 1098,
+  "exact_prior_source_files": 1093,
+  "intentional_prior_source_changes": [
+    "deploy/fixtures/deployment_test_manifest.json",
+    "deploy/test_deployment_shards.py",
+    "deploy/test_enrollment_revocation.py",
+    "deploy/test_withdrawal_backup.py",
+    "scripts/run_ci_deployment_shard.py"
+  ],
+  "CI_jobs": 9,
+  "worker_budgets_and_deadlines_unchanged": true,
+  "frontend_sources_and_coverage_unchanged": true,
+  "automatic_reruns": 0,
+  "private_case_or_real_accounts_used": false,
+  "runtime_installation": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "owner_focused_analysis_v3_review": "pending",
+  "milestone_readiness": {
+    "before": {
+      "ready": 0,
+      "partial": 9,
+      "waiting": 4,
+      "planned": 1
+    },
+    "after": {
+      "ready": 0,
+      "partial": 9,
+      "waiting": 4,
+      "planned": 1
+    }
+  },
+  "checklist": {
+    "total": 93,
+    "done": 42,
+    "open": 21,
+    "waiting": 24,
+    "deferred": 6,
+    "all_deltas_zero": true
+  },
+  "ledger_sections_before": 243,
+  "ledger_sections_after": 244,
+  "next_product_slice": "Independently authorized staged-reader binding and withdrawal-fence cutover with disposable identities."
+}
