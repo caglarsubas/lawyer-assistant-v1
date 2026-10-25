@@ -7436,3 +7436,66 @@ remain preserved. F00-06 and owner focused-analysis v3 review stay pending. The
 prepared next product slice remains independently authorized staged-reader binding
 and withdrawal-fence cutover with disposable identities. See [tracker contract](tracker/README.md)
 and [dated evidence](evidence/roadmap-progress-views-2026-10-25.json).
+
+
+## Frozen campaign case discovery and CI headroom — 2026-10-26
+
+Before extending the prepared staged-reader slice, correct the measured CI
+prerequisite. The main repeat after PR #226 ended **cancelled**, with eight jobs
+successful. Its frontend worker passed all 70 assigned files and 5,299 tests in
+248.17 seconds; the deployment worker was still inside a 26-case archive method
+when the five-minute job deadline expired. The successful nine-check PR run and
+independently verified merged-main tree remain separate evidence from that repeat.
+
+The first correction exposed inventory/archive cases individually. Actual CI
+then identified older monoliths: lifecycle **102.602 seconds**, anchored review
+48.896 seconds and authenticated review 37.485 seconds. Its x86 deployment worker
+completed 292.6 seconds of work before cancellation, while Vitest passed in
+252.08 seconds. ARM passed in 238 seconds. That rejected source/run is retained;
+a token-denied cancellation request changed no access. No automatic retry or
+larger runner/deadline is used to conceal the failed qualification.
+
+All **199 frozen cases across seven campaigns** now have individual asynchronous
+unittest identities. Their fixture IDs, outcomes, case bodies, assertions and
+cleanup remain exact; structural comparison confirms all seven bodies. Frozen
+policies, native reports and graders remain unchanged. Reuse only each campaign's
+unchanged package/model test assets, matching its original shared fixture. Check
+their bytes, physical identities, ownership, permissions and links per case.
+Every account, session, key, journal, work root, client, authorization check and
+event loop stays fresh; services and integrity verdicts are not cached.
+
+Two measured intermediate profiles passed both frontend lanes but failed the
+separate reserve gate: ARM retained only **13 seconds** after its 27-second build;
+moving the build to x86 left only **5 seconds** there under a slower run. Both
+profiles remain rejected. Move the single production build to the existing backend
+job's measured reserve, before Python tests, and leave both frontend lanes with
+their two-worker test pairs. Retain a stable **2:3 x86/ARM** hash weighting for
+closed frozen-case IDs and the original half partition for ordinary contracts.
+No job, executor, concurrent worker or deadline is added.
+No case is dropped. The complete manifest grows **630 → 826** methods: seven
+monoliths become 199 cases, plus four helper contracts. This is test granularity,
+not 199 new product capabilities. All **826** pass locally exactly once,
+**383 / 443**, with **106.6 / 140.56** summed case seconds. Start/completion
+records identify interrupted work using public test IDs.
+
+All nine jobs, both frontend lanes, worker budgets, architecture coverage, the
+single frontend build, all 139 frontend files and 10,532 tests, deadlines and retry
+policy stay unchanged. Merge requires nine exact-head checks, five designated
+30-second reserves, a pinned-head merge and independently fetched-main full-tree
+equality. Historical rejected profiles and new main-push CI remain separate.
+
+Engineering completion is published only after verified merge. The 14 readiness
+states remain **0 ready, 9 partial, 4 waiting, 1 planned**; the 93 checklist items
+remain **42 done, 21 open, 24 waiting, 6 deferred**, all **Δ0**. The ledger grows
+**243 → 244**. No parent gate, legal review or live provider qualification closes.
+Of 1,098 prior code/configuration files, 1,086 remain exact; twelve intentional
+changes update deployment case discovery, fixture lifecycle, its verification,
+progress diagnostics and the existing build placement. Originals, encrypted evidence, exact versions, confidential
+case data, sessions and private review history remain preserved. This delivery
+creates no provider call, inference, trust enrollment, application deployment or
+review decision.
+
+Next qualify the independently authorized staged-reader binding and withdrawal-
+fence cutover with disposable identities. F00-06 and owner focused-analysis v3
+review remain pending. See the [CI contract](CI_CASE_GRANULARITY.md) and
+[dated evidence](evidence/ci-case-granularity-2026-10-26.json).
