@@ -1,0 +1,69 @@
+{
+  "schema": "withdrawal-history-backup-evidence-v1",
+  "client_date": "2026-10-25",
+  "base_commit": "e5641b5015927e943f076c51afb0e7b21914cb11",
+  "status": "partial",
+  "retained_report_sha256": "c8d6edb57fd2966ba567728119cfbf2da3c7008cda0d8ea558d54ae29fa55924",
+  "results": {
+    "cases_passed": 26,
+    "actual_loopback_servers": 52,
+    "actual_HTTP_requests": 448,
+    "actual_app_session_and_RBAC_checks": true,
+    "disposable_accounts_only": true,
+    "independent_controls_external": true,
+    "read_only_reconciliation": true,
+    "runtime_installation": false,
+    "legal_qualification": false
+  },
+  "deployment_contracts": {
+    "passed": 622
+  },
+  "new_contracts": 12,
+  "native_campaign_seconds": 96.83,
+  "accepted_profile_attempts_per_case": 1,
+  "rejected_native_profiles": 4,
+  "isolated_replacement_probe": "diagnostic only; not stitched into accepted campaign",
+  "storage_profile": "four separate ext4 mounts; readonly models/package, work, independent keys/controls, encrypted backups",
+  "prior_source_files_exact": 1080,
+  "intentional_prior_source_changes": [
+    "deploy/fixtures/deployment_test_manifest.json",
+    "deploy/test_deployment_shards.py",
+    "scripts/run_ci_deployment_shard.py"
+  ],
+  "portable_package_modules_unchanged": 14,
+  "all_owned_containers_removed": 12,
+  "all_owned_volumes_removed": 24,
+  "CI_change": "Retain nine jobs, workers, deadlines, x86 coverage and all test IDs. Assign the new sequential archive campaign to the existing x86 contract lane with base-head 100-second reserve.",
+  "contract_shard_counts": [
+    305,
+    317
+  ],
+  "complete_manifest": 622,
+  "rehearsal_corrections": "Initial local preservation field fixed. Native namespace collision and inode-recycling fault corrected in fresh fixtures; two rejected 180-second timeout profiles retained. Partial output/per-case progress retained; the accepted controller overlaps initialization of its same two workers without raising resources, retries or deadlines. Policy, case expectations, service implementation and prior sources remain exact across native candidates.",
+  "progress_distribution": {
+    "total": 93,
+    "before": {
+      "done": 42,
+      "open": 21,
+      "blocked_waiting": 24,
+      "deferred": 6
+    },
+    "after": {
+      "done": 42,
+      "open": 21,
+      "blocked_waiting": 24,
+      "deferred": 6
+    },
+    "all_deltas_zero": true,
+    "ledger_sections_before": 241,
+    "ledger_sections_after": 242
+  },
+  "private_case_or_real_accounts_used": false,
+  "owner_focused_analysis_v3_review": "pending",
+  "production_IdP_PostgreSQL_custody_and_joint_rollback": "not qualified",
+  "real_trust_enrolled": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_installation": false,
+  "production_activation": false
+}
