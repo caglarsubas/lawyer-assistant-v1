@@ -1,0 +1,33 @@
+{
+  "schema": "authenticated-operator-evidence-v1",
+  "client_date": "2026-10-25",
+  "base_commit": "d31797f71e4173b9ca28e535106e998161bbbab6",
+  "status": "partial",
+  "retained_report_sha256": "ced70814a5422c788f7763764a5c05bf0ec561576243f14d24f482cf597ecaf9",
+  "results": {
+    "cases_passed": 44,
+    "actual_loopback_servers": 44,
+    "actual_HTTP_requests": 92,
+    "actual_app_session_and_RBAC_checks": true,
+    "disposable_accounts_only": true,
+    "read_only_model_and_package_exact": true,
+    "native_inference_calls": 0,
+    "real_trust_enrolled": false,
+    "runtime_installation": false,
+    "legal_qualification": false
+  },
+  "prior_implementation_files_exact": 995,
+  "new_contracts": 10,
+  "deployment_contracts": {
+    "passed": 568
+  },
+  "initial_unit_status_mapping_errors": 2,
+  "native_acceptance_attempts_per_case": 1,
+  "native_wrapper_summary_error_retained": true,
+  "expected_request_counts_verified_from_frozen_paths": true,
+  "native_driver_formatting_AST_equal": true,
+  "CI_configuration_unchanged": true,
+  "private_case_or_live_accounts_used": false,
+  "owner_focused_analysis_v3_review": "pending",
+  "independent_real_issuer_and_runtime_pin_confirmation": "pending"
+}

@@ -1,0 +1,192 @@
+{
+  "schema": "authenticated-operator-review-qualification-v1",
+  "cases": [
+    {
+      "id": "F01_valid",
+      "expected": 200
+    },
+    {
+      "id": "F02_bad_cookie",
+      "expected": 401
+    },
+    {
+      "id": "F03_no_csrf",
+      "expected": 400
+    },
+    {
+      "id": "F04_origin",
+      "expected": 403
+    },
+    {
+      "id": "F05_duplicate_cookie",
+      "expected": 400
+    },
+    {
+      "id": "F06_self_review",
+      "expected": 403
+    },
+    {
+      "id": "F07_unassigned_reviewer",
+      "expected": 403
+    },
+    {
+      "id": "F08_foreign_firm",
+      "expected": 403
+    },
+    {
+      "id": "F09_revoked_reviewer_session",
+      "expected": 401
+    },
+    {
+      "id": "F10_expired_reviewer_session",
+      "expected": 401
+    },
+    {
+      "id": "F11_disabled_reviewer",
+      "expected": 401
+    },
+    {
+      "id": "F12_removed_reviewer_roles",
+      "expected": 403
+    },
+    {
+      "id": "F13_reviewer_role_revision",
+      "expected": 409
+    },
+    {
+      "id": "F14_preparer_session_revoked",
+      "expected": 403
+    },
+    {
+      "id": "F15_preparer_role_revision",
+      "expected": 403
+    },
+    {
+      "id": "F16_packet_changed",
+      "expected": 400
+    },
+    {
+      "id": "F17_observation_changed",
+      "expected": 400
+    },
+    {
+      "id": "F18_candidate_changed",
+      "expected": 409
+    },
+    {
+      "id": "F19_operation_revoked",
+      "expected": 409
+    },
+    {
+      "id": "F20_handoff_expired",
+      "expected": 409
+    },
+    {
+      "id": "F21_identity_field_in_body",
+      "expected": 400
+    },
+    {
+      "id": "F22_decision_replay",
+      "expected": 409
+    },
+    {
+      "id": "F23_changes_required",
+      "expected": 200
+    },
+    {
+      "id": "F24_rejected",
+      "expected": 200
+    },
+    {
+      "id": "F25_handoff_hash",
+      "expected": 409
+    },
+    {
+      "id": "F26_decision_hash",
+      "expected": 409
+    },
+    {
+      "id": "F27_revoked_after_commit",
+      "expected": 403
+    },
+    {
+      "id": "F28_prepare_revoked_before_commit",
+      "expected": 403
+    },
+    {
+      "id": "F29_review_revoked_before_commit",
+      "expected": 403
+    },
+    {
+      "id": "F30_lost_acknowledgement",
+      "expected": 400
+    },
+    {
+      "id": "F31_no_privileged_helpers",
+      "expected": 200
+    },
+    {
+      "id": "F32_malformed_json",
+      "expected": 400
+    },
+    {
+      "id": "F33_body_budget",
+      "expected": 413
+    },
+    {
+      "id": "F34_query",
+      "expected": 400
+    },
+    {
+      "id": "F35_path_in_body",
+      "expected": 400
+    },
+    {
+      "id": "F36_profile_tampered",
+      "expected": 403
+    },
+    {
+      "id": "F37_store_contains_record",
+      "expected": 403
+    },
+    {
+      "id": "F38_concurrent_decision",
+      "expected": 409
+    },
+    {
+      "id": "F39_unrelated_inspection",
+      "expected": 403
+    },
+    {
+      "id": "F40_expired_after_commit",
+      "expected": 409
+    },
+    {
+      "id": "F41_expired_packet_history",
+      "expected": 200
+    },
+    {
+      "id": "F42_wrong_csrf",
+      "expected": 403
+    },
+    {
+      "id": "F43_roles_revoked_history",
+      "expected": 200
+    },
+    {
+      "id": "F44_prepare_replay",
+      "expected": 409
+    }
+  ],
+  "native_attempts_per_case": 1,
+  "actual_local_auth": true,
+  "disposable_accounts_only": true,
+  "review_max_age_seconds": 300,
+  "body_max_bytes": 8192,
+  "model_verification_seconds": 20,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "real_trust_enrolled": false,
+  "runtime_installation": false,
+  "production_activation": false
+}

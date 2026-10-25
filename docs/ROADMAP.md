@@ -6943,3 +6943,63 @@ five-job native research load, retention/capacity, cold/host-bind profiles,
 historical 502 root cause and legal/production acceptance remain open. See
 [operator contract](OPERATOR_ENROLLMENT_RECONCILIATION.md) and
 [dated evidence](evidence/operator-enrollment-2026-10-25.json).
+
+## Authenticated operator-review handoff — 2026-10-25
+
+F00-06 remains **partial**. An unregistered staging service now derives preparer and
+reviewer subjects from the retained application's actual cookie/session/RBAC
+checks, with active accounts, current managed roles, origin, CSRF and a firm guard
+held through response release. The adapter accepts only a marked owner-only
+disposable SQLite account store, rejects production/arbitrary stores and refuses
+any application record. Trusted subject-role/firm assignments remain outside JSON.
+Different authenticated subjects and exact packet assignments are mandatory;
+labels alone cannot authorize review. Real human identity/appointments remain open.
+
+Handoffs bind exact packet/observation hashes, source context, preparer session and
+assigned reviewer-role evidence. Current role IDs/revisions/permissions, sessions,
+public versions, sealed ancestry/current anchor, read-only mappings and expiry are
+rechecked at commit/reply boundaries. The full retained reconciliation precedes
+admission. Handoffs expire within 300 seconds and their source/session limits.
+The original 20-second model verifier limit remains unchanged.
+
+Separate exclusive owner-only files retain pending handoffs and accept/change/
+reject decisions, their controlled reasons, authenticated actors and review time.
+No replay or competing decision can overwrite history. An already committed record
+can survive a lost reply/cancellation; admitted work finishes before guard release
+and is never replayed. Assigned currently eligible actors can inspect exact stale
+history after role/session/source changes or packet expiry. Observation/pinning is
+explicit; historical inspection never silently renews a decision. All trust,
+installation, native-execution, production and legal authority flags remain false.
+No live accounts, originals, documents or legal-review decisions are used.
+
+The first frozen native campaign passes **44/44 cases** through **44 actual
+loopback servers and 92 HTTP requests**, using real session/RBAC checks and invented
+identities. No app startup, provider or inference-engine module is loaded. Only the
+retained 65,561-byte zero-tensor model fixture is read; model/package inventory
+remains exact. Two CPUs/768 MiB, a cleared environment/read-only root, no external
+network/runtime mounts/host ports and three fresh ext4 volumes bound qualification.
+Both owned containers and all volumes are removed. No credentials enter responses
+or review records. Test-only hash seeding preserves fresh subjects/sessions and
+password verification at every login; permission results are never cached.
+
+All **568 deployment contracts** (10 new), Python lint and retained-report replay
+pass. Two first-unit status-mapping errors were corrected while preserving frozen
+expectations. A native wrapper's request-count estimate was wrong; all frozen case
+paths require exactly 92 requests, individually verified without a native rerun.
+Raw results/failed wrapper remain retained. One driver whitespace correction is
+AST-equivalent; all other frozen native inputs remain exact. All 995 prior
+implementation/configuration files, the complete fourteen-module portable package,
+CI jobs/workers/caps/coverage, provider source and real staged material remain exact.
+Live originals, ciphertext, exact evidence, confidential reviews/history,
+credentials/sessions and prior edits are preserved. Owner focused-analysis v3
+review and genuine independent issuer/runtime-pin confirmation remain pending.
+
+Next add anchored authenticated decision persistence/recovery and explicit fresh
+re-review with disposable identities, preserving original decisions and exact
+source/auth evidence. Production PostgreSQL/multiprocess admission, real IdP and
+operator appointments, external attestation/joint rollback qualification,
+installation/executed weights, actual completion/context/tokenizer/truncation,
+sustained five-job native research load, retention/capacity, cold/host-bind profiles,
+historical 502 root cause and legal/production acceptance remain open. See
+[operator review contract](AUTHENTICATED_OPERATOR_REVIEW.md) and
+[dated evidence](evidence/authenticated-operator-2026-10-25.json).
