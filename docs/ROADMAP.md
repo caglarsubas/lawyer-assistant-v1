@@ -7258,3 +7258,67 @@ fencing, physical/off-host recovery, key/control loss, privileged joint rollback
 real provider/native context and five-job load, historical 502 root cause and legal/
 production acceptance remain open. See the [lifecycle contract](RESTORE_LIFECYCLE.md)
 and [dated evidence](evidence/restore-lifecycle-2026-10-25.json).
+
+
+## Read-only lifecycle inventory and enrollment withdrawal — 2026-10-25
+
+F00-06 remains **partial**. A new unregistered wrapper exposes a bounded,
+metadata-only catalog inventory and explicitly reviewed enrollment withdrawal.
+Pages contain opaque version IDs, evidenced renewal parents, integrity/validity
+status and retained-record counts. They include no documents, passages, key
+contents or credentials. Snapshot and continuation tokens bind source heads,
+withdrawal state and current actor/session/role evidence. Changed state or a
+changed/tampered cursor rejects continuation. Inventory is read-only and no-store.
+
+Withdrawal needs an exact observed subject, a current preparer proposal and an
+independent authenticated reviewer decision within 300 seconds. Approval blocks
+that enrollment and its evidenced descendants. Every ordinary route, including a
+previously prepared renewal decision, is fenced; withdrawn candidates cannot be
+activated and withdrawn lineages cannot renew around the block. An unrelated
+eligible enrollment remains usable. Original files, encrypted backups, source
+versions, review decisions, keys and independent controls are neither destroyed
+nor rewritten. Metadata inventory and exact decision status remain readable.
+
+An admitted unanchored decision blocks ordinary access until explicit observed
+head/tip recovery. Only anchored withdrawals are reported before repair. Lost
+acknowledgements are observed and pinned without replay or automatic reactivation.
+A changed control version makes a proposal stale; an inner lifecycle rollback
+that removes withdrawal evidence is rejected. Management can withdraw an enrollment
+after its source packet expires or key integrity is lost, provided current assigned
+identities and control evidence remain intact. Unknown integrity is never labeled
+usable. Key/control loss and privileged joint rollback remain separate open gates.
+
+The first frozen native campaign passes **20 cases, 40 actual server processes
+and 367 HTTP requests** in 101.85 seconds. A three-enrollment catalog and two
+independent processes per case exercise actual app session/RBAC/origin/CSRF code,
+read-only paging, cursor tamper/actor/state changes, current/ancestor/candidate
+withdrawal, pending renewal blocking, denial, stale roles/versions, races, lost
+replies, interrupted commits and explicit external faults. Four separate ext4
+mounts, two CPUs/768 MiB, readonly model/package storage and disabled external
+networking remain. Both owned containers and all four fresh volumes are removed.
+All **610 deployment contracts** pass. The 14-module package and 1,066 prior
+source/configuration files remain exact; three intentional prior-file edits update
+the complete test manifest and its ARM affinity guard. The initial local lost-reply
+rehearsal and a mutation assertion were corrected before qualification acceptance;
+failed receipts remain retained and frozen native outcomes are unchanged.
+
+CI still has nine jobs, the original caps, two test workers per frontend lane,
+all 139 frontend files and x86 coverage. The new sequential inventory method uses
+the existing ARM unit lane, whose measured work was below its frontend critical
+path. A committed **610-ID manifest** splits all execution exactly once, 297/313.
+No runner, automatic retry, timeout extension or test omission is introduced.
+Native durability remains qualified separately from bounded unit scratch. Merge
+requires all nine exact-head checks, five timing reserves, a pinned-head merge and
+independently fetched-main full-tree equality. Original documents, exact evidence,
+confidential reviews/history, credentials/sessions and live services are preserved.
+Owner focused-analysis v3 review and genuine operator/issuer/runtime confirmation
+remain pending; no private case, real account, key rotation/destruction, provider
+call, native inference, real enrollment, installation or production activation.
+
+Next qualify withdrawal-journal backup/restore and revocation-fence reconciliation
+with disposable identities. Retain original evidence/review/control chains and CI
+reserves. Production IdP/PostgreSQL fencing, real custody/appointments, physical
+off-host and joint-rollback/key-loss recovery, native provider/context/five-job
+qualification, historical 502 root cause and legal/production acceptance remain
+open. See the [inventory/withdrawal contract](ENROLLMENT_INVENTORY_REVOCATION.md)
+and [dated evidence](evidence/enrollment-revocation-2026-10-25.json).
