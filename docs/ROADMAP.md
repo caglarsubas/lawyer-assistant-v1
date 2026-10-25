@@ -7139,3 +7139,49 @@ truncation, sustained native five-job research, retention/capacity, historical 5
 root cause and legal/production acceptance remain open. See the
 [backup/restore contract](REVIEW_HISTORY_BACKUP.md) and
 [dated evidence](evidence/review-history-backup-2026-10-25.json).
+
+
+## Restore authorization, key custody and guarded target selection — 2026-10-25
+
+F00-06 remains **partial**. A new unregistered disposable service binds an exact
+backup/manifest, current source review head, packet and observation versions,
+assigned independent actors, pinned key enrollment and server-configured target
+namespace. The preparer cannot approve their own restore. Approval expires within
+300 seconds; execution durably consumes it once under a cross-process fence before
+writing only a new stage. Original reviews, backups and independent anchors/intents
+remain intact. Direct restore bypass, denied/revoked/expired grants, changed roles,
+keys/inodes/enrollment, target replacement and wrong hashes fail closed.
+
+An uncertain response is reconciled read-only, never replayed. Exactly one admitted
+unanchored control event requires explicit observed pins to recover; a consumed
+grant stays consumed even when no target was materialized. Separate reviewer
+selection pins the exact restored intent/receipt and checks the full projection.
+Only the latest explicit selection permits bounded exact historical metadata
+reads; original stale review status is retained. This is no live activation or
+renewed legal approval.
+
+The frozen native profile passes **26 cases, 52 actual server processes and 270
+HTTP requests**, with two distinct authenticated workers per case. All use actual
+app session/RBAC/CSRF checks and invented identities. Four separate ext4 mounts
+isolate readonly model/package bytes, working state, independent key/manifest/
+control retention and encrypted backups. The campaign takes 111.93 seconds under
+two CPUs/768 MiB, network disabled. A harness-only helper lookup was rejected before
+case execution, corrected with an explicit import, and retained separately; frozen
+case outcomes were not relaxed. All owned containers and eight new volumes are
+removed. All **594 deployment contracts** pass. The 1,048 retained source files,
+14-module portable package, originals, exact evidence versions, private reviews,
+credentials/sessions and live configuration remain unchanged. CI jobs, worker
+budgets, discovery and timeout caps are unchanged; merge requires nine exact-head
+checks, five timing reserves, a pinned-head merge and fetched-main tree equality.
+Owner focused-analysis v3 review and genuine independent issuer/runtime-pin
+confirmation remain pending. No private case, real account, provider request,
+native inference, real enrollment, runtime installation or production activation.
+
+Next qualify bounded restore-target retirement and key-enrollment renewal with
+explicit supersession and fresh authorization using disposable identities. Keep
+original backup/review/control chains and all five CI reserves. Production IdP/
+PostgreSQL revocation fencing, genuine key custody/operator appointments, off-host
+physical recovery, key/control loss, privileged joint rollback, native executed
+weights/context/five-job load, historical 502 root cause and legal/production
+acceptance remain separate open gates. See the [restore authorization contract](RESTORE_AUTHORIZATION.md)
+and [dated evidence](evidence/restore-authorization-2026-10-25.json).

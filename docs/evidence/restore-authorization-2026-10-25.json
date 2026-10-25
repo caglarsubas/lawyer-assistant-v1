@@ -1,0 +1,40 @@
+{
+  "schema": "restore-authorization-evidence-v1",
+  "client_date": "2026-10-25",
+  "base_commit": "912c507e4ba1dd282ff65199e488afade7d1f096",
+  "status": "partial",
+  "retained_report_sha256": "3c7dc139b3be2126d4d07e421b66646cce38ce4d850e17717aec3b7bf9bdc590",
+  "results": {
+    "cases_passed": 26,
+    "actual_loopback_servers": 52,
+    "actual_HTTP_requests": 270,
+    "actual_app_session_and_RBAC_checks": true,
+    "disposable_accounts_only": true,
+    "native_inference_calls": 0,
+    "real_trust_enrolled": false,
+    "runtime_installation": false,
+    "legal_qualification": false
+  },
+  "deployment_contracts": {
+    "passed": 594
+  },
+  "new_contracts": 6,
+  "accepted_profile_attempts_per_case": 1,
+  "storage_profile": "four separate ext4 mounts; readonly models/package, working state, independent keys/manifests/controls, encrypted backups",
+  "native_campaign_seconds": 111.93,
+  "retained_case_expectations_unchanged": true,
+  "source_files_exact": 1048,
+  "portable_package_modules_unchanged": 14,
+  "CI_change": "None: same nine jobs, existing two-worker budget, complete discovery and all caps; five measured headroom reserves required before merge.",
+  "rejected_harness_startup": "Parent-fixture helper lookup failed before case execution; explicit imported helper fixed it. Both owned workers and four volumes cleaned. No case expectations relaxed.",
+  "all_owned_containers_removed": 4,
+  "all_owned_volumes_removed": 8,
+  "private_case_or_live_accounts_used": false,
+  "owner_focused_analysis_v3_review": "pending",
+  "independent_real_issuer_and_runtime_pin_confirmation": "pending",
+  "production_key_custody_IdP_PostgreSQL_and_offhost_recovery": "not qualified",
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_installation": false,
+  "production_activation": false
+}
