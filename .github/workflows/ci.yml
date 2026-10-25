@@ -242,7 +242,7 @@ jobs:
     # Growing history contracts exceeded the single frontend lane's reserve.
     # Built-in hash sharding preserves all files and per-file isolation. Each
     # lane retains two workers and the five-minute cap; build runs only once.
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
@@ -259,10 +259,9 @@ jobs:
         working-directory: frontend
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
-      # The complete deployment-contract tail used 69s after a 972s backend
-      # suite, leaving only 14s of its unchanged job cap. This existing shard
-      # had 212s spare. Run the full discovery exactly once here; retain all
-      # nine jobs, tests, workers, limits and the original backend step cap.
+      # Keep complete deployment discovery exactly once in this existing native
+      # ARM lane. Measured x86 execution exhausted frontend headroom; retain
+      # all nine jobs, two workers, cases, caps and no automatic retry.
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
