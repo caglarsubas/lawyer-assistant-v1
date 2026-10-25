@@ -7044,9 +7044,12 @@ case. Initial SQLite initialization and duplicate-discovery errors were also
 corrected; all three test method bodies and 31 case expectations remain exact.
 
 All **575 deployment contracts** (seven new), full Python lint and retained-report
-replay pass. CI's complete deployment discovery moves exactly once from history
-(measured 43s reserve) to the existing frontend lane (169s reserve). All nine jobs,
-workers, cases, caps and no-retry rules remain. Merge still requires nine exact-head
+replay pass. Initial relocation of complete deployment discovery to x86 frontend
+exhausted its unchanged five-minute cap; that head is not accepted. Full discovery
+remains exactly once in frontend-history, now on native ARM, while frontend retains
+x86 coverage. All nine jobs, workers, cases, caps and no-retry rules remain. Direct
+cancellation was denied (HTTP 403); normal PR concurrency cancels obsolete work
+after the corrected push. Merge still requires nine exact-head
 checks, five timing gates, a pinned head and independent fetched-main tree equality.
 Of 1,025 prior source/configuration files, 1,022 remain byte-exact; the three changes
 are the backward-compatible handoff extension hook, CI placement and its guard.

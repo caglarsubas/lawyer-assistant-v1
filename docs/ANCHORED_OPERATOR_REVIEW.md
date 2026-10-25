@@ -88,7 +88,10 @@ The first native driver stopped before any HTTP request on a missing helper.
 Its raw logs/cleanup and source freeze are retained. A new driver candidate,
 fresh volumes and unchanged expectations complete each case once; no failed
 case is retuned. All 575 deployment contracts (seven new), full lint and retained
-report replay pass. The complete CI discovery moves once to the existing frontend
-lane based on measured 169s reserve versus 43s in history; no jobs, workers, test
-coverage or deadlines are increased. Exact-head CI and timing gates remain
-mandatory before merge. See the [dated evidence](evidence/anchored-operator-2026-10-25.json).
+report replay pass. The initial CI relocation to x86 frontend exhausted its
+unchanged five-minute deadline; that head is not accepted. Complete discovery
+remains exactly once in frontend-history, now on native ARM, with x86 frontend
+coverage retained. All nine jobs, workers, tests and caps stay unchanged. Exact-head
+CI and five timing gates remain mandatory. The obsolete run and denied direct
+cancellation (HTTP 403) are retained; normal PR concurrency cancels obsolete work
+when the corrected head is pushed. See the [dated evidence](evidence/anchored-operator-2026-10-25.json).

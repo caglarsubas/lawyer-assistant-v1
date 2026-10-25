@@ -14,11 +14,13 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count(command), 1)
         blocks = dict(re.findall(r"^  ([a-z-]+):\n(.*?)(?=^  [a-z-]+:\n|\Z)", workflow.split("\njobs:\n", 1)[1], re.MULTILINE | re.DOTALL))
         self.assertNotIn(command, blocks["backend-and-contracts"])
-        self.assertNotIn(command, blocks["frontend-history"])
-        self.assertIn("backend/.venv/bin/python " + command, blocks["frontend"])
-        self.assertIn("actions/setup-python@v5", blocks["frontend"])
-        self.assertIn("uv sync --project backend --frozen --extra dev", blocks["frontend"])
-        self.assertIn("timeout-minutes: 5", blocks["frontend"])
+        self.assertNotIn(command, blocks["frontend"])
+        self.assertIn("backend/.venv/bin/python " + command, blocks["frontend-history"])
+        self.assertIn("actions/setup-python@v5", blocks["frontend-history"])
+        self.assertIn("uv sync --project backend --frozen --extra dev", blocks["frontend-history"])
+        self.assertIn("timeout-minutes: 5", blocks["frontend-history"])
+        self.assertIn("runs-on: ubuntu-24.04-arm", blocks["frontend-history"])
+        self.assertIn("runs-on: ubuntu-latest", blocks["frontend"])
         self.assertIn("timeout-minutes: 18", blocks["backend-and-contracts"])
 
 

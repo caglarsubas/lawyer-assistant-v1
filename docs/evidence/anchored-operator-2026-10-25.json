@@ -34,8 +34,13 @@
     "scripts/authenticated_operator_review.py"
   ],
   "portable_package_modules_unchanged": 14,
-  "CI_change": "Move complete deployment discovery once from frontend-history (43s reserve) to frontend (169s reserve), retaining all jobs, tests, workers, deadlines and no automatic retries.",
+  "CI_change": "Complete discovery remains exactly once in native ARM frontend-history; x86 frontend coverage, all nine jobs/workers/tests/caps and no automatic retries remain.",
   "private_case_or_live_accounts_used": false,
   "owner_focused_analysis_v3_review": "pending",
-  "independent_real_issuer_and_runtime_pin_confirmation": "pending"
+  "independent_real_issuer_and_runtime_pin_confirmation": "pending",
+  "initial_CI_head": "661041c117c22cf3c9586e4a025fabee2b5df15e",
+  "initial_CI_run": 40162174318,
+  "initial_CI_frontend_seconds": 316,
+  "initial_CI_head_accepted": false,
+  "direct_obsolete_run_cancellation_HTTP_status": 403
 }
