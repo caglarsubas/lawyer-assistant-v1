@@ -7389,3 +7389,50 @@ fencing, real custody/appointments, physical/off-host and privileged joint-rollb
 key-loss recovery, native provider/context/five-job load, historical 502 root cause
 and legal/production acceptance remain open. See the [archive contract](WITHDRAWAL_HISTORY_BACKUP.md),
 [dated evidence](evidence/withdrawal-backup-2026-10-25.json) and [progress assets](tracker/README.md).
+
+
+## Separate engineering-subtask delivery and milestone readiness — 2026-10-25
+
+The development tracker separates **Engineering subtasks** from **Milestone
+readiness**. The engineering view contains one evidence-linked repository PR
+record, with actual merge metadata and source-ancestry verification required for
+completion. Open PRs stay open even if GitHub provides a synthetic merge SHA;
+explicit blocked labels are a separate state. Closed unmerged PRs are excluded.
+Each record retains its title, merge date, exact PR/commit links and curated
+checklist references. Unmapped records remain visible. Search accepts exact PR
+numbers; status and workstream filters remain available. References never close
+a parent or imply legal, runtime or customer acceptance.
+
+The observed PR #224 → #225 example now shows **223 → 224 completed engineering
+records (+1)**. Historical open/blocked states that were not sampled stay unknown.
+A separate append-only engineering snapshot history preserves before/current
+counts through pending heads, merged heads and repeated refreshes. Totals must
+match individual records; duplicate identities, foreign links, unmerged or
+non-ancestral commits, altered verified snapshots and rollback fail validation.
+Engineering records include implementation, documentation and evaluation changes;
+this inventory is not a complete denominator for all future engineering work.
+
+The readiness view retains **14 workstreams: 0 ready, 9 partial, 4 waiting and
+1 planned**. It keeps the remaining evidence, accountable roles and detailed
+checklist links. The **93-item checklist** remains **42 done, 21 open, 24 waiting
+and 6 deferred**, with no status transitions. Its original history and the raw
+owner-review record remain preserved. Overview cards, navigation, comparison
+selectors and scope labels make the separate measures visible. A completed PR
+never automatically advances a workstream or checklist item.
+
+All **630 deployment contracts**, including eight delivery/readiness contracts,
+pass through the complete source-bound manifest, 306/324, with every ID once. The
+final affected eight contracts pass again after metadata validation changes.
+Lint, JavaScript syntax and browser checks pass, including exact PR #225 search,
+merge evidence, parent navigation and both progress views. Of 1,095 prior code/configuration files, 1,094 remain exact; the complete-test
+manifest is the sole intentional code/configuration edit. CI jobs, caps, worker budgets and frontend source/coverage are unchanged.
+Merge requires the nine exact-head checks, five timing reserves, a pinned-head
+merge and independently fetched-main tree equality.
+
+This is a tracker-only delivery. It creates no product deployment, provider call,
+native inference, trust enrollment or private analysis/review mutation. Original
+documents, encrypted data, exact evidence, credentials/sessions and review history
+remain preserved. F00-06 and owner focused-analysis v3 review stay pending. The
+prepared next product slice remains independently authorized staged-reader binding
+and withdrawal-fence cutover with disposable identities. See [tracker contract](tracker/README.md)
+and [dated evidence](evidence/roadmap-progress-views-2026-10-25.json).
