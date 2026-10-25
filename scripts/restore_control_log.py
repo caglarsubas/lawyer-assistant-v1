@@ -84,6 +84,11 @@ def fold(events, scope):
 
 
 class RestoreControlLog:
+    schema = SCHEMA
+
+    def validate(self, events):
+        return fold(events, self.scope)
+
     @classmethod
     def create(cls, root, anchor_path, scope, api):
         root, anchor_path = e.directory(root), Path(anchor_path)
@@ -91,7 +96,7 @@ class RestoreControlLog:
         if root == anchor_path.parent.resolve() or any(root.iterdir()) or anchor_path.exists():
             reject()
         identity = secrets.token_hex(16)
-        metadata = {"schema": SCHEMA, "control_id": identity, "scope": scope, **dict.fromkeys(e.FLAGS, False)}
+        metadata = {"schema": cls.schema, "control_id": identity, "scope": scope, **dict.fromkeys(e.FLAGS, False)}
         e.retain(root / "metadata.json", e.encode(metadata))
         api.sealed_volume.sync_dir(root)
         initial = {"journal_id": identity, "seq": 0, "previous": ZERO, "head": e.sha(e.encode(metadata))}
@@ -107,7 +112,7 @@ class RestoreControlLog:
             reject()
 
     def scan(self, fence):
-        metadata = {"schema": SCHEMA, "control_id": self.identity, "scope": self.scope, **dict.fromkeys(e.FLAGS, False)}
+        metadata = {"schema": self.schema, "control_id": self.identity, "scope": self.scope, **dict.fromkeys(e.FLAGS, False)}
         if e.read(self.root / "metadata.json") != e.encode(metadata):
             reject()
         paths = sorted(p for p in self.root.iterdir() if p.name != "metadata.json")
@@ -119,7 +124,7 @@ class RestoreControlLog:
             raw = e.read(path)
             event = e.decode(raw)
             fields = {"schema", "control_id", "seq", "previous", "kind", "payload", "head", *e.FLAGS}
-            if (path.name != f"{seq:04x}.json" or e.encode(event) != raw or set(event) != fields or event["schema"] != SCHEMA
+            if (path.name != f"{seq:04x}.json" or e.encode(event) != raw or set(event) != fields or event["schema"] != self.schema
                     or event["control_id"] != self.identity or type(event["seq"]) is not int or event["seq"] != seq
                     or event["previous"] != frames[-1]["head"] or any(event[k] is not False for k in e.FLAGS)
                     or event["head"] != e.sha(e.encode({k: v for k, v in event.items() if k != "head"}))):
@@ -129,7 +134,7 @@ class RestoreControlLog:
                 reject()
             events.append(event)
             frames.append(frame)
-        fold(events, self.scope)
+        self.validate(events)
         if fence not in frames or len(events) - fence["seq"] not in {0, 1}:
             reject()
         return events, frames[-1]
@@ -145,10 +150,10 @@ class RestoreControlLog:
     def append(self, fd, fence, events, kind, payload):
         if len(events) >= MAX_EVENTS or len(list(self.anchor.path.parent.glob("*.intent.json"))) >= 2 * MAX_EVENTS:
             reject()
-        event = {"schema": SCHEMA, "control_id": self.identity, "seq": len(events) + 1, "previous": fence["head"],
+        event = {"schema": self.schema, "control_id": self.identity, "seq": len(events) + 1, "previous": fence["head"],
                  "kind": kind, "payload": payload, **dict.fromkeys(e.FLAGS, False)}
         event["head"] = e.sha(e.encode(event))
-        fold([*events, event], self.scope)
+        self.validate([*events, event])
         frame = {"journal_id": self.identity, "seq": event["seq"], "previous": event["previous"], "head": event["head"]}
         e.retain(self.anchor.path.parent / (event["head"] + ".intent.json"), e.encode(frame))
         self.api.sealed_volume.sync_dir(self.anchor.path.parent)
