@@ -18,8 +18,9 @@ CASES = [("N01_retire_selected", 200), ("N02_self_retirement", 409), ("N03_wrong
          ("N13_unknown_candidate", 409), ("N14_changed_key", 400), ("N15_changed_enrollment", 400),
          ("N16_changed_preparer_role", 403), ("N17_renewal_replay", 409), ("N18_renewal_race", 409),
          ("N19_unanchored_renewal", 200), ("N20_retired_history_after_renewal", 200),
-         ("N21_unassigned", 403), ("N22_missing_csrf", 400), ("N23_stale_lifecycle_head", 409), ("N24_missing_lifecycle_intent", 400)]
-POLICY = {"schema": "restore-lifecycle-qualification-v1", "cases": [dict(id=n, expected=s) for n, s in CASES],
+         ("N21_unassigned", 403), ("N22_missing_csrf", 400), ("N23_stale_lifecycle_head", 409), ("N24_missing_lifecycle_intent", 400),
+         ("N25_retired_identity_after_renewal", 409), ("N26_other_identity_after_renewal", 200)]
+POLICY = {"schema": "restore-lifecycle-qualification-v2", "cases": [dict(id=n, expected=s) for n, s in CASES],
           "native_attempts_per_case": 1, "min_distinct_worker_processes": 2, "max_control_events": 256,
           "max_proposal_seconds": 300, "max_enrollment_seconds": 86400, "max_configured_enrollments": 8,
           "disposable_accounts_only": True, "model_verification_seconds": 20,
@@ -124,7 +125,7 @@ class Fixture(old.Fixture):
         if n in {5, 12}:
             self.now += 121
             self.clock_path.write_bytes(e.encode({"now": self.now}))
-        kind = "retirement" if n <= 8 or n in {20, 21, 22, 23, 24} else "renewal"
+        kind = "retirement" if n <= 8 or n in {20, 21, 22, 23, 24, 25, 26} else "renewal"
         headers = self.headers("preparer") if n == 22 else None
         if headers:
             headers.pop("x-csrf-token")
@@ -204,10 +205,23 @@ class Fixture(old.Fixture):
                 decision = {"decision_sha256": ref(raw)}
             else:
                 decision = self.life_decision
-            if n == 20:
+            if n in {20, 25, 26}:
                 self.proposal_id = e.sha((self.name + "-renewal").encode())[:32]
                 if (await self.propose(a, "renewal")).status_code != 200 or (await self.lifecycle_decide(b, "renewal")).status_code != 200:
                     raise ValueError("Renewal after retirement rejected")
+            if n in {25, 26}:
+                rejected = await self.prepare_grant(a, head)
+                if rejected.status_code != 409:
+                    raise ValueError("A retired physical target reentered through a renewed enrollment")
+                if n == 25:
+                    return rejected.status_code
+                self.restore_id = e.sha((self.name + "-different-target").encode())[:32]
+                if (await self.prepare_grant(a, head)).status_code != 200 or (await self.authorize(b)).status_code != 200:
+                    raise ValueError("Retirement incorrectly blocked a different target")
+                fresh = await self.execute(a)
+                if fresh.status_code != 200 or (await self.select(b, fresh.json())).status_code != 200:
+                    raise ValueError("Different target could not be restored and selected")
+                return (await self.selected(b)).status_code
             return (await self.retired_status(b, decision)).status_code
         if self.context["enrollment_sha256"] != self.successor:
             raise ValueError("Approved enrollment was not superseded")

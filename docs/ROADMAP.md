@@ -7210,12 +7210,18 @@ are rejected. Lost replies reconcile without replay. One admitted unanchored eve
 needs explicit observed pins; until then, normal actions remain blocked and the
 last anchored enrollment stays current.
 
-The first frozen native campaign passes **24 cases, 48 actual server processes
-and 402 HTTP requests** in 125.21 seconds. Two independent worker instances per
+The corrected frozen native campaign passes **26 cases, 52 actual server processes
+and 456 HTTP requests** in 139.28 seconds. Review identified that retirement must
+follow the physical target across enrollment generations. The guard now rejects
+retired IDs across the shared namespace, including before a new grant is prepared;
+a different target can still receive fresh authorization. Two fresh regressions
+cover both outcomes. The earlier 24-case/48-server/402-request profile and its
+source head remain retained and superseded; they cannot qualify the corrected
+source. Two independent worker instances per
 case use actual app session/RBAC/origin/CSRF checks and invented identities. Four
 separate ext4 mounts retain readonly model/package bytes, work, independent keys/
 controls and encrypted bundles under two CPUs/768 MiB with external network off.
-Two owned containers and all four fresh volumes are removed. All **604 deployment
+All four owned containers and eight fresh volumes from both profiles are removed. All **604 deployment
 contracts** pass. The 14-module package and 1,050 prior source/configuration files
 stay byte-exact; six intentional prior-file edits provide the journal schema hook
 and CI placement/guards. Originals, exact evidence, private reviews/history,
@@ -7232,7 +7238,9 @@ budget. Discovery must match the same source manifest on both architectures and
 all assigned IDs must actually execute. Both local worker pairs pass all 604 contracts
 exactly once and all 10,532 frontend cases across 139 files; the production build
 passes. A local collector-only two-JSON-line parsing error was corrected while
-retaining the first successful pair and running only the second. All 139 frontend
+retaining the first successful pair and running only the second. After the physical-target correction, both Python shards reexecute
+all 604 IDs once against the corrected source; retained frontend tests/build remain
+applicable because every frontend source file is unchanged. All 139 frontend
 files, isolation, failure
 propagation, bounded unit scratch, nine jobs and original caps remain. Native
 durability remains separate on ext4. Merge still requires nine exact-head checks,

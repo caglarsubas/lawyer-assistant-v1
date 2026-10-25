@@ -163,7 +163,7 @@ class RestoreLifecycle(ReviewHandoff):
                         conflict()
                     if kind == "retirement":
                         key = (e.token(body["target_generation"]), e.token(body["operation_id"], 32))
-                        if key[0] not in used or key in retired:
+                        if key[0] not in used or any(k[1] == key[1] for k in retired):
                             conflict()
                         subject = self.retirement_snapshot(*key)
                     else:
@@ -205,14 +205,14 @@ class RestoreLifecycle(ReviewHandoff):
                     return {"status": "lifecycle_decision_retained", "decision_sha256": ref(event), "decision": body["decision"],
                             "enrollment_sha256": after_current, "lifecycle_head_sha256": event["head"], **dict.fromkeys(e.FLAGS, False)}
                 child = self.child(current)
-                if action in {"select_restored_target", "execute_restore", "reconcile_restore", "restore_status"}:
+                if action in {"prepare_restore", "select_restored_target", "execute_restore", "reconcile_restore", "restore_status"}:
                     ident = body.get("operation_id", body.get("request_id"))
-                    if (current, ident) in retired:
+                    if any(key[1] == ident for key in retired):
                         conflict()
                 if action == "selected_history":
                     with child.controls.locked() as (_, _, controls, _):
                         _, selections = restore_fold(controls, child.controls.scope)
                         selection = selections.get(body.get("selection_id"))
-                        if selection and (current, selection["payload"]["operation_id"]) in retired:
+                        if selection and any(key[1] == selection["payload"]["operation_id"] for key in retired):
                             conflict()
                 return child.handle(scope, body)

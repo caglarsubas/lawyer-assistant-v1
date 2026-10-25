@@ -26,7 +26,10 @@ Approval creates a permanent metadata tombstone. The wrapper then rejects servin
 selection and restore-status actions for that target. No original or restored
 bytes, backup, review decision, key or independent anchor are deleted or rewritten.
 An exact-decision-bound metadata status remains readable, including after a later
-enrollment renewal. Declined proposals leave valid selections available.
+enrollment renewal. Retirement follows the physical target namespace and operation
+across every configured enrollment generation. A renewed enrollment cannot
+reintroduce a retired target ID; a different new ID can still pass fresh restore
+authorization and selection. Declined proposals leave valid selections available.
 
 Renewal independently observes and pins a preconfigured successor enrollment. The
 key ID, key fingerprint, file device/inode/owner, purpose and identity scope must

@@ -3,11 +3,11 @@
   "client_date": "2026-10-25",
   "base_commit": "4d0b35588eb08a470354637e4a6bd57466ec363d",
   "status": "partial",
-  "retained_report_sha256": "a466d5b3ebf5128e8a2587a4a44ed95be71afea03f32ebd88baf423221d228a3",
+  "retained_report_sha256": "918242dcd7a3e215629eecadca70558912d1f44bf542a578693dae4b8f3a8c89",
   "results": {
-    "cases_passed": 24,
-    "actual_loopback_servers": 48,
-    "actual_HTTP_requests": 402,
+    "cases_passed": 26,
+    "actual_loopback_servers": 52,
+    "actual_HTTP_requests": 456,
     "actual_app_session_and_RBAC_checks": true,
     "disposable_accounts_only": true,
     "key_rotation": false,
@@ -20,7 +20,7 @@
   },
   "new_contracts": 10,
   "accepted_profile_attempts_per_case": 1,
-  "native_campaign_seconds": 125.21,
+  "native_campaign_seconds": 139.28,
   "storage_profile": "four separate ext4 mounts; readonly models/package, working state, independent keys/manifests/controls, encrypted backups",
   "original_restore_and_lifecycle_expectations_unchanged_after_native_freeze": true,
   "prior_source_files_exact": 1050,
@@ -33,8 +33,8 @@
     "scripts/run_ci_history_workers.py"
   ],
   "portable_package_modules_unchanged": 14,
-  "all_owned_containers_removed": 2,
-  "all_owned_volumes_removed": 4,
+  "all_owned_containers_removed": 4,
+  "all_owned_volumes_removed": 8,
   "CI_change": "Split the complete source-bound deployment test manifest across both existing frontend jobs, one Vitest and one sequential unittest worker per lane. Existing nine jobs, two-worker budgets, full frontend file isolation, caps and failure cleanup remain. Exact executed test IDs are required.",
   "base_history_contract_seconds": 206.377,
   "complete_contract_manifest": 604,
@@ -102,5 +102,29 @@
       }
     ]
   },
-  "local_receipt_collector": "The first successful worker pair emitted two verifier JSON lines; the receipt collector was corrected without repeating those tests. The second pair then ran once. Both retained reports match the same complete manifest."
+  "local_receipt_collector": "The first successful worker pair emitted two verifier JSON lines; the receipt collector was corrected without repeating those tests. The second pair then ran once. Both retained reports match the same complete manifest.",
+  "superseded_profile": {
+    "head": "9711f278a59e7db4da37f815f37119b01d6d455d",
+    "cases": 24,
+    "servers": 48,
+    "HTTP_requests": 402,
+    "retained": true,
+    "accepted_for_corrected_source": false,
+    "reason": "Physical target retirement must persist across enrollment generations; two fresh frozen regressions qualify the narrowed guard and a permitted different target."
+  },
+  "retirement_identity_scope": "Shared physical target namespace and operation ID across all configured generations",
+  "local_CI_pairs_source_head": "9711f278a59e7db4da37f815f37119b01d6d455d",
+  "latest_unit_shards": {
+    "current_source_complete_contracts": 604,
+    "shard_counts": [
+      294,
+      310
+    ],
+    "every_ID_executed_once": true,
+    "manifest_sha256": "9999bb475e2e3f2180d760cdfcfc338b7364d2164f9d0078aefea7f310b14ed0",
+    "frontend_source_unchanged": true,
+    "native_cases": 26,
+    "servers": 52,
+    "HTTP_requests": 456
+  }
 }

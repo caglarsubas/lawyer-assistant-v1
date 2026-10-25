@@ -55,7 +55,7 @@ def fold(events, scope):
             if p["kind"] == "renewal":
                 if s["previous_generation"] != current or s["candidate_generation"] in used:
                     reject()
-            elif s["target_generation"] not in used or (s["target_generation"], s["operation_id"]) in retired:
+            elif s["target_generation"] not in used or any(k[1] == s["operation_id"] for k in retired):
                 reject()
             requests[ident] = {"proposal": event}
             continue
@@ -79,7 +79,7 @@ def fold(events, scope):
                 used.add(current)
             else:
                 key = (s["target_generation"], s["operation_id"])
-                if key in retired:
+                if any(k[1] == key[1] for k in retired):
                     reject()
                 retired[key] = event
         state["decision"] = event

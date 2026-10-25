@@ -1,5 +1,5 @@
 {
-  "schema": "restore-lifecycle-qualification-v1",
+  "schema": "restore-lifecycle-qualification-v2",
   "cases": [
     {
       "id": "N01_retire_selected",
@@ -96,6 +96,14 @@
     {
       "id": "N24_missing_lifecycle_intent",
       "expected": 400
+    },
+    {
+      "id": "N25_retired_identity_after_renewal",
+      "expected": 409
+    },
+    {
+      "id": "N26_other_identity_after_renewal",
+      "expected": 200
     }
   ],
   "native_attempts_per_case": 1,
