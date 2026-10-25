@@ -1,0 +1,33 @@
+{
+  "schema": "portable-controller-evidence-v1",
+  "client_date": "2026-10-25",
+  "base_commit": "3fba3ccfae5420cde4b180dc76712c0c5c4b0e11",
+  "status": "partial",
+  "retained_report_sha256": "440d0f693b0e28c7dd62d9a429e1c605aa09e6ba6eb9ff6fa77f2053e6a6ca59",
+  "package_manifest_sha256": "8884b082f361f6333e813eef9b7677e24542db6862dabba2b87a002b7874888b",
+  "public_source_archive_sha256": "70e7689fbb588bc8c79649cad06597ea1adf959f121bf2caa4e79e12fc7d5131",
+  "results": {
+    "cases_passed": 29,
+    "package_modules": 14,
+    "actual_loopback_servers": 2,
+    "actual_HTTP_requests": 5,
+    "portable_signed_responses_verified_by_retained_consumer": 2,
+    "read_only_inventory_exact": true,
+    "real_trust_confirmed": false,
+    "runtime_installation": false,
+    "native_execution_qualified": false,
+    "legal_qualification": false
+  },
+  "prior_implementation_files_exact": 976,
+  "new_contracts": 11,
+  "deployment_contracts": {
+    "passed": 545
+  },
+  "initial_unit_fixture_errors": 2,
+  "preparer_rejections_before_acceptance": 1,
+  "native_acceptance_attempts_per_case": 1,
+  "CI_configuration_unchanged": true,
+  "private_case_or_documents_used": false,
+  "owner_focused_analysis_v3_review": "pending",
+  "independent_real_issuer_and_runtime_pin_confirmation": "pending"
+}

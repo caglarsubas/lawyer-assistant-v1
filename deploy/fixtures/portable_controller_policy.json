@@ -1,0 +1,130 @@
+{
+  "schema": "portable-controller-qualification-v1",
+  "cases": [
+    {
+      "id": "A01_import",
+      "expected": "verified"
+    },
+    {
+      "id": "A02_module",
+      "expected": "rejected"
+    },
+    {
+      "id": "A03_manifest",
+      "expected": "rejected"
+    },
+    {
+      "id": "A04_extra",
+      "expected": "rejected"
+    },
+    {
+      "id": "A05_symlink",
+      "expected": "rejected"
+    },
+    {
+      "id": "A06_hardlink",
+      "expected": "rejected"
+    },
+    {
+      "id": "A07_missing",
+      "expected": "rejected"
+    },
+    {
+      "id": "A08_app_import",
+      "expected": "rejected"
+    },
+    {
+      "id": "A09_wrong_approval",
+      "expected": "rejected"
+    },
+    {
+      "id": "A10_writable",
+      "expected": "rejected"
+    },
+    {
+      "id": "A11_ready",
+      "expected": "ready_for_disposable_mock_validation"
+    },
+    {
+      "id": "A12_candidate_only",
+      "expected": "waiting"
+    },
+    {
+      "id": "A13_no_confirmation_approval",
+      "expected": "waiting"
+    },
+    {
+      "id": "A14_fingerprint",
+      "expected": "blocked"
+    },
+    {
+      "id": "A15_issuer",
+      "expected": "blocked"
+    },
+    {
+      "id": "A16_reviewer",
+      "expected": "blocked"
+    },
+    {
+      "id": "A17_self_review",
+      "expected": "blocked"
+    },
+    {
+      "id": "A18_expired",
+      "expected": "blocked"
+    },
+    {
+      "id": "A19_revoked",
+      "expected": "blocked"
+    },
+    {
+      "id": "A20_candidate",
+      "expected": "blocked"
+    },
+    {
+      "id": "A21_confirmation_hash",
+      "expected": "blocked"
+    },
+    {
+      "id": "A22_binding",
+      "expected": "blocked"
+    },
+    {
+      "id": "A23_unsealed",
+      "expected": "blocked"
+    },
+    {
+      "id": "A24_journal",
+      "expected": "blocked"
+    },
+    {
+      "id": "A25_revoked_during_check",
+      "expected": "blocked"
+    },
+    {
+      "id": "A26_no_privileged_helpers",
+      "expected": "ready_for_disposable_mock_validation"
+    },
+    {
+      "id": "A27_HTTP",
+      "expected": "verified"
+    },
+    {
+      "id": "A28_receipt_rollback",
+      "expected": "rejected"
+    },
+    {
+      "id": "A29_real_transport",
+      "expected": "rejected"
+    }
+  ],
+  "attempts_per_case": 1,
+  "model_verification_seconds": 20,
+  "small_model_bytes": 65561,
+  "package_modules": 14,
+  "real_provider_requests": 0,
+  "native_inference_calls": 0,
+  "real_trust_confirmed": false,
+  "runtime_installation": false,
+  "production_activation": false
+}

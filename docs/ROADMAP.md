@@ -6836,3 +6836,51 @@ truncation, sustained native/research jobs, cold storage/host-bind profiles,
 historical HTTP 502 cause and legal/production acceptance remain open. See
 [procedure and boundary](GUARDED_CONTROLLER_ROUTE.md) and
 [dated evidence](evidence/guarded-controller-2026-10-25.json).
+
+## Portable guarded-controller packaging and binding/enrollment readiness — 2026-10-25
+
+F00-06 remains **partial**. A deterministic source-only export now carries fourteen
+modules and three manifests, exact source hashes and independently approved
+manifest verification before import. The prior eight package modules remain
+byte-exact; six additional modules change import statements only. There is no
+installer, dependency download, real backend transport, registry change or trust
+activation. An approved manifest hash must come from a trusted external operator;
+self-consistent archive metadata alone is insufficient.
+
+A read-only preflight checks actual read-only package/model storage, pinned
+dependencies, exact V2 journal/operation/record/volume/runtime pin, sealed ancestry,
+current external anchor and bounded V3 content verification. A final binding check
+rejects intervening revocation. Public enrollment checks require exact independent
+issuer/fingerprint/reviewer/provisioner/confirmation expectations and reject
+mismatch, self-review expectations, expiry or any revocation marker. Missing
+confirmation stays waiting. Supplied labels do not authenticate a human reviewer.
+The result grants no trust, installation, native execution or legal qualification.
+
+The frozen native campaign passes **29/29 cases** using **two actual Uvicorn
+loopback servers and five HTTP requests**. The retained consumer verifies both
+portable signed responses with exact original request whitespace; rolling back
+older receipts still cannot repeat a consumed V2 challenge. Only invented public
+records, in-memory ephemeral keys and a 65,561-byte zero-tensor model fixture are
+used. Read-only metadata and model inventory remain exact except deliberately
+injected revocation. No application/engine modules load in the isolated process.
+All three owned ext4 volumes and both disposable containers are removed.
+
+All **545 deployment contracts** (11 new), full Python lint and retained-report
+replay pass. One initial unit fixture used a consumed synchronous mock stream;
+two errors were retained and the synthetic fixture was corrected. A host-bind
+ownership mismatch rejected the first preparer before acceptance; approved public
+sources were then copied to owned ext4 storage, preserving strict reader checks.
+The first native acceptance attempt passes all expectations without policy tuning.
+All 976 previous implementation/configuration files, CI jobs/workers/caps/coverage,
+provider source and staged real material remain exact. Encrypted originals, exact
+evidence versions, credentials/sessions and private review history remain outside
+the campaign. Owner focused-analysis v3 review remains pending.
+
+Next prepare a bounded operator evidence packet and read-only enrollment
+reconciliation without generating or confirming real trust. Independent real
+issuer/runtime-pin confirmation, authenticated reviewer workflow, deployment,
+executed weights, completion/context/tokenizer/truncation, sustained five-job
+native research load, retention/capacity, cold and host-bind profiles, historical
+502 cause and legal/production acceptance remain open. See
+[procedure and boundary](PORTABLE_CONTROLLER_READINESS.md) and
+[dated evidence](evidence/portable-controller-2026-10-25.json).
