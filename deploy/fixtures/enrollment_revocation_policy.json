@@ -1,0 +1,98 @@
+{
+  "schema": "enrollment-withdrawal-qualification-v1",
+  "cases": [
+    {
+      "id": "I01_inventory_pagination_readonly",
+      "expected": 200
+    },
+    {
+      "id": "I02_tampered_cursor",
+      "expected": 409
+    },
+    {
+      "id": "I03_other_actor_cursor",
+      "expected": 409
+    },
+    {
+      "id": "I04_changed_snapshot",
+      "expected": 409
+    },
+    {
+      "id": "I05_current_and_future_blocked",
+      "expected": 200
+    },
+    {
+      "id": "I06_ancestor_and_descendants",
+      "expected": 200
+    },
+    {
+      "id": "I07_unused_candidate_only",
+      "expected": 200
+    },
+    {
+      "id": "I08_self_approval",
+      "expected": 409
+    },
+    {
+      "id": "I09_wrong_subject_and_decision_pin",
+      "expected": 409
+    },
+    {
+      "id": "I10_declined_withdrawal",
+      "expected": 200
+    },
+    {
+      "id": "I11_changed_preparer_role",
+      "expected": 403
+    },
+    {
+      "id": "I12_competing_decisions",
+      "expected": 409
+    },
+    {
+      "id": "I13_lost_acknowledgement",
+      "expected": 200
+    },
+    {
+      "id": "I14_unanchored_withdrawal",
+      "expected": 200
+    },
+    {
+      "id": "I15_expired_source_packet",
+      "expected": 200
+    },
+    {
+      "id": "I16_unassigned_and_csrf",
+      "expected": 400
+    },
+    {
+      "id": "I17_pending_renewal_blocked",
+      "expected": 200
+    },
+    {
+      "id": "I18_compromised_key_withdrawal",
+      "expected": 200
+    },
+    {
+      "id": "I19_changed_control_proposal",
+      "expected": 409
+    },
+    {
+      "id": "I20_legacy_bypass_and_missing_intent",
+      "expected": 400
+    }
+  ],
+  "native_attempts_per_case": 1,
+  "min_distinct_worker_processes": 2,
+  "max_control_events": 256,
+  "max_proposal_seconds": 300,
+  "max_page_rows": 8,
+  "configured_enrollments": 3,
+  "disposable_accounts_only": true,
+  "model_verification_seconds": 20,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "real_trust_enrolled": false,
+  "runtime_installation": false,
+  "production_activation": false
+}

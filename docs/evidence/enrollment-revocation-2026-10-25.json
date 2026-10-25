@@ -1,0 +1,50 @@
+{
+  "schema": "enrollment-inventory-withdrawal-evidence-v1",
+  "client_date": "2026-10-25",
+  "base_commit": "27ee6019fda7d61f1b0673e38c98b7f7fd78dbc5",
+  "status": "partial",
+  "retained_report_sha256": "0c9ca31626d8805a85fcdb2196c47780953595a55f33fb65a92fab88af85f5e1",
+  "results": {
+    "cases_passed": 20,
+    "actual_loopback_servers": 40,
+    "actual_HTTP_requests": 367,
+    "actual_app_session_and_RBAC_checks": true,
+    "disposable_accounts_only": true,
+    "key_destruction_or_rotation": false,
+    "native_inference_calls": 0,
+    "runtime_installation": false,
+    "legal_qualification": false
+  },
+  "deployment_contracts": {
+    "passed": 610
+  },
+  "new_contracts": 6,
+  "native_campaign_seconds": 101.85,
+  "accepted_profile_attempts_per_case": 1,
+  "storage_profile": "four separate ext4 mounts; readonly models/package, work, independent keys/controls, encrypted backups",
+  "prior_source_files_exact": 1066,
+  "intentional_prior_source_changes": [
+    "deploy/fixtures/deployment_test_manifest.json",
+    "deploy/test_deployment_shards.py",
+    "scripts/run_ci_deployment_shard.py"
+  ],
+  "portable_package_modules_unchanged": 14,
+  "all_owned_containers_removed": 2,
+  "all_owned_volumes_removed": 4,
+  "CI_change": "Keep nine jobs, existing worker budgets and caps, x86 frontend coverage and one ARM build. Place the new sequential inventory campaign in the existing ARM contract lane below its measured frontend critical path. Complete source manifest and executed IDs remain required.",
+  "contract_shard_counts": [
+    297,
+    313
+  ],
+  "complete_manifest": 610,
+  "local_rehearsal_corrections": "Lost reply now observes retained inventory before pinning status. A report-mutation assertion now targets a nonzero event case; original failed receipts remain retained. Native policy/outcomes are unchanged after freeze.",
+  "private_case_or_real_accounts_used": false,
+  "owner_focused_analysis_v3_review": "pending",
+  "production_IdP_PostgreSQL_custody_and_joint_rollback": "not qualified",
+  "real_trust_enrolled": false,
+  "key_destruction_or_rotation": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_installation": false,
+  "production_activation": false
+}

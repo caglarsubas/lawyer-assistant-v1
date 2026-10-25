@@ -9,6 +9,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "deploy/fixtures/deployment_test_manifest.json"
+# The x86 lane has a measured 37-second reserve. This new metadata-control
+# campaign uses the ARM lane's spare sequential-contract capacity; both lanes
+# keep one Vitest and one unit worker and the same five-minute caps.
+ARM_AFFINITY = {"test_enrollment_revocation.EnrollmentRevocationContracts.test_frozen_inventory_and_withdrawal_cases"}
+
 
 
 def flatten(suite):
@@ -33,6 +38,8 @@ def collect():
 
 
 def shard(test_id):
+    if test_id in ARM_AFFINITY:
+        return 2
     return int.from_bytes(hashlib.sha256(test_id.encode()).digest()[:4], "big") % 2 + 1
 
 
@@ -43,7 +50,7 @@ def digest(ids):
 def plan(tests, manifest, selected):
     ids = [test.id() for test in tests]
     if (selected not in {1, 2} or manifest != {"schema": "complete-deployment-test-manifest-v1", "test_ids": ids}
-            or ids != sorted(set(ids)) or not ids):
+            or ids != sorted(set(ids)) or not ids or not ARM_AFFINITY <= set(ids)):
         raise ValueError("Source-bound complete test manifest required")
     sets = [{ident for ident in ids if shard(ident) == lane} for lane in (1, 2)]
     if not all(sets) or sets[0] & sets[1] or sets[0] | sets[1] != set(ids):
