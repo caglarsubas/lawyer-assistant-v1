@@ -229,6 +229,10 @@ jobs:
         timeout-minutes: 1
         run: npm ci --prefer-offline --no-audit --no-fund --fetch-retries=1 --fetch-timeout=15000 --fetch-retry-mintimeout=1000 --fetch-retry-maxtimeout=3000
         working-directory: frontend
+      # Complete campaign discovery restores x86 headroom. Keep the only
+      # production build here, avoiding the measured ARM setup/build tail.
+      - run: npm run build
+        working-directory: frontend
       - name: Verify complete disjoint frontend discovery
         run: node scripts/verify_frontend_shards.mjs
       - uses: actions/setup-python@v5
@@ -262,10 +266,6 @@ jobs:
       - name: Install locked frontend dependencies
         timeout-minutes: 1
         run: npm ci --prefer-offline --no-audit --no-fund --fetch-retries=1 --fetch-timeout=15000 --fetch-retry-mintimeout=1000 --fetch-retry-maxtimeout=3000
-        working-directory: frontend
-      # Keep the single build on the lane with measured reserve. The x86
-      # test pair retains both workers and loses no test or architecture check.
-      - run: npm run build
         working-directory: frontend
       - uses: actions/setup-python@v5
         with:

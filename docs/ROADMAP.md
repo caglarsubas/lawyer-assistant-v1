@@ -7464,12 +7464,15 @@ their bytes, physical identities, ownership, permissions and links per case.
 Every account, session, key, journal, work root, client, authorization check and
 event loop stays fresh; services and integrity verdicts are not cached.
 
-Distribute closed frozen-case IDs with a stable **2:3 x86/ARM** hash weighting
-based on observed runner cost; ordinary contracts retain their half partition.
+An intermediate **2:3** weighting passed both lanes, but ARM retained only
+**13 seconds** of reserve after its 27-second build; reject that profile as well.
+Restore the original stable **half hash partition for every test ID**, without
+architecture overrides. Move the single production build to x86, whose measured
+reserve was **83 seconds**, and preserve both lanes and all worker/deadline caps.
 No case is dropped. The complete manifest grows **630 → 826** methods: seven
 monoliths become 199 cases, plus four helper contracts. This is test granularity,
 not 199 new product capabilities. All **826** pass locally exactly once,
-**383 / 443**, with **91.16 / 115.39** summed case seconds. Start/completion
+**403 / 423**, with **85.34 / 91.67** summed case seconds. Start/completion
 records identify interrupted work using public test IDs.
 
 All nine jobs, both frontend lanes, worker budgets, architecture coverage, the
@@ -7482,9 +7485,9 @@ Engineering completion is published only after verified merge. The 14 readiness
 states remain **0 ready, 9 partial, 4 waiting, 1 planned**; the 93 checklist items
 remain **42 done, 21 open, 24 waiting, 6 deferred**, all **Δ0**. The ledger grows
 **243 → 244**. No parent gate, legal review or live provider qualification closes.
-Of 1,098 prior code/configuration files, 1,088 remain exact; ten intentional
-changes update deployment case discovery, fixture lifecycle, its verification and
-progress diagnostics. Originals, encrypted evidence, exact versions, confidential
+Of 1,098 prior code/configuration files, 1,086 remain exact; twelve intentional
+changes update deployment case discovery, fixture lifecycle, its verification,
+progress diagnostics and the existing build placement. Originals, encrypted evidence, exact versions, confidential
 case data, sessions and private review history remain preserved. This delivery
 creates no provider call, inference, trust enrollment, application deployment or
 review decision.

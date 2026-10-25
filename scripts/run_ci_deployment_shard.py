@@ -3,7 +3,6 @@
 import argparse
 import hashlib
 import json
-import re
 import sys
 import time
 import unittest
@@ -34,12 +33,7 @@ def collect():
 
 
 def shard(test_id):
-    key = int.from_bytes(hashlib.sha256(test_id.encode()).digest()[:4], "big")
-    # Authenticated filesystem campaigns are CPU heavy on the measured x86
-    # runner. Give its concurrent Vitest worker room: 2/5 of these case IDs go
-    # to x86, 3/5 to ARM. Other contracts retain the original half partition.
-    # Every ID still appears exactly once under the complete source manifest.
-    return (1 if key % 5 < 2 else 2) if re.search(r"\.test_case_[A-Z][0-9]{2}_", test_id) else key % 2 + 1
+    return int.from_bytes(hashlib.sha256(test_id.encode()).digest()[:4], "big") % 2 + 1
 
 
 def digest(ids):
