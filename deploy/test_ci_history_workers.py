@@ -10,7 +10,7 @@ from run_ci_history_workers import commands, run  # noqa: E402
 
 class HistoryWorkerContracts(unittest.TestCase):
     def test_discovery_and_two_worker_budget_are_closed(self):
-        node = ["npm", "test", "--", "--shard=2/2", "--maxWorkers=1", "--reporter=default", "--reporter=json", "--outputFile=/tmp/invented.json"]
+        node = ["node", "node_modules/vitest/vitest.mjs", "run", "--pool=threads", "--maxWorkers=1", "--shard=2/2", "--reporter=default", "--reporter=json", "--outputFile=/tmp/invented.json"]
         contract = ["bash", "scripts/run_ci_contracts.sh", "backend/.venv/bin/python", "-m", "unittest", "discover", "-s", "deploy", "-p", "test_*.py"]
         self.assertEqual(commands([*node, ":::", *contract]), (node, contract))
         for invalid in ([*node[:4], "--maxWorkers=2", *node[5:], ":::", *contract], [*node, ":::", *contract[:-1], "subset.py"]):

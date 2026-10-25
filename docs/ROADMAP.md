@@ -7108,8 +7108,7 @@ expectations under two CPUs/768 MiB, a cleared environment/read-only root and no
 external network, runtime mounts or host ports. All four owned containers and
 seven fresh volumes are removed; both raw profiles remain retained.
 
-The **585-contract suite**, three new orchestration checks and affected storage/report
-checks pass, with
+The **588-contract suite** (13 new) and affected storage/report checks pass, with
 full Python lint and shell syntax validation. Before adding cases, CI unit scratch
 was aligned with the existing bounded 1 GiB tmpfs policy. Complete deployment
 coverage still runs exactly once in native ARM history. The first CI head passed
@@ -7117,7 +7116,10 @@ all 585 contracts in 170 seconds after 106 seconds of frontend tests but exhaust
 its five-minute cap and is rejected. The corrected lane overlaps one isolated
 Vitest worker and one complete unittest worker within its existing two-worker
 budget, retaining reports, full discovery, nine jobs, all caps and no-retry rules.
-Owned process groups are cancelled/reaped on failure or interruption. Native ext4 durability qualification remains
+Owned process groups are cancelled/reaped on failure or interruption. The first
+overlap invocation failed before tests on a duplicate npm worker limit; the locked
+Vitest binary now receives exactly one worker flag. All 588 contracts and the full
+second frontend shard pass together locally; rejected heads remain retained. Native ext4 durability qualification remains
 separate. Merge requires all nine exact-head checks, five timing reserves, a
 pinned head and independently fetched-main tree equality. Of 1,034 prior source/
 configuration files, 1,031 stay byte-exact; only CI placement and its two guards

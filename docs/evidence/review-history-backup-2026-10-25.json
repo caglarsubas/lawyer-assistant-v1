@@ -47,5 +47,19 @@
     "frontend_seconds": 106,
     "job_cap_seconds": 300,
     "accepted": false
+  },
+  "initial_overlap_CI": {
+    "run": 40171141460,
+    "failure": "Duplicate npm worker limits before any tests",
+    "accepted": false
+  },
+  "local_overlap": {
+    "exit": 0,
+    "seconds": 80.441,
+    "frontend_workers": 1,
+    "contract_workers": 1,
+    "storage": "local scratch, not native durability qualification",
+    "contracts_passed": 588,
+    "frontend_discovery_verified": true
   }
 }

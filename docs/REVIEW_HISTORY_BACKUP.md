@@ -60,12 +60,15 @@ on fresh volumes under two CPUs/768 MiB, a read-only root, cleared environment,
 no external network/host ports/runtime mounts, and the original model budget.
 All four owned containers and seven fresh volumes are removed; raw inputs/results
 from both profiles remain retained. Case expectations and test method bodies are
-unchanged. The 585-contract suite, three new orchestration checks and affected storage/report checks pass, with
+unchanged. The 588-contract suite and affected storage/report checks pass, with
 full lint and shell syntax validation. CI unit scratch now uses the existing
 bounded 1 GiB tmpfs policy; the complete discovery runs once with the same nine
 jobs and deadlines. The first CI head passed all 585 contracts in 170 seconds
 after 106 seconds of frontend tests but exhausted the five-minute cap; it is
 rejected. The corrected lane overlaps one isolated Vitest worker and one complete
 unittest worker within the existing two-worker budget. Both commands, reports,
-full discovery and cancellation/exit propagation are retained, with no retries. Native durability stays separately qualified on
+full discovery and cancellation/exit propagation are retained, with no retries.
+The first overlap invocation failed before tests on a duplicate npm worker option;
+calling the locked Vitest binary directly supplies exactly one limit. All 588
+contracts and the complete second frontend shard then pass together locally. Native durability stays separately qualified on
 ext4. See the [dated evidence](evidence/review-history-backup-2026-10-25.json).

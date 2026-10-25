@@ -15,8 +15,8 @@ def commands(arguments):
         raise ValueError("Two explicit bounded commands required")
     split = arguments.index(":::")
     node, contracts = arguments[:split], arguments[split + 1:]
-    if (node[:5] != ["npm", "test", "--", "--shard=2/2", "--maxWorkers=1"] or len(node) != 8
-            or node[5:7] != ["--reporter=default", "--reporter=json"] or not node[7].startswith("--outputFile=")
+    if (node[:6] != ["node", "node_modules/vitest/vitest.mjs", "run", "--pool=threads", "--maxWorkers=1", "--shard=2/2"] or len(node) != 9
+            or node[6:8] != ["--reporter=default", "--reporter=json"] or not node[8].startswith("--outputFile=")
             or contracts != ["bash", "scripts/run_ci_contracts.sh", "backend/.venv/bin/python", "-m", "unittest", "discover", "-s", "deploy", "-p", "test_*.py"]):
         raise ValueError("Complete discovery and exactly two test workers required")
     return node, contracts
