@@ -1,0 +1,953 @@
+{
+  "schema": "operator-enrollment-native-v1",
+  "cases": [
+    {
+      "id": "E01_candidate_only",
+      "status": "waiting",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "verified",
+        "readiness": "waiting",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "e907d2fad662e6cc8c309027fd6fcba09e3b31274688e4223dc05e073c6b33cc",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E02_confirmed",
+      "status": "reconciled_for_disposable_mock_validation",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "verified",
+        "readiness": "verified",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "6c13f7cbfb3adbbf5e37bb532c57f3df2fc30aa10933b018aea1d489cdc6ea54",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E03_tampered_packet",
+      "status": "blocked",
+      "checks": {
+        "packet": "blocked",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "not_checked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "afa5fc630b86b99e717c5a8ca4b0e7f83988115ea903944d34b751118c5b5a8d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E04_wrong_approval",
+      "status": "blocked",
+      "checks": {
+        "packet": "blocked",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "not_checked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "afa5fc630b86b99e717c5a8ca4b0e7f83988115ea903944d34b751118c5b5a8d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E05_unknown_field",
+      "status": "blocked",
+      "checks": {
+        "packet": "blocked",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "not_checked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "afa5fc630b86b99e717c5a8ca4b0e7f83988115ea903944d34b751118c5b5a8d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E06_expired",
+      "status": "blocked",
+      "checks": {
+        "packet": "blocked",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "not_checked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "afa5fc630b86b99e717c5a8ca4b0e7f83988115ea903944d34b751118c5b5a8d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E07_future",
+      "status": "blocked",
+      "checks": {
+        "packet": "blocked",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "not_checked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "afa5fc630b86b99e717c5a8ca4b0e7f83988115ea903944d34b751118c5b5a8d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E08_lifetime",
+      "status": "blocked",
+      "checks": {
+        "packet": "blocked",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "not_checked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "afa5fc630b86b99e717c5a8ca4b0e7f83988115ea903944d34b751118c5b5a8d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E09_duplicate",
+      "status": "blocked",
+      "checks": {
+        "packet": "blocked",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "not_checked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "afa5fc630b86b99e717c5a8ca4b0e7f83988115ea903944d34b751118c5b5a8d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E10_symlink",
+      "status": "blocked",
+      "checks": {
+        "packet": "blocked",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "not_checked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "afa5fc630b86b99e717c5a8ca4b0e7f83988115ea903944d34b751118c5b5a8d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E11_hardlink",
+      "status": "blocked",
+      "checks": {
+        "packet": "blocked",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "not_checked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "afa5fc630b86b99e717c5a8ca4b0e7f83988115ea903944d34b751118c5b5a8d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E12_permissions",
+      "status": "blocked",
+      "checks": {
+        "packet": "blocked",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "not_checked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "afa5fc630b86b99e717c5a8ca4b0e7f83988115ea903944d34b751118c5b5a8d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E13_record",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "blocked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "eb265efaf8db707040ff1a0ebb1c225a25e8491b94ffe1e816720024eed118bc",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E14_pin",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "blocked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "81e1d75c9efd73ebf8e66c41d3403edb61ca99e51a33719d21a5c5362b5ec71c",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E15_journal",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "blocked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "23f07bbea49c2938e8075365efd1dc5c8253105fddea7246fb1be59f84786532",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E16_unsealed",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "blocked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "9f72543900f115ae18738360155a323128baedb5ac6c58ca69e9a6e02754a5bd",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E17_candidate_version",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "blocked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "81d5ff2876303778b6d95016c15da42e5ca250c1964e0939ec70d0bb7dd6f15a",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E18_fingerprint",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "not_checked",
+        "readiness": "blocked",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "9ed3deda9a8948b7f98a31681136f0859da49a69035735ecbe44e92a8908c408",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E19_unapproved_confirmation",
+      "status": "waiting",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "verified",
+        "readiness": "waiting",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "3ea5c0ad0f4654b5a32131d0e6c97e9ff378494f0946e224681537b1db497939",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E20_confirmation_hash",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "blocked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "25c5e4f59dee54295d84ff4f3850ebf46b4ea9850d9558b24959704d145c4098",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E21_packet_expires_during_check",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "blocked",
+        "readiness": "verified",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": true,
+      "observation_sha256": "1ddc7dadd18d9aad8a1379caf4e25281cd502cec3c5cde5d3d34fcd2f04f8c10",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E22_revoked_during_check",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "blocked",
+        "readiness": "verified",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": false,
+      "external_change_injected": true,
+      "observation_sha256": "6e6456717e5fed08761eb55750269f94dea1dd2c549fff7ba00eaeb57124fcbc",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E23_packet_replaced",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "blocked",
+        "readiness": "verified",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": false,
+      "external_change_injected": true,
+      "observation_sha256": "b18059d20964c7115b4d8deba4bc8a551269435fe1739a7e536462808f8ed39a",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E24_candidate_replaced",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "blocked",
+        "readiness": "verified",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": false,
+      "external_change_injected": true,
+      "observation_sha256": "31a4cffb60f7f3c8b820c3df244ad533936bdd211178ac35431bd1bbe8c54d3c",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E25_ancestor_state_changed",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "blocked",
+        "readiness": "verified",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": false,
+      "external_change_injected": true,
+      "observation_sha256": "8edbcf4a2f67170937689d5dde39fd27429b877d16b7c807a717871564bc5e62",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E26_previous_unchanged",
+      "status": "reconciled_for_disposable_mock_validation",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "verified",
+        "readiness": "verified",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": "84d4fb4adf9c8651128af68cbba0f7d3e5302a5b82af80dbc8ecc45e92b8c247",
+        "outcome": "unchanged",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "d61829087b05a17344c7b5d21af5ded07c4b6bffbe28e2708b9c2382be991605",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E27_foreign_previous",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "blocked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "a7308a735b17777cfa2881fe062918a8332c79b4d0e29cd89a0c35007b6dc0f6",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E28_previous_tampered",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "blocked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "8b8b69311d10664f59d6f1c30ef2a31a06e97db261997d6066e78043f3c8c92c",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E29_previous_permissions",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "blocked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "f0386a95c685226289740db8798e5315fedc0dae60a06dfd811509520918bd92",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E30_missing_candidate",
+      "status": "waiting",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "verified",
+        "readiness": "waiting",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "7ba81090fec8aedabe951b1552554af268b4a0732b3d58bec42262477a45a05b",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E31_unexpected_private_material",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "blocked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "98d32d248d20bbc9497018f65128189eb533053c1b53b2643dba81e726a5cf0a",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E32_no_privileged_helpers",
+      "status": "reconciled_for_disposable_mock_validation",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "verified",
+        "readiness": "verified",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "9fc9cf0b4cc8106287b04a71a4ffc40441b1eee87ad5509824854bc99dd37160",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E33_fifo",
+      "status": "blocked",
+      "checks": {
+        "packet": "blocked",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "not_checked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "afa5fc630b86b99e717c5a8ca4b0e7f83988115ea903944d34b751118c5b5a8d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E34_illicit_authority",
+      "status": "blocked",
+      "checks": {
+        "packet": "blocked",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "not_checked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "afa5fc630b86b99e717c5a8ca4b0e7f83988115ea903944d34b751118c5b5a8d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E35_previous_approval",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "not_checked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "blocked"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "4f17accba0ca4cac15402cb1172572bc257eaf58b1e0885baed6d40d278f7a38",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E36_writable_package",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "blocked",
+        "binding": "not_checked",
+        "public_evidence": "not_checked",
+        "stability": "not_checked",
+        "readiness": "not_checked",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "bda80917c97f02dd1b37425441400c4ccb0d94781d8e4d75a161cbbb75c85eb6",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E37_new_unapproved_confirmation",
+      "status": "waiting",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "verified",
+        "readiness": "waiting",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": "9f2e3e209b83c07a3e41e8dd44891fdd56e3b894e76fe66b7125da606275aafd",
+        "outcome": "changed",
+        "changed_fields": [
+          "confirmation_sha256"
+        ]
+      },
+      "state_unchanged": true,
+      "external_change_injected": false,
+      "observation_sha256": "8e582bb7afc4f50acbfb6913af018a5354e43b68d8a69451fc8bb41835ce6b8f",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E38_clock_rollback",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "blocked",
+        "readiness": "verified",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": true,
+      "observation_sha256": "78809eb2149d9d9775e019e8892386c25af61d0a4816e0f749a78f8c7061521d",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    },
+    {
+      "id": "E39_confirmation_expires_during_check",
+      "status": "blocked",
+      "checks": {
+        "packet": "verified",
+        "package": "verified",
+        "binding": "verified",
+        "public_evidence": "verified",
+        "stability": "blocked",
+        "readiness": "verified",
+        "comparison": "verified"
+      },
+      "comparison": {
+        "previous_observation_sha256": null,
+        "outcome": "not_requested",
+        "changed_fields": []
+      },
+      "state_unchanged": true,
+      "external_change_injected": true,
+      "observation_sha256": "8fa4f174be15ff72e22ca3e7fa0c7d40057302d30c1e53617857d5f522bbcab7",
+      "private_sentinels_absent": true,
+      "all_authority_flags_false": true
+    }
+  ],
+  "package_manifest_sha256": "8884b082f361f6333e813eef9b7677e24542db6862dabba2b87a002b7874888b",
+  "policy_sha256": "e659c4428b96a4ab397c43b416dd29469d4007c46d0bef12ba61bda2e04e739d",
+  "read_only_model_inventory_exact": true,
+  "application_or_engine_imports": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "trust_enrolled": false,
+  "private_case_inputs": false,
+  "production_activation": false,
+  "candidate": {
+    "source": {
+      "scripts/controller_stage_manifest.py": "2b44aecc76d806dd8f5e79b80157fb2744d00e7f39de8b40529d467e0ed36fab",
+      "scripts/portable_controller_fixture.py": "92c2487f2aadbad51dd8564c8e5874f6532ed05d0b062d7de625d08a6bb961fe",
+      "scripts/portable_controller_native.py": "880e67815a4d3ffca31d184e6689ef3ffbb7a3caf4af3d7570b12a36388e19e3",
+      "scripts/operator_enrollment_evidence.py": "ee7ca36c7c33e1978d60188d46f4ee38c4886b55703bb9bdd8aac22c3f8bbd74",
+      "scripts/operator_enrollment_fixture.py": "f003f32b9ba01bece72cafaad253f7c2d80cbfb2df9cb837d3abeb4d1ea7a858",
+      "scripts/operator_enrollment_native.py": "adeadedf487e217054035218326e52f8ef1c1cd5389b3084506ee4786cb38c3c"
+    },
+    "controller": {
+      "controller_stage_manifest.py": "2b44aecc76d806dd8f5e79b80157fb2744d00e7f39de8b40529d467e0ed36fab",
+      "portable_controller_fixture.py": "92c2487f2aadbad51dd8564c8e5874f6532ed05d0b062d7de625d08a6bb961fe",
+      "portable_controller_native.py": "880e67815a4d3ffca31d184e6689ef3ffbb7a3caf4af3d7570b12a36388e19e3",
+      "operator_enrollment_evidence.py": "ee7ca36c7c33e1978d60188d46f4ee38c4886b55703bb9bdd8aac22c3f8bbd74",
+      "operator_enrollment_fixture.py": "f003f32b9ba01bece72cafaad253f7c2d80cbfb2df9cb837d3abeb4d1ea7a858",
+      "operator_enrollment_native.py": "adeadedf487e217054035218326e52f8ef1c1cd5389b3084506ee4786cb38c3c"
+    },
+    "launcher_sha256": "265423cc87fe275c91bf32bc276c8a3dc7b93bae4e51a9afa7df06b966c1deec",
+    "single_attempt": true,
+    "new_volumes_only": true,
+    "real_credentials_or_inputs": false,
+    "production_activation": false
+  },
+  "preparation": {
+    "filesystems": {
+      "models": "ext4",
+      "work": "ext4",
+      "anchors": "ext4"
+    },
+    "tensor_count": 0,
+    "private_inputs": false
+  },
+  "profile": {
+    "filesystem": "ext4",
+    "cpu": 2,
+    "memory_mib": 768,
+    "network": "none",
+    "process_environment_cleared": true,
+    "single_attempt": true
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "schema": "operator-enrollment-evidence-v1",
+  "client_date": "2026-10-25",
+  "base_commit": "cdae5ee376e5613928f792060b3e784151c45ced",
+  "status": "partial",
+  "retained_report_sha256": "0c84d0f73fb1c7d445745670bc66072836d48565a8bd2335d08b38260a570e1b",
+  "unchanged_package_manifest_sha256": "8884b082f361f6333e813eef9b7677e24542db6862dabba2b87a002b7874888b",
+  "results": {
+    "cases_passed": 39,
+    "read_only_model_inventory_exact": true,
+    "previous_package_modules_exact": 14,
+    "packet_max_lifetime_seconds": 900,
+    "retained_history_comparisons": 2,
+    "real_provider_requests": 0,
+    "native_inference_calls": 0,
+    "trust_enrolled": false,
+    "runtime_installation": false,
+    "legal_qualification": false
+  },
+  "prior_implementation_files_exact": 985,
+  "new_contracts": 13,
+  "deployment_contracts": {
+    "passed": 558
+  },
+  "native_acceptance_attempts_per_case": 1,
+  "private_case_or_documents_used": false,
+  "owner_focused_analysis_v3_review": "pending",
+  "independent_real_issuer_and_runtime_pin_confirmation": "pending",
+  "prior_configuration_changes": [
+    ".github/workflows/ci.yml"
+  ],
+  "CI_jobs_workers_caps_and_coverage_preserved": true,
+  "CI_headroom_repair": {
+    "old_run": 40152494185,
+    "old_head": "8ed9cbcd63597023fe8a6b60ba9e227392254660",
+    "all_checks_successful": 9,
+    "backend_job_seconds": 1186,
+    "backend_job_cap_seconds": 1200,
+    "backend_reserve_seconds": 14,
+    "required_reserve_seconds": 30,
+    "decision": "do_not_merge",
+    "merge_invocations": 0,
+    "backend_test_seconds": 972,
+    "deployment_contract_seconds": 69,
+    "destination": "frontend-history",
+    "destination_previous_reserve_seconds": 212,
+    "old_CI_sha256": "7977fef22e4d57661d737ca48cb41b8d170d912c4a606b1cc9708e500af9ce49",
+    "new_CI_sha256": "2995370c8267ae0706cc24e74a2a1edb51004093841016aaedc290b33a0b5c80",
+    "all_tests_jobs_workers_caps_preserved": true,
+    "new_regression_contracts": 1
+  }
+}
