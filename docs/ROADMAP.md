@@ -7067,3 +7067,68 @@ completion/context/tokenizer/truncation, sustained five-job native research,
 retention/capacity, cold/host-bind profiles, historical 502 root cause and legal or
 production acceptance remain open. See the [review recovery contract](ANCHORED_OPERATOR_REVIEW.md)
 and [dated evidence](evidence/anchored-operator-2026-10-25.json).
+
+
+### Review-history backup/restore and cross-instance recovery — 2026-10-25
+
+**F00-06 remains partial.** The unregistered disposable operator path now encrypts
+exact logical review rows, original decision/handoff bytes, parent links and audit
+frames. A separately retained manifest pins snapshot/ciphertext hashes, identity
+scope, journal and current head. Keys, accounts, documents and independent control
+anchors/intents stay outside the bundle. Validated IDs/hashes are the only request
+inputs; paths, key material and target configuration remain server-side. Existing
+app cookie/session/RBAC, origin/CSRF, assigned actors and firm guards remain.
+
+Backup holds the independent lock for a consistent fully anchored snapshot and
+rechecks current actors at commit/reply boundaries. Exclusive writes prevent
+replacement of existing backup IDs. Restore requires the exact manifest and
+current independent head; old backups cannot rewind newer decisions. It creates
+only a new private stage, validates the complete audit/lineage against independently
+retained intents, and recreates exact records without overwriting the source.
+Source database loss/corruption can be recovered while keys, controls and identity
+scope remain available. Anchors/intents/keys are never restored from the bundle.
+
+Read-only restore observation returns hashes which must then be pinned explicitly.
+Another instance can reconcile a lost acknowledgement. Interrupted attempts remain
+incomplete and retained; a fresh authorized ID can create a new attempt. No replay,
+automatic resume/activation or fresh approval is inferred. Restored historical
+actors, source versions, timestamps, decisions and staleness remain unchanged;
+fresh re-review still needs its own handoff and reviewer decision. Limits remain
+64 backups, 4 MiB plaintext/8 MiB ciphertext, and the original model/HTTP budgets.
+
+Both frozen profiles pass **26 cases through 57 actual worker servers and 155 HTTP
+requests**, with at least two separate OS processes per case and shared disposable
+identity/journal state. Duplicate prepare, backup and restore races, another
+worker's interrupted commit, original database loss/corruption, stale heads/reviews,
+corrupt ciphertext/keys/manifests, missing controls, interrupted/lost replies and
+unauthorized requests are covered. The release profile uses four independently
+mounted ext4 volumes for read-only models, working state, independent keys/control
+metadata, and encrypted backups. Both profiles run once per case with unchanged
+expectations under two CPUs/768 MiB, a cleared environment/read-only root and no
+external network, runtime mounts or host ports. All four owned containers and
+seven fresh volumes are removed; both raw profiles remain retained.
+
+The **585-contract suite** (ten new) and affected storage/report checks pass, with
+full Python lint and shell syntax validation. Before adding cases, CI unit scratch
+was aligned with the existing bounded 1 GiB tmpfs policy. Complete deployment
+coverage still runs exactly once in native ARM history; all nine jobs, workers,
+cases, caps and no-retry rules remain. Native ext4 durability qualification remains
+separate. Merge requires all nine exact-head checks, five timing reserves, a
+pinned head and independently fetched-main tree equality. Of 1,034 prior source/
+configuration files, 1,032 stay byte-exact; only CI placement's scratch wrapper
+and its guard change. The full 14-module portable package/archive, provider source,
+real staged materials, originals, ciphertext, evidence versions, confidential
+reviews/history, credentials/sessions and prior edits remain unchanged. Owner
+focused-analysis v3 review and genuine independent issuer/runtime-pin confirmation
+remain pending; no real account, enrollment, install, inference or legal approval.
+
+Next qualify independent restore authorization, key custody and guarded selection/reconciliation of a restored
+target with disposable identities. Keep original backup/
+review chains and current independent controls; preserve measured CI headroom before
+adding cases. Production IdP/PostgreSQL revocation fencing, operator appointments,
+physical/off-host disaster recovery, key/control loss, privileged joint rollback,
+external attestations, installation/executed weights, completion/context/tokenizer/
+truncation, sustained native five-job research, retention/capacity, historical 502
+root cause and legal/production acceptance remain open. See the
+[backup/restore contract](REVIEW_HISTORY_BACKUP.md) and
+[dated evidence](evidence/review-history-backup-2026-10-25.json).

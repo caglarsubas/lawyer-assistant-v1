@@ -270,7 +270,9 @@ jobs:
           python -m pip install uv==0.8.15
           uv sync --project backend --frozen --extra dev
       - name: Test deployment contracts
-        run: backend/.venv/bin/python -m unittest discover -s deploy -p 'test_*.py'
+        # Unit scratch follows the existing bounded pytest tmpfs policy. Native
+        # durability qualification remains separately frozen on real ext4.
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python -m unittest discover -s deploy -p 'test_*.py'
 
   final-release-authorization:
     # Existing jobs are within 30 seconds of their caps. New whole-release
