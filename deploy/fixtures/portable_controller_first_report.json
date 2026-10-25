@@ -1,0 +1,468 @@
+{
+  "schema": "portable-controller-native-v1",
+  "cases": [
+    {
+      "id": "A01_import",
+      "status": "verified",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "A02_module",
+      "status": "rejected",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "A03_manifest",
+      "status": "rejected",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "A04_extra",
+      "status": "rejected",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "A05_symlink",
+      "status": "rejected",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "A06_hardlink",
+      "status": "rejected",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "A07_missing",
+      "status": "rejected",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "A08_app_import",
+      "status": "rejected",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "A09_wrong_approval",
+      "status": "rejected",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "A10_writable",
+      "status": "rejected",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0
+    },
+    {
+      "id": "A11_ready",
+      "status": "ready_for_disposable_mock_validation",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "verified",
+        "model": "verified",
+        "enrollment": "verified"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A12_candidate_only",
+      "status": "waiting",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "verified",
+        "model": "verified",
+        "enrollment": "waiting"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A13_no_confirmation_approval",
+      "status": "waiting",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "verified",
+        "model": "verified",
+        "enrollment": "waiting"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A14_fingerprint",
+      "status": "blocked",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "verified",
+        "model": "verified",
+        "enrollment": "blocked"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A15_issuer",
+      "status": "blocked",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "verified",
+        "model": "verified",
+        "enrollment": "blocked"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A16_reviewer",
+      "status": "blocked",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "verified",
+        "model": "verified",
+        "enrollment": "blocked"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A17_self_review",
+      "status": "blocked",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "verified",
+        "model": "verified",
+        "enrollment": "blocked"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A18_expired",
+      "status": "blocked",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "verified",
+        "model": "verified",
+        "enrollment": "blocked"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A19_revoked",
+      "status": "blocked",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "verified",
+        "model": "verified",
+        "enrollment": "blocked"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A20_candidate",
+      "status": "blocked",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "verified",
+        "model": "verified",
+        "enrollment": "blocked"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A21_confirmation_hash",
+      "status": "blocked",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "verified",
+        "model": "verified",
+        "enrollment": "blocked"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A22_binding",
+      "status": "blocked",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "blocked",
+        "model": "not_checked",
+        "enrollment": "not_checked"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A23_unsealed",
+      "status": "blocked",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "blocked",
+        "model": "not_checked",
+        "enrollment": "not_checked"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A24_journal",
+      "status": "blocked",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "blocked",
+        "model": "not_checked",
+        "enrollment": "not_checked"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A25_revoked_during_check",
+      "status": "blocked",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "blocked",
+        "model": "verified",
+        "enrollment": "verified"
+      },
+      "read_only_state_exact": false,
+      "external_revocation_injected": true
+    },
+    {
+      "id": "A26_no_privileged_helpers",
+      "status": "ready_for_disposable_mock_validation",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0,
+      "gates": {
+        "package": "verified",
+        "dependencies": "verified",
+        "binding": "verified",
+        "model": "verified",
+        "enrollment": "verified"
+      },
+      "read_only_state_exact": true,
+      "external_revocation_injected": false
+    },
+    {
+      "id": "A27_HTTP",
+      "status": "verified",
+      "HTTP_requests": 2,
+      "simulated_backend_sends": 1,
+      "frame": {
+        "public_key_base64": "Gwiu1uU5e1gTS4hBcl/WhcX12wP/bXQNcYLwmDvENAo=",
+        "pin": {
+          "model_id": "fixture-portable-model",
+          "model_digest_sha256": "38ebcaf59b8e461394795a0e3beaaef97795be10ded04af0d56db96ef92f427c",
+          "backend": "ollama_http",
+          "format": "ollama_http",
+          "model_context_units": 8192,
+          "application_context_units": 4096,
+          "tenant_id": "fixture-tenant",
+          "organization_id": "fixture-org",
+          "key_id": "fixture-key",
+          "transport_mode": "native_private",
+          "route_sha256": "29184f07096224e7f23df0d96cde6bdc8730dd985b44d0c5d2b46d1458b049ec",
+          "cloud_fallback_disabled": true
+        },
+        "request_base64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJJbnZlbnRlZCBwb3J0YWJsZSBpbnB1dC4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJmaXh0dXJlLXBvcnRhYmxlLW1vZGVsIiwic3RyZWFtIjpmYWxzZX0gCg==",
+        "identity_proof": {
+          "claims": {
+            "contract": "lawyer-provider-binding-v2",
+            "expires_at": 1800000420,
+            "issued_at": 1800000300,
+            "issuer_key_id": "fixture-portable-issuer",
+            "kind": "identity",
+            "nonce": "11111111111111111111111111111111",
+            "pin": {
+              "application_context_units": 4096,
+              "backend": "ollama_http",
+              "cloud_fallback_disabled": true,
+              "format": "ollama_http",
+              "key_id": "fixture-key",
+              "model_context_units": 8192,
+              "model_digest_sha256": "38ebcaf59b8e461394795a0e3beaaef97795be10ded04af0d56db96ef92f427c",
+              "model_id": "fixture-portable-model",
+              "organization_id": "fixture-org",
+              "route_sha256": "29184f07096224e7f23df0d96cde6bdc8730dd985b44d0c5d2b46d1458b049ec",
+              "tenant_id": "fixture-tenant",
+              "transport_mode": "native_private"
+            }
+          },
+          "signature": "R2egoO9uYGjuRrUlRFWp3B7kkL0z8jYjwIog3UA3kQ19XZA7b11zRKklMbtRf7ZFSwJjNkaZf9SmMBF0H57qDA=="
+        },
+        "identity_nonce": "11111111111111111111111111111111",
+        "response_nonce": "22222222222222222222222222222222",
+        "now": 1800000300,
+        "response_envelope_base64": "eyJwcm92aWRlcl9iaW5kaW5nIjp7ImNsYWltcyI6eyJjb250cmFjdCI6Imxhd3llci1wcm92aWRlci1iaW5kaW5nLXYyIiwiZXhwaXJlc19hdCI6MTgwMDAwMDQyMCwiaWRlbnRpdHlfc2hhMjU2IjoiN2Q1OGFhYzI2YTY2MGY4NWU1ODMzMmVmNDY3YmM4ZDQ4NGU0MGY3ZmQxZWRiYTFhMWQzOGViNTZkMWRjM2RjYSIsImlzc3VlZF9hdCI6MTgwMDAwMDMwMCwiaXNzdWVyX2tleV9pZCI6ImZpeHR1cmUtcG9ydGFibGUtaXNzdWVyIiwia2luZCI6ImNvbXBsZXRpb24iLCJub25jZSI6IjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyIiwicGluX3NoYTI1NiI6IjRhMDRkMjQ5ZGUxOWIyYzA4YmZmMDMwOGZjYTQzYTM1YzdkYjBkNzI3NjI4OTNkM2FkZDUyY2Q2ZWFjNjY3NjIiLCJyZXF1ZXN0X3NoYTI1NiI6ImUwYmE2N2U5NzViMWY3YmZiODA1MGYzNjhhNTY4ZDliM2Y1MGM0ODg3MTM3Y2Y2NGU1NjZkOGM5MmJhMjlhMmEiLCJyZXNwb25zZV9zaGEyNTYiOiJmMTJmZTYyNmQ4ZmM0NTI4Y2MzYzM5ZjRhN2FiOGM1ZDVlNGQ0OTdmMTY4MGU4MWE5YjA2OTM1MGQxYWFlNmRmIn0sInNpZ25hdHVyZSI6IkVMTTBJNVQ4eXMwSnpqaHdoTXg2YWx3cFFtYlNZcUY0YlVMYmU4bXU0RXo5Z1RIM0loTGNLYWNSTHdXU1dZNzVSL3p6cGlVNU1xZWwwVFJQTWc5R0JnPT0ifSwicmVzcG9uc2VfYmFzZTY0IjoiZXlKamFHOXBZMlZ6SWpwYmV5Sm1hVzVwYzJoZmNtVmhjMjl1SWpvaWMzUnZjQ0lzSW0xbGMzTmhaMlVpT25zaVkyOXVkR1Z1ZENJNklrbHVkbVZ1ZEdWa0lIQnZjblJoWW14bElHRnVjM2RsY2k0aUxDSnliMnhsSWpvaVlYTnphWE4wWVc1MEluMTlYU3dpYlc5a1pXd2lPaUptYVhoMGRYSmxMWEJ2Y25SaFlteGxMVzF2WkdWc0lpd2ljbVZ4ZFdWemRGOXJaWGxmYzI5MWNtTmxJam9pYkc5allXd3RhVzVtWlhKbGJtTmxJaXdpZFhOaFoyVWlPbnNpWTI5dGNHeGxkR2x2Ymw5MGIydGxibk1pT2pFd0xDSndjbTl0Y0hSZmRHOXJaVzV6SWpvME1Dd2lkRzkwWVd4ZmRHOXJaVzV6SWpvMU1IMTkifQ=="
+      },
+      "nonce_counts": {
+        "consumed": 1
+      }
+    },
+    {
+      "id": "A28_receipt_rollback",
+      "status": "rejected",
+      "HTTP_requests": 3,
+      "simulated_backend_sends": 1,
+      "frame": {
+        "public_key_base64": "hmjRnVEP9MMG2vbPzf75I4ej7yR+OEeQA4g8ePe6gLA=",
+        "pin": {
+          "model_id": "fixture-portable-model",
+          "model_digest_sha256": "38ebcaf59b8e461394795a0e3beaaef97795be10ded04af0d56db96ef92f427c",
+          "backend": "ollama_http",
+          "format": "ollama_http",
+          "model_context_units": 8192,
+          "application_context_units": 4096,
+          "tenant_id": "fixture-tenant",
+          "organization_id": "fixture-org",
+          "key_id": "fixture-key",
+          "transport_mode": "native_private",
+          "route_sha256": "29184f07096224e7f23df0d96cde6bdc8730dd985b44d0c5d2b46d1458b049ec",
+          "cloud_fallback_disabled": true
+        },
+        "request_base64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJJbnZlbnRlZCBwb3J0YWJsZSBpbnB1dC4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJmaXh0dXJlLXBvcnRhYmxlLW1vZGVsIiwic3RyZWFtIjpmYWxzZX0gCg==",
+        "identity_proof": {
+          "claims": {
+            "contract": "lawyer-provider-binding-v2",
+            "expires_at": 1800000420,
+            "issued_at": 1800000300,
+            "issuer_key_id": "fixture-portable-issuer",
+            "kind": "identity",
+            "nonce": "11111111111111111111111111111111",
+            "pin": {
+              "application_context_units": 4096,
+              "backend": "ollama_http",
+              "cloud_fallback_disabled": true,
+              "format": "ollama_http",
+              "key_id": "fixture-key",
+              "model_context_units": 8192,
+              "model_digest_sha256": "38ebcaf59b8e461394795a0e3beaaef97795be10ded04af0d56db96ef92f427c",
+              "model_id": "fixture-portable-model",
+              "organization_id": "fixture-org",
+              "route_sha256": "29184f07096224e7f23df0d96cde6bdc8730dd985b44d0c5d2b46d1458b049ec",
+              "tenant_id": "fixture-tenant",
+              "transport_mode": "native_private"
+            }
+          },
+          "signature": "Cwsb/h88t99RtPc2P6F/ps7UbA9VsAo46Qh+AlNbjvdFMisLPFX8q9lRViCCojwjOBIlREVvX2oT/Zb7jyvtDg=="
+        },
+        "identity_nonce": "11111111111111111111111111111111",
+        "response_nonce": "22222222222222222222222222222222",
+        "now": 1800000300,
+        "response_envelope_base64": "eyJwcm92aWRlcl9iaW5kaW5nIjp7ImNsYWltcyI6eyJjb250cmFjdCI6Imxhd3llci1wcm92aWRlci1iaW5kaW5nLXYyIiwiZXhwaXJlc19hdCI6MTgwMDAwMDQyMCwiaWRlbnRpdHlfc2hhMjU2IjoiN2Q1OGFhYzI2YTY2MGY4NWU1ODMzMmVmNDY3YmM4ZDQ4NGU0MGY3ZmQxZWRiYTFhMWQzOGViNTZkMWRjM2RjYSIsImlzc3VlZF9hdCI6MTgwMDAwMDMwMCwiaXNzdWVyX2tleV9pZCI6ImZpeHR1cmUtcG9ydGFibGUtaXNzdWVyIiwia2luZCI6ImNvbXBsZXRpb24iLCJub25jZSI6IjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyIiwicGluX3NoYTI1NiI6IjRhMDRkMjQ5ZGUxOWIyYzA4YmZmMDMwOGZjYTQzYTM1YzdkYjBkNzI3NjI4OTNkM2FkZDUyY2Q2ZWFjNjY3NjIiLCJyZXF1ZXN0X3NoYTI1NiI6ImUwYmE2N2U5NzViMWY3YmZiODA1MGYzNjhhNTY4ZDliM2Y1MGM0ODg3MTM3Y2Y2NGU1NjZkOGM5MmJhMjlhMmEiLCJyZXNwb25zZV9zaGEyNTYiOiJmMTJmZTYyNmQ4ZmM0NTI4Y2MzYzM5ZjRhN2FiOGM1ZDVlNGQ0OTdmMTY4MGU4MWE5YjA2OTM1MGQxYWFlNmRmIn0sInNpZ25hdHVyZSI6IjRqV1Vray9RaE5XSFRJb1dLSWcrZ2Q0cWxGYVF2eWtFbUgzNmptc0U3amJiZ1dza0ZTYjBROUtlaXo2Q2lZUjNYRWZTbUJ4WDk5ay9NYTh3K1pubkNnPT0ifSwicmVzcG9uc2VfYmFzZTY0IjoiZXlKamFHOXBZMlZ6SWpwYmV5Sm1hVzVwYzJoZmNtVmhjMjl1SWpvaWMzUnZjQ0lzSW0xbGMzTmhaMlVpT25zaVkyOXVkR1Z1ZENJNklrbHVkbVZ1ZEdWa0lIQnZjblJoWW14bElHRnVjM2RsY2k0aUxDSnliMnhsSWpvaVlYTnphWE4wWVc1MEluMTlYU3dpYlc5a1pXd2lPaUptYVhoMGRYSmxMWEJ2Y25SaFlteGxMVzF2WkdWc0lpd2ljbVZ4ZFdWemRGOXJaWGxmYzI5MWNtTmxJam9pYkc5allXd3RhVzVtWlhKbGJtTmxJaXdpZFhOaFoyVWlPbnNpWTI5dGNHeGxkR2x2Ymw5MGIydGxibk1pT2pFd0xDSndjbTl0Y0hSZmRHOXJaVzV6SWpvME1Dd2lkRzkwWVd4ZmRHOXJaVzV6SWpvMU1IMTkifQ=="
+      },
+      "nonce_counts": {
+        "consumed": 1
+      }
+    },
+    {
+      "id": "A29_real_transport",
+      "status": "rejected",
+      "HTTP_requests": 0,
+      "simulated_backend_sends": 0
+    }
+  ],
+  "package_manifest_sha256": "8884b082f361f6333e813eef9b7677e24542db6862dabba2b87a002b7874888b",
+  "actual_loopback_servers": 2,
+  "actual_HTTP_requests": 5,
+  "read_only_model_inventory_exact": true,
+  "application_or_engine_imports": false,
+  "native_inference_calls": 0,
+  "live_provider_requests": 0,
+  "real_trust_confirmed": false,
+  "private_case_inputs": false,
+  "production_activation": false,
+  "candidate": {
+    "source": {
+      "scripts/controller_stage_manifest.py": "2b44aecc76d806dd8f5e79b80157fb2744d00e7f39de8b40529d467e0ed36fab",
+      "scripts/portable_controller_fixture.py": "92c2487f2aadbad51dd8564c8e5874f6532ed05d0b062d7de625d08a6bb961fe",
+      "scripts/portable_controller_native.py": "880e67815a4d3ffca31d184e6689ef3ffbb7a3caf4af3d7570b12a36388e19e3"
+    },
+    "controller": {
+      "controller_stage_manifest.py": "2b44aecc76d806dd8f5e79b80157fb2744d00e7f39de8b40529d467e0ed36fab",
+      "portable_controller_fixture.py": "92c2487f2aadbad51dd8564c8e5874f6532ed05d0b062d7de625d08a6bb961fe",
+      "portable_controller_native.py": "880e67815a4d3ffca31d184e6689ef3ffbb7a3caf4af3d7570b12a36388e19e3"
+    },
+    "launcher_sha256": "6c5c17a744f26821e17b860788b9fa3c934454926a6398270bf9f369be5ff768",
+    "single_attempt": true,
+    "new_volumes_only": true,
+    "real_credentials_or_inputs": false,
+    "production_activation": false
+  },
+  "preparation": {
+    "filesystems": {
+      "models": "ext4",
+      "work": "ext4",
+      "anchors": "ext4"
+    },
+    "tensor_count": 0,
+    "private_inputs": false
+  },
+  "profile": {
+    "filesystem": "ext4",
+    "cpu": 2,
+    "memory_mib": 768,
+    "network": "none",
+    "process_environment_cleared": true,
+    "single_attempt": true
+  },
+  "policy_sha256": "d900f65da2f9fb1918662c9606c8ae0a2ea86a4323d68049fb7f71dbcaef278d"
+}
