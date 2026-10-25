@@ -17,6 +17,8 @@ import operator_enrollment_evidence as evidence  # noqa: E402
 import operator_review_fixture as fixture  # noqa: E402
 import portable_controller_fixture as portable  # noqa: E402
 from authenticated_operator_review import PREFIX  # noqa: E402
+from campaign_test_assets import share_immutable_assets  # noqa: E402
+from ci_case_discovery import declared, install  # noqa: E402
 from fastapi import HTTPException  # noqa: E402
 from operator_review_auth import SessionAuthority  # noqa: E402
 from test_portable_controller import unit_readonly  # noqa: E402
@@ -62,18 +64,16 @@ class AuthenticatedOperatorContracts(unittest.IsolatedAsyncioTestCase):
         stack.enter_context(fixture.forbid_provider_helpers(self.api))
         return stack
 
-    async def test_frozen_authenticated_review_cases(self):
+    async def qualify_case(self, name, expected):
         with self.readonly():
-            for name, expected in fixture.CASES:
-                with self.subTest(case=name):
-                    f = fixture.Fixture(name, self.models, self.work, self.anchors, self.api)
-                    try:
-                        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=f.service), base_url="http://operator.invalid") as client:
-                            status = await f.run(client)
-                        self.assertEqual(status, expected)
-                        self.assertTrue(f.result(status)["credentials_absent_from_responses_and_review_records"])
-                    finally:
-                        f.close()
+            f = fixture.Fixture(name, self.models, self.work, self.anchors, self.api)
+            try:
+                async with httpx.AsyncClient(transport=httpx.ASGITransport(app=f.service), base_url="http://operator.invalid") as client:
+                    status = await f.run(client)
+                self.assertEqual(status, expected)
+                self.assertTrue(f.result(status)["credentials_absent_from_responses_and_review_records"])
+            finally:
+                f.close()
 
     async def test_cancelled_metadata_write_finishes_before_guard_release_without_replay(self):
         with self.readonly():
@@ -137,7 +137,11 @@ class AuthenticatedOperatorContracts(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.approved, previous["package_manifest_sha256"])
         self.assertEqual(json.loads((ROOT / "deploy/fixtures/authenticated_operator_policy.json").read_text()), fixture.POLICY)
         self.assertEqual(self.api.artifact_store.Budget().seconds, 20)
+        self.assertEqual(declared(type(self)), {name: (name, status) for name, status in fixture.CASES})
 
+
+share_immutable_assets(AuthenticatedOperatorContracts)
+install(AuthenticatedOperatorContracts, fixture.CASES)
 
 if __name__ == "__main__":
     unittest.main()

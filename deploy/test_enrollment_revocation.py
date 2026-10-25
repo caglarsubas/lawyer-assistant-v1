@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "scripts"), str(ROOT / "backend"), str(ROOT / "deploy")]
 import enrollment_revocation_fixture as fixture  # noqa: E402
 import test_authenticated_operator_review as retained  # noqa: E402
+from campaign_test_assets import share_immutable_assets  # noqa: E402
 from ci_case_discovery import declared, install  # noqa: E402
 
 
@@ -38,6 +39,7 @@ class EnrollmentRevocationContracts(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(declared(type(self)), {name: (name, status) for name, status in fixture.CASES})
 
 
+share_immutable_assets(EnrollmentRevocationContracts)
 install(EnrollmentRevocationContracts, fixture.CASES)
 
 if __name__ == "__main__":

@@ -19,30 +19,37 @@
     "merged_main_tree_equal": true
   },
   "deployment_contracts": {
-    "passed": 676,
+    "passed": 826,
     "before_methods": 630,
-    "after_methods": 676,
-    "frozen_campaign_cases_preserved": 46,
-    "replaced_monolithic_methods": 2,
-    "helper_contracts_added": 2,
+    "after_methods": 826,
+    "frozen_campaign_cases_preserved": 199,
+    "replaced_monolithic_methods": 7,
+    "helper_contracts_added": 4,
     "shard_counts": [
-      329,
-      347
+      383,
+      443
     ],
     "local_summed_case_seconds": [
-      145.03,
-      115.08
+      91.16,
+      115.39
     ],
     "every_manifest_ID_once": true,
     "original_case_bodies_AST_equal": true,
-    "frozen_policies_native_reports_and_graders_unchanged": true
+    "frozen_policies_native_reports_and_graders_unchanged": true,
+    "fixture_assets": "Only unchanged package/model fixture assets are shared within a campaign; integrity is checked each case. Accounts, keys, journals, work roots, clients and event loops remain fresh.",
+    "case_partition": "Stable 2:3 hash weighting for closed frozen-case IDs across x86/ARM; ordinary contracts retain the original half partition."
   },
   "retained_source_files": 1098,
-  "exact_prior_source_files": 1093,
+  "exact_prior_source_files": 1088,
   "intentional_prior_source_changes": [
     "deploy/fixtures/deployment_test_manifest.json",
+    "deploy/test_anchored_operator_review.py",
+    "deploy/test_authenticated_operator_review.py",
     "deploy/test_deployment_shards.py",
     "deploy/test_enrollment_revocation.py",
+    "deploy/test_history_backup.py",
+    "deploy/test_restore_authorization.py",
+    "deploy/test_restore_lifecycle.py",
     "deploy/test_withdrawal_backup.py",
     "scripts/run_ci_deployment_shard.py"
   ],
@@ -79,5 +86,16 @@
   },
   "ledger_sections_before": 243,
   "ledger_sections_after": 244,
-  "next_product_slice": "Independently authorized staged-reader binding and withdrawal-fence cutover with disposable identities."
+  "next_product_slice": "Independently authorized staged-reader binding and withdrawal-fence cutover with disposable identities.",
+  "rejected_first_candidate": {
+    "head": "c8f991dbe315760edd3b0744673779f6c2d76d18",
+    "run": 40210580970,
+    "x86_frontend": "cancelled at deadline",
+    "x86_lifecycle_campaign_seconds": 102.602,
+    "x86_completed_contract_seconds": 292.6,
+    "x86_frontend_cases_passed": 5299,
+    "x86_frontend_seconds": 252.08,
+    "ARM_job_seconds": 238,
+    "workflow_cancel_request": "denied by GitHub token; no access change attempted"
+  }
 }

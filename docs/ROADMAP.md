@@ -7447,34 +7447,47 @@ successful. Its frontend worker passed all 70 assigned files and 5,299 tests in
 when the five-minute job deadline expired. The successful nine-check PR run and
 independently verified merged-main tree remain separate evidence from that repeat.
 
-The two frozen inventory/archive campaigns now expose all **46** original cases
-as separate asynchronous unittest methods. Their fixture IDs, expected statuses,
-case bodies, assertions and cleanup remain exact; structural comparison confirms
-the unchanged bodies. Both original policies, native reports and graders remain
-unchanged. Remove the two campaign-level architecture overrides and distribute
-the individual methods with the existing stable hash rule. No case is dropped.
-The complete source-bound manifest grows **630 → 676** methods: two monolithic
-methods become 46, and two helper contracts are added. This change does not
-represent 46 new product capabilities. All **676** methods pass locally exactly
-once, **329 / 347**, with 145.03 / 115.08 summed case seconds.
+The first correction exposed inventory/archive cases individually. Actual CI
+then identified older monoliths: lifecycle **102.602 seconds**, anchored review
+48.896 seconds and authenticated review 37.485 seconds. Its x86 deployment worker
+completed 292.6 seconds of work before cancellation, while Vitest passed in
+252.08 seconds. ARM passed in 238 seconds. That rejected source/run is retained;
+a token-denied cancellation request changed no access. No automatic retry or
+larger runner/deadline is used to conceal the failed qualification.
 
-Per-case start/completion records and elapsed seconds identify any interrupted
-tail using public test IDs. All nine jobs, both existing frontend lanes, worker
-budgets, architecture coverage, the single frontend build, all 139 frontend files
-and 10,532 tests, deadlines and retry policy stay unchanged. Merge still requires
-nine exact-head checks, the five designated 30-second reserves, a pinned-head
-merge and independently fetched-main tree equality. The cancelled historical
-repeat is retained; no duplicate run is requested to conceal it.
+All **199 frozen cases across seven campaigns** now have individual asynchronous
+unittest identities. Their fixture IDs, outcomes, case bodies, assertions and
+cleanup remain exact; structural comparison confirms all seven bodies. Frozen
+policies, native reports and graders remain unchanged. Reuse only each campaign's
+unchanged package/model test assets, matching its original shared fixture. Check
+their bytes, physical identities, ownership, permissions and links per case.
+Every account, session, key, journal, work root, client, authorization check and
+event loop stays fresh; services and integrity verdicts are not cached.
+
+Distribute closed frozen-case IDs with a stable **2:3 x86/ARM** hash weighting
+based on observed runner cost; ordinary contracts retain their half partition.
+No case is dropped. The complete manifest grows **630 → 826** methods: seven
+monoliths become 199 cases, plus four helper contracts. This is test granularity,
+not 199 new product capabilities. All **826** pass locally exactly once,
+**383 / 443**, with **91.16 / 115.39** summed case seconds. Start/completion
+records identify interrupted work using public test IDs.
+
+All nine jobs, both frontend lanes, worker budgets, architecture coverage, the
+single frontend build, all 139 frontend files and 10,532 tests, deadlines and retry
+policy stay unchanged. Merge requires nine exact-head checks, five designated
+30-second reserves, a pinned-head merge and independently fetched-main full-tree
+equality. Historical rejected profiles and new main-push CI remain separate.
 
 Engineering completion is published only after verified merge. The 14 readiness
 states remain **0 ready, 9 partial, 4 waiting, 1 planned**; the 93 checklist items
 remain **42 done, 21 open, 24 waiting, 6 deferred**, all **Δ0**. The ledger grows
 **243 → 244**. No parent gate, legal review or live provider qualification closes.
-Of 1,098 prior code/configuration files, 1,093 remain exact; five intentional
-changes update deployment discovery, its verification and progress diagnostics.
-Originals, encrypted evidence, exact versions, confidential case data, sessions
-and private review history remain preserved. This delivery creates no provider
-call, inference, trust enrollment, application deployment or review decision.
+Of 1,098 prior code/configuration files, 1,088 remain exact; ten intentional
+changes update deployment case discovery, fixture lifecycle, its verification and
+progress diagnostics. Originals, encrypted evidence, exact versions, confidential
+case data, sessions and private review history remain preserved. This delivery
+creates no provider call, inference, trust enrollment, application deployment or
+review decision.
 
 Next qualify the independently authorized staged-reader binding and withdrawal-
 fence cutover with disposable identities. F00-06 and owner focused-analysis v3

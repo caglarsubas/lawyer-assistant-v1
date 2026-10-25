@@ -20,7 +20,12 @@ class DeploymentShardContracts(unittest.TestCase):
         a, b = [{test.id() for test in runner.plan(tests, manifest, n)} for n in (1, 2)]
         self.assertFalse(a & b)
         self.assertEqual(a | b, {test.id() for test in tests})
-        for module, cls, policy in [("test_enrollment_revocation", "EnrollmentRevocationContracts", "enrollment_revocation_policy.json"),
+        for module, cls, policy in [("test_authenticated_operator_review", "AuthenticatedOperatorContracts", "authenticated_operator_policy.json"),
+                                    ("test_anchored_operator_review", "AnchoredReviewContracts", "anchored_review_policy.json"),
+                                    ("test_history_backup", "HistoryBackupContracts", "history_backup_policy.json"),
+                                    ("test_restore_authorization", "RestoreAuthorizationContracts", "restore_authorization_policy.json"),
+                                    ("test_restore_lifecycle", "RestoreLifecycleContracts", "restore_lifecycle_policy.json"),
+                                    ("test_enrollment_revocation", "EnrollmentRevocationContracts", "enrollment_revocation_policy.json"),
                                     ("test_withdrawal_backup", "WithdrawalBackupContracts", "withdrawal_backup_policy.json")]:
             prefix = module + "." + cls + ".test_case_"
             expected = {prefix + row["id"] for row in json.loads((ROOT / "deploy/fixtures" / policy).read_text())["cases"]}
