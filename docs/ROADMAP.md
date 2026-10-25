@@ -7003,3 +7003,64 @@ sustained five-job native research load, retention/capacity, cold/host-bind prof
 historical 502 root cause and legal/production acceptance remain open. See
 [operator review contract](AUTHENTICATED_OPERATOR_REVIEW.md) and
 [dated evidence](evidence/authenticated-operator-2026-10-25.json).
+
+
+### Anchored decision recovery and fresh re-review — 2026-10-25
+
+**F00-06 remains partial.** The unregistered disposable operator service now
+retains exact original handoff/decision bytes, authenticated actor/source evidence
+and explicit parent links in a bounded SQLite journal. A hash chain, separately
+retained durable commit intents and independent anchor detect database rollback,
+forged unanchored suffixes, corruption and missing/changed projections. No
+ordinary request can silently repair or advance these controls. Actual app
+cookie/session/RBAC, current assigned actors, origin/CSRF and the firm guard
+remain mandatory. Trusted paths/identity scope remain outside HTTP.
+
+Authenticated recovery first observes hashes without mutation, then requires an
+explicit exact anchor/tip pin. It may reconcile at most one independently
+admitted committed frame and recreate only missing projections from exact retained
+bytes. It never overwrites history, invents a decision from an uncommitted intent,
+refreshes actors/timestamps or renews approval. Lost acknowledgements remain
+recoverable metadata; stale decisions remain stale. Deep divergence, wrong pins,
+unknown files, unsafe posture, unrelated/revoked actors and tampering fail closed.
+
+Fresh re-review requires the exact prior handoff and decision, a new handoff ID,
+current source versions and fresh eligibility/context checks. A retained parent
+link records lineage without copying the old decision. The assigned reviewer
+must make a new decision; expired sessions/versions or changed assessments never
+rewrite the original. All enrollment, installation, execution, production and
+legal authority flags remain false. Limits stay at 128 records, 16 lineage edges,
+256 independent intents and the original 20-second model verifier budget.
+
+The completed frozen candidate passes **31/31 cases through 31 actual loopback
+servers and 124 HTTP requests**, using invented identities and actual retained app
+authentication. Fresh ext4 volumes, read-only model/package, two CPUs/768 MiB,
+cleared environment/read-only root and no external network/runtime mounts/host
+ports bound qualification. All four owned containers and six fresh volumes from
+both candidates are removed. The first native driver failed before any HTTP
+request on helper wiring; its source/logs/cleanup remain retained. The completed
+candidate uses a corrected driver with unchanged frozen expectations, once per
+case. Initial SQLite initialization and duplicate-discovery errors were also
+corrected; all three test method bodies and 31 case expectations remain exact.
+
+All **575 deployment contracts** (seven new), full Python lint and retained-report
+replay pass. CI's complete deployment discovery moves exactly once from history
+(measured 43s reserve) to the existing frontend lane (169s reserve). All nine jobs,
+workers, cases, caps and no-retry rules remain. Merge still requires nine exact-head
+checks, five timing gates, a pinned head and independent fetched-main tree equality.
+Of 1,025 prior source/configuration files, 1,022 remain byte-exact; the three changes
+are the backward-compatible handoff extension hook, CI placement and its guard.
+The entire 14-module portable package/archive, provider source, real staged
+materials, originals, ciphertext, exact evidence, confidential reviews/history,
+credentials/sessions and prior edits remain unchanged. The owner's focused-analysis
+v3 review and genuine independent issuer/runtime-pin confirmation remain pending.
+
+Next qualify exact, externally retained review-history backup/restore and
+cross-instance admission/recovery using disposable identities. Preserve all
+original decisions, parent links and independent controls; do not treat joint
+privileged rollback as qualified. Real operator appointments/IdP, production
+PostgreSQL admission, external attestations, installation/executed weights,
+completion/context/tokenizer/truncation, sustained five-job native research,
+retention/capacity, cold/host-bind profiles, historical 502 root cause and legal or
+production acceptance remain open. See the [review recovery contract](ANCHORED_OPERATOR_REVIEW.md)
+and [dated evidence](evidence/anchored-operator-2026-10-25.json).

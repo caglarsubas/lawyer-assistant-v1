@@ -237,6 +237,19 @@ jobs:
         working-directory: frontend
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 1
+      # The history lane retained only43s before new recovery contracts; the
+      # frontend lane retained169s in the exact same PR run. Move the complete
+      # discovery, without filtering or duplication, into this existing lane.
+      # Keep all nine jobs, two workers, current caps and no automatic retries.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install locked deployment-contract dependencies
+        run: |
+          python -m pip install uv==0.8.15
+          uv sync --project backend --frozen --extra dev
+      - name: Test deployment contracts
+        run: backend/.venv/bin/python -m unittest discover -s deploy -p 'test_*.py'
 
   frontend-history:
     # Growing history contracts exceeded the single frontend lane's reserve.
@@ -259,19 +272,6 @@ jobs:
         working-directory: frontend
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
-      # The complete deployment-contract tail used 69s after a 972s backend
-      # suite, leaving only 14s of its unchanged job cap. This existing shard
-      # had 212s spare. Run the full discovery exactly once here; retain all
-      # nine jobs, tests, workers, limits and the original backend step cap.
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install locked deployment-contract dependencies
-        run: |
-          python -m pip install uv==0.8.15
-          uv sync --project backend --frozen --extra dev
-      - name: Test deployment contracts
-        run: backend/.venv/bin/python -m unittest discover -s deploy -p 'test_*.py'
 
   final-release-authorization:
     # Existing jobs are within 30 seconds of their caps. New whole-release

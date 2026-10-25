@@ -80,6 +80,8 @@ class Target:
 
 
 class ReviewHandoff:
+    actions = ("prepare", "decide", "inspect")
+
     def __init__(self, authority, target, ledger, *, clock=evidence.utc, checkpoint=None):
         if not isinstance(authority, SessionAuthority) or not isinstance(target, Target):
             raise ValueError("Trusted disposable authority and target required")
@@ -99,6 +101,9 @@ class ReviewHandoff:
     def point(self, name):
         if self.checkpoint is not None:
             self.checkpoint(name)  # Trusted qualification hook, never an HTTP field.
+
+    def retain_record(self, path, raw):
+        return evidence.retain(path, raw)
 
     def read_record(self, ident, kind, expected):
         raw = evidence.read(self.ledger / (evidence.token(ident, 32) + "." + kind + ".json"))
@@ -166,7 +171,7 @@ class ReviewHandoff:
                 self.current(record, actor, evidence.stamp(self.clock()))
                 path = self.ledger / (ident + ".handoff.json")
                 try:
-                    receipt = evidence.retain(path, evidence.encode(record))
+                    receipt = self.retain_record(path, evidence.encode(record))
                 except FileExistsError:
                     conflict()
                 self.point("after_commit")
@@ -208,7 +213,7 @@ class ReviewHandoff:
             self.point("before_commit")
             self.current(decision, actor, evidence.stamp(self.clock()))
             try:
-                receipt = evidence.retain(self.ledger / (ident + ".decision.json"), evidence.encode(decision))
+                receipt = self.retain_record(self.ledger / (ident + ".decision.json"), evidence.encode(decision))
             except FileExistsError:
                 conflict()
             self.point("after_commit")
@@ -229,7 +234,7 @@ class ReviewHandoff:
     async def respond(self, scope, receive, send):
         status, result, worker = 200, None, None
         try:
-            if scope["type"] != "http" or scope.get("method") != "POST" or scope.get("path") not in {PREFIX + x for x in ("prepare", "decide", "inspect")} or scope.get("query_string"):
+            if scope["type"] != "http" or scope.get("method") != "POST" or scope.get("path") not in {PREFIX + x for x in self.actions} or scope.get("query_string"):
                 raise ValueError("Unsupported staged request")
             headers = scope.get("headers", [])
             if len(headers) > 64 or sum(len(k) + len(v) for k, v in headers) > 16384:
