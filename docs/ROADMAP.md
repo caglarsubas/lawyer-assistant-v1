@@ -6922,10 +6922,16 @@ remains exact. Two CPUs/768 MiB, no external network/runtime mounts or host port
 a read-only root, cleared environment and three new ext4 volumes bound the profile.
 Both owned containers and all three volumes are removed.
 
-All **557 deployment contracts** (12 new), full Python lint and retained-report
-replay pass. All 986 earlier implementation/configuration files, the complete
-portable package, CI jobs/workers/caps/coverage, provider source and real staged
-material remain exact. Live originals, encrypted bytes, exact evidence versions,
+All **558 deployment contracts** (13 new), full Python lint and retained-report
+replay pass. The initial nine-check CI run passed but left only 14 seconds of
+backend reserve, below the 30-second merge gate; it was not merged. Its 972-second
+backend suite was followed by a 69-second deployment-contract tail. The complete
+deployment discovery now runs exactly once in the existing frontend-history job,
+which previously had 212 seconds spare, using locked Python dependencies. A new
+contract prevents duplicate or missing discovery. All nine jobs, tests, workers,
+step/job caps, frontend shards and coverage remain; no retry or deadline increase.
+All 985 other earlier implementation/configuration files, the complete portable
+package/archive, provider source and real staged material remain exact. Live originals, encrypted bytes, exact evidence versions,
 confidential review history, credentials/sessions and prior checkout edits are
 preserved. Owner focused-analysis v3 review remains pending.
 

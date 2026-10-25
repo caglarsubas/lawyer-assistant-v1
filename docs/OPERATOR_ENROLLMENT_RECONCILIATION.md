@@ -101,8 +101,15 @@ is measured separately after reconciliation. Model/package inventory remains exa
 Two new owned containers and three ext4 volumes provide two CPUs/768 MiB, a read-only
 root, cleared environment, no external network/runtime mounts/host ports and separate
 anchor storage. Preparation exits before reader use; all owned resources are removed.
-Routine CI runs small contracts and retained-report replay, preserving existing jobs,
-workers, caps and coverage. No live provider or acquired weights are exercised.
+Routine CI runs small contracts and retained-report replay. The initial nine-check
+run passed, but its 972-second backend suite plus 69-second deployment-contract tail
+left only 14 seconds reserve; the 30-second merge gate rejected it. Move the complete
+deployment discovery exactly once to the existing frontend-history job, previously
+212 seconds below its cap, with locked Python dependencies. All nine jobs, original
+tests, two-worker settings, deadlines, frontend shards and coverage remain; add one
+discovery-placement regression without retries or larger caps. The 985 other earlier
+implementation/configuration files and complete portable package/archive remain
+exact. No live provider or acquired weights are exercised.
 
 Next implement an authenticated operator-review handoff with disposable identities,
 binding approvals to exact packet/observation hashes and retaining reviewer-role and
