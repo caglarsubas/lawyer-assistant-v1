@@ -1,0 +1,120 @@
+{
+  "schema": "restore-authorization-qualification-v1",
+  "cases": [
+    {
+      "id": "A01_roundtrip",
+      "expected": 200
+    },
+    {
+      "id": "A02_direct_restore",
+      "expected": 409
+    },
+    {
+      "id": "A03_self_authorize",
+      "expected": 409
+    },
+    {
+      "id": "A04_denied",
+      "expected": 409
+    },
+    {
+      "id": "A05_wrong_preparation",
+      "expected": 409
+    },
+    {
+      "id": "A06_wrong_authorization",
+      "expected": 409
+    },
+    {
+      "id": "A07_execution_replay",
+      "expected": 409
+    },
+    {
+      "id": "A08_revoked",
+      "expected": 409
+    },
+    {
+      "id": "A09_changed_key",
+      "expected": 400
+    },
+    {
+      "id": "A10_replaced_key_inode",
+      "expected": 400
+    },
+    {
+      "id": "A11_custody_changed",
+      "expected": 400
+    },
+    {
+      "id": "A12_target_replaced",
+      "expected": 409
+    },
+    {
+      "id": "A13_wrong_receipt",
+      "expected": 400
+    },
+    {
+      "id": "A14_role_changed",
+      "expected": 409
+    },
+    {
+      "id": "A15_preparer_selection",
+      "expected": 409
+    },
+    {
+      "id": "A16_superseded_selection",
+      "expected": 409
+    },
+    {
+      "id": "A17_lost_acknowledgement",
+      "expected": 200
+    },
+    {
+      "id": "A18_unanchored_consumption",
+      "expected": 200
+    },
+    {
+      "id": "A19_execution_race",
+      "expected": 409
+    },
+    {
+      "id": "A20_wrong_control_head",
+      "expected": 409
+    },
+    {
+      "id": "A21_unassigned",
+      "expected": 403
+    },
+    {
+      "id": "A22_missing_csrf",
+      "expected": 400
+    },
+    {
+      "id": "A23_control_rollback",
+      "expected": 400
+    },
+    {
+      "id": "A24_stale_original_review",
+      "expected": 200
+    },
+    {
+      "id": "A25_expired_grant",
+      "expected": 409
+    },
+    {
+      "id": "A26_missing_admission_intent",
+      "expected": 400
+    }
+  ],
+  "native_attempts_per_case": 1,
+  "min_distinct_worker_processes": 2,
+  "max_control_events": 256,
+  "max_grant_seconds": 300,
+  "disposable_accounts_only": true,
+  "model_verification_seconds": 20,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "real_trust_enrolled": false,
+  "runtime_installation": false,
+  "production_activation": false
+}
