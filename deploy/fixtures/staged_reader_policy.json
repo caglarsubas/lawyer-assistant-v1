@@ -1,0 +1,98 @@
+{
+  "schema": "staged-reader-qualification-v1",
+  "cases": [
+    {
+      "id": "B01_approved_read",
+      "expected": 200
+    },
+    {
+      "id": "B02_self_review",
+      "expected": 409
+    },
+    {
+      "id": "B03_denied_selection",
+      "expected": 409
+    },
+    {
+      "id": "B04_wrong_stage_pin",
+      "expected": 400
+    },
+    {
+      "id": "B05_source_advanced",
+      "expected": 409
+    },
+    {
+      "id": "B06_changed_preparer_role",
+      "expected": 403
+    },
+    {
+      "id": "B07_expired_proposal",
+      "expected": 409
+    },
+    {
+      "id": "B08_selection_replay",
+      "expected": 409
+    },
+    {
+      "id": "B09_selection_race",
+      "expected": 409
+    },
+    {
+      "id": "B10_lost_selection_reply",
+      "expected": 200
+    },
+    {
+      "id": "B11_unanchored_selection",
+      "expected": 200
+    },
+    {
+      "id": "B12_stage_tampered",
+      "expected": 400
+    },
+    {
+      "id": "B13_canonical_withdrawal",
+      "expected": 409
+    },
+    {
+      "id": "B14_superseded_selection",
+      "expected": 200
+    },
+    {
+      "id": "B15_cross_selection_cursor",
+      "expected": 409
+    },
+    {
+      "id": "B16_revoked_reviewer_session",
+      "expected": 403
+    },
+    {
+      "id": "B17_unassigned_and_csrf",
+      "expected": 400
+    },
+    {
+      "id": "B18_missing_admission_intent",
+      "expected": 400
+    },
+    {
+      "id": "B19_retained_expired_status",
+      "expected": 200
+    },
+    {
+      "id": "B20_fresh_post_withdrawal_review",
+      "expected": 200
+    }
+  ],
+  "native_attempts_per_case": 1,
+  "min_distinct_worker_processes": 2,
+  "max_events": 256,
+  "max_proposal_seconds": 300,
+  "max_page_rows": 8,
+  "canonical_fence_on_every_read": true,
+  "disposable_accounts_only": true,
+  "model_verification_seconds": 20,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "real_trust_enrolled": false,
+  "runtime_installation": false,
+  "production_activation": false
+}

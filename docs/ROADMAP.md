@@ -7499,3 +7499,79 @@ Next qualify the independently authorized staged-reader binding and withdrawal-
 fence cutover with disposable identities. F00-06 and owner focused-analysis v3
 review remain pending. See the [CI contract](CI_CASE_GRANULARITY.md) and
 [dated evidence](evidence/ci-case-granularity-2026-10-26.json).
+
+
+## Independently selected staged readers and visible work backlog — 2026-10-26
+
+F00-06 remains **partial**. The unregistered disposable reader adapter now binds
+an exact staged withdrawal journal to its original source, intent/receipt, snapshot,
+physical namespace and current canonical fence. The assigned preparer proposes it;
+a distinct current reviewer approves or denies the exact subject; the original
+preparer selects an approved proposal once. Both session/role snapshots, exact
+source context and the bounded lifetime are rechecked. Authorization precedes
+reader-storage inspection. No production route, provider trust or runtime is
+activated by this qualification.
+
+Ordinary writes keep using the original journal. Each staged metadata read checks
+the current canonical withdrawal fence and source context. Pagination binds the
+selection, reader head and actor. Source changes, expiry, withdrawn authority,
+modified stages, stale cursors, changed roles/sessions and missing independent
+controls fail closed. A newer independently reviewed selection supersedes the old
+reader while retaining its history. Exact status inspection does not renew approval.
+Lost replies use observation and pins without replay; one admitted unanchored tail
+requires explicit pinned repair. Fresh post-withdrawal staging and review can expose
+withdrawal metadata while the ordinary withdrawn reader remains blocked.
+
+The frozen native campaign passes **20 cases, 40 actual server processes and
+434 HTTP requests** in **93.96 seconds** under the unchanged 180-second budget.
+Two CPUs, 768 MiB, 96 PIDs, four separate fresh ext4 mounts, read-only model/package
+storage and disabled external networking remain. Real app session/RBAC/origin/CSRF
+checks use invented accounts. All owned containers and volumes are removed.
+The retained launcher's display-only count says 26; actual assertions, policy,
+retained report and grader require and verify 20. No case or report is rewritten
+to match that label. A separate contract verifies denial before damaged-storage
+inspection. Native reports reject altered outcomes, counts, authority or resource
+profiles. Original model/provider controller dependencies remain exact.
+
+The tracker now has **Work backlog** and **Engineering PR deliveries** alongside
+milestone readiness. The previous engineering view counted only registered PRs;
+zero open PRs after merging #227 did not mean that unfinished work was absent.
+The retained `q=227` filter further narrowed the visible list to that merged PR.
+Backlog links clear PR-specific filters. The backlog includes every unfinished
+checklist item, even before a PR exists, and preserves its next action, required
+owner, acceptance evidence and dependencies. Its filters distinguish open work,
+waiting reviews/dependent gates and deferred scope; an empty filtered result links
+back to the full inventory. The existing restrained interface is preserved.
+
+There are **51 unfinished checklist items: 21 open, 24 waiting and 6 deferred**.
+The underlying **93-item** catalog remains **42 done, 21 open, 24 waiting and
+6 deferred**, all status deltas **0**. Workstream readiness remains **0 ready,
+9 partial, 4 waiting and 1 planned**, also unchanged. A verified PR merge advances
+its delivery record; it does not close these broader parent requirements. No future
+PR, completed task or historical status is fabricated. Backlog projection and filter
+navigation are read-only, and verified histories remain append-only.
+
+All **857 deployment methods** are source-manifest partitioned exactly once:
+**370 / 416 / 71**. The 22 new reader methods and 49 retained authenticated-review
+methods run sequentially in the existing backend job before pytest. A first CI
+profile left only 20 seconds of history-lane reserve and is rejected. Measured
+group timing moves complete groups between existing jobs; no cases or expectations
+change. The single production build uses the existing final-authorization job's
+reserve, preserving space in the constrained frontend/backend lanes. Both frontend lanes retain their original test
+pairs. Nine jobs, current concurrent-worker budgets, all frontend coverage and
+existing job/test deadlines remain. Merge requires nine exact-head checks, five
+30-second timing reserves, a pinned-head merge and independently fetched-main
+full-tree equality. PR/main CI and product deployment remain separate evidence.
+
+Originals, encrypted documents, exact evidence versions, confidential case data,
+credentials/sessions and private review history remain preserved. There is no live
+provider call, inference, real enrollment, application redeployment or legal-review
+decision. Owner focused-analysis v3 review stays pending. The delivery ledger grows
+**244 → 245**. See the [staged-reader contract](STAGED_METADATA_READER.md),
+[backlog contract](tracker/README.md) and [dated evidence](evidence/staged-reader-backlog-2026-10-26.json).
+
+Next qualify explicit reader retirement and independently reviewed rollback/renewal
+against a newly current stage. Production IdP/PostgreSQL fencing, actual operator
+appointments and custody, privileged joint rollback/key loss, off-host recovery,
+native provider/context/five-job operation and independent legal acceptance remain
+open. Waiting work is visible in the backlog and is not cleared by this delivery.
