@@ -7649,7 +7649,7 @@ revocation, lost replies, exact recovery, missing admission, races, cursor/bypas
 prevention, wrong subject pins and retained retirement lineage. A separate source
 gate requires current runtime and qualification hashes to match the native report.
 
-All **914 deployment methods** must run exactly once across seven disjoint source-bound
+All **915 deployment methods** must run exactly once across seven disjoint source-bound
 assignments. The first CI profile passes its tests but exceeds the frontend job cap. A closed
 source-bound work profile now maps exact namespace methods to measured reserves
 in existing assignments, with a small sequential slice in the existing PostgreSQL
@@ -7659,6 +7659,15 @@ existing lifecycle methods move to the PostgreSQL contract slice under a bounded
 25-second measured increment, preserving every case and native source. Preserve nine jobs, existing caps, current concurrent
 workers and every frontend test. Merge requires nine exact-head checks, five
 30-second reserves, pinned-head merge and fetched-main full-tree equality.
+
+A third profile passes 4,061 backend tests but is cancelled at the 20-minute job
+cap after its serial preparation stack. Nine measured staged-reader methods and
+six namespace methods move to the retained-reader assignment. Only the backend
+and retained jobs use two isolated contract workers within their existing
+two-worker peak; frontend keeps its existing one-contract/one-Vitest overlap.
+Exact child receipt reconciliation rejects stale, missing, duplicate or failed
+work. No application, fixture semantics, native source, case, worker peak or
+deadline changes. Fresh checks and timing reserves remain required.
 
 Work backlog stays **51** unfinished: **21 open / 24 waiting / 6 deferred**.
 Checklist remains **42 done / 21 open / 24 waiting / 6 deferred** across 93 items.

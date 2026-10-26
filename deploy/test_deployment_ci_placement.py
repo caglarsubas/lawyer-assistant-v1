@@ -31,6 +31,11 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("runs-on: ubuntu-24.04-arm", blocks["frontend-history"])
         self.assertIn("runs-on: ubuntu-latest", blocks["frontend"])
         self.assertIn("timeout-minutes: 18", blocks["backend-and-contracts"])
+        self.assertEqual(workflow.count("--workers=2"), 2)
+        self.assertIn("--shard=3 --workers=2", blocks["backend-and-contracts"])
+        self.assertIn("--shard=6 --workers=2", blocks["retained-release-withdrawal"])
+        self.assertNotIn("--workers=2", blocks["frontend"])
+        self.assertNotIn("--workers=2", blocks["frontend-history"])
 
     def test_bounded_scratch_preserves_full_command_exit_and_cleanup(self):
         script = (ROOT / "scripts/run_ci_contracts.sh").read_text()

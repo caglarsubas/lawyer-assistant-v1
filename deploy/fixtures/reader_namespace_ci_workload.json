@@ -9,7 +9,7 @@
     "3": 20000,
     "4": 12000,
     "5": 12000,
-    "6": 6000,
+    "6": 26000,
     "7": 14000
   },
   "assignments": [
@@ -20,7 +20,7 @@
     },
     {
       "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N02_self_review",
-      "shard": 3,
+      "shard": 6,
       "observed_case_ms": 3114
     },
     {
@@ -30,12 +30,12 @@
     },
     {
       "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N04_legacy_advanced",
-      "shard": 3,
+      "shard": 6,
       "observed_case_ms": 3236
     },
     {
       "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N05_destination_advanced",
-      "shard": 3,
+      "shard": 6,
       "observed_case_ms": 3293
     },
     {
@@ -100,17 +100,17 @@
     },
     {
       "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N18_readonly_lineage",
-      "shard": 3,
+      "shard": 6,
       "observed_case_ms": 3426
     },
     {
       "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N19_retired_destination",
-      "shard": 3,
+      "shard": 6,
       "observed_case_ms": 2936
     },
     {
       "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N20_preserved_retirement_lineage",
-      "shard": 3,
+      "shard": 6,
       "observed_case_ms": 3541
     },
     {
@@ -156,6 +156,49 @@
       {
         "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C22_post_withdrawal_renewal",
         "observed_case_ms": 3401
+      }
+    ]
+  },
+  "backend_rebalance": {
+    "observed_head": "2e4dcb5b3519f95ea75958b970713770998c4478",
+    "observed_run": 40287433500,
+    "retained_log_sha256": "ebe383bf57ea7c706155fee7d6d2f090eb6f0b432b5b38c91e303a6bf19ef73d",
+    "moved": [
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B20_fresh_post_withdrawal_review",
+        "observed_case_ms": 3123
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B15_cross_selection_cursor",
+        "observed_case_ms": 3016
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B14_superseded_selection",
+        "observed_case_ms": 2994
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B11_unanchored_selection",
+        "observed_case_ms": 2826
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B10_lost_selection_reply",
+        "observed_case_ms": 2812
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B19_retained_expired_status",
+        "observed_case_ms": 2796
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B16_revoked_reviewer_session",
+        "observed_case_ms": 2777
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B18_missing_admission_intent",
+        "observed_case_ms": 2758
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B13_canonical_withdrawal",
+        "observed_case_ms": 2754
       }
     ]
   }

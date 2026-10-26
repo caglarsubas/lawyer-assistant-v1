@@ -84,13 +84,13 @@ jobs:
           echo "$GITHUB_WORKSPACE/backend/.venv/bin" >> "$GITHUB_PATH"
       - name: Lint Python
         run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
-      # Complete original authenticated groups run once before pytest.
-      # New lifecycle cases are disjoint across three measured existing reserves.
+      # Authenticated contracts run once before pytest, with at most two workers.
+      # Retained-worker overlap and measured exceptions remove the serial tail.
       # Keep the frontend lanes' timing reserve, with no additional executor,
       # concurrent worker or longer job/test deadline.
       - name: Test manifest-bound authenticated qualification
         timeout-minutes: 2
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=3 --report=${{ runner.temp }}/deployment-reader-results.json
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=3 --workers=2 --report=${{ runner.temp }}/deployment-reader-results.json
       - name: Record nonsecret test runtime characteristics
         run: |
           python - <<'PY'
@@ -365,7 +365,7 @@ jobs:
       # Sequential metadata contracts share this job and retain its hard cap.
       - name: Test manifest-bound reader lifecycle slice 6
         timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
 
   graph-candidate-contracts:
     # A 67-second transition case previously consumed the final job's setup

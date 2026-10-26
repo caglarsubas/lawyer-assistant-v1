@@ -33,14 +33,14 @@
     "preexisting_resources_removed": 0
   },
   "deployment_contracts": {
-    "passed": 914,
+    "passed": 915,
     "shard_counts": [
-      380,
+      381,
       420,
-      77,
+      62,
       8,
       7,
-      11,
+      26,
       11
     ],
     "source_manifest_exactly_once": true,
@@ -49,14 +49,29 @@
     "new_namespace_group_runs_after_frontend_pair": false,
     "namespace_cases_use_observed_source_bound_budget": true,
     "additional_budget_guard_methods_passed": 5,
+    "isolated_parallel_assignments": [
+      3,
+      6
+    ],
+    "per_job_peak_test_workers": 2,
+    "exact_child_receipts_required": true,
     "local_summed_case_seconds": [
-      148.66,
-      189.12,
-      80.58,
-      20.87,
-      25.74,
-      14.44,
-      29.62
+      94.308,
+      104.278,
+      28.786,
+      12.754,
+      9.835,
+      30.013,
+      16.542
+    ],
+    "local_wall_seconds": [
+      96.52,
+      106.33,
+      16.31,
+      13.69,
+      10.67,
+      16.68,
+      17.34
     ]
   },
   "old_native_source_pins_exact": 58,
@@ -80,8 +95,8 @@
     "deploy/test_reader_namespace.py": "069e39ed32b64eaf5f8269209fc03c5ddc964a1ca527f06f7747ab05a2cb5af7",
     "deploy/test_reader_namespace_report.py": "33f950ec14bf3836742c062edc9473b13ce26e8efde08957d7167b3e9aae6aea",
     "deploy/test_reader_namespace_source.py": "7a5f76298832797f6200939896b7f3b3880705ce394b109e67c85235e620ffc6",
-    "scripts/run_ci_deployment_shard.py": "88f37c8ec7e92bd675f0aa7947dd7e95d5ffdc4a329da688b267c00f65a8e630",
-    "deploy/fixtures/reader_namespace_ci_workload.json": "0f965e66fe3be05b9ba9403978f5bea92683c4aa2036a7ade0c19cfdd7824733"
+    "scripts/run_ci_deployment_shard.py": "6872c440580257e34d9b2f60293be9844b2116f51fed96eb35be359ba114efae",
+    "deploy/fixtures/reader_namespace_ci_workload.json": "8eee5012c94b608e3036c0e8fa0832076fada5f51f505b6f537f1dace4c3780e"
   },
   "backlog": {
     "total_unfinished": 51,
@@ -128,5 +143,16 @@
     "required_reserve": 30,
     "accepted_for_merge": false,
     "correction": "Move seven measured lifecycle methods (22.256 case-seconds) from graph runtime to existing PostgreSQL contract assignment, within a 25-second incremental case budget. No new job, worker, deadline, source runtime, native scenario or expected outcome."
+  },
+  "rejected_third_CI_head": {
+    "head": "2e4dcb5b3519f95ea75958b970713770998c4478",
+    "run": 40287433500,
+    "backend_job_seconds": 1204,
+    "backend_job_cap": 1200,
+    "full_backend_tests_passed": 4061,
+    "backend_test_seconds": 950.02,
+    "contract_case_seconds": 107.479,
+    "accepted_for_merge": false,
+    "correction": "Move nine measured staged-reader methods (25.856 seconds) and six namespace methods to retained assignment 6. Only backend/retained contract phases use two isolated workers within their existing two-worker peak, with exact disjoint source-bound child receipts, cancellation/reaping and no retries. Frontend stays one Vitest plus one contract worker. No jobs, deadlines, native sources, cases or assertions removed."
   }
 }

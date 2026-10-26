@@ -102,3 +102,14 @@ measured lifecycle methods move to the existing PostgreSQL contract assignment
 within a 25-second incremental case budget. Their retained log and exact method
 identities join the same source-bound work profile; no scenario or native source
 is changed. Actual fresh timing gates remain required.
+
+A third CI profile passes the full backend tests but is cancelled at the job cap
+after 112 seconds of sequential deployment contracts and the other preparation
+steps. The measured nine heaviest staged-reader methods (25.856 case-seconds)
+and six namespace methods leave that job for the existing retained-reader job.
+Only those two dedicated jobs run two isolated deployment workers; their pytest
+phases already allow two workers and never overlap this phase. Frontend lanes
+keep one contract worker alongside one Vitest worker. Parent receipts require
+both child manifests, complete-suite hashes, exact disjoint IDs, successful exits
+and finite per-case timings. Failed workers cancel and reap their peer; there is
+no retry. All seven assignments and nine jobs retain their existing deadlines.
