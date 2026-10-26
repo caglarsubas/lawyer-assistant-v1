@@ -156,6 +156,8 @@ class DestinationChange(ReaderNamespace):
             if self.changes.scope != scope_for(self, self.changes.root):
                 reject()
             states, opened = fold(history, self.changes.scope)
+            if e.stamp(self.clock()) < (history[-1]["payload"]["created_at"] if history else self.changes.scope["created_at"]):
+                reject()
             active = states[opened["payload"]["change_id"]] if opened else None
             self._change = active
             try:
@@ -218,6 +220,8 @@ class DestinationChange(ReaderNamespace):
                 if action in {"change_decide", "change_open"} and subject != p["subject"]:
                     conflict()
                 if action == "change_decide":
+                    if value["decision"] not in {"approve", "deny"}:
+                        reject()
                     if actor["kind"] != "reviewer" or "decided" in state or value["proposal_sha256"] != ref(state["proposed"]):
                         conflict()
                     payload = {"change_id": ident, "proposal_sha256": value["proposal_sha256"], "reviewed_by": actor, "created_at": now,
@@ -235,6 +239,8 @@ class DestinationChange(ReaderNamespace):
                 phase, rows, nrows = self.projection(state, data)
                 if action == "change_step":
                     step = value["step"]
+                    if step not in {"prepare", "decide", "select", "retire"} or step == "decide" and value["decision"] not in {"approve", "deny"}:
+                        reject()
                     expected = {"opened": "retire" if p["terms"]["mode"] == "retirement" else "prepare", "reader_proposed": "decide", "reader_decided": "select"}
                     if expected.get(phase) != step or step != "decide" and (value["decision"] is not None or actor != p["prepared_by"]):
                         conflict()

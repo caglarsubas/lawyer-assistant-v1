@@ -69,6 +69,37 @@ class DestinationChangeContracts(unittest.IsolatedAsyncioTestCase):
                 await asyncio.gather(*(c.aclose() for c in clients))
                 f.close()
 
+    async def test_unknown_decisions_steps_and_clock_rollback_do_not_append(self):
+        with self.readonly():
+            f = fixture.Fixture("D07_invalid_values", self.models, self.work, self.anchors, self.api)
+            clients = [httpx.AsyncClient(transport=httpx.ASGITransport(app=s), base_url="http://operator.invalid") for s in f.services]
+            try:
+                a, b = clients[:2]
+                self.assertEqual(await f.run((a, b)), 409)
+                before = f.retained_files(f.change_controls)
+                result = await f.change(b, "change_decide", role="reviewer", proposal_sha256=f.change_proposal["proposal_sha256"], decision="unknown", reason_code=None)
+                self.assertEqual(result.status_code, 400)
+                self.assertEqual(f.retained_files(f.change_controls), before)
+                f.advance(1)
+                result = await f.change(b, "change_decide", role="reviewer", proposal_sha256=f.change_proposal["proposal_sha256"], decision="approve", reason_code="exact_destination_change_checked")
+                self.assertEqual(result.status_code, 200)
+                decision = result.json()["decision_sha256"]
+                f.advance(1)
+                self.assertEqual((await f.change(a, "change_open", decision_sha256=decision)).status_code, 200)
+                before = f.retained_files(f.reader_controls)
+                self.assertEqual((await f.change(a, "change_step", step=None, decision=None)).status_code, 400)
+                self.assertEqual(f.retained_files(f.reader_controls), before)
+                self.assertEqual((await f.change(a, "change_step", step="prepare", decision=None)).status_code, 200)
+                before = f.retained_files(f.reader_controls)
+                self.assertEqual((await f.change(b, "change_step", role="reviewer", step="decide", decision="unknown")).status_code, 400)
+                self.assertEqual(f.retained_files(f.reader_controls), before)
+                f.advance(-1)
+                self.assertEqual((await f.change(a, "change_status")).status_code, 400)
+                self.assertEqual(f.retained_files(f.reader_controls), before)
+            finally:
+                await asyncio.gather(*(c.aclose() for c in clients))
+                f.close()
+
 
 
 share_immutable_assets(DestinationChangeContracts)

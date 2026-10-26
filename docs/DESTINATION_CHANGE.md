@@ -53,6 +53,9 @@ accepts no filesystem path, arbitrary tool name or query. Original writer action
 remain unchanged. Direct legacy/destination delegation stays blocked after the
 initial namespace commit.
 
+Unknown step/decision values and a current-time rollback are rejected before
+any append, with regression checks that retained journals remain unchanged.
+
 The separate window lock serializes both the existing broker and new actions
 across processes. Child journals retain their own locking, independent review
 and exact expected-head checks. Competing openings or selections cannot commit
@@ -69,7 +72,7 @@ fails closed. This slice does not repair an unanchored maintenance/child journal
 Exact guarded recovery of those journals is the next qualification item.
 
 The accepted native campaign passes **20 scenarios, 40 loopback servers and 975
-HTTP requests in 112.84 seconds**. It uses the pinned local image, four fresh separate ext4
+HTTP requests in 108.77 seconds**. It uses the pinned local image, four fresh separate ext4
 volumes, two CPUs, 768 MiB, 96 PIDs, a cleared process environment and no external
 network. The frozen matrix covers renewal after expiry, retirement, rollback,
 denial, self-review, unopened steps, old decisions, withdrawal, changed stages,

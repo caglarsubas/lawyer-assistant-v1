@@ -7704,7 +7704,7 @@ remain expired. Status, lost-reply reconciliation and competing-write handling
 never replay a mutation or manufacture admission evidence.
 
 The accepted frozen qualification passes **20 scenarios / 40 actual loopback
-servers / 975 HTTP requests in 112.84 seconds**, with real local session/RBAC
+servers / 975 HTTP requests in 108.77 seconds**, with real local session/RBAC
 checks and four fresh ext4 retention volumes. The
 campaign retains two CPUs, 768 MiB, 96 PIDs, no external network and the existing
 180-second limit. A separate copied-root regression protects physical identity;
@@ -7713,7 +7713,7 @@ report grading and complete-manifest checks are required before publication.
 Earlier unaccepted/superseded native candidates remain retained separately; no
 outcome, assertion or resource threshold is relaxed.
 
-All 943 deployment methods must execute once across seven disjoint assignments
+All 944 deployment methods must execute once across seven disjoint assignments
 in the same nine jobs. The new workflow cases use the existing backend two-worker
 reserve. No job, frontend case, worker peak or deadline is added or removed.
 Nine exact-head checks, five 30-second timing reserves, pinned-head merge and

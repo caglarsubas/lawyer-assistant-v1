@@ -78,6 +78,7 @@ def fold(events, scope):
         if kind == "decided":
             actor(p["reviewed_by"], session=True)
             if ("decided" in state or p["proposal_sha256"] != ref(state["proposed"])
+                    or p["decision"] not in {"approve", "deny"}
                     or {k: p["reviewed_by"][k] for k in original["reviewer"]} != original["reviewer"]
                     or now >= p["reviewed_by"]["expires_at"]
                     or {"approve": "exact_destination_change_checked", "deny": "destination_change_declined"}.get(p["decision"]) != p["reason_code"]):

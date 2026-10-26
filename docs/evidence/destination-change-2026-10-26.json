@@ -14,9 +14,9 @@
     "runtime_installation": false,
     "legal_qualification": false
   },
-  "native_campaign_seconds": 112.84,
+  "native_campaign_seconds": 108.77,
   "native_campaign_seconds_cap": 180,
-  "native_report_sha256": "fa5a031f81817c8df4e7c165f96d45a6590f46c86d72b13ccfb7c1ed56454416",
+  "native_report_sha256": "d7f8f8963b441548c48780465f55390987444e1126bcb2ae0061a22f4a2a1f41",
   "accepted_frozen_campaigns": 1,
   "accepted_campaign_attempts_per_case": 1,
   "prior_native_candidates": [
@@ -45,6 +45,15 @@
       "seconds": 112.88,
       "reason": "Source-closure gate rejects a bundled old native-driver filename substitution: 77 source entries instead of all 78 required. Corrected unique source list and preserved every prior dependency; new frozen bundle and fresh volumes required.",
       "all_owned_resources_removed": true
+    },
+    {
+      "candidate": "qualified-candidate-v4",
+      "accepted": false,
+      "completed_cases": 20,
+      "passed": true,
+      "seconds": 112.84,
+      "reason": "Superseded before merge by strict maintenance step/decision enums and current-time rollback rejection, with a no-append regression. Final source requires fresh qualification.",
+      "all_owned_resources_removed": true
     }
   ],
   "resources": {
@@ -61,11 +70,11 @@
     "preexisting_resources_removed": 0
   },
   "deployment_contracts": {
-    "passed": 943,
+    "passed": 944,
     "shard_counts": [
       384,
       422,
-      85,
+      86,
       8,
       7,
       26,
@@ -80,22 +89,22 @@
     "existing_worker_peak": 2,
     "deadlines_and_frontend_coverage_unchanged": true,
     "local_summed_case_seconds": [
-      79.977,
-      92.359,
-      63.586,
-      8.739,
-      7.752,
-      29.223,
-      12.334
+      106.936,
+      147.128,
+      64.186,
+      12.758,
+      11.431,
+      27.177,
+      19.971
     ],
     "local_wall_seconds": [
-      82.16,
-      94.21,
-      33.62,
-      9.41,
-      8.4,
-      16.48,
-      13.01
+      109.97,
+      149.87,
+      33.91,
+      13.71,
+      12.38,
+      15.34,
+      20.96
     ]
   },
   "new_native_source_pins": 78,
@@ -108,17 +117,17 @@
   ],
   "implementation_sha256": {
     "deploy/fixtures/destination_change_policy.json": "6300e3ad217138531e06565ba0f098e7d5d264ca5c509f125b30a534277fa359",
-    "deploy/test_destination_change.py": "0600447246848e15f5ceee87ad57d3d5709e11010fa64acf8901a7d135068fcc",
+    "deploy/test_destination_change.py": "89de6d16e997e3ad94bf770ceb98236ce085c96cb8d8526a83487e2d13113412",
     "deploy/test_destination_change_report.py": "6c1b681ffc75debfcb4fdff79e578d7149ea82d623221bc3361b8e8fbf643809",
     "deploy/test_destination_change_source.py": "bd09374ce5237b4add389b4e71b053f97fd30859cd3c7c7f048e3feccff59c2d",
-    "scripts/destination_change.py": "777144fcaafcae3491116d4c557feec415655092d163f2bf3ae8fe2c6d215ba8",
+    "scripts/destination_change.py": "58ddb5db7672d5ff01cedb79c082d7b8f3b67152eb710c9bafbdfccf0dce02fc",
     "scripts/destination_change_fixture.py": "8dc3314473bf0e426432498817e32d15c589ab027b4e5e06aa72a97ea1522ff1",
-    "scripts/destination_change_log.py": "91a20bfe2536b061d6428b412615155095f5333deb124836f43711127863014a",
+    "scripts/destination_change_log.py": "5cce178c625401a532aaad23c7d82943158c36b28476539938de631b716d79e1",
     "scripts/destination_change_native.py": "d4b6777e392c5e3fc920a40fd573b75d70f9e3fa8207588a0c0cdf287e552ff6",
     "scripts/destination_change_report.py": "16d23546bbddb23eab4a080a12e3cdc14882927456fab18f7764ee0992fc5044",
     "scripts/destination_change_worker.py": "6ea4927f27e6aabad9d73554073c75f6e49677f939ffe997c91784e5a3e3be65",
     "scripts/run_ci_deployment_shard.py": "dcecc0f52b490b61a67f25b78dfedfc7cb15a462058f11a2d176790d00919338",
-    "deploy/fixtures/deployment_test_manifest.json": "7e23653abc318859b0669f71a4a6f012bcf38e2fdbebc4fab32f4c7235ec2510"
+    "deploy/fixtures/deployment_test_manifest.json": "34225169d00628cd07da114e76c404cede731aff5f044dfd0249e4fc91dd2660"
   },
   "backlog": {
     "total_unfinished": 51,
@@ -144,5 +153,12 @@
   "native_inference_calls": 0,
   "runtime_installation": false,
   "legal_qualification": false,
-  "remaining_recovery": "Guarded recovery of unanchored maintenance/destination journals and interrupted finish; current actions fail closed and never manufacture admission or replay."
+  "remaining_recovery": "Guarded recovery of unanchored maintenance/destination journals and interrupted finish; current actions fail closed and never manufacture admission or replay.",
+  "superseded_first_CI_head": {
+    "head": "bff8d016401953709be65fd5152851df6152895e",
+    "run": 40318331412,
+    "all_nine_checks_successful": true,
+    "accepted_for_final_merge": false,
+    "reason": "Final source adds closed maintenance step/decision enum validation and pre-mutation clock rollback rejection with a no-append regression."
+  }
 }

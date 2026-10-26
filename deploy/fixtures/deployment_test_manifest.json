@@ -234,6 +234,7 @@
     "test_destination_change.DestinationChangeContracts.test_copied_legacy_namespace_is_rejected_before_change_preparation",
     "test_destination_change.DestinationChangeContracts.test_frozen_policy_and_retained_model_budget",
     "test_destination_change.DestinationChangeContracts.test_unassigned_actor_is_denied_before_reader_storage_inspection",
+    "test_destination_change.DestinationChangeContracts.test_unknown_decisions_steps_and_clock_rollback_do_not_append",
     "test_destination_change_report.DestinationChangeReportContracts.test_activation_real_accounts_and_missing_fence_are_rejected",
     "test_destination_change_report.DestinationChangeReportContracts.test_frozen_native_report_passes",
     "test_destination_change_report.DestinationChangeReportContracts.test_missing_duplicate_or_changed_case_outcome_is_rejected",
