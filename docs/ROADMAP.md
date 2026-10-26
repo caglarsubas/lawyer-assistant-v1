@@ -7575,3 +7575,51 @@ against a newly current stage. Production IdP/PostgreSQL fencing, actual operato
 appointments and custody, privileged joint rollback/key loss, off-host recovery,
 native provider/context/five-job operation and independent legal acceptance remain
 open. Waiting work is visible in the backlog and is not cleared by this delivery.
+
+
+## Exact reader retirement and independently reviewed rollback/renewal — 2026-10-26
+
+Extend disposable staged-reader qualification with permanent retirement of an
+exact selection. Retirement appends history instead of deleting decisions or
+backups. Status and lost-reply reconciliation remain read-only; admitted
+unanchored events require explicit exact recovery. Missing independent admission
+evidence fails closed.
+
+Initial selection, renewal and rollback are distinct modes. A successor pins the
+preceding selection and any retirement event. Rollback also pins a historical
+selected target whose exact snapshot must still match the current canonical
+source. Every successor needs a fresh independent decision and creates a new
+selection; historical approvals and retired selections never become active again.
+The original writer, canonical withdrawal fence, exact stage versions, bounded
+pages, actor permissions and source checks remain mandatory.
+
+The frozen qualification matrix passes **22 scenarios / 44 actual loopback
+servers / 615 HTTP requests** in **123.8 seconds**, within 180 seconds. Current source and
+policy hashes are bound to the retained native report. Source code and evidence from
+the prior staged-reader campaign remain unchanged. Two rejected native
+preparations and their cleanup are retained; the host-versus-Docker mount owner is independently
+observed and bound in a fresh candidate. No campaign case, expected outcome or
+ownership guard is weakened to resolve packaging.
+
+All 886 deployment methods must execute exactly once in six manifest-bound
+assignments. A first CI profile leaves only 24 seconds of frontend reserve and
+is rejected. The complete original authenticated groups retain their backend
+phase; the new lifecycle group is source-ID-hash partitioned over measured
+reserve in graph runtime, graph candidate and retained-withdrawal jobs. Nine jobs, concurrent-worker budgets, complete frontend coverage and
+existing deadlines remain. Merge requires all exact-head checks and five
+30-second reserves, followed by pinned-head merge and fetched-main tree equality.
+
+Work backlog remains **51** unfinished items: **21 open / 24 waiting / 6 deferred**.
+Checklist states remain **42 done / 21 open / 24 waiting / 6 deferred**, across 93
+items. Workstream readiness remains **0 ready / 9 partial / 4 waiting / 1 planned**.
+A verified merged PR advances engineering delivery independently; it does not close
+these parent gates or the owner's pending private-analysis review. The canonical
+ledger advances from **245 → 246** sections.
+
+See the [reader lifecycle contract](READER_LIFECYCLE.md) and
+[dated evidence](evidence/reader-lifecycle-2026-10-26.json). Next qualify explicit,
+reviewed transition from an existing reader namespace without rewriting either
+history. Genuine identities/key custody, production IdP/PostgreSQL and off-host
+recovery, signed live provider/context/five-job qualification and legal acceptance
+remain open. No real provider request, inference, trust enrollment, application
+redeployment or private-case migration is authorized by these disposable results.

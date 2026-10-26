@@ -33,12 +33,15 @@ def collect():
     return sorted(tests, key=lambda test: test.id())
 
 
-def shard(test_id):
+def shard(test_id, lifecycle_ids):
+    if test_id.startswith("test_reader_lifecycle.ReaderLifecycleContracts."):
+        # Measured 65s group is disjointly distributed over existing reserves.
+        rank = sorted(lifecycle_ids, key=lambda ident: hashlib.sha256(ident.encode()).digest()).index(test_id)
+        return 5 if rank < 4 else 6 if rank < 12 else 4
     if test_id.startswith(("test_staged_reader.StagedReaderContracts.", "test_authenticated_operator_review.AuthenticatedOperatorContracts.")):
-        return 3  # Complete authenticated groups use the existing backend reserve.
+        return 3  # Keep the complete original authenticated groups together.
     key = int.from_bytes(hashlib.sha256(test_id.encode()).digest()[:4], "big")
-    # Measured authenticated cases use a stable 2:3 x86/ARM weighting.
-    # Ordinary contracts keep the original half partition; no ID is omitted.
+    # Existing ordinary and retained frozen-case assignments stay unchanged.
     return (1 if key % 5 < 2 else 2) if re.search(r"\.test_case_[A-Z][0-9]{2}_", test_id) else key % 2 + 1
 
 
@@ -48,10 +51,11 @@ def digest(ids):
 
 def plan(tests, manifest, selected):
     ids = [test.id() for test in tests]
-    if (selected not in {1, 2, 3} or manifest != {"schema": "complete-deployment-test-manifest-v1", "test_ids": ids}
+    if (selected not in {1, 2, 3, 4, 5, 6} or manifest != {"schema": "complete-deployment-test-manifest-v1", "test_ids": ids}
             or ids != sorted(set(ids)) or not ids):
         raise ValueError("Source-bound complete test manifest required")
-    sets = [{ident for ident in ids if shard(ident) == lane} for lane in (1, 2, 3)]
+    lifecycle_ids = [ident for ident in ids if ident.startswith("test_reader_lifecycle.ReaderLifecycleContracts.")]
+    sets = [{ident for ident in ids if shard(ident, lifecycle_ids) == lane} for lane in (1, 2, 3, 4, 5, 6)]
     if not all(sets) or any(a & b for n, a in enumerate(sets) for b in sets[n + 1:]) or set.union(*sets) != set(ids):
         raise ValueError("Complete disjoint shards required")
     return [test for test in tests if test.id() in sets[selected - 1]]
@@ -83,7 +87,7 @@ def verify(result, expected):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--shard", type=int, choices=(1, 2, 3), required=True)
+    parser.add_argument("--shard", type=int, choices=(1, 2, 3, 4, 5, 6), required=True)
     parser.add_argument("--report", type=Path, required=True)
     args = parser.parse_args()
     tests = collect()
@@ -91,7 +95,7 @@ def main():
     selected = plan(tests, json.loads(raw), args.shard)
     expected = [test.id() for test in selected]
     result = unittest.TextTestRunner(resultclass=ExecutedResult).run(unittest.TestSuite(selected))
-    report = {"schema": "deployment-shard-result-v1", "shard": args.shard, "total_shards": 3,
+    report = {"schema": "deployment-shard-result-v1", "shard": args.shard, "total_shards": 6,
               "manifest_sha256": hashlib.sha256(raw).hexdigest(), "complete_suite_sha256": digest([test.id() for test in tests]),
               "selected_ids": expected, "executed_ids": result.executed_ids, "tests_run": result.testsRun,
               "case_seconds": result.case_seconds,
