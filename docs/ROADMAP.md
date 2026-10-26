@@ -7649,9 +7649,11 @@ revocation, lost replies, exact recovery, missing admission, races, cursor/bypas
 prevention, wrong subject pins and retained retirement lineage. A separate source
 gate requires current runtime and qualification hashes to match the native report.
 
-All **913 deployment methods** must run exactly once across seven disjoint source-bound
-assignments. The new group runs sequentially after the frontend pair within that
-job's measured reserve. Preserve nine jobs, existing caps, current concurrent
+All **914 deployment methods** must run exactly once across seven disjoint source-bound
+assignments. The first CI profile passes its tests but exceeds the frontend job cap. A closed
+source-bound work profile now maps exact namespace methods to measured reserves
+in existing assignments, with a small sequential slice in the existing PostgreSQL
+job. Missing, duplicate, stale or over-budget assignments fail before execution. Preserve nine jobs, existing caps, current concurrent
 workers and every frontend test. Merge requires nine exact-head checks, five
 30-second reserves, pinned-head merge and fetched-main full-tree equality.
 

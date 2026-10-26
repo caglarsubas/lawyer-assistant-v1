@@ -73,8 +73,13 @@ origin and CSRF checks, four separate fresh ext4 volumes, two CPUs, 768 MiB,
 96 PIDs, cleared process environment and no external network. The campaign limit
 remains 180 seconds. All prior lifecycle/native source pins remain unchanged.
 
-The new group runs sequentially after the frontend pair, in its measured reserve;
-it never adds a third concurrent worker. All source-manifest deployment methods
+The first CI profile passed all frontend and namespace tests but exceeded the
+frontend job cap. Its retained per-case times now guide a closed, source-bound
+namespace assignment profile. Every namespace method is assigned once within
+explicit incremental work budgets. Missing, duplicate, stale or over-budget
+assignments fail before execution. New cases share existing workers; a small
+sequential slice uses reserve in the existing PostgreSQL job. No third concurrent
+worker is added. All source-manifest deployment methods
 must execute once across seven disjoint assignments within the same nine jobs.
 Existing deadlines and frontend coverage remain unchanged. Merge requires nine
 exact-head checks and five timing reserves of at least 30 seconds, then a
@@ -87,3 +92,7 @@ recovery, signed live provider/context/five-job qualification and legal acceptan
 remain separate gates. Owner review of focused private analysis v3 stays pending.
 
 See the [dated evidence](evidence/reader-namespace-transition-2026-10-26.json).
+
+The work profile is planning evidence, not a runtime guarantee. Actual exact-head
+CI results and timing reserves remain mandatory. All native source pins, scenarios
+and outcomes remain unchanged by this CI correction.

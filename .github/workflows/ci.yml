@@ -221,6 +221,10 @@ jobs:
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+      # A disjoint measured namespace slice shares this existing job sequentially.
+      - name: Test manifest-bound reader namespace slice
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=7 --report=${{ runner.temp }}/deployment-namespace-results.json
 
   frontend:
     runs-on: ubuntu-latest
@@ -245,6 +249,7 @@ jobs:
         run: |
           python -m pip install uv==0.8.15
           uv sync --project backend --frozen --extra dev
+      # Namespace cases join existing source-bound budgets; no sequential tail.
       - name: Test frontend and manifest-bound contracts within two workers
         run: |
           python scripts/run_ci_history_workers.py \
@@ -252,11 +257,6 @@ jobs:
             ::: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=1 --report=${{ runner.temp }}/deployment-results.json
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 1
-
-      # Use measured reserve after the two-worker pair finishes, sequentially.
-      - name: Test manifest-bound reader namespace transition
-        timeout-minutes: 2
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=7 --report=${{ runner.temp }}/deployment-namespace-results.json
 
   frontend-history:
     # Growing history contracts exceeded the single frontend lane's reserve.

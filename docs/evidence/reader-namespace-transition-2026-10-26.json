@@ -33,29 +33,31 @@
     "preexisting_resources_removed": 0
   },
   "deployment_contracts": {
-    "passed": 913,
+    "passed": 914,
     "shard_counts": [
-      376,
+      380,
       420,
-      71,
-      12,
-      4,
-      8,
-      22
+      77,
+      15,
+      7,
+      11,
+      4
     ],
     "source_manifest_exactly_once": true,
     "jobs": 9,
     "existing_job_caps_and_concurrent_worker_budgets_unchanged": true,
-    "new_namespace_group_runs_after_frontend_pair": true,
+    "new_namespace_group_runs_after_frontend_pair": false,
+    "namespace_cases_use_observed_source_bound_budget": true,
     "local_summed_case_seconds": [
-      103.84,
-      132.92,
-      55.19,
-      19.17,
-      6.87,
-      10.58,
-      34.01
-    ]
+      77.64,
+      93.81,
+      44.74,
+      18.01,
+      8.56,
+      8.46,
+      5.04
+    ],
+    "additional_budget_guard_methods_passed": 5
   },
   "old_native_source_pins_exact": 58,
   "new_native_source_pins": 68,
@@ -77,7 +79,9 @@
     "scripts/reader_namespace_report.py": "7484c25a3cc408397e8fced299ab6bdf873e1530299373f44d7558126f9eae45",
     "deploy/test_reader_namespace.py": "069e39ed32b64eaf5f8269209fc03c5ddc964a1ca527f06f7747ab05a2cb5af7",
     "deploy/test_reader_namespace_report.py": "33f950ec14bf3836742c062edc9473b13ce26e8efde08957d7167b3e9aae6aea",
-    "deploy/test_reader_namespace_source.py": "7a5f76298832797f6200939896b7f3b3880705ce394b109e67c85235e620ffc6"
+    "deploy/test_reader_namespace_source.py": "7a5f76298832797f6200939896b7f3b3880705ce394b109e67c85235e620ffc6",
+    "scripts/run_ci_deployment_shard.py": "66e358d241cf3fb370a3d3404d5c4ea73fec058d25b071dd32f8e25924af60a2",
+    "deploy/fixtures/reader_namespace_ci_workload.json": "48f5a887f4b4b44e0751c4d0b9557ebbd62f887a39d86fdd2fcce6f78998a5b3"
   },
   "backlog": {
     "total_unfinished": 51,
@@ -105,5 +109,15 @@
   "native_inference_calls": 0,
   "runtime_installation": false,
   "legal_qualification": false,
-  "native_source_change_gate": "All 68 current source/policy pins must match the retained native campaign; changed runtime or qualification source requires fresh native qualification."
+  "native_source_change_gate": "All 68 current source/policy pins must match the retained native campaign; changed runtime or qualification source requires fresh native qualification.",
+  "rejected_first_CI_head": {
+    "head": "c7cd5f877ff7c9ac6295dd27e34f3b5b5a2c32de",
+    "run": 40282791008,
+    "frontend_job_seconds": 316,
+    "frontend_job_cap": 300,
+    "all_frontend_and_namespace_methods_passed": true,
+    "observed_namespace_case_seconds": 65.92,
+    "accepted_for_merge": false,
+    "correction": "Remove the sequential frontend tail. Source-bind measured namespace costs to all 22 exact methods and distribute them over existing worker assignments plus a small sequential slice in the existing PostgreSQL job. Preserve every scenario, native source pin, job cap and concurrent-worker budget."
+  }
 }
