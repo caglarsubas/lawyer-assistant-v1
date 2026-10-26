@@ -38,26 +38,26 @@
       380,
       420,
       77,
-      15,
+      8,
       7,
       11,
-      4
+      11
     ],
     "source_manifest_exactly_once": true,
     "jobs": 9,
     "existing_job_caps_and_concurrent_worker_budgets_unchanged": true,
     "new_namespace_group_runs_after_frontend_pair": false,
     "namespace_cases_use_observed_source_bound_budget": true,
+    "additional_budget_guard_methods_passed": 5,
     "local_summed_case_seconds": [
-      77.64,
-      93.81,
-      44.74,
-      18.01,
-      8.56,
-      8.46,
-      5.04
-    ],
-    "additional_budget_guard_methods_passed": 5
+      148.66,
+      189.12,
+      80.58,
+      20.87,
+      25.74,
+      14.44,
+      29.62
+    ]
   },
   "old_native_source_pins_exact": 58,
   "new_native_source_pins": 68,
@@ -80,8 +80,8 @@
     "deploy/test_reader_namespace.py": "069e39ed32b64eaf5f8269209fc03c5ddc964a1ca527f06f7747ab05a2cb5af7",
     "deploy/test_reader_namespace_report.py": "33f950ec14bf3836742c062edc9473b13ce26e8efde08957d7167b3e9aae6aea",
     "deploy/test_reader_namespace_source.py": "7a5f76298832797f6200939896b7f3b3880705ce394b109e67c85235e620ffc6",
-    "scripts/run_ci_deployment_shard.py": "66e358d241cf3fb370a3d3404d5c4ea73fec058d25b071dd32f8e25924af60a2",
-    "deploy/fixtures/reader_namespace_ci_workload.json": "48f5a887f4b4b44e0751c4d0b9557ebbd62f887a39d86fdd2fcce6f78998a5b3"
+    "scripts/run_ci_deployment_shard.py": "88f37c8ec7e92bd675f0aa7947dd7e95d5ffdc4a329da688b267c00f65a8e630",
+    "deploy/fixtures/reader_namespace_ci_workload.json": "0f965e66fe3be05b9ba9403978f5bea92683c4aa2036a7ade0c19cfdd7824733"
   },
   "backlog": {
     "total_unfinished": 51,
@@ -119,5 +119,14 @@
     "observed_namespace_case_seconds": 65.92,
     "accepted_for_merge": false,
     "correction": "Remove the sequential frontend tail. Source-bind measured namespace costs to all 22 exact methods and distribute them over existing worker assignments plus a small sequential slice in the existing PostgreSQL job. Preserve every scenario, native source pin, job cap and concurrent-worker budget."
+  },
+  "rejected_second_CI_head": {
+    "head": "02dbf27930f751b2d0e288590b37cca11c1de1f3",
+    "run": 40284850650,
+    "graph_runtime_job_seconds": 342,
+    "graph_runtime_reserve": 18,
+    "required_reserve": 30,
+    "accepted_for_merge": false,
+    "correction": "Move seven measured lifecycle methods (22.256 case-seconds) from graph runtime to existing PostgreSQL contract assignment, within a 25-second incremental case budget. No new job, worker, deadline, source runtime, native scenario or expected outcome."
   }
 }

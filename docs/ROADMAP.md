@@ -7653,7 +7653,10 @@ All **914 deployment methods** must run exactly once across seven disjoint sourc
 assignments. The first CI profile passes its tests but exceeds the frontend job cap. A closed
 source-bound work profile now maps exact namespace methods to measured reserves
 in existing assignments, with a small sequential slice in the existing PostgreSQL
-job. Missing, duplicate, stale or over-budget assignments fail before execution. Preserve nine jobs, existing caps, current concurrent
+job. Missing, duplicate, stale or over-budget assignments fail before execution.
+A second profile is rejected for only 18 seconds of graph-runtime reserve; seven
+existing lifecycle methods move to the PostgreSQL contract slice under a bounded
+25-second measured increment, preserving every case and native source. Preserve nine jobs, existing caps, current concurrent
 workers and every frontend test. Merge requires nine exact-head checks, five
 30-second reserves, pinned-head merge and fetched-main full-tree equality.
 

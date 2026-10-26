@@ -24,15 +24,15 @@ class DeploymentShardContracts(unittest.TestCase):
         self.assertFalse(any(left & right for i, left in enumerate(shards) for right in shards[i + 1:]))
         self.assertEqual(a | b | c | d | e | f | g, {test.id() for test in tests})
         self.assertEqual({ident for ident in c if not ident.startswith("test_reader_namespace.")}, {test.id() for test in tests if test.id().startswith(("test_staged_reader.StagedReaderContracts.", "test_authenticated_operator_review.AuthenticatedOperatorContracts."))})
-        self.assertEqual({ident for ident in d | e | f if ident.startswith("test_reader_lifecycle.")}, {test.id() for test in tests if test.id().startswith("test_reader_lifecycle.ReaderLifecycleContracts.")})
-        self.assertEqual([sum(ident.startswith("test_reader_lifecycle.") for ident in lane) for lane in (d, e, f)], [12, 4, 8])
+        self.assertEqual({ident for ident in d | e | f | g if ident.startswith("test_reader_lifecycle.")}, {test.id() for test in tests if test.id().startswith("test_reader_lifecycle.ReaderLifecycleContracts.")})
+        self.assertEqual([sum(ident.startswith("test_reader_lifecycle.") for ident in lane) for lane in (d, e, f, g)], [5, 4, 8, 7])
         namespace_ids = {test.id() for test in tests if test.id().startswith("test_reader_namespace.ReaderNamespaceContracts.")}
         self.assertEqual(namespace_ids, {ident for ident in a | c | d | e | f | g if ident.startswith("test_reader_namespace.")})
         self.assertFalse(namespace_ids & b)
         namespace = json.loads((ROOT / "deploy/fixtures/reader_namespace_policy.json").read_text())
         self.assertEqual({"test_reader_namespace.ReaderNamespaceContracts.test_case_" + row["id"] for row in namespace["cases"]}, {ident for ident in namespace_ids if ".test_case_" in ident})
         lifecycle = json.loads((ROOT / "deploy/fixtures/reader_lifecycle_policy.json").read_text())
-        self.assertEqual({"test_reader_lifecycle.ReaderLifecycleContracts.test_case_" + row["id"] for row in lifecycle["cases"]}, {ident for ident in d | e | f if ident.startswith("test_reader_lifecycle.ReaderLifecycleContracts.test_case_")})
+        self.assertEqual({"test_reader_lifecycle.ReaderLifecycleContracts.test_case_" + row["id"] for row in lifecycle["cases"]}, {ident for ident in d | e | f | g if ident.startswith("test_reader_lifecycle.ReaderLifecycleContracts.test_case_")})
         policy = json.loads((ROOT / "deploy/fixtures/staged_reader_policy.json").read_text())
         self.assertEqual({"test_staged_reader.StagedReaderContracts.test_case_" + row["id"] for row in policy["cases"]}, {ident for ident in c if ident.startswith("test_staged_reader.StagedReaderContracts.test_case_")})
         for module, cls, policy in [("test_authenticated_operator_review", "AuthenticatedOperatorContracts", "authenticated_operator_policy.json"),
@@ -55,12 +55,12 @@ class DeploymentShardContracts(unittest.TestCase):
     def test_namespace_work_profile_rejects_missing_duplicate_stale_over_budget_or_unknown_assignments(self):
         ids = [test.id() for test in runner.collect()]
         original = json.loads(runner.NAMESPACE_WORKLOAD.read_text())
-        self.assertEqual(len(runner.namespace_assignments(ids)), 22)
+        self.assertEqual(len(runner.namespace_assignments(ids)), 29)
         original_read = Path.read_bytes
         changed = ROOT / "scripts/reader_namespace.py"
         with patch.object(Path, "read_bytes", lambda path: b"changed" if path == changed else original_read(path)), self.assertRaises(ValueError):
             runner.namespace_assignments(ids, original)
-        for kind in ("missing", "duplicate", "source", "budget", "lane", "unknown"):
+        for kind in ("missing", "duplicate", "source", "budget", "lane", "graph_duplicate", "graph_cost", "unknown"):
             value = copy.deepcopy(original)
             if kind == "missing":
                 value["assignments"].pop()
@@ -72,6 +72,10 @@ class DeploymentShardContracts(unittest.TestCase):
                 value["assignments"][0]["observed_case_ms"] = 1000000
             elif kind == "lane":
                 value["assignments"][0]["shard"] = 2
+            elif kind == "graph_duplicate":
+                value["graph_rebalance"]["moved"][1] = value["graph_rebalance"]["moved"][0]
+            elif kind == "graph_cost":
+                value["graph_rebalance"]["moved"][0]["observed_case_ms"] = 1000000
             else:
                 value["assignments"][0]["unexpected"] = True
             with self.subTest(kind=kind), self.assertRaises(ValueError):

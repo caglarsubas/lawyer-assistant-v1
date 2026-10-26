@@ -123,5 +123,40 @@
       "shard": 6,
       "observed_case_ms": 334
     }
-  ]
+  ],
+  "graph_rebalance": {
+    "observed_head": "02dbf27930f751b2d0e288590b37cca11c1de1f3",
+    "observed_run": 40284850650,
+    "retained_log_sha256": "ee50984963b1861f64f014357552c0fb73c680b9458888e6481e4d20328e2a41",
+    "moved": [
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C01_retirement_blocks",
+        "observed_case_ms": 3026
+      },
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C02_expired_retired_renewal",
+        "observed_case_ms": 3180
+      },
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C06_denied_renewal",
+        "observed_case_ms": 3096
+      },
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C08_withdrawal_pending_rollback",
+        "observed_case_ms": 3387
+      },
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C16_revoked_reviewer",
+        "observed_case_ms": 3010
+      },
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C21_unknown_rollback_target",
+        "observed_case_ms": 3156
+      },
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C22_post_withdrawal_renewal",
+        "observed_case_ms": 3401
+      }
+    ]
+  }
 }

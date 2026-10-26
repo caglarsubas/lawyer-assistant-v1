@@ -46,7 +46,7 @@ def namespace_assignments(ids, profile=None):
         if not path.is_relative_to(ROOT) or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected_sha:
             raise ValueError("Current qualified namespace source required before execution")
     source_sha = hashlib.sha256(json.dumps(source, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
-    if (not isinstance(value, dict) or set(value) != {"schema", "qualification_source_sha256", "observed_head", "observed_run", "retained_log_sha256", "lane_case_budget_ms", "assignments"}
+    if (not isinstance(value, dict) or set(value) != {"schema", "qualification_source_sha256", "observed_head", "observed_run", "retained_log_sha256", "lane_case_budget_ms", "assignments", "graph_rebalance"}
             or value["schema"] != "reader-namespace-ci-workload-v1" or value["qualification_source_sha256"] != source_sha
             or not re.fullmatch(r"[0-9a-f]{40}", value["observed_head"]) or type(value["observed_run"]) is not int or value["observed_run"] <= 0
             or not re.fullmatch(r"[0-9a-f]{64}", value["retained_log_sha256"]) or value["lane_case_budget_ms"] != NAMESPACE_BUDGET_MS
@@ -62,6 +62,24 @@ def namespace_assignments(ids, profile=None):
         sums[str(row["shard"])] += row["observed_case_ms"]
     if sorted(result) != expected or any(sums[n] > budget for n, budget in NAMESPACE_BUDGET_MS.items()):
         raise ValueError("Complete namespace assignments within measured budgets required")
+    change = value["graph_rebalance"]
+    lifecycle_ids = sorted((ident for ident in ids if ident.startswith("test_reader_lifecycle.ReaderLifecycleContracts.")),
+                           key=lambda ident: hashlib.sha256(ident.encode()).digest())
+    if (not isinstance(change, dict) or set(change) != {"observed_head", "observed_run", "retained_log_sha256", "moved"}
+            or not re.fullmatch(r"[0-9a-f]{40}", change["observed_head"]) or type(change["observed_run"]) is not int or change["observed_run"] <= 0
+            or not re.fullmatch(r"[0-9a-f]{64}", change["retained_log_sha256"]) or not isinstance(change["moved"], list) or len(change["moved"]) != 7):
+        raise ValueError("Exact retained graph rebalance required")
+    moved, cost = set(), 0
+    for row in change["moved"]:
+        if (not isinstance(row, dict) or set(row) != {"test_id", "observed_case_ms"}
+                or row["test_id"] in moved or row["test_id"] not in lifecycle_ids[12:]
+                or type(row["observed_case_ms"]) is not int or row["observed_case_ms"] <= 0):
+            raise ValueError("Unique graph-runtime cases required")
+        moved.add(row["test_id"])
+        cost += row["observed_case_ms"]
+        result[row["test_id"]] = 7
+    if cost > 25000:
+        raise ValueError("Bounded PostgreSQL case increment required")
     return result
 
 
@@ -69,6 +87,8 @@ def shard(test_id, lifecycle_ids, namespace):
     if test_id.startswith("test_reader_namespace.ReaderNamespaceContracts."):
         return namespace[test_id]  # A source-bound measured budget; no extra worker.
     if test_id.startswith("test_reader_lifecycle.ReaderLifecycleContracts."):
+        if test_id in namespace:
+            return namespace[test_id]
         # Measured 65s group is disjointly distributed over existing reserves.
         rank = sorted(lifecycle_ids, key=lambda ident: hashlib.sha256(ident.encode()).digest()).index(test_id)
         return 5 if rank < 4 else 6 if rank < 12 else 4

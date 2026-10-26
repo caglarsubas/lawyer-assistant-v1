@@ -96,3 +96,9 @@ See the [dated evidence](evidence/reader-namespace-transition-2026-10-26.json).
 The work profile is planning evidence, not a runtime guarantee. Actual exact-head
 CI results and timing reserves remain mandatory. All native source pins, scenarios
 and outcomes remain unchanged by this CI correction.
+
+A second CI profile is rejected for 18 seconds of graph-runtime reserve. Seven
+measured lifecycle methods move to the existing PostgreSQL contract assignment
+within a 25-second incremental case budget. Their retained log and exact method
+identities join the same source-bound work profile; no scenario or native source
+is changed. Actual fresh timing gates remain required.
