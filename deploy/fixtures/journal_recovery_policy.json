@@ -1,0 +1,87 @@
+{
+  "schema": "journal-recovery-qualification-v1",
+  "cases": [
+    {
+      "id": "G01_open_anchor_repair",
+      "expected": 200
+    },
+    {
+      "id": "G02_selection_anchor_repair",
+      "expected": 200
+    },
+    {
+      "id": "G03_finish_anchor_repair",
+      "expected": 200
+    },
+    {
+      "id": "G04_lost_finish_reply",
+      "expected": 200
+    },
+    {
+      "id": "G05_lost_repair_reply",
+      "expected": 200
+    },
+    {
+      "id": "G06_missing_admission",
+      "expected": 400
+    },
+    {
+      "id": "G07_stale_view",
+      "expected": 409
+    },
+    {
+      "id": "G08_expired_metadata_only",
+      "expected": 200
+    },
+    {
+      "id": "G09_withdrawn_metadata_only",
+      "expected": 200
+    },
+    {
+      "id": "G10_revoked_review_metadata_only",
+      "expected": 200
+    },
+    {
+      "id": "G11_copied_namespace",
+      "expected": 400
+    },
+    {
+      "id": "G12_wrong_change",
+      "expected": 409
+    },
+    {
+      "id": "G13_competing_repair",
+      "expected": 409
+    },
+    {
+      "id": "G14_joint_pending_refused",
+      "expected": 409
+    },
+    {
+      "id": "G15_clock_rollback",
+      "expected": 409
+    },
+    {
+      "id": "G16_readonly_finish_and_cursor",
+      "expected": 200
+    }
+  ],
+  "native_attempts_per_case": 1,
+  "min_distinct_worker_processes": 2,
+  "max_events": 256,
+  "max_proposal_seconds": 300,
+  "max_page_rows": 8,
+  "model_verification_seconds": 20,
+  "admission_required": true,
+  "exact_view_and_actor_binding": true,
+  "joint_recovery_refused": true,
+  "no_authority_renewal": true,
+  "no_mutation_replay": true,
+  "histories_immutable": true,
+  "disposable_accounts_only": true,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "real_trust_enrolled": false,
+  "runtime_installation": false,
+  "production_activation": false
+}

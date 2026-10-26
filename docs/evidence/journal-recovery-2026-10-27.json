@@ -1,0 +1,142 @@
+{
+  "schema": "journal-recovery-evidence-v1",
+  "client_date": "2026-10-27",
+  "base_commit": "aff1ad1005f05334962edeb56babf97b6d9e7e9d",
+  "status": "partial",
+  "native": {
+    "cases_passed": 16,
+    "actual_loopback_servers": 32,
+    "actual_HTTP_requests": 889,
+    "actual_app_session_and_RBAC_checks": true,
+    "disposable_accounts_only": true,
+    "repair_preserves_all_four_histories": true,
+    "metadata_repair_never_renews_authority": true,
+    "runtime_installation": false,
+    "legal_qualification": false
+  },
+  "native_campaign_seconds": 90.03,
+  "native_campaign_seconds_cap": 180,
+  "native_report_sha256": "4d7124f03624a9b6de2ca934f86e3995f09c2bde3f3ba68a55fc0f46b1a082d1",
+  "accepted_frozen_campaigns": 1,
+  "accepted_campaign_attempts_per_case": 1,
+  "resources": {
+    "CPU": 2,
+    "memory_MiB": 768,
+    "PID_limit": 96,
+    "retention_volumes": 4,
+    "filesystem": "ext4",
+    "network": "none"
+  },
+  "native_cleanup": {
+    "owned_containers_removed": 2,
+    "owned_volumes_removed": 4,
+    "preexisting_resources_removed": 0
+  },
+  "deployment_contracts": {
+    "passed": 968,
+    "shard_counts": [
+      396,
+      423,
+      97,
+      8,
+      7,
+      26,
+      11
+    ],
+    "source_manifest_exactly_once": true,
+    "existing_jobs": 9,
+    "worker_peaks_deadlines_and_frontend_coverage_unchanged": true,
+    "local_summed_case_seconds": [
+      82.305,
+      101.132,
+      70.639,
+      8.724,
+      9.93,
+      25.762,
+      15.568
+    ],
+    "local_wall_seconds": [
+      84.14,
+      102.87,
+      38.44,
+      9.4,
+      10.74,
+      14.46,
+      16.41
+    ]
+  },
+  "native_source_pins": 87,
+  "prior_source_pins_exact": 78,
+  "prior_source_files": 1149,
+  "exact_prior_source_files": 1147,
+  "intentional_prior_source_changes": [
+    "scripts/run_ci_deployment_shard.py",
+    "deploy/fixtures/deployment_test_manifest.json"
+  ],
+  "implementation_sha256": {
+    "deploy/fixtures/journal_recovery_policy.json": "bd2eaafeefe0cd258378b8cac5cbe6f41e97b59594212db9ed2602f062d0cb12",
+    "deploy/test_journal_recovery.py": "391c1883831f2b5ee95c318f915ae310b071812f7c7a77c8382f3fd7d2d3cfb1",
+    "deploy/test_journal_recovery_report.py": "eb7bec02fa15d10e498f9b49ef4be1b0a721c382615ae6450dda13bf682a3fb4",
+    "deploy/test_journal_recovery_source.py": "07f441ea331da72fb4bb244e277a89b7ad332ad52f799df946f1f6c9c1fa1a16",
+    "scripts/journal_recovery.py": "d991e46ba959cd4c12d7e00b61ae0cab2a35d010f22d038bc385a0c595492a2b",
+    "scripts/journal_recovery_fixture.py": "94e0b2c4e9842d05396a147d04b1d24af5556ddb762de762a6e95a32959cf865",
+    "scripts/journal_recovery_native.py": "f360589634aad79fe16ac606917284ea851a90b6aca9bd317cfa7e2fc23edee5",
+    "scripts/journal_recovery_report.py": "d12ce5de3edebbc2b8705379a8c2969f764625e59de4dbc6dcd1828dd642e203",
+    "scripts/journal_recovery_worker.py": "4e865fd084d40266752a9f746fe66b46e9f4410a2dc691ef8b3156bc59dac833",
+    "scripts/run_ci_deployment_shard.py": "4f48b533b129f75f9788855cd315ae68905a7eee150fca275a86e69cd490d637",
+    "deploy/fixtures/deployment_test_manifest.json": "8d682d24686955d9f46203e207c0aaa4173e742cb899ae91fd7fece0ccd1ff42"
+  },
+  "backlog": {
+    "total_unfinished": 51,
+    "open": 21,
+    "waiting": 24,
+    "deferred": 6,
+    "catalog_total": 93,
+    "done": 42,
+    "all_statuses_unchanged": true
+  },
+  "readiness": {
+    "ready": 0,
+    "partial": 9,
+    "waiting": 4,
+    "planned": 1
+  },
+  "roadmap_sections_before": 248,
+  "roadmap_sections_after": 249,
+  "owner_focused_analysis_v3_review": "pending",
+  "private_case_inputs": false,
+  "real_trust_enrolled": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_installation": false,
+  "legal_qualification": false,
+  "remaining_recovery": "Joint pending journals are observed and fail closed; explicit per-anchor joint recovery is a separate qualification.",
+  "ci_headroom_rebalance": {
+    "superseded_head": "b7271a0d4ac18dc8e6bb0a7aef154761052e7563",
+    "observed_run": 40364628445,
+    "graph_job_seconds": 342,
+    "graph_cap_seconds": 360,
+    "rejected_margin_seconds": 18,
+    "required_margin_seconds": 30,
+    "moved_exact_cases": [
+      "test_journal_recovery.JournalRecoveryContracts.test_case_G01_open_anchor_repair",
+      "test_journal_recovery.JournalRecoveryContracts.test_case_G02_selection_anchor_repair",
+      "test_journal_recovery.JournalRecoveryContracts.test_case_G03_finish_anchor_repair",
+      "test_journal_recovery.JournalRecoveryContracts.test_case_G04_lost_finish_reply",
+      "test_journal_recovery.JournalRecoveryContracts.test_case_G05_lost_repair_reply",
+      "test_journal_recovery.JournalRecoveryContracts.test_case_G06_missing_admission",
+      "test_journal_recovery.JournalRecoveryContracts.test_case_G07_stale_view",
+      "test_journal_recovery.JournalRecoveryContracts.test_case_G08_expired_metadata_only"
+    ],
+    "observed_moved_seconds": 33.196,
+    "destination_job": "frontend",
+    "observed_destination_job_seconds": 212,
+    "destination_cap_seconds": 300,
+    "observed_destination_margin_seconds": 88,
+    "extra_jobs": 0,
+    "extra_peak_workers": 0,
+    "deadline_increases": 0,
+    "native_qualified_source_unchanged": true,
+    "fresh_exact_head_gates_required": true
+  }
+}
