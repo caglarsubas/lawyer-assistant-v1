@@ -14,10 +14,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count(command), 0)
         blocks = dict(re.findall(r"^  ([a-z-]+):\n(.*?)(?=^  [a-z-]+:\n|\Z)", workflow.split("\njobs:\n", 1)[1], re.MULTILINE | re.DOTALL))
         self.assertNotIn(command, blocks["backend-and-contracts"])
-        self.assertEqual(workflow.count("scripts/run_ci_deployment_shard.py"), 4)
+        self.assertEqual(workflow.count("scripts/run_ci_deployment_shard.py"), 6)
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=3", blocks["backend-and-contracts"])
-        self.assertIn("scripts/run_ci_deployment_shard.py --shard=4", blocks["backend-and-contracts"])
-        self.assertLess(blocks["backend-and-contracts"].index("--shard=4"), blocks["backend-and-contracts"].index("name: Test backend"))
+        for name, lane in (("graph-runtime-contracts", 4), ("graph-candidate-contracts", 5), ("retained-release-withdrawal", 6)):
+            self.assertIn("scripts/run_ci_deployment_shard.py --shard=" + str(lane), blocks[name])
         self.assertLess(blocks["backend-and-contracts"].index("--shard=3"), blocks["backend-and-contracts"].index("name: Test backend"))
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=1", blocks["frontend"])
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=2", blocks["frontend-history"])

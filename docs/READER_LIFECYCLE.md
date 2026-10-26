@@ -64,9 +64,10 @@ servers, real application session/RBAC/origin/CSRF enforcement with disposable
 identities, four separate fresh ext4 volumes, two CPUs, 768 MiB, a 96-PID limit,
 cleared environment and no external networking. Campaign limit stays 180 seconds.
 The manifest-bound CI inventory must execute every deployment method once across
-four disjoint assignments within the existing nine jobs. The authentication group
-uses measured frontend reserve; the existing and new reader groups execute in
-separate bounded phases of the same backend job. No existing job/test cap,
+six disjoint assignments within the existing nine jobs. The original authenticated groups retain their existing backend phase. The new
+lifecycle group uses three disjoint, sequential phases in the existing graph
+runtime, graph candidate and retained-withdrawal jobs, sized using measured
+reserve and deterministic source-ID hash rank. No existing job/test cap,
 concurrent-worker budget or frontend file coverage is increased or reduced.
 
 Merge requires nine exact-head checks, five timing reserves of at least 30 seconds,
@@ -80,3 +81,8 @@ owner without weakening ownership checks or changing cases. All newly owned
 resources from rejected preparations and the accepted campaign were removed.
 
 See the [dated evidence](evidence/reader-lifecycle-2026-10-26.json).
+
+The first CI profile passed frontend tests but had only 24 seconds of reserve
+and is rejected for merge. Its 65-second lifecycle group is redistributed without
+changing any scenario or expected result. Current exact-head checks and reserves
+must all pass; a green test count alone is insufficient.

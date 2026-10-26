@@ -7601,10 +7601,11 @@ preparations and their cleanup are retained; the host-versus-Docker mount owner 
 observed and bound in a fresh candidate. No campaign case, expected outcome or
 ownership guard is weakened to resolve packaging.
 
-All 886 deployment methods must execute exactly once in four manifest-bound
-assignments. The retained authentication group uses existing frontend reserve;
-the old and new reader groups use separate bounded sequential phases of the same
-backend job. Nine jobs, concurrent-worker budgets, complete frontend coverage and
+All 886 deployment methods must execute exactly once in six manifest-bound
+assignments. A first CI profile leaves only 24 seconds of frontend reserve and
+is rejected. The complete original authenticated groups retain their backend
+phase; the new lifecycle group is source-ID-hash partitioned over measured
+reserve in graph runtime, graph candidate and retained-withdrawal jobs. Nine jobs, concurrent-worker budgets, complete frontend coverage and
 existing deadlines remain. Merge requires all exact-head checks and five
 30-second reserves, followed by pinned-head merge and fetched-main tree equality.
 

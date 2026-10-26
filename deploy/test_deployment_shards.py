@@ -17,13 +17,15 @@ class DeploymentShardContracts(unittest.TestCase):
     def test_all_shards_cover_each_test_exactly_once(self):
         tests = runner.collect()
         manifest = json.loads(runner.MANIFEST.read_text())
-        a, b, c, d = [{test.id() for test in runner.plan(tests, manifest, n)} for n in (1, 2, 3, 4)]
-        self.assertFalse(a & b or a & c or a & d or b & c or b & d or c & d)
-        self.assertEqual(a | b | c | d, {test.id() for test in tests})
-        self.assertEqual(c, {test.id() for test in tests if test.id().startswith("test_staged_reader.StagedReaderContracts.")})
-        self.assertEqual(d, {test.id() for test in tests if test.id().startswith("test_reader_lifecycle.ReaderLifecycleContracts.")})
+        a, b, c, d, e, f = [{test.id() for test in runner.plan(tests, manifest, n)} for n in (1, 2, 3, 4, 5, 6)]
+        shards = (a, b, c, d, e, f)
+        self.assertFalse(any(left & right for i, left in enumerate(shards) for right in shards[i + 1:]))
+        self.assertEqual(a | b | c | d | e | f, {test.id() for test in tests})
+        self.assertEqual(c, {test.id() for test in tests if test.id().startswith(("test_staged_reader.StagedReaderContracts.", "test_authenticated_operator_review.AuthenticatedOperatorContracts."))})
+        self.assertEqual(d | e | f, {test.id() for test in tests if test.id().startswith("test_reader_lifecycle.ReaderLifecycleContracts.")})
+        self.assertEqual([len(d), len(e), len(f)], [12, 4, 8])
         lifecycle = json.loads((ROOT / "deploy/fixtures/reader_lifecycle_policy.json").read_text())
-        self.assertEqual({"test_reader_lifecycle.ReaderLifecycleContracts.test_case_" + row["id"] for row in lifecycle["cases"]}, {ident for ident in d if ".test_case_" in ident})
+        self.assertEqual({"test_reader_lifecycle.ReaderLifecycleContracts.test_case_" + row["id"] for row in lifecycle["cases"]}, {ident for ident in d | e | f if ".test_case_" in ident})
         policy = json.loads((ROOT / "deploy/fixtures/staged_reader_policy.json").read_text())
         self.assertEqual({"test_staged_reader.StagedReaderContracts.test_case_" + row["id"] for row in policy["cases"]}, {ident for ident in c if ident.startswith("test_staged_reader.StagedReaderContracts.test_case_")})
         for module, cls, policy in [("test_authenticated_operator_review", "AuthenticatedOperatorContracts", "authenticated_operator_policy.json"),
@@ -36,8 +38,8 @@ class DeploymentShardContracts(unittest.TestCase):
             prefix = module + "." + cls + ".test_case_"
             expected = {prefix + row["id"] for row in json.loads((ROOT / "deploy/fixtures" / policy).read_text())["cases"]}
             if module == "test_authenticated_operator_review":
-                self.assertEqual({name for name in a if name.startswith(prefix)}, expected)
-                self.assertFalse(expected & (b | c | d))
+                self.assertEqual({name for name in c if name.startswith(prefix)}, expected)
+                self.assertFalse(expected & (a | b | d | e | f))
             else:
                 self.assertEqual({name for name in a | b if name.startswith(prefix)}, expected)
                 self.assertTrue(expected & a)

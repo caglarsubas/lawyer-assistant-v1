@@ -47,19 +47,23 @@
   "deployment_contracts": {
     "passed": 886,
     "shard_counts": [
-      422,
+      373,
       418,
-      22,
-      24
+      71,
+      12,
+      4,
+      8
     ],
     "source_manifest_exactly_once": true,
     "jobs": 9,
     "existing_job_caps_and_concurrent_worker_budgets_unchanged": true,
     "local_summed_case_seconds": [
-      130.97,
-      140.39,
-      48.38,
-      53.96
+      116.79,
+      144.88,
+      60.31,
+      25.96,
+      10.0,
+      8.81
     ]
   },
   "local_correction": "Initial replay returned 400 instead of 409; explicit replay checks now precede lineage validation. The revoked-reviewer scenario now attempts selection by the preparer after the independent approval session is revoked, testing stale approval use rather than sign-in denial. Frozen expected statuses did not change. Initial failures remain retained.",
@@ -110,5 +114,16 @@
   "native_inference_calls": 0,
   "runtime_installation": false,
   "legal_qualification": false,
-  "native_source_change_gate": "All 58 current source/policy pins must match the retained native campaign; changed runtime or qualification source requires fresh native qualification."
+  "native_source_change_gate": "All 58 current source/policy pins must match the retained native campaign; changed runtime or qualification source requires fresh native qualification.",
+  "rejected_first_CI_head": {
+    "head": "791baf6c7dc8cde779911528accb2698837a41a0",
+    "run": 40274710170,
+    "frontend_seconds": 276,
+    "frontend_reserve": 24,
+    "required_reserve": 30,
+    "new_lifecycle_phase_seconds": 65,
+    "retained_auth_frontend_seconds": 40.77,
+    "accepted_for_merge": false,
+    "correction": "Restore complete original authenticated groups to the backend. Split the new lifecycle group by deterministic source-ID hash rank over three existing jobs: 12 in graph runtime, four in graph candidate and eight in retained withdrawal. No source runtime, case, outcome, job or existing deadline changes."
+  }
 }
