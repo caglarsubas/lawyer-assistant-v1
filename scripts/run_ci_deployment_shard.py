@@ -34,8 +34,8 @@ def collect():
 
 
 def shard(test_id):
-    if test_id.startswith("test_staged_reader.StagedReaderContracts."):
-        return 3  # New authenticated qualification uses existing backend reserve.
+    if test_id.startswith(("test_staged_reader.StagedReaderContracts.", "test_authenticated_operator_review.AuthenticatedOperatorContracts.")):
+        return 3  # Complete authenticated groups use the existing backend reserve.
     key = int.from_bytes(hashlib.sha256(test_id.encode()).digest()[:4], "big")
     # Measured authenticated cases use a stable 2:3 x86/ARM weighting.
     # Ordinary contracts keep the original half partition; no ID is omitted.

@@ -7552,9 +7552,12 @@ PR, completed task or historical status is fabricated. Backlog projection and fi
 navigation are read-only, and verified histories remain append-only.
 
 All **857 deployment methods** are source-manifest partitioned exactly once:
-**385 / 450 / 22**. The 22 authenticated reader methods run sequentially in the
-existing backend job before pytest, avoiding additional heavy work in the frontend
-lane's measured 32-second reserve. Both frontend lanes retain their original test
+**370 / 416 / 71**. The 22 new reader methods and 49 retained authenticated-review
+methods run sequentially in the existing backend job before pytest. A first CI
+profile left only 20 seconds of history-lane reserve and is rejected. Measured
+group timing moves complete groups between existing jobs; no cases or expectations
+change. The single production build uses the existing final-authorization job's
+reserve, preserving space in the constrained frontend/backend lanes. Both frontend lanes retain their original test
 pairs. Nine jobs, current concurrent-worker budgets, all frontend coverage and
 existing job/test deadlines remain. Merge requires nine exact-head checks, five
 30-second timing reserves, a pinned-head merge and independently fetched-main

@@ -20,9 +20,9 @@ class DeploymentShardContracts(unittest.TestCase):
         a, b, c = [{test.id() for test in runner.plan(tests, manifest, n)} for n in (1, 2, 3)]
         self.assertFalse(a & b or a & c or b & c)
         self.assertEqual(a | b | c, {test.id() for test in tests})
-        self.assertEqual(c, {test.id() for test in tests if test.id().startswith("test_staged_reader.StagedReaderContracts.")})
+        self.assertEqual(c, {test.id() for test in tests if test.id().startswith(("test_staged_reader.StagedReaderContracts.", "test_authenticated_operator_review.AuthenticatedOperatorContracts."))})
         policy = json.loads((ROOT / "deploy/fixtures/staged_reader_policy.json").read_text())
-        self.assertEqual({"test_staged_reader.StagedReaderContracts.test_case_" + row["id"] for row in policy["cases"]}, {ident for ident in c if ".test_case_" in ident})
+        self.assertEqual({"test_staged_reader.StagedReaderContracts.test_case_" + row["id"] for row in policy["cases"]}, {ident for ident in c if ident.startswith("test_staged_reader.StagedReaderContracts.test_case_")})
         for module, cls, policy in [("test_authenticated_operator_review", "AuthenticatedOperatorContracts", "authenticated_operator_policy.json"),
                                     ("test_anchored_operator_review", "AnchoredReviewContracts", "anchored_review_policy.json"),
                                     ("test_history_backup", "HistoryBackupContracts", "history_backup_policy.json"),
@@ -32,9 +32,13 @@ class DeploymentShardContracts(unittest.TestCase):
                                     ("test_withdrawal_backup", "WithdrawalBackupContracts", "withdrawal_backup_policy.json")]:
             prefix = module + "." + cls + ".test_case_"
             expected = {prefix + row["id"] for row in json.loads((ROOT / "deploy/fixtures" / policy).read_text())["cases"]}
-            self.assertEqual({name for name in a | b if name.startswith(prefix)}, expected)
-            self.assertTrue(expected & a)
-            self.assertTrue(expected & b)
+            if module == "test_authenticated_operator_review":
+                self.assertEqual({name for name in c if name.startswith(prefix)}, expected)
+                self.assertFalse(expected & (a | b))
+            else:
+                self.assertEqual({name for name in a | b if name.startswith(prefix)}, expected)
+                self.assertTrue(expected & a)
+                self.assertTrue(expected & b)
 
     def test_omitted_or_duplicate_test_is_rejected_before_execution(self):
         tests = [unittest.FunctionTestCase(lambda: None), unittest.FunctionTestCase(lambda: None)]

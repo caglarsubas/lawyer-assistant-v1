@@ -35,21 +35,23 @@
   "deployment_contracts": {
     "passed": 857,
     "shard_counts": [
-      385,
-      450,
-      22
+      370,
+      416,
+      71
     ],
     "local_summed_case_seconds": [
-      74.23,
-      97.42,
-      20.97
+      85.6,
+      98.74,
+      43.19
     ],
     "source_manifest_exactly_once": true,
     "new_reader_methods_in_existing_backend_job": 22,
     "jobs": 9,
-    "existing_job_caps_and_concurrent_worker_budgets_unchanged": true
+    "existing_job_caps_and_concurrent_worker_budgets_unchanged": true,
+    "retained_authenticated_methods_in_existing_backend_job": 49,
+    "single_production_build_job": "final-release-authorization"
   },
-  "local_correction": "The old placement contract expected two shards; updated it to require all three disjoint assignments before the backend tail. The affected lane passes after correction; the initial local failure remains retained.",
+  "local_correction": "Placement contracts now require all three disjoint assignments and exactly the intended reader cases within the combined authenticated shard. Initial local assertion failures remain retained; successful final assignments require all 857 methods exactly once.",
   "backlog": {
     "total_unfinished": 51,
     "open": 21,
@@ -75,13 +77,14 @@
     "all_status_deltas_zero": true
   },
   "prior_source_files": 1102,
-  "exact_prior_source_files": 1097,
+  "exact_prior_source_files": 1096,
   "intentional_prior_source_changes": [
     ".github/workflows/ci.yml",
     "deploy/fixtures/deployment_test_manifest.json",
     "deploy/test_deployment_ci_placement.py",
     "deploy/test_deployment_shards.py",
-    "scripts/run_ci_deployment_shard.py"
+    "scripts/run_ci_deployment_shard.py",
+    "deploy/test_ci_partition_contract.py"
   ],
   "implementation_sha256": {
     "scripts/staged_reader.py": "a25bc7c766d83cd8e61ad47af5bdc6575534ec5aeb876bcb36e9bcfdb625a7d6",
@@ -105,5 +108,14 @@
   "native_inference_calls": 0,
   "runtime_installation": false,
   "legal_qualification": false,
-  "native_source_change_gate": "Current runtime, auth, fixture, worker, policy and qualification-source hashes must match the retained native campaign; changed source requires fresh qualification."
+  "native_source_change_gate": "Current runtime, auth, fixture, worker, policy and qualification-source hashes must match the retained native campaign; changed source requires fresh qualification.",
+  "rejected_first_CI_profile": {
+    "run": 40268613212,
+    "head": "d9befdea4c5ec4b932d7471295cdfbc93f6f5ab4",
+    "history_lane_seconds": 280,
+    "history_reserve_seconds": 20,
+    "required_reserve_seconds": 30,
+    "accepted_for_merge": false,
+    "response": "Move the complete 49-method authenticated-review group to the existing backend phase and the single production build to the existing final-authorization job. No dropped tests, additional jobs, concurrent workers or deadline increases."
+  }
 }
