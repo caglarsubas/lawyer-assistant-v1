@@ -7732,3 +7732,47 @@ without replay, retaining the read fence and all four histories. Genuine route
 cutover, appointments/key custody, PostgreSQL/IdP, off-host recovery, signed live
 provider qualification and legal acceptance remain open. These disposable results
 do not authorize production activation, private-case migration or inference.
+
+
+## Guarded admitted journal recovery and finish reconciliation — 2026-10-27
+
+Qualify explicit metadata repair of retained maintenance/destination records and
+read-only interrupted-finish reconciliation. Actor-bound observation pins exact
+heads/tips, all four histories, physical scope and current canonical context. Only
+the selected external anchor may append its existing admitted frame. No event,
+admission, stage, decision, selection or transition is rewritten or replayed.
+
+Unanchored opening and selection keep the existing inventory fence. A retained
+finish is distinguished from anchored completion. Lost finish/repair replies
+reconcile against exact metadata without repeating mutation. Missing admission,
+stale or borrowed pins, copied roots, wrong changes and clock rollback reject
+before repair; simultaneous pending journals are observed but not implicitly
+repaired jointly. Expiry, withdrawal and revoked reviews remain effective after
+metadata repair. The original writer and old-cursor/legacy boundaries remain.
+
+The frozen native campaign passes **16 scenarios / 32 loopback servers /
+889 HTTP requests in 90.03 seconds**, using actual local app authentication. It
+retains the 180-second cap, two CPUs, 768 MiB, 96 PIDs, four fresh distinct ext4
+volumes and no external network. All **87 current source pins**, including all
+**78 prior destination-maintenance dependencies**, remain exact. Source/report
+gates reject missing evidence, changed outcomes, altered budgets and stale code.
+
+All **968 deployment methods** must execute once over seven disjoint assignments
+in the same nine CI jobs. New cases share existing backend and graph-runtime
+reserves. Frontend coverage, worker peaks and deadlines remain unchanged. Nine
+exact-head checks, five 30-second timing reserves, pinned-head merge and
+independently fetched-main tree equality remain required.
+
+Work backlog stays **51 unfinished: 21 open / 24 waiting / 6 deferred**. Checklist
+stays **42 done / 21 open / 24 waiting / 6 deferred** across 93 items; workstream
+readiness stays **0 ready / 9 partial / 4 waiting / 1 planned**. A verified merge
+advances engineering delivery separately. The canonical ledger advances
+**248 → 249** sections; no parent gate or owner private-analysis review closes.
+
+See the [journal recovery contract](JOURNAL_RECOVERY.md) and
+[dated evidence](evidence/journal-recovery-2026-10-27.json). Next qualify explicit
+jointly pending maintenance/destination recovery with exact per-anchor progress
+reconciliation and no replay. Genuine appointments/key custody, production
+PostgreSQL/IdP, off-host rollback protection, live provider qualification and
+legal acceptance remain separate. No production activation, private-case
+migration, provider request or inference is authorized by these disposable results.

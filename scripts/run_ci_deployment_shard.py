@@ -104,6 +104,9 @@ def namespace_assignments(ids, profile=None):
 
 
 def shard(test_id, lifecycle_ids, namespace):
+    if test_id.startswith("test_journal_recovery.JournalRecoveryContracts."):
+        case = re.search(r"\.test_case_G([0-9]{2})_", test_id)
+        return 4 if case and int(case[1]) <= 8 else 3
     if test_id.startswith("test_destination_change.DestinationChangeContracts."):
         return 3  # Existing isolated two-worker reserve; no frontend tail.
     if test_id in namespace:
