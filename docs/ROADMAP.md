@@ -7683,3 +7683,52 @@ fence. Genuine route cutover, operator appointments, key custody, PostgreSQL/IdP
 off-host recovery, signed live provider/context/five-job qualification and legal
 acceptance remain open. These disposable results do not authorize production
 activation, private-case migration, provider requests or inference.
+
+
+## Guarded destination lifecycle after namespace transition — 2026-10-26
+
+Add a separately reviewed maintenance window for exact destination retirement,
+renewal or rollback. A fourth journal records the reviewed intent and verified
+finish while preserving both reader histories and the prior transition lineage.
+Legacy history stays unchanged; destination/transition histories retain every
+original record and append new evidence only. Physical namespace bindings are
+revalidated before maintenance operations.
+
+Opening fences all inventory. Renewal and rollback require a fresh child stage,
+independent reader review and selection, then a fresh independent namespace
+transition review. Explicit finish binds the exact new destination head and
+transition commit. Retirement leaves reads blocked without legacy fallback.
+Legacy selections are historical references, not renewed permissions: expiry can
+be followed by genuinely fresh destination/transition authority while old grants
+remain expired. Status, lost-reply reconciliation and competing-write handling
+never replay a mutation or manufacture admission evidence.
+
+The accepted frozen qualification passes **20 scenarios / 40 actual loopback
+servers / 975 HTTP requests in 112.84 seconds**, with real local session/RBAC
+checks and four fresh ext4 retention volumes. The
+campaign retains two CPUs, 768 MiB, 96 PIDs, no external network and the existing
+180-second limit. A separate copied-root regression protects physical identity;
+all 68 prior namespace source pins remain unchanged. Final native source hashes,
+report grading and complete-manifest checks are required before publication.
+Earlier unaccepted/superseded native candidates remain retained separately; no
+outcome, assertion or resource threshold is relaxed.
+
+All 943 deployment methods must execute once across seven disjoint assignments
+in the same nine jobs. The new workflow cases use the existing backend two-worker
+reserve. No job, frontend case, worker peak or deadline is added or removed.
+Nine exact-head checks, five 30-second timing reserves, pinned-head merge and
+independently fetched-main tree equality remain required.
+
+Work backlog stays **51 unfinished: 21 open / 24 waiting / 6 deferred**.
+Checklist stays **42 done / 21 open / 24 waiting / 6 deferred** across 93 items;
+readiness stays **0 ready / 9 partial / 4 waiting / 1 planned**. A verified merge
+advances the engineering delivery counter separately. The canonical ledger
+advances **247 → 248** sections; no parent qualification or owner review is closed.
+
+See the [destination lifecycle contract](DESTINATION_CHANGE.md) and
+[dated evidence](evidence/destination-change-2026-10-26.json). Next qualify exact
+maintenance/destination journal recovery and interrupted-finish reconciliation
+without replay, retaining the read fence and all four histories. Genuine route
+cutover, appointments/key custody, PostgreSQL/IdP, off-host recovery, signed live
+provider qualification and legal acceptance remain open. These disposable results
+do not authorize production activation, private-case migration or inference.
