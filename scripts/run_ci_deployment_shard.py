@@ -34,7 +34,11 @@ def collect():
 
 
 def shard(test_id):
-    if test_id.startswith(("test_staged_reader.StagedReaderContracts.", "test_authenticated_operator_review.AuthenticatedOperatorContracts.")):
+    if test_id.startswith("test_reader_lifecycle.ReaderLifecycleContracts."):
+        return 4  # Bounded new group, sequentially in the same backend job.
+    if test_id.startswith("test_authenticated_operator_review.AuthenticatedOperatorContracts."):
+        return 1  # Existing frontend reserve; keep the history lane unchanged.
+    if test_id.startswith("test_staged_reader.StagedReaderContracts."):
         return 3  # Complete authenticated groups use the existing backend reserve.
     key = int.from_bytes(hashlib.sha256(test_id.encode()).digest()[:4], "big")
     # Measured authenticated cases use a stable 2:3 x86/ARM weighting.
@@ -48,10 +52,10 @@ def digest(ids):
 
 def plan(tests, manifest, selected):
     ids = [test.id() for test in tests]
-    if (selected not in {1, 2, 3} or manifest != {"schema": "complete-deployment-test-manifest-v1", "test_ids": ids}
+    if (selected not in {1, 2, 3, 4} or manifest != {"schema": "complete-deployment-test-manifest-v1", "test_ids": ids}
             or ids != sorted(set(ids)) or not ids):
         raise ValueError("Source-bound complete test manifest required")
-    sets = [{ident for ident in ids if shard(ident) == lane} for lane in (1, 2, 3)]
+    sets = [{ident for ident in ids if shard(ident) == lane} for lane in (1, 2, 3, 4)]
     if not all(sets) or any(a & b for n, a in enumerate(sets) for b in sets[n + 1:]) or set.union(*sets) != set(ids):
         raise ValueError("Complete disjoint shards required")
     return [test for test in tests if test.id() in sets[selected - 1]]
@@ -83,7 +87,7 @@ def verify(result, expected):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--shard", type=int, choices=(1, 2, 3), required=True)
+    parser.add_argument("--shard", type=int, choices=(1, 2, 3, 4), required=True)
     parser.add_argument("--report", type=Path, required=True)
     args = parser.parse_args()
     tests = collect()
@@ -91,7 +95,7 @@ def main():
     selected = plan(tests, json.loads(raw), args.shard)
     expected = [test.id() for test in selected]
     result = unittest.TextTestRunner(resultclass=ExecutedResult).run(unittest.TestSuite(selected))
-    report = {"schema": "deployment-shard-result-v1", "shard": args.shard, "total_shards": 3,
+    report = {"schema": "deployment-shard-result-v1", "shard": args.shard, "total_shards": 4,
               "manifest_sha256": hashlib.sha256(raw).hexdigest(), "complete_suite_sha256": digest([test.id() for test in tests]),
               "selected_ids": expected, "executed_ids": result.executed_ids, "tests_run": result.testsRun,
               "case_seconds": result.case_seconds,

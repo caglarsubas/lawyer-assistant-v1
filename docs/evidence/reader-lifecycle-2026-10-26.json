@@ -1,0 +1,114 @@
+{
+  "schema": "reader-lifecycle-evidence-v1",
+  "client_date": "2026-10-26",
+  "base_commit": "235c633d389d1f8936367cc73db7acf720a04788",
+  "status": "partial",
+  "native": {
+    "cases_passed": 22,
+    "actual_loopback_servers": 44,
+    "actual_HTTP_requests": 615,
+    "actual_app_session_and_RBAC_checks": true,
+    "disposable_accounts_only": true,
+    "independent_controls_external": true,
+    "read_only_reconciliation": true,
+    "independently_reviewed_reader_selection": true,
+    "runtime_installation": false,
+    "legal_qualification": false
+  },
+  "native_campaign_seconds": 123.8,
+  "native_campaign_seconds_cap": 180,
+  "report_sha256": "ad0bda10914b38915dc559f6b943d221976452d1aa836e3cf46c7a5ddb099f55",
+  "native_accepted_campaigns": 1,
+  "native_attempts_per_case": 1,
+  "native_setup": {
+    "rejected_preparations_before_campaign": 2,
+    "cases_run_in_rejected_preparations": 0,
+    "correction": "Independent read-only probe now matches the root preparation posture. The approved source owner matches the observed read-only mount. Ownership checks and all runtime sources, scenarios and expected outcomes remain unchanged.",
+    "preparation_process_uid": 0,
+    "approved_mounted_source_owner_uid": 0,
+    "host_uid": 501,
+    "initial_probe_default_user_uid": 10001,
+    "all_rejected_resources_removed": true
+  },
+  "resources": {
+    "CPU": 2,
+    "memory_MiB": 768,
+    "PID_limit": 96,
+    "filesystems": "four separate ext4 volumes",
+    "network": "none"
+  },
+  "native_cleanup": {
+    "accepted_campaign_containers_removed": 2,
+    "accepted_campaign_volumes_removed": 4,
+    "rejected_setup_containers_removed": 2,
+    "rejected_setup_volumes_removed": 8,
+    "preexisting_resources_removed": 0
+  },
+  "deployment_contracts": {
+    "passed": 886,
+    "shard_counts": [
+      422,
+      418,
+      22,
+      24
+    ],
+    "source_manifest_exactly_once": true,
+    "jobs": 9,
+    "existing_job_caps_and_concurrent_worker_budgets_unchanged": true,
+    "local_summed_case_seconds": [
+      130.97,
+      140.39,
+      48.38,
+      53.96
+    ]
+  },
+  "local_correction": "Initial replay returned 400 instead of 409; explicit replay checks now precede lineage validation. The revoked-reviewer scenario now attempts selection by the preparer after the independent approval session is revoked, testing stale approval use rather than sign-in denial. Frozen expected statuses did not change. Initial failures remain retained.",
+  "old_native_source_pins_exact": 48,
+  "new_native_source_pins": 58,
+  "prior_source_files": 1115,
+  "exact_prior_source_files": 1110,
+  "intentional_prior_source_changes": [
+    ".github/workflows/ci.yml",
+    "deploy/fixtures/deployment_test_manifest.json",
+    "deploy/test_deployment_ci_placement.py",
+    "deploy/test_deployment_shards.py",
+    "scripts/run_ci_deployment_shard.py"
+  ],
+  "implementation_sha256": {
+    "scripts/reader_lifecycle.py": "0b6f5454a3c9762187a78066e7e701efed268de1b8563fffff94681607dfba8b",
+    "scripts/reader_lifecycle_log.py": "86b8af3875d2a335e06e0e5c25d580189f0dbe2bbcb240a1f5088b3407c5469e",
+    "scripts/reader_lifecycle_fixture.py": "51e283c05e9125e69c4b5ce9e8ff1881fc9ab717db967761f5d9286e3da78f57",
+    "scripts/reader_lifecycle_worker.py": "fee92609cf64ce6771ae6839b7433c645c24368a4ea019149fdad49e6535fbfb",
+    "scripts/reader_lifecycle_native.py": "b9334c15f9acfd02733ecab19336abd0c0d9d6d1bea9ae59bf5e0a6f89c685c7",
+    "scripts/reader_lifecycle_report.py": "187410d80bf739679faa3624f4d27996aec7e6ead49d14be784dcda9c77bb74f",
+    "deploy/test_reader_lifecycle.py": "625efb230e24ac64ef7ddb0f5443b2239228c9fb19bf0fe10d947f9d677f44b3",
+    "deploy/test_reader_lifecycle_report.py": "d198bbce73e3194e32f249df08b10a7b7a8906167efb5494d69843282fc78c75",
+    "deploy/test_reader_lifecycle_source.py": "f5485b74c93a02c306f0b420f80f4c4d9d1392d12668fe81282a57ae1e2285cd"
+  },
+  "backlog": {
+    "total_unfinished": 51,
+    "open": 21,
+    "waiting": 24,
+    "deferred": 6,
+    "catalog_total": 93,
+    "done": 42,
+    "existing_statuses_unchanged": true
+  },
+  "readiness": {
+    "ready": 0,
+    "partial": 9,
+    "waiting": 4,
+    "planned": 1,
+    "all_status_deltas_zero": true
+  },
+  "roadmap_sections_before": 245,
+  "roadmap_sections_after": 246,
+  "owner_focused_analysis_v3_review": "pending",
+  "private_case_inputs": false,
+  "real_trust_enrolled": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_installation": false,
+  "legal_qualification": false,
+  "native_source_change_gate": "All 58 current source/policy pins must match the retained native campaign; changed runtime or qualification source requires fresh native qualification."
+}

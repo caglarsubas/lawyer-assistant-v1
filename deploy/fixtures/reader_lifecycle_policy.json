@@ -1,0 +1,108 @@
+{
+  "schema": "reader-lifecycle-qualification-v1",
+  "cases": [
+    {
+      "id": "C01_retirement_blocks",
+      "expected": 200
+    },
+    {
+      "id": "C02_expired_retired_renewal",
+      "expected": 200
+    },
+    {
+      "id": "C03_fresh_rollback",
+      "expected": 200
+    },
+    {
+      "id": "C04_old_decision_reuse",
+      "expected": 409
+    },
+    {
+      "id": "C05_self_review",
+      "expected": 409
+    },
+    {
+      "id": "C06_denied_renewal",
+      "expected": 409
+    },
+    {
+      "id": "C07_wrong_predecessor",
+      "expected": 400
+    },
+    {
+      "id": "C08_withdrawal_pending_rollback",
+      "expected": 409
+    },
+    {
+      "id": "C09_retired_old_read",
+      "expected": 409
+    },
+    {
+      "id": "C10_retirement_race",
+      "expected": 409
+    },
+    {
+      "id": "C11_lost_retirement_reply",
+      "expected": 200
+    },
+    {
+      "id": "C12_unanchored_retirement",
+      "expected": 200
+    },
+    {
+      "id": "C13_missing_retirement_intent",
+      "expected": 400
+    },
+    {
+      "id": "C14_superseded_retirement",
+      "expected": 409
+    },
+    {
+      "id": "C15_expired_renewal",
+      "expected": 409
+    },
+    {
+      "id": "C16_revoked_reviewer",
+      "expected": 403
+    },
+    {
+      "id": "C17_cross_renewal_cursor",
+      "expected": 409
+    },
+    {
+      "id": "C18_source_changed",
+      "expected": 409
+    },
+    {
+      "id": "C19_stage_tampered",
+      "expected": 400
+    },
+    {
+      "id": "C20_initial_mode_bypass",
+      "expected": 400
+    },
+    {
+      "id": "C21_unknown_rollback_target",
+      "expected": 400
+    },
+    {
+      "id": "C22_post_withdrawal_renewal",
+      "expected": 200
+    }
+  ],
+  "native_attempts_per_case": 1,
+  "min_distinct_worker_processes": 2,
+  "max_events": 256,
+  "max_proposal_seconds": 300,
+  "max_page_rows": 8,
+  "retirement_permanent_per_selection": true,
+  "fresh_independent_decision_for_succession": true,
+  "canonical_fence_on_every_read": true,
+  "disposable_accounts_only": true,
+  "model_verification_seconds": 20,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "real_trust_enrolled": false,
+  "runtime_installation": false,
+  "production_activation": false
+}
