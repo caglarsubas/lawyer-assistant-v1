@@ -1,0 +1,100 @@
+{
+  "schema": "reader-namespace-qualification-v1",
+  "cases": [
+    {
+      "id": "N01_reviewed_transition",
+      "expected": 200
+    },
+    {
+      "id": "N02_self_review",
+      "expected": 409
+    },
+    {
+      "id": "N03_denied_transition",
+      "expected": 409
+    },
+    {
+      "id": "N04_legacy_advanced",
+      "expected": 409
+    },
+    {
+      "id": "N05_destination_advanced",
+      "expected": 409
+    },
+    {
+      "id": "N06_canonical_withdrawal",
+      "expected": 409
+    },
+    {
+      "id": "N07_legacy_tampered",
+      "expected": 400
+    },
+    {
+      "id": "N08_destination_tampered",
+      "expected": 400
+    },
+    {
+      "id": "N09_lost_commit_reply",
+      "expected": 200
+    },
+    {
+      "id": "N10_unanchored_commit",
+      "expected": 200
+    },
+    {
+      "id": "N11_missing_admission",
+      "expected": 400
+    },
+    {
+      "id": "N12_competing_commits",
+      "expected": 409
+    },
+    {
+      "id": "N13_expired_transition",
+      "expected": 409
+    },
+    {
+      "id": "N14_revoked_reviewer",
+      "expected": 403
+    },
+    {
+      "id": "N15_old_cursor",
+      "expected": 409
+    },
+    {
+      "id": "N16_no_namespace_bypass",
+      "expected": 409
+    },
+    {
+      "id": "N17_wrong_subject_pin",
+      "expected": 409
+    },
+    {
+      "id": "N18_readonly_lineage",
+      "expected": 200
+    },
+    {
+      "id": "N19_retired_destination",
+      "expected": 409
+    },
+    {
+      "id": "N20_preserved_retirement_lineage",
+      "expected": 200
+    }
+  ],
+  "native_attempts_per_case": 1,
+  "min_distinct_worker_processes": 2,
+  "max_events": 256,
+  "max_transition_seconds": 300,
+  "max_page_rows": 8,
+  "both_reader_histories_unchanged_by_transition": true,
+  "fresh_independent_transition_review": true,
+  "canonical_fence_on_every_read": true,
+  "disposable_accounts_only": true,
+  "model_verification_seconds": 20,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "real_trust_enrolled": false,
+  "runtime_installation": false,
+  "production_activation": false
+}

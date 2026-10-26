@@ -17,13 +17,16 @@ class DeploymentShardContracts(unittest.TestCase):
     def test_all_shards_cover_each_test_exactly_once(self):
         tests = runner.collect()
         manifest = json.loads(runner.MANIFEST.read_text())
-        a, b, c, d, e, f = [{test.id() for test in runner.plan(tests, manifest, n)} for n in (1, 2, 3, 4, 5, 6)]
-        shards = (a, b, c, d, e, f)
+        a, b, c, d, e, f, g = [{test.id() for test in runner.plan(tests, manifest, n)} for n in (1, 2, 3, 4, 5, 6, 7)]
+        shards = (a, b, c, d, e, f, g)
         self.assertFalse(any(left & right for i, left in enumerate(shards) for right in shards[i + 1:]))
-        self.assertEqual(a | b | c | d | e | f, {test.id() for test in tests})
+        self.assertEqual(a | b | c | d | e | f | g, {test.id() for test in tests})
         self.assertEqual(c, {test.id() for test in tests if test.id().startswith(("test_staged_reader.StagedReaderContracts.", "test_authenticated_operator_review.AuthenticatedOperatorContracts."))})
         self.assertEqual(d | e | f, {test.id() for test in tests if test.id().startswith("test_reader_lifecycle.ReaderLifecycleContracts.")})
         self.assertEqual([len(d), len(e), len(f)], [12, 4, 8])
+        self.assertEqual(g, {test.id() for test in tests if test.id().startswith("test_reader_namespace.ReaderNamespaceContracts.")})
+        namespace = json.loads((ROOT / "deploy/fixtures/reader_namespace_policy.json").read_text())
+        self.assertEqual({"test_reader_namespace.ReaderNamespaceContracts.test_case_" + row["id"] for row in namespace["cases"]}, {ident for ident in g if ".test_case_" in ident})
         lifecycle = json.loads((ROOT / "deploy/fixtures/reader_lifecycle_policy.json").read_text())
         self.assertEqual({"test_reader_lifecycle.ReaderLifecycleContracts.test_case_" + row["id"] for row in lifecycle["cases"]}, {ident for ident in d | e | f if ".test_case_" in ident})
         policy = json.loads((ROOT / "deploy/fixtures/staged_reader_policy.json").read_text())
@@ -39,7 +42,7 @@ class DeploymentShardContracts(unittest.TestCase):
             expected = {prefix + row["id"] for row in json.loads((ROOT / "deploy/fixtures" / policy).read_text())["cases"]}
             if module == "test_authenticated_operator_review":
                 self.assertEqual({name for name in c if name.startswith(prefix)}, expected)
-                self.assertFalse(expected & (a | b | d | e | f))
+                self.assertFalse(expected & (a | b | d | e | f | g))
             else:
                 self.assertEqual({name for name in a | b if name.startswith(prefix)}, expected)
                 self.assertTrue(expected & a)
