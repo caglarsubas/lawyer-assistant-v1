@@ -98,6 +98,12 @@ jobs:
         working-directory: frontend
       - name: Lint Python
         run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
+      # The new authenticated reader cases run once here, sequentially before
+      # pytest, rather than exhausting the frontend lane's measured 32s reserve.
+      # Same nine jobs, at most two concurrent workers, and unchanged job caps.
+      - name: Test manifest-bound staged reader qualification
+        timeout-minutes: 2
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=3 --report=${{ runner.temp }}/deployment-reader-results.json
       - name: Record nonsecret test runtime characteristics
         run: |
           python - <<'PY'

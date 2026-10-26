@@ -14,12 +14,15 @@ class DeploymentShardContracts(unittest.TestCase):
         tests = runner.collect()
         self.assertEqual(json.loads(runner.MANIFEST.read_text()), {"schema": "complete-deployment-test-manifest-v1", "test_ids": [test.id() for test in tests]})
 
-    def test_both_shards_cover_each_test_exactly_once(self):
+    def test_all_shards_cover_each_test_exactly_once(self):
         tests = runner.collect()
         manifest = json.loads(runner.MANIFEST.read_text())
-        a, b = [{test.id() for test in runner.plan(tests, manifest, n)} for n in (1, 2)]
-        self.assertFalse(a & b)
-        self.assertEqual(a | b, {test.id() for test in tests})
+        a, b, c = [{test.id() for test in runner.plan(tests, manifest, n)} for n in (1, 2, 3)]
+        self.assertFalse(a & b or a & c or b & c)
+        self.assertEqual(a | b | c, {test.id() for test in tests})
+        self.assertEqual(c, {test.id() for test in tests if test.id().startswith("test_staged_reader.StagedReaderContracts.")})
+        policy = json.loads((ROOT / "deploy/fixtures/staged_reader_policy.json").read_text())
+        self.assertEqual({"test_staged_reader.StagedReaderContracts.test_case_" + row["id"] for row in policy["cases"]}, {ident for ident in c if ".test_case_" in ident})
         for module, cls, policy in [("test_authenticated_operator_review", "AuthenticatedOperatorContracts", "authenticated_operator_policy.json"),
                                     ("test_anchored_operator_review", "AnchoredReviewContracts", "anchored_review_policy.json"),
                                     ("test_history_backup", "HistoryBackupContracts", "history_backup_policy.json"),

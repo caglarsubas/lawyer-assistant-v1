@@ -1,0 +1,109 @@
+{
+  "schema": "staged-reader-and-backlog-evidence-v1",
+  "client_date": "2026-10-26",
+  "base_commit": "4c112abc6ae7a9b856e0ded09a71b559296ad29b",
+  "status": "partial",
+  "native": {
+    "cases_passed": 20,
+    "actual_loopback_servers": 40,
+    "actual_HTTP_requests": 434,
+    "actual_app_session_and_RBAC_checks": true,
+    "disposable_accounts_only": true,
+    "independent_controls_external": true,
+    "read_only_reconciliation": true,
+    "independently_reviewed_reader_selection": true,
+    "runtime_installation": false,
+    "legal_qualification": false
+  },
+  "native_campaign_seconds": 93.96,
+  "report_sha256": "788fefe6362b3bbb88d3028a4d73fddcdab348e12d31492dd883cb79d839055e",
+  "native_accepted_attempts": 1,
+  "resources": {
+    "CPU": 2,
+    "memory_MiB": 768,
+    "PID_limit": 96,
+    "campaign_seconds_cap": 180,
+    "filesystems": "four separate ext4 volumes",
+    "network": "none"
+  },
+  "native_cleanup": {
+    "owned_containers_removed": 2,
+    "owned_volumes_removed": 4,
+    "preexisting_resources_removed": 0
+  },
+  "launcher_display_count_discrepancy": "Retained stdout labels native_cases as 26. Actual assertions, frozen policy, retained report and grader verify 20; no report or case was rewritten.",
+  "deployment_contracts": {
+    "passed": 857,
+    "shard_counts": [
+      385,
+      450,
+      22
+    ],
+    "local_summed_case_seconds": [
+      74.23,
+      97.42,
+      20.97
+    ],
+    "source_manifest_exactly_once": true,
+    "new_reader_methods_in_existing_backend_job": 22,
+    "jobs": 9,
+    "existing_job_caps_and_concurrent_worker_budgets_unchanged": true
+  },
+  "local_correction": "The old placement contract expected two shards; updated it to require all three disjoint assignments before the backend tail. The affected lane passes after correction; the initial local failure remains retained.",
+  "backlog": {
+    "total_unfinished": 51,
+    "open": 21,
+    "waiting": 24,
+    "deferred": 6,
+    "catalog_total": 93,
+    "done": 42,
+    "existing_statuses_unchanged": true,
+    "browser_checks": [
+      "PR-filter explanation",
+      "navigation clears PR search",
+      "all 51 unfinished items",
+      "21 open filter",
+      "24 waiting filter",
+      "filtered empty state returns to full backlog"
+    ]
+  },
+  "readiness": {
+    "ready": 0,
+    "partial": 9,
+    "waiting": 4,
+    "planned": 1,
+    "all_status_deltas_zero": true
+  },
+  "prior_source_files": 1102,
+  "exact_prior_source_files": 1097,
+  "intentional_prior_source_changes": [
+    ".github/workflows/ci.yml",
+    "deploy/fixtures/deployment_test_manifest.json",
+    "deploy/test_deployment_ci_placement.py",
+    "deploy/test_deployment_shards.py",
+    "scripts/run_ci_deployment_shard.py"
+  ],
+  "implementation_sha256": {
+    "scripts/staged_reader.py": "a25bc7c766d83cd8e61ad47af5bdc6575534ec5aeb876bcb36e9bcfdb625a7d6",
+    "scripts/staged_reader_log.py": "d139a2b917789cd4edbcb77d7c594370782954f07e3b6647101291072224f8b6",
+    "scripts/staged_reader_fixture.py": "c08f2d6b3b505587abb07e9cfb337393db325a4de23083094fc092d3a3be051f",
+    "scripts/staged_reader_worker.py": "5b78f8aa86981ffc66d66fac3dc5890bfe266f72d6c25f22cd02a6189e50ccf8",
+    "scripts/staged_reader_native.py": "08186b1d73e24efeed1f7285cd202a882a54435792c140adc50d91350e9f4974",
+    "scripts/staged_reader_report.py": "d76771e0cc1fb430a109e0282cbfd888fdf026033f837b89303078fdfe736d63",
+    "scripts/roadmap_backlog.py": "5c235cfb9fa1792f8937c55830fe4e49838026a7edaf8b09b96ffea06b60094d",
+    "docs/tracker/delivery-views.js": "e4984c7d5e2687962b07bcdbc78574256a2bfda60a912117b5d6c045e7b99db9",
+    "docs/tracker/delivery-views.css": "0cb77e50fed3d298aa1a54342ebe5ad9acd1bb6592059106f53451c519a6f203",
+    "docs/tracker/progress.js": "c73298d44e6eee48841072b6a9b44339240fa269e67494a368e53e04d6a56516",
+    "deploy/test_staged_reader_source.py": "f8969504af504c14a1b3d2c7b6d7254e029c6b04a75ce3bad3d78112a0277857"
+  },
+  "roadmap_sections_before": 244,
+  "roadmap_sections_after": 245,
+  "owner_focused_analysis_v3_review": "pending",
+  "private_case_inputs": false,
+  "real_trust_enrolled": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_installation": false,
+  "legal_qualification": false,
+  "native_source_change_gate": "Current runtime, auth, fixture, worker, policy and qualification-source hashes must match the retained native campaign; changed source requires fresh qualification."
+}
