@@ -64,10 +64,17 @@ ext4 volumes and no external network, within the existing 180-second cap.
 All prior destination-maintenance source pins are retained. Source/report gates
 bind the new runtime, adapters, fixtures, policy and tests to the exact native
 campaign. Complete deployment discovery remains disjoint across the same seven
-assignments and nine CI jobs. New cases share existing backend and graph-runtime
+assignments and nine CI jobs. New cases share existing backend and frontend
 reserves; no frontend case, worker peak or deadline changes. Merge requires nine
 exact-head checks, five reserves of at least 30 seconds, a pinned-head merge and
 independently fetched-main tree equality.
+
+The first CI placement passed graph tests but left only 18 seconds under its
+360-second job cap. Its eight new contracts took 33.196 seconds; they move to the
+existing frontend contract worker, which had 88 seconds of measured reserve.
+The native-qualified implementation and all source pins remain unchanged. Fresh
+exact-head CI must still prove the five reserves; a passing test status alone
+cannot authorize merge.
 
 Joint recovery, off-host/rollback-resistant custody, production PostgreSQL/IdP,
 genuine operator appointments, live provider qualification and legal acceptance

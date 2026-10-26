@@ -7758,8 +7758,9 @@ volumes and no external network. All **87 current source pins**, including all
 gates reject missing evidence, changed outcomes, altered budgets and stale code.
 
 All **968 deployment methods** must execute once over seven disjoint assignments
-in the same nine CI jobs. New cases share existing backend and graph-runtime
-reserves. Frontend coverage, worker peaks and deadlines remain unchanged. Nine
+in the same nine CI jobs. New cases share existing backend and frontend
+reserves. The first graph placement left only 18 seconds; its eight new contracts
+move to the measured 88-second frontend reserve, with fresh timing gates. Frontend coverage, worker peaks and deadlines remain unchanged. Nine
 exact-head checks, five 30-second timing reserves, pinned-head merge and
 independently fetched-main tree equality remain required.
 
