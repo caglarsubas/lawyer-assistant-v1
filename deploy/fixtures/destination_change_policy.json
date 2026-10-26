@@ -1,0 +1,103 @@
+{
+  "schema": "destination-change-qualification-v1",
+  "cases": [
+    {
+      "id": "D01_reviewed_renewal",
+      "expected": 200
+    },
+    {
+      "id": "D02_expired_legacy_new_authority",
+      "expected": 200
+    },
+    {
+      "id": "D03_reviewed_retirement",
+      "expected": 200
+    },
+    {
+      "id": "D04_fresh_rollback",
+      "expected": 200
+    },
+    {
+      "id": "D05_self_review",
+      "expected": 409
+    },
+    {
+      "id": "D06_denied_window",
+      "expected": 409
+    },
+    {
+      "id": "D07_unopened_step",
+      "expected": 409
+    },
+    {
+      "id": "D08_old_decision_reuse",
+      "expected": 409
+    },
+    {
+      "id": "D09_canonical_withdrawal",
+      "expected": 409
+    },
+    {
+      "id": "D10_changed_stage",
+      "expected": 400
+    },
+    {
+      "id": "D11_revoked_reviewer",
+      "expected": 403
+    },
+    {
+      "id": "D12_expired_window",
+      "expected": 409
+    },
+    {
+      "id": "D13_lost_open_reply",
+      "expected": 200
+    },
+    {
+      "id": "D14_lost_selection_reply",
+      "expected": 200
+    },
+    {
+      "id": "D15_lost_transition_reply",
+      "expected": 200
+    },
+    {
+      "id": "D16_readonly_reconciliation",
+      "expected": 200
+    },
+    {
+      "id": "D17_early_finish",
+      "expected": 409
+    },
+    {
+      "id": "D18_missing_window_admission",
+      "expected": 400
+    },
+    {
+      "id": "D19_competing_open",
+      "expected": 409
+    },
+    {
+      "id": "D20_competing_selection",
+      "expected": 409
+    }
+  ],
+  "native_attempts_per_case": 1,
+  "min_distinct_worker_processes": 2,
+  "max_events": 256,
+  "max_proposal_seconds": 300,
+  "max_page_rows": 8,
+  "model_verification_seconds": 20,
+  "legacy_history_immutable": true,
+  "destination_history_append_only": true,
+  "fresh_independent_window_reader_and_transition_review": true,
+  "no_inventory_during_change": true,
+  "no_legacy_authority_reactivated": true,
+  "canonical_fence_on_every_read": true,
+  "disposable_accounts_only": true,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "real_trust_enrolled": false,
+  "runtime_installation": false,
+  "production_activation": false
+}

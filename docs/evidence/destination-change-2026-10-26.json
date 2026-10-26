@@ -1,0 +1,164 @@
+{
+  "schema": "destination-change-evidence-v1",
+  "client_date": "2026-10-26",
+  "base_commit": "7ece6b8740eaaf7c0aac50a9414c66b0582f8401",
+  "status": "partial",
+  "native": {
+    "cases_passed": 20,
+    "actual_loopback_servers": 40,
+    "actual_HTTP_requests": 975,
+    "actual_app_session_and_RBAC_checks": true,
+    "disposable_accounts_only": true,
+    "legacy_history_immutable": true,
+    "destination_and_transition_prefixes_preserved": true,
+    "runtime_installation": false,
+    "legal_qualification": false
+  },
+  "native_campaign_seconds": 108.77,
+  "native_campaign_seconds_cap": 180,
+  "native_report_sha256": "d7f8f8963b441548c48780465f55390987444e1126bcb2ae0061a22f4a2a1f41",
+  "accepted_frozen_campaigns": 1,
+  "accepted_campaign_attempts_per_case": 1,
+  "prior_native_candidates": [
+    {
+      "candidate": "qualified-candidate",
+      "accepted": false,
+      "completed_cases": 13,
+      "failed_case": "D14_lost_selection_reply",
+      "reason": "Separate-process reader selection checkpoint was not wired. Corrected checkpoint wiring and status qualification so pending/denied/finished windows never report a current grant. Fresh source-bound campaign required.",
+      "all_owned_resources_removed": true
+    },
+    {
+      "candidate": "qualified-candidate-v2",
+      "accepted": false,
+      "completed_cases": 20,
+      "passed": true,
+      "seconds": 116.08,
+      "reason": "Superseded before publication by the physical legacy/destination namespace pre-mutation guard and its copied-root regression. Final source requires a fresh campaign.",
+      "all_owned_resources_removed": true
+    },
+    {
+      "candidate": "qualified-candidate-v3",
+      "accepted": false,
+      "completed_cases": 20,
+      "passed": true,
+      "seconds": 112.88,
+      "reason": "Source-closure gate rejects a bundled old native-driver filename substitution: 77 source entries instead of all 78 required. Corrected unique source list and preserved every prior dependency; new frozen bundle and fresh volumes required.",
+      "all_owned_resources_removed": true
+    },
+    {
+      "candidate": "qualified-candidate-v4",
+      "accepted": false,
+      "completed_cases": 20,
+      "passed": true,
+      "seconds": 112.84,
+      "reason": "Superseded before merge by strict maintenance step/decision enums and current-time rollback rejection, with a no-append regression. Final source requires fresh qualification.",
+      "all_owned_resources_removed": true
+    }
+  ],
+  "resources": {
+    "CPU": 2,
+    "memory_MiB": 768,
+    "PID_limit": 96,
+    "retention_volumes": 4,
+    "filesystem": "ext4",
+    "network": "none"
+  },
+  "native_cleanup": {
+    "owned_containers_removed": 2,
+    "owned_volumes_removed": 4,
+    "preexisting_resources_removed": 0
+  },
+  "deployment_contracts": {
+    "passed": 944,
+    "shard_counts": [
+      384,
+      422,
+      86,
+      8,
+      7,
+      26,
+      11
+    ],
+    "source_manifest_exactly_once": true,
+    "existing_jobs": 9,
+    "isolated_parallel_assignments": [
+      3,
+      6
+    ],
+    "existing_worker_peak": 2,
+    "deadlines_and_frontend_coverage_unchanged": true,
+    "local_summed_case_seconds": [
+      106.936,
+      147.128,
+      64.186,
+      12.758,
+      11.431,
+      27.177,
+      19.971
+    ],
+    "local_wall_seconds": [
+      109.97,
+      149.87,
+      33.91,
+      13.71,
+      12.38,
+      15.34,
+      20.96
+    ]
+  },
+  "new_native_source_pins": 78,
+  "prior_namespace_source_pins_exact": 68,
+  "prior_source_files": 1138,
+  "exact_prior_source_files": 1136,
+  "intentional_prior_source_changes": [
+    "scripts/run_ci_deployment_shard.py",
+    "deploy/fixtures/deployment_test_manifest.json"
+  ],
+  "implementation_sha256": {
+    "deploy/fixtures/destination_change_policy.json": "6300e3ad217138531e06565ba0f098e7d5d264ca5c509f125b30a534277fa359",
+    "deploy/test_destination_change.py": "89de6d16e997e3ad94bf770ceb98236ce085c96cb8d8526a83487e2d13113412",
+    "deploy/test_destination_change_report.py": "6c1b681ffc75debfcb4fdff79e578d7149ea82d623221bc3361b8e8fbf643809",
+    "deploy/test_destination_change_source.py": "bd09374ce5237b4add389b4e71b053f97fd30859cd3c7c7f048e3feccff59c2d",
+    "scripts/destination_change.py": "58ddb5db7672d5ff01cedb79c082d7b8f3b67152eb710c9bafbdfccf0dce02fc",
+    "scripts/destination_change_fixture.py": "8dc3314473bf0e426432498817e32d15c589ab027b4e5e06aa72a97ea1522ff1",
+    "scripts/destination_change_log.py": "5cce178c625401a532aaad23c7d82943158c36b28476539938de631b716d79e1",
+    "scripts/destination_change_native.py": "d4b6777e392c5e3fc920a40fd573b75d70f9e3fa8207588a0c0cdf287e552ff6",
+    "scripts/destination_change_report.py": "16d23546bbddb23eab4a080a12e3cdc14882927456fab18f7764ee0992fc5044",
+    "scripts/destination_change_worker.py": "6ea4927f27e6aabad9d73554073c75f6e49677f939ffe997c91784e5a3e3be65",
+    "scripts/run_ci_deployment_shard.py": "dcecc0f52b490b61a67f25b78dfedfc7cb15a462058f11a2d176790d00919338",
+    "deploy/fixtures/deployment_test_manifest.json": "34225169d00628cd07da114e76c404cede731aff5f044dfd0249e4fc91dd2660"
+  },
+  "backlog": {
+    "total_unfinished": 51,
+    "open": 21,
+    "waiting": 24,
+    "deferred": 6,
+    "catalog_total": 93,
+    "done": 42,
+    "all_statuses_unchanged": true
+  },
+  "readiness": {
+    "ready": 0,
+    "partial": 9,
+    "waiting": 4,
+    "planned": 1
+  },
+  "roadmap_sections_before": 247,
+  "roadmap_sections_after": 248,
+  "owner_focused_analysis_v3_review": "pending",
+  "private_case_inputs": false,
+  "real_trust_enrolled": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_installation": false,
+  "legal_qualification": false,
+  "remaining_recovery": "Guarded recovery of unanchored maintenance/destination journals and interrupted finish; current actions fail closed and never manufacture admission or replay.",
+  "superseded_first_CI_head": {
+    "head": "bff8d016401953709be65fd5152851df6152895e",
+    "run": 40318331412,
+    "all_nine_checks_successful": true,
+    "accepted_for_final_merge": false,
+    "reason": "Final source adds closed maintenance step/decision enum validation and pre-mutation clock rollback rejection with a no-append regression."
+  }
+}

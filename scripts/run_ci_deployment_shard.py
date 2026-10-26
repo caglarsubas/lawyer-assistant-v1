@@ -104,6 +104,8 @@ def namespace_assignments(ids, profile=None):
 
 
 def shard(test_id, lifecycle_ids, namespace):
+    if test_id.startswith("test_destination_change.DestinationChangeContracts."):
+        return 3  # Existing isolated two-worker reserve; no frontend tail.
     if test_id in namespace:
         return namespace[test_id]
     if test_id.startswith("test_reader_namespace.ReaderNamespaceContracts."):
