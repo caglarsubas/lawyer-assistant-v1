@@ -7623,3 +7623,63 @@ history. Genuine identities/key custody, production IdP/PostgreSQL and off-host
 recovery, signed live provider/context/five-job qualification and legal acceptance
 remain open. No real provider request, inference, trust enrollment, application
 redeployment or private-case migration is authorized by these disposable results.
+
+
+## Reviewed reader namespace transition with both histories retained — 2026-10-26
+
+Qualify an explicit broker from the existing staged-reader namespace to the
+separately reviewed lifecycle-reader namespace. Preserve both schemas, identities,
+roots, anchors, admission evidence and complete histories byte-for-byte. A third
+journal records exact old/new heads, history digests, selections, source snapshot,
+canonical withdrawal context and fresh independent transition review.
+
+Destination selection needs its own fresh stage and review. A retired destination
+cannot be used; a freshly reviewed renewal keeps its earlier retirement history.
+Transition lifetime is bounded by both child grants and the preparer's session.
+No old approval is imported as new authority. Source, actor, scope and evidence
+checks run before commit and every read, with both namespace and canonical locks
+held through page assembly. Delegation cannot bypass review or reopen a legacy
+reader after commit. The original canonical writer remains unchanged.
+
+The frozen matrix passes **20 native scenarios / 40 actual loopback servers /
+675 HTTP requests** in **96.31 seconds** within the unchanged 180-second limit.
+Authorization, policy and retained-report/source gates remain required.
+It includes stale or damaged histories, withdrawal, denial, self-review, expiry,
+revocation, lost replies, exact recovery, missing admission, races, cursor/bypass
+prevention, wrong subject pins and retained retirement lineage. A separate source
+gate requires current runtime and qualification hashes to match the native report.
+
+All **915 deployment methods** must run exactly once across seven disjoint source-bound
+assignments. The first CI profile passes its tests but exceeds the frontend job cap. A closed
+source-bound work profile now maps exact namespace methods to measured reserves
+in existing assignments, with a small sequential slice in the existing PostgreSQL
+job. Missing, duplicate, stale or over-budget assignments fail before execution.
+A second profile is rejected for only 18 seconds of graph-runtime reserve; seven
+existing lifecycle methods move to the PostgreSQL contract slice under a bounded
+25-second measured increment, preserving every case and native source. Preserve nine jobs, existing caps, current concurrent
+workers and every frontend test. Merge requires nine exact-head checks, five
+30-second reserves, pinned-head merge and fetched-main full-tree equality.
+
+A third profile passes 4,061 backend tests but is cancelled at the 20-minute job
+cap after its serial preparation stack. Nine measured staged-reader methods and
+six namespace methods move to the retained-reader assignment. Only the backend
+and retained jobs use two isolated contract workers within their existing
+two-worker peak; frontend keeps its existing one-contract/one-Vitest overlap.
+Exact child receipt reconciliation rejects stale, missing, duplicate or failed
+work. No application, fixture semantics, native source, case, worker peak or
+deadline changes. Fresh checks and timing reserves remain required.
+
+Work backlog stays **51** unfinished: **21 open / 24 waiting / 6 deferred**.
+Checklist remains **42 done / 21 open / 24 waiting / 6 deferred** across 93 items.
+Readiness remains **0 ready / 9 partial / 4 waiting / 1 planned**. A verified merged
+PR advances engineering delivery, not these parent gates or the pending owner
+review. The canonical ledger advances **246 → 247** sections.
+
+See the [namespace-transition contract](READER_NAMESPACE_TRANSITION.md) and
+[dated evidence](evidence/reader-namespace-transition-2026-10-26.json). Next
+qualify guarded post-transition destination lifecycle changes with renewed
+independent transition review, preserving both histories and the legacy-read
+fence. Genuine route cutover, operator appointments, key custody, PostgreSQL/IdP,
+off-host recovery, signed live provider/context/five-job qualification and legal
+acceptance remain open. These disposable results do not authorize production
+activation, private-case migration, provider requests or inference.

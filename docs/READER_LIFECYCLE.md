@@ -86,3 +86,5 @@ The first CI profile passed frontend tests but had only 24 seconds of reserve
 and is rejected for merge. Its 65-second lifecycle group is redistributed without
 changing any scenario or expected result. Current exact-head checks and reserves
 must all pass; a green test count alone is insufficient.
+
+Subsequent engineering: [reviewed namespace transition](READER_NAMESPACE_TRANSITION.md) preserves this namespace and its prior qualification unchanged.

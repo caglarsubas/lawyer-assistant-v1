@@ -1,0 +1,205 @@
+{
+  "schema": "reader-namespace-ci-workload-v1",
+  "qualification_source_sha256": "71cab5c4c7ff2b3973444f2157cea5e084f30f6a7e590327dd6945e5a8b92299",
+  "observed_head": "c7cd5f877ff7c9ac6295dd27e34f3b5b5a2c32de",
+  "observed_run": 40282791008,
+  "retained_log_sha256": "0235625b04e57bf18dbb37088e78ee9197ed4809bf5b162442f8fa0732710447",
+  "lane_case_budget_ms": {
+    "1": 12000,
+    "3": 20000,
+    "4": 12000,
+    "5": 12000,
+    "6": 26000,
+    "7": 14000
+  },
+  "assignments": [
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N01_reviewed_transition",
+      "shard": 1,
+      "observed_case_ms": 3502
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N02_self_review",
+      "shard": 6,
+      "observed_case_ms": 3114
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N03_denied_transition",
+      "shard": 4,
+      "observed_case_ms": 3260
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N04_legacy_advanced",
+      "shard": 6,
+      "observed_case_ms": 3236
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N05_destination_advanced",
+      "shard": 6,
+      "observed_case_ms": 3293
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N06_canonical_withdrawal",
+      "shard": 5,
+      "observed_case_ms": 3460
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N07_legacy_tampered",
+      "shard": 7,
+      "observed_case_ms": 3176
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N08_destination_tampered",
+      "shard": 1,
+      "observed_case_ms": 3139
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N09_lost_commit_reply",
+      "shard": 4,
+      "observed_case_ms": 3476
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N10_unanchored_commit",
+      "shard": 7,
+      "observed_case_ms": 3515
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N11_missing_admission",
+      "shard": 7,
+      "observed_case_ms": 3299
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N12_competing_commits",
+      "shard": 6,
+      "observed_case_ms": 3275
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N13_expired_transition",
+      "shard": 5,
+      "observed_case_ms": 3173
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N14_revoked_reviewer",
+      "shard": 4,
+      "observed_case_ms": 3148
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N15_old_cursor",
+      "shard": 5,
+      "observed_case_ms": 3275
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N16_no_namespace_bypass",
+      "shard": 1,
+      "observed_case_ms": 3259
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N17_wrong_subject_pin",
+      "shard": 7,
+      "observed_case_ms": 3073
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N18_readonly_lineage",
+      "shard": 6,
+      "observed_case_ms": 3426
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N19_retired_destination",
+      "shard": 6,
+      "observed_case_ms": 2936
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N20_preserved_retirement_lineage",
+      "shard": 6,
+      "observed_case_ms": 3541
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_frozen_policy_and_retained_model_budget",
+      "shard": 6,
+      "observed_case_ms": 10
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_unassigned_actor_is_denied_before_reader_storage_inspection",
+      "shard": 6,
+      "observed_case_ms": 334
+    }
+  ],
+  "graph_rebalance": {
+    "observed_head": "02dbf27930f751b2d0e288590b37cca11c1de1f3",
+    "observed_run": 40284850650,
+    "retained_log_sha256": "ee50984963b1861f64f014357552c0fb73c680b9458888e6481e4d20328e2a41",
+    "moved": [
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C01_retirement_blocks",
+        "observed_case_ms": 3026
+      },
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C02_expired_retired_renewal",
+        "observed_case_ms": 3180
+      },
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C06_denied_renewal",
+        "observed_case_ms": 3096
+      },
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C08_withdrawal_pending_rollback",
+        "observed_case_ms": 3387
+      },
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C16_revoked_reviewer",
+        "observed_case_ms": 3010
+      },
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C21_unknown_rollback_target",
+        "observed_case_ms": 3156
+      },
+      {
+        "test_id": "test_reader_lifecycle.ReaderLifecycleContracts.test_case_C22_post_withdrawal_renewal",
+        "observed_case_ms": 3401
+      }
+    ]
+  },
+  "backend_rebalance": {
+    "observed_head": "2e4dcb5b3519f95ea75958b970713770998c4478",
+    "observed_run": 40287433500,
+    "retained_log_sha256": "ebe383bf57ea7c706155fee7d6d2f090eb6f0b432b5b38c91e303a6bf19ef73d",
+    "moved": [
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B20_fresh_post_withdrawal_review",
+        "observed_case_ms": 3123
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B15_cross_selection_cursor",
+        "observed_case_ms": 3016
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B14_superseded_selection",
+        "observed_case_ms": 2994
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B11_unanchored_selection",
+        "observed_case_ms": 2826
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B10_lost_selection_reply",
+        "observed_case_ms": 2812
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B19_retained_expired_status",
+        "observed_case_ms": 2796
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B16_revoked_reviewer_session",
+        "observed_case_ms": 2777
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B18_missing_admission_intent",
+        "observed_case_ms": 2758
+      },
+      {
+        "test_id": "test_staged_reader.StagedReaderContracts.test_case_B13_canonical_withdrawal",
+        "observed_case_ms": 2754
+      }
+    ]
+  }
+}

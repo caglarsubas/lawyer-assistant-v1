@@ -84,13 +84,13 @@ jobs:
           echo "$GITHUB_WORKSPACE/backend/.venv/bin" >> "$GITHUB_PATH"
       - name: Lint Python
         run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
-      # Complete original authenticated groups run once before pytest.
-      # New lifecycle cases are disjoint across three measured existing reserves.
+      # Authenticated contracts run once before pytest, with at most two workers.
+      # Retained-worker overlap and measured exceptions remove the serial tail.
       # Keep the frontend lanes' timing reserve, with no additional executor,
       # concurrent worker or longer job/test deadline.
       - name: Test manifest-bound authenticated qualification
         timeout-minutes: 2
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=3 --report=${{ runner.temp }}/deployment-reader-results.json
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=3 --workers=2 --report=${{ runner.temp }}/deployment-reader-results.json
       - name: Record nonsecret test runtime characteristics
         run: |
           python - <<'PY'
@@ -221,6 +221,10 @@ jobs:
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+      # A disjoint measured namespace slice shares this existing job sequentially.
+      - name: Test manifest-bound reader namespace slice
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=7 --report=${{ runner.temp }}/deployment-namespace-results.json
 
   frontend:
     runs-on: ubuntu-latest
@@ -245,6 +249,7 @@ jobs:
         run: |
           python -m pip install uv==0.8.15
           uv sync --project backend --frozen --extra dev
+      # Namespace cases join existing source-bound budgets; no sequential tail.
       - name: Test frontend and manifest-bound contracts within two workers
         run: |
           python scripts/run_ci_history_workers.py \
@@ -360,7 +365,7 @@ jobs:
       # Sequential metadata contracts share this job and retain its hard cap.
       - name: Test manifest-bound reader lifecycle slice 6
         timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
 
   graph-candidate-contracts:
     # A 67-second transition case previously consumed the final job's setup
