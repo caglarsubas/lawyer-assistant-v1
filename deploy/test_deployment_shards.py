@@ -85,6 +85,35 @@ class DeploymentShardContracts(unittest.TestCase):
             with self.subTest(kind=kind), self.assertRaises(ValueError):
                 runner.namespace_assignments(ids, value)
 
+        phase = json.loads(runner.PHASE_WORKLOAD.read_text())
+        lifecycle = [x for x in ids if x.startswith("test_reader_lifecycle.ReaderLifecycleContracts.")]
+        namespace = runner.namespace_assignments(ids)
+        initial = {x: runner.shard(x, lifecycle, namespace) for x in ids}
+        self.assertEqual(len(runner.phase_assignments(ids, initial)), 16)
+        changed = ROOT / "scripts/joint_recovery.py"
+        with patch.object(Path, "read_bytes", lambda path: b"changed" if path == changed else original_read(path)), self.assertRaises(ValueError):
+            runner.phase_assignments(ids, initial, phase)
+        for kind in ("missing", "duplicate", "source", "manifest", "budget", "lane", "origin", "extra"):
+            value = copy.deepcopy(phase)
+            if kind == "missing":
+                value["assignments"].pop()
+            elif kind == "duplicate":
+                value["assignments"][1] = value["assignments"][0]
+            elif kind == "source":
+                value["qualification_source_sha256"] = "0" * 64
+            elif kind == "manifest":
+                value["manifest_sha256"] = "0" * 64
+            elif kind == "budget":
+                value["assignments"][0]["observed_case_ms"] = 1000000
+            elif kind == "lane":
+                value["assignments"][0]["shard"] = 6
+            elif kind == "origin":
+                value["assignments"][0]["test_id"] = next(x for x in ids if initial[x] == 1)
+            else:
+                value["assignments"][0]["unknown"] = True
+            with self.subTest(phase_kind=kind), self.assertRaises(ValueError):
+                runner.phase_assignments(ids, initial, value)
+
     def test_omitted_or_duplicate_test_is_rejected_before_execution(self):
         tests = [unittest.FunctionTestCase(lambda: None), unittest.FunctionTestCase(lambda: None)]
         with self.assertRaises(ValueError):
