@@ -7777,3 +7777,47 @@ reconciliation and no replay. Genuine appointments/key custody, production
 PostgreSQL/IdP, off-host rollback protection, live provider qualification and
 legal acceptance remain separate. No production activation, private-case
 migration, provider request or inference is authorized by these disposable results.
+
+## Explicit joint journal recovery and per-anchor progress — 2026-10-27
+
+Qualify a separately selected repair for two causally related admitted tails.
+An actor-bound plan pins the exact change, finish, four histories, physical
+namespace and source context. A fresh progress view pins both anchor positions.
+The destination anchor precedes the maintenance finish anchor; each action may
+append only its existing admitted frame. Records and admissions remain exact.
+
+The service rejects wrong order, stale progress, borrowed views, changed plans,
+missing admissions, copied physical roots, clock rollback and unfinished changes.
+Competing instances reconcile one append. Lost replies reconcile after stopping
+the original process and starting a replacement, without mutation replay. Reads
+remain fenced until both anchors are complete; expiry, withdrawal, revoked review
+and old-cursor boundaries remain effective. No atomic cross-volume write or
+renewed authority is claimed.
+
+The frozen native campaign passes **16 scenarios / 34 loopback servers /
+950 HTTP requests in 103.33 seconds**, with the retained 180-second cap, two CPUs,
+768 MiB, 96 PIDs, four fresh distinct ext4 volumes and no external network.
+All **96 current source pins**, including all **87 preceding dependencies**,
+remain exact. The mixed-state fixture represents separately restored invented
+anchors and does not establish production rollback resistance or genuine custody.
+
+All **992 deployment methods** must run once across seven disjoint assignments
+in the same nine CI jobs. Source-bound per-case receipts guide placement within existing reserves.
+Frontend/history jobs with only 13/23 seconds of measured reserve did not
+qualify; work moves without increasing workers or deadlines. No frontend case, worker peak or deadline changes.
+Nine exact-head checks, five 30-second timing reserves, pinned merge and fetched
+main tree equality remain mandatory.
+
+Work backlog remains **21 open / 24 waiting / 6 deferred**; checklist remains
+**42 done / 21 open / 24 waiting / 6 deferred** across 93 items. Readiness remains
+**0 ready / 9 partial / 4 waiting / 1 planned**. The engineering delivery advances
+separately; the canonical ledger advances **249 → 250** sections. Originals,
+exact evidence versions, credentials/sessions, runtime and review history remain
+preserved. Owner private-analysis review remains pending.
+
+See the [joint recovery contract](JOINT_RECOVERY.md) and
+[dated evidence](evidence/joint-recovery-2026-10-27.json). Next qualify read-only
+joint retirement/rollback campaigns, followed by read-only operator recovery
+inventory and exact cross-instance recovery handoff. Genuine
+appointments/key custody, production PostgreSQL/IdP, off-host rollback protection,
+live provider qualification and legal acceptance remain separate gates.
