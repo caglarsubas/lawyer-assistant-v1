@@ -1,0 +1,90 @@
+{
+  "schema": "joint-recovery-qualification-v1",
+  "cases": [
+    {
+      "id": "J01_ordered_progress",
+      "expected": 200
+    },
+    {
+      "id": "J02_lost_destination_reply_restart",
+      "expected": 200
+    },
+    {
+      "id": "J03_lost_window_reply_restart",
+      "expected": 200
+    },
+    {
+      "id": "J04_stale_progress",
+      "expected": 409
+    },
+    {
+      "id": "J05_finish_first_refused",
+      "expected": 409
+    },
+    {
+      "id": "J06_missing_window_admission",
+      "expected": 400
+    },
+    {
+      "id": "J07_missing_destination_admission",
+      "expected": 400
+    },
+    {
+      "id": "J08_borrowed_actor",
+      "expected": 409
+    },
+    {
+      "id": "J09_withdrawal_between_repairs",
+      "expected": 200
+    },
+    {
+      "id": "J10_expiry_between_repairs",
+      "expected": 200
+    },
+    {
+      "id": "J11_revoked_review_between_repairs",
+      "expected": 200
+    },
+    {
+      "id": "J12_competing_first_repair",
+      "expected": 409
+    },
+    {
+      "id": "J13_copied_namespace",
+      "expected": 400
+    },
+    {
+      "id": "J14_wrong_plan_and_finish",
+      "expected": 409
+    },
+    {
+      "id": "J15_clock_rollback",
+      "expected": 409
+    },
+    {
+      "id": "J16_unfinished_window",
+      "expected": 409
+    }
+  ],
+  "native_attempts_per_case": 1,
+  "min_distinct_worker_processes": 2,
+  "max_events": 256,
+  "max_proposal_seconds": 300,
+  "max_page_rows": 8,
+  "model_verification_seconds": 20,
+  "independent_admissions_required": true,
+  "destination_before_finish_anchor": true,
+  "fresh_view_each_step": true,
+  "actor_bound_plan": true,
+  "single_anchor_per_step": true,
+  "no_atomic_joint_transaction": true,
+  "histories_immutable": true,
+  "no_authority_renewal": true,
+  "invented_mixed_anchor_restore": true,
+  "disposable_accounts_only": true,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "real_trust_enrolled": false,
+  "runtime_installation": false,
+  "production_activation": false
+}

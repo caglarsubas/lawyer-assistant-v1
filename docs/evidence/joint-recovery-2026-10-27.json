@@ -1,0 +1,115 @@
+{
+  "schema": "joint-recovery-engineering-evidence-v1",
+  "client_date": "2026-10-27",
+  "base_commit": "be2df4221027ea06152613f439b42a1c2c2aeb7d",
+  "status": "disposable_native_qualified_no_production_or_legal_acceptance",
+  "native": {
+    "cases": 16,
+    "servers": 34,
+    "HTTP_requests": 950,
+    "seconds": 103.33,
+    "seconds_cap": 180,
+    "process_replacements": 2,
+    "maximum_concurrent_workers": 2,
+    "qualified_change_modes": [
+      "renewal"
+    ]
+  },
+  "native_report_sha256": "945049aab22e5345d1166134a992b610c7f66a036f7b695b6e0fd2df56936002",
+  "accepted_frozen_campaigns": 1,
+  "accepted_attempts_per_case": 1,
+  "resources": {
+    "cpu": 2,
+    "memory_mib": 768,
+    "pids": 96,
+    "fresh_ext4_volumes": 4,
+    "network": "none"
+  },
+  "owned_native_resources_removed": true,
+  "native_source_pins": 96,
+  "prior_source_pins_exact": 87,
+  "prior_source_files": 1158,
+  "exact_prior_source_files": 1156,
+  "intentional_prior_source_changes": [
+    "deploy/fixtures/deployment_test_manifest.json",
+    "scripts/run_ci_deployment_shard.py"
+  ],
+  "implementation_sha256": {
+    "deploy/fixtures/joint_recovery_policy.json": "966ef75747839a516392e36fb640467529d7f4e80369096e81d97d2d380ea62f",
+    "deploy/test_joint_recovery.py": "465bf3d3fbdc8fd0f52e129f5d0780a88a9bf1fe11b3206c30e5c5e1bcad75f6",
+    "deploy/test_joint_recovery_report.py": "79ded4a9ea937be105869716553ccff02d3af9723e3036bcb67019b0482f499e",
+    "deploy/test_joint_recovery_source.py": "2869ad2aeaf01685356537634806a2e47e7dbf9415f229e949a518d80e965c7e",
+    "scripts/joint_recovery.py": "c56eb2249f8becb18305e9c343d138e8d977a2799a05d0261b29862cdeb32ddf",
+    "scripts/joint_recovery_fixture.py": "8055b2058e13c18ce2cf9d45666a5e597dd4b51c9c5d0b895011e9a27670350a",
+    "scripts/joint_recovery_native.py": "c8f85318faf248b251ed1f00b77380588a4cae100d4aa7b99a34dba9d026dab3",
+    "scripts/joint_recovery_report.py": "6acdd6a320ea9010208d49454cd76d05ef5f5512122ced8c4f2b86e7d89b3576",
+    "scripts/joint_recovery_worker.py": "034f5d568481d6e659efcd2cf7371b0e471cc597ecad8f30204bbe1c12773f10",
+    "deploy/fixtures/deployment_test_manifest.json": "5a71f4fee15d40e0849e875c56606b85b667cd3ce0d326128eeee2bf34095970",
+    "scripts/run_ci_deployment_shard.py": "efe36d995d49b119e24d8aef5468b07513ee4b7b4f19e5d3caf9c95ae97f21c0"
+  },
+  "deployment_contracts": {
+    "inventory": 992,
+    "passed": 992,
+    "shard_counts": [
+      403,
+      430,
+      101,
+      14,
+      7,
+      26,
+      11
+    ],
+    "source_manifest_exactly_once": true,
+    "existing_jobs": 9,
+    "frontend_files": 139,
+    "frontend_cases": 10532,
+    "worker_peaks_and_deadlines_unchanged": true,
+    "local_wall_seconds": [
+      104.94,
+      105.87,
+      50.04,
+      20.53,
+      8.91,
+      16.5,
+      13.86
+    ],
+    "local_summed_case_seconds": [
+      102.689,
+      103.96,
+      93.575,
+      19.656,
+      8.172,
+      29.796,
+      13.095
+    ]
+  },
+  "backlog": {
+    "open": 21,
+    "waiting": 24,
+    "deferred": 6
+  },
+  "readiness": {
+    "ready": 0,
+    "partial": 9,
+    "waiting": 4,
+    "planned": 1
+  },
+  "roadmap_sections_before": 249,
+  "roadmap_sections_after": 250,
+  "owner_focused_analysis_v3_review": "pending",
+  "private_case_inputs": false,
+  "real_trust_enrolled": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_installation": false,
+  "legal_qualification": false,
+  "remaining": [
+    "joint_retirement_and_rollback_campaigns",
+    "read_only_operator_recovery_inventory_and_exact_handoff",
+    "genuine_appointments_and_key_custody",
+    "production_PostgreSQL_and_IdP",
+    "off_host_rollback_resistance",
+    "signed_live_provider_qualification",
+    "legal_acceptance"
+  ]
+}
