@@ -7868,3 +7868,25 @@ See the [mode qualification contract](MODE_RECOVERY.md),
 Next qualify read-only operator recovery inventory and exact cross-instance
 handoff. Genuine appointments/key custody, production PostgreSQL/IdP, off-host
 protection, signed live provider qualification and legal acceptance remain.
+
+## CI reserves before operator recovery inventory — 2026-10-27
+
+Move deployment assignments 5, 6 and 7 from candidate, withdrawal and PostgreSQL
+jobs into sequential backend stages before the full suite. Reuse the backend's
+existing pair for each assignment; assignments 5 and 7 now use validated worker
+receipts as well. Preserve all seven disjoint inventories, 1,018 methods, 139
+frontend files, 10,532 frontend cases, ten jobs and every existing job/step cap.
+The backend may take longer; measure both critical path and total runner time.
+
+Require exact-head success and at least 30 seconds of reserve for **every job**,
+plus the backend test step, before a pinned merge and independently fetched-main
+tree comparison. Reject missing, duplicate, stale or malformed worker receipts.
+Source-bound CI logs must prove every method executes once in its assigned stage.
+Keep all 103 native recovery source pins and the prior 96 dependencies exact.
+No application, provider, trust enrollment or private-case operation is performed.
+
+The ledger advances **251 → 252** sections. Engineering delivery remains separate
+from unchanged checklist/readiness states and pending owner review. See the
+[CI reserve contract](CI_RESERVES.md) and
+[evidence](evidence/ci-reserves-2026-10-27.json). Next qualify read-only operator
+recovery inventory and exact cross-instance handoff using disposable identities.

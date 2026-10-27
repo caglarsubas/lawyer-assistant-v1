@@ -1,0 +1,88 @@
+{
+  "schema": "ci-reserve-qualification-v1",
+  "date": "2026-10-27",
+  "base_commit": "3e324daefa8cc344c1fa0a2b1f792a7d016af7fb",
+  "baseline_main_run": 40496334128,
+  "implementation_sha256": {
+    ".github/workflows/ci.yml": "f1f461cd42e655e3cbcb951693360c24341a7f3a0642f0dcaf5614fb4a56d209",
+    "scripts/run_ci_deployment_shard.py": "a4f4b97bb3bb308f559f1896392b1cc398463ae6fd4f2fb49214953fd1336517",
+    "deploy/test_deployment_shards.py": "1e31aa8bb02b92769695b187bfc48185b881de0a5e2d743c9c9ad8cbecaaf7df",
+    "deploy/test_deployment_ci_placement.py": "f28b6715146c8a43c81dfb7a0bbd56d6292e9bb73460bcf14f82577186aa6faa"
+  },
+  "contract_inventory": 1018,
+  "contract_shard_counts": [
+    408,
+    435,
+    106,
+    23,
+    9,
+    26,
+    11
+  ],
+  "contract_worker_pairs": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "local_assignments": [
+    {
+      "lane": 1,
+      "seconds": 55.21,
+      "count": 408
+    },
+    {
+      "lane": 2,
+      "seconds": 103.48,
+      "count": 435
+    },
+    {
+      "lane": 3,
+      "seconds": 50.61,
+      "count": 106
+    },
+    {
+      "lane": 4,
+      "seconds": 25.64,
+      "count": 23
+    },
+    {
+      "lane": 5,
+      "seconds": 8.88,
+      "count": 9
+    },
+    {
+      "lane": 6,
+      "seconds": 19.33,
+      "count": 26
+    },
+    {
+      "lane": 7,
+      "seconds": 10.16,
+      "count": 11
+    }
+  ],
+  "frontend_files": 139,
+  "frontend_cases": 10532,
+  "jobs": 10,
+  "existing_deadlines_preserved": true,
+  "per_job_worker_upper_bounds_preserved": true,
+  "all_job_minimum_reserve_seconds": 30,
+  "native_preservation": {
+    "cases": 18,
+    "source_pins_exact": 103,
+    "prior_source_pins_exact": 96,
+    "native_report_sha256": "552049e5e7124f2c237ce0969f2492858c0158e8f6b640dc2fda5265b0540fdf",
+    "new_native_inference_calls": 0
+  },
+  "runtime_restarted": false,
+  "private_case_inputs": false,
+  "provider_requests": 0,
+  "real_identity_enrollment": false,
+  "owner_review": "pending",
+  "readiness_changed": false,
+  "roadmap_sections_before": 251,
+  "roadmap_sections_after": 252
+}

@@ -218,8 +218,8 @@ def main():
     parser.add_argument("--worker-index", type=int, choices=(0, 1))
     args = parser.parse_args()
     # Assignment 1 runs sequentially after review tests; only history overlaps Vitest.
-    if args.workers == 2 and args.shard not in {1, 3, 4, 6} or args.worker_index is not None and args.workers != 2:
-        raise ValueError("Only declared review/backend/graph/retained two-worker peaks may be used")
+    if args.workers == 2 and args.shard not in {1, 3, 4, 5, 6, 7} or args.worker_index is not None and args.workers != 2:
+        raise ValueError("Only declared sequential two-worker peaks may be used")
     tests = collect()
     raw = MANIFEST.read_bytes()
     selected = plan(tests, json.loads(raw), args.shard)
