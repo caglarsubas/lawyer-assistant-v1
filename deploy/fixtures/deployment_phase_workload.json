@@ -1,0 +1,94 @@
+{
+  "schema": "deployment-phase-workload-v1",
+  "manifest_sha256": "16599d9f6eddab10b32bdc1ee92d04ea741dcd69931e218e44c49ee46c68d8ff",
+  "qualification_source_sha256": "38b59e72178770299944ff27a90c13ca6a832a87ce0ec8980a7fae47a3a2502e",
+  "observed_head": "3021b98282d732eb6fbe815510204fdd7e221238",
+  "observed_run": 40506702850,
+  "retained_log_sha256": "69bb31e920c561e756863144262380f0b3315470ed3d56686b919b7b9b9f8b67",
+  "increment_budget_ms": {
+    "5": 38000,
+    "7": 38000
+  },
+  "assignments": [
+    {
+      "test_id": "test_destination_change.DestinationChangeContracts.test_case_D01_reviewed_renewal",
+      "shard": 7,
+      "observed_case_ms": 4295
+    },
+    {
+      "test_id": "test_destination_change.DestinationChangeContracts.test_case_D04_fresh_rollback",
+      "shard": 7,
+      "observed_case_ms": 4814
+    },
+    {
+      "test_id": "test_destination_change.DestinationChangeContracts.test_case_D13_lost_open_reply",
+      "shard": 5,
+      "observed_case_ms": 4463
+    },
+    {
+      "test_id": "test_destination_change.DestinationChangeContracts.test_case_D14_lost_selection_reply",
+      "shard": 7,
+      "observed_case_ms": 4357
+    },
+    {
+      "test_id": "test_destination_change.DestinationChangeContracts.test_case_D15_lost_transition_reply",
+      "shard": 7,
+      "observed_case_ms": 4486
+    },
+    {
+      "test_id": "test_joint_recovery.JointRecoveryContracts.test_case_J07_missing_destination_admission",
+      "shard": 5,
+      "observed_case_ms": 4326
+    },
+    {
+      "test_id": "test_joint_recovery.JointRecoveryContracts.test_case_J08_borrowed_actor",
+      "shard": 7,
+      "observed_case_ms": 4316
+    },
+    {
+      "test_id": "test_joint_recovery.JointRecoveryContracts.test_case_J09_withdrawal_between_repairs",
+      "shard": 5,
+      "observed_case_ms": 4674
+    },
+    {
+      "test_id": "test_joint_recovery.JointRecoveryContracts.test_case_J10_expiry_between_repairs",
+      "shard": 7,
+      "observed_case_ms": 4515
+    },
+    {
+      "test_id": "test_joint_recovery.JointRecoveryContracts.test_case_J11_revoked_review_between_repairs",
+      "shard": 5,
+      "observed_case_ms": 4570
+    },
+    {
+      "test_id": "test_joint_recovery.JointRecoveryContracts.test_case_J12_competing_first_repair",
+      "shard": 5,
+      "observed_case_ms": 4383
+    },
+    {
+      "test_id": "test_journal_recovery.JournalRecoveryContracts.test_case_G09_withdrawn_metadata_only",
+      "shard": 5,
+      "observed_case_ms": 4536
+    },
+    {
+      "test_id": "test_journal_recovery.JournalRecoveryContracts.test_case_G10_revoked_review_metadata_only",
+      "shard": 5,
+      "observed_case_ms": 4414
+    },
+    {
+      "test_id": "test_journal_recovery.JournalRecoveryContracts.test_case_G11_copied_namespace",
+      "shard": 7,
+      "observed_case_ms": 4306
+    },
+    {
+      "test_id": "test_journal_recovery.JournalRecoveryContracts.test_case_G14_joint_pending_refused",
+      "shard": 5,
+      "observed_case_ms": 4364
+    },
+    {
+      "test_id": "test_journal_recovery.JournalRecoveryContracts.test_case_G16_readonly_finish_and_cursor",
+      "shard": 7,
+      "observed_case_ms": 4475
+    }
+  ]
+}

@@ -7890,3 +7890,26 @@ from unchanged checklist/readiness states and pending owner review. See the
 [CI reserve contract](CI_RESERVES.md) and
 [evidence](evidence/ci-reserves-2026-10-27.json). Next qualify read-only operator
 recovery inventory and exact cross-instance handoff using disposable identities.
+
+## Internal CI phase budget recovery — 2026-10-27
+
+The prior PR passed, but its main-push run timed out the authenticated deployment
+step after all 106 methods completed. Job-level reserve did not protect this
+internal two-minute boundary. Rebalance 16 measured recovery cases from assignment
+3 into paired assignments 5 and 7 (eight each). These stages already run in the
+same backend job. Keep every method, original step/job deadline, ten jobs and
+existing worker upper bound. Reject stale-source, stale-manifest, duplicate,
+foreign-origin or over-budget placement profiles before execution.
+
+The source-bound counts become **408 / 435 / 90 / 23 / 17 / 26 / 19**, totaling
+1,018 methods. Require all-job and backend test-step reserves of 30 seconds,
+30 seconds for the authenticated deployment phase, and 15 seconds for each short
+backend deployment phase. Verify exact-head CI, actual receipts, pinned merge,
+fetched-main tree equality and a complete green main-push run before closing
+this follow-up. All 103 native source pins and 96 preceding dependencies remain
+exact; no runtime, private case, credentials, evidence or review mutation occurs.
+
+The ledger advances **252 → 253**. Checklist/readiness and owner review remain
+unchanged. See [phase qualification](CI_PHASE_BUDGETS.md) and
+[evidence](evidence/ci-phase-budgets-2026-10-27.json). Read-only operator recovery
+inventory remains the next planned product-engineering slice.
