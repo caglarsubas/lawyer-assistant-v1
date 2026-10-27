@@ -39,11 +39,12 @@ env:
     backend/tests/test_final_authorization_postgres.py
     backend/tests/test_final_release_inspection.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
+  # The complete open-validity file returns to the existing backend remainder.
+  # Graph metadata reuses the job's sequential two-worker peak and one-minute cap.
   CI_GRAPH_RUNTIME_TESTS: >-
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_release_set_authorization.py
-    backend/tests/test_open_validity_publication.py
     backend/tests/test_graph_b_publication.py
     backend/tests/test_graph_b_snapshot.py
   CI_PUBLICATION_TESTS: >-
@@ -437,4 +438,4 @@ jobs:
       # Sequential metadata contracts share this job and retain its hard cap.
       - name: Test manifest-bound reader lifecycle slice 4
         timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=4 --report=${{ runner.temp }}/deployment-reader-lifecycle-4.json
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=4 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-4.json

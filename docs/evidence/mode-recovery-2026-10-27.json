@@ -1,0 +1,126 @@
+{
+  "schema": "mode-recovery-engineering-evidence-v1",
+  "client_date": "2026-10-27",
+  "base_commit": "d10812d5a3a9fa0eced549e3371d7625a0db6a7a",
+  "status": "native_qualified_disposable_only",
+  "native": {
+    "cases": 18,
+    "servers": 40,
+    "HTTP_requests": 1097,
+    "seconds": 132.6,
+    "seconds_cap": 180,
+    "qualified_modes": [
+      "retirement",
+      "rollback"
+    ],
+    "cases_per_mode": 9,
+    "process_replacements": 4,
+    "maximum_concurrent_workers": 2
+  },
+  "native_report_sha256": "552049e5e7124f2c237ce0969f2492858c0158e8f6b640dc2fda5265b0540fdf",
+  "accepted_frozen_campaigns": 1,
+  "accepted_case_attempts": 1,
+  "preflight_aborted_before_scenarios": true,
+  "preflight_resources_removed": true,
+  "owned_native_resources_removed": true,
+  "native_source_pins": 103,
+  "prior_source_pins_exact": 96,
+  "prior_source_files": 1168,
+  "exact_prior_source_files": 1163,
+  "intentional_prior_source_changes": [
+    ".github/workflows/ci.yml",
+    "deploy/fixtures/deployment_test_manifest.json",
+    "deploy/test_deployment_shards.py",
+    "scripts/run_ci_deployment_shard.py",
+    "deploy/test_deployment_ci_placement.py"
+  ],
+  "implementation_sha256": {
+    "deploy/fixtures/mode_recovery_policy.json": "f518cb1997ee2a6d267704a73af816c7fbc6b1d31b4d819ddca585de9fb9ac0f",
+    "deploy/test_mode_recovery.py": "fc4109117c1bc63bad0a84d7f26152148380bd9028218666f3ea9fd864bc3278",
+    "deploy/test_mode_recovery_report.py": "e272d34121dbae945b91f6ff66bdf2874f3c91c76fa30d1ae6d0ee6c4fe65b0f",
+    "deploy/test_mode_recovery_source.py": "7a640eee56baf5290eb71c4e5b0428b4653186076d9bf9d45f22463425016920",
+    "scripts/mode_recovery_fixture.py": "2cbf15ff0e5d2cc15abfadf302203f0501af4389e6d66203d9b015af14dba01a",
+    "scripts/mode_recovery_native.py": "82952ef3a675dd3e4db6613fada12c2119e5a3b91f710c97f1a135db5077683a",
+    "scripts/mode_recovery_report.py": "77c4c77518bb3fa045d7bd1ca0443dc1907258f96487e815b64add490a217182",
+    ".github/workflows/ci.yml": "ec5f91a20dba2662819be8fd19996dc51e16314f3260e9f9c5966f866dbf99c5",
+    "deploy/fixtures/deployment_test_manifest.json": "16599d9f6eddab10b32bdc1ee92d04ea741dcd69931e218e44c49ee46c68d8ff",
+    "deploy/test_deployment_shards.py": "dcc58134c1255de3ae2144a298e5022542aba5ea6c83201f06763ea9dfa61322",
+    "scripts/run_ci_deployment_shard.py": "d639ebc4fe1bb5ba4d89d47cb579e5b1972b266f713a41c66749e6dff89a7440",
+    "deploy/test_deployment_ci_placement.py": "6cec4ac176226a0cb94a41a00536692981a2fac388b42f1f80aadc1a999921db"
+  },
+  "deployment_contracts": {
+    "inventory": 1018,
+    "passed": 1018,
+    "shard_counts": [
+      408,
+      435,
+      106,
+      23,
+      9,
+      26,
+      11
+    ],
+    "source_manifest_exactly_once": true,
+    "existing_jobs": 9,
+    "frontend_files": 139,
+    "frontend_cases": 10532,
+    "peak_workers_and_deadlines_unchanged": true,
+    "contract_worker_pairs": [
+      3,
+      4,
+      6
+    ],
+    "local_wall_seconds": [
+      106.85,
+      112.06,
+      53.02,
+      26.98,
+      26.45,
+      18.26,
+      21.69
+    ],
+    "local_summed_case_seconds": [
+      104.521,
+      109.963,
+      99.939,
+      47.125,
+      24.956,
+      33.191,
+      20.146
+    ]
+  },
+  "CI_capacity": {
+    "whole_file_to_backend_remainder": "backend/tests/test_open_validity_publication.py",
+    "graph_pair_after_pytest_only": true,
+    "graph_contract_seconds_cap": 60,
+    "jobs_workers_and_deadlines_unchanged": true,
+    "moved_file_local_validation": {
+      "moved_complete_file": "backend/tests/test_open_validity_publication.py",
+      "passed": true,
+      "wall_seconds": 25.58,
+      "workers": 2
+    }
+  },
+  "scanner_intake_restored": true,
+  "scanner_evidence_sha256": "ab7db069b9be6d6405522a5f26de4d891f11f05cf22cd3966fd19e28305223e3",
+  "backlog": {
+    "open": 21,
+    "waiting": 24,
+    "deferred": 6
+  },
+  "readiness": {
+    "ready": 0,
+    "partial": 9,
+    "waiting": 4,
+    "planned": 1
+  },
+  "roadmap_sections_before": 250,
+  "roadmap_sections_after": 251,
+  "owner_focused_analysis_v3_review": "pending",
+  "private_case_inputs": false,
+  "real_trust_enrolled": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_controller_installation": false,
+  "legal_qualification": false
+}

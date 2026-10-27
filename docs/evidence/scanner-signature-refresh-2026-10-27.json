@@ -1,0 +1,48 @@
+{
+  "schema": "scanner-signature-refresh-v1",
+  "client_date": "2026-10-27",
+  "official_CVD_verification_passed": true,
+  "manifest_sha256": "2a30bf435bb555abaec68e54b7bcdf2b538f8ea5408b62b757b19d8756574a9f",
+  "databases": [
+    {
+      "file": "main.cvd",
+      "sha256": "0b2182d229f46981ec8f535382222f7c9dfdd656b250ad47988b910a8d302365",
+      "bytes": 89072577,
+      "version": 63,
+      "signatures": 3287027,
+      "build_time": 1765927102
+    },
+    {
+      "file": "daily.cvd",
+      "sha256": "dd1c707b7e1fcaa8eaa7020094845b53e0460258322fe7fa5515b1f51a195019",
+      "bytes": 23444017,
+      "version": 28166,
+      "signatures": 355789,
+      "build_time": 1793082252
+    },
+    {
+      "file": "bytecode.cvd",
+      "sha256": "6d4aa01f219e988060fc419f495d07f27e0cdf1a2cccc065971da922c76f7ffb",
+      "bytes": 281702,
+      "version": 339,
+      "signatures": 80,
+      "build_time": 1757593759
+    }
+  ],
+  "maximum_daily_age_days": 7,
+  "only_scanner_recreated": true,
+  "healthy_services": 8,
+  "same_scanner_image_and_security_posture": true,
+  "same_networks_and_addresses": true,
+  "only_signature_directory_setting_changed": true,
+  "originals_ciphertext_evidence_reviews_credentials_sessions_exact": true,
+  "other_seven_services_exact": true,
+  "clean_stream_accepted": true,
+  "EICAR_stream_rejected": true,
+  "live_intake_dependencies_ready": true,
+  "anonymous_readiness_requires_authentication": true,
+  "authenticated_browser_readiness_verified": false,
+  "private_document_uploads": 0,
+  "sessions_created_or_revoked": 0,
+  "legal_qualification": false
+}

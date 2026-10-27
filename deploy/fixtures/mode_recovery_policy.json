@@ -1,0 +1,141 @@
+{
+  "schema": "mode-recovery-qualification-v1",
+  "cases": [
+    {
+      "id": "C01_retirement_ordered",
+      "expected": 200,
+      "mode": "retirement",
+      "scenario": 1
+    },
+    {
+      "id": "C02_retirement_destination_restart",
+      "expected": 200,
+      "mode": "retirement",
+      "scenario": 2
+    },
+    {
+      "id": "C03_retirement_finish_restart",
+      "expected": 200,
+      "mode": "retirement",
+      "scenario": 3
+    },
+    {
+      "id": "C04_retirement_wrong_order",
+      "expected": 409,
+      "mode": "retirement",
+      "scenario": 5
+    },
+    {
+      "id": "C05_retirement_missing_admission",
+      "expected": 400,
+      "mode": "retirement",
+      "scenario": 6
+    },
+    {
+      "id": "C06_retirement_withdrawal",
+      "expected": 200,
+      "mode": "retirement",
+      "scenario": 9
+    },
+    {
+      "id": "C07_retirement_expiry",
+      "expected": 200,
+      "mode": "retirement",
+      "scenario": 10
+    },
+    {
+      "id": "C08_retirement_wrong_plan",
+      "expected": 409,
+      "mode": "retirement",
+      "scenario": 14
+    },
+    {
+      "id": "C09_rollback_ordered",
+      "expected": 200,
+      "mode": "rollback",
+      "scenario": 1
+    },
+    {
+      "id": "C10_rollback_destination_restart",
+      "expected": 200,
+      "mode": "rollback",
+      "scenario": 2
+    },
+    {
+      "id": "C11_rollback_finish_restart",
+      "expected": 200,
+      "mode": "rollback",
+      "scenario": 3
+    },
+    {
+      "id": "C12_rollback_stale_progress",
+      "expected": 409,
+      "mode": "rollback",
+      "scenario": 4
+    },
+    {
+      "id": "C13_rollback_missing_admission",
+      "expected": 400,
+      "mode": "rollback",
+      "scenario": 7
+    },
+    {
+      "id": "C14_rollback_revoked_review",
+      "expected": 200,
+      "mode": "rollback",
+      "scenario": 11
+    },
+    {
+      "id": "C15_rollback_competing_repair",
+      "expected": 409,
+      "mode": "rollback",
+      "scenario": 12
+    },
+    {
+      "id": "C16_rollback_borrowed_actor",
+      "expected": 409,
+      "mode": "rollback",
+      "scenario": 8
+    },
+    {
+      "id": "C17_retirement_borrowed_actor",
+      "expected": 409,
+      "mode": "retirement",
+      "scenario": 8
+    },
+    {
+      "id": "C18_rollback_wrong_plan",
+      "expected": 409,
+      "mode": "rollback",
+      "scenario": 14
+    }
+  ],
+  "native_attempts_per_case": 1,
+  "min_distinct_worker_processes": 2,
+  "max_events": 256,
+  "max_proposal_seconds": 300,
+  "max_page_rows": 8,
+  "model_verification_seconds": 20,
+  "independent_admissions_required": true,
+  "destination_before_finish_anchor": true,
+  "fresh_view_each_step": true,
+  "actor_bound_plan": true,
+  "single_anchor_per_step": true,
+  "no_atomic_joint_transaction": true,
+  "histories_immutable": true,
+  "no_authority_renewal": true,
+  "invented_mixed_anchor_restore": true,
+  "disposable_accounts_only": true,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "real_trust_enrolled": false,
+  "runtime_installation": false,
+  "production_activation": false,
+  "qualified_modes": [
+    "retirement",
+    "rollback"
+  ],
+  "retirement_preserves_namespace": true,
+  "rollback_requires_new_selection_and_reviews": true,
+  "prior_approval_reuse_rejected": true
+}

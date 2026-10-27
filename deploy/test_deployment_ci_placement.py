@@ -31,9 +31,13 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("runs-on: ubuntu-24.04-arm", blocks["frontend-history"])
         self.assertIn("runs-on: ubuntu-latest", blocks["frontend"])
         self.assertIn("timeout-minutes: 18", blocks["backend-and-contracts"])
-        self.assertEqual(workflow.count("--workers=2"), 2)
+        self.assertEqual(workflow.count("--workers=2"), 3)
         self.assertIn("--shard=3 --workers=2", blocks["backend-and-contracts"])
         self.assertIn("--shard=6 --workers=2", blocks["retained-release-withdrawal"])
+        graph = blocks["graph-runtime-contracts"]
+        self.assertIn("--shard=4 --workers=2", graph)
+        self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("name: Test manifest-bound reader lifecycle"))
+        self.assertIn("timeout-minutes: 1", graph.split("name: Test manifest-bound reader lifecycle", 1)[1])
         self.assertNotIn("--workers=2", blocks["frontend"])
         self.assertNotIn("--workers=2", blocks["frontend-history"])
 

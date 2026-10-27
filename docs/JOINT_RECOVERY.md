@@ -48,8 +48,9 @@ environment and no external network remain required. All 96 current source pins
 include the preceding 87 unchanged dependencies. Owned containers and volumes
 are removed after qualification. No inference or live provider request occurs.
 
-The frozen joint workflow uses renewal. Joint retirement and rollback campaigns
-remain separate coverage gaps.
+The original frozen joint workflow uses renewal. A separate
+[retirement/rollback campaign](MODE_RECOVERY.md) qualifies those modes; the
+original report remains immutable.
 
 The mixed pending state models separately restored external anchors: an admitted
 finish is retained before its anchor, and the invented destination anchor is one
