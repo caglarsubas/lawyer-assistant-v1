@@ -97,6 +97,16 @@ jobs:
       - name: Test manifest-bound authenticated qualification
         timeout-minutes: 2
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=3 --workers=2 --report=${{ runner.temp }}/deployment-reader-results.json
+      # Reuse the backend pair sequentially; every former step keeps its cap.
+      - name: Test manifest-bound reader lifecycle slice 5
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=5 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-5.json
+      - name: Test manifest-bound reader lifecycle slice 6
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
+      - name: Test manifest-bound reader namespace slice
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=7 --workers=2 --report=${{ runner.temp }}/deployment-namespace-results.json
       - name: Record nonsecret test runtime characteristics
         run: |
           python - <<'PY'
@@ -256,10 +266,6 @@ jobs:
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
-      # A disjoint measured namespace slice shares this existing job sequentially.
-      - name: Test manifest-bound reader namespace slice
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=7 --report=${{ runner.temp }}/deployment-namespace-results.json
 
   frontend:
     runs-on: ubuntu-latest
@@ -388,10 +394,6 @@ jobs:
         run: |
           read -r -a withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${withdrawal_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
-      # Sequential metadata contracts share this job and retain its hard cap.
-      - name: Test manifest-bound reader lifecycle slice 6
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
 
   graph-candidate-contracts:
     # A 67-second transition case previously consumed the final job's setup
@@ -413,10 +415,6 @@ jobs:
         run: |
           read -r -a candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${candidate_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
-      # Sequential metadata contracts share this job and retain its hard cap.
-      - name: Test manifest-bound reader lifecycle slice 5
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=5 --report=${{ runner.temp }}/deployment-reader-lifecycle-5.json
 
   source-publication-contracts:
     # PostgreSQL races passed in 208s and publication checks in 72s, but setup

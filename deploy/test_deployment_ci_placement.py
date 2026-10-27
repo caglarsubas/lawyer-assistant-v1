@@ -16,12 +16,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn(command, blocks["backend-and-contracts"])
         self.assertEqual(workflow.count("scripts/run_ci_deployment_shard.py"), 7)
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=3", blocks["backend-and-contracts"])
-        for name, lane in (("graph-runtime-contracts", 4), ("graph-candidate-contracts", 5), ("retained-release-withdrawal", 6)):
+        for name, lane in (("graph-runtime-contracts", 4), ("backend-and-contracts", 5), ("backend-and-contracts", 6)):
             self.assertIn("scripts/run_ci_deployment_shard.py --shard=" + str(lane), blocks[name])
         self.assertLess(blocks["backend-and-contracts"].index("--shard=3"), blocks["backend-and-contracts"].index("name: Test backend"))
         self.assertNotIn("scripts/run_ci_deployment_shard.py", blocks["frontend"])
         self.assertIn("--shard=1 --workers=2", blocks["backend-review-contracts"])
-        self.assertIn("scripts/run_ci_deployment_shard.py --shard=7", blocks["postgres-snapshot-concurrency"])
+        self.assertIn("scripts/run_ci_deployment_shard.py --shard=7", blocks["backend-and-contracts"])
         self.assertNotIn("--shard=7", blocks["frontend"])
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=2", blocks["frontend-history"])
         self.assertNotIn("actions/setup-python@v5", blocks["frontend"])
@@ -32,9 +32,16 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("runs-on: ubuntu-24.04-arm", blocks["frontend-history"])
         self.assertIn("runs-on: ubuntu-latest", blocks["frontend"])
         self.assertIn("timeout-minutes: 18", blocks["backend-and-contracts"])
-        self.assertEqual(workflow.count("--workers=2"), 4)
+        self.assertEqual(workflow.count("--workers=2"), 6)
         self.assertIn("--shard=3 --workers=2", blocks["backend-and-contracts"])
-        self.assertIn("--shard=6 --workers=2", blocks["retained-release-withdrawal"])
+        backend = blocks["backend-and-contracts"]
+        for lane in (5, 6, 7):
+            self.assertIn("--shard=" + str(lane) + " --workers=2", backend)
+            self.assertLess(backend.index("--shard=" + str(lane)), backend.index("name: Test backend"))
+        for name in ("graph-candidate-contracts", "retained-release-withdrawal", "postgres-snapshot-concurrency"):
+            self.assertNotIn("scripts/run_ci_deployment_shard.py", blocks[name])
+        stages = re.findall(r"      - name: Test manifest-bound [^\n]+\n        timeout-minutes: (\d+)\n        run: [^\n]+--shard=(\d+)[^\n]+", backend)
+        self.assertEqual(stages, [("2", "3"), ("1", "5"), ("1", "6"), ("1", "7")])
         graph = blocks["graph-runtime-contracts"]
         self.assertIn("--shard=4 --workers=2", graph)
         self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("name: Test manifest-bound reader lifecycle"))
