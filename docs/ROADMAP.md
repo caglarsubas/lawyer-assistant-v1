@@ -7802,8 +7802,9 @@ remain exact. The mixed-state fixture represents separately restored invented
 anchors and does not establish production rollback resistance or genuine custody.
 
 All **992 deployment methods** must run once across seven disjoint assignments
-in the same nine CI jobs. Existing frontend, history, backend and graph-runtime
-reserves share the new cases. No frontend case, worker peak or deadline changes.
+in the same nine CI jobs. Existing history, backend, graph-runtime and graph-candidate reserves
+share the new cases. The first placement left only 13 seconds of frontend
+reserve; measured contract work moves without increasing workers or deadlines. No frontend case, worker peak or deadline changes.
 Nine exact-head checks, five 30-second timing reserves, pinned merge and fetched
 main tree equality remain mandatory.
 

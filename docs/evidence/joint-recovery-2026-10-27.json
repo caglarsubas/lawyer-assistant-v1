@@ -45,17 +45,17 @@
     "scripts/joint_recovery_report.py": "6acdd6a320ea9010208d49454cd76d05ef5f5512122ced8c4f2b86e7d89b3576",
     "scripts/joint_recovery_worker.py": "034f5d568481d6e659efcd2cf7371b0e471cc597ecad8f30204bbe1c12773f10",
     "deploy/fixtures/deployment_test_manifest.json": "5a71f4fee15d40e0849e875c56606b85b667cd3ce0d326128eeee2bf34095970",
-    "scripts/run_ci_deployment_shard.py": "efe36d995d49b119e24d8aef5468b07513ee4b7b4f19e5d3caf9c95ae97f21c0"
+    "scripts/run_ci_deployment_shard.py": "836b78faeedadc0d759c604ee13eebd0593124ca9b7c8b93e4f5badfe6dac2a4"
   },
   "deployment_contracts": {
     "inventory": 992,
     "passed": 992,
     "shard_counts": [
-      403,
-      430,
-      101,
-      14,
-      7,
+      398,
+      431,
+      103,
+      12,
+      11,
       26,
       11
     ],
@@ -65,22 +65,36 @@
     "frontend_cases": 10532,
     "worker_peaks_and_deadlines_unchanged": true,
     "local_wall_seconds": [
-      104.94,
-      105.87,
-      50.04,
-      20.53,
-      8.91,
+      139.81,
+      169.29,
+      74.14,
+      35.1,
+      33.86,
       16.5,
       13.86
     ],
     "local_summed_case_seconds": [
-      102.689,
-      103.96,
-      93.575,
-      19.656,
-      8.172,
+      135.449,
+      165.939,
+      138.31,
+      33.43,
+      32.061,
       29.796,
       13.095
+    ],
+    "local_peak_contract_workers": 2,
+    "rebalanced_local_overlap_groups": [
+      [
+        1,
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4,
+        5
+      ]
     ]
   },
   "backlog": {
@@ -111,5 +125,56 @@
     "off_host_rollback_resistance",
     "signed_live_provider_qualification",
     "legal_acceptance"
-  ]
+  ],
+  "ci_headroom_rebalance": {
+    "run": 40459268076,
+    "head": "5b4ced6aea00831b24d8f1e7919478e04ef21a5c",
+    "moved": [
+      {
+        "contract_completed": "test_joint_recovery.JointRecoveryContracts.test_case_J01_ordered_progress",
+        "seconds": 5.443
+      },
+      {
+        "contract_completed": "test_joint_recovery.JointRecoveryContracts.test_case_J02_lost_destination_reply_restart",
+        "seconds": 5.374
+      },
+      {
+        "contract_completed": "test_joint_recovery.JointRecoveryContracts.test_case_J03_lost_window_reply_restart",
+        "seconds": 5.232
+      },
+      {
+        "contract_completed": "test_journal_recovery.JournalRecoveryContracts.test_case_G01_open_anchor_repair",
+        "seconds": 5.325
+      },
+      {
+        "contract_completed": "test_journal_recovery.JournalRecoveryContracts.test_case_G02_selection_anchor_repair",
+        "seconds": 5.143
+      }
+    ],
+    "log_sha256": "a26d0612db3a21f47807c952cb159f4209c58c3dab8ec2aa01371bf3ba00fac9",
+    "frontend_seconds": 287,
+    "frontend_cap": 300,
+    "required_reserve": 30,
+    "graph_job_seconds": 329,
+    "graph_cap": 360,
+    "graph_reserve": 31,
+    "graph_moved": [
+      {
+        "contract_completed": "test_joint_recovery.JointRecoveryContracts.test_case_J11_revoked_review_between_repairs",
+        "seconds": 4.574
+      },
+      {
+        "contract_completed": "test_joint_recovery.JointRecoveryContracts.test_case_J12_competing_first_repair",
+        "seconds": 4.314
+      }
+    ],
+    "graph_target": "existing_backend_two_worker_assignment",
+    "moved_frontend_seconds": 26.517,
+    "moved_graph_seconds": 8.888,
+    "backend_contract_step_seconds": 108,
+    "backend_contract_step_cap_seconds": 120,
+    "same_nine_jobs": true,
+    "same_worker_peaks_and_deadlines": true,
+    "fresh_exact_head_reserves_required": true
+  }
 }
