@@ -35,18 +35,20 @@ env:
   # a late single-worker tail. Full-suite membership, workers and caps stay.
   CI_FINAL_RELEASE_TESTS: >-
     backend/tests/test_retained_mixed_assembly.py
+    backend/tests/test_set_publication_cli.py
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
     backend/tests/test_final_release_inspection.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
-  # The complete open-validity file returns to the existing backend remainder.
-  # Graph metadata reuses the job's sequential two-worker peak and one-minute cap.
+  # Keep the heavier open-validity file in this graph group; the lighter complete
+  # Graph B snapshot file uses the backend remainder. Measured file exchange,
+  # plus sequential graph metadata workers, preserves both jobs' timing reserve.
   CI_GRAPH_RUNTIME_TESTS: >-
+    backend/tests/test_open_validity_publication.py
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_release_set_authorization.py
     backend/tests/test_graph_b_publication.py
-    backend/tests/test_graph_b_snapshot.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py

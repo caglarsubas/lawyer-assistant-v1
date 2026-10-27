@@ -38,6 +38,13 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("--shard=4 --workers=2", graph)
         self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("name: Test manifest-bound reader lifecycle"))
         self.assertIn("timeout-minutes: 1", graph.split("name: Test manifest-bound reader lifecycle", 1)[1])
+        group = re.search(r"  CI_GRAPH_RUNTIME_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(group.count("backend/tests/test_open_validity_publication.py"), 1)
+        self.assertNotIn("backend/tests/test_graph_b_snapshot.py", group)
+        self.assertEqual(workflow.count("backend/tests/test_graph_b_snapshot.py"), 0)
+        self.assertIn('"${graph_runtime_tests[@]}"', blocks["backend-and-contracts"])
+        final_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(final_group.count("backend/tests/test_set_publication_cli.py"), 1)
         self.assertNotIn("--workers=2", blocks["frontend"])
         self.assertNotIn("--workers=2", blocks["frontend-history"])
 

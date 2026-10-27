@@ -7846,8 +7846,10 @@ The new frozen campaign passes **18 scenarios / 40 loopback servers /
 Native controller results use only invented inputs and disposable identities.
 
 All **1,018 deployment methods** must execute once. To retain CI headroom, the
-complete open-validity file returns to the existing backend remainder; the
-graph job's sequential contract step reuses its existing two-worker peak and
+complete open-validity file stays in the graph group, while the lighter Graph B
+snapshot file returns to the backend remainder. The complete set-publication CLI file
+uses the existing whole-release job's measured reserve. The graph job's sequential
+contract step reuses its existing two-worker peak and
 one-minute deadline. Nine jobs, all frontend files/cases and job/test deadlines
 remain. Nine exact-head checks, five 30-second reserves, a pinned merge and
 independently fetched-main tree equality remain mandatory.

@@ -42,11 +42,11 @@
     "scripts/mode_recovery_fixture.py": "2cbf15ff0e5d2cc15abfadf302203f0501af4389e6d66203d9b015af14dba01a",
     "scripts/mode_recovery_native.py": "82952ef3a675dd3e4db6613fada12c2119e5a3b91f710c97f1a135db5077683a",
     "scripts/mode_recovery_report.py": "77c4c77518bb3fa045d7bd1ca0443dc1907258f96487e815b64add490a217182",
-    ".github/workflows/ci.yml": "ec5f91a20dba2662819be8fd19996dc51e16314f3260e9f9c5966f866dbf99c5",
+    ".github/workflows/ci.yml": "01ea1ca473d52df4f9cbb486dba8bba178c11831c7569b30c8c3b0683b1cb0a8",
     "deploy/fixtures/deployment_test_manifest.json": "16599d9f6eddab10b32bdc1ee92d04ea741dcd69931e218e44c49ee46c68d8ff",
     "deploy/test_deployment_shards.py": "dcc58134c1255de3ae2144a298e5022542aba5ea6c83201f06763ea9dfa61322",
     "scripts/run_ci_deployment_shard.py": "d639ebc4fe1bb5ba4d89d47cb579e5b1972b266f713a41c66749e6dff89a7440",
-    "deploy/test_deployment_ci_placement.py": "6cec4ac176226a0cb94a41a00536692981a2fac388b42f1f80aadc1a999921db"
+    "deploy/test_deployment_ci_placement.py": "deab54b98458312ce7870e2bd3bf7df96a4c2b6488759da625f3d0f17af8edaf"
   },
   "deployment_contracts": {
     "inventory": 1018,
@@ -72,7 +72,7 @@
     ],
     "local_wall_seconds": [
       106.85,
-      112.06,
+      101.91,
       53.02,
       26.98,
       26.45,
@@ -81,7 +81,7 @@
     ],
     "local_summed_case_seconds": [
       104.521,
-      109.963,
+      99.953,
       99.939,
       47.125,
       24.956,
@@ -90,16 +90,44 @@
     ]
   },
   "CI_capacity": {
-    "whole_file_to_backend_remainder": "backend/tests/test_open_validity_publication.py",
+    "whole_file_to_backend_remainder": "backend/tests/test_graph_b_snapshot.py",
     "graph_pair_after_pytest_only": true,
     "graph_contract_seconds_cap": 60,
     "jobs_workers_and_deadlines_unchanged": true,
     "moved_file_local_validation": {
-      "moved_complete_file": "backend/tests/test_open_validity_publication.py",
+      "moved_complete_file": "backend/tests/test_graph_b_snapshot.py",
       "passed": true,
-      "wall_seconds": 25.58,
+      "wall_seconds": 15.08,
       "workers": 2
-    }
+    },
+    "whole_file_retained_in_graph": "backend/tests/test_open_validity_publication.py",
+    "first_exact_head_CI": {
+      "head": "5039cce48d2623e9a00c2929d33faeaa250b0249",
+      "run": 40484402038,
+      "successful_jobs": 9,
+      "backend_seconds": 1188,
+      "backend_reserve_seconds": 12,
+      "merge_held_for_minimum_30_second_reserve": true
+    },
+    "whole_file_to_existing_final_release_group": "backend/tests/test_set_publication_cli.py",
+    "publication_file_local_validation": {
+      "passed": true,
+      "seconds": 13.47,
+      "workers": 2
+    },
+    "graph_group_local_validation": {
+      "complete_graph_group_passed": true,
+      "seconds": 138.09,
+      "files": [
+        "backend/tests/test_open_validity_publication.py",
+        "backend/tests/test_declared_graph_assembly.py",
+        "backend/tests/test_graph_b_component_grants.py",
+        "backend/tests/test_release_set_authorization.py",
+        "backend/tests/test_graph_b_publication.py"
+      ],
+      "workers": 2
+    },
+    "disjoint_complete_file_placement_contracts_passed": 5
   },
   "scanner_intake_restored": true,
   "scanner_evidence_sha256": "ab7db069b9be6d6405522a5f26de4d891f11f05cf22cd3966fd19e28305223e3",

@@ -40,8 +40,10 @@ are retained separately from the accepted campaign.
 
 The full deployment inventory is **1,018 methods**. Existing graph-job pytest
 workers finish before its contract worker pair starts, preserving the job's
-two-worker peak and one-minute contract deadline. The complete open-validity
-test file returns to the existing backend remainder exactly once. Nine jobs,
+two-worker peak and one-minute contract deadline. The heavier complete open-validity
+file stays in the graph group; the lighter Graph B snapshot file returns to the
+backend remainder exactly once. The complete set-publication CLI file
+uses the existing whole-release job's measured reserve. Nine jobs,
 all frontend cases/files and job/test deadlines remain unchanged. Merge requires
 exact-head success, complete source-bound receipts, five timing reserves of at
 least 30 seconds, a pinned merge and fetched-main tree equality.
