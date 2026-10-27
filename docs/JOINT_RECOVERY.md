@@ -61,12 +61,12 @@ assignments in the same nine CI jobs. Fresh exact-head success, five reserves of
 at least 30 seconds, a pinned merge and independently fetched-main tree equality
 remain mandatory. Frontend coverage, worker peaks and deadlines are unchanged.
 
-The first CI placement left 13 seconds of frontend reserve and 31 seconds of
-graph-runtime reserve. Five measured contracts (26.517 seconds) leave frontend
-for existing history/candidate reserves; two graph contracts (8.888 seconds)
-join the existing two-worker backend assignment, whose contract step took
-108 seconds under its unchanged 120-second cap. The qualified runtime and all
-96 native source pins stay unchanged. Fresh exact-head timing gates are required.
+Timing is qualified independently of passing tests. Observed frontend/history
+jobs with 13/23 seconds of reserve did not clear the required 30-second gate.
+Retained per-case receipts guide the final placement within existing frontend,
+backend and graph reserves, and reduce candidate-job load. The qualified runtime
+and all 96 native source pins remain unchanged. Fresh exact-head timing gates
+are still required; no worker or deadline increases substitute for them.
 
 Production PostgreSQL/IdP, genuine appointments and custody, off-host recovery,
 signed live provider qualification and legal acceptance remain separate gates.

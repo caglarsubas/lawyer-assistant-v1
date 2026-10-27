@@ -106,7 +106,7 @@ def namespace_assignments(ids, profile=None):
 def shard(test_id, lifecycle_ids, namespace):
     if test_id.startswith("test_joint_recovery.JointRecoveryContracts.test_case_J"):
         case = int(re.search(r"\.test_case_J([0-9]{2})_", test_id)[1])
-        return 2 if case == 1 else 5 if case <= 3 else 2 if case <= 6 else 3 if case <= 12 else 4
+        return 4 if case in {2, 3} else 1 if case <= 6 else 3 if case <= 12 else 4
     if test_id.startswith("test_journal_recovery.JournalRecoveryContracts."):
         case = re.search(r"\.test_case_G([0-9]{2})_", test_id)
         return 5 if case and int(case[1]) <= 2 else 1 if case and int(case[1]) <= 8 else 3

@@ -45,17 +45,17 @@
     "scripts/joint_recovery_report.py": "6acdd6a320ea9010208d49454cd76d05ef5f5512122ced8c4f2b86e7d89b3576",
     "scripts/joint_recovery_worker.py": "034f5d568481d6e659efcd2cf7371b0e471cc597ecad8f30204bbe1c12773f10",
     "deploy/fixtures/deployment_test_manifest.json": "5a71f4fee15d40e0849e875c56606b85b667cd3ce0d326128eeee2bf34095970",
-    "scripts/run_ci_deployment_shard.py": "836b78faeedadc0d759c604ee13eebd0593124ca9b7c8b93e4f5badfe6dac2a4"
+    "scripts/run_ci_deployment_shard.py": "e89186449ad75961d43f291b3deab07b90ecb7d11bfe9335a1769dc3426065c5"
   },
   "deployment_contracts": {
     "inventory": 992,
     "passed": 992,
     "shard_counts": [
-      398,
-      431,
+      402,
+      427,
       103,
-      12,
-      11,
+      14,
+      9,
       26,
       11
     ],
@@ -65,20 +65,20 @@
     "frontend_cases": 10532,
     "worker_peaks_and_deadlines_unchanged": true,
     "local_wall_seconds": [
-      139.81,
-      169.29,
+      105.5,
+      104.57,
       74.14,
-      35.1,
-      33.86,
+      24.71,
+      14.6,
       16.5,
       13.86
     ],
     "local_summed_case_seconds": [
-      135.449,
-      165.939,
+      102.446,
+      102.16,
       138.31,
-      33.43,
-      32.061,
+      23.779,
+      13.704,
       29.796,
       13.095
     ],
@@ -87,9 +87,6 @@
       [
         1,
         2
-      ],
-      [
-        3
       ],
       [
         4,
@@ -176,5 +173,49 @@
     "same_nine_jobs": true,
     "same_worker_peaks_and_deadlines": true,
     "fresh_exact_head_reserves_required": true
+  },
+  "ci_headroom_rebalance_followup": {
+    "head": "749338c409ff4c562cb3d157bcbbafcab5be640a",
+    "run": 40460677010,
+    "selected": {
+      "frontend-history": {
+        "moved": [
+          {
+            "contract_completed": "test_joint_recovery.JointRecoveryContracts.test_case_J01_ordered_progress",
+            "seconds": 4.857
+          },
+          {
+            "contract_completed": "test_joint_recovery.JointRecoveryContracts.test_case_J04_stale_progress",
+            "seconds": 4.866
+          },
+          {
+            "contract_completed": "test_joint_recovery.JointRecoveryContracts.test_case_J05_finish_first_refused",
+            "seconds": 4.577
+          },
+          {
+            "contract_completed": "test_joint_recovery.JointRecoveryContracts.test_case_J06_missing_window_admission",
+            "seconds": 4.476
+          }
+        ],
+        "seconds": 18.776,
+        "log_sha256": "a91d48e7bb8e58403ab4d00cc9d0511bd5f75626a7f8737cff924bfc0616ea26",
+        "job_seconds": 277
+      },
+      "graph-candidate-contracts": {
+        "moved": [
+          {
+            "contract_completed": "test_joint_recovery.JointRecoveryContracts.test_case_J02_lost_destination_reply_restart",
+            "seconds": 4.471
+          },
+          {
+            "contract_completed": "test_joint_recovery.JointRecoveryContracts.test_case_J03_lost_window_reply_restart",
+            "seconds": 4.391
+          }
+        ],
+        "seconds": 8.862,
+        "log_sha256": "09a0cc41f0827693679d3b688475e7015b1066afb7eb024ee7db28fee8415b2d",
+        "job_seconds": 173
+      }
+    }
   }
 }
