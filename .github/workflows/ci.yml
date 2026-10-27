@@ -35,7 +35,6 @@ env:
   # a late single-worker tail. Full-suite membership, workers and caps stay.
   CI_FINAL_RELEASE_TESTS: >-
     backend/tests/test_retained_mixed_assembly.py
-    backend/tests/test_set_publication_cli.py
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
     backend/tests/test_final_release_inspection.py
@@ -49,10 +48,16 @@ env:
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_release_set_authorization.py
     backend/tests/test_graph_b_publication.py
+  # Complete expensive review files are disjoint from the backend remainder.
+  CI_BACKEND_REVIEW_TESTS: >-
+    backend/tests/test_authority_model_cohorts.py
+    backend/tests/test_authority_trial_cohorts.py
+    backend/tests/test_authority_trials.py
+    backend/tests/test_set_publication_cli.py
+    backend/tests/test_source_reviews.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py
-    backend/tests/test_source_reviews.py
     backend/tests/test_source_review_effort.py
     backend/tests/test_source_analysis_reviews.py
     backend/tests/test_source_context_renewals.py
@@ -145,8 +150,9 @@ jobs:
           read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
+          read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
           ignore_args=()
-          for path in "${runtime_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${workspace_tests[@]}" "${human_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}"; do
+          for path in "${runtime_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${workspace_tests[@]}" "${human_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
@@ -173,6 +179,26 @@ jobs:
           LA_GATEWAY_TOKEN: ci-placeholder-not-a-real-secret
           LA_EXTRACTION_TOKEN: ci-placeholder-not-a-real-secret-at-least-32
         run: docker compose --env-file /dev/null --profile research --profile native-provider config --quiet
+
+  backend-review-contracts:
+    # Isolate measured cohort/review CPU work instead of saturating the remainder.
+    # Exactly the same files run once with two workers; existing caps stay intact.
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install locked review dependencies
+        run: |
+          python -m pip install uv==0.8.15
+          uv sync --project backend --frozen --extra dev
+      - name: Test complete backend review and cohort files
+        timeout-minutes: 5
+        run: |
+          read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 
   postgres-snapshot-concurrency:
     # The unchanged CPU-heavy runtime guard exceeded the x86 job budget even

@@ -38,15 +38,25 @@ campaign cap remain required. Owned resources are removed afterward. An earlier
 preflight assertion stopped before scenarios began; its resources and receipt
 are retained separately from the accepted campaign.
 
-The full deployment inventory is **1,018 methods**. Existing graph-job pytest
-workers finish before its contract worker pair starts, preserving the job's
-two-worker peak and one-minute contract deadline. The heavier complete open-validity
-file stays in the graph group; the lighter Graph B snapshot file returns to the
-backend remainder exactly once. The complete set-publication CLI file
-uses the existing whole-release job's measured reserve. Nine jobs,
-all frontend cases/files and job/test deadlines remain unchanged. Merge requires
-exact-head success, complete source-bound receipts, five timing reserves of at
-least 30 seconds, a pinned merge and fetched-main tree equality.
+The full deployment inventory is **1,018 methods**. A source-bound timing profile
+moves eleven complete recovery scenarios off the saturated x86 contract worker
+into bounded increments in existing ARM assignments. All 139 frontend files and
+10,532 cases remain unchanged. Every method executes once across seven disjoint
+assignments; malformed, stale or over-budget profiles fail before execution.
+
+CI now has ten jobs. One new bounded six-minute ARM review job isolates five
+complete CPU-heavy backend files, using two workers and a five-minute test step.
+Existing job/test deadlines and per-job worker peaks remain unchanged. The graph
+job keeps open-validity tests, while the lighter complete Graph B snapshot file
+returns to the backend remainder. Graph metadata uses its sequential two-worker
+peak and unchanged one-minute deadline. The whole-release job retains its prior
+file group. Prior runs with insufficient reserve or timed-out jobs remain
+recorded and are not merge evidence.
+
+Merge requires ten exact-head checks, all source-bound method receipts, the five
+existing timing reserves plus a 30-second reserve for the new review job, a pinned
+merge and fetched-main tree equality. Runner time and job setup overhead are
+reported separately from the improved critical path; lower billing is not assumed.
 
 ## Intake maintenance
 

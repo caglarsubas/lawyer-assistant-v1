@@ -103,7 +103,44 @@ def namespace_assignments(ids, profile=None):
     return result
 
 
+
+MODE_WORKLOAD = ROOT / "deploy/fixtures/mode_recovery_ci_workload.json"
+MODE_BUDGET_MS = {"4": 12000, "5": 11000, "6": 24000, "7": 18000}
+MODE_MOVED_CODES = {"C06", "C07", "G03", "G04", "G05", "G06", "G07", "J01", "J04", "J05", "J06"}
+
+
+def mode_assignments(ids, profile=None):
+    value = json.loads(MODE_WORKLOAD.read_text()) if profile is None else profile
+    source = json.loads((ROOT / "deploy/fixtures/mode_recovery_first_report.json").read_text())["candidate"]["source"]
+    for name, expected_sha in source.items():
+        path = (ROOT / name).resolve()
+        if not path.is_relative_to(ROOT) or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected_sha:
+            raise ValueError("Current qualified recovery source required before execution")
+    source_sha = hashlib.sha256(json.dumps(source, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    expected = {ident for ident in ids if ident.startswith(("test_mode_recovery.", "test_journal_recovery.", "test_joint_recovery."))
+                and (match := re.search(r"\.test_case_([CGJ][0-9]{2})_", ident)) and match[1] in MODE_MOVED_CODES}
+    if (not isinstance(value, dict) or set(value) != {"schema", "qualification_source_sha256", "observed_head", "observed_run", "retained_log_sha256", "lane_increment_budget_ms", "assignments"}
+            or value["schema"] != "mode-recovery-ci-workload-v1" or value["qualification_source_sha256"] != source_sha
+            or not re.fullmatch(r"[0-9a-f]{40}", value["observed_head"]) or type(value["observed_run"]) is not int or value["observed_run"] <= 0
+            or not re.fullmatch(r"[0-9a-f]{64}", value["retained_log_sha256"]) or value["lane_increment_budget_ms"] != MODE_BUDGET_MS
+            or not isinstance(value["assignments"], list) or len(value["assignments"]) != len(expected) or len(expected) != 11):
+        raise ValueError("Source-bound recovery work profile required")
+    result, sums = {}, dict.fromkeys(MODE_BUDGET_MS, 0)
+    for row in value["assignments"]:
+        if (not isinstance(row, dict) or set(row) != {"test_id", "shard", "observed_case_ms"}
+                or row["test_id"] in result or row["test_id"] not in expected or type(row["shard"]) is not int
+                or str(row["shard"]) not in sums or type(row["observed_case_ms"]) is not int or row["observed_case_ms"] <= 0):
+            raise ValueError("Closed unique recovery assignments required")
+        result[row["test_id"]] = row["shard"]
+        sums[str(row["shard"])] += row["observed_case_ms"]
+    if set(result) != expected or any(sums[n] > budget for n, budget in MODE_BUDGET_MS.items()):
+        raise ValueError("Recovery increments must fit retained budgets")
+    return result
+
+
 def shard(test_id, lifecycle_ids, namespace):
+    if test_id in namespace:
+        return namespace[test_id]
     if test_id.startswith("test_mode_recovery.ModeRecoveryContracts.test_case_C"):
         case = int(re.search(r"\.test_case_C([0-9]{2})_", test_id)[1])
         return 2 if case <= 3 else 3 if case in {4, 5, 17} else 1 if case in {6, 7, 8} else 4
@@ -143,6 +180,10 @@ def plan(tests, manifest, selected):
         raise ValueError("Source-bound complete test manifest required")
     lifecycle_ids = [ident for ident in ids if ident.startswith("test_reader_lifecycle.ReaderLifecycleContracts.")]
     namespace = namespace_assignments(ids)
+    recovery = mode_assignments(ids)
+    if set(namespace) & set(recovery):
+        raise ValueError("Recovery placement cannot replace retained namespace budgets")
+    namespace.update(recovery)
     sets = [{ident for ident in ids if shard(ident, lifecycle_ids, namespace) == lane} for lane in (1, 2, 3, 4, 5, 6, 7)]
     if not all(sets) or any(a & b for n, a in enumerate(sets) for b in sets[n + 1:]) or set.union(*sets) != set(ids):
         raise ValueError("Complete disjoint shards required")

@@ -7845,14 +7845,17 @@ The new frozen campaign passes **18 scenarios / 40 loopback servers /
 768 MiB, 96 PIDs, four new ext4 volumes and disconnected operation remain.
 Native controller results use only invented inputs and disposable identities.
 
-All **1,018 deployment methods** must execute once. To retain CI headroom, the
-complete open-validity file stays in the graph group, while the lighter Graph B
-snapshot file returns to the backend remainder. The complete set-publication CLI file
-uses the existing whole-release job's measured reserve. The graph job's sequential
-contract step reuses its existing two-worker peak and
-one-minute deadline. Nine jobs, all frontend files/cases and job/test deadlines
-remain. Nine exact-head checks, five 30-second reserves, a pinned merge and
-independently fetched-main tree equality remain mandatory.
+All **1,018 deployment methods** must execute once. A source-bound measured
+profile moves eleven scenarios off the saturated frontend contract worker into
+bounded ARM reserves, preserving all 139 frontend files and 10,532 cases. One new
+six-minute ARM review job isolates five complete heavy backend files with two
+workers and a five-minute test cap. The existing nine jobs' deadlines and per-job
+worker peaks remain unchanged. Open-validity stays in the graph group; the lighter
+Graph B snapshot file returns to the backend remainder. The whole-release group
+is restored. Its sequential graph metadata pair retains its one-minute cap.
+Ten exact-head checks, six 30-second timing reserves, a pinned merge and
+independently fetched-main tree equality are mandatory. Retain earlier failed or
+insufficient-reserve runs; measure runner cost separately from critical-path time.
 
 Engineering delivery advances separately from readiness. The canonical ledger
 advances **250 → 251** sections. Checklist stays **42 done / 21 open / 24 waiting /

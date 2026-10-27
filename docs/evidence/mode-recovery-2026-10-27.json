@@ -26,13 +26,14 @@
   "native_source_pins": 103,
   "prior_source_pins_exact": 96,
   "prior_source_files": 1168,
-  "exact_prior_source_files": 1163,
+  "exact_prior_source_files": 1162,
   "intentional_prior_source_changes": [
     ".github/workflows/ci.yml",
     "deploy/fixtures/deployment_test_manifest.json",
     "deploy/test_deployment_shards.py",
     "scripts/run_ci_deployment_shard.py",
-    "deploy/test_deployment_ci_placement.py"
+    "deploy/test_deployment_ci_placement.py",
+    "deploy/test_ci_partition_contract.py"
   ],
   "implementation_sha256": {
     "deploy/fixtures/mode_recovery_policy.json": "f518cb1997ee2a6d267704a73af816c7fbc6b1d31b4d819ddca585de9fb9ac0f",
@@ -42,58 +43,62 @@
     "scripts/mode_recovery_fixture.py": "2cbf15ff0e5d2cc15abfadf302203f0501af4389e6d66203d9b015af14dba01a",
     "scripts/mode_recovery_native.py": "82952ef3a675dd3e4db6613fada12c2119e5a3b91f710c97f1a135db5077683a",
     "scripts/mode_recovery_report.py": "77c4c77518bb3fa045d7bd1ca0443dc1907258f96487e815b64add490a217182",
-    ".github/workflows/ci.yml": "01ea1ca473d52df4f9cbb486dba8bba178c11831c7569b30c8c3b0683b1cb0a8",
+    ".github/workflows/ci.yml": "d0e7bdbd89a67a3d3f3a801363a25ac16b24ad9416a3df829241016c3136bfec",
     "deploy/fixtures/deployment_test_manifest.json": "16599d9f6eddab10b32bdc1ee92d04ea741dcd69931e218e44c49ee46c68d8ff",
-    "deploy/test_deployment_shards.py": "dcc58134c1255de3ae2144a298e5022542aba5ea6c83201f06763ea9dfa61322",
-    "scripts/run_ci_deployment_shard.py": "d639ebc4fe1bb5ba4d89d47cb579e5b1972b266f713a41c66749e6dff89a7440",
-    "deploy/test_deployment_ci_placement.py": "deab54b98458312ce7870e2bd3bf7df96a4c2b6488759da625f3d0f17af8edaf"
+    "deploy/test_deployment_shards.py": "35372efb2164e99007837fc3b4c4345424e49972256608819b2c76b16e54b8eb",
+    "scripts/run_ci_deployment_shard.py": "eb622b562f6c07350637f287ebf9991b20242f139bdc07a9c120aaa0964e7189",
+    "deploy/test_deployment_ci_placement.py": "43108b491e9ef437cc771a709a0a4e4e2ae9faa782950bb88963daa617dbc9bb",
+    "deploy/test_ci_partition_contract.py": "5f774e10a821f300cbad2ae4a604e34eb9b62370c287fc0f47328a4dba1c3efd",
+    "deploy/fixtures/mode_recovery_ci_workload.json": "a8d0dd5cc3a30b070058f1e655fef90dce701e4a0e6432c64cc8e27e30383b28"
   },
   "deployment_contracts": {
     "inventory": 1018,
     "passed": 1018,
     "shard_counts": [
-      408,
+      397,
       435,
       106,
-      23,
-      9,
-      26,
-      11
+      25,
+      11,
+      30,
+      14
     ],
     "source_manifest_exactly_once": true,
     "existing_jobs": 9,
     "frontend_files": 139,
     "frontend_cases": 10532,
-    "peak_workers_and_deadlines_unchanged": true,
     "contract_worker_pairs": [
       3,
       4,
       6
     ],
     "local_wall_seconds": [
-      106.85,
-      101.91,
-      53.02,
-      26.98,
-      26.45,
-      18.26,
-      21.69
+      82.53,
+      101.18,
+      50.81,
+      25.22,
+      16.19,
+      19.12,
+      19.56
     ],
     "local_summed_case_seconds": [
-      104.521,
-      99.953,
-      99.939,
-      47.125,
-      24.956,
-      33.191,
-      20.146
-    ]
+      80.301,
+      99.29,
+      95.796,
+      44.905,
+      15.376,
+      34.535,
+      18.763
+    ],
+    "added_jobs": 1,
+    "total_jobs": 10,
+    "existing_deadlines_and_per_job_workers_unchanged": true
   },
   "CI_capacity": {
     "whole_file_to_backend_remainder": "backend/tests/test_graph_b_snapshot.py",
     "graph_pair_after_pytest_only": true,
     "graph_contract_seconds_cap": 60,
-    "jobs_workers_and_deadlines_unchanged": true,
+    "jobs_workers_and_deadlines_unchanged": false,
     "moved_file_local_validation": {
       "moved_complete_file": "backend/tests/test_graph_b_snapshot.py",
       "passed": true,
@@ -109,7 +114,6 @@
       "backend_reserve_seconds": 12,
       "merge_held_for_minimum_30_second_reserve": true
     },
-    "whole_file_to_existing_final_release_group": "backend/tests/test_set_publication_cli.py",
     "publication_file_local_validation": {
       "passed": true,
       "seconds": 13.47,
@@ -127,7 +131,43 @@
       ],
       "workers": 2
     },
-    "disjoint_complete_file_placement_contracts_passed": 5
+    "disjoint_complete_file_placement_contracts_passed": 5,
+    "added_bounded_review_job": {
+      "job_cap_seconds": 360,
+      "test_step_cap_seconds": 300,
+      "workers": 2,
+      "existing_jobs": 9,
+      "total_jobs": 10,
+      "local_complete_group_validation": {
+        "passed": true,
+        "seconds": 71.02,
+        "complete_files": [
+          "backend/tests/test_authority_model_cohorts.py",
+          "backend/tests/test_authority_trial_cohorts.py",
+          "backend/tests/test_authority_trials.py",
+          "backend/tests/test_set_publication_cli.py",
+          "backend/tests/test_source_reviews.py"
+        ],
+        "workers": 2
+      }
+    },
+    "frontend_rebalance": {
+      "profile": "deploy/fixtures/mode_recovery_ci_workload.json",
+      "source_pins": 103,
+      "methods": 11,
+      "observed_x86_case_ms_removed": 59055,
+      "profile_guard_contracts_passed": 11
+    },
+    "second_exact_head_CI": {
+      "head": "92f7a66c6c06d9275f56343f6300dbb344dc9d51",
+      "run": 40488916132,
+      "frontend_seconds": 315,
+      "frontend_cases_passed": 5299,
+      "frontend_methods_before_timeout": 403,
+      "whole_release_seconds": 368,
+      "merge_allowed": false
+    },
+    "whole_release_group_restored": true
   },
   "scanner_intake_restored": true,
   "scanner_evidence_sha256": "ab7db069b9be6d6405522a5f26de4d891f11f05cf22cd3966fd19e28305223e3",
