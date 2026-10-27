@@ -43,56 +43,56 @@
     "scripts/mode_recovery_fixture.py": "2cbf15ff0e5d2cc15abfadf302203f0501af4389e6d66203d9b015af14dba01a",
     "scripts/mode_recovery_native.py": "82952ef3a675dd3e4db6613fada12c2119e5a3b91f710c97f1a135db5077683a",
     "scripts/mode_recovery_report.py": "77c4c77518bb3fa045d7bd1ca0443dc1907258f96487e815b64add490a217182",
-    ".github/workflows/ci.yml": "d0e7bdbd89a67a3d3f3a801363a25ac16b24ad9416a3df829241016c3136bfec",
+    ".github/workflows/ci.yml": "7b99bd81c7a3fdc4b4bf84c3eb6032e90fc02f2ddd457ae5ad1af3e49c2e02b8",
     "deploy/fixtures/deployment_test_manifest.json": "16599d9f6eddab10b32bdc1ee92d04ea741dcd69931e218e44c49ee46c68d8ff",
-    "deploy/test_deployment_shards.py": "35372efb2164e99007837fc3b4c4345424e49972256608819b2c76b16e54b8eb",
-    "scripts/run_ci_deployment_shard.py": "eb622b562f6c07350637f287ebf9991b20242f139bdc07a9c120aaa0964e7189",
-    "deploy/test_deployment_ci_placement.py": "43108b491e9ef437cc771a709a0a4e4e2ae9faa782950bb88963daa617dbc9bb",
-    "deploy/test_ci_partition_contract.py": "5f774e10a821f300cbad2ae4a604e34eb9b62370c287fc0f47328a4dba1c3efd",
-    "deploy/fixtures/mode_recovery_ci_workload.json": "a8d0dd5cc3a30b070058f1e655fef90dce701e4a0e6432c64cc8e27e30383b28"
+    "deploy/test_deployment_shards.py": "2b0361b55bc0a0a4ef4eda40504b6f2d9b8c7942c874926e354ba1714e519d0c",
+    "scripts/run_ci_deployment_shard.py": "94b79ff45230ef8f3d7ec2fa7f8e44cdd7e3b8df3f5d586c0fa38bf7b5db7a96",
+    "deploy/test_deployment_ci_placement.py": "6482ebf8a95addc1c091d9d3d1cdc7ee7f25d686ca48ba175666b797dabf0d84",
+    "deploy/test_ci_partition_contract.py": "d4e1631719addd795227ad0beca3070479d592a6fb642cf9ef36898ffa013edc"
   },
   "deployment_contracts": {
     "inventory": 1018,
     "passed": 1018,
     "shard_counts": [
-      397,
+      408,
       435,
       106,
-      25,
-      11,
-      30,
-      14
+      23,
+      9,
+      26,
+      11
     ],
     "source_manifest_exactly_once": true,
     "existing_jobs": 9,
     "frontend_files": 139,
     "frontend_cases": 10532,
     "contract_worker_pairs": [
+      1,
       3,
       4,
       6
     ],
     "local_wall_seconds": [
-      82.53,
-      101.18,
-      50.81,
-      25.22,
-      16.19,
-      19.12,
-      19.56
+      60.36,
+      105.82,
+      49.22,
+      21.79,
+      13.1,
+      15.33,
+      14.26
     ],
     "local_summed_case_seconds": [
-      80.301,
-      99.29,
-      95.796,
-      44.905,
-      15.376,
-      34.535,
-      18.763
+      109.451,
+      103.861,
+      92.531,
+      38.622,
+      12.263,
+      27.333,
+      13.557
     ],
     "added_jobs": 1,
     "total_jobs": 10,
-    "existing_deadlines_and_per_job_workers_unchanged": true
+    "existing_deadlines_and_worker_upper_bounds_preserved": true
   },
   "CI_capacity": {
     "whole_file_to_backend_remainder": "backend/tests/test_graph_b_snapshot.py",
@@ -140,23 +140,18 @@
       "total_jobs": 10,
       "local_complete_group_validation": {
         "passed": true,
-        "seconds": 71.02,
+        "seconds": 52.73,
         "complete_files": [
           "backend/tests/test_authority_model_cohorts.py",
           "backend/tests/test_authority_trial_cohorts.py",
-          "backend/tests/test_authority_trials.py",
-          "backend/tests/test_set_publication_cli.py",
           "backend/tests/test_source_reviews.py"
         ],
         "workers": 2
-      }
-    },
-    "frontend_rebalance": {
-      "profile": "deploy/fixtures/mode_recovery_ci_workload.json",
-      "source_pins": 103,
-      "methods": 11,
-      "observed_x86_case_ms_removed": 59055,
-      "profile_guard_contracts_passed": 11
+      },
+      "contract_step_cap_seconds": 180,
+      "contract_assignment": 1,
+      "contract_workers": 2,
+      "pytest_and_contract_workers_sequential": true
     },
     "second_exact_head_CI": {
       "head": "92f7a66c6c06d9275f56343f6300dbb344dc9d51",
@@ -167,7 +162,21 @@
       "whole_release_seconds": 368,
       "merge_allowed": false
     },
-    "whole_release_group_restored": true
+    "whole_release_group_restored": true,
+    "frontend_contract_separation": {
+      "x86_frontend_Python_setup_removed": true,
+      "all_408_methods_run_in_ARM_review_pair": true,
+      "original_other_assignments_preserved": true,
+      "front_worker_count": 1,
+      "review_job_peak": 2
+    },
+    "third_exact_head_frontend": {
+      "head": "ad422b664add83913462d0cb0af473733f660ce8",
+      "run": 40491457344,
+      "seconds": 292,
+      "reserve_seconds": 8,
+      "merge_held": true
+    }
   },
   "scanner_intake_restored": true,
   "scanner_evidence_sha256": "ab7db069b9be6d6405522a5f26de4d891f11f05cf22cd3966fd19e28305223e3",

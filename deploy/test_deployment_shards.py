@@ -84,27 +84,6 @@ class DeploymentShardContracts(unittest.TestCase):
                 value["assignments"][0]["unexpected"] = True
             with self.subTest(kind=kind), self.assertRaises(ValueError):
                 runner.namespace_assignments(ids, value)
-        recovery = json.loads(runner.MODE_WORKLOAD.read_text())
-        self.assertEqual(len(runner.mode_assignments(ids)), 11)
-        changed = ROOT / "scripts/mode_recovery_fixture.py"
-        with patch.object(Path, "read_bytes", lambda path: b"changed" if path == changed else original_read(path)), self.assertRaises(ValueError):
-            runner.mode_assignments(ids, recovery)
-        for kind in ("missing", "duplicate", "source", "budget", "lane", "unknown"):
-            value = copy.deepcopy(recovery)
-            if kind == "missing":
-                value["assignments"].pop()
-            elif kind == "duplicate":
-                value["assignments"][1] = value["assignments"][0]
-            elif kind == "source":
-                value["qualification_source_sha256"] = "0" * 64
-            elif kind == "budget":
-                value["assignments"][0]["observed_case_ms"] = 1000000
-            elif kind == "lane":
-                value["assignments"][0]["shard"] = 2
-            else:
-                value["assignments"][0]["unexpected"] = True
-            with self.subTest(recovery_kind=kind), self.assertRaises(ValueError):
-                runner.mode_assignments(ids, value)
 
     def test_omitted_or_duplicate_test_is_rejected_before_execution(self):
         tests = [unittest.FunctionTestCase(lambda: None), unittest.FunctionTestCase(lambda: None)]
@@ -118,7 +97,7 @@ class DeploymentShardContracts(unittest.TestCase):
                     "selected_ids": expected[index::2], "executed_ids": expected[index::2],
                     "tests_run": 2, "case_seconds": dict.fromkeys(expected[index::2], .1),
                     "complete_count": 5, "success": True, "worker_index": index, "worker_count": 2} for index in (0, 1)]
-        for lane in (3, 4, 6):
+        for lane in (1, 3, 4, 6):
             paired = copy.deepcopy(reports)
             for row in paired:
                 row["shard"] = lane

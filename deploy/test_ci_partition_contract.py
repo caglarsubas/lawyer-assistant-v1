@@ -59,7 +59,7 @@ class PartitionContract(unittest.TestCase):
         self.assertIn("npm run build", workflow.split("  final-release-authorization:\n", 1)[1].split("  retained-release-withdrawal:", 1)[0])
         self.assertIn('"test": "vitest run --pool=threads --maxWorkers=2"', package)
         self.assertIn("node node_modules/vitest/vitest.mjs run --pool=threads --maxWorkers=1 --shard=2/2", workflow)
-        self.assertEqual(workflow.count("python scripts/run_ci_history_workers.py"), 2)
+        self.assertEqual(workflow.count("python scripts/run_ci_history_workers.py"), 1)
         self.assertNotIn("--no-isolate", workflow + package)
         self.assertNotIn("--passWithNoTests", workflow + package)
 

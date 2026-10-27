@@ -38,25 +38,25 @@ campaign cap remain required. Owned resources are removed afterward. An earlier
 preflight assertion stopped before scenarios began; its resources and receipt
 are retained separately from the accepted campaign.
 
-The full deployment inventory is **1,018 methods**. A source-bound timing profile
-moves eleven complete recovery scenarios off the saturated x86 contract worker
-into bounded increments in existing ARM assignments. All 139 frontend files and
-10,532 cases remain unchanged. Every method executes once across seven disjoint
-assignments; malformed, stale or over-budget profiles fail before execution.
+The full deployment inventory is **1,018 methods** in seven disjoint assignments.
+CI separates the x86 Vitest process from the competing Python contract worker.
+Assignment 1 runs with two workers after the complete cohort/source-review group
+in a new ARM job. Existing other assignments retain their prior distribution.
+All 139 frontend files and 10,532 cases remain unchanged; every method runs once.
 
-CI now has ten jobs. One new bounded six-minute ARM review job isolates five
-complete CPU-heavy backend files, using two workers and a five-minute test step.
-Existing job/test deadlines and per-job worker peaks remain unchanged. The graph
-job keeps open-validity tests, while the lighter complete Graph B snapshot file
-returns to the backend remainder. Graph metadata uses its sequential two-worker
-peak and unchanged one-minute deadline. The whole-release job retains its prior
-file group. Prior runs with insufficient reserve or timed-out jobs remain
+CI has ten jobs. The new review job has a six-minute limit, a five-minute pytest
+step and a three-minute contract step, executed sequentially with at most two
+workers. Existing deadlines and worker upper bounds remain; the x86 UI job needs
+one Vitest worker and no Python setup. The graph job keeps open-validity tests;
+the lighter complete Graph B snapshot file returns to the backend remainder.
+Graph metadata retains its sequential pair and one-minute cap. Whole-release
+retains its prior group. Earlier insufficient-reserve and timed-out runs remain
 recorded and are not merge evidence.
 
 Merge requires ten exact-head checks, all source-bound method receipts, the five
 existing timing reserves plus a 30-second reserve for the new review job, a pinned
 merge and fetched-main tree equality. Runner time and job setup overhead are
-reported separately from the improved critical path; lower billing is not assumed.
+reported separately from the critical path; lower billing is not assumed.
 
 ## Intake maintenance
 

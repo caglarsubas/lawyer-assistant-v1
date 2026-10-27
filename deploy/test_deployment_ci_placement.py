@@ -19,19 +19,20 @@ class DeploymentPlacementContract(unittest.TestCase):
         for name, lane in (("graph-runtime-contracts", 4), ("graph-candidate-contracts", 5), ("retained-release-withdrawal", 6)):
             self.assertIn("scripts/run_ci_deployment_shard.py --shard=" + str(lane), blocks[name])
         self.assertLess(blocks["backend-and-contracts"].index("--shard=3"), blocks["backend-and-contracts"].index("name: Test backend"))
-        self.assertIn("scripts/run_ci_deployment_shard.py --shard=1", blocks["frontend"])
+        self.assertNotIn("scripts/run_ci_deployment_shard.py", blocks["frontend"])
+        self.assertIn("--shard=1 --workers=2", blocks["backend-review-contracts"])
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=7", blocks["postgres-snapshot-concurrency"])
         self.assertNotIn("--shard=7", blocks["frontend"])
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=2", blocks["frontend-history"])
-        self.assertIn("actions/setup-python@v5", blocks["frontend"])
-        self.assertIn("uv sync --project backend --frozen --extra dev", blocks["frontend"])
+        self.assertNotIn("actions/setup-python@v5", blocks["frontend"])
+        self.assertNotIn("uv sync --project backend --frozen --extra dev", blocks["frontend"])
         self.assertIn("actions/setup-python@v5", blocks["frontend-history"])
         self.assertIn("uv sync --project backend --frozen --extra dev", blocks["frontend-history"])
         self.assertIn("timeout-minutes: 5", blocks["frontend-history"])
         self.assertIn("runs-on: ubuntu-24.04-arm", blocks["frontend-history"])
         self.assertIn("runs-on: ubuntu-latest", blocks["frontend"])
         self.assertIn("timeout-minutes: 18", blocks["backend-and-contracts"])
-        self.assertEqual(workflow.count("--workers=2"), 3)
+        self.assertEqual(workflow.count("--workers=2"), 4)
         self.assertIn("--shard=3 --workers=2", blocks["backend-and-contracts"])
         self.assertIn("--shard=6 --workers=2", blocks["retained-release-withdrawal"])
         graph = blocks["graph-runtime-contracts"]
@@ -44,7 +45,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_graph_b_snapshot.py"), 0)
         self.assertIn('"${graph_runtime_tests[@]}"', blocks["backend-and-contracts"])
         final_group = re.search(r"  CI_BACKEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(final_group.count("backend/tests/test_set_publication_cli.py"), 1)
+        self.assertNotIn("backend/tests/test_set_publication_cli.py", final_group)
+        review = blocks["backend-review-contracts"]
+        self.assertLess(review.index("name: Test complete backend review"), review.index("name: Test complete manifest-bound assignment 1"))
         self.assertNotIn("--workers=2", blocks["frontend"])
         self.assertNotIn("--workers=2", blocks["frontend-history"])
 

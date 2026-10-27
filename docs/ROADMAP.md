@@ -7845,17 +7845,17 @@ The new frozen campaign passes **18 scenarios / 40 loopback servers /
 768 MiB, 96 PIDs, four new ext4 volumes and disconnected operation remain.
 Native controller results use only invented inputs and disposable identities.
 
-All **1,018 deployment methods** must execute once. A source-bound measured
-profile moves eleven scenarios off the saturated frontend contract worker into
-bounded ARM reserves, preserving all 139 frontend files and 10,532 cases. One new
-six-minute ARM review job isolates five complete heavy backend files with two
-workers and a five-minute test cap. The existing nine jobs' deadlines and per-job
-worker peaks remain unchanged. Open-validity stays in the graph group; the lighter
-Graph B snapshot file returns to the backend remainder. The whole-release group
-is restored. Its sequential graph metadata pair retains its one-minute cap.
-Ten exact-head checks, six 30-second timing reserves, a pinned merge and
-independently fetched-main tree equality are mandatory. Retain earlier failed or
-insufficient-reserve runs; measure runner cost separately from critical-path time.
+All **1,018 deployment methods** must execute once. Separate x86 Vitest from its
+competing Python contract worker. Complete assignment 1 runs with two workers
+after two complete cohort files and source-review tests in one new six-minute ARM
+job; the other original assignment distributions remain. All 139 frontend files
+and 10,532 cases remain. The new job has sequential five-minute pytest and
+three-minute contract steps. Existing deadlines and worker upper bounds remain.
+Open-validity stays in graph; the lighter Graph B snapshot file returns to the
+backend remainder. Whole-release retains its prior group. Graph metadata keeps
+its one-minute cap. Ten exact-head checks, six 30-second reserves, a pinned merge
+and independently fetched-main tree equality are mandatory. Retain earlier failed
+or insufficient-reserve runs; report runner time separately from critical path.
 
 Engineering delivery advances separately from readiness. The canonical ledger
 advances **250 → 251** sections. Checklist stays **42 done / 21 open / 24 waiting /
