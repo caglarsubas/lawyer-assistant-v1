@@ -97,7 +97,11 @@ class DeploymentShardContracts(unittest.TestCase):
                     "selected_ids": expected[index::2], "executed_ids": expected[index::2],
                     "tests_run": 2, "case_seconds": dict.fromkeys(expected[index::2], .1),
                     "complete_count": 5, "success": True, "worker_index": index, "worker_count": 2} for index in (0, 1)]
-        self.assertEqual(runner.merge_workers(reports, expected, complete, sha, 3), dict.fromkeys(expected, .1))
+        for lane in (1, 3, 4, 6):
+            paired = copy.deepcopy(reports)
+            for row in paired:
+                row["shard"] = lane
+            self.assertEqual(runner.merge_workers(paired, expected, complete, sha, lane), dict.fromkeys(expected, .1))
         for kind in ("failure", "missing", "duplicate", "stale", "wrong_worker", "count", "cost", "extra", "third_worker"):
             changed = copy.deepcopy(reports)
             if kind == "failure":

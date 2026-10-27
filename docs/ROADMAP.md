@@ -7821,3 +7821,50 @@ joint retirement/rollback campaigns, followed by read-only operator recovery
 inventory and exact cross-instance recovery handoff. Genuine
 appointments/key custody, production PostgreSQL/IdP, off-host rollback protection,
 live provider qualification and legal acceptance remain separate gates.
+
+## Restored intake and retirement/rollback recovery — 2026-10-27
+
+Restore intake using a fresh official CVD release admitted by cryptographic
+verification in a disconnected verifier. Keep the scanner image and seven-day
+freshness policy, security posture, networks and addresses. Only the scanner is
+recreated; the other seven services and private document/evidence/review,
+credential and session state remain exact. All eight services are healthy.
+API-side clean/EICAR checks and live intake dependency checks pass. No private
+document is reuploaded, and no user session is created or revoked.
+
+Qualify the existing controller's retirement and rollback modes separately from
+renewal. Retirement preserves the namespace and permanently denies the retired
+reader. Rollback binds a specific earlier target through fresh child, window and
+namespace reviews; it does not reactivate an old selection or decision. Exact
+actor-bound plans and fresh progress views govern each existing anchor append.
+Lost replies reconcile across replacement processes without replaying mutations.
+
+The new frozen campaign passes **18 scenarios / 40 loopback servers /
+1,097 HTTP requests in 132.60 seconds**. All **103 current source pins**, including
+**96 preceding dependencies**, remain exact. The 180-second cap, two CPUs,
+768 MiB, 96 PIDs, four new ext4 volumes and disconnected operation remain.
+Native controller results use only invented inputs and disposable identities.
+
+All **1,018 deployment methods** must execute once. Separate x86 Vitest from its
+competing Python contract worker. Complete assignment 1 runs with two workers
+after two complete cohort files and source-review tests in one new six-minute ARM
+job; the other original assignment distributions remain. All 139 frontend files
+and 10,532 cases remain. The new job has sequential five-minute pytest and
+three-minute contract steps. Existing deadlines and worker upper bounds remain.
+Open-validity stays in graph; the lighter Graph B snapshot file returns to the
+backend remainder. Whole-release retains its prior group. Graph metadata keeps
+its one-minute cap. Ten exact-head checks, six 30-second reserves, a pinned merge
+and independently fetched-main tree equality are mandatory. Retain earlier failed
+or insufficient-reserve runs; report runner time separately from critical path.
+
+Engineering delivery advances separately from readiness. The canonical ledger
+advances **250 → 251** sections. Checklist stays **42 done / 21 open / 24 waiting /
+6 deferred**; workstream readiness stays **0 ready / 9 partial / 4 waiting /
+1 planned**. Owner private-analysis review remains pending.
+
+See the [mode qualification contract](MODE_RECOVERY.md),
+[mode evidence](evidence/mode-recovery-2026-10-27.json) and
+[scanner maintenance evidence](evidence/scanner-signature-refresh-2026-10-27.json).
+Next qualify read-only operator recovery inventory and exact cross-instance
+handoff. Genuine appointments/key custody, production PostgreSQL/IdP, off-host
+protection, signed live provider qualification and legal acceptance remain.

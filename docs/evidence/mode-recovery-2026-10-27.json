@@ -1,0 +1,203 @@
+{
+  "schema": "mode-recovery-engineering-evidence-v1",
+  "client_date": "2026-10-27",
+  "base_commit": "d10812d5a3a9fa0eced549e3371d7625a0db6a7a",
+  "status": "native_qualified_disposable_only",
+  "native": {
+    "cases": 18,
+    "servers": 40,
+    "HTTP_requests": 1097,
+    "seconds": 132.6,
+    "seconds_cap": 180,
+    "qualified_modes": [
+      "retirement",
+      "rollback"
+    ],
+    "cases_per_mode": 9,
+    "process_replacements": 4,
+    "maximum_concurrent_workers": 2
+  },
+  "native_report_sha256": "552049e5e7124f2c237ce0969f2492858c0158e8f6b640dc2fda5265b0540fdf",
+  "accepted_frozen_campaigns": 1,
+  "accepted_case_attempts": 1,
+  "preflight_aborted_before_scenarios": true,
+  "preflight_resources_removed": true,
+  "owned_native_resources_removed": true,
+  "native_source_pins": 103,
+  "prior_source_pins_exact": 96,
+  "prior_source_files": 1168,
+  "exact_prior_source_files": 1162,
+  "intentional_prior_source_changes": [
+    ".github/workflows/ci.yml",
+    "deploy/fixtures/deployment_test_manifest.json",
+    "deploy/test_deployment_shards.py",
+    "scripts/run_ci_deployment_shard.py",
+    "deploy/test_deployment_ci_placement.py",
+    "deploy/test_ci_partition_contract.py"
+  ],
+  "implementation_sha256": {
+    "deploy/fixtures/mode_recovery_policy.json": "f518cb1997ee2a6d267704a73af816c7fbc6b1d31b4d819ddca585de9fb9ac0f",
+    "deploy/test_mode_recovery.py": "fc4109117c1bc63bad0a84d7f26152148380bd9028218666f3ea9fd864bc3278",
+    "deploy/test_mode_recovery_report.py": "e272d34121dbae945b91f6ff66bdf2874f3c91c76fa30d1ae6d0ee6c4fe65b0f",
+    "deploy/test_mode_recovery_source.py": "7a640eee56baf5290eb71c4e5b0428b4653186076d9bf9d45f22463425016920",
+    "scripts/mode_recovery_fixture.py": "2cbf15ff0e5d2cc15abfadf302203f0501af4389e6d66203d9b015af14dba01a",
+    "scripts/mode_recovery_native.py": "82952ef3a675dd3e4db6613fada12c2119e5a3b91f710c97f1a135db5077683a",
+    "scripts/mode_recovery_report.py": "77c4c77518bb3fa045d7bd1ca0443dc1907258f96487e815b64add490a217182",
+    ".github/workflows/ci.yml": "7b99bd81c7a3fdc4b4bf84c3eb6032e90fc02f2ddd457ae5ad1af3e49c2e02b8",
+    "deploy/fixtures/deployment_test_manifest.json": "16599d9f6eddab10b32bdc1ee92d04ea741dcd69931e218e44c49ee46c68d8ff",
+    "deploy/test_deployment_shards.py": "2b0361b55bc0a0a4ef4eda40504b6f2d9b8c7942c874926e354ba1714e519d0c",
+    "scripts/run_ci_deployment_shard.py": "94b79ff45230ef8f3d7ec2fa7f8e44cdd7e3b8df3f5d586c0fa38bf7b5db7a96",
+    "deploy/test_deployment_ci_placement.py": "6482ebf8a95addc1c091d9d3d1cdc7ee7f25d686ca48ba175666b797dabf0d84",
+    "deploy/test_ci_partition_contract.py": "d4e1631719addd795227ad0beca3070479d592a6fb642cf9ef36898ffa013edc"
+  },
+  "deployment_contracts": {
+    "inventory": 1018,
+    "passed": 1018,
+    "shard_counts": [
+      408,
+      435,
+      106,
+      23,
+      9,
+      26,
+      11
+    ],
+    "source_manifest_exactly_once": true,
+    "existing_jobs": 9,
+    "frontend_files": 139,
+    "frontend_cases": 10532,
+    "contract_worker_pairs": [
+      1,
+      3,
+      4,
+      6
+    ],
+    "local_wall_seconds": [
+      60.36,
+      105.82,
+      49.22,
+      21.79,
+      13.1,
+      15.33,
+      14.26
+    ],
+    "local_summed_case_seconds": [
+      109.451,
+      103.861,
+      92.531,
+      38.622,
+      12.263,
+      27.333,
+      13.557
+    ],
+    "added_jobs": 1,
+    "total_jobs": 10,
+    "existing_deadlines_and_worker_upper_bounds_preserved": true
+  },
+  "CI_capacity": {
+    "whole_file_to_backend_remainder": "backend/tests/test_graph_b_snapshot.py",
+    "graph_pair_after_pytest_only": true,
+    "graph_contract_seconds_cap": 60,
+    "jobs_workers_and_deadlines_unchanged": false,
+    "moved_file_local_validation": {
+      "moved_complete_file": "backend/tests/test_graph_b_snapshot.py",
+      "passed": true,
+      "wall_seconds": 15.08,
+      "workers": 2
+    },
+    "whole_file_retained_in_graph": "backend/tests/test_open_validity_publication.py",
+    "first_exact_head_CI": {
+      "head": "5039cce48d2623e9a00c2929d33faeaa250b0249",
+      "run": 40484402038,
+      "successful_jobs": 9,
+      "backend_seconds": 1188,
+      "backend_reserve_seconds": 12,
+      "merge_held_for_minimum_30_second_reserve": true
+    },
+    "publication_file_local_validation": {
+      "passed": true,
+      "seconds": 13.47,
+      "workers": 2
+    },
+    "graph_group_local_validation": {
+      "complete_graph_group_passed": true,
+      "seconds": 138.09,
+      "files": [
+        "backend/tests/test_open_validity_publication.py",
+        "backend/tests/test_declared_graph_assembly.py",
+        "backend/tests/test_graph_b_component_grants.py",
+        "backend/tests/test_release_set_authorization.py",
+        "backend/tests/test_graph_b_publication.py"
+      ],
+      "workers": 2
+    },
+    "disjoint_complete_file_placement_contracts_passed": 5,
+    "added_bounded_review_job": {
+      "job_cap_seconds": 360,
+      "test_step_cap_seconds": 300,
+      "workers": 2,
+      "existing_jobs": 9,
+      "total_jobs": 10,
+      "local_complete_group_validation": {
+        "passed": true,
+        "seconds": 52.73,
+        "complete_files": [
+          "backend/tests/test_authority_model_cohorts.py",
+          "backend/tests/test_authority_trial_cohorts.py",
+          "backend/tests/test_source_reviews.py"
+        ],
+        "workers": 2
+      },
+      "contract_step_cap_seconds": 180,
+      "contract_assignment": 1,
+      "contract_workers": 2,
+      "pytest_and_contract_workers_sequential": true
+    },
+    "second_exact_head_CI": {
+      "head": "92f7a66c6c06d9275f56343f6300dbb344dc9d51",
+      "run": 40488916132,
+      "frontend_seconds": 315,
+      "frontend_cases_passed": 5299,
+      "frontend_methods_before_timeout": 403,
+      "whole_release_seconds": 368,
+      "merge_allowed": false
+    },
+    "whole_release_group_restored": true,
+    "frontend_contract_separation": {
+      "x86_frontend_Python_setup_removed": true,
+      "all_408_methods_run_in_ARM_review_pair": true,
+      "original_other_assignments_preserved": true,
+      "front_worker_count": 1,
+      "review_job_peak": 2
+    },
+    "third_exact_head_frontend": {
+      "head": "ad422b664add83913462d0cb0af473733f660ce8",
+      "run": 40491457344,
+      "seconds": 292,
+      "reserve_seconds": 8,
+      "merge_held": true
+    }
+  },
+  "scanner_intake_restored": true,
+  "scanner_evidence_sha256": "ab7db069b9be6d6405522a5f26de4d891f11f05cf22cd3966fd19e28305223e3",
+  "backlog": {
+    "open": 21,
+    "waiting": 24,
+    "deferred": 6
+  },
+  "readiness": {
+    "ready": 0,
+    "partial": 9,
+    "waiting": 4,
+    "planned": 1
+  },
+  "roadmap_sections_before": 250,
+  "roadmap_sections_after": 251,
+  "owner_focused_analysis_v3_review": "pending",
+  "private_case_inputs": false,
+  "real_trust_enrolled": false,
+  "live_provider_requests": 0,
+  "native_inference_calls": 0,
+  "runtime_controller_installation": false,
+  "legal_qualification": false
+}

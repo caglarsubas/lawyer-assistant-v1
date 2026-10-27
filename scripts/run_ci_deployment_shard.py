@@ -104,6 +104,9 @@ def namespace_assignments(ids, profile=None):
 
 
 def shard(test_id, lifecycle_ids, namespace):
+    if test_id.startswith("test_mode_recovery.ModeRecoveryContracts.test_case_C"):
+        case = int(re.search(r"\.test_case_C([0-9]{2})_", test_id)[1])
+        return 2 if case <= 3 else 3 if case in {4, 5, 17} else 1 if case in {6, 7, 8} else 4
     if test_id.startswith("test_joint_recovery.JointRecoveryContracts.test_case_J"):
         case = int(re.search(r"\.test_case_J([0-9]{2})_", test_id)[1])
         return 4 if case in {2, 3} else 1 if case <= 6 else 3 if case <= 12 else 4
@@ -214,9 +217,9 @@ def main():
     parser.add_argument("--workers", type=int, choices=(1, 2), default=1)
     parser.add_argument("--worker-index", type=int, choices=(0, 1))
     args = parser.parse_args()
-    # Frontend lanes already overlap one contract and one Vitest worker.
-    if args.workers == 2 and args.shard not in {3, 6} or args.worker_index is not None and args.workers != 2:
-        raise ValueError("Only existing backend/retained two-worker reserves may be used")
+    # Assignment 1 runs sequentially after review tests; only history overlaps Vitest.
+    if args.workers == 2 and args.shard not in {1, 3, 4, 6} or args.worker_index is not None and args.workers != 2:
+        raise ValueError("Only declared review/backend/graph/retained two-worker peaks may be used")
     tests = collect()
     raw = MANIFEST.read_bytes()
     selected = plan(tests, json.loads(raw), args.shard)
