@@ -1,0 +1,163 @@
+{
+  "schema": "receipt-stage-native-campaign-v1",
+  "status": "qualified",
+  "scope": "Linux/ext4 read-only package and process isolation only",
+  "source_sha256": {
+    "scripts/operator_enrollment_evidence.py": "ee7ca36c7c33e1978d60188d46f4ee38c4886b55703bb9bdd8aac22c3f8bbd74",
+    "scripts/operator_recovery_inventory.py": "81bb313e0b887365ee97666ed36fd57b69f9327bece5140b5be1076aad09adc2",
+    "scripts/operator_inventory_handoff.py": "34e453101518e4411758dc5ed2f92795ae7883edaf32abc82e76284361df125a",
+    "scripts/private_inventory_receipts.py": "4832798f43aaa9fc766b2bc2c4dfee9decdf209406695920a094c0b99f980bf9",
+    "scripts/controller_stage_manifest.py": "2b44aecc76d806dd8f5e79b80157fb2744d00e7f39de8b40529d467e0ed36fab",
+    "scripts/receipt_stage_manifest.py": "8338b2a2a96b1054bc608175cce9662151ab1b6fc97042fd247ca6104bd2432e",
+    "scripts/receipt_provisioning_readiness.py": "afa8fd9c9623af973d6225dc7945b721f5aa81eaa2215cd9974aa200bfd190de",
+    "scripts/staged_receipt_adapter.py": "586c93f3f3e6f7be3f36bcf62d7f32584b0e8839dbc64e15d09d20b443ac0341",
+    "scripts/receipt_stage_native.py": "334fd6e9f3f7e7be619fe2cd7a4647bd907d40e92b0cfabcb8570903d95117f5",
+    "scripts/receipt_stage_native_report.py": "3a22048d2c16af87e895978f9cc24fa5d67a6230a04364ff6a096e6995b626b5",
+    "scripts/qualify_receipt_stage.py": "9dce2aedb68cd3a893be4181605b539d54d489d80100dd0fd9e2b18ce923a9ea",
+    "scripts/build_receipt_stage.py": "49ab59f24a402ecb4d2b7fa9d0f456a4099f655d195848af88c384be6ac4588b"
+  },
+  "base_dependency_image": "sha256:7a67b0bf06799c403b9a7b5363faeb85f14fca0d6836eb167d13acc086c224d2",
+  "qualification_image": "sha256:d606a29f543916a61a55457e5950f51d31e0adb281f496615930e2fb2a02b96c",
+  "posture": [
+    {
+      "no_network": true,
+      "no_host_ports": true,
+      "no_host_mounts": true,
+      "root_filesystem_readonly": true,
+      "nonroot_runtime": false,
+      "stage_volume_readonly": false,
+      "two_CPUs": true,
+      "memory_bytes": 1073741824,
+      "pids_limit": 64
+    },
+    {
+      "no_network": true,
+      "no_host_ports": true,
+      "no_host_mounts": true,
+      "root_filesystem_readonly": true,
+      "nonroot_runtime": true,
+      "stage_volume_readonly": true,
+      "two_CPUs": true,
+      "memory_bytes": 1073741824,
+      "pids_limit": 64
+    }
+  ],
+  "native": {
+    "schema": "receipt-stage-native-packaging-v1",
+    "package_manifest_sha256": "58564918d1cebd63c3edfa4aa045e514afeeb8dbc6fedd8b6e5efff3f300f5dc",
+    "cases": [
+      {
+        "id": "N01_valid",
+        "state": "verified",
+        "inspected_before_import": true,
+        "package_imported": true,
+        "application_or_engine_imports": false,
+        "kernel_write_rejected": true,
+        "disposable_readiness": "verified"
+      },
+      {
+        "id": "N02_pin",
+        "state": "rejected",
+        "inspected_before_import": true,
+        "package_imported": false,
+        "application_or_engine_imports": false,
+        "kernel_write_rejected": false,
+        "disposable_readiness": "not_checked"
+      },
+      {
+        "id": "N03_extra",
+        "state": "rejected",
+        "inspected_before_import": true,
+        "package_imported": false,
+        "application_or_engine_imports": false,
+        "kernel_write_rejected": false,
+        "disposable_readiness": "not_checked"
+      },
+      {
+        "id": "N04_mode",
+        "state": "rejected",
+        "inspected_before_import": true,
+        "package_imported": false,
+        "application_or_engine_imports": false,
+        "kernel_write_rejected": false,
+        "disposable_readiness": "not_checked"
+      },
+      {
+        "id": "N05_symlink",
+        "state": "rejected",
+        "inspected_before_import": true,
+        "package_imported": false,
+        "application_or_engine_imports": false,
+        "kernel_write_rejected": false,
+        "disposable_readiness": "not_checked"
+      },
+      {
+        "id": "N06_hardlink",
+        "state": "rejected",
+        "inspected_before_import": true,
+        "package_imported": false,
+        "application_or_engine_imports": false,
+        "kernel_write_rejected": false,
+        "disposable_readiness": "not_checked"
+      },
+      {
+        "id": "N07_forbidden_import",
+        "state": "rejected",
+        "inspected_before_import": true,
+        "package_imported": false,
+        "application_or_engine_imports": false,
+        "kernel_write_rejected": false,
+        "disposable_readiness": "not_checked"
+      },
+      {
+        "id": "N08_writable",
+        "state": "rejected",
+        "inspected_before_import": true,
+        "package_imported": false,
+        "application_or_engine_imports": false,
+        "kernel_write_rejected": false,
+        "disposable_readiness": "not_checked"
+      },
+      {
+        "id": "N09_owner",
+        "state": "rejected",
+        "inspected_before_import": true,
+        "package_imported": false,
+        "application_or_engine_imports": false,
+        "kernel_write_rejected": false,
+        "disposable_readiness": "not_checked"
+      },
+      {
+        "id": "N10_bytes",
+        "state": "rejected",
+        "inspected_before_import": true,
+        "package_imported": false,
+        "application_or_engine_imports": false,
+        "kernel_write_rejected": false,
+        "disposable_readiness": "not_checked"
+      }
+    ],
+    "read_only_inventory_exact": true,
+    "distinct_processes": 10,
+    "filesystem": "ext4",
+    "kernel_readonly": true,
+    "native_inference_calls": 0,
+    "live_provider_requests": 0,
+    "HTTP_requests": 0,
+    "operator_authorization": "unassessed",
+    "key_custody": "unassessed",
+    "application_or_engine_imports": false,
+    "private_case_inputs": false,
+    "real_trust_confirmed": false,
+    "production_activation": false
+  },
+  "production_activation": false,
+  "not_qualified": [
+    "native authenticated HTTP handoff",
+    "operator appointments and key custody",
+    "real provider or inference",
+    "production deployment",
+    "legal or owner review"
+  ],
+  "disposable_volumes_removed": true
+}
