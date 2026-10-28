@@ -35,21 +35,29 @@
   "implementation_sha256": {
     "scripts/operator_recovery_inventory.py": "81bb313e0b887365ee97666ed36fd57b69f9327bece5140b5be1076aad09adc2",
     "backend/tests/test_operator_recovery_inventory.py": "8334a9d522b63cb7c9e0ef15f67427bf869cb346105c0f610ed3119edd90605c",
-    ".github/workflows/ci.yml": "46b219e8f5244c96fcea7bac70f9079b12f676330231b40a72647152d19fd86d"
+    ".github/workflows/ci.yml": "3724a69db50371f7b408ce9b45253082fbea5c786c3a0ad135a041abfdad7d93",
+    "deploy/test_ci_partition_contract.py": "acdd3898f41833c93b38895bbb10fa5d014fcb21fadf659c163c4eb4223bf2fc"
   },
   "CI_rebalance": {
-    "insufficient_reserve_run": 40612281447,
-    "observed_final_release_reserve_seconds": 29,
+    "insufficient_runs": [
+      {
+        "run": 40612281447,
+        "head": "459a6cab604ef4088b26acbaf53f47b7618e546c",
+        "reserve_seconds": 29
+      },
+      {
+        "run": 40613737695,
+        "head": "3b2281776d9b46f58a37d7c2566b8121bdb2c20b",
+        "reserve_seconds": 22
+      }
+    ],
     "required_job_reserve_seconds": 30,
-    "complete_file_moved": "backend/tests/test_final_release_inspection.py",
-    "methods_moved": 8,
-    "origin": "final-release-authorization",
-    "destination": "backend remainder",
-    "prior_complete_main_run": 40515966667,
-    "observed_case_work_seconds": 35.98,
+    "inspection_move_did_not_remove_critical_tail": true,
+    "original_twenty_case_release_group_restored": true,
+    "single_existing_Node_setup_install_build_moved": "final-release-authorization to backend before all contract/pytest workers",
+    "observed_build_sequence_seconds": 41,
+    "retained_log_sha256": "ed63f27811ff55812830d92dc3ac28310b11b7f55d764d2e7cffb0861c2d6fd1",
     "no_retry_or_deadline_increase": true,
-    "local_combined_tests_passed": 23,
-    "local_combined_subtests_passed": 17,
     "canonical_private_TMPDIR_used_without_relaxing_symlink_guards": true
   }
 }

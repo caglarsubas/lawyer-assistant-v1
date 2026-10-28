@@ -7932,10 +7932,12 @@ expiry, withdrawal, malformed inputs and deadlines remain visible. This is
 in-process qualification; existing native qualification is preserved rather than
 extended by implication. All 103 recovery source pins, 96 preceding dependencies,
 1,018 deployment methods, 139 frontend files, ten CI jobs and current deadlines
-and worker bounds remain exact. Recover the observed 29-second final-release
-reserve by moving its complete eight-case read-only inspection file into the
-backend remainder; retain heavy lifecycle and actual PostgreSQL cases in place.
-The insufficient-reserve run stays recorded; no blind rerun qualifies it.
+and worker bounds remain exact. Retain the observed 29-second and subsequent
+22-second final-release reserves as insufficient. Inspection movement did not
+remove the critical tail, so restore its original twenty-case group. Move the
+single existing Node setup/install/build sequence into measured backend reserve,
+before contract/pytest workers; retain all original deadlines and commands.
+Neither superseded run qualifies a merge.
 
 The ledger advances **253 → 254**. Checklist remains **42 done / 21 open /
 24 waiting / 6 deferred**; workstreams remain **0 ready / 9 partial / 4 waiting /

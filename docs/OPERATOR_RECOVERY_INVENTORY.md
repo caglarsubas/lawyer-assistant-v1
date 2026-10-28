@@ -54,10 +54,12 @@ loopback HTTP or production qualification. All 103 existing qualified recovery
 source pins, their 96 preceding dependencies, the 1,018-method deployment
 inventory and the frontend inventory remain exact. Ten CI jobs and their current
 deadlines/worker bounds remain. The first PR run exposed only 29 seconds of
-final-release job reserve. Move the complete eight-case read-only release
-inspection file into the backend remainder, using its measured reserve; retain
-the heavy lifecycle and actual PostgreSQL tests in their existing job. Keep the
-superseded run as evidence. Require exact-head checks, all-job/backend test
+final-release job reserve. Moving inspection did not remove the critical tail
+(22 seconds remained in that run). Restore its original twenty-case group and
+move the single existing Node setup/install/build sequence into measured backend
+reserve, before any contract/pytest workers start. The retained timing is 41
+seconds for those three build steps. Keep both superseded runs as evidence.
+Require exact-head checks, all-job/backend test
 reserves of thirty seconds and the existing internal-phase reserves before a
 pinned merge; verify the full main-push run and preservation audit afterwards.
 
