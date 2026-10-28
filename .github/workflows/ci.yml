@@ -49,10 +49,13 @@ env:
     backend/tests/test_release_set_authorization.py
     backend/tests/test_graph_b_publication.py
   # Complete expensive review files are disjoint from the backend remainder.
+  # Retention qualification uses this job's measured 81-second main reserve;
+  # keep its existing pair/cap and keep the backend remainder unchanged.
   CI_BACKEND_REVIEW_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_source_reviews.py
+    backend/tests/test_private_inventory_receipts.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py
