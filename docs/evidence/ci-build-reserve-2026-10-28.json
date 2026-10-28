@@ -1,0 +1,67 @@
+{
+  "schema": "ci-single-build-reserve-candidate-v1",
+  "date": "2026-10-28",
+  "base_commit": "40c08d999f2c384990cb81042d1d1fd085cdd9d9",
+  "baseline_main_run": 40652152012,
+  "baseline_functional_checks_passed": 10,
+  "baseline_backend_job_seconds": 1179,
+  "backend_job_cap_seconds": 1200,
+  "baseline_backend_job_reserve_seconds": 21,
+  "required_job_reserve_seconds": 30,
+  "baseline_backend_test_seconds": 840,
+  "baseline_build_seconds": 27,
+  "baseline_frontend_job_reserve_seconds": 112,
+  "candidate": "single build in frontend job before Vitest; backend Node dependencies retained",
+  "test_methods_unchanged": 1018,
+  "assignments_unchanged": [
+    418,
+    425,
+    90,
+    23,
+    17,
+    26,
+    19
+  ],
+  "frontend_files_unchanged": 139,
+  "frontend_cases_unchanged": 10532,
+  "jobs_unchanged": 10,
+  "fresh_exact_head_and_main_required": true,
+  "private_runtime_changes": 0,
+  "owner_review": "pending",
+  "source_sha256": {
+    ".github/workflows/ci.yml": "858d26bd49e0ee8e4b01613b8be1125c35247bde2aabc40d957b5ee8a2694926",
+    "deploy/test_ci_partition_contract.py": "c772da347104f7183434f0a155534d885f93ad98e49d885dd203bc414b9fe80e",
+    "docs/CI_BUILD_RESERVE.md": "96b451b93edf761cb6dbdab3c2962ad0fe97c082834e2f49bb28c608ad4bca7b",
+    "deploy/test_deployment_ci_placement.py": "e15b87c5ea100b58ada9e362f0239a449b9c92aa04417f975a646ad777df716e"
+  },
+  "first_placement_candidate": {
+    "head": "0cc57249109680bc2f8094a3ea94e9ec206b027f",
+    "run": 40654787307,
+    "frontend_job_seconds": 266,
+    "frontend_job_reserve_seconds": 34,
+    "superseded_before_merge": true
+  },
+  "frontend_workers_before": 1,
+  "frontend_workers_after": 2,
+  "per_job_worker_ceiling_unchanged": 2,
+  "history_worker_pairing_unchanged": "one Vitest plus one contract",
+  "worker_ceiling_deadlines_retries_unchanged": true,
+  "second_placement_candidate": {
+    "head": "f85f037d0f1bd28ce72ca7fdab6aab9f39fe1ca5",
+    "run": 40655931696,
+    "functional_checks": 10,
+    "fixed_gates_passed": true,
+    "backend_job_reserve_seconds": 34,
+    "frontend_job_reserve_seconds": 128,
+    "superseded_before_merge": true
+  },
+  "human_review_group": {
+    "cases": 32,
+    "from": "backend-and-contracts",
+    "to": "frontend",
+    "after": "verified Vitest completion",
+    "command_and_180_second_step_cap_unchanged": true,
+    "worker_ceiling": 2,
+    "backend_remainder_membership_unchanged": true
+  }
+}
