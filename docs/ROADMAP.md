@@ -8023,3 +8023,34 @@ remain **0 ready / 9 partial / 4 waiting / 1 planned**. Originals, exact evidenc
 confidentiality, review history and runtime remain unchanged. Next qualify staged
 adapter integration and operator provisioning readiness; genuine key custody,
 appointments, live activation and owner legal review remain pending.
+
+## Staged receipt adapter and provisioning readiness — 2026-10-28
+
+F00-06 adds a separate deterministic, public-source-only receipt adapter stage,
+with import-only rewriting and independent manifest verification before import.
+Closed provisioning checks compare context/scope, key fingerprint, store identity
+and disposable-profile pins; they never approve key custody or appointments.
+Unregistered ASGI capture/re-observation uses current host cookie/origin/CSRF/RBAC
+checks, closed bounded requests, immutable wiring and no-store responses.
+
+Short-lived session admission avoids nested-controller lock acquisition; each
+controller retains its own authorization. Final package/profile/session checks
+withhold cached bodies or acknowledgements on change, preserving any committed
+encrypted receipt. No joint snapshot, live installation, trust enrollment,
+provider request, private-case mutation or legal qualification is implied.
+
+Seventeen tests and twenty-six negative subtests include isolated imports,
+package/provisioning mismatches, guard cleanup, cancellation and two authenticated
+ASGI retention flows with fifteen re-observations. Preserve exact ciphertext and
+all four histories, 103 qualified recovery pins, 96 preceding dependencies,
+1,018 deployment methods and the complete frontend inventory. Place the complete
+new test file in existing graph-candidate reserve without changing workers,
+commands, deadlines or prior cases.
+
+See [stage contract](STAGED_RECEIPT_ADAPTER.md) and
+[evidence](evidence/staged-receipt-adapter-2026-10-28.json). Ledger **257 → 258**.
+Checklist stays **42 done / 21 open / 24 waiting / 6 deferred**; workstreams stay
+**0 ready / 9 partial / 4 waiting / 1 planned**. Originals, evidence versions,
+confidentiality, review history and runtime remain intact. Next qualify native
+read-only packaging and process-boundary adapter behavior with disposable
+identities; genuine custody, appointments, deployment and owner review stay open.
