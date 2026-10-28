@@ -19,15 +19,15 @@ class DeploymentShardContracts(unittest.TestCase):
     def test_all_shards_cover_each_test_exactly_once(self):
         tests = runner.collect()
         manifest = json.loads(runner.MANIFEST.read_text())
-        a, b, c, d, e, f, g = [{test.id() for test in runner.plan(tests, manifest, n)} for n in (1, 2, 3, 4, 5, 6, 7)]
-        shards = (a, b, c, d, e, f, g)
+        a, b, c, d, e, f, g, h, i, j = [{test.id() for test in runner.plan(tests, manifest, n)} for n in range(1, 11)]
+        shards = (a, b, c, d, e, f, g, h, i, j)
         self.assertFalse(any(left & right for i, left in enumerate(shards) for right in shards[i + 1:]))
-        self.assertEqual(a | b | c | d | e | f | g, {test.id() for test in tests})
+        self.assertEqual(a | b | c | d | e | f | g | h | i | j, {test.id() for test in tests})
         self.assertEqual({ident for ident in c | f if ident.startswith(("test_staged_reader.StagedReaderContracts.", "test_authenticated_operator_review.AuthenticatedOperatorContracts."))}, {test.id() for test in tests if test.id().startswith(("test_staged_reader.StagedReaderContracts.", "test_authenticated_operator_review.AuthenticatedOperatorContracts."))})
         self.assertEqual({ident for ident in d | e | f | g if ident.startswith("test_reader_lifecycle.")}, {test.id() for test in tests if test.id().startswith("test_reader_lifecycle.ReaderLifecycleContracts.")})
         self.assertEqual([sum(ident.startswith("test_reader_lifecycle.") for ident in lane) for lane in (d, e, f, g)], [5, 4, 8, 7])
         namespace_ids = {test.id() for test in tests if test.id().startswith("test_reader_namespace.ReaderNamespaceContracts.")}
-        self.assertEqual(namespace_ids, {ident for ident in a | c | d | e | f | g if ident.startswith("test_reader_namespace.")})
+        self.assertEqual(namespace_ids, {ident for ident in a | c | d | e | f | g | h | i | j if ident.startswith("test_reader_namespace.")})
         self.assertFalse(namespace_ids & b)
         namespace = json.loads((ROOT / "deploy/fixtures/reader_namespace_policy.json").read_text())
         self.assertEqual({"test_reader_namespace.ReaderNamespaceContracts.test_case_" + row["id"] for row in namespace["cases"]}, {ident for ident in namespace_ids if ".test_case_" in ident})
@@ -46,10 +46,10 @@ class DeploymentShardContracts(unittest.TestCase):
             expected = {prefix + row["id"] for row in json.loads((ROOT / "deploy/fixtures" / policy).read_text())["cases"]}
             if module == "test_authenticated_operator_review":
                 self.assertEqual({name for name in c if name.startswith(prefix)}, expected)
-                self.assertFalse(expected & (a | b | d | e | f | g))
+                self.assertFalse(expected & (a | b | d | e | f | g | h | i | j))
             else:
-                self.assertEqual({name for name in a | b if name.startswith(prefix)}, expected)
-                self.assertTrue(expected & a)
+                self.assertEqual({name for name in a | b | h | i | j if name.startswith(prefix)}, expected)
+                self.assertTrue(expected & (a | h | i | j))
                 if module == "test_enrollment_revocation":
                     self.assertFalse(expected & b)
                 else:
@@ -144,6 +144,35 @@ class DeploymentShardContracts(unittest.TestCase):
             with self.subTest(history_kind=kind), self.assertRaises(ValueError):
                 runner.history_assignments(ids, initial, value)
 
+        initial.update(runner.history_assignments(ids, initial))
+        review = json.loads(runner.REVIEW_WORKLOAD.read_text())
+        self.assertEqual(len(runner.review_assignments(ids, initial)), 33)
+        changed = ROOT / "scripts/mode_recovery_fixture.py"
+        with patch.object(Path, "read_bytes", lambda path: b"changed" if path == changed else original_read(path)), self.assertRaises(ValueError):
+            runner.review_assignments(ids, initial, review)
+        for kind in ("missing", "duplicate", "source", "manifest", "origin", "cost", "budget", "lane", "extra"):
+            value = copy.deepcopy(review)
+            if kind == "missing":
+                value["assignments"].pop()
+            elif kind == "duplicate":
+                value["assignments"][1] = value["assignments"][0]
+            elif kind == "source":
+                value["qualification_source_sha256"] = "0" * 64
+            elif kind == "manifest":
+                value["manifest_sha256"] = "0" * 64
+            elif kind == "origin":
+                value["assignments"][0]["test_id"] = next(x for x in ids if initial[x] == 2)
+            elif kind == "cost":
+                value["assignments"][0]["observed_case_ms"] = 1000000
+            elif kind == "budget":
+                value["worker_budget_ms"]["8"] = 1000000
+            elif kind == "lane":
+                value["assignments"][0]["shard"] = 3
+            else:
+                value["assignments"][0]["unknown"] = True
+            with self.subTest(review_kind=kind), self.assertRaises(ValueError):
+                runner.review_assignments(ids, initial, value)
+
     def test_omitted_or_duplicate_test_is_rejected_before_execution(self):
         tests = [unittest.FunctionTestCase(lambda: None), unittest.FunctionTestCase(lambda: None)]
         with self.assertRaises(ValueError):
@@ -151,12 +180,12 @@ class DeploymentShardContracts(unittest.TestCase):
 
     def test_parallel_receipts_reject_failure_missing_duplicate_or_stale_work(self):
         expected, complete, sha = ["a", "b", "c", "d"], ["a", "b", "c", "d", "e"], "0" * 64
-        reports = [{"schema": "deployment-shard-result-v1", "shard": 3, "total_shards": 7,
+        reports = [{"schema": "deployment-shard-result-v2", "shard": 3, "total_shards": 10,
                     "manifest_sha256": sha, "complete_suite_sha256": runner.digest(complete),
                     "selected_ids": expected[index::2], "executed_ids": expected[index::2],
                     "tests_run": 2, "case_seconds": dict.fromkeys(expected[index::2], .1),
                     "complete_count": 5, "success": True, "worker_index": index, "worker_count": 2} for index in (0, 1)]
-        for lane in (1, 3, 4, 5, 6, 7):
+        for lane in (1, 3, 4, 5, 6, 7, 8, 9, 10):
             paired = copy.deepcopy(reports)
             for row in paired:
                 row["shard"] = lane
