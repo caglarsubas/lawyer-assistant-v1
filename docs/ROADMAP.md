@@ -7932,7 +7932,10 @@ expiry, withdrawal, malformed inputs and deadlines remain visible. This is
 in-process qualification; existing native qualification is preserved rather than
 extended by implication. All 103 recovery source pins, 96 preceding dependencies,
 1,018 deployment methods, 139 frontend files, ten CI jobs and current deadlines
-and worker bounds remain exact.
+and worker bounds remain exact. Recover the observed 29-second final-release
+reserve by moving its complete eight-case read-only inspection file into the
+backend remainder; retain heavy lifecycle and actual PostgreSQL cases in place.
+The insufficient-reserve run stays recorded; no blind rerun qualifies it.
 
 The ledger advances **253 → 254**. Checklist remains **42 done / 21 open /
 24 waiting / 6 deferred**; workstreams remain **0 ready / 9 partial / 4 waiting /

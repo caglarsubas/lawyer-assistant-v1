@@ -34,6 +34,22 @@
   "roadmap_sections_after": 254,
   "implementation_sha256": {
     "scripts/operator_recovery_inventory.py": "81bb313e0b887365ee97666ed36fd57b69f9327bece5140b5be1076aad09adc2",
-    "backend/tests/test_operator_recovery_inventory.py": "8334a9d522b63cb7c9e0ef15f67427bf869cb346105c0f610ed3119edd90605c"
+    "backend/tests/test_operator_recovery_inventory.py": "8334a9d522b63cb7c9e0ef15f67427bf869cb346105c0f610ed3119edd90605c",
+    ".github/workflows/ci.yml": "46b219e8f5244c96fcea7bac70f9079b12f676330231b40a72647152d19fd86d"
+  },
+  "CI_rebalance": {
+    "insufficient_reserve_run": 40612281447,
+    "observed_final_release_reserve_seconds": 29,
+    "required_job_reserve_seconds": 30,
+    "complete_file_moved": "backend/tests/test_final_release_inspection.py",
+    "methods_moved": 8,
+    "origin": "final-release-authorization",
+    "destination": "backend remainder",
+    "prior_complete_main_run": 40515966667,
+    "observed_case_work_seconds": 35.98,
+    "no_retry_or_deadline_increase": true,
+    "local_combined_tests_passed": 23,
+    "local_combined_subtests_passed": 17,
+    "canonical_private_TMPDIR_used_without_relaxing_symlink_guards": true
   }
 }

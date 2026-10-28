@@ -37,7 +37,9 @@ env:
     backend/tests/test_retained_mixed_assembly.py
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
-    backend/tests/test_final_release_inspection.py
+  # The complete eight-case read-only inspection file returns to the backend
+  # remainder. Its measured 36s case work leaves the final-release job's thin
+  # 29s reserve, with no test omission, extra job/worker or deadline increase.
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
   # Keep the heavier open-validity file in this graph group; the lighter complete
   # Graph B snapshot file uses the backend remainder. Measured file exchange,
@@ -325,9 +327,9 @@ jobs:
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
 
   final-release-authorization:
-    # Existing jobs are within 30 seconds of their caps. New whole-release
-    # lifecycle/concurrency contracts are isolated, not added to the 18-minute
-    # backend step or granted a longer existing deadline. No automatic retries.
+    # Heavy lifecycle/concurrency contracts stay isolated. The complete
+    # lightweight read-only inspection file uses measured backend reserve.
+    # Original deadlines, worker upper bounds and no-retry policy remain.
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 6
     services:
@@ -365,7 +367,7 @@ jobs:
       - run: npm run build
         working-directory: frontend
       - name: Test whole-release permission, transitions and real concurrent reads
-        # Include read-only reconciliation in this existing six-minute job.
+        # Keep heavy lifecycle and PostgreSQL concurrency qualification here.
         # The hard job cap, two workers and no-retry policy remain unchanged.
         timeout-minutes: 6
         env:
