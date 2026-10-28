@@ -8126,3 +8126,27 @@ New one-minute phases require 15 seconds of reserve; all jobs still require 30.
 The 1,018-method manifest stays exact across ten assignments, with fresh v2
 receipts and early rejection of stale, duplicate or over-budget plans.
 Historical reports, originals, evidence versions and review histories remain.
+
+## Native receipt-package read-only and process qualification — 2026-10-28
+
+Qualify the unchanged nine-module receipt export on fresh isolated Linux/ext4
+Docker volumes. Ten frozen fresh-process cases require inspection before import,
+kernel read-only denial, exact retained package inventory and fail-closed identity,
+ownership, permission, link, byte and dependency checks. The valid package checks
+independently pinned disposable store/profile/key/scope bindings; all operator
+appointments, key custody and authority remain unassessed.
+
+See [native packaging contract](NATIVE_RECEIPT_PACKAGING.md) and the source-bound
+[first report](evidence/native-receipt-packaging-2026-10-28.json). Ledger **260 → 261**.
+Add only lightweight report/wiring regressions to the existing candidate group;
+preserve all 1,018 deployment methods, ten jobs, two-worker ceilings, deadlines
+and fixed reserve floors. Require exact-head and independent-main qualification.
+
+This package gate performs zero HTTP, inference or provider requests. Native
+authenticated loopback handoff, receipt restart/re-observation and independently
+provided real operator/key enrollment remain open. No product route, install or
+activation changes. Originals, exact evidence versions, confidentiality, private
+runtime and review history stay intact; owner analysis review remains pending.
+Checklist remains **42 done / 21 open / 24 waiting / 6 deferred**, and readiness
+remains **0 ready / 9 partial / 4 waiting / 1 planned**. Engineering completion is
+reported separately from these unchanged parent gates.
