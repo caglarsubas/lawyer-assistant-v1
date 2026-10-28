@@ -7913,3 +7913,41 @@ The ledger advances **252 → 253**. Checklist/readiness and owner review remain
 unchanged. See [phase qualification](CI_PHASE_BUDGETS.md) and
 [evidence](evidence/ci-phase-budgets-2026-10-27.json). Read-only operator recovery
 inventory remains the next planned product-engineering slice.
+
+## Read-only operator recovery inventory — 2026-10-28
+
+F00-06 adds a bounded collector over explicitly selected, prebound private
+contexts, using only `joint_observe` and `joint_finish_observe`. Bind the current
+actor, scope, change, source/context, exact histories, plan, view and finish.
+Reauthorize before both reads and before returning metadata. Preserve pending,
+changed, denied, conflicted, unavailable, unverifiable and partial states; never
+claim an atomic cross-context snapshot or current independent-review validity.
+No directory enumeration, public cache, repair, real enrollment, application
+route, provider request or authority renewal is introduced.
+
+Ten focused tests and seventeen subtests include sixteen disposable ASGI
+inventory collections and twenty-eight read requests over retirement and
+rollback histories. Explicit external anchor changes, unrelated/revoked actors,
+expiry, withdrawal, malformed inputs and deadlines remain visible. This is
+in-process qualification; existing native qualification is preserved rather than
+extended by implication. All 103 recovery source pins, 96 preceding dependencies,
+1,018 deployment methods, 139 frontend files, ten CI jobs and current deadlines
+and worker bounds remain exact. Retain the observed 29-second and subsequent
+22-second final-release reserves as insufficient. Inspection movement did not
+remove the critical tail, so restore its original twenty-case group. Move the
+single existing Node setup/install/build sequence into measured backend reserve,
+before contract/pytest workers; retain all original deadlines and commands.
+That run passed all checks but left twelve backend seconds against ninety-one
+in final release. Transfer complete assignment 6 (twenty-six cases; measured
+thirty-eight seconds) sequentially into final release, preserving its pair and
+one-minute cap. Retain all three insufficient timing results. None qualifies a
+merge; verify the new exact stage receipts and timing reserves first.
+
+The ledger advances **253 → 254**. Checklist remains **42 done / 21 open /
+24 waiting / 6 deferred**; workstreams remain **0 ready / 9 partial / 4 waiting /
+1 planned**. Owner review stays pending. See the
+[inventory contract](OPERATOR_RECOVERY_INVENTORY.md) and
+[evidence](evidence/operator-inventory-2026-10-28.json). Next qualify explicit,
+exact receipt handoff with fresh destination actor/scope/context authorization
+using disposable identities; genuine appointments, custody and legal acceptance
+remain separate.

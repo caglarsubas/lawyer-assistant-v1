@@ -1,0 +1,81 @@
+{
+  "schema": "operator-recovery-inventory-qualification-v1",
+  "date": "2026-10-28",
+  "base_commit": "c339b8471dbacf1f60bfb4ebf754f9afaf90d51c",
+  "qualification_scope": "in-process disposable ASGI, no new native qualification",
+  "tests": 10,
+  "negative_input_subtests": 17,
+  "disposable_inventory_collections": 16,
+  "collector_read_requests": 28,
+  "external_race_repairs": 2,
+  "retirement_collections": 9,
+  "rollback_collections": 7,
+  "histories_preserved_around_ordinary_reads": true,
+  "current_authority_assessed": false,
+  "review_validity": "unassessed",
+  "maximum_selections": 8,
+  "maximum_read_requests": 16,
+  "cooperative_deadline_seconds": 20,
+  "per_read_timeout_seconds": 2,
+  "retries": 0,
+  "runtime_mutations": 0,
+  "live_provider_requests": 0,
+  "real_trust_enrolled": false,
+  "application_route_added": false,
+  "owner_review": "pending",
+  "native_source_pins_unchanged": 103,
+  "prior_native_source_pins_unchanged": 96,
+  "deployment_methods_unchanged": 1018,
+  "frontend_files_unchanged": 139,
+  "frontend_cases_unchanged": 10532,
+  "CI_jobs_unchanged": 10,
+  "CI_deadlines_and_worker_bounds_unchanged": true,
+  "roadmap_sections_before": 253,
+  "roadmap_sections_after": 254,
+  "implementation_sha256": {
+    "scripts/operator_recovery_inventory.py": "81bb313e0b887365ee97666ed36fd57b69f9327bece5140b5be1076aad09adc2",
+    "backend/tests/test_operator_recovery_inventory.py": "8334a9d522b63cb7c9e0ef15f67427bf869cb346105c0f610ed3119edd90605c",
+    ".github/workflows/ci.yml": "99cbd5f722f599fa2983fe0dfb9b01218bf98f75dec9fe1c8035cdcc0c9c8ec1",
+    "deploy/test_ci_partition_contract.py": "acdd3898f41833c93b38895bbb10fa5d014fcb21fadf659c163c4eb4223bf2fc",
+    "deploy/test_deployment_ci_placement.py": "137c5c76760ae6ec312ff681cd97967a47077dee9e7155e0e722b7cf5d519f8e"
+  },
+  "CI_rebalance": {
+    "insufficient_runs": [
+      {
+        "run": 40612281447,
+        "head": "459a6cab604ef4088b26acbaf53f47b7618e546c",
+        "reserve_seconds": 29
+      },
+      {
+        "run": 40613737695,
+        "head": "3b2281776d9b46f58a37d7c2566b8121bdb2c20b",
+        "reserve_seconds": 22
+      },
+      {
+        "run": 40614954756,
+        "head": "48ffd19e8be7490542f64b2120c423451360905a",
+        "all_functional_checks_passed": 10,
+        "backend_reserve_seconds": 12,
+        "final_release_reserve_seconds": 91
+      }
+    ],
+    "required_job_reserve_seconds": 30,
+    "inspection_move_did_not_remove_critical_tail": true,
+    "original_twenty_case_release_group_restored": true,
+    "single_existing_Node_setup_install_build_moved": "final-release-authorization to backend before all contract/pytest workers",
+    "observed_build_sequence_seconds": 41,
+    "retained_log_sha256": "ed63f27811ff55812830d92dc3ac28310b11b7f55d764d2e7cffb0861c2d6fd1",
+    "no_retry_or_deadline_increase": true,
+    "canonical_private_TMPDIR_used_without_relaxing_symlink_guards": true,
+    "balanced_stage_move": {
+      "assignment": 6,
+      "cases": 26,
+      "observed_seconds": 38,
+      "from": "backend-and-contracts",
+      "to": "final-release-authorization after pytest",
+      "worker_count": 2,
+      "step_cap_seconds": 60,
+      "required_step_reserve_seconds": 15
+    }
+  }
+}
