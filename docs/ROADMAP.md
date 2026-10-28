@@ -7971,3 +7971,28 @@ and sessions remain exact. See [CI follow-up](CI_INVENTORY_HEADROOM.md) and
 Ledger **254 → 255**; engineering delivery remains separate from unchanged
 checklist/readiness counts and pending owner review. Exact private receipt
 handoff with fresh destination authorization remains the next product slice.
+
+## Exact private inventory-receipt handoff — 2026-10-28
+
+F00-06 adds an explicit, bounded handoff of one selected inventory entry. Pin
+the exact source receipt bytes independently, validate the complete closed
+inventory and bind destination scope, actor, change and requested context.
+Fresh authorization brackets two exact controller reads and the final release
+of metadata. Preserve original and current observations separately, including
+changed source/context, pending anchors and changes between reads. Failed
+authorization or evidence validation returns no cached body. No authority,
+approval, import, repair, route, deployment or production enrollment is added.
+
+Thirteen focused tests and eighteen negative-input subtests include thirteen
+disposable ASGI handoffs with twenty read requests, plus four source-collection
+reads. Preserve all four histories, exact source receipts, 103 qualified recovery
+pins, 96 preceding dependencies and the complete deployment/frontend inventory.
+Existing ten-job CI, deadlines, worker limits and measured reserve gates remain.
+See [handoff contract](OPERATOR_INVENTORY_HANDOFF.md) and
+[evidence](evidence/inventory-receipt-handoff-2026-10-28.json).
+
+Ledger **255 → 256**. Checklist remains **42 done / 21 open / 24 waiting /
+6 deferred**; workstreams remain **0 ready / 9 partial / 4 waiting / 1 planned**.
+Owner review is pending; originals, exact evidence versions and private runtime
+remain unchanged. Next qualify explicit private handoff retention and later
+re-observation with independent pins and fresh authorization on every access.
