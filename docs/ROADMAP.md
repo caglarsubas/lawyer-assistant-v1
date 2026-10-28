@@ -7937,7 +7937,11 @@ and worker bounds remain exact. Retain the observed 29-second and subsequent
 remove the critical tail, so restore its original twenty-case group. Move the
 single existing Node setup/install/build sequence into measured backend reserve,
 before contract/pytest workers; retain all original deadlines and commands.
-Neither superseded run qualifies a merge.
+That run passed all checks but left twelve backend seconds against ninety-one
+in final release. Transfer complete assignment 6 (twenty-six cases; measured
+thirty-eight seconds) sequentially into final release, preserving its pair and
+one-minute cap. Retain all three insufficient timing results. None qualifies a
+merge; verify the new exact stage receipts and timing reserves first.
 
 The ledger advances **253 → 254**. Checklist remains **42 done / 21 open /
 24 waiting / 6 deferred**; workstreams remain **0 ready / 9 partial / 4 waiting /

@@ -35,8 +35,9 @@
   "implementation_sha256": {
     "scripts/operator_recovery_inventory.py": "81bb313e0b887365ee97666ed36fd57b69f9327bece5140b5be1076aad09adc2",
     "backend/tests/test_operator_recovery_inventory.py": "8334a9d522b63cb7c9e0ef15f67427bf869cb346105c0f610ed3119edd90605c",
-    ".github/workflows/ci.yml": "3724a69db50371f7b408ce9b45253082fbea5c786c3a0ad135a041abfdad7d93",
-    "deploy/test_ci_partition_contract.py": "acdd3898f41833c93b38895bbb10fa5d014fcb21fadf659c163c4eb4223bf2fc"
+    ".github/workflows/ci.yml": "99cbd5f722f599fa2983fe0dfb9b01218bf98f75dec9fe1c8035cdcc0c9c8ec1",
+    "deploy/test_ci_partition_contract.py": "acdd3898f41833c93b38895bbb10fa5d014fcb21fadf659c163c4eb4223bf2fc",
+    "deploy/test_deployment_ci_placement.py": "137c5c76760ae6ec312ff681cd97967a47077dee9e7155e0e722b7cf5d519f8e"
   },
   "CI_rebalance": {
     "insufficient_runs": [
@@ -49,6 +50,13 @@
         "run": 40613737695,
         "head": "3b2281776d9b46f58a37d7c2566b8121bdb2c20b",
         "reserve_seconds": 22
+      },
+      {
+        "run": 40614954756,
+        "head": "48ffd19e8be7490542f64b2120c423451360905a",
+        "all_functional_checks_passed": 10,
+        "backend_reserve_seconds": 12,
+        "final_release_reserve_seconds": 91
       }
     ],
     "required_job_reserve_seconds": 30,
@@ -58,6 +66,16 @@
     "observed_build_sequence_seconds": 41,
     "retained_log_sha256": "ed63f27811ff55812830d92dc3ac28310b11b7f55d764d2e7cffb0861c2d6fd1",
     "no_retry_or_deadline_increase": true,
-    "canonical_private_TMPDIR_used_without_relaxing_symlink_guards": true
+    "canonical_private_TMPDIR_used_without_relaxing_symlink_guards": true,
+    "balanced_stage_move": {
+      "assignment": 6,
+      "cases": 26,
+      "observed_seconds": 38,
+      "from": "backend-and-contracts",
+      "to": "final-release-authorization after pytest",
+      "worker_count": 2,
+      "step_cap_seconds": 60,
+      "required_step_reserve_seconds": 15
+    }
   }
 }

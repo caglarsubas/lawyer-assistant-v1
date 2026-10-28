@@ -59,6 +59,12 @@ final-release job reserve. Moving inspection did not remove the critical tail
 move the single existing Node setup/install/build sequence into measured backend
 reserve, before any contract/pytest workers start. The retained timing is 41
 seconds for those three build steps. Keep both superseded runs as evidence.
+That placement passed all checks but left only twelve seconds in the backend,
+while final release retained ninety-one. Transfer the complete measured
+thirty-eight-second assignment 6 to final release after its pytest group. Its
+twenty-six cases, two workers and one-minute cap stay exact. Other assignments
+and the original twenty-case release group remain. Retain this third insufficient
+timing result as well. Verify actual receipts at the new stage location.
 Require exact-head checks, all-job/backend test
 reserves of thirty seconds and the existing internal-phase reserves before a
 pinned merge; verify the full main-push run and preservation audit afterwards.

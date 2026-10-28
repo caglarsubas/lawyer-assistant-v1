@@ -16,7 +16,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn(command, blocks["backend-and-contracts"])
         self.assertEqual(workflow.count("scripts/run_ci_deployment_shard.py"), 7)
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=3", blocks["backend-and-contracts"])
-        for name, lane in (("graph-runtime-contracts", 4), ("backend-and-contracts", 5), ("backend-and-contracts", 6)):
+        for name, lane in (("graph-runtime-contracts", 4), ("backend-and-contracts", 5), ("final-release-authorization", 6)):
             self.assertIn("scripts/run_ci_deployment_shard.py --shard=" + str(lane), blocks[name])
         self.assertLess(blocks["backend-and-contracts"].index("--shard=3"), blocks["backend-and-contracts"].index("name: Test backend"))
         self.assertNotIn("scripts/run_ci_deployment_shard.py", blocks["frontend"])
@@ -35,13 +35,18 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("--workers=2"), 6)
         self.assertIn("--shard=3 --workers=2", blocks["backend-and-contracts"])
         backend = blocks["backend-and-contracts"]
-        for lane in (5, 6, 7):
+        for lane in (5, 7):
             self.assertIn("--shard=" + str(lane) + " --workers=2", backend)
             self.assertLess(backend.index("--shard=" + str(lane)), backend.index("name: Test backend"))
         for name in ("graph-candidate-contracts", "retained-release-withdrawal", "postgres-snapshot-concurrency"):
             self.assertNotIn("scripts/run_ci_deployment_shard.py", blocks[name])
         stages = re.findall(r"      - name: Test manifest-bound [^\n]+\n        timeout-minutes: (\d+)\n        run: [^\n]+--shard=(\d+)[^\n]+", backend)
-        self.assertEqual(stages, [("2", "3"), ("1", "5"), ("1", "6"), ("1", "7")])
+        self.assertEqual(stages, [("2", "3"), ("1", "5"), ("1", "7")])
+        final = blocks["final-release-authorization"]
+        self.assertNotIn("--shard=6", backend)
+        self.assertIn("--shard=6 --workers=2", final)
+        self.assertIn("timeout-minutes: 1", final.split("name: Test manifest-bound reader lifecycle slice 6", 1)[1])
+        self.assertLess(final.index("name: Test whole-release permission"), final.index("name: Test manifest-bound reader lifecycle slice 6"))
         graph = blocks["graph-runtime-contracts"]
         self.assertIn("--shard=4 --workers=2", graph)
         self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("name: Test manifest-bound reader lifecycle"))

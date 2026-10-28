@@ -115,9 +115,6 @@ jobs:
       - name: Test manifest-bound reader lifecycle slice 5
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=5 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-5.json
-      - name: Test manifest-bound reader lifecycle slice 6
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
       - name: Test manifest-bound reader namespace slice
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=7 --workers=2 --report=${{ runner.temp }}/deployment-namespace-results.json
@@ -373,6 +370,11 @@ jobs:
         run: |
           read -r -a final_release_tests <<< "$CI_FINAL_RELEASE_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${final_release_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+      # Transfer the measured 38s stage from the backend's 12s reserve into
+      # this job's measured 91s reserve. Same cases/pair/cap; no overlap.
+      - name: Test manifest-bound reader lifecycle slice 6
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
 
   retained-release-withdrawal:
     # Measured withdrawal reconstruction exhausted the frontend's five-minute
