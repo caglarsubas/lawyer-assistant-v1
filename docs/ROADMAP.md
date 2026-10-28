@@ -8150,3 +8150,29 @@ runtime and review history stay intact; owner analysis review remains pending.
 Checklist remains **42 done / 21 open / 24 waiting / 6 deferred**, and readiness
 remains **0 ready / 9 partial / 4 waiting / 1 planned**. Engineering completion is
 reported separately from these unchanged parent gates.
+
+## Native authenticated receipt HTTP and restart qualification — 2026-10-28
+
+Exercise the unchanged receipt and controller packages through actual loopback
+HTTP with real disposable session, CSRF, origin and role checks. Two frozen
+retirement/rollback protocols require thirty exact request outcomes across eight
+worker processes, including two clean receipt-worker restarts. Re-open the same
+encrypted record and independently pinned source/profile/key/store bindings;
+preserve ciphertext and four retained histories across every read. Reject stale
+pins, unrelated actors and revoked sessions without cached metadata or controller
+I/O. Intended fixture repairs, expiry and withdrawal remain distinct transitions.
+
+See [native HTTP contract](NATIVE_RECEIPT_HTTP.md) and
+[source-bound first report](evidence/native-receipt-http-2026-10-28.json).
+Ledger **261 → 262**. Keep Docker qualification opt-in and lightweight report/wiring
+regressions in existing CI capacity. Preserve all 1,018 methods, ten jobs, workers,
+deadlines, fixed reserve floors and prior source-pinned reports. Exact-head and
+independent-main qualification remain required.
+
+Native in-flight revocation and interrupted-publication/crash recovery remain
+the next engineering gates. Genuine key custody, operator appointments,
+production installation, provider inference and owner review remain unassessed
+or pending. No product route, private case, original evidence version or review
+history changes. Checklist stays **42 done / 21 open / 24 waiting / 6 deferred**;
+readiness stays **0 ready / 9 partial / 4 waiting / 1 planned**. Report engineering
+completion independently from these broader product gates.
