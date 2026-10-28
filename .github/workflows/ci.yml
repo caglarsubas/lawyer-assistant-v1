@@ -14,7 +14,7 @@ env:
     backend/tests/test_runtime_authorization_integration.py
   CI_AUTHORITY_MODEL_TESTS: >-
     backend/tests/test_authority_model_trials.py
-  # Complete workspace and review groups use measured ARM backend headroom.
+  # Complete workspace and review groups use measured ARM-job headroom.
   # Frontend retains its full x86 TypeScript/build/browser-unit coverage.
   # No cases, jobs, workers, deadlines, fixtures or assertions are removed.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
@@ -115,6 +115,9 @@ jobs:
       - name: Test manifest-bound reader lifecycle slice 5
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=5 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-5.json
+      - name: Test manifest-bound reader lifecycle slice 6
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
       - name: Test manifest-bound reader namespace slice
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=7 --workers=2 --report=${{ runner.temp }}/deployment-namespace-results.json
@@ -137,20 +140,12 @@ jobs:
           bash scripts/run_ci_tests.sh pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
       # Complete review group moves from the saturated frontend to measured ARM
       # backend headroom. Keep all32 cases, two workers and its three-minute cap;
-      # the workspace group below uses its original two-minute step cap.
+      # workspace permission cases use PostgreSQL-job reserve below.
       - name: Test confidential human review groups
         timeout-minutes: 3
         run: |
           read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${human_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
-
-      # These complete48 permission cases leave the measured frontend tail.
-      # Keep their exact command, two workers and two-minute step deadline.
-      - name: Test workspace permission and proposal contracts
-        timeout-minutes: 2
-        run: |
-          read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
 
       # The R01 dossier is a closed five-file inventory. Reject misplaced files
       # before the costly backend suite; keep this same gate exactly once.
@@ -277,6 +272,13 @@ jobs:
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+      # Use measured spare capacity for the complete 49-case workspace group.
+      # Same command/pair/two-minute cap, after the real race group has exited.
+      - name: Test workspace permission and proposal contracts
+        timeout-minutes: 2
+        run: |
+          read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
 
   frontend:
     runs-on: ubuntu-latest
@@ -370,11 +372,6 @@ jobs:
         run: |
           read -r -a final_release_tests <<< "$CI_FINAL_RELEASE_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${final_release_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
-      # Transfer the measured 38s stage from the backend's 12s reserve into
-      # this job's measured 91s reserve. Same cases/pair/cap; no overlap.
-      - name: Test manifest-bound reader lifecycle slice 6
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
 
   retained-release-withdrawal:
     # Measured withdrawal reconstruction exhausted the frontend's five-minute
