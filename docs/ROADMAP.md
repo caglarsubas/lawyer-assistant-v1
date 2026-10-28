@@ -7996,3 +7996,30 @@ Ledger **255 → 256**. Checklist remains **42 done / 21 open / 24 waiting /
 Owner review is pending; originals, exact evidence versions and private runtime
 remain unchanged. Next qualify explicit private handoff retention and later
 re-observation with independent pins and fresh authorization on every access.
+
+## Private receipt retention and fresh re-observation — 2026-10-28
+
+F00-06 adds create-only encrypted retention of the selected handoff metadata,
+with independently prebound context/scope, key custody and directory identity.
+Preserve original source digests and exact selected observations; omit unselected
+inventory entries. Require fresh authorization for capture and every subsequent
+access. Pinned ciphertext, schema and file integrity are rechecked before fresh
+controller reads and before returning historical/current observations separately.
+No receipt becomes a bearer credential or evidence of current review validity.
+
+Seventeen tests and thirty-six negative subtests include two disposable retained
+records and fifteen authenticated ASGI re-observations. Preserve exact ciphertext
+and all four histories around reads; reject revoked/unrelated sessions, unsafe
+files, wrong keys/bindings, altered records, timeouts and cancellation. Preserve
+uncertain published records for independent inspection without automatic retry.
+Use the existing review job's measured capacity for the complete new test file;
+retain all cases, workers, deadlines, 1,018 deployment methods, frontend inventory,
+103 qualified recovery source pins and 96 preceding dependencies.
+
+See [retention contract](PRIVATE_INVENTORY_RECEIPTS.md) and
+[evidence](evidence/private-receipt-retention-2026-10-28.json). Ledger **256 → 257**.
+Checklist remains **42 done / 21 open / 24 waiting / 6 deferred**; workstreams
+remain **0 ready / 9 partial / 4 waiting / 1 planned**. Originals, exact evidence,
+confidentiality, review history and runtime remain unchanged. Next qualify staged
+adapter integration and operator provisioning readiness; genuine key custody,
+appointments, live activation and owner legal review remain pending.
