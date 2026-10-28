@@ -14,12 +14,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count(command), 0)
         blocks = dict(re.findall(r"^  ([a-z-]+):\n(.*?)(?=^  [a-z-]+:\n|\Z)", workflow.split("\njobs:\n", 1)[1], re.MULTILINE | re.DOTALL))
         self.assertNotIn(command, blocks["backend-and-contracts"])
-        self.assertEqual(workflow.count("scripts/run_ci_deployment_shard.py"), 7)
+        self.assertEqual(workflow.count("scripts/run_ci_deployment_shard.py"), 11)
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=3", blocks["backend-and-contracts"])
         for name, lane in (("graph-runtime-contracts", 4), ("backend-and-contracts", 5), ("backend-and-contracts", 6)):
             self.assertIn("scripts/run_ci_deployment_shard.py --shard=" + str(lane), blocks[name])
         self.assertLess(blocks["backend-and-contracts"].index("--shard=3"), blocks["backend-and-contracts"].index("name: Test backend"))
-        self.assertNotIn("scripts/run_ci_deployment_shard.py", blocks["frontend"])
+        self.assertIn("--shard=8 --workers=2", blocks["frontend"])
         self.assertIn("--shard=1 --workers=2", blocks["backend-review-contracts"])
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=7", blocks["backend-and-contracts"])
         self.assertNotIn("--shard=7", blocks["frontend"])
@@ -37,16 +37,16 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("runs-on: ubuntu-24.04-arm", blocks["frontend-history"])
         self.assertIn("runs-on: ubuntu-latest", blocks["frontend"])
         self.assertIn("timeout-minutes: 18", blocks["backend-and-contracts"])
-        self.assertEqual(workflow.count("--workers=2"), 6)
+        self.assertEqual(workflow.count("--workers=2"), 9)
         self.assertIn("--shard=3 --workers=2", blocks["backend-and-contracts"])
         backend = blocks["backend-and-contracts"]
-        for lane in (5, 6, 7):
+        for lane in (5, 6, 7, 9):
             self.assertIn("--shard=" + str(lane) + " --workers=2", backend)
             self.assertLess(backend.index("--shard=" + str(lane)), backend.index("name: Test backend"))
         for name in ("graph-candidate-contracts", "retained-release-withdrawal", "postgres-snapshot-concurrency"):
             self.assertNotIn("scripts/run_ci_deployment_shard.py", blocks[name])
         stages = re.findall(r"      - name: Test manifest-bound [^\n]+\n        timeout-minutes: (\d+)\n        run: [^\n]+--shard=(\d+)[^\n]+", backend)
-        self.assertEqual(stages, [("2", "3"), ("1", "5"), ("1", "6"), ("1", "7")])
+        self.assertEqual(stages, [("2", "3"), ("1", "5"), ("1", "6"), ("1", "7"), ("1", "9")])
         final = blocks["final-release-authorization"]
         self.assertNotIn("--shard=6", final)
         postgres = blocks["postgres-snapshot-concurrency"]
@@ -75,8 +75,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_staged_receipt_adapter.py"), 1)
         review = blocks["backend-review-contracts"]
         self.assertLess(review.index("name: Test complete backend review"), review.index("name: Test complete manifest-bound assignment 1"))
-        self.assertNotIn("--workers=2", blocks["frontend"])
-        self.assertNotIn("--workers=2", blocks["frontend-history"])
+        self.assertLess(blocks["frontend"].index("name: Test confidential human review groups"), blocks["frontend"].index("--shard=8"))
+        self.assertIn("timeout-minutes: 1", blocks["frontend"].split("name: Test manifest-bound review headroom slice 8", 1)[1])
+        self.assertLess(blocks["frontend-history"].index("name: Verify executed frontend shard"), blocks["frontend-history"].index("--shard=10"))
+        self.assertIn("--shard=10 --workers=2", blocks["frontend-history"])
+        self.assertIn("timeout-minutes: 1", blocks["frontend-history"].split("name: Test manifest-bound review headroom slice 10", 1)[1])
+        self.assertLess(review.index("--plan-only"), review.index("name: Test complete backend review"))
 
     def test_bounded_scratch_preserves_full_command_exit_and_cleanup(self):
         script = (ROOT / "scripts/run_ci_contracts.sh").read_text()

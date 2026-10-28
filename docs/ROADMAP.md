@@ -8116,3 +8116,13 @@ Engineering delivery remains separate from unchanged checklist/readiness and
 pending owner review. Originals, exact evidence versions, confidentiality,
 review history and private runtime remain intact. Native read-only receipt
 packaging and process-boundary qualification remain the next product slice.
+
+The first workspace candidate completed all review tests but exceeded the
+review job's cap. Its two deployment workers were balanced; reduce that job's
+work through a closed source/manifest/log-bound profile. Move 33 unchanged
+methods into bounded sequential phases in existing frontend, backend and
+history jobs. Keep ten jobs, two-worker ceilings and all prior deadlines.
+New one-minute phases require 15 seconds of reserve; all jobs still require 30.
+The 1,018-method manifest stays exact across ten assignments, with fresh v2
+receipts and early rejection of stale, duplicate or over-budget plans.
+Historical reports, originals, evidence versions and review histories remain.

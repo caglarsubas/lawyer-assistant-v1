@@ -172,7 +172,7 @@ def phase_assignments(ids, initial, profile=None):
 
 def plan(tests, manifest, selected):
     ids = [test.id() for test in tests]
-    if (selected not in {1, 2, 3, 4, 5, 6, 7} or manifest != {"schema": "complete-deployment-test-manifest-v1", "test_ids": ids}
+    if (selected not in range(1, 11) or manifest != {"schema": "complete-deployment-test-manifest-v1", "test_ids": ids}
             or ids != sorted(set(ids)) or not ids):
         raise ValueError("Source-bound complete test manifest required")
     lifecycle_ids = [ident for ident in ids if ident.startswith("test_reader_lifecycle.ReaderLifecycleContracts.")]
@@ -180,7 +180,8 @@ def plan(tests, manifest, selected):
     initial = {ident: shard(ident, lifecycle_ids, namespace) for ident in ids}
     initial.update(phase_assignments(ids, initial))
     initial.update(history_assignments(ids, initial))
-    sets = [{ident for ident in ids if initial[ident] == lane} for lane in (1, 2, 3, 4, 5, 6, 7)]
+    initial.update(review_assignments(ids, initial))
+    sets = [{ident for ident in ids if initial[ident] == lane} for lane in range(1, 11)]
     if not all(sets) or any(a & b for n, a in enumerate(sets) for b in sets[n + 1:]) or set.union(*sets) != set(ids):
         raise ValueError("Complete disjoint shards required")
     return [test for test in tests if test.id() in sets[selected - 1]]
@@ -218,6 +219,41 @@ def history_assignments(ids, initial, profile=None):
     return moved
 
 
+REVIEW_WORKLOAD = ROOT / "deploy/fixtures/deployment_review_headroom_workload.json"
+REVIEW_WORKER_BUDGET_MS = {"8": 35000, "9": 20000, "10": 20000}
+
+
+def review_assignments(ids, initial, profile=None):
+    """Closed measured work, moved only from review into existing sequential peaks."""
+    value = json.loads(REVIEW_WORKLOAD.read_text()) if profile is None else profile
+    source = json.loads((ROOT / "deploy/fixtures/mode_recovery_first_report.json").read_text())["candidate"]["source"]
+    for name, expected_sha in source.items():
+        path = (ROOT / name).resolve()
+        if not path.is_relative_to(ROOT) or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected_sha:
+            raise ValueError("Qualified recovery source required before review distribution")
+    source_sha = hashlib.sha256(json.dumps(source, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    original = [ident for ident in ids if initial[ident] == 1]
+    if (not isinstance(value, dict) or set(value) != {"schema", "manifest_sha256", "qualification_source_sha256", "original_review_ids_sha256", "observed_head", "observed_run", "retained_log_sha256", "worker_budget_ms", "assignments"}
+            or value["schema"] != "deployment-review-headroom-workload-v1" or value["manifest_sha256"] != hashlib.sha256(MANIFEST.read_bytes()).hexdigest()
+            or value["qualification_source_sha256"] != source_sha or value["original_review_ids_sha256"] != digest(original)
+            or len(original) != 418 or not re.fullmatch(r"[0-9a-f]{40}", value["observed_head"])
+            or type(value["observed_run"]) is not int or value["observed_run"] <= 0 or not re.fullmatch(r"[0-9a-f]{64}", value["retained_log_sha256"])
+            or value["worker_budget_ms"] != REVIEW_WORKER_BUDGET_MS or not isinstance(value["assignments"], list) or len(value["assignments"]) != 33):
+        raise ValueError("Source-bound complete review distribution required")
+    moved, costs = {}, {}
+    for row in value["assignments"]:
+        if (not isinstance(row, dict) or set(row) != {"test_id", "shard", "observed_case_ms"}
+                or row["test_id"] not in original or row["test_id"] in moved or type(row["shard"]) is not int or str(row["shard"]) not in REVIEW_WORKER_BUDGET_MS
+                or type(row["observed_case_ms"]) is not int or row["observed_case_ms"] <= 0):
+            raise ValueError("Unique bounded source-qualified review work required")
+        moved[row["test_id"]], costs[row["test_id"]] = row["shard"], row["observed_case_ms"]
+    for lane, budget in REVIEW_WORKER_BUDGET_MS.items():
+        selected = sorted(ident for ident in moved if str(moved[ident]) == lane)
+        if len(selected) < 2 or any(sum(costs[ident] for ident in selected[i::2]) > budget for i in (0, 1)):
+            raise ValueError("Each declared pair must fit its measured work budget")
+    return moved
+
+
 class ExecutedResult(unittest.TextTestResult):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -250,8 +286,8 @@ def merge_workers(reports, expected, complete, manifest_sha, lane):
     costs = {}
     for index, report in enumerate(reports):
         ids = expected[index::2]
-        if (not isinstance(report, dict) or set(report) != fields or report["schema"] != "deployment-shard-result-v1"
-                or report["shard"] != lane or report["total_shards"] != 7
+        if (not isinstance(report, dict) or set(report) != fields or report["schema"] != "deployment-shard-result-v2"
+                or report["shard"] != lane or report["total_shards"] != 10
                 or report["manifest_sha256"] != manifest_sha or report["complete_suite_sha256"] != digest(complete)
                 or report["selected_ids"] != ids or report["executed_ids"] != ids
                 or type(report["tests_run"]) is not int or report["tests_run"] != len(ids)
@@ -281,13 +317,24 @@ def parallel(args, expected, complete, manifest_sha):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--shard", type=int, choices=(1, 2, 3, 4, 5, 6, 7), required=True)
-    parser.add_argument("--report", type=Path, required=True)
+    parser.add_argument("--shard", type=int, choices=range(1, 11))
+    parser.add_argument("--report", type=Path)
+    parser.add_argument("--plan-only", action="store_true")
     parser.add_argument("--workers", type=int, choices=(1, 2), default=1)
     parser.add_argument("--worker-index", type=int, choices=(0, 1))
     args = parser.parse_args()
+    if args.plan_only:
+        if args.shard is not None or args.report is not None or args.worker_index is not None or args.workers != 1:
+            raise ValueError("Closed read-only plan required")
+        tests = collect()
+        raw = MANIFEST.read_bytes()
+        counts = [len(plan(tests, json.loads(raw), n)) for n in range(1, 11)]
+        print(json.dumps({"deployment_plan": 10, "complete_count": sum(counts), "assignments": counts, "manifest_sha256": hashlib.sha256(raw).hexdigest()}))
+        return 0
+    if args.shard is None or args.report is None:
+        raise ValueError("Explicit assignment and create-only report required")
     # Assignment 1 runs sequentially after review tests; only history overlaps Vitest.
-    if args.workers == 2 and args.shard not in {1, 3, 4, 5, 6, 7} or args.worker_index is not None and args.workers != 2:
+    if args.workers == 2 and args.shard == 2 or args.worker_index is not None and args.workers != 2:
         raise ValueError("Only declared sequential two-worker peaks may be used")
     tests = collect()
     raw = MANIFEST.read_bytes()
@@ -310,7 +357,7 @@ def main():
         result = unittest.TextTestRunner(resultclass=ExecutedResult).run(unittest.TestSuite(selected))
         verify(result, expected)
         executed, count, costs, success = result.executed_ids, result.testsRun, result.case_seconds, result.wasSuccessful()
-    report = {"schema": "deployment-shard-result-v1", "shard": args.shard, "total_shards": 7,
+    report = {"schema": "deployment-shard-result-v2", "shard": args.shard, "total_shards": 10,
               "manifest_sha256": manifest_sha, "complete_suite_sha256": digest(complete),
               "selected_ids": expected, "executed_ids": executed, "tests_run": count,
               "case_seconds": costs, "complete_count": len(tests), "success": success}

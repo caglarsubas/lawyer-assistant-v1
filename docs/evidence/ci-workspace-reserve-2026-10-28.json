@@ -15,7 +15,21 @@
   "candidate": "complete workspace group sequentially in final-release; command, workers, 120-second step cap unchanged",
   "jobs_unchanged": 10,
   "deployment_methods_unchanged": 1018,
-  "assignments_unchanged": [
+  "frontend_files_unchanged": 139,
+  "frontend_cases_unchanged": 10532,
+  "runtime_mutations": 0,
+  "native_source_pins_unchanged": 103,
+  "prior_source_pins_unchanged": 96,
+  "fresh_exact_head_and_main_required": true,
+  "source_sha256": {
+    ".github/workflows/ci.yml": "9811e9a8f2d29a4446bb8b88ae46638bd1ea16fd26f015f9160efe8f04610ab9",
+    "deploy/test_deployment_ci_placement.py": "4a12bf280916a51c3b102c01220add00175cfc50bb0dc096717363d506766034",
+    "docs/CI_WORKSPACE_RESERVE.md": "98eb3cb8eced6fad2cd09e824084bf3a8a327f6dc248217ba80d15241195c8b2",
+    "scripts/run_ci_deployment_shard.py": "0d9fee1284a531e8921c997c4de5abbc312d9315e0c5bf21d4788ead318f6ee9",
+    "deploy/test_deployment_shards.py": "e92d963666fe2ebd4facd4e102810b35771582f6e36960640839c33b3bb0ded0",
+    "deploy/fixtures/deployment_review_headroom_workload.json": "f4f25cac1bcae8bdc2f407532c3a31aee374ace2d20ea58243c8be6d355aa4e7"
+  },
+  "assignments_before": [
     418,
     425,
     90,
@@ -24,15 +38,40 @@
     26,
     19
   ],
-  "frontend_files_unchanged": 139,
-  "frontend_cases_unchanged": 10532,
-  "runtime_mutations": 0,
-  "native_source_pins_unchanged": 103,
-  "prior_source_pins_unchanged": 96,
-  "fresh_exact_head_and_main_required": true,
-  "source_sha256": {
-    ".github/workflows/ci.yml": "e26267ac91e2633576dc09405a0537716433718cefedc3ddb0d2d92fede0ddd2",
-    "deploy/test_deployment_ci_placement.py": "463869cea396227830a8ce7b87e878fa78930e99882261dee8c4a9235a9cdcae",
-    "docs/CI_WORKSPACE_RESERVE.md": "2e609736f0d06fc0132afbbc82530b33a6162ff3f087cecd74ae82ef7f427f2b"
+  "assignments_after": [
+    385,
+    425,
+    90,
+    23,
+    17,
+    26,
+    19,
+    12,
+    10,
+    11
+  ],
+  "review_job_remediation": {
+    "diagnostic_run": 40662874620,
+    "diagnostic_job_seconds": 369,
+    "job_cap_seconds": 360,
+    "review_cases_completed": 133,
+    "original_deployment_methods_completed": 418,
+    "original_worker_case_seconds": [
+      139.958,
+      145.693
+    ],
+    "moved_methods": 33,
+    "aggregate_observed_case_ms": 146174,
+    "new_per_worker_case_budgets_ms": {
+      "8": 35000,
+      "9": 20000,
+      "10": 20000
+    },
+    "new_step_cap_seconds": 60,
+    "new_step_reserve_floor_seconds": 15,
+    "jobs_and_worker_ceilings_unchanged": true,
+    "report_schema": "deployment-shard-result-v2",
+    "early_read_only_plan_check": true,
+    "work_budgets_are_not_runtime_guarantees": true
   }
 }

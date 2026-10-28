@@ -1,0 +1,181 @@
+{
+  "schema": "deployment-review-headroom-workload-v1",
+  "manifest_sha256": "16599d9f6eddab10b32bdc1ee92d04ea741dcd69931e218e44c49ee46c68d8ff",
+  "qualification_source_sha256": "38b59e72178770299944ff27a90c13ca6a832a87ce0ec8980a7fae47a3a2502e",
+  "original_review_ids_sha256": "c2efcd812fb91f76e2b261de7f684de351081c449de22dfde0652898f0306d80",
+  "observed_head": "1300a9d71e4aa0ee651b21e5ba6d321dd48e4cc5",
+  "observed_run": 40662874620,
+  "retained_log_sha256": "3058236fe941a0e311de7b7b150fce256e0a18eee2f56a898667bf970cea3fe5",
+  "worker_budget_ms": {
+    "8": 35000,
+    "9": 20000,
+    "10": 20000
+  },
+  "assignments": [
+    {
+      "test_id": "test_anchored_operator_review.AnchoredReviewContracts.test_case_R08_anchor_deep_rollback",
+      "shard": 9,
+      "observed_case_ms": 2069
+    },
+    {
+      "test_id": "test_anchored_operator_review.AnchoredReviewContracts.test_case_R19_parent_undecided",
+      "shard": 8,
+      "observed_case_ms": 656
+    },
+    {
+      "test_id": "test_anchored_operator_review.AnchoredReviewContracts.test_case_R24_role_changed",
+      "shard": 10,
+      "observed_case_ms": 1552
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I04_changed_snapshot",
+      "shard": 10,
+      "observed_case_ms": 3809
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I06_ancestor_and_descendants",
+      "shard": 8,
+      "observed_case_ms": 5047
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I07_unused_candidate_only",
+      "shard": 9,
+      "observed_case_ms": 4140
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I17_pending_renewal_blocked",
+      "shard": 10,
+      "observed_case_ms": 3747
+    },
+    {
+      "test_id": "test_joint_recovery.JointRecoveryContracts.test_case_J01_ordered_progress",
+      "shard": 8,
+      "observed_case_ms": 4879
+    },
+    {
+      "test_id": "test_joint_recovery.JointRecoveryContracts.test_case_J04_stale_progress",
+      "shard": 9,
+      "observed_case_ms": 4707
+    },
+    {
+      "test_id": "test_joint_recovery.JointRecoveryContracts.test_case_J05_finish_first_refused",
+      "shard": 9,
+      "observed_case_ms": 4671
+    },
+    {
+      "test_id": "test_joint_recovery.JointRecoveryContracts.test_case_J06_missing_window_admission",
+      "shard": 9,
+      "observed_case_ms": 4550
+    },
+    {
+      "test_id": "test_journal_recovery.JournalRecoveryContracts.test_case_G03_finish_anchor_repair",
+      "shard": 8,
+      "observed_case_ms": 4824
+    },
+    {
+      "test_id": "test_journal_recovery.JournalRecoveryContracts.test_case_G04_lost_finish_reply",
+      "shard": 8,
+      "observed_case_ms": 4716
+    },
+    {
+      "test_id": "test_journal_recovery.JournalRecoveryContracts.test_case_G05_lost_repair_reply",
+      "shard": 8,
+      "observed_case_ms": 4815
+    },
+    {
+      "test_id": "test_journal_recovery.JournalRecoveryContracts.test_case_G06_missing_admission",
+      "shard": 9,
+      "observed_case_ms": 4219
+    },
+    {
+      "test_id": "test_journal_recovery.JournalRecoveryContracts.test_case_G07_stale_view",
+      "shard": 10,
+      "observed_case_ms": 4019
+    },
+    {
+      "test_id": "test_journal_recovery.JournalRecoveryContracts.test_case_G08_expired_metadata_only",
+      "shard": 8,
+      "observed_case_ms": 4741
+    },
+    {
+      "test_id": "test_long_page_quotes.LongPageQuotes.test_authenticated_driver_correlates_concurrent_outcomes_and_keeps_failed_product_seals",
+      "shard": 8,
+      "observed_case_ms": 7969
+    },
+    {
+      "test_id": "test_mode_recovery.ModeRecoveryContracts.test_case_C06_retirement_withdrawal",
+      "shard": 9,
+      "observed_case_ms": 4462
+    },
+    {
+      "test_id": "test_mode_recovery.ModeRecoveryContracts.test_case_C07_retirement_expiry",
+      "shard": 9,
+      "observed_case_ms": 4225
+    },
+    {
+      "test_id": "test_mode_recovery.ModeRecoveryContracts.test_case_C08_retirement_wrong_plan",
+      "shard": 9,
+      "observed_case_ms": 4168
+    },
+    {
+      "test_id": "test_operator_enrollment_evidence.OperatorEvidenceContracts.test_frozen_operator_cases_with_explicit_unit_readonly_adapter",
+      "shard": 10,
+      "observed_case_ms": 3767
+    },
+    {
+      "test_id": "test_quote_selection_evaluation.QuoteSelectionEvaluation.test_full_declared_driver_through_authenticated_app_routes_with_controlled_oracle",
+      "shard": 8,
+      "observed_case_ms": 6731
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N01_reviewed_transition",
+      "shard": 10,
+      "observed_case_ms": 3670
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N08_destination_tampered",
+      "shard": 10,
+      "observed_case_ms": 3508
+    },
+    {
+      "test_id": "test_reader_namespace.ReaderNamespaceContracts.test_case_N16_no_namespace_bypass",
+      "shard": 10,
+      "observed_case_ms": 3774
+    },
+    {
+      "test_id": "test_restore_lifecycle.RestoreLifecycleContracts.test_case_N11_declined_renewal",
+      "shard": 10,
+      "observed_case_ms": 4050
+    },
+    {
+      "test_id": "test_restore_lifecycle.RestoreLifecycleContracts.test_case_N18_renewal_race",
+      "shard": 10,
+      "observed_case_ms": 3939
+    },
+    {
+      "test_id": "test_restore_lifecycle.RestoreLifecycleContracts.test_case_N24_missing_lifecycle_intent",
+      "shard": 9,
+      "observed_case_ms": 2723
+    },
+    {
+      "test_id": "test_restore_lifecycle.RestoreLifecycleContracts.test_case_N26_other_identity_after_renewal",
+      "shard": 8,
+      "observed_case_ms": 5741
+    },
+    {
+      "test_id": "test_scanner_compose.ScannerComposeTests.test_compose_secrets_are_file_scoped_without_literal_credential_interpolation",
+      "shard": 8,
+      "observed_case_ms": 13142
+    },
+    {
+      "test_id": "test_withdrawal_backup.WithdrawalBackupContracts.test_case_W06_changed_lifecycle",
+      "shard": 8,
+      "observed_case_ms": 3994
+    },
+    {
+      "test_id": "test_withdrawal_backup.WithdrawalBackupContracts.test_case_W22_interrupted_backup",
+      "shard": 10,
+      "observed_case_ms": 3150
+    }
+  ]
+}

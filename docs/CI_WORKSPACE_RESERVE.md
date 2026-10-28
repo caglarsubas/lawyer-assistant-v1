@@ -24,3 +24,32 @@ reserve gates. A cancelled or near-deadline baseline is diagnostic evidence,
 never clearance. Originals, exact evidence versions, review history, source pins
 and private runtime remain unchanged. Native receipt packaging and owner review
 remain separate readiness requirements.
+
+The first candidate's review job completed all 133 review cases and all 418
+deployment methods, but exceeded its six-minute job cap. The two deployment
+workers were already balanced (139.958/145.693 seconds of aggregate case work);
+the job needed less work, rather than another worker or a longer deadline.
+
+A source/manifest/log-bound profile moves 33 unchanged deployment methods into
+three sequential phases in existing frontend, backend and history jobs. Each
+phase reuses that job's two-worker ceiling after its preceding work exits. The
+one-minute phases retain a 15-second step floor; all jobs retain 30 seconds.
+
+| Assignment | Existing job | Methods | Per-worker observed case-work budget |
+|---|---|---:|---:|
+| 8 | Frontend, after human review | 12 | 35 seconds |
+| 9 | Backend, before the remainder | 10 | 20 seconds |
+| 10 | History, after both overlapped workers and report verification | 11 | 20 seconds |
+
+The complete inventory stays 1,018 methods. Assignments become
+385/425/90/23/17/26/19/12/10/11. These are case-work measurements, excluding
+process startup; actual phase and job gates remain mandatory. Four other
+retained observations of these methods fit the declared per-worker budgets.
+No test implementation or qualified recovery source is changed.
+
+Reject missing, duplicate, stale, foreign and over-budget assignments before
+execution. A read-only plan check runs before the expensive review group.
+Fresh v2 execution reports declare ten assignments and reject the old seven-
+assignment reports. Historical reports remain intact. Require actual logs to
+show every assigned method exactly once and both workers within each declared
+peak; no cached report substitutes for a successful current process and gate.
