@@ -51,9 +51,11 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("--shard=6", final)
         postgres = blocks["postgres-snapshot-concurrency"]
         self.assertNotIn("name: Test workspace permission", backend)
-        self.assertIn('"${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', postgres)
-        self.assertIn("timeout-minutes: 2", postgres.split("name: Test workspace permission", 1)[1])
-        self.assertLess(postgres.index("name: Test real PostgreSQL"), postgres.index("name: Test workspace permission"))
+        self.assertNotIn("name: Test workspace permission", postgres)
+        self.assertIn('"${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', final)
+        self.assertIn("timeout-minutes: 2", final.split("name: Test workspace permission", 1)[1])
+        self.assertLess(final.index("name: Test whole-release permission"), final.index("name: Test workspace permission"))
+        self.assertEqual(workflow.count("name: Test workspace permission and proposal contracts"), 1)
         graph = blocks["graph-runtime-contracts"]
         self.assertIn("--shard=4 --workers=2", graph)
         self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("name: Test manifest-bound reader lifecycle"))

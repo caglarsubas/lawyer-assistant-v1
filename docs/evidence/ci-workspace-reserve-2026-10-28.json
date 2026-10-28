@@ -1,0 +1,38 @@
+{
+  "schema": "ci-workspace-group-reserve-candidate-v1",
+  "date": "2026-10-28",
+  "base_commit": "a3d92af6162fe35736e22b73ed3c320528b93ab8",
+  "baseline_main_run": 40661329285,
+  "baseline_postgres_job_seconds": 281,
+  "postgres_job_cap_seconds": 300,
+  "baseline_postgres_reserve_seconds": 19,
+  "required_job_reserve_seconds": 30,
+  "baseline_final_release_reserve_seconds": 75,
+  "baseline_remaining_work_cancelled": true,
+  "workspace_cases": 49,
+  "real_postgres_cases_unchanged": 95,
+  "human_review_cases_in_frontend_unchanged": 32,
+  "candidate": "complete workspace group sequentially in final-release; command, workers, 120-second step cap unchanged",
+  "jobs_unchanged": 10,
+  "deployment_methods_unchanged": 1018,
+  "assignments_unchanged": [
+    418,
+    425,
+    90,
+    23,
+    17,
+    26,
+    19
+  ],
+  "frontend_files_unchanged": 139,
+  "frontend_cases_unchanged": 10532,
+  "runtime_mutations": 0,
+  "native_source_pins_unchanged": 103,
+  "prior_source_pins_unchanged": 96,
+  "fresh_exact_head_and_main_required": true,
+  "source_sha256": {
+    ".github/workflows/ci.yml": "e26267ac91e2633576dc09405a0537716433718cefedc3ddb0d2d92fede0ddd2",
+    "deploy/test_deployment_ci_placement.py": "463869cea396227830a8ce7b87e878fa78930e99882261dee8c4a9235a9cdcae",
+    "docs/CI_WORKSPACE_RESERVE.md": "2e609736f0d06fc0132afbbc82530b33a6162ff3f087cecd74ae82ef7f427f2b"
+  }
+}

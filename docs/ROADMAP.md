@@ -8094,3 +8094,25 @@ pending owner review. Originals, exact evidence versions, review histories,
 103 recovery source pins, 96 prior dependencies and private runtime remain intact.
 Native read-only receipt packaging and process-boundary behavior with disposable
 identities remain the next product slice after reserve qualification.
+
+## Workspace-group placement and PostgreSQL main reserve — 2026-10-28
+
+PR #242 passed exact-head qualification and merged with a matching tree. Its
+independent main PostgreSQL job passed functionally but retained only **19 seconds**
+against the unchanged **30-second** gate. Main qualification stays open; cancel
+the remaining ineligible backend work while preserving completed receipts.
+
+Move the complete **49-case** workspace permission/proposal group to measured
+final-release reserve after its whole-release phase. Preserve the exact command,
+two workers, two-minute step cap and isolated fixtures. The real **95-case**
+PostgreSQL race group and its durability settings remain unchanged. Keep all ten
+jobs, test inventories, deadlines, source pins and the single frontend build.
+Require fresh exact-head and main checks, all actual receipts and existing
+reserve floors; cancelled baselines cannot provide clearance.
+
+See [placement rationale](CI_WORKSPACE_RESERVE.md) and
+[evidence](evidence/ci-workspace-reserve-2026-10-28.json). Ledger **259 → 260**.
+Engineering delivery remains separate from unchanged checklist/readiness and
+pending owner review. Originals, exact evidence versions, confidentiality,
+review history and private runtime remain intact. Native read-only receipt
+packaging and process-boundary qualification remain the next product slice.
