@@ -62,6 +62,16 @@ the same command, pair and deadline. Existing backend/review inventories remain
 139 files/10,532 cases. Exact-head and independent-main checks, actual receipts,
 all-job/backend-test reserves and existing short-phase gates remain mandatory.
 
+The first PR run passed the history job functionally but left only 22 of the
+required 30 reserve seconds. Its sequential deployment shard was the tail.
+Bind ten enrollment/revocation cases (27,523 observed milliseconds) to the
+existing review pair instead. The closed workload profile retains the exact
+manifest, qualified source and originating log digests. Assignments change from
+408/435 to 418/425; all other assignments, workers and deadlines stay unchanged.
+Missing, duplicate, stale, foreign or over-budget assignments fail before work.
+Both affected assignments and complete discovery are checked locally; fresh
+exact-head and main CI must independently meet the unchanged reserve gates.
+
 Next qualify native read-only packaging and process-boundary adapter behavior
 using disposable identities. Independently reviewed live key custody, genuine
 appointments, production activation and owner legal review remain pending.

@@ -179,10 +179,43 @@ def plan(tests, manifest, selected):
     namespace = namespace_assignments(ids)
     initial = {ident: shard(ident, lifecycle_ids, namespace) for ident in ids}
     initial.update(phase_assignments(ids, initial))
+    initial.update(history_assignments(ids, initial))
     sets = [{ident for ident in ids if initial[ident] == lane} for lane in (1, 2, 3, 4, 5, 6, 7)]
     if not all(sets) or any(a & b for n, a in enumerate(sets) for b in sets[n + 1:]) or set.union(*sets) != set(ids):
         raise ValueError("Complete disjoint shards required")
     return [test for test in tests if test.id() in sets[selected - 1]]
+
+
+HISTORY_WORKLOAD = ROOT / "deploy/fixtures/deployment_history_workload.json"
+
+
+def history_assignments(ids, initial, profile=None):
+    """Move a measured sequential tail to the existing review pair, once."""
+    value = json.loads(HISTORY_WORKLOAD.read_text()) if profile is None else profile
+    source = json.loads((ROOT / "deploy/fixtures/enrollment_revocation_first_report.json").read_text())["candidate"]["source"]
+    for name, expected_sha in source.items():
+        path = (ROOT / name).resolve()
+        if not path.is_relative_to(ROOT) or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected_sha:
+            raise ValueError("Current qualified enrollment source required before execution")
+    source_sha = hashlib.sha256(json.dumps(source, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    expected = {ident for ident in ids if initial[ident] == 2 and ident.startswith("test_enrollment_revocation.EnrollmentRevocationContracts.test_case_")}
+    if (not isinstance(value, dict) or set(value) != {"schema", "manifest_sha256", "qualification_source_sha256", "observed_head", "observed_run", "retained_log_sha256", "increment_budget_ms", "assignments"}
+            or value["schema"] != "deployment-history-workload-v1" or value["manifest_sha256"] != hashlib.sha256(MANIFEST.read_bytes()).hexdigest()
+            or value["qualification_source_sha256"] != source_sha or not re.fullmatch(r"[0-9a-f]{40}", value["observed_head"])
+            or type(value["observed_run"]) is not int or value["observed_run"] <= 0 or not re.fullmatch(r"[0-9a-f]{64}", value["retained_log_sha256"])
+            or value["increment_budget_ms"] != 30000 or not isinstance(value["assignments"], list) or len(value["assignments"]) != len(expected) or len(expected) != 10):
+        raise ValueError("Source-bound measured history assignments required")
+    moved, cost = {}, 0
+    for row in value["assignments"]:
+        if (not isinstance(row, dict) or set(row) != {"test_id", "shard", "observed_case_ms"}
+                or row["test_id"] not in expected or row["test_id"] in moved or type(row["shard"]) is not int or row["shard"] != 1
+                or type(row["observed_case_ms"]) is not int or row["observed_case_ms"] <= 0):
+            raise ValueError("Closed unique history assignments required")
+        moved[row["test_id"]] = 1
+        cost += row["observed_case_ms"]
+    if set(moved) != expected or cost > 30000:
+        raise ValueError("History increment must fit retained measured budget")
+    return moved
 
 
 class ExecutedResult(unittest.TextTestResult):

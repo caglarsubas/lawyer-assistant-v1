@@ -45,6 +45,39 @@
     "scripts/staged_receipt_adapter.py": "586c93f3f3e6f7be3f36bcf62d7f32584b0e8839dbc64e15d09d20b443ac0341",
     "backend/tests/test_staged_receipt_adapter.py": "23e0099606599ea15e6ce14e09c54fa6b801622513017cab394341a7bb591652",
     ".github/workflows/ci.yml": "fef57816c23a927a743d36ad142828c11c3b142a546bf2977f069199820fc923",
-    "deploy/test_deployment_ci_placement.py": "1060a823645eee8e6f21b6a37c3ba1ff538423ba13f830ac82e90a7744edfeab"
+    "deploy/test_deployment_ci_placement.py": "1060a823645eee8e6f21b6a37c3ba1ff538423ba13f830ac82e90a7744edfeab",
+    "scripts/run_ci_deployment_shard.py": "4bd6daac114bdee8b01b9157e313f09b3836e0039eac1324c003d433e34cc728",
+    "deploy/test_deployment_shards.py": "36b29f375601f98fa21321831ac21a689862ce56c4de996c574cf53eb9c13c96",
+    "deploy/fixtures/deployment_history_workload.json": "88e474f743e7205094f72ed0206339085ac8c08ddc4172a6122584cbed40693c"
+  },
+  "CI_headroom_remediation": {
+    "initial_run": 40647989596,
+    "initial_history_job_seconds": 278,
+    "history_job_cap_seconds": 300,
+    "required_job_reserve_seconds": 30,
+    "initial_reserve_seconds": 22,
+    "observed_moved_case_ms": 27523,
+    "moved_cases": 10,
+    "assignments_before": [
+      408,
+      435,
+      90,
+      23,
+      17,
+      26,
+      19
+    ],
+    "assignments_after": [
+      418,
+      425,
+      90,
+      23,
+      17,
+      26,
+      19
+    ],
+    "method_inventory_unchanged": true,
+    "workers_and_deadlines_unchanged": true,
+    "fresh_exact_head_and_main_gates_required": true
   }
 }

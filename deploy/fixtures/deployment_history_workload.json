@@ -1,0 +1,61 @@
+{
+  "schema": "deployment-history-workload-v1",
+  "manifest_sha256": "16599d9f6eddab10b32bdc1ee92d04ea741dcd69931e218e44c49ee46c68d8ff",
+  "qualification_source_sha256": "c94c1982c302973bdaf783383acbc1d83ef7d183a6b38f3e8ff72fae7d0cc0f7",
+  "observed_head": "3b58532251ab66782b552ef4b4e54e5c41ea7d1e",
+  "observed_run": 40647989596,
+  "retained_log_sha256": "5271cd00d4c3289341aff36f40db0260bbd8395fb16cebf7dd0839c3230d4505",
+  "increment_budget_ms": 30000,
+  "assignments": [
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I01_inventory_pagination_readonly",
+      "shard": 1,
+      "observed_case_ms": 2677
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I02_tampered_cursor",
+      "shard": 1,
+      "observed_case_ms": 2700
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I03_other_actor_cursor",
+      "shard": 1,
+      "observed_case_ms": 2702
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I05_current_and_future_blocked",
+      "shard": 1,
+      "observed_case_ms": 2733
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I09_wrong_subject_and_decision_pin",
+      "shard": 1,
+      "observed_case_ms": 2721
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I11_changed_preparer_role",
+      "shard": 1,
+      "observed_case_ms": 2791
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I13_lost_acknowledgement",
+      "shard": 1,
+      "observed_case_ms": 2792
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I15_expired_source_packet",
+      "shard": 1,
+      "observed_case_ms": 2848
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I19_changed_control_proposal",
+      "shard": 1,
+      "observed_case_ms": 2826
+    },
+    {
+      "test_id": "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_I20_legacy_bypass_and_missing_intent",
+      "shard": 1,
+      "observed_case_ms": 2733
+    }
+  ]
+}

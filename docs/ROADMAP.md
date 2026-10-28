@@ -8047,6 +8047,13 @@ all four histories, 103 qualified recovery pins, 96 preceding dependencies,
 new test file in existing graph-candidate reserve without changing workers,
 commands, deadlines or prior cases.
 
+The initial history job passed with only 22 seconds of the required 30-second
+reserve. Move its measured 27.5-second, ten-case enrollment tail into the
+existing review pair using source/manifest/log-bound assignments. Preserve all
+1,018 methods exactly once: assignments 1/2 become 418/425; no extra worker,
+executor, retry or longer cap. Reject malformed, stale and over-budget profiles
+and require fresh exact-head and main reserve qualification before completion.
+
 See [stage contract](STAGED_RECEIPT_ADAPTER.md) and
 [evidence](evidence/staged-receipt-adapter-2026-10-28.json). Ledger **257 → 258**.
 Checklist stays **42 done / 21 open / 24 waiting / 6 deferred**; workstreams stay
