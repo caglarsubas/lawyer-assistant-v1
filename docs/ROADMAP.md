@@ -8083,6 +8083,12 @@ reserve. Use its otherwise idle second Vitest slot within the existing two-worke
 ceiling; retain file isolation, both complete shards and history's one-plus-one
 worker pairing. No executor or concurrency ceiling is added.
 
+The second candidate passed all ten checks and fixed gates, but backend reserve
+was still 34 seconds. Reuse freed frontend capacity for the complete 32-case
+human-review group after verified Vitest completion. Preserve its command,
+three-minute cap, two-worker ceiling and unchanged backend remainder membership.
+Require exact, nonduplicated execution receipts in the fresh candidate and main.
+
 Engineering delivery remains separate from unchanged checklist/readiness and
 pending owner review. Originals, exact evidence versions, review histories,
 103 recovery source pins, 96 prior dependencies and private runtime remain intact.

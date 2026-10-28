@@ -29,3 +29,11 @@ short-phase floors remain. No near-deadline green run substitutes for this gate.
 Keep PR #241's records as historical evidence of its distinct functional and
 qualification states. No application, private runtime, source evidence or review
 history is changed by this CI-only follow-up.
+
+The second placement candidate passed all ten checks and fixed gates, but the
+backend still retained only 34 seconds. Reuse the frontend capacity freed by its
+two Vitest workers for the complete 32-case human-review group, after Vitest
+exits and its shard receipt is verified. Preserve the exact pytest command,
+three-minute step cap and two-worker ceiling. Backend remainder membership is
+unchanged because this group stays explicitly excluded. Fresh logs must show
+all 32 cases in frontend and no duplicate backend execution.
