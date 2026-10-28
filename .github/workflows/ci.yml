@@ -25,6 +25,7 @@ env:
   CI_GRAPH_CANDIDATE_TESTS: >-
     backend/tests/test_final_release_transitions.py
     backend/tests/test_final_graph_candidate.py
+    backend/tests/test_staged_receipt_adapter.py
   CI_WORKSPACE_SECURITY_TESTS: >-
     backend/tests/test_firm_admin.py
     backend/tests/test_authority_proposals.py

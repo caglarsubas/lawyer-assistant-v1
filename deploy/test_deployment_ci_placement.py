@@ -63,6 +63,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(final_group.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
+        candidate_group = re.search(r"  CI_GRAPH_CANDIDATE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(candidate_group.count("backend/tests/test_staged_receipt_adapter.py"), 1)
+        self.assertEqual(workflow.count("backend/tests/test_staged_receipt_adapter.py"), 1)
         review = blocks["backend-review-contracts"]
         self.assertLess(review.index("name: Test complete backend review"), review.index("name: Test complete manifest-bound assignment 1"))
         self.assertNotIn("--workers=2", blocks["frontend"])

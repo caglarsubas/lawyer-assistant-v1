@@ -50,7 +50,10 @@ class DeploymentShardContracts(unittest.TestCase):
             else:
                 self.assertEqual({name for name in a | b if name.startswith(prefix)}, expected)
                 self.assertTrue(expected & a)
-                self.assertTrue(expected & b)
+                if module == "test_enrollment_revocation":
+                    self.assertFalse(expected & b)
+                else:
+                    self.assertTrue(expected & b)
 
     def test_namespace_work_profile_rejects_missing_duplicate_stale_over_budget_or_unknown_assignments(self):
         ids = [test.id() for test in runner.collect()]
@@ -113,6 +116,33 @@ class DeploymentShardContracts(unittest.TestCase):
                 value["assignments"][0]["unknown"] = True
             with self.subTest(phase_kind=kind), self.assertRaises(ValueError):
                 runner.phase_assignments(ids, initial, value)
+
+        initial.update(runner.phase_assignments(ids, initial))
+        history = json.loads(runner.HISTORY_WORKLOAD.read_text())
+        self.assertEqual(len(runner.history_assignments(ids, initial)), 10)
+        changed = ROOT / "scripts/enrollment_revocation.py"
+        with patch.object(Path, "read_bytes", lambda path: b"changed" if path == changed else original_read(path)), self.assertRaises(ValueError):
+            runner.history_assignments(ids, initial, history)
+        for kind in ("missing", "duplicate", "source", "manifest", "budget", "lane", "origin", "extra"):
+            value = copy.deepcopy(history)
+            if kind == "missing":
+                value["assignments"].pop()
+            elif kind == "duplicate":
+                value["assignments"][1] = value["assignments"][0]
+            elif kind == "source":
+                value["qualification_source_sha256"] = "0" * 64
+            elif kind == "manifest":
+                value["manifest_sha256"] = "0" * 64
+            elif kind == "budget":
+                value["assignments"][0]["observed_case_ms"] = 1000000
+            elif kind == "lane":
+                value["assignments"][0]["shard"] = 2
+            elif kind == "origin":
+                value["assignments"][0]["test_id"] = next(x for x in ids if initial[x] == 1)
+            else:
+                value["assignments"][0]["unknown"] = True
+            with self.subTest(history_kind=kind), self.assertRaises(ValueError):
+                runner.history_assignments(ids, initial, value)
 
     def test_omitted_or_duplicate_test_is_rejected_before_execution(self):
         tests = [unittest.FunctionTestCase(lambda: None), unittest.FunctionTestCase(lambda: None)]
