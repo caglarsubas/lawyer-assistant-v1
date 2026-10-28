@@ -7951,3 +7951,23 @@ The ledger advances **253 → 254**. Checklist remains **42 done / 21 open /
 exact receipt handoff with fresh destination actor/scope/context authorization
 using disposable identities; genuine appointments, custody and legal acceptance
 remain separate.
+
+## Inventory CI reserve follow-up — 2026-10-28
+
+PR #237's source tree passed all PR checks and reserve gates; its main release
+job subsequently passed functionally with only 24 reserve seconds. Preserve
+that distinction and keep the 30-second requirement. Return complete assignment
+6 to the backend and move the complete 49-case workspace permission/proposal
+group into measured PostgreSQL-job reserve, after the real race tests. Preserve
+all commands, cases, worker bounds, step/job caps and the single build.
+
+Require complete exact-head and main qualification, including actual receipts
+for all 1,018 deployment methods, 139 frontend files, 10,532 frontend cases and
+all moved workspace cases. All 103 recovery source pins, 96 prior dependencies,
+the collector and its tests, private originals, evidence, reviews, credentials
+and sessions remain exact. See [CI follow-up](CI_INVENTORY_HEADROOM.md) and
+[evidence](evidence/inventory-ci-headroom-2026-10-28.json).
+
+Ledger **254 → 255**; engineering delivery remains separate from unchanged
+checklist/readiness counts and pending owner review. Exact private receipt
+handoff with fresh destination authorization remains the next product slice.
