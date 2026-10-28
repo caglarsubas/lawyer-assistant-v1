@@ -8007,7 +8007,7 @@ access. Pinned ciphertext, schema and file integrity are rechecked before fresh
 controller reads and before returning historical/current observations separately.
 No receipt becomes a bearer credential or evidence of current review validity.
 
-Seventeen tests and thirty-six negative subtests include two disposable retained
+Eighteen tests and thirty-six negative subtests include two disposable retained
 records and fifteen authenticated ASGI re-observations. Preserve exact ciphertext
 and all four histories around reads; reject revoked/unrelated sessions, unsafe
 files, wrong keys/bindings, altered records, timeouts and cancellation. Preserve

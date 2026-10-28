@@ -45,7 +45,7 @@ Cancellation propagates. No atomic snapshot, current review validity, approval
 renewal, legal qualification or execution authority is asserted. All historical
 and fresh metadata remains private; there is no shared cache or public graph use.
 
-Seventeen tests and thirty-six negative subtests include two disposable retained
+Eighteen tests and thirty-six negative subtests include two disposable retained
 records and fifteen authenticated ASGI re-observations over retirement/rollback,
 expiry, withdrawal, unrelated actors and session revocation. Thirty-two read
 requests include four creating the source inventories, four capturing the

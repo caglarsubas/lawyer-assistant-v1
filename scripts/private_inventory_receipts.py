@@ -163,9 +163,10 @@ class RetentionUncertain(Exception):
 def _publish(store, record_id, raw):
     directory = _directory(store)
     temporary = ".pending-" + secrets.token_hex(16)
-    published = False
+    published, created = False, False
     try:
         fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600, dir_fd=directory)
+        created = True
         with os.fdopen(fd, "wb") as stream:
             stream.write(raw)
             stream.flush()
@@ -174,6 +175,7 @@ def _publish(store, record_id, raw):
         os.link(temporary, record_id + ".receipt", src_dir_fd=directory, dst_dir_fd=directory, follow_symlinks=False)
         published = True
         os.unlink(temporary, dir_fd=directory)
+        created = False
         os.fsync(directory)
         _root(store)
         _read(store, record_id, e.sha(raw))
@@ -184,7 +186,8 @@ def _publish(store, record_id, raw):
     finally:
         cleanup_error = False
         try:
-            os.unlink(temporary, dir_fd=directory)
+            if created:
+                os.unlink(temporary, dir_fd=directory)
         except FileNotFoundError:
             pass
         except OSError:

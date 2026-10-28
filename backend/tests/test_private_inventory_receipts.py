@@ -105,6 +105,16 @@ class PrivateReceiptTests(unittest.IsolatedAsyncioTestCase):
         other = await self.capture(record="2" * 32)
         self.assertNotEqual(first["record_sha256"], other["record_sha256"])
 
+    async def test_staging_collision_never_cleans_another_pending_file(self):
+        pending = self.root / (".pending-" + "3" * 32)
+        pending.write_bytes(b"private-marker-owned-by-another-operation")
+        pending.chmod(0o600)
+        original = pending.read_bytes()
+        with patch.object(p.secrets, "token_hex", return_value="3" * 32):
+            self.no_body(await self.capture(), "conflict")
+        self.assertEqual(pending.read_bytes(), original)
+        self.assertEqual([x.name for x in self.root.iterdir()], [pending.name])
+
     async def test_independent_hash_key_record_context_and_scope_pins_reject_replay(self):
         captured = await self.capture()
         original = (self.root / (RECORD + ".receipt")).read_bytes()
