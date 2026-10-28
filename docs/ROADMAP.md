@@ -8061,3 +8061,25 @@ Checklist stays **42 done / 21 open / 24 waiting / 6 deferred**; workstreams sta
 confidentiality, review history and runtime remain intact. Next qualify native
 read-only packaging and process-boundary adapter behavior with disposable
 identities; genuine custody, appointments, deployment and owner review stay open.
+
+## Single-build placement and backend main reserve — 2026-10-28
+
+PR #241 passed exact-head checks and reserve gates, then merged with an exact
+matching tree. Its independent main run passed all ten jobs functionally but
+left only **21 seconds** in the backend job against the retained **30-second**
+requirement. Preserve that distinction; main qualification remains open.
+
+Move the single frontend build from the backend's serial path into measured
+frontend reserve, before Vitest. Keep locked Node preparation, every existing
+command, all ten jobs, worker bounds and deadlines. The build runs exactly once;
+preserve all backend groups, 1,018 deployment methods and 139 frontend files /
+10,532 cases. Require fresh exact-head and main qualification, actual receipts
+and unchanged job/step reserve gates before completion.
+
+See [placement rationale](CI_BUILD_RESERVE.md) and
+[evidence](evidence/ci-build-reserve-2026-10-28.json). Ledger **258 → 259**.
+Engineering delivery remains separate from unchanged checklist/readiness and
+pending owner review. Originals, exact evidence versions, review histories,
+103 recovery source pins, 96 prior dependencies and private runtime remain intact.
+Native read-only receipt packaging and process-boundary behavior with disposable
+identities remain the next product slice after reserve qualification.

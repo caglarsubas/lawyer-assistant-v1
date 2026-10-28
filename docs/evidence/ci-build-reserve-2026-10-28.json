@@ -1,0 +1,37 @@
+{
+  "schema": "ci-single-build-reserve-candidate-v1",
+  "date": "2026-10-28",
+  "base_commit": "40c08d999f2c384990cb81042d1d1fd085cdd9d9",
+  "baseline_main_run": 40652152012,
+  "baseline_functional_checks_passed": 10,
+  "baseline_backend_job_seconds": 1179,
+  "backend_job_cap_seconds": 1200,
+  "baseline_backend_job_reserve_seconds": 21,
+  "required_job_reserve_seconds": 30,
+  "baseline_backend_test_seconds": 840,
+  "baseline_build_seconds": 27,
+  "baseline_frontend_job_reserve_seconds": 112,
+  "candidate": "single build in frontend job before Vitest; backend Node dependencies retained",
+  "test_methods_unchanged": 1018,
+  "assignments_unchanged": [
+    418,
+    425,
+    90,
+    23,
+    17,
+    26,
+    19
+  ],
+  "frontend_files_unchanged": 139,
+  "frontend_cases_unchanged": 10532,
+  "jobs_unchanged": 10,
+  "workers_deadlines_retries_unchanged": true,
+  "fresh_exact_head_and_main_required": true,
+  "private_runtime_changes": 0,
+  "owner_review": "pending",
+  "source_sha256": {
+    ".github/workflows/ci.yml": "4890f0c29c89f6a5dc5b76b26fc3902ffd95b638d616a48280e5757bc9db436a",
+    "deploy/test_ci_partition_contract.py": "0c54bd47147f8f4cf689f71c8bf4670ec0360388baed83fd878321924058c3e0",
+    "docs/CI_BUILD_RESERVE.md": "5138fc145be3e57e58a904269dba26555565bf0b15b9e5448686de0941f67425"
+  }
+}
