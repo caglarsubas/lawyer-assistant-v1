@@ -8078,6 +8078,11 @@ and unchanged job/step reserve gates before completion.
 
 See [placement rationale](CI_BUILD_RESERVE.md) and
 [evidence](evidence/ci-build-reserve-2026-10-28.json). Ledger **258 → 259**.
+The first build-placement candidate passed frontend with only 34 seconds of
+reserve. Use its otherwise idle second Vitest slot within the existing two-worker
+ceiling; retain file isolation, both complete shards and history's one-plus-one
+worker pairing. No executor or concurrency ceiling is added.
+
 Engineering delivery remains separate from unchanged checklist/readiness and
 pending owner review. Originals, exact evidence versions, review histories,
 103 recovery source pins, 96 prior dependencies and private runtime remain intact.

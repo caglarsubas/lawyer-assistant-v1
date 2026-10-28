@@ -301,9 +301,10 @@ jobs:
         working-directory: frontend
       - name: Verify complete disjoint frontend discovery
         run: node scripts/verify_frontend_shards.mjs
-      # Keep the x86 UI worker independent from CPU-heavy Python contracts.
+      # Contract work left this job; use its existing two-worker budget for
+      # isolated x86 Vitest files. History keeps its one-plus-one pairing.
       - name: Test complete frontend shard
-        run: node node_modules/vitest/vitest.mjs run --pool=threads --maxWorkers=1 --shard=1/2 --reporter=default --reporter=json --outputFile=${{ runner.temp }}/frontend-results.json
+        run: node node_modules/vitest/vitest.mjs run --pool=threads --maxWorkers=2 --shard=1/2 --reporter=default --reporter=json --outputFile=${{ runner.temp }}/frontend-results.json
         working-directory: frontend
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 1

@@ -25,13 +25,24 @@
   "frontend_files_unchanged": 139,
   "frontend_cases_unchanged": 10532,
   "jobs_unchanged": 10,
-  "workers_deadlines_retries_unchanged": true,
   "fresh_exact_head_and_main_required": true,
   "private_runtime_changes": 0,
   "owner_review": "pending",
   "source_sha256": {
-    ".github/workflows/ci.yml": "4890f0c29c89f6a5dc5b76b26fc3902ffd95b638d616a48280e5757bc9db436a",
-    "deploy/test_ci_partition_contract.py": "0c54bd47147f8f4cf689f71c8bf4670ec0360388baed83fd878321924058c3e0",
-    "docs/CI_BUILD_RESERVE.md": "5138fc145be3e57e58a904269dba26555565bf0b15b9e5448686de0941f67425"
-  }
+    ".github/workflows/ci.yml": "09b8ccc8013328d231d49b450d344475f355bc2b65fc7668882bef77ecc0bda7",
+    "deploy/test_ci_partition_contract.py": "c772da347104f7183434f0a155534d885f93ad98e49d885dd203bc414b9fe80e",
+    "docs/CI_BUILD_RESERVE.md": "8e186e25709e29ad576829fcdb6a917aff5c9d765fb314f73a49b58b35608d63"
+  },
+  "first_placement_candidate": {
+    "head": "0cc57249109680bc2f8094a3ea94e9ec206b027f",
+    "run": 40654787307,
+    "frontend_job_seconds": 266,
+    "frontend_job_reserve_seconds": 34,
+    "superseded_before_merge": true
+  },
+  "frontend_workers_before": 1,
+  "frontend_workers_after": 2,
+  "per_job_worker_ceiling_unchanged": 2,
+  "history_worker_pairing_unchanged": "one Vitest plus one contract",
+  "worker_ceiling_deadlines_retries_unchanged": true
 }

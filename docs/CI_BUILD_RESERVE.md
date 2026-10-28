@@ -12,7 +12,12 @@ took 27 seconds; the main frontend job retained 112 seconds. These measurements
 justify the candidate placement, not a guarantee about future x86 runtime.
 Keep backend Node/dependency preparation for existing contract checks.
 
-The change adds no executor, worker, retry, test command or longer deadline.
+The first placement candidate passed the frontend job with only 34 seconds of
+reserve. Contract work no longer shares that job, so use its existing two-worker
+budget for two isolated Vitest workers instead of leaving one slot idle. The
+history job retains one Vitest worker plus one contract worker. This restores
+use of the existing per-job ceiling, with no extra executor, retry, test command
+or longer deadline.
 The complete build still runs once. Preserve x86 frontend coverage, both isolated
 frontend shards, all 139 files/10,532 cases, all backend groups, the 1,018-method
 manifest and assignments 418/425/90/23/17/26/19. Update the existing placement
