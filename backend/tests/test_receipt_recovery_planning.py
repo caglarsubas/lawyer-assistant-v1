@@ -315,6 +315,21 @@ def test_authorization_loss_after_commit_withholds_body_but_preserves_history(f)
     assert len(f.files(f.journal)) == 1 and f.files() == before
 
 
+@pytest.mark.parametrize("operation", ["prepare", "decide"])
+def test_expiry_after_commit_withholds_acknowledgement_and_preserves_encrypted_history(f, operation):
+    plan = f.prepare() if operation == "decide" else None
+    before, history = f.files(), f.files(f.journal)
+    publish = receipts._publish
+    def expired(*args):
+        publish(*args)
+        f.now += 301
+    with patch.object(receipts, "_publish", side_effect=expired):
+        response = f.decide(plan) if plan else f.prepare()
+    assert response["state"] == "conflict" and "plan_ciphertext_sha256" not in response and "decision_ciphertext_sha256" not in response
+    after = f.files(f.journal)
+    assert len(after) == len(history) + 1 and all(after[k] == v for k, v in history.items()) and f.files() == before
+
+
 def test_trusted_wiring_requires_distinct_journal_key_namespace_and_real_principals(f):
     for journal, reviewer in ((f.source_store, f.ids["reviewer"]), (f.journal_store, f.ids["preparer"])):
         with pytest.raises(ValueError):

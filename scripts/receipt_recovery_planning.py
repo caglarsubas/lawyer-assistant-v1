@@ -164,6 +164,10 @@ class RecoveryPlanner:
         if self.authority.eligible(self.reviewer, "reviewer") != plan["assigned_reviewer"]:
             raise PermissionError
 
+    def current_window(self, plan):
+        if not plan["created_at"] <= self.clock() <= plan["expires_at"]:
+            raise FileExistsError
+
     async def unchanged(self, actor, snapshot):
         observed = await self.observe(actor)
         if observed["state"] != "observed_metadata" or observed["snapshot_sha256"] != snapshot:
@@ -196,9 +200,11 @@ class RecoveryPlanner:
                              "created_at": now, "expires_at": now + 300, **dict.fromkeys(physical.FLAGS, False)}
                     await self.unchanged(actor, snap)
                     self.current_actors(value)
+                    self.current_window(value)
                     cipher = self.write("plan", ident, value)
                     await self.unchanged(actor, snap)
                     self.current_actors(value)
+                    self.current_window(value)
                     return result("pending_independent_review", plan_id=ident, plan_ciphertext_sha256=cipher, plan_sha256=e.sha(e.encode(value)))
                 required = {"plan_id", "plan_ciphertext_sha256", "plan_sha256"}
                 if set(request) != required | ({"decision", "reason_code"} if operation == "decide" else {"decision_ciphertext_sha256"}):
@@ -212,8 +218,7 @@ class RecoveryPlanner:
                     if decision not in DECISIONS or reason != DECISIONS[decision][0]:
                         e.reject()
                     self.current_actors(value)
-                    if not value["created_at"] <= self.clock() <= value["expires_at"]:
-                        raise FileExistsError
+                    self.current_window(value)
                     await self.unchanged(actor, snap)
                     record = {"schema": "receipt-recovery-review-v1", "plan_id": ident, "plan_ciphertext_sha256": cipher,
                               "plan_sha256": digest, "snapshot_sha256": snap, "reviewed_by": actor,
@@ -224,6 +229,7 @@ class RecoveryPlanner:
                     committed = self.write("decision", decision_id, record)
                     await self.unchanged(actor, snap)
                     self.current_actors(value)
+                    self.current_window(value)
                     return result(DECISIONS[decision][1], decision_ciphertext_sha256=committed)
                 committed = request["decision_ciphertext_sha256"]
                 review = None

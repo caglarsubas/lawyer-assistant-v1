@@ -253,17 +253,17 @@
       "key_custody": "unassessed",
       "operator_appointments": "unassessed",
       "disposable_identities_only": true,
+      "actual_app_auth_used": true,
       "all_expected_process_exits_verified": true,
       "read_only_package_inventory_exact": true,
-      "actual_app_auth_used": true,
-      "power_loss_qualified": false,
-      "live_provider_requests": 0,
-      "real_trust_enrolled": false,
-      "native_inference_calls": 0,
       "production_activation": false,
+      "private_case_inputs": false,
+      "native_inference_calls": 0,
       "runtime_installation": false,
-      "automatic_orphan_repair": false,
-      "private_case_inputs": false
+      "real_trust_enrolled": false,
+      "live_provider_requests": 0,
+      "power_loss_qualified": false,
+      "automatic_orphan_repair": false
     },
     "planning": [
       {
@@ -834,7 +834,7 @@
     "scripts/receipt_recovery_inventory.py": "99028a6bb080ff46d9dfb6e3f8ec5d4746e03e142905bee15c86608072e904b6",
     "scripts/receipt_recovery_native.py": "02ba39d387633fd1e798e50e7115e69755f50e3849b70b8b61f939c952fc0cdb",
     "scripts/receipt_recovery_native_cases.py": "044a5ca250f4081df1184c8272926ca8b91091c6fe5ccc0946a720953560bc90",
-    "scripts/receipt_recovery_planning.py": "11d79cc931b96f94d94a710b6ec0b9ddc74470ed80de9d2428127d157b428931",
+    "scripts/receipt_recovery_planning.py": "c34727f9493f782ab86ba3b42e2249c661bf4fcda4415eccebff0b0e62cdcae3",
     "scripts/receipt_stage_manifest.py": "8338b2a2a96b1054bc608175cce9662151ab1b6fc97042fd247ca6104bd2432e",
     "scripts/receipt_stage_native.py": "334fd6e9f3f7e7be619fe2cd7a4647bd907d40e92b0cfabcb8570903d95117f5",
     "scripts/receipt_stage_native_report.py": "3a22048d2c16af87e895978f9cc24fa5d67a6230a04364ff6a096e6995b626b5",
@@ -903,7 +903,7 @@
     "scripts/withdrawal_history_service.py": "b8ad44903c3cec50c9d55f77ed7fe5c3c8057b09a862d66007eac16694fb9aab"
   },
   "base_dependency_image": "sha256:7a67b0bf06799c403b9a7b5363faeb85f14fca0d6836eb167d13acc086c224d2",
-  "qualification_image": "sha256:f875d435a290073045657afb955998998482e859374a930b27eed87e046bb645",
+  "qualification_image": "sha256:32c9a53bc87d07c795a19df386302e86b772f1cea8c3a8d11244eb60f5486ce1",
   "posture": [
     {
       "no_network": true,

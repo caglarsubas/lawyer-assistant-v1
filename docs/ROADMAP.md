@@ -8286,6 +8286,8 @@ checks; preserve historical decisions and exact ciphertext. Changed evidence,
 membership, versions, roles, sessions or expiry make prior review stale and
 require fresh independent review. Accepting metadata planning never authorizes
 repair, deletion, adoption, enrollment, controller execution or activation.
+Recheck expiry after publication and before acknowledging a plan or decision;
+preserve committed encrypted history when the acknowledgement is withheld.
 
 See [planning contract](RECEIPT_RECOVERY_PLANNING.md) and
 [source-bound native report](evidence/native-receipt-recovery-2026-10-29.json).

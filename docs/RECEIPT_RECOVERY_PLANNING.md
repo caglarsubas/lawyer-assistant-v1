@@ -54,6 +54,9 @@ preparer cannot act as the independently assigned reviewer. GET, missing or
 duplicate admission headers, unrelated users, changed roles, revoked sessions
 and mismatched pins cannot grant access. Final authorization loss withholds the
 response even if an encrypted record was committed; that record is preserved.
+Expiry is checked again after publication and before acknowledgement: a newly
+expired plan or review returns no successful acknowledgement, preserving the
+committed ciphertext for later authorized reconciliation.
 
 Decisions are **accept**, **changes required** or **reject**, each with a closed
 reason code. Accept means **reviewed for metadata planning** only. It grants no
