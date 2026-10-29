@@ -29,6 +29,7 @@ env:
     backend/tests/test_native_receipt_stage.py
     backend/tests/test_native_receipt_http.py
     backend/tests/test_native_receipt_faults.py
+    backend/tests/test_receipt_recovery_planning.py
   CI_WORKSPACE_SECURITY_TESTS: >-
     backend/tests/test_firm_admin.py
     backend/tests/test_authority_proposals.py

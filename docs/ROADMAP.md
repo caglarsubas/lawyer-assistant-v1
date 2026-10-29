@@ -8267,3 +8267,40 @@ Bind the existing pip-cache key to both the frozen lockfile and the bootstrap
 script. This creates a new immutable key instead of repeatedly restoring an
 older wheel-only cache that cannot be overwritten. Cache contents still confer
 no trust; every archive is checked against its fixed checksum before use.
+
+## Read-only interrupted-publication inventory and reviewed recovery planning — 2026-10-29
+
+Add an unregistered staged service for bounded physical receipt inventory and
+independent review of recovery plans. Compare two fresh scans of the exact
+source/root/profile/key binding without decrypting source receipts or reading
+controllers. Distinguish single-link records, unclaimed/partial staging entries,
+interrupted link pairs and unaccounted links; preserve every entry and unknown
+condition. Envelope shape and metadata agreement do not establish authenticity,
+atomicity, completed publication, legal correctness or execution authority.
+
+Bind each nonexecuting plan to the complete inventory, selected link groups,
+actual preparer session, independently assigned reviewer and a 300-second
+window. Encrypt create-only plans and decisions under a separate journal key
+in a disjoint namespace. Require real disposable session, CSRF, origin and role
+checks; preserve historical decisions and exact ciphertext. Changed evidence,
+membership, versions, roles, sessions or expiry make prior review stale and
+require fresh independent review. Accepting metadata planning never authorizes
+repair, deletion, adoption, enrollment, controller execution or activation.
+
+See [planning contract](RECEIPT_RECOVERY_PLANNING.md) and
+[source-bound native report](evidence/native-receipt-recovery-2026-10-29.json).
+Ledger **264 → 265**. Both retirement/rollback protocols preserve the prior 34
+frozen HTTP outcomes and add 26 frozen planning outcomes plus two fresh reads
+over actual SIGKILL leftovers. Keep Docker opt-in; focused regressions use
+existing candidate capacity. Preserve all 1,018 deployment identities, ten jobs,
+worker ceilings, deadlines, checksum-verified bootstrap and fixed reserve floors.
+Require exact-head and independent-main CI before engineering completion.
+
+Next: planning-journal interruption/restart and read-only reconciliation of
+uncertain acknowledgement. Automatic repair and power-loss durability remain
+unqualified. Genuine appointments, operational key custody, provider/native
+inference and production activation remain open; owner legal review remains
+pending. Originals, exact evidence versions, private runtime and review history
+remain intact. Checklist **42 done / 21 open / 24 waiting / 6 deferred**;
+readiness **0 ready / 9 partial / 4 waiting / 1 planned**, unchanged. Report
+completed engineering independently from these broader readiness gates.
