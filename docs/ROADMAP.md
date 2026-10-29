@@ -8343,3 +8343,14 @@ pending. Originals, evidence versions, confidentiality and private runtime remai
 intact. Checklist **42 done / 21 open / 24 waiting / 6 deferred** and readiness
 **0 ready / 9 partial / 4 waiting / 1 planned** remain unchanged. Report completed
 engineering separately from these broader product gates.
+
+The first PR #249 run cannot qualify delivery: history retained 29 seconds and
+final-release retained 26, below the unchanged 30-second floors; frontend had
+only 32 seconds. Preserve the cancelled run and its
+[measured observation](evidence/planning-journal-ci-headroom-2026-10-29.json).
+Move unchanged slices 4 and 9 before the backend remainder, human-review tests
+into review capacity, and workspace tests after PostgreSQL races. Preserve
+all 1,018 identities, complete frontend coverage, ten jobs, worker ceilings,
+every timeout, bootstrap checks and fixed reserve floors. Update placement
+assertions within their existing methods and require fresh exact-head/main
+receipts; no cancelled run or historical bootstrap snapshot supplies clearance.

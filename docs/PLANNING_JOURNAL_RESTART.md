@@ -83,6 +83,19 @@ candidate group, all 1,018 deployment identities, ten jobs, worker ceilings,
 deadlines, verified bootstrap and fixed reserve floors. Exact-head checks,
 guarded merge, independent main checks and preservation receipts remain separate.
 
+The initial PR run passed its tests but failed timing-reserve qualification:
+history retained 29 seconds and final-release retained 26, below their fixed
+30-second floors. Frontend retained only 32 seconds. Cancel that run and retain
+the [measured observation](evidence/planning-journal-ci-headroom-2026-10-29.json).
+Move unchanged contract slices 4 and 9 before the backend remainder, human-review
+tests into review capacity, and workspace tests after PostgreSQL races. Every
+group still runs once, sequentially within the existing worker ceilings and
+its original timeout. Preserve all 1,018 method identities, the complete x86
+frontend suite, ten jobs, bootstrap verification and reserve floors. Updated
+placement assertions reuse the same methods. Previous bootstrap evidence stays
+bound to its historical workflow; fresh exact-head/main receipts must qualify
+the current layout.
+
 This qualifies process interruption on a running kernel. Power-loss durability,
 operational key custody, genuine appointments, installation, native/provider
 inference and legal qualification remain unassessed. Owner review is pending.
