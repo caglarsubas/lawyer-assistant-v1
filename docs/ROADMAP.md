@@ -8262,3 +8262,8 @@ next; originals, exact evidence versions, private runtime and review history
 are preserved. Owner review, genuine operator appointments and independent key
 custody remain pending. Checklist **42 done / 21 open / 24 waiting / 6 deferred**;
 readiness **0 ready / 9 partial / 4 waiting / 1 planned**, unchanged.
+
+Bind the existing pip-cache key to both the frozen lockfile and the bootstrap
+script. This creates a new immutable key instead of repeatedly restoring an
+older wheel-only cache that cannot be overwritten. Cache contents still confer
+no trust; every archive is checked against its fixed checksum before use.

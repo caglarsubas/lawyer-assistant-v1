@@ -91,7 +91,9 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: backend/uv.lock
+          cache-dependency-path: |
+            backend/uv.lock
+            .github/scripts/install-uv.sh
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
@@ -202,7 +204,9 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: backend/uv.lock
+          cache-dependency-path: |
+            backend/uv.lock
+            .github/scripts/install-uv.sh
       - name: Install locked review dependencies
         timeout-minutes: 1
         run: |
@@ -254,7 +258,9 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: backend/uv.lock
+          cache-dependency-path: |
+            backend/uv.lock
+            .github/scripts/install-uv.sh
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
@@ -316,7 +322,9 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: backend/uv.lock
+          cache-dependency-path: |
+            backend/uv.lock
+            .github/scripts/install-uv.sh
       - name: Install locked human-review dependencies
         timeout-minutes: 1
         run: |
@@ -357,7 +365,9 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: backend/uv.lock
+          cache-dependency-path: |
+            backend/uv.lock
+            .github/scripts/install-uv.sh
       - name: Install locked deployment-contract dependencies
         timeout-minutes: 1
         run: |
@@ -403,7 +413,9 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: backend/uv.lock
+          cache-dependency-path: |
+            backend/uv.lock
+            .github/scripts/install-uv.sh
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
@@ -440,7 +452,9 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: backend/uv.lock
+          cache-dependency-path: |
+            backend/uv.lock
+            .github/scripts/install-uv.sh
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
@@ -465,7 +479,9 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: backend/uv.lock
+          cache-dependency-path: |
+            backend/uv.lock
+            .github/scripts/install-uv.sh
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
@@ -490,7 +506,9 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: backend/uv.lock
+          cache-dependency-path: |
+            backend/uv.lock
+            .github/scripts/install-uv.sh
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
@@ -516,7 +534,9 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: backend/uv.lock
+          cache-dependency-path: |
+            backend/uv.lock
+            .github/scripts/install-uv.sh
       - name: Install test dependencies
         timeout-minutes: 1
         run: |

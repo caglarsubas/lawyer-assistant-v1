@@ -89,7 +89,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("--shard=10 --workers=2", graph)
         self.assertIn("timeout-minutes: 1", graph.split("name: Test manifest-bound review headroom slice 10", 1)[1])
         self.assertEqual(workflow.count("cache: pip"), 10)
-        self.assertEqual(workflow.count("cache-dependency-path: backend/uv.lock"), 10)
+        self.assertEqual(workflow.count("cache-dependency-path: |\n            backend/uv.lock\n            .github/scripts/install-uv.sh"), 10)
         self.assertEqual(workflow.count("timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh"), 10)
         self.assertEqual(workflow.count("UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s \"$uv_path\" sync --project backend --frozen --extra dev"), 10)
         self.assertNotIn("--shard=9", backend)

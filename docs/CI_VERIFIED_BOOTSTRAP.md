@@ -32,3 +32,8 @@ Both architectures, cold/warm bootstrap, exact PR head and independent main
 still require fresh CI evidence. Earlier native receipt and private-runtime
 preservation reports remain unchanged; operator custody and legal acceptance
 are separate pending gates.
+
+Bind the existing pip-cache key to both the frozen lockfile and the bootstrap
+script. This creates a new immutable key instead of repeatedly restoring an
+older wheel-only cache that cannot be overwritten. Cache contents still confer
+no trust; every archive is checked against its fixed checksum before use.
