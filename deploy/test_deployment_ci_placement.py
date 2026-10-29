@@ -16,7 +16,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn(command, blocks["backend-and-contracts"])
         self.assertEqual(workflow.count("scripts/run_ci_deployment_shard.py"), 11)
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=3", blocks["backend-and-contracts"])
-        for name, lane in (("graph-runtime-contracts", 4), ("backend-and-contracts", 5), ("backend-and-contracts", 6)):
+        for name, lane in (("frontend", 4), ("backend-and-contracts", 5), ("backend-and-contracts", 6)):
             self.assertIn("scripts/run_ci_deployment_shard.py --shard=" + str(lane), blocks[name])
         self.assertLess(blocks["backend-and-contracts"].index("--shard=3"), blocks["backend-and-contracts"].index("name: Test backend"))
         self.assertIn("--shard=8 --workers=2", blocks["frontend"])
@@ -57,9 +57,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(final.index("name: Test whole-release permission"), final.index("name: Test workspace permission"))
         self.assertEqual(workflow.count("name: Test workspace permission and proposal contracts"), 1)
         graph = blocks["graph-runtime-contracts"]
-        self.assertIn("--shard=4 --workers=2", graph)
-        self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("name: Test manifest-bound reader lifecycle"))
-        self.assertIn("timeout-minutes: 1", graph.split("name: Test manifest-bound reader lifecycle", 1)[1])
+        self.assertNotIn("--shard=4", graph)
+        self.assertIn("--shard=4 --workers=2", blocks["frontend"])
+        self.assertLess(blocks["frontend"].index("--shard=8"), blocks["frontend"].index("--shard=4"))
+        self.assertIn("timeout-minutes: 1", blocks["frontend"].split("name: Test manifest-bound reader lifecycle slice 4", 1)[1])
         group = re.search(r"  CI_GRAPH_RUNTIME_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(group.count("backend/tests/test_open_validity_publication.py"), 1)
         self.assertNotIn("backend/tests/test_graph_b_snapshot.py", group)
@@ -77,9 +78,14 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(review.index("name: Test complete backend review"), review.index("name: Test complete manifest-bound assignment 1"))
         self.assertLess(blocks["frontend"].index("name: Test confidential human review groups"), blocks["frontend"].index("--shard=8"))
         self.assertIn("timeout-minutes: 1", blocks["frontend"].split("name: Test manifest-bound review headroom slice 8", 1)[1])
-        self.assertLess(blocks["frontend-history"].index("name: Verify executed frontend shard"), blocks["frontend-history"].index("--shard=10"))
-        self.assertIn("--shard=10 --workers=2", blocks["frontend-history"])
-        self.assertIn("timeout-minutes: 1", blocks["frontend-history"].split("name: Test manifest-bound review headroom slice 10", 1)[1])
+        self.assertNotIn("--shard=10", blocks["frontend-history"])
+        self.assertLess(blocks["frontend"].index("--shard=4"), blocks["frontend"].index("--shard=10"))
+        self.assertIn("--shard=10 --workers=2", blocks["frontend"])
+        self.assertIn("timeout-minutes: 1", blocks["frontend"].split("name: Test manifest-bound review headroom slice 10", 1)[1])
+        self.assertEqual(workflow.count("cache: pip"), 10)
+        self.assertEqual(workflow.count("cache-dependency-path: backend/uv.lock"), 10)
+        self.assertEqual(workflow.count("timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15"), 10)
+        self.assertEqual(workflow.count("UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev"), 10)
         self.assertLess(review.index("--plan-only"), review.index("name: Test complete backend review"))
 
     def test_bounded_scratch_preserves_full_command_exit_and_cleanup(self):

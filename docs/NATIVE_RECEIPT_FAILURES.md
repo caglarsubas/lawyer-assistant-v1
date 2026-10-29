@@ -81,3 +81,19 @@ Docker remains opt-in; lightweight report and wiring regressions use existing
 candidate CI capacity. All 1,018 deployment methods, ten jobs, worker ceilings,
 deadlines and fixed reserve floors remain. Exact-head qualification, merge,
 independent main qualification and runtime acceptance remain separate gates.
+
+## CI reserve correction
+
+The first candidate run was cancelled and cannot qualify this delivery. A
+74-second download of the pinned uv wheel inflated publication setup to
+79 seconds, while all 230 publication tests passed. History retained only
+23 seconds against its unchanged 30-second floor. See the
+[measured rejected-run observation](evidence/native-receipt-ci-headroom-2026-10-29.json).
+
+Cache pip bootstrap artifacts by platform, Python and frozen lockfile. Bound
+bootstrap and sync separately to 20 seconds, with zero network retry and a
+two-second termination grace; the install step has a one-minute cap. Move
+unchanged assignments 4 and 10 into existing x86 frontend reserve, sequentially
+after prior tests. All ten jobs, two-worker ceilings, test/phase deadlines and
+1,018 method identities remain. Require fresh actual receipts and fixed reserve
+floors on both the exact PR head and independently observed main.

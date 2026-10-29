@@ -8209,3 +8209,14 @@ pending. Originals, exact evidence versions, private runtime and review history
 remain intact. Checklist remains **42 done / 21 open / 24 waiting / 6 deferred**;
 readiness remains **0 ready / 9 partial / 4 waiting / 1 planned**. Report completed
 engineering separately from these unchanged product gates.
+
+The first PR #246 run was rejected before merge: the unchanged publication
+tests passed, but a 74-second uv wheel download inflated setup to 79 seconds;
+the job exceeded its cap. The history job retained only 23 seconds. Cache the
+pinned pip bootstrap by platform/Python/lockfile, bound each bootstrap/sync
+command to 20 seconds with no network retry, and retain frozen dependencies.
+Move unchanged deployment assignments 4 and 10 sequentially into measured
+x86 frontend reserve after existing tests. Preserve ten jobs, two-worker
+ceilings, all 1,018 exact methods, every test deadline and fixed reserve floors.
+The cancelled run cannot supply clearance. Require fresh exact-head and main
+receipts for the revised layout; private runtime and reviewed work stay intact.

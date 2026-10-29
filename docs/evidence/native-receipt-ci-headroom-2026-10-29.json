@@ -1,0 +1,113 @@
+{
+  "schema": "receipt-ci-headroom-observation-v1",
+  "rejected_head": "8f9875cc1468b062c15ae4ae7b4fc994d799d9f1",
+  "rejected_run": 40800062831,
+  "run_conclusion": "cancelled",
+  "not_qualification_evidence": true,
+  "observed": [
+    {
+      "job": "frontend",
+      "job_id": 123205751849,
+      "elapsed_seconds": 176,
+      "steps": [
+        {
+          "name": "Install locked frontend dependencies",
+          "seconds": 2
+        },
+        {
+          "name": "Test complete frontend shard",
+          "seconds": 88
+        },
+        {
+          "name": "Install locked human-review dependencies",
+          "seconds": 3
+        },
+        {
+          "name": "Test confidential human review groups",
+          "seconds": 30
+        },
+        {
+          "name": "Test manifest-bound review headroom slice 8",
+          "seconds": 26
+        }
+      ]
+    },
+    {
+      "job": "graph-runtime-contracts",
+      "job_id": 123205751883,
+      "elapsed_seconds": 329,
+      "steps": [
+        {
+          "name": "Install test dependencies",
+          "seconds": 10
+        },
+        {
+          "name": "Test complete graph assembly, grants and runtime authorization",
+          "seconds": 260
+        },
+        {
+          "name": "Test manifest-bound reader lifecycle slice 4",
+          "seconds": 55
+        }
+      ]
+    },
+    {
+      "job": "frontend-history",
+      "job_id": 123205751976,
+      "elapsed_seconds": 277,
+      "steps": [
+        {
+          "name": "Install locked frontend dependencies",
+          "seconds": 2
+        },
+        {
+          "name": "Install locked deployment-contract dependencies",
+          "seconds": 5
+        },
+        {
+          "name": "Test history and deployment contracts within two workers",
+          "seconds": 239
+        },
+        {
+          "name": "Test manifest-bound review headroom slice 10",
+          "seconds": 23
+        }
+      ]
+    },
+    {
+      "job": "source-publication-contracts",
+      "job_id": 123205752023,
+      "elapsed_seconds": 215,
+      "steps": [
+        {
+          "name": "Install test dependencies",
+          "seconds": 79
+        },
+        {
+          "name": "Test signed publication and retained-source renewal",
+          "seconds": 131
+        }
+      ]
+    }
+  ],
+  "root_cause": "Pinned uv wheel download took 74 seconds; publication setup took 79 seconds. Publication tests themselves passed. History reserve was 23 seconds, below the unchanged 30-second floor.",
+  "proposed_controls": {
+    "pip_cache_dependency": "backend/uv.lock",
+    "bootstrap_command_seconds": 20,
+    "sync_command_seconds": 20,
+    "network_retries": 0,
+    "kill_grace_seconds": 2,
+    "python_install_step_minutes": 1,
+    "move_assignments": {
+      "4": "frontend",
+      "10": "frontend"
+    },
+    "job_count": 10,
+    "worker_ceiling": 2,
+    "job_reserve_seconds": 30,
+    "short_phase_reserve_seconds": 15,
+    "test_inventory": 1018
+  },
+  "fresh_exact_head_and_main_required": true,
+  "runtime_changed": false
+}
