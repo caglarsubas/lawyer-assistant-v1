@@ -95,8 +95,9 @@ jobs:
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
-          timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15
-          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev
+          timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
+          uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
           echo "$GITHUB_WORKSPACE/backend/.venv/bin" >> "$GITHUB_PATH"
       - name: Lint Python
         run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
@@ -205,8 +206,9 @@ jobs:
       - name: Install locked review dependencies
         timeout-minutes: 1
         run: |
-          timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15
-          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev
+          timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
+          uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Validate closed deployment inventory and measured budgets
         run: backend/.venv/bin/python scripts/run_ci_deployment_shard.py --plan-only
       - name: Test complete backend review and cohort files
@@ -256,8 +258,9 @@ jobs:
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
-          timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15
-          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev
+          timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
+          uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test real PostgreSQL review and research races in isolated child databases
         env:
           LA_TEST_POSTGRES_URL: postgresql+psycopg://snapshot_test:disposable-ci-snapshot-only@127.0.0.1:${{ job.services.postgres.ports['5432'] }}/lawyer_snapshot_test
@@ -317,8 +320,9 @@ jobs:
       - name: Install locked human-review dependencies
         timeout-minutes: 1
         run: |
-          timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15
-          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev
+          timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
+          uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test confidential human review groups
         timeout-minutes: 3
         run: |
@@ -357,8 +361,9 @@ jobs:
       - name: Install locked deployment-contract dependencies
         timeout-minutes: 1
         run: |
-          timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15
-          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev
+          timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
+          uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       # One Vitest worker and one complete-manifest contract shard per lane.
       # Both existing lanes retain two workers and all test IDs execute once.
       - name: Test history and deployment contracts within two workers
@@ -402,8 +407,9 @@ jobs:
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
-          timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15
-          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev
+          timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
+          uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test whole-release permission, transitions and real concurrent reads
         # Keep inspection, lifecycle and PostgreSQL concurrency qualification.
         # The hard job cap, two workers and no-retry policy remain unchanged.
@@ -438,8 +444,9 @@ jobs:
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
-          timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15
-          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev
+          timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
+          uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test conjunctive release withdrawal and complete retained budgets
         timeout-minutes: 3
         run: |
@@ -462,8 +469,9 @@ jobs:
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
-          timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15
-          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev
+          timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
+          uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test complete final graph candidate contracts
         timeout-minutes: 3
         run: |
@@ -486,8 +494,9 @@ jobs:
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
-          timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15
-          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev
+          timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
+          uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test signed publication and retained-source renewal
         timeout-minutes: 3
         run: |
@@ -511,8 +520,9 @@ jobs:
       - name: Install test dependencies
         timeout-minutes: 1
         run: |
-          timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15
-          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev
+          timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
+          uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       # Keep this complete offline model-trial group at its original two-worker cap.
       - name: Test registered local-model authority trials
         timeout-minutes: 2

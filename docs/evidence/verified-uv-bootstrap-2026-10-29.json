@@ -1,0 +1,28 @@
+{
+  "schema": "verified-uv-bootstrap-v1",
+  "public_dependency_image": "sha256:7a67b0bf06799c403b9a7b5363faeb85f14fca0d6836eb167d13acc086c224d2",
+  "source_sha256": {
+    ".github/scripts/install-uv.sh": "132604b341779920fcdd4ec109ae2b498545b0d1bf564664f187f105b1e02bf9",
+    ".github/workflows/ci.yml": "3f13224ea7fbbb61daf3a3ba85ee7435bdb2ccc6817fbb43db09b4583543dadb",
+    "deploy/test_deployment_ci_placement.py": "5c06087eac6186ceb47882696c71d2577323ef629e44d401ed0fb80f4cadc503"
+  },
+  "architecture": "aarch64",
+  "archive_sha256": "6ede0fefa7db7be3d5d9eda8784a8e43b1cf5410720eb3da60ab1d2f66678e82",
+  "native_probe": {
+    "verified_cache_execution": true,
+    "poisoned_cache_rejected": true,
+    "network": "none"
+  },
+  "native_probe_seconds": 0.918,
+  "private_inputs": false,
+  "live_provider_requests": 0,
+  "runtime_changed": false,
+  "generated_container_removed": true,
+  "bootstrap_seconds": 20,
+  "sync_seconds": 20,
+  "download_seconds": 15,
+  "download_retries": 0,
+  "cache_hit_confers_trust": false,
+  "x86_runtime_required_in_fresh_CI": true,
+  "fresh_PR_and_main_required": true
+}
