@@ -8176,3 +8176,36 @@ or pending. No product route, private case, original evidence version or review
 history changes. Checklist stays **42 done / 21 open / 24 waiting / 6 deferred**;
 readiness stays **0 ready / 9 partial / 4 waiting / 1 planned**. Report engineering
 completion independently from these broader product gates.
+
+## Native receipt authorization loss and process-crash qualification — 2026-10-29
+
+Exercise the unchanged receipt and controller packages through two frozen
+retirement/rollback protocols with disposable identities and real host session,
+origin, CSRF and role checks. Thirty-four HTTP attempts across thirty distinct
+worker processes cover six in-flight revocations, six actual SIGKILL exits and
+fresh-session recovery. Revoke during fresh reads, before publication and after
+publication but before acknowledgement. Failed requests return no retained
+metadata; previously committed ciphertext survives lost acknowledgement.
+
+Stop at actual filesystem boundaries before link, after link and after directory
+fsync. Preserve orphan entries, hard-link counts, original ciphertext and all
+four histories. A two-link interrupted record stays unverifiable; retries remain
+create-only and cannot overwrite history. Restart requires the same independently
+pinned package, source, root, key and profile, followed by fresh authorization.
+
+See [failure contract](NATIVE_RECEIPT_FAILURES.md) and
+[source-bound report](evidence/native-receipt-faults-2026-10-29.json).
+Ledger **262 → 263**. Docker qualification remains opt-in. Add lightweight
+report/wiring regressions within existing candidate capacity; retain all 1,018
+deployment methods, ten jobs, worker ceilings, deadlines, fixed reserve floors
+and previous source-pinned reports. Require exact-head and independent-main
+qualification before reporting engineering delivery complete.
+
+Read-only interrupted-publication inventory and explicitly reviewed recovery
+planning remain next. Automatic orphan repair and power-loss durability are not
+qualified. Genuine operator appointments, independent key custody, production
+installation, real provider inference and owner review remain unassessed or
+pending. Originals, exact evidence versions, private runtime and review history
+remain intact. Checklist remains **42 done / 21 open / 24 waiting / 6 deferred**;
+readiness remains **0 ready / 9 partial / 4 waiting / 1 planned**. Report completed
+engineering separately from these unchanged product gates.
