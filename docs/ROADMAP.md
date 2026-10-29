@@ -8220,3 +8220,10 @@ x86 frontend reserve after existing tests. Preserve ten jobs, two-worker
 ceilings, all 1,018 exact methods, every test deadline and fixed reserve floors.
 The cancelled run cannot supply clearance. Require fresh exact-head and main
 receipts for the revised layout; private runtime and reviewed work stay intact.
+
+The second placement was also rejected: frontend variability exhausted the
+unchanged five-minute cap before both moved tails completed. Use the measured
+review (241 seconds) and graph (264 seconds) jobs instead: assignment 4 follows
+review assignment 1, and assignment 10 follows graph tests. Frontend retains
+its original assignment 8; history retains assignment 2. No extra executor,
+worker, retry or deadline; all exact identities and prior reserve floors remain.

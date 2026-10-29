@@ -92,8 +92,9 @@ The first candidate run was cancelled and cannot qualify this delivery. A
 
 Cache pip bootstrap artifacts by platform, Python and frozen lockfile. Bound
 bootstrap and sync separately to 20 seconds, with zero network retry and a
-two-second termination grace; the install step has a one-minute cap. Move
-unchanged assignments 4 and 10 into existing x86 frontend reserve, sequentially
-after prior tests. All ten jobs, two-worker ceilings, test/phase deadlines and
+two-second termination grace; the install step has a one-minute cap. The initial frontend placement was rejected too. Move
+unchanged assignment 4 after review assignment 1 and assignment 10 after graph
+tests, using their measured 241-second and 264-second jobs. Frontend keeps
+assignment 8; history keeps assignment 2. All ten jobs, two-worker ceilings, test/phase deadlines and
 1,018 method identities remain. Require fresh actual receipts and fixed reserve
 floors on both the exact PR head and independently observed main.

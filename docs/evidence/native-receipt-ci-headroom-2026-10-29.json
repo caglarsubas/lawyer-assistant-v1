@@ -109,5 +109,21 @@
     "test_inventory": 1018
   },
   "fresh_exact_head_and_main_required": true,
-  "runtime_changed": false
+  "runtime_changed": false,
+  "second_candidate": {
+    "head": "62f8be52425e9a9f9bb98fe4cd4b3da131ebb7f8",
+    "run": 40801881773,
+    "rejected": true,
+    "reason": "Frontend variability exhausted its five-minute cap before moved assignments finished; workflow cancellation requested.",
+    "measured_review_job_seconds": 241,
+    "measured_graph_job_seconds": 264,
+    "measured_history_job_seconds": 218,
+    "publication_job_seconds": 143
+  },
+  "final_proposed_placement": {
+    "4": "backend-review-contracts",
+    "10": "graph-runtime-contracts",
+    "8": "frontend",
+    "2": "frontend-history"
+  }
 }

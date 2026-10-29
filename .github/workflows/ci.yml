@@ -228,6 +228,11 @@ jobs:
         timeout-minutes: 3
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=1 --workers=2 --report=${{ runner.temp }}/deployment-review-results.json
 
+      # Reuse completed review-worker capacity for the unchanged graph tail.
+      - name: Test manifest-bound reader lifecycle slice 4
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=4 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-4.json
+
   postgres-snapshot-concurrency:
     # The unchanged CPU-heavy runtime guard exceeded the x86 job budget even
     # after all 95 cases passed. Use the already-qualified native ARM executor,
@@ -334,14 +339,6 @@ jobs:
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=8 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-8.json
 
-      # Reuse the same pair sequentially: measured x86 reserve absorbs the
-      # unchanged graph/history tails; no extra job, worker or deadline.
-      - name: Test manifest-bound reader lifecycle slice 4
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=4 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-4.json
-      - name: Test manifest-bound review headroom slice 10
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=10 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-10.json
 
   frontend-history:
     # Growing history contracts exceeded the single frontend lane's reserve.
@@ -524,3 +521,8 @@ jobs:
         run: |
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${graph_runtime_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+
+      # Reuse completed graph-worker capacity for the unchanged history tail.
+      - name: Test manifest-bound review headroom slice 10
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=10 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-10.json
