@@ -8176,3 +8176,63 @@ or pending. No product route, private case, original evidence version or review
 history changes. Checklist stays **42 done / 21 open / 24 waiting / 6 deferred**;
 readiness stays **0 ready / 9 partial / 4 waiting / 1 planned**. Report engineering
 completion independently from these broader product gates.
+
+## Native receipt authorization loss and process-crash qualification — 2026-10-29
+
+Exercise the unchanged receipt and controller packages through two frozen
+retirement/rollback protocols with disposable identities and real host session,
+origin, CSRF and role checks. Thirty-four HTTP attempts across thirty distinct
+worker processes cover six in-flight revocations, six actual SIGKILL exits and
+fresh-session recovery. Revoke during fresh reads, before publication and after
+publication but before acknowledgement. Failed requests return no retained
+metadata; previously committed ciphertext survives lost acknowledgement.
+
+Stop at actual filesystem boundaries before link, after link and after directory
+fsync. Preserve orphan entries, hard-link counts, original ciphertext and all
+four histories. A two-link interrupted record stays unverifiable; retries remain
+create-only and cannot overwrite history. Restart requires the same independently
+pinned package, source, root, key and profile, followed by fresh authorization.
+
+See [failure contract](NATIVE_RECEIPT_FAILURES.md) and
+[source-bound report](evidence/native-receipt-faults-2026-10-29.json).
+Ledger **262 → 263**. Docker qualification remains opt-in. Add lightweight
+report/wiring regressions within existing candidate capacity; retain all 1,018
+deployment methods, ten jobs, worker ceilings, deadlines, fixed reserve floors
+and previous source-pinned reports. Require exact-head and independent-main
+qualification before reporting engineering delivery complete.
+
+Read-only interrupted-publication inventory and explicitly reviewed recovery
+planning remain next. Automatic orphan repair and power-loss durability are not
+qualified. Genuine operator appointments, independent key custody, production
+installation, real provider inference and owner review remain unassessed or
+pending. Originals, exact evidence versions, private runtime and review history
+remain intact. Checklist remains **42 done / 21 open / 24 waiting / 6 deferred**;
+readiness remains **0 ready / 9 partial / 4 waiting / 1 planned**. Report completed
+engineering separately from these unchanged product gates.
+
+The first PR #246 run was rejected before merge: the unchanged publication
+tests passed, but a 74-second uv wheel download inflated setup to 79 seconds;
+the job exceeded its cap. The history job retained only 23 seconds. Cache the
+pinned pip bootstrap by platform/Python/lockfile, bound each bootstrap/sync
+command to 20 seconds with no network retry, and retain frozen dependencies.
+Move unchanged deployment assignments 4 and 10 sequentially into measured
+x86 frontend reserve after existing tests. Preserve ten jobs, two-worker
+ceilings, all 1,018 exact methods, every test deadline and fixed reserve floors.
+The cancelled run cannot supply clearance. Require fresh exact-head and main
+receipts for the revised layout; private runtime and reviewed work stay intact.
+
+The second placement was also rejected: frontend variability exhausted the
+unchanged five-minute cap before both moved tails completed. Use the measured
+review (241 seconds) and graph (264 seconds) jobs instead: assignment 4 follows
+review assignment 1, and assignment 10 follows graph tests. Frontend retains
+its original assignment 8; history retains assignment 2. No extra executor,
+worker, retry or deadline; all exact identities and prior reserve floors remain.
+
+The third candidate passed all ten checks but its 1,180-second backend job
+retained only 20 seconds, below the fixed 30-second floor; do not merge it.
+Move the unchanged 36-second offline authority-trial group into graph capacity,
+using the same two workers and two-minute step cap. Move unchanged assignment
+9 (23 seconds) after history verification, retaining its one-minute cap. The
+4,055-case backend remainder, all 1,018 method IDs and every existing worker,
+deadline and reserve floor remain unchanged. Require fresh exact-head/main
+qualification for this final distribution; green tests alone are insufficient.
