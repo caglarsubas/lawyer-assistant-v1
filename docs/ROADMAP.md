@@ -8306,3 +8306,40 @@ pending. Originals, exact evidence versions, private runtime and review history
 remain intact. Checklist **42 done / 21 open / 24 waiting / 6 deferred**;
 readiness **0 ready / 9 partial / 4 waiting / 1 planned**, unchanged. Report
 completed engineering independently from these broader readiness gates.
+
+## Planning-journal interruption and restart reconciliation — 2026-10-29
+
+Add staged read-only reconciliation after interrupted encrypted plan/decision
+publication. Independently pin the journal namespace, key, source binding,
+account profile and assigned principals; require fresh real authentication and
+exact source/journal snapshot hashes. Revalidate both observations and the caller
+before returning any retained metadata. Preserve original sources, exact
+ciphertext, link topology and all review histories.
+
+Known plans require independently retained exact references. Unclaimed staging,
+interrupted link pairs and plans without prior references remain unverified.
+Matching authenticated decisions can be inspected as retained metadata, with
+stale source/session/role/time conditions shown explicitly. Observed decision
+digests do not restore a lost acknowledgement or grant recovery authority.
+Fresh preparation and independent re-review use new create-only identities;
+duplicate decisions remain conflicts. No repair, deletion, adoption or automatic
+trust renewal is introduced.
+
+See [restart contract](PLANNING_JOURNAL_RESTART.md) and
+[source-bound report](evidence/native-planning-journal-restart-2026-10-29.json).
+Ledger **265 → 266**. Both retirement/rollback modes qualify 44 frozen outcomes
+over 50 distinct journal processes and 12 actual SIGKILL exits at publication
+boundaries, followed by fresh read-only processes. Prior reports and immutable
+exports remain exact. Add focused tests to measured review-job capacity; retain
+all 1,018 deployment identities, the candidate group, ten jobs, deadlines,
+workers, verified bootstrap and fixed reserve floors. Require exact-head and
+independent-main qualification before engineering completion.
+
+Next: independently reviewed journal backup/restore readiness and copied-namespace
+qualification, preserving both histories without implicit trust migration.
+Power-loss durability, genuine appointments, operational key custody, production
+installation and provider/native inference remain open. Owner legal review is
+pending. Originals, evidence versions, confidentiality and private runtime remain
+intact. Checklist **42 done / 21 open / 24 waiting / 6 deferred** and readiness
+**0 ready / 9 partial / 4 waiting / 1 planned** remain unchanged. Report completed
+engineering separately from these broader product gates.

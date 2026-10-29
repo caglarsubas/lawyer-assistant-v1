@@ -61,6 +61,7 @@ env:
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_source_reviews.py
     backend/tests/test_private_inventory_receipts.py
+    backend/tests/test_planning_journal_reconciliation.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py
