@@ -8227,3 +8227,12 @@ review (241 seconds) and graph (264 seconds) jobs instead: assignment 4 follows
 review assignment 1, and assignment 10 follows graph tests. Frontend retains
 its original assignment 8; history retains assignment 2. No extra executor,
 worker, retry or deadline; all exact identities and prior reserve floors remain.
+
+The third candidate passed all ten checks but its 1,180-second backend job
+retained only 20 seconds, below the fixed 30-second floor; do not merge it.
+Move the unchanged 36-second offline authority-trial group into graph capacity,
+using the same two workers and two-minute step cap. Move unchanged assignment
+9 (23 seconds) after history verification, retaining its one-minute cap. The
+4,055-case backend remainder, all 1,018 method IDs and every existing worker,
+deadline and reserve floor remain unchanged. Require fresh exact-head/main
+qualification for this final distribution; green tests alone are insufficient.

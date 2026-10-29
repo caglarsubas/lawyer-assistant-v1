@@ -128,9 +128,6 @@ jobs:
       - name: Test manifest-bound reader namespace slice
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=7 --workers=2 --report=${{ runner.temp }}/deployment-namespace-results.json
-      - name: Test manifest-bound review headroom slice 9
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json
       - name: Record nonsecret test runtime characteristics
         run: |
           python - <<'PY'
@@ -143,11 +140,6 @@ jobs:
         run: |
           read -r -a preflight_tests <<< "$CI_ONTOLOGY_PREFLIGHT_TESTS"
           bash scripts/run_ci_tests.sh pytest "${preflight_tests[@]}" -q
-      - name: Test registered local-model authority trials
-        timeout-minutes: 2
-        run: |
-          read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
-          bash scripts/run_ci_tests.sh pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
       # The R01 dossier is a closed five-file inventory. Reject misplaced files
       # before the costly backend suite; keep this same gate exactly once.
       - name: Validate R01 planning contracts (not legal or runtime approval)
@@ -378,6 +370,11 @@ jobs:
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
 
 
+      # Reuse completed history-worker capacity for unchanged backend metadata.
+      - name: Test manifest-bound review headroom slice 9
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json
+
   final-release-authorization:
     # Whole-release lifecycle, inspection and real concurrency stay together.
     # The single build uses backend reserve instead of this measured thin tail.
@@ -516,6 +513,12 @@ jobs:
         run: |
           timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev
+      # Keep this complete offline model-trial group at its original two-worker cap.
+      - name: Test registered local-model authority trials
+        timeout-minutes: 2
+        run: |
+          read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
       - name: Test complete graph assembly, grants and runtime authorization
         timeout-minutes: 6
         run: |

@@ -98,3 +98,12 @@ tests, using their measured 241-second and 264-second jobs. Frontend keeps
 assignment 8; history keeps assignment 2. All ten jobs, two-worker ceilings, test/phase deadlines and
 1,018 method identities remain. Require fresh actual receipts and fixed reserve
 floors on both the exact PR head and independently observed main.
+
+The third candidate passed all ten checks but its 1,180-second backend job
+retained only 20 seconds, below the fixed 30-second floor; do not merge it.
+Move the unchanged 36-second offline authority-trial group into graph capacity,
+using the same two workers and two-minute step cap. Move unchanged assignment
+9 (23 seconds) after history verification, retaining its one-minute cap. The
+4,055-case backend remainder, all 1,018 method IDs and every existing worker,
+deadline and reserve floor remain unchanged. Require fresh exact-head/main
+qualification for this final distribution; green tests alone are insufficient.

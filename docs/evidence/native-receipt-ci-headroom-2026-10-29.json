@@ -124,6 +124,20 @@
     "4": "backend-review-contracts",
     "10": "graph-runtime-contracts",
     "8": "frontend",
-    "2": "frontend-history"
+    "2": "frontend-history",
+    "9": "frontend-history",
+    "offline_authority_trials": "graph-runtime-contracts"
+  },
+  "third_candidate": {
+    "head": "05e64bcf60b6d10b1f30a5c8748645a0b8724d25",
+    "run": 40802630442,
+    "all_ten_checks_successful": true,
+    "qualified": false,
+    "backend_job_seconds": 1180,
+    "backend_reserve_seconds": 20,
+    "required_job_reserve_seconds": 30,
+    "backend_remainder_seconds": 856,
+    "offline_authority_trial_step_seconds": 36,
+    "assignment9_step_seconds": 23
   }
 }
