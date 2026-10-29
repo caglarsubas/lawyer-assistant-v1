@@ -8236,3 +8236,34 @@ using the same two workers and two-minute step cap. Move unchanged assignment
 4,055-case backend remainder, all 1,018 method IDs and every existing worker,
 deadline and reserve floor remain unchanged. Require fresh exact-head/main
 qualification for this final distribution; green tests alone are insufficient.
+
+## Verified bounded CI bootstrap after main rejection — 2026-10-29
+
+PR #246 merged after all ten exact-head checks and existing reserve floors
+passed. Its independently observed main run failed at the 20-second cold pip
+bootstrap guard before tests; cancel it and retain the failure. A warm PR cache
+cannot qualify a cold main install. Main qualification remains open.
+
+Replace pip tool installation with exact SHA-256-pinned uv 0.8.15 Linux release
+archives for ARM64 and x86-64. Verify every cache hit and downloaded archive
+before extraction, reject poisoned/symlink/unsupported entries, and export only
+the verified executable after a version check. Preserve the 20-second whole
+bootstrap and frozen sync bounds, zero download retry, one-minute install-step
+cap, all ten jobs, two-worker ceilings, test deadlines and fixed reserve floors.
+No fallback or authority expansion. Three rejection subtests reuse the existing
+placement method; all 1,018 identities and native receipt reports remain.
+
+See [bootstrap contract](CI_VERIFIED_BOOTSTRAP.md) and
+[source-bound public probe](evidence/verified-uv-bootstrap-2026-10-29.json).
+Ledger **263 → 264**. Require fresh exact-head checks, actual receipts, guarded
+merge and independent-main qualification before closing this recovery gate.
+Native interrupted-publication inventory and reviewed recovery planning remain
+next; originals, exact evidence versions, private runtime and review history
+are preserved. Owner review, genuine operator appointments and independent key
+custody remain pending. Checklist **42 done / 21 open / 24 waiting / 6 deferred**;
+readiness **0 ready / 9 partial / 4 waiting / 1 planned**, unchanged.
+
+Bind the existing pip-cache key to both the frozen lockfile and the bootstrap
+script. This creates a new immutable key instead of repeatedly restoring an
+older wheel-only cache that cannot be overwritten. Cache contents still confer
+no trust; every archive is checked against its fixed checksum before use.

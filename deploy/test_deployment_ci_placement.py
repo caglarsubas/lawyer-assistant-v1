@@ -1,6 +1,10 @@
 """Keep complete contract discovery exactly once within existing CI resources."""
 
+import os
 import re
+import shutil
+import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -25,14 +29,14 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("--shard=7", blocks["frontend"])
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=2", blocks["frontend-history"])
         self.assertIn("actions/setup-python@v5", blocks["frontend"])
-        self.assertIn("uv sync --project backend --frozen --extra dev", blocks["frontend"])
+        self.assertIn('"$uv_path" sync --project backend --frozen --extra dev', blocks["frontend"])
         self.assertNotIn("name: Test confidential human review groups", blocks["backend-and-contracts"])
         self.assertEqual(workflow.count("name: Test confidential human review groups"), 1)
         self.assertIn("timeout-minutes: 3", blocks["frontend"].split("name: Test confidential human review groups", 1)[1])
         self.assertLess(blocks["frontend"].index("name: Verify executed frontend shard"), blocks["frontend"].index("name: Test confidential human review groups"))
         self.assertIn('"${human_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', blocks["frontend"])
         self.assertIn("actions/setup-python@v5", blocks["frontend-history"])
-        self.assertIn("uv sync --project backend --frozen --extra dev", blocks["frontend-history"])
+        self.assertIn('"$uv_path" sync --project backend --frozen --extra dev', blocks["frontend-history"])
         self.assertIn("timeout-minutes: 5", blocks["frontend-history"])
         self.assertIn("runs-on: ubuntu-24.04-arm", blocks["frontend-history"])
         self.assertIn("runs-on: ubuntu-latest", blocks["frontend"])
@@ -85,9 +89,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("--shard=10 --workers=2", graph)
         self.assertIn("timeout-minutes: 1", graph.split("name: Test manifest-bound review headroom slice 10", 1)[1])
         self.assertEqual(workflow.count("cache: pip"), 10)
-        self.assertEqual(workflow.count("cache-dependency-path: backend/uv.lock"), 10)
-        self.assertEqual(workflow.count("timeout --kill-after=2s 20s python -m pip install --disable-pip-version-check --no-input --retries 0 --timeout 10 uv==0.8.15"), 10)
-        self.assertEqual(workflow.count("UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s uv sync --project backend --frozen --extra dev"), 10)
+        self.assertEqual(workflow.count("cache-dependency-path: |\n            backend/uv.lock\n            .github/scripts/install-uv.sh"), 10)
+        self.assertEqual(workflow.count("timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh"), 10)
+        self.assertEqual(workflow.count("UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s \"$uv_path\" sync --project backend --frozen --extra dev"), 10)
         self.assertNotIn("--shard=9", backend)
         self.assertIn("--shard=9 --workers=2", blocks["frontend-history"])
         self.assertLess(blocks["frontend-history"].index("name: Verify executed frontend shard"), blocks["frontend-history"].index("--shard=9"))
@@ -97,6 +101,38 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', graph)
         self.assertIn("timeout-minutes: 2", graph.split("name: Test registered local-model authority trials", 1)[1])
         self.assertLess(review.index("--plan-only"), review.index("name: Test complete backend review"))
+        self._bootstrap_rejections()
+
+    def _bootstrap_rejections(self):
+        script = ROOT / ".github/scripts/install-uv.sh"
+        self.assertIn("--max-time 15 --retry 0", script.read_text())
+        self.assertIn("sha256sum --check --status", script.read_text())
+        for kind in ("unsupported_arch", "poisoned_cache", "symlink_cache"):
+            with self.subTest(bootstrap=kind), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary).resolve()
+                commands = root / "bin"
+                commands.mkdir()
+                uname = commands / "uname"
+                uname.write_text("#!/bin/sh\nif [ \"$1\" = -s ]; then echo Linux; else echo " + ("unsupported" if kind == "unsupported_arch" else "aarch64") + "; fi\n")
+                uname.chmod(0o700)
+                cache = root / "pip/lawyer-ci-uv/0.8.15"
+                cache.mkdir(parents=True)
+                archive = cache / "uv-aarch64-unknown-linux-gnu-6ede0fefa7db7be3d5d9eda8784a8e43b1cf5410720eb3da60ab1d2f66678e82.tar.gz"
+                outside = root / "untrusted"
+                outside.write_bytes(b"wrong archive; never execute")
+                if kind == "symlink_cache":
+                    archive.symlink_to(outside)
+                elif kind == "poisoned_cache":
+                    if not shutil.which("sha256sum"):
+                        continue  # Linux CI has coreutils; unsupported/link guards run everywhere.
+                    archive.write_bytes(outside.read_bytes())
+                env = {**os.environ, "PATH": str(commands) + os.pathsep + os.environ["PATH"],
+                       "PIP_CACHE_DIR": str(root / "pip"), "RUNNER_TEMP": str(root), "GITHUB_PATH": str(root / "export")}
+                result = subprocess.run(["bash", str(script)], env=env, capture_output=True, timeout=3)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertFalse((root / "export").exists())
+                self.assertEqual(outside.read_bytes(), b"wrong archive; never execute")
+                self.assertFalse(list(root.glob("lawyer-uv.*")))
 
     def test_bounded_scratch_preserves_full_command_exit_and_cleanup(self):
         script = (ROOT / "scripts/run_ci_contracts.sh").read_text()
