@@ -1,0 +1,59 @@
+{
+  "schema": "planning-journal-ci-reserve-observation-v1",
+  "run_id": 40829379297,
+  "head": "fbbf3c99e01091d7e73acff970ec81cb3aba1a75",
+  "qualification": "rejected; cancelled; cannot supply clearance",
+  "job_reserves": [
+    {
+      "job": "frontend-history",
+      "seconds": 271,
+      "cap_seconds": 300,
+      "reserve_seconds": 29,
+      "required_reserve_seconds": 30
+    },
+    {
+      "job": "frontend",
+      "seconds": 268,
+      "cap_seconds": 300,
+      "reserve_seconds": 32,
+      "required_reserve_seconds": 30
+    },
+    {
+      "job": "final-release-authorization",
+      "seconds": 334,
+      "cap_seconds": 360,
+      "reserve_seconds": 26,
+      "required_reserve_seconds": 30
+    },
+    {
+      "job": "backend-review-contracts",
+      "seconds": 300,
+      "cap_seconds": 360,
+      "reserve_seconds": 60,
+      "required_reserve_seconds": 30
+    },
+    {
+      "job": "postgres-snapshot-concurrency",
+      "seconds": 235,
+      "cap_seconds": 300,
+      "reserve_seconds": 65,
+      "required_reserve_seconds": 30
+    }
+  ],
+  "changes": [
+    "slices 4 and 9 run before the backend remainder",
+    "human review runs sequentially in review capacity",
+    "workspace tests follow PostgreSQL race qualification"
+  ],
+  "deployment_manifest_sha256": "16599d9f6eddab10b32bdc1ee92d04ea741dcd69931e218e44c49ee46c68d8ff",
+  "deployment_methods": 1018,
+  "jobs": 10,
+  "maximum_test_workers": 2,
+  "deadline_increases": false,
+  "reserve_floor_reductions": false,
+  "test_removals": false,
+  "invoiced_cost_measured": false,
+  "fresh_exact_head_and_main_required": true,
+  "observed_conclusion": "cancelled",
+  "run_url": "https://github.com/caglarsubas/lawyer-assistant-v1/actions/runs/40829379297"
+}
