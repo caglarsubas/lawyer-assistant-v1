@@ -8511,3 +8511,14 @@ operational backup, trust migration, power-loss recovery or legal approval.
 
 Next after qualification: bounded read-only interruption/restart inventory and
 consumed-intent/completion reconciliation with independently retained references.
+
+The initial correction layout (run 41009795196) restored PostgreSQL reserve to
+56 seconds, but the history job passed in 271/300 seconds: only 29 seconds spare.
+Retain that rejection and rebalance complete groups across existing native ARM
+capacity. Move the 69-case source-review file from history into the whole-release
+group; history retains the complete 49-case planning file. Move the unchanged
+64-case copy-context step from frontend into sequential ARM review capacity.
+Move the 18-case receipt-retention file from withdrawal into a separate sequential
+PostgreSQL step after all real races exit. Workspace tests stay in sequential
+backend reserve. Keep all identities, assertions, caps, jobs and worker ceilings;
+no retries. Require fresh measured qualification of the complete final layout.

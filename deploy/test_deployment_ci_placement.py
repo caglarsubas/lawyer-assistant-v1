@@ -79,16 +79,25 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(human_group.split(), ["backend/tests/test_analysis_cohorts.py"])
         self.assertEqual(workflow.count("backend/tests/test_authority_model_cohorts.py"), 1)
         history_group = re.search(r"  CI_HISTORY_METADATA_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(history_group.split(), ["backend/tests/test_source_reviews.py", "backend/tests/test_planning_journal_reconciliation.py"])
+        self.assertEqual(history_group.split(), ["backend/tests/test_planning_journal_reconciliation.py"])
         withdrawal_group = re.search(r"  CI_RETAINED_WITHDRAWAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertIn("backend/tests/test_private_inventory_receipts.py", withdrawal_group)
+        self.assertNotIn("backend/tests/test_private_inventory_receipts.py", withdrawal_group)
+        retention_group = re.search(r"  CI_RECEIPT_RETENTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(retention_group.split(), ["backend/tests/test_private_inventory_receipts.py"])
+        self.assertIn('"${receipt_retention_tests[@]}"', backend)
+        self.assertIn("name: Test complete private receipt retention file", postgres)
+        self.assertLess(postgres.index("name: Test real PostgreSQL review"), postgres.index("name: Test complete private receipt retention file"))
+        self.assertIn("timeout-minutes: 1", postgres.split("name: Test complete private receipt retention file", 1)[1])
+        release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertIn("backend/tests/test_source_reviews.py", release_group)
+        self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
         for path in history_group.split():
             self.assertEqual(workflow.count(path), 1)
             self.assertNotIn(path, final_group)
         self.assertIn('"${history_metadata_tests[@]}"', backend)
         history = blocks["frontend-history"]
-        self.assertLess(history.index("name: Verify executed frontend shard"), history.index("name: Test complete source-review and planning metadata files"))
-        self.assertIn("timeout-minutes: 1", history.split("name: Test complete source-review and planning metadata files", 1)[1])
+        self.assertLess(history.index("name: Verify executed frontend shard"), history.index("name: Test complete planning metadata file"))
+        self.assertIn("timeout-minutes: 1", history.split("name: Test complete planning metadata file", 1)[1])
         self.assertIn('"${history_metadata_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', history)
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
@@ -127,10 +136,11 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${backup_context_tests[@]}"', backend)
         self.assertEqual(workflow.count("name: Test unchanged journal copy-context contracts"), 1)
         frontend = blocks["frontend"]
-        self.assertLess(frontend.index("name: Test confidential human review"), frontend.index("name: Test unchanged journal copy-context"))
-        self.assertLess(frontend.index("name: Test unchanged journal copy-context"), frontend.index("--shard=8"))
-        self.assertIn("timeout-minutes: 1", frontend.split("name: Test unchanged journal copy-context", 1)[1])
-        self.assertIn('"${backup_context_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', frontend)
+        self.assertNotIn("name: Test unchanged journal copy-context", frontend)
+        self.assertLess(review.index("name: Test complete backend review"), review.index("name: Test unchanged journal copy-context"))
+        self.assertLess(review.index("name: Test unchanged journal copy-context"), review.index("--shard=1"))
+        self.assertIn("timeout-minutes: 1", review.split("name: Test unchanged journal copy-context", 1)[1])
+        self.assertIn('"${backup_context_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', review)
         self._bootstrap_rejections()
 
     def _bootstrap_rejections(self):
