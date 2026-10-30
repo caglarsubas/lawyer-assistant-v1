@@ -78,7 +78,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         cohort_group = re.search(r"  CI_AUTHORITY_COHORT_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(cohort_group.split(), ["backend/tests/test_authority_model_cohorts.py"])
         self.assertIn('"${authority_cohort_tests[@]}"', backend)
-        for job, lane in (("backend-review-contracts", "review"), ("graph-runtime-contracts", "graph"), ("frontend-history", "history")):
+        for job, lane in (("backend-review-contracts", "review"), ("postgres-snapshot-concurrency", "database"), ("frontend-history", "history")):
             self.assertEqual(blocks[job].count("-p scripts.ci_authority_cohorts --authority-cohort-lane=" + lane), 1)
             self.assertIn('"${authority_cohort_tests[@]}"', blocks[job])
         self.assertEqual(workflow.count("-p scripts.ci_authority_cohorts"), 3)
@@ -92,9 +92,11 @@ class DeploymentPlacementContract(unittest.TestCase):
         retention_group = re.search(r"  CI_RECEIPT_RETENTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(retention_group.split(), ["backend/tests/test_private_inventory_receipts.py"])
         self.assertIn('"${receipt_retention_tests[@]}"', backend)
-        self.assertIn("name: Test complete private receipt retention file", postgres)
-        self.assertLess(postgres.index("name: Test real PostgreSQL review"), postgres.index("name: Test complete private receipt retention file"))
-        self.assertIn("timeout-minutes: 1", postgres.split("name: Test complete private receipt retention file", 1)[1])
+        self.assertIn("name: Test closed authority cohort partition", postgres)
+        self.assertLess(postgres.index("name: Test real PostgreSQL review"), postgres.index("name: Test closed authority cohort partition"))
+        self.assertIn("timeout-minutes: 1", postgres.split("name: Test closed authority cohort partition", 1)[1])
+        self.assertNotIn("-p scripts.ci_authority_cohorts", graph)
+        self.assertIn('"${receipt_retention_tests[@]}"', blocks["backend-review-contracts"])
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("backend/tests/test_source_reviews.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)

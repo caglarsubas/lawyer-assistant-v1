@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "backend/tests/test_authority_model_cohorts.py"
 MANIFEST = ROOT / "deploy/fixtures/authority_cohort_partition.json"
 PREFIX = "tests/test_authority_model_cohorts.py::"
-COUNTS = {"review": 15, "graph": 2, "history": 2}
+COUNTS = {"review": 16, "database": 1, "history": 2}
 
 
 @dataclass(frozen=True)
@@ -68,6 +68,8 @@ def select(contract, lane, nodeids):
         # Start one expensive case in each half instead of recreating a serial tail.
         cohort = list(contract.lanes[lane])
         other = [x for x in retained if not x.startswith(contract.prefix)]
+        if len(cohort) == 1:
+            return [cohort[0], *other]
         middle = len(retained) // 2
         return [cohort[0], *other[:middle - 1], cohort[1], *other[middle - 1:]]
     return retained
@@ -100,7 +102,8 @@ class Partition:
             raise pytest.UsageError("Worker cohort selection differs from its exact lane")
         if self.lane != "review":
             positions = [ids.index(x) for x in self.contract.lanes[self.lane]]
-            if positions != [0, len(ids) // 2]:
+            expected = [0] if len(positions) == 1 else [0, len(ids) // 2]
+            if positions != expected:
                 raise pytest.UsageError("Expensive cases must occupy separate initial worker halves")
 
     def pytest_runtest_logreport(self, report):

@@ -35,18 +35,18 @@
       "tests/test_authority_model_cohorts.py::test_export_checks_after_serialization_and_discards_bytes[grant]",
       "tests/test_authority_model_cohorts.py::test_export_checks_after_serialization_and_discards_bytes[private]",
       "tests/test_authority_model_cohorts.py::test_export_checks_after_serialization_and_discards_bytes[rights]",
+      "tests/test_authority_model_cohorts.py::test_freezes_both_arms_original_or_renewal_with_unknowns_overlap_and_no_new_calls[False]",
       "tests/test_authority_model_cohorts.py::test_invalid_selection_receipts_and_budget_are_fail_closed",
       "tests/test_authority_model_cohorts.py::test_missing_runs_separate_profiles_and_metadata_without_quoted_titles",
       "tests/test_authority_model_cohorts.py::test_new_execution_or_human_event_invalidates_the_frozen_capture[run]",
       "tests/test_authority_model_cohorts.py::test_pending_after_committed_guard_failure_cannot_be_admitted_by_retry",
       "tests/test_authority_model_cohorts.py::test_temporary_source_denial_withholds_all_group_text_and_keeps_metadata"
     ],
-    "graph": [
-      "tests/test_authority_model_cohorts.py::test_freezes_both_arms_original_or_renewal_with_unknowns_overlap_and_no_new_calls[True]",
+    "database": [
       "tests/test_authority_model_cohorts.py::test_new_execution_or_human_event_invalidates_the_frozen_capture[effort]"
     ],
     "history": [
-      "tests/test_authority_model_cohorts.py::test_freezes_both_arms_original_or_renewal_with_unknowns_overlap_and_no_new_calls[False]",
+      "tests/test_authority_model_cohorts.py::test_freezes_both_arms_original_or_renewal_with_unknowns_overlap_and_no_new_calls[True]",
       "tests/test_authority_model_cohorts.py::test_new_execution_or_human_event_invalidates_the_frozen_capture[observation]"
     ]
   }

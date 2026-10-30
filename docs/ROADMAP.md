@@ -8532,10 +8532,10 @@ leaving 27 seconds against the fixed 30-second floor. Whole-file moves still
 allow four expensive cohort cases to cluster into a late worker tail.
 
 Freeze all 19 original authority-model cohort identities and their exact source
-hash. Keep 15 in review; execute two in existing graph capacity and two in existing
-history capacity. Preserve the original test file and every test body/identity.
+hash. Keep 16 in review; execute one after existing database races and two in
+history capacity. Move the complete 18-case retention file into review capacity. Preserve the original test file and every test body/identity.
 Collection must match the complete inventory before selection; lane partitions
-must be disjoint and exhaustive. Put the two relocated cases in separate initial
+must be disjoint and exhaustive. Put the two history cases in separate initial
 worker halves and verify each worker's final collection. Success receipts require
 every selected case to pass exactly once; missing, duplicate, skipped, stale or
 unrecognized cases fail closed. Aggregate all three receipts before merge.
@@ -8553,3 +8553,11 @@ unchanged. Broader milestone readiness and the owner's legal review stay pending
 The next product slice remains bounded read-only interruption/restart inventory
 and consumed-intent/completion reconciliation; no repair, trust migration or
 production activation is authorized by this engineering qualification.
+
+The first partition head (41017932966) restored review reserve to 77 seconds but
+crossed the graph job's fixed reserve floor. Retain that rejection. Restore the
+graph job's original complete file group; execute only the bounded effort case
+after PostgreSQL races, and return the less expensive original-snapshot case to
+review. Retention uses review capacity, not the database job. Preserve the closed
+19-identity union (16 review / 1 database / 2 history), all original caps and every
+assertion; qualify this final layout afresh rather than retry the rejected head.

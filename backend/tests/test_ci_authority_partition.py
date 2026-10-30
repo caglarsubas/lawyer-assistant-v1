@@ -17,7 +17,7 @@ import ci_authority_cohorts as partition  # noqa: E402
 def test_real_contract_retains_all_original_identities_once():
     contract = partition.load_contract()
     assert len(contract.ids) == 19
-    assert {k: len(v) for k, v in contract.lanes.items()} == {"review": 15, "graph": 2, "history": 2}
+    assert {k: len(v) for k, v in contract.lanes.items()} == {"review": 16, "database": 1, "history": 2}
     rows = [x for values in contract.lanes.values() for x in values]
     assert len(rows) == len(set(rows)) == 19 and sorted(rows) == list(contract.ids)
 
@@ -30,9 +30,9 @@ def test_changed_contract_is_rejected_before_execution(tmp_path, change):
     elif change == "missing":
         value["test_ids"].pop()
     elif change == "duplicate":
-        value["lanes"]["graph"][1] = value["lanes"]["graph"][0]
+        value["lanes"]["review"][1] = value["lanes"]["review"][0]
     elif change == "overlap":
-        value["lanes"]["graph"] = value["lanes"]["history"]
+        value["lanes"]["database"] = value["lanes"]["history"][:1]
     else:
         value["schema"] = "unreviewed-inventory"
     path = tmp_path / "contract.json"
@@ -50,19 +50,19 @@ def test_collection_cannot_omit_duplicate_or_invent_an_identity():
     with pytest.raises(ValueError):
         partition.select(contract, "undeclared", list(contract.ids))
     other = "test_unrelated.py::test_retained"
-    assert partition.select(contract, "graph", [*contract.ids, other]) == [*contract.lanes["graph"], other]
+    assert partition.select(contract, "database", [*contract.ids, other]) == [*contract.lanes["database"], other]
 
 
 def test_expensive_cases_start_in_separate_worker_halves_without_losing_other_cases():
     contract = partition.load_contract()
     others = [f"test_other.py::test_{i:02d}" for i in range(49)]
-    for lane in ("graph", "history"):
+    for lane in ("database", "history"):
         ids = partition.select(contract, lane, [*others, *contract.ids])
-        assert [ids.index(x) for x in contract.lanes[lane]] == [0, len(ids) // 2]
+        assert [ids.index(x) for x in contract.lanes[lane]] == ([0] if lane == "database" else [0, len(ids) // 2])
         assert [x for x in ids if x not in contract.ids] == others
         plugin = partition.Partition(contract, lane)
         plugin.pytest_xdist_node_collection_finished(ids)
-        ids[1], ids[len(ids) // 2] = ids[len(ids) // 2], ids[1]
+        ids[0], ids[1] = ids[1], ids[0]
         with pytest.raises(pytest.UsageError):
             plugin.pytest_xdist_node_collection_finished(ids)
 
@@ -78,7 +78,7 @@ def run_fixture(tmp_path, lane, skip=False):
     source = tmp_path / "test_fixture.py"
     source.write_text(code)
     ids = tuple(f"test_fixture.py::test_{i:02d}" for i in range(19))
-    lanes = {"review": ids[:15], "graph": ids[15:17], "history": ids[17:]}
+    lanes = {"review": ids[:16], "database": ids[16:17], "history": ids[17:]}
     scaffold = ("from ci_authority_cohorts import Contract, Partition\n"
         "def pytest_configure(config):\n"
         f"    contract = Contract({hashlib.sha256(source.read_bytes()).hexdigest()!r}, {ids!r}, {lanes!r})\n"
@@ -92,7 +92,7 @@ def run_fixture(tmp_path, lane, skip=False):
     return result.returncode, actual, receipts
 
 
-@pytest.mark.parametrize("lane,start,stop", [("review", 0, 15), ("graph", 15, 17), ("history", 17, 19)])
+@pytest.mark.parametrize("lane,start,stop", [("review", 0, 16), ("database", 16, 17), ("history", 17, 19)])
 def test_real_execution_and_receipt_match_independent_expected_calls(tmp_path, lane, start, stop):
     status, actual, receipts = run_fixture(tmp_path, lane)
     assert status == 0
@@ -104,4 +104,4 @@ def test_real_execution_and_receipt_match_independent_expected_calls(tmp_path, l
 
 def test_a_skipped_selected_case_cannot_publish_a_success_receipt(tmp_path):
     status, actual, receipts = run_fixture(tmp_path, "review", skip=True)
-    assert status != 0 and len(actual) == 14 and receipts == []
+    assert status != 0 and len(actual) == 15 and receipts == []

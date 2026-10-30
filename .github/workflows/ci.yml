@@ -177,6 +177,7 @@ jobs:
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
+          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a backup_context_tests <<< "$CI_BACKUP_CONTEXT_TESTS"
           read -r -a history_metadata_tests <<< "$CI_HISTORY_METADATA_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
@@ -247,7 +248,7 @@ jobs:
         run: |
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${authority_cohort_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${authority_cohort_tests[@]}" "${receipt_retention_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 
       # Reuse ARM review capacity after its full file group exits.
       - name: Test unchanged journal copy-context contracts
@@ -325,12 +326,12 @@ jobs:
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
-      # All real PostgreSQL workers exited; reuse the same pair for retention.
-      - name: Test complete private receipt retention file
+      # A single source-bound cohort case reuses exited database-worker capacity.
+      - name: Test closed authority cohort partition
         timeout-minutes: 1
         run: |
-          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${receipt_retention_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
+          read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
 
 
   frontend:
@@ -593,8 +594,7 @@ jobs:
         timeout-minutes: 6
         run: |
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
-          read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=graph "${authority_cohort_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${graph_runtime_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 
       # Reuse completed graph-worker capacity for the unchanged history tail.
       - name: Test manifest-bound review headroom slice 10
