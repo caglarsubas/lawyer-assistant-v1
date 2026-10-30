@@ -8663,3 +8663,11 @@ review history remains exact. No operational backup, private runtime mutation or
 legal approval is implied. Ledger **272 → 273**; owner review and broader
 milestone readiness remain pending. The next product slice remains read-only
 interruption/restart inventory and consumed-intent/completion reconciliation.
+
+The first PR #256 layout (run 41038306798) left review only 29 seconds spare.
+Its eight inspection cases contain one heavy case; a separate step serialized
+that work after the existing review pair. Put the unchanged inspection file first
+in the same two-worker review group (**127 cases**) and remove its standalone
+step. The long case starts early alongside other review work. Preserve all source
+bodies, caps, workers, identifiers and the rejected observation; qualify fresh
+actual execution/ordering receipts before merge.
