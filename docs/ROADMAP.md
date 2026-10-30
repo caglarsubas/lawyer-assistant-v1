@@ -8385,8 +8385,11 @@ deployment slices 4/9 out of the backend. The first layout passed frontend tests
 but left 11 seconds, below its fixed 30-second floor. Keep slice 4 after frontend
 workers, move slice 9 after review workers and return the single build to regained
 backend capacity. Preserve all 1,018 identities, ten jobs, caps, workers, bootstrap
-guards and fixed timing floors. Require
-exact-head checks, guarded merge, independent main checks and preservation proof.
+guards and fixed timing floors. The revised frontend retains 77 seconds; correct
+the second placement assertion to require the single backend build, preserving
+its method and all discovery/worker/deadline checks. Validate all workflow-related
+contracts locally before fresh exact-head checks, guarded merge, independent
+main checks and preservation proof.
 
 Next: separately reviewed bounded backup materialization and read-only restored
 copy verification with independently retained manifest/destination pins. Do not

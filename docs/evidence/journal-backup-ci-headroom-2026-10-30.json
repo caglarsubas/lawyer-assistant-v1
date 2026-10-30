@@ -49,5 +49,14 @@
       "slice9": 24
     },
     "action": "cancel remaining backend work; preserve measured failure; no merge"
+  },
+  "corrected_placement_contract": {
+    "head": "0c7c80b44cde3837659c7aaad72f7cd664dc3e7b",
+    "run": 40983443629,
+    "frontend_seconds": 223,
+    "frontend_reserve_seconds": 77,
+    "failure": "A second unchanged partition test still asserted frontend build ownership. Update its same method to require one backend build before tests and no builds in other lanes.",
+    "method_inventory": "No test methods added or removed; all 1018 identities preserved.",
+    "local_validation": "Run all three deployment files referencing workflow/build ownership before corrected CI."
   }
 }
