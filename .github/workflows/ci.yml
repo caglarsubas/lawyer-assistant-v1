@@ -15,7 +15,6 @@ env:
   CI_BACKEND_CAPACITY_TESTS: >-
     backend/tests/test_journal_backup_readiness.py
     backend/tests/test_retained_release_inspection.py
-    backend/tests/test_staged_receipt_adapter.py
     backend/tests/test_firm_admin.py
   CI_AUTHORITY_MODEL_TESTS: >-
     backend/tests/test_authority_model_trials.py
@@ -26,10 +25,14 @@ env:
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_analysis_cohorts.py
     backend/tests/test_analysis_feedback.py
+    backend/tests/test_ci_authority_partition.py
+    backend/tests/test_ci_budgeted_deployment.py
+    backend/tests/test_ci_retained_history.py
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_authority_proposals.py
   CI_GRAPH_CANDIDATE_TESTS: >-
+    backend/tests/test_staged_receipt_adapter.py
     backend/tests/test_final_release_transitions.py
     backend/tests/test_final_graph_candidate.py
     backend/tests/test_native_receipt_stage.py

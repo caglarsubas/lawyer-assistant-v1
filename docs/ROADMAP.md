@@ -8710,3 +8710,13 @@ for renewal/backup cases. Preserve the unchanged original constraint: those
 families may enter assignment10, not assignment3. Enforce this before execution
 and exercise the original frozen placement test directly against the overlay.
 No original test is relaxed, skipped or rewritten; retain the failed observation.
+
+The compatible overlay run 41046548668 passed all tests but left backend only
+28 seconds spare (824-second remainder, 59-second capacity step). Retain that
+reserve rejection. Return staged-adapter17 to candidate capacity (**215 cases**);
+backend capacity retains copy-context64/retained-inspection7/firm-admin19 (**90**).
+Move all 43 unchanged CI guards (12/13/18) into the existing frontend Python group
+(**125 total**), excluded through its declared list. Backend remainder becomes
+**3,911**. This preserves every case and source body; no new job, worker or longer
+cap. Candidate/frontend retained 50/89 seconds spare on this exact rejected head.
+Qualify the revised complete layout afresh, including exact per-file execution.
