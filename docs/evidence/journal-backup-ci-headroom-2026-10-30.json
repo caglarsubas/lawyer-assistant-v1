@@ -1,0 +1,62 @@
+{
+  "schema": "journal-backup-readiness-ci-placement-v1",
+  "baseline_commit": "6da39b3b5b977606917866252b3065e19a690a2a",
+  "baseline_main_run": 40833727719,
+  "baseline_job_seconds": {
+    "backend-and-contracts": 1170,
+    "frontend": 167
+  },
+  "backend_cap_seconds": 1200,
+  "frontend_cap_seconds": 300,
+  "required_job_reserve_seconds": 30,
+  "baseline_backend_reserve_seconds": 30,
+  "moved_unchanged_slices": [
+    4,
+    9
+  ],
+  "measured_slice_seconds_on_baseline_arm": {
+    "4": 55,
+    "9": 23
+  },
+  "destination": "slice 4 after frontend workers; slice 9 after review workers; single build returns to regained backend capacity",
+  "coverage": "all 1018 deployment identities once; complete frontend remains",
+  "unchanged": [
+    "ten jobs",
+    "job and step caps",
+    "at most two workers",
+    "no automatic retries",
+    "checksum-verified bootstrap",
+    "fixed reserve floors"
+  ],
+  "new_layout_qualification": "fresh exact-head and independent-main receipts required; no lowered floors or extra workers",
+  "billing": "runner time proxy only; invoiced cost not measured",
+  "superseded_head": "0c54b01380a8a57da45d2040afd665c54dff8309",
+  "superseded_run": 40981978937,
+  "supersession_reason": "Final inspection added explicit rejection of readiness-review reuse of the original receipt key; stop superseded CI and qualify the corrected source.",
+  "cancellation": "Requested through the authenticated GitHub run page before starting corrected CI; final cancellation receipt retained privately.",
+  "rejected_layout": {
+    "head": "8d3b164e5a45c1a13e7294beb2b09bb4197a3459",
+    "run": 40982531498,
+    "all_nine_completed_jobs_tests": "passed",
+    "frontend_seconds": 289,
+    "frontend_reserve_seconds": 11,
+    "required_reserve_seconds": 30,
+    "frontend_step_seconds": {
+      "build": 25,
+      "Vitest": 128,
+      "slice8": 40,
+      "slice4": 58,
+      "slice9": 24
+    },
+    "action": "cancel remaining backend work; preserve measured failure; no merge"
+  },
+  "corrected_placement_contract": {
+    "head": "0c7c80b44cde3837659c7aaad72f7cd664dc3e7b",
+    "run": 40983443629,
+    "frontend_seconds": 223,
+    "frontend_reserve_seconds": 77,
+    "failure": "A second unchanged partition test still asserted frontend build ownership. Update its same method to require one backend build before tests and no builds in other lanes.",
+    "method_inventory": "No test methods added or removed; all 1018 identities preserved.",
+    "local_validation": "Run all three deployment files referencing workflow/build ownership before corrected CI."
+  }
+}

@@ -8354,3 +8354,49 @@ all 1,018 identities, complete frontend coverage, ten jobs, worker ceilings,
 every timeout, bootstrap checks and fixed reserve floors. Update placement
 assertions within their existing methods and require fresh exact-head/main
 receipts; no cancelled run or historical bootstrap snapshot supplies clearance.
+
+## Independently reviewed journal backup/restore readiness — 2026-10-30
+
+Add an unregistered staged metadata readiness service for an empty or byte-exact
+copied planning-journal destination. Independently pin the original source,
+planning journal, candidate namespace/key/profile and assigned principals. Keep
+readiness plans and independent decisions in a fourth disjoint namespace under
+a separate key. Real disposable app sessions, CSRF, origin and current firm roles
+protect every observation and decision. Repeated bounded scans preserve complete
+inventories, exact ciphertext versions and link topology without decrypting
+source or candidate records. Partial copies, interrupted staging, unknown links
+and mismatches block preparation without mutation or silent normalization.
+
+Freeze exact observations and a 300-second review window. Require fresh,
+independent review of caller-retained plan hashes; retain decisions create-only.
+Changed evidence, session, role or expiry makes old review stale. A repinned new
+candidate requires a new plan and independent review while both histories remain
+exact. Missing decision references remain unknown. Readiness acceptance confers
+no backup/restore execution, destination enrollment, key custody, repair,
+acknowledgement recovery or implicit trust migration authority.
+
+See the [readiness contract](JOURNAL_BACKUP_READINESS.md) and
+[source-bound report](evidence/native-journal-backup-readiness-2026-10-30.json).
+Ledger **266 → 267**. Qualify 38 frozen outcomes in 38 fresh disposable Linux
+workers across empty/preexisting-copy targets, preserving earlier ciphertext
+and all historical source reports. Keep Docker opt-in and routine tests within
+existing review capacity. Restore backend CI reserve first: serialize unchanged
+deployment slices 4/9 out of the backend. The first layout passed frontend tests
+but left 11 seconds, below its fixed 30-second floor. Keep slice 4 after frontend
+workers, move slice 9 after review workers and return the single build to regained
+backend capacity. Preserve all 1,018 identities, ten jobs, caps, workers, bootstrap
+guards and fixed timing floors. The revised frontend retains 77 seconds; correct
+the second placement assertion to require the single backend build, preserving
+its method and all discovery/worker/deadline checks. Validate all workflow-related
+contracts locally before fresh exact-head checks, guarded merge, independent
+main checks and preservation proof.
+
+Next: separately reviewed bounded backup materialization and read-only restored
+copy verification with independently retained manifest/destination pins. Do not
+execute or enroll through readiness approval. Genuine appointments, operational
+key custody, actual disaster/power-loss recovery, provider/native inference and
+production activation remain open; owner legal review is still pending.
+Originals, exact evidence versions, confidentiality and private review history
+remain intact. Checklist **42 done / 21 open / 24 waiting / 6 deferred**; readiness
+**0 ready / 9 partial / 4 waiting / 1 planned**, unchanged. Report engineering
+completion separately from broader milestone readiness.
