@@ -17,8 +17,12 @@ env:
   # Workspace, cohort and human-review groups reuse existing ARM capacity.
   # Frontend retains its full x86 TypeScript/build/browser-unit coverage.
   # No cases, jobs, workers, deadlines, fixtures or assertions are removed.
+  # Rejected run 41004860057: review had 11s spare; frontend had 100s.
+  # Move the complete 19-case model cohort file, preserving all identities
+  # and the same two workers, ten jobs, fixed caps and no-retry policy.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_analysis_cohorts.py
+    backend/tests/test_authority_model_cohorts.py
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_retained_release_inspection.py
@@ -57,7 +61,6 @@ env:
   # Retention qualification uses this job's measured 81-second main reserve;
   # keep its existing pair/cap and keep the backend remainder unchanged.
   CI_BACKEND_REVIEW_TESTS: >-
-    backend/tests/test_authority_model_cohorts.py
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_source_reviews.py
     backend/tests/test_private_inventory_receipts.py

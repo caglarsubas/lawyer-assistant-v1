@@ -8460,6 +8460,13 @@ identities exactly once, complete frontend discovery, ten jobs, workers, caps,
 bootstrap verification and fixed reserve floors. Require exact-head, guarded
 merge, independent-main and preservation receipts before qualification.
 
+Reject the first layout: run 41004860057 completed review in 349/360 seconds,
+leaving only 11 seconds against the fixed 30-second reserve floor. Stop its
+remaining work and retain the rejection. Frontend used 200/300 seconds. Move
+the entire unchanged 19-case authority-model cohort file to its existing human
+review group, without duplicating or dropping tests. New copy tests remain on
+ARM. Qualify the corrected head and independent main with unchanged caps.
+
 Next: bounded read-only interruption/restart inventory and consumed-intent/
 completion reconciliation using independently retained references. Genuine key
 custody, operator appointments, live/private operational backup/restore,

@@ -73,6 +73,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${graph_runtime_tests[@]}"', blocks["backend-and-contracts"])
         final_group = re.search(r"  CI_BACKEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_set_publication_cli.py", final_group)
+        self.assertNotIn("backend/tests/test_authority_model_cohorts.py", final_group)
+        human_group = re.search(r"  CI_HUMAN_REVIEW_GROUP_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(human_group.split(), ["backend/tests/test_analysis_cohorts.py", "backend/tests/test_authority_model_cohorts.py"])
+        self.assertEqual(workflow.count("backend/tests/test_authority_model_cohorts.py"), 1)
         self.assertEqual(final_group.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
