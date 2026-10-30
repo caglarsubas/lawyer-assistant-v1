@@ -8400,3 +8400,30 @@ Originals, exact evidence versions, confidentiality and private review history
 remain intact. Checklist **42 done / 21 open / 24 waiting / 6 deferred**; readiness
 **0 ready / 9 partial / 4 waiting / 1 planned**, unchanged. Report engineering
 completion separately from broader milestone readiness.
+
+## Native reader-slice full-process CI qualification — 2026-10-30
+
+PR #250's exact head passed all ten checks, complete test inventories and fixed
+reserve floors. Its independent main run then completed all 23 slice-4 tests on
+x86 but exceeded the unchanged one-minute action deadline before process exit.
+The test counters are not qualification: retain the failure and cancel remaining
+work, without rerunning the same workflow or extending the deadline.
+
+Place unchanged slice 4 on the native ARM review job after its existing workers
+exit. Move the shorter slice 9 and 32-case human-review group to x86 frontend
+capacity, after Vitest exits. Keep the single build in backend capacity. Preserve
+all 1,018 deployment identities and all frontend cases exactly once, ten jobs,
+worker ceilings, original job/step caps, verified bootstrap and reserve floors.
+Update the same placement assertions; all 19 workflow-related contracts and the
+closed inventory must pass locally before new exact-head and independent-main
+qualification. See the [measured failure and corrective layout](evidence/reader-slice-native-ci-reserve-2026-10-30.json).
+
+Ledger **267 → 268**. Journal backup/restore readiness remains staged; its source,
+64 regressions, 38 frozen native outcomes and all 476 source pins remain exact.
+No production backup, restore, trust migration or activation is authorized.
+Preserve originals, exact evidence versions, both histories, confidentiality and
+pending owner review. Checklist **42 done / 21 open / 24 waiting / 6 deferred**;
+readiness **0 ready / 9 partial / 4 waiting / 1 planned**, unchanged. After the
+corrective main is qualified, separately review bounded backup materialization
+and read-only restored-copy verification with independent destination/manifest
+pins. Genuine custody, appointments and legal approval remain separate gates.
