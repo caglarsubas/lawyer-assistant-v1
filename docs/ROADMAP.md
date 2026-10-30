@@ -8594,3 +8594,42 @@ rejected a CI placement-guard import: the script launcher exposes the scripts
 directory, not a top-level scripts package. Import the guard through that explicit
 directory and verify the same launcher search path locally. Preserve this failure;
 no skipped placement check, reduced inventory or retry of unchanged source.
+
+
+## 272. Balanced CI groups with complete execution evidence — 2026-10-30
+
+The first independent main after PR #254 passed history with 17 seconds spare,
+below the fixed 30-second floor, and graph with only 31 seconds spare. Retain
+that rejection (run 41030231776). The initial PR #255 layout returned workspace49
+to backend capacity; its full backend suite took 878 seconds, then workspace
+checks exhausted job reserve (run 41031287137). Neither run establishes release
+qualification; do not retry unchanged source or lower the reserve floors.
+
+Use complete disjoint file moves into measured existing two-worker groups:
+
+- Authority-proposals30 joins withdrawal15: **45 cases**.
+- Firm-admin19 joins publication230: **249 cases**.
+- Planning49 joins final-release89: **138 cases**.
+- Public-source94 joins copy-context64 in review: **158 cases**.
+- Feedback50 joins the database cohort case: **51 cases**.
+- History retains its **two** declared cohort cases after its frontend/contracts.
+
+The backend remainder excludes these complete files through the same declared
+lists. Remove the standalone workspace and graph-public-source steps; keep every
+original case, assertion, exact source version and native source pin. Retained
+workspace costs were 29.96 worker-seconds for proposals and 12.14 for firm-admin;
+withdrawal/publication had 54/51 seconds spare on the rejected PR. Reviewed
+feedback costs total about 24 worker-seconds; database retained 69 seconds spare.
+Keep ten jobs, two-worker ceilings, original step/job caps and reserve floors.
+No automatic retries, new executor or longer deadline.
+
+Require fresh exact-head and independent-main execution receipts for all 1,018
+deployment methods once, all 139 frontend files/10,532 cases, every moved file,
+and all 19 cohort identities. Preserve originals, exact evidence versions,
+private case confidentiality and review history; no runtime mutation, operational
+backup or legal approval. Preserve the previous complete coverage observations
+alongside the reserve rejections.
+
+Ledger **271 → 272**. Milestone readiness and owner legal review remain pending.
+The next product slice remains bounded read-only interruption/restart inventory
+and consumed-intent/completion reconciliation with independently retained references.
