@@ -107,7 +107,7 @@ jobs:
       - name: Lint Python
         run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
       # Retain locked Node/dependency preparation for existing contract checks.
-      # The single frontend build now uses the frontend job's measured reserve.
+      # Its single build uses the newly released backend reserve.
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -116,6 +116,10 @@ jobs:
       - name: Install locked Node contract dependencies
         timeout-minutes: 1
         run: npm ci --prefer-offline --no-audit --no-fund --fetch-retries=1 --fetch-timeout=15000 --fetch-retry-mintimeout=1000 --fetch-retry-maxtimeout=3000
+        working-directory: frontend
+      # The unchanged build reuses backend reserve released by slices 4 and 9.
+      # Keep it single and sequential; the full x86 Vitest suite stays intact.
+      - run: npm run build
         working-directory: frontend
       # Authenticated contracts run once before pytest, with at most two workers.
       # Retained-worker overlap and measured exceptions remove the serial tail.
@@ -236,6 +240,12 @@ jobs:
         timeout-minutes: 3
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=1 --workers=2 --report=${{ runner.temp }}/deployment-review-results.json
 
+      # The measured complete review group has reserve for this unchanged slice.
+      - name: Test manifest-bound review headroom slice 9
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json
+
+
   postgres-snapshot-concurrency:
     # The unchanged CPU-heavy runtime guard exceeded the x86 job budget even
     # after all 95 cases passed. Use the already-qualified native ARM executor,
@@ -314,10 +324,6 @@ jobs:
         timeout-minutes: 1
         run: npm ci --prefer-offline --no-audit --no-fund --fetch-retries=1 --fetch-timeout=15000 --fetch-retry-mintimeout=1000 --fetch-retry-maxtimeout=3000
         working-directory: frontend
-      # The backend main run retained only 21s; serialize the single build
-      # here before Vitest, using measured x86 reserve without extra workers.
-      - run: npm run build
-        working-directory: frontend
       - name: Verify complete disjoint frontend discovery
         run: node scripts/verify_frontend_shards.mjs
       # Contract work left this job; use its existing two-worker budget for
@@ -353,10 +359,6 @@ jobs:
       - name: Test manifest-bound reader lifecycle slice 4
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=4 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-4.json
-
-      - name: Test manifest-bound review headroom slice 9
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json
 
 
   frontend-history:

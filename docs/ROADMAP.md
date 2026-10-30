@@ -8381,8 +8381,11 @@ Ledger **266 → 267**. Qualify 38 frozen outcomes in 38 fresh disposable Linux
 workers across empty/preexisting-copy targets, preserving earlier ciphertext
 and all historical source reports. Keep Docker opt-in and routine tests within
 existing review capacity. Restore backend CI reserve first: serialize unchanged
-deployment slices 4/9 after frontend workers exit; preserve all 1,018 identities,
-ten jobs, caps, workers, bootstrap guards and fixed timing floors. Require
+deployment slices 4/9 out of the backend. The first layout passed frontend tests
+but left 11 seconds, below its fixed 30-second floor. Keep slice 4 after frontend
+workers, move slice 9 after review workers and return the single build to regained
+backend capacity. Preserve all 1,018 identities, ten jobs, caps, workers, bootstrap
+guards and fixed timing floors. Require
 exact-head checks, guarded merge, independent main checks and preservation proof.
 
 Next: separately reviewed bounded backup materialization and read-only restored

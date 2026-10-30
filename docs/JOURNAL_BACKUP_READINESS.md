@@ -80,8 +80,10 @@ This does not repeat or extend the previous controller/mode or SIGKILL campaign.
 The source-bound report is [retained here](evidence/native-journal-backup-readiness-2026-10-30.json).
 
 Focused regressions use measured review-job capacity. Restore backend headroom
-first by moving unchanged deployment slices 4 and 9 after the frontend workers
-exit. Every one of the 1,018 deployment identities still runs once. Preserve all
+first by removing unchanged deployment slices 4/9 from the backend. The measured
+frontend placement passed tests but retained only 11 seconds; keep slice 4 after
+frontend workers, move slice 9 after review workers and return the single build
+to recovered backend capacity. Every one of the 1,018 deployment identities still runs once. Preserve all
 ten jobs, original deadlines, worker ceilings, complete frontend discovery,
 checksum-verified bootstrap, zero automatic retries and fixed reserve floors.
 Qualify exact-head CI and independent main CI separately before completion.

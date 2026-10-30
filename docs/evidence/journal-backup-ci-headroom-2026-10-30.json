@@ -18,7 +18,7 @@
     "4": 55,
     "9": 23
   },
-  "destination": "frontend after its existing workers exit",
+  "destination": "slice 4 after frontend workers; slice 9 after review workers; single build returns to regained backend capacity",
   "coverage": "all 1018 deployment identities once; complete frontend remains",
   "unchanged": [
     "ten jobs",
@@ -28,10 +28,26 @@
     "checksum-verified bootstrap",
     "fixed reserve floors"
   ],
-  "new_layout_qualification": "requires fresh exact-head and independent-main receipts; estimates do not qualify CI",
+  "new_layout_qualification": "fresh exact-head and independent-main receipts required; no lowered floors or extra workers",
   "billing": "runner time proxy only; invoiced cost not measured",
   "superseded_head": "0c54b01380a8a57da45d2040afd665c54dff8309",
   "superseded_run": 40981978937,
   "supersession_reason": "Final inspection added explicit rejection of readiness-review reuse of the original receipt key; stop superseded CI and qualify the corrected source.",
-  "cancellation": "Requested through the authenticated GitHub run page before starting corrected CI; final cancellation receipt retained privately."
+  "cancellation": "Requested through the authenticated GitHub run page before starting corrected CI; final cancellation receipt retained privately.",
+  "rejected_layout": {
+    "head": "8d3b164e5a45c1a13e7294beb2b09bb4197a3459",
+    "run": 40982531498,
+    "all_nine_completed_jobs_tests": "passed",
+    "frontend_seconds": 289,
+    "frontend_reserve_seconds": 11,
+    "required_reserve_seconds": 30,
+    "frontend_step_seconds": {
+      "build": 25,
+      "Vitest": 128,
+      "slice8": 40,
+      "slice4": 58,
+      "slice9": 24
+    },
+    "action": "cancel remaining backend work; preserve measured failure; no merge"
+  }
 }
