@@ -8427,3 +8427,43 @@ readiness **0 ready / 9 partial / 4 waiting / 1 planned**, unchanged. After the
 corrective main is qualified, separately review bounded backup materialization
 and read-only restored-copy verification with independent destination/manifest
 pins. Genuine custody, appointments and legal approval remain separate gates.
+
+## Reviewed backup materialization and restored-copy verification — 2026-10-30
+
+Add an unregistered, separately reviewed ciphertext-copy service. Readiness
+acceptance alone cannot execute: bind a fresh backup/restore operation to exact
+readiness references, independently retained manifest/destination pins and a new
+independent decision. Keep encrypted operation controls in a fifth disjoint
+namespace under a separate key. Real disposable app sessions, CSRF, origin and
+firm-role checks protect all stages; execution cannot extend the prerequisite
+review window. Source records and all earlier reviews remain read-only.
+
+Consume a deterministic encrypted intent before exclusive, fsynced publication.
+Recheck source, destination prefix, actors and windows around every copied file.
+Retain incomplete attempts and withheld acknowledgements without overwriting,
+rollback, cleanup or automatic resume. Publish exact completion/version receipts
+only after complete verification. Restores require the retained backup's exact
+operation/decision/intent/completion references and new independent review; they
+preserve both histories and grant no implicit trust migration or activation.
+Read-only verification separates exact ciphertext from stale review/applicability;
+unknown completion references remain unknown and never recover acknowledgement.
+
+See the [materialization contract](REVIEWED_JOURNAL_MATERIALIZATION.md) and
+[source-bound native report](evidence/native-journal-materialization-2026-10-30.json).
+Ledger **268 → 269**. Qualify 36 frozen native outcomes in 36 fresh workers,
+including one actual SIGKILL after the first copied record, conservative restart
+reads and re-execution rejection. Preserve all 476 earlier native source pins
+and all prior evidence. Keep Docker opt-in. Reuse measured CI capacity by moving
+the unchanged lightweight 64-case readiness-context group to frontend capacity
+and keeping new copy tests in ARM review capacity. Preserve all 1,018 deployment
+identities exactly once, complete frontend discovery, ten jobs, workers, caps,
+bootstrap verification and fixed reserve floors. Require exact-head, guarded
+merge, independent-main and preservation receipts before qualification.
+
+Next: bounded read-only interruption/restart inventory and consumed-intent/
+completion reconciliation using independently retained references. Genuine key
+custody, operator appointments, live/private operational backup/restore,
+power-loss recovery, installation and the owner's legal review remain separate
+outstanding gates. Originals, exact evidence versions, confidentiality and review
+history remain intact. Checklist **42 done / 21 open / 24 waiting / 6 deferred**;
+readiness **0 ready / 9 partial / 4 waiting / 1 planned**, unchanged.

@@ -103,6 +103,18 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', graph)
         self.assertIn("timeout-minutes: 2", graph.split("name: Test registered local-model authority trials", 1)[1])
         self.assertLess(review.index("--plan-only"), review.index("name: Test complete backend review"))
+        contexts = re.search(r"  CI_BACKUP_CONTEXT_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(contexts.split(), ["backend/tests/test_journal_backup_readiness.py"])
+        self.assertEqual(workflow.count("backend/tests/test_journal_backup_readiness.py"), 1)
+        self.assertEqual(workflow.count("backend/tests/test_journal_materialization.py"), 1)
+        self.assertNotIn("backend/tests/test_journal_backup_readiness.py", final_group)
+        self.assertIn('"${backup_context_tests[@]}"', backend)
+        self.assertEqual(workflow.count("name: Test unchanged journal copy-context contracts"), 1)
+        frontend = blocks["frontend"]
+        self.assertLess(frontend.index("name: Test confidential human review"), frontend.index("name: Test unchanged journal copy-context"))
+        self.assertLess(frontend.index("name: Test unchanged journal copy-context"), frontend.index("--shard=8"))
+        self.assertIn("timeout-minutes: 1", frontend.split("name: Test unchanged journal copy-context", 1)[1])
+        self.assertIn('"${backup_context_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', frontend)
         self._bootstrap_rejections()
 
     def _bootstrap_rejections(self):
