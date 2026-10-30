@@ -45,6 +45,7 @@ env:
     backend/tests/test_final_authorization_postgres.py
     backend/tests/test_final_release_inspection.py
     backend/tests/test_source_reviews.py
+    backend/tests/test_planning_journal_reconciliation.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
   # Keep the heavier open-validity file in this graph group; the lighter complete
   # Graph B snapshot file uses the backend remainder. Measured file exchange,
@@ -67,7 +68,6 @@ env:
   # Sequential workers start only after both history workers have exited.
   # Rejected review/frontend layouts are retained; no caps or floors increase.
   CI_HISTORY_METADATA_TESTS: >-
-    backend/tests/test_planning_journal_reconciliation.py
     backend/tests/test_public_sources.py
   CI_RECEIPT_RETENTION_TESTS: >-
     backend/tests/test_private_inventory_receipts.py
@@ -601,7 +601,7 @@ jobs:
 
       # Complete metadata/public-source files leave the saturated backend;
       # reuse the same completed pair, with the existing one-minute ceiling.
-      - name: Test planning metadata and public source contracts
+      - name: Test complete public source contracts
         timeout-minutes: 1
         run: |
           read -r -a history_metadata_tests <<< "$CI_HISTORY_METADATA_TESTS"

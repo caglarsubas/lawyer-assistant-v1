@@ -89,7 +89,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(human_group.split(), ["backend/tests/test_analysis_cohorts.py"])
         self.assertEqual(workflow.count("backend/tests/test_authority_model_cohorts.py"), 1)
         history_group = re.search(r"  CI_HISTORY_METADATA_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(history_group.split(), ["backend/tests/test_planning_journal_reconciliation.py", "backend/tests/test_public_sources.py"])
+        self.assertEqual(history_group.split(), ["backend/tests/test_public_sources.py"])
         withdrawal_group = re.search(r"  CI_RETAINED_WITHDRAWAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_private_inventory_receipts.py", withdrawal_group)
         retention_group = re.search(r"  CI_RECEIPT_RETENTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
@@ -112,6 +112,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(review_block.index("--check-workflow-arrays"), review_block.index("name: Test complete backend review"))
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("backend/tests/test_source_reviews.py", release_group)
+        self.assertIn("backend/tests/test_planning_journal_reconciliation.py", release_group)
+        self.assertEqual(workflow.count("backend/tests/test_planning_journal_reconciliation.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
         for path in history_group.split():
             self.assertEqual(workflow.count(path), 1)
@@ -121,9 +123,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(history.index("name: Verify executed frontend shard"), history.index("name: Test verified history cohort partition"))
         self.assertIn("timeout-minutes: 1", history.split("name: Test verified history cohort partition", 1)[1])
         self.assertIn('"${history_metadata_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', graph)
-        self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("name: Test planning metadata"))
-        self.assertLess(graph.index("name: Test planning metadata"), graph.index("--shard=10"))
-        self.assertIn("timeout-minutes: 1", graph.split("name: Test planning metadata", 1)[1])
+        self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("name: Test complete public source"))
+        self.assertLess(graph.index("name: Test complete public source"), graph.index("--shard=10"))
+        self.assertIn("timeout-minutes: 1", graph.split("name: Test complete public source", 1)[1])
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
         candidate_group = re.search(r"  CI_GRAPH_CANDIDATE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]

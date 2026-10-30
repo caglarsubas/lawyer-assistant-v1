@@ -8615,3 +8615,10 @@ independent-main execution, coverage, timing and preservation evidence.
 
 Ledger **271 → 272**; milestone readiness and owner legal review remain pending.
 The next product slice is still read-only interruption/restart reconciliation.
+
+The same main run finished history in 283/300 seconds (17 seconds spare), while
+graph finished with only 31 seconds spare. Move the complete 49-case planning
+group from graph metadata to the final-release group, which retained 51 seconds
+on main and 55 on the PR. Public-source94 remains in graph metadata; final
+executes its original 89 plus planning49 (138 total). This preserves every
+assertion and frees measured graph reserve without increasing backend work.
