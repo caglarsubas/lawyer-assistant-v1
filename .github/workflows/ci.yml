@@ -182,6 +182,13 @@ jobs:
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
+      # Main run 41008676682 left PostgreSQL only 27s spare.
+      # Reuse the backend pair sequentially after its full suite exits.
+      - name: Test workspace permission and proposal contracts
+        timeout-minutes: 2
+        run: |
+          read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
       - name: Validate RDF and SHACL contract
         run: python scripts/validate_ontology.py
       - name: Compare actual synthetic extraction with independent reference
@@ -306,12 +313,6 @@ jobs:
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 
-      # The real PostgreSQL races have exited; keep workspace tests sequential.
-      - name: Test workspace permission and proposal contracts
-        timeout-minutes: 2
-        run: |
-          read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
 
   frontend:
     runs-on: ubuntu-latest

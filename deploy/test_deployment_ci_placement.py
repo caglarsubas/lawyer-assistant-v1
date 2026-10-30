@@ -54,11 +54,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         final = blocks["final-release-authorization"]
         self.assertNotIn("--shard=6", final)
         postgres = blocks["postgres-snapshot-concurrency"]
-        self.assertNotIn("name: Test workspace permission", backend)
+        self.assertIn("name: Test workspace permission", backend)
         self.assertNotIn("name: Test workspace permission", final)
-        self.assertIn('"${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', postgres)
-        self.assertIn("timeout-minutes: 2", postgres.split("name: Test workspace permission", 1)[1])
-        self.assertLess(postgres.index("name: Test real PostgreSQL review"), postgres.index("name: Test workspace permission"))
+        self.assertIn('"${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', backend)
+        self.assertIn("timeout-minutes: 2", backend.split("name: Test workspace permission", 1)[1])
+        self.assertNotIn("name: Test workspace permission", postgres)
+        self.assertLess(backend.index("name: Test backend"), backend.index("name: Test workspace permission"))
         self.assertEqual(workflow.count("name: Test workspace permission and proposal contracts"), 1)
         graph = blocks["graph-runtime-contracts"]
         self.assertNotIn("--shard=4", graph)
