@@ -8522,3 +8522,75 @@ Move the 18-case receipt-retention file from withdrawal into a separate sequenti
 PostgreSQL step after all real races exit. Workspace tests stay in sequential
 backend reserve. Keep all identities, assertions, caps, jobs and worker ceilings;
 no retries. Require fresh measured qualification of the complete final layout.
+
+
+## 271. Closed cohort identity partition and verified worker placement — 2026-10-30
+
+PR #253 preserved full coverage and passed its exact-head reserve gates. Retain
+its independent-main rejection: run 41012949613 passed review in 333/360 seconds,
+leaving 27 seconds against the fixed 30-second floor. Whole-file moves still
+allow four expensive cohort cases to cluster into a late worker tail.
+
+Freeze all 19 original authority-model cohort identities and their exact source
+hash. Keep 16 in review; execute one after existing database races and two in
+history capacity. Move the complete 18-case retention file into review capacity. Preserve the original test file and every test body/identity.
+Collection must match the complete inventory before selection; lane partitions
+must be disjoint and exhaustive. Put the two history cases in separate initial
+worker halves and verify each worker's final collection. Success receipts require
+every selected case to pass exactly once; missing, duplicate, skipped, stale or
+unrecognized cases fail closed. Aggregate all three receipts before merge.
+
+Add independent execution tests using invented cases and actual call markers,
+including skipped-case refusal and changed manifest/collection rejection. New
+CI-control tests are additive. Keep all 1,018 deployment identities once, all 139
+frontend files, ten jobs, original caps, two-worker ceilings and no retries.
+Neither native runtime source pins nor the 245 retained evidence reports change.
+
+Require fresh exact-head, guarded-merge, independent-main, coverage and private
+preservation receipts. Ledger **270 → 271**. This changes CI scheduling only:
+originals, evidence versions, credentials, review history and runtime remain
+unchanged. Broader milestone readiness and the owner's legal review stay pending.
+The next product slice remains bounded read-only interruption/restart inventory
+and consumed-intent/completion reconciliation; no repair, trust migration or
+production activation is authorized by this engineering qualification.
+
+The first partition head (41017932966) restored review reserve to 77 seconds but
+crossed the graph job's fixed reserve floor. Retain that rejection. Restore the
+graph job's original complete file group; execute only the bounded effort case
+after PostgreSQL races, and return the less expensive original-snapshot case to
+review. Retention uses review capacity, not the database job. Preserve the closed
+19-identity union (16 review / 1 database / 2 history), all original caps and every
+assertion; qualify this final layout afresh rather than retry the rejected head.
+
+The execution audit rejected head 6bf7007 (41019842509) despite ten successful
+jobs: the review step referenced its retention array without defining it in that
+step, so 18 cases were omitted. No merge occurred. Correct the step-local read;
+validate every array expansion against definitions in the same run block before
+costly suites, with a negative fixture reproducing this exact omission. Execute
+the actual review workflow block locally with its declared groups. Preserve the
+119-case review target and all earlier coverage gates; never lower expected counts
+to admit an incomplete run. Retain this rejected coverage observation explicitly.
+
+Retain the subsequent backend rejection (head 4d2ab11, run 41022701346):
+authenticated slice 3 took 96/120 seconds, and the job reached its original
+20-minute cap after all 4,067 backend and 49 workspace cases passed. A CI-only,
+source-bound overlay moves six measured identities from slice 3 into existing
+slices 1 (four) and 10 (two). Keep the frozen driver, native source pins and
+original deployment manifest unchanged; both child processes use the same overlay
+and unchanged exact-execution receipt checks. Reject changed source/counts,
+missing/duplicate identities, undeclared destinations and exceeded measured
+worker increments. All 1,018 identities remain disjoint and exhaustive.
+
+Move the complete 49-case workspace group into the history job's existing
+one-minute metadata step, alongside its two declared cohort cases. Move the
+complete 49-case planning and 94-case public-source groups into a sequential
+one-minute graph step. Remove those public-source cases from the backend
+remainder; retain every body and assertion exactly once. No job, worker, deadline
+or reserve floor increases. Qualification must verify actual group executions,
+all frontend/deployment receipts and the unchanged private-runtime state.
+
+The replacement run 41027418096 passed all 5,233 history frontend cases but
+rejected a CI placement-guard import: the script launcher exposes the scripts
+directory, not a top-level scripts package. Import the guard through that explicit
+directory and verify the same launcher search path locally. Preserve this failure;
+no skipped placement check, reduced inventory or retry of unchanged source.

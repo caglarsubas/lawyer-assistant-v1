@@ -58,8 +58,9 @@ env:
   # Complete expensive review files are disjoint from the backend remainder.
   # Retention qualification uses this job's measured 81-second main reserve;
   # keep its existing pair/cap and keep the backend remainder unchanged.
-  CI_BACKEND_REVIEW_TESTS: >-
+  CI_AUTHORITY_COHORT_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
+  CI_BACKEND_REVIEW_TESTS: >-
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_journal_materialization.py
   # Complete lighter files reuse measured native ARM history/withdrawal reserve.
@@ -67,6 +68,7 @@ env:
   # Rejected review/frontend layouts are retained; no caps or floors increase.
   CI_HISTORY_METADATA_TESTS: >-
     backend/tests/test_planning_journal_reconciliation.py
+    backend/tests/test_public_sources.py
   CI_RECEIPT_RETENTION_TESTS: >-
     backend/tests/test_private_inventory_receipts.py
   CI_BACKUP_CONTEXT_TESTS: >-
@@ -85,7 +87,7 @@ env:
 jobs:
   backend-and-contracts:
     # Standard native ARM executor; the frontend job retains x86 coverage below.
-    # The complete 19-case model-cohort file returns to this existing remainder.
+    # Cohort, metadata and workspace work uses disjoint existing ARM reserves.
     # Keep the same two pytest workers and the existing test/job deadlines.
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 20
@@ -135,7 +137,7 @@ jobs:
       # concurrent worker or longer job/test deadline.
       - name: Test manifest-bound authenticated qualification
         timeout-minutes: 2
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=3 --workers=2 --report=${{ runner.temp }}/deployment-reader-results.json
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_budgeted_deployment.py --shard=3 --workers=2 --report=${{ runner.temp }}/deployment-reader-results.json
       # Reuse the backend pair sequentially; every former step keeps its cap.
       - name: Test manifest-bound reader lifecycle slice 5
         timeout-minutes: 1
@@ -179,18 +181,12 @@ jobs:
           read -r -a backup_context_tests <<< "$CI_BACKUP_CONTEXT_TESTS"
           read -r -a history_metadata_tests <<< "$CI_HISTORY_METADATA_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
+          read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           ignore_args=()
-          for path in "${runtime_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${workspace_tests[@]}" "${human_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${backup_context_tests[@]}" "${history_metadata_tests[@]}" "${receipt_retention_tests[@]}"; do
+          for path in "${runtime_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${workspace_tests[@]}" "${human_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${backup_context_tests[@]}" "${history_metadata_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
-      # Main run 41008676682 left PostgreSQL only 27s spare.
-      # Reuse the backend pair sequentially after its full suite exits.
-      - name: Test workspace permission and proposal contracts
-        timeout-minutes: 2
-        run: |
-          read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
       - name: Validate RDF and SHACL contract
         run: python scripts/validate_ontology.py
       - name: Compare actual synthetic extraction with independent reference
@@ -239,12 +235,16 @@ jobs:
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Validate closed deployment inventory and measured budgets
-        run: backend/.venv/bin/python scripts/run_ci_deployment_shard.py --plan-only
+        run: |
+          backend/.venv/bin/python scripts/run_ci_budgeted_deployment.py --plan-only
+          backend/.venv/bin/python scripts/ci_authority_cohorts.py --check-workflow-arrays
       - name: Test complete backend review and cohort files
         timeout-minutes: 5
         run: |
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
+          read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${authority_cohort_tests[@]}" "${receipt_retention_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 
       # Reuse ARM review capacity after its full file group exits.
       - name: Test unchanged journal copy-context contracts
@@ -257,7 +257,7 @@ jobs:
       # Reuse the same pair after review tests; no overlap with the x86 UI.
       - name: Test complete manifest-bound assignment 1
         timeout-minutes: 3
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=1 --workers=2 --report=${{ runner.temp }}/deployment-review-results.json
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_budgeted_deployment.py --shard=1 --workers=2 --report=${{ runner.temp }}/deployment-review-results.json
 
       # Complete slice 4 on qualified native ARM after the review workers exit.
       # Its original one-minute cap and two-worker ceiling remain unchanged.
@@ -322,12 +322,12 @@ jobs:
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
-      # All real PostgreSQL workers exited; reuse the same pair for retention.
-      - name: Test complete private receipt retention file
+      # A single source-bound cohort case reuses exited database-worker capacity.
+      - name: Test closed authority cohort partition
         timeout-minutes: 1
         run: |
-          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${receipt_retention_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
+          read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
 
 
   frontend:
@@ -428,11 +428,12 @@ jobs:
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
       # The two history workers have fully exited; reuse the same pair.
-      - name: Test complete planning metadata file
+      - name: Test workspace contracts and verified cohort partition
         timeout-minutes: 1
         run: |
-          read -r -a history_metadata_tests <<< "$CI_HISTORY_METADATA_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${history_metadata_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
+          read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
+          read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=history "${authority_cohort_tests[@]}" "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
 
 
   final-release-authorization:
@@ -591,7 +592,15 @@ jobs:
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${graph_runtime_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 
+      # Complete metadata/public-source files leave the saturated backend;
+      # reuse the same completed pair, with the existing one-minute ceiling.
+      - name: Test planning metadata and public source contracts
+        timeout-minutes: 1
+        run: |
+          read -r -a history_metadata_tests <<< "$CI_HISTORY_METADATA_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${history_metadata_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
+
       # Reuse completed graph-worker capacity for the unchanged history tail.
       - name: Test manifest-bound review headroom slice 10
         timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=10 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-10.json
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_budgeted_deployment.py --shard=10 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-10.json
