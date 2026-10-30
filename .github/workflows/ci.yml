@@ -12,8 +12,6 @@ concurrency:
 env:
   CI_RUNTIME_AUTHORIZATION_TESTS: >-
     backend/tests/test_runtime_authorization_integration.py
-  CI_DATABASE_CONTEXT_TESTS: >-
-    backend/tests/test_analysis_feedback.py
   CI_BACKEND_CAPACITY_TESTS: >-
     backend/tests/test_journal_backup_readiness.py
     backend/tests/test_retained_release_inspection.py
@@ -27,6 +25,7 @@ env:
   # Preserve full x86 coverage; measured model-cohort work stays on ARM.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_analysis_cohorts.py
+    backend/tests/test_analysis_feedback.py
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_authority_proposals.py
@@ -47,6 +46,7 @@ env:
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
     backend/tests/test_source_reviews.py
+    backend/tests/test_public_sources.py
     backend/tests/test_planning_journal_reconciliation.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
   # Keep the heavier open-validity file in this graph group; the lighter complete
@@ -69,8 +69,6 @@ env:
   # Complete lighter files reuse measured native ARM history/withdrawal reserve.
   # Sequential workers start only after both history workers have exited.
   # Rejected review/frontend layouts are retained; no caps or floors increase.
-  CI_PUBLIC_SOURCE_TESTS: >-
-    backend/tests/test_public_sources.py
   CI_RECEIPT_RETENTION_TESTS: >-
     backend/tests/test_private_inventory_receipts.py
   CI_REVIEW_INSPECTION_TESTS: >-
@@ -170,7 +168,6 @@ jobs:
         timeout-minutes: 18
         run: |
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
-          read -r -a database_context_tests <<< "$CI_DATABASE_CONTEXT_TESTS"
           read -r -a capacity_tests <<< "$CI_BACKEND_CAPACITY_TESTS"
           read -r -a preflight_tests <<< "$CI_ONTOLOGY_PREFLIGHT_TESTS"
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
@@ -182,11 +179,10 @@ jobs:
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
           read -r -a review_inspection_tests <<< "$CI_REVIEW_INSPECTION_TESTS"
-          read -r -a public_source_tests <<< "$CI_PUBLIC_SOURCE_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           ignore_args=()
-          for path in "${runtime_tests[@]}" "${database_context_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${review_inspection_tests[@]}" "${public_source_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${review_inspection_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
@@ -337,8 +333,7 @@ jobs:
         timeout-minutes: 1
         run: |
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
-          read -r -a database_context_tests <<< "$CI_DATABASE_CONTEXT_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${database_context_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
 
 
   frontend:
@@ -595,8 +590,7 @@ jobs:
         timeout-minutes: 2
         run: |
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
-          read -r -a public_source_tests <<< "$CI_PUBLIC_SOURCE_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" "${public_source_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
       - name: Test complete graph assembly, grants and runtime authorization
         timeout-minutes: 6
         run: |

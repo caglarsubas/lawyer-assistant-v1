@@ -8649,9 +8649,11 @@ PR backend had 150 seconds spare; removing feedback50 had preserved that capacit
 
 Withdrawal retains withdrawal8/proposals30 (**38**); publication returns to **230**;
 candidate retains **198**. Move final-inspection8 into the existing one-minute
-review inspection step; final retains **130**. Public-source94 joins model20
-(**114**) under the original two-minute graph-model cap. Preserve review119,
-database95 plus context/cohort51, history/cohort2, all 1,018 deployment identities
+review inspection step; final retains **130**. Public-source94 joins final130 (**224** total); model20 remains unchanged.
+Feedback50 joins the existing frontend human-review32 step (**82** total).
+The same main run left database only 23 seconds spare with feedback included;
+return database to its original 95 plus cohort1. Preserve review119 and its
+inspection8 step, history/cohort2, all 1,018 deployment identities
 and all 139 frontend files/10,532 cases. The backend remainder stays **3,936**.
 
 Keep ten jobs, two-worker ceilings, original caps and all reserve floors. Require

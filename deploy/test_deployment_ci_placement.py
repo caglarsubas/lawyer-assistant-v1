@@ -82,10 +82,9 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertIn('"${authority_cohort_tests[@]}"', blocks[job])
         self.assertEqual(workflow.count("-p scripts.ci_authority_cohorts"), 3)
         human_group = re.search(r"  CI_HUMAN_REVIEW_GROUP_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(human_group.split(), ["backend/tests/test_analysis_cohorts.py"])
+        self.assertEqual(human_group.split(), ["backend/tests/test_analysis_cohorts.py", "backend/tests/test_analysis_feedback.py"])
         self.assertEqual(workflow.count("backend/tests/test_authority_model_cohorts.py"), 1)
-        history_group = re.search(r"  CI_PUBLIC_SOURCE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(history_group.split(), ["backend/tests/test_public_sources.py"])
+        history_group = ["backend/tests/test_public_sources.py"]
         withdrawal_group = re.search(r"  CI_RETAINED_WITHDRAWAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_private_inventory_receipts.py", withdrawal_group)
         self.assertIn("backend/tests/test_authority_proposals.py", withdrawal_group)
@@ -115,24 +114,17 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(review_block.index("--check-workflow-arrays"), review_block.index("name: Test complete backend review"))
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("backend/tests/test_source_reviews.py", release_group)
+        self.assertIn("backend/tests/test_public_sources.py", release_group)
         self.assertIn("backend/tests/test_planning_journal_reconciliation.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_planning_journal_reconciliation.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
-        for path in history_group.split():
+        for path in history_group:
             self.assertEqual(workflow.count(path), 1)
             self.assertNotIn(path, final_group)
-        self.assertIn('"${public_source_tests[@]}"', backend)
-        history = blocks["frontend-history"]
-        self.assertLess(history.index("name: Verify executed frontend shard"), history.index("name: Test verified history cohort partition"))
-        self.assertIn("timeout-minutes: 1", history.split("name: Test verified history cohort partition", 1)[1])
-        self.assertIn('"${review_inspection_tests[@]}" -q -n 2', blocks["backend-review-contracts"])
-        self.assertIn('"${public_source_tests[@]}"', graph)
-        self.assertNotIn('"${public_source_tests[@]}"', blocks["backend-review-contracts"])
-        database_group = re.search(r"  CI_DATABASE_CONTEXT_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(database_group.split(), ["backend/tests/test_analysis_feedback.py"])
+        self.assertNotIn("CI_DATABASE_CONTEXT_TESTS", workflow)
+        self.assertNotIn("CI_PUBLIC_SOURCE_TESTS", workflow)
         self.assertEqual(workflow.count("backend/tests/test_analysis_feedback.py"), 1)
-        self.assertIn('"${database_context_tests[@]}"', backend)
-        self.assertIn('--authority-cohort-lane=database "${authority_cohort_tests[@]}" "${database_context_tests[@]}"', postgres)
+        self.assertIn("backend/tests/test_analysis_feedback.py", human_group)
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
         candidate_group = re.search(r"  CI_GRAPH_CANDIDATE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
@@ -160,7 +152,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("timeout-minutes: 1", blocks["frontend"].split("name: Test manifest-bound review headroom slice 9", 1)[1])
         self.assertNotIn("name: Test registered local-model authority trials", backend)
         self.assertEqual(workflow.count("name: Test registered local-model authority trials"), 1)
-        self.assertIn('"${model_trial_tests[@]}" "${public_source_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', graph)
+        self.assertIn('"${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', graph)
         self.assertIn("timeout-minutes: 2", graph.split("name: Test registered local-model authority trials", 1)[1])
         self.assertLess(review.index("--plan-only"), review.index("name: Test complete backend review"))
         contexts = re.search(r"  CI_REVIEW_INSPECTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
