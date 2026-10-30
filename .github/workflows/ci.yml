@@ -62,6 +62,7 @@ env:
     backend/tests/test_source_reviews.py
     backend/tests/test_private_inventory_receipts.py
     backend/tests/test_planning_journal_reconciliation.py
+    backend/tests/test_journal_backup_readiness.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py
@@ -133,15 +134,6 @@ jobs:
       - name: Test manifest-bound reader namespace slice
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=7 --workers=2 --report=${{ runner.temp }}/deployment-namespace-results.json
-      # Reuse measured backend reserve before the unchanged full-suite step.
-      - name: Test manifest-bound reader lifecycle slice 4
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=4 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-4.json
-
-      - name: Test manifest-bound review headroom slice 9
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json
-
       - name: Record nonsecret test runtime characteristics
         run: |
           python - <<'PY'
@@ -356,6 +348,16 @@ jobs:
       - name: Test manifest-bound review headroom slice 8
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=8 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-8.json
+      # Restore backend reserve using measured x86 capacity after its workers exit.
+      # Keep both complete slices once, sequentially, with their original caps.
+      - name: Test manifest-bound reader lifecycle slice 4
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=4 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-4.json
+
+      - name: Test manifest-bound review headroom slice 9
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json
+
 
   frontend-history:
     # Growing history contracts exceeded the single frontend lane's reserve.

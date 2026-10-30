@@ -1,0 +1,33 @@
+{
+  "schema": "journal-backup-readiness-ci-placement-v1",
+  "baseline_commit": "6da39b3b5b977606917866252b3065e19a690a2a",
+  "baseline_main_run": 40833727719,
+  "baseline_job_seconds": {
+    "backend-and-contracts": 1170,
+    "frontend": 167
+  },
+  "backend_cap_seconds": 1200,
+  "frontend_cap_seconds": 300,
+  "required_job_reserve_seconds": 30,
+  "baseline_backend_reserve_seconds": 30,
+  "moved_unchanged_slices": [
+    4,
+    9
+  ],
+  "measured_slice_seconds_on_baseline_arm": {
+    "4": 55,
+    "9": 23
+  },
+  "destination": "frontend after its existing workers exit",
+  "coverage": "all 1018 deployment identities once; complete frontend remains",
+  "unchanged": [
+    "ten jobs",
+    "job and step caps",
+    "at most two workers",
+    "no automatic retries",
+    "checksum-verified bootstrap",
+    "fixed reserve floors"
+  ],
+  "new_layout_qualification": "requires fresh exact-head and independent-main receipts; estimates do not qualify CI",
+  "billing": "runner time proxy only; invoiced cost not measured"
+}

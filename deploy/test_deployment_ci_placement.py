@@ -20,7 +20,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn(command, blocks["backend-and-contracts"])
         self.assertEqual(workflow.count("scripts/run_ci_deployment_shard.py"), 11)
         self.assertIn("scripts/run_ci_deployment_shard.py --shard=3", blocks["backend-and-contracts"])
-        for name, lane in (("backend-and-contracts", 4), ("backend-and-contracts", 5), ("backend-and-contracts", 6)):
+        for name, lane in (("frontend", 4), ("backend-and-contracts", 5), ("backend-and-contracts", 6)):
             self.assertIn("scripts/run_ci_deployment_shard.py --shard=" + str(lane), blocks[name])
         self.assertLess(blocks["backend-and-contracts"].index("--shard=3"), blocks["backend-and-contracts"].index("name: Test backend"))
         self.assertIn("--shard=8 --workers=2", blocks["frontend"])
@@ -50,7 +50,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         for name in ("graph-candidate-contracts", "retained-release-withdrawal", "postgres-snapshot-concurrency"):
             self.assertNotIn("scripts/run_ci_deployment_shard.py", blocks[name])
         stages = re.findall(r"      - name: Test manifest-bound [^\n]+\n        timeout-minutes: (\d+)\n        run: [^\n]+--shard=(\d+)[^\n]+", backend)
-        self.assertEqual(stages, [("2", "3"), ("1", "5"), ("1", "6"), ("1", "7"), ("1", "4"), ("1", "9")])
+        self.assertEqual(stages, [("2", "3"), ("1", "5"), ("1", "6"), ("1", "7")])
         final = blocks["final-release-authorization"]
         self.assertNotIn("--shard=6", final)
         postgres = blocks["postgres-snapshot-concurrency"]
@@ -62,10 +62,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("name: Test workspace permission and proposal contracts"), 1)
         graph = blocks["graph-runtime-contracts"]
         self.assertNotIn("--shard=4", graph)
-        self.assertIn("--shard=4 --workers=2", backend)
-        self.assertLess(backend.index("--shard=7"), backend.index("--shard=4"))
-        self.assertLess(backend.index("--shard=4"), backend.index("name: Test backend"))
-        self.assertIn("timeout-minutes: 1", backend.split("name: Test manifest-bound reader lifecycle slice 4", 1)[1])
+        self.assertIn("--shard=4 --workers=2", blocks["frontend"])
+        self.assertNotIn("--shard=4", backend)
+        self.assertLess(blocks["frontend"].index("--shard=8"), blocks["frontend"].index("--shard=4"))
+        self.assertIn("timeout-minutes: 1", blocks["frontend"].split("name: Test manifest-bound reader lifecycle slice 4", 1)[1])
         group = re.search(r"  CI_GRAPH_RUNTIME_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(group.count("backend/tests/test_open_validity_publication.py"), 1)
         self.assertNotIn("backend/tests/test_graph_b_snapshot.py", group)
@@ -84,7 +84,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("name: Test confidential human review groups", blocks["frontend"])
         self.assertIn("timeout-minutes: 1", blocks["frontend"].split("name: Test manifest-bound review headroom slice 8", 1)[1])
         self.assertNotIn("--shard=10", blocks["frontend-history"])
-        self.assertNotIn("--shard=4", blocks["frontend"])
+        self.assertNotIn("--shard=4", backend)
         self.assertNotIn("--shard=10", blocks["frontend"])
         self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("--shard=10"))
         self.assertIn("--shard=10 --workers=2", graph)
@@ -94,10 +94,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh"), 10)
         self.assertEqual(workflow.count("UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s \"$uv_path\" sync --project backend --frozen --extra dev"), 10)
         self.assertNotIn("--shard=9", blocks["frontend-history"])
-        self.assertIn("--shard=9 --workers=2", backend)
-        self.assertLess(backend.index("--shard=4"), backend.index("--shard=9"))
-        self.assertLess(backend.index("--shard=9"), backend.index("name: Test backend"))
-        self.assertIn("timeout-minutes: 1", backend.split("name: Test manifest-bound review headroom slice 9", 1)[1])
+        self.assertIn("--shard=9 --workers=2", blocks["frontend"])
+        self.assertLess(blocks["frontend"].index("--shard=4"), blocks["frontend"].index("--shard=9"))
+        self.assertNotIn("--shard=9", backend)
+        self.assertIn("timeout-minutes: 1", blocks["frontend"].split("name: Test manifest-bound review headroom slice 9", 1)[1])
         self.assertNotIn("name: Test registered local-model authority trials", backend)
         self.assertEqual(workflow.count("name: Test registered local-model authority trials"), 1)
         self.assertIn('"${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', graph)
