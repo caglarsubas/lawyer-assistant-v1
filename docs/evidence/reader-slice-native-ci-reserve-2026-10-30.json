@@ -1,0 +1,37 @@
+{
+  "schema": "reader-slice-native-ci-reserve-v1",
+  "failed_main_source": "e4d06728e9532d81ff9821c8738b7068a873325f",
+  "failed_main_run": 40986621915,
+  "failed_job": "frontend",
+  "failed_job_id": 123839039706,
+  "failed_step": "Test manifest-bound reader lifecycle slice 4",
+  "unchanged_step_cap_seconds": 60,
+  "observed_complete_slice_count": 23,
+  "complete_manifest_count": 1018,
+  "observed_result": "all 23 test counters emitted, then the action timed out; no full-process qualification",
+  "remaining_work": "cancellation requested after failure; no retry or deadline increase",
+  "earlier_ARM_slice4_step_seconds": [
+    51,
+    55
+  ],
+  "corrective_layout": {
+    "backend": "single build and slices 3,5,6,7; unchanged full remainder",
+    "review": "complete 246-test review group, then assignment 1, then slice 4 on native ARM",
+    "frontend": "complete x86 frontend shard, then 32 human-review cases and shorter slices 8/9",
+    "other_jobs": "unchanged"
+  },
+  "preserved": [
+    "all 1018 deployment identities exactly once",
+    "complete 139 frontend files and 10532 cases",
+    "ten jobs",
+    "original worker ceilings",
+    "all original job and step caps",
+    "bootstrap checksum guards",
+    "fixed reserve floors",
+    "476 native source pins",
+    "prior qualification evidence"
+  ],
+  "new_qualification": "Require successful process exits, exact-head CI, guarded merge and independent-main CI; counters alone do not qualify",
+  "private_runtime_mutations": 0,
+  "legal_qualification": "not established; owner review pending"
+}
