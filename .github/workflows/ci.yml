@@ -23,6 +23,7 @@ env:
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_retained_release_inspection.py
+    backend/tests/test_authority_proposals.py
   CI_GRAPH_CANDIDATE_TESTS: >-
     backend/tests/test_final_release_transitions.py
     backend/tests/test_final_graph_candidate.py
@@ -31,9 +32,6 @@ env:
     backend/tests/test_native_receipt_http.py
     backend/tests/test_native_receipt_faults.py
     backend/tests/test_receipt_recovery_planning.py
-  CI_WORKSPACE_SECURITY_TESTS: >-
-    backend/tests/test_firm_admin.py
-    backend/tests/test_authority_proposals.py
   # Model-cohort cases remain in the full backend remainder. Running them
   # sequentially with x86 workspace/review groups left only 3s of job margin.
   # Keep every case, eight jobs, two workers, current caps and no retries.
@@ -74,6 +72,7 @@ env:
   CI_BACKUP_CONTEXT_TESTS: >-
     backend/tests/test_journal_backup_readiness.py
   CI_PUBLICATION_TESTS: >-
+    backend/tests/test_firm_admin.py
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py
     backend/tests/test_source_review_effort.py
@@ -173,7 +172,6 @@ jobs:
           read -r -a final_release_tests <<< "$CI_FINAL_RELEASE_TESTS"
           read -r -a retained_withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a graph_candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
-          read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
           read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
@@ -183,18 +181,10 @@ jobs:
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           ignore_args=()
-          for path in "${runtime_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${workspace_tests[@]}" "${human_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${backup_context_tests[@]}" "${history_metadata_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${runtime_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${backup_context_tests[@]}" "${history_metadata_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
-      # The closed overlay released 172 seconds on the qualified PR backend.
-      # Keep workspace work here, after the full suite, rather than the history
-      # job's variable DOM/deployment tail. Same pair and original two-minute cap.
-      - name: Test workspace permission and proposal contracts
-        timeout-minutes: 2
-        run: |
-          read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
       - name: Validate RDF and SHACL contract
         run: python scripts/validate_ontology.py
       - name: Compare actual synthetic extraction with independent reference

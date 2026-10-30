@@ -57,12 +57,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("--shard=6", final)
         postgres = blocks["postgres-snapshot-concurrency"]
         history = blocks["frontend-history"]
-        self.assertIn('"${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', backend)
-        self.assertIn("name: Test workspace permission", backend)
-        self.assertLess(backend.index("name: Test backend"), backend.index("name: Test workspace permission"))
-        self.assertIn("timeout-minutes: 2", backend.split("name: Test workspace permission", 1)[1])
-        self.assertNotIn("name: Test workspace permission", final)
-        self.assertNotIn("name: Test workspace permission", postgres)
+        self.assertNotIn("CI_WORKSPACE_SECURITY_TESTS", workflow)
+        self.assertNotIn("name: Test workspace permission", workflow)
         self.assertEqual(workflow.count("name: Test verified history cohort partition"), 1)
         graph = blocks["graph-runtime-contracts"]
         self.assertNotIn("--shard=4", graph)
@@ -92,6 +88,11 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(history_group.split(), ["backend/tests/test_public_sources.py"])
         withdrawal_group = re.search(r"  CI_RETAINED_WITHDRAWAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_private_inventory_receipts.py", withdrawal_group)
+        self.assertIn("backend/tests/test_authority_proposals.py", withdrawal_group)
+        publication_group = re.search(r"  CI_PUBLICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertIn("backend/tests/test_firm_admin.py", publication_group)
+        for path in ("backend/tests/test_firm_admin.py", "backend/tests/test_authority_proposals.py"):
+            self.assertEqual(workflow.count(path), 1)
         retention_group = re.search(r"  CI_RECEIPT_RETENTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(retention_group.split(), ["backend/tests/test_private_inventory_receipts.py"])
         self.assertIn('"${receipt_retention_tests[@]}"', backend)

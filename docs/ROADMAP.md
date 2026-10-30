@@ -8622,3 +8622,14 @@ group from graph metadata to the final-release group, which retained 51 seconds
 on main and 55 on the PR. Public-source94 remains in graph metadata; final
 executes its original 89 plus planning49 (138 total). This preserves every
 assertion and frees measured graph reserve without increasing backend work.
+
+The first PR #255 layout (run 41031287137) exhausted backend job reserve while
+executing workspace checks after the full suite. Retain that rejection. Replace
+the standalone workspace step with two complete, disjoint file placements:
+authority-proposals30 joins withdrawal15 (45 total), and firm-admin19 joins the
+publication group. The retained measured workspace costs were 29.96 worker-seconds
+for proposals and 12.14 for firm administration; destination reserves were 54 and
+51 seconds on this PR, and 48 and 54 on the prior main. Preserve the existing
+two-worker groups/caps, original source bodies and full backend complement.
+The previous whole-workspace return is superseded; qualify this revised source
+afresh, including exact original method identities and per-file execution counts.
