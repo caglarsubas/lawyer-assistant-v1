@@ -29,5 +29,9 @@
     "fixed reserve floors"
   ],
   "new_layout_qualification": "requires fresh exact-head and independent-main receipts; estimates do not qualify CI",
-  "billing": "runner time proxy only; invoiced cost not measured"
+  "billing": "runner time proxy only; invoiced cost not measured",
+  "superseded_head": "0c54b01380a8a57da45d2040afd665c54dff8309",
+  "superseded_run": 40981978937,
+  "supersession_reason": "Final inspection added explicit rejection of readiness-review reuse of the original receipt key; stop superseded CI and qualify the corrected source.",
+  "cancellation": "Requested through the authenticated GitHub run page before starting corrected CI; final cancellation receipt retained privately."
 }

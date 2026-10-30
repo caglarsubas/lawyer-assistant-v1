@@ -58,7 +58,7 @@ class JournalBackupReadiness:
         if (any(a == b or a in b.parents or b in a.parents for i, a in enumerate(roots) for b in roots[i + 1:])
                 or r.source is not p.journal or r.pins != self.source.binding.pins or r.authority is not p.authority
                 or (r.preparer, r.reviewer) != (p.preparer, p.reviewer)
-                or self.candidate.key != p.journal.key or self.candidate.key == r.journal.key
+                or self.candidate.key != p.journal.key or r.journal.key in {p.source.key, p.journal.key}
                 or self.candidate.context_id != t.context_id or t.context_id != r.pins.context_id
                 or self.candidate.scope_sha256 != t.scope_sha256 or t.scope_sha256 != r.pins.scope_sha256
                 or self.candidate.identity != t.store_identity or fingerprint(self.candidate.key) != t.key_fingerprint

@@ -342,3 +342,16 @@ def test_frozen_native_report_rejects_scope_or_outcome_inflation(fault):
         value["receipt_manifest_sha256"] = "f" * 64
     with pytest.raises(ValueError):
         validate(value, native["receipt_manifest_sha256"], native["controller_manifest_sha256"])
+
+
+def test_readiness_review_key_cannot_reuse_the_original_receipt_key(f):
+    from journal_backup_fixture import pins, reconciler
+    from receipt_recovery_planning import RecoveryPlanner
+
+    old = f.readiness.reviews.planner
+    reused = receipts.ReceiptStore(root=old.journal.root, context_id=old.journal.context_id,
+        scope_sha256=old.journal.scope_sha256, key=f.source_store.key)
+    planner = RecoveryPlanner(f.journal_store, reused, pins(f, f.journal_store), f.authority,
+        preparer_id=f.ids["preparer"], reviewer_id=f.ids["reviewer"], clock=lambda: f.now)
+    with pytest.raises(ValueError):
+        replace(f.readiness, reviews=reconciler(f, planner))

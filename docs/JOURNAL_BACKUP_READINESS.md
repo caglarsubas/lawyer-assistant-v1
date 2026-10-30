@@ -11,7 +11,8 @@ source, planning journal, candidate destination and readiness review journal.
 Pin every root identity, context, scope, key fingerprint, disposable account
 profile and assigned preparer/reviewer. The candidate's key must already match
 the independently pinned planning-journal key; no key is copied or provisioned
-by the service. Keep the readiness review key separate. Named paths, matching
+by the service. Keep the readiness review key separate from both original
+receipt and planning-journal keys. Named paths, matching
 ciphertext and possession of a key confer no destination trust.
 
 ## Observe, prepare, review, inspect

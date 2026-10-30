@@ -90,18 +90,18 @@
         "source_preparation_operations": 3,
         "readiness_API_attempts": 19,
         "controller_reads": 0,
-        "all_worker_exits_verified": true,
-        "readonly_source_and_candidates_exact": true,
         "prior_readiness_history_exact": true,
+        "readonly_source_and_candidates_exact": true,
         "new_target_independently_pinned": true,
+        "all_worker_exits_verified": true,
         "original_ciphertext_exact": true,
-        "actual_app_auth": true,
         "independent_review": true,
+        "actual_app_auth": true,
         "trust_migrated": false,
-        "acknowledgement_recovered": false,
         "production_activation": false,
         "restore_executed": false,
-        "backup_executed": false
+        "backup_executed": false,
+        "acknowledgement_recovered": false
       },
       {
         "mode": "existing_copy",
@@ -187,18 +187,18 @@
         "source_preparation_operations": 3,
         "readiness_API_attempts": 19,
         "controller_reads": 0,
-        "all_worker_exits_verified": true,
-        "readonly_source_and_candidates_exact": true,
         "prior_readiness_history_exact": true,
+        "readonly_source_and_candidates_exact": true,
         "new_target_independently_pinned": true,
+        "all_worker_exits_verified": true,
         "original_ciphertext_exact": true,
-        "actual_app_auth": true,
         "independent_review": true,
+        "actual_app_auth": true,
         "trust_migrated": false,
-        "acknowledgement_recovered": false,
         "production_activation": false,
         "restore_executed": false,
-        "backup_executed": false
+        "backup_executed": false,
+        "acknowledgement_recovered": false
       }
     ],
     "filesystem": "ext4",
@@ -510,7 +510,7 @@
     "scripts/joint_recovery_worker.py": "034f5d568481d6e659efcd2cf7371b0e471cc597ecad8f30204bbe1c12773f10",
     "scripts/journal_backup_fixture.py": "aacd91cf5102d22b388af308d0c799472950907a96ce2c164758dcfeb298bf92",
     "scripts/journal_backup_native.py": "8503362cef3ee7c8ba43bde7aaf08dff144655302c708f21b283d358c8e537bd",
-    "scripts/journal_backup_readiness.py": "ebe2d031d4aeb735e52a626d9bc6cb6c2537c045f9adec7c3a121bc5d2a0133a",
+    "scripts/journal_backup_readiness.py": "efc790c1c9459813d23ae2fdaed2805371e09b0767d68aed569c953e490b5348",
     "scripts/journal_backup_report.py": "a33e6720ff93f8237612cbdd04583ca2c5d04ef875039736aec7192bddf9b5de",
     "scripts/journal_backup_worker.py": "7a998ed3431cd2a6dc366aa76ab73854dbb041d55a8dcff5f33376dac02b0a33",
     "scripts/journal_recovery.py": "d991e46ba959cd4c12d7e00b61ae0cab2a35d010f22d038bc385a0c595492a2b",
@@ -690,7 +690,7 @@
     "scripts/withdrawal_history_service.py": "b8ad44903c3cec50c9d55f77ed7fe5c3c8057b09a862d66007eac16694fb9aab"
   },
   "base_dependency_image": "sha256:7a67b0bf06799c403b9a7b5363faeb85f14fca0d6836eb167d13acc086c224d2",
-  "qualification_image": "sha256:3f4763ae0ca50fc98a0efd939fb33d282a25d6de63bc9e015edfb495b7d16a3a",
+  "qualification_image": "sha256:da497406e37cdb07fc4bcb652ec0c49232b7b5925d9105d109f9ce76c518e559",
   "posture": [
     {
       "no_network": true,
