@@ -8522,3 +8522,34 @@ Move the 18-case receipt-retention file from withdrawal into a separate sequenti
 PostgreSQL step after all real races exit. Workspace tests stay in sequential
 backend reserve. Keep all identities, assertions, caps, jobs and worker ceilings;
 no retries. Require fresh measured qualification of the complete final layout.
+
+
+## 271. Closed cohort identity partition and verified worker placement — 2026-10-30
+
+PR #253 preserved full coverage and passed its exact-head reserve gates. Retain
+its independent-main rejection: run 41012949613 passed review in 333/360 seconds,
+leaving 27 seconds against the fixed 30-second floor. Whole-file moves still
+allow four expensive cohort cases to cluster into a late worker tail.
+
+Freeze all 19 original authority-model cohort identities and their exact source
+hash. Keep 15 in review; execute two in existing graph capacity and two in existing
+history capacity. Preserve the original test file and every test body/identity.
+Collection must match the complete inventory before selection; lane partitions
+must be disjoint and exhaustive. Put the two relocated cases in separate initial
+worker halves and verify each worker's final collection. Success receipts require
+every selected case to pass exactly once; missing, duplicate, skipped, stale or
+unrecognized cases fail closed. Aggregate all three receipts before merge.
+
+Add independent execution tests using invented cases and actual call markers,
+including skipped-case refusal and changed manifest/collection rejection. New
+CI-control tests are additive. Keep all 1,018 deployment identities once, all 139
+frontend files, ten jobs, original caps, two-worker ceilings and no retries.
+Neither native runtime source pins nor the 245 retained evidence reports change.
+
+Require fresh exact-head, guarded-merge, independent-main, coverage and private
+preservation receipts. Ledger **270 → 271**. This changes CI scheduling only:
+originals, evidence versions, credentials, review history and runtime remain
+unchanged. Broader milestone readiness and the owner's legal review stay pending.
+The next product slice remains bounded read-only interruption/restart inventory
+and consumed-intent/completion reconciliation; no repair, trust migration or
+production activation is authorized by this engineering qualification.

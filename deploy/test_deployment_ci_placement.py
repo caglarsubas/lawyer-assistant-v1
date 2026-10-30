@@ -74,7 +74,14 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${graph_runtime_tests[@]}"', blocks["backend-and-contracts"])
         final_group = re.search(r"  CI_BACKEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_set_publication_cli.py", final_group)
-        self.assertIn("backend/tests/test_authority_model_cohorts.py", final_group)
+        self.assertNotIn("backend/tests/test_authority_model_cohorts.py", final_group)
+        cohort_group = re.search(r"  CI_AUTHORITY_COHORT_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(cohort_group.split(), ["backend/tests/test_authority_model_cohorts.py"])
+        self.assertIn('"${authority_cohort_tests[@]}"', backend)
+        for job, lane in (("backend-review-contracts", "review"), ("graph-runtime-contracts", "graph"), ("frontend-history", "history")):
+            self.assertEqual(blocks[job].count("-p scripts.ci_authority_cohorts --authority-cohort-lane=" + lane), 1)
+            self.assertIn('"${authority_cohort_tests[@]}"', blocks[job])
+        self.assertEqual(workflow.count("-p scripts.ci_authority_cohorts"), 3)
         human_group = re.search(r"  CI_HUMAN_REVIEW_GROUP_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(human_group.split(), ["backend/tests/test_analysis_cohorts.py"])
         self.assertEqual(workflow.count("backend/tests/test_authority_model_cohorts.py"), 1)
@@ -96,8 +103,8 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertNotIn(path, final_group)
         self.assertIn('"${history_metadata_tests[@]}"', backend)
         history = blocks["frontend-history"]
-        self.assertLess(history.index("name: Verify executed frontend shard"), history.index("name: Test complete planning metadata file"))
-        self.assertIn("timeout-minutes: 1", history.split("name: Test complete planning metadata file", 1)[1])
+        self.assertLess(history.index("name: Verify executed frontend shard"), history.index("name: Test planning metadata and verified cohort partition"))
+        self.assertIn("timeout-minutes: 1", history.split("name: Test planning metadata and verified cohort partition", 1)[1])
         self.assertIn('"${history_metadata_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', history)
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
