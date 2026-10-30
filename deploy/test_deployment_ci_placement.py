@@ -57,11 +57,13 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("--shard=6", final)
         postgres = blocks["postgres-snapshot-concurrency"]
         history = blocks["frontend-history"]
-        self.assertIn('"${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', history)
-        self.assertNotIn("name: Test workspace permission", backend)
+        self.assertIn('"${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', backend)
+        self.assertIn("name: Test workspace permission", backend)
+        self.assertLess(backend.index("name: Test backend"), backend.index("name: Test workspace permission"))
+        self.assertIn("timeout-minutes: 2", backend.split("name: Test workspace permission", 1)[1])
         self.assertNotIn("name: Test workspace permission", final)
         self.assertNotIn("name: Test workspace permission", postgres)
-        self.assertEqual(workflow.count("name: Test workspace contracts and verified cohort partition"), 1)
+        self.assertEqual(workflow.count("name: Test verified history cohort partition"), 1)
         graph = blocks["graph-runtime-contracts"]
         self.assertNotIn("--shard=4", graph)
         self.assertIn("--shard=4 --workers=2", blocks["backend-review-contracts"])
@@ -116,8 +118,8 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertNotIn(path, final_group)
         self.assertIn('"${history_metadata_tests[@]}"', backend)
         history = blocks["frontend-history"]
-        self.assertLess(history.index("name: Verify executed frontend shard"), history.index("name: Test workspace contracts and verified cohort partition"))
-        self.assertIn("timeout-minutes: 1", history.split("name: Test workspace contracts and verified cohort partition", 1)[1])
+        self.assertLess(history.index("name: Verify executed frontend shard"), history.index("name: Test verified history cohort partition"))
+        self.assertIn("timeout-minutes: 1", history.split("name: Test verified history cohort partition", 1)[1])
         self.assertIn('"${history_metadata_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', graph)
         self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("name: Test planning metadata"))
         self.assertLess(graph.index("name: Test planning metadata"), graph.index("--shard=10"))

@@ -8594,3 +8594,24 @@ rejected a CI placement-guard import: the script launcher exposes the scripts
 directory, not a top-level scripts package. Import the guard through that explicit
 directory and verify the same launcher search path locally. Preserve this failure;
 no skipped placement check, reduced inventory or retry of unchanged source.
+
+
+## 272. History-tail reserve and retained backend capacity — 2026-10-30
+
+PR #254 passed all ten exact-head jobs, every deployment/frontend/cohort receipt
+and preservation checks. Its backend job used 1,028/1,200 seconds (172 seconds
+spare). Retain its independent-main history reserve rejection from run
+41030231776: history crossed the fixed 270-second work limit while completing
+workspace/cohort checks. Main qualification remains unestablished.
+
+Return all 49 unchanged workspace tests to the backend's sequential two-worker
+step after its full suite, under the original two-minute cap. History keeps its
+two declared cohort cases under the unchanged one-minute cap. Preserve all 1,018
+deployment methods, 139 frontend files, 19 cohort identities, complete planning
+and public-source groups, ten jobs, original caps and reserve floors. No retry
+of an unchanged layout, source pin or evidence-version change, operational
+backup, private data mutation or legal approval. Require fresh exact-head and
+independent-main execution, coverage, timing and preservation evidence.
+
+Ledger **271 → 272**; milestone readiness and owner legal review remain pending.
+The next product slice is still read-only interruption/restart reconciliation.

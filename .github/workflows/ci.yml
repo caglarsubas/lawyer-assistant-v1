@@ -187,6 +187,14 @@ jobs:
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
+      # The closed overlay released 172 seconds on the qualified PR backend.
+      # Keep workspace work here, after the full suite, rather than the history
+      # job's variable DOM/deployment tail. Same pair and original two-minute cap.
+      - name: Test workspace permission and proposal contracts
+        timeout-minutes: 2
+        run: |
+          read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
       - name: Validate RDF and SHACL contract
         run: python scripts/validate_ontology.py
       - name: Compare actual synthetic extraction with independent reference
@@ -428,12 +436,11 @@ jobs:
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
       # The two history workers have fully exited; reuse the same pair.
-      - name: Test workspace contracts and verified cohort partition
+      - name: Test verified history cohort partition
         timeout-minutes: 1
         run: |
-          read -r -a workspace_tests <<< "$CI_WORKSPACE_SECURITY_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=history "${authority_cohort_tests[@]}" "${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=history "${authority_cohort_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
 
 
   final-release-authorization:
