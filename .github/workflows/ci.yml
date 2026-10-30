@@ -177,7 +177,6 @@ jobs:
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
-          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a backup_context_tests <<< "$CI_BACKUP_CONTEXT_TESTS"
           read -r -a history_metadata_tests <<< "$CI_HISTORY_METADATA_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
@@ -242,11 +241,14 @@ jobs:
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Validate closed deployment inventory and measured budgets
-        run: backend/.venv/bin/python scripts/run_ci_deployment_shard.py --plan-only
+        run: |
+          backend/.venv/bin/python scripts/run_ci_deployment_shard.py --plan-only
+          backend/.venv/bin/python scripts/ci_authority_cohorts.py --check-workflow-arrays
       - name: Test complete backend review and cohort files
         timeout-minutes: 5
         run: |
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
+          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${authority_cohort_tests[@]}" "${receipt_retention_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 

@@ -8561,3 +8561,12 @@ after PostgreSQL races, and return the less expensive original-snapshot case to
 review. Retention uses review capacity, not the database job. Preserve the closed
 19-identity union (16 review / 1 database / 2 history), all original caps and every
 assertion; qualify this final layout afresh rather than retry the rejected head.
+
+The execution audit rejected head 6bf7007 (41019842509) despite ten successful
+jobs: the review step referenced its retention array without defining it in that
+step, so 18 cases were omitted. No merge occurred. Correct the step-local read;
+validate every array expansion against definitions in the same run block before
+costly suites, with a negative fixture reproducing this exact omission. Execute
+the actual review workflow block locally with its declared groups. Preserve the
+119-case review target and all earlier coverage gates; never lower expected counts
+to admit an incomplete run. Retain this rejected coverage observation explicitly.

@@ -2,6 +2,8 @@
 
 import hashlib
 import json
+import re
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -12,6 +14,23 @@ SOURCE = ROOT / "backend/tests/test_authority_model_cohorts.py"
 MANIFEST = ROOT / "deploy/fixtures/authority_cohort_partition.json"
 PREFIX = "tests/test_authority_model_cohorts.py::"
 COUNTS = {"review": 16, "database": 1, "history": 2}
+
+
+def validate_workflow_arrays(text):
+    """Shell arrays do not persist between Actions steps; reject silent omissions."""
+    lines = text.splitlines()
+    for index, line in enumerate(lines):
+        if line != "        run: |":
+            continue
+        defined = set()
+        for command in lines[index + 1:]:
+            if command.strip() and not command.startswith("          "):
+                break
+            for name in re.findall(r"\$\{(\w+)\[@\]\}", command):
+                if name not in defined:
+                    raise ValueError(f"Array {name} expanded without a definition in the same run block")
+            defined.update(re.findall(r"read -r -a (\w+)", command))
+            defined.update(re.findall(r"^\s*(\w+)=\(", command))
 
 
 @dataclass(frozen=True)
@@ -138,3 +157,10 @@ def pytest_configure(config):
         config.pluginmanager.register(Partition(load_contract(), lane), "closed-authority-cohort-partition")
     except (ValueError, OSError, KeyError, TypeError):
         raise pytest.UsageError("Closed authority cohort source, inventory and lane required") from None
+
+
+if __name__ == "__main__":
+    if sys.argv[1:] != ["--check-workflow-arrays"]:
+        raise SystemExit("Explicit workflow array check required")
+    validate_workflow_arrays((ROOT / ".github/workflows/ci.yml").read_text())
+    print(json.dumps({"ci_step_array_bindings": "verified"}))

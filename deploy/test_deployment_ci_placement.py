@@ -97,6 +97,15 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("timeout-minutes: 1", postgres.split("name: Test closed authority cohort partition", 1)[1])
         self.assertNotIn("-p scripts.ci_authority_cohorts", graph)
         self.assertIn('"${receipt_retention_tests[@]}"', blocks["backend-review-contracts"])
+        from scripts.ci_authority_cohorts import validate_workflow_arrays
+        validate_workflow_arrays(workflow)
+        review_block = blocks["backend-review-contracts"]
+        read_retention = '          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"\n'
+        self.assertEqual(review_block.count(read_retention), 1)
+        broken = workflow.replace(review_block, review_block.replace(read_retention, "", 1), 1)
+        with self.assertRaisesRegex(ValueError, "receipt_retention_tests"):
+            validate_workflow_arrays(broken)
+        self.assertLess(review_block.index("--check-workflow-arrays"), review_block.index("name: Test complete backend review"))
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("backend/tests/test_source_reviews.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
