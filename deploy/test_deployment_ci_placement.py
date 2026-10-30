@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -97,7 +98,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("timeout-minutes: 1", postgres.split("name: Test closed authority cohort partition", 1)[1])
         self.assertNotIn("-p scripts.ci_authority_cohorts", graph)
         self.assertIn('"${receipt_retention_tests[@]}"', blocks["backend-review-contracts"])
-        from scripts.ci_authority_cohorts import validate_workflow_arrays
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from ci_authority_cohorts import validate_workflow_arrays
         validate_workflow_arrays(workflow)
         review_block = blocks["backend-review-contracts"]
         read_retention = '          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"\n'

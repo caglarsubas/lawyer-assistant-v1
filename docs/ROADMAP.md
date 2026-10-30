@@ -8588,3 +8588,9 @@ one-minute graph step. Remove those public-source cases from the backend
 remainder; retain every body and assertion exactly once. No job, worker, deadline
 or reserve floor increases. Qualification must verify actual group executions,
 all frontend/deployment receipts and the unchanged private-runtime state.
+
+The replacement run 41027418096 passed all 5,233 history frontend cases but
+rejected a CI placement-guard import: the script launcher exposes the scripts
+directory, not a top-level scripts package. Import the guard through that explicit
+directory and verify the same launcher search path locally. Preserve this failure;
+no skipped placement check, reduced inventory or retry of unchanged source.
