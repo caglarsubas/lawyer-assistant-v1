@@ -8633,3 +8633,41 @@ alongside the reserve rejections.
 Ledger **271 → 272**. Milestone readiness and owner legal review remain pending.
 The next product slice remains bounded read-only interruption/restart inventory
 and consumed-intent/completion reconciliation with independently retained references.
+
+
+## 273. Larger measured reserve across every CI group — 2026-10-30
+
+PR #255 passed every exact-head execution and preservation gate, but its fresh
+main run 41036668422 finished withdrawal with 28 seconds spare, below the fixed
+30-second floor. Retain this rejection. Move complete files using retained
+worker costs rather than retry unchanged source or close the two-second gap alone.
+
+Use the existing sequential two-minute backend capacity step for four unchanged
+files: copy-context64, retained-inspection7, staged-adapter17 and firm-admin19
+(**107 cases**). Their retained costs total about 100 worker-seconds. The qualified
+PR backend had 150 seconds spare; removing feedback50 had preserved that capacity.
+
+Withdrawal retains withdrawal8/proposals30 (**38**); publication returns to **230**;
+candidate retains **198**. Move final-inspection8 into the existing one-minute
+review inspection step; final retains **130**. Public-source94 joins final130 (**224** total); model20 remains unchanged.
+Feedback50 joins the existing frontend human-review32 step (**82** total).
+The same main run left database only 23 seconds spare with feedback included;
+return database to its original 95 plus cohort1. Preserve review119 and its
+inspection8 step, history/cohort2, all 1,018 deployment identities
+and all 139 frontend files/10,532 cases. The backend remainder stays **3,936**.
+
+Keep ten jobs, two-worker ceilings, original caps and all reserve floors. Require
+fresh exact-head and independent-main per-file execution, coverage, timing and
+private-preservation receipts. Every original source body, evidence version and
+review history remains exact. No operational backup, private runtime mutation or
+legal approval is implied. Ledger **272 → 273**; owner review and broader
+milestone readiness remain pending. The next product slice remains read-only
+interruption/restart inventory and consumed-intent/completion reconciliation.
+
+The first PR #256 layout (run 41038306798) left review only 29 seconds spare.
+Its eight inspection cases contain one heavy case; a separate step serialized
+that work after the existing review pair. Put the unchanged inspection file first
+in the same two-worker review group (**127 cases**) and remove its standalone
+step. The long case starts early alongside other review work. Preserve all source
+bodies, caps, workers, identifiers and the rejected observation; qualify fresh
+actual execution/ordering receipts before merge.
