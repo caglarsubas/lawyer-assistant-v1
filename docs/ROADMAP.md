@@ -8720,3 +8720,9 @@ Move all 43 unchanged CI guards (12/13/18) into the existing frontend Python gro
 **3,911**. This preserves every case and source body; no new job, worker or longer
 cap. Candidate/frontend retained 50/89 seconds spare on this exact rejected head.
 Qualify the revised complete layout afresh, including exact per-file execution.
+
+Start the heavy retained-inspection file first within backend capacity90. Its
+single expensive case can overlap the lighter copy-context and firm checks;
+moving lightweight files alone must not leave that case as a delayed serial
+tail. Keep the original two-worker step/cap and enforce the declared ordering
+in the placement contract. No test body, evidence version or runtime changes.

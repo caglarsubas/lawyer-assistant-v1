@@ -13,8 +13,8 @@ env:
   CI_RUNTIME_AUTHORIZATION_TESTS: >-
     backend/tests/test_runtime_authorization_integration.py
   CI_BACKEND_CAPACITY_TESTS: >-
-    backend/tests/test_journal_backup_readiness.py
     backend/tests/test_retained_release_inspection.py
+    backend/tests/test_journal_backup_readiness.py
     backend/tests/test_firm_admin.py
   CI_AUTHORITY_MODEL_TESTS: >-
     backend/tests/test_authority_model_trials.py
