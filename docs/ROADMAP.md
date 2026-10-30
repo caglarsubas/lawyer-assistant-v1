@@ -8466,6 +8466,13 @@ remaining work and retain the rejection. Frontend used 200/300 seconds. Move
 the entire unchanged 19-case authority-model cohort file to its existing human
 review group, without duplicating or dropping tests. New copy tests remain on
 ARM. Qualify the corrected head and independent main with unchanged caps.
+The second layout (41005966345) left review 82 seconds spare, but frontend
+hit its unchanged five-minute cap: full x86 discovery took 132 seconds and the
+combined review group 101 seconds. Reject it and cancel remaining work. Return
+model cohorts to ARM review; move the complete 69-case source-review and 49-case
+planning metadata files to sequential ARM history capacity, after both existing
+workers exit. Move the complete 18-case receipt-retention file into the existing
+ARM withdrawal group. Retain all identities, no retries, and fresh qualification.
 
 Next: bounded read-only interruption/restart inventory and consumed-intent/
 completion reconciliation using independently retained references. Genuine key
