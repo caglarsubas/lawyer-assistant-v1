@@ -56,7 +56,6 @@ class DeploymentPlacementContract(unittest.TestCase):
         final = blocks["final-release-authorization"]
         self.assertNotIn("--shard=6", final)
         postgres = blocks["postgres-snapshot-concurrency"]
-        history = blocks["frontend-history"]
         self.assertNotIn("CI_WORKSPACE_SECURITY_TESTS", workflow)
         self.assertNotIn("name: Test workspace permission", workflow)
         self.assertEqual(workflow.count("name: Test verified history cohort partition"), 1)
