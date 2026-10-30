@@ -13,9 +13,8 @@ env:
   CI_RUNTIME_AUTHORIZATION_TESTS: >-
     backend/tests/test_runtime_authorization_integration.py
   CI_BACKEND_CAPACITY_TESTS: >-
-    backend/tests/test_journal_backup_readiness.py
     backend/tests/test_retained_release_inspection.py
-    backend/tests/test_staged_receipt_adapter.py
+    backend/tests/test_journal_backup_readiness.py
     backend/tests/test_firm_admin.py
   CI_AUTHORITY_MODEL_TESTS: >-
     backend/tests/test_authority_model_trials.py
@@ -26,12 +25,16 @@ env:
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_analysis_cohorts.py
     backend/tests/test_analysis_feedback.py
+    backend/tests/test_ci_authority_partition.py
+    backend/tests/test_ci_budgeted_deployment.py
+    backend/tests/test_ci_retained_history.py
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_authority_proposals.py
   CI_GRAPH_CANDIDATE_TESTS: >-
     backend/tests/test_final_release_transitions.py
     backend/tests/test_final_graph_candidate.py
+    backend/tests/test_staged_receipt_adapter.py
     backend/tests/test_native_receipt_stage.py
     backend/tests/test_native_receipt_http.py
     backend/tests/test_native_receipt_faults.py
@@ -137,7 +140,7 @@ jobs:
       # concurrent worker or longer job/test deadline.
       - name: Test manifest-bound authenticated qualification
         timeout-minutes: 2
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_budgeted_deployment.py --shard=3 --workers=2 --report=${{ runner.temp }}/deployment-reader-results.json
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_retained_deployment.py --shard=3 --workers=2 --report=${{ runner.temp }}/deployment-reader-results.json
       # Reuse the backend pair sequentially; every former step keeps its cap.
       - name: Test manifest-bound reader lifecycle slice 5
         timeout-minutes: 1
@@ -242,7 +245,7 @@ jobs:
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Validate closed deployment inventory and measured budgets
         run: |
-          backend/.venv/bin/python scripts/run_ci_budgeted_deployment.py --plan-only
+          backend/.venv/bin/python scripts/run_ci_retained_deployment.py --plan-only
           backend/.venv/bin/python scripts/ci_authority_cohorts.py --check-workflow-arrays
       - name: Test complete backend review and cohort files
         timeout-minutes: 5
@@ -421,7 +424,7 @@ jobs:
       # Both existing lanes retain two workers and all test IDs execute once.
       - name: Test history and deployment contracts within two workers
         run: |
-          python scripts/run_ci_history_workers.py \
+          python scripts/run_ci_retained_history_workers.py --executor python scripts/run_ci_history_workers.py \
             node node_modules/vitest/vitest.mjs run --pool=threads --maxWorkers=1 --shard=2/2 --reporter=default --reporter=json --outputFile=${{ runner.temp }}/frontend-results.json \
             ::: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=2 --report=${{ runner.temp }}/deployment-results.json
       - name: Verify executed frontend shard
@@ -593,4 +596,4 @@ jobs:
       # Reuse completed graph-worker capacity for the unchanged history tail.
       - name: Test manifest-bound review headroom slice 10
         timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_budgeted_deployment.py --shard=10 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-10.json
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_retained_deployment.py --shard=10 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-10.json

@@ -20,8 +20,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         blocks = dict(re.findall(r"^  ([a-z-]+):\n(.*?)(?=^  [a-z-]+:\n|\Z)", workflow.split("\njobs:\n", 1)[1], re.MULTILINE | re.DOTALL))
         self.assertNotIn(command, blocks["backend-and-contracts"])
         self.assertEqual(workflow.count("scripts/run_ci_deployment_shard.py"), 7)
-        self.assertEqual(workflow.count("scripts/run_ci_budgeted_deployment.py"), 4)
-        self.assertIn("scripts/run_ci_budgeted_deployment.py --shard=3", blocks["backend-and-contracts"])
+        self.assertEqual(workflow.count("scripts/run_ci_budgeted_deployment.py"), 1)
+        self.assertEqual(workflow.count("scripts/run_ci_retained_deployment.py"), 3)
+        self.assertIn("python scripts/run_ci_retained_history_workers.py --executor python scripts/run_ci_history_workers.py", blocks["frontend-history"])
+        self.assertIn("scripts/run_ci_retained_deployment.py --shard=3", blocks["backend-and-contracts"])
         for name, lane in (("backend-review-contracts", 4), ("backend-and-contracts", 5), ("backend-and-contracts", 6)):
             self.assertIn("scripts/run_ci_deployment_shard.py --shard=" + str(lane), blocks[name])
         self.assertLess(blocks["backend-and-contracts"].index("--shard=3"), blocks["backend-and-contracts"].index("name: Test backend"))
@@ -81,7 +83,7 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertIn('"${authority_cohort_tests[@]}"', blocks[job])
         self.assertEqual(workflow.count("-p scripts.ci_authority_cohorts"), 3)
         human_group = re.search(r"  CI_HUMAN_REVIEW_GROUP_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(human_group.split(), ["backend/tests/test_analysis_cohorts.py", "backend/tests/test_analysis_feedback.py"])
+        self.assertEqual(human_group.split(), ["backend/tests/test_analysis_cohorts.py", "backend/tests/test_analysis_feedback.py", "backend/tests/test_ci_authority_partition.py", "backend/tests/test_ci_budgeted_deployment.py", "backend/tests/test_ci_retained_history.py"])
         self.assertEqual(workflow.count("backend/tests/test_authority_model_cohorts.py"), 1)
         history_group = ["backend/tests/test_public_sources.py"]
         withdrawal_group = re.search(r"  CI_RETAINED_WITHDRAWAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
@@ -127,8 +129,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
         candidate_group = re.search(r"  CI_GRAPH_CANDIDATE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertNotIn("backend/tests/test_staged_receipt_adapter.py", candidate_group)
-        self.assertIn("backend/tests/test_staged_receipt_adapter.py", capacity_group)
+        self.assertIn("backend/tests/test_staged_receipt_adapter.py", candidate_group)
+        self.assertNotIn("backend/tests/test_staged_receipt_adapter.py", capacity_group)
         self.assertEqual(workflow.count("backend/tests/test_staged_receipt_adapter.py"), 1)
         review = blocks["backend-review-contracts"]
         self.assertLess(review.index("name: Test complete backend review"), review.index("name: Test complete manifest-bound assignment 1"))
@@ -168,7 +170,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("name: Test complete backend capacity group"), 1)
         self.assertIn("timeout-minutes: 2", backend.split("name: Test complete backend capacity group", 1)[1])
         self.assertLess(backend.index("name: Test backend"), backend.index("name: Test complete backend capacity group"))
-        self.assertEqual(set(capacity_group.split()), {"backend/tests/test_journal_backup_readiness.py", "backend/tests/test_retained_release_inspection.py", "backend/tests/test_staged_receipt_adapter.py", "backend/tests/test_firm_admin.py"})
+        self.assertEqual(capacity_group.split()[0], "backend/tests/test_retained_release_inspection.py")
+        self.assertEqual(set(capacity_group.split()), {"backend/tests/test_journal_backup_readiness.py", "backend/tests/test_retained_release_inspection.py", "backend/tests/test_firm_admin.py"})
         self._bootstrap_rejections()
 
     def _bootstrap_rejections(self):
