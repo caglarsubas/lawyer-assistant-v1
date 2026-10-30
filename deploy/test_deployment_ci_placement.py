@@ -18,8 +18,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count(command), 0)
         blocks = dict(re.findall(r"^  ([a-z-]+):\n(.*?)(?=^  [a-z-]+:\n|\Z)", workflow.split("\njobs:\n", 1)[1], re.MULTILINE | re.DOTALL))
         self.assertNotIn(command, blocks["backend-and-contracts"])
-        self.assertEqual(workflow.count("scripts/run_ci_deployment_shard.py"), 11)
-        self.assertIn("scripts/run_ci_deployment_shard.py --shard=3", blocks["backend-and-contracts"])
+        self.assertEqual(workflow.count("scripts/run_ci_deployment_shard.py"), 7)
+        self.assertEqual(workflow.count("scripts/run_ci_budgeted_deployment.py"), 4)
+        self.assertIn("scripts/run_ci_budgeted_deployment.py --shard=3", blocks["backend-and-contracts"])
         for name, lane in (("backend-review-contracts", 4), ("backend-and-contracts", 5), ("backend-and-contracts", 6)):
             self.assertIn("scripts/run_ci_deployment_shard.py --shard=" + str(lane), blocks[name])
         self.assertLess(blocks["backend-and-contracts"].index("--shard=3"), blocks["backend-and-contracts"].index("name: Test backend"))
@@ -54,13 +55,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         final = blocks["final-release-authorization"]
         self.assertNotIn("--shard=6", final)
         postgres = blocks["postgres-snapshot-concurrency"]
-        self.assertIn("name: Test workspace permission", backend)
+        history = blocks["frontend-history"]
+        self.assertIn('"${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', history)
+        self.assertNotIn("name: Test workspace permission", backend)
         self.assertNotIn("name: Test workspace permission", final)
-        self.assertIn('"${workspace_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', backend)
-        self.assertIn("timeout-minutes: 2", backend.split("name: Test workspace permission", 1)[1])
         self.assertNotIn("name: Test workspace permission", postgres)
-        self.assertLess(backend.index("name: Test backend"), backend.index("name: Test workspace permission"))
-        self.assertEqual(workflow.count("name: Test workspace permission and proposal contracts"), 1)
+        self.assertEqual(workflow.count("name: Test workspace contracts and verified cohort partition"), 1)
         graph = blocks["graph-runtime-contracts"]
         self.assertNotIn("--shard=4", graph)
         self.assertIn("--shard=4 --workers=2", blocks["backend-review-contracts"])
@@ -86,7 +86,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(human_group.split(), ["backend/tests/test_analysis_cohorts.py"])
         self.assertEqual(workflow.count("backend/tests/test_authority_model_cohorts.py"), 1)
         history_group = re.search(r"  CI_HISTORY_METADATA_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(history_group.split(), ["backend/tests/test_planning_journal_reconciliation.py"])
+        self.assertEqual(history_group.split(), ["backend/tests/test_planning_journal_reconciliation.py", "backend/tests/test_public_sources.py"])
         withdrawal_group = re.search(r"  CI_RETAINED_WITHDRAWAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_private_inventory_receipts.py", withdrawal_group)
         retention_group = re.search(r"  CI_RECEIPT_RETENTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
@@ -114,9 +114,12 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertNotIn(path, final_group)
         self.assertIn('"${history_metadata_tests[@]}"', backend)
         history = blocks["frontend-history"]
-        self.assertLess(history.index("name: Verify executed frontend shard"), history.index("name: Test planning metadata and verified cohort partition"))
-        self.assertIn("timeout-minutes: 1", history.split("name: Test planning metadata and verified cohort partition", 1)[1])
-        self.assertIn('"${history_metadata_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', history)
+        self.assertLess(history.index("name: Verify executed frontend shard"), history.index("name: Test workspace contracts and verified cohort partition"))
+        self.assertIn("timeout-minutes: 1", history.split("name: Test workspace contracts and verified cohort partition", 1)[1])
+        self.assertIn('"${history_metadata_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', graph)
+        self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("name: Test planning metadata"))
+        self.assertLess(graph.index("name: Test planning metadata"), graph.index("--shard=10"))
+        self.assertIn("timeout-minutes: 1", graph.split("name: Test planning metadata", 1)[1])
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
         candidate_group = re.search(r"  CI_GRAPH_CANDIDATE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]

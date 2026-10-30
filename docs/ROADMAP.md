@@ -8570,3 +8570,21 @@ costly suites, with a negative fixture reproducing this exact omission. Execute
 the actual review workflow block locally with its declared groups. Preserve the
 119-case review target and all earlier coverage gates; never lower expected counts
 to admit an incomplete run. Retain this rejected coverage observation explicitly.
+
+Retain the subsequent backend rejection (head 4d2ab11, run 41022701346):
+authenticated slice 3 took 96/120 seconds, and the job reached its original
+20-minute cap after all 4,067 backend and 49 workspace cases passed. A CI-only,
+source-bound overlay moves six measured identities from slice 3 into existing
+slices 1 (four) and 10 (two). Keep the frozen driver, native source pins and
+original deployment manifest unchanged; both child processes use the same overlay
+and unchanged exact-execution receipt checks. Reject changed source/counts,
+missing/duplicate identities, undeclared destinations and exceeded measured
+worker increments. All 1,018 identities remain disjoint and exhaustive.
+
+Move the complete 49-case workspace group into the history job's existing
+one-minute metadata step, alongside its two declared cohort cases. Move the
+complete 49-case planning and 94-case public-source groups into a sequential
+one-minute graph step. Remove those public-source cases from the backend
+remainder; retain every body and assertion exactly once. No job, worker, deadline
+or reserve floor increases. Qualification must verify actual group executions,
+all frontend/deployment receipts and the unchanged private-runtime state.

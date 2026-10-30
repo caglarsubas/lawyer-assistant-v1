@@ -1,0 +1,49 @@
+{
+  "schema": "ci-authenticated-reserve-overlay-v1",
+  "manifest_sha256": "16599d9f6eddab10b32bdc1ee92d04ea741dcd69931e218e44c49ee46c68d8ff",
+  "driver_sha256": "0d9fee1284a531e8921c997c4de5abbc312d9315e0c5bf21d4788ead318f6ee9",
+  "observed_head": "4d2ab1170fc53b2e3c1db4211239760b96fd1892",
+  "observed_run": 41022701346,
+  "retained_log_sha256": "28b3d58b8ba29b2e41ce6b0491ba3cda59c08ce2000763e34dcb8551f7d08375",
+  "original_counts": {
+    "1": 385,
+    "3": 90,
+    "10": 11
+  },
+  "worker_increment_budget_ms": {
+    "1": 10000,
+    "10": 6000
+  },
+  "assignments": [
+    {
+      "test_id": "test_destination_change.DestinationChangeContracts.test_case_D02_expired_legacy_new_authority",
+      "shard": 1,
+      "observed_case_ms": 4794
+    },
+    {
+      "test_id": "test_destination_change.DestinationChangeContracts.test_case_D03_reviewed_retirement",
+      "shard": 10,
+      "observed_case_ms": 4011
+    },
+    {
+      "test_id": "test_destination_change.DestinationChangeContracts.test_case_D17_early_finish",
+      "shard": 1,
+      "observed_case_ms": 4379
+    },
+    {
+      "test_id": "test_destination_change.DestinationChangeContracts.test_unknown_decisions_steps_and_clock_rollback_do_not_append",
+      "shard": 10,
+      "observed_case_ms": 4211
+    },
+    {
+      "test_id": "test_journal_recovery.JournalRecoveryContracts.test_malformed_and_borrowed_repair_views_do_not_append",
+      "shard": 1,
+      "observed_case_ms": 4492
+    },
+    {
+      "test_id": "test_mode_recovery.ModeRecoveryContracts.test_case_C04_retirement_wrong_order",
+      "shard": 1,
+      "observed_case_ms": 4309
+    }
+  ]
+}
