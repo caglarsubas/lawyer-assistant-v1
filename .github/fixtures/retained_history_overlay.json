@@ -130,19 +130,19 @@
   },
   "assignments": [
     {
+      "test_id": "test_load_contract.LoadContracts.test_fixture_control_routes_are_absent_from_production_application",
+      "shard": 3,
+      "observed_case_ms": 1885
+    },
+    {
       "test_id": "test_mode_recovery.ModeRecoveryContracts.test_case_C01_retirement_ordered",
       "shard": 10,
       "observed_case_ms": 4517
     },
     {
       "test_id": "test_mode_recovery.ModeRecoveryContracts.test_case_C02_retirement_destination_restart",
-      "shard": 10,
+      "shard": 3,
       "observed_case_ms": 4575
-    },
-    {
-      "test_id": "test_mode_recovery.ModeRecoveryContracts.test_case_C03_retirement_finish_restart",
-      "shard": 10,
-      "observed_case_ms": 4504
     },
     {
       "test_id": "test_quote_volume_evaluation.QuoteVolumeEvaluation.test_complete_authenticated_volume_driver_preserves_failed_case_without_retry_or_lost_original_checks",
@@ -151,12 +151,12 @@
     },
     {
       "test_id": "test_restore_lifecycle.RestoreLifecycleContracts.test_case_N09_renew_and_fresh_restore",
-      "shard": 3,
+      "shard": 10,
       "observed_case_ms": 6057
     },
     {
       "test_id": "test_withdrawal_backup.WithdrawalBackupContracts.test_case_W03_descendant_roundtrip",
-      "shard": 3,
+      "shard": 10,
       "observed_case_ms": 4703
     }
   ]

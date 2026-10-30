@@ -26,7 +26,7 @@ def test_all_original_identities_execute_in_exactly_one_retained_lane(inventory)
         assert lanes[n - 1] == [test.id() for test in overlay.prior.plan(tests, manifest, n)]
 
 
-@pytest.mark.parametrize("change", ["schema", "manifest", "source", "missing", "duplicate", "source_lane", "destination", "overbudget", "baseline", "history"])
+@pytest.mark.parametrize("change", ["schema", "manifest", "source", "missing", "duplicate", "source_lane", "destination", "overbudget", "baseline", "history", "family"])
 def test_incomplete_or_unmeasured_overlay_cannot_execute(inventory, change):
     tests, manifest = inventory
     value = copy.deepcopy(json.loads(overlay.PROFILE.read_text()))
@@ -48,6 +48,13 @@ def test_incomplete_or_unmeasured_overlay_cannot_execute(inventory, change):
         value["assignments"][0]["observed_case_ms"] = 100000
     elif change == "baseline":
         value["baseline_case_ms"].pop(next(iter(value["baseline_case_ms"])))
+    elif change == "family":
+        restricted = next(row for row in value["assignments"] if row["test_id"].startswith("test_restore_lifecycle."))
+        allowed = next(row for row in value["assignments"] if row["shard"] == 3)
+        restricted["shard"], allowed["shard"] = 3, 10
+        with pytest.raises(ValueError, match="Retained history family"):
+            overlay.assignments(tests, manifest, value)
+        return
     else:
         value["original_history_ids_sha256"] = "0" * 64
     with pytest.raises(ValueError):
@@ -94,3 +101,9 @@ def test_parallel_children_reenter_overlay_and_keep_original_receipt_checks(monk
     monkeypatch.setattr(overlay.driver, "plan", original_plan)
     monkeypatch.setattr(overlay.driver, "main", run)
     assert overlay.main() == 37
+
+
+def test_original_frozen_placement_contract_accepts_the_overlay(monkeypatch, inventory):
+    from test_deployment_shards import DeploymentShardContracts
+    monkeypatch.setattr(overlay.driver, "plan", overlay.plan)
+    DeploymentShardContracts("test_all_shards_cover_each_test_exactly_once").test_all_shards_cover_each_test_exactly_once()

@@ -8681,7 +8681,7 @@ rejection: the one contract worker accumulated 239.297 case-seconds while Vitest
 took 215.46 seconds; their shared step took 248 seconds, then history cohort2
 took 25. The unchanged frozen contract assignment is the measured critical path.
 
-Add a CI-only, source-bound overlay moving six original methods (39.611 measured
+Add a CI-only, source-bound overlay moving six original methods (36.992 measured
 serial seconds) from assignment2 into existing assignments3 and10, three each.
 Counts become **389/419/87/23/17/26/19/12/10/16**; all 1,018 original identities
 remain disjoint and exhaustive. Preserve the original manifest, frozen drivers,
@@ -8691,16 +8691,22 @@ substitutes only the declared deployment entrypoint. Vitest stays unchanged.
 
 Commit all measured destination-case costs, source/log hashes and exact source
 counts. Require destination worker totals under 80/38 seconds for assignments3/10
-and increments under 17/14 seconds. The measured projections are 78.585 and
-27.221 seconds; fresh actual step reserves still determine qualification. Both
+and increments under 17/14 seconds. The measured projections are 77.589 and
+28.361 seconds; fresh actual step reserves still determine qualification. Both
 parallel children reenter the same overlay and use unchanged receipt checks.
-Sixteen additive guard tests reject stale source, incomplete/duplicate identities,
+Eighteen additive guard tests reject stale source, incomplete/duplicate identities,
 wrong destinations, exceeded budgets and arbitrary executors/extra workers.
 
 Keep ten jobs, original caps, two-worker ceilings, frontend139/10,532, cohort19,
 backend capacity107 and every earlier complete group. Backend remainder becomes
-**3,952** with the 16 new guard cases. Require fresh exact-head and independent-main
+**3,954** with the 18 new guard cases. Require fresh exact-head and independent-main
 per-file execution/coverage, timing and private preservation receipts. No private
 runtime mutation, operational backup or legal approval. Ledger **273 → 274**;
 owner review and broader readiness remain pending. The next product slice remains
 read-only interruption/restart inventory and consumed-intent/completion reconciliation.
+
+The first overlay run 41045462988 rejected a retained family-placement constraint
+for renewal/backup cases. Preserve the unchanged original constraint: those
+families may enter assignment10, not assignment3. Enforce this before execution
+and exercise the original frozen placement test directly against the overlay.
+No original test is relaxed, skipped or rewritten; retain the failed observation.

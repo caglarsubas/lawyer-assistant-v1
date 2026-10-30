@@ -11,6 +11,12 @@ PROFILE = driver.ROOT / ".github/fixtures/retained_history_overlay.json"
 COUNTS = {"2": 425, "3": 84, "10": 13}
 INCREMENTS = {"3": 17000, "10": 14000}
 BUDGETS = {"3": 80000, "10": 38000}
+RETAINED_FAMILIES = ("test_anchored_operator_review.AnchoredReviewContracts.test_case_",
+                     "test_history_backup.HistoryBackupContracts.test_case_",
+                     "test_restore_authorization.RestoreAuthorizationContracts.test_case_",
+                     "test_restore_lifecycle.RestoreLifecycleContracts.test_case_",
+                     "test_enrollment_revocation.EnrollmentRevocationContracts.test_case_",
+                     "test_withdrawal_backup.WithdrawalBackupContracts.test_case_")
 SOURCES = ("scripts/run_ci_deployment_shard.py", "scripts/run_ci_budgeted_deployment.py", "scripts/run_ci_history_workers.py")
 
 
@@ -60,6 +66,8 @@ def assignments(tests, manifest, value=None):
                 or type(row["shard"]) is not int or row["shard"] not in (3, 10)
                 or type(row["observed_case_ms"]) is not int or row["observed_case_ms"] <= 0):
             raise ValueError("Six unique measured history identities required")
+        if row["shard"] == 3 and row["test_id"].startswith(RETAINED_FAMILIES):
+            raise ValueError("Retained history family must stay in its compatible assignment")
         moved[row["test_id"]], costs[row["test_id"]] = row["shard"], row["observed_case_ms"]
     for lane in ("3", "10"):
         selected = sorted(ids[lane] + [ident for ident, target in moved.items() if str(target) == lane])
