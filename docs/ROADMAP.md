@@ -8481,3 +8481,44 @@ power-loss recovery, installation and the owner's legal review remain separate
 outstanding gates. Originals, exact evidence versions, confidentiality and review
 history remain intact. Checklist **42 done / 21 open / 24 waiting / 6 deferred**;
 readiness **0 ready / 9 partial / 4 waiting / 1 planned**, unchanged.
+
+
+## 270. Independent-main PostgreSQL reserve correction — 2026-10-30
+
+PR #252 delivered reviewed ciphertext backup/restore materialization and exact
+restored-copy verification. Its exact head passed all ten jobs, every deployment
+identity once and the fixed reserve floors. Retain its independent-main rejection:
+run 41008676682 passed the PostgreSQL checks in 273/300 seconds, leaving only
+27 seconds against the fixed 30-second floor. Cancel remaining work and preserve
+that evidence; a successful job alone does not establish sufficient headroom.
+
+The measured PostgreSQL race step used 225 seconds; unrelated workspace-permission
+and proposal tests added 26 seconds. Move that complete, unchanged 49-case group
+to the existing native ARM backend job, sequentially after its full suite exits.
+That job had 78 seconds spare at the qualified PR head; the last fully qualified
+main had 72 seconds spare. Keep the original two-minute workspace-step cap,
+18-minute backend-suite cap, 20-minute backend-job cap, five-minute PostgreSQL cap,
+all ten jobs, two-worker ceilings, no retries and every existing reserve floor.
+Real PostgreSQL isolation and all 95 race tests remain unchanged.
+
+Require a fresh exact-head run, guarded merge, independent-main run, all 1,018
+deployment identities exactly once, all 139 frontend files, and preservation
+receipts. No application behavior, native source pin, document, evidence version,
+credential, review record, fixture, test assertion or live runtime changes.
+Ledger **269 → 270**; the broader checklist and milestone-readiness counts remain
+unchanged. Backup materialization is staged qualification, not live/private
+operational backup, trust migration, power-loss recovery or legal approval.
+
+Next after qualification: bounded read-only interruption/restart inventory and
+consumed-intent/completion reconciliation with independently retained references.
+
+The initial correction layout (run 41009795196) restored PostgreSQL reserve to
+56 seconds, but the history job passed in 271/300 seconds: only 29 seconds spare.
+Retain that rejection and rebalance complete groups across existing native ARM
+capacity. Move the 69-case source-review file from history into the whole-release
+group; history retains the complete 49-case planning file. Move the unchanged
+64-case copy-context step from frontend into sequential ARM review capacity.
+Move the 18-case receipt-retention file from withdrawal into a separate sequential
+PostgreSQL step after all real races exit. Workspace tests stay in sequential
+backend reserve. Keep all identities, assertions, caps, jobs and worker ceilings;
+no retries. Require fresh measured qualification of the complete final layout.
