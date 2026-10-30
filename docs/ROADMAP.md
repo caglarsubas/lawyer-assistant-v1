@@ -8596,40 +8596,40 @@ directory and verify the same launcher search path locally. Preserve this failur
 no skipped placement check, reduced inventory or retry of unchanged source.
 
 
-## 272. History-tail reserve and retained backend capacity — 2026-10-30
+## 272. Balanced CI groups with complete execution evidence — 2026-10-30
 
-PR #254 passed all ten exact-head jobs, every deployment/frontend/cohort receipt
-and preservation checks. Its backend job used 1,028/1,200 seconds (172 seconds
-spare). Retain its independent-main history reserve rejection from run
-41030231776: history crossed the fixed 270-second work limit while completing
-workspace/cohort checks. Main qualification remains unestablished.
+The first independent main after PR #254 passed history with 17 seconds spare,
+below the fixed 30-second floor, and graph with only 31 seconds spare. Retain
+that rejection (run 41030231776). The initial PR #255 layout returned workspace49
+to backend capacity; its full backend suite took 878 seconds, then workspace
+checks exhausted job reserve (run 41031287137). Neither run establishes release
+qualification; do not retry unchanged source or lower the reserve floors.
 
-Return all 49 unchanged workspace tests to the backend's sequential two-worker
-step after its full suite, under the original two-minute cap. History keeps its
-two declared cohort cases under the unchanged one-minute cap. Preserve all 1,018
-deployment methods, 139 frontend files, 19 cohort identities, complete planning
-and public-source groups, ten jobs, original caps and reserve floors. No retry
-of an unchanged layout, source pin or evidence-version change, operational
-backup, private data mutation or legal approval. Require fresh exact-head and
-independent-main execution, coverage, timing and preservation evidence.
+Use complete disjoint file moves into measured existing two-worker groups:
 
-Ledger **271 → 272**; milestone readiness and owner legal review remain pending.
-The next product slice is still read-only interruption/restart reconciliation.
+- Authority-proposals30 joins withdrawal15: **45 cases**.
+- Firm-admin19 joins publication230: **249 cases**.
+- Planning49 joins final-release89: **138 cases**.
+- Public-source94 joins copy-context64 in review: **158 cases**.
+- Feedback50 joins the database cohort case: **51 cases**.
+- History retains its **two** declared cohort cases after its frontend/contracts.
 
-The same main run finished history in 283/300 seconds (17 seconds spare), while
-graph finished with only 31 seconds spare. Move the complete 49-case planning
-group from graph metadata to the final-release group, which retained 51 seconds
-on main and 55 on the PR. Public-source94 remains in graph metadata; final
-executes its original 89 plus planning49 (138 total). This preserves every
-assertion and frees measured graph reserve without increasing backend work.
+The backend remainder excludes these complete files through the same declared
+lists. Remove the standalone workspace and graph-public-source steps; keep every
+original case, assertion, exact source version and native source pin. Retained
+workspace costs were 29.96 worker-seconds for proposals and 12.14 for firm-admin;
+withdrawal/publication had 54/51 seconds spare on the rejected PR. Reviewed
+feedback costs total about 24 worker-seconds; database retained 69 seconds spare.
+Keep ten jobs, two-worker ceilings, original step/job caps and reserve floors.
+No automatic retries, new executor or longer deadline.
 
-The first PR #255 layout (run 41031287137) exhausted backend job reserve while
-executing workspace checks after the full suite. Retain that rejection. Replace
-the standalone workspace step with two complete, disjoint file placements:
-authority-proposals30 joins withdrawal15 (45 total), and firm-admin19 joins the
-publication group. The retained measured workspace costs were 29.96 worker-seconds
-for proposals and 12.14 for firm administration; destination reserves were 54 and
-51 seconds on this PR, and 48 and 54 on the prior main. Preserve the existing
-two-worker groups/caps, original source bodies and full backend complement.
-The previous whole-workspace return is superseded; qualify this revised source
-afresh, including exact original method identities and per-file execution counts.
+Require fresh exact-head and independent-main execution receipts for all 1,018
+deployment methods once, all 139 frontend files/10,532 cases, every moved file,
+and all 19 cohort identities. Preserve originals, exact evidence versions,
+private case confidentiality and review history; no runtime mutation, operational
+backup or legal approval. Preserve the previous complete coverage observations
+alongside the reserve rejections.
+
+Ledger **271 → 272**. Milestone readiness and owner legal review remain pending.
+The next product slice remains bounded read-only interruption/restart inventory
+and consumed-intent/completion reconciliation with independently retained references.
