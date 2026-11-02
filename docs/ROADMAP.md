@@ -9483,3 +9483,150 @@ independent JUnit/manifest comparison proves all69 original identities executed
 once. The unchanged source file and505 native source pins remain exact. Latest
 head and independent-main measured reserves, complete case coverage and private
 preservation are still required separately.
+
+
+## 286. Restore independent-main frontend and publication headroom — 2026-11-03
+
+PR #264 qualified its exact head with12 successful checks and a32-second minimum
+reserve, then merged with an independently fetched identical tree. Its independent
+main41487933593 exposes three operational failures: source-publication151/180
+leaves29/required30, history296/300 leaves4/required30, and frontend is cancelled
+after308 seconds against its unchanged300-second job cap. Preserve that rejection;
+do not mark main qualified from the earlier PR or retry identical placement.
+
+Move the complete50-case disposition-restart group from frontend to the existing
+graph pair under its original two-minute step cap. Move the complete19-case focus
+file to candidate. Move the complete83-case provision-binding step from history
+to publication/planning, preserving its two-minute cap. Route the same23-case
+publication source-review lane into that four-minute planning job instead of
+source-publication. All69 frozen source-review identities and actual non-skipped
+execution receipts remain required once across the three authorized CI lanes.
+
+Keep all12 jobs,70 capped runner-minutes,two active workers/job and every existing
+job/step cap and reserve floor. The full139-file/10,532-case frontend shards,
+all1,018 deployment IDs and19 authority identities stay intact. Backend remains
+3841 pass+97 existing skips/3938 collected; graph adds50, candidate becomes256,
+planning runs132 then83 (215 total), source-publication returns to185 and the
+withdrawal154 group stays unchanged. All application/backend bodies and fixtures,
+505 native pins,249 existing evidence files and the receipt implementation remain
+byte-identical. Only CI routing, its placement guards and roadmap evidence change.
+
+Local152-case qualification of all moved files passes in34.16 seconds with two
+workers in the owned physical temporary root. All10 CI policy contracts pass.
+Require fresh exact-head and independently fetched-main actual identity coverage,
+all fixed reserves, full-tree equality and private/runtime preservation before
+closure. No native campaign, inference, deployment, credential change or case
+mutation is authorized by this engineering result; owner analysis-v3 review
+remains pending. Engineering delivery and product/legal readiness stay separate.
+
+Ledger **285 → 286**. Next product item remains read-only receipt re-observation
+with exact independently retained references and fresh authorization.
+
+
+## 287. Close disposition-read CI routing with exact execution receipts — 2026-11-03
+
+The first PR #265 layout41492191384 resolves the frontend/history/publication
+placement but leaves graph349/360 seconds,11/required30 reserve. Retain that
+rejection. Freeze all50 existing restart-case IDs and their unchanged source in
+a second closed CI manifest. Use observed fixture costs to move fifteen costly
+cases out of graph:35 remain there,6 run with withdrawal and9 with planning.
+The original69-case source-review manifest, its code and all three23-case lanes
+remain byte-identical. Both manifests validate full collection and exact worker
+selection; success receipts require every assigned case actually pass once.
+
+Add12 independent CI guard cases for changed/missing/overlapping manifests,
+worker selection, actual calls and skipped-case rejection. All50 real restart
+cases pass exactly once locally across35/6/9; dual-plugin runs also pass46 real
+source-review cases without interfering with either selection. Keep every
+original assertion, fixture, source/evidence version, job/step cap/reserve floor,
+all12 jobs,70 capped runner-minutes and two active workers/job. Backend becomes
+3853 pass+97 existing skips/3950 collected; graph restart35; withdrawal77+83=160;
+planning141+83=224; candidate256 and source-publication185 stay unchanged.
+
+Require all50 and all69 direct actual execution receipts jointly once, every
+original deployment/frontend/authority identity, fresh PR/main reserves and full
+tree/private-runtime preservation.505 native pins and249 prior evidence files
+remain exact. No new native campaign, runtime route, inference, recovery,
+deployment, key/session change or case mutation. Owner analysis-v3 review is
+pending; engineering and legal/product readiness remain separate.
+
+Ledger **286 → 287**. Receipt re-observation remains the next product item.
+
+
+## 288. Balance closed restart lanes using actual CI reserve — 2026-11-03
+
+Run41495050242 proves the partitioned graph job finishes329/360 seconds, with31
+seconds against the30-second floor, while planning retains72 seconds of spare.
+Move ten graph cases and two withdrawal cases to that measured planning spare,
+using their logged durations. Freeze the resulting25 graph/4 withdrawal/21
+planning allocation without changing any original assertion or source file.
+This removes the one-second graph surplus before the independent-main gate.
+
+All12 guard cases and all50 actual restart cases pass locally for the new
+allocation, including46 source-review cases exercising both plugins together.
+The source69 manifest and receipt implementation remain exact. Counts become
+graph restart25, withdrawal75+83=158 and planning153+83=236; backend3950/candidate256/
+source-publication185 and all other inventories remain unchanged. Every original
+job/step cap, reserve floor, worker limit and the12-job/70-minute aggregate
+maximum stays fixed. Actual all50/all69 once receipts, full prior coverage,
+fresh PR/main reserves and private/runtime preservation remain mandatory.
+
+Ledger **287 → 288** within the same CI follow-up. Owner analysis-v3 review,
+genuine operator/key-custody/provider qualification and legal/product readiness
+remain pending; no recovery, inference, deployment or case mutation occurs.
+
+
+## 289. Rebalance exact binding coverage and complete portfolio tests — 2026-11-03
+
+The next layout41497372696 leaves planning224/240 seconds (16/required30
+reserve) and analysis332/360 (28/required30). Preserve both rejections and the
+observed job-finalization tail; a successful test step alone is insufficient.
+The earlier transfer used measured spare but did not establish durable headroom.
+
+Freeze all83 unchanged provision-binding identities in a third closed manifest:
+20 execute in candidate,48 in history and15 in planning. Each lane validates
+full original collection and emits a success receipt only for actual non-skipped
+execution of its exact assignment. Add12 independent guards including changed
+source, missing/overlapping IDs and skipped execution. Keep the existing source69
+and disposition50 manifests and their original source files exact. Move the
+complete32-case portfolio-review file from analysis to the exited frontend pair,
+under a bounded two-minute step; no test is omitted or duplicated.
+
+Backend collects3962 (3865 expected pass+97 existing skips); candidate276;
+planning153+15=168; history adds48; frontend adds32; analysis180 plus its unchanged
+53-case frozen serial pair. Graph restart25, withdrawal158 and source-publication185
+remain. All three manifests require actual once-only receipts covering69/50/83
+identities. Every original job/step cap and reserve floor,12 jobs,70 capped
+runner-minutes,139 frontend files/10532 cases,1018 deployment IDs and19 authority
+identities remain.505 native pins,249 earlier evidence files and all receipt
+implementation pins remain exact. No private/runtime change or native campaign.
+
+Require fresh exact-head and independent-main qualification, complete original
+identity coverage, full-tree equality and private preservation before closure.
+Engineering progress is separate from pending owner analysis-v3 review and
+genuine operator, custody, provider, production and legal-readiness gates.
+
+Ledger **288 → 289**. Next product item remains bounded read-only receipt
+re-observation with exact independently retained digest and fresh authorization.
+
+
+## 290. Persist the actual uv dependency cache — 2026-11-03
+
+Run41502185572 fails PostgreSQL setup before any tests: the bounded20-second
+locked sync downloads uncached public dependencies and exits124. The prior pip
+cache held only the uv tool archive; uv used its separate default dependency
+directory. Explicitly place uv dependencies below the already restored pip
+cache in all12 jobs. Bump the pinned installer cache schema to invalidate old
+tool-only entries; subsequent successful cold syncs can publish actual packages.
+Keep frozen lock resolution, hash-pinned bootstrap, zero network retries,20-second
+bootstrap/sync deadlines and all original job/step caps and reserve floors.
+
+The existing placement contract now checks all12 explicit cache paths; the
+original1018 deployment methods and all backend/frontend/authority identities
+remain. No runtime, private data, inference, documents, evidence or review
+mutation. Cold-cache qualification remains required; caching is an efficiency
+control, not a waiver for unavailable dependencies or failed CI.
+
+[uv caching documentation](https://docs.astral.sh/uv/concepts/cache/) confirms
+UV_CACHE_DIR selects the dependency directory. Ledger **289 → 290** within the
+same open CI follow-up; owner review and product-readiness gates stay pending.

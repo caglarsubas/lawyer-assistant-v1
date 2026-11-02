@@ -51,7 +51,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         fast_guards = re.search(r"  CI_FAST_GUARD_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(fast_guards.split(), ["backend/tests/test_ci_history_review_pair.py"])
         self.assertEqual(workflow.count("backend/tests/test_ci_history_review_pair.py"), 1)
-        self.assertIn('"${history_binding_tests[@]}" "${frontend_qualification_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}"', backend)
+        self.assertIn('"${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}"', backend)
         self.assertIn('timeout --kill-after=2s 30s bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${fast_guard_tests[@]}"', backend)
         self.assertLess(backend.index('timeout --kill-after=2s 30s'), backend.index('name: Test manifest-bound authenticated qualification'))
 
@@ -94,7 +94,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("-p scripts.ci_authority_cohorts"), 2)
         self.assertEqual(workflow.count("-p scripts.ci_serial_history_cohorts"), 2)
         human_group = re.search(r"  CI_HUMAN_REVIEW_GROUP_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(human_group.split(), ["backend/tests/test_analysis_cohorts.py", "backend/tests/test_analysis_feedback.py"])
+        self.assertEqual(human_group.split(), ["backend/tests/test_analysis_feedback.py"])
         history_guards = re.search(r"  CI_HISTORY_GUARD_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         history_inspection = re.search(r"  CI_HISTORY_INSPECTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(history_guards.split(), ["backend/tests/test_ci_authority_partition.py", "backend/tests/test_ci_budgeted_deployment.py", "backend/tests/test_ci_retained_history.py"])
@@ -182,28 +182,45 @@ class DeploymentPlacementContract(unittest.TestCase):
             broken = workflow.replace(owner, owner.replace(definition, "", 1), 1)
             with self.assertRaisesRegex(ValueError, "publication_planning_tests"):
                 validate_workflow_arrays(broken)
-        self.assertIn('"${publication_planning_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["publication-planning-contracts"])
+        self.assertIn('"${publication_planning_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["publication-planning-contracts"])
         self.assertNotIn("CI_PUBLICATION_PLANNING_TESTS", blocks["frontend"])
-        restart_group = re.search(r"  CI_FRONTEND_QUALIFICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(restart_group.split(), ["backend/tests/test_analysis_focus.py", "backend/tests/test_disposition_journal_reconciliation.py"])
-        self.assertEqual(workflow.count("backend/tests/test_disposition_journal_reconciliation.py"), 1)
-        definition = '          read -r -a frontend_qualification_tests <<< "$CI_FRONTEND_QUALIFICATION_TESTS"\n'
-        for owner in (backend, blocks["frontend"]):
-            self.assertEqual(owner.count(definition), 1)
-            broken = workflow.replace(owner, owner.replace(definition, "", 1), 1)
-            with self.assertRaisesRegex(ValueError, "frontend_qualification_tests"):
-                validate_workflow_arrays(broken)
-        self.assertIn('"${frontend_qualification_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["frontend"])
+        for key, path, array, job in (("CI_DISPOSITION_RESTART_TESTS", "backend/tests/test_disposition_journal_reconciliation.py", "disposition_restart_tests", "graph-runtime-contracts"),
+                                      ("CI_CANDIDATE_FOCUS_TESTS", "backend/tests/test_analysis_focus.py", "focus_tests", "graph-candidate-contracts")):
+            group = re.search(r"  " + key + r": >-\n((?:    [^\n]+\n)+)", workflow)[1]
+            self.assertEqual(group.split(), [path])
+            self.assertEqual(workflow.count(path), 1)
+            definition = f'          read -r -a {array} <<< "${key}"\n'
+            owners = [backend, blocks[job]]
+            if key == "CI_DISPOSITION_RESTART_TESTS":
+                owners.extend([blocks["retained-release-withdrawal"], blocks["publication-planning-contracts"]])
+            for owner in owners:
+                self.assertEqual(owner.count(definition), 1)
+                broken = workflow.replace(owner, owner.replace(definition, "", 1), 1)
+                with self.assertRaisesRegex(ValueError, array):
+                    validate_workflow_arrays(broken)
+            self.assertNotIn(key, blocks["frontend"])
+        self.assertIn('"${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', graph)
+        self.assertEqual(workflow.count("-p scripts.ci_disposition_reads --disposition-read-lane="), 3)
+        for name, lane in (("graph-runtime-contracts", "graph"), ("retained-release-withdrawal", "withdrawal"),
+                           ("publication-planning-contracts", "publication")):
+            self.assertIn("--disposition-read-lane=" + lane, blocks[name])
+        self.assertNotIn("name: Test complete frontend recovery qualification", workflow)
         history_bindings = re.search(r"  CI_HISTORY_BINDING_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(history_bindings.split(), ["backend/tests/test_provision_mappings.py"])
         self.assertEqual(workflow.count("backend/tests/test_provision_mappings.py"), 1)
         definition = '          read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"\n'
-        for owner in (backend, blocks["frontend-history"]):
+        for owner in (backend, blocks["publication-planning-contracts"], blocks["graph-candidate-contracts"], blocks["frontend-history"]):
             self.assertEqual(owner.count(definition), 1)
             broken = workflow.replace(owner, owner.replace(definition, "", 1), 1)
             with self.assertRaisesRegex(ValueError, "history_binding_tests"):
                 validate_workflow_arrays(broken)
-        self.assertIn('"${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["frontend-history"])
+        self.assertIn('"${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["publication-planning-contracts"])
+        self.assertEqual(workflow.count("-p scripts.ci_provision_bindings --provision-binding-lane="), 3)
+        for name, lane in (("graph-candidate-contracts", "candidate"), ("frontend-history", "history"), ("publication-planning-contracts", "planning")):
+            self.assertIn("--provision-binding-lane=" + lane, blocks[name])
+        self.assertEqual(workflow.count("name: Test complete portfolio review qualification"), 1)
+        self.assertIn('"${frontend_review_tests[@]}" -q -n 2', blocks["frontend"])
+        self.assertEqual(re.search(r"  CI_FRONTEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_analysis_cohorts.py"])
         self.assertNotIn("scripts/run_ci_history_review_pair.py", blocks["frontend-history"])
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
@@ -215,12 +232,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("backend/tests/test_graph_b_publication.py", workflow)
         self.assertNotIn("backend/tests/test_final_release_transitions.py", workflow)
         self.assertNotIn("backend/tests/test_disposition_reconciliation_receipt.py", workflow)
-        self.assertIn('"${candidate_tests[@]}" "${source_review_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', blocks["graph-candidate-contracts"])
+        self.assertIn('"${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', blocks["graph-candidate-contracts"])
         self.assertEqual(workflow.count("-p scripts.ci_source_reviews --source-review-lane="), 3)
         self.assertEqual(re.search(r"  CI_SOURCE_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_source_reviews.py"])
         definition = '          read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"\n'
         for name, lane in (("graph-candidate-contracts", "candidate"), ("retained-release-withdrawal", "withdrawal"),
-                           ("source-publication-contracts", "publication")):
+                           ("publication-planning-contracts", "publication")):
             owner = blocks[name]
             self.assertEqual(owner.count(definition), 1)
             self.assertIn("--source-review-lane=" + lane, owner)
@@ -242,6 +259,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("--shard=10 --workers=2", graph)
         self.assertIn("timeout-minutes: 1", graph.split("name: Test manifest-bound review headroom slice 10", 1)[1])
         self.assertEqual(workflow.count("cache: pip"), 12)
+        self.assertEqual(workflow.count('UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies"'), 12)
         self.assertEqual(workflow.count("cache-dependency-path: |\n            backend/uv.lock\n            .github/scripts/install-uv.sh"), 12)
         self.assertEqual(workflow.count("timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh"), 12)
         self.assertEqual(workflow.count("UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s \"$uv_path\" sync --project backend --frozen --extra dev"), 12)

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 # Public CI tool only. The caller enforces a 20-second whole-command deadline.
+# Cache schema v2: workflow also retains uv dependencies under the restored pip
+# tree. This pinned script is part of the cache key, invalidating old tool-only
+# entries so successful cold syncs can publish the populated dependency cache.
 set -euo pipefail
 umask 077
 : "${RUNNER_TEMP:?}" "${GITHUB_PATH:?}"
