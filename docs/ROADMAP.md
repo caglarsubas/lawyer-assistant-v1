@@ -8975,3 +8975,40 @@ disposition and51 retained copy cases stay included; fast guards18 remain
 separate and execute once. All1,758 earlier tracked files outside the living
 roadmap and two CI placement files stay byte-exact. Native500 pins and247 older
 evidence reports are unchanged; private preservation gates remain mandatory.
+
+
+Retain correction run41402620896: frontend274/300 leaves26/required30;
+database164 consumed262 seconds in the pair and19 in a separate cohort step,
+then reached its unchanged300-second job cap. The individual database files
+completed, but cap cancellation and insufficient reserve prevent qualification.
+Final68, graph236 and review124 finish with59/50/30 seconds spare respectively.
+Do not retry that placement unchanged.
+
+Restore source-review69 and analysis-focus19 to the full backend; move complete
+analysis-suggestions39 (27.54 measured worker-seconds) to publication. Backend
+becomes4004 plus97 existing skips; publication269; graph236; review105. Keep all
+36 disposition cases and all51 retained copy cases in the backend. Database
+returns to95 real races. Its unchanged source-bound cohort1 executes within the
+existing final pair alongside68 whole-release cases (69 selected), removing a
+serial startup/tail while retaining the exact original19-case partition.
+
+Frontend82 and final69 use two xdist load workers with maximum scheduling
+chunk1. The smaller chunks preserve every case, assertion and fixture, and
+avoid static count-based queues delaying unequal-cost work. No child worker,
+job, retry, cap or reserve-floor expansion. Guards require the exact scheduling
+arguments, cohort location and moved-file inclusion/exclusion. Native500 pins,
+247 reports, originals, exact evidence, privacy and review history stay exact.
+
+
+The full backend additionally emits pytest's passive `-rA` execution summary.
+Bind its actual passed identities to the exact collected inventory, require
+4,004 unique passes plus97 existing skips, and verify moved-source69, focused
+analysis19, new disposition36 and retained copy51 coverage explicitly. This
+adds an execution receipt without additional tests, jobs, workers or authority.
+
+
+The revised local frontend82/publication269/final69 groups pass, including
+real PostgreSQL and the unchanged cohort partition within the final pair. The
+owned disposable database is removed. All36 disposition cases pass with actual
+identity receipts; canonicalize only the optional backend/ report prefix against
+collection4101. Placement guards, lint and all500 native pins/247 reports pass.
