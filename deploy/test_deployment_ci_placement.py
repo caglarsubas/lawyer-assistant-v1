@@ -214,6 +214,7 @@ class DeploymentPlacementContract(unittest.TestCase):
             "backend/tests/test_receipt_recovery_planning.py", "backend/tests/test_disposition_reconciliation_receipt.py"])
         self.assertNotIn("backend/tests/test_final_release_transitions.py", workflow)
         self.assertEqual(workflow.count("backend/tests/test_disposition_reconciliation_receipt.py"), 1)
+        self.assertIn('"${candidate_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', blocks["graph-candidate-contracts"])
         self.assertIn("backend/tests/test_staged_receipt_adapter.py", candidate_group)
         self.assertNotIn("backend/tests/test_staged_receipt_adapter.py", capacity_group)
         self.assertEqual(workflow.count("backend/tests/test_staged_receipt_adapter.py"), 1)

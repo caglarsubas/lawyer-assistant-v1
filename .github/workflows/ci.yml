@@ -542,7 +542,7 @@ jobs:
         timeout-minutes: 3
         run: |
           read -r -a candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${candidate_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${candidate_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   source-publication-contracts:
     # PostgreSQL races passed in 208s and publication checks in 72s, but setup
