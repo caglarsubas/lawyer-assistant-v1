@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "backend/tests/test_disposition_journal_reconciliation.py"
 MANIFEST = ROOT / "deploy/fixtures/disposition_read_partition.json"
 PREFIX = "tests/test_disposition_journal_reconciliation.py::"
-COUNTS = {"graph": 35, "withdrawal": 6, "publication": 9}
+COUNTS = {"graph": 25, "withdrawal": 4, "publication": 21}
 LANES = tuple(COUNTS)
 
 

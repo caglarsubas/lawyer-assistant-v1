@@ -16,7 +16,7 @@ import ci_disposition_reads as p  # noqa: E402
 
 def test_frozen_source_and_three_lanes_preserve_every_original_identity():
     c = p.load_contract()
-    assert len(c.ids) == 50 and {k: len(v) for k, v in c.lanes.items()} == {"graph": 35, "withdrawal": 6, "publication": 9}
+    assert len(c.ids) == 50 and {k: len(v) for k, v in c.lanes.items()} == {"graph": 25, "withdrawal": 4, "publication": 21}
     ids = [x for lane in c.lanes.values() for x in lane]
     assert sorted(ids) == list(c.ids) and len(ids) == len(set(ids))
 
@@ -65,7 +65,7 @@ def actual(tmp_path, lane, skip=False):
     source = tmp_path / "test_fixture.py"
     source.write_text(code)
     ids = tuple(f"test_fixture.py::test_{i:02d}" for i in range(50))
-    lanes = {"graph": ids[:35], "withdrawal": ids[35:41], "publication": ids[41:]}
+    lanes = {"graph": ids[:25], "withdrawal": ids[25:29], "publication": ids[29:]}
     scaffold = ("from ci_disposition_reads import Contract, Partition\n"
         "def pytest_configure(config):\n"
         f"    c = Contract({hashlib.sha256(source.read_bytes()).hexdigest()!r}, {ids!r}, {lanes!r})\n"
@@ -82,7 +82,7 @@ def actual(tmp_path, lane, skip=False):
 @pytest.mark.parametrize("lane", p.LANES)
 def test_actual_calls_and_receipt_match_independently_expected_lane(tmp_path, lane):
     status, calls, rows = actual(tmp_path, lane)
-    start, stop = {"graph": (0, 35), "withdrawal": (35, 41), "publication": (41, 50)}[lane]
+    start, stop = {"graph": (0, 25), "withdrawal": (25, 29), "publication": (29, 50)}[lane]
     assert status == 0 and calls == [f"test_{i:02d}" for i in range(start, stop)]
     assert len(rows) == 1 and rows[0]["complete_count"] == 50 and rows[0]["disposition_read_partition"] == lane
     assert rows[0]["selected_ids"] == [f"test_fixture.py::test_{i:02d}" for i in range(start, stop)]
@@ -90,4 +90,4 @@ def test_actual_calls_and_receipt_match_independently_expected_lane(tmp_path, la
 
 def test_skipped_selected_case_cannot_publish_a_success_receipt(tmp_path):
     status, calls, rows = actual(tmp_path, "graph", skip=True)
-    assert status != 0 and len(calls) == 34 and not rows
+    assert status != 0 and len(calls) == 24 and not rows

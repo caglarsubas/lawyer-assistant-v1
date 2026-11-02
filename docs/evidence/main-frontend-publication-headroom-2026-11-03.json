@@ -32,19 +32,19 @@
     ".github/workflows/ci.yml": "8a057ef7119b8702448472ea99f915707911a042b320f17bafe192cfb087951a",
     "deploy/test_deployment_ci_placement.py": "e6afe9b685ea51f156968c90f714fd2729c8cb6faf43f1457f898869b302ce90",
     "deploy/test_ci_partition_contract.py": "35247b53806bc7e2ae8555e382f439765bbb2e91310ee558257c4c4e014be2e8",
-    "scripts/ci_disposition_reads.py": "5d2478cfc11f0121936b61e44f93a7b41c7b34adeceea0687a916f1d34861d16",
-    "backend/tests/test_ci_disposition_reads.py": "8835ac3d84081b4a3f25354aef65be687b8bdba3069f7f65ad29a8ee8503737c",
-    "deploy/fixtures/disposition_read_partition.json": "492a7e333597063b0fc2d047efe1b78359d48243d46b58dbf5c816f6b6b1804f"
+    "scripts/ci_disposition_reads.py": "804c030998077fe7548b99b79a4c4d4e296b4def0f993bda94ab040385950953",
+    "backend/tests/test_ci_disposition_reads.py": "5eaaebdeb311d029c4731898e7aa8dc01de2af4b34543c3d1df5b6a8b74eadf9",
+    "deploy/fixtures/disposition_read_partition.json": "afa76738f5fb0eb142737c597573bc159e4570bc49c028be5838d8a7d2546442"
   },
   "placement": {
     "backend_collected": 3950,
     "backend_expected_passed": 3853,
     "existing_skips": 97,
-    "graph_restart_cases": 35,
+    "graph_restart_cases": 25,
     "candidate_total": 256,
-    "planning_primary": 141,
+    "planning_primary": 153,
     "planning_binding": 83,
-    "planning_total": 224,
+    "planning_total": 236,
     "source_publication": 185,
     "withdrawal": 154,
     "frontend_extra_pytest": 0,
@@ -55,12 +55,12 @@
       23
     ],
     "publication_lane_job": "publication-planning-contracts",
-    "withdrawal_primary": 77,
-    "withdrawal_total": 160,
+    "withdrawal_primary": 75,
+    "withdrawal_total": 158,
     "disposition_read_lanes": {
-      "graph": 35,
-      "withdrawal": 6,
-      "publication": 9
+      "graph": 25,
+      "withdrawal": 4,
+      "publication": 21
     },
     "new_CI_guard_cases": 12
   },
@@ -99,5 +99,21 @@
     "cap": 360,
     "reserve": 11,
     "required": 30
+  },
+  "reserve_balancing": {
+    "observed_run": 41495050242,
+    "graph_job_seconds": 329,
+    "graph_cap_seconds": 360,
+    "graph_reserve_seconds": 31,
+    "required_reserve_seconds": 30,
+    "planning_reserve_seconds": 72,
+    "moved_graph_cases": 10,
+    "moved_withdrawal_cases": 2,
+    "new_lanes": {
+      "graph": 25,
+      "withdrawal": 4,
+      "publication": 21
+    },
+    "all_original_cases_unchanged": true
   }
 }

@@ -9551,3 +9551,26 @@ deployment, key/session change or case mutation. Owner analysis-v3 review is
 pending; engineering and legal/product readiness remain separate.
 
 Ledger **286 → 287**. Receipt re-observation remains the next product item.
+
+
+## 288. Balance closed restart lanes using actual CI reserve — 2026-11-03
+
+Run41495050242 proves the partitioned graph job finishes329/360 seconds, with31
+seconds against the30-second floor, while planning retains72 seconds of spare.
+Move ten graph cases and two withdrawal cases to that measured planning spare,
+using their logged durations. Freeze the resulting25 graph/4 withdrawal/21
+planning allocation without changing any original assertion or source file.
+This removes the one-second graph surplus before the independent-main gate.
+
+All12 guard cases and all50 actual restart cases pass locally for the new
+allocation, including46 source-review cases exercising both plugins together.
+The source69 manifest and receipt implementation remain exact. Counts become
+graph restart25, withdrawal75+83=158 and planning153+83=236; backend3950/candidate256/
+source-publication185 and all other inventories remain unchanged. Every original
+job/step cap, reserve floor, worker limit and the12-job/70-minute aggregate
+maximum stays fixed. Actual all50/all69 once receipts, full prior coverage,
+fresh PR/main reserves and private/runtime preservation remain mandatory.
+
+Ledger **287 → 288** within the same CI follow-up. Owner analysis-v3 review,
+genuine operator/key-custody/provider qualification and legal/product readiness
+remain pending; no recovery, inference, deployment or case mutation occurs.
