@@ -22,9 +22,10 @@ env:
   # Frontend retains its full x86 TypeScript/build/browser-unit coverage.
   # No cases, jobs, workers, deadlines, fixtures or assertions are removed.
   # Preserve full x86 coverage; measured model-cohort work stays on ARM.
-  # Retain the complete 32-case analysis group on x86. Move the remaining
-  # complete files into the exited history pair, with its original one-minute cap.
+  # Start the heavy complete inspection file before analysis32 on x86, so
+  # both share the exited pair. History retains its original one-minute cap.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
+    backend/tests/test_final_release_inspection.py
     backend/tests/test_analysis_cohorts.py
   CI_HISTORY_REVIEW_TESTS: >-
     backend/tests/test_analysis_feedback.py
@@ -77,8 +78,6 @@ env:
   # Rejected review/frontend layouts are retained; no caps or floors increase.
   CI_RECEIPT_RETENTION_TESTS: >-
     backend/tests/test_private_inventory_receipts.py
-  CI_REVIEW_INSPECTION_TESTS: >-
-    backend/tests/test_final_release_inspection.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py
@@ -185,11 +184,10 @@ jobs:
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
-          read -r -a review_inspection_tests <<< "$CI_REVIEW_INSPECTION_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           ignore_args=()
-          for path in "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${review_inspection_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
@@ -254,11 +252,10 @@ jobs:
       - name: Test complete backend review and cohort files
         timeout-minutes: 5
         run: |
-          read -r -a review_inspection_tests <<< "$CI_REVIEW_INSPECTION_TESTS"
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${review_inspection_tests[@]}" "${authority_cohort_tests[@]}" "${receipt_retention_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${authority_cohort_tests[@]}" "${receipt_retention_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 
       # Reuse the same pair after review tests; no overlap with the x86 UI.
       - name: Test complete manifest-bound assignment 1

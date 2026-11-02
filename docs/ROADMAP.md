@@ -8786,3 +8786,30 @@ case/identity. Backend exclusions explicitly include both disjoint lists; origin
 case bodies and frozen drivers are unchanged. Update the placement guard to
 require exact new membership, definitions and destination. Require fresh native
 history execution/timing and exact-head/main gates; no threshold relaxation.
+
+
+## 276. Measured review-inspection CI headroom — 2026-11-02
+
+PR #258 passed all ten exact-head checks and coverage/preservation gates. Its
+independent main run41376308752 finished review in340/360 seconds, leaving
+20/required30 seconds. Retain that rejected main qualification. Review spent183
+seconds on127 cases,86 on assignment1 and58 on slice4; the original gates stay.
+
+Move the complete unchanged final-release inspection file (**8 cases**,41.43
+measured worker-seconds on rejected main;38.19 on qualified PR) to the existing
+frontend human-review pair, before analysis32. Review becomes **119**; frontend
+Python becomes **40**. Starting its heavy case first allows overlap with the
+analysis file rather than creating a serial tail. Frontend retained61 seconds
+on qualified PR and106 on main; the move uses measured spare capacity. History95,
+backend remainder3962/capacity90 and every other complete group remain unchanged.
+
+Keep ten jobs, two-worker ceilings, all1,018 deployment identities once and all
+139 frontend files/10,532 cases, original caps and every reserve floor. Explicit
+backend exclusions and the placement guard require the moved file exactly once
+in its new destination. No test body, frozen driver, fixture, native report,
+application source, credential, original document, evidence version or private
+review history changes. Require fresh exact-head/main coverage, execution, timing
+and preservation receipts before closing this correction. Ledger **275 → 276**;
+owner legal review, genuine custody, activation and broader readiness stay pending.
+The next product slice remains independently reviewed recovery disposition
+planning from exact retained restart observations, without execution or repair.
