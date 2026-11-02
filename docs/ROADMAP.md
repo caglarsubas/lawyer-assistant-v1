@@ -9012,3 +9012,28 @@ real PostgreSQL and the unchanged cohort partition within the final pair. The
 owned disposable database is removed. All36 disposition cases pass with actual
 identity receipts; canonicalize only the optional backend/ report prefix against
 collection4101. Placement guards, lint and all500 native pins/247 reports pass.
+
+
+Retain run41406626981: all short jobs pass except publication269's26/required30
+reserve. It measured30.44 worker-seconds for analysis-suggestions39. Other job
+reserves are frontend73, database64, final48, graph51, review53, history36,
+withdrawal35 and candidate43. Keep the successful frontend/final small-chunk
+scheduling and shared final cohort execution.
+
+Keep analysis files in the original backend3998+97 skips (collection4095).
+Replace graph's public-source94 file with source-review69: graph187 keeps
+institutional/assembly work beside its source-review fixtures. Public-source94
+joins its publication fixture family: publication324. Both use two load workers
+with max scheduling chunk1, preserving every original test body and source
+identity. This avoids the new analysis fixture family's startup work in the
+publication job and leaves the qualified backend workload unchanged.
+Frontend82, real database95, final69, review105 and all other groups remain
+complete. Retain all rejected timings and require fresh actual identities,
+coverage and reserves; no timeout/worker/coverage relaxation or unchanged retry.
+
+
+The final local graph187 and publication324 groups both pass under the exact
+two-worker small-chunk scheduling. All36 disposition identity receipts,
+placement/omission guards, full lint, collection4095 and all500 native pins/247
+prior reports remain verified. Preserve the rejected attempts; require fresh
+exact-head and independent-main evidence before declaring this correction done.

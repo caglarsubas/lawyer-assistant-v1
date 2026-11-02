@@ -62,10 +62,9 @@ env:
   CI_GRAPH_RUNTIME_TESTS: >-
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_graph_b_publication.py
-    backend/tests/test_public_sources.py
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_release_set_authorization.py
-    backend/tests/test_analysis_reviews.py
+    backend/tests/test_source_reviews.py
   # Complete expensive review files are disjoint from the backend remainder.
   # Lighter retention18 reuses withdrawal's spare pair capacity; open-validity4
   # enters review. Preserve every case, pair/cap and backend exclusion.
@@ -90,7 +89,7 @@ env:
     backend/tests/test_portfolio_source_reviews.py
     backend/tests/test_source_context_navigation.py
     backend/tests/test_source_review_lineage.py
-    backend/tests/test_analysis_suggestions.py
+    backend/tests/test_public_sources.py
 
 jobs:
   backend-and-contracts:
@@ -569,7 +568,7 @@ jobs:
         timeout-minutes: 3
         run: |
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${publication_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${publication_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20
 
   graph-runtime-contracts:
     # The 3907-case backend lane exhausted its unchanged 18-minute deadline.
@@ -602,7 +601,7 @@ jobs:
         timeout-minutes: 6
         run: |
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${graph_runtime_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20
 
       # Reuse completed graph-worker capacity for the unchanged history tail.
       - name: Test manifest-bound review headroom slice 10
