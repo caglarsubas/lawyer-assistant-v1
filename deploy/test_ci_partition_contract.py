@@ -42,7 +42,7 @@ class PartitionContract(unittest.TestCase):
             self.assertEqual(int(re.search(r"^    timeout-minutes: (\d+)$", blocks[name], re.MULTILINE)[1]), cap)
         graph = blocks["graph-runtime-contracts"]
         self.assertIn("runs-on: ubuntu-24.04-arm", graph)
-        self.assertIn('"${graph_runtime_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', graph)
+        self.assertIn('"${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1', graph)
         self.assertEqual(graph.count("CI_GRAPH_RUNTIME_TESTS"), 1)
 
     def test_frontend_shards_keep_isolation_workers_and_complete_discovery(self):

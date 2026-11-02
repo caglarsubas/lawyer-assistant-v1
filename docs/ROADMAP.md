@@ -9037,3 +9037,31 @@ two-worker small-chunk scheduling. All36 disposition identity receipts,
 placement/omission guards, full lint, collection4095 and all500 native pins/247
 prior reports remain verified. Preserve the rejected attempts; require fresh
 exact-head and independent-main evidence before declaring this correction done.
+
+
+Retain run41407852604: publication324 reserve32, graph187 reserve24,
+frontend reserve29 and an actual history contract failure. A second CI-only
+contract still required the former graph scheduler; update it to require the
+new two-worker bounded load scheduling, preserving its deadline/worker checks.
+The missed guard is an engineering error; all CI-related deployment contracts
+must pass locally before another Actions run.
+
+Restore the original backend3998, graph212 and publication230 fixture families.
+Frontend keeps cohort32; feedback50 joins the existing real database95 pair
+(145 total), with expensive runtime cases first and metadata feedback last.
+Final137 receives the unchanged database cohort1 within its existing pair
+(138 selected). Review105, history53, model20 and other groups stay complete.
+All these pairs retain two workers; frontend/database/final/graph/publication
+use bounded load scheduling. Preserve all1,018 original method identities,
+139 frontend files/10,532 cases, original caps/floors and500 native source pins.
+Only the workflow, two CI policy guards and living roadmap may change. No
+application/backend test body, native report or private history changes.
+
+
+Local qualification passes frontend32, real-database145 and final138 under
+the revised exact scheduling; the owned disposable database is removed. All24
+CI-related deployment guard tests (8 CI contracts,2 placement methods,14 native
+acceptance-plan contracts), full lint, collection4095 and500 native pins pass.
+The backend still executes3998+97 skips with actual identity receipts. All1,757
+prior tracked files outside the roadmap/workflow/two CI policy guards stay exact.
+Require fresh exact-head and independent-main qualification before closure.

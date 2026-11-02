@@ -27,7 +27,6 @@ env:
   # pair runs two bounded serial groups, avoiding a delayed inspection tail.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_analysis_cohorts.py
-    backend/tests/test_analysis_feedback.py
   CI_HISTORY_GUARD_TESTS: >-
     backend/tests/test_ci_authority_partition.py
     backend/tests/test_ci_budgeted_deployment.py
@@ -54,17 +53,20 @@ env:
     backend/tests/test_retained_mixed_assembly.py
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
+    backend/tests/test_source_reviews.py
     backend/tests/test_planning_journal_reconciliation.py
     backend/tests/test_retained_release_inspection.py
+  CI_DATABASE_FEEDBACK_TESTS: >-
+    backend/tests/test_analysis_feedback.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
   # The complete four-case open-validity file reuses review capacity. Keep
   # the remaining graph files complete and the lighter Graph B snapshot in backend.
   CI_GRAPH_RUNTIME_TESTS: >-
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_graph_b_publication.py
+    backend/tests/test_public_sources.py
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_release_set_authorization.py
-    backend/tests/test_source_reviews.py
   # Complete expensive review files are disjoint from the backend remainder.
   # Lighter retention18 reuses withdrawal's spare pair capacity; open-validity4
   # enters review. Preserve every case, pair/cap and backend exclusion.
@@ -89,7 +91,6 @@ env:
     backend/tests/test_portfolio_source_reviews.py
     backend/tests/test_source_context_navigation.py
     backend/tests/test_source_review_lineage.py
-    backend/tests/test_public_sources.py
 
 jobs:
   backend-and-contracts:
@@ -182,6 +183,7 @@ jobs:
           read -r -a capacity_tests <<< "$CI_BACKEND_CAPACITY_TESTS"
           read -r -a preflight_tests <<< "$CI_ONTOLOGY_PREFLIGHT_TESTS"
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
+          read -r -a database_feedback_tests <<< "$CI_DATABASE_FEEDBACK_TESTS"
           read -r -a final_release_tests <<< "$CI_FINAL_RELEASE_TESTS"
           read -r -a retained_withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a graph_candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
@@ -194,7 +196,7 @@ jobs:
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           ignore_args=()
-          for path in "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${database_feedback_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
@@ -330,7 +332,8 @@ jobs:
           print('Disposable PostgreSQL settings:', settings)
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+          read -r -a database_feedback_tests <<< "$CI_DATABASE_FEEDBACK_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${database_feedback_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20
 
 
 
