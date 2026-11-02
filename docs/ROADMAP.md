@@ -9304,3 +9304,182 @@ frontend69 in19.69 seconds on two load workers. All24 CI policy contracts, lint
 and unchanged505 native source pins/248 historical reports pass. Require fresh
 actual identity coverage and independent-main reserves; no operational, native
 execution, private-case or legal readiness claim is added by this CI-only fix.
+
+
+## 281. Bounded private read-only reconciliation receipts — 2026-11-02
+
+Continue from independently main-qualified PR #263 with a staged, closed receipt
+operation. Keep exact plan, decision and observation versions, including explicit
+missing references. Two fresh complete reconciliations must agree under current
+app-session/firm/origin/CSRF authorization; final binding/session checks precede
+the bounded8-KiB canonical receipt and transport checksum. The existing20-second
+workflow budget remains. No imported receipt, arbitrary store/path/key selection,
+automatic persistence, product route, inference or runtime change is introduced.
+
+Include exact combined/source/copy/journal snapshot hashes and supplied versions,
+authenticated plan/decision status, retained positive/negative outcome and explicit
+staleness. Do not export plan/review bodies, complete observations or filesystem
+paths. Treat the selection and all receipt metadata as private. Physical presence
+does not supply missing references, recover an acknowledgement or renew authority;
+a checksum is not a signature or proof of an earlier observation. Source reads
+remain non-atomic. Every recovery/execution/custody/activation flag stays false.
+Failures, changed observations, expiry during issuance, revocation and budgets
+withhold the whole receipt without altering originals or either review history.
+
+New fixture-based qualification runs in the complete backend remainder, using
+its independently measured122-second job reserve. Keep all12 jobs,70 capped
+runner-minutes, two active workers/job, existing job/step caps and reserve floors,
+all1,018 deployment identities once,139 frontend files/10,532 cases and19 cohort
+identities. Preserve505 earlier native source pins and248 historical reports;
+those results are not new native execution of this receipt wrapper. Require
+fresh exact-head and independent-main checks, actual case identities and private
+runtime/evidence preservation before closure. Owner analysis-v3 review and
+genuine operator/custody/provider/production acceptance remain pending.
+
+Ledger **280 → 281**. Engineering progress and overall product readiness remain
+separate. See [receipt contract](DISPOSITION_RECONCILIATION_RECEIPTS.md). Next:
+read-only receipt re-observation with an independently retained exact digest,
+separating prior metadata from fresh authorization without importing authority.
+
+Local qualification:27 new session/encrypted-journal cases and154 combined
+regressions pass in63.21 seconds on two workers. Repository-configured lint and
+10 CI placement/discovery/partition/worker contracts pass. All505 prior native
+source pins remain exact. See [aggregate evidence](evidence/disposition-reconciliation-receipts-2026-11-02.json).
+Fresh PR/main checks, exact identity coverage, reserve floors and preservation
+are required separately; no new native-wrapper or product/legal acceptance is
+claimed by this local evidence.
+
+
+## 282. Rebalance candidate qualification within existing CI limits — 2026-11-02
+
+The first receipt PR run41474064626 crosses the candidate job's fixed30-second
+reserve despite that job's unchanged test bodies and workload. Retain the failed
+qualification; do not merge, retry identical inputs or raise any limit. Baseline
+timing identifies the single final-release transition case at72.14 worker-seconds
+and the14 candidate cases at152.01. Keep original cases intact and move the
+complete single transition file into the long backend worker pool, replacing
+the27 new receipt cases with it. Move the complete27-case receipt file into the
+candidate job's released capacity. Frontend/history allocation remains unchanged.
+
+Backend becomes3771 passing cases plus97 existing skips (3868 collected);
+candidate becomes241 cases. The earlier3894/3797 backend-only proposal is
+superseded. Placement guards require exact complete candidate membership and
+reject duplicate execution. Preserve all1,018 deployment identities once,
+139 frontend files/10,532 cases,19 authority identities,505 native source pins,
+248 historical evidence reports and every original test body. Keep12 jobs,
+70 capped runner-minutes, two active workers/job, all job/step caps and reserve
+floors. Require measured local replacement groups, fresh exact-head and
+independent-main qualification before closure. Runner timing is not invoice cost.
+
+Ledger **281 → 282** within the same receipt PR. No private case, originals,
+evidence-version, credential, session, runtime or owner-review change. Receipt
+re-observation remains the next prepared product item; legal and genuine
+operational readiness remain pending.
+
+Local replacement qualification passes242 cases and26 subtests in167.92 seconds
+on two work-stealing workers, covering the complete241-case candidate group and
+the single unchanged transition case. An initial macOS run correctly rejects
+the system temporary path's symlinked ancestor; isolate qualification in an
+owned physical temporary root without changing the production path guard or
+test bodies. All10 CI policy contracts and configured lint pass. The rejected
+candidate job finished154/180 seconds, leaving26/required30; fresh replacement
+PR/main reserves and actual coverage remain pending.
+
+
+## 283. Release measured short-job capacity for receipt qualification — 2026-11-03
+
+Replacement run41476936130 finishes candidate green in152/180 seconds with28
+against the fixed30-second reserve. Retain that second rejection. Actual metrics
+show27 receipt cases consuming70.34 worker-seconds and14 candidate cases152.67;
+moving only the single transition case did not release sufficient capacity.
+Move the complete receipt file into the backend remainder alongside the unchanged
+transition file. Move the existing83-case capacity group, measured at23 wall
+seconds on independently qualified main, into withdrawal's measured spare after
+its original48-case pair exits. Keep its original two-minute step cap and pair.
+
+Backend becomes3798 passing cases plus97 existing skips (3895 collected),
+candidate returns to214 cases, and withdrawal runs48 then83,131 cases total.
+Both earlier layouts remain historical rejected proposals. Keep12 jobs,
+70 capped runner-minutes, two active workers/job, every existing step/job cap
+and reserve floor, original test bodies, all1,018 deployment identities once,
+139 frontend files/10,532 cases,19 authority identities,505 native source pins
+and248 historical evidence reports. Record explicit IDs for both moved groups.
+Require complete local replacement qualification, fresh exact-head and
+independent-main actual coverage/reserves before closure. No unchanged retry,
+private-case or runtime mutation, authority renewal or legal-review approval.
+
+Ledger **282 → 283** within the same receipt PR. Exact evidence, originals,
+confidentiality and both review histories remain protected. Owner analysis-v3
+review and genuine operator/custody/provider/production readiness stay pending.
+
+The complete withdrawal/capacity replacement qualifies locally with131 cases
+and36 subtests in49.30 seconds in the owned physical temporary root. All10 CI
+policy contracts and configured lint pass. Receipt27/combined154 and the earlier
+242-case/26-subtest candidate-plus-transition qualifications remain retained;
+all original bodies stay exact. Actual fresh PR/main reserves and disjoint
+case-identity receipts determine closure, with no new native or legal claim.
+
+
+## 284. Balance publication/planning against measured capacity — 2026-11-03
+
+Run41478501169 qualifies candidate with69 seconds reserve and withdrawal with56,
+but the unchanged publication/planning group finishes235/240, leaving5/required30.
+Retain that third rejection. Its actual file metrics show69 source-review cases
+at44.45 worker-seconds and31 Graph B publication cases at56.61. Move the complete
+lighter69-case source-review file into candidate and the complete31-case Graph B
+publication file into the backend pool. Leave all case bodies, assertions,
+source/evidence versions, signatures, seeds and permission gates unchanged.
+
+The declared allocation becomes backend3829 passing cases plus97 existing skips
+(3926 collected), candidate283, publication/planning109 and withdrawal48+83=131.
+All actual identities must remain disjoint and complete. Retain12 jobs,
+70 capped runner-minutes, two active workers/job and every existing step/job
+cap/reserve floor. The current PostgreSQL and history lanes have33 and36 seconds
+reserve; do not treat them as spare capacity for moved work. Every lane requires
+fresh exact-head and independent-main qualification. No unchanged retry or new
+native execution, private-data mutation, deployment or legal acceptance.
+
+Ledger **283 → 284** within the same receipt PR. Preserve505 prior native source
+pins and248 historical evidence files, originals, exact evidence versions,
+confidentiality and review history. Owner analysis-v3 review remains pending.
+
+All100 moved source-review/Graph B publication cases qualify locally in45.14
+seconds on two workers, alongside10 CI policy contracts and configured lint.
+Retain prior receipt154, candidate-plus-transition242/26-subtest and
+withdrawal131/36-subtest results without claiming fresh execution of unchanged
+native campaigns. Actual latest-head and independent-main case identities and
+reserve floors remain separate mandatory qualification gates.
+
+
+## 285. Closed case-level source-review allocation and execution receipts — 2026-11-03
+
+The whole-file layout still exhausts candidate reserve. Retain that fourth
+rejection; do not keep trying identical workloads. Freeze the unchanged69-case
+source-review file and every exact collected identity in a closed manifest.
+Assign23 disjoint cases each to candidate, withdrawal and source-publication.
+Validate the whole69-ID collection before selecting a lane, check every worker's
+selected IDs and emit a source/inventory-bound receipt only after every assigned
+case passes once. A skipped/xfail/missing/duplicate/invented case, changed source,
+wrong lane or incomplete worker collection fails qualification. Other test IDs
+remain untouched. Twelve new guard cases verify actual child calls and receipts.
+
+Retain every original case body and the12 jobs/70 capped runner-minutes/two
+active workers per job, all original job/step limits and reserve floors. Backend
+becomes3841 passing cases plus97 existing skips (3938 collected); candidate237,
+withdrawal71+83=154, source-publication208 and publication/planning109. The three
+source-review execution receipts must jointly account for all69 identities once.
+All1,018 deployment,139 frontend-file/10,532-case and19 authority identities,
+505 earlier native pins and248 historical evidence files remain protected.
+
+Ledger **284 → 285**, still within the same receipt PR. Require actual fresh
+exact-head and independently fetched-main execution/coverage/reserve gates.
+The unsigned private receipt has no product route, persistence, import or
+execution authority. Originals, exact evidence, confidentiality and independent
+review histories remain unchanged; owner analysis-v3 review stays pending.
+
+Local qualification passes39 receipt/partition-guard cases and all10 CI policy
+contracts. Three real two-worker source-review lanes each pass23 cases; the
+independent JUnit/manifest comparison proves all69 original identities executed
+once. The unchanged source file and505 native source pins remain exact. Latest
+head and independent-main measured reserves, complete case coverage and private
+preservation are still required separately.

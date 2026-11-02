@@ -10,17 +10,17 @@ concurrency:
   group: checks-${{ github.ref }}
   cancel-in-progress: true
 env:
+  CI_SOURCE_REVIEW_TESTS: >-
+    backend/tests/test_source_reviews.py
   CI_HISTORY_BINDING_TESTS: >-
     backend/tests/test_provision_mappings.py
   CI_FRONTEND_QUALIFICATION_TESTS: >-
     backend/tests/test_analysis_focus.py
     backend/tests/test_disposition_journal_reconciliation.py
   CI_PUBLICATION_PLANNING_TESTS: >-
-    backend/tests/test_graph_b_publication.py
     backend/tests/test_open_validity_publication.py
     backend/tests/test_planning_journal_reconciliation.py
     backend/tests/test_release_authorization.py
-    backend/tests/test_source_reviews.py
     backend/tests/test_retained_release_inspection.py
   CI_FAST_GUARD_TESTS: >-
     backend/tests/test_ci_history_review_pair.py
@@ -49,7 +49,6 @@ env:
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_authority_proposals.py
   CI_GRAPH_CANDIDATE_TESTS: >-
-    backend/tests/test_final_release_transitions.py
     backend/tests/test_final_graph_candidate.py
     backend/tests/test_staged_receipt_adapter.py
     backend/tests/test_native_receipt_stage.py
@@ -187,6 +186,7 @@ jobs:
       - name: Test backend
         timeout-minutes: 16
         run: |
+          read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"
           read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
           read -r -a frontend_qualification_tests <<< "$CI_FRONTEND_QUALIFICATION_TESTS"
           read -r -a publication_planning_tests <<< "$CI_PUBLICATION_PLANNING_TESTS"
@@ -208,17 +208,10 @@ jobs:
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           ignore_args=()
-          for path in "${history_binding_tests[@]}" "${frontend_qualification_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${source_review_tests[@]}" "${history_binding_tests[@]}" "${frontend_qualification_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
-      # Reuse the original sequential two-minute backend capacity step.
-      # These complete files leave saturated short jobs; same pair, no overlap.
-      - name: Test complete backend capacity group
-        timeout-minutes: 2
-        run: |
-          read -r -a capacity_tests <<< "$CI_BACKEND_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${capacity_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
       - name: Validate RDF and SHACL contract
         run: python scripts/validate_ontology.py
       - name: Compare actual synthetic extraction with independent reference
@@ -513,14 +506,22 @@ jobs:
       - name: Test conjunctive release withdrawal and complete retained budgets
         timeout-minutes: 2
         run: |
+          read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"
           read -r -a withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=withdrawal "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" "${source_review_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+      # Reuse measured withdrawal spare after its original pair has exited.
+      # Both complete files and the original two-minute step limit are retained.
+      - name: Test complete backend capacity group
+        timeout-minutes: 2
+        run: |
+          read -r -a capacity_tests <<< "$CI_BACKEND_CAPACITY_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${capacity_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   graph-candidate-contracts:
-    # A 67-second transition case previously consumed the final job's setup
-    # headroom. Run it first alongside candidate checks; keep every assertion,
-    # seven jobs, two workers and all existing deadlines without retry.
+    # The transition and new receipt files reuse the backend pool. Preserve
+    # complete candidate files and every assertion within the original
+    # twelve jobs, two workers and all existing deadlines without retry.
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 3
     steps:
@@ -541,8 +542,9 @@ jobs:
       - name: Test complete final graph candidate contracts
         timeout-minutes: 3
         run: |
+          read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"
           read -r -a candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${candidate_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate "${candidate_tests[@]}" "${source_review_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   source-publication-contracts:
     # PostgreSQL races passed in 208s and publication checks in 72s, but setup
@@ -568,8 +570,9 @@ jobs:
       - name: Test signed publication and retained-source renewal
         timeout-minutes: 3
         run: |
+          read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${publication_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=publication "${publication_tests[@]}" "${source_review_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
       - name: Test manifest-bound review headroom slice 9
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json

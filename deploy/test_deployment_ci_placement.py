@@ -174,8 +174,8 @@ class DeploymentPlacementContract(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "recovery_qualification_tests"):
                 validate_workflow_arrays(broken)
         frontend_group = re.search(r"  CI_PUBLICATION_PLANNING_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(frontend_group.split(), ["backend/tests/test_graph_b_publication.py",
-            "backend/tests/test_open_validity_publication.py", "backend/tests/test_planning_journal_reconciliation.py", "backend/tests/test_release_authorization.py", "backend/tests/test_source_reviews.py", "backend/tests/test_retained_release_inspection.py"])
+        self.assertEqual(frontend_group.split(), ["backend/tests/test_open_validity_publication.py",
+            "backend/tests/test_planning_journal_reconciliation.py", "backend/tests/test_release_authorization.py", "backend/tests/test_retained_release_inspection.py"])
         definition = '          read -r -a publication_planning_tests <<< "$CI_PUBLICATION_PLANNING_TESTS"\n'
         for owner in (backend, blocks["publication-planning-contracts"]):
             self.assertEqual(owner.count(definition), 1)
@@ -208,6 +208,26 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
         candidate_group = re.search(r"  CI_GRAPH_CANDIDATE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(candidate_group.split(), ["backend/tests/test_final_graph_candidate.py",
+            "backend/tests/test_staged_receipt_adapter.py", "backend/tests/test_native_receipt_stage.py",
+            "backend/tests/test_native_receipt_http.py", "backend/tests/test_native_receipt_faults.py",
+            "backend/tests/test_receipt_recovery_planning.py"])
+        self.assertNotIn("backend/tests/test_graph_b_publication.py", workflow)
+        self.assertNotIn("backend/tests/test_final_release_transitions.py", workflow)
+        self.assertNotIn("backend/tests/test_disposition_reconciliation_receipt.py", workflow)
+        self.assertIn('"${candidate_tests[@]}" "${source_review_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', blocks["graph-candidate-contracts"])
+        self.assertEqual(workflow.count("-p scripts.ci_source_reviews --source-review-lane="), 3)
+        self.assertEqual(re.search(r"  CI_SOURCE_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_source_reviews.py"])
+        definition = '          read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"\n'
+        for name, lane in (("graph-candidate-contracts", "candidate"), ("retained-release-withdrawal", "withdrawal"),
+                           ("source-publication-contracts", "publication")):
+            owner = blocks[name]
+            self.assertEqual(owner.count(definition), 1)
+            self.assertIn("--source-review-lane=" + lane, owner)
+            self.assertIn('"${source_review_tests[@]}"', owner)
+            with self.assertRaisesRegex(ValueError, "source_review_tests"):
+                validate_workflow_arrays(workflow.replace(owner, owner.replace(definition, "", 1), 1))
+        self.assertEqual(backend.count(definition), 1)
         self.assertIn("backend/tests/test_staged_receipt_adapter.py", candidate_group)
         self.assertNotIn("backend/tests/test_staged_receipt_adapter.py", capacity_group)
         self.assertEqual(workflow.count("backend/tests/test_staged_receipt_adapter.py"), 1)
@@ -248,8 +268,11 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(review.index("name: Test complete backend review"), review.index("--shard=1"))
         self.assertIn('"${capacity_tests[@]}"', backend)
         self.assertEqual(workflow.count("name: Test complete backend capacity group"), 1)
-        self.assertIn("timeout-minutes: 2", backend.split("name: Test complete backend capacity group", 1)[1])
-        self.assertLess(backend.index("name: Test backend"), backend.index("name: Test complete backend capacity group"))
+        withdrawal = blocks["retained-release-withdrawal"]
+        self.assertNotIn("name: Test complete backend capacity group", backend)
+        self.assertIn("timeout-minutes: 2", withdrawal.split("name: Test complete backend capacity group", 1)[1])
+        self.assertLess(withdrawal.index("name: Test conjunctive release withdrawal"), withdrawal.index("name: Test complete backend capacity group"))
+        self.assertIn('"${capacity_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', withdrawal)
         self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
         self.assertEqual(release_group.split(), ["backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_final_release_authorization.py", "backend/tests/test_final_authorization_postgres.py"])
