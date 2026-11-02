@@ -8857,3 +8857,14 @@ withdrawal's spare pair. Graph core becomes **118**, review **105**, withdrawal
 existing pairs and steps, preserving every cap and case. The placement guard also
 checks withdrawal's local retention-array definition to prevent silent omission.
 Qualify both revised groups and fresh complete PR/main execution before merge.
+
+
+Run41385121586 qualified the graph/review/withdrawal transfer, but final release
+used334/360 seconds (26/required30 spare). Retain this rejection. Its unchanged
+public-source94 file cost19.61 measured worker-seconds. Reuse the freed graph
+capacity for that complete file: graph core **212**, final **130**. Keep model20
+and all existing steps/caps; initial graph file ordering uses measured costs
+with the remaining authorization file available for work stealing. Require exact
+membership/order in the placement guard. Backend3962/fast18, review105,
+withdrawal56, history53 and frontend82 retain every case without duplication.
+Fresh actual execution and independent-main reserve gates remain mandatory.

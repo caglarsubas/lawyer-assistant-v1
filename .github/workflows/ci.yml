@@ -56,16 +56,16 @@ env:
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
     backend/tests/test_source_reviews.py
-    backend/tests/test_public_sources.py
     backend/tests/test_planning_journal_reconciliation.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
   # The complete four-case open-validity file reuses review capacity. Keep
   # the remaining graph files complete and the lighter Graph B snapshot in backend.
   CI_GRAPH_RUNTIME_TESTS: >-
-    backend/tests/test_declared_graph_assembly.py
     backend/tests/test_graph_b_component_grants.py
-    backend/tests/test_release_set_authorization.py
     backend/tests/test_graph_b_publication.py
+    backend/tests/test_public_sources.py
+    backend/tests/test_declared_graph_assembly.py
+    backend/tests/test_release_set_authorization.py
   # Complete expensive review files are disjoint from the backend remainder.
   # Lighter retention18 reuses withdrawal's spare pair capacity; open-validity4
   # enters review. Preserve every case, pair/cap and backend exclusion.

@@ -138,7 +138,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(review_block.index("--check-workflow-arrays"), review_block.index("name: Test complete backend review"))
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("backend/tests/test_source_reviews.py", release_group)
-        self.assertIn("backend/tests/test_public_sources.py", release_group)
+        self.assertNotIn("backend/tests/test_public_sources.py", release_group)
+        self.assertEqual(group.split(), ["backend/tests/test_graph_b_component_grants.py", "backend/tests/test_graph_b_publication.py", "backend/tests/test_public_sources.py", "backend/tests/test_declared_graph_assembly.py", "backend/tests/test_release_set_authorization.py"])
         self.assertIn("backend/tests/test_planning_journal_reconciliation.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_planning_journal_reconciliation.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
