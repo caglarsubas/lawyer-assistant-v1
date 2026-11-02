@@ -8726,3 +8726,63 @@ single expensive case can overlap the lighter copy-context and firm checks;
 moving lightweight files alone must not leave that case as a delayed serial
 tail. Keep the original two-worker step/cap and enforce the declared ordering
 in the placement contract. No test body, evidence version or runtime changes.
+
+
+## 275. Read-only copy interruption/restart reconciliation — 2026-11-02
+
+Add a staged read-only service for independently pinned journal materialization
+contexts. Inventory and reconcile require fresh app authentication, CSRF, origin
+and firm permissions. Trusted bindings preserve source/destination identity,
+manifest, keys, namespace, profile and distinct preparer/reviewer. Reconcile
+requires exact plan/decision/intent/completion references and the caller's exact
+observation hash; physical publication is distinct from authenticated content.
+
+Distinguish no observed intent, missing intent reference, consumed intent with no
+completion, missing completion reference, exact completed copy and stale execution
+review. An empty, partial or exact destination never supplies a lost completion
+or acknowledgement. Recheck source/journal/target/control versions before and
+after each read under the existing 20-second workflow and per-store bounds.
+Withhold partial history on wrong references, conflicting links, changed snapshots,
+revoked callers or budget exhaustion. Preserve restore-origin dependencies and
+both histories; missing origin evidence cannot qualify a dependent restore.
+
+No writes, retry/resume, cleanup, repair, adoption, authority renewal, trust
+migration or product route. The additive frozen native campaign covers 41 fresh
+process outcomes and one real process interruption on disposable ext4 volumes.
+All 51 additive offline checks and 107 retained materialization/planning checks
+pass locally. The source-bound native report qualifies all 41 declared outcomes
+and verifies disposable cleanup. It uses invented identities only; originals, exact evidence versions, encrypted
+private documents and review history are untouched. Existing native reports,
+fixtures and source bodies remain byte-exact. See [contract and qualification](JOURNAL_COPY_RESTART.md).
+
+Keep ten CI jobs, two-worker ceilings, all 1,018 deployment identities and all
+139 frontend files/10,532 cases, original deadlines and reserve floors. Close
+engineering only after fresh exact-head and independent-main execution, timing,
+coverage and private-preservation receipts. Ledger **274 → 275**; milestone
+readiness and the owner's focused-analysis v3 review remain pending.
+
+A read-only baseline found the provider relay unhealthy and seven other services
+healthy before this work. Retain that independent runtime limitation; this drill
+uses no provider request and performs no runtime install, restart or mutation.
+
+Next: independently reviewed recovery disposition planning bound to exact retained
+restart observations, without execution or repair. Genuine custody/appointments,
+production recovery and legal approval remain separate gates.
+
+
+The first exact-head run 41373772303 passed frontend tests but used272 seconds
+of its300-second job cap, leaving28/required30 seconds. Retain the rejection;
+no merge or unchanged retry. Its Vitest lane took133 seconds, human-review125
+took58, and unchanged deployment phases8/9 took40/26. History completed in235
+seconds (65 spare), while short candidate/publication/withdrawal jobs have
+insufficient measured capacity for the complete relocated group.
+
+Keep analysis-cohorts32 on x86. Move the complete feedback50 and CI-guard43 files
+to the existing history cohort step, combining them with its two fixed cohort
+cases (**95 total**) after the prior history workers exit. Frontend Python becomes
+**32**, with all5299/5233 TypeScript cases unchanged. Maintain the original
+one-minute history step, five-minute job caps, two-worker ceilings and every
+case/identity. Backend exclusions explicitly include both disjoint lists; original
+case bodies and frozen drivers are unchanged. Update the placement guard to
+require exact new membership, definitions and destination. Require fresh native
+history execution/timing and exact-head/main gates; no threshold relaxation.
