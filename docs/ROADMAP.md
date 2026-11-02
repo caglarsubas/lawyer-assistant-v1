@@ -9264,3 +9264,43 @@ Fresh PR/main qualification, actual identity coverage, all fixed reserve floors
 and private-data preservation remain required. The tracker records these states
 separately; no legal, private-case, operator-appointment or production acceptance
 is inferred from engineering results.
+
+
+## 280. Restore independently qualified main CI headroom — 2026-11-02
+
+PR #262 passed all12 exact-head checks, complete execution receipts and fixed
+reserves (minimum36 seconds) before merge. Independent main41448685317 completes
+all12 green but backend takes1137/1140 seconds, leaving3/required30. Retain that
+rejection; no unchanged retry or weakened floor. The staged reader/native52
+qualification stays valid, but main operational CI qualification remains open.
+Originals, evidence versions, review history, credentials and runtime stay exact.
+
+Move complete unchanged files into measured spare: provision-mapping83 from
+backend to the exited history pair, and focus-analysis19 from backend alongside
+the new50 frontend cases (69 total). Move unchanged ten-method manifest slice9
+from the long backend final stages to the exited publication pair. Main measured
+these files at56.44 and14.08 worker-seconds; the original case IDs/assertions,
+inputs, independent identities and native505 source pins remain unchanged.
+Backend becomes3770+97 skips (collection3867); history gains83 and frontend69.
+Every original and new50 case still runs once. Keep all12 jobs,70 total capped
+runner-minutes, two active workers/job and every job/step limit/reserve floor.
+
+Local63-case seed/front exploration passes but repeats relatively expensive
+seed setup, so leave that file in backend. Qualify only the declared83/69
+placement, plus all24 CI policy contracts, source/evidence preservation, actual
+1018 deployment IDs once,139 frontend files/10532 cases and19 authority IDs.
+Require fresh exact-head and independent-main gates before closure. No changes
+to application/backend test bodies,505 native source pins,248 earlier reports,
+private data, real provider/inference, installation, execution or activation.
+
+Ledger **279 → 280**. Engineering delivery and product readiness remain separate;
+owner analysis-v3 review and genuine operator/custody/provider/production gates
+stay pending. Next prepared product item remains a bounded read-only
+reconciliation receipt with exact versions and no recovered acknowledgements.
+
+
+The declared replacement groups pass locally: provision83 in13.52 seconds and
+frontend69 in19.69 seconds on two load workers. All24 CI policy contracts, lint
+and unchanged505 native source pins/248 historical reports pass. Require fresh
+actual identity coverage and independent-main reserves; no operational, native
+execution, private-case or legal readiness claim is added by this CI-only fix.
