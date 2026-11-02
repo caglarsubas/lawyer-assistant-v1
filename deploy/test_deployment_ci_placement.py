@@ -48,6 +48,13 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("--workers=2"), 9)
         self.assertIn("--shard=3 --workers=2", blocks["backend-and-contracts"])
         backend = blocks["backend-and-contracts"]
+        fast_guards = re.search(r"  CI_FAST_GUARD_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(fast_guards.split(), ["backend/tests/test_ci_history_review_pair.py"])
+        self.assertEqual(workflow.count("backend/tests/test_ci_history_review_pair.py"), 1)
+        self.assertIn('"${fast_guard_tests[@]}" "${runtime_tests[@]}"', backend)
+        self.assertIn('timeout --kill-after=2s 30s bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${fast_guard_tests[@]}"', backend)
+        self.assertLess(backend.index('timeout --kill-after=2s 30s'), backend.index('name: Test manifest-bound authenticated qualification'))
+
         for lane in (5, 6, 7):
             self.assertIn("--shard=" + str(lane) + " --workers=2", backend)
             self.assertLess(backend.index("--shard=" + str(lane)), backend.index("name: Test backend"))

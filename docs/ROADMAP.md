@@ -8818,8 +8818,9 @@ failure/timeout cleanup and unauthorized adapter contexts.
 
 The 53-case pair passes locally with complete child receipts and exact source
 binding; frontend82 and the placement guards also pass.
-Backend remainder becomes **3980** solely through18 fast CI guard cases; its
-capacity90 and every other group stay complete. Keep ten jobs, two-active-worker
+The18 fast CI guards run once, within30 seconds, in the existing lint step
+before expensive contracts/backend work. Backend remainder stays **3962**; its
+capacity90 and every other group remain complete. Keep ten jobs, two-active-worker
 ceilings, all1,018 deployment identities once and139 frontend files/10,532 cases,
 original caps and reserve floors. Placement/exclusion guards require exact new
 membership. Fresh exact-head/main execution, coverage, timing and preservation
@@ -8831,3 +8832,15 @@ Ledger **275 → 276**; owner legal review, genuine custody, activation and broa
 readiness stay pending. The next product slice remains independently reviewed
 recovery disposition planning from exact retained restart observations, without
 execution or repair.
+
+
+The revised layout run41381130645 qualified the53-case history pair in42.527
+seconds, leaving36 history,47 frontend and52 review job seconds. Backend then
+caught a test import bootstrap difference: the console `pytest` entrypoint did
+not supply the repository namespace that local `python -m pytest` had supplied.
+Explicitly bind both repository/script import roots in the new test module.
+Retain that failure. Run the18 guards with the exact console entrypoint as a
+30-second preflight in the existing lint step, excluded from the full backend
+through one declared list. Require actual18+3962 receipts, with no duplicates.
+This catches guard setup failures before the costly suite without relaxing any
+worker, timeout, coverage or preservation condition.
