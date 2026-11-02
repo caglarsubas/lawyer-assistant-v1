@@ -8878,3 +8878,58 @@ final **137**. Keep mixed-assembly first and inspection last so the second initi
 worker half can begin inspection while the long assembly case runs. Case counts,
 source versions, original job/step caps and worker limits stay fixed. Require the
 new full/capacity/final execution receipts and fresh independent-main gates.
+
+
+## 277. Independently reviewed recovery disposition planning — 2026-11-02
+
+Continue from the retained copy-restart observation with a separate encrypted,
+append-only disposition journal. The actual assigned preparer selects exact
+copy references, observation hash and a closed metadata-only disposition; a
+different assigned reviewer records accept/changes-required/reject against that
+exact immutable plan. Source, destination, manifest, original backup/restore
+lineage, ciphertext versions and both previous histories remain unchanged.
+
+A fresh five-minute planning window does not renew any execution window.
+Acceptance authorizes no copy, resume, repair, adoption, acknowledgement
+recovery, custody/enrollment change or production activation. Completed history
+requires its independently supplied authenticated completion; an exact target
+without that reference remains unacknowledged. Unknown references stay unknown.
+
+Read-only inspection keeps an explicitly missing review reference missing,
+rechecks the caller, compares observations and rereads exact encrypted records.
+Expired, revoked or changed planning context is visibly stale. Late physical
+races, unavailable observations, invalid references, ciphertext tampering or
+budget exhaustion withhold decrypted metadata. A record retained before a lost
+response remains append-only without automatic retry or acknowledgement recovery.
+
+Qualify the closed contract with disposable app identities and frozen native
+outcomes, including a process killed after the first target copy, then require
+all ten exact-head checks, their actual coverage and fixed reserve floors before
+merge. Independently qualify main afterward. Preserve every existing test,
+1,018 deployment identities once, 139 frontend files/10,532 cases, two-worker
+ceilings, original CI caps, 492 earlier native source pins and 246 earlier reports.
+No private runtime, originals, evidence, credentials, sessions or case-review
+mutation is part of this slice.
+
+Ledger **276 → 277**. Engineering completion is separate from milestone
+readiness: the owner's case analysis v3 review, genuine operator appointments,
+key custody, provider qualification and production activation stay pending.
+Next: read-only disposition-journal interruption/restart reconciliation, keeping
+unacknowledged review records unresolved and preserving both older histories;
+no recovery execution or authority renewal.
+
+See [the disposition contract](COPY_RECOVERY_DISPOSITION.md) for operation and
+failure semantics. Exact-head/main and native receipts determine closure.
+
+
+Qualification: all **36** new offline cases and **77** combined regression cases
+pass; lint and unchanged-source checks pass. The first native attempts reached
+report validation but rejected a mismatched schema name. Retain those failures;
+correct only the schema wiring and keep the59 expected outcomes unchanged.
+The fresh final campaign qualifies **59 outcomes /59 fresh processes /58 clean
+exits /one deliberate SIGKILL** on four disposable ext4 volumes, with all owned
+volumes removed. It binds **500** exact public source hashes, independent
+preparer/reviewer identities and exact append-only disposition inspections.
+All **1,751** prior tracked files outside the living roadmap and all246 older
+evidence reports remain exact. PR/main CI and fixed reserves are still separate
+gates; the tracker records their actual completion.
