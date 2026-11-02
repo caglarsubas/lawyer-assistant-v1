@@ -38,8 +38,9 @@ env:
   # Preserve full x86 coverage; measured model-cohort work stays on ARM.
   # Keep analysis/feedback on their measured x86 pair. The exited history
   # pair runs two bounded serial groups, avoiding a delayed inspection tail.
-  CI_HUMAN_REVIEW_GROUP_TESTS: >-
+  CI_FRONTEND_REVIEW_TESTS: >-
     backend/tests/test_analysis_cohorts.py
+  CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_analysis_feedback.py
   CI_HISTORY_GUARD_TESTS: >-
     backend/tests/test_ci_authority_partition.py
@@ -202,6 +203,7 @@ jobs:
           read -r -a retained_withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a graph_candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
           read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
+          read -r -a frontend_review_tests <<< "$CI_FRONTEND_REVIEW_TESTS"
           read -r -a history_guard_tests <<< "$CI_HISTORY_GUARD_TESTS"
           read -r -a history_inspection_tests <<< "$CI_HISTORY_INSPECTION_TESTS"
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
@@ -210,7 +212,7 @@ jobs:
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           ignore_args=()
-          for path in "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
@@ -388,6 +390,12 @@ jobs:
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=8 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-8.json
 
+      - name: Test complete portfolio review qualification
+        timeout-minutes: 2
+        run: |
+          read -r -a frontend_review_tests <<< "$CI_FRONTEND_REVIEW_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${frontend_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+
   frontend-history:
     # Growing history contracts exceeded the single frontend lane's reserve.
     # Built-in hash sharding preserves all files and per-file isolation. Each
@@ -427,6 +435,12 @@ jobs:
             ::: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=2 --report=${{ runner.temp }}/deployment-results.json
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
+
+      - name: Test complete provision binding qualification
+        timeout-minutes: 2
+        run: |
+          read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_provision_bindings --provision-binding-lane=history "${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   final-release-authorization:
     # Whole-release lifecycle, inspection and real concurrency stay together.
@@ -534,8 +548,9 @@ jobs:
         run: |
           read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"
           read -r -a candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
+          read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
           read -r -a focus_tests <<< "$CI_CANDIDATE_FOCUS_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate -p scripts.ci_provision_bindings --provision-binding-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   source-publication-contracts:
     # PostgreSQL races passed in 208s and publication checks in 72s, but setup
@@ -684,4 +699,4 @@ jobs:
         timeout-minutes: 2
         run: |
           read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_provision_bindings --provision-binding-lane=planning "${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA

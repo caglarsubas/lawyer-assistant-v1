@@ -9574,3 +9574,37 @@ fresh PR/main reserves and private/runtime preservation remain mandatory.
 Ledger **287 → 288** within the same CI follow-up. Owner analysis-v3 review,
 genuine operator/key-custody/provider qualification and legal/product readiness
 remain pending; no recovery, inference, deployment or case mutation occurs.
+
+
+## 289. Rebalance exact binding coverage and complete portfolio tests — 2026-11-03
+
+The next layout41497372696 leaves planning224/240 seconds (16/required30
+reserve) and analysis332/360 (28/required30). Preserve both rejections and the
+observed job-finalization tail; a successful test step alone is insufficient.
+The earlier transfer used measured spare but did not establish durable headroom.
+
+Freeze all83 unchanged provision-binding identities in a third closed manifest:
+20 execute in candidate,48 in history and15 in planning. Each lane validates
+full original collection and emits a success receipt only for actual non-skipped
+execution of its exact assignment. Add12 independent guards including changed
+source, missing/overlapping IDs and skipped execution. Keep the existing source69
+and disposition50 manifests and their original source files exact. Move the
+complete32-case portfolio-review file from analysis to the exited frontend pair,
+under a bounded two-minute step; no test is omitted or duplicated.
+
+Backend collects3962 (3865 expected pass+97 existing skips); candidate276;
+planning153+15=168; history adds48; frontend adds32; analysis180 plus its unchanged
+53-case frozen serial pair. Graph restart25, withdrawal158 and source-publication185
+remain. All three manifests require actual once-only receipts covering69/50/83
+identities. Every original job/step cap and reserve floor,12 jobs,70 capped
+runner-minutes,139 frontend files/10532 cases,1018 deployment IDs and19 authority
+identities remain.505 native pins,249 earlier evidence files and all receipt
+implementation pins remain exact. No private/runtime change or native campaign.
+
+Require fresh exact-head and independent-main qualification, complete original
+identity coverage, full-tree equality and private preservation before closure.
+Engineering progress is separate from pending owner analysis-v3 review and
+genuine operator, custody, provider, production and legal-readiness gates.
+
+Ledger **288 → 289**. Next product item remains bounded read-only receipt
+re-observation with exact independently retained digest and fresh authorization.
