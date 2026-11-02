@@ -9204,3 +9204,63 @@ Local209-case qualification passes in71.74 seconds with209 distinct execution
 identities. All24 policy guards and repository-configured lint pass. Original
 500 native pins/247 reports/1,757 other tracked files remain exact. The
 209/13 placement now requires fresh exact-head and independent-main evidence.
+
+
+## 279. Read-only disposition-journal interruption/restart reconciliation — 2026-11-02
+
+Continue from the independently reviewed disposition journal with a closed,
+source-only `inventory`/`reconcile` service. Observe copy/control dependencies
+and the independently pinned disposition store; join their exact source
+snapshots, compare fresh observations and reread supplied encrypted versions.
+Require current app-session/firm/origin/CSRF authorization on every request.
+Caller-selected paths, keys, stores and controller/provider reads stay excluded.
+
+Preserve the distinction between a physical publication and a retained
+acknowledgement. A temporary file is not a final plan, a present plan without
+its exact retained references remains unresolved, and a present decision without
+its supplied ciphertext reference remains withheld. Accepted, rejected and
+changes-required histories retain exact content. A stale planning context is
+visible as stale to a fresh authorized reader, without renewing any copy,
+execution, custody or independent-review authority. Late source/record changes,
+revoked callers, tampering, conflicting links and exhausted budgets withhold
+all decrypted history. No repair, cleanup, adoption, retry/resume, deployment,
+private case mutation or recovery effect is part of this slice.
+
+Freeze native outcomes for plan/review interruptions before final link and
+after durable publication before acknowledgement, plus an acknowledged-review
+control. Require real SIGKILL exits and fresh read-only processes on four owned
+ext4 volumes, with retained staging/published bytes and both earlier histories
+unchanged. Existing500 native source pins and247 prior reports remain exact.
+Owner analysis-v3 review, genuine operator appointments/key custody, provider
+qualification and production readiness remain pending.
+
+CI allocation is decided before first push: the41 new fixture-based offline
+cases pass locally in17.30 seconds on two workers. Reuse frontend reserve for
+the complete new file after Vitest exits; move the unchanged ten-method manifest
+slice9 into backend's measured spare after its capacity pair exits. Keep all12
+jobs, the70-runner-minute maximum, every existing job/step cap, two active
+workers/job, all1,018 deployment identities exactly once,139 frontend files/
+10,532 cases and19 authority-cohort identities. Add omission/placement checks
+for the new group and keep all existing application/backend test bodies frozen.
+Actual PR/main execution and fixed reserve floors determine qualification;
+local timing and runner-seconds are not invoice-cost evidence.
+
+Ledger **278 → 279**. Engineering progress and product readiness stay separate.
+See [the restart contract](DISPOSITION_JOURNAL_RESTART.md). Next prepared item:
+a bounded read-only reconciliation receipt retaining exact snapshot/reference
+versions and explicit missing-acknowledgement/current-authority limits.
+
+
+Qualification: all50 new offline cases (41 fixture scenarios plus9 closed native
+report checks) and127 combined regressions pass. All24 CI placement/worker/
+bootstrap contracts and repository-configured lint pass. The first standalone
+run exposed failure-state classification and import-order wiring; correct those
+without changing native expectations. The first native campaign passes all52
+frozen outcomes/52 fresh processes/48 clean exits/four actual SIGKILLs. Before-
+link interruptions leave two staging records; acknowledged and unacknowledged
+final publications remain distinct. All four owned ext4 volumes are removed.
+The public source-bound report pins505 files and preserves all500 prior pins.
+Fresh PR/main qualification, actual identity coverage, all fixed reserve floors
+and private-data preservation remain required. The tracker records these states
+separately; no legal, private-case, operator-appointment or production acceptance
+is inferred from engineering results.
