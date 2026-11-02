@@ -8786,3 +8786,95 @@ case/identity. Backend exclusions explicitly include both disjoint lists; origin
 case bodies and frozen drivers are unchanged. Update the placement guard to
 require exact new membership, definitions and destination. Require fresh native
 history execution/timing and exact-head/main gates; no threshold relaxation.
+
+
+## 276. Measured review and frontend CI headroom — 2026-11-02
+
+PR #258 passed its exact-head gates. Independent main41376308752 finished
+review in340/360 seconds:20/required30 spare. Retain that rejected qualification.
+The first PR #259 placement moved inspection8 to frontend; run41377661536
+finished frontend in275/300 seconds:25/required30 spare. Retain that rejection
+also. Its human40 group took66 seconds; measured inspection worker cost was
+52.29 on x86 versus41.43 on ARM. Moving a heavy complete file alone recreated
+a delayed single-worker tail.
+
+Keep analysis32 plus feedback50 on their measured x86 pair (**82**). Review
+retains **119**. After the existing history workers exit, run exactly two
+source-bound serial test processes: cohort2 plus the43 existing CI guards
+(**45**), alongside the complete inspection file (**8**). The53 cases preserve
+the original cohort19 inventory/receipts, every test body and frozen plugin.
+This balances measured ARM file costs (cohort/guards about42 worker-seconds,
+inspection41) without xdist startup or a delayed heavy case.
+
+The CI-only controller accepts two exact commands and nine exact source hashes,
+checks complete child counts and clean exits, rechecks source versions and caps
+the pair at **50 seconds inside the unchanged60-second step**. No arbitrary
+executors, extra worker, xdist child pair, retry or deadline extension. A narrow
+serial adapter requires its direct controller parent and exact profile identity,
+then delegates original cohort selection, assessment and receipts. The original
+plugin's standalone serial rejection remains unchanged. Eighteen additive guards
+cover changed commands, sources, counts, deadlines, worker expansion, child
+failure/timeout cleanup and unauthorized adapter contexts.
+
+The 53-case pair passes locally with complete child receipts and exact source
+binding; frontend82 and the placement guards also pass.
+The18 fast CI guards run once, within30 seconds, in the existing lint step
+before expensive contracts/backend work. Backend remainder stays **3962**; its
+capacity90 and every other group remain complete. Keep ten jobs, two-active-worker
+ceilings, all1,018 deployment identities once and139 frontend files/10,532 cases,
+original caps and reserve floors. Placement/exclusion guards require exact new
+membership. Fresh exact-head/main execution, coverage, timing and preservation
+receipts determine closure. All492 native source pins,246 prior evidence reports,
+original product/tests, frozen drivers and fixtures remain exact. No private
+runtime, originals, evidence versions, credential, session or review mutation.
+
+Ledger **275 → 276**; owner legal review, genuine custody, activation and broader
+readiness stay pending. The next product slice remains independently reviewed
+recovery disposition planning from exact retained restart observations, without
+execution or repair.
+
+
+The revised layout run41381130645 qualified the53-case history pair in42.527
+seconds, leaving36 history,47 frontend and52 review job seconds. Backend then
+caught a test import bootstrap difference: the console `pytest` entrypoint did
+not supply the repository namespace that local `python -m pytest` had supplied.
+Explicitly bind both repository/script import roots in the new test module.
+Retain that failure. Run the18 guards with the exact console entrypoint as a
+30-second preflight in the existing lint step, excluded from the full backend
+through one declared list. Require actual18+3962 receipts, with no duplicates.
+This catches guard setup failures before the costly suite without relaxing any
+worker, timeout, coverage or preservation condition.
+
+
+Run41383254858 passed the console preflight and corrected review/history/frontend
+work, but graph runtime used342/360 seconds (18/required30 spare). Retain that
+rejection. Its graph core122 took261 seconds, model20 took38 and assignment10
+took37. Transfer the unchanged open-validity4 file (54.39 measured worker-seconds)
+from graph to review; transfer retention18 (12.63 worker-seconds) from review to
+withdrawal's spare pair. Graph core becomes **118**, review **105**, withdrawal
+**56**. Model20 keeps its dedicated two-minute step. The net review increment is
+41.76 worker-seconds, while graph drops54.39; withdrawal gains only12.63. Reuse
+existing pairs and steps, preserving every cap and case. The placement guard also
+checks withdrawal's local retention-array definition to prevent silent omission.
+Qualify both revised groups and fresh complete PR/main execution before merge.
+
+
+Run41385121586 qualified the graph/review/withdrawal transfer, but final release
+used334/360 seconds (26/required30 spare). Retain this rejection. Its unchanged
+public-source94 file cost19.61 measured worker-seconds. Reuse the freed graph
+capacity for that complete file: graph core **212**, final **130**. Keep model20
+and all existing steps/caps; initial graph file ordering uses measured costs
+with the remaining authorization file available for work stealing. Require exact
+membership/order in the placement guard. Backend3962/fast18, review105,
+withdrawal56, history53 and frontend82 retain every case without duplication.
+Fresh actual execution and independent-main reserve gates remain mandatory.
+
+
+The same run later exhausted backend job reserve during its capacity group;
+retain that observation. Move the unchanged retained-inspection7 file (52.30
+measured worker-seconds in retained execution, dominated by one case) from that
+capacity pair into final's freed capacity. Backend capacity becomes **83** and
+final **137**. Keep mixed-assembly first and inspection last so the second initial
+worker half can begin inspection while the long assembly case runs. Case counts,
+source versions, original job/step caps and worker limits stay fixed. Require the
+new full/capacity/final execution receipts and fresh independent-main gates.

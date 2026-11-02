@@ -1,0 +1,20 @@
+{
+  "schema": "ci-history-review-pair-v1",
+  "source_sha256": {
+    "backend/tests/test_authority_model_cohorts.py": "5bd9161624af36c2f943ce528a341b9b497aafe6670feb34e516ae26cc90cc1b",
+    "backend/tests/test_ci_authority_partition.py": "f04234ae727f3844ffe9961e057ffb4e9106453a71b6d2cb8b3488b66f9d0bb4",
+    "backend/tests/test_ci_budgeted_deployment.py": "548324699f614da5cf5b601de0a14e30fee8c5ab7516b49b80db5953bb44b5b0",
+    "backend/tests/test_ci_retained_history.py": "f57586aad1fda5c0de3635addbdb13eb9d1272efda861cd4edfe5f1cd33723d0",
+    "backend/tests/test_final_release_inspection.py": "7f6620537e0156a6e336522712d47e359fd20b622f827364db947819558b6ffd",
+    "scripts/ci_authority_cohorts.py": "6519e8e3dd88c7d4f0ad426c51f4a1e5d489eb0f47b884f552c4235bfcccf056",
+    "deploy/fixtures/authority_cohort_partition.json": "6989f5cc355081538de1a696c4335a7146874f6cc1507c3476b4a132f476efc1",
+    "scripts/run_ci_history_review_pair.py": "48e9ac083f61a34438e1a752a91965cd3b389ea7d78350a2d0ae14d3a44efe26",
+    "scripts/ci_serial_history_cohorts.py": "c681251aadb92ff4246aaf231832c44ab2e6fe6a9853154e086449127107de03"
+  },
+  "seconds": 50,
+  "counts": [
+    45,
+    8
+  ],
+  "active_workers": 2
+}

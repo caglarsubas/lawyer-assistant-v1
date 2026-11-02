@@ -10,10 +10,11 @@ concurrency:
   group: checks-${{ github.ref }}
   cancel-in-progress: true
 env:
+  CI_FAST_GUARD_TESTS: >-
+    backend/tests/test_ci_history_review_pair.py
   CI_RUNTIME_AUTHORIZATION_TESTS: >-
     backend/tests/test_runtime_authorization_integration.py
   CI_BACKEND_CAPACITY_TESTS: >-
-    backend/tests/test_retained_release_inspection.py
     backend/tests/test_journal_backup_readiness.py
     backend/tests/test_firm_admin.py
   CI_AUTHORITY_MODEL_TESTS: >-
@@ -22,15 +23,17 @@ env:
   # Frontend retains its full x86 TypeScript/build/browser-unit coverage.
   # No cases, jobs, workers, deadlines, fixtures or assertions are removed.
   # Preserve full x86 coverage; measured model-cohort work stays on ARM.
-  # Retain the complete 32-case analysis group on x86. Move the remaining
-  # complete files into the exited history pair, with its original one-minute cap.
+  # Keep analysis/feedback on their measured x86 pair. The exited history
+  # pair runs two bounded serial groups, avoiding a delayed inspection tail.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_analysis_cohorts.py
-  CI_HISTORY_REVIEW_TESTS: >-
     backend/tests/test_analysis_feedback.py
+  CI_HISTORY_GUARD_TESTS: >-
     backend/tests/test_ci_authority_partition.py
     backend/tests/test_ci_budgeted_deployment.py
     backend/tests/test_ci_retained_history.py
+  CI_HISTORY_INSPECTION_TESTS: >-
+    backend/tests/test_final_release_inspection.py
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_authority_proposals.py
@@ -52,33 +55,31 @@ env:
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
     backend/tests/test_source_reviews.py
-    backend/tests/test_public_sources.py
     backend/tests/test_planning_journal_reconciliation.py
+    backend/tests/test_retained_release_inspection.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
-  # Keep the heavier open-validity file in this graph group; the lighter complete
-  # Graph B snapshot file uses the backend remainder. Measured file exchange,
-  # plus sequential graph metadata workers, preserves both jobs' timing reserve.
+  # The complete four-case open-validity file reuses review capacity. Keep
+  # the remaining graph files complete and the lighter Graph B snapshot in backend.
   CI_GRAPH_RUNTIME_TESTS: >-
-    backend/tests/test_open_validity_publication.py
-    backend/tests/test_declared_graph_assembly.py
     backend/tests/test_graph_b_component_grants.py
-    backend/tests/test_release_set_authorization.py
     backend/tests/test_graph_b_publication.py
+    backend/tests/test_public_sources.py
+    backend/tests/test_declared_graph_assembly.py
+    backend/tests/test_release_set_authorization.py
   # Complete expensive review files are disjoint from the backend remainder.
-  # Retention qualification uses this job's measured 81-second main reserve;
-  # keep its existing pair/cap and keep the backend remainder unchanged.
+  # Lighter retention18 reuses withdrawal's spare pair capacity; open-validity4
+  # enters review. Preserve every case, pair/cap and backend exclusion.
   CI_AUTHORITY_COHORT_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
   CI_BACKEND_REVIEW_TESTS: >-
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_journal_materialization.py
+    backend/tests/test_open_validity_publication.py
   # Complete lighter files reuse measured native ARM history/withdrawal reserve.
   # Sequential workers start only after both history workers have exited.
   # Rejected review/frontend layouts are retained; no caps or floors increase.
   CI_RECEIPT_RETENTION_TESTS: >-
     backend/tests/test_private_inventory_receipts.py
-  CI_REVIEW_INSPECTION_TESTS: >-
-    backend/tests/test_final_release_inspection.py
   CI_PUBLICATION_TESTS: >-
     backend/tests/test_publication_cli.py
     backend/tests/test_authority_revalidations.py
@@ -121,7 +122,10 @@ jobs:
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
           echo "$GITHUB_WORKSPACE/backend/.venv/bin" >> "$GITHUB_PATH"
       - name: Lint Python
-        run: ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
+        run: |
+          ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
+          read -r -a fast_guard_tests <<< "$CI_FAST_GUARD_TESTS"
+          timeout --kill-after=2s 30s bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${fast_guard_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
       # Retain locked Node/dependency preparation for existing contract checks.
       # Its single build uses the newly released backend reserve.
       - uses: actions/setup-node@v4
@@ -173,6 +177,7 @@ jobs:
       - name: Test backend
         timeout-minutes: 18
         run: |
+          read -r -a fast_guard_tests <<< "$CI_FAST_GUARD_TESTS"
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           read -r -a capacity_tests <<< "$CI_BACKEND_CAPACITY_TESTS"
           read -r -a preflight_tests <<< "$CI_ONTOLOGY_PREFLIGHT_TESTS"
@@ -181,15 +186,15 @@ jobs:
           read -r -a retained_withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a graph_candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
           read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
-          read -r -a history_review_tests <<< "$CI_HISTORY_REVIEW_TESTS"
+          read -r -a history_guard_tests <<< "$CI_HISTORY_GUARD_TESTS"
+          read -r -a history_inspection_tests <<< "$CI_HISTORY_INSPECTION_TESTS"
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
-          read -r -a review_inspection_tests <<< "$CI_REVIEW_INSPECTION_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           ignore_args=()
-          for path in "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${review_inspection_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
@@ -254,11 +259,9 @@ jobs:
       - name: Test complete backend review and cohort files
         timeout-minutes: 5
         run: |
-          read -r -a review_inspection_tests <<< "$CI_REVIEW_INSPECTION_TESTS"
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
-          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${review_inspection_tests[@]}" "${authority_cohort_tests[@]}" "${receipt_retention_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${authority_cohort_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 
       # Reuse the same pair after review tests; no overlap with the x86 UI.
       - name: Test complete manifest-bound assignment 1
@@ -433,14 +436,18 @@ jobs:
             ::: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=2 --report=${{ runner.temp }}/deployment-results.json
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
-      # The two history workers have fully exited. Combine the closed two-case
-      # cohort with feedback50 and the 43 unchanged CI guards in the same pair.
+      # The two history workers have exited. One serial child runs cohort2
+      # plus guards43; the other runs inspection8. No xdist grandchildren.
+      # The source-bound controller enforces 50s inside this original 60s step.
       - name: Test verified history cohort partition
         timeout-minutes: 1
         run: |
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
-          read -r -a history_review_tests <<< "$CI_HISTORY_REVIEW_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=history "${authority_cohort_tests[@]}" "${history_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
+          read -r -a history_guard_tests <<< "$CI_HISTORY_GUARD_TESTS"
+          read -r -a history_inspection_tests <<< "$CI_HISTORY_INSPECTION_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python scripts/run_ci_history_review_pair.py \
+            backend/.venv/bin/python -m pytest -p scripts.ci_serial_history_cohorts --authority-cohort-lane=history --ci-serial-role=cohort "${authority_cohort_tests[@]}" "${history_guard_tests[@]}" -q --maxfail=1 \
+            ::: backend/.venv/bin/python -m pytest -p scripts.ci_serial_history_cohorts --ci-serial-role=inspection "${history_inspection_tests[@]}" -q --maxfail=1
 
 
   final-release-authorization:
@@ -510,7 +517,8 @@ jobs:
         timeout-minutes: 3
         run: |
           read -r -a withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${withdrawal_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
+          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
 
   graph-candidate-contracts:
     # A 67-second transition case previously consumed the final job's setup
