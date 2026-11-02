@@ -9144,3 +9144,14 @@ and authority partitions. CI policy tests and the repository-configured lint
 pass; frozen controllers, application/backend test bodies,500 native pins
 and247 report files remain exact. No deadline, worker, private data or runtime
 permission changes. Exact-head and independent-main reserve gates remain open.
+
+
+The previous long backend job also finishes1123/1140 seconds, below the
+30-second reserve floor. Transfer its unchanged49-case authorization file
+(78.62 measured worker-seconds) into the withdrawal job's measured spare;
+withdrawal becomes97, backend3872+97skip (collection3969). The combined97-case
+withdrawal candidate passes locally in23.51 seconds with36 original subtests.
+No additional job, cap, worker, test-ID or application/test-body changes.
+Bind all49 moved identities to actual withdrawal execution and the backend
+exclusion. Retain every rejected observation and require both fresh PR and
+independent-main qualification under the same eleven-job66-minute envelope.

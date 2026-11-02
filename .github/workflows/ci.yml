@@ -40,6 +40,7 @@ env:
     backend/tests/test_final_release_inspection.py
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_authority_proposals.py
+    backend/tests/test_release_authorization.py
   CI_GRAPH_CANDIDATE_TESTS: >-
     backend/tests/test_final_release_transitions.py
     backend/tests/test_final_graph_candidate.py
@@ -73,8 +74,8 @@ env:
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_release_set_authorization.py
   # Complete expensive review files are disjoint from the backend remainder.
-  # Lighter retention18 reuses withdrawal's spare pair capacity; open-validity4
-  # enters review. Preserve every case, pair/cap and backend exclusion.
+  # Withdrawal spare holds retention18 and authorization49; frontend holds
+  # open-validity4. Preserve every complete file, pair/cap and exclusion.
   CI_AUTHORITY_COHORT_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
   CI_BACKEND_REVIEW_TESTS: >-
@@ -504,7 +505,7 @@ jobs:
         run: |
           read -r -a withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   graph-candidate-contracts:
     # A 67-second transition case previously consumed the final job's setup
