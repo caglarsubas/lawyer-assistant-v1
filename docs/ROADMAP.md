@@ -9117,3 +9117,30 @@ bootstrap-negative launch hit its unchanged3-second bound during concurrent
 qualification; retain the failure and its quiet rerun without relaxing the
 bound. All24 CI-related policy guards, lint and500 native pins/247 reports are
 required before push. No new runtime operation or readiness claim is added.
+
+
+The next run41416630262 completed short-job correctness checks but misses
+reserve in history294/300, graph343/360 and review333/360. Keep these rejections.
+Use measured spare without raising the eleven-job/66-minute budget: move the
+unchanged frozen53-case ARM history pair from history to the analysis job, after
+its main pair exits. Its original controller, nine source hashes, exact commands,
+50-second limit and two serial children stay byte-exact. Move source-review69
+back to final and planning-journal49 to frontend. Analysis main becomes212 plus
+frozen pair53; final becomes89 (88+cohort1). Move graph-publication31 and open-
+validity4 to the same frontend84 group beside journal49. Graph becomes181;
+review101; history retains its original complete5233-case frontend shard and419
+contract identities. Frontend uses existing spare after its TypeScript pair exits.
+Every moved file is globally declared once and excluded from backend. Original
+1,018 method IDs,139 frontend files/10,532 cases,19 cohort IDs, per-job ceilings,
+all500 native source pins and247 earlier reports remain preserved. Require fresh
+local controller/placement checks, actual coverage and independent-main reserves.
+
+
+The rebalanced local qualification passes exact53-case frozen controller
+(45+8, both clean exits,16.217 seconds), complete frontend84 in26.96 seconds
+and analysis212 in84.31 seconds. Every actual identity is distinct. Require
+the same identities in fresh CI, including all original frontend/deployment
+and authority partitions. CI policy tests and the repository-configured lint
+pass; frozen controllers, application/backend test bodies,500 native pins
+and247 report files remain exact. No deadline, worker, private data or runtime
+permission changes. Exact-head and independent-main reserve gates remain open.
