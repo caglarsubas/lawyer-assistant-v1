@@ -29,19 +29,22 @@
   ],
   "same_original_case_inventory": true,
   "source_sha256": {
-    ".github/workflows/ci.yml": "64bd5cdde2136929133dfe3f7fb688b8f8e552d1e5e40c7f2f809d972e04241a",
-    "deploy/test_deployment_ci_placement.py": "8873cd6fb9decae60ef3482708d445e907a573fc932f57143e134b7185a101a9",
-    "deploy/test_ci_partition_contract.py": "08f1cf7ed5e1b7d859c5db57ce5fe8c048d965ba39e4f5ae0c35c4ff6117197b"
+    ".github/workflows/ci.yml": "8a057ef7119b8702448472ea99f915707911a042b320f17bafe192cfb087951a",
+    "deploy/test_deployment_ci_placement.py": "e6afe9b685ea51f156968c90f714fd2729c8cb6faf43f1457f898869b302ce90",
+    "deploy/test_ci_partition_contract.py": "35247b53806bc7e2ae8555e382f439765bbb2e91310ee558257c4c4e014be2e8",
+    "scripts/ci_disposition_reads.py": "5d2478cfc11f0121936b61e44f93a7b41c7b34adeceea0687a916f1d34861d16",
+    "backend/tests/test_ci_disposition_reads.py": "8835ac3d84081b4a3f25354aef65be687b8bdba3069f7f65ad29a8ee8503737c",
+    "deploy/fixtures/disposition_read_partition.json": "492a7e333597063b0fc2d047efe1b78359d48243d46b58dbf5c816f6b6b1804f"
   },
   "placement": {
-    "backend_collected": 3938,
-    "backend_expected_passed": 3841,
+    "backend_collected": 3950,
+    "backend_expected_passed": 3853,
     "existing_skips": 97,
-    "graph_restart_cases": 50,
+    "graph_restart_cases": 35,
     "candidate_total": 256,
-    "planning_primary": 132,
+    "planning_primary": 141,
     "planning_binding": 83,
-    "planning_total": 215,
+    "planning_total": 224,
     "source_publication": 185,
     "withdrawal": 154,
     "frontend_extra_pytest": 0,
@@ -51,7 +54,15 @@
       23,
       23
     ],
-    "publication_lane_job": "publication-planning-contracts"
+    "publication_lane_job": "publication-planning-contracts",
+    "withdrawal_primary": 77,
+    "withdrawal_total": 160,
+    "disposition_read_lanes": {
+      "graph": 35,
+      "withdrawal": 6,
+      "publication": 9
+    },
+    "new_CI_guard_cases": 12
   },
   "fixed_limits": {
     "jobs": 12,
@@ -63,7 +74,10 @@
   "local": {
     "moved_cases": 152,
     "seconds": 34.16,
-    "CI_policy_checks": 10
+    "CI_policy_checks": 10,
+    "disposition_manifest_guards": 12,
+    "all50_real_disposition_cases_once": true,
+    "dual_plugin_real_source_cases": 46
   },
   "preservation": {
     "native_pins": 505,
@@ -77,5 +91,13 @@
     "production_activation": false,
     "billing_measured": false,
     "independent_main_qualification": "required separately"
+  },
+  "rejected_PR_layout": {
+    "run": 41492191384,
+    "job": "graph-runtime-contracts",
+    "seconds": 349,
+    "cap": 360,
+    "reserve": 11,
+    "required": 30
   }
 }

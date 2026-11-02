@@ -9521,3 +9521,33 @@ remains pending. Engineering delivery and product/legal readiness stay separate.
 
 Ledger **285 → 286**. Next product item remains read-only receipt re-observation
 with exact independently retained references and fresh authorization.
+
+
+## 287. Close disposition-read CI routing with exact execution receipts — 2026-11-03
+
+The first PR #265 layout41492191384 resolves the frontend/history/publication
+placement but leaves graph349/360 seconds,11/required30 reserve. Retain that
+rejection. Freeze all50 existing restart-case IDs and their unchanged source in
+a second closed CI manifest. Use observed fixture costs to move fifteen costly
+cases out of graph:35 remain there,6 run with withdrawal and9 with planning.
+The original69-case source-review manifest, its code and all three23-case lanes
+remain byte-identical. Both manifests validate full collection and exact worker
+selection; success receipts require every assigned case actually pass once.
+
+Add12 independent CI guard cases for changed/missing/overlapping manifests,
+worker selection, actual calls and skipped-case rejection. All50 real restart
+cases pass exactly once locally across35/6/9; dual-plugin runs also pass46 real
+source-review cases without interfering with either selection. Keep every
+original assertion, fixture, source/evidence version, job/step cap/reserve floor,
+all12 jobs,70 capped runner-minutes and two active workers/job. Backend becomes
+3853 pass+97 existing skips/3950 collected; graph restart35; withdrawal77+83=160;
+planning141+83=224; candidate256 and source-publication185 stay unchanged.
+
+Require all50 and all69 direct actual execution receipts jointly once, every
+original deployment/frontend/authority identity, fresh PR/main reserves and full
+tree/private-runtime preservation.505 native pins and249 prior evidence files
+remain exact. No new native campaign, runtime route, inference, recovery,
+deployment, key/session change or case mutation. Owner analysis-v3 review is
+pending; engineering and legal/product readiness remain separate.
+
+Ledger **286 → 287**. Receipt re-observation remains the next product item.

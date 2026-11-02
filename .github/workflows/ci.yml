@@ -496,9 +496,10 @@ jobs:
         timeout-minutes: 2
         run: |
           read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"
+          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
           read -r -a withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=withdrawal "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" "${source_review_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=withdrawal -p scripts.ci_disposition_reads --disposition-read-lane=withdrawal "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
       # Reuse measured withdrawal spare after its original pair has exited.
       # Both complete files and the original two-minute step limit are retained.
       - name: Test complete backend capacity group
@@ -604,7 +605,7 @@ jobs:
         timeout-minutes: 2
         run: |
           read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
 
       # Reuse completed graph-worker capacity for the unchanged history tail.
@@ -676,8 +677,9 @@ jobs:
         timeout-minutes: 4
         run: |
           read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"
+          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
           read -r -a publication_planning_tests <<< "$CI_PUBLICATION_PLANNING_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=publication "${publication_planning_tests[@]}" "${source_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=publication -p scripts.ci_disposition_reads --disposition-read-lane=publication "${publication_planning_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
       - name: Test complete provision binding qualification
         timeout-minutes: 2
         run: |

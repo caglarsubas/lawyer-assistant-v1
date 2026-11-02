@@ -182,7 +182,7 @@ class DeploymentPlacementContract(unittest.TestCase):
             broken = workflow.replace(owner, owner.replace(definition, "", 1), 1)
             with self.assertRaisesRegex(ValueError, "publication_planning_tests"):
                 validate_workflow_arrays(broken)
-        self.assertIn('"${publication_planning_tests[@]}" "${source_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["publication-planning-contracts"])
+        self.assertIn('"${publication_planning_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["publication-planning-contracts"])
         self.assertNotIn("CI_PUBLICATION_PLANNING_TESTS", blocks["frontend"])
         for key, path, array, job in (("CI_DISPOSITION_RESTART_TESTS", "backend/tests/test_disposition_journal_reconciliation.py", "disposition_restart_tests", "graph-runtime-contracts"),
                                       ("CI_CANDIDATE_FOCUS_TESTS", "backend/tests/test_analysis_focus.py", "focus_tests", "graph-candidate-contracts")):
@@ -190,13 +190,20 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertEqual(group.split(), [path])
             self.assertEqual(workflow.count(path), 1)
             definition = f'          read -r -a {array} <<< "${key}"\n'
-            for owner in (backend, blocks[job]):
+            owners = [backend, blocks[job]]
+            if key == "CI_DISPOSITION_RESTART_TESTS":
+                owners.extend([blocks["retained-release-withdrawal"], blocks["publication-planning-contracts"]])
+            for owner in owners:
                 self.assertEqual(owner.count(definition), 1)
                 broken = workflow.replace(owner, owner.replace(definition, "", 1), 1)
                 with self.assertRaisesRegex(ValueError, array):
                     validate_workflow_arrays(broken)
             self.assertNotIn(key, blocks["frontend"])
         self.assertIn('"${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', graph)
+        self.assertEqual(workflow.count("-p scripts.ci_disposition_reads --disposition-read-lane="), 3)
+        for name, lane in (("graph-runtime-contracts", "graph"), ("retained-release-withdrawal", "withdrawal"),
+                           ("publication-planning-contracts", "publication")):
+            self.assertIn("--disposition-read-lane=" + lane, blocks[name])
         self.assertNotIn("name: Test complete frontend recovery qualification", workflow)
         history_bindings = re.search(r"  CI_HISTORY_BINDING_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(history_bindings.split(), ["backend/tests/test_provision_mappings.py"])

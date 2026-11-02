@@ -51,7 +51,7 @@ class PartitionContract(unittest.TestCase):
         self.assertNotIn("--workers=", isolated)
         planning = blocks["publication-planning-contracts"]
         self.assertIn("runs-on: ubuntu-24.04-arm", planning)
-        self.assertIn('"${publication_planning_tests[@]}" "${source_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1', planning)
+        self.assertIn('"${publication_planning_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1', planning)
         self.assertNotIn("--workers=", planning)
 
     def test_frontend_shards_keep_isolation_workers_and_complete_discovery(self):
