@@ -8933,3 +8933,274 @@ preparer/reviewer identities and exact append-only disposition inspections.
 All **1,751** prior tracked files outside the living roadmap and all246 older
 evidence reports remain exact. PR/main CI and fixed reserves are still separate
 gates; the tracker records their actual completion.
+
+
+## 278. Preserve main CI reserve with complete measured groups — 2026-11-02
+
+PR #260 passed all ten exact-head checks, actual coverage and every reserve
+floor before its guarded merge. Independent main run41400027723 then completed
+final release in338/360 seconds, leaving22 against the required30. Retain that
+rejection; a green check does not qualify insufficient reserve. Leave the other
+main work to finish within its existing caps. Originals, exact evidence versions,
+private review history, encrypted documents, credentials and sessions stay exact.
+
+Move the unchanged source-review69 file (39.77 measured worker-seconds) from
+final into the existing database pair. Final becomes68; real database coverage
+becomes164 plus the separate cohort1. Transfer the complete analysis-review24
+and analysis-focus19 files (15.59/12.98 worker-seconds) from backend into graph
+and review respectively. Graph becomes236; review124; backend remainder3955.
+The moves use observed spare capacity and avoid increasing the already narrow
+backend reserve after the36 new disposition cases. No method, assertion, fixture,
+case, deployment identity, deadline or worker is removed or relaxed.
+
+The placement guard requires each new array, its definition in both execution
+and backend exclusion, exact group membership and one copy of each moved file.
+Keep ten jobs, two-active-worker ceilings, all1,018 deployment identities once,
+all139 frontend files/10,532 cases, original caps and fixed reserve floors.
+All500 native source pins,247 previous reports and application/backend test
+bodies remain exact. This is CI placement only; retain the59-outcome native qualification and
+make no new provider/inference, private backup, install or activation claim.
+
+Ledger **277 → 278**. Require fresh exact-head execution, complete per-file
+receipts, guarded merge and independent-main qualification. Engineering delivery
+and broader readiness remain separate. The next product item stays read-only
+disposition-journal interruption/restart reconciliation, without execution or
+acknowledgement recovery. Owner case review remains pending.
+
+
+Local qualification passes complete graph236, review124 and source-review69
+cases, the unchanged two placement methods with added omission regressions,
+full lint and collection4052 (backend3955 plus97 existing skips). All36 new
+disposition and51 retained copy cases stay included; fast guards18 remain
+separate and execute once. All1,758 earlier tracked files outside the living
+roadmap and two CI placement files stay byte-exact. Native500 pins and247 older
+evidence reports are unchanged; private preservation gates remain mandatory.
+
+
+Retain correction run41402620896: frontend274/300 leaves26/required30;
+database164 consumed262 seconds in the pair and19 in a separate cohort step,
+then reached its unchanged300-second job cap. The individual database files
+completed, but cap cancellation and insufficient reserve prevent qualification.
+Final68, graph236 and review124 finish with59/50/30 seconds spare respectively.
+Do not retry that placement unchanged.
+
+Restore source-review69 and analysis-focus19 to the full backend; move complete
+analysis-suggestions39 (27.54 measured worker-seconds) to publication. Backend
+becomes4004 plus97 existing skips; publication269; graph236; review105. Keep all
+36 disposition cases and all51 retained copy cases in the backend. Database
+returns to95 real races. Its unchanged source-bound cohort1 executes within the
+existing final pair alongside68 whole-release cases (69 selected), removing a
+serial startup/tail while retaining the exact original19-case partition.
+
+Frontend82 and final69 use two xdist load workers with maximum scheduling
+chunk1. The smaller chunks preserve every case, assertion and fixture, and
+avoid static count-based queues delaying unequal-cost work. No child worker,
+job, retry, cap or reserve-floor expansion. Guards require the exact scheduling
+arguments, cohort location and moved-file inclusion/exclusion. Native500 pins,
+247 reports, originals, exact evidence, privacy and review history stay exact.
+
+
+The full backend additionally emits pytest's passive `-rA` execution summary.
+Bind its actual passed identities to the exact collected inventory, require
+4,004 unique passes plus97 existing skips, and verify moved-source69, focused
+analysis19, new disposition36 and retained copy51 coverage explicitly. This
+adds an execution receipt without additional tests, jobs, workers or authority.
+
+
+The revised local frontend82/publication269/final69 groups pass, including
+real PostgreSQL and the unchanged cohort partition within the final pair. The
+owned disposable database is removed. All36 disposition cases pass with actual
+identity receipts; canonicalize only the optional backend/ report prefix against
+collection4101. Placement guards, lint and all500 native pins/247 reports pass.
+
+
+Retain run41406626981: all short jobs pass except publication269's26/required30
+reserve. It measured30.44 worker-seconds for analysis-suggestions39. Other job
+reserves are frontend73, database64, final48, graph51, review53, history36,
+withdrawal35 and candidate43. Keep the successful frontend/final small-chunk
+scheduling and shared final cohort execution.
+
+Keep analysis files in the original backend3998+97 skips (collection4095).
+Replace graph's public-source94 file with source-review69: graph187 keeps
+institutional/assembly work beside its source-review fixtures. Public-source94
+joins its publication fixture family: publication324. Both use two load workers
+with max scheduling chunk1, preserving every original test body and source
+identity. This avoids the new analysis fixture family's startup work in the
+publication job and leaves the qualified backend workload unchanged.
+Frontend82, real database95, final69, review105 and all other groups remain
+complete. Retain all rejected timings and require fresh actual identities,
+coverage and reserves; no timeout/worker/coverage relaxation or unchanged retry.
+
+
+The final local graph187 and publication324 groups both pass under the exact
+two-worker small-chunk scheduling. All36 disposition identity receipts,
+placement/omission guards, full lint, collection4095 and all500 native pins/247
+prior reports remain verified. Preserve the rejected attempts; require fresh
+exact-head and independent-main evidence before declaring this correction done.
+
+
+Retain run41407852604: publication324 reserve32, graph187 reserve24,
+frontend reserve29 and an actual history contract failure. A second CI-only
+contract still required the former graph scheduler; update it to require the
+new two-worker bounded load scheduling, preserving its deadline/worker checks.
+The missed guard is an engineering error; all CI-related deployment contracts
+must pass locally before another Actions run.
+
+Restore the original backend3998, graph212 and publication230 fixture families.
+Frontend keeps cohort32; feedback50 joins the existing real database95 pair
+(145 total), with expensive runtime cases first and metadata feedback last.
+Final137 receives the unchanged database cohort1 within its existing pair
+(138 selected). Review105, history53, model20 and other groups stay complete.
+All these pairs retain two workers; frontend/database/final/graph/publication
+use bounded load scheduling. Preserve all1,018 original method identities,
+139 frontend files/10,532 cases, original caps/floors and500 native source pins.
+Only the workflow, two CI policy guards and living roadmap may change. No
+application/backend test body, native report or private history changes.
+
+
+Local qualification passes frontend32, real-database145 and final138 under
+the revised exact scheduling; the owned disposable database is removed. All24
+CI-related deployment guard tests (8 CI contracts,2 placement methods,14 native
+acceptance-plan contracts), full lint, collection4095 and500 native pins pass.
+The backend still executes3998+97 skips with actual identity receipts. All1,757
+prior tracked files outside the roadmap/workflow/two CI policy guards stay exact.
+Require fresh exact-head and independent-main qualification before closure.
+
+
+Run41410461193 also exhausted reserve in the unchanged withdrawal job. The
+fixed ten-job topology is too tight for runtime variation; stop shuffling small
+files among saturated pairs. Add one bounded ARM analysis/recovery job for the
+complete human82, source-review69, disposition36, copy-reconciliation41 and
+withdrawal8 files (236 cases). These leave their old groups and run once on two
+load workers. Backend becomes3921+97 skips (collection4018), with its job cap
+reduced20→19 minutes and backend step18→16. The remaining withdrawal48 job and
+step reduce3→2 minutes. Frontend has its original complete TypeScript/deployment
+coverage; real database95, final69, graph212, publication230 and review105 remain.
+
+This supersedes the earlier ten-job placement decision. The aggregate hard
+workflow ceiling changes62→66 runner-minutes (+6.5%); actual charged runtime is
+separate and will be compared using execution receipts. No original cap is
+increased, no test is duplicated or removed, and each job keeps its two-worker
+ceiling and fixed reserve floor. The added startup isolates sustained workload
+and avoids repeated full-suite attempts caused by near-limit jobs. Preserve all
+1,018 deployment identities,139 frontend files/10,532 cases,19 cohort identities,
+500 native pins,247 reports and every private original/evidence/review byte.
+All CI policy guards must pass locally against the explicit eleven-job budget
+before fresh exact-head and independent-main qualification.
+
+
+The isolated236-case group passes locally in85.12 seconds, with236 distinct
+actual execution identities. Backend collection4018 (3921+97 existing skips),
+isolated236 and fast18 inventories are disjoint; the original51 retained copy
+cases span the two exact collections and all36 new disposition cases remain.
+All24 CI-related policy contracts, full lint and all500 native pins/247 reports
+pass. Existing application/backend test bodies and1,757 other tracked files stay
+exact. The roadmap tracker derives the declared job count for its verifier.
+Fresh eleven-check PR and independent-main coverage/timing/preservation gates
+remain required; no operational or legal readiness is inferred from this split.
+
+
+Eleven-job run41414081332 validates the workload isolation: analysis236 has105
+seconds reserve, withdrawal86, frontend160, database52, final50, graph49 and
+review49. Publication230 still leaves29/required30. Transfer its unchanged
+lineage45 file (55.54 measured worker-seconds) beside source-review69 in the
+isolated group. Analysis/recovery becomes281; publication185. No job, worker,
+cap, total66-minute hard ceiling or test-ID inventory changes. Both fixture
+families retain every test, source version and assertion. Require fresh actual
+281/185 receipts and independent-main qualification; keep the rejected1-second
+reserve shortfall visible rather than weakening its floor.
+
+
+The isolated281 group passes locally in93.96 seconds with281 distinct actual
+identities; backend4018 and isolated281 collections remain disjoint. A local
+bootstrap-negative launch hit its unchanged3-second bound during concurrent
+qualification; retain the failure and its quiet rerun without relaxing the
+bound. All24 CI-related policy guards, lint and500 native pins/247 reports are
+required before push. No new runtime operation or readiness claim is added.
+
+
+The next run41416630262 completed short-job correctness checks but misses
+reserve in history294/300, graph343/360 and review333/360. Keep these rejections.
+Use measured spare without raising the eleven-job/66-minute budget: move the
+unchanged frozen53-case ARM history pair from history to the analysis job, after
+its main pair exits. Its original controller, nine source hashes, exact commands,
+50-second limit and two serial children stay byte-exact. Move source-review69
+back to final and planning-journal49 to frontend. Analysis main becomes212 plus
+frozen pair53; final becomes89 (88+cohort1). Move graph-publication31 and open-
+validity4 to the same frontend84 group beside journal49. Graph becomes181;
+review101; history retains its original complete5233-case frontend shard and419
+contract identities. Frontend uses existing spare after its TypeScript pair exits.
+Every moved file is globally declared once and excluded from backend. Original
+1,018 method IDs,139 frontend files/10,532 cases,19 cohort IDs, per-job ceilings,
+all500 native source pins and247 earlier reports remain preserved. Require fresh
+local controller/placement checks, actual coverage and independent-main reserves.
+
+
+The rebalanced local qualification passes exact53-case frozen controller
+(45+8, both clean exits,16.217 seconds), complete frontend84 in26.96 seconds
+and analysis212 in84.31 seconds. Every actual identity is distinct. Require
+the same identities in fresh CI, including all original frontend/deployment
+and authority partitions. CI policy tests and the repository-configured lint
+pass; frozen controllers, application/backend test bodies,500 native pins
+and247 report files remain exact. No deadline, worker, private data or runtime
+permission changes. Exact-head and independent-main reserve gates remain open.
+
+
+The previous long backend job also finishes1123/1140 seconds, below the
+30-second reserve floor. Transfer its unchanged49-case authorization file
+(78.62 measured worker-seconds) into the withdrawal job's measured spare;
+withdrawal becomes97, backend3872+97skip (collection3969). The combined97-case
+withdrawal candidate passes locally in23.51 seconds with36 original subtests.
+No additional job, cap, worker, test-ID or application/test-body changes.
+Bind all49 moved identities to actual withdrawal execution and the backend
+exclusion. Retain every rejected observation and require both fresh PR and
+independent-main qualification under the same eleven-job66-minute envelope.
+
+
+Run41422695386 provides the full revised short-job measurements: history211,
+publication116, database229, graph281, review300, analysis301, final318 and
+candidate143 seconds; each meets30-second reserve. Withdrawal97 completes93/120
+(reserve27), and frontend times out313/300 despite all84 added Python cases
+passing. Keep both failures. Measured spare is fragmented; stop complete-file
+shuffling among near-limit jobs. Add one bounded four-minute ARM publication/
+planning job for the intact frontend84 plus authorization49 files (133 total),
+with two load workers/max chunk1. Frontend returns to its full original
+TypeScript/deployment coverage without that extra Python group; withdrawal
+returns to48. Backend remains3872+97skip/3969 collection, analysis212 plus the
+unchanged frozen53-case pair. All original cases execute once.
+
+This supersedes the eleven-job placement: twelve jobs, aggregate hard ceiling
+70 runner-minutes versus66 in the intermediate candidate and62 originally
+(+12.9% versus original). No original job cap increases, worker or reserve
+expansion, application/test-body changes or reduced coverage. Actual elapsed
+runner-time and invoiced cost remain separate. Isolating this sustained group
+avoids reusing fragmented reserve and repeated full-suite attempts. Require
+local133 actual identities, all24 CI policy contracts, lint, all500 native pins/
+247 reports, fresh exact-head and independent-main coverage/reserve evidence
+and private-data preservation before closure. No runtime or legal approval.
+
+
+The dedicated133-case candidate passes locally in42.26 seconds with133
+distinct actual identities; all24 CI policy contracts and repository-configured
+lint pass. All500 native pins,247 historical reports and1,757 other tracked
+files remain byte-exact. Twelve-job PR/main qualification remains required;
+no runtime, legal or owner-review status changes.
+
+
+Twelve-job run41423971144 qualifies ten jobs, with minimum48-second reserve;
+new publication/planning133 finishes114/240 seconds with126 seconds spare.
+Final-release crosses330 seconds and fails its30-second reserve gate. Keep
+that rejection. Transfer intact source-review69 and retained-inspection7 files
+into the new job (209 total), using its measured spare. Neither requires the
+PostgreSQL service; keep retained mixed assembly, final authorization, real
+PostgreSQL authorization and the database authority cohort in final (13 total).
+All source reviews and exact inspection evidence remain covered once; no case,
+assertion, native source pin or runtime/private record changes. The twelve-job
+70-minute ceiling, every job/step limit and reserve floor remain fixed. Require
+local209 IDs, all24 policy contracts and fresh PR/main gates.
+
+
+Local209-case qualification passes in71.74 seconds with209 distinct execution
+identities. All24 policy guards and repository-configured lint pass. Original
+500 native pins/247 reports/1,757 other tracked files remain exact. The
+209/13 placement now requires fresh exact-head and independent-main evidence.
