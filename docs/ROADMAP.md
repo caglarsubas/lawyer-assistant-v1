@@ -9304,3 +9304,47 @@ frontend69 in19.69 seconds on two load workers. All24 CI policy contracts, lint
 and unchanged505 native source pins/248 historical reports pass. Require fresh
 actual identity coverage and independent-main reserves; no operational, native
 execution, private-case or legal readiness claim is added by this CI-only fix.
+
+
+## 281. Bounded private read-only reconciliation receipts — 2026-11-02
+
+Continue from independently main-qualified PR #263 with a staged, closed receipt
+operation. Keep exact plan, decision and observation versions, including explicit
+missing references. Two fresh complete reconciliations must agree under current
+app-session/firm/origin/CSRF authorization; final binding/session checks precede
+the bounded8-KiB canonical receipt and transport checksum. The existing20-second
+workflow budget remains. No imported receipt, arbitrary store/path/key selection,
+automatic persistence, product route, inference or runtime change is introduced.
+
+Include exact combined/source/copy/journal snapshot hashes and supplied versions,
+authenticated plan/decision status, retained positive/negative outcome and explicit
+staleness. Do not export plan/review bodies, complete observations or filesystem
+paths. Treat the selection and all receipt metadata as private. Physical presence
+does not supply missing references, recover an acknowledgement or renew authority;
+a checksum is not a signature or proof of an earlier observation. Source reads
+remain non-atomic. Every recovery/execution/custody/activation flag stays false.
+Failures, changed observations, expiry during issuance, revocation and budgets
+withhold the whole receipt without altering originals or either review history.
+
+New fixture-based qualification runs in the complete backend remainder, using
+its independently measured122-second job reserve. Keep all12 jobs,70 capped
+runner-minutes, two active workers/job, existing job/step caps and reserve floors,
+all1,018 deployment identities once,139 frontend files/10,532 cases and19 cohort
+identities. Preserve505 earlier native source pins and248 historical reports;
+those results are not new native execution of this receipt wrapper. Require
+fresh exact-head and independent-main checks, actual case identities and private
+runtime/evidence preservation before closure. Owner analysis-v3 review and
+genuine operator/custody/provider/production acceptance remain pending.
+
+Ledger **280 → 281**. Engineering progress and overall product readiness remain
+separate. See [receipt contract](DISPOSITION_RECONCILIATION_RECEIPTS.md). Next:
+read-only receipt re-observation with an independently retained exact digest,
+separating prior metadata from fresh authorization without importing authority.
+
+Local qualification:27 new session/encrypted-journal cases and154 combined
+regressions pass in63.21 seconds on two workers. Repository-configured lint and
+10 CI placement/discovery/partition/worker contracts pass. All505 prior native
+source pins remain exact. See [aggregate evidence](evidence/disposition-reconciliation-receipts-2026-11-02.json).
+Fresh PR/main checks, exact identity coverage, reserve floors and preservation
+are required separately; no new native-wrapper or product/legal acceptance is
+claimed by this local evidence.

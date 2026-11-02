@@ -1,0 +1,45 @@
+{
+  "schema": "disposition-reconciliation-receipt-qualification-v1",
+  "date": "2026-11-02",
+  "scope": "staged offline read-only receipt wrapper; no product route or persistence",
+  "source_sha256": {
+    "scripts/disposition_reconciliation_receipt.py": "bde89c7bfcf553692b01a74d09839b1e5551836bd66db2037f0a3fbb1dff9715",
+    "backend/tests/test_disposition_reconciliation_receipt.py": "4a7e3a56e254f1ea21dc0cfacc27649957d36629f8ebe58818b568c4b3a63144"
+  },
+  "offline": {
+    "new_cases": 27,
+    "combined_regression_cases": 154,
+    "combined_seconds": 63.21,
+    "ci_policy_checks": 10,
+    "configured_ruff_passed": true,
+    "identities": "invented disposable users and sessions only"
+  },
+  "native": {
+    "new_native_execution": false,
+    "prior_report_unchanged": "native-disposition-journal-restart-2026-11-02.json",
+    "prior_outcomes": 52,
+    "prior_actual_SIGKILLs": 4,
+    "scope": "prior reconciler only; not receipt-wrapper execution"
+  },
+  "required_delivery_gates": [
+    "fresh exact-head twelve-check CI",
+    "all fixed job and step reserve floors",
+    "actual new case IDs exactly once",
+    "1018 deployment identities once",
+    "139 frontend files and 10532 cases",
+    "19 authority cohort identities once",
+    "independent fetched-main full-tree equality and CI",
+    "private data and runtime preservation"
+  ],
+  "limitations": {
+    "receipt_signed": false,
+    "receipt_persisted": false,
+    "acknowledgement_recovered": false,
+    "recovery_execution": false,
+    "production_activation": false,
+    "live_provider_tested": false,
+    "owner_analysis_v3_review_pending": true,
+    "genuine_operator_custody_qualified": false,
+    "billing_measured": false
+  }
+}
