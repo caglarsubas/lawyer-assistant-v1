@@ -36,8 +36,8 @@ class PartitionContract(unittest.TestCase):
         blocks = {name: body for name, body in re.findall(r"^  ([a-z-]+):\n(.*?)(?=^  [a-z-]+:\n|\Z)", workflow, re.MULTILINE | re.DOTALL)}
         caps = {"backend-and-contracts": 19, "postgres-snapshot-concurrency": 5, "frontend": 5, "frontend-history": 5,
                 "final-release-authorization": 6, "retained-release-withdrawal": 2,
-                "graph-candidate-contracts": 3, "source-publication-contracts": 3, "graph-runtime-contracts": 6, "backend-review-contracts": 6, "analysis-recovery-contracts": 6}
-        self.assertEqual(sum(caps.values()), 66)
+                "graph-candidate-contracts": 3, "source-publication-contracts": 3, "graph-runtime-contracts": 6, "backend-review-contracts": 6, "analysis-recovery-contracts": 6, "publication-planning-contracts": 4}
+        self.assertEqual(sum(caps.values()), 70)
         self.assertEqual(set(blocks), set(caps))
         for name, cap in caps.items():
             self.assertEqual(int(re.search(r"^    timeout-minutes: (\d+)$", blocks[name], re.MULTILINE)[1]), cap)
@@ -49,6 +49,10 @@ class PartitionContract(unittest.TestCase):
         self.assertIn("runs-on: ubuntu-24.04-arm", isolated)
         self.assertIn('"${recovery_qualification_tests[@]}" "${human_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1', isolated)
         self.assertNotIn("--workers=", isolated)
+        planning = blocks["publication-planning-contracts"]
+        self.assertIn("runs-on: ubuntu-24.04-arm", planning)
+        self.assertIn('"${publication_planning_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1', planning)
+        self.assertNotIn("--workers=", planning)
 
     def test_frontend_shards_keep_isolation_workers_and_complete_discovery(self):
         workflow = (ROOT / ".github/workflows/ci.yml").read_text()

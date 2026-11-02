@@ -9155,3 +9155,33 @@ No additional job, cap, worker, test-ID or application/test-body changes.
 Bind all49 moved identities to actual withdrawal execution and the backend
 exclusion. Retain every rejected observation and require both fresh PR and
 independent-main qualification under the same eleven-job66-minute envelope.
+
+
+Run41422695386 provides the full revised short-job measurements: history211,
+publication116, database229, graph281, review300, analysis301, final318 and
+candidate143 seconds; each meets30-second reserve. Withdrawal97 completes93/120
+(reserve27), and frontend times out313/300 despite all84 added Python cases
+passing. Keep both failures. Measured spare is fragmented; stop complete-file
+shuffling among near-limit jobs. Add one bounded four-minute ARM publication/
+planning job for the intact frontend84 plus authorization49 files (133 total),
+with two load workers/max chunk1. Frontend returns to its full original
+TypeScript/deployment coverage without that extra Python group; withdrawal
+returns to48. Backend remains3872+97skip/3969 collection, analysis212 plus the
+unchanged frozen53-case pair. All original cases execute once.
+
+This supersedes the eleven-job placement: twelve jobs, aggregate hard ceiling
+70 runner-minutes versus66 in the intermediate candidate and62 originally
+(+12.9% versus original). No original job cap increases, worker or reserve
+expansion, application/test-body changes or reduced coverage. Actual elapsed
+runner-time and invoiced cost remain separate. Isolating this sustained group
+avoids reusing fragmented reserve and repeated full-suite attempts. Require
+local133 actual identities, all24 CI policy contracts, lint, all500 native pins/
+247 reports, fresh exact-head and independent-main coverage/reserve evidence
+and private-data preservation before closure. No runtime or legal approval.
+
+
+The dedicated133-case candidate passes locally in42.26 seconds with133
+distinct actual identities; all24 CI policy contracts and repository-configured
+lint pass. All500 native pins,247 historical reports and1,757 other tracked
+files remain byte-exact. Twelve-job PR/main qualification remains required;
+no runtime, legal or owner-review status changes.

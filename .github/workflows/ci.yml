@@ -10,10 +10,11 @@ concurrency:
   group: checks-${{ github.ref }}
   cancel-in-progress: true
 env:
-  CI_FRONTEND_QUALIFICATION_TESTS: >-
+  CI_PUBLICATION_PLANNING_TESTS: >-
     backend/tests/test_graph_b_publication.py
     backend/tests/test_open_validity_publication.py
     backend/tests/test_planning_journal_reconciliation.py
+    backend/tests/test_release_authorization.py
   CI_FAST_GUARD_TESTS: >-
     backend/tests/test_ci_history_review_pair.py
   CI_RUNTIME_AUTHORIZATION_TESTS: >-
@@ -40,7 +41,6 @@ env:
     backend/tests/test_final_release_inspection.py
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_authority_proposals.py
-    backend/tests/test_release_authorization.py
   CI_GRAPH_CANDIDATE_TESTS: >-
     backend/tests/test_final_release_transitions.py
     backend/tests/test_final_graph_candidate.py
@@ -66,7 +66,7 @@ env:
     backend/tests/test_journal_copy_reconciliation.py
     backend/tests/test_source_review_lineage.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
-  # Frontend spare holds complete publication/planning files after Vitest exits.
+  # A dedicated bounded job holds complete publication/planning files.
   # Keep remaining graph files complete and the lighter Graph B snapshot in backend.
   CI_GRAPH_RUNTIME_TESTS: >-
     backend/tests/test_graph_b_component_grants.py
@@ -74,8 +74,8 @@ env:
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_release_set_authorization.py
   # Complete expensive review files are disjoint from the backend remainder.
-  # Withdrawal spare holds retention18 and authorization49; frontend holds
-  # open-validity4. Preserve every complete file, pair/cap and exclusion.
+  # Withdrawal retains retention18; the dedicated publication/planning job
+  # holds authorization49 and open-validity4. Preserve every complete file, pair/cap and exclusion.
   CI_AUTHORITY_COHORT_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
   CI_BACKEND_REVIEW_TESTS: >-
@@ -182,7 +182,7 @@ jobs:
       - name: Test backend
         timeout-minutes: 16
         run: |
-          read -r -a frontend_qualification_tests <<< "$CI_FRONTEND_QUALIFICATION_TESTS"
+          read -r -a publication_planning_tests <<< "$CI_PUBLICATION_PLANNING_TESTS"
           read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"
           read -r -a fast_guard_tests <<< "$CI_FAST_GUARD_TESTS"
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
@@ -201,7 +201,7 @@ jobs:
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           ignore_args=()
-          for path in "${frontend_qualification_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
@@ -380,12 +380,6 @@ jobs:
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
-
-      - name: Test bounded graph and journal qualification
-        timeout-minutes: 3
-        run: |
-          read -r -a frontend_qualification_tests <<< "$CI_FRONTEND_QUALIFICATION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${frontend_qualification_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
 
       # The bounded metadata contract slices reuse the same exited pair.
       - name: Test manifest-bound review headroom slice 8
@@ -638,3 +632,29 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/python scripts/run_ci_history_review_pair.py \
             backend/.venv/bin/python -m pytest -p scripts.ci_serial_history_cohorts --authority-cohort-lane=history --ci-serial-role=cohort "${authority_cohort_tests[@]}" "${history_guard_tests[@]}" -q --maxfail=1 \
             ::: backend/.venv/bin/python -m pytest -p scripts.ci_serial_history_cohorts --ci-serial-role=inspection "${history_inspection_tests[@]}" -q --maxfail=1
+
+  publication-planning-contracts:
+    # Complete files outgrew spare in the frontend and withdrawal jobs.
+    # One explicit bounded job replaces those placements; no duplicate coverage.
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: |
+            backend/uv.lock
+            .github/scripts/install-uv.sh
+      - name: Install test dependencies
+        timeout-minutes: 1
+        run: |
+          timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
+          uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
+      - name: Test complete publication and planning qualification
+        timeout-minutes: 4
+        run: |
+          read -r -a publication_planning_tests <<< "$CI_PUBLICATION_PLANNING_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${publication_planning_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
