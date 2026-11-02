@@ -9098,3 +9098,22 @@ pass. Existing application/backend test bodies and1,757 other tracked files stay
 exact. The roadmap tracker derives the declared job count for its verifier.
 Fresh eleven-check PR and independent-main coverage/timing/preservation gates
 remain required; no operational or legal readiness is inferred from this split.
+
+
+Eleven-job run41414081332 validates the workload isolation: analysis236 has105
+seconds reserve, withdrawal86, frontend160, database52, final50, graph49 and
+review49. Publication230 still leaves29/required30. Transfer its unchanged
+lineage45 file (55.54 measured worker-seconds) beside source-review69 in the
+isolated group. Analysis/recovery becomes281; publication185. No job, worker,
+cap, total66-minute hard ceiling or test-ID inventory changes. Both fixture
+families retain every test, source version and assertion. Require fresh actual
+281/185 receipts and independent-main qualification; keep the rejected1-second
+reserve shortfall visible rather than weakening its floor.
+
+
+The isolated281 group passes locally in93.96 seconds with281 distinct actual
+identities; backend4018 and isolated281 collections remain disjoint. A local
+bootstrap-negative launch hit its unchanged3-second bound during concurrent
+qualification; retain the failure and its quiet rerun without relaxing the
+bound. All24 CI-related policy guards, lint and500 native pins/247 reports are
+required before push. No new runtime operation or readiness claim is added.
