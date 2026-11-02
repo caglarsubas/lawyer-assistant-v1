@@ -8868,3 +8868,13 @@ with the remaining authorization file available for work stealing. Require exact
 membership/order in the placement guard. Backend3962/fast18, review105,
 withdrawal56, history53 and frontend82 retain every case without duplication.
 Fresh actual execution and independent-main reserve gates remain mandatory.
+
+
+The same run later exhausted backend job reserve during its capacity group;
+retain that observation. Move the unchanged retained-inspection7 file (52.30
+measured worker-seconds in retained execution, dominated by one case) from that
+capacity pair into final's freed capacity. Backend capacity becomes **83** and
+final **137**. Keep mixed-assembly first and inspection last so the second initial
+worker half can begin inspection while the long assembly case runs. Case counts,
+source versions, original job/step caps and worker limits stay fixed. Require the
+new full/capacity/final execution receipts and fresh independent-main gates.

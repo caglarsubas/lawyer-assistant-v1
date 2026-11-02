@@ -195,8 +195,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("name: Test complete backend capacity group"), 1)
         self.assertIn("timeout-minutes: 2", backend.split("name: Test complete backend capacity group", 1)[1])
         self.assertLess(backend.index("name: Test backend"), backend.index("name: Test complete backend capacity group"))
-        self.assertEqual(capacity_group.split()[0], "backend/tests/test_retained_release_inspection.py")
-        self.assertEqual(set(capacity_group.split()), {"backend/tests/test_journal_backup_readiness.py", "backend/tests/test_retained_release_inspection.py", "backend/tests/test_firm_admin.py"})
+        self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
+        self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
+        self.assertEqual(release_group.split()[-1], "backend/tests/test_retained_release_inspection.py")
+        self.assertEqual(release_group.split()[0], "backend/tests/test_retained_mixed_assembly.py")
+        self.assertEqual(workflow.count("backend/tests/test_retained_release_inspection.py"), 1)
+        self.assertEqual(set(capacity_group.split()), {"backend/tests/test_journal_backup_readiness.py", "backend/tests/test_firm_admin.py"})
         self._bootstrap_rejections()
 
     def _bootstrap_rejections(self):
