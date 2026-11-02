@@ -264,7 +264,8 @@ def test_tampered_ciphertext_never_returns_decrypted_history(f, which):
     d = reviewed(f, p)
     ident = p["plan_id"] if which == "plan" else f.disposition.decision_id(p, p["plan_ciphertext_sha256"])
     path = f.disposition.planner.journal.root / (ident + ".receipt")
-    path.write_bytes(path.read_bytes()[:-1] + b"!")
+    raw = path.read_bytes()
+    path.write_bytes(raw[:-1] + bytes([raw[-1] ^ 1]))
     safe(inspected(f, p, d), "unverifiable")
 
 
