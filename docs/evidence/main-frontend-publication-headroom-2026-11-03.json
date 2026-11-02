@@ -1,0 +1,81 @@
+{
+  "schema": "main-ci-headroom-followup-v1",
+  "date": "2026-11-03",
+  "feature_PR": 264,
+  "qualified_PR_run": 41484160540,
+  "qualified_PR_minimum_job_reserve_seconds": 32,
+  "rejected_main_run": 41487933593,
+  "main_failures": [
+    {
+      "job": "source-publication-contracts",
+      "seconds": 151,
+      "cap": 180,
+      "reserve": 29,
+      "required": 30
+    },
+    {
+      "job": "frontend-history",
+      "seconds": 296,
+      "cap": 300,
+      "reserve": 4,
+      "required": 30
+    },
+    {
+      "job": "frontend",
+      "seconds": 308,
+      "cap": 300,
+      "conclusion": "cancelled"
+    }
+  ],
+  "same_original_case_inventory": true,
+  "source_sha256": {
+    ".github/workflows/ci.yml": "64bd5cdde2136929133dfe3f7fb688b8f8e552d1e5e40c7f2f809d972e04241a",
+    "deploy/test_deployment_ci_placement.py": "8873cd6fb9decae60ef3482708d445e907a573fc932f57143e134b7185a101a9",
+    "deploy/test_ci_partition_contract.py": "08f1cf7ed5e1b7d859c5db57ce5fe8c048d965ba39e4f5ae0c35c4ff6117197b"
+  },
+  "placement": {
+    "backend_collected": 3938,
+    "backend_expected_passed": 3841,
+    "existing_skips": 97,
+    "graph_restart_cases": 50,
+    "candidate_total": 256,
+    "planning_primary": 132,
+    "planning_binding": 83,
+    "planning_total": 215,
+    "source_publication": 185,
+    "withdrawal": 154,
+    "frontend_extra_pytest": 0,
+    "history_extra_pytest": 0,
+    "source_review_lanes": [
+      23,
+      23,
+      23
+    ],
+    "publication_lane_job": "publication-planning-contracts"
+  },
+  "fixed_limits": {
+    "jobs": 12,
+    "aggregate_capped_runner_minutes": 70,
+    "active_workers_per_job": 2,
+    "all_job_and_step_caps_preserved": true,
+    "all_reserve_floors_preserved": true
+  },
+  "local": {
+    "moved_cases": 152,
+    "seconds": 34.16,
+    "CI_policy_checks": 10
+  },
+  "preservation": {
+    "native_pins": 505,
+    "earlier_evidence_files": 249,
+    "receipt_code_unchanged": true,
+    "originals_evidence_reviews_credentials_sessions_runtime_unchanged": true,
+    "owner_review_pending": true
+  },
+  "limitations": {
+    "new_native_execution": false,
+    "production_activation": false,
+    "billing_measured": false,
+    "independent_main_qualification": "required separately"
+  }
+}

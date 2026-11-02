@@ -9483,3 +9483,41 @@ independent JUnit/manifest comparison proves all69 original identities executed
 once. The unchanged source file and505 native source pins remain exact. Latest
 head and independent-main measured reserves, complete case coverage and private
 preservation are still required separately.
+
+
+## 286. Restore independent-main frontend and publication headroom — 2026-11-03
+
+PR #264 qualified its exact head with12 successful checks and a32-second minimum
+reserve, then merged with an independently fetched identical tree. Its independent
+main41487933593 exposes three operational failures: source-publication151/180
+leaves29/required30, history296/300 leaves4/required30, and frontend is cancelled
+after308 seconds against its unchanged300-second job cap. Preserve that rejection;
+do not mark main qualified from the earlier PR or retry identical placement.
+
+Move the complete50-case disposition-restart group from frontend to the existing
+graph pair under its original two-minute step cap. Move the complete19-case focus
+file to candidate. Move the complete83-case provision-binding step from history
+to publication/planning, preserving its two-minute cap. Route the same23-case
+publication source-review lane into that four-minute planning job instead of
+source-publication. All69 frozen source-review identities and actual non-skipped
+execution receipts remain required once across the three authorized CI lanes.
+
+Keep all12 jobs,70 capped runner-minutes,two active workers/job and every existing
+job/step cap and reserve floor. The full139-file/10,532-case frontend shards,
+all1,018 deployment IDs and19 authority identities stay intact. Backend remains
+3841 pass+97 existing skips/3938 collected; graph adds50, candidate becomes256,
+planning runs132 then83 (215 total), source-publication returns to185 and the
+withdrawal154 group stays unchanged. All application/backend bodies and fixtures,
+505 native pins,249 existing evidence files and the receipt implementation remain
+byte-identical. Only CI routing, its placement guards and roadmap evidence change.
+
+Local152-case qualification of all moved files passes in34.16 seconds with two
+workers in the owned physical temporary root. All10 CI policy contracts pass.
+Require fresh exact-head and independently fetched-main actual identity coverage,
+all fixed reserves, full-tree equality and private/runtime preservation before
+closure. No native campaign, inference, deployment, credential change or case
+mutation is authorized by this engineering result; owner analysis-v3 review
+remains pending. Engineering delivery and product/legal readiness stay separate.
+
+Ledger **285 → 286**. Next product item remains read-only receipt re-observation
+with exact independently retained references and fresh authorization.
