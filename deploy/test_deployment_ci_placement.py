@@ -208,6 +208,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
         candidate_group = re.search(r"  CI_GRAPH_CANDIDATE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(candidate_group.split(), ["backend/tests/test_final_graph_candidate.py",
+            "backend/tests/test_staged_receipt_adapter.py", "backend/tests/test_native_receipt_stage.py",
+            "backend/tests/test_native_receipt_http.py", "backend/tests/test_native_receipt_faults.py",
+            "backend/tests/test_receipt_recovery_planning.py", "backend/tests/test_disposition_reconciliation_receipt.py"])
+        self.assertNotIn("backend/tests/test_final_release_transitions.py", workflow)
+        self.assertEqual(workflow.count("backend/tests/test_disposition_reconciliation_receipt.py"), 1)
         self.assertIn("backend/tests/test_staged_receipt_adapter.py", candidate_group)
         self.assertNotIn("backend/tests/test_staged_receipt_adapter.py", capacity_group)
         self.assertEqual(workflow.count("backend/tests/test_staged_receipt_adapter.py"), 1)

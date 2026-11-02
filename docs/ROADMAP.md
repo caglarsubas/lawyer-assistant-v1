@@ -9348,3 +9348,39 @@ source pins remain exact. See [aggregate evidence](evidence/disposition-reconcil
 Fresh PR/main checks, exact identity coverage, reserve floors and preservation
 are required separately; no new native-wrapper or product/legal acceptance is
 claimed by this local evidence.
+
+
+## 282. Rebalance candidate qualification within existing CI limits — 2026-11-02
+
+The first receipt PR run41474064626 crosses the candidate job's fixed30-second
+reserve despite that job's unchanged test bodies and workload. Retain the failed
+qualification; do not merge, retry identical inputs or raise any limit. Baseline
+timing identifies the single final-release transition case at72.14 worker-seconds
+and the14 candidate cases at152.01. Keep original cases intact and move the
+complete single transition file into the long backend worker pool, replacing
+the27 new receipt cases with it. Move the complete27-case receipt file into the
+candidate job's released capacity. Frontend/history allocation remains unchanged.
+
+Backend becomes3771 passing cases plus97 existing skips (3868 collected);
+candidate becomes241 cases. The earlier3894/3797 backend-only proposal is
+superseded. Placement guards require exact complete candidate membership and
+reject duplicate execution. Preserve all1,018 deployment identities once,
+139 frontend files/10,532 cases,19 authority identities,505 native source pins,
+248 historical evidence reports and every original test body. Keep12 jobs,
+70 capped runner-minutes, two active workers/job, all job/step caps and reserve
+floors. Require measured local replacement groups, fresh exact-head and
+independent-main qualification before closure. Runner timing is not invoice cost.
+
+Ledger **281 → 282** within the same receipt PR. No private case, originals,
+evidence-version, credential, session, runtime or owner-review change. Receipt
+re-observation remains the next prepared product item; legal and genuine
+operational readiness remain pending.
+
+Local replacement qualification passes242 cases and26 subtests in167.92 seconds
+on two work-stealing workers, covering the complete241-case candidate group and
+the single unchanged transition case. An initial macOS run correctly rejects
+the system temporary path's symlinked ancestor; isolate qualification in an
+owned physical temporary root without changing the production path guard or
+test bodies. All10 CI policy contracts and configured lint pass. The rejected
+candidate job finished154/180 seconds, leaving26/required30; fresh replacement
+PR/main reserves and actual coverage remain pending.

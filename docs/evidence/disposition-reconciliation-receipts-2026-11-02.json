@@ -41,5 +41,26 @@
     "owner_analysis_v3_review_pending": true,
     "genuine_operator_custody_qualified": false,
     "billing_measured": false
+  },
+  "CI_placement": {
+    "first_run": 41474064626,
+    "first_candidate_reserve_qualified": false,
+    "unchanged_transition_cases_moved_to_backend": 1,
+    "receipt_cases_in_candidate": 27,
+    "candidate_total": 241,
+    "backend_collected": 3868,
+    "backend_passed_expected": 3771,
+    "existing_skips": 97,
+    "caps_increased": false,
+    "workers_increased": false,
+    "case_bodies_changed": false,
+    "first_candidate_job_seconds": 154,
+    "first_candidate_cap_seconds": 180,
+    "first_candidate_reserve_seconds": 26,
+    "required_job_reserve_seconds": 30,
+    "replacement_local_cases": 242,
+    "replacement_local_subtests": 26,
+    "replacement_local_seconds": 167.92,
+    "local_path_diagnostic": "macOS symlinked default temp ancestor correctly rejected; owned physical TMPDIR fixes qualification without weakening the path guard"
   }
 }

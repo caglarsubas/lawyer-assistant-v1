@@ -49,13 +49,13 @@ env:
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_authority_proposals.py
   CI_GRAPH_CANDIDATE_TESTS: >-
-    backend/tests/test_final_release_transitions.py
     backend/tests/test_final_graph_candidate.py
     backend/tests/test_staged_receipt_adapter.py
     backend/tests/test_native_receipt_stage.py
     backend/tests/test_native_receipt_http.py
     backend/tests/test_native_receipt_faults.py
     backend/tests/test_receipt_recovery_planning.py
+    backend/tests/test_disposition_reconciliation_receipt.py
   # Model-cohort cases remain in the full backend remainder. Running them
   # sequentially with x86 workspace/review groups left only 3s of job margin.
   # Keep every case, eight jobs, two workers, current caps and no retries.
@@ -518,9 +518,9 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   graph-candidate-contracts:
-    # A 67-second transition case previously consumed the final job's setup
-    # headroom. Run it first alongside candidate checks; keep every assertion,
-    # seven jobs, two workers and all existing deadlines without retry.
+    # The unchanged transition case reuses the backend pool. Complete receipt
+    # checks reuse released candidate capacity; preserve every assertion,
+    # twelve jobs, two workers and all existing deadlines without retry.
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 3
     steps:
