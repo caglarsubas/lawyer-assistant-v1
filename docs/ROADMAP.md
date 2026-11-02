@@ -9384,3 +9384,37 @@ owned physical temporary root without changing the production path guard or
 test bodies. All10 CI policy contracts and configured lint pass. The rejected
 candidate job finished154/180 seconds, leaving26/required30; fresh replacement
 PR/main reserves and actual coverage remain pending.
+
+
+## 283. Release measured short-job capacity for receipt qualification — 2026-11-03
+
+Replacement run41476936130 finishes candidate green in152/180 seconds with28
+against the fixed30-second reserve. Retain that second rejection. Actual metrics
+show27 receipt cases consuming70.34 worker-seconds and14 candidate cases152.67;
+moving only the single transition case did not release sufficient capacity.
+Move the complete receipt file into the backend remainder alongside the unchanged
+transition file. Move the existing83-case capacity group, measured at23 wall
+seconds on independently qualified main, into withdrawal's measured spare after
+its original48-case pair exits. Keep its original two-minute step cap and pair.
+
+Backend becomes3798 passing cases plus97 existing skips (3895 collected),
+candidate returns to214 cases, and withdrawal runs48 then83,131 cases total.
+Both earlier layouts remain historical rejected proposals. Keep12 jobs,
+70 capped runner-minutes, two active workers/job, every existing step/job cap
+and reserve floor, original test bodies, all1,018 deployment identities once,
+139 frontend files/10,532 cases,19 authority identities,505 native source pins
+and248 historical evidence reports. Record explicit IDs for both moved groups.
+Require complete local replacement qualification, fresh exact-head and
+independent-main actual coverage/reserves before closure. No unchanged retry,
+private-case or runtime mutation, authority renewal or legal-review approval.
+
+Ledger **282 → 283** within the same receipt PR. Exact evidence, originals,
+confidentiality and both review histories remain protected. Owner analysis-v3
+review and genuine operator/custody/provider/production readiness stay pending.
+
+The complete withdrawal/capacity replacement qualifies locally with131 cases
+and36 subtests in49.30 seconds in the owned physical temporary root. All10 CI
+policy contracts and configured lint pass. Receipt27/combined154 and the earlier
+242-case/26-subtest candidate-plus-transition qualifications remain retained;
+all original bodies stay exact. Actual fresh PR/main reserves and disjoint
+case-identity receipts determine closure, with no new native or legal claim.

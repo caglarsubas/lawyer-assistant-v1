@@ -211,9 +211,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(candidate_group.split(), ["backend/tests/test_final_graph_candidate.py",
             "backend/tests/test_staged_receipt_adapter.py", "backend/tests/test_native_receipt_stage.py",
             "backend/tests/test_native_receipt_http.py", "backend/tests/test_native_receipt_faults.py",
-            "backend/tests/test_receipt_recovery_planning.py", "backend/tests/test_disposition_reconciliation_receipt.py"])
+            "backend/tests/test_receipt_recovery_planning.py"])
         self.assertNotIn("backend/tests/test_final_release_transitions.py", workflow)
-        self.assertEqual(workflow.count("backend/tests/test_disposition_reconciliation_receipt.py"), 1)
+        self.assertNotIn("backend/tests/test_disposition_reconciliation_receipt.py", workflow)
         self.assertIn('"${candidate_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', blocks["graph-candidate-contracts"])
         self.assertIn("backend/tests/test_staged_receipt_adapter.py", candidate_group)
         self.assertNotIn("backend/tests/test_staged_receipt_adapter.py", capacity_group)
@@ -255,8 +255,11 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(review.index("name: Test complete backend review"), review.index("--shard=1"))
         self.assertIn('"${capacity_tests[@]}"', backend)
         self.assertEqual(workflow.count("name: Test complete backend capacity group"), 1)
-        self.assertIn("timeout-minutes: 2", backend.split("name: Test complete backend capacity group", 1)[1])
-        self.assertLess(backend.index("name: Test backend"), backend.index("name: Test complete backend capacity group"))
+        withdrawal = blocks["retained-release-withdrawal"]
+        self.assertNotIn("name: Test complete backend capacity group", backend)
+        self.assertIn("timeout-minutes: 2", withdrawal.split("name: Test complete backend capacity group", 1)[1])
+        self.assertLess(withdrawal.index("name: Test conjunctive release withdrawal"), withdrawal.index("name: Test complete backend capacity group"))
+        self.assertIn('"${capacity_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', withdrawal)
         self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
         self.assertEqual(release_group.split(), ["backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_final_release_authorization.py", "backend/tests/test_final_authorization_postgres.py"])
