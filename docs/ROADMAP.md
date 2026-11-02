@@ -9065,3 +9065,36 @@ acceptance-plan contracts), full lint, collection4095 and500 native pins pass.
 The backend still executes3998+97 skips with actual identity receipts. All1,757
 prior tracked files outside the roadmap/workflow/two CI policy guards stay exact.
 Require fresh exact-head and independent-main qualification before closure.
+
+
+Run41410461193 also exhausted reserve in the unchanged withdrawal job. The
+fixed ten-job topology is too tight for runtime variation; stop shuffling small
+files among saturated pairs. Add one bounded ARM analysis/recovery job for the
+complete human82, source-review69, disposition36, copy-reconciliation41 and
+withdrawal8 files (236 cases). These leave their old groups and run once on two
+load workers. Backend becomes3921+97 skips (collection4018), with its job cap
+reduced20→19 minutes and backend step18→16. The remaining withdrawal48 job and
+step reduce3→2 minutes. Frontend has its original complete TypeScript/deployment
+coverage; real database95, final69, graph212, publication230 and review105 remain.
+
+This supersedes the earlier ten-job placement decision. The aggregate hard
+workflow ceiling changes62→66 runner-minutes (+6.5%); actual charged runtime is
+separate and will be compared using execution receipts. No original cap is
+increased, no test is duplicated or removed, and each job keeps its two-worker
+ceiling and fixed reserve floor. The added startup isolates sustained workload
+and avoids repeated full-suite attempts caused by near-limit jobs. Preserve all
+1,018 deployment identities,139 frontend files/10,532 cases,19 cohort identities,
+500 native pins,247 reports and every private original/evidence/review byte.
+All CI policy guards must pass locally against the explicit eleven-job budget
+before fresh exact-head and independent-main qualification.
+
+
+The isolated236-case group passes locally in85.12 seconds, with236 distinct
+actual execution identities. Backend collection4018 (3921+97 existing skips),
+isolated236 and fast18 inventories are disjoint; the original51 retained copy
+cases span the two exact collections and all36 new disposition cases remain.
+All24 CI-related policy contracts, full lint and all500 native pins/247 reports
+pass. Existing application/backend test bodies and1,757 other tracked files stay
+exact. The roadmap tracker derives the declared job count for its verifier.
+Fresh eleven-check PR and independent-main coverage/timing/preservation gates
+remain required; no operational or legal readiness is inferred from this split.

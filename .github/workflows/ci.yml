@@ -27,6 +27,7 @@ env:
   # pair runs two bounded serial groups, avoiding a delayed inspection tail.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_analysis_cohorts.py
+    backend/tests/test_analysis_feedback.py
   CI_HISTORY_GUARD_TESTS: >-
     backend/tests/test_ci_authority_partition.py
     backend/tests/test_ci_budgeted_deployment.py
@@ -34,7 +35,6 @@ env:
   CI_HISTORY_INSPECTION_TESTS: >-
     backend/tests/test_final_release_inspection.py
   CI_RETAINED_WITHDRAWAL_TESTS: >-
-    backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_authority_proposals.py
   CI_GRAPH_CANDIDATE_TESTS: >-
     backend/tests/test_final_release_transitions.py
@@ -53,11 +53,13 @@ env:
     backend/tests/test_retained_mixed_assembly.py
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
-    backend/tests/test_source_reviews.py
     backend/tests/test_planning_journal_reconciliation.py
     backend/tests/test_retained_release_inspection.py
-  CI_DATABASE_FEEDBACK_TESTS: >-
-    backend/tests/test_analysis_feedback.py
+  CI_RECOVERY_QUALIFICATION_TESTS: >-
+    backend/tests/test_retained_release_withdrawal.py
+    backend/tests/test_copy_recovery_disposition.py
+    backend/tests/test_journal_copy_reconciliation.py
+    backend/tests/test_source_reviews.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
   # The complete four-case open-validity file reuses review capacity. Keep
   # the remaining graph files complete and the lighter Graph B snapshot in backend.
@@ -98,7 +100,7 @@ jobs:
     # Cohort, metadata and workspace work uses disjoint existing ARM reserves.
     # Keep the same two pytest workers and the existing test/job deadlines.
     runs-on: ubuntu-24.04-arm
-    timeout-minutes: 20
+    timeout-minutes: 19
     env:
       CI_ONTOLOGY_PREFLIGHT_TESTS: >-
         backend/tests/test_validation_queries.py
@@ -176,14 +178,14 @@ jobs:
       - name: Validate R01 planning contracts (not legal or runtime approval)
         run: python scripts/qualify_roadmap.py check qualification
       - name: Test backend
-        timeout-minutes: 18
+        timeout-minutes: 16
         run: |
+          read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"
           read -r -a fast_guard_tests <<< "$CI_FAST_GUARD_TESTS"
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           read -r -a capacity_tests <<< "$CI_BACKEND_CAPACITY_TESTS"
           read -r -a preflight_tests <<< "$CI_ONTOLOGY_PREFLIGHT_TESTS"
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
-          read -r -a database_feedback_tests <<< "$CI_DATABASE_FEEDBACK_TESTS"
           read -r -a final_release_tests <<< "$CI_FINAL_RELEASE_TESTS"
           read -r -a retained_withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a graph_candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
@@ -196,7 +198,7 @@ jobs:
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           ignore_args=()
-          for path in "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${database_feedback_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
@@ -332,8 +334,7 @@ jobs:
           print('Disposable PostgreSQL settings:', settings)
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
-          read -r -a database_feedback_tests <<< "$CI_DATABASE_FEEDBACK_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${database_feedback_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20
 
 
 
@@ -376,14 +377,6 @@ jobs:
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
-
-      # Vitest has exited. Restore its original human-review group on x86;
-      # preserve the original cap and sequential two-worker ceiling.
-      - name: Test confidential human review groups
-        timeout-minutes: 3
-        run: |
-          read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${human_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10
 
       # The bounded metadata contract slices reuse the same exited pair.
       - name: Test manifest-bound review headroom slice 8
@@ -496,7 +489,7 @@ jobs:
     # cap. Keep this complete group disjoint instead of retrying whole suites or
     # extending existing deadlines. No PostgreSQL service is needed here.
     runs-on: ubuntu-24.04-arm
-    timeout-minutes: 3
+    timeout-minutes: 2
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -513,7 +506,7 @@ jobs:
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test conjunctive release withdrawal and complete retained budgets
-        timeout-minutes: 3
+        timeout-minutes: 2
         run: |
           read -r -a withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
@@ -610,3 +603,31 @@ jobs:
       - name: Test manifest-bound review headroom slice 10
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_retained_deployment.py --shard=10 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-10.json
+
+
+  analysis-recovery-contracts:
+    # One bounded ARM pair isolates the growing analysis/recovery workload.
+    # Every file leaves its former group; no cases or workers are duplicated.
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: |
+            backend/uv.lock
+            .github/scripts/install-uv.sh
+      - name: Install test dependencies
+        timeout-minutes: 1
+        run: |
+          timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
+          uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
+      - name: Test complete analysis and recovery qualification
+        timeout-minutes: 6
+        run: |
+          read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
+          read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${recovery_qualification_tests[@]}" "${human_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
