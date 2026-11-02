@@ -130,6 +130,7 @@ jobs:
         run: |
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies" \
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
           echo "$GITHUB_WORKSPACE/backend/.venv/bin" >> "$GITHUB_PATH"
       - name: Lint Python
@@ -262,6 +263,7 @@ jobs:
         run: |
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies" \
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Validate closed deployment inventory and measured budgets
         run: |
@@ -321,6 +323,7 @@ jobs:
         run: |
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies" \
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test real PostgreSQL review and research races in isolated child databases
         env:
@@ -383,6 +386,7 @@ jobs:
         run: |
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies" \
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
 
       # The bounded metadata contract slices reuse the same exited pair.
@@ -425,6 +429,7 @@ jobs:
         run: |
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies" \
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       # One Vitest worker and one complete-manifest contract shard per lane.
       # Both existing lanes retain two workers and all test IDs execute once.
@@ -473,6 +478,7 @@ jobs:
         run: |
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies" \
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test whole-release permission, transitions and real concurrent reads
         # Keep inspection, lifecycle and PostgreSQL concurrency qualification.
@@ -505,6 +511,7 @@ jobs:
         run: |
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies" \
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test conjunctive release withdrawal and complete retained budgets
         timeout-minutes: 2
@@ -542,6 +549,7 @@ jobs:
         run: |
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies" \
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test complete final graph candidate contracts
         timeout-minutes: 3
@@ -572,6 +580,7 @@ jobs:
         run: |
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies" \
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test signed publication and retained-source renewal
         timeout-minutes: 3
@@ -603,6 +612,7 @@ jobs:
         run: |
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies" \
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       # Keep this complete offline model-trial group at its original two-worker cap.
       - name: Test registered local-model authority trials
@@ -648,6 +658,7 @@ jobs:
         run: |
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies" \
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test complete analysis and recovery qualification
         timeout-minutes: 6
@@ -687,6 +698,7 @@ jobs:
         run: |
           timeout --kill-after=2s 20s bash .github/scripts/install-uv.sh
           uv_path=$(tail -n 1 "$GITHUB_PATH")/uv
+          UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies" \
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Test complete publication and planning qualification
         timeout-minutes: 4

@@ -9608,3 +9608,25 @@ genuine operator, custody, provider, production and legal-readiness gates.
 
 Ledger **288 → 289**. Next product item remains bounded read-only receipt
 re-observation with exact independently retained digest and fresh authorization.
+
+
+## 290. Persist the actual uv dependency cache — 2026-11-03
+
+Run41502185572 fails PostgreSQL setup before any tests: the bounded20-second
+locked sync downloads uncached public dependencies and exits124. The prior pip
+cache held only the uv tool archive; uv used its separate default dependency
+directory. Explicitly place uv dependencies below the already restored pip
+cache in all12 jobs. Bump the pinned installer cache schema to invalidate old
+tool-only entries; subsequent successful cold syncs can publish actual packages.
+Keep frozen lock resolution, hash-pinned bootstrap, zero network retries,20-second
+bootstrap/sync deadlines and all original job/step caps and reserve floors.
+
+The existing placement contract now checks all12 explicit cache paths; the
+original1018 deployment methods and all backend/frontend/authority identities
+remain. No runtime, private data, inference, documents, evidence or review
+mutation. Cold-cache qualification remains required; caching is an efficiency
+control, not a waiver for unavailable dependencies or failed CI.
+
+[uv caching documentation](https://docs.astral.sh/uv/concepts/cache/) confirms
+UV_CACHE_DIR selects the dependency directory. Ledger **289 → 290** within the
+same open CI follow-up; owner review and product-readiness gates stay pending.

@@ -29,15 +29,16 @@
   ],
   "same_original_case_inventory": true,
   "source_sha256": {
-    ".github/workflows/ci.yml": "554542e873d5bb7f2caae9761bae993acfc21d5c2e5c871dfbd20b4d273bf75c",
-    "deploy/test_deployment_ci_placement.py": "a0933bb5277fa06a52ebdfa7ca2158084b72b5fc80f0fb00e8eac27a568ecc0e",
+    ".github/workflows/ci.yml": "6c3455edfb6c7e04b5fd6d685abda3fd2364f3a24fa97cbfef32030937dec1bf",
+    "deploy/test_deployment_ci_placement.py": "b635e075841c9d85a62885490c99ca3cd2a41f34fca062bce18441c5e097f65e",
     "deploy/test_ci_partition_contract.py": "35247b53806bc7e2ae8555e382f439765bbb2e91310ee558257c4c4e014be2e8",
     "scripts/ci_disposition_reads.py": "804c030998077fe7548b99b79a4c4d4e296b4def0f993bda94ab040385950953",
     "backend/tests/test_ci_disposition_reads.py": "5eaaebdeb311d029c4731898e7aa8dc01de2af4b34543c3d1df5b6a8b74eadf9",
     "deploy/fixtures/disposition_read_partition.json": "afa76738f5fb0eb142737c597573bc159e4570bc49c028be5838d8a7d2546442",
     "scripts/ci_provision_bindings.py": "dde5187bbaa90bc3d16429a47a737f3e4590fb0be9a9a5122f90de1bfc1d9b4f",
     "backend/tests/test_ci_provision_bindings.py": "b8adc88be3e9c2c0164ebfd71ad59ab6b712c03997b0835d3d06b36369bc5a32",
-    "deploy/fixtures/provision_binding_partition.json": "34f81ab0a65be799129b8f0a37fa76956ebc08253339066753f67522fd7d98c6"
+    "deploy/fixtures/provision_binding_partition.json": "34f81ab0a65be799129b8f0a37fa76956ebc08253339066753f67522fd7d98c6",
+    ".github/scripts/install-uv.sh": "e73bb457e76e8ecc67c5ba64b4b0df7e442f96256f7e211563ba8c0b1157d803"
   },
   "placement": {
     "backend_collected": 3962,
@@ -144,5 +145,19 @@
       "required": 30
     },
     "job_finalization_tail_included": true
+  },
+  "dependency_cache_fix": {
+    "rejected_run": 41502185572,
+    "job": "postgres-snapshot-concurrency",
+    "phase": "Install test dependencies",
+    "exit": 124,
+    "sync_seconds_cap": 20,
+    "root_cause": "uv dependencies outside restored pip cache",
+    "UV_CACHE_DIR": "restored pip cache / lawyer-ci-dependencies",
+    "cache_key_version": 2,
+    "original_step_job_caps_preserved": true,
+    "zero_network_retries": true,
+    "cold_cache_qualification_required": true,
+    "documentation": "https://docs.astral.sh/uv/concepts/cache/"
   }
 }
