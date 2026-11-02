@@ -75,13 +75,15 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(blocks["backend-review-contracts"].index("--shard=1"), blocks["backend-review-contracts"].index("--shard=4"))
         self.assertIn("timeout-minutes: 1", blocks["backend-review-contracts"].split("name: Test manifest-bound reader lifecycle slice 4", 1)[1])
         group = re.search(r"  CI_GRAPH_RUNTIME_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(group.count("backend/tests/test_open_validity_publication.py"), 1)
+        self.assertNotIn("backend/tests/test_open_validity_publication.py", group)
+        self.assertEqual(workflow.count("backend/tests/test_open_validity_publication.py"), 1)
         self.assertNotIn("backend/tests/test_graph_b_snapshot.py", group)
         self.assertEqual(workflow.count("backend/tests/test_graph_b_snapshot.py"), 0)
         self.assertIn('"${graph_runtime_tests[@]}"', blocks["backend-and-contracts"])
         final_group = re.search(r"  CI_BACKEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_set_publication_cli.py", final_group)
         self.assertNotIn("backend/tests/test_authority_model_cohorts.py", final_group)
+        self.assertIn("backend/tests/test_open_validity_publication.py", final_group)
         cohort_group = re.search(r"  CI_AUTHORITY_COHORT_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(cohort_group.split(), ["backend/tests/test_authority_model_cohorts.py"])
         self.assertIn('"${authority_cohort_tests[@]}"', backend)
@@ -121,14 +123,16 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(postgres.index("name: Test real PostgreSQL review"), postgres.index("name: Test closed authority cohort partition"))
         self.assertIn("timeout-minutes: 1", postgres.split("name: Test closed authority cohort partition", 1)[1])
         self.assertNotIn("-p scripts.ci_authority_cohorts", graph)
-        self.assertIn('"${receipt_retention_tests[@]}"', blocks["backend-review-contracts"])
+        self.assertIn('"${receipt_retention_tests[@]}"', blocks["retained-release-withdrawal"])
+        self.assertNotIn('"${receipt_retention_tests[@]}"', blocks["backend-review-contracts"])
         sys.path.insert(0, str(ROOT / "scripts"))
         from ci_authority_cohorts import validate_workflow_arrays
         validate_workflow_arrays(workflow)
         review_block = blocks["backend-review-contracts"]
         read_retention = '          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"\n'
-        self.assertEqual(review_block.count(read_retention), 1)
-        broken = workflow.replace(review_block, review_block.replace(read_retention, "", 1), 1)
+        withdrawal_block = blocks["retained-release-withdrawal"]
+        self.assertEqual(withdrawal_block.count(read_retention), 1)
+        broken = workflow.replace(withdrawal_block, withdrawal_block.replace(read_retention, "", 1), 1)
         with self.assertRaisesRegex(ValueError, "receipt_retention_tests"):
             validate_workflow_arrays(broken)
         self.assertLess(review_block.index("--check-workflow-arrays"), review_block.index("name: Test complete backend review"))

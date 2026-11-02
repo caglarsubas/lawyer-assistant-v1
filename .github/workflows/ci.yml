@@ -59,23 +59,22 @@ env:
     backend/tests/test_public_sources.py
     backend/tests/test_planning_journal_reconciliation.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
-  # Keep the heavier open-validity file in this graph group; the lighter complete
-  # Graph B snapshot file uses the backend remainder. Measured file exchange,
-  # plus sequential graph metadata workers, preserves both jobs' timing reserve.
+  # The complete four-case open-validity file reuses review capacity. Keep
+  # the remaining graph files complete and the lighter Graph B snapshot in backend.
   CI_GRAPH_RUNTIME_TESTS: >-
-    backend/tests/test_open_validity_publication.py
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_release_set_authorization.py
     backend/tests/test_graph_b_publication.py
   # Complete expensive review files are disjoint from the backend remainder.
-  # Retention qualification uses this job's measured 81-second main reserve;
-  # keep its existing pair/cap and keep the backend remainder unchanged.
+  # Lighter retention18 reuses withdrawal's spare pair capacity; open-validity4
+  # enters review. Preserve every case, pair/cap and backend exclusion.
   CI_AUTHORITY_COHORT_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
   CI_BACKEND_REVIEW_TESTS: >-
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_journal_materialization.py
+    backend/tests/test_open_validity_publication.py
   # Complete lighter files reuse measured native ARM history/withdrawal reserve.
   # Sequential workers start only after both history workers have exited.
   # Rejected review/frontend layouts are retained; no caps or floors increase.
@@ -261,9 +260,8 @@ jobs:
         timeout-minutes: 5
         run: |
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
-          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${authority_cohort_tests[@]}" "${receipt_retention_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${authority_cohort_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 
       # Reuse the same pair after review tests; no overlap with the x86 UI.
       - name: Test complete manifest-bound assignment 1
@@ -519,7 +517,8 @@ jobs:
         timeout-minutes: 3
         run: |
           read -r -a withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${withdrawal_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
+          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10
 
   graph-candidate-contracts:
     # A 67-second transition case previously consumed the final job's setup

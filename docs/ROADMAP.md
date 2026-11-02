@@ -8844,3 +8844,16 @@ Retain that failure. Run the18 guards with the exact console entrypoint as a
 through one declared list. Require actual18+3962 receipts, with no duplicates.
 This catches guard setup failures before the costly suite without relaxing any
 worker, timeout, coverage or preservation condition.
+
+
+Run41383254858 passed the console preflight and corrected review/history/frontend
+work, but graph runtime used342/360 seconds (18/required30 spare). Retain that
+rejection. Its graph core122 took261 seconds, model20 took38 and assignment10
+took37. Transfer the unchanged open-validity4 file (54.39 measured worker-seconds)
+from graph to review; transfer retention18 (12.63 worker-seconds) from review to
+withdrawal's spare pair. Graph core becomes **118**, review **105**, withdrawal
+**56**. Model20 keeps its dedicated two-minute step. The net review increment is
+41.76 worker-seconds, while graph drops54.39; withdrawal gains only12.63. Reuse
+existing pairs and steps, preserving every cap and case. The placement guard also
+checks withdrawal's local retention-array definition to prevent silent omission.
+Qualify both revised groups and fresh complete PR/main execution before merge.
