@@ -8933,3 +8933,45 @@ preparer/reviewer identities and exact append-only disposition inspections.
 All **1,751** prior tracked files outside the living roadmap and all246 older
 evidence reports remain exact. PR/main CI and fixed reserves are still separate
 gates; the tracker records their actual completion.
+
+
+## 278. Preserve main CI reserve with complete measured groups — 2026-11-02
+
+PR #260 passed all ten exact-head checks, actual coverage and every reserve
+floor before its guarded merge. Independent main run41400027723 then completed
+final release in338/360 seconds, leaving22 against the required30. Retain that
+rejection; a green check does not qualify insufficient reserve. Leave the other
+main work to finish within its existing caps. Originals, exact evidence versions,
+private review history, encrypted documents, credentials and sessions stay exact.
+
+Move the unchanged source-review69 file (39.77 measured worker-seconds) from
+final into the existing database pair. Final becomes68; real database coverage
+becomes164 plus the separate cohort1. Transfer the complete analysis-review24
+and analysis-focus19 files (15.59/12.98 worker-seconds) from backend into graph
+and review respectively. Graph becomes236; review124; backend remainder3955.
+The moves use observed spare capacity and avoid increasing the already narrow
+backend reserve after the36 new disposition cases. No method, assertion, fixture,
+case, deployment identity, deadline or worker is removed or relaxed.
+
+The placement guard requires each new array, its definition in both execution
+and backend exclusion, exact group membership and one copy of each moved file.
+Keep ten jobs, two-active-worker ceilings, all1,018 deployment identities once,
+all139 frontend files/10,532 cases, original caps and fixed reserve floors.
+All500 native source pins,247 previous reports and application/backend test
+bodies remain exact. This is CI placement only; retain the59-outcome native qualification and
+make no new provider/inference, private backup, install or activation claim.
+
+Ledger **277 → 278**. Require fresh exact-head execution, complete per-file
+receipts, guarded merge and independent-main qualification. Engineering delivery
+and broader readiness remain separate. The next product item stays read-only
+disposition-journal interruption/restart reconciliation, without execution or
+acknowledgement recovery. Owner case review remains pending.
+
+
+Local qualification passes complete graph236, review124 and source-review69
+cases, the unchanged two placement methods with added omission regressions,
+full lint and collection4052 (backend3955 plus97 existing skips). All36 new
+disposition and51 retained copy cases stay included; fast guards18 remain
+separate and execute once. All1,758 earlier tracked files outside the living
+roadmap and two CI placement files stay byte-exact. Native500 pins and247 older
+evidence reports are unchanged; private preservation gates remain mandatory.

@@ -137,9 +137,28 @@ class DeploymentPlacementContract(unittest.TestCase):
             validate_workflow_arrays(broken)
         self.assertLess(review_block.index("--check-workflow-arrays"), review_block.index("name: Test complete backend review"))
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertIn("backend/tests/test_source_reviews.py", release_group)
+        self.assertNotIn("backend/tests/test_source_reviews.py", release_group)
+        database_source_group = re.search(r"  CI_DATABASE_SOURCE_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(database_source_group.split(), ["backend/tests/test_source_reviews.py"])
+        self.assertIn('"${database_source_review_tests[@]}"', postgres)
+        self.assertIn('read -r -a database_source_review_tests <<< "$CI_DATABASE_SOURCE_REVIEW_TESTS"', postgres)
+        self.assertIn('"${database_source_review_tests[@]}"', backend)
+        self.assertIn('read -r -a database_source_review_tests <<< "$CI_DATABASE_SOURCE_REVIEW_TESTS"', backend)
+        self.assertIn("backend/tests/test_analysis_reviews.py", group)
+        self.assertIn("backend/tests/test_analysis_focus.py", final_group)
+        self.assertEqual(final_group.split(), ["backend/tests/test_authority_trial_cohorts.py",
+            "backend/tests/test_journal_materialization.py", "backend/tests/test_open_validity_publication.py",
+            "backend/tests/test_analysis_focus.py"])
+        read_source_reviews = '          read -r -a database_source_review_tests <<< "$CI_DATABASE_SOURCE_REVIEW_TESTS"\n'
+        for owner in (backend, postgres):
+            self.assertEqual(owner.count(read_source_reviews), 1)
+            broken = workflow.replace(owner, owner.replace(read_source_reviews, "", 1), 1)
+            with self.assertRaisesRegex(ValueError, "database_source_review_tests"):
+                validate_workflow_arrays(broken)
+        for path in ("backend/tests/test_analysis_reviews.py", "backend/tests/test_analysis_focus.py"):
+            self.assertEqual(workflow.count(path), 1)
         self.assertNotIn("backend/tests/test_public_sources.py", release_group)
-        self.assertEqual(group.split(), ["backend/tests/test_graph_b_component_grants.py", "backend/tests/test_graph_b_publication.py", "backend/tests/test_public_sources.py", "backend/tests/test_declared_graph_assembly.py", "backend/tests/test_release_set_authorization.py"])
+        self.assertEqual(group.split(), ["backend/tests/test_graph_b_component_grants.py", "backend/tests/test_graph_b_publication.py", "backend/tests/test_public_sources.py", "backend/tests/test_declared_graph_assembly.py", "backend/tests/test_release_set_authorization.py", "backend/tests/test_analysis_reviews.py"])
         self.assertIn("backend/tests/test_planning_journal_reconciliation.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_planning_journal_reconciliation.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
