@@ -79,17 +79,23 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(cohort_group.split(), ["backend/tests/test_authority_model_cohorts.py"])
         self.assertIn('"${authority_cohort_tests[@]}"', backend)
         for job, lane in (("backend-review-contracts", "review"), ("postgres-snapshot-concurrency", "database"), ("frontend-history", "history")):
-            self.assertEqual(blocks[job].count("-p scripts.ci_authority_cohorts --authority-cohort-lane=" + lane), 1)
+            plugin = "scripts.ci_serial_history_cohorts" if lane == "history" else "scripts.ci_authority_cohorts"
+            self.assertEqual(blocks[job].count("-p " + plugin + " --authority-cohort-lane=" + lane), 1)
             self.assertIn('"${authority_cohort_tests[@]}"', blocks[job])
-        self.assertEqual(workflow.count("-p scripts.ci_authority_cohorts"), 3)
+        self.assertEqual(workflow.count("-p scripts.ci_authority_cohorts"), 2)
+        self.assertEqual(workflow.count("-p scripts.ci_serial_history_cohorts"), 2)
         human_group = re.search(r"  CI_HUMAN_REVIEW_GROUP_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(human_group.split(), ["backend/tests/test_final_release_inspection.py", "backend/tests/test_analysis_cohorts.py"])
-        history_review = re.search(r"  CI_HISTORY_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(history_review.split(), ["backend/tests/test_analysis_feedback.py", "backend/tests/test_ci_authority_partition.py", "backend/tests/test_ci_budgeted_deployment.py", "backend/tests/test_ci_retained_history.py"])
-        self.assertIn('"${history_review_tests[@]}"', backend)
-        self.assertIn('"${history_review_tests[@]}"', blocks["frontend-history"])
-        self.assertIn('read -r -a history_review_tests <<< "$CI_HISTORY_REVIEW_TESTS"', blocks["frontend-history"])
-        self.assertNotIn('"${history_review_tests[@]}"', blocks["frontend"])
+        self.assertEqual(human_group.split(), ["backend/tests/test_analysis_cohorts.py", "backend/tests/test_analysis_feedback.py"])
+        history_guards = re.search(r"  CI_HISTORY_GUARD_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        history_inspection = re.search(r"  CI_HISTORY_INSPECTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(history_guards.split(), ["backend/tests/test_ci_authority_partition.py", "backend/tests/test_ci_budgeted_deployment.py", "backend/tests/test_ci_retained_history.py"])
+        self.assertEqual(history_inspection.split(), ["backend/tests/test_final_release_inspection.py"])
+        for name in ("history_guard_tests", "history_inspection_tests"):
+            self.assertIn('"${' + name + '[@]}"', backend)
+            self.assertIn('"${' + name + '[@]}"', blocks["frontend-history"])
+            self.assertNotIn('"${' + name + '[@]}"', blocks["frontend"])
+        self.assertIn("scripts/run_ci_history_review_pair.py", blocks["frontend-history"])
+        self.assertIn('::: backend/.venv/bin/python -m pytest -p scripts.ci_serial_history_cohorts --ci-serial-role=inspection "${history_inspection_tests[@]}" -q --maxfail=1', blocks["frontend-history"])
         self.assertEqual(workflow.count("backend/tests/test_authority_model_cohorts.py"), 1)
         history_group = ["backend/tests/test_public_sources.py"]
         withdrawal_group = re.search(r"  CI_RETAINED_WITHDRAWAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
@@ -131,7 +137,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("CI_DATABASE_CONTEXT_TESTS", workflow)
         self.assertNotIn("CI_PUBLIC_SOURCE_TESTS", workflow)
         self.assertEqual(workflow.count("backend/tests/test_analysis_feedback.py"), 1)
-        self.assertIn("backend/tests/test_analysis_feedback.py", history_review)
+        self.assertIn("backend/tests/test_analysis_feedback.py", human_group)
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
         candidate_group = re.search(r"  CI_GRAPH_CANDIDATE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
@@ -164,7 +170,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(review.index("--plan-only"), review.index("name: Test complete backend review"))
         self.assertNotIn("CI_REVIEW_INSPECTION_TESTS", workflow)
         self.assertEqual(workflow.count("backend/tests/test_final_release_inspection.py"), 1)
-        self.assertEqual(human_group.split()[0], "backend/tests/test_final_release_inspection.py")
+        self.assertIn("backend/tests/test_final_release_inspection.py", history_inspection)
         self.assertEqual(workflow.count("backend/tests/test_journal_backup_readiness.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_journal_materialization.py"), 1)
         self.assertNotIn("backend/tests/test_journal_backup_readiness.py", final_group)

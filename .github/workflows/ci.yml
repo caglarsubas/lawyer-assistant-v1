@@ -22,16 +22,17 @@ env:
   # Frontend retains its full x86 TypeScript/build/browser-unit coverage.
   # No cases, jobs, workers, deadlines, fixtures or assertions are removed.
   # Preserve full x86 coverage; measured model-cohort work stays on ARM.
-  # Start the heavy complete inspection file before analysis32 on x86, so
-  # both share the exited pair. History retains its original one-minute cap.
+  # Keep analysis/feedback on their measured x86 pair. The exited history
+  # pair runs two bounded serial groups, avoiding a delayed inspection tail.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
-    backend/tests/test_final_release_inspection.py
     backend/tests/test_analysis_cohorts.py
-  CI_HISTORY_REVIEW_TESTS: >-
     backend/tests/test_analysis_feedback.py
+  CI_HISTORY_GUARD_TESTS: >-
     backend/tests/test_ci_authority_partition.py
     backend/tests/test_ci_budgeted_deployment.py
     backend/tests/test_ci_retained_history.py
+  CI_HISTORY_INSPECTION_TESTS: >-
+    backend/tests/test_final_release_inspection.py
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_authority_proposals.py
@@ -180,14 +181,15 @@ jobs:
           read -r -a retained_withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a graph_candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
           read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
-          read -r -a history_review_tests <<< "$CI_HISTORY_REVIEW_TESTS"
+          read -r -a history_guard_tests <<< "$CI_HISTORY_GUARD_TESTS"
+          read -r -a history_inspection_tests <<< "$CI_HISTORY_INSPECTION_TESTS"
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           ignore_args=()
-          for path in "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
@@ -430,14 +432,18 @@ jobs:
             ::: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=2 --report=${{ runner.temp }}/deployment-results.json
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
-      # The two history workers have fully exited. Combine the closed two-case
-      # cohort with feedback50 and the 43 unchanged CI guards in the same pair.
+      # The two history workers have exited. One serial child runs cohort2
+      # plus guards43; the other runs inspection8. No xdist grandchildren.
+      # The source-bound controller enforces 50s inside this original 60s step.
       - name: Test verified history cohort partition
         timeout-minutes: 1
         run: |
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
-          read -r -a history_review_tests <<< "$CI_HISTORY_REVIEW_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=history "${authority_cohort_tests[@]}" "${history_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
+          read -r -a history_guard_tests <<< "$CI_HISTORY_GUARD_TESTS"
+          read -r -a history_inspection_tests <<< "$CI_HISTORY_INSPECTION_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python scripts/run_ci_history_review_pair.py \
+            backend/.venv/bin/python -m pytest -p scripts.ci_serial_history_cohorts --authority-cohort-lane=history --ci-serial-role=cohort "${authority_cohort_tests[@]}" "${history_guard_tests[@]}" -q --maxfail=1 \
+            ::: backend/.venv/bin/python -m pytest -p scripts.ci_serial_history_cohorts --ci-serial-role=inspection "${history_inspection_tests[@]}" -q --maxfail=1
 
 
   final-release-authorization:
