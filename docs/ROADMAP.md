@@ -9418,3 +9418,34 @@ policy contracts and configured lint pass. Receipt27/combined154 and the earlier
 242-case/26-subtest candidate-plus-transition qualifications remain retained;
 all original bodies stay exact. Actual fresh PR/main reserves and disjoint
 case-identity receipts determine closure, with no new native or legal claim.
+
+
+## 284. Balance publication/planning against measured capacity — 2026-11-03
+
+Run41478501169 qualifies candidate with69 seconds reserve and withdrawal with56,
+but the unchanged publication/planning group finishes235/240, leaving5/required30.
+Retain that third rejection. Its actual file metrics show69 source-review cases
+at44.45 worker-seconds and31 Graph B publication cases at56.61. Move the complete
+lighter69-case source-review file into candidate and the complete31-case Graph B
+publication file into the backend pool. Leave all case bodies, assertions,
+source/evidence versions, signatures, seeds and permission gates unchanged.
+
+The declared allocation becomes backend3829 passing cases plus97 existing skips
+(3926 collected), candidate283, publication/planning109 and withdrawal48+83=131.
+All actual identities must remain disjoint and complete. Retain12 jobs,
+70 capped runner-minutes, two active workers/job and every existing step/job
+cap/reserve floor. The current PostgreSQL and history lanes have33 and36 seconds
+reserve; do not treat them as spare capacity for moved work. Every lane requires
+fresh exact-head and independent-main qualification. No unchanged retry or new
+native execution, private-data mutation, deployment or legal acceptance.
+
+Ledger **283 → 284** within the same receipt PR. Preserve505 prior native source
+pins and248 historical evidence files, originals, exact evidence versions,
+confidentiality and review history. Owner analysis-v3 review remains pending.
+
+All100 moved source-review/Graph B publication cases qualify locally in45.14
+seconds on two workers, alongside10 CI policy contracts and configured lint.
+Retain prior receipt154, candidate-plus-transition242/26-subtest and
+withdrawal131/36-subtest results without claiming fresh execution of unchanged
+native campaigns. Actual latest-head and independent-main case identities and
+reserve floors remain separate mandatory qualification gates.

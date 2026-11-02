@@ -174,8 +174,8 @@ class DeploymentPlacementContract(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "recovery_qualification_tests"):
                 validate_workflow_arrays(broken)
         frontend_group = re.search(r"  CI_PUBLICATION_PLANNING_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(frontend_group.split(), ["backend/tests/test_graph_b_publication.py",
-            "backend/tests/test_open_validity_publication.py", "backend/tests/test_planning_journal_reconciliation.py", "backend/tests/test_release_authorization.py", "backend/tests/test_source_reviews.py", "backend/tests/test_retained_release_inspection.py"])
+        self.assertEqual(frontend_group.split(), ["backend/tests/test_open_validity_publication.py",
+            "backend/tests/test_planning_journal_reconciliation.py", "backend/tests/test_release_authorization.py", "backend/tests/test_retained_release_inspection.py"])
         definition = '          read -r -a publication_planning_tests <<< "$CI_PUBLICATION_PLANNING_TESTS"\n'
         for owner in (backend, blocks["publication-planning-contracts"]):
             self.assertEqual(owner.count(definition), 1)
@@ -211,7 +211,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(candidate_group.split(), ["backend/tests/test_final_graph_candidate.py",
             "backend/tests/test_staged_receipt_adapter.py", "backend/tests/test_native_receipt_stage.py",
             "backend/tests/test_native_receipt_http.py", "backend/tests/test_native_receipt_faults.py",
-            "backend/tests/test_receipt_recovery_planning.py"])
+            "backend/tests/test_receipt_recovery_planning.py", "backend/tests/test_source_reviews.py"])
+        self.assertNotIn("backend/tests/test_graph_b_publication.py", workflow)
         self.assertNotIn("backend/tests/test_final_release_transitions.py", workflow)
         self.assertNotIn("backend/tests/test_disposition_reconciliation_receipt.py", workflow)
         self.assertIn('"${candidate_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', blocks["graph-candidate-contracts"])

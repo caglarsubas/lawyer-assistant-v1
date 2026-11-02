@@ -16,11 +16,9 @@ env:
     backend/tests/test_analysis_focus.py
     backend/tests/test_disposition_journal_reconciliation.py
   CI_PUBLICATION_PLANNING_TESTS: >-
-    backend/tests/test_graph_b_publication.py
     backend/tests/test_open_validity_publication.py
     backend/tests/test_planning_journal_reconciliation.py
     backend/tests/test_release_authorization.py
-    backend/tests/test_source_reviews.py
     backend/tests/test_retained_release_inspection.py
   CI_FAST_GUARD_TESTS: >-
     backend/tests/test_ci_history_review_pair.py
@@ -55,6 +53,7 @@ env:
     backend/tests/test_native_receipt_http.py
     backend/tests/test_native_receipt_faults.py
     backend/tests/test_receipt_recovery_planning.py
+    backend/tests/test_source_reviews.py
   # Model-cohort cases remain in the full backend remainder. Running them
   # sequentially with x86 workspace/review groups left only 3s of job margin.
   # Keep every case, eight jobs, two workers, current caps and no retries.

@@ -47,9 +47,9 @@
     "first_candidate_reserve_qualified": false,
     "unchanged_transition_cases_moved_to_backend": 1,
     "receipt_cases_in_candidate": 0,
-    "candidate_total": 214,
-    "backend_collected": 3895,
-    "backend_passed_expected": 3798,
+    "candidate_total": 283,
+    "backend_collected": 3926,
+    "backend_passed_expected": 3829,
     "existing_skips": 97,
     "caps_increased": false,
     "workers_increased": false,
@@ -73,6 +73,18 @@
     "withdrawal_total": 131,
     "withdrawal_replacement_local_cases": 131,
     "withdrawal_replacement_local_subtests": 36,
-    "withdrawal_replacement_local_seconds": 49.3
+    "withdrawal_replacement_local_seconds": 49.3,
+    "third_rejected_run": 41478501169,
+    "third_rejected_job": "publication-planning-contracts",
+    "third_job_seconds": 235,
+    "third_job_cap_seconds": 240,
+    "third_job_reserve_seconds": 5,
+    "third_candidate_reserve_seconds": 69,
+    "third_withdrawal_reserve_seconds": 56,
+    "source_review_cases_in_candidate": 69,
+    "graph_b_publication_cases_in_backend": 31,
+    "publication_planning_total": 109,
+    "publication_moved_local_cases": 100,
+    "publication_moved_local_seconds": 45.14
   }
 }
