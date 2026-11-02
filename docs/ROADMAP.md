@@ -8768,3 +8768,21 @@ uses no provider request and performs no runtime install, restart or mutation.
 Next: independently reviewed recovery disposition planning bound to exact retained
 restart observations, without execution or repair. Genuine custody/appointments,
 production recovery and legal approval remain separate gates.
+
+
+The first exact-head run 41373772303 passed frontend tests but used272 seconds
+of its300-second job cap, leaving28/required30 seconds. Retain the rejection;
+no merge or unchanged retry. Its Vitest lane took133 seconds, human-review125
+took58, and unchanged deployment phases8/9 took40/26. History completed in235
+seconds (65 spare), while short candidate/publication/withdrawal jobs have
+insufficient measured capacity for the complete relocated group.
+
+Keep analysis-cohorts32 on x86. Move the complete feedback50 and CI-guard43 files
+to the existing history cohort step, combining them with its two fixed cohort
+cases (**95 total**) after the prior history workers exit. Frontend Python becomes
+**32**, with all5299/5233 TypeScript cases unchanged. Maintain the original
+one-minute history step, five-minute job caps, two-worker ceilings and every
+case/identity. Backend exclusions explicitly include both disjoint lists; original
+case bodies and frozen drivers are unchanged. Update the placement guard to
+require exact new membership, definitions and destination. Require fresh native
+history execution/timing and exact-head/main gates; no threshold relaxation.

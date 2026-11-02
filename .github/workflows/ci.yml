@@ -22,8 +22,11 @@ env:
   # Frontend retains its full x86 TypeScript/build/browser-unit coverage.
   # No cases, jobs, workers, deadlines, fixtures or assertions are removed.
   # Preserve full x86 coverage; measured model-cohort work stays on ARM.
+  # Retain the complete 32-case analysis group on x86. Move the remaining
+  # complete files into the exited history pair, with its original one-minute cap.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_analysis_cohorts.py
+  CI_HISTORY_REVIEW_TESTS: >-
     backend/tests/test_analysis_feedback.py
     backend/tests/test_ci_authority_partition.py
     backend/tests/test_ci_budgeted_deployment.py
@@ -178,6 +181,7 @@ jobs:
           read -r -a retained_withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a graph_candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
           read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
+          read -r -a history_review_tests <<< "$CI_HISTORY_REVIEW_TESTS"
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
@@ -185,7 +189,7 @@ jobs:
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           ignore_args=()
-          for path in "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${review_inspection_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${history_review_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${review_inspection_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30
@@ -429,12 +433,14 @@ jobs:
             ::: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=2 --report=${{ runner.temp }}/deployment-results.json
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
-      # The two history workers have fully exited; reuse the same pair.
+      # The two history workers have fully exited. Combine the closed two-case
+      # cohort with feedback50 and the 43 unchanged CI guards in the same pair.
       - name: Test verified history cohort partition
         timeout-minutes: 1
         run: |
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=history "${authority_cohort_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
+          read -r -a history_review_tests <<< "$CI_HISTORY_REVIEW_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=history "${authority_cohort_tests[@]}" "${history_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
 
 
   final-release-authorization:
