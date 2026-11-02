@@ -9449,3 +9449,37 @@ Retain prior receipt154, candidate-plus-transition242/26-subtest and
 withdrawal131/36-subtest results without claiming fresh execution of unchanged
 native campaigns. Actual latest-head and independent-main case identities and
 reserve floors remain separate mandatory qualification gates.
+
+
+## 285. Closed case-level source-review allocation and execution receipts — 2026-11-03
+
+The whole-file layout still exhausts candidate reserve. Retain that fourth
+rejection; do not keep trying identical workloads. Freeze the unchanged69-case
+source-review file and every exact collected identity in a closed manifest.
+Assign23 disjoint cases each to candidate, withdrawal and source-publication.
+Validate the whole69-ID collection before selecting a lane, check every worker's
+selected IDs and emit a source/inventory-bound receipt only after every assigned
+case passes once. A skipped/xfail/missing/duplicate/invented case, changed source,
+wrong lane or incomplete worker collection fails qualification. Other test IDs
+remain untouched. Twelve new guard cases verify actual child calls and receipts.
+
+Retain every original case body and the12 jobs/70 capped runner-minutes/two
+active workers per job, all original job/step limits and reserve floors. Backend
+becomes3841 passing cases plus97 existing skips (3938 collected); candidate237,
+withdrawal71+83=154, source-publication208 and publication/planning109. The three
+source-review execution receipts must jointly account for all69 identities once.
+All1,018 deployment,139 frontend-file/10,532-case and19 authority identities,
+505 earlier native pins and248 historical evidence files remain protected.
+
+Ledger **284 → 285**, still within the same receipt PR. Require actual fresh
+exact-head and independently fetched-main execution/coverage/reserve gates.
+The unsigned private receipt has no product route, persistence, import or
+execution authority. Originals, exact evidence, confidentiality and independent
+review histories remain unchanged; owner analysis-v3 review stays pending.
+
+Local qualification passes39 receipt/partition-guard cases and all10 CI policy
+contracts. Three real two-worker source-review lanes each pass23 cases; the
+independent JUnit/manifest comparison proves all69 original identities executed
+once. The unchanged source file and505 native source pins remain exact. Latest
+head and independent-main measured reserves, complete case coverage and private
+preservation are still required separately.
