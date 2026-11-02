@@ -9185,3 +9185,22 @@ distinct actual identities; all24 CI policy contracts and repository-configured
 lint pass. All500 native pins,247 historical reports and1,757 other tracked
 files remain byte-exact. Twelve-job PR/main qualification remains required;
 no runtime, legal or owner-review status changes.
+
+
+Twelve-job run41423971144 qualifies ten jobs, with minimum48-second reserve;
+new publication/planning133 finishes114/240 seconds with126 seconds spare.
+Final-release crosses330 seconds and fails its30-second reserve gate. Keep
+that rejection. Transfer intact source-review69 and retained-inspection7 files
+into the new job (209 total), using its measured spare. Neither requires the
+PostgreSQL service; keep retained mixed assembly, final authorization, real
+PostgreSQL authorization and the database authority cohort in final (13 total).
+All source reviews and exact inspection evidence remain covered once; no case,
+assertion, native source pin or runtime/private record changes. The twelve-job
+70-minute ceiling, every job/step limit and reserve floor remain fixed. Require
+local209 IDs, all24 policy contracts and fresh PR/main gates.
+
+
+Local209-case qualification passes in71.74 seconds with209 distinct execution
+identities. All24 policy guards and repository-configured lint pass. Original
+500 native pins/247 reports/1,757 other tracked files remain exact. The
+209/13 placement now requires fresh exact-head and independent-main evidence.

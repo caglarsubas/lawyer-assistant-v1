@@ -140,7 +140,7 @@ class DeploymentPlacementContract(unittest.TestCase):
             validate_workflow_arrays(broken)
         self.assertLess(review_block.index("--check-workflow-arrays"), review_block.index("name: Test complete backend review"))
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertIn("backend/tests/test_source_reviews.py", release_group)
+        self.assertNotIn("backend/tests/test_source_reviews.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
         self.assertEqual(final_group.split(), ["backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py"])
         self.assertNotIn("backend/tests/test_analysis_focus.py", workflow)
@@ -175,7 +175,7 @@ class DeploymentPlacementContract(unittest.TestCase):
                 validate_workflow_arrays(broken)
         frontend_group = re.search(r"  CI_PUBLICATION_PLANNING_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(frontend_group.split(), ["backend/tests/test_graph_b_publication.py",
-            "backend/tests/test_open_validity_publication.py", "backend/tests/test_planning_journal_reconciliation.py", "backend/tests/test_release_authorization.py"])
+            "backend/tests/test_open_validity_publication.py", "backend/tests/test_planning_journal_reconciliation.py", "backend/tests/test_release_authorization.py", "backend/tests/test_source_reviews.py", "backend/tests/test_retained_release_inspection.py"])
         definition = '          read -r -a publication_planning_tests <<< "$CI_PUBLICATION_PLANNING_TESTS"\n'
         for owner in (backend, blocks["publication-planning-contracts"]):
             self.assertEqual(owner.count(definition), 1)
@@ -232,7 +232,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(backend.index("name: Test backend"), backend.index("name: Test complete backend capacity group"))
         self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
-        self.assertEqual(release_group.split()[-1], "backend/tests/test_retained_release_inspection.py")
+        self.assertEqual(release_group.split(), ["backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_final_release_authorization.py", "backend/tests/test_final_authorization_postgres.py"])
+        self.assertEqual(frontend_group.split()[-1], "backend/tests/test_retained_release_inspection.py")
         self.assertEqual(release_group.split()[0], "backend/tests/test_retained_mixed_assembly.py")
         self.assertEqual(workflow.count("backend/tests/test_retained_release_inspection.py"), 1)
         self.assertEqual(set(capacity_group.split()), {"backend/tests/test_journal_backup_readiness.py", "backend/tests/test_firm_admin.py"})

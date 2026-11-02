@@ -15,6 +15,8 @@ env:
     backend/tests/test_open_validity_publication.py
     backend/tests/test_planning_journal_reconciliation.py
     backend/tests/test_release_authorization.py
+    backend/tests/test_source_reviews.py
+    backend/tests/test_retained_release_inspection.py
   CI_FAST_GUARD_TESTS: >-
     backend/tests/test_ci_history_review_pair.py
   CI_RUNTIME_AUTHORIZATION_TESTS: >-
@@ -58,8 +60,6 @@ env:
     backend/tests/test_retained_mixed_assembly.py
     backend/tests/test_final_release_authorization.py
     backend/tests/test_final_authorization_postgres.py
-    backend/tests/test_source_reviews.py
-    backend/tests/test_retained_release_inspection.py
   CI_RECOVERY_QUALIFICATION_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_copy_recovery_disposition.py
