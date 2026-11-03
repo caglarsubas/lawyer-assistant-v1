@@ -14,8 +14,11 @@ env:
     backend/tests/test_operator_inspection_preview.py
   CI_SOURCE_REVIEW_TESTS: >-
     backend/tests/test_source_reviews.py
-  CI_HISTORY_CAPACITY_TESTS: >-
+  CI_PUBLICATION_WORKBENCH_TESTS: >-
     backend/tests/test_analysis_workbench.py
+  CI_POSTGRES_CAPACITY_TESTS: >-
+    backend/tests/test_runtime_graph_release.py
+    backend/tests/test_analysis_feedback.py
   CI_HISTORY_BINDING_TESTS: >-
     backend/tests/test_provision_mappings.py
   CI_CANDIDATE_FOCUS_TESTS: >-
@@ -50,7 +53,6 @@ env:
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_analysis_suggestions.py
     backend/tests/test_temporal_validity.py
-    backend/tests/test_operator_preview_package.py
     backend/tests/test_public_sources.py
   CI_HISTORY_GUARD_TESTS: >-
     backend/tests/test_ci_authority_partition.py
@@ -89,17 +91,17 @@ env:
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_release_set_authorization.py
-    backend/tests/test_runtime_graph_release.py
+    backend/tests/test_operator_preview_package.py
   # Complete expensive review files are disjoint from the backend remainder.
   # Withdrawal retains retention18; the dedicated publication/planning job
   # holds authorization49 and open-validity4. Preserve every complete file, pair/cap and exclusion.
   CI_AUTHORITY_COHORT_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
   CI_BACKEND_REVIEW_TESTS: >-
+    backend/tests/test_native_preview_restart.py
     backend/tests/test_native_operator_preview.py
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_journal_materialization.py
-    backend/tests/test_analysis_feedback.py
   # Complete lighter files reuse measured native ARM history/withdrawal reserve.
   # Sequential workers start only after both history workers have exited.
   # Rejected review/frontend layouts are retained; no caps or floors increase.
@@ -204,7 +206,8 @@ jobs:
         run: |
           read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"
           read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
-          read -r -a history_capacity_tests <<< "$CI_HISTORY_CAPACITY_TESTS"
+          read -r -a publication_workbench_tests <<< "$CI_PUBLICATION_WORKBENCH_TESTS"
+          read -r -a postgres_capacity_tests <<< "$CI_POSTGRES_CAPACITY_TESTS"
           read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
           read -r -a focus_tests <<< "$CI_CANDIDATE_FOCUS_TESTS"
           read -r -a publication_planning_tests <<< "$CI_PUBLICATION_PLANNING_TESTS"
@@ -228,7 +231,7 @@ jobs:
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           ignore_args=()
-          for path in "${preview_tests[@]}" "${history_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${preview_tests[@]}" "${publication_workbench_tests[@]}" "${postgres_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
@@ -303,6 +306,12 @@ jobs:
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=4 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-4.json
 
 
+      - name: Test complete provision binding qualification
+        timeout-minutes: 2
+        run: |
+          read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_provision_bindings --provision-binding-lane=history "${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+
   postgres-snapshot-concurrency:
     # The unchanged CPU-heavy runtime guard exceeded the x86 job budget even
     # after all 95 cases passed. Use the already-qualified native ARM executor,
@@ -359,8 +368,17 @@ jobs:
           print('Disposable PostgreSQL settings:', settings)
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
+          read -r -a postgres_capacity_tests <<< "$CI_POSTGRES_CAPACITY_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_capacity_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
 
+      - name: Test complete disposition restart qualification
+        timeout-minutes: 2
+        run: |
+          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+
+
+      # The original bounded restart phase follows exited PostgreSQL workers.
 
 
   frontend:
@@ -457,12 +475,6 @@ jobs:
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
 
-      - name: Test complete provision binding qualification
-        timeout-minutes: 2
-        run: |
-          read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
-          read -r -a history_capacity_tests <<< "$CI_HISTORY_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_provision_bindings --provision-binding-lane=history "${history_binding_tests[@]}" "${history_capacity_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   final-release-authorization:
     # Whole-release lifecycle, inspection and real concurrency stay together.
@@ -605,7 +617,8 @@ jobs:
         timeout-minutes: 3
         run: |
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${publication_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
+          read -r -a publication_workbench_tests <<< "$CI_PUBLICATION_WORKBENCH_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${publication_tests[@]}" "${publication_workbench_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
       - name: Test manifest-bound review headroom slice 9
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json
@@ -646,14 +659,7 @@ jobs:
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
 
-      - name: Test complete disposition restart qualification
-        timeout-minutes: 2
-        run: |
-          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
-
-      # Reuse completed graph-worker capacity for the unchanged history tail.
       - name: Test manifest-bound review headroom slice 10
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_retained_deployment.py --shard=10 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-10.json

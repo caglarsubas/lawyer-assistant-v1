@@ -10103,3 +10103,72 @@ interrupted-listener restart and fresh authorization without automatic replay.
 Local complete review174 passes in93.32s; all23 new offline contracts,
 exact CI lint and both placement contracts pass. Native22 is a separate opt-in
 result. Fresh complete remote qualification remains required.
+
+## 303. Native interrupted-listener restart and fresh authorization — 2026-11-03
+
+The additive frozen25-case campaign retains the previous native report and all
+741 source pins. Use the unchanged mount/isolation controller with a separately
+pinned restart entrypoint. Fresh labelled Linux/ext4 volumes, immutable local
+public dependencies, non-root runtime, read-only root/source/package, no egress,
+no host mounts/ports, bounded resources and separate preparation privileges
+remain mandatory. No private input, real account, provider or model is used.
+
+Three actual SIGKILL interruptions occur while idle, after real reviewer
+admission with a partial HTTP body, and after a completed observation. Require
+exit -9, a closed socket and no partial response. Seven distinct workers use
+fresh connection pools against the same invented account namespace and six
+exact input/candidate/history stores. Startup never replays a request or renews
+authority. A current reviewer session and current CSRF token are required after
+restart; revoked credentials and mismatched tokens fail closed. Independent
+checksum entry is required again, and a matching entry produces a fresh
+read-only observation with the original handoff/version/expiry unchanged.
+
+Expired preparation, a changed trusted pin and revoked preparer are rejected
+before listener release. Preserve all encrypted bytes, metadata and both source
+inventories. Only explicit fixture-session replacement and preparer revocation
+change the invented account DB. No history adoption, repair, replay, trust or
+production action is authorized. The controller retains fixtures in memory;
+cold descriptor reload, controller loss, host reboot, real operator/key custody,
+channel provenance, deployment and legal acceptance remain unqualified.
+
+The first native candidate passes25 outcomes/15 HTTP requests with complete
+owned-container/volume/generated-tag cleanup and745 exact source pins.
+Add29 inexpensive offline contracts in existing review capacity:187 primary
+plus16 closed authority cases. Native execution remains opt-in. Retain all
+previous cases, evidence256 files,505/741 prior native pins, frontend139 files/
+10532 cases, backend3798/3701+97 skips, analysis321/frozen53, graph128/model20/
+disposition25, final59, PostgreSQL95, portfolio47, planning209, candidate276,
+source185, withdrawal158, original closed inventories and all1018 deployment IDs.
+Keep12 jobs,70 capped runner-minutes,two workers and every deadline/reserve floor.
+
+Engineering270→271 only after exact-head CI, actual execution identities,
+independently fetched equal main tree, independent-main CI and private
+preservation pass. Product42/21/24/6 and readiness0/9/4/1 remain unchanged.
+Owner analysis-v3 review remains pending. Next: cold descriptor reconstruction
+and fail-closed controller-loss recovery with independently retained fixture
+bindings; no automatic trust renewal.
+
+Local complete review203 passes in53.41s; all29 new offline
+contracts, exact CI lint and both placement contracts pass. The native25 result
+is separate from CI. Fresh exact-head and independent-main qualification is
+required before closure.
+
+The first PR run41648262256 is rejected despite green checks: history291s,
+graph338s and analysis333s leave only9/22/27 seconds, below the30-second job
+reserve. The29 new offline cases take0.04s; existing workload plus runner/setup
+variation exhausted headroom. Retain this run without qualification credit.
+Cancellation was denied403; its original caps and workflow supersession remain.
+
+Rebalance complete unchanged files across existing jobs. Workbench57 shares
+source-publication242; runtime35 and feedback50 share PostgreSQL180, followed
+by the unchanged bounded graph25 restart phase. The48-case binding lane moves
+intact with its two-minute cap to review after153 primary/cohort cases.
+Package34 shares graph127; analysis287 retains the frozen53 pair. Backend3798,
+final59, portfolio47, candidate276, planning209, withdrawal158, frontend139 files/
+10532 cases, all1018 deployment IDs, closed partition identities, all job caps,
+phase deadlines, workers and reserve floors remain unchanged. New PostgreSQL
+capacity85 and source242 pass locally. A graph relocation fixture initially
+rejects the local harness's inherited077 mask; rerun with the normal022 test
+mask while retaining private logs under077. Do not relax directory validation.
+No native source changes or native rerun are needed. Fresh exact-head and
+independent-main qualification of the revised routing is required for closure.
