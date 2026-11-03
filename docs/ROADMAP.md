@@ -9825,3 +9825,31 @@ pending. Ledger **294 → 295**; engineering266 done/1 open/0 blocked becomes
 267 done/0 open/0 blocked only with qualified delivery. Product42 done/21 open/
 24 waiting/6 deferred and readiness0 ready/9 partial/4 waiting/1 planned stay exact.
 Next: the isolated disposable operator inspection preview and checksum guidance.
+
+
+## 296. Preserve frontend reserve while correcting graph load — 2026-11-03
+
+Retain rejected PR268 run41574723944: frontend277/300s leaves23 against30s.
+Vitest130s, manifest slice8 at41s and portfolio75 at83s explain the whole-job
+reserve loss; the portfolio step itself passed its120s cap/30s reserve.
+Graph87 completed in284/360s and analysis279 primary in254s. Do not retry this
+unchanged arrangement or expand its caps.
+
+Keep the complete runtime35 file in graph and restore original frontend40.
+Only public-source94 and suggestion39 move to analysis279; graph core122 retains
+model20/disposition25/manifest10 and analysis retains the exact frozen53 pair.
+These133 identities move once, preserving all cases and original bodies.
+Backend remains3798 collected/3701 pass+97 existing skips with43 handoff/45 lineage
+cases. Source and authority partitions,1018 deployment IDs,139 frontend files/
+10532 cases,12 jobs,70 capped runner-minutes,two workers,caches,caps and all floors
+remain unchanged. The earlier candidate, failed timing and local75-case result
+remain retained; the final affected groups and exact-head/main proofs are separate.
+
+PR267 main backend later completed with85-second reserve; its graph17-second
+reserve remains the qualification failure. No runtime, original, exact evidence,
+private history, credential, session, native-source or legal-review change.
+Ledger **295 → 296** in PR268. Engineering266→267 is conditional on qualification;
+product42/21/24/6 and readiness0/9/4/1 remain unchanged.
+
+Final local graph122 passes in83.03s; unchanged analysis279 passes in94.43s.
+All10 CI policy contracts and lint pass; fresh remote qualification remains required.
