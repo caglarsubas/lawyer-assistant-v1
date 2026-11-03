@@ -9711,3 +9711,50 @@ Fresh exact-head and independently fetched-main qualification, whole-tree
 equality and private preservation remain required. Ledger **291 → 292** within
 the same PR. Engineering264→265 only on qualified merge; product readiness and
 owner analysis-v3 review stay pending.
+
+
+## 293. Staged operator handoff and independent checksum provenance — 2026-11-03
+
+Add an unregistered read-only ASGI adapter over the existing receipt re-observer.
+Trusted host wiring prepares an immutable five-minute handoff using a current
+preparer session, a different assigned reviewer, exact receipt bytes and pin,
+and a canonical provenance record with a separately retained pin. The record
+binds source, opaque reference, receipt checksum, profile, local binding and
+recording time. SHA-256 proves byte identity; sender and external-channel
+authentication remain explicitly unestablished. No provenance is auto-generated
+from incoming receipt bytes or accepted as execution authority.
+
+The sole POST operation accepts only source ID, exact handoff checksum and the
+reviewer's independently supplied receipt checksum. Requests cannot override
+trusted pins, stores, profiles, paths or reviewer assignments. Current reviewer
+session, firm, role, origin and CSRF checks precede body/provenance inspection;
+self-review and unassigned reviewers are denied. Recheck the preparer, reviewer,
+binding, pins, clock and any still-current underlying planning review at return.
+
+Return bounded metadata and fresh re-observation only. Preserve exact references,
+explicit nulls, negative/stale decisions and missing acknowledgements. No partial
+output survives failed final checks. Keep2-KiB/eight-frame/two-second body limits,
+the20-second cooperative operation budget and8-KiB response ceiling; cancellation
+propagates and every response is no-store. Route-missing conditions are distinct
+from internal lookup failures; late lookup errors withhold the full report. No
+live route, persistence, history write, authority renewal, recovery, enrollment, inference or production effect.
+
+Local qualification passes43 cases in13.01 seconds plus lint and all10 CI policy
+contracts. New cases use the backend's measured181-second main reserve; keep the
+entire current CI workflow and placement unchanged. Backend becomes3753 collected,
+3656 expected pass+97 existing skips. Preserve all original inventories, including
+the36 re-observation and252 previously moved cases,1018 deployment IDs,139 frontend
+files/10532 cases,69/50/83 partition IDs and19 authority IDs. Keep12 jobs,70 capped
+runner-minutes,two active workers/job, all deadlines, reserve floors and caching.
+
+Require fresh PR and independently fetched-main actual identity/reserve proofs,
+whole-tree equality and preservation audits.505 native pins and251 prior evidence
+files remain exact; no new native campaign is claimed. Originals, exact evidence
+versions, confidentiality, private analysis-v3, credentials, sessions and review
+histories remain unchanged. Owner review and genuine operator/custody/provider,
+production and legal qualification remain pending.
+
+Ledger **292 → 293**. Engineering265→266 only after qualified merge; product
+checklist42 done/21 open/24 waiting/6 deferred and readiness stay unchanged.
+Next: an isolated disposable operator inspection preview with independent
+checksum-entry guidance; genuine live provisioning remains a separate gate.
