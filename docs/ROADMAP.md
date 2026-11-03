@@ -10172,3 +10172,30 @@ rejects the local harness's inherited077 mask; rerun with the normal022 test
 mask while retaining private logs under077. Do not relax directory validation.
 No native source changes or native rerun are needed. Fresh exact-head and
 independent-main qualification of the revised routing is required for closure.
+
+## 304. Restore independent-main source-job headroom — 2026-11-03
+
+PR272 passes exact-head qualification with all12 jobs, all1018 deployment IDs
+once and a32-second minimum job reserve; its fetched main tree is identical.
+Independent main41655550699 is not qualified: the completed source-publication
+job takes160s, leaving20s against the fixed30s floor. Record the completed
+failure separately from live metadata warnings and retain all earlier evidence.
+
+Move the unchanged workbench57 file out of source-publication242 and into the
+existing history job, whose completed main run retains78s. Source-publication
+returns to185. Add a bounded two-worker workbench phase after both history
+workers exit; require its own120s deadline and30s reserve as well as the original
+300s job limit. Every test body, fixture, native745/741/505 pin, prior evidence
+file, frontend139-file/10532-case inventory and all closed partitions stay exact.
+No job, worker, aggregate cap or existing deadline increases. Native25/three
+SIGKILL/seven-process qualification is unchanged and is not rerun by CI.
+
+Keep engineering merge evidence separate from independent-main readiness.
+Require fresh exact-head and independent-main identities/reserves plus private
+preservation; original documents, exact evidence versions, credentials and review
+history remain unchanged. Overall product42/21/24/6 and readiness0/9/4/1 stay
+exact; the owner's focused-analysis-v3 review remains pending.
+
+The standalone57-case workbench phase passes locally in8.98s; exact CI lint,
+both placement contracts and private preservation pass. Fresh remote identities
+and both PR/main reserve gates remain required.

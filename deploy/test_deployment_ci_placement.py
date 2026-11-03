@@ -218,7 +218,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         history_bindings = re.search(r"  CI_HISTORY_BINDING_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(history_bindings.split(), ["backend/tests/test_provision_mappings.py"])
         self.assertEqual(workflow.count("backend/tests/test_provision_mappings.py"), 1)
-        for key, paths, array, job in (("CI_PUBLICATION_WORKBENCH_TESTS", ["backend/tests/test_analysis_workbench.py"], "publication_workbench_tests", "source-publication-contracts"),
+        for key, paths, array, job in (("CI_HISTORY_CAPACITY_TESTS", ["backend/tests/test_analysis_workbench.py"], "history_capacity_tests", "frontend-history"),
                                         ("CI_POSTGRES_CAPACITY_TESTS", ["backend/tests/test_runtime_graph_release.py", "backend/tests/test_analysis_feedback.py"], "postgres_capacity_tests", "postgres-snapshot-concurrency")):
             self.assertEqual(re.search(r"  " + key + r": >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), paths)
             definition = f'          read -r -a {array} <<< "${key}"\n'
@@ -226,7 +226,7 @@ class DeploymentPlacementContract(unittest.TestCase):
                 self.assertEqual(owner.count(definition), 1)
                 with self.assertRaisesRegex(ValueError, array):
                     validate_workflow_arrays(workflow.replace(owner, owner.replace(definition, "", 1), 1))
-            self.assertIn('"${' + array + '[@]}" -n 2', blocks[job])
+            self.assertRegex(blocks[job], r'"\$\{' + array + r'\[@\]\}"(?: -q)? -n 2')
         self.assertNotIn("provision-binding-lane=history", blocks["frontend-history"])
         self.assertIn('"${history_binding_tests[@]}" -q -n 2', review_block)
 
