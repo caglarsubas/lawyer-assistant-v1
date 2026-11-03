@@ -6,7 +6,9 @@
   "source_sha256": {
     "scripts/operator_checksum_handoff.py": "8fb6c6d38c92d71fa0cc56bc3b80c0529f62631e327e8e5bbe606226ecbaaec4",
     "backend/tests/test_operator_checksum_handoff.py": "26e474172c454c3432a418391c0a76e646c0848191d7698809e16747d4544639",
-    "docs/OPERATOR_CHECKSUM_HANDOFF.md": "66d3139c0e7ac79083da2811c3cd55a97973693c0abc86da78da856ccaa1ce4f"
+    "docs/OPERATOR_CHECKSUM_HANDOFF.md": "66d3139c0e7ac79083da2811c3cd55a97973693c0abc86da78da856ccaa1ce4f",
+    ".github/workflows/ci.yml": "ff497c3f3452311b91ecbc7389e7809c8730c1c8cde49fdf18ab0d53179e66ec",
+    "deploy/test_deployment_ci_placement.py": "9eba2d6316a13c2bf23d31c33c16260dac6f6dbb2c37e2ddea17c8cbfa0b8ee9"
   },
   "scope": "unregistered read-only operator adapter; disposable validation only",
   "checksum_provenance": {
@@ -33,17 +35,19 @@
     "new_cases_passed": 43,
     "seconds": 13.01,
     "CI_policy_checks_passed": 10,
-    "lint": "passed"
+    "lint": "passed",
+    "unchanged_lineage_cases_passed": 45,
+    "lineage_seconds": 11.88
   },
   "CI": {
-    "workflow_and_placement_unchanged": true,
+    "workflow_and_placement_unchanged": false,
     "jobs": 12,
     "aggregate_capped_runner_minutes": 70,
     "active_test_workers_per_job": 2,
     "all_deadlines_and_reserve_floors_unchanged": true,
     "baseline_backend_job_reserve_seconds": 181,
-    "backend_collected": 3753,
-    "expected_backend_passed": 3656,
+    "backend_collected": 3798,
+    "expected_backend_passed": 3701,
     "existing_skips": 97,
     "new_cases_actual_once": "required in PR and independent main",
     "original_contract_ids": 1018,
@@ -54,12 +58,25 @@
     "disposition_read_ids": 50,
     "provision_binding_ids": 83,
     "earlier_reobservation_cases": 36,
-    "earlier_moved_original_cases": 252
+    "earlier_moved_original_cases": 252,
+    "all_other_routing_unchanged": true,
+    "analysis_primary_cases": 146,
+    "analysis_frozen_pair_cases": 53,
+    "newly_moved_lineage_cases": 45,
+    "rejected_run": {
+      "id": 41569718708,
+      "job": "analysis-recovery-contracts",
+      "seconds": 332,
+      "cap_seconds": 360,
+      "reserve_seconds": 28,
+      "required_reserve_seconds": 30
+    },
+    "lineage_profile_case_seconds": 52.91
   },
   "preservation": {
     "native_source_pins": 505,
     "earlier_evidence_files": 251,
-    "all_original_source_and_test_files": "unchanged except roadmap",
+    "all_original_source_and_test_files": "unchanged except explicit CI placement contract and workflow route; all original test bodies and fixtures unchanged",
     "originals_exact_versions_confidentiality_and_review_history": "preserved",
     "runtime_credentials_sessions_and_user_edits": "preserved",
     "owner_analysis_v3_review": "pending"

@@ -9758,3 +9758,34 @@ Ledger **292 → 293**. Engineering265→266 only after qualified merge; product
 checklist42 done/21 open/24 waiting/6 deferred and readiness stay unchanged.
 Next: an isolated disposable operator inspection preview with independent
 checksum-entry guidance; genuine live provisioning remains a separate gate.
+
+
+## 294. Measured analysis reserve correction for operator handoff — 2026-11-03
+
+Hold PR #267 after run41569718708: the unchanged analysis/recovery job used
+332 of360 seconds, leaving28 against the required30-second reserve. Its primary
+191-case group used277 seconds and the frozen53-case pair48 seconds. Functional
+success does not satisfy this independent headroom gate. Retain that rejected
+observation; do not retry the unchanged layout or increase caps or reserve floors.
+
+Move the complete unchanged45-case source-review-lineage file from analysis into
+the existing backend remainder. Its observed combined case setup/call/teardown
+time was52.91 seconds; this profiling input is not wall-time or billing savings.
+Local qualification passes all45 cases in11.88 seconds. Update the explicit
+placement contract; preserve every test body, fixture, partition and other route.
+Analysis becomes146 cases plus the unchanged53-case frozen pair; backend becomes
+3798 collected/3701 expected pass+97 existing skips, including the new43 handoff
+cases and moved45 lineage cases exactly once. Keep all12 jobs,70 aggregate capped
+runner-minutes,two active workers/job,caches,deadlines and reserve floors.
+
+Require fresh exact-head and independently fetched-main identity, reserve and
+whole-tree proofs; keep all1018 deployment IDs,139 frontend files/10532 cases,
+505 native pins and251 historical evidence files unchanged. Preserve originals,
+exact evidence versions, confidentiality, review history, user edits and runtime.
+No live adapter installation, new inference or case re-analysis.
+
+Ledger **293 → 294** within PR #267. Engineering265 done/1 open/0 blocked becomes
+266 done/0 open/0 blocked only after qualified merge and main verification.
+Product checklist42 done/21 open/24 waiting/6 deferred and milestone readiness
+0 ready/9 partial/4 waiting/1 planned stay unchanged; owner analysis-v3 review
+and genuine operational, custody, provider and legal qualification remain pending.
