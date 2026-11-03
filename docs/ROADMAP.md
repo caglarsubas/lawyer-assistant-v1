@@ -10009,3 +10009,8 @@ The portable preview/host binding and all private originals, exact evidence
 versions, confidentiality and review history remain unchanged. This supersedes
 only section299 placement. Engineering268→269 remains conditional on this PR's
 qualified delivery; product42/21/24/6 and readiness0/9/4/1 stay exact.
+
+Retain run41611617186: the executable pytest launcher could not import the
+new repository plugin before collection. Use an explicit Python module launcher
+in all three lanes; the placement contract now checks it. This fixes import-path
+initialization only; all inventories and limits stay exact.

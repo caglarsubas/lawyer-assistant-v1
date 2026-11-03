@@ -9,8 +9,8 @@
     "scripts/operator_preview_binding.py": "a0f7eda341be4e2af1f4987b05e514d4371d7706466b8ce78c158c201367a5b2",
     "backend/tests/test_operator_preview_package.py": "73dbfa72306314db5a80c240d5236123ade5e727523340f8851ff302540f3928",
     "docs/OPERATOR_PREVIEW_PACKAGE.md": "662217d1bf5d4757608cf2e104a51f5375495bb637741805485f7e4cce079253",
-    ".github/workflows/ci.yml": "80cd99dcaa42994f6d2f15f12e75c8c58c8af07691e0cfe6081a45b14e7f38c4",
-    "deploy/test_deployment_ci_placement.py": "d398093f25a11a78d256e21b5509b3148b0cc609b39cfc4514abbb5a5ecf7334",
+    ".github/workflows/ci.yml": "235de59a414f7ea269e9a8b7a284c661cacebf5544dbe1d2e97a81c3f9fd7d89",
+    "deploy/test_deployment_ci_placement.py": "2e0e587d14419b759ec4f56f4d80d27351a5385a3281406ededcdffd0e0ae5b9",
     "scripts/ci_operator_previews.py": "8a6bd8cbb541598d4067b49e9a2203926a17391d4ed8c1908361e75e996bea8c",
     "deploy/fixtures/operator_preview_partition.json": "db5df627fbc6e7fed2b0a95fa9a4755e408d78a907b27d9adbb6335d4b835c47"
   },
@@ -96,7 +96,8 @@
     "relocated fixture initially imported the old page without its asset; test helper made independent, preserving the export-only page path",
     "placement guard updated to include the additive complete file",
     "local analysis fixture TemporaryDirectory hit the macOS /var alias; rerun with a real TMPDIR and unchanged source assertions",
-    "first preview-plugin startup required the scripts namespace import before test-module paths were added; actual three-lane and composed-authority invocations now pass"
+    "first preview-plugin startup required the scripts namespace import before test-module paths were added; actual three-lane and composed-authority invocations now pass",
+    "CI executable launcher lacked repository root; fixed graph and frontend to Python module launchers and enforced all three by placement contract"
   ],
   "CI": {
     "new_cases": 34,
@@ -141,6 +142,11 @@
         "run": 41609032053,
         "job": "analysis-recovery-contracts",
         "reserve_seconds": 27
+      },
+      {
+        "run": 41611617186,
+        "job": "graph-runtime-contracts",
+        "reason": "executable startup lacked repository scripts import; explicit Python module launcher required in all three lanes"
       }
     ]
   },
