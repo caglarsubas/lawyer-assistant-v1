@@ -10208,3 +10208,13 @@ intact48 binding phase, and suggestions39 joins planning248. Deep analysis96
 retains its exact frozen53 pair. All191 moved cases pass locally in25.77s;
 no native/application/test-body changes or added workers/deadlines occur.
 Fresh complete receipts and both reserve gates remain required.
+
+The next candidate41660888417 fails the unchanged frozen partition contract
+because the isolated command omitted its retained second array. Restore that
+interface without modifying the frozen test. Keep journal-copy41 in recovery
+and suggestions39 in the retained auxiliary array; analysis totals135, while
+planning returns to209. This also restores planning reserve after its measured
+31-second candidate margin. Graph185 and review247 plus binding48 retain the
+moved temporal58/public94 files. All five placement/partition checks pass
+locally. Every source/test body and native pin remains exact; require fresh
+remote qualification of the compatible final layout.
