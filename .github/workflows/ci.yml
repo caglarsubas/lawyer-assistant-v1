@@ -76,7 +76,6 @@ env:
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_copy_recovery_disposition.py
     backend/tests/test_journal_copy_reconciliation.py
-    backend/tests/test_source_review_lineage.py
     backend/tests/test_disposition_receipt_reobservation_races.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
   # A dedicated bounded job holds complete publication/planning files.

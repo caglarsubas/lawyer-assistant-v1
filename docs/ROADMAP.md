@@ -9711,3 +9711,81 @@ Fresh exact-head and independently fetched-main qualification, whole-tree
 equality and private preservation remain required. Ledger **291 → 292** within
 the same PR. Engineering264→265 only on qualified merge; product readiness and
 owner analysis-v3 review stay pending.
+
+
+## 293. Staged operator handoff and independent checksum provenance — 2026-11-03
+
+Add an unregistered read-only ASGI adapter over the existing receipt re-observer.
+Trusted host wiring prepares an immutable five-minute handoff using a current
+preparer session, a different assigned reviewer, exact receipt bytes and pin,
+and a canonical provenance record with a separately retained pin. The record
+binds source, opaque reference, receipt checksum, profile, local binding and
+recording time. SHA-256 proves byte identity; sender and external-channel
+authentication remain explicitly unestablished. No provenance is auto-generated
+from incoming receipt bytes or accepted as execution authority.
+
+The sole POST operation accepts only source ID, exact handoff checksum and the
+reviewer's independently supplied receipt checksum. Requests cannot override
+trusted pins, stores, profiles, paths or reviewer assignments. Current reviewer
+session, firm, role, origin and CSRF checks precede body/provenance inspection;
+self-review and unassigned reviewers are denied. Recheck the preparer, reviewer,
+binding, pins, clock and any still-current underlying planning review at return.
+
+Return bounded metadata and fresh re-observation only. Preserve exact references,
+explicit nulls, negative/stale decisions and missing acknowledgements. No partial
+output survives failed final checks. Keep2-KiB/eight-frame/two-second body limits,
+the20-second cooperative operation budget and8-KiB response ceiling; cancellation
+propagates and every response is no-store. Route-missing conditions are distinct
+from internal lookup failures; late lookup errors withhold the full report. No
+live route, persistence, history write, authority renewal, recovery, enrollment, inference or production effect.
+
+Local qualification passes43 cases in13.01 seconds plus lint and all10 CI policy
+contracts. New cases use the backend's measured181-second main reserve; keep the
+entire current CI workflow and placement unchanged. Backend becomes3753 collected,
+3656 expected pass+97 existing skips. Preserve all original inventories, including
+the36 re-observation and252 previously moved cases,1018 deployment IDs,139 frontend
+files/10532 cases,69/50/83 partition IDs and19 authority IDs. Keep12 jobs,70 capped
+runner-minutes,two active workers/job, all deadlines, reserve floors and caching.
+
+Require fresh PR and independently fetched-main actual identity/reserve proofs,
+whole-tree equality and preservation audits.505 native pins and251 prior evidence
+files remain exact; no new native campaign is claimed. Originals, exact evidence
+versions, confidentiality, private analysis-v3, credentials, sessions and review
+histories remain unchanged. Owner review and genuine operator/custody/provider,
+production and legal qualification remain pending.
+
+Ledger **292 → 293**. Engineering265→266 only after qualified merge; product
+checklist42 done/21 open/24 waiting/6 deferred and readiness stay unchanged.
+Next: an isolated disposable operator inspection preview with independent
+checksum-entry guidance; genuine live provisioning remains a separate gate.
+
+
+## 294. Measured analysis reserve correction for operator handoff — 2026-11-03
+
+Hold PR #267 after run41569718708: the unchanged analysis/recovery job used
+332 of360 seconds, leaving28 against the required30-second reserve. Its primary
+191-case group used277 seconds and the frozen53-case pair48 seconds. Functional
+success does not satisfy this independent headroom gate. Retain that rejected
+observation; do not retry the unchanged layout or increase caps or reserve floors.
+
+Move the complete unchanged45-case source-review-lineage file from analysis into
+the existing backend remainder. Its observed combined case setup/call/teardown
+time was52.91 seconds; this profiling input is not wall-time or billing savings.
+Local qualification passes all45 cases in11.88 seconds. Update the explicit
+placement contract; preserve every test body, fixture, partition and other route.
+Analysis becomes146 cases plus the unchanged53-case frozen pair; backend becomes
+3798 collected/3701 expected pass+97 existing skips, including the new43 handoff
+cases and moved45 lineage cases exactly once. Keep all12 jobs,70 aggregate capped
+runner-minutes,two active workers/job,caches,deadlines and reserve floors.
+
+Require fresh exact-head and independently fetched-main identity, reserve and
+whole-tree proofs; keep all1018 deployment IDs,139 frontend files/10532 cases,
+505 native pins and251 historical evidence files unchanged. Preserve originals,
+exact evidence versions, confidentiality, review history, user edits and runtime.
+No live adapter installation, new inference or case re-analysis.
+
+Ledger **293 → 294** within PR #267. Engineering265 done/1 open/0 blocked becomes
+266 done/0 open/0 blocked only after qualified merge and main verification.
+Product checklist42 done/21 open/24 waiting/6 deferred and milestone readiness
+0 ready/9 partial/4 waiting/1 planned stay unchanged; owner analysis-v3 review
+and genuine operational, custody, provider and legal qualification remain pending.
