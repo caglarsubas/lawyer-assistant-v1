@@ -259,6 +259,12 @@ def test_closed_preview_partition_keeps_every_original_identity_and_requires_one
         partition.pytest_sessionfinish(session, 0)
         assert not partition.valid
     assert sorted(all_ids) == list(contract.ids) and len(set(all_ids)) == 20
+    items = [SimpleNamespace(nodeid=n) for n in [*contract.ids, "tests/authority.py::test_current", "tests/heavy.py::test_runtime", "tests/heavy.py::test_retained"]]
+    c.Partition(contract, "final").pytest_collection_modifyitems(
+        SimpleNamespace(hook=SimpleNamespace(pytest_deselected=lambda **_: None)), items)
+    assert [x.nodeid for x in items][:3] == ["tests/authority.py::test_current", "tests/heavy.py::test_runtime", "tests/heavy.py::test_retained"]
+    assert [x.nodeid for x in items][3:] == list(contract.lanes["final"])
+
     with pytest.raises(ValueError):
         c.select(contract, "graph", list(contract.ids)[:-1])
 

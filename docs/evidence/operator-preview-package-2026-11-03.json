@@ -7,11 +7,11 @@
     "scripts/operator_preview_manifest.py": "9df37d1c7cefc7f8c12aca2b383b812cc984ae12fe62cee65ec55a01e8a1394e",
     "scripts/build_operator_preview.py": "8621a43ed05c42c118b90356da7ecdb8ed3a71efc0e01dd12033f80d53c4bdb6",
     "scripts/operator_preview_binding.py": "a0f7eda341be4e2af1f4987b05e514d4371d7706466b8ce78c158c201367a5b2",
-    "backend/tests/test_operator_preview_package.py": "73dbfa72306314db5a80c240d5236123ade5e727523340f8851ff302540f3928",
+    "backend/tests/test_operator_preview_package.py": "88d9babd111890463ed54964bf2cb6bce5cb01a827866b51c73da0e0a1f512c9",
     "docs/OPERATOR_PREVIEW_PACKAGE.md": "662217d1bf5d4757608cf2e104a51f5375495bb637741805485f7e4cce079253",
-    ".github/workflows/ci.yml": "235de59a414f7ea269e9a8b7a284c661cacebf5544dbe1d2e97a81c3f9fd7d89",
-    "deploy/test_deployment_ci_placement.py": "2e0e587d14419b759ec4f56f4d80d27351a5385a3281406ededcdffd0e0ae5b9",
-    "scripts/ci_operator_previews.py": "8a6bd8cbb541598d4067b49e9a2203926a17391d4ed8c1908361e75e996bea8c",
+    ".github/workflows/ci.yml": "5100bc3bc36b718592b7ce2240e12713a235fd1fd514fa214f16c3475a9f6012",
+    "deploy/test_deployment_ci_placement.py": "ca7329b6f1136be04ee83b529531ca9c7cbca5f77d32427104528a676bebab23",
+    "scripts/ci_operator_previews.py": "0035777c3eed5d7ead727c339818baa6f685b0975df5eaf075feed06aca69398",
     "deploy/fixtures/operator_preview_partition.json": "db5df627fbc6e7fed2b0a95fa9a4755e408d78a907b27d9adbb6335d4b835c47"
   },
   "scope": "public-source-only export; unregistered ASGI callable; compatible application host required",
@@ -88,7 +88,15 @@
         "cases": 7,
         "seconds": 3.589
       }
-    ]
+    ],
+    "balanced_analysis": {
+      "passed": 321,
+      "seconds": 91.401
+    },
+    "balanced_partition_composition": {
+      "passed": 8,
+      "seconds": 6.129
+    }
   },
   "relocation": "separate Python -I -B process; copied public host code and invented fixture identities; four histories byte exact; no network listener",
   "development_regressions": [
@@ -101,32 +109,37 @@
   ],
   "CI": {
     "new_cases": 34,
-    "placement": "34 new cases in existing review; original preview20 closed across graph6/final7/frontend7; every actual identity once required",
-    "primary_review_cases": 158,
+    "placement": "34 new cases in existing analysis; original preview20 closed across graph6/final7/frontend7; complete immutable file redistribution; all identities once required",
+    "primary_review_cases": 135,
     "closed_review_authority_cases": 16,
     "backend_collected": 3798,
     "backend_expected_passed": 3701,
     "backend_existing_skips": 97,
-    "graph_core_cases": 222,
+    "graph_core_cases": 128,
     "jobs": 12,
     "aggregate_capped_runner_minutes": 70,
     "workers_per_job": 2,
     "caps_floors_caches_partitions_unchanged": true,
     "fresh_exact_head_and_independent_main_receipts": "required before closure",
     "billing_measured": false,
-    "analysis_cases": 185,
+    "analysis_cases": 321,
     "frozen_history_pair_cases": 53,
     "retained_rejected_run": 41606531317,
     "rejected_graph_seconds": 331,
     "rejected_graph_reserve_seconds": 29,
-    "placement_correction": "public sources94 remains graph; original preview20 removed from analysis and source-pinned across three existing invocations",
+    "placement_correction": "PG runtime1 and final-PG1 exchange; pure temporal58/package34/public94 to analysis, adjudication39 to final, feedback50 to review; original bodies unchanged",
     "placement_inputs": {
       "public_source94_combined_case_seconds": 19.13,
       "preview20_combined_case_seconds": 38.96,
-      "measurement_scope": "setup/call/teardown sums; not wall-time or invoice savings"
+      "measurement_scope": "setup/call/teardown sums; not wall-time or invoice savings",
+      "runtime_postgres_case_combined_seconds": 122.65,
+      "runtime_measurement_run": 41612041758,
+      "final_postgres_case_combined_seconds": 78.2,
+      "final_measurement_run": 41606531317,
+      "comparison_scope": "different runners/runs; inputs to placement only; fresh reserves required"
     },
     "frontend_portfolio_cases": 47,
-    "final_release_cases": 20,
+    "final_release_cases": 59,
     "preview_source_pinned_partition": {
       "graph": 6,
       "final": 7,
@@ -147,8 +160,24 @@
         "run": 41611617186,
         "job": "graph-runtime-contracts",
         "reason": "executable startup lacked repository scripts import; explicit Python module launcher required in all three lanes"
+      },
+      {
+        "run": 41612041758,
+        "job_reserves_seconds": {
+          "postgres-snapshot-concurrency": 9,
+          "backend-review-contracts": 21,
+          "graph-runtime-contracts": 32,
+          "analysis-recovery-contracts": 88,
+          "final-release-authorization": 57
+        },
+        "all_below_floor_jobs_rejected": true
       }
-    ]
+    ],
+    "postgres_cases": 95,
+    "postgres_image": "postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "both_existing_postgres_services_same_disposable_tmpfs": true,
+    "postgres_durability_flags_unchanged": true,
+    "final_heavy_files_first_and_preview_last": true
   },
   "preservation": {
     "native_source_pins": 505,

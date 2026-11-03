@@ -10014,3 +10014,45 @@ Retain run41611617186: the executable pytest launcher could not import the
 new repository plugin before collection. Use an explicit Python module launcher
 in all three lanes; the placement contract now checks it. This fixes import-path
 initialization only; all inventories and limits stay exact.
+
+
+## 301. Balance remaining PostgreSQL and review work — 2026-11-03
+
+Retain run41612041758: PostgreSQL291/300 leaves9 and review339/360 leaves21;
+graph328/360 leaves32, analysis272/360 leaves88 and final303/360 leaves57.
+The source-pinned preview partition passes. Keep this rejection separate from
+green GitHub test conclusions; do not retry its arrangement unchanged.
+
+Use observed complete-file case sums to balance existing capacity. Exchange the
+long runtime-authorization PostgreSQL case (122.65s) with the final-authorization
+PostgreSQL case (78.20s). Move pure temporal58 (34.45s) to analysis. Move package34
+(26.48s) to analysis, adjudication39 (26.62s) to final and feedback50 (19.03s) to
+review. Public sources94 returns to analysis, freeing graph reserve. These are
+setup/call/teardown sums, not predicted wall time or invoice savings. No source
+case body, fixture, assertion or original closed partition changes.
+
+In final, put runtime authorization and retained assembly before ordinary files;
+the preview selector keeps its small selected cases after the host's other work.
+The existing authority guard retains its required first item. Qualify this hook
+composition explicitly. Both existing PostgreSQL lanes use the same already
+approved16.10-bookworm digest and bounded512-MiB disposable database tmpfs, with
+fsync/full-page-writes/synchronous-commit on and real row-lock/commit tests.
+No production database or durability policy is changed; power-loss durability is
+not established by these disposable tests. Add final verbose IDs for verification.
+
+Final groups: PostgreSQL95; graph128 plus model20/disposition25; analysis321 plus
+the exact frozen53 pair; review135 plus closed authority16; final59; frontend47.
+The original preview20 remains6 graph/7 final/7 frontend. Backend3798/3701+97
+skips, every original identity and all1018 deployment IDs/139 frontend files/
+10532 cases remain required once on fresh exact head and independent main.
+Keep12 jobs,70 capped runner-minutes,two workers,all caps/floors/caches,505 native
+pins and254 prior evidence files. Require equal fetched tree and preservation.
+The portable surface, all originals, exact versions, credentials, private history
+and runtime remain unchanged. Engineering268→269 is still conditional; product
+42/21/24/6 and readiness0/9/4/1 stay exact. Owner review remains pending.
+
+Local balanced analysis321 passes in91.40s; the composed final
+preview/authority selection8 passes in6.13s with the
+heavy-first ordering rule. The78.20s final-PG comparison is from run41606531317;
+other listed fourth-run inputs are from41612041758. Different runners do not
+establish wall-time savings. Fresh complete remote qualification is required.

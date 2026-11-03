@@ -48,6 +48,14 @@ def load_contract(path=MANIFEST, source=SOURCE):
 
 
 class Partition(BasePartition):
+    @pytest.hookimpl(tryfirst=True)
+    def pytest_collection_modifyitems(self, config, items):
+        super().pytest_collection_modifyitems(config, items)
+        if self.lane == "final":
+            # Preserve the authority guard's first item and the host's heavy-file
+            # order. Small preview cases fill later slots rather than delaying it.
+            items.sort(key=lambda item: item.nodeid.startswith(PREFIX))
+
     def pytest_terminal_summary(self, terminalreporter, exitstatus):
         if self.valid and exitstatus == 0 and not hasattr(terminalreporter.config, "workerinput"):
             terminalreporter.write_line(json.dumps({"operator_preview_partition": self.lane,
