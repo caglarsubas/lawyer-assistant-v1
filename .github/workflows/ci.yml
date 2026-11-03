@@ -97,6 +97,7 @@ env:
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_journal_materialization.py
     backend/tests/test_analysis_adjudication.py
+    backend/tests/test_operator_preview_package.py
   # Complete lighter files reuse measured native ARM history/withdrawal reserve.
   # Sequential workers start only after both history workers have exited.
   # Rejected review/frontend layouts are retained; no caps or floors increase.

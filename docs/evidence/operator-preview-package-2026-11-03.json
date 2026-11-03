@@ -1,0 +1,94 @@
+{
+  "schema": "portable-operator-preview-qualification-v1",
+  "date": "2026-11-03",
+  "base": "39fc22ebd14073c59b0d3b71ac86dfe6a77775ab",
+  "baseline_qualified_main_run": 41593320617,
+  "source_sha256": {
+    "scripts/operator_preview_manifest.py": "9df37d1c7cefc7f8c12aca2b383b812cc984ae12fe62cee65ec55a01e8a1394e",
+    "scripts/build_operator_preview.py": "8621a43ed05c42c118b90356da7ecdb8ed3a71efc0e01dd12033f80d53c4bdb6",
+    "scripts/operator_preview_binding.py": "a0f7eda341be4e2af1f4987b05e514d4371d7706466b8ce78c158c201367a5b2",
+    "backend/tests/test_operator_preview_package.py": "3dc0fc98ac9e33b212b8db9bdfd7f145f982beaf67fe2ec264cc0c5e6238c860",
+    "docs/OPERATOR_PREVIEW_PACKAGE.md": "662217d1bf5d4757608cf2e104a51f5375495bb637741805485f7e4cce079253",
+    ".github/workflows/ci.yml": "3f22bbed95ba1818047b593bb5808ee7aef79b6d3a9093ef973a2c36275c5675",
+    "deploy/test_deployment_ci_placement.py": "a3972b4bc3e758dd5733752078507d43726c1a0b07956501a42808f60eef883b"
+  },
+  "scope": "public-source-only export; unregistered ASGI callable; compatible application host required",
+  "package": {
+    "deterministic": true,
+    "private_material_included": false,
+    "exact_prior_preview_source_and_HTML": true,
+    "compatible_host_source_and_lock_pinned": true,
+    "approval_pin_supplied_separately": true,
+    "default_kernel_readonly_package_and_host": true,
+    "disposable_test_override_explicit": true,
+    "verification_file_cap": 512,
+    "verification_byte_cap": 8388608,
+    "cooperative_seconds_per_pass": 20,
+    "source_hashes_attest_loaded_interpreter": false
+  },
+  "binding": {
+    "explicit_typed_host_adapter": true,
+    "exact_profile_context_source_handoff_distinct_principals_and_single_origin": true,
+    "current_session_RBAC_CSRF_preserved": true,
+    "final_code_asset_pins_and_expiry_rechecked": true,
+    "Host_scheme_duplicate_Host_forwarding_and_root_path_rejected": true,
+    "login_or_session_creation": false,
+    "listener_or_route_registered": false,
+    "independent_checksum_prefilled": false,
+    "authority_renewed": false,
+    "sender_authenticated": false,
+    "external_channel_independence_proven": false
+  },
+  "local": {
+    "review": {
+      "passed": 150,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 58.888
+    },
+    "package": {
+      "passed": 26,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 8.565
+    }
+  },
+  "relocation": "separate Python -I -B process; copied public host code and invented fixture identities; four histories byte exact; no network listener",
+  "development_regressions": [
+    "source mode0600 needed an explicit protected-host file policy; old helper remains unchanged",
+    "relocated fixture initially imported the old page without its asset; test helper made independent, preserving the export-only page path",
+    "placement guard updated to include the additive complete file"
+  ],
+  "CI": {
+    "new_cases": 26,
+    "placement": "complete file in existing backend-review-contracts only",
+    "primary_review_cases": 150,
+    "closed_review_authority_cases": 16,
+    "backend_collected": 3798,
+    "backend_expected_passed": 3701,
+    "backend_existing_skips": 97,
+    "graph_core_cases": 142,
+    "jobs": 12,
+    "aggregate_capped_runner_minutes": 70,
+    "workers_per_job": 2,
+    "caps_floors_caches_partitions_unchanged": true,
+    "fresh_exact_head_and_independent_main_receipts": "required before closure",
+    "billing_measured": false
+  },
+  "preservation": {
+    "native_source_pins": 505,
+    "previous_evidence_files": 254,
+    "prior_preview_handoff_and_reobserver_unchanged": true,
+    "originals_exact_versions_private_history_credentials_sessions_and_runtime": "required exact by preservation audit",
+    "private_analysis_v3_review": "pending"
+  },
+  "qualification_not_claimed": [
+    "native read-only mounts",
+    "listener deployment",
+    "genuine operator appointments or custody",
+    "provider inference",
+    "production activation",
+    "independent legal review"
+  ],
+  "next": "isolated read-only package/host mount and listener qualification with fresh disposable authorization"
+}

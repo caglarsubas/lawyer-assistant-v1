@@ -9900,3 +9900,44 @@ binding, preserving current admission and independent checksum-entry boundaries.
 Local complete graph142 passes in126.13s; new20 cases account for22.26 combined
 case seconds, a profiling input rather than wall-time or billing savings.
 The owned disposable server and host-only test cookie are closed; histories stay exact.
+
+
+## 298. Portable operator preview and trusted host binding — 2026-11-03
+
+Export the exact existing preview source and HTML with a deterministic closed
+manifest. The source-only package includes no private material, fixtures,
+credentials or dependencies. It explicitly requires a compatible application
+host; pin its complete application source inventory, staged dependency closure,
+packaging tools and dependency lock. Require a separately retained manifest
+approval, safe paths/ownership/modes, bounded reads and default kernel-read-only
+package/host source mounts before execution. No import path or live route is added.
+
+Trusted typed wiring fixes the existing disposable adapter, one source/handoff,
+context/profile, distinct preparer/reviewer and single canonical origin. Verify
+loaded module origins, exact host code and current preparation before and after
+construction. Compare the captured page bytes and sample the final clock before
+returning the unregistered ASGI callable. Refuse wrong/duplicate Host, scheme,
+forwarding headers and root-path rewriting before authentication or body reads.
+No login, session creation, provenance generation, trust or authority renewal.
+Keep the original blank independent checksum entry, exact evidence pins,
+original expiry and current-session/CSRF/RBAC and error-withholding behavior.
+
+Twenty-six additive cases include a relocated separate-process host with invented
+accounts, deterministic export, rejected substitutions, namespace/pin/link/mode
+failures, page change, revocation, late expiry and early host/proxy denial.
+The complete new file uses existing review-job reserve: review124+16→150+16;
+graph142, backend3798/3701+97 skips, analysis279/frozen53 and frontend40 stay exact.
+Keep12 jobs/70 capped runner-minutes/two workers, every cap/floor/cache/partition,
+all1018 deployment IDs and139 frontend files/10532 cases. Require actual new26
+and all retained identities once in fresh PR and independent main, equal fetched
+tree and preservation proof. Do not claim a new native read-only mount campaign.
+
+Preserve505 native source pins,254 previous evidence files, original test bodies,
+originals, exact evidence versions, encrypted stores, private review history,
+runtime configuration, credentials, sessions and user edits. Fresh scanner intake
+is healthy under its existing policy; the provider relay's prior unhealthy state
+remains. No live listener, installation, case/model execution or review change.
+Engineering268→269 only on qualified merge; checklist42/21/24/6 and readiness
+0/9/4/1 remain unchanged. Owner analysis-v3 review is pending.
+Next: isolated read-only package/host mount and listener qualification, with
+separately retained package approval and fresh disposable host authorization.

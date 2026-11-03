@@ -81,6 +81,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_graph_b_snapshot.py"), 0)
         self.assertIn('"${graph_runtime_tests[@]}"', blocks["backend-and-contracts"])
         final_group = re.search(r"  CI_BACKEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(workflow.count("backend/tests/test_operator_preview_package.py"), 1)
+        self.assertIn("backend/tests/test_operator_preview_package.py", final_group)
         self.assertNotIn("backend/tests/test_set_publication_cli.py", final_group)
         self.assertNotIn("backend/tests/test_authority_model_cohorts.py", final_group)
         self.assertNotIn("backend/tests/test_open_validity_publication.py", final_group)
@@ -142,7 +144,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_source_reviews.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
-        self.assertEqual(final_group.split(), ["backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py", "backend/tests/test_analysis_adjudication.py"])
+        self.assertEqual(final_group.split(), ["backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py", "backend/tests/test_analysis_adjudication.py", "backend/tests/test_operator_preview_package.py"])
         self.assertIn("backend/tests/test_analysis_focus.py", workflow)
         self.assertEqual(workflow.count("backend/tests/test_analysis_reviews.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_analysis_suggestions.py"), 1)
