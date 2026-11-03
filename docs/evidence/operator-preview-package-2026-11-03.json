@@ -9,8 +9,8 @@
     "scripts/operator_preview_binding.py": "a0f7eda341be4e2af1f4987b05e514d4371d7706466b8ce78c158c201367a5b2",
     "backend/tests/test_operator_preview_package.py": "3dc0fc98ac9e33b212b8db9bdfd7f145f982beaf67fe2ec264cc0c5e6238c860",
     "docs/OPERATOR_PREVIEW_PACKAGE.md": "662217d1bf5d4757608cf2e104a51f5375495bb637741805485f7e4cce079253",
-    ".github/workflows/ci.yml": "3f22bbed95ba1818047b593bb5808ee7aef79b6d3a9093ef973a2c36275c5675",
-    "deploy/test_deployment_ci_placement.py": "a3972b4bc3e758dd5733752078507d43726c1a0b07956501a42808f60eef883b"
+    ".github/workflows/ci.yml": "2281968157763cefadeb8474248992563fc19bb7349d3aafd0cbcb17b42358c5",
+    "deploy/test_deployment_ci_placement.py": "2ca39c6b021684c840f877b487f7e3053e31b669b4ded1aaa65496afa9def69b"
   },
   "scope": "public-source-only export; unregistered ASGI callable; compatible application host required",
   "package": {
@@ -51,13 +51,24 @@
       "failures": 0,
       "errors": 0,
       "seconds": 8.565
+    },
+    "corrected_graph": {
+      "passed": 216,
+      "seconds": 104.345,
+      "scheduler": "two workers; graph local worksteal, analysis exact CI load/maxschedchunk1; remote reserves separately required"
+    },
+    "corrected_analysis": {
+      "passed": 205,
+      "seconds": 113.651,
+      "scheduler": "two workers; graph local worksteal, analysis exact CI load/maxschedchunk1; remote reserves separately required"
     }
   },
   "relocation": "separate Python -I -B process; copied public host code and invented fixture identities; four histories byte exact; no network listener",
   "development_regressions": [
     "source mode0600 needed an explicit protected-host file policy; old helper remains unchanged",
     "relocated fixture initially imported the old page without its asset; test helper made independent, preserving the export-only page path",
-    "placement guard updated to include the additive complete file"
+    "placement guard updated to include the additive complete file",
+    "local analysis fixture TemporaryDirectory hit the macOS /var alias; rerun with a real TMPDIR and unchanged source assertions"
   ],
   "CI": {
     "new_cases": 26,
@@ -67,13 +78,24 @@
     "backend_collected": 3798,
     "backend_expected_passed": 3701,
     "backend_existing_skips": 97,
-    "graph_core_cases": 142,
+    "graph_core_cases": 216,
     "jobs": 12,
     "aggregate_capped_runner_minutes": 70,
     "workers_per_job": 2,
     "caps_floors_caches_partitions_unchanged": true,
     "fresh_exact_head_and_independent_main_receipts": "required before closure",
-    "billing_measured": false
+    "billing_measured": false,
+    "analysis_cases": 205,
+    "frozen_history_pair_cases": 53,
+    "retained_rejected_run": 41606531317,
+    "rejected_graph_seconds": 331,
+    "rejected_graph_reserve_seconds": 29,
+    "placement_correction": "complete unchanged public-source94 returns to graph; preview20 moves to analysis; new package26 stays review",
+    "placement_inputs": {
+      "public_source94_combined_case_seconds": 19.13,
+      "preview20_combined_case_seconds": 38.96,
+      "measurement_scope": "setup/call/teardown sums; not wall-time or invoice savings"
+    }
   },
   "preservation": {
     "native_source_pins": 505,

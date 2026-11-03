@@ -9941,3 +9941,33 @@ Engineering268→269 only on qualified merge; checklist42/21/24/6 and readiness
 0/9/4/1 remain unchanged. Owner analysis-v3 review is pending.
 Next: isolated read-only package/host mount and listener qualification, with
 separately retained package approval and fresh disposable host authorization.
+
+
+## 299. Restore graph reserve for the portable preview candidate — 2026-11-03
+
+Retain rejected PR270 run41606531317 at69cc375: graph331/360 seconds leaves29,
+below the unchanged30-second floor, despite successful tests. The graph core
+step took238s; model37s, disposition12s and manifest slice10 at34s. Review320/360
+leaves40; analysis295/360 leaves65. The qualified baseline main graph reserve
+was40s and analysis55s. This arrangement cannot be merged on green checks alone.
+
+Swap two complete unchanged files: public sources94 returns from analysis to
+graph; the disposable preview20 moves from graph to analysis. Their observed
+setup/call/teardown sums are19.13s and38.96s respectively. The19.83s difference
+is a profiling input, not a wall-time or billing claim. Graph core142→216;
+analysis279→205 plus the exact frozen53 pair. New package26 remains in the
+existing review150+16. Backend3798/3701+97 skips, all original bodies and fixtures,
+every1018 deployment ID,139 frontend files/10532 cases and closed partitions
+remain exact. Preserve12 jobs/70 capped runner-minutes/two workers, all existing
+caps/floors/caches and no automatic retries. Requalify exact head and independent
+main with actual once-only identities, full tree equality and preservation.
+
+No preview, package, host-binding, runtime, provider, inference, trust, account,
+original-document, evidence-version or review-history change. This corrects the
+initial placement in section298; engineering268→269 remains conditional on the
+same PR's qualified delivery. Checklist42/21/24/6 and readiness0/9/4/1 stay exact.
+
+Local corrected groups pass216 graph cases in104.34s and205 analysis
+cases in113.65s. The local analysis harness uses a real TMPDIR
+to preserve the existing no-symlink fixture policy on macOS. Exact CI lint and
+both placement contracts pass. Fresh remote qualification remains required.
