@@ -32,6 +32,7 @@ env:
     backend/tests/test_retained_release_inspection.py
     backend/tests/test_disposition_receipt_reobservation_boundary.py
     backend/tests/test_analysis_reviews.py
+    backend/tests/test_analysis_suggestions.py
   CI_FAST_GUARD_TESTS: >-
     backend/tests/test_ci_history_review_pair.py
   CI_RUNTIME_AUTHORIZATION_TESTS: >-
@@ -50,10 +51,6 @@ env:
   CI_FRONTEND_REVIEW_TESTS: >-
     backend/tests/test_analysis_cohorts.py
     backend/tests/test_disposition_receipt_reobservation.py
-  CI_HUMAN_REVIEW_GROUP_TESTS: >-
-    backend/tests/test_analysis_suggestions.py
-    backend/tests/test_temporal_validity.py
-    backend/tests/test_public_sources.py
   CI_HISTORY_GUARD_TESTS: >-
     backend/tests/test_ci_authority_partition.py
     backend/tests/test_ci_budgeted_deployment.py
@@ -92,6 +89,7 @@ env:
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_release_set_authorization.py
     backend/tests/test_operator_preview_package.py
+    backend/tests/test_temporal_validity.py
   # Complete expensive review files are disjoint from the backend remainder.
   # Withdrawal retains retention18; the dedicated publication/planning job
   # holds authorization49 and open-validity4. Preserve every complete file, pair/cap and exclusion.
@@ -102,6 +100,7 @@ env:
     backend/tests/test_native_operator_preview.py
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_journal_materialization.py
+    backend/tests/test_public_sources.py
   # Complete lighter files reuse measured native ARM history/withdrawal reserve.
   # Sequential workers start only after both history workers have exited.
   # Rejected review/frontend layouts are retained; no caps or floors increase.
@@ -220,7 +219,6 @@ jobs:
           read -r -a final_release_tests <<< "$CI_FINAL_RELEASE_TESTS"
           read -r -a retained_withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a graph_candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
-          read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
           read -r -a frontend_review_tests <<< "$CI_FRONTEND_REVIEW_TESTS"
           read -r -a history_guard_tests <<< "$CI_HISTORY_GUARD_TESTS"
           read -r -a history_inspection_tests <<< "$CI_HISTORY_INSPECTION_TESTS"
@@ -231,7 +229,7 @@ jobs:
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           ignore_args=()
-          for path in "${preview_tests[@]}" "${history_capacity_tests[@]}" "${postgres_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${human_review_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${preview_tests[@]}" "${history_capacity_tests[@]}" "${postgres_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
@@ -694,9 +692,8 @@ jobs:
       - name: Test complete analysis and recovery qualification
         timeout-minutes: 6
         run: |
-          read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
           read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${recovery_qualification_tests[@]}" "${human_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${recovery_qualification_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
 
       # The main analysis pair has exited. Preserve the exact frozen history
       # pair, its two serial children and its 50s controller inside the 60s step.

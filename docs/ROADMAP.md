@@ -10199,3 +10199,12 @@ exact; the owner's focused-analysis-v3 review remains pending.
 The standalone57-case workbench phase passes locally in8.98s; exact CI lint,
 both placement contracts and private preservation pass. Fresh remote identities
 and both PR/main reserve gates remain required.
+
+The first follow-up run41658272576 restores source/history reserves to47/52s
+but its completed analysis job takes341s, leaving19s. Preserve that rejection.
+Redistribute three complete unchanged lighter files using measured destination
+capacity: temporal58 joins graph185, public-source94 joins review247 plus the
+intact48 binding phase, and suggestions39 joins planning248. Deep analysis96
+retains its exact frozen53 pair. All191 moved cases pass locally in25.77s;
+no native/application/test-body changes or added workers/deadlines occur.
+Fresh complete receipts and both reserve gates remain required.
