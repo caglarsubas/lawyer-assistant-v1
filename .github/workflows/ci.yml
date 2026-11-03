@@ -96,6 +96,7 @@ env:
   CI_AUTHORITY_COHORT_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
   CI_BACKEND_REVIEW_TESTS: >-
+    backend/tests/test_native_operator_preview.py
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_journal_materialization.py
     backend/tests/test_analysis_feedback.py

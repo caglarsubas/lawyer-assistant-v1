@@ -10056,3 +10056,50 @@ preview/authority selection8 passes in6.13s with the
 heavy-first ordering rule. The78.20s final-PG comparison is from run41606531317;
 other listed fourth-run inputs are from41612041758. Different runners do not
 establish wall-time savings. Fresh complete remote qualification is required.
+
+
+## 302. Native read-only preview mounts and bounded listener — 2026-11-03
+
+The portable preview's default policy now has a frozen22-case Linux/ext4 native
+campaign. It uses an immutable local public dependency image, copied bounded
+tracked source, fresh labelled volumes and invented actors. No client input,
+runtime secret/configuration, existing data volume, provider or model is used.
+Independent Docker inspection enforces non-root runtime, read-only root/source/
+package mounts, no added capabilities, no egress or host ports/mounts, two CPUs,
+1-GiB memory and64 PIDs. Preparation privileges never reach runtime.
+
+Prove actual kernel EROFS and reject altered/unapproved, linked, wrong-owner or
+writable inputs before listener release. A separate process serves real HTTP
+on its isolated loopback socket. Exercise the generic shell, cookie/CSRF
+bootstrap, exact evidence preview/comparison, wrong checksum and authorization/
+origin/Host/proxy denials. Verify the original partial-body timeout, controlled
+expiry, current-session revocation and closed listener after clean shutdown.
+Keep all four encrypted histories, two input/candidate stores and source/stage
+inventories exact. The only fixture-account mutation is explicit revocation.
+Report no genuine operator, external-channel, production or legal approval.
+
+Retain seven incomplete development attempts without credit. Fix fixture imports
+for the production dependency image without pytest; preserve private work-volume
+ownership across Docker's empty workdir copy-up; use one deliberate connection
+per request after the existing keep-alive interval. Never relax the22 outcomes,
+read-only default, authentication, POST retry policy, expiry or history checks.
+The eighth candidate passes22 cases,12 HTTP requests and complete owned-resource
+cleanup.741 source pins bind this new campaign;505 earlier native pins and255
+previous evidence files remain exact. New offline contracts are23 lightweight
+cases in existing review capacity:135+23 primary plus16 closed authority cases.
+Native Docker runs stay opt-in; CI does not launch them.
+
+Keep backend3798/3701+97 skips, analysis321/frozen53, graph128/model20/disposition25,
+final59, PostgreSQL95, frontend47, all1018 deployment IDs,139 frontend files/
+10532 cases and existing69/50/83/19/20 closed inventories. Preserve12 jobs,
+70 capped runner-minutes,two workers and every cap/floor/cache. Require fresh
+exact-head and independent-main reserves/identities, equal fetched tree and
+private preservation before closure. No live route, installation, case rerun,
+original/evidence-version, review-history, credential or runtime change.
+Engineering269→270 only on qualified merge; product42/21/24/6 and readiness
+0/9/4/1 remain unchanged. Owner analysis-v3 review is pending. Next: native
+interrupted-listener restart and fresh authorization without automatic replay.
+
+Local complete review174 passes in93.32s; all23 new offline contracts,
+exact CI lint and both placement contracts pass. Native22 is a separate opt-in
+result. Fresh complete remote qualification remains required.
