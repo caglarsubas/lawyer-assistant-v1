@@ -1,0 +1,55 @@
+{
+  "schema": "operator-preview-ci-partition-v1",
+  "source_path": "backend/tests/test_operator_inspection_preview.py",
+  "source_sha256": "f830de940f50714afb5545968de90bde5a95ca8c03f08347d7d0fef51980ad5e",
+  "test_ids": [
+    "tests/test_operator_inspection_preview.py::test_bounded_closed_requests_and_wrong_preparation_are_not_silently_replaced",
+    "tests/test_operator_inspection_preview.py::test_cancellation_after_preview_assembly_releases_no_response",
+    "tests/test_operator_inspection_preview.py::test_complete_preview_then_independent_entry_uses_unchanged_reobserver",
+    "tests/test_operator_inspection_preview.py::test_current_admission_precedes_preview_inspection[duplicate_cookie]",
+    "tests/test_operator_inspection_preview.py::test_current_admission_precedes_preview_inspection[foreign_origin]",
+    "tests/test_operator_inspection_preview.py::test_current_admission_precedes_preview_inspection[missing_csrf]",
+    "tests/test_operator_inspection_preview.py::test_current_admission_precedes_preview_inspection[revoked]",
+    "tests/test_operator_inspection_preview.py::test_generic_shell_contains_no_private_pins_and_only_hash_authorized_assets",
+    "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[clock]",
+    "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[expiry]",
+    "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[internal]",
+    "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[lookup]",
+    "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[pin]",
+    "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[preparer]",
+    "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[reviewer]",
+    "tests/test_operator_inspection_preview.py::test_session_bootstrap_cannot_be_embedded_cross_origin_or_supplied_identity",
+    "tests/test_operator_inspection_preview.py::test_session_revoked_during_bootstrap_does_not_release_csrf",
+    "tests/test_operator_inspection_preview.py::test_unassigned_or_self_review_cannot_bootstrap_or_read_private_body[other]",
+    "tests/test_operator_inspection_preview.py::test_unassigned_or_self_review_cannot_bootstrap_or_read_private_body[preparer]",
+    "tests/test_operator_inspection_preview.py::test_wrapper_does_not_expose_a_second_host_source_through_the_existing_endpoint"
+  ],
+  "lanes": {
+    "graph": [
+      "tests/test_operator_inspection_preview.py::test_cancellation_after_preview_assembly_releases_no_response",
+      "tests/test_operator_inspection_preview.py::test_complete_preview_then_independent_entry_uses_unchanged_reobserver",
+      "tests/test_operator_inspection_preview.py::test_current_admission_precedes_preview_inspection[foreign_origin]",
+      "tests/test_operator_inspection_preview.py::test_current_admission_precedes_preview_inspection[missing_csrf]",
+      "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[clock]",
+      "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[expiry]"
+    ],
+    "final": [
+      "tests/test_operator_inspection_preview.py::test_current_admission_precedes_preview_inspection[duplicate_cookie]",
+      "tests/test_operator_inspection_preview.py::test_current_admission_precedes_preview_inspection[revoked]",
+      "tests/test_operator_inspection_preview.py::test_generic_shell_contains_no_private_pins_and_only_hash_authorized_assets",
+      "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[internal]",
+      "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[pin]",
+      "tests/test_operator_inspection_preview.py::test_session_revoked_during_bootstrap_does_not_release_csrf",
+      "tests/test_operator_inspection_preview.py::test_unassigned_or_self_review_cannot_bootstrap_or_read_private_body[preparer]"
+    ],
+    "frontend": [
+      "tests/test_operator_inspection_preview.py::test_bounded_closed_requests_and_wrong_preparation_are_not_silently_replaced",
+      "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[lookup]",
+      "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[preparer]",
+      "tests/test_operator_inspection_preview.py::test_late_changes_withhold_whole_preview_and_keep_histories[reviewer]",
+      "tests/test_operator_inspection_preview.py::test_session_bootstrap_cannot_be_embedded_cross_origin_or_supplied_identity",
+      "tests/test_operator_inspection_preview.py::test_unassigned_or_self_review_cannot_bootstrap_or_read_private_body[other]",
+      "tests/test_operator_inspection_preview.py::test_wrapper_does_not_expose_a_second_host_source_through_the_existing_endpoint"
+    ]
+  }
+}
