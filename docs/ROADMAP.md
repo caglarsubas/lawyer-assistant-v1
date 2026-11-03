@@ -10218,3 +10218,30 @@ planning returns to209. This also restores planning reserve after its measured
 moved temporal58/public94 files. All five placement/partition checks pass
 locally. Every source/test body and native pin remains exact; require fresh
 remote qualification of the compatible final layout.
+
+The compatible candidate41663198701 leaves26s in PostgreSQL, while analysis
+retains84s and planning60s. Transfer the unchanged SQLite runtime35/feedback50
+files from PostgreSQL to analysis220, preserving the original95 real database
+race cases and the separate25-case restart phase. Move public-source94 to
+planning303; review175 plus its48 binding phase includes22 cheap new CI cost
+supervisor contracts. Analysis220/planning303 pass locally. All native and
+application test bodies and the frozen partition contract remain unchanged;
+placement assertions track the new routing.
+
+On2026-11-04, add a read-only cost supervisor inside the existing backend step.
+Only that job receives Actions read permission, as required by the
+[workflow-jobs API](https://docs.github.com/en/rest/actions/workflow-jobs).
+Bind metadata to the exact run/head and closed12-job/70-minute policy. Check
+completed job/phase timestamps against the existing30s/15s floors; never infer
+a final breach from a stale in-progress observation. Stop only the owned backend
+pytest process group on a failed/incomplete check, preserving the outer tmpfs
+cleanup. This avoids spending the remaining backend budget after another job
+has made the run unqualifiable; no Actions-write/cancellation privilege is used.
+Metadata reads have two bounded4s attempts. Tokens are withheld from test-child
+environments, and diagnostics contain only fixed codes, known job names and
+aggregate reserves. Require eleven completed qualified siblings at successful
+child exit, then independently verify the backend's own final duration and all
+original test identities before release. All22 guard tests pass, including real
+owned-process shutdown; the recorded live bad-reserve metadata is rejected.
+No job, worker, existing timeout or floor increases. No private document,
+evidence-version, credential, review-history or runtime change occurs.

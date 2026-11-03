@@ -16,9 +16,6 @@ env:
     backend/tests/test_source_reviews.py
   CI_HISTORY_CAPACITY_TESTS: >-
     backend/tests/test_analysis_workbench.py
-  CI_POSTGRES_CAPACITY_TESTS: >-
-    backend/tests/test_runtime_graph_release.py
-    backend/tests/test_analysis_feedback.py
   CI_HISTORY_BINDING_TESTS: >-
     backend/tests/test_provision_mappings.py
   CI_CANDIDATE_FOCUS_TESTS: >-
@@ -32,6 +29,7 @@ env:
     backend/tests/test_retained_release_inspection.py
     backend/tests/test_disposition_receipt_reobservation_boundary.py
     backend/tests/test_analysis_reviews.py
+    backend/tests/test_public_sources.py
   CI_FAST_GUARD_TESTS: >-
     backend/tests/test_ci_history_review_pair.py
   CI_RUNTIME_AUTHORIZATION_TESTS: >-
@@ -83,6 +81,8 @@ env:
     backend/tests/test_copy_recovery_disposition.py
     backend/tests/test_journal_copy_reconciliation.py
     backend/tests/test_disposition_receipt_reobservation_races.py
+    backend/tests/test_runtime_graph_release.py
+    backend/tests/test_analysis_feedback.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
   # A dedicated bounded job holds complete publication/planning files.
   # Keep remaining graph files complete and the lighter Graph B snapshot in backend.
@@ -98,11 +98,11 @@ env:
   CI_AUTHORITY_COHORT_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
   CI_BACKEND_REVIEW_TESTS: >-
+    backend/tests/test_ci_reserve_guard.py
     backend/tests/test_native_preview_restart.py
     backend/tests/test_native_operator_preview.py
     backend/tests/test_authority_trial_cohorts.py
     backend/tests/test_journal_materialization.py
-    backend/tests/test_public_sources.py
   # Complete lighter files reuse measured native ARM history/withdrawal reserve.
   # Sequential workers start only after both history workers have exited.
   # Rejected review/frontend layouts are retained; no caps or floors increase.
@@ -120,6 +120,9 @@ env:
 
 jobs:
   backend-and-contracts:
+    permissions:
+      contents: read
+      actions: read
     # Standard native ARM executor; the frontend job retains x86 coverage below.
     # Cohort, metadata and workspace work uses disjoint existing ARM reserves.
     # Keep the same two pytest workers and the existing test/job deadlines.
@@ -204,11 +207,12 @@ jobs:
         run: python scripts/qualify_roadmap.py check qualification
       - name: Test backend
         timeout-minutes: 16
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"
           read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
           read -r -a history_capacity_tests <<< "$CI_HISTORY_CAPACITY_TESTS"
-          read -r -a postgres_capacity_tests <<< "$CI_POSTGRES_CAPACITY_TESTS"
           read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
           read -r -a focus_tests <<< "$CI_CANDIDATE_FOCUS_TESTS"
           read -r -a publication_planning_tests <<< "$CI_PUBLICATION_PLANNING_TESTS"
@@ -232,10 +236,10 @@ jobs:
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           ignore_args=()
-          for path in "${preview_tests[@]}" "${history_capacity_tests[@]}" "${postgres_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${human_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${preview_tests[@]}" "${history_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${human_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
-          bash scripts/run_ci_tests.sh pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
+          bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard.py -- pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
       - name: Validate RDF and SHACL contract
         run: python scripts/validate_ontology.py
       - name: Compare actual synthetic extraction with independent reference
@@ -369,8 +373,7 @@ jobs:
           print('Disposable PostgreSQL settings:', settings)
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
-          read -r -a postgres_capacity_tests <<< "$CI_POSTGRES_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_capacity_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
 
       - name: Test complete disposition restart qualification
         timeout-minutes: 2
