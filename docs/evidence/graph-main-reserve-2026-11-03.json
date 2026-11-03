@@ -1,0 +1,89 @@
+{
+  "schema": "graph-main-reserve-qualification-v1",
+  "date": "2026-11-03",
+  "base": "17d70e44c33508cc3e51d4b02af01b68badd05a3",
+  "scope": "CI-only intact-file redistribution; no new tests or runtime effect",
+  "rejected_main_run": {
+    "id": 41573542549,
+    "graph_seconds": 343,
+    "cap_seconds": 360,
+    "reserve_seconds": 17,
+    "required_reserve_seconds": 30
+  },
+  "source_sha256": {
+    ".github/workflows/ci.yml": "a2a0e3897462461beb9b5a529cbe69f6ecf2c3584b907756cd592cbac4585c6f",
+    "deploy/test_deployment_ci_placement.py": "c86d66ccf6ab59915df8b7ceb22da47eb9568f36222797c0b5719fbe6b8dda75",
+    "backend/tests/test_runtime_graph_release.py": "4f4beed62fc556d830742a3a494759c866a0fb76cb0b460482eff8c7d64e1a4e",
+    "backend/tests/test_public_sources.py": "577c12af4e6118f960dae78c747607d4957bd597c7df30693fa109837d131841",
+    "backend/tests/test_analysis_suggestions.py": "9baaa11c2acd98574fb06221435af6db33da736f70cf93603ea725e4d021ca9c"
+  },
+  "moved": {
+    "frontend_runtime_cases": 0,
+    "runtime_cases_retained_in_graph": 35,
+    "analysis_public_source_cases": 94,
+    "analysis_suggestion_cases": 39,
+    "total": 133
+  },
+  "combined_case_profile_seconds": {
+    "runtime": 34.03,
+    "public_sources": 20.39,
+    "suggestions": 29.33
+  },
+  "expected_counts": {
+    "graph_core": 122,
+    "frontend_portfolio": 40,
+    "analysis_primary": 279,
+    "analysis_frozen_pair": 53,
+    "backend_collected": 3798,
+    "backend_passed": 3701,
+    "backend_existing_skips": 97,
+    "retained_handoff_cases": 43,
+    "retained_lineage_cases": 45,
+    "deployment_contracts": 1018,
+    "frontend_files": 139,
+    "frontend_cases": 10532
+  },
+  "limits": {
+    "jobs": 12,
+    "aggregate_capped_runner_minutes": 70,
+    "active_workers_per_job": 2,
+    "all_caps_floors_bootstrap_cache_and_partitions_unchanged": true
+  },
+  "preservation": {
+    "original_test_bodies_and_fixtures": "byte exact",
+    "native_source_pins": 505,
+    "previous_evidence_files": 252,
+    "private_originals_versions_reviews_credentials_sessions_runtime": "unchanged",
+    "owner_review": "pending"
+  },
+  "qualification": "Local affected groups and10 CI guards; fresh exact-head and independently fetched-main actual identity and reserve proof required",
+  "effects": {
+    "new_cases": 0,
+    "new_native_campaign": false,
+    "runtime_or_private_mutations": false,
+    "billing_measured": false
+  },
+  "local": {
+    "analysis_cases_passed": 279,
+    "analysis_seconds": 94.425,
+    "CI_policy_contracts_passed": 10,
+    "lint": "passed",
+    "initial_rejected_layout_frontend_cases_passed": 75,
+    "initial_rejected_layout_frontend_seconds": 26.846,
+    "graph_cases_passed": 122,
+    "graph_seconds": 83.028
+  },
+  "rejected_initial_PR_run": {
+    "id": 41574723944,
+    "frontend_seconds": 277,
+    "cap_seconds": 300,
+    "reserve_seconds": 23,
+    "floor_seconds": 30,
+    "Vitest_seconds": 130,
+    "deployment_seconds": 41,
+    "portfolio75_seconds": 83,
+    "graph87_seconds": 284,
+    "analysis279_primary_seconds": 254
+  },
+  "base_main_backend_reserve_seconds": 85
+}

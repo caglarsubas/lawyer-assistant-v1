@@ -9789,3 +9789,67 @@ Ledger **293 → 294** within PR #267. Engineering265 done/1 open/0 blocked beco
 Product checklist42 done/21 open/24 waiting/6 deferred and milestone readiness
 0 ready/9 partial/4 waiting/1 planned stay unchanged; owner analysis-v3 review
 and genuine operational, custody, provider and legal qualification remain pending.
+
+
+## 295. Graph main reserve qualification follow-up — 2026-11-03
+
+PR #267 merged after12 exact-head checks with39-second minimum job reserve;
+fetched-main tree matched. Its separate main run41573542549 used343 of360 seconds
+in the graph job, leaving17 against the unchanged30-second floor. Retain that
+rejection; a green GitHub conclusion does not qualify it. The staged handoff
+source remains delivered, with main qualification still open until this correction.
+
+Move three complete unchanged graph files using observed case-time sums:
+runtime authorization35 cases/34.03s to frontend capacity; public sources94/20.39s
+and analysis suggestions39/29.33s to analysis capacity. These83.75 combined
+setup/call/teardown seconds are profiling inputs, not wall-time or billing savings.
+Graph core becomes87 cases; model20, disposition25 and manifest slice10 remain.
+Frontend portfolio becomes75; analysis279 plus the unchanged frozen53-case pair.
+Backend remains3798 collected/3701 expected pass+97 existing skips, including
+all43 handoff cases and45 lineage cases. All original bodies, fixtures and closed
+source/authority partitions remain exact. Update only explicit placement guards.
+
+Local qualification passes75 frontend cases in26.85s,279 analysis cases in94.43s,
+all10 CI policy contracts and lint.
+
+Keep12 jobs,70 aggregate capped runner-minutes,two active workers/job, all caches,
+step/job caps, bootstrap bounds and reserve floors. Verify each shifted168 and
+all original1018 deployment IDs,139 frontend files/10532 cases exactly once in
+fresh PR and independently fetched-main receipts. Preserve all505 native pins
+and252 earlier evidence files; do not claim a new native campaign.
+
+No application, route, provider, inference, installation, enrollment, key, session,
+original-document, exact evidence-version or private review-history change.
+Owner analysis-v3 review and genuine custody/operator/provider/legal gates remain
+pending. Ledger **294 → 295**; engineering266 done/1 open/0 blocked becomes
+267 done/0 open/0 blocked only with qualified delivery. Product42 done/21 open/
+24 waiting/6 deferred and readiness0 ready/9 partial/4 waiting/1 planned stay exact.
+Next: the isolated disposable operator inspection preview and checksum guidance.
+
+
+## 296. Preserve frontend reserve while correcting graph load — 2026-11-03
+
+Retain rejected PR268 run41574723944: frontend277/300s leaves23 against30s.
+Vitest130s, manifest slice8 at41s and portfolio75 at83s explain the whole-job
+reserve loss; the portfolio step itself passed its120s cap/30s reserve.
+Graph87 completed in284/360s and analysis279 primary in254s. Do not retry this
+unchanged arrangement or expand its caps.
+
+Keep the complete runtime35 file in graph and restore original frontend40.
+Only public-source94 and suggestion39 move to analysis279; graph core122 retains
+model20/disposition25/manifest10 and analysis retains the exact frozen53 pair.
+These133 identities move once, preserving all cases and original bodies.
+Backend remains3798 collected/3701 pass+97 existing skips with43 handoff/45 lineage
+cases. Source and authority partitions,1018 deployment IDs,139 frontend files/
+10532 cases,12 jobs,70 capped runner-minutes,two workers,caches,caps and all floors
+remain unchanged. The earlier candidate, failed timing and local75-case result
+remain retained; the final affected groups and exact-head/main proofs are separate.
+
+PR267 main backend later completed with85-second reserve; its graph17-second
+reserve remains the qualification failure. No runtime, original, exact evidence,
+private history, credential, session, native-source or legal-review change.
+Ledger **295 → 296** in PR268. Engineering266→267 is conditional on qualification;
+product42/21/24/6 and readiness0/9/4/1 remain unchanged.
+
+Final local graph122 passes in83.03s; unchanged analysis279 passes in94.43s.
+All10 CI policy contracts and lint pass; fresh remote qualification remains required.
