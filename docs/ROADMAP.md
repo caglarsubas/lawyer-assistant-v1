@@ -10172,3 +10172,87 @@ rejects the local harness's inherited077 mask; rerun with the normal022 test
 mask while retaining private logs under077. Do not relax directory validation.
 No native source changes or native rerun are needed. Fresh exact-head and
 independent-main qualification of the revised routing is required for closure.
+
+## 304. Restore independent-main source-job headroom — 2026-11-03
+
+PR272 passes exact-head qualification with all12 jobs, all1018 deployment IDs
+once and a32-second minimum job reserve; its fetched main tree is identical.
+Independent main41655550699 is not qualified: the completed source-publication
+job takes160s, leaving20s against the fixed30s floor. Record the completed
+failure separately from live metadata warnings and retain all earlier evidence.
+
+Move the unchanged workbench57 file out of source-publication242 and into the
+existing history job, whose completed main run retains78s. Source-publication
+returns to185. Add a bounded two-worker workbench phase after both history
+workers exit; require its own120s deadline and30s reserve as well as the original
+300s job limit. Every test body, fixture, native745/741/505 pin, prior evidence
+file, frontend139-file/10532-case inventory and all closed partitions stay exact.
+No job, worker, aggregate cap or existing deadline increases. Native25/three
+SIGKILL/seven-process qualification is unchanged and is not rerun by CI.
+
+Keep engineering merge evidence separate from independent-main readiness.
+Require fresh exact-head and independent-main identities/reserves plus private
+preservation; original documents, exact evidence versions, credentials and review
+history remain unchanged. Overall product42/21/24/6 and readiness0/9/4/1 stay
+exact; the owner's focused-analysis-v3 review remains pending.
+
+The standalone57-case workbench phase passes locally in8.98s; exact CI lint,
+both placement contracts and private preservation pass. Fresh remote identities
+and both PR/main reserve gates remain required.
+
+The first follow-up run41658272576 restores source/history reserves to47/52s
+but its completed analysis job takes341s, leaving19s. Preserve that rejection.
+Redistribute three complete unchanged lighter files using measured destination
+capacity: temporal58 joins graph185, public-source94 joins review247 plus the
+intact48 binding phase, and suggestions39 joins planning248. Deep analysis96
+retains its exact frozen53 pair. All191 moved cases pass locally in25.77s;
+no native/application/test-body changes or added workers/deadlines occur.
+Fresh complete receipts and both reserve gates remain required.
+
+The next candidate41660888417 fails the unchanged frozen partition contract
+because the isolated command omitted its retained second array. Restore that
+interface without modifying the frozen test. Keep journal-copy41 in recovery
+and suggestions39 in the retained auxiliary array; analysis totals135, while
+planning returns to209. This also restores planning reserve after its measured
+31-second candidate margin. Graph185 and review247 plus binding48 retain the
+moved temporal58/public94 files. All five placement/partition checks pass
+locally. Every source/test body and native pin remains exact; require fresh
+remote qualification of the compatible final layout.
+
+The compatible candidate41663198701 leaves26s in PostgreSQL, while analysis
+retains84s and planning60s. Transfer the unchanged SQLite runtime35/feedback50
+files from PostgreSQL to analysis220, preserving the original95 real database
+race cases and the separate25-case restart phase. Move public-source94 to
+planning303; review175 plus its48 binding phase includes22 cheap new CI cost
+supervisor contracts. Analysis220/planning303 pass locally. All native and
+application test bodies and the frozen partition contract remain unchanged;
+placement assertions track the new routing.
+
+On2026-11-04, add a read-only cost supervisor inside the existing backend step.
+Only that job receives Actions read permission, as required by the
+[workflow-jobs API](https://docs.github.com/en/rest/actions/workflow-jobs).
+Bind metadata to the exact run/head and closed12-job/70-minute policy. Check
+completed job/phase timestamps against the existing30s/15s floors; never infer
+a final breach from a stale in-progress observation. Stop only the owned backend
+pytest process group on a failed/incomplete check, preserving the outer tmpfs
+cleanup. This avoids spending the remaining backend budget after another job
+has made the run unqualifiable; no Actions-write/cancellation privilege is used.
+Metadata reads have two bounded4s attempts. Tokens are withheld from test-child
+environments, and diagnostics contain only fixed codes, known job names and
+aggregate reserves. Require eleven completed qualified siblings at successful
+child exit, then independently verify the backend's own final duration and all
+original test identities before release. All22 guard tests pass, including real
+owned-process shutdown; the recorded live bad-reserve metadata is rejected.
+No job, worker, existing timeout or floor increases. No private document,
+evidence-version, credential, review-history or runtime change occurs.
+
+The supervisor's first live candidate41669942342 rejects planning's completed
+218-second duration and22-second reserve before launching the backend suite.
+Preserve that rejection; green sibling checks do not qualify this candidate.
+PostgreSQL retains64 seconds after the portable runtime/feedback files leave.
+Move the complete unchanged94-case public-source file into that freed capacity,
+alongside the original95 database cases, with the separate25-case restart phase
+unchanged. Planning returns to209; analysis220, graph185, review175 plus48,
+source185 and history57 stay fixed. The five placement/partition checks pass.
+Require fresh exact-head and independent-main execution identities and timing
+receipts; no retries of unchanged candidates or relaxed qualification floors.
