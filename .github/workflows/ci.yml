@@ -87,6 +87,7 @@ env:
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_release_set_authorization.py
     backend/tests/test_runtime_graph_release.py
+    backend/tests/test_operator_inspection_preview.py
   # Complete expensive review files are disjoint from the backend remainder.
   # Withdrawal retains retention18; the dedicated publication/planning job
   # holds authorization49 and open-validity4. Preserve every complete file, pair/cap and exclusion.
