@@ -10245,3 +10245,14 @@ original test identities before release. All22 guard tests pass, including real
 owned-process shutdown; the recorded live bad-reserve metadata is rejected.
 No job, worker, existing timeout or floor increases. No private document,
 evidence-version, credential, review-history or runtime change occurs.
+
+The supervisor's first live candidate41669942342 rejects planning's completed
+218-second duration and22-second reserve before launching the backend suite.
+Preserve that rejection; green sibling checks do not qualify this candidate.
+PostgreSQL retains64 seconds after the portable runtime/feedback files leave.
+Move the complete unchanged94-case public-source file into that freed capacity,
+alongside the original95 database cases, with the separate25-case restart phase
+unchanged. Planning returns to209; analysis220, graph185, review175 plus48,
+source185 and history57 stay fixed. The five placement/partition checks pass.
+Require fresh exact-head and independent-main execution identities and timing
+receipts; no retries of unchanged candidates or relaxed qualification floors.
