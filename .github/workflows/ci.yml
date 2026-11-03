@@ -46,8 +46,11 @@ env:
   CI_FRONTEND_REVIEW_TESTS: >-
     backend/tests/test_analysis_cohorts.py
     backend/tests/test_disposition_receipt_reobservation.py
+    backend/tests/test_runtime_graph_release.py
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
     backend/tests/test_analysis_feedback.py
+    backend/tests/test_public_sources.py
+    backend/tests/test_analysis_suggestions.py
   CI_HISTORY_GUARD_TESTS: >-
     backend/tests/test_ci_authority_partition.py
     backend/tests/test_ci_budgeted_deployment.py
@@ -82,11 +85,8 @@ env:
   # Keep remaining graph files complete and the lighter Graph B snapshot in backend.
   CI_GRAPH_RUNTIME_TESTS: >-
     backend/tests/test_graph_b_component_grants.py
-    backend/tests/test_public_sources.py
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_release_set_authorization.py
-    backend/tests/test_runtime_graph_release.py
-    backend/tests/test_analysis_suggestions.py
   # Complete expensive review files are disjoint from the backend remainder.
   # Withdrawal retains retention18; the dedicated publication/planning job
   # holds authorization49 and open-validity4. Preserve every complete file, pair/cap and exclusion.

@@ -9789,3 +9789,39 @@ Ledger **293 → 294** within PR #267. Engineering265 done/1 open/0 blocked beco
 Product checklist42 done/21 open/24 waiting/6 deferred and milestone readiness
 0 ready/9 partial/4 waiting/1 planned stay unchanged; owner analysis-v3 review
 and genuine operational, custody, provider and legal qualification remain pending.
+
+
+## 295. Graph main reserve qualification follow-up — 2026-11-03
+
+PR #267 merged after12 exact-head checks with39-second minimum job reserve;
+fetched-main tree matched. Its separate main run41573542549 used343 of360 seconds
+in the graph job, leaving17 against the unchanged30-second floor. Retain that
+rejection; a green GitHub conclusion does not qualify it. The staged handoff
+source remains delivered, with main qualification still open until this correction.
+
+Move three complete unchanged graph files using observed case-time sums:
+runtime authorization35 cases/34.03s to frontend capacity; public sources94/20.39s
+and analysis suggestions39/29.33s to analysis capacity. These83.75 combined
+setup/call/teardown seconds are profiling inputs, not wall-time or billing savings.
+Graph core becomes87 cases; model20, disposition25 and manifest slice10 remain.
+Frontend portfolio becomes75; analysis279 plus the unchanged frozen53-case pair.
+Backend remains3798 collected/3701 expected pass+97 existing skips, including
+all43 handoff cases and45 lineage cases. All original bodies, fixtures and closed
+source/authority partitions remain exact. Update only explicit placement guards.
+
+Local qualification passes75 frontend cases in26.85s,279 analysis cases in94.43s,
+all10 CI policy contracts and lint.
+
+Keep12 jobs,70 aggregate capped runner-minutes,two active workers/job, all caches,
+step/job caps, bootstrap bounds and reserve floors. Verify each shifted168 and
+all original1018 deployment IDs,139 frontend files/10532 cases exactly once in
+fresh PR and independently fetched-main receipts. Preserve all505 native pins
+and252 earlier evidence files; do not claim a new native campaign.
+
+No application, route, provider, inference, installation, enrollment, key, session,
+original-document, exact evidence-version or private review-history change.
+Owner analysis-v3 review and genuine custody/operator/provider/legal gates remain
+pending. Ledger **294 → 295**; engineering266 done/1 open/0 blocked becomes
+267 done/0 open/0 blocked only with qualified delivery. Product42 done/21 open/
+24 waiting/6 deferred and readiness0 ready/9 partial/4 waiting/1 planned stay exact.
+Next: the isolated disposable operator inspection preview and checksum guidance.

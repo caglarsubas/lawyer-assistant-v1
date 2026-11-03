@@ -1,0 +1,73 @@
+{
+  "schema": "graph-main-reserve-qualification-v1",
+  "date": "2026-11-03",
+  "base": "17d70e44c33508cc3e51d4b02af01b68badd05a3",
+  "scope": "CI-only intact-file redistribution; no new tests or runtime effect",
+  "rejected_main_run": {
+    "id": 41573542549,
+    "graph_seconds": 343,
+    "cap_seconds": 360,
+    "reserve_seconds": 17,
+    "required_reserve_seconds": 30
+  },
+  "source_sha256": {
+    ".github/workflows/ci.yml": "b6f478636b3cd782188651974538437a070d73f008c91dba10251a462bdd4a9b",
+    "deploy/test_deployment_ci_placement.py": "7257207a9be6f8ec3fceeb1b8bbb8f7e8eadeef8ab43e57dbd32c6f3a52152f3",
+    "backend/tests/test_runtime_graph_release.py": "4f4beed62fc556d830742a3a494759c866a0fb76cb0b460482eff8c7d64e1a4e",
+    "backend/tests/test_public_sources.py": "577c12af4e6118f960dae78c747607d4957bd597c7df30693fa109837d131841",
+    "backend/tests/test_analysis_suggestions.py": "9baaa11c2acd98574fb06221435af6db33da736f70cf93603ea725e4d021ca9c"
+  },
+  "moved": {
+    "frontend_runtime_cases": 35,
+    "analysis_public_source_cases": 94,
+    "analysis_suggestion_cases": 39,
+    "total": 168
+  },
+  "combined_case_profile_seconds": {
+    "runtime": 34.03,
+    "public_sources": 20.39,
+    "suggestions": 29.33
+  },
+  "expected_counts": {
+    "graph_core": 87,
+    "frontend_portfolio": 75,
+    "analysis_primary": 279,
+    "analysis_frozen_pair": 53,
+    "backend_collected": 3798,
+    "backend_passed": 3701,
+    "backend_existing_skips": 97,
+    "retained_handoff_cases": 43,
+    "retained_lineage_cases": 45,
+    "deployment_contracts": 1018,
+    "frontend_files": 139,
+    "frontend_cases": 10532
+  },
+  "limits": {
+    "jobs": 12,
+    "aggregate_capped_runner_minutes": 70,
+    "active_workers_per_job": 2,
+    "all_caps_floors_bootstrap_cache_and_partitions_unchanged": true
+  },
+  "preservation": {
+    "original_test_bodies_and_fixtures": "byte exact",
+    "native_source_pins": 505,
+    "previous_evidence_files": 252,
+    "private_originals_versions_reviews_credentials_sessions_runtime": "unchanged",
+    "owner_review": "pending"
+  },
+  "qualification": "Local affected groups and10 CI guards; fresh exact-head and independently fetched-main actual identity and reserve proof required",
+  "effects": {
+    "new_cases": 0,
+    "new_native_campaign": false,
+    "runtime_or_private_mutations": false,
+    "billing_measured": false
+  },
+  "local": {
+    "frontend_cases_passed": 75,
+    "frontend_seconds": 26.846,
+    "analysis_cases_passed": 279,
+    "analysis_seconds": 94.425,
+    "CI_policy_contracts_passed": 10,
+    "lint": "passed"
+  }
+}
