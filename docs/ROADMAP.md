@@ -9679,3 +9679,35 @@ checklist42 done/21 open/24 waiting/6 deferred and milestone readiness stay
 unchanged. Next is a staged operator-adapter handoff with independent checksum
 provenance and fresh read-only access, using disposable identities until genuine
 operator/custody prerequisites are supplied.
+
+
+## 292. Restore backend reserve using complete-file timing evidence — 2026-11-03
+
+PR266 run41555436851 passes all12 checks and all36 new cases, but its unchanged
+backend job takes1123/1140 seconds, leaving17/required30 reserve. The backend
+test step takes843 seconds. Retain this rejected qualification; green GitHub
+checks do not waive the reserve floor. The new re-observation implementation
+and its36-case layout stay exact.
+
+Use that run's actual file setup/call/teardown timings to move252 existing
+passed cases in six unchanged files: runtime-graph35 and analysis-suggestions39
+to graph; analysis-workbench57 to history; temporal-validity58 to PostgreSQL;
+analysis-review24 to planning; analysis-adjudication39 to backend-review.
+Recorded CPU case-time sums are30.54/29.72/36.11/37.41/16.11/26.15 seconds
+respectively; these are profiling inputs, not wall-time or billing predictions.
+Each target reuses its existing exited/active pair with complete-file selection.
+History capacity has a separate declared array, avoiding duplicate execution
+through the shared83-case binding selector. Add direct passed-ID reporting.
+
+Backend becomes3710 collected/3613 pass+97 existing skips. Graph core255;
+history57+48 binding; PostgreSQL153; planning194+15=209; backend-review140.
+Frontend portfolio40 and analysis191 plus53 serial-pair cases stay unchanged.
+Require every moved252 case exactly once alongside new36 and every original
+contract/frontend/source/authority identity. Keep12 jobs,70 capped runner-minutes,
+two active workers/job, dependency caching, all deadlines and reserve floors.
+No new runtime, provider, case, evidence, review, original-test or fixture change.
+
+Fresh exact-head and independently fetched-main qualification, whole-tree
+equality and private preservation remain required. Ledger **291 → 292** within
+the same PR. Engineering264→265 only on qualified merge; product readiness and
+owner analysis-v3 review stay pending.

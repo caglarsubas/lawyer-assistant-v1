@@ -9,8 +9,8 @@
     "backend/tests/test_disposition_receipt_reobservation.py": "8ddd0d97332ed2f2e836466c1f9b4cc1ca54a6039ab12c51baafda11d1c214d7",
     "backend/tests/test_disposition_receipt_reobservation_boundary.py": "7dc0efde20174d646124b2e7f7b2f4a3dbbd64a82e0e8d61eb922315f9416e7a",
     "backend/tests/test_disposition_receipt_reobservation_races.py": "d906b9794ad370cf1bc1f3646be4ec1ac0365308726c8893171653d0e8cfafea",
-    ".github/workflows/ci.yml": "d21c1f8b165e66473d7dc76c72134866727d60de1edb9c4879777288230a6b35",
-    "deploy/test_deployment_ci_placement.py": "af5394ae09a09e6836359bd25563e35cd3f464a0e5d19552e98fb6a0fb8f6e9f",
+    ".github/workflows/ci.yml": "76f0d28f6de2b0a3d7d073f1a5cc1b339e9f0f43f7bc3ce084af3b7663d82b73",
+    "deploy/test_deployment_ci_placement.py": "1c6169bbca3d536c0bc987d5c38c125e757ae7a326530ce2001d8d761164bede",
     "docs/DISPOSITION_RECEIPT_REOBSERVATION.md": "22227d361a3097a165a1ded4f4a2c75ceef023a0e1061ee1a54d7e5d45d52d7c"
   },
   "authorization": {
@@ -60,17 +60,19 @@
       "tests.test_disposition_receipt_reobservation_races": 11,
       "tests.test_disposition_reconciliation_receipt": 27
     },
-    "lint": "passed"
+    "lint": "passed",
+    "moved_original_cases_locally_passed": 252,
+    "moved_original_local_seconds": 36.26
   },
   "original_coverage": {
-    "backend_collected": 3962,
-    "backend_passed": 3865,
+    "backend_collected": 3710,
+    "backend_passed": 3613,
     "existing_skips": 97,
     "analysis_primary": 191,
     "analysis_serial_pair": 53,
-    "planning_primary": 170,
+    "planning_primary": 194,
     "planning_binding": 15,
-    "planning_total": 185,
+    "planning_total": 209,
     "frontend_portfolio": 40,
     "source_review_ids": 69,
     "disposition_read_ids": 50,
@@ -78,7 +80,12 @@
     "deployment_ids": 1018,
     "frontend_files": 139,
     "frontend_cases": 10532,
-    "authority_ids": 19
+    "authority_ids": 19,
+    "graph_core": 255,
+    "history_capacity": 57,
+    "postgres": 153,
+    "backend_review": 140,
+    "moved_original_cases": 252
   },
   "preservation": {
     "native_source_pins": 505,
@@ -96,5 +103,34 @@
     "production_activation": false,
     "legal_qualification": false,
     "billing_measured": false
+  },
+  "rejected_reserve_profile": {
+    "run": 41555436851,
+    "checks_successful": 12,
+    "new_cases_actual_once": 36,
+    "job": "backend-and-contracts",
+    "seconds": 1123,
+    "cap_seconds": 1140,
+    "reserve_seconds": 17,
+    "required_reserve_seconds": 30,
+    "backend_test_step_seconds": 843
+  },
+  "moved_original_files": {
+    "graph": {
+      "backend/tests/test_runtime_graph_release.py": 35,
+      "backend/tests/test_analysis_suggestions.py": 39
+    },
+    "history": {
+      "backend/tests/test_analysis_workbench.py": 57
+    },
+    "postgres": {
+      "backend/tests/test_temporal_validity.py": 58
+    },
+    "planning": {
+      "backend/tests/test_analysis_reviews.py": 24
+    },
+    "review": {
+      "backend/tests/test_analysis_adjudication.py": 39
+    }
   }
 }
