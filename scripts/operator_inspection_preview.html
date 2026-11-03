@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Operatör inceleme önizlemesi</title>
+<style>
+:root{font-family:Manrope,sans-serif;color:oklch(28% .024 158);background:oklch(97.5% .009 95);font-size:16px}
+*{box-sizing:border-box}body{margin:0}main{max-width:1060px;margin:auto;padding:48px 24px 64px}
+h1,h2{font-family:"Source Serif 4",Georgia,serif;font-weight:400;line-height:1.2}h1{font-size:2.5rem;margin:16px 0}h2{font-size:1.5rem;margin:0 0 16px}
+p,li{line-height:1.7;max-width:70ch}header{padding-bottom:32px;border-bottom:1px solid oklch(84% .02 158)}
+.label{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:oklch(43% .03 158)}
+.work{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:48px;padding-top:32px}section+section{margin-top:32px}
+button,input{font:inherit}button{border:1px solid oklch(36% .057 158);background:oklch(36% .057 158);color:oklch(98% .01 158);padding:12px 18px;min-height:44px;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid oklch(49% .08 158);outline-offset:4px}
+label{display:block;font-weight:650;margin:24px 0 8px}input{width:100%;padding:12px;border:1px solid oklch(65% .025 158);background:oklch(99% .004 95);color:inherit}
+.help{font-size:.875rem;color:oklch(41% .025 158);margin:8px 0 20px}.status{min-height:3em;padding-top:24px}details{margin-top:24px}summary{cursor:pointer;padding:8px 0}
+pre{font: .8rem/1.7 Manrope,sans-serif;white-space:pre-wrap;overflow-wrap:anywhere;background:oklch(94.3% .014 107);padding:16px}aside{border-top:1px solid oklch(84% .02 158);padding-top:24px}
+[hidden]{display:none!important}@media(max-width:720px){main{padding:24px 20px}.work{grid-template-columns:1fr;gap:32px}h1{font-size:2rem}}
+</style></head><body><main>
+<header><span class="label">Hukuk Asistanı · Ayrı deneme ortamı</span><h1>Operatör inceleme önizlemesi</h1>
+<p>Hazırlanan aktarımın kimliğini inceleyin; ayrı kayıttan aldığınız sağlama toplamıyla yeniden gözlemleyin.</p></header>
+<div class="work"><div><section><h2>1. Hazırlığı görüntüleyin</h2>
+<p>Yalnızca atanmış inceleyicinin güncel deneme oturumu kullanılabilir. Bu sayfa oturum açmaz veya yeni yetki vermez.</p>
+<button id="inspect" type="button">Hazırlanan aktarımı görüntüle</button>
+<details id="metadata" hidden><summary>Hazırlığın kimliği ve zaman aralığı</summary><pre id="identity"></pre></details></section>
+<section><h2>2. Ayrı kayıttaki değeri girin</h2><form id="compare-form" autocomplete="off">
+<label for="checksum">Makbuzun SHA-256 sağlama toplamı</label>
+<input id="checksum" name="independent-checksum" type="text" minlength="64" maxlength="64" pattern="[0-9a-f]{64}" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="checksum-help" disabled required>
+<p class="help" id="checksum-help">Bu aktarımdan bağımsız tuttuğunuz kayıttaki 64 haneli değeri girin: yalnızca 0–9 ve küçük a–f harfleri. Beklenen değer burada gösterilmez veya otomatik doldurulmaz.</p>
+<button id="compare" type="submit" disabled>Karşılaştır ve yeniden gözlemle</button></form></section>
+<p id="status" class="status" role="status" aria-live="polite">Başlamak için hazırlanan aktarımı görüntüleyin.</p>
+<details id="result" hidden><summary>Sunucunun gözlem raporu</summary><pre id="report"></pre></details></div>
+<aside><h2>Bu işlem neyi gösterir?</h2><p>Sağlama toplamı eşleşmesi, karşılaştırılan baytların aynı olduğunu gösterir.</p>
+<p>Gönderenin kimliğini veya kaydın ayrı bir kanaldan alındığını doğrulamaz. Sonuç; hukuki onay, yeni inceleme kararı veya işlem yetkisi değildir.</p>
+<p>Özgün belgeler, eski kararlar ve inceleme geçmişi değiştirilmez. Eksik alındı bilgisi geri oluşturulmaz.</p>
+<p class="help">Hazırlık değişir, süresi dolar veya oturum yetkisi kaldırılırsa yeniden görüntüleme gerekir. Eski yanıt yeni yetki sağlamaz.</p></aside></div>
+</main><script>
+'use strict';
+const $=id=>document.getElementById(id), hex=/^[0-9a-f]{64}$/;
+let prepared=null, csrf=null, sequence=0, active=null;
+function clear(){prepared=null;csrf=null;$('checksum').value='';$('checksum').disabled=true;$('compare').disabled=true;$('metadata').hidden=true;$('identity').textContent='';$('result').hidden=true;$('report').textContent='';}
+function canonical(v){if(v===null||typeof v==='boolean'||typeof v==='string')return JSON.stringify(v);if(typeof v==='number'&&Number.isSafeInteger(v))return String(v);if(Array.isArray(v))return '['+v.map(canonical).join(',')+']';if(v&&typeof v==='object')return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonical(v[k])).join(',')+'}';throw Error('schema');}
+async function digest(v){const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonical(v)));return [...new Uint8Array(bytes)].map(x=>x.toString(16).padStart(2,'0')).join('');}
+async function wire(path,method,data,signal){const headers={'X-Operator-Preview':'1'};if(method==='POST'){headers['Content-Type']='application/json';headers['X-CSRF-Token']=csrf;}
+const response=await fetch(path,{method,headers,body:method==='POST'?JSON.stringify(data):undefined,mode:'same-origin',credentials:'same-origin',redirect:'error',cache:'no-store',signal});
+if(!response.ok)throw Error(String(response.status));const text=await response.text();if(text.length>8192)throw Error('schema');return JSON.parse(text);}
+function failure(error){clear();$('status').textContent=error.message==='403'?'Oturum veya inceleyici yetkisi doğrulanamadı. Yetkili deneme oturumuyla tekrar başlayın.':error.message==='409'?'Sağlama toplamı veya hazırlığın güncel durumu doğrulanamadı. Ayrı kaydı kontrol edin; ardından hazırlığı yeniden görüntüleyin.':'Doğrulanabilir bir yanıt alınamadı. Hazırlığı yeniden görüntüleyin; önceki sonuç işlem yetkisi sağlamaz.';}
+async function inspect(){const ticket=++sequence;active?.abort();active=new AbortController();clear();$('inspect').disabled=true;$('status').textContent='Güncel oturum ve hazırlık doğrulanıyor…';const controller=active,timer=setTimeout(()=>controller.abort(),22000);
+try{const session=await wire('/api/v1/firm-admin/disposition-receipt-stage/preview-session','GET',null,active.signal);if(ticket!==sequence)return;if(session.schema!=='disposable-preview-session-v1'||typeof session.csrf_token!=='string')throw Error('schema');csrf=session.csrf_token;
+const v=await wire('/api/v1/firm-admin/disposition-receipt-stage/preview','POST',{},active.signal);if(ticket!==sequence)return;
+if(v.state!=='prepared_handoff_inspected'||!v.preview||v.receipt_checksum_disclosed!==false||v.independent_entry_prefilled!==false||await digest(v.preview)!==v.preview_sha256)throw Error('schema');
+if(ticket!==sequence)return;prepared=v.preview;$('identity').textContent=JSON.stringify(prepared,null,2);$('metadata').hidden=false;$('checksum').disabled=false;$('compare').disabled=false;$('status').textContent='Hazırlık görüntülendi. Şimdi ayrı kayıttan aldığınız sağlama toplamını girin.';$('checksum').focus();
+}catch(error){if(ticket===sequence)failure(error);}finally{clearTimeout(timer);if(ticket===sequence)$('inspect').disabled=false;}}
+$('inspect').addEventListener('click',inspect);
+$('compare-form').addEventListener('submit',async event=>{event.preventDefault();const checksum=$('checksum').value;if(!prepared||!hex.test(checksum)){ $('status').textContent='Ayrı kayıttaki 64 haneli SHA-256 değerini eksiksiz girin.';return;}
+const pin={...prepared},ticket=++sequence;active?.abort();active=new AbortController();$('inspect').disabled=true;$('compare').disabled=true;$('checksum').disabled=true;$('checksum').value='';$('result').hidden=true;$('report').textContent='';$('status').textContent='Bayt eşleşmesi ve güncel gözlem doğrulanıyor…';const controller=active,timer=setTimeout(()=>controller.abort(),22000);
+try{const v=await wire('/api/v1/firm-admin/disposition-receipt-stage/reobserve','POST',{source_id:pin.source_id,expected_handoff_sha256:pin.handoff_sha256,independent_receipt_sha256:checksum},active.signal);if(ticket!==sequence)return;
+if(v.state!=='staged_handoff_reobserved'||!v.observation||v.observation.source_id!==pin.source_id||v.observation.handoff_sha256!==pin.handoff_sha256||v.observation.provenance_sha256!==pin.provenance_sha256||await digest(v.observation)!==v.observation_sha256)throw Error('schema');
+if(ticket!==sequence)return;$('report').textContent=JSON.stringify(v.observation,null,2);$('result').hidden=false;$('status').textContent='Karşılaştırma ve yeniden gözlemleme tamamlandı. Yeni inceleme kararı veya işlem yetkisi verilmedi.';
+}catch(error){if(ticket===sequence)failure(error);}finally{clearTimeout(timer);if(ticket===sequence){csrf=null;prepared=null;$('inspect').disabled=false;}}});
+addEventListener('pagehide',()=>{++sequence;active?.abort();clear();$('inspect').disabled=false;$('status').textContent='Hazırlığı yeniden görüntüleyin; önceki yanıt tekrar kullanılmaz.';});
+</script></body></html>

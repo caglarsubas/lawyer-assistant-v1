@@ -1,0 +1,100 @@
+{
+  "schema": "disposable-operator-inspection-preview-qualification-v1",
+  "date": "2026-11-03",
+  "base": "a6a287089d254d4f79083e774958be488a6486c2",
+  "baseline_qualified_main_run": 41577909635,
+  "source_sha256": {
+    "scripts/operator_inspection_preview.py": "d20ed0b0ff6bf493d6c7d77a8a6e7ff37d041f24d92e98859810a99c111465c7",
+    "scripts/operator_inspection_preview.html": "83457c96ae958e53957c6262fd125cb5b8af28a9b66ac95bcf47505766943ceb",
+    "backend/tests/test_operator_inspection_preview.py": "f830de940f50714afb5545968de90bde5a95ca8c03f08347d7d0fef51980ad5e",
+    "docs/OPERATOR_INSPECTION_PREVIEW.md": "81215e032a2bfbe3c30c213728e093a0695f00b63c2d3607f12a009855da6408",
+    ".github/workflows/ci.yml": "9ab4b91ff2408973e1db1628813a9567b94892d602646166e6512f8093fa737a",
+    "deploy/test_deployment_ci_placement.py": "c4170b290da2327f9e928433f52d86bce945402849118b7bd04413cfe653a1ec"
+  },
+  "scope": "unregistered disposable operator preview only; original handoff and reobserver byte exact",
+  "admission": {
+    "generic_shell_contains_private_data": false,
+    "session_bootstrap": "current assigned disposable reviewer cookie; same-origin custom header; no CORS; exit recheck",
+    "CSRF": "authenticated bootstrap response and browser memory only; never HTML, report, URL or storage",
+    "new_login_account_or_session_creation": false,
+    "current_preparer_and_reviewer_rechecked": true,
+    "exact_host_selected_source_and_handoff_pin": true,
+    "other_host_sources_exposed": false,
+    "late_errors_and_expiry_withhold_all_metadata": true
+  },
+  "independent_checksum": {
+    "expected_receipt_checksum_in_preview": false,
+    "entry_prefilled": false,
+    "independent_input_required": true,
+    "sender_authenticated": false,
+    "external_channel_verified": false,
+    "byte_identity_is_not_execution_authority": true
+  },
+  "UI": {
+    "language": "tr",
+    "external_assets": false,
+    "hash_only_CSP": true,
+    "no_store_no_referrer_nosniff": true,
+    "current_source_and_SHA256_binding_checked_before_display": true,
+    "cleared_on_failure_new_preparation_and_page_departure": true,
+    "automatic_retry": false,
+    "no_new_review_decision": true
+  },
+  "limits": {
+    "input_bytes": 2048,
+    "input_frames": 8,
+    "read_seconds": 2,
+    "cooperative_workflow_seconds": 20,
+    "preview_output_bytes": 4096,
+    "unchanged_comparison_output_bytes": 8192,
+    "browser_abort_seconds": 22,
+    "static_asset_bytes": 9292
+  },
+  "local": {
+    "new_server_cases_passed": 20,
+    "new_server_seconds": 7.57,
+    "complete_affected_graph_cases_passed": 142,
+    "complete_affected_graph_seconds": 126.127,
+    "new_case_time_sum_in_combined_run_seconds": 22.26,
+    "CI_policy_contracts_passed": 10,
+    "lint": "passed",
+    "browser": "invented disposable session: blank field, preview, mismatch clears, fresh preview, matching entry and exact response hash verified",
+    "browser_scope": "pre-conflict-copy-polish flow; final conflict wording preserves the same control flow",
+    "cleanup": "owned loopback server stopped; own disposable host cookie expired; tab closed; all four histories preserved",
+    "native_campaign_claimed": false,
+    "development_regressions": "static input assertion corrected; a late-expiry regression required release-clock verification after authorization; expectations retained"
+  },
+  "CI": {
+    "new_complete_file_placement": "existing graph job only",
+    "graph_core_cases": 142,
+    "backend_collected": 3798,
+    "backend_expected_passed": 3701,
+    "backend_existing_skips": 97,
+    "analysis_cases": 279,
+    "frozen_history_pair_cases": 53,
+    "frontend_portfolio_cases": 40,
+    "jobs": 12,
+    "aggregate_capped_runner_minutes": 70,
+    "active_workers_per_job": 2,
+    "all_existing_caps_floors_caches_partitions_unchanged": true,
+    "new20_and_all_original_actual_identities_once": "required on fresh PR and independent main",
+    "baseline_graph_PR_reserve_seconds": 64,
+    "baseline_graph_main_reserve_seconds": 66,
+    "invoiced_billing_measured": false
+  },
+  "preservation": {
+    "native_source_pins": 505,
+    "previous_evidence_files": 253,
+    "originals_exact_versions_confidentiality_history_credentials_sessions_user_edits": "unchanged",
+    "owner_analysis_v3_review": "pending"
+  },
+  "effects": {
+    "live_route_registered": false,
+    "runtime_mutated": false,
+    "provider_or_native_inference": false,
+    "enrollment_or_trust_activation": false,
+    "recovery_or_acknowledgement_reconstruction": false,
+    "real_operator_appointments_or_custody_qualified": false,
+    "legal_readiness_established": false
+  }
+}

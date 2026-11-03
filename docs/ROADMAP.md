@@ -9853,3 +9853,50 @@ product42/21/24/6 and readiness0/9/4/1 remain unchanged.
 
 Final local graph122 passes in83.03s; unchanged analysis279 passes in94.43s.
 All10 CI policy contracts and lint pass; fresh remote qualification remains required.
+
+
+## 297. Disposable operator inspection preview and checksum guidance — 2026-11-03
+
+Add an unregistered Turkish screen around the exact staged handoff. Trusted host
+wiring fixes one source and its handoff checksum; the original adapter is narrowed
+to that source without changing its implementation or expanding authorization.
+The generic GET contains no private metadata. Current assigned-reviewer cookie/
+RBAC checks gate a same-origin CSRF bootstrap; tokens stay in memory and never
+appear in the HTML, visible fields, reports, URLs or storage. No login/account/
+session provisioning is added. Fresh CSRF-protected preview accepts only an
+empty object and reveals exact preparation identity and original time window.
+
+Keep the receipt checksum absent and the entry blank. Explain in Turkish where
+to get the separately retained value, its64-character lowercase format and the
+limits of byte equality. The comparison uses the unchanged read-only endpoint.
+Browser SHA-256 and exact source/handoff/provenance checks precede display. Clear
+old data on new preparation, failures or page departure; never retry or infer a
+new review, acknowledgement, genuine provenance or execution authority.
+
+A local regression exposed expiry during final validation; check the clock again
+after authorization before releasing metadata. Preserve whole-response withholding
+on revoked actors, changed pins, expiry, rollback, late errors or cancellation.
+Use fixed hash-only CSP, no external assets, no-store/no-referrer/nosniff, bounded
+2-KiB/eight-frame/two-second input,20-second cooperative workflow and4-KiB preview.
+Original comparison limits remain exact.
+
+Twenty additive server cases and disposable browser inspection/mismatch/success
+checks qualify this staged subset. No new native campaign is claimed. The new
+complete file uses existing graph reserve (64s PR/66s qualified main): graph core
+122→142; backend3798/3701+97 skips, analysis279/frozen53 and frontend40 stay exact.
+Keep12 jobs,70 capped runner-minutes,two workers,all caches,caps,floors,original
+1018 deployment IDs,139 frontend files/10532 cases and69/50/83/19 closed inventories.
+Require actual once-only IDs, fresh exact-head and independent-main reserves,
+fetched-tree equality and private preservation before closure.
+
+Preserve505 native pins,253 previous evidence files,original test bodies,encrypted
+originals,exact evidence versions,review history,credentials,sessions and user
+edits. No runtime route,provider request,inference,installation or trust change.
+Engineering267→268 only on qualified merge; checklist42/21/24/6 and readiness
+0/9/4/1 remain unchanged. Owner analysis-v3 review remains pending.
+Next: portable packaging of the disposable inspection surface and trusted host
+binding, preserving current admission and independent checksum-entry boundaries.
+
+Local complete graph142 passes in126.13s; new20 cases account for22.26 combined
+case seconds, a profiling input rather than wall-time or billing savings.
+The owned disposable server and host-only test cookie are closed; histories stay exact.
