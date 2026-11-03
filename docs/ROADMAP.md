@@ -9971,3 +9971,41 @@ Local corrected groups pass216 graph cases in104.34s and205 analysis
 cases in113.65s. The local analysis harness uses a real TMPDIR
 to preserve the existing no-symlink fixture policy on macOS. Exact CI lint and
 both placement contracts pass. Fresh remote qualification remains required.
+
+
+## 300. Source-pinned preview placement across existing capacity — 2026-11-03
+
+Retain second rejected run41609032053 atf80d178: graph313/360 leaves47 but
+analysis333/360 leaves27 against30. Its primary step280s and unchanged frozen
+pair46s exhausted reserve. File-time sums show slower analysis work, including
+preview40.84s; a mean-based whole-file transfer does not cover this variation.
+Do not rerun that arrangement unchanged or weaken caps, workers or floors.
+
+Use the existing closed-partition execution guard for the20 original preview
+identities: six in graph, seven in final-release, seven in frontend, within
+their existing two-worker pytest calls. Pin the unchanged original source and
+full identity inventory. Reject missing/duplicate assignments, source drift,
+unknown lanes, wrong collection, missing success or repeated execution. Require
+source/inventory-bound execution receipts from all three lanes and their exact
+once-only union in fresh PR and independent-main qualification. No original
+case body, parameter, assertion, fixture or existing partition is changed.
+
+Eight additive partition guards join the26 package/binding cases: new34;
+review158+16 closed authority cases. Final placement is graph222 (including6),
+frontend47 (including7), final20 (including7), analysis185 plus frozen53.
+Public sources94 stays in graph; suggestions39 remains in analysis. Backend
+3798/3701+97 skips, all1018 deployment IDs,139 frontend files/10532 cases and
+69/50/83/19 existing closed inventories stay exact. Preserve12 jobs,70 capped
+runner-minutes,two active workers per job, all deadlines/caches/reserve floors,
+no automatic retries,505 native pins and254 prior evidence files.
+
+Local qualification executes all20 retained preview identities once across6/7/7
+and all34 package/binding/placement cases. An early plugin-startup import error
+was corrected using the repository module namespace; the actual plugin command
+is now exercised before publishing. Earlier rejected runs and local attempts
+remain retained. Remote budgets and actual complete identities still require
+fresh qualification. No new native campaign or live installation is claimed.
+The portable preview/host binding and all private originals, exact evidence
+versions, confidentiality and review history remain unchanged. This supersedes
+only section299 placement. Engineering268→269 remains conditional on this PR's
+qualified delivery; product42/21/24/6 and readiness0/9/4/1 stay exact.

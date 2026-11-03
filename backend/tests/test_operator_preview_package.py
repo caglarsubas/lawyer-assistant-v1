@@ -233,3 +233,57 @@ def test_host_scheme_authority_and_proxy_headers_rejected_before_body_or_private
     with patch.object(app.preview.adapter.service.reconciler.disposition.planner.authority,
                       "resolve", side_effect=AssertionError("no auth or body read")):
         asyncio.run(run())
+
+
+def test_closed_preview_partition_keeps_every_original_identity_and_requires_one_success_each():
+    from types import SimpleNamespace
+
+    from scripts import ci_operator_previews as c
+    contract = c.load_contract()
+    assert {k: len(v) for k, v in contract.lanes.items()} == {"graph": 6, "final": 7, "frontend": 7}
+    all_ids = []
+    for lane in c.LANES:
+        selected = c.select(contract, lane, [*contract.ids, "tests/unrelated.py::test_preserved"])
+        assert selected[-1] == "tests/unrelated.py::test_preserved"
+        assert set(selected[:-1]) == set(contract.lanes[lane])
+        all_ids.extend(selected[:-1])
+        partition = c.Partition(contract, lane)
+        session = SimpleNamespace(config=SimpleNamespace(getoption=lambda _: False), exitstatus=0)
+        partition.pytest_sessionfinish(session, 0)
+        assert not partition.valid and session.exitstatus != 0
+        for ident in contract.lanes[lane]:
+            partition.pytest_runtest_logreport(SimpleNamespace(when="call", passed=True, nodeid=ident))
+        partition.pytest_sessionfinish(session, 0)
+        assert partition.valid
+        partition.pytest_runtest_logreport(SimpleNamespace(when="call", passed=True, nodeid=contract.lanes[lane][0]))
+        partition.pytest_sessionfinish(session, 0)
+        assert not partition.valid
+    assert sorted(all_ids) == list(contract.ids) and len(set(all_ids)) == 20
+    with pytest.raises(ValueError):
+        c.select(contract, "graph", list(contract.ids)[:-1])
+
+
+@pytest.mark.parametrize("fault", ["source_pin", "missing_id", "duplicate_id", "overlap", "unknown_lane",
+                                  "unknown_field", "duplicate_json"])
+def test_preview_partition_refuses_changed_source_or_incomplete_duplicate_assignments(tmp_path, fault):
+    from scripts import ci_operator_previews as c
+    value = json.loads(c.MANIFEST.read_bytes())
+    if fault == "source_pin":
+        value["source_sha256"] = "0" * 64
+    elif fault == "missing_id":
+        value["test_ids"].pop()
+    elif fault == "duplicate_id":
+        value["test_ids"][0] = value["test_ids"][1]
+    elif fault == "overlap":
+        value["lanes"]["final"][0] = value["lanes"]["graph"][0]
+    elif fault == "unknown_lane":
+        value["lanes"]["unapproved"] = value["lanes"].pop("graph")
+    elif fault == "unknown_field":
+        value["allow_missing"] = True
+    raw = json.dumps(value).encode()
+    if fault == "duplicate_json":
+        raw = raw.replace(b'{', b'{"schema":"duplicate",', 1)
+    path = tmp_path / "manifest.json"
+    path.write_bytes(raw)
+    with pytest.raises(ValueError):
+        c.load_contract(path)
