@@ -9630,3 +9630,52 @@ control, not a waiver for unavailable dependencies or failed CI.
 [uv caching documentation](https://docs.astral.sh/uv/concepts/cache/) confirms
 UV_CACHE_DIR selects the dependency directory. Ledger **289 → 290** within the
 same open CI follow-up; owner review and product-readiness gates stay pending.
+
+
+## 291. Read-only receipt re-observation and fresh authorization — 2026-11-03
+
+Add a staged `DispositionReceiptReobserver` with an independently retained
+checksum supplied through trusted local wiring. Its closed `reobserve` operation
+accepts only bounded canonical receipt bytes. Authenticate the current session,
+firm, role, origin and CSRF before inspecting retained private metadata. Reject
+wrong checksums/bindings, duplicate keys, extra fields, invalid flags, future
+issue times and clock regression. The retained checksum establishes byte identity;
+it authenticates neither a sender nor the earlier observation.
+
+Read a fresh authorized inventory, preserving every exact plan/decision reference
+and explicit null. Obtain two fresh complete receipts, each of which repeats full
+reconciliation. Require stable metadata across the observation window; recheck
+the binding, current reader and any review observed as current at return. Compare
+only bounded snapshot/outcome/publication/review metadata, excluding reader/time
+changes. A changed context observed before this new window can be reported;
+changes within it withhold the whole result. Snapshots remain non-atomic.
+
+Keep missing acknowledgements unresolved, negative decisions negative and stale
+reviews historical. Return only a bounded metadata comparison and fresh receipt,
+with checksums. Never return retained raw bytes, full plans, reasoning, filenames,
+document text or credentials. Keep the existing20-second cooperative budget and
+8-KiB input/output limits. No persistence, product route, history repair, renewed
+authority, recovery, inference, trust enrollment, custody or production effect.
+
+Qualify36 new disposable cases in three complete files:8 functional cases reuse
+the frontend pair,17 boundary cases reuse planning and11 stale/race cases reuse
+analysis. With the27 unchanged prior receipt cases, the focused suite contains63
+checks. Preserve every original case: backend3962 collected/3865 pass+97 existing
+skips; analysis191 plus its53-case frozen pair; planning170+15=185; frontend
+portfolio40. All other inventories and all69/50/83 partition IDs stay exact.
+No extra jobs, workers, retries or relaxed deadlines: retain12 jobs,70 capped
+runner-minutes, all step/job caps and reserve floors, the actual dependency cache,
+1018 deployment IDs once,139 frontend files/10532 cases and19 authority IDs.
+
+Require exact-head and independently fetched-main checks, actual identity receipts,
+full-tree equality and private preservation.505 native source pins and250 prior
+evidence files remain exact; no new native campaign is claimed. Originals, exact
+evidence versions, private-case analysis-v3, sessions, credentials and both review
+histories remain unchanged. Owner review and genuine operator/custody/provider,
+production and legal-readiness gates stay pending.
+
+Ledger **290 → 291**. Engineering264→265 completed only after merge; product
+checklist42 done/21 open/24 waiting/6 deferred and milestone readiness stay
+unchanged. Next is a staged operator-adapter handoff with independent checksum
+provenance and fresh read-only access, using disposable identities until genuine
+operator/custody prerequisites are supplied.
