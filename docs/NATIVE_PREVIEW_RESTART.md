@@ -52,3 +52,9 @@ scope limits. The owner's focused-analysis-v3 review remains pending.
 
 Next: cold descriptor reconstruction and fail-closed controller-loss recovery
 using independently retained fixture bindings, without automatic trust renewal.
+
+The initial remote layout was rejected on existing-job reserve exhaustion.
+Complete unchanged workbench/runtime/feedback/package files are redistributed
+within the same jobs; binding and restart phases retain their original limits.
+Native source pins and all case identities remain exact. Fresh qualification
+must establish all job and phase reserves; green checks alone are insufficient.

@@ -10152,3 +10152,23 @@ Local complete review203 passes in53.41s; all29 new offline
 contracts, exact CI lint and both placement contracts pass. The native25 result
 is separate from CI. Fresh exact-head and independent-main qualification is
 required before closure.
+
+The first PR run41648262256 is rejected despite green checks: history291s,
+graph338s and analysis333s leave only9/22/27 seconds, below the30-second job
+reserve. The29 new offline cases take0.04s; existing workload plus runner/setup
+variation exhausted headroom. Retain this run without qualification credit.
+Cancellation was denied403; its original caps and workflow supersession remain.
+
+Rebalance complete unchanged files across existing jobs. Workbench57 shares
+source-publication242; runtime35 and feedback50 share PostgreSQL180, followed
+by the unchanged bounded graph25 restart phase. The48-case binding lane moves
+intact with its two-minute cap to review after153 primary/cohort cases.
+Package34 shares graph127; analysis287 retains the frozen53 pair. Backend3798,
+final59, portfolio47, candidate276, planning209, withdrawal158, frontend139 files/
+10532 cases, all1018 deployment IDs, closed partition identities, all job caps,
+phase deadlines, workers and reserve floors remain unchanged. New PostgreSQL
+capacity85 and source242 pass locally. A graph relocation fixture initially
+rejects the local harness's inherited077 mask; rerun with the normal022 test
+mask while retaining private logs under077. Do not relax directory validation.
+No native source changes or native rerun are needed. Fresh exact-head and
+independent-main qualification of the revised routing is required for closure.
