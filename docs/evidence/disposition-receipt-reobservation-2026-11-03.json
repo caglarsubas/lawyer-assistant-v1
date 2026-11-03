@@ -1,0 +1,136 @@
+{
+  "schema": "disposition-receipt-reobservation-qualification-v1",
+  "date": "2026-11-03",
+  "scope": "staged read-only unsigned receipt re-observation; disposable qualification only",
+  "base": "16775e45a8ecdaa4e23945300b096298a595a6d7",
+  "baseline_qualified_main_run": 41505968722,
+  "source_sha256": {
+    "scripts/disposition_receipt_reobservation.py": "2adea3e0202887bc3868e21fab66e85398bb5d6e6977b00beeec5e56774029cf",
+    "backend/tests/test_disposition_receipt_reobservation.py": "8ddd0d97332ed2f2e836466c1f9b4cc1ca54a6039ab12c51baafda11d1c214d7",
+    "backend/tests/test_disposition_receipt_reobservation_boundary.py": "7dc0efde20174d646124b2e7f7b2f4a3dbbd64a82e0e8d61eb922315f9416e7a",
+    "backend/tests/test_disposition_receipt_reobservation_races.py": "d906b9794ad370cf1bc1f3646be4ec1ac0365308726c8893171653d0e8cfafea",
+    ".github/workflows/ci.yml": "76f0d28f6de2b0a3d7d073f1a5cc1b339e9f0f43f7bc3ce084af3b7663d82b73",
+    "deploy/test_deployment_ci_placement.py": "1c6169bbca3d536c0bc987d5c38c125e757ae7a326530ce2001d8d761164bede",
+    "docs/DISPOSITION_RECEIPT_REOBSERVATION.md": "22227d361a3097a165a1ded4f4a2c75ceef023a0e1061ee1a54d7e5d45d52d7c"
+  },
+  "authorization": {
+    "fresh_before_retained_bytes": true,
+    "exact_current_firm_session_role_origin_csrf": true,
+    "independent_checksum_in_trusted_wiring_only": true,
+    "retained_checksum_authenticates_sender": false,
+    "retained_observation_authenticated": false,
+    "late_revocation_withholds_output": true
+  },
+  "evidence": {
+    "exact_reference_versions_preserved": true,
+    "explicit_nulls_preserved": true,
+    "acknowledgement_recovery": false,
+    "history_rewritten": false,
+    "review_authority_renewed": false,
+    "snapshots_atomic": false,
+    "negative_and_stale_reviews_preserved": true
+  },
+  "limits": {
+    "max_input_bytes": 8192,
+    "max_output_bytes": 8192,
+    "total_cooperative_seconds": 20,
+    "new_jobs": 0,
+    "jobs": 12,
+    "capped_runner_minutes": 70,
+    "active_test_workers_per_job": 2,
+    "all_original_job_step_caps_reserve_floors": true,
+    "network_retries_added": 0
+  },
+  "qualification": {
+    "new_cases": 36,
+    "complete_files": {
+      "frontend": 8,
+      "planning": 17,
+      "analysis": 11
+    },
+    "prior_receipt_regressions": 27,
+    "focused_cases": 63,
+    "CI_policy_contracts": 10,
+    "full_CI_and_independent_main": "required separately",
+    "local_passed": 63,
+    "local_wall_seconds": 72.63,
+    "local_counts": {
+      "tests.test_disposition_receipt_reobservation": 8,
+      "tests.test_disposition_receipt_reobservation_boundary": 17,
+      "tests.test_disposition_receipt_reobservation_races": 11,
+      "tests.test_disposition_reconciliation_receipt": 27
+    },
+    "lint": "passed",
+    "moved_original_cases_locally_passed": 252,
+    "moved_original_local_seconds": 36.26
+  },
+  "original_coverage": {
+    "backend_collected": 3710,
+    "backend_passed": 3613,
+    "existing_skips": 97,
+    "analysis_primary": 191,
+    "analysis_serial_pair": 53,
+    "planning_primary": 194,
+    "planning_binding": 15,
+    "planning_total": 209,
+    "frontend_portfolio": 40,
+    "source_review_ids": 69,
+    "disposition_read_ids": 50,
+    "provision_binding_ids": 83,
+    "deployment_ids": 1018,
+    "frontend_files": 139,
+    "frontend_cases": 10532,
+    "authority_ids": 19,
+    "graph_core": 255,
+    "history_capacity": 57,
+    "postgres": 153,
+    "backend_review": 140,
+    "moved_original_cases": 252
+  },
+  "preservation": {
+    "native_source_pins": 505,
+    "prior_evidence_files": 250,
+    "originals_exact_versions_confidentiality_and_reviews": true,
+    "runtime_credentials_sessions_and_user_edits": true,
+    "owner_analysis_v3_review": "pending"
+  },
+  "effects": {
+    "new_native_execution": false,
+    "product_HTTP_route": false,
+    "receipt_persistence": false,
+    "recovery_or_adoption": false,
+    "inference": false,
+    "production_activation": false,
+    "legal_qualification": false,
+    "billing_measured": false
+  },
+  "rejected_reserve_profile": {
+    "run": 41555436851,
+    "checks_successful": 12,
+    "new_cases_actual_once": 36,
+    "job": "backend-and-contracts",
+    "seconds": 1123,
+    "cap_seconds": 1140,
+    "reserve_seconds": 17,
+    "required_reserve_seconds": 30,
+    "backend_test_step_seconds": 843
+  },
+  "moved_original_files": {
+    "graph": {
+      "backend/tests/test_runtime_graph_release.py": 35,
+      "backend/tests/test_analysis_suggestions.py": 39
+    },
+    "history": {
+      "backend/tests/test_analysis_workbench.py": 57
+    },
+    "postgres": {
+      "backend/tests/test_temporal_validity.py": 58
+    },
+    "planning": {
+      "backend/tests/test_analysis_reviews.py": 24
+    },
+    "review": {
+      "backend/tests/test_analysis_adjudication.py": 39
+    }
+  }
+}

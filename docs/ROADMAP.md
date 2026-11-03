@@ -9630,3 +9630,84 @@ control, not a waiver for unavailable dependencies or failed CI.
 [uv caching documentation](https://docs.astral.sh/uv/concepts/cache/) confirms
 UV_CACHE_DIR selects the dependency directory. Ledger **289 → 290** within the
 same open CI follow-up; owner review and product-readiness gates stay pending.
+
+
+## 291. Read-only receipt re-observation and fresh authorization — 2026-11-03
+
+Add a staged `DispositionReceiptReobserver` with an independently retained
+checksum supplied through trusted local wiring. Its closed `reobserve` operation
+accepts only bounded canonical receipt bytes. Authenticate the current session,
+firm, role, origin and CSRF before inspecting retained private metadata. Reject
+wrong checksums/bindings, duplicate keys, extra fields, invalid flags, future
+issue times and clock regression. The retained checksum establishes byte identity;
+it authenticates neither a sender nor the earlier observation.
+
+Read a fresh authorized inventory, preserving every exact plan/decision reference
+and explicit null. Obtain two fresh complete receipts, each of which repeats full
+reconciliation. Require stable metadata across the observation window; recheck
+the binding, current reader and any review observed as current at return. Compare
+only bounded snapshot/outcome/publication/review metadata, excluding reader/time
+changes. A changed context observed before this new window can be reported;
+changes within it withhold the whole result. Snapshots remain non-atomic.
+
+Keep missing acknowledgements unresolved, negative decisions negative and stale
+reviews historical. Return only a bounded metadata comparison and fresh receipt,
+with checksums. Never return retained raw bytes, full plans, reasoning, filenames,
+document text or credentials. Keep the existing20-second cooperative budget and
+8-KiB input/output limits. No persistence, product route, history repair, renewed
+authority, recovery, inference, trust enrollment, custody or production effect.
+
+Qualify36 new disposable cases in three complete files:8 functional cases reuse
+the frontend pair,17 boundary cases reuse planning and11 stale/race cases reuse
+analysis. With the27 unchanged prior receipt cases, the focused suite contains63
+checks. Preserve every original case: backend3962 collected/3865 pass+97 existing
+skips; analysis191 plus its53-case frozen pair; planning170+15=185; frontend
+portfolio40. All other inventories and all69/50/83 partition IDs stay exact.
+No extra jobs, workers, retries or relaxed deadlines: retain12 jobs,70 capped
+runner-minutes, all step/job caps and reserve floors, the actual dependency cache,
+1018 deployment IDs once,139 frontend files/10532 cases and19 authority IDs.
+
+Require exact-head and independently fetched-main checks, actual identity receipts,
+full-tree equality and private preservation.505 native source pins and250 prior
+evidence files remain exact; no new native campaign is claimed. Originals, exact
+evidence versions, private-case analysis-v3, sessions, credentials and both review
+histories remain unchanged. Owner review and genuine operator/custody/provider,
+production and legal-readiness gates stay pending.
+
+Ledger **290 → 291**. Engineering264→265 completed only after merge; product
+checklist42 done/21 open/24 waiting/6 deferred and milestone readiness stay
+unchanged. Next is a staged operator-adapter handoff with independent checksum
+provenance and fresh read-only access, using disposable identities until genuine
+operator/custody prerequisites are supplied.
+
+
+## 292. Restore backend reserve using complete-file timing evidence — 2026-11-03
+
+PR266 run41555436851 passes all12 checks and all36 new cases, but its unchanged
+backend job takes1123/1140 seconds, leaving17/required30 reserve. The backend
+test step takes843 seconds. Retain this rejected qualification; green GitHub
+checks do not waive the reserve floor. The new re-observation implementation
+and its36-case layout stay exact.
+
+Use that run's actual file setup/call/teardown timings to move252 existing
+passed cases in six unchanged files: runtime-graph35 and analysis-suggestions39
+to graph; analysis-workbench57 to history; temporal-validity58 to PostgreSQL;
+analysis-review24 to planning; analysis-adjudication39 to backend-review.
+Recorded CPU case-time sums are30.54/29.72/36.11/37.41/16.11/26.15 seconds
+respectively; these are profiling inputs, not wall-time or billing predictions.
+Each target reuses its existing exited/active pair with complete-file selection.
+History capacity has a separate declared array, avoiding duplicate execution
+through the shared83-case binding selector. Add direct passed-ID reporting.
+
+Backend becomes3710 collected/3613 pass+97 existing skips. Graph core255;
+history57+48 binding; PostgreSQL153; planning194+15=209; backend-review140.
+Frontend portfolio40 and analysis191 plus53 serial-pair cases stay unchanged.
+Require every moved252 case exactly once alongside new36 and every original
+contract/frontend/source/authority identity. Keep12 jobs,70 capped runner-minutes,
+two active workers/job, dependency caching, all deadlines and reserve floors.
+No new runtime, provider, case, evidence, review, original-test or fixture change.
+
+Fresh exact-head and independently fetched-main qualification, whole-tree
+equality and private preservation remain required. Ledger **291 → 292** within
+the same PR. Engineering264→265 only on qualified merge; product readiness and
+owner analysis-v3 review stay pending.
