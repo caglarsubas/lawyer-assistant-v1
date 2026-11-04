@@ -2,11 +2,14 @@
 
 import json
 import re
+import sys
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
-from scripts import ci_authority_trials as placement
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from scripts import ci_authority_trials as placement  # noqa: E402
 
 
 def test_complete_inventory_is_disjoint_and_preserves_other_tests():
