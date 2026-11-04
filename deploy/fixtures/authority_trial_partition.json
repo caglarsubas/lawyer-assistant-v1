@@ -43,48 +43,50 @@
   ],
   "lanes": {
     "final": [
+      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[bool]",
+      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[head]",
       "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[negative]",
-      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[note]",
-      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[partial]",
-      "tests/test_authority_trials.py::test_changed_case_inputs_need_a_new_registration[issue]",
-      "tests/test_authority_trials.py::test_dependency_changes_retain_stale_evidence_and_close_export[new_draft]",
-      "tests/test_authority_trials.py::test_dependency_changes_retain_stale_evidence_and_close_export[private_quote]",
-      "tests/test_authority_trials.py::test_dependency_changes_retain_stale_evidence_and_close_export[recipe]",
-      "tests/test_authority_trials.py::test_dependency_changes_retain_stale_evidence_and_close_export[role]",
-      "tests/test_authority_trials.py::test_export_partial_capture_rechecks_after_serialization",
+      "tests/test_authority_trials.py::test_changed_case_inputs_need_a_new_registration[premises]",
+      "tests/test_authority_trials.py::test_dependency_changes_retain_stale_evidence_and_close_export[new_adjudication]",
       "tests/test_authority_trials.py::test_late_commit_failure_remains_pending_replay_never_admits",
       "tests/test_authority_trials.py::test_pre_registration_candidate_and_capture_cap_are_not_silently_accepted",
-      "tests/test_authority_trials.py::test_registration_precedes_revision_exact_frozen_inputs_and_unknowns",
-      "tests/test_authority_trials.py::test_registration_rejects_retroactive_or_ineligible_assignments[after_revision]",
-      "tests/test_authority_trials.py::test_registration_rejects_retroactive_or_ineligible_assignments[real]",
-      "tests/test_authority_trials.py::test_registration_rejects_retroactive_or_ineligible_assignments[wrong_basis]",
-      "tests/test_authority_trials.py::test_registration_retry_and_integrity_and_foreign_routes"
+      "tests/test_authority_trials.py::test_registration_rejects_retroactive_or_ineligible_assignments[wrong_basis]"
     ],
     "candidate": [
       "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[basis]",
+      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[foreign]",
+      "tests/test_authority_trials.py::test_changed_case_inputs_need_a_new_registration[issue]",
+      "tests/test_authority_trials.py::test_dependency_changes_retain_stale_evidence_and_close_export[new_draft]",
+      "tests/test_authority_trials.py::test_export_partial_capture_rechecks_after_serialization",
+      "tests/test_authority_trials.py::test_precommit_change_and_packet_limit_roll_back_atomically",
+      "tests/test_authority_trials.py::test_registration_rejects_retroactive_or_ineligible_assignments[after_revision]",
+      "tests/test_authority_trials.py::test_registration_retry_and_integrity_and_foreign_routes"
+    ],
+    "publication": [
+      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[note]",
+      "tests/test_authority_trials.py::test_public_denial_withholds_all_notes_protocol_and_exports",
+      "tests/test_authority_trials.py::test_registration_rejects_retroactive_or_ineligible_assignments[real]"
+    ],
+    "frontend": [
+      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[duplicate]",
+      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[fraction]",
+      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[partial]",
+      "tests/test_authority_trials.py::test_changed_case_inputs_need_a_new_registration[event_date]",
+      "tests/test_authority_trials.py::test_dependency_changes_retain_stale_evidence_and_close_export[private_quote]",
+      "tests/test_authority_trials.py::test_dependency_changes_retain_stale_evidence_and_close_export[recipe]",
+      "tests/test_authority_trials.py::test_dependency_changes_retain_stale_evidence_and_close_export[role]",
+      "tests/test_authority_trials.py::test_registration_precedes_revision_exact_frozen_inputs_and_unknowns",
+      "tests/test_authority_trials.py::test_registration_rejects_retroactive_or_ineligible_assignments[same_reviewers]",
+      "tests/test_authority_trials.py::test_retry_head_history_and_encrypted_source_preservation"
+    ],
+    "analysis": [
       "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[extra]",
-      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[head]",
       "tests/test_authority_trials.py::test_changed_case_inputs_need_a_new_registration[posture]",
+      "tests/test_authority_trials.py::test_complete_means_presence_not_correctness_and_retains_disagreement",
+      "tests/test_authority_trials.py::test_dependency_changes_retain_stale_evidence_and_close_export[public_product]",
       "tests/test_authority_trials.py::test_newer_reviewer_observation_can_be_recaptured_under_same_current_protocol",
       "tests/test_authority_trials.py::test_only_operator_can_capture_and_membership_is_required_for_reads",
       "tests/test_authority_trials.py::test_registration_rejects_retroactive_or_ineligible_assignments[author]",
-      "tests/test_authority_trials.py::test_registration_rejects_retroactive_or_ineligible_assignments[same_reviewers]"
-    ],
-    "publication": [
-      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[bool]",
-      "tests/test_authority_trials.py::test_changed_case_inputs_need_a_new_registration[event_date]",
-      "tests/test_authority_trials.py::test_dependency_changes_retain_stale_evidence_and_close_export[public_product]",
-      "tests/test_authority_trials.py::test_precommit_change_and_packet_limit_roll_back_atomically",
-      "tests/test_authority_trials.py::test_public_denial_withholds_all_notes_protocol_and_exports",
-      "tests/test_authority_trials.py::test_retry_head_history_and_encrypted_source_preservation"
-    ],
-    "graph": [
-      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[duplicate]",
-      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[foreign]",
-      "tests/test_authority_trials.py::test_capture_rejects_invalid_bounded_or_foreign_input_without_partial_write[fraction]",
-      "tests/test_authority_trials.py::test_changed_case_inputs_need_a_new_registration[premises]",
-      "tests/test_authority_trials.py::test_complete_means_presence_not_correctness_and_retains_disagreement",
-      "tests/test_authority_trials.py::test_dependency_changes_retain_stale_evidence_and_close_export[new_adjudication]",
       "tests/test_authority_trials.py::test_registration_rejects_retroactive_or_ineligible_assignments[role]"
     ]
   }

@@ -35,10 +35,10 @@ def test_changed_source_or_inventory_fails_closed(tmp_path, change):
     elif change == "duplicate":
         value["test_ids"][0] = value["test_ids"][1]
     elif change == "overlap":
-        value["lanes"]["graph"][0] = value["lanes"]["final"][0]
-        value["lanes"]["graph"].sort()
+        value["lanes"]["candidate"][0] = value["lanes"]["final"][0]
+        value["lanes"]["candidate"].sort()
     elif change == "unknown_lane":
-        value["lanes"]["unknown"] = value["lanes"].pop("graph")
+        value["lanes"]["unknown"] = value["lanes"].pop("candidate")
     else:
         value["waive"] = True
     manifest = tmp_path / "manifest.json"
@@ -58,14 +58,14 @@ def test_incomplete_actual_collection_is_rejected(change):
     else:
         ids[0] += "_renamed"
     with pytest.raises(ValueError):
-        placement.select(contract, "graph", ids)
+        placement.select(contract, "candidate", ids)
 
 
 @pytest.mark.parametrize("change", ["missing", "duplicate", "skip", "xfail", "exact"])
 def test_execution_receipt_requires_each_selected_pass_once(change):
     contract = placement.load_contract()
-    plugin = placement.Partition(contract, "graph")
-    ids = list(contract.lanes["graph"])
+    plugin = placement.Partition(contract, "candidate")
+    ids = list(contract.lanes["candidate"])
     if change == "missing":
         ids.pop()
     elif change == "duplicate":
@@ -85,7 +85,8 @@ def test_workflow_routes_every_lane_once_and_keeps_fixed_resources():
     blocks = dict(re.findall(r"^  ([a-z-]+):\n(.*?)(?=^  [a-z-]+:\n|\Z)",
                              workflow.split("\njobs:\n", 1)[1], re.M | re.S))
     owners = {"final": "final-release-authorization", "candidate": "graph-candidate-contracts",
-              "publication": "source-publication-contracts", "graph": "graph-runtime-contracts"}
+              "publication": "source-publication-contracts", "frontend": "frontend",
+              "analysis": "analysis-recovery-contracts"}
     assert len(blocks) == 12
     assert sum(int(re.search(r"    timeout-minutes: (\d+)", b)[1]) for b in blocks.values()) == 70
     for lane, owner in owners.items():

@@ -10335,15 +10335,17 @@ separate gates. Forty new tests use existing portable-source PostgreSQL capacity
 The first PR run passed all twelve checks but retained only five seconds in the
 backend job (1135/1140 seconds); it is not qualified for merge. Setup/contracts
 preceded an838-second backend suite. Move the unchanged37 authority-trial cases
-(107.96 measured worker-seconds) from that saturated suite into four existing
-jobs: final16, candidate8, publication6 and graph7. A source-bound closed manifest
+(107.96 measured worker-seconds) from that saturated suite into five existing
+jobs: final8, candidate8, publication3, frontend10 and analysis8. A subsequent
+run retained only29 seconds in the graph job; the unchanged cost supervisor
+stopped the backend early. Neither rejected run qualifies for closure. A source-bound closed manifest
 and execution receipts require each original identity to pass exactly once.
 Sixteen new scheduling guards use the portable-source group. Keep all original
 source bodies and757 evidence pins unchanged.
 
 The resulting groups are PostgreSQL primary245/restart25, backend3761 (3664
-passes and97 existing skips), graph192/model20, final75, candidate284 and
-publication191. Retain review201/binding48, analysis220/frozen53, planning209,
+passes and97 existing skips), graph185/model20, final67, candidate284 and
+publication188. Retain review201/binding48, analysis228/frozen53, portfolio57, planning209,
 history57, withdrawal158, frontend139 files/10532 cases and all1018 deployment
 IDs. No job, worker, aggregate cap, deadline, reserve floor or cost-supervisor
 increase is permitted. Fresh exact-head CI must demonstrate the reserve gain;

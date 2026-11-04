@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "backend/tests/test_authority_trials.py"
 MANIFEST = ROOT / "deploy/fixtures/authority_trial_partition.json"
 PREFIX = "tests/test_authority_trials.py::"
-COUNTS = {"final": 16, "candidate": 8, "publication": 6, "graph": 7}
+COUNTS = {"final": 8, "candidate": 8, "publication": 3, "frontend": 10, "analysis": 8}
 
 
 def load_contract(path=MANIFEST, source=SOURCE):
