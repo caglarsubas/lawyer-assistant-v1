@@ -10477,3 +10477,52 @@ focused-analysis-v3 legal review is pending. Next: read-only retention and fresh
 re-observation readiness for explicit receiver-verification references, without
 inferring acknowledgement, genuine provisioning, recovery permission or trust
 renewal from retained bytes.
+
+## 309. Read-only verification-reference retention readiness and fresh re-observation
+
+**Qualified baseline:** PR #277 is merged as
+`b3f5345a66e0fbf6d8c4e230db86514dfec88a47`; its exact-head run and independent
+main run `41853857816` pass all 13 checks and fixed reserve floors. Main's minimum
+job reserve is 33 seconds; backend retains 92 seconds. Engineering starts at
+276 done / 0 open / 0 blocked. The 773-source receiver report and all predecessor
+evidence remain exact.
+
+Add a read-only private retention-plan preview and exact verification-reference
+re-observation adapter. Authenticate the current destination reviewer before
+record lookup, namespace inspection or decryption. Independently supply separate
+store/key pins, explicit record/ciphertext/plaintext references and host
+acknowledgement pins. Missing pins never trigger discovery, adoption or repair.
+Matching invented host pins do not establish genuine acknowledgement provenance,
+durability or custody.
+
+Re-verify current source and destination authority, exact evidence/review versions,
+reference/registry/store context and namespace around two fresh verifier calls.
+Reject changed, revoked, expired, malformed or inconsistent observations and
+exhausted budgets without returning retained metadata. Preserve staging and
+unregistered bytes. Retained plans must equal current verification; a new session
+requires fresh validation. Preserve original expiry and both histories without
+renewing trust or rewriting originals.
+
+The frozen local campaign qualifies 20 outcomes across two pairs/four isolated
+account contexts, two fixture-retained verification records, one declared test
+revocation and one retained namespace injection. Service reads write nothing;
+all source inputs/reviews remain exact and account changes are limited to the
+declared fixture revocation. Bind 777 source files, all 773 predecessor pins and
+the exact preceding report hash. Twelve ordinary backend cases cover authorization
+ordering, exact selection, missing pins, tampering, staging/links/limits, races,
+revocation, session/expiry changes, budgets and closed operations.
+
+Keep all original execution identities, 1018 deployment IDs, 139 frontend files /
+10532 cases, placement manifests, 13 jobs, 73 aggregate capped minutes, two
+workers, deadlines, reserve supervisor and fixed floors unchanged. Require fresh
+exact-head and independently fetched equal-main execution, timing and private
+preservation evidence before closure. Engineering and milestone readiness remain
+separate; product checklist 42/21/24/6 and readiness 0/9/4/1 are unchanged.
+
+No live route, retain/restore operation, controller, listener, credential release,
+trust renewal, production activation or legal approval is added. Owner review is
+pending. Next: independently reviewed retention-authorization and acknowledgement
+provenance readiness, with explicit custody/durability limitations and no
+automatic promotion of retained metadata. See
+[adapter contract](VERIFICATION_REFERENCE_READINESS.md) and
+[frozen report](evidence/verification-reference-2026-11-04.json).
