@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "scripts"))
+sys.path[:0] = [str(ROOT), str(ROOT / "scripts")]
 import operator_enrollment_evidence as e  # noqa: E402
 import recovery_review_inventory as inventory  # noqa: E402
 from operator_recovery_inputs import FLAGS  # noqa: E402
@@ -203,6 +203,27 @@ def test_request_and_execution_budgets_fail_closed(f, monkeypatch):
     monkeypatch.setattr(inventory, "BUDGET_SECONDS", 0)
     value = s.dispatch(f.account.scope("reviewer"), "inventory")
     assert value["state"] == "budget_exhausted" and value["inventory"] is None
+    assert snapshot(f) == before
+
+    # Mandatory authority/source checks can also become unavailable. Driver
+    # exceptions must not escape this metadata boundary or expose SQL details.
+    import sqlite3
+
+    from sqlalchemy.exc import OperationalError
+
+    monkeypatch.setattr(inventory, "BUDGET_SECONDS", 10)
+    original_actor = s.reviews.planner.actor
+    def unavailable_actor(*_):
+        raise OperationalError("INVENTED SQL", {}, Exception("INVENTED unavailable database"))
+    monkeypatch.setattr(s.reviews.planner, "actor", unavailable_actor)
+    unavailable = s.dispatch(f.account.scope("reviewer"), "inventory")
+    assert unavailable["state"] == "unverifiable" and unavailable["inventory"] is None
+    monkeypatch.setattr(s.reviews.planner, "actor", original_actor)
+    def unavailable_source(*_):
+        raise sqlite3.OperationalError("INVENTED source connection unavailable")
+    monkeypatch.setattr(s.reviews, "current", unavailable_source)
+    unavailable = s.dispatch(f.account.scope("reviewer"), "inventory")
+    assert unavailable["state"] == "unverifiable" and unavailable["inventory"] is None
     assert snapshot(f) == before
 
 

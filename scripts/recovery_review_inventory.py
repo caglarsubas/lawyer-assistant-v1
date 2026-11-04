@@ -4,6 +4,7 @@ Only host-retained acknowledged references are read. No discovery, publication,
 acknowledgement recovery, destination provisioning or recovery execution.
 """
 
+import sqlite3
 import time
 from dataclasses import asdict, dataclass
 from types import MappingProxyType
@@ -13,6 +14,7 @@ from cryptography.exceptions import InvalidTag
 from fastapi import HTTPException
 from operator_recovery_inputs import REFS, RecoveryInputReview
 from operator_recovery_inputs import result as base_result
+from sqlalchemy.exc import SQLAlchemyError
 
 SCHEMA = "recovery-review-inventory-v1"
 MAX_ENTRIES = 4
@@ -189,5 +191,5 @@ class ReviewInventory:
             return result("budget_exhausted")
         except FileExistsError:
             return result("observation_conflict")
-        except (ValueError, TypeError, KeyError, RecursionError, OSError, InvalidTag):
+        except (ValueError, TypeError, KeyError, RecursionError, OSError, InvalidTag, SQLAlchemyError, sqlite3.Error):
             return result("unverifiable")

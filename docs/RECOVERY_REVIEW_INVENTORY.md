@@ -20,6 +20,8 @@ reviews and current actor eligibility. It returns only acknowledged reference
 metadata and outcomes. Stale and negative reviews remain visible as history;
 inventory itself never grants handoff readiness. A changed observation, revoked
 caller, invalid ciphertext or exhausted execution budget yields no partial list.
+Unavailable database checks return `unverifiable` without releasing metadata or
+exposing driver diagnostics.
 
 The inventory hash is bound to the caller's current session, host reference and
 destination registries, and journal snapshot. It is a comparison commitment,

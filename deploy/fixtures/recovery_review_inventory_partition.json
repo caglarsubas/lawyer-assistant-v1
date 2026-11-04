@@ -1,7 +1,7 @@
 {
   "schema": "recovery-inventory-ci-partition-v1",
   "source_path": "backend/tests/test_recovery_review_inventory.py",
-  "source_sha256": "af583f1fb3fb5a8a3b4899a402c6667080b86b9f8b5ebb6e92ee030f239629fa",
+  "source_sha256": "bbeb5fc3277442fa8303eb2f472099c16ec33c082bcc40b17e075395ef546802",
   "test_ids": [
     "tests/test_recovery_review_inventory.py::test_caller_revocation_between_observations_withholds_all_metadata",
     "tests/test_recovery_review_inventory.py::test_changed_source_between_observations_returns_no_partial_inventory",
