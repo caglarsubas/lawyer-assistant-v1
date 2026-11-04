@@ -10393,7 +10393,12 @@ reviewed-input report hash; claim no new native mount or production qualificatio
 Keep the 26 new tests disjoint: 16 in PostgreSQL capacity and 10 alongside the
 135-case qualification job, using a source-bound manifest and exact execution
 receipts. Resulting groups are PostgreSQL primary 225 / restart 25 and capacity
-145; backend 3703, all 1018 deployment IDs, 139 frontend files / 10532 cases,
+145. A first CI run passed the new partitions with 52/49 seconds reserve, but
+the unchanged analysis job retained only 21 seconds and was rejected. Move its
+unchanged runtime-graph (35 cases, 33.08 worker-seconds) and feedback (50 cases,
+23.67 worker-seconds) files to backend discovery. Backend becomes 3788
+(3691 passes / 97 existing skips), analysis 135 plus the frozen 53-case pair.
+Keep all 1018 deployment IDs, 139 frontend files / 10532 cases,
 old partitions, two workers, existing caps and reserve floors remain intact.
 Require actual PR and independently fetched equal-main timing, identity and
 private-preservation evidence before closure. No unchanged-head retry is used
