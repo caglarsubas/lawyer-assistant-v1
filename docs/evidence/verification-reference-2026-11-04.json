@@ -890,7 +890,7 @@
     "scripts/staged_receipt_adapter.py": "586c93f3f3e6f7be3f36bcf62d7f32584b0e8839dbc64e15d09d20b443ac0341",
     "scripts/staged_signed_route.py": "06ac4dd6361e78f04f1d607233de2c212e1a432dee145848080bf953ac835169",
     "scripts/validate_ontology.py": "da8beb73e57372b25bfbe3d813714b019fabfbd8c8841914beffc70cff693f63",
-    "scripts/verification_reference_fixture.py": "3b354aada01cc3625d14644f9241ffcf5ad60cdee2d51078491d759fd6cbf736",
+    "scripts/verification_reference_fixture.py": "e56196d8782cf8a3b3a703c1e499fb639a710d09eafa79a897d7aa9e988eec3b",
     "scripts/verification_reference_readiness.py": "a83387b9279287fc4d274e4945d47193dd31d71836c794a53e8ca4cc581cebbc",
     "scripts/volume_store_qualification.py": "3591e900ca7e76c39eec2dc887773c93c561c47da4971e706148d193fff1db1e",
     "scripts/whole_passage_packets.py": "f32f2d10e5700e5948823c1741e024a3af51281fe4bb1d9e6c5e01096cf2ddac",

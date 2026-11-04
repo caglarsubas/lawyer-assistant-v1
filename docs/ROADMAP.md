@@ -10508,9 +10508,21 @@ account contexts, two fixture-retained verification records, one declared test
 revocation and one retained namespace injection. Service reads write nothing;
 all source inputs/reviews remain exact and account changes are limited to the
 declared fixture revocation. Bind 777 source files, all 773 predecessor pins and
-the exact preceding report hash. Twelve ordinary backend cases cover authorization
+the exact preceding report hash. Twelve ordinary cases cover authorization
 ordering, exact selection, missing pins, tampering, staging/links/limits, races,
 revocation, session/expiry changes, budgets and closed operations.
+
+Retain the first run's rejection: all 3752 backend cases passed with the original
+97 skips, but the supervisor rejected incomplete siblings during the reported
+GitHub Actions outage. Backend retained only seven seconds, below the fixed
+30-second job floor. The new file consumed 64.43 worker-seconds. Keep its exact
+12 identities, parametrizations and business assertions. Reduce fixture-only
+retention setup to one independently checked receiver result; production reads
+still perform both fresh checks. Move the complete new file to portfolio review
+and its 32-case cohort predecessor to source publication. Backend returns to
+3837 collected / 3740 passes / 97 original skips; portfolio has 27 cases and
+source publication has 181. Placement guards require each file exactly once.
+Do not rerun an unchanged head or relax caps, deadlines or reserve floors.
 
 Keep all original execution identities, 1018 deployment IDs, 139 frontend files /
 10532 cases, placement manifests, 13 jobs, 73 aggregate capped minutes, two

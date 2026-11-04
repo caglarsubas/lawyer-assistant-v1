@@ -54,7 +54,7 @@ env:
   # Keep analysis/feedback on their measured x86 pair. The exited history
   # pair runs two bounded serial groups, avoiding a delayed inspection tail.
   CI_FRONTEND_REVIEW_TESTS: >-
-    backend/tests/test_analysis_cohorts.py
+    backend/tests/test_verification_reference_readiness.py
     backend/tests/test_disposition_receipt_reobservation.py
   # Retain the frozen two-array interface; this file stays in deep recovery.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
@@ -117,6 +117,7 @@ env:
   CI_RECEIPT_RETENTION_TESTS: >-
     backend/tests/test_private_inventory_receipts.py
   CI_PUBLICATION_TESTS: >-
+    backend/tests/test_analysis_cohorts.py
     backend/tests/test_authority_revalidations.py
     backend/tests/test_source_analysis_reviews.py
     backend/tests/test_source_context_renewals.py

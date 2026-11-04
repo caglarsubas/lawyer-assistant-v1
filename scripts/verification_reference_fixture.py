@@ -7,9 +7,11 @@ from dataclasses import asdict, dataclass
 import operator_enrollment_evidence as e
 import private_inventory_receipts as receipts
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from destination_snapshot_verification import Snapshot
 from journal_backup_fixture import pins
 from operator_recovery_inputs import FLAGS
 from verification_reference_readiness import (
+    PLAN_SCHEMA,
     RECORD_SCHEMA,
     AcknowledgementPin,
     Reference,
@@ -59,9 +61,12 @@ def make_frame(pair, root):
 def retain_external(frame, *, record_id=RECORD, acknowledged=True):
     """Fixture-owned publication only; the application service has no write operation."""
     service = frame.service()
-    preview = frame.preview(service)
-    assert preview["state"] == "private_retention_plan_ready"
-    plan = preview["retention_plan"]
+    checked = frame.pair.call()  # Independent fixture setup; exercise the service afresh in each test.
+    assert checked["state"] == "destination_snapshot_verified"
+    packet = {"schema": PLAN_SCHEMA, "store_context_sha256": service.binding(),
+        "snapshot": asdict(Snapshot.parse(frame.pair.snapshot)), "source_reference": asdict(frame.pair.reference),
+        "verification": checked["verification"]}
+    plan = {"plan": packet, "plan_sha256": e.sha(e.encode(packet))}
     record = {"schema": RECORD_SCHEMA, "record_id": record_id, "store_context_sha256": service.binding(),
         "plan": plan["plan"], "plan_sha256": plan["plan_sha256"], **dict.fromkeys(FLAGS, False)}
     plain, nonce = e.encode(record), os.urandom(12)

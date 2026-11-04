@@ -49,7 +49,16 @@ backend/.venv/bin/python scripts/qualify_verification_references.py --output /pr
 The output must not already exist. Failure writes an incomplete report containing
 only the error type. Reports contain aggregate outcomes and source hashes; no
 private records, case contents, sessions, filesystem locations or keys.
-Twelve ordinary regression cases use existing backend capacity. CI jobs, caps,
+Twelve ordinary regression cases use existing portfolio capacity. The initial
+run passed all 3752 backend cases and 97 original skips, but its reserve guard
+rejected incomplete siblings; the job retained only seven seconds. Preserve that
+rejection. Move the complete 12-case file to portfolio review and its complete
+32-case cohort predecessor to source publication. Backend returns to its exact
+3837 collected / 3740 passing / 97 skipped baseline; portfolio has 27 cases and
+source publication has 181. Fixture-only retention constructs a packet from one
+independently checked receiver result, reducing redundant setup verification.
+Production reads still perform both fresh checks; all test bodies and assertions
+are unchanged. CI jobs, caps,
 workers, placement manifests, reserve supervisor and fixed floors remain exact.
 
 Genuine acknowledgement provenance/durability, independently reviewed retention
