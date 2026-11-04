@@ -10302,3 +10302,62 @@ checksum provenance require real evidence; host reboot, changed volume identity
 and joint account rollback remain unqualified. Next: independently reviewed
 operator recovery-input readiness with explicit retained-context selection;
 never infer fresh authority from successful cold reconstruction.
+
+## 306. Reviewed operator recovery-input readiness — 2026-11-04
+
+PR274 is merged at0b6ba0d40bcdcd1c551ce347329360e58024333f. Its final PR and
+independent main41779307417 pass all12 checks, all execution identities and
+required reserves, with30 seconds minimum per job. Engineering273 done/0 open/
+0 blocked is the baseline. The original30-outcome cold-controller report and
+753/745/741/505 source pins remain exact.
+
+Add explicit host-registered recovery-input selection, assigned preparation,
+independent review and read-only readiness/inspection. Bind each decision to the
+exact descriptor, stores, keys, package/host, original handoff and expiry,
+profile and assigned actors. A missing or different selection, version or
+decision reference never resolves to a current/latest replacement. Recheck
+current sessions, Origin, CSRF and roles before input inspection and release.
+
+Keep new review records in a disjoint, independently keyed encrypted journal.
+Immutable publication, bounded namespace locks and a reserved decision slot
+prevent overwrite and over-capacity writes. Retain uncertain publications
+without recovering acknowledgement, deleting staging or adopting a decision.
+Authorized history inspection preserves stale decisions while withholding
+readiness. Readiness starts no controller and renews no trust or expiry.
+
+The frozen local campaign qualifies18 outcomes across three invented contexts
+and six encrypted records, with exact original stores, retained keys and account
+database bytes. The new report binds757 source files and the predecessor native
+report hash. This is local fixture/session qualification; native mounts, genuine
+appointments/custody/channel evidence, production and legal acceptance remain
+separate gates. Forty portable feature tests join the disjoint qualification job; twenty new
+scheduling/policy guards use existing portable-source PostgreSQL capacity.
+
+Fresh runs exposed insufficient reserves in backend, graph, frontend,
+PostgreSQL, candidate and history jobs. The unchanged core supervisor stopped
+backend work early; rejected runs receive no qualification credit. The fixed
+12-job layout cannot reliably absorb the growing fixtures. Supersede the prior
+fixed-topology restriction with one disjoint3-minute ARM job for37 unchanged
+authority-trial,58 graph-boundary and40 feature cases. A source-bound135-case manifest,
+complete collection checks and hashed execution receipts require every original
+identity to pass exactly once. Start the measured indivisible graph query first.
+
+Keep all existing job/step caps, two workers per job, original test bodies,
+all757 evidence pins, phase floors and the30-second job reserve unchanged.
+The new explicit13-job policy retains the immutable12-job core and adds only
+this180-second cap: aggregate ceiling70→73 minutes. This is a cap change,
+not an invoiced-cost measurement; compare actual runner time on qualified runs.
+No source or test is duplicated and no automatic retries are introduced.
+
+The resulting groups are PostgreSQL primary209/restart25, backend3703 (3606
+passes and97 existing skips), capacity135, graph185/model20, final59,
+candidate276, publication185, analysis220/frozen53 and history57. Retain
+review201/binding48, portfolio47, planning209, withdrawal158, frontend139 files/
+10532 cases and all1018 deployment IDs. Fresh exact-head CI must demonstrate
+the fixed reserves and then be qualified independently on equal main.
+
+Require fresh PR and independently fetched equal-main receipts, all timing
+reserves and private preservation before closure. Product42/21/24/6 and
+readiness0/9/4/1 remain unchanged; owner analysis-v3 review is pending. Next:
+read-only recovery-input review inventory and independently pinned handoff
+readiness, retaining exact references and genuine operator approval gates.
