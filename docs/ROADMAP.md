@@ -10330,26 +10330,29 @@ and six encrypted records, with exact original stores, retained keys and account
 database bytes. The new report binds757 source files and the predecessor native
 report hash. This is local fixture/session qualification; native mounts, genuine
 appointments/custody/channel evidence, production and legal acceptance remain
-separate gates. Forty new tests use existing portable-source PostgreSQL capacity.
+separate gates. Forty portable feature tests run in the backend; sixteen new
+scheduling guards use existing portable-source PostgreSQL capacity.
 
-The first PR run passed all twelve checks but retained only five seconds in the
-backend job (1135/1140 seconds); it is not qualified for merge. Setup/contracts
-preceded an838-second backend suite. Move the unchanged37 authority-trial cases
-(107.96 measured worker-seconds) from that saturated suite into five existing
-jobs: final8, candidate8, publication3, frontend10 and analysis8. A subsequent
-run retained only29 seconds in the graph job; the unchanged cost supervisor
-stopped the backend early. Neither rejected run qualifies for closure. A source-bound closed manifest
-and execution receipts require each original identity to pass exactly once.
-Sixteen new scheduling guards use the portable-source group. Keep all original
-source bodies and757 evidence pins unchanged.
+Fresh runs exposed only five seconds of backend reserve,29 seconds in graph,
+20 seconds in frontend and two seconds in PostgreSQL. These runs are rejected;
+the unchanged cost supervisor stops the backend early on sibling reserve failure.
+Keep the new portable tests out of PostgreSQL and added trial work off the x86
+frontend. Move the unchanged37 authority-trial cases (107.96 measured worker-seconds)
+and58 graph-boundary cases into six existing ARM jobs. The closed95-case
+manifest assigns final28, candidate12, publication8, analysis6, graph2 and
+history39. Run the measured indivisible graph query first in its assigned lane
+so other queued work can use the second worker. Source hashes, complete
+collections and execution receipts require every original identity to pass once. Keep original test bodies
+and all757 evidence pins unchanged.
 
-The resulting groups are PostgreSQL primary245/restart25, backend3761 (3664
-passes and97 existing skips), graph185/model20, final67, candidate284 and
-publication188. Retain review201/binding48, analysis228/frozen53, portfolio57, planning209,
-history57, withdrawal158, frontend139 files/10532 cases and all1018 deployment
-IDs. No job, worker, aggregate cap, deadline, reserve floor or cost-supervisor
-increase is permitted. Fresh exact-head CI must demonstrate the reserve gain;
-the rejected run receives no qualification credit.
+The resulting groups are PostgreSQL primary205/restart25, backend3743 (3646
+passes and97 existing skips), graph187/model20, final87, candidate288,
+publication193, analysis226/frozen53 and history96 (57 workbench plus39 relocated cases).
+Retain review201/binding48, portfolio47, planning209, withdrawal158,
+frontend139 files/10532 cases and all1018 deployment IDs. No job, worker,
+aggregate cap, deadline, reserve floor or cost-supervisor increase is permitted.
+Fresh exact-head CI must demonstrate the reserves; rejected runs receive no
+qualification credit.
 
 Require fresh PR and independently fetched equal-main receipts, all timing
 reserves and private preservation before closure. Product42/21/24/6 and

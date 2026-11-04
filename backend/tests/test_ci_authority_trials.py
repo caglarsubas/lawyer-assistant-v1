@@ -1,5 +1,6 @@
 """Closed scheduling guards; no legal or provider qualification credit."""
 
+import hashlib
 import json
 import re
 import sys
@@ -18,9 +19,11 @@ def test_complete_inventory_is_disjoint_and_preserves_other_tests():
     selected = []
     for lane in placement.COUNTS:
         ids = placement.select(contract, lane, [other, *contract.ids])
-        assert ids[0] == other
-        selected.extend(ids[1:])
+        assert other in ids
+        selected.extend(x for x in ids if x != other)
     assert sorted(selected) == list(contract.ids)
+    lane = next(k for k, v in contract.lanes.items() if placement.PRIORITY[0] in v)
+    assert placement.select(contract, lane, [other, *contract.ids])[0] == placement.PRIORITY[0]
 
 
 @pytest.mark.parametrize("change", ["source", "missing", "duplicate", "overlap", "unknown_lane", "extra_key"])
@@ -78,6 +81,16 @@ def test_execution_receipt_requires_each_selected_pass_once(change):
     plugin.pytest_sessionfinish(session, 0)
     assert plugin.valid is (change == "exact")
     assert session.exitstatus == (0 if change == "exact" else pytest.ExitCode.TESTS_FAILED)
+    receipts = []
+    plugin.pytest_terminal_summary(SimpleNamespace(config=SimpleNamespace(), write_line=receipts.append), 0)
+    if change == "exact":
+        record = json.loads(receipts[0])
+        assert record["complete_count"] == 95
+        assert record["selected_ids_sha256"] == sorted(hashlib.sha256(n.encode()).hexdigest() for n in ids)
+        assert "selected_ids" not in record
+    else:
+        assert not receipts
+
 
 
 def test_workflow_routes_every_lane_once_and_keeps_fixed_resources():
@@ -85,7 +98,7 @@ def test_workflow_routes_every_lane_once_and_keeps_fixed_resources():
     blocks = dict(re.findall(r"^  ([a-z-]+):\n(.*?)(?=^  [a-z-]+:\n|\Z)",
                              workflow.split("\njobs:\n", 1)[1], re.M | re.S))
     owners = {"final": "final-release-authorization", "candidate": "graph-candidate-contracts",
-              "publication": "source-publication-contracts", "frontend": "frontend",
+              "publication": "source-publication-contracts", "graph": "graph-runtime-contracts", "history": "frontend-history",
               "analysis": "analysis-recovery-contracts"}
     assert len(blocks) == 12
     assert sum(int(re.search(r"    timeout-minutes: (\d+)", b)[1]) for b in blocks.values()) == 70
@@ -97,5 +110,6 @@ def test_workflow_routes_every_lane_once_and_keeps_fixed_resources():
     backend = blocks["backend-and-contracts"]
     assert '"${authority_trial_tests[@]}"' in backend.split("for path in ", 1)[1]
     group = re.search(r"  CI_AUTHORITY_TRIAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split()
-    assert group == ["backend/tests/test_authority_trials.py"]
+    assert group == ["backend/tests/test_authority_trials.py", "backend/tests/test_graph.py"]
+    assert workflow.count("backend/tests/test_graph.py") == 1
     assert workflow.count("backend/tests/test_authority_trials.py") == 1
