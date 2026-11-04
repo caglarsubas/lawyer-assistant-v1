@@ -54,9 +54,21 @@ account contexts. It retains six original input-review ciphertexts and two
 declared injected entries, verifies unchanged original inputs, accounts and
 review history, and binds 770 source files plus the preceding inventory report.
 Twenty-five focused tests also exercise credential separation, fresh revocation,
-database failure, exact versions, races and original expiry. They use existing
-backend discovery; the 13-job, 73-minute CI ceiling, two workers, all older test
-identities, placement manifests, deadlines and reserve floors are unchanged.
+database failure, exact versions, races and original expiry. Read-only cases
+share a disposable pair per worker, with a whole-source/account/history byte
+check around each test. Mutating cases retain fresh isolated pairs. Every
+business assertion and case identity from the initial fresh-pair run remains.
+
+The first PR run passed all 13 checks but retained only 16 seconds in backend,
+below its fixed 30-second floor. Retain that rejection. Its new test file used
+104.60 worker-seconds, including 84.18 seconds of repeated setup. Correct that
+setup and move the complete file into existing analysis capacity: analysis
+becomes 160 plus its unchanged frozen 53-case pair; backend returns to 3788
+collected, 3691 passes and 97 original skips. The placement guard requires the
+new file exactly once. Keep the 13-job, 73-minute CI ceiling, two workers, all
+older case identities and business assertions, placement manifests, deadlines
+and reserve floors unchanged. Fresh PR and independent-main evidence still
+gate delivery; local timings or a green run alone do not establish headroom.
 
 The owner's focused-analysis-v3 legal review remains pending. The next slice is
 read-only retention/re-observation readiness for explicit receiver verification

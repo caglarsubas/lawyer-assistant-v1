@@ -89,6 +89,7 @@ env:
     backend/tests/test_copy_recovery_disposition.py
     backend/tests/test_journal_copy_reconciliation.py
     backend/tests/test_disposition_receipt_reobservation_races.py
+    backend/tests/test_destination_snapshot_verification.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
   # A dedicated bounded job holds complete publication/planning files.
   # Keep remaining graph files complete and the lighter Graph B snapshot in backend.

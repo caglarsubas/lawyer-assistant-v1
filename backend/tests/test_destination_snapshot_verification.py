@@ -20,8 +20,24 @@ from recovery_inventory_fixture import DESTINATION, ENTRY  # noqa: E402
 from recovery_review_inventory import ReviewInventory  # noqa: E402
 
 
+@pytest.fixture(scope="module")
+def shared_pair(tmp_path_factory):
+    f = make_pair(tmp_path_factory.mktemp("destination-read-only") / "pair")
+    yield f
+    f.close()
+
+
 @pytest.fixture
-def pair(tmp_path):
+def pair(shared_pair):
+    # Reuse setup only for read-only scenarios. Each test must preserve every
+    # protected source, account and review byte; mutation scenarios use fresh pairs.
+    before = shared_pair.protected()
+    yield shared_pair
+    assert shared_pair.protected() == before
+
+
+@pytest.fixture
+def isolated_pair(tmp_path):
     f = make_pair(tmp_path / "pair")
     yield f
     f.close()
@@ -141,7 +157,8 @@ def test_unaccepted_or_unacknowledged_review_cannot_reuse_an_accepted_packet(tmp
         p.close()
 
 
-def test_revoked_source_session_withholds_even_an_exact_previously_valid_packet(pair):
+def test_revoked_source_session_withholds_even_an_exact_previously_valid_packet(isolated_pair):
+    pair = isolated_pair
     pair.source.account.revoke("reviewer")
     before = pair.protected()
     value = pair.call()
@@ -150,7 +167,8 @@ def test_revoked_source_session_withholds_even_an_exact_previously_valid_packet(
     assert pair.protected() == before
 
 
-def test_receiver_revocation_during_reobservation_withholds_all_metadata(pair):
+def test_receiver_revocation_during_reobservation_withholds_all_metadata(isolated_pair):
+    pair = isolated_pair
     old = records(pair)
     s = pair.verifier(checkpoint=lambda _: pair.target.account.revoke("reviewer"))
     value = pair.call(s)
@@ -159,7 +177,8 @@ def test_receiver_revocation_during_reobservation_withholds_all_metadata(pair):
     assert records(pair) == old
 
 
-def test_source_revocation_during_reobservation_withholds_all_metadata(pair):
+def test_source_revocation_during_reobservation_withholds_all_metadata(isolated_pair):
+    pair = isolated_pair
     old = records(pair)
     s = pair.verifier(checkpoint=lambda _: pair.source.account.revoke("reviewer"))
     value = pair.call(s)
@@ -168,7 +187,8 @@ def test_source_revocation_during_reobservation_withholds_all_metadata(pair):
     assert records(pair) == old
 
 
-def test_changed_source_versions_are_not_resolved_to_current_after_restart(pair):
+def test_changed_source_versions_are_not_resolved_to_current_after_restart(isolated_pair):
+    pair = isolated_pair
     e.retain(pair.source.account.profile / ".runtime-key-rotation", b"INVENTED maintenance marker")
     before = pair.protected()
     value = pair.call(pair.verifier())
@@ -177,7 +197,8 @@ def test_changed_source_versions_are_not_resolved_to_current_after_restart(pair)
     assert pair.protected() == before
 
 
-def test_destination_source_change_between_observations_withholds_everything(pair):
+def test_destination_source_change_between_observations_withholds_everything(isolated_pair):
+    pair = isolated_pair
     old = records(pair)
     def changed(_):
         e.retain(pair.target.account.profile / ".runtime-key-rotation", b"INVENTED maintenance marker")
@@ -187,7 +208,8 @@ def test_destination_source_change_between_observations_withholds_everything(pai
     assert records(pair) == old
 
 
-def test_new_source_ciphertext_invalidates_snapshot_without_adoption(pair):
+def test_new_source_ciphertext_invalidates_snapshot_without_adoption(isolated_pair):
+    pair = isolated_pair
     path = pair.source.sidecar.root / ("9" * 32 + ".receipt")
     e.retain(path, next(pair.source.sidecar.root.iterdir()).read_bytes())
     before = pair.protected()
@@ -197,7 +219,8 @@ def test_new_source_ciphertext_invalidates_snapshot_without_adoption(pair):
     assert pair.protected() == before and path.is_file()
 
 
-def test_destination_journal_race_is_detected_and_injected_bytes_retained(pair):
+def test_destination_journal_race_is_detected_and_injected_bytes_retained(isolated_pair):
+    pair = isolated_pair
     path = pair.target.sidecar.root / ("8" * 32 + ".receipt")
     def changed(_):
         e.retain(path, b"INVENTED unregistered record")
@@ -207,7 +230,8 @@ def test_destination_journal_race_is_detected_and_injected_bytes_retained(pair):
     assert path.read_bytes() == b"INVENTED unregistered record"
 
 
-def test_interrupted_destination_staging_blocks_without_cleanup(pair):
+def test_interrupted_destination_staging_blocks_without_cleanup(isolated_pair):
+    pair = isolated_pair
     path = pair.target.sidecar.root / ".pending-invented"
     e.retain(path, b"INVENTED interrupted staging")
     before = pair.protected()
@@ -228,7 +252,8 @@ def test_source_and_destination_registries_must_share_the_independent_exact_pin(
             reference=pair.reference, pin=replace(pair.pin, expires_at=pair.pin.expires_at + 1), selection_id=SELECTION)
 
 
-def test_original_expiry_and_both_clocks_cannot_be_renewed_by_a_fresh_receiver(pair):
+def test_original_expiry_and_both_clocks_cannot_be_renewed_by_a_fresh_receiver(isolated_pair):
+    pair = isolated_pair
     pair.source.account.now = pair.snapshot["expires_at"]
     before = pair.protected()
     value = pair.call(pair.verifier())
@@ -237,7 +262,8 @@ def test_original_expiry_and_both_clocks_cannot_be_renewed_by_a_fresh_receiver(p
     assert pair.protected() == before
 
 
-def test_shorter_receiver_session_limits_result_without_changing_original_handoff(pair):
+def test_shorter_receiver_session_limits_result_without_changing_original_handoff(isolated_pair):
+    pair = isolated_pair
     from app.auth import create_session
     from app.db import LoginSession, User, digest
     account = pair.target.account

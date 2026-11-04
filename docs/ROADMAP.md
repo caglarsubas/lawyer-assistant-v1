@@ -10444,14 +10444,22 @@ pairs and six isolated account contexts. It preserves six original input-review
 ciphertexts, all original source/account/review bytes and two declared injected
 entries. Bind 770 source files and the preceding inventory report hash.
 
-Twenty-five new focused tests use existing backend discovery. Backend becomes
-3813 collected (3716 passes / 97 existing skips); all other groups remain
-unchanged, including analysis 135 plus its frozen 53-case pair, PostgreSQL
-225/25 and capacity 145. Preserve all 1018 deployment IDs, 139 frontend files /
-10532 cases, every old placement manifest, 13 jobs, the 73-minute aggregate
-ceiling, two workers, deadlines, supervisor policy and reserve floors. Require
-actual exact-head and independently fetched equal-main execution, timing and
-private-preservation evidence before closure; local timing is not a CI result.
+The first PR run passed all 13 checks but backend retained only 16 seconds,
+below the fixed 30-second floor. Retain that rejection. The new 25-case file
+consumed 104.60 worker-seconds, including 84.18 seconds of fixture setup.
+Share only read-only disposable setup per worker with whole-source/account/
+history byte checks around each test; mutating scenarios keep fresh pairs.
+Preserve every business assertion and exact case identity from the initial run.
+
+Move the complete new file into existing analysis capacity. Analysis becomes
+160 plus its unchanged frozen 53-case pair; backend returns to 3788 collected,
+3691 passes and 97 original skips. PostgreSQL 225/25 and capacity 145 remain
+unchanged. The placement guard requires the new file exactly once. Preserve
+all 1018 deployment IDs, 139 frontend files / 10532 cases, every old placement
+manifest, 13 jobs, the 73-minute aggregate ceiling, two workers, deadlines,
+supervisor policy and reserve floors. Require fresh exact-head and independently
+fetched equal-main execution, timing and private-preservation evidence before
+closure; local timing or a green run alone does not establish CI headroom.
 
 Product checklist 42/21/24/6 and readiness 0/9/4/1 remain unchanged. The owner's
 focused-analysis-v3 legal review is pending. Next: read-only retention and fresh

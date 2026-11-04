@@ -181,7 +181,8 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertEqual(workflow.count(moved), 1)
         recovery_group = re.search(r"  CI_RECOVERY_QUALIFICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(recovery_group.split(), ["backend/tests/test_retained_release_withdrawal.py", "backend/tests/test_copy_recovery_disposition.py",
-            "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py"])
+            "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py",
+            "backend/tests/test_destination_snapshot_verification.py"])
         self.assertNotIn("backend/tests/test_retained_release_withdrawal.py", withdrawal_group)
         self.assertIn('"${recovery_qualification_tests[@]}"', backend)
         definition = '          read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"\n'
