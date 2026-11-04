@@ -10302,3 +10302,43 @@ checksum provenance require real evidence; host reboot, changed volume identity
 and joint account rollback remain unqualified. Next: independently reviewed
 operator recovery-input readiness with explicit retained-context selection;
 never infer fresh authority from successful cold reconstruction.
+
+## 306. Reviewed operator recovery-input readiness — 2026-11-04
+
+PR274 is merged at0b6ba0d40bcdcd1c551ce347329360e58024333f. Its final PR and
+independent main41779307417 pass all12 checks, all execution identities and
+required reserves, with30 seconds minimum per job. Engineering273 done/0 open/
+0 blocked is the baseline. The original30-outcome cold-controller report and
+753/745/741/505 source pins remain exact.
+
+Add explicit host-registered recovery-input selection, assigned preparation,
+independent review and read-only readiness/inspection. Bind each decision to the
+exact descriptor, stores, keys, package/host, original handoff and expiry,
+profile and assigned actors. A missing or different selection, version or
+decision reference never resolves to a current/latest replacement. Recheck
+current sessions, Origin, CSRF and roles before input inspection and release.
+
+Keep new review records in a disjoint, independently keyed encrypted journal.
+Immutable publication, bounded namespace locks and a reserved decision slot
+prevent overwrite and over-capacity writes. Retain uncertain publications
+without recovering acknowledgement, deleting staging or adopting a decision.
+Authorized history inspection preserves stale decisions while withholding
+readiness. Readiness starts no controller and renews no trust or expiry.
+
+The frozen local campaign qualifies18 outcomes across three invented contexts
+and six encrypted records, with exact original stores, retained keys and account
+database bytes. The new report binds757 source files and the predecessor native
+report hash. This is local fixture/session qualification; native mounts, genuine
+appointments/custody/channel evidence, production and legal acceptance remain
+separate gates. Forty new tests use the existing portable-source PostgreSQL
+capacity: primary229 plus the unchanged25-case restart phase. Keep review201/
+binding48, backend3798, graph185/model20, analysis220/frozen53, planning209,
+source185, history57, candidate276, withdrawal158, frontend139 files/10532 cases,
+all1018 deployment IDs and all closed inventories intact. No job, worker,
+aggregate cap, deadline, reserve floor or cost-supervisor change is permitted.
+
+Require fresh PR and independently fetched equal-main receipts, all timing
+reserves and private preservation before closure. Product42/21/24/6 and
+readiness0/9/4/1 remain unchanged; owner analysis-v3 review is pending. Next:
+read-only recovery-input review inventory and independently pinned handoff
+readiness, retaining exact references and genuine operator approval gates.

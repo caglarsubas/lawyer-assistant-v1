@@ -18,6 +18,7 @@ env:
     backend/tests/test_analysis_workbench.py
   CI_POSTGRES_SOURCE_TESTS: >-
     backend/tests/test_public_sources.py
+    backend/tests/test_operator_recovery_inputs.py
   CI_HISTORY_BINDING_TESTS: >-
     backend/tests/test_provision_mappings.py
   CI_CANDIDATE_FOCUS_TESTS: >-
