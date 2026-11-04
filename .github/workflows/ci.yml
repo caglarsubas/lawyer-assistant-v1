@@ -12,6 +12,8 @@ concurrency:
 env:
   CI_PREVIEW_PARTITION_TESTS: >-
     backend/tests/test_operator_inspection_preview.py
+  CI_AUTHORITY_TRIAL_TESTS: >-
+    backend/tests/test_authority_trials.py
   CI_SOURCE_REVIEW_TESTS: >-
     backend/tests/test_source_reviews.py
   CI_HISTORY_CAPACITY_TESTS: >-
@@ -19,6 +21,7 @@ env:
   CI_POSTGRES_SOURCE_TESTS: >-
     backend/tests/test_public_sources.py
     backend/tests/test_operator_recovery_inputs.py
+    backend/tests/test_ci_authority_trials.py
   CI_HISTORY_BINDING_TESTS: >-
     backend/tests/test_provision_mappings.py
   CI_CANDIDATE_FOCUS_TESTS: >-
@@ -213,6 +216,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          read -r -a authority_trial_tests <<< "$CI_AUTHORITY_TRIAL_TESTS"
           read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"
           read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
           read -r -a history_capacity_tests <<< "$CI_HISTORY_CAPACITY_TESTS"
@@ -240,7 +244,7 @@ jobs:
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           ignore_args=()
-          for path in "${preview_tests[@]}" "${history_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${postgres_source_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${human_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
+          for path in "${authority_trial_tests[@]}" "${preview_tests[@]}" "${history_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${postgres_source_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${human_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}"; do
             ignore_args+=("--ignore=$path")
           done
           bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard.py -- pytest backend/tests "${ignore_args[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
@@ -535,7 +539,8 @@ jobs:
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a final_release_tests <<< "$CI_FINAL_RELEASE_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=final "${preview_tests[@]}" -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
+          read -r -a authority_trial_tests <<< "$CI_AUTHORITY_TRIAL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=final "${preview_tests[@]}" -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_authority_trials --authority-trial-lane=final "${authority_trial_tests[@]}"
 
   retained-release-withdrawal:
     # Measured withdrawal reconstruction exhausted the frontend's five-minute
@@ -604,7 +609,8 @@ jobs:
           read -r -a candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
           read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
           read -r -a focus_tests <<< "$CI_CANDIDATE_FOCUS_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate -p scripts.ci_provision_bindings --provision-binding-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+          read -r -a authority_trial_tests <<< "$CI_AUTHORITY_TRIAL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate -p scripts.ci_provision_bindings --provision-binding-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_authority_trials --authority-trial-lane=candidate "${authority_trial_tests[@]}"
 
   source-publication-contracts:
     # PostgreSQL races passed in 208s and publication checks in 72s, but setup
@@ -632,7 +638,8 @@ jobs:
         timeout-minutes: 3
         run: |
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${publication_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
+          read -r -a authority_trial_tests <<< "$CI_AUTHORITY_TRIAL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${publication_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_authority_trials --authority-trial-lane=publication "${authority_trial_tests[@]}"
       - name: Test manifest-bound review headroom slice 9
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json
@@ -671,7 +678,8 @@ jobs:
         run: |
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
+          read -r -a authority_trial_tests <<< "$CI_AUTHORITY_TRIAL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_authority_trials --authority-trial-lane=graph "${authority_trial_tests[@]}"
 
 
       - name: Test manifest-bound review headroom slice 10

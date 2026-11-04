@@ -10330,12 +10330,24 @@ and six encrypted records, with exact original stores, retained keys and account
 database bytes. The new report binds757 source files and the predecessor native
 report hash. This is local fixture/session qualification; native mounts, genuine
 appointments/custody/channel evidence, production and legal acceptance remain
-separate gates. Forty new tests use the existing portable-source PostgreSQL
-capacity: primary229 plus the unchanged25-case restart phase. Keep review201/
-binding48, backend3798, graph185/model20, analysis220/frozen53, planning209,
-source185, history57, candidate276, withdrawal158, frontend139 files/10532 cases,
-all1018 deployment IDs and all closed inventories intact. No job, worker,
-aggregate cap, deadline, reserve floor or cost-supervisor change is permitted.
+separate gates. Forty new tests use existing portable-source PostgreSQL capacity.
+
+The first PR run passed all twelve checks but retained only five seconds in the
+backend job (1135/1140 seconds); it is not qualified for merge. Setup/contracts
+preceded an838-second backend suite. Move the unchanged37 authority-trial cases
+(107.96 measured worker-seconds) from that saturated suite into four existing
+jobs: final16, candidate8, publication6 and graph7. A source-bound closed manifest
+and execution receipts require each original identity to pass exactly once.
+Sixteen new scheduling guards use the portable-source group. Keep all original
+source bodies and757 evidence pins unchanged.
+
+The resulting groups are PostgreSQL primary245/restart25, backend3761 (3664
+passes and97 existing skips), graph192/model20, final75, candidate284 and
+publication191. Retain review201/binding48, analysis220/frozen53, planning209,
+history57, withdrawal158, frontend139 files/10532 cases and all1018 deployment
+IDs. No job, worker, aggregate cap, deadline, reserve floor or cost-supervisor
+increase is permitted. Fresh exact-head CI must demonstrate the reserve gain;
+the rejected run receives no qualification credit.
 
 Require fresh PR and independently fetched equal-main receipts, all timing
 reserves and private preservation before closure. Product42/21/24/6 and
