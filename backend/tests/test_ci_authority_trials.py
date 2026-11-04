@@ -38,10 +38,10 @@ def test_changed_source_or_inventory_fails_closed(tmp_path, change):
     elif change == "duplicate":
         value["test_ids"][0] = value["test_ids"][1]
     elif change == "overlap":
-        value["lanes"]["candidate"][0] = value["lanes"]["final"][0]
-        value["lanes"]["candidate"].sort()
+        value["lanes"]["capacity"][0] = value["lanes"]["capacity"][1]
+        value["lanes"]["capacity"].sort()
     elif change == "unknown_lane":
-        value["lanes"]["unknown"] = value["lanes"].pop("candidate")
+        value["lanes"]["unknown"] = value["lanes"].pop("capacity")
     else:
         value["waive"] = True
     manifest = tmp_path / "manifest.json"
@@ -61,14 +61,14 @@ def test_incomplete_actual_collection_is_rejected(change):
     else:
         ids[0] += "_renamed"
     with pytest.raises(ValueError):
-        placement.select(contract, "candidate", ids)
+        placement.select(contract, "capacity", ids)
 
 
 @pytest.mark.parametrize("change", ["missing", "duplicate", "skip", "xfail", "exact"])
 def test_execution_receipt_requires_each_selected_pass_once(change):
     contract = placement.load_contract()
-    plugin = placement.Partition(contract, "candidate")
-    ids = list(contract.lanes["candidate"])
+    plugin = placement.Partition(contract, "capacity")
+    ids = list(contract.lanes["capacity"])
     if change == "missing":
         ids.pop()
     elif change == "duplicate":
@@ -85,7 +85,7 @@ def test_execution_receipt_requires_each_selected_pass_once(change):
     plugin.pytest_terminal_summary(SimpleNamespace(config=SimpleNamespace(), write_line=receipts.append), 0)
     if change == "exact":
         record = json.loads(receipts[0])
-        assert record["complete_count"] == 95
+        assert record["complete_count"] == 135
         assert record["selected_ids_sha256"] == sorted(hashlib.sha256(n.encode()).hexdigest() for n in ids)
         assert "selected_ids" not in record
     else:
@@ -97,11 +97,9 @@ def test_workflow_routes_every_lane_once_and_keeps_fixed_resources():
     workflow = (placement.ROOT / ".github/workflows/ci.yml").read_text()
     blocks = dict(re.findall(r"^  ([a-z-]+):\n(.*?)(?=^  [a-z-]+:\n|\Z)",
                              workflow.split("\njobs:\n", 1)[1], re.M | re.S))
-    owners = {"final": "final-release-authorization", "candidate": "graph-candidate-contracts",
-              "publication": "source-publication-contracts", "graph": "graph-runtime-contracts", "history": "frontend-history",
-              "analysis": "analysis-recovery-contracts"}
-    assert len(blocks) == 12
-    assert sum(int(re.search(r"    timeout-minutes: (\d+)", b)[1]) for b in blocks.values()) == 70
+    owners = {"capacity": "backend-capacity"}
+    assert len(blocks) == 13
+    assert sum(int(re.search(r"    timeout-minutes: (\d+)", b)[1]) for b in blocks.values()) == 73
     for lane, owner in owners.items():
         option = "-p scripts.ci_authority_trials --authority-trial-lane=" + lane
         assert workflow.count(option) == 1 and option in blocks[owner]
@@ -110,6 +108,39 @@ def test_workflow_routes_every_lane_once_and_keeps_fixed_resources():
     backend = blocks["backend-and-contracts"]
     assert '"${authority_trial_tests[@]}"' in backend.split("for path in ", 1)[1]
     group = re.search(r"  CI_AUTHORITY_TRIAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split()
-    assert group == ["backend/tests/test_authority_trials.py", "backend/tests/test_graph.py"]
+    assert group == ["backend/tests/test_authority_trials.py", "backend/tests/test_graph.py",
+                     "backend/tests/test_operator_recovery_inputs.py"]
     assert workflow.count("backend/tests/test_graph.py") == 1
     assert workflow.count("backend/tests/test_authority_trials.py") == 1
+
+
+@pytest.mark.parametrize("fault", ["none", "new_job_29_seconds", "missing_job", "wrong_head"])
+def test_explicit_thirteen_job_policy_keeps_the_original_core_and_floors(fault):
+    from datetime import datetime, timedelta, timezone
+
+    from scripts import run_ci_reserve_guard as old
+    from scripts import run_ci_reserve_guard_v2 as current
+
+    core = current.load_policy()
+    assert len(old.CAPS) == 12 and sum(old.CAPS.values()) == 4200
+    assert core.CAPS == {**old.CAPS, "backend-capacity": 180}
+    assert core.STEP_CAPS == old.STEP_CAPS and core.FLOOR == old.FLOOR == 30
+    assert core.policy_sha256() != old.policy_sha256()
+    start = datetime(2026, 1, 1, tzinfo=timezone.utc)
+    jobs = [{"name": k, "head_sha": "a" * 40, "run_id": 123, "status": "completed",
+             "conclusion": "success", "started_at": start.isoformat(),
+             "completed_at": (start + timedelta(seconds=cap - 30)).isoformat()}
+            for k, cap in core.CAPS.items()]
+    row = jobs[-1]
+    if fault == "new_job_29_seconds":
+        row["completed_at"] = (start + timedelta(seconds=151)).isoformat()
+    elif fault == "missing_job":
+        jobs.pop()
+    elif fault == "wrong_head":
+        row["head_sha"] = "b" * 40
+    if fault == "none":
+        assert core.inspect({"jobs": jobs}, 123, "a" * 40, final=True) == {
+            "completed_siblings": 12, "minimum_reserve": 30}
+    else:
+        with pytest.raises(core.Rejected):
+            core.inspect({"jobs": jobs}, 123, "a" * 40, final=True)

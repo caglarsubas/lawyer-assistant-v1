@@ -10,8 +10,9 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "backend/tests/test_authority_trials.py"
 MANIFEST = ROOT / "deploy/fixtures/authority_trial_partition.json"
-SOURCES = {"backend/tests/test_authority_trials.py": 37, "backend/tests/test_graph.py": 58}
-COUNTS = {"final": 28, "candidate": 12, "publication": 8, "analysis": 6, "graph": 2, "history": 39}
+SOURCES = {"backend/tests/test_authority_trials.py": 37, "backend/tests/test_graph.py": 58,
+           "backend/tests/test_operator_recovery_inputs.py": 40}
+COUNTS = {"capacity": 135}
 PRIORITY = ("tests/test_graph.py::test_two_hop_expansion_stops_before_third_hop",)
 
 
@@ -41,7 +42,7 @@ def load_contract(path=MANIFEST, source=SOURCE):
             or value["priority_ids"] != list(PRIORITY)):
         raise ValueError("Backend capacity sources or manifest changed")
     ids, lanes = value["test_ids"], value["lanes"]
-    if (not isinstance(ids, list) or len(ids) != 95
+    if (not isinstance(ids, list) or len(ids) != 135
             or any(not isinstance(x, str) or len(x) > 1024 for x in ids)
             or ids != sorted(set(ids)) or not set(PRIORITY) <= set(ids)
             or not isinstance(lanes, dict) or set(lanes) != set(COUNTS)):
@@ -55,7 +56,7 @@ def load_contract(path=MANIFEST, source=SOURCE):
         if not isinstance(rows, list) or len(rows) != count or rows != sorted(set(rows)):
             raise ValueError("Backend capacity lane is not closed")
         combined.extend(rows)
-    if sorted(combined) != ids or len(set(combined)) != 95:
+    if sorted(combined) != ids or len(set(combined)) != 135:
         raise ValueError("Every backend capacity identity must occur once")
     return Contract(hashes, tuple(ids), {k: tuple(v) for k, v in lanes.items()})
 
@@ -114,7 +115,7 @@ class Partition:
             terminalreporter.write_line(json.dumps({"backend_capacity_partition": self.lane,
                 "source_sha256": self.contract.source_sha256,
                 "inventory_sha256": self.contract.inventory_sha256,
-                "complete_count": 95,
+                "complete_count": 135,
                 "selected_ids_sha256": sorted(hashlib.sha256(n.encode()).hexdigest() for n in self.passed)}))
 
 

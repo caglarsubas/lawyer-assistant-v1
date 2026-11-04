@@ -10330,29 +10330,31 @@ and six encrypted records, with exact original stores, retained keys and account
 database bytes. The new report binds757 source files and the predecessor native
 report hash. This is local fixture/session qualification; native mounts, genuine
 appointments/custody/channel evidence, production and legal acceptance remain
-separate gates. Forty portable feature tests run in the backend; sixteen new
-scheduling guards use existing portable-source PostgreSQL capacity.
+separate gates. Forty portable feature tests join the disjoint qualification job; twenty new
+scheduling/policy guards use existing portable-source PostgreSQL capacity.
 
-Fresh runs exposed only five seconds of backend reserve,29 seconds in graph,
-20 seconds in frontend and two seconds in PostgreSQL. These runs are rejected;
-the unchanged cost supervisor stops the backend early on sibling reserve failure.
-Keep the new portable tests out of PostgreSQL and added trial work off the x86
-frontend. Move the unchanged37 authority-trial cases (107.96 measured worker-seconds)
-and58 graph-boundary cases into six existing ARM jobs. The closed95-case
-manifest assigns final28, candidate12, publication8, analysis6, graph2 and
-history39. Run the measured indivisible graph query first in its assigned lane
-so other queued work can use the second worker. Source hashes, complete
-collections and execution receipts require every original identity to pass once. Keep original test bodies
-and all757 evidence pins unchanged.
+Fresh runs exposed insufficient reserves in backend, graph, frontend,
+PostgreSQL, candidate and history jobs. The unchanged core supervisor stopped
+backend work early; rejected runs receive no qualification credit. The fixed
+12-job layout cannot reliably absorb the growing fixtures. Supersede the prior
+fixed-topology restriction with one disjoint3-minute ARM job for37 unchanged
+authority-trial,58 graph-boundary and40 feature cases. A source-bound135-case manifest,
+complete collection checks and hashed execution receipts require every original
+identity to pass exactly once. Start the measured indivisible graph query first.
 
-The resulting groups are PostgreSQL primary205/restart25, backend3743 (3646
-passes and97 existing skips), graph187/model20, final87, candidate288,
-publication193, analysis226/frozen53 and history96 (57 workbench plus39 relocated cases).
-Retain review201/binding48, portfolio47, planning209, withdrawal158,
-frontend139 files/10532 cases and all1018 deployment IDs. No job, worker,
-aggregate cap, deadline, reserve floor or cost-supervisor increase is permitted.
-Fresh exact-head CI must demonstrate the reserves; rejected runs receive no
-qualification credit.
+Keep all existing job/step caps, two workers per job, original test bodies,
+all757 evidence pins, phase floors and the30-second job reserve unchanged.
+The new explicit13-job policy retains the immutable12-job core and adds only
+this180-second cap: aggregate ceiling70→73 minutes. This is a cap change,
+not an invoiced-cost measurement; compare actual runner time on qualified runs.
+No source or test is duplicated and no automatic retries are introduced.
+
+The resulting groups are PostgreSQL primary209/restart25, backend3703 (3606
+passes and97 existing skips), capacity135, graph185/model20, final59,
+candidate276, publication185, analysis220/frozen53 and history57. Retain
+review201/binding48, portfolio47, planning209, withdrawal158, frontend139 files/
+10532 cases and all1018 deployment IDs. Fresh exact-head CI must demonstrate
+the fixed reserves and then be qualified independently on equal main.
 
 Require fresh PR and independently fetched equal-main receipts, all timing
 reserves and private preservation before closure. Product42/21/24/6 and
