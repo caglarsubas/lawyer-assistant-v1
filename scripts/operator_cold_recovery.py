@@ -140,6 +140,9 @@ def recover(case_root, anchors_root, pins, *, clock=e.utc):
         retained_keys[KEYS[name]] = key
         stores[name] = ReceiptStore(root=root, context_id=row["context_id"], scope_sha256=row["scope_sha256"], key=key)
     profile = e.directory(case / "accounts")
+    maintenance = profile / ".runtime-key-rotation"
+    if maintenance.exists() or maintenance.is_symlink():
+        e.reject()
     database = profile / "disposable-identities.sqlite"
     info = database.lstat()
     if (database != database.resolve() or identity(database) != pins.database_identity

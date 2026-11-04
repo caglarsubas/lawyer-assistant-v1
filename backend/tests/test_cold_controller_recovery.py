@@ -60,6 +60,22 @@ def test_cold_load_retains_original_actors_versions_and_expiry_without_database_
         loaded.close()
 
 
+def test_active_or_interrupted_key_maintenance_blocks_cold_recovery(frozen):
+    f, _, _, anchors, pins = frozen
+    marker = f.profile / ".runtime-key-rotation"
+    for dangling in (False, True):
+        try:
+            if dangling:
+                marker.symlink_to(f.profile / "missing-maintenance-record")
+            else:
+                marker.write_bytes(b"invented active key maintenance")
+                marker.chmod(0o600)
+            with pytest.raises(ValueError):
+                recover(f.root, anchors, pins, clock=lambda: f.now)
+        finally:
+            marker.unlink(missing_ok=True)
+
+
 @pytest.mark.parametrize("fault", ["missing_pins", "descriptor", "handoff", "binding", "profile", "database", "case", "anchors", "expired"])
 def test_original_independent_pins_and_original_expiry_are_required(frozen, fault):
     f, _, _, anchors, pins = frozen

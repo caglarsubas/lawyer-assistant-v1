@@ -10285,8 +10285,10 @@ original expiry, explicit comparison and reviewer/preparer session revocation.
 Keys and six stores retain exact bytes and metadata. Native753 source pins and
 the predecessor hash bind the new report; prior745/741/505 pins remain exact.
 
-Twenty-five cheap offline/loader cases share the existing review job, raising
-its primary200 plus the unchanged48-case binding phase. Keep backend3798,
+Twenty-six cheap offline/loader cases share the existing review job, raising
+its primary201 plus the unchanged48-case binding phase. Preserve the original
+key-maintenance guard while bypassing schema initialization: active or dangling
+maintenance markers prevent recovery. Keep backend3798,
 analysis220/frozen53, graph185/model20, PostgreSQL189/restart25, planning209,
 history57, source185, candidate276, withdrawal158, frontend139 files/10532 cases,
 all1018 deployment IDs and all closed inventories intact. The read-only cost

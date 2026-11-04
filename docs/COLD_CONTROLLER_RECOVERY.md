@@ -16,7 +16,8 @@ inputs fail closed; nothing is adopted, repaired, rekeyed or generated on reload
 
 The account database is opened with SQLite `mode=ro`, using an existing `Store`
 instance interface without invoking its schema-creating constructor. The original
-session and firm role checks still run. A native attempted schema write must
+key-maintenance marker guard, session and firm role checks still run. Both a live
+maintenance marker and a dangling marker link prevent cold recovery. A native attempted schema write must
 receive SQLITE_READONLY. Only explicit fixture session revocations in the test
 supervisor change the invented account database. Recovery creates no sessions.
 
