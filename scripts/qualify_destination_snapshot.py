@@ -30,6 +30,8 @@ CASES = ("D01_separate_receiver_session", "D02_exact_packet_and_references", "D0
     "D22_disposable_account_bytes_exact", "D23_service_reads_do_not_write", "D24_no_genuine_attestation_claim")
 NEW = ("scripts/destination_snapshot_verification.py", "scripts/destination_snapshot_fixture.py",
        "scripts/qualify_destination_snapshot.py", "backend/tests/test_destination_snapshot_verification.py")
+CI = ("scripts/ci_materialization_capacity.py", "deploy/fixtures/materialization_capacity_partition.json",
+      "backend/tests/test_ci_materialization_capacity.py")
 
 
 def candidate(pair):
@@ -165,8 +167,8 @@ def campaign(root):
 def run():
     prior = ROOT / "docs/evidence/recovery-review-inventory-2026-11-04.json"
     old = json.loads(prior.read_bytes())
-    hashes = {**old["source_sha256"], **{n: e.sha((ROOT / n).read_bytes()) for n in NEW}}
-    assert len(old["source_sha256"]) == 766 and len(hashes) == 770
+    hashes = {**old["source_sha256"], **{n: e.sha((ROOT / n).read_bytes()) for n in NEW + CI}}
+    assert len(old["source_sha256"]) == 766 and len(hashes) == 773
     assert all(e.sha((ROOT / n).read_bytes()) == digest for n, digest in hashes.items())
     with tempfile.TemporaryDirectory(prefix="lawyer-destination-snapshot-") as name:
         evidence = campaign(Path(name).resolve())
