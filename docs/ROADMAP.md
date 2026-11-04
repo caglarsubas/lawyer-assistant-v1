@@ -10361,3 +10361,50 @@ reserves and private preservation before closure. Product42/21/24/6 and
 readiness0/9/4/1 remain unchanged; owner analysis-v3 review is pending. Next:
 read-only recovery-input review inventory and independently pinned handoff
 readiness, retaining exact references and genuine operator approval gates.
+
+## 307. Acknowledged recovery-review inventory and pinned handoff — 2026-11-04
+
+PR #275 is merged at `42e055ee9284c4668bda7ac3a8775fbe446a6b92`.
+Its PR and independent main run `41799714762` pass all 13 checks, exact
+execution inventories and fixed floors. Main retains at least 43 seconds per
+job, including 162 seconds in backend. Engineering 274 done / 0 open / 0 blocked
+is the baseline. The 757-source reviewed-input and prior native reports remain
+exact. The 13-job, 73-minute aggregate ceiling is retained without extension.
+
+Add a read-only inventory of up to four explicitly acknowledged host references.
+Keep missing decision acknowledgements missing even when ciphertext is retained.
+Never discover a latest decision, advertise unregistered records or clean up
+staging. Reobserve exact source/journal versions, actors and fixed expiry before
+releasing a complete metadata result; return no partial list on conflict.
+Preserve stale and negative independent decisions as history.
+
+Require the exact entry, full references, current actor-bound inventory hash and
+separately supplied destination pins for handoff readiness. Bind the destination
+to the selection, review context, journal pins, reference and original expiry.
+Neither a matching digest nor an inventory creates authority. No packet is sent,
+record written, controller started, acknowledgement adopted or trust renewed.
+Genuine target provenance, custody, execution and legal approval remain gated.
+
+The frozen local campaign qualifies 20 outcomes in three invented contexts, with
+six retained review records, two deliberately injected entries and unchanged
+source/account/history bytes. Bind 766 source/placement files and the preceding
+reviewed-input report hash; claim no new native mount or production qualification.
+
+Keep the 26 new tests disjoint: 16 in PostgreSQL capacity and 10 alongside the
+135-case qualification job, using a source-bound manifest and exact execution
+receipts. Resulting groups are PostgreSQL primary 225 / restart 25 and capacity
+145. A first CI run passed the new partitions with 52/49 seconds reserve, but
+the unchanged analysis job retained only 21 seconds and was rejected. Move its
+unchanged runtime-graph (35 cases, 33.08 worker-seconds) and feedback (50 cases,
+23.67 worker-seconds) files to backend discovery. Backend becomes 3788
+(3691 passes / 97 existing skips), analysis 135 plus the frozen 53-case pair.
+Keep all 1018 deployment IDs, 139 frontend files / 10532 cases,
+old partitions, two workers, existing caps and reserve floors remain intact.
+Require actual PR and independently fetched equal-main timing, identity and
+private-preservation evidence before closure. No unchanged-head retry is used
+to waive a reserve failure.
+
+Product checklist 42/21/24/6 and readiness 0/9/4/1 remain unchanged. The owner's
+analysis-v3 review is pending. Next: read-only destination-side verification of
+an explicit handoff snapshot, retaining independently pinned target context,
+source references and original expiry, without restoration or trust renewal.

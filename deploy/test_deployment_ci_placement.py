@@ -176,12 +176,12 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertNotIn(path, final_group)
         self.assertNotIn("CI_DATABASE_CONTEXT_TESTS", workflow)
         self.assertNotIn("CI_PUBLIC_SOURCE_TESTS", workflow)
-        self.assertEqual(workflow.count("backend/tests/test_analysis_feedback.py"), 1)
+        self.assertEqual(workflow.count("backend/tests/test_analysis_feedback.py"), 0)
         for moved in ("backend/tests/test_analysis_suggestions.py", "backend/tests/test_temporal_validity.py", "backend/tests/test_public_sources.py"):
             self.assertEqual(workflow.count(moved), 1)
         recovery_group = re.search(r"  CI_RECOVERY_QUALIFICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(recovery_group.split(), ["backend/tests/test_retained_release_withdrawal.py", "backend/tests/test_copy_recovery_disposition.py",
-            "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py", "backend/tests/test_runtime_graph_release.py", "backend/tests/test_analysis_feedback.py"])
+            "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py"])
         self.assertNotIn("backend/tests/test_retained_release_withdrawal.py", withdrawal_group)
         self.assertIn('"${recovery_qualification_tests[@]}"', backend)
         definition = '          read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"\n'
