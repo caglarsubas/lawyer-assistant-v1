@@ -10408,3 +10408,53 @@ Product checklist 42/21/24/6 and readiness 0/9/4/1 remain unchanged. The owner's
 analysis-v3 review is pending. Next: read-only destination-side verification of
 an explicit handoff snapshot, retaining independently pinned target context,
 source references and original expiry, without restoration or trust renewal.
+
+## 308. Read-only destination-side snapshot verification — 2026-11-04
+
+PR #276 is merged at `d3060c937e7b92e039be9c80f9f59c319e344c18`.
+Its PR and independent main run `41817708522` pass all 13 checks, exact
+execution inventories and fixed floors. Job reserves are at least 38 seconds
+for the PR and 41 seconds for main; backend retains 133/132 seconds.
+Engineering 275 done / 0 open / 0 blocked is the baseline. The 766-source
+inventory report and every preceding native/review report remain exact.
+
+Add an unregistered receiver verifier for one explicit handoff snapshot and
+full source reference. Authenticate the currently assigned destination reviewer
+before inspecting the packet, target or source. Require separate account/store
+namespaces, keys and sessions. Pins, receiver selection and source credentials
+are supplied by trusted host wiring, never by the incoming request.
+
+Match every original handoff field to the independent target context and pin.
+Reobserve local package/source versions and journal around two fresh source
+handoff checks. Withhold all verification metadata on stale versions, missing
+acknowledgements, negative decisions, revoked sessions, failed mandatory checks,
+changed observations or exhausted checked budgets. Preserve unexpected staging
+and unregistered bytes without adoption or cleanup. Verification writes nothing.
+
+Bind the result to the exact handoff/reference, receiver context and current
+receiver session. Limit expiry to the earliest original handoff, receiver-session
+or local-input expiry, preserving the original expiry separately. A fresh
+instance or new read cannot renew trust. No controller, listener, restore,
+publication, source-credential release or production/legal approval is granted.
+Genuine pin provenance, external channel authenticity, custody, native mount
+posture, cross-store atomicity and joint rollback remain separately gated.
+
+The frozen local campaign qualifies 24 outcomes across three source/receiver
+pairs and six isolated account contexts. It preserves six original input-review
+ciphertexts, all original source/account/review bytes and two declared injected
+entries. Bind 770 source files and the preceding inventory report hash.
+
+Twenty-five new focused tests use existing backend discovery. Backend becomes
+3813 collected (3716 passes / 97 existing skips); all other groups remain
+unchanged, including analysis 135 plus its frozen 53-case pair, PostgreSQL
+225/25 and capacity 145. Preserve all 1018 deployment IDs, 139 frontend files /
+10532 cases, every old placement manifest, 13 jobs, the 73-minute aggregate
+ceiling, two workers, deadlines, supervisor policy and reserve floors. Require
+actual exact-head and independently fetched equal-main execution, timing and
+private-preservation evidence before closure; local timing is not a CI result.
+
+Product checklist 42/21/24/6 and readiness 0/9/4/1 remain unchanged. The owner's
+focused-analysis-v3 legal review is pending. Next: read-only retention and fresh
+re-observation readiness for explicit receiver-verification references, without
+inferring acknowledgement, genuine provisioning, recovery permission or trust
+renewal from retained bytes.
