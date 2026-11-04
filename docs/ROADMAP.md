@@ -10256,3 +10256,47 @@ unchanged. Planning returns to209; analysis220, graph185, review175 plus48,
 source185 and history57 stay fixed. The five placement/partition checks pass.
 Require fresh exact-head and independent-main execution identities and timing
 receipts; no retries of unchanged candidates or relaxed qualification floors.
+
+## 305. Cold controller recovery without automatic trust renewal — 2026-11-04
+
+PR273 is merged at bb136bbaba5e927e5269a191c64822d25f689ffc. Its exact-head and
+independent main41677215480 pass all12 checks, all original execution identities
+and the fixed reserve gates; both runs retain at least34 seconds per job. The
+earlier native PR272 main failure remains retained without qualification credit.
+Engineering272 done/0 open/0 blocked is the starting point for this slice.
+
+Add a trusted, unregistered fixture loader that reconstructs the original stores,
+keys, profile, actors and handoff from bounded retained files. Independent pins
+are mandatory; the descriptor never approves itself. Open the existing account
+database read-only without schema creation or credential/session generation.
+Keep the original preparation timestamp, five-minute expiry, receipt, provenance,
+binding and review history exact. Current session/Origin/CSRF/role checks and an
+explicit independent checksum entry remain mandatory after each cold restart.
+No automatic replay, trust refresh, preparation, key replacement or adoption.
+
+The first native candidate is retained as incomplete: host dependencies were
+imported before the preparation volume existed. Defer those imports until the
+read-only host volume is populated; preserve the original isolation harness.
+The revised frozen candidate passes30 outcomes,12 distinct spawn interpreters,
+three actual SIGKILL exits and12 real HTTP requests. The seeding interpreter
+exits before controller starts; no controller object survives in the supervisor.
+Test idle/partial/completed interruption, fail-closed missing/changed pins,
+original expiry, explicit comparison and reviewer/preparer session revocation.
+Keys and six stores retain exact bytes and metadata. Native753 source pins and
+the predecessor hash bind the new report; prior745/741/505 pins remain exact.
+
+Twenty-five cheap offline/loader cases share the existing review job, raising
+its primary200 plus the unchanged48-case binding phase. Keep backend3798,
+analysis220/frozen53, graph185/model20, PostgreSQL189/restart25, planning209,
+history57, source185, candidate276, withdrawal158, frontend139 files/10532 cases,
+all1018 deployment IDs and all closed inventories intact. The read-only cost
+supervisor and12 jobs/70 capped runner-minutes/two workers retain every deadline
+and reserve floor. Require fresh exact-head and independent-main receipts,
+equal fetched tree and private preservation before closure.
+
+Overall product42/21/24/6 and readiness0/9/4/1 remain unchanged. The owner's
+analysis-v3 review is pending. Genuine operator appointment, custody and external
+checksum provenance require real evidence; host reboot, changed volume identity
+and joint account rollback remain unqualified. Next: independently reviewed
+operator recovery-input readiness with explicit retained-context selection;
+never infer fresh authority from successful cold reconstruction.
