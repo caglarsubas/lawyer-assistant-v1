@@ -10408,3 +10408,72 @@ Product checklist 42/21/24/6 and readiness 0/9/4/1 remain unchanged. The owner's
 analysis-v3 review is pending. Next: read-only destination-side verification of
 an explicit handoff snapshot, retaining independently pinned target context,
 source references and original expiry, without restoration or trust renewal.
+
+## 308. Read-only destination-side snapshot verification — 2026-11-04
+
+PR #276 is merged at `d3060c937e7b92e039be9c80f9f59c319e344c18`.
+Its PR and independent main run `41817708522` pass all 13 checks, exact
+execution inventories and fixed floors. Job reserves are at least 38 seconds
+for the PR and 41 seconds for main; backend retains 133/132 seconds.
+Engineering 275 done / 0 open / 0 blocked is the baseline. The 766-source
+inventory report and every preceding native/review report remain exact.
+
+Add an unregistered receiver verifier for one explicit handoff snapshot and
+full source reference. Authenticate the currently assigned destination reviewer
+before inspecting the packet, target or source. Require separate account/store
+namespaces, keys and sessions. Pins, receiver selection and source credentials
+are supplied by trusted host wiring, never by the incoming request.
+
+Match every original handoff field to the independent target context and pin.
+Reobserve local package/source versions and journal around two fresh source
+handoff checks. Withhold all verification metadata on stale versions, missing
+acknowledgements, negative decisions, revoked sessions, failed mandatory checks,
+changed observations or exhausted checked budgets. Preserve unexpected staging
+and unregistered bytes without adoption or cleanup. Verification writes nothing.
+
+Bind the result to the exact handoff/reference, receiver context and current
+receiver session. Limit expiry to the earliest original handoff, receiver-session
+or local-input expiry, preserving the original expiry separately. A fresh
+instance or new read cannot renew trust. No controller, listener, restore,
+publication, source-credential release or production/legal approval is granted.
+Genuine pin provenance, external channel authenticity, custody, native mount
+posture, cross-store atomicity and joint rollback remain separately gated.
+
+The frozen local campaign qualifies 24 outcomes across three source/receiver
+pairs and six isolated account contexts. It preserves six original input-review
+ciphertexts, all original source/account/review bytes and two declared injected
+entries. Bind 773 source files and the preceding inventory report hash.
+
+The first PR run passed all 13 checks but backend retained only 16 seconds,
+below the fixed 30-second floor. Retain that rejection. The new 25-case file
+consumed 104.60 worker-seconds, including 84.18 seconds of fixture setup.
+Share only read-only disposable setup per worker with whole-source/account/
+history byte checks around each test; mutating scenarios keep fresh pairs.
+Preserve every business assertion and exact case identity from the initial run.
+
+Moving the new file into analysis reduced setup to 45.38 worker-seconds, but
+the next run was rejected for source-publication/analysis reserves of 24/27
+seconds. The existing supervisor stopped backend early, preserving its unused
+cap. Retain both rejections; do not waive floors or retry an unchanged head.
+
+Balance complete-file assignments and a closed, source-bound materialization
+partition: all 58 original cases execute once, 38 in review and 20 in final.
+Add five coverage/corruption guards and exact execution receipts without editing
+the materialization test source or any older manifest. Suggestions and publication
+CLI move to backend; source-effort moves to final. Analysis is 121 plus the frozen
+53-case pair; backend is 3837 collected, 3740 passes and 97 original skips;
+source-publication is 149, review is 181 plus 48 bindings, and final is 110.
+PostgreSQL 225/25 and capacity 145 remain unchanged. Preserve all 25 receiver
+case identities, parametrizations and assertions, adding only five CI guards.
+The placement guard requires every assignment exactly once. Preserve
+all 1018 deployment IDs, 139 frontend files / 10532 cases, every old placement
+manifest, 13 jobs, the 73-minute aggregate ceiling, two workers, deadlines,
+supervisor policy and reserve floors. Require fresh exact-head and independently
+fetched equal-main execution, timing and private-preservation evidence before
+closure; local timing or a green run alone does not establish CI headroom.
+
+Product checklist 42/21/24/6 and readiness 0/9/4/1 remain unchanged. The owner's
+focused-analysis-v3 legal review is pending. Next: read-only retention and fresh
+re-observation readiness for explicit receiver-verification references, without
+inferring acknowledgement, genuine provisioning, recovery permission or trust
+renewal from retained bytes.
