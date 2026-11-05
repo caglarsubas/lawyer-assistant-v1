@@ -10724,35 +10724,35 @@ approval. See the [closed capacity manifest](../deploy/fixtures/metadata_ci_capa
 
 ## 313. ARM frontend and complete-job reserve balancing — 2026-11-05
 
-Retain rejected mains41992213977 and41985956054. The first exposed50second x86
-native slices, frontend cap cancellation and22second PostgreSQL reserve. ARM
-candidate973ee0 fixed native slices at36/37seconds but retained22second frontend
-reserve; candidate6a2c489 improved frontend/PostgreSQL to57/59seconds but analysis
-retained21seconds. Run41999084136 at997777e improved analysis to58seconds while
-graph retained12seconds. Reject each qualification; passing components do not
-qualify the run. Preserve supervisor rejection and owned-child-stop evidence.
-Never rerun an unchanged rejected head or enlarge limits to pass.
+Retain rejected mains41992213977/41985956054 and PR candidates973ee0(frontend22
+seconds reserve),6a2c489(analysis21),997777e run41999084136(graph12), and9b70810
+run42001929768(final25). Passing components never qualify the run. Preserve the
+supervisor rejection and owned-child-stop evidence; no unchanged rejected head
+is rerun and no limits are enlarged to pass.
 
-Use ARM for the remaining frontend job, matching the other12. Balance complete
-fixed work: frozen53 history pair from analysis to exited graph workers; native
-slice10 from graph to exited analysis workers; standalone20-case trial block
-from graph to exited final-authorization workers; restart25 from history to
-exited graph workers. Every command, source, manifest, lane, step name, deadline
-and two-worker sequence remains. Package34 stays in PostgreSQL.
+Use ARM for frontend, matching the other12 jobs. Timing establishes two long
+integration tests dominate final authorization; move its standalone trials20
+block to history's existing exited pair. Keep the frozen53 history pair in graph,
+native slice10 in analysis, and restart25 in graph. Every command, source,
+manifest, lane, step name, deadline and two-worker sequence remains. Swap the
+whole workbench57 and source-review-effort31 files between final/history groups
+to leave room for startup variance; preserve both complete files and identities.
 
-The same44 metadata IDs use review10, analysis16, frontend7, graph5 and history6.
-Final groups: review191 plus48bindings; analysis137 plus native10; graph107 plus
-frozen53 and restart25; final44 plus trials20; portfolio42; history63; database165.
-All5907 Python IDs,1018 deployment IDs,139frontend files/10532cases,14guard IDs
-and97 original skips remain. Existing CI guards describe sequential ownership;
-frozen business sources and drivers never change.
+Move frontend metadata7 to PostgreSQL, and history metadata6 plus six analysis
+metadata cases to graph. Final metadata placement: review10, analysis10,
+graph17, database7, totaling the same44 source-bound identities once. Groups:
+review191 plus48bindings; analysis131 plus native10; graph119 plus frozen53 and
+restart25; final44; portfolio35; history57 plus trials20; database172. Package34
+remains PostgreSQL. All5907 Python IDs,1018 deployment IDs,139frontend files/
+10532cases,14guard IDs and97 original skips remain. Existing CI guards describe
+sequential ownership; frozen business sources and drivers never change.
 
-The closed v5 manifest uses retained hosted per-file CPU and individual phases,
-frozen local proportions and25percent planning allowance; whole-job observations
-include fixed work and setup. Models do not establish hosted qualification.
-Require all13 exact-head checks, original execution receipts,30second job reserve
-and original step floors, then independently fetched equal-main/platform checks.
-Keep13jobs, two workers,73minute aggregate cap, locked dependencies, isolation,
+The closed v6 model retains hosted per-file/individual phase timing, local
+proportions and25percent planning allowance. Whole-job measurements include
+fixed work and setup. Models do not establish hosted qualification. Require all
+13 exact-head checks, original execution receipts,30second job reserve and
+original step floors, then independently fetched equal-main/platform checks.
+Keep13jobs, two workers,73minute aggregate cap, dependencies, isolation,
 deadlines and retry policy. Invoice savings remain unmeasured.
 
 All785 feature pins,24 frozen outcomes and264 evidence reports remain byte-exact.
