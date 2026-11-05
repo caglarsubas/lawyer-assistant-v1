@@ -10726,13 +10726,13 @@ approval. See the [closed capacity manifest](../deploy/fixtures/metadata_ci_capa
 
 Retain rejected mains41992213977/41985956054 and candidates973ee0(frontend22s
 reserve),6a2c489(analysis21),997777e(graph12),9b70810(final25),6122e96 run42005341497
-(graph13),94c73a8 run42011468201(postgres23/analysis28),ffa0247 run42013986134(review18). Passing component tests never qualify the run. Preserve supervisor
+(graph13),94c73a8 run42011468201(postgres23/analysis28),ffa0247 run42013986134(review18),9527322 run42015421476(postgres26/final27). Passing component tests never qualify the run. Preserve supervisor
 rejection and owned-child-stop evidence; never rerun an unchanged rejected head
 or enlarge limits to pass.
 
 Use ARM for frontend. Keep frozen53 history pair in graph,native10 in analysis,
-trials20 in history; move restart25 to exited analysis workers. Swap complete
-workbench57/source-effort31 files between final/history groups. Preserve commands,
+trials20 in history; move restart25 to exited analysis workers. Place complete
+workbench57 in final and source-effort31 in review. Preserve commands,
 sources,manifests,lanes,step names,deadlines and two-worker sequences.
 
 Add closed source-bound routing for the ten unchanged final-authorization cases:
@@ -10744,19 +10744,20 @@ inventory rejection,exercise the actual locked scheduler without spawning extra
 workers,and reject skipped/duplicate/same-worker success receipts. Early
 collection-only import checks precede the expensive backend suite.
 
-The same44 metadata IDs use review9,database12,frontend6,final17. Move the
+The same44 metadata IDs use review9,database8,analysis4,frontend6,final17. Move the
 unchanged package34 file from PostgreSQL to graph,using the newly observed spare
 capacity after authorization routing established final64/graph57second reserves. Groups:
-review190 plus48bindings; analysis121 plus native10/restart25; graph138 plus
-frozen53; final102; portfolio41; history31 plus trials20; database143. Move the
-unchanged17-case re-observation boundary file from planning to final, leaving
-planning177 plus15bindings. This uses measured PostgreSQL87/final67second
-reserves after review18 rejected the prior run. All5907 original Python IDs remain,plus3 guards=5910; retain
+review190 plus48bindings/effort31; analysis142 plus native10/restart25; graph138
+plus frozen53; final85; portfolio41; history trials20; database139. The unchanged
+17-case re-observation boundary file runs in analysis; source-effort31 moves
+from history to review. Planning retains177 plus15bindings. Use observed
+analysis74/review49second reserves after PostgreSQL26/final27 rejected the prior
+run; history30 receives the eight seconds freed by the complete effort step. All5907 original Python IDs remain,plus3 guards=5910; retain
 1018 deployment IDs,139frontend files/10532cases,14 existing guards and97 skips.
 Only declared CI guards change ownership assertions; frozen business sources
 and drivers stay byte-exact.
 
-Closed v9 metadata and ten-case authorization manifests retain hosted/local
+Closed v10 metadata and ten-case authorization manifests retain hosted/local
 source,timing and scheduler commitments. Planning does not qualify runtime.
 Require all13 exact-head checks,original execution receipts,30s job reserve and
 original step floors,then independently fetched equal-main/platform checks.

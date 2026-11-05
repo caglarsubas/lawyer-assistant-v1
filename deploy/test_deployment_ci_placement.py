@@ -45,6 +45,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         for job, lane in [('backend-review-contracts', 'review'),
                           ('frontend', 'frontend'),
                           ('postgres-snapshot-concurrency', 'database'),
+                          ('analysis-recovery-contracts', 'analysis'),
                           ('final-release-authorization', 'final')]:
             self.assertEqual(blocks[job].count('read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_metadata_capacity --metadata-capacity-lane=' + lane + ' "${metadata_capacity_tests[@]}"'), 1)
@@ -55,7 +56,7 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertEqual(blocks[job].count('read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_final_auth_capacity --final-auth-capacity-lane=' + lane), 1)
         self.assertEqual(workflow.count('-p scripts.ci_final_auth_capacity'), 3)
-        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 5)  # Four executions and one import-only probe.
+        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 6)  # Five executions and one import-only probe.
         probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=review --collect-only -q -n 2'
         self.assertEqual(blocks['backend-and-contracts'].count(probe), 1)
         self.assertLess(blocks['backend-and-contracts'].index(probe), blocks['backend-and-contracts'].index('name: Test backend'))
@@ -210,7 +211,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(group.split(), ["backend/tests/test_operator_preview_package.py", "backend/tests/test_metadata_handoff_readiness.py", "backend/tests/test_graph_b_component_grants.py", "backend/tests/test_declared_graph_assembly.py", "backend/tests/test_release_set_authorization.py"])
         self.assertNotIn("backend/tests/test_planning_journal_reconciliation.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_planning_journal_reconciliation.py"), 1)
-        self.assertIn("backend/tests/test_disposition_receipt_reobservation_boundary.py", release_group)
+        self.assertNotIn("backend/tests/test_disposition_receipt_reobservation_boundary.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_disposition_receipt_reobservation_boundary.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
         for path in history_group:
@@ -223,7 +224,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_public_sources.py"), 0)
         recovery_group = re.search(r"  CI_RECOVERY_QUALIFICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(recovery_group.split(), ["backend/tests/test_retained_release_withdrawal.py", "backend/tests/test_copy_recovery_disposition.py",
-            "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py"])
+            "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py", "backend/tests/test_disposition_receipt_reobservation_boundary.py"])
         self.assertNotIn("backend/tests/test_retained_release_withdrawal.py", withdrawal_group)
         self.assertIn('"${recovery_qualification_tests[@]}"', backend)
         definition = '          read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"\n'
@@ -268,7 +269,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         history_bindings = re.search(r"  CI_HISTORY_BINDING_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(history_bindings.split(), ["backend/tests/test_provision_mappings.py"])
         self.assertEqual(workflow.count("backend/tests/test_provision_mappings.py"), 1)
-        for key, paths, array, job in (("CI_HISTORY_CAPACITY_TESTS", ["backend/tests/test_source_review_effort.py"], "history_capacity_tests", "frontend-history"),
+        for key, paths, array, job in (("CI_HISTORY_CAPACITY_TESTS", ["backend/tests/test_source_review_effort.py"], "history_capacity_tests", "backend-review-contracts"),
                                         ("CI_POSTGRES_SOURCE_TESTS", ["backend/tests/test_ci_authority_trials.py"], "postgres_source_tests", "postgres-snapshot-concurrency")):
             self.assertEqual(re.search(r"  " + key + r": >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), paths)
             definition = f'          read -r -a {array} <<< "${key}"\n'
@@ -370,7 +371,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${capacity_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', withdrawal)
         self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
-        self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_analysis_workbench.py", "backend/tests/test_disposition_receipt_reobservation_boundary.py"])
+        self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_analysis_workbench.py"])
         self.assertEqual(frontend_group.split()[-2:], ["backend/tests/test_retained_release_inspection.py", "backend/tests/test_analysis_reviews.py"])
         self.assertEqual(release_group.split()[:2], ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py"])
         self.assertEqual(workflow.count("backend/tests/test_retained_release_inspection.py"), 1)

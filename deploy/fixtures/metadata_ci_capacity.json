@@ -1,5 +1,5 @@
 {
-  "schema": "metadata-ci-capacity-v9",
+  "schema": "metadata-ci-capacity-v10",
   "source_sha256": {
     "backend/tests/test_analysis_cohorts.py": "dfea8d14b6a8aa161d274f71a3d5aea1c94d109167025a7da84de8f59e7e6c2f",
     "backend/tests/test_verification_reference_readiness.py": "a7d2db9a2c0485a7f433148c1cc9d8a586cbc3faee91df9368fd1d9f44dd884a"
@@ -69,11 +69,7 @@
       "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[observations]",
       "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[participant]",
       "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[provider]",
-      "tests/test_verification_reference_readiness.py::test_current_session_revocation_withholds_retained_metadata[destination]",
       "tests/test_verification_reference_readiness.py::test_current_session_revocation_withholds_retained_metadata[source]",
-      "tests/test_verification_reference_readiness.py::test_destination_authentication_precedes_all_record_and_inventory_reads",
-      "tests/test_verification_reference_readiness.py::test_expiry_and_a_new_receiver_session_require_fresh_validation_without_rewriting_history",
-      "tests/test_verification_reference_readiness.py::test_preview_and_exact_retained_reference_reopen_without_service_writes",
       "tests/test_verification_reference_readiness.py::test_tampered_ciphertext_is_retained_without_metadata_or_repair"
     ],
     "frontend": [
@@ -102,6 +98,12 @@
       "tests/test_verification_reference_readiness.py::test_missing_acknowledgement_and_missing_pin_do_not_decrypt_retained_bytes",
       "tests/test_verification_reference_readiness.py::test_record_namespace_and_registry_races_withhold_metadata",
       "tests/test_verification_reference_readiness.py::test_unknown_staging_links_permissions_and_limits_block_without_cleanup"
+    ],
+    "analysis": [
+      "tests/test_verification_reference_readiness.py::test_current_session_revocation_withholds_retained_metadata[destination]",
+      "tests/test_verification_reference_readiness.py::test_destination_authentication_precedes_all_record_and_inventory_reads",
+      "tests/test_verification_reference_readiness.py::test_expiry_and_a_new_receiver_session_require_fresh_validation_without_rewriting_history",
+      "tests/test_verification_reference_readiness.py::test_preview_and_exact_retained_reference_reopen_without_service_writes"
     ]
   },
   "case_cost_ms": {
@@ -152,7 +154,8 @@
   },
   "lane_increment_budget_ms": {
     "review": 12000,
-    "database": 54000,
+    "database": 27000,
+    "analysis": 32000,
     "frontend": 7000,
     "final": 27000
   },
@@ -166,5 +169,5 @@
     "backend-review-contracts": "65f1e5c52b5603cb413a64a65cf7450766d52290a3cf63c185bff1a31ca81357",
     "frontend-history": "f8577d63f3c2fd40570cdfcbb4944fb7826cc258a9b19b9070bb3f06e83ced20"
   },
-  "normalization": "Retained hosted/local timing with1.25 allowance. ffa0247 review18s reserve rejected. Move12 costly review cases to PostgreSQL87s,analysis10 to final67s; preserve44 IDs. Original hosted floors remain authoritative."
+  "normalization": "Retained hosted/local timing with1.25 allowance.9527322 rejected PostgreSQL26/final27s reserves. Move4 reference cases PostgreSQL-to-analysis; whole boundary17 final-to-analysis and effort31 history-to-review. Original hosted floors authoritative."
 }
