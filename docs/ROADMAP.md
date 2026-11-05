@@ -10582,10 +10582,24 @@ preceding report hash. No live case documents, real keys or provider/model
 requests are used.
 
 Thirteen new regression cases use the measured backend reserve and guarded
-shared read-only setup; mutation scenarios keep isolated pairs. Preserve all
-older test identities, 97 original backend skips, 1018 deployment IDs and 139
-frontend files / 10532 cases. No existing workflow, source file, manifest, job,
-73-minute aggregate cap, worker count, deadline, supervisor or floor changes.
+shared read-only setup; mutation scenarios keep isolated pairs. Retain the first
+CI rejection: final-release passed but retained only 12 seconds against the fixed
+30-second floor. The supervisor stopped backend early. The preceding 31-second
+baseline was too close to the floor; do not accept the green final test result
+as qualification or retry the unchanged head.
+
+Move complete adjudication39/effort31 files and the unchanged preview-final7
+slice into backend, and the unchanged materialization-final20 slice into
+portfolio review. Backend is 3927 selected / 3830 passes / 97 original skips;
+final-release is 13 and portfolio is 47. Preserve all original preview20,
+materialization58 and cohort19 identities exactly once. Existing closed manifests
+and logical slice contents remain byte-exact; only hosting jobs change, guarded
+by explicit placement assertions. The 13 new retention tests and their business
+bodies remain unchanged.
+
+Preserve older source bytes, 1018 deployment IDs and 139 frontend files / 10532
+cases. Keep 13 jobs, the 73-minute aggregate cap, worker counts, deadlines,
+supervisor and floors unchanged.
 Require fresh exact-head and independently fetched equal-main execution,
 fixed-floor and private-preservation evidence before closure. Local timing is
 not hosted CI qualification.

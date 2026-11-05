@@ -120,9 +120,14 @@ class DeploymentPlacementContract(unittest.TestCase):
         history_group = ["backend/tests/test_operator_inspection_preview.py"]
         self.assertEqual(workflow.count("backend/tests/test_operator_inspection_preview.py"), 1)
         self.assertIn('"${preview_tests[@]}"', backend)
-        for job, lane in (("frontend", "frontend"), ("final-release-authorization", "final"), ("graph-runtime-contracts", "graph")):
-            self.assertIn("backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=" + lane + ' "${preview_tests[@]}"', blocks[job])
+        for job, lane in (("frontend", "frontend"), ("backend-and-contracts", "final"), ("graph-runtime-contracts", "graph")):
+            if job == "backend-and-contracts":
+                self.assertIn('-p scripts.ci_operator_previews --operator-preview-lane=final -n 2', blocks[job])
+                self.assertIn('if [[ "$path" != "${preview_tests[0]}" ]]; then', blocks[job])
+            else:
+                self.assertIn("backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=" + lane + ' "${preview_tests[@]}"', blocks[job])
             self.assertIn('read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"', blocks[job])
+        self.assertEqual(workflow.count("--operator-preview-lane=final"), 1)
         withdrawal_group = re.search(r"  CI_RETAINED_WITHDRAWAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_private_inventory_receipts.py", withdrawal_group)
         self.assertIn("backend/tests/test_authority_proposals.py", withdrawal_group)
@@ -167,10 +172,14 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('--dist load --maxschedchunk=1', graph)
         self.assertIn('--dist load --maxschedchunk=1', blocks["source-publication-contracts"])
         self.assertNotIn("backend/tests/test_public_sources.py", release_group)
-        self.assertIn("backend/tests/test_source_review_effort.py", release_group)
+        self.assertNotIn("backend/tests/test_source_review_effort.py", workflow)
+        self.assertNotIn("backend/tests/test_analysis_adjudication.py", workflow)
         self.assertNotIn("backend/tests/test_publication_cli.py", workflow)
         self.assertIn("--materialization-capacity-lane=review", review_block)
-        self.assertIn("--materialization-capacity-lane=final", final)
+        self.assertIn("--materialization-capacity-lane=final", blocks["frontend"])
+        self.assertEqual(workflow.count("--materialization-capacity-lane=final"), 1)
+        self.assertNotIn("--materialization-capacity-lane=final", final)
+        self.assertNotIn("--operator-preview-lane=final", final)
         self.assertEqual(group.split(), ["backend/tests/test_graph_b_component_grants.py", "backend/tests/test_declared_graph_assembly.py", "backend/tests/test_release_set_authorization.py", "backend/tests/test_operator_preview_package.py", "backend/tests/test_temporal_validity.py"])
         self.assertNotIn("backend/tests/test_planning_journal_reconciliation.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_planning_journal_reconciliation.py"), 1)
@@ -252,7 +261,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         for name, lane in (("graph-candidate-contracts", "candidate"), ("backend-review-contracts", "history"), ("publication-planning-contracts", "planning")):
             self.assertIn("--provision-binding-lane=" + lane, blocks[name])
         self.assertEqual(workflow.count("name: Test complete portfolio review qualification"), 1)
-        self.assertIn('"${frontend_review_tests[@]}" -q -n 2', blocks["frontend"])
+        self.assertIn('"${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2', blocks["frontend"])
         self.assertEqual(re.search(r"  CI_FRONTEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_verification_reference_readiness.py", "backend/tests/test_disposition_receipt_reobservation.py"])
         self.assertIn("backend/tests/test_analysis_cohorts.py", publication_group)
         self.assertEqual(workflow.count("backend/tests/test_analysis_cohorts.py"), 1)
@@ -329,7 +338,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${capacity_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', withdrawal)
         self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
-        self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_final_release_authorization.py", "backend/tests/test_analysis_adjudication.py", "backend/tests/test_source_review_effort.py"])
+        self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_final_release_authorization.py"])
         self.assertEqual(frontend_group.split()[-3:], ["backend/tests/test_retained_release_inspection.py", "backend/tests/test_disposition_receipt_reobservation_boundary.py", "backend/tests/test_analysis_reviews.py"])
         self.assertEqual(release_group.split()[:2], ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py"])
         self.assertEqual(workflow.count("backend/tests/test_retained_release_inspection.py"), 1)

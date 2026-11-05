@@ -62,10 +62,22 @@ Use an owner-only output location whose file does not yet exist. Failure records
 only an incomplete status/error type. Fixture-only publication/signing happens
 outside the application service and never establishes production custody.
 
-Thirteen ordinary regression cases use existing backend reserve. Preserve all
-older case IDs and source bytes, 13 jobs, the 73-minute aggregate cap, two workers,
-deadlines, manifests and reserve floors. Hosted exact-head and independent-main
-execution/reserve/preservation qualification are required before closure.
+Thirteen ordinary regression cases use existing backend reserve. Retain the
+initial CI rejection: the final-release tests passed but the job retained only
+12 seconds against the fixed 30-second floor. The supervisor stopped backend
+early. The preceding 31-second baseline was too close to the floor.
+
+Move complete adjudication39 and effort31 files plus the unchanged preview-final
+slice7 to backend. Move the unchanged materialization-final slice20 to portfolio
+review. Backend has 3927 selected cases: 3830 passes and 97 original skips;
+final-release has 13, and portfolio has 47. Closed manifests remain byte-exact,
+with all 20 preview, 58 materialization and 19 cohort identities executing once.
+Logical slice names and their contents are retained; only their hosting jobs
+change. Placement assertions require the new assignments explicitly.
+
+Preserve all older source bytes, cases, 13 jobs, the 73-minute aggregate cap, two
+workers, deadlines, supervisor and reserve floors. Hosted exact-head and
+independent-main execution/reserve/preservation qualification gate closure.
 
 Next: explicit metadata-handoff packaging and read-only destination acceptance,
 binding reviewed proof/reference versions and requiring fresh destination
