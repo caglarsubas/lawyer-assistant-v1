@@ -10722,44 +10722,45 @@ decision writing, acknowledgement inference, trust renewal or production/legal
 approval. See the [closed capacity manifest](../deploy/fixtures/metadata_ci_capacity.json).
 
 
-## 313. ARM frontend and measured allocation across warm worker pairs — 2026-11-05
+## 313. ARM frontend and complete-job reserve balancing — 2026-11-05
 
-PR281 exact-head passed13 checks and fixed reserves, but its independent main
-run41992213977 atbc0ae47 was rejected: x86 native slices8/5 took50 seconds each,
-frontend reached its job cap and PostgreSQL retained22 seconds reserve. Keep
-that rejection and the earlier41985956054 failure. The immutable supervisor
-stopped its own backend child.
+Retain rejected main41992213977 atbc0ae47: x86 native slices8/5 took50 seconds
+each, frontend reached its cap and PostgreSQL retained22 seconds reserve. Keep
+the earlier41985956054 rejection too. The immutable supervisor stopped its own
+backend child; a passing individual test group never qualified those runs.
 
-Use ubuntu-24.04-arm for the remaining frontend job, matching the other12 jobs.
-The first ARM candidate973ee0 established native slices36/37 seconds and
-PostgreSQL/graph job reserves63/54 seconds, but frontend still retained only22
-seconds. Reject that PR qualification too; do not count it as a completed change.
-Retain its measured timings and do not rerun an unchanged rejected head.
+Use ubuntu-24.04-arm for frontend, matching the other12 jobs. Candidate973ee0
+established native slices36/37seconds and PostgreSQL/graph reserves63/54seconds,
+but frontend retained22seconds and was rejected. Candidate6a2c489 improved
+frontend/PostgreSQL to57/59seconds, but analysis retained21seconds; reject its
+run41995856870 too. Preserve failures and never rerun an unchanged rejected head.
 
-The final candidate keeps the original package34 file in PostgreSQL, removes
-metadata pressure from PostgreSQL/graph, and allocates the same44 metadata cases
-only among already warm review8, final12, analysis12 and history12 pairs. Move
-the unchanged25-case disposition restart command from frontend to the exited
-history pair, preserving its manifest, lane, workers, deadline and step name.
-Final groups: database165, graph102, portfolio35, review189 plus48 bindings,
-final56, analysis133, history69 plus the25-case restart group. Do not add jobs or
-concurrent workers. Native deployment sources, assignments and1018 identities
-remain unchanged; all139 frontend files/10532cases and5907 Python identities
-remain. Retain the14 guard identities and original97 skips.
+Balance complete jobs rather than only metadata increments. Move the unchanged
+frozen53-case history pair from exited analysis workers to exited graph workers;
+move unchanged native deployment slice10 to exited analysis workers. Keep every
+command, manifest, source pin, worker count, step name and deadline. Keep the
+package34 file in PostgreSQL and the unchanged25-case restart command in history.
+The same44 metadata identities use review7, frontend7, database6, final7,
+history6, graph5 and analysis6. Groups: review188 plus48bindings, portfolio42,
+database171, final51, history63 plus restart25, graph107 plus the frozen pair,
+analysis127 plus native slice10. No duplicate or omitted identities are permitted.
 
-Use source-bound historical weights as planning evidence and the fresh ARM
-candidate's job/step observations for placement. Actual13 exact-head checks,
-original execution receipts, fixed30-second job reserve and original step floors
-must pass, followed by independently fetched equal-main/platform qualification.
-Keep the73-minute aggregate cap, two workers, locked dependencies, isolation,
-deadlines, immutable supervisor and retry policy. Architecture choice and local
-planning do not establish hosted success or invoice savings.
+The closed v4 manifest commits retained hosted per-file CPU and individual
+phase timing, frozen local proportions and a25percent planning allowance. Model
+complete job reserves, including source/database setup and the moved fixed work.
+Planning is not hosted qualification. Require all13 exact-head checks, original
+execution receipts,30second job reserve and original step floors, followed by
+independently fetched equal-main/platform qualification. Preserve13jobs, two
+workers,73minute aggregate cap, dependencies, isolation, deadlines, retry policy,
+1018deployment IDs,139frontend files/10532cases,5907Python IDs,14guard IDs and97
+original skips. Existing CI guards describe the new sequential ownership; none
+of the frozen business sources or drivers change.
 
-All785 feature source pins,24 frozen outcomes and264 evidence reports remain
-byte-exact. Originals, evidence versions, credentials, sessions, private case
-content and review history remain untouched. Engineering merges remain separate
-from main qualification, product42/21/24/6, readiness0/9/4/1 and the owner's
-pending focused-analysis-v3 review.
+All785 feature pins,24 frozen outcomes and264 evidence reports remain byte-exact.
+Originals, evidence versions, credentials, sessions, private case content and
+review history remain untouched. Engineering merge and main qualification stay
+separate from product42/21/24/6, readiness0/9/4/1 and the pending owner review.
 
 Next: recipient-observation receipt packaging and independently reviewed retention
-planning, after fresh qualification; no automatic adoption or trust renewal.
+planning after qualification; no automatic adoption, trust renewal or production
+or legal approval. Invoice savings remain unmeasured.

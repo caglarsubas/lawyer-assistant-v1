@@ -48,7 +48,9 @@ class PartitionContract(unittest.TestCase):
         isolated = blocks["analysis-recovery-contracts"]
         self.assertIn("runs-on: ubuntu-24.04-arm", isolated)
         self.assertIn('"${recovery_qualification_tests[@]}" "${human_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1', isolated)
-        self.assertNotIn("--workers=", isolated)
+        self.assertEqual(isolated.count("--workers=2"), 1)
+        self.assertIn("name: Test manifest-bound review headroom slice 10", isolated)
+        self.assertNotIn("--workers=3", isolated)
         planning = blocks["publication-planning-contracts"]
         self.assertIn("runs-on: ubuntu-24.04-arm", planning)
         self.assertIn('"${publication_planning_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1', planning)

@@ -42,14 +42,13 @@ class DeploymentPlacementContract(unittest.TestCase):
         metadata = re.search(r'  CI_METADATA_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
         self.assertEqual(metadata, ['backend/tests/test_analysis_cohorts.py', 'backend/tests/test_verification_reference_readiness.py'])
         self.assertIn('"${metadata_capacity_tests[@]}"; do', blocks['backend-and-contracts'])
-        self.assertNotIn('scripts.ci_metadata_capacity', blocks['postgres-snapshot-concurrency'])
-        self.assertNotIn('scripts.ci_metadata_capacity', blocks['graph-runtime-contracts'])
-        for job, lane in [('backend-review-contracts', 'review'),
-                          ('final-release-authorization', 'final'),
-                          ('analysis-recovery-contracts', 'analysis'), ('frontend-history', 'history')]:
+        for job, lane in [('backend-review-contracts', 'review'), ('frontend', 'frontend'),
+                          ('postgres-snapshot-concurrency', 'database'), ('graph-runtime-contracts', 'graph'),
+                          ('final-release-authorization', 'final'), ('analysis-recovery-contracts', 'analysis'),
+                          ('frontend-history', 'history')]:
             self.assertEqual(blocks[job].count('read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_metadata_capacity --metadata-capacity-lane=' + lane + ' "${metadata_capacity_tests[@]}"'), 1)
-        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 5)  # Four executions and one import-only probe.
+        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 8)  # Seven executions and one import-only probe.
         probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=review --collect-only -q -n 2'
         self.assertEqual(blocks['backend-and-contracts'].count(probe), 1)
         self.assertLess(blocks['backend-and-contracts'].index(probe), blocks['backend-and-contracts'].index('name: Test backend'))
@@ -117,7 +116,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         cohort_group = re.search(r"  CI_AUTHORITY_COHORT_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(cohort_group.split(), ["backend/tests/test_authority_model_cohorts.py"])
         self.assertIn('"${authority_cohort_tests[@]}"', backend)
-        for job, lane in (("backend-review-contracts", "review"), ("final-release-authorization", "database"), ("analysis-recovery-contracts", "history")):
+        for job, lane in (("backend-review-contracts", "review"), ("final-release-authorization", "database"), ("graph-runtime-contracts", "history")):
             plugin = "scripts.ci_serial_history_cohorts" if lane == "history" else "scripts.ci_authority_cohorts"
             self.assertEqual(blocks[job].count("-p " + plugin + " --authority-cohort-lane=" + lane), 1)
             self.assertIn('"${authority_cohort_tests[@]}"', blocks[job])
@@ -132,10 +131,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(history_inspection.split(), ["backend/tests/test_final_release_inspection.py"])
         for name in ("history_guard_tests", "history_inspection_tests"):
             self.assertIn('"${' + name + '[@]}"', backend)
-            self.assertIn('"${' + name + '[@]}"', isolated)
+            self.assertIn('"${' + name + '[@]}"', blocks["graph-runtime-contracts"])
             self.assertNotIn('"${' + name + '[@]}"', blocks["frontend"])
-        self.assertIn("scripts/run_ci_history_review_pair.py", isolated)
-        self.assertIn('::: backend/.venv/bin/python -m pytest -p scripts.ci_serial_history_cohorts --ci-serial-role=inspection "${history_inspection_tests[@]}" -q --maxfail=1', isolated)
+        self.assertIn("scripts/run_ci_history_review_pair.py", blocks["graph-runtime-contracts"])
+        self.assertIn('::: backend/.venv/bin/python -m pytest -p scripts.ci_serial_history_cohorts --ci-serial-role=inspection "${history_inspection_tests[@]}" -q --maxfail=1', blocks["graph-runtime-contracts"])
         self.assertEqual(workflow.count("backend/tests/test_authority_model_cohorts.py"), 1)
         history_group = ["backend/tests/test_operator_inspection_preview.py"]
         self.assertEqual(workflow.count("backend/tests/test_operator_inspection_preview.py"), 1)
@@ -323,9 +322,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("--shard=10", blocks["frontend-history"])
         self.assertNotIn("--shard=4", backend)
         self.assertNotIn("--shard=10", blocks["frontend"])
-        self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("--shard=10"))
-        self.assertIn("--shard=10 --workers=2", graph)
-        self.assertIn("timeout-minutes: 1", graph.split("name: Test manifest-bound review headroom slice 10", 1)[1])
+        self.assertLess(isolated.index("name: Test complete analysis and recovery"), isolated.index("--shard=10"))
+        self.assertLess(graph.index("name: Test complete graph assembly"), graph.index("scripts/run_ci_history_review_pair.py"))
+        self.assertIn("--shard=10 --workers=2", isolated)
+        self.assertIn("timeout-minutes: 1", isolated.split("name: Test manifest-bound review headroom slice 10", 1)[1])
         self.assertEqual(workflow.count("cache: pip"), 13)
         self.assertEqual(workflow.count('UV_CACHE_DIR="${PIP_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/pip}/lawyer-ci-dependencies"'), 13)
         self.assertEqual(workflow.count("cache-dependency-path: |\n            backend/uv.lock\n            .github/scripts/install-uv.sh"), 13)
