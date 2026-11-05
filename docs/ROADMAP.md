@@ -10682,3 +10682,41 @@ retention planning; first budget coverage against fresh CI reserves. No automati
 receipt adoption, decision writing, acknowledgement inference or trust renewal.
 See [contract](METADATA_HANDOFF_READINESS.md) and
 [frozen evidence](evidence/metadata-handoff-2026-11-05.json).
+
+
+## 312. Measured metadata CI allocation after rejected main reserve — 2026-11-05
+
+Preserve the rejected PR280 main run41985956054 at5633c6f. Its frontend and
+analysis/recovery jobs completed with21 and24 seconds of reserve; the unchanged
+supervisor stopped its backend child. Passing individual tests did not qualify
+that main. PR280 exact-head qualification and the last qualified PR279 main
+remain separate evidence.
+
+Replace whole-file movement with a source-bound allocation of the original
+cohort32 and verification-reference12 cases across six existing jobs: review7,
+database6, final9, graph6, analysis8 and history8. Remove reference work from
+frontend and reduce analysis work. Preserve all44 original identities, source
+bodies and successful-execution receipts. Admission rejects missing, duplicate,
+overlapping, skipped, xfailed, invented or changed-source cases. Fourteen fast
+guards protect collection, execution and the measured allocation.
+
+Use retained hosted per-file timings and a fresh two-worker44-case local sample
+to weight the allocation. The closed manifest commits timing evidence and
+fixed per-lane incremental planning budgets; it does not guarantee future
+hosted timing. Actual exact-head and independently fetched equal-main execution
+must satisfy the existing30-second job reserve and original step floors.
+Keep all13 jobs, two workers,73-minute aggregate cap, deadlines, supervisor,
+1018 deployment identities,139 frontend files/10532 cases, PostgreSQL races and
+97 original skips unchanged. Do not retry an unchanged rejected head or enlarge
+resources to pass.
+
+All785 metadata feature source pins,24 frozen outcomes and264 prior evidence
+reports remain byte-exact. This correction changes CI placement and its guards;
+originals, evidence versions, credentials, sessions, private case data and review
+history remain unchanged. Product checklist42/21/24/6 and readiness0/9/4/1 stay
+unchanged. Owner focused-analysis-v3 review remains pending.
+
+Next: recipient-observation receipt packaging and independently reviewed retention
+planning, budgeted against fresh qualified reserves. No automatic adoption,
+decision writing, acknowledgement inference, trust renewal or production/legal
+approval. See the [closed capacity manifest](../deploy/fixtures/metadata_ci_capacity.json).

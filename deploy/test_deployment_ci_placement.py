@@ -38,7 +38,20 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("name: Test confidential human review groups", workflow)
         self.assertNotIn("CI_HUMAN_REVIEW_GROUP_TESTS", blocks["frontend"])
         self.assertIn('"${recovery_qualification_tests[@]}" "${human_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', isolated)
-        self.assertEqual(re.search(r'  CI_HUMAN_REVIEW_GROUP_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split(), ['backend/tests/test_analysis_cohorts.py', 'backend/tests/test_destination_snapshot_verification.py'])
+        self.assertEqual(re.search(r'  CI_HUMAN_REVIEW_GROUP_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split(), ['backend/tests/test_destination_snapshot_verification.py'])
+        metadata = re.search(r'  CI_METADATA_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
+        self.assertEqual(metadata, ['backend/tests/test_analysis_cohorts.py', 'backend/tests/test_verification_reference_readiness.py'])
+        self.assertIn('"${metadata_capacity_tests[@]}"; do', blocks['backend-and-contracts'])
+        self.assertNotIn('scripts.ci_metadata_capacity', blocks['frontend'])
+        for job, lane in [('backend-review-contracts', 'review'), ('postgres-snapshot-concurrency', 'database'),
+                          ('final-release-authorization', 'final'), ('graph-runtime-contracts', 'graph'),
+                          ('analysis-recovery-contracts', 'analysis'), ('frontend-history', 'history')]:
+            self.assertEqual(blocks[job].count('read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"'), 1)
+            self.assertEqual(blocks[job].count('-p scripts.ci_metadata_capacity --metadata-capacity-lane=' + lane + ' "${metadata_capacity_tests[@]}"'), 1)
+        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 7)  # Six executions and one import-only probe.
+        probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=graph --collect-only -q -n 2'
+        self.assertEqual(blocks['backend-and-contracts'].count(probe), 1)
+        self.assertLess(blocks['backend-and-contracts'].index(probe), blocks['backend-and-contracts'].index('name: Test backend'))
         self.assertIn('"${recovery_qualification_tests[@]}"', isolated)
         self.assertIn("actions/setup-python@v5", blocks["frontend-history"])
         self.assertIn('"$uv_path" sync --project backend --frozen --extra dev', blocks["frontend-history"])
@@ -270,10 +283,10 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertIn("--provision-binding-lane=" + lane, blocks[name])
         self.assertEqual(workflow.count("name: Test complete portfolio review qualification"), 1)
         self.assertIn('"${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2', blocks["frontend"])
-        self.assertEqual(re.search(r"  CI_FRONTEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_verification_reference_readiness.py", "backend/tests/test_disposition_receipt_reobservation.py"])
+        self.assertEqual(re.search(r"  CI_FRONTEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_disposition_receipt_reobservation.py"])
         self.assertNotIn("backend/tests/test_analysis_cohorts.py", publication_group)
         self.assertEqual(workflow.count("backend/tests/test_analysis_cohorts.py"), 1)
-        self.assertIn("backend/tests/test_analysis_cohorts.py", re.search(r"  CI_HUMAN_REVIEW_GROUP_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1])
+        self.assertIn("backend/tests/test_analysis_cohorts.py", re.search(r"  CI_METADATA_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1])
         self.assertEqual(workflow.count("backend/tests/test_verification_reference_readiness.py"), 1)
         self.assertNotIn("scripts/run_ci_history_review_pair.py", blocks["frontend-history"])
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
