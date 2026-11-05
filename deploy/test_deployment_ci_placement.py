@@ -41,20 +41,28 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(re.search(r'  CI_HUMAN_REVIEW_GROUP_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split(), ['backend/tests/test_destination_snapshot_verification.py'])
         metadata = re.search(r'  CI_METADATA_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
         self.assertEqual(metadata, ['backend/tests/test_analysis_cohorts.py', 'backend/tests/test_verification_reference_readiness.py'])
-        self.assertIn('"${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}"; do', blocks['backend-and-contracts'])
+        self.assertIn('"${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}"; do', blocks['backend-and-contracts'])
         for job, lane in [('backend-review-contracts', 'review'),
                           ('frontend', 'frontend'),
-                          ('postgres-snapshot-concurrency', 'database'),
+                          ('graph-runtime-contracts', 'graph'),
                           ('publication-planning-contracts', 'planning'),
                           ('final-release-authorization', 'final')]:
             self.assertEqual(blocks[job].count('read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_metadata_capacity --metadata-capacity-lane=' + lane + ' "${metadata_capacity_tests[@]}"'), 1)
         auth = re.search(r'  CI_FINAL_AUTH_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
         self.assertEqual(auth, ['backend/tests/test_final_release_authorization.py'])
-        self.assertIn('"${auth_capacity_tests[@]}"; do', blocks['backend-and-contracts'])
+        self.assertIn('"${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}"; do', blocks['backend-and-contracts'])
         for job, lane in [('graph-runtime-contracts', 'graph'), ('final-release-authorization', 'final')]:
             self.assertEqual(blocks[job].count('read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_final_auth_capacity --final-auth-capacity-lane=' + lane), 1)
+        recipient = re.search(r'  CI_RECIPIENT_OBSERVATION_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
+        self.assertEqual(recipient, ['backend/tests/test_recipient_observation_readiness.py'])
+        self.assertEqual(workflow.count(recipient[0]), 1)
+        self.assertIn('read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"', blocks['backend-and-contracts'])
+        self.assertIn('read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"', blocks['postgres-snapshot-concurrency'])
+        self.assertIn('timeout --kill-after=2s 50s bash scripts/run_ci_tests.sh', blocks['postgres-snapshot-concurrency'])
+        self.assertIn('"${recipient_observation_tests[@]}" -q -n 0 --maxfail=1', blocks['postgres-snapshot-concurrency'])
+        self.assertEqual(blocks['postgres-snapshot-concurrency'].count('Test recipient observation receipts and independent planning'), 1)
         self.assertEqual(workflow.count('-p scripts.ci_final_auth_capacity'), 3)
         self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 6)  # Five executions and one import-only probe.
         probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=review --collect-only -q -n 2'

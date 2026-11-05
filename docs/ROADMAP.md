@@ -10777,3 +10777,53 @@ product42/21/24/6,readiness0/9/4/1 and the pending owner review.
 Next: recipient-observation receipt packaging and independently reviewed retention
 planning after qualification; no automatic adoption,trust renewal,production or
 legal approval.
+
+## 314. Recipient-observation receipts and independent retention planning — 2026-11-05
+
+Stage an unregistered read-only adapter for exact recipient-observation receipts
+and independently reviewed disposable retention plans. Authenticate the assigned
+recipient or independent reviewer before lookup/parsing. Trusted host pins bind
+the metadata package, receipt specification/context, separate reviewer profile,
+public keys and exact receipt/proposal/decision versions; requests cannot supply
+paths, keys, principals, credentials, decisions or bindings.
+
+Two distinct preparer/reviewer signatures, current roles/sessions and fresh
+predecessor acceptance gate planning. The predecessor still performs two full
+signed-source checks and two recipient observations; the wrapper checks its own
+stable review bytes around that complete call. Negative reviews trigger no source
+inspection. Missing, changed, linked, staged, oversized, expired or revoked inputs
+withhold output and remain untouched. Keep twelve files,4KiB/file,two-second
+checked admission and ten-second checked operation bounds. Original evidence,
+receipt, review, key and session windows cap expiry; replay cannot renew it.
+
+The frozen26-outcome campaign uses eight isolated account contexts,four original
+input reviews,two receipts,ten signed review sets and twenty invented review keys.
+All785 predecessor sources stay exact within790 pins. Twenty service reads and
+zero service writes preserve original versions/history; two declared fixture
+session deletions are accounted for. Retain both incomplete campaign attempts.
+Strengthen new fixture identity namespaces and correct malformed-input injection;
+do not change the26 expectations or predecessor implementations.
+
+Address CI capacity before publishing coverage. Closed v12 placement preserves
+the44 original metadata IDs: review9,graph2,planning4,frontend12,final17. Move the
+eight former database cases to frontend6/graph2; database core returns to131 and
+graph core becomes140. Run ten new integration IDs serially after PostgreSQL's
+existing pair exits, with a50-second hard timeout; one fast retained-report guard
+uses backend. Full Python inventory is5910 original IDs plus11new=5921; backend
+selection4008/passes3911/original97skips and portfolio47 retain all prior bodies.
+Keep1018 deployment IDs,139frontend files/10532cases,13jobs,the73-minute aggregate
+cap,all older worker commands/deadlines,immutable manifests,supervisor and floors.
+Require all exact-head checks and fixed reserves,then separately fetched equal-main
+execution and preservation evidence. Local timing is planning,not hosted acceptance
+or measured invoice savings.
+
+Originals,evidence versions,credentials,sessions,private cases and review history
+remain unchanged. Actual retention permission,custody,issuer/channel authenticity,
+durability,recovery,atomicity,trust renewal,production and legal readiness remain
+unqualified. Product42/21/24/6 and readiness0/9/4/1 remain unchanged; the owner
+focused-analysis-v3 review stays pending.
+
+Next: exclusive external recipient-receipt retention and fresh read-only reopening
+readiness,with independently provisioned permission/custody inputs. No automatic
+materialization,adoption,decision writing,trust renewal or production/legal approval.
+See [recipient-observation readiness](RECIPIENT_OBSERVATION_READINESS.md).

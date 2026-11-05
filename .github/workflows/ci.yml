@@ -15,6 +15,8 @@ env:
   CI_METADATA_CAPACITY_TESTS: >-
     backend/tests/test_analysis_cohorts.py
     backend/tests/test_verification_reference_readiness.py
+  CI_RECIPIENT_OBSERVATION_TESTS: >-
+    backend/tests/test_recipient_observation_readiness.py
   CI_PREVIEW_PARTITION_TESTS: >-
     backend/tests/test_operator_inspection_preview.py
   CI_AUTHORITY_TRIAL_TESTS: >-
@@ -251,9 +253,10 @@ jobs:
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
+          read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
           ignore_args=()
-          for path in "${inventory_review_tests[@]}" "${authority_trial_tests[@]}" "${preview_tests[@]}" "${history_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${postgres_source_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${human_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}" "${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}"; do
+          for path in "${inventory_review_tests[@]}" "${authority_trial_tests[@]}" "${preview_tests[@]}" "${history_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${postgres_source_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${human_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}" "${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}"; do
             if [[ "$path" != "${preview_tests[0]}" ]]; then
               ignore_args+=("--ignore=$path")
             fi
@@ -401,16 +404,22 @@ jobs:
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           read -r -a postgres_source_tests <<< "$CI_POSTGRES_SOURCE_TESTS"
-          read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           read -r -a inventory_review_tests <<< "$CI_RECOVERY_INVENTORY_TESTS"
           export PYTHONPATH="$GITHUB_WORKSPACE"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=database "${metadata_capacity_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}"
 
 
 
 
       # The original bounded restart phase follows exited PostgreSQL workers.
 
+
+      - name: Test recipient observation receipts and independent planning
+        timeout-minutes: 2
+        run: |
+          read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"
+          export PYTHONPATH="$GITHUB_WORKSPACE"
+          timeout --kill-after=2s 50s bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${recipient_observation_tests[@]}" -q -n 0 --maxfail=1 --durations=12 -rA
 
   frontend:
     runs-on: ubuntu-24.04-arm
@@ -693,7 +702,8 @@ jobs:
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}"
+          read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=graph "${metadata_capacity_tests[@]}"
 
 
       # The main graph pair has exited. Preserve the exact frozen history
