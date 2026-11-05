@@ -5,11 +5,32 @@ import importlib.util
 import json
 import os
 import signal
+import subprocess
 import sys
 from pathlib import Path
 
 PARENT = Path(__file__).with_name("run_ci_reserve_guard_v2.py")
 PARENT_SHA256 = "ec1aefdb5f96bf72259c3e2fe1fd72366064b01a0ad48058468dbfe5431eb341"
+
+
+def snapshot(repo, run, env, rejected):
+    """One bounded request uses the original aggregate eight-second allowance."""
+    try:
+        response = subprocess.run(["gh", "api", "--hostname", "github.com",
+            f"repos/{repo}/actions/runs/{run}/jobs?filter=latest&per_page=100"],
+            env=env, capture_output=True, timeout=8, check=False)
+    except subprocess.TimeoutExpired:
+        raise rejected("metadata_transport_deadline") from None
+    except OSError:
+        raise rejected("metadata_client_unavailable") from None
+    if response.returncode != 0:
+        raise rejected("metadata_cli_rejected")
+    if not 0 < len(response.stdout) <= 2 * 1024**2:
+        raise rejected("metadata_payload_bound")
+    try:
+        return json.loads(response.stdout)
+    except (ValueError, UnicodeError):
+        raise rejected("metadata_invalid_json") from None
 
 
 def load_policy():
@@ -60,6 +81,7 @@ def load_policy():
         return {"completed_siblings": len(margins), "minimum_reserve": min(margins, default=None)}
 
     core.inspect = inspect
+    core.snapshot = lambda repo, run, env: snapshot(repo, run, env, core.Rejected)
     core.policy_sha256 = lambda: policy
     return core
 

@@ -64,29 +64,33 @@ Use an existing owner-only directory and a fresh output name. Reports have a
 separate 1 MiB bound; receipt limits remain 4 KiB. No real cases, models, provider
 requests or genuine signing keys are used.
 
-CI preserves the independently qualified040bba6 layout. Keep legacy metadata,
-model20,inventory16 and phase commands. Earlier redistribution attempts remain
-negative evidence; their experimental helpers are superseded in this unmerged PR.
-No original5910-case coverage or earlier evidence is removed.
+CI retains the independently qualified040bba6 baseline with measured, limited
+changes. Recipient10 shares one fixture worker in PostgreSQL; the original
+read-only destination25 shares one worker in analysis. Source-bound receipts and
+three guards require complete, once-only execution on one known worker for both
+lanes. All unrelated tests stay individual scheduling units. No test body or
+independent mutation fixture changes. The cold138-case analysis comparison is
+168.446 seconds before and154.800 after; every original ID passes in both runs.
 
-Run recipient10 inside the existing PostgreSQL pair,with its exact shared fixture
-on one worker. Legacy tests retain individual scheduling units. A complete
-source-bound receipt proves all ten IDs passed once on one known worker; three
-guards reject altered sources,incomplete collections,skips,duplicates,xfails and
-split execution. The pinned pytest-xdist3.8.0 interface retains two workers.
+Move intact feedback50 to candidate and retain retention13 in backend. Move two
+unchanged reference cases from database to the already-loaded final reference
+fixture and two unchanged cohort cases to the frontend cohort fixture. Metadata44
+remains complete/disjoint; lane counts are9/4/4/8/19. The final metadata sample
+changes from17 cases/9.064 seconds to19/9.863 seconds in cold local runs.
 
-Move intact analysis-feedback50 to candidate. Keep retention-authorization13
-in its original backend pool after the measured frontend reserve rejection. Preserve all bodies,139 old PostgreSQL IDs,97 original skips,1018
-deployment IDs,139frontend files/10532cases,13jobs,the73-minute aggregate cap,
-all old deadlines,supervisor and reserve floors. Full Python inventory is5927:
-5910 prior IDs plus ten integrations,one report guard,three affinity guards and three inventory guards.
+Preserve5910 original Python IDs,97 original skips,1018 deployment IDs,139 frontend
+files/10532 cases,13 jobs,two workers,the73-minute aggregate cap,old deadlines,
+supervisor and reserve floors. Full Python inventory is5927: ten integrations,
+one report guard,three affinity guards and three inventory guards are new.
+
+The v3 reserve adapter validates gradually exposed,monotonic closed job subsets.
+Final qualification still requires all thirteen jobs and every old floor. One
+eight-second metadata request replaces two four-second attempts without increasing
+the aggregate allowance. Diagnostic codes distinguish transport,client and payload
+failures; raw output and credentials remain private. Original v1/v2 sources,
+child supervision,credential stripping,polling,caps and floors stay exact.
+
 Require exact-head checks,reserves,execution receipts and preservation before
-merge; independently qualify fetched equal-tree main. Engineering checks establish
-no production or legal approval. Owner focused-analysis-v3 review stays pending.
-
-The v3 reserve adapter handles GitHub exposing queued jobs gradually. Early
-observations must be nonempty,known,unique,identity-bound and monotonic. Every
-visible completed job/phase retains the old checks. Final qualification still
-requires all thirteen jobs; no placeholder job is synthesized. Original v1/v2
-sources,supervision,credential stripping,caps,floors and polling remain exact.
-Three new guards cover this startup race and strict final rejection.
+merge; independently qualify fetched equal-tree main. Local measurements establish
+no invoice saving,production or legal approval. Owner focused-analysis-v3 review
+stays pending. All rejected attempts remain evidence; none is retried unchanged.

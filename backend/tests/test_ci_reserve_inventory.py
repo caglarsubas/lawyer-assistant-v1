@@ -1,6 +1,7 @@
 """Gradual Actions inventory never replaces final, complete reserve qualification."""
 
 import copy
+import json
 import subprocess
 import sys
 from datetime import datetime, timedelta, timezone
@@ -76,6 +77,18 @@ def test_partial_snapshots_still_reject_identity_failure_and_exhausted_reserves(
             value["jobs"][-1].update(status="in_progress", completed_at=None)
         with pytest.raises(core.Rejected):
             core.inspect(value, RUN, SHA, final=mode == "unfinished_final")
+    for mode in ("valid", "timeout", "rejected", "oversized", "invalid"):
+        core = current.load_policy()
+        raw = json.dumps(jobs(core)).encode() if mode == "valid" else b" " * (2 * 1024**2 + 1) if mode == "oversized" else b"invalid"
+        response = subprocess.CompletedProcess([], 1 if mode == "rejected" else 0, raw, b"INVENTED_ONLY")
+        error = subprocess.TimeoutExpired([], 8) if mode == "timeout" else None
+        with patch.object(current.subprocess, "run", return_value=response, side_effect=error) as request:
+            if mode == "valid":
+                assert core.snapshot("invented/repository", RUN, {}) == jobs(core)
+            else:
+                with pytest.raises(core.Rejected, match="metadata_"):
+                    core.snapshot("invented/repository", RUN, {})
+            assert request.call_count == 1 and request.call_args.kwargs["timeout"] == 8
 
 
 def test_supervision_starts_once_on_partial_metadata_and_rejects_incomplete_final(capsys):

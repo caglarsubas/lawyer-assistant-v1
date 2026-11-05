@@ -10804,46 +10804,56 @@ session deletions are accounted for. Retain both incomplete campaign attempts.
 Strengthen new fixture identity namespaces and correct malformed-input injection;
 do not change the26 expectations or predecessor implementations.
 
-Preserve CI capacity using the last independently qualified layout at040bba6.
-Restore its metadata placement,model-trial20 group,inventory16 placement and
-all legacy schedulers. Earlier broad redistribution attempts failed their reserve
-or import guards; retain those attempts as negative evidence,without merge credit.
-Avoid spreading shared fixture families across many jobs.
+Use the independently qualified 040bba6 layout as the CI baseline. Retain failed
+redistribution experiments as negative evidence. Preserve every original test ID,
+body and assertion, the thirteen ARM jobs, two-worker ceiling, 73-minute aggregate
+cap, original command/job deadlines, supervisor and reserve floors.
 
-Run all ten new recipient cases in the existing PostgreSQL pair. A source-bound
-fixture-affinity rule assigns their complete module to one of the existing two
-workers,so its shared fixture initializes once. Every legacy test remains an
-individual scheduling unit. Require all ten original IDs,one successful execution
-each and a single known worker in the terminal receipt; skipped,duplicated,
-xfailed,missing or split execution cannot qualify. Pin pytest-xdist3.8.0 and the
-existing two-worker load interface. Three fast guards protect these rules.
+Run recipient10 in the existing PostgreSQL pair with one shared-fixture worker.
+Also keep the original destination25 together on one worker in the analysis pair.
+Source-bound manifests pin both complete modules. Every unrelated test remains an
+individual scheduling unit. Require all selected IDs to pass exactly once on one
+known worker; missing, duplicated, skipped, xfailed or split execution cannot
+qualify. Pin pytest-xdist3.8.0 and the existing two-worker load interface. Three
+fast guards cover both lanes. No fixture bodies or independent mutation fixtures
+change. In a cold local comparison all138 analysis IDs pass in both runs: control
+168.446 seconds, affinity154.800 seconds. These are observed local wall times.
 
-Move the intact analysis-feedback50 file into the related candidate pool. Keep
-retention-authorization13 in the original backend pool; adding it to frontend
-exhausted that job’s reserve in head05fc351. No original body or assertion changes. All other legacy group memberships and phase commands remain intact.
-The original139 PostgreSQL cases plus recipient10 run149; candidate276+50=326;
-portfolio41; core4007-50+7=3964 with3867passes and97original skips. Full Python
-inventory is5910 original IDs plus17new=5927: ten integrations,one report guard and
-three affinity guards and three inventory guards. Preserve1018 deployment IDs,139frontend files/10532cases,
-13jobs,the73-minute aggregate cap,two-worker ceiling,all original deadlines,
-supervisor and reserve floors. No earlier report or original case is removed.
+Move only the intact feedback50 module into candidate. Keep retention13 in its
+original backend pool after the measured frontend reserve rejection. Move two
+unchanged reference cases from database to final, where the reference fixture is
+already loaded, and two unchanged cohort cases from database to frontend, where
+that fixture is already loaded. All44 metadata IDs remain disjoint and complete;
+review/database/planning/frontend/final counts become9/4/4/8/19. Measured metadata
+increments change within existing job/command caps. The cold final-metadata sample
+passes the original17 in9.064 seconds and the new19 in9.863 seconds. Acquisition,
+evidence validation and individual independent test fixtures remain unchanged.
 
-The head05fc351/run42068985062 guard stopped before pytest because GitHub exposed
-only11 of13 declared jobs. Treat gradual visibility as a snapshot state,not proof
-of a missing workflow job. A separately source-pinned v3 adapter accepts only
-nonempty,monotonically growing subsets of the closed13 names,including itself.
-Validate each visible identity,completed phase and completed sibling reserve.
-Final exit still requires the complete original thirteen-job inventory and every
-original floor. Invalid,duplicate,unknown or regressing inventories fail closed.
-Keep the original v1/v2 sources,child supervision,credential stripping,polling and
-all caps exact; add no wait,retry or synthetic job row. Three new guards cover
-late visibility,negative metadata and real disposable child supervision.
+PostgreSQL runs145 cases, candidate326, portfolio43 and final87. Core inventory is
+4007-50+7=3964 with3867 passes and97 original skips. Full Python inventory remains
+5910 original IDs plus17 new=5927: ten integrations, one retained-report guard,
+three affinity guards and three inventory guards. Preserve1018 deployment IDs
+and139 frontend files/10532 cases. Historical reports are never rewritten.
 
-Local qualification must include the real two-worker fixture-affinity path and
-the deployment harness interpreter. Require exact-head checks,reserves,physical
-execution receipts and preservation audit before merge; independently qualify
-fetched equal-tree main. Local durations and green engineering checks establish
-no invoice saving,production readiness or legal acceptance.
+Head05fc351/run42068985062 stopped before pytest because GitHub exposed only11 of
+13 jobs; its frontend reserve also failed. Head eee3851/run42071256666 stopped on
+unavailable metadata; database17/analysis21 reserves independently reject it.
+The source-pinned v3 adapter accepts only nonempty, monotonically growing subsets
+of the closed thirteen names, including itself. Each visible identity, completed
+phase and completed sibling retains the original checks. Final exit requires all
+thirteen jobs and every original floor; invalid, duplicate, unknown or regressing
+inventories fail closed. Replace two four-second metadata attempts with one
+eight-second request, retaining the aggregate eight-second allowance and reducing
+attempts. Fixed diagnostic categories distinguish transport deadline, client
+rejection and malformed/bounded payload errors without printing transport output
+or credentials. Original v1/v2 sources, child supervision, credential stripping,
+polling, job/step caps and floors stay exact. No added wait or test retry.
+
+Local qualification includes the real two-worker affinity paths and the deployment
+harness interpreter. Require exact-head checks, physical execution receipts,
+reserves and preservation before merge; independently qualify fetched equal-tree
+main. Local timing or green engineering checks establish no invoice saving,
+production readiness or legal acceptance.
 
 Originals,evidence versions,credentials,sessions,private cases and review history
 remain unchanged. Actual retention permission,custody,issuer/channel authenticity,

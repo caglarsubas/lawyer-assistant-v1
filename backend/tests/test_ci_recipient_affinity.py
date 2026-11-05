@@ -15,14 +15,15 @@ from scripts import ci_recipient_affinity as affinity  # noqa: E402
 def test_exact_source_and_complete_inventory_are_required(tmp_path):
     value = affinity.contract()
     assert len(value["test_ids"]) == 10
+    assert len(affinity.contract(lane="analysis")["test_ids"]) == 25
     for mode in ("source", "missing", "duplicate", "unknown"):
         changed = json.loads(affinity.MANIFEST.read_bytes())
         if mode == "source":
-            changed["source_sha256"] = "0" * 64
+            changed["lanes"]["recipient"]["source_sha256"] = "0" * 64
         elif mode == "missing":
-            changed["test_ids"].pop()
+            changed["lanes"]["recipient"]["test_ids"].pop()
         elif mode == "duplicate":
-            changed["test_ids"][-1] = changed["test_ids"][0]
+            changed["lanes"]["recipient"]["test_ids"][-1] = changed["lanes"]["recipient"]["test_ids"][0]
         else:
             changed["path_from_request"] = "untrusted"
         p = tmp_path / "manifest.json"
@@ -35,6 +36,10 @@ def test_only_new_fixture_is_grouped_and_legacy_tests_remain_individual_scopes()
     ids = affinity.contract()["test_ids"]
     scheduler = object.__new__(affinity.RecipientScheduling)
     assert len({scheduler._split_scope(n) for n in ids}) == 1
+    other = affinity.contract(lane="analysis")
+    scheduler.prefix = other["source_path"].removeprefix("backend/") + "::"
+    assert len({scheduler._split_scope(n) for n in other["test_ids"]}) == 1
+    scheduler.prefix = affinity.PREFIX
     others = ["tests/test_existing.py::Example::test_one", "tests/test_existing.py::Example::test_two"]
     assert [scheduler._split_scope(n) for n in others] == others
     affinity.validate_collection([*others, *ids], ids)
@@ -44,7 +49,11 @@ def test_only_new_fixture_is_grouped_and_legacy_tests_remain_individual_scopes()
 
 
 def test_only_complete_once_single_worker_execution_can_publish_receipt():
-    value = affinity.contract()
+    for lane in affinity.LANES:
+        verify_receipt(affinity.contract(lane=lane))
+
+
+def verify_receipt(value):
     for mode in ("valid", "skipped", "duplicate", "xfail", "split_worker", "unknown_worker"):
         plugin = affinity.Affinity(value)
         for i, nodeid in enumerate(value["test_ids"]):
