@@ -42,14 +42,15 @@ class DeploymentPlacementContract(unittest.TestCase):
         metadata = re.search(r'  CI_METADATA_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
         self.assertEqual(metadata, ['backend/tests/test_analysis_cohorts.py', 'backend/tests/test_verification_reference_readiness.py'])
         self.assertIn('"${metadata_capacity_tests[@]}"; do', blocks['backend-and-contracts'])
-        self.assertNotIn('scripts.ci_metadata_capacity', blocks['frontend'])
-        for job, lane in [('backend-review-contracts', 'review'), ('postgres-snapshot-concurrency', 'database'),
-                          ('final-release-authorization', 'final'), ('graph-runtime-contracts', 'graph'),
+        self.assertNotIn('scripts.ci_metadata_capacity', blocks['postgres-snapshot-concurrency'])
+        self.assertNotIn('scripts.ci_metadata_capacity', blocks['graph-runtime-contracts'])
+        for job, lane in [('backend-review-contracts', 'review'), ('frontend', 'frontend'),
+                          ('final-release-authorization', 'final'),
                           ('analysis-recovery-contracts', 'analysis'), ('frontend-history', 'history')]:
             self.assertEqual(blocks[job].count('read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_metadata_capacity --metadata-capacity-lane=' + lane + ' "${metadata_capacity_tests[@]}"'), 1)
-        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 7)  # Six executions and one import-only probe.
-        probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=graph --collect-only -q -n 2'
+        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 6)  # Five executions and one import-only probe.
+        probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend --collect-only -q -n 2'
         self.assertEqual(blocks['backend-and-contracts'].count(probe), 1)
         self.assertLess(blocks['backend-and-contracts'].index(probe), blocks['backend-and-contracts'].index('name: Test backend'))
         self.assertIn('"${recovery_qualification_tests[@]}"', isolated)
@@ -57,7 +58,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"$uv_path" sync --project backend --frozen --extra dev', blocks["frontend-history"])
         self.assertIn("timeout-minutes: 5", blocks["frontend-history"])
         self.assertIn("runs-on: ubuntu-24.04-arm", blocks["frontend-history"])
-        self.assertIn("runs-on: ubuntu-latest", blocks["frontend"])
+        self.assertIn("runs-on: ubuntu-24.04-arm", blocks["frontend"])
         self.assertIn("timeout-minutes: 16", blocks["backend-and-contracts"])
         self.assertEqual(workflow.count("--workers=2"), 9)
         self.assertIn("--shard=3 --workers=2", blocks["backend-and-contracts"])

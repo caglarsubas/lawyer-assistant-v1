@@ -32,13 +32,13 @@ def test_changed_sources_coverage_or_measured_capacity_cannot_be_admitted(tmp_pa
     elif change == "missing":
         value["test_ids"].pop()
     elif change == "overlap":
-        value["lanes"]["graph"][0] = value["lanes"]["final"][0]
-        value["lanes"]["graph"].sort()
+        value["lanes"]["frontend"][0] = value["lanes"]["final"][0]
+        value["lanes"]["frontend"].sort()
     elif change == "cost":
-        for n in value["lanes"]["graph"]:
+        for n in value["lanes"]["frontend"]:
             value["case_cost_ms"][n] = 60000
     elif change == "budget":
-        value["lane_increment_budget_ms"]["graph"] += 1
+        value["lane_increment_budget_ms"]["frontend"] += 1
     elif change == "bool_cost":
         value["case_cost_ms"][value["test_ids"][0]] = True
     elif change == "provenance":
@@ -60,25 +60,25 @@ def test_collection_preserves_other_tests_and_refuses_missing_duplicate_or_inven
     for ids in (list(contract.ids[:-1]), [*contract.ids, contract.ids[0]],
                 [*contract.ids[:-1], "tests/test_analysis_cohorts.py::test_undeclared"]):
         with pytest.raises(ValueError):
-            capacity.select(contract, "graph", ids)
+            capacity.select(contract, "frontend", ids)
     with pytest.raises(ValueError):
         capacity.select(contract, "unknown", list(contract.ids))
-    assert capacity.select(contract, "graph", [other, *contract.ids]) == [other, *contract.lanes["graph"]]
+    assert capacity.select(contract, "frontend", [other, *contract.ids]) == [other, *contract.lanes["frontend"]]
 
 
 def test_worker_inventory_cannot_drop_a_selected_case():
     contract = capacity.load_contract()
-    plugin = capacity.Partition(contract, "graph")
-    plugin.pytest_xdist_node_collection_finished(list(contract.lanes["graph"]))
+    plugin = capacity.Partition(contract, "frontend")
+    plugin.pytest_xdist_node_collection_finished(list(contract.lanes["frontend"]))
     with pytest.raises(pytest.UsageError):
-        plugin.pytest_xdist_node_collection_finished(list(contract.lanes["graph"][:-1]))
+        plugin.pytest_xdist_node_collection_finished(list(contract.lanes["frontend"][:-1]))
 
 
 def test_skip_or_repeated_execution_cannot_publish_an_exact_execution_receipt():
     contract = capacity.load_contract()
     for mode in ("skipped", "duplicate", "xfail"):
-        plugin = capacity.Partition(contract, "graph")
-        for i, nodeid in enumerate(contract.lanes["graph"]):
+        plugin = capacity.Partition(contract, "frontend")
+        for i, nodeid in enumerate(contract.lanes["frontend"]):
             report = SimpleNamespace(when="call", passed=not (i == 0 and mode == "skipped"),
                                      wasxfail=(i == 0 and mode == "xfail"), nodeid=nodeid)
             plugin.pytest_runtest_logreport(report)

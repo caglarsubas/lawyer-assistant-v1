@@ -10720,3 +10720,38 @@ Next: recipient-observation receipt packaging and independently reviewed retenti
 planning, budgeted against fresh qualified reserves. No automatic adoption,
 decision writing, acknowledgement inference, trust renewal or production/legal
 approval. See the [closed capacity manifest](../deploy/fixtures/metadata_ci_capacity.json).
+
+
+## 313. ARM frontend and removal of metadata pressure from database/graph — 2026-11-05
+
+PR281 exact-head passed13 checks and the fixed reserves, but its independent main
+run41992213977 atbc0ae47 was rejected. The x86 frontend's unchanged native slices8
+and5 each took50 seconds, below their15-second required reserve; the frontend
+then reached its job cap. PostgreSQL completed with22 seconds of job reserve.
+The unchanged supervisor stopped its own backend child. Keep these failures
+separate from the qualified PR head and do not rerun an unchanged rejected head.
+
+Use the same ubuntu-24.04-arm platform already used by the other12 jobs for the
+remaining frontend job. Preserve Node22, locked dependencies, isolation, both
+frontend inventories, two workers, all native deployment sources/assignments and
+their deadlines. This removes the differing platform from the overloaded native
+frontend path; actual hosted qualification must establish compatibility and
+reserve. Do not infer success or invoice savings from architecture selection.
+
+Restore PostgreSQL and graph to their prior165 and102 case groups by moving the
+same12 metadata cases into the existing frontend portfolio command. The closed
+v2 allocation is frontend12, review7, final9, analysis8 and history8: the same44
+source-bound identities once, across five existing pairs. Retain conservative
+historical x86 weights as planning evidence; retain all14 guard identities and
+the original97 skips. No new tests, jobs, workers, caps, retries or deadlines.
+Require all13 exact-head and independently fetched equal-main checks, every
+original execution receipt, fixed30-second job reserve and original step floors.
+
+All785 feature source pins,24 frozen outcomes and264 evidence reports remain
+byte-exact. Original documents, evidence versions, credentials, sessions, private
+case content and review history remain untouched. Engineering merge completion
+is separate from main qualification, product42/21/24/6, readiness0/9/4/1 and the
+owner's pending focused-analysis-v3 review.
+
+Next: recipient-observation receipt packaging and independently reviewed retention
+planning, after fresh qualification; no automatic adoption or trust renewal.

@@ -16,8 +16,8 @@ from scripts.controller_stage_manifest import strict
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "deploy/fixtures/metadata_ci_capacity.json"
 SOURCES = ("backend/tests/test_analysis_cohorts.py", "backend/tests/test_verification_reference_readiness.py")
-COUNTS = {"review": 7, "database": 6, "final": 9, "graph": 6, "analysis": 8, "history": 8}
-BUDGETS = {"review": 15000, "database": 14000, "final": 14000, "graph": 9000, "analysis": 12000, "history": 13000}
+COUNTS = {"review": 7, "final": 9, "analysis": 8, "history": 8, "frontend": 12}
+BUDGETS = {"review": 15000, "final": 14000, "analysis": 12000, "history": 13000, "frontend": 30000}
 
 
 class Contract(BaseContract):
@@ -37,7 +37,7 @@ def load_contract(path=MANIFEST, root=ROOT):
     value = strict(raw)
     fields = {"schema", "source_sha256", "test_ids", "lanes", "case_cost_ms", "lane_increment_budget_ms",
               "observed_head", "observed_run", "qualification_status", "local_xml_sha256", "retained_log_sha256", "normalization"}
-    if (type(value) is not dict or set(value) != fields or value["schema"] != "metadata-ci-capacity-v1"
+    if (type(value) is not dict or set(value) != fields or value["schema"] != "metadata-ci-capacity-v2"
             or value["source_sha256"] != {n: hashlib.sha256((root / n).read_bytes()).hexdigest() for n in SOURCES}
             or value["observed_head"] != "5633c6fbfe7eee16d67b87fe72964959c05e6919"
             or value["observed_run"] != 41985956054 or type(value["observed_run"]) is not int
