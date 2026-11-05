@@ -10591,8 +10591,8 @@ as qualification or retry the unchanged head.
 Move complete adjudication39/effort31 files and the unchanged preview-final7
 slice into backend, and the unchanged materialization-final20 slice into
 portfolio review. Return the complete analysis-cohort32 file to backend after source-publication
-passed with only27 seconds of reserve. Backend is 4111 selected / 4014 passes / 97 original skips;
-final-release is 13 and portfolio is 81. Preserve all original preview20,
+passed with only27 seconds of reserve. Backend is 4048 selected / 3951 passes / 97 original skips;
+final-release is 44 and portfolio is 81. Preserve all original preview20,
 materialization58 and cohort19 identities exactly once. Existing closed manifests
 and logical slice contents remain byte-exact; only hosting jobs change, guarded
 by explicit placement assertions. The 13 new retention tests and their business
@@ -10610,8 +10610,14 @@ collection probe now uses the existing declared array, preserving the guard
 against duplicate test execution. Retain both rejected observations. A further run passed PostgreSQL/graph tests
 but retained only25/27 seconds. Move complete public-source94 and temporal58
 files to backend; package34 and the intact restart25 phase use frontend reserve.
-PostgreSQL primary131, graph primary93 and portfolio81 preserve every original
+PostgreSQL primary131, graph primary125 and portfolio81 preserve every original
 identity and all real database races. No test bodies or frozen manifests change.
+The following run passed4014 with the original97 skips but reached its overall
+job cap during final validation. Move the unchanged39-second contract phase5 to
+frontend; place complete cohort32 in graph and effort31 in final-release. This
+reduces the measured backend pre-suite and suite costs without weakening any
+assertion. Final selections are backend4048/passes3951/skips97, graph125,
+final44 and portfolio81. The ten manifest partitions retain every original ID.
 
 Preserve older source bytes, 1018 deployment IDs and 139 frontend files / 10532
 cases. Keep 13 jobs, the 73-minute aggregate cap, worker counts, deadlines,

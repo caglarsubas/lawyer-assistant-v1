@@ -83,6 +83,7 @@ env:
     backend/tests/test_runtime_authorization_integration.py
     backend/tests/test_retained_mixed_assembly.py
     backend/tests/test_final_release_authorization.py
+    backend/tests/test_source_review_effort.py
   CI_RECOVERY_QUALIFICATION_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_copy_recovery_disposition.py
@@ -92,6 +93,7 @@ env:
   # A dedicated bounded job holds complete publication/planning files.
   # Keep remaining graph files complete and the lighter Graph B snapshot in backend.
   CI_GRAPH_RUNTIME_TESTS: >-
+    backend/tests/test_analysis_cohorts.py
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_release_set_authorization.py
@@ -184,9 +186,6 @@ jobs:
         timeout-minutes: 2
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_retained_deployment.py --shard=3 --workers=2 --report=${{ runner.temp }}/deployment-reader-results.json
       # Reuse the backend pair sequentially; every former step keeps its cap.
-      - name: Test manifest-bound reader lifecycle slice 5
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=5 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-5.json
       - name: Test manifest-bound reader lifecycle slice 6
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
@@ -440,6 +439,9 @@ jobs:
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=8 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-8.json
 
+      - name: Test manifest-bound reader lifecycle slice 5
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=5 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-5.json
       - name: Test complete portfolio review qualification
         timeout-minutes: 2
         run: |
