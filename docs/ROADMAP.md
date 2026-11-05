@@ -10818,15 +10818,26 @@ each and a single known worker in the terminal receipt; skipped,duplicated,
 xfailed,missing or split execution cannot qualify. Pin pytest-xdist3.8.0 and the
 existing two-worker load interface. Three fast guards protect these rules.
 
-Move two intact existing files into related spare pools: analysis-feedback50 into
-candidate and retention-authorization13 into frontend. Their bodies and assertions
-stay exact. All other legacy group memberships and phase commands remain intact.
+Move the intact analysis-feedback50 file into the related candidate pool. Keep
+retention-authorization13 in the original backend pool; adding it to frontend
+exhausted that job’s reserve in head05fc351. No original body or assertion changes. All other legacy group memberships and phase commands remain intact.
 The original139 PostgreSQL cases plus recipient10 run149; candidate276+50=326;
-portfolio41+13=54; core4007-63+4=3948 with3851passes and97original skips. Full Python
-inventory is5910 original IDs plus14new=5924: ten integrations,one report guard and
-three affinity guards. Preserve1018 deployment IDs,139frontend files/10532cases,
+portfolio41; core4007-50+7=3964 with3867passes and97original skips. Full Python
+inventory is5910 original IDs plus17new=5927: ten integrations,one report guard and
+three affinity guards and three inventory guards. Preserve1018 deployment IDs,139frontend files/10532cases,
 13jobs,the73-minute aggregate cap,two-worker ceiling,all original deadlines,
 supervisor and reserve floors. No earlier report or original case is removed.
+
+The head05fc351/run42068985062 guard stopped before pytest because GitHub exposed
+only11 of13 declared jobs. Treat gradual visibility as a snapshot state,not proof
+of a missing workflow job. A separately source-pinned v3 adapter accepts only
+nonempty,monotonically growing subsets of the closed13 names,including itself.
+Validate each visible identity,completed phase and completed sibling reserve.
+Final exit still requires the complete original thirteen-job inventory and every
+original floor. Invalid,duplicate,unknown or regressing inventories fail closed.
+Keep the original v1/v2 sources,child supervision,credential stripping,polling and
+all caps exact; add no wait,retry or synthetic job row. Three new guards cover
+late visibility,negative metadata and real disposable child supervision.
 
 Local qualification must include the real two-worker fixture-affinity path and
 the deployment harness interpreter. Require exact-head checks,reserves,physical

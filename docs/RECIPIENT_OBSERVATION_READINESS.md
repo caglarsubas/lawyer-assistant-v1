@@ -75,11 +75,18 @@ source-bound receipt proves all ten IDs passed once on one known worker; three
 guards reject altered sources,incomplete collections,skips,duplicates,xfails and
 split execution. The pinned pytest-xdist3.8.0 interface retains two workers.
 
-Move intact analysis-feedback50 to candidate and retention-authorization13 to
-frontend. Preserve all bodies,139 old PostgreSQL IDs,97 original skips,1018
+Move intact analysis-feedback50 to candidate. Keep retention-authorization13
+in its original backend pool after the measured frontend reserve rejection. Preserve all bodies,139 old PostgreSQL IDs,97 original skips,1018
 deployment IDs,139frontend files/10532cases,13jobs,the73-minute aggregate cap,
-all old deadlines,supervisor and reserve floors. Full Python inventory is5924:
-5910 prior IDs plus ten integrations,one report guard and three affinity guards.
+all old deadlines,supervisor and reserve floors. Full Python inventory is5927:
+5910 prior IDs plus ten integrations,one report guard,three affinity guards and three inventory guards.
 Require exact-head checks,reserves,execution receipts and preservation before
 merge; independently qualify fetched equal-tree main. Engineering checks establish
 no production or legal approval. Owner focused-analysis-v3 review stays pending.
+
+The v3 reserve adapter handles GitHub exposing queued jobs gradually. Early
+observations must be nonempty,known,unique,identity-bound and monotonic. Every
+visible completed job/phase retains the old checks. Final qualification still
+requires all thirteen jobs; no placeholder job is synthesized. Original v1/v2
+sources,supervision,credential stripping,caps,floors and polling remain exact.
+Three new guards cover this startup race and strict final rejection.

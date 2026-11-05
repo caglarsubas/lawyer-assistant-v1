@@ -115,7 +115,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_metadata_handoff_readiness.py"), 1)
         self.assertIn("backend/tests/test_metadata_handoff_readiness.py", group)
         self.assertEqual(workflow.count("backend/tests/test_ci_reserve_guard.py"), 1)
-        self.assertIn("bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard_v2.py -- pytest backend/tests", backend)
+        self.assertIn("bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard_v3.py -- pytest backend/tests", backend)
         self.assertIn('export PYTHONPATH="$GITHUB_WORKSPACE"', backend)
         import_probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${preview_probe[@]}" -p scripts.ci_operator_previews --operator-preview-lane=final --collect-only -q -n 2'
         self.assertEqual(backend.count(import_probe), 1)
@@ -301,7 +301,7 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertIn("--provision-binding-lane=" + lane, blocks[name])
         self.assertEqual(workflow.count("name: Test complete portfolio review qualification"), 1)
         self.assertIn('"${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2', blocks["frontend"])
-        self.assertEqual(re.search(r"  CI_FRONTEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_retention_authorization_readiness.py", "backend/tests/test_disposition_receipt_reobservation.py"])
+        self.assertEqual(re.search(r"  CI_FRONTEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_disposition_receipt_reobservation.py"])
         self.assertNotIn("backend/tests/test_analysis_cohorts.py", publication_group)
         self.assertEqual(workflow.count("backend/tests/test_analysis_cohorts.py"), 1)
         self.assertIn("backend/tests/test_analysis_cohorts.py", re.search(r"  CI_METADATA_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1])

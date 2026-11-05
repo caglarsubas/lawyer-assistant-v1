@@ -59,7 +59,6 @@ env:
   # Keep analysis/feedback on their measured pair. The exited history
   # pair runs two bounded serial groups, avoiding a delayed inspection tail.
   CI_FRONTEND_REVIEW_TESTS: >-
-    backend/tests/test_retention_authorization_readiness.py
     backend/tests/test_disposition_receipt_reobservation.py
   # Retain the frozen two-array interface; this file stays in deep recovery.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
@@ -263,7 +262,7 @@ jobs:
               ignore_args+=("--ignore=$path")
             fi
           done
-          bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard_v2.py -- pytest backend/tests "${ignore_args[@]}" -p scripts.ci_operator_previews --operator-preview-lane=final -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
+          bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard_v3.py -- pytest backend/tests "${ignore_args[@]}" -p scripts.ci_operator_previews --operator-preview-lane=final -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
       - name: Validate RDF and SHACL contract
         run: python scripts/validate_ontology.py
       - name: Compare actual synthetic extraction with independent reference
