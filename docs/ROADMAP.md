@@ -10817,13 +10817,13 @@ backend timeout after3914 core passes/97 skips in873 seconds,recipient10 and
 binding48. Retain488cb76/run42048411310: its existing declaration guard correctly
 rejected an omitted collection-group declaration; capacity28,candidate29,
 publication29 and final9 seconds also failed the unchanged30-second job floor.
-Neither head supplies merge credit. Correct the declaration and qualify all five
+Neither head supplies merge credit. Retain7b58110/run42051176447: declaration checks pass,but candidate27/planning29/publication30 reserve requires six IDs move into measured spare jobs. No retry or relaxed floor. Correct the declaration and qualify all five
 placement/declaration guards before another hosted run. Keep the supervisor intact.
 
 Source-bind99 unchanged cases (publication31,disposition receipts27,authority
 adjudications41) using retained file CPU totals and fresh per-case timings. Account
-for fixture startup,retain19 declared cases in backend and place80 across10
-existing pairs. Review and final select none from this99-case inventory; their
+for fixture startup,retain19 declared cases in backend and place80 across11
+existing pairs. Final selects none from this99-case inventory; review selects two. Their
 original suites still run. Three guards and actual terminal receipts enforce
 source hashes,complete collection and exactly-once non-skipped execution. Run
 all selected lanes locally without inherited PYTHONPATH before publishing.

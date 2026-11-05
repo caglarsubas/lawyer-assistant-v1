@@ -68,7 +68,7 @@ CI reuses existing capacity and retains all rejected attempts without merge cred
 Fix the omitted declaration caught by the existing partition guard and run all
 five declaration/placement checks locally. Account for fixture startup as well as
 retained CPU times: a source-bound99-case inventory retains19 cases in backend
-and places80 across10 existing pairs. Review and final select none of those99;
+and places80 across11 existing pairs. Final selects none of those99; review selects two.
 their original suites remain. Three guards enforce original hashes,complete
 collection and exactly-once non-skipped execution. Run each nonempty lane locally
 with two workers and no inherited repository path before another hosted run.
@@ -81,3 +81,6 @@ prior Python identities plus17new,all1018 deployment IDs,139frontend files/
 supervisor and reserve floors. Independently qualify exact-head checks and fetched
 equal-main execution. Estimates and engineering CI establish no legal or
 production approval.
+
+Retain7b58110/run42051176447 candidate27/planning29/publication30 reserve.
+Move six exact IDs to observed spare jobs; keep all99 source identities and floors.

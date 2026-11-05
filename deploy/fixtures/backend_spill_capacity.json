@@ -107,14 +107,19 @@
     "tests/test_graph_b_publication.py::test_source_change_keeps_old_packet_but_withholds_current_validation"
   ],
   "lanes": {
-    "review": [],
+    "review": [
+      "tests/test_disposition_reconciliation_receipt.py::test_receipt_preserves_exact_independent_decision_and_both_histories[changes_required]",
+      "tests/test_graph_b_publication.py::test_private_packet_sealed_encrypted_and_public_files_exact"
+    ],
     "database": [
       "tests/test_authority_adjudications.py::test_actual_signed_bytes_adjudication_and_rights_revocation",
       "tests/test_authority_adjudications.py::test_denied_sources_withhold_all_notes_and_cached_content[exit]",
       "tests/test_authority_adjudications.py::test_exact_routes_seals_roles_and_draft_author_separation[wrong_route]",
       "tests/test_authority_adjudications.py::test_malformed_or_foreign_coverage_no_partial_save[semantic]",
       "tests/test_authority_adjudications.py::test_malformed_or_foreign_coverage_no_partial_save[source]",
+      "tests/test_authority_adjudications.py::test_postcommit_failure_retains_pending_without_quotes_or_retry_admission",
       "tests/test_authority_adjudications.py::test_private_exports_include_exact_comparison_quotes_and_unknown_coverage[docx]",
+      "tests/test_authority_adjudications.py::test_private_exports_include_exact_comparison_quotes_and_unknown_coverage[pdf]",
       "tests/test_disposition_reconciliation_receipt.py::test_closed_selection_requires_exact_versions_and_has_no_import_or_execution[extra]",
       "tests/test_disposition_reconciliation_receipt.py::test_closed_selection_requires_exact_versions_and_has_no_import_or_execution[wrong_digest]",
       "tests/test_disposition_reconciliation_receipt.py::test_receipt_preserves_exact_independent_decision_and_both_histories[reject]",
@@ -127,8 +132,6 @@
       "tests/test_authority_adjudications.py::test_changed_dependencies_stale_without_rewriting_judgments[private]",
       "tests/test_authority_adjudications.py::test_malformed_or_foreign_coverage_no_partial_save[duplicate]",
       "tests/test_authority_adjudications.py::test_malformed_or_foreign_coverage_no_partial_save[private]",
-      "tests/test_authority_adjudications.py::test_preserve_disagreement_per_account_heads_idempotency_and_no_consensus",
-      "tests/test_disposition_reconciliation_receipt.py::test_late_changes_and_failures_withhold_the_entire_receipt[caller]",
       "tests/test_disposition_reconciliation_receipt.py::test_missing_references_stay_null_without_recovering_an_acknowledgement[empty]",
       "tests/test_disposition_reconciliation_receipt.py::test_receipts_do_not_bypass_current_session_scope_or_origin[cookie]",
       "tests/test_graph_b_publication.py::test_component_request_requires_each_current_source_and_bounded_permission[future]",
@@ -139,8 +142,6 @@
     ],
     "candidate": [
       "tests/test_authority_adjudications.py::test_changed_dependencies_stale_without_rewriting_judgments[draft]",
-      "tests/test_authority_adjudications.py::test_postcommit_failure_retains_pending_without_quotes_or_retry_admission",
-      "tests/test_authority_adjudications.py::test_private_exports_include_exact_comparison_quotes_and_unknown_coverage[pdf]",
       "tests/test_graph_b_publication.py::test_component_request_requires_each_current_source_and_bounded_permission[duplicate-source]",
       "tests/test_graph_b_publication.py::test_component_request_requires_each_current_source_and_bounded_permission[missing-source]",
       "tests/test_graph_b_publication.py::test_component_request_requires_each_current_source_and_bounded_permission[permission-expiry]",
@@ -160,7 +161,9 @@
       "tests/test_graph_b_publication.py::test_request_expiring_during_atomic_output_is_withheld"
     ],
     "capacity": [
+      "tests/test_authority_adjudications.py::test_preserve_disagreement_per_account_heads_idempotency_and_no_consensus",
       "tests/test_authority_adjudications.py::test_rendering_time_changes_discard_all_attachment_bytes[membership]",
+      "tests/test_disposition_reconciliation_receipt.py::test_late_changes_and_failures_withhold_the_entire_receipt[caller]",
       "tests/test_disposition_reconciliation_receipt.py::test_receipts_do_not_bypass_current_session_scope_or_origin[method]",
       "tests/test_graph_b_publication.py::test_component_request_requires_each_current_source_and_bounded_permission[expired]",
       "tests/test_graph_b_publication.py::test_component_request_requires_each_current_source_and_bounded_permission[proof]",
@@ -203,11 +206,9 @@
       "tests/test_authority_adjudications.py::test_exact_routes_seals_roles_and_draft_author_separation[tamper]",
       "tests/test_disposition_reconciliation_receipt.py::test_closed_selection_requires_exact_versions_and_has_no_import_or_execution[execute]",
       "tests/test_disposition_reconciliation_receipt.py::test_closed_selection_requires_exact_versions_and_has_no_import_or_execution[missing]",
-      "tests/test_disposition_reconciliation_receipt.py::test_receipt_preserves_exact_independent_decision_and_both_histories[changes_required]",
       "tests/test_disposition_reconciliation_receipt.py::test_size_budget_and_final_revocation_never_return_partial_receipts",
       "tests/test_graph_b_publication.py::test_component_request_requires_each_current_source_and_bounded_permission[wrong-source]",
-      "tests/test_graph_b_publication.py::test_late_trust_change_removes_only_newly_owned_output",
-      "tests/test_graph_b_publication.py::test_private_packet_sealed_encrypted_and_public_files_exact"
+      "tests/test_graph_b_publication.py::test_late_trust_change_removes_only_newly_owned_output"
     ],
     "backend": [
       "tests/test_authority_adjudications.py::test_denied_sources_withhold_all_notes_and_cached_content[pending_comparison]",
@@ -333,12 +334,12 @@
     "tests/test_authority_adjudications.py::test_actual_signed_bytes_adjudication_and_rights_revocation": 6979
   },
   "lane_increment_budget_ms": {
-    "review": 500,
-    "database": 25000,
+    "review": 10000,
+    "database": 30000,
     "publication": 22000,
     "candidate": 13000,
     "graph": 20000,
-    "capacity": 12000,
+    "capacity": 17000,
     "analysis": 9000,
     "frontend": 10000,
     "final": 500,
@@ -351,5 +352,5 @@
   "observed_run": 42042276367,
   "retained_log_sha256": "067020c473c6918a17e7ab306305102e03aed1d47b6ab37563c02636ccbd3b47",
   "local_xml_sha256": "7052d4ef857f6fdf92dfac0a12fbc5ea88d9016f4a8afa2b6146de9a9d4039e6",
-  "normalization": "Retain99768ba per-file CPU and fresh local fractions.488cb76/run42048411310 exposes mixed-fixture startup cost and declaration failure. Preserve99 IDs; backend retains19,80 move across10 existing pairs. Estimates never qualify CI reserves."
+  "normalization": "Retained99768ba CPU/local fractions;488cb76 fixture/declaration failure and7b58110/run42051176447 candidate27/planning29/publication30 reserve guide placement. Preserve99 IDs,backend19; move six IDs into observed spare jobs. Estimates never qualify CI."
 }

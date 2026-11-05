@@ -15,7 +15,7 @@ from scripts import ci_backend_spill_capacity as capacity  # noqa: E402
 def test_closed_source_and_complete_inventory_cannot_be_changed_or_omitted(tmp_path):
     c = capacity.load_contract()
     assert len(c.ids) == 99 and len(c.lanes) == 13
-    assert len(c.lanes["backend"]) == 19 and c.lanes["review"] == c.lanes["final"] == ()
+    assert len(c.lanes["backend"]) == 19 and len(c.lanes["review"]) == 2 and c.lanes["final"] == ()
     assert set(c.lanes["analysis"]).isdisjoint(c.lanes["history"])
     rows = [n for values in c.lanes.values() for n in values]
     assert len(rows) == len(set(rows)) == 99 and set(rows) == set(c.ids)

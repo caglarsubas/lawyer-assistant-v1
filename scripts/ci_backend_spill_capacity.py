@@ -16,8 +16,8 @@ from scripts.controller_stage_manifest import strict
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "deploy/fixtures/backend_spill_capacity.json"
 SOURCES = ("backend/tests/test_graph_b_publication.py", "backend/tests/test_disposition_reconciliation_receipt.py", "backend/tests/test_authority_adjudications.py")
-COUNTS = {'review': 0, 'database': 12, 'publication': 13, 'candidate': 7, 'graph': 11, 'capacity': 5, 'analysis': 6, 'frontend': 7, 'final': 0, 'withdrawal': 3, 'history': 6, 'planning': 10, 'backend': 19}
-BUDGETS = {'review': 500, 'database': 25000, 'publication': 22000, 'candidate': 13000, 'graph': 20000, 'capacity': 12000, 'analysis': 9000, 'frontend': 10000, 'final': 500, 'withdrawal': 4000, 'history': 8000, 'planning': 18000, 'backend': 30000}
+COUNTS = {'review': 2, 'database': 14, 'publication': 11, 'candidate': 5, 'graph': 11, 'capacity': 7, 'analysis': 6, 'frontend': 7, 'final': 0, 'withdrawal': 3, 'history': 6, 'planning': 8, 'backend': 19}
+BUDGETS = {'review': 10000, 'database': 30000, 'publication': 22000, 'candidate': 13000, 'graph': 20000, 'capacity': 17000, 'analysis': 9000, 'frontend': 10000, 'final': 500, 'withdrawal': 4000, 'history': 8000, 'planning': 18000, 'backend': 30000}
 
 
 class Contract(BaseContract):
