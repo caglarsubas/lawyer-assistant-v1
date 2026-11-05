@@ -1,5 +1,5 @@
 {
-  "schema": "metadata-ci-capacity-v4",
+  "schema": "metadata-ci-capacity-v5",
   "source_sha256": {
     "backend/tests/test_analysis_cohorts.py": "dfea8d14b6a8aa161d274f71a3d5aea1c94d109167025a7da84de8f59e7e6c2f",
     "backend/tests/test_verification_reference_readiness.py": "a7d2db9a2c0485a7f433148c1cc9d8a586cbc3faee91df9368fd1d9f44dd884a"
@@ -52,28 +52,21 @@
   ],
   "lanes": {
     "analysis": [
+      "tests/test_analysis_cohorts.py::test_candidates_and_cohort_lists_are_bounded_and_archived_freeze_is_withheld",
       "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[effort]",
-      "tests/test_analysis_cohorts.py::test_missing_integrity_and_routing_changes_never_silently_substitute_records[corrupt_protocol]",
-      "tests/test_analysis_cohorts.py::test_missing_integrity_and_routing_changes_never_silently_substitute_records[source_move]",
-      "tests/test_analysis_cohorts.py::test_separate_profiles_family_conflicts_and_different_outcomes_are_retained_not_resolved",
-      "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[reserved]",
-      "tests/test_verification_reference_readiness.py::test_current_session_revocation_withholds_retained_metadata[source]"
-    ],
-    "database": [
+      "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[job]",
       "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[participant]",
       "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[recipe]",
-      "tests/test_analysis_cohorts.py::test_second_change_to_already_stale_evidence_invalidates_preview_and_rolls_back[fact]",
-      "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[duplicate]",
-      "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[override]",
-      "tests/test_verification_reference_readiness.py::test_expiry_and_a_new_receiver_session_require_fresh_validation_without_rewriting_history"
-    ],
-    "final": [
-      "tests/test_analysis_cohorts.py::test_candidates_and_cohort_lists_are_bounded_and_archived_freeze_is_withheld",
-      "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[job]",
+      "tests/test_analysis_cohorts.py::test_missing_integrity_and_routing_changes_never_silently_substitute_records[corrupt_protocol]",
+      "tests/test_analysis_cohorts.py::test_missing_integrity_and_routing_changes_never_silently_substitute_records[source_move]",
       "tests/test_analysis_cohorts.py::test_missing_integrity_and_routing_changes_never_silently_substitute_records[substitute_cohort]",
       "tests/test_analysis_cohorts.py::test_preview_change_and_late_save_change_both_reject_with_atomic_rollback",
+      "tests/test_analysis_cohorts.py::test_separate_profiles_family_conflicts_and_different_outcomes_are_retained_not_resolved",
+      "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[reserved]",
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[thirteen]",
+      "tests/test_verification_reference_readiness.py::test_current_session_revocation_withholds_retained_metadata[source]",
       "tests/test_verification_reference_readiness.py::test_destination_authentication_precedes_all_record_and_inventory_reads",
+      "tests/test_verification_reference_readiness.py::test_expiry_and_a_new_receiver_session_require_fresh_validation_without_rewriting_history",
       "tests/test_verification_reference_readiness.py::test_explicit_versions_and_entry_selection_never_follow_a_newer_record"
     ],
     "frontend": [
@@ -104,6 +97,9 @@
       "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[observations]",
       "tests/test_analysis_cohorts.py::test_missing_integrity_and_routing_changes_never_silently_substitute_records[delete]",
       "tests/test_analysis_cohorts.py::test_pure_reconciliation_keeps_real_synthetic_model_budget_and_feedback_profiles_separate",
+      "tests/test_analysis_cohorts.py::test_second_change_to_already_stale_evidence_invalidates_preview_and_rolls_back[fact]",
+      "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[duplicate]",
+      "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[override]",
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[raw_capture]",
       "tests/test_verification_reference_readiness.py::test_current_session_revocation_withholds_retained_metadata[destination]",
       "tests/test_verification_reference_readiness.py::test_preview_and_exact_retained_reference_reopen_without_service_writes",
@@ -157,13 +153,11 @@
     "tests/test_verification_reference_readiness.py::test_explicit_versions_and_entry_selection_never_follow_a_newer_record": 6428
   },
   "lane_increment_budget_ms": {
-    "review": 32000,
-    "frontend": 22000,
-    "database": 24000,
-    "final": 20000,
-    "history": 13000,
-    "graph": 12000,
-    "analysis": 18000
+    "analysis": 42000,
+    "frontend": 20000,
+    "graph": 10000,
+    "history": 11000,
+    "review": 31000
   },
   "observed_head": "6a2c48947f9733687086240b280a9f7f4deba67b",
   "observed_run": 41995856870,
@@ -175,5 +169,5 @@
     "backend-review-contracts": "65f1e5c52b5603cb413a64a65cf7450766d52290a3cf63c185bff1a31ca81357",
     "frontend-history": "f8577d63f3c2fd40570cdfcbb4944fb7826cc258a9b19b9070bb3f06e83ced20"
   },
-  "normalization": "Hosted per-lane per-file CPU distributed by frozen local case proportions,lower-bounded by retained individual duration phases,then times1.25 ceil. Rebalance after rejected PR6a2c489. Planning only; original hosted floors remain authoritative."
+  "normalization": "Retained hosted CPU/individual phases and local proportions,times1.25 ceil. Whole-job reassignment after997777e: trials to final,restart to graph,final/database metadata to analysis/review. Planning only; original hosted floors authoritative."
 }

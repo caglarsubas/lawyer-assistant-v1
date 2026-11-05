@@ -32,7 +32,7 @@ def test_changed_sources_coverage_or_measured_capacity_cannot_be_admitted(tmp_pa
     elif change == "missing":
         value["test_ids"].pop()
     elif change == "overlap":
-        value["lanes"]["review"][0] = value["lanes"]["final"][0]
+        value["lanes"]["review"][0] = value["lanes"]["analysis"][0]
         value["lanes"]["review"].sort()
     elif change == "cost":
         for n in value["lanes"]["review"]:
