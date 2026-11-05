@@ -26,6 +26,7 @@ env:
   CI_RECOVERY_INVENTORY_TESTS: >-
     backend/tests/test_recovery_review_inventory.py
   CI_POSTGRES_SOURCE_TESTS: >-
+    backend/tests/test_operator_preview_package.py
     backend/tests/test_ci_authority_trials.py
   CI_HISTORY_BINDING_TESTS: >-
     backend/tests/test_provision_mappings.py
@@ -56,7 +57,6 @@ env:
   # Keep analysis/feedback on their measured x86 pair. The exited history
   # pair runs two bounded serial groups, avoiding a delayed inspection tail.
   CI_FRONTEND_REVIEW_TESTS: >-
-    backend/tests/test_operator_preview_package.py
     backend/tests/test_disposition_receipt_reobservation.py
   # Retain the frozen two-array interface; this file stays in deep recovery.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
@@ -165,7 +165,7 @@ jobs:
           read -r -a preview_probe <<< "$CI_PREVIEW_PARTITION_TESTS"
           PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${preview_probe[@]}" -p scripts.ci_operator_previews --operator-preview-lane=final --collect-only -q -n 2
           read -r -a metadata_probe <<< "$CI_METADATA_CAPACITY_TESTS"
-          PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend --collect-only -q -n 2
+          PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=review --collect-only -q -n 2
           read -r -a fast_guard_tests <<< "$CI_FAST_GUARD_TESTS"
           timeout --kill-after=2s 30s bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${fast_guard_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1
       # Retain locked Node/dependency preparation for existing contract checks.
@@ -454,14 +454,7 @@ jobs:
         run: |
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a frontend_review_tests <<< "$CI_FRONTEND_REVIEW_TESTS"
-          read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" "${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend "${metadata_capacity_tests[@]}"
-
-      - name: Test complete disposition restart qualification
-        timeout-minutes: 2
-        run: |
-          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" "${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   frontend-history:
     # Growing history contracts exceeded the single frontend lane's reserve.
@@ -511,6 +504,13 @@ jobs:
           read -r -a history_capacity_tests <<< "$CI_HISTORY_CAPACITY_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${history_capacity_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=history "${metadata_capacity_tests[@]}"
+
+
+      - name: Test complete disposition restart qualification
+        timeout-minutes: 2
+        run: |
+          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   final-release-authorization:
     # Whole-release lifecycle, inspection and real concurrency stay together.

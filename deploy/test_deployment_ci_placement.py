@@ -44,13 +44,13 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${metadata_capacity_tests[@]}"; do', blocks['backend-and-contracts'])
         self.assertNotIn('scripts.ci_metadata_capacity', blocks['postgres-snapshot-concurrency'])
         self.assertNotIn('scripts.ci_metadata_capacity', blocks['graph-runtime-contracts'])
-        for job, lane in [('backend-review-contracts', 'review'), ('frontend', 'frontend'),
+        for job, lane in [('backend-review-contracts', 'review'),
                           ('final-release-authorization', 'final'),
                           ('analysis-recovery-contracts', 'analysis'), ('frontend-history', 'history')]:
             self.assertEqual(blocks[job].count('read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_metadata_capacity --metadata-capacity-lane=' + lane + ' "${metadata_capacity_tests[@]}"'), 1)
-        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 6)  # Five executions and one import-only probe.
-        probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend --collect-only -q -n 2'
+        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 5)  # Four executions and one import-only probe.
+        probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=review --collect-only -q -n 2'
         self.assertEqual(blocks['backend-and-contracts'].count(probe), 1)
         self.assertLess(blocks['backend-and-contracts'].index(probe), blocks['backend-and-contracts'].index('name: Test backend'))
         self.assertIn('"${recovery_qualification_tests[@]}"', isolated)
@@ -235,7 +235,7 @@ class DeploymentPlacementContract(unittest.TestCase):
                 validate_workflow_arrays(broken)
         self.assertIn('"${publication_planning_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["publication-planning-contracts"])
         self.assertNotIn("CI_PUBLICATION_PLANNING_TESTS", blocks["frontend"])
-        for key, path, array, job in (("CI_DISPOSITION_RESTART_TESTS", "backend/tests/test_disposition_journal_reconciliation.py", "disposition_restart_tests", "frontend"),
+        for key, path, array, job in (("CI_DISPOSITION_RESTART_TESTS", "backend/tests/test_disposition_journal_reconciliation.py", "disposition_restart_tests", "frontend-history"),
                                       ("CI_CANDIDATE_FOCUS_TESTS", "backend/tests/test_analysis_focus.py", "focus_tests", "graph-candidate-contracts")):
             group = re.search(r"  " + key + r": >-\n((?:    [^\n]+\n)+)", workflow)[1]
             self.assertEqual(group.split(), [path])
@@ -251,9 +251,9 @@ class DeploymentPlacementContract(unittest.TestCase):
                     validate_workflow_arrays(broken)
             if key != "CI_DISPOSITION_RESTART_TESTS":
                 self.assertNotIn(key, blocks["frontend"])
-        self.assertIn('"${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["frontend"])
+        self.assertIn('"${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["frontend-history"])
         self.assertEqual(workflow.count("-p scripts.ci_disposition_reads --disposition-read-lane="), 3)
-        for name, lane in (("frontend", "graph"), ("retained-release-withdrawal", "withdrawal"),
+        for name, lane in (("frontend-history", "graph"), ("retained-release-withdrawal", "withdrawal"),
                            ("publication-planning-contracts", "publication")):
             self.assertIn("--disposition-read-lane=" + lane, blocks[name])
         self.assertNotIn("name: Test complete frontend recovery qualification", workflow)
@@ -261,7 +261,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(history_bindings.split(), ["backend/tests/test_provision_mappings.py"])
         self.assertEqual(workflow.count("backend/tests/test_provision_mappings.py"), 1)
         for key, paths, array, job in (("CI_HISTORY_CAPACITY_TESTS", ["backend/tests/test_analysis_workbench.py"], "history_capacity_tests", "frontend-history"),
-                                        ("CI_POSTGRES_SOURCE_TESTS", ["backend/tests/test_ci_authority_trials.py"], "postgres_source_tests", "postgres-snapshot-concurrency")):
+                                        ("CI_POSTGRES_SOURCE_TESTS", ["backend/tests/test_operator_preview_package.py", "backend/tests/test_ci_authority_trials.py"], "postgres_source_tests", "postgres-snapshot-concurrency")):
             self.assertEqual(re.search(r"  " + key + r": >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), paths)
             definition = f'          read -r -a {array} <<< "${key}"\n'
             for owner in (backend, blocks[job]):
@@ -284,7 +284,7 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertIn("--provision-binding-lane=" + lane, blocks[name])
         self.assertEqual(workflow.count("name: Test complete portfolio review qualification"), 1)
         self.assertIn('"${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2', blocks["frontend"])
-        self.assertEqual(re.search(r"  CI_FRONTEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_operator_preview_package.py", "backend/tests/test_disposition_receipt_reobservation.py"])
+        self.assertEqual(re.search(r"  CI_FRONTEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_disposition_receipt_reobservation.py"])
         self.assertNotIn("backend/tests/test_analysis_cohorts.py", publication_group)
         self.assertEqual(workflow.count("backend/tests/test_analysis_cohorts.py"), 1)
         self.assertIn("backend/tests/test_analysis_cohorts.py", re.search(r"  CI_METADATA_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1])
