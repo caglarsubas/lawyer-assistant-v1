@@ -45,7 +45,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         for job, lane in [('backend-review-contracts', 'review'),
                           ('frontend', 'frontend'),
                           ('analysis-recovery-contracts', 'analysis'),
-                          ('postgres-snapshot-concurrency', 'database')]:
+                          ('final-release-authorization', 'final')]:
             self.assertEqual(blocks[job].count('read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_metadata_capacity --metadata-capacity-lane=' + lane + ' "${metadata_capacity_tests[@]}"'), 1)
         auth = re.search(r'  CI_FINAL_AUTH_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
@@ -116,7 +116,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_native_preview_restart.py"), 1)
         self.assertIn("backend/tests/test_native_preview_restart.py", final_group)
         self.assertEqual(workflow.count("backend/tests/test_operator_preview_package.py"), 1)
-        self.assertNotIn("backend/tests/test_operator_preview_package.py", group)
+        self.assertIn("backend/tests/test_operator_preview_package.py", group)
         self.assertNotIn("backend/tests/test_set_publication_cli.py", final_group)
         self.assertNotIn("backend/tests/test_authority_model_cohorts.py", final_group)
         self.assertNotIn("backend/tests/test_open_validity_publication.py", final_group)
@@ -207,7 +207,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("--materialization-capacity-lane=final"), 1)
         self.assertNotIn("--materialization-capacity-lane=final", final)
         self.assertNotIn("--operator-preview-lane=final", final)
-        self.assertEqual(group.split(), ["backend/tests/test_metadata_handoff_readiness.py", "backend/tests/test_graph_b_component_grants.py", "backend/tests/test_declared_graph_assembly.py", "backend/tests/test_release_set_authorization.py"])
+        self.assertEqual(group.split(), ["backend/tests/test_operator_preview_package.py", "backend/tests/test_metadata_handoff_readiness.py", "backend/tests/test_graph_b_component_grants.py", "backend/tests/test_declared_graph_assembly.py", "backend/tests/test_release_set_authorization.py"])
         self.assertNotIn("backend/tests/test_planning_journal_reconciliation.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_planning_journal_reconciliation.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
@@ -267,7 +267,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(history_bindings.split(), ["backend/tests/test_provision_mappings.py"])
         self.assertEqual(workflow.count("backend/tests/test_provision_mappings.py"), 1)
         for key, paths, array, job in (("CI_HISTORY_CAPACITY_TESTS", ["backend/tests/test_source_review_effort.py"], "history_capacity_tests", "frontend-history"),
-                                        ("CI_POSTGRES_SOURCE_TESTS", ["backend/tests/test_operator_preview_package.py", "backend/tests/test_ci_authority_trials.py"], "postgres_source_tests", "postgres-snapshot-concurrency")):
+                                        ("CI_POSTGRES_SOURCE_TESTS", ["backend/tests/test_ci_authority_trials.py"], "postgres_source_tests", "postgres-snapshot-concurrency")):
             self.assertEqual(re.search(r"  " + key + r": >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), paths)
             definition = f'          read -r -a {array} <<< "${key}"\n'
             for owner in (backend, blocks[job]):
