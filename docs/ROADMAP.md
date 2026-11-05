@@ -10720,3 +10720,60 @@ Next: recipient-observation receipt packaging and independently reviewed retenti
 planning, budgeted against fresh qualified reserves. No automatic adoption,
 decision writing, acknowledgement inference, trust renewal or production/legal
 approval. See the [closed capacity manifest](../deploy/fixtures/metadata_ci_capacity.json).
+
+
+## 313. ARM frontend and closed CI workload routing — 2026-11-05
+
+Retain rejected mains41992213977/41985956054 and candidates973ee0(frontend22s
+reserve),6a2c489(analysis21),997777e(graph12),9b70810(final25),6122e96 run42005341497
+(graph13),94c73a8 run42011468201(postgres23/analysis28),ffa0247 run42013986134(review18),9527322 run42015421476(postgres26/final27). Passing component tests never qualify the run. Preserve supervisor
+rejection and owned-child-stop evidence; never rerun an unchanged rejected head
+or enlarge limits to pass.
+
+Use ARM for frontend. Keep frozen53 history pair in graph,native10 in analysis,
+trials20 in history; move restart25 to exited analysis workers. Place complete
+workbench57 in final and source-effort31 in review. Preserve commands,
+sources,manifests,lanes,step names,deadlines and two-worker sequences.
+
+Add closed source-bound routing for the ten unchanged final-authorization cases:
+eight remain final,two bounded negative/interruption cases use graph's pair.
+The locked xdist3.8.0 load scheduler with maxschedchunk1 starts two-item batches;
+put the two moved cases at positions0/2 and require distinct actual worker IDs.
+No case is omitted,skipped or replaced. Three fast guards validate source and
+inventory rejection,exercise the actual locked scheduler without spawning extra
+workers,and reject skipped/duplicate/same-worker success receipts. Early
+collection-only import checks precede the expensive backend suite.
+
+The same44 metadata IDs use review9,database8,planning4,frontend6,final17. Move the
+unchanged package34 file from PostgreSQL to graph,using the newly observed spare
+capacity after authorization routing established final64/graph57second reserves. Groups:
+review190 plus48bindings/effort31; analysis138 plus native10/restart25; graph138
+plus frozen53; final85; portfolio41; history trials20; database139. The unchanged
+17-case re-observation boundary file runs in analysis; source-effort31 moves
+from history to review. Planning holds181 plus15bindings. Use observed
+analysis74/review49second reserves after PostgreSQL26/final27 rejected the prior
+run; history30 receives the eight seconds freed by the complete effort step. All5907 original Python IDs remain,plus3 guards=5910; retain
+1018 deployment IDs,139frontend files/10532cases,14 existing guards and97 skips.
+Only declared CI guards change ownership assertions; frozen business sources
+and drivers stay byte-exact.
+
+Twelve completed siblings at7c84355 run42016910660 passed; analysis31second
+reserve leaves one second above the floor. Supersede that head before merge,
+moving its4 reference cases to planning's observed67second reserve. Retain the
+partial run without qualification credit.
+
+Closed v11 metadata and ten-case authorization manifests retain hosted/local
+source,timing and scheduler commitments. Planning does not qualify runtime.
+Require all13 exact-head checks,original execution receipts,30s job reserve and
+original step floors,then independently fetched equal-main/platform checks.
+Keep13jobs,two workers,73minute aggregate cap,dependencies,isolation,deadlines
+and retry policy. Invoice savings remain unmeasured.
+
+All785 feature pins,24 frozen outcomes and264 evidence reports remain byte-exact.
+Originals,evidence versions,credentials,sessions,private content and review
+history remain untouched. Merge and main qualification stay separate from
+product42/21/24/6,readiness0/9/4/1 and the pending owner review.
+
+Next: recipient-observation receipt packaging and independently reviewed retention
+planning after qualification; no automatic adoption,trust renewal,production or
+legal approval.

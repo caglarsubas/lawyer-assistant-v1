@@ -1,0 +1,46 @@
+{
+  "schema": "final-auth-capacity-v1",
+  "source_path": "backend/tests/test_final_release_authorization.py",
+  "source_sha256": "42cedbcd9002987a5b74ea1a509f6162be9b56f14ec2a0f557a02fe28c199fdd",
+  "lock_sha256": "cde13f1ccee8a439e9ddfea7c15dcb26960c2e9bebffec7c2582ac1386b4b23f",
+  "xdist_version": "3.8.0",
+  "test_ids": [
+    "tests/test_final_release_authorization.py::test_acceptance_interruption_discards_only_owned_new_permission",
+    "tests/test_final_release_authorization.py::test_external_grant_requires_exact_whole_reviewed_request",
+    "tests/test_final_release_authorization.py::test_guard_rejects_unheld_or_fabricated_transition",
+    "tests/test_final_release_authorization.py::test_late_grant_change_has_unknown_transition_outcome_and_no_blind_replay[activate]",
+    "tests/test_final_release_authorization.py::test_late_grant_change_has_unknown_transition_outcome_and_no_blind_replay[install]",
+    "tests/test_final_release_authorization.py::test_mid_read_changes_cannot_reuse_an_entry_permission_verdict[candidate-bytes]",
+    "tests/test_final_release_authorization.py::test_mid_read_changes_cannot_reuse_an_entry_permission_verdict[expiry]",
+    "tests/test_final_release_authorization.py::test_mid_read_changes_cannot_reuse_an_entry_permission_verdict[serving-role]",
+    "tests/test_final_release_authorization.py::test_original_retained_structural_base_remains_required_after_activation",
+    "tests/test_final_release_authorization.py::test_whole_external_approval_install_activation_and_current_runtime_read"
+  ],
+  "lanes": {
+    "graph": [
+      "tests/test_final_release_authorization.py::test_acceptance_interruption_discards_only_owned_new_permission",
+      "tests/test_final_release_authorization.py::test_guard_rejects_unheld_or_fabricated_transition"
+    ],
+    "final": [
+      "tests/test_final_release_authorization.py::test_external_grant_requires_exact_whole_reviewed_request",
+      "tests/test_final_release_authorization.py::test_late_grant_change_has_unknown_transition_outcome_and_no_blind_replay[activate]",
+      "tests/test_final_release_authorization.py::test_late_grant_change_has_unknown_transition_outcome_and_no_blind_replay[install]",
+      "tests/test_final_release_authorization.py::test_mid_read_changes_cannot_reuse_an_entry_permission_verdict[candidate-bytes]",
+      "tests/test_final_release_authorization.py::test_mid_read_changes_cannot_reuse_an_entry_permission_verdict[expiry]",
+      "tests/test_final_release_authorization.py::test_mid_read_changes_cannot_reuse_an_entry_permission_verdict[serving-role]",
+      "tests/test_final_release_authorization.py::test_original_retained_structural_base_remains_required_after_activation",
+      "tests/test_final_release_authorization.py::test_whole_external_approval_install_activation_and_current_runtime_read"
+    ]
+  },
+  "observed_head": "6122e965023d81394e2cfa416c21cada330cffda",
+  "observed_run": 42005341497,
+  "retained_log_sha256": "18b70808dcae5726b35f9cbf28bd4e34da536885a4ea200b8b9122cbd80e2207",
+  "moved_case_cpu_upper_ms": {
+    "tests/test_final_release_authorization.py::test_acceptance_interruption_discards_only_owned_new_permission": 12000,
+    "tests/test_final_release_authorization.py::test_guard_rejects_unheld_or_fabricated_transition": 12000
+  },
+  "worker_positions": [
+    0,
+    2
+  ]
+}

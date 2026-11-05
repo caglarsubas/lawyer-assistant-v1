@@ -16,8 +16,8 @@ from scripts.controller_stage_manifest import strict
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "deploy/fixtures/metadata_ci_capacity.json"
 SOURCES = ("backend/tests/test_analysis_cohorts.py", "backend/tests/test_verification_reference_readiness.py")
-COUNTS = {"review": 7, "database": 6, "final": 9, "graph": 6, "analysis": 8, "history": 8}
-BUDGETS = {"review": 15000, "database": 14000, "final": 14000, "graph": 9000, "analysis": 12000, "history": 13000}
+COUNTS = {'review': 9, 'database': 8, 'planning': 4, 'frontend': 6, 'final': 17}
+BUDGETS = {'review': 12000, 'database': 27000, 'planning': 32000, 'frontend': 7000, 'final': 27000}
 
 
 class Contract(BaseContract):
@@ -37,16 +37,16 @@ def load_contract(path=MANIFEST, root=ROOT):
     value = strict(raw)
     fields = {"schema", "source_sha256", "test_ids", "lanes", "case_cost_ms", "lane_increment_budget_ms",
               "observed_head", "observed_run", "qualification_status", "local_xml_sha256", "retained_log_sha256", "normalization"}
-    if (type(value) is not dict or set(value) != fields or value["schema"] != "metadata-ci-capacity-v1"
+    if (type(value) is not dict or set(value) != fields or value["schema"] != "metadata-ci-capacity-v11"
             or value["source_sha256"] != {n: hashlib.sha256((root / n).read_bytes()).hexdigest() for n in SOURCES}
-            or value["observed_head"] != "5633c6fbfe7eee16d67b87fe72964959c05e6919"
-            or value["observed_run"] != 41985956054 or type(value["observed_run"]) is not int
-            or value["qualification_status"] != "predecessor_main_rejected_reserve"
+            or value["observed_head"] != "6a2c48947f9733687086240b280a9f7f4deba67b"
+            or value["observed_run"] != 41995856870 or type(value["observed_run"]) is not int
+            or value["qualification_status"] != "predecessor_PR_rejected_reserve"
             or value["lane_increment_budget_ms"] != BUDGETS
             or type(value["normalization"]) is not str or not 1 <= len(value["normalization"]) <= 256):
         raise ValueError("Source-bound measured capacity evidence required")
     logs = value["retained_log_sha256"]
-    if (type(logs) is not dict or set(logs) != {"frontend", "analysis-recovery-contracts"}
+    if (type(logs) is not dict or set(logs) != {"analysis-recovery-contracts", "final-release-authorization", "backend-review-contracts", "frontend-history"}
             or any(type(x) is not str or not re.fullmatch(r"[0-9a-f]{64}", x)
                    for x in [value["local_xml_sha256"], *logs.values()])):
         raise ValueError("Exact retained timing commitments required")
