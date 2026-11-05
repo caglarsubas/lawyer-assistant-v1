@@ -10538,3 +10538,66 @@ provenance readiness, with explicit custody/durability limitations and no
 automatic promotion of retained metadata. See
 [adapter contract](VERIFICATION_REFERENCE_READINESS.md) and
 [frozen report](evidence/verification-reference-2026-11-04.json).
+
+## 310. Independently reviewed retention metadata and signed provenance readiness
+
+**Qualified baseline:** PR #278 is merged as
+`004bba250b368683aee3089fde99d7628db594b1`. Its exact-head run `41870102802`
+and independent main run `41873364495` pass all 13 checks, exact execution
+inventories and fixed reserve floors. Backend retains 108/162 seconds for
+PR/main; minimum job reserves are 32/31 seconds. Engineering starts at
+277 done / 0 open / 0 blocked. All 777 predecessor source pins and earlier
+evidence remain exact.
+
+Add an unregistered read-only adapter for independently reviewed retention
+metadata. Trusted host wiring supplies a distinct private proof directory,
+independent context/directory pins, three distinct public keys/principals and
+explicit proof-set versions. Requests supply only an entry ID and exact hash.
+Authenticate the assigned reviewer before lookup, inventory or parsing.
+
+Verify domain-separated signed issuer provenance, a preparer's proposal binding
+the exact provenance-file hash, and a distinct reviewer's decision binding the
+exact proposal-file hash. All records bind the proof-directory identity, target
+profile, note-store context, original acknowledgement and exact reference/plan.
+Check current sessions, roles, key scopes, revocation, causal ordering and bounded
+validity. Different valid keys or later records cannot substitute for reviewed
+versions. Reject self-review, caller key provisioning and claims of approved
+custody, durability or renewed authority.
+
+Validate cheap mandatory checks first; negative decisions never cause source
+decryption. Accepted metadata requires two fresh source/destination reference
+checks and stable proof bytes, inventories and key/reference registries. Missing
+or failed checks, changed inputs, revoked actors, staging, links, races or
+exhausted budgets withhold all evidence metadata. Preserve originals and both
+histories. Expiry never exceeds the original handoff, signed proof/key windows
+or current verification; reopening cannot renew trust.
+
+The frozen local campaign qualifies 20 outcomes across two pairs/four isolated
+account contexts, two encrypted verification records, six proof sets/18 exact
+signed envelopes and 12 invented keys. Four original input-review records and
+source/review bytes remain exact. Account changes are limited to two declared
+fixture revocations; retain one namespace injection. Fourteen measured service
+reads write nothing. Bind 781 source files, all 777 predecessor pins and the
+preceding report hash. No live case documents, real keys or provider/model
+requests are used.
+
+Thirteen new regression cases use the measured backend reserve and guarded
+shared read-only setup; mutation scenarios keep isolated pairs. Preserve all
+older test identities, 97 original backend skips, 1018 deployment IDs and 139
+frontend files / 10532 cases. No existing workflow, source file, manifest, job,
+73-minute aggregate cap, worker count, deadline, supervisor or floor changes.
+Require fresh exact-head and independently fetched equal-main execution,
+fixed-floor and private-preservation evidence before closure. Local timing is
+not hosted CI qualification.
+
+Readiness grants only disposable metadata planning. Real retention permission,
+key ownership/custody, issuer enrollment, acknowledgement-channel authenticity,
+durability, cross-store atomicity, recovery, production and legal approval remain
+unqualified. Product checklist 42/21/24/6 and readiness 0/9/4/1 remain unchanged;
+the owner's focused-analysis-v3 review is pending.
+
+Next: explicit metadata-handoff packaging and read-only destination acceptance,
+binding exact reviewed proof/reference versions and fresh destination authority.
+Budget new cases against measured reserves before implementation. See
+[adapter contract](RETENTION_AUTHORIZATION_READINESS.md) and
+[frozen report](evidence/retention-authorization-2026-11-05.json).
