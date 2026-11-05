@@ -64,19 +64,20 @@ Use an existing owner-only directory and a fresh output name. Reports have a
 separate 1 MiB bound; receipt limits remain 4 KiB. No real cases, models, provider
 requests or genuine signing keys are used.
 
-CI reuses existing capacity. Metadata44 uses review7/planning6/frontend8/final15/
-backend4/database2/history2. Preserve the intact logical PostgreSQL inventory16
-slice in final and move boundary17 into the PostgreSQL pair. Move the unchanged
-provision-binding history48 slice from review to backend; retain the83-case
-manifest. The same mocked model20 runs analysis8/history12 through source-bound
-closed selection with three guards. Explicit repository PYTHONPATH is required
-for the history console entry point; exercise it without inherited environment.
-History combines its12 model IDs with2 metadata IDs in its existing pair.
-Backend serially runs new recipient10 after exited pairs under a fifty-second
-hard timeout,plus metadata4 under thirty-five seconds and the moved binding48
-step. Its fast retained-report guard remains in the core selection. Preserve all
-5910 previous Python identities plus fourteen new cases,thirteen jobs,the
-seventy-three-minute aggregate cap,existing deadlines,two-worker ceiling,
-supervisor and reserve floors. Retain earlier failed or superseded runs without
-qualification credit. Exact-head and independently fetched equal-main receipts
-and timing qualify delivery; local estimates do not qualify hosted CI.
+CI reuses existing capacity and retains all rejected attempts. The873-second
+backend core at99768ba passed but the whole job timed out after recipient10 and
+binding48. A new closed source-bound inventory redistributes99 unchanged cases
+(publication31,disposition receipts27,adjudications41) across12 existing jobs;
+backend selects none. Three guards enforce original hashes,complete collection
+and exactly-once non-skipped execution. Local12-lane execution confirms all99
+once. Retained per-file CPU totals and fresh per-case timings are planning inputs;
+actual hosted receipts and reserve floors remain mandatory.
+
+Metadata44 uses review11/database3/planning5/frontend8/final15/history2,removing
+its standalone backend phase. Preserve inventory16 in final,boundary17 in
+PostgreSQL,binding history48 in backend,and mocked model20 analysis8/history12.
+Recipient10 runs serially in backend under50s after exited pairs. Preserve5910
+previous Python identities plus17new,all1018 deployment IDs,139frontend files/
+10532cases,13jobs,the73-minute aggregate cap,existing deadlines,two-worker ceiling,
+supervisor and reserve floors. Independently qualify exact-head checks and fetched
+equal-main execution. Engineering CI does not establish legal or production approval.

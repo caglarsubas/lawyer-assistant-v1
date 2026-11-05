@@ -10,6 +10,10 @@ concurrency:
   group: checks-${{ github.ref }}
   cancel-in-progress: true
 env:
+  CI_BACKEND_SPILL_TESTS: >-
+    backend/tests/test_graph_b_publication.py
+    backend/tests/test_disposition_reconciliation_receipt.py
+    backend/tests/test_authority_adjudications.py
   CI_FINAL_AUTH_CAPACITY_TESTS: >-
     backend/tests/test_final_release_authorization.py
   CI_METADATA_CAPACITY_TESTS: >-
@@ -261,7 +265,7 @@ jobs:
               ignore_args+=("--ignore=$path")
             fi
           done
-          bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard_v2.py -- pytest backend/tests "${ignore_args[@]}" -p scripts.ci_operator_previews --operator-preview-lane=final -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA
+          bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard_v2.py -- pytest backend/tests "${ignore_args[@]}" -p scripts.ci_operator_previews --operator-preview-lane=final -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=30 -rA -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=backend
       - name: Validate RDF and SHACL contract
         run: python scripts/validate_ontology.py
       - name: Compare actual synthetic extraction with independent reference
@@ -302,11 +306,6 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_provision_bindings --provision-binding-lane=history "${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
 
-      - name: Test retained metadata capacity slice
-        timeout-minutes: 1
-        run: |
-          read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          timeout --kill-after=2s 35s bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=backend "${metadata_capacity_tests[@]}"
   backend-review-contracts:
     # Isolate measured cohort/review CPU work instead of saturating the remainder.
     # Exactly the same files run once with two workers; existing caps stay intact.
@@ -341,7 +340,8 @@ jobs:
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_materialization_capacity --materialization-capacity-lane=review -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${authority_cohort_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=review "${metadata_capacity_tests[@]}"
+          read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_materialization_capacity --materialization-capacity-lane=review -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${authority_cohort_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=review "${metadata_capacity_tests[@]}" -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=review "${backend_spill_tests[@]}"
 
       # Reuse the same pair after review tests; no overlap with the x86 UI.
       - name: Test complete manifest-bound assignment 1
@@ -421,7 +421,8 @@ jobs:
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           read -r -a postgres_source_tests <<< "$CI_POSTGRES_SOURCE_TESTS"
           export PYTHONPATH="$GITHUB_WORKSPACE"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=database "${metadata_capacity_tests[@]}"
+          read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=database "${metadata_capacity_tests[@]}" -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=database "${backend_spill_tests[@]}"
 
 
 
@@ -484,7 +485,8 @@ jobs:
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a frontend_review_tests <<< "$CI_FRONTEND_REVIEW_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" "${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend "${metadata_capacity_tests[@]}"
+          read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" "${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend "${metadata_capacity_tests[@]}" -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=frontend "${backend_spill_tests[@]}"
 
   frontend-history:
     # Growing history contracts exceeded the single frontend lane's reserve.
@@ -535,7 +537,8 @@ jobs:
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
           export PYTHONPATH="$GITHUB_WORKSPACE"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -p scripts.ci_model_trial_capacity -rA --model-trial-capacity-lane=history -p scripts.ci_metadata_capacity --metadata-capacity-lane=history "${metadata_capacity_tests[@]}"
+          read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -p scripts.ci_model_trial_capacity -rA --model-trial-capacity-lane=history -p scripts.ci_metadata_capacity --metadata-capacity-lane=history "${metadata_capacity_tests[@]}" -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=history "${backend_spill_tests[@]}"
   final-release-authorization:
     # Whole-release lifecycle, inspection and real concurrency stay together.
     # The single build uses backend reserve instead of this measured thin tail.
@@ -582,7 +585,8 @@ jobs:
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           read -r -a inventory_review_tests <<< "$CI_RECOVERY_INVENTORY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=final "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=final "${metadata_capacity_tests[@]}" -p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}"
+          read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=final "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=final "${metadata_capacity_tests[@]}" -p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}" -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=final "${backend_spill_tests[@]}"
 
   retained-release-withdrawal:
     # Measured withdrawal reconstruction exhausted the frontend's five-minute
@@ -613,7 +617,8 @@ jobs:
           read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
           read -r -a withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=withdrawal -p scripts.ci_disposition_reads --disposition-read-lane=withdrawal "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+          read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=withdrawal -p scripts.ci_disposition_reads --disposition-read-lane=withdrawal "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=withdrawal "${backend_spill_tests[@]}"
       # Reuse measured withdrawal spare after its original pair has exited.
       # Both complete files and the original two-minute step limit are retained.
       - name: Test complete backend capacity group
@@ -651,7 +656,8 @@ jobs:
           read -r -a candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
           read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
           read -r -a focus_tests <<< "$CI_CANDIDATE_FOCUS_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate -p scripts.ci_provision_bindings --provision-binding-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+          read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate -p scripts.ci_provision_bindings --provision-binding-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=candidate "${backend_spill_tests[@]}"
 
   source-publication-contracts:
     # PostgreSQL races passed in 208s and publication checks in 72s, but setup
@@ -679,7 +685,8 @@ jobs:
         timeout-minutes: 3
         run: |
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${publication_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
+          read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${publication_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=publication "${backend_spill_tests[@]}"
       - name: Test manifest-bound review headroom slice 9
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json
@@ -713,7 +720,8 @@ jobs:
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}"
+          read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}" -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=graph "${backend_spill_tests[@]}"
 
 
       # The main graph pair has exited. Preserve the exact frozen history
@@ -754,7 +762,8 @@ jobs:
         run: |
           read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
           read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${recovery_qualification_tests[@]}" "${human_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
+          read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${recovery_qualification_tests[@]}" "${human_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=analysis "${backend_spill_tests[@]}"
 
       - name: Test manifest-bound review headroom slice 10
         timeout-minutes: 1
@@ -803,7 +812,8 @@ jobs:
           read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
           read -r -a publication_planning_tests <<< "$CI_PUBLICATION_PLANNING_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=publication -p scripts.ci_disposition_reads --disposition-read-lane=publication "${publication_planning_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=planning "${metadata_capacity_tests[@]}"
+          read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=publication -p scripts.ci_disposition_reads --disposition-read-lane=publication "${publication_planning_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=planning "${metadata_capacity_tests[@]}" -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=planning "${backend_spill_tests[@]}"
       - name: Test complete provision binding qualification
         timeout-minutes: 2
         run: |
@@ -834,4 +844,5 @@ jobs:
         run: |
           read -r -a authority_trial_tests <<< "$CI_AUTHORITY_TRIAL_TESTS"
           read -r -a inventory_review_tests <<< "$CI_RECOVERY_INVENTORY_TESTS"
-          timeout --kill-after=2s 140s bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_trials --authority-trial-lane=capacity "${authority_trial_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_recovery_inventory --recovery-inventory-lane=capacity "${inventory_review_tests[@]}"
+          read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"
+          timeout --kill-after=2s 140s bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_trials --authority-trial-lane=capacity "${authority_trial_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_recovery_inventory --recovery-inventory-lane=capacity "${inventory_review_tests[@]}" -p scripts.ci_backend_spill_capacity --backend-spill-capacity-lane=capacity "${backend_spill_tests[@]}"

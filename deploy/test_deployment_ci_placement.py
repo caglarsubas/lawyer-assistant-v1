@@ -46,7 +46,6 @@ class DeploymentPlacementContract(unittest.TestCase):
                           ('frontend', 'frontend'),
                           ('publication-planning-contracts', 'planning'),
                           ('final-release-authorization', 'final'),
-                          ('backend-and-contracts', 'backend'),
                           ('postgres-snapshot-concurrency', 'database'),
                           ('frontend-history', 'history')]:
             self.assertEqual(blocks[job].count('read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"'), 2 if lane == 'backend' else 1)
@@ -73,9 +72,17 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('--model-trial-capacity-lane=history', blocks['frontend-history'])
         self.assertIn('export PYTHONPATH="$GITHUB_WORKSPACE"', blocks['frontend-history'])
         self.assertIn('timeout --kill-after=2s 35s bash scripts/run_ci_tests.sh', blocks['analysis-recovery-contracts'])
+        spill = re.search(r'  CI_BACKEND_SPILL_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
+        self.assertEqual(spill, ['backend/tests/test_graph_b_publication.py', 'backend/tests/test_disposition_reconciliation_receipt.py', 'backend/tests/test_authority_adjudications.py'])
+        self.assertEqual(workflow.count('-p scripts.ci_backend_spill_capacity'), 13)
+        for job, lane in [('backend-and-contracts', 'backend'), ('backend-review-contracts', 'review'), ('postgres-snapshot-concurrency', 'database'), ('frontend', 'frontend'), ('frontend-history', 'history'), ('final-release-authorization', 'final'), ('source-publication-contracts', 'publication'), ('graph-candidate-contracts', 'candidate'), ('retained-release-withdrawal', 'withdrawal'), ('analysis-recovery-contracts', 'analysis'), ('publication-planning-contracts', 'planning'), ('backend-capacity', 'capacity'), ('graph-runtime-contracts', 'graph')]:
+            self.assertEqual(blocks[job].count('--backend-spill-capacity-lane=' + lane), 1)
+            if lane != 'backend':
+                self.assertIn('read -r -a backend_spill_tests <<< "$CI_BACKEND_SPILL_TESTS"', blocks[job])
+                self.assertIn('"${backend_spill_tests[@]}"', blocks[job])
         self.assertEqual(workflow.count('-p scripts.ci_model_trial_capacity'), 2)
         self.assertEqual(workflow.count('-p scripts.ci_final_auth_capacity'), 3)
-        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 8)  # Seven executions and one import-only probe.
+        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 7)  # Six executions and one import-only probe.
         probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=review --collect-only -q -n 2'
         self.assertEqual(blocks['backend-and-contracts'].count(probe), 1)
         self.assertLess(blocks['backend-and-contracts'].index(probe), blocks['backend-and-contracts'].index('name: Test backend'))
@@ -326,9 +333,9 @@ class DeploymentPlacementContract(unittest.TestCase):
             "backend/tests/test_staged_receipt_adapter.py", "backend/tests/test_native_receipt_stage.py",
             "backend/tests/test_native_receipt_http.py", "backend/tests/test_native_receipt_faults.py",
             "backend/tests/test_receipt_recovery_planning.py"])
-        self.assertNotIn("backend/tests/test_graph_b_publication.py", workflow)
+        self.assertEqual(workflow.count("backend/tests/test_graph_b_publication.py"), 1)
         self.assertNotIn("backend/tests/test_final_release_transitions.py", workflow)
-        self.assertNotIn("backend/tests/test_disposition_reconciliation_receipt.py", workflow)
+        self.assertEqual(workflow.count("backend/tests/test_disposition_reconciliation_receipt.py"), 1)
         self.assertIn('"${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', blocks["graph-candidate-contracts"])
         self.assertEqual(workflow.count("-p scripts.ci_source_reviews --source-review-lane="), 3)
         self.assertEqual(re.search(r"  CI_SOURCE_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_source_reviews.py"])
