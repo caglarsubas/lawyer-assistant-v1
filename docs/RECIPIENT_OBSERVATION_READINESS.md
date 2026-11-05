@@ -64,11 +64,17 @@ Use an existing owner-only directory and a fresh output name. Reports have a
 separate 1 MiB bound; receipt limits remain 4 KiB. No real cases, models, provider
 requests or genuine signing keys are used.
 
-CI reuses existing capacity. The unchanged eight database metadata cases move
-to frontend six/graph two. The intact sixteen-case logical PostgreSQL inventory
-slice runs in the final-release pair, preserving its original partition manifest. The new ten-case group runs serially after PostgreSQL's
-existing two-worker group has exited, with a fifty-second hard timeout. The
-retained-report guard runs in backend. All previous identities, worker ceilings,
-thirteen jobs, seventy-three-minute aggregate cap, existing deadlines, supervisor
-and reserve floors are preserved. Exact-head and independently fetched equal-main
-receipts and timing qualify delivery; local estimates do not qualify hosted CI.
+CI reuses existing capacity. Metadata44 uses review9/planning6/frontend12/final17.
+The intact sixteen-case logical PostgreSQL inventory slice runs in the final-release
+pair, preserving its original partition manifest. The unchanged boundary17 moves
+from analysis to candidate. A closed source-bound model-trial inventory runs the
+same twenty mocked cases frontend8/history12 and refuses missing, duplicated,
+skipped or xfailed execution receipts; three fast guards verify this contract.
+The new ten-case group runs serially after PostgreSQL's existing two-worker group
+has exited, with a fifty-second hard timeout. The retained-report guard runs in
+backend. All5910 previous Python identities plus fourteen new cases are conserved.
+Thirteen jobs, the seventy-three-minute aggregate cap, existing deadlines,
+two-worker ceiling, supervisor and reserve floors are preserved. Retain the earlier
+history23-second rejection; do not rerun or merge that head. Exact-head and
+independently fetched equal-main receipts and timing qualify delivery; local
+estimates do not qualify hosted CI.

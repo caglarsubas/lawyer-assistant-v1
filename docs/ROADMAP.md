@@ -10804,22 +10804,31 @@ session deletions are accounted for. Retain both incomplete campaign attempts.
 Strengthen new fixture identity namespaces and correct malformed-input injection;
 do not change the26 expectations or predecessor implementations.
 
-Address CI capacity before publishing coverage. Closed v12 placement preserves
-the44 original metadata IDs: review9,graph2,planning4,frontend12,final17. Move the
-eight former database cases to frontend6/graph2; database core returns to131 and
-graph core becomes140. Retain run42033292507 at2476635: twelve sibling jobs
-passed,new serial41s,PostgreSQL32s reserve. Supersede before merge to strengthen
-headroom: the unchanged logical PostgreSQL inventory16 slice joins final's existing
-pair,keeping its frozen26-case manifest and lane contents. Database core becomes115
-and final core101. Run ten new integration IDs serially after PostgreSQL's
-existing pair exits, with a50-second hard timeout; one fast retained-report guard
-uses backend. Full Python inventory is5910 original IDs plus11new=5921; backend
-selection4008/passes3911/original97skips and portfolio47 retain all prior bodies.
-Keep1018 deployment IDs,139frontend files/10532cases,13jobs,the73-minute aggregate
-cap,all older worker commands/deadlines,immutable manifests,supervisor and floors.
-Require all exact-head checks and fixed reserves,then separately fetched equal-main
-execution and preservation evidence. Local timing is planning,not hosted acceptance
-or measured invoice savings.
+Address CI capacity before publishing coverage. Retain the initial run42033292507
+at2476635 and the rejected run42035472783 at04c38dc: the latter finished history
+with23 seconds of reserve, below the unchanged30-second job floor. Its supervisor
+stopped the backend; it supplies no merge qualification. Graph and analysis had
+31 seconds, so distribute unchanged work into measured spare capacity before
+publishing another head. Closed v13 metadata placement preserves44 original IDs:
+review9,planning6,frontend12,final17. The intact logical PostgreSQL inventory16
+slice joins final's existing pair, preserving its frozen26-case manifest. Move the
+unchanged boundary17 from analysis to candidate. Split the20 unchanged mocked
+model-trial cases frontend8/history12 using a source-pinned closed inventory and
+three fast execution-receipt guards. No cases are pruned or repeated. Local two-lane
+execution confirms all20 once; hosted headroom remains a separate gate.
+
+Run ten new integration IDs serially after PostgreSQL's existing pair exits with
+a50-second hard timeout; the fast retained-report guard uses backend. Full Python
+inventory is5910 original IDs plus14new=5924: ten integrations,one report guard and
+three CI guards. Backend selection4011/passes3914/original97skips,graph138,
+analysis121,candidate293,planning198,database115 plus serial10,final101 and
+portfolio47 retain all prior bodies. Keep1018 deployment IDs,139frontend files/
+10532cases,13jobs,the73-minute aggregate cap,the two-worker ceiling,all existing
+phase deadlines,immutable business manifests,supervisor and reserve floors.
+The added frontend model slice has a35-second hard deadline inside a60-second
+step,with15 seconds of required step reserve. Require all exact-head checks and
+fixed reserves,then separately fetched equal-main execution and preservation
+receipts. Local timing is planning,not hosted acceptance or measured invoice savings.
 
 Originals,evidence versions,credentials,sessions,private cases and review history
 remain unchanged. Actual retention permission,custody,issuer/channel authenticity,

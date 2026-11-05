@@ -1,5 +1,5 @@
 {
-  "schema": "metadata-ci-capacity-v12",
+  "schema": "metadata-ci-capacity-v13",
   "source_sha256": {
     "backend/tests/test_analysis_cohorts.py": "dfea8d14b6a8aa161d274f71a3d5aea1c94d109167025a7da84de8f59e7e6c2f",
     "backend/tests/test_verification_reference_readiness.py": "a7d2db9a2c0485a7f433148c1cc9d8a586cbc3faee91df9368fd1d9f44dd884a"
@@ -96,14 +96,12 @@
       "tests/test_verification_reference_readiness.py::test_unknown_staging_links_permissions_and_limits_block_without_cleanup"
     ],
     "planning": [
+      "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[job]",
+      "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[observations]",
       "tests/test_verification_reference_readiness.py::test_current_session_revocation_withholds_retained_metadata[destination]",
       "tests/test_verification_reference_readiness.py::test_destination_authentication_precedes_all_record_and_inventory_reads",
       "tests/test_verification_reference_readiness.py::test_expiry_and_a_new_receiver_session_require_fresh_validation_without_rewriting_history",
       "tests/test_verification_reference_readiness.py::test_preview_and_exact_retained_reference_reopen_without_service_writes"
-    ],
-    "graph": [
-      "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[job]",
-      "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[observations]"
     ]
   },
   "case_cost_ms": {
@@ -156,8 +154,7 @@
     "review": 12000,
     "frontend": 25000,
     "final": 27000,
-    "planning": 32000,
-    "graph": 8000
+    "planning": 37000
   },
   "observed_head": "6a2c48947f9733687086240b280a9f7f4deba67b",
   "observed_run": 41995856870,
@@ -169,5 +166,5 @@
     "backend-review-contracts": "65f1e5c52b5603cb413a64a65cf7450766d52290a3cf63c185bff1a31ca81357",
     "frontend-history": "f8577d63f3c2fd40570cdfcbb4944fb7826cc258a9b19b9070bb3f06e83ced20"
   },
-  "normalization": "Retained costs with1.25 allowance.040bba6 PR reserves:frontend58s/database56s. Move unchanged database8 cases to frontend6/graph2 before new bounded serial recipient tests in PostgreSQL. Planning only; original hosted floors gate PR/main."
+  "normalization": "Retained costs with1.25 allowance.04c38dc run42035472783 rejected history23s; graph31/analysis31s. Keep44 IDs; move graph2 metadata to planning52s reserve. Frozen source bytes and original hosted floors remain authoritative."
 }

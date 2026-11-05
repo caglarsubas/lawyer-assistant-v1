@@ -72,6 +72,7 @@ env:
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_authority_proposals.py
   CI_GRAPH_CANDIDATE_TESTS: >-
+    backend/tests/test_disposition_receipt_reobservation_boundary.py
     backend/tests/test_final_graph_candidate.py
     backend/tests/test_staged_receipt_adapter.py
     backend/tests/test_native_receipt_stage.py
@@ -92,7 +93,6 @@ env:
     backend/tests/test_copy_recovery_disposition.py
     backend/tests/test_journal_copy_reconciliation.py
     backend/tests/test_disposition_receipt_reobservation_races.py
-    backend/tests/test_disposition_receipt_reobservation_boundary.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
   # A dedicated bounded job holds complete publication/planning files.
   # Keep remaining graph files complete and the lighter Graph B snapshot in backend.
@@ -477,6 +477,13 @@ jobs:
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" "${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend "${metadata_capacity_tests[@]}"
 
+      - name: Test model-trial capacity slice
+        timeout-minutes: 1
+        run: |
+          read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
+          export PYTHONPATH="$GITHUB_WORKSPACE"
+          timeout --kill-after=2s 35s bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_model_trial_capacity --model-trial-capacity-lane=frontend
+
   frontend-history:
     # Growing history contracts exceeded the single frontend lane's reserve.
     # Built-in hash sharding preserves all files and per-file isolation. Each
@@ -519,12 +526,12 @@ jobs:
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
 
 
-      # Keep this complete offline model-trial group at its original two-worker cap.
+      # Closed inventory retains all twenty mocked model-trial cases across two existing jobs.
       - name: Test registered local-model authority trials
         timeout-minutes: 2
         run: |
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -p scripts.ci_model_trial_capacity --model-trial-capacity-lane=history
   final-release-authorization:
     # Whole-release lifecycle, inspection and real concurrency stay together.
     # The single build uses backend reserve instead of this measured thin tail.
@@ -702,8 +709,7 @@ jobs:
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
-          read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=graph "${metadata_capacity_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}"
 
 
       # The main graph pair has exited. Preserve the exact frozen history
