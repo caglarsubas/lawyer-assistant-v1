@@ -10738,8 +10738,11 @@ their deadlines. This removes the differing platform from the overloaded native
 frontend path; actual hosted qualification must establish compatibility and
 reserve. Do not infer success or invoice savings from architecture selection.
 
-Restore PostgreSQL and graph to their prior165 and102 case groups by moving the
-same12 metadata cases into the existing frontend portfolio command. The closed
+Remove the same12 metadata cases from PostgreSQL/graph and restore the unchanged
+package34 file from PostgreSQL to the existing frontend portfolio command. The
+retained PostgreSQL report measured28.13 CPU seconds for that file; removing it
+also covers database startup variance. Database131, graph102 and portfolio81
+retain their complete source identities. The closed
 v2 allocation is frontend12, review7, final9, analysis8 and history8: the same44
 source-bound identities once, across five existing pairs. Retain conservative
 historical x86 weights as planning evidence; retain all14 guard identities and

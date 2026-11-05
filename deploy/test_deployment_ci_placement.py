@@ -261,7 +261,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(history_bindings.split(), ["backend/tests/test_provision_mappings.py"])
         self.assertEqual(workflow.count("backend/tests/test_provision_mappings.py"), 1)
         for key, paths, array, job in (("CI_HISTORY_CAPACITY_TESTS", ["backend/tests/test_analysis_workbench.py"], "history_capacity_tests", "frontend-history"),
-                                        ("CI_POSTGRES_SOURCE_TESTS", ["backend/tests/test_operator_preview_package.py", "backend/tests/test_ci_authority_trials.py"], "postgres_source_tests", "postgres-snapshot-concurrency")):
+                                        ("CI_POSTGRES_SOURCE_TESTS", ["backend/tests/test_ci_authority_trials.py"], "postgres_source_tests", "postgres-snapshot-concurrency")):
             self.assertEqual(re.search(r"  " + key + r": >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), paths)
             definition = f'          read -r -a {array} <<< "${key}"\n'
             for owner in (backend, blocks[job]):
@@ -284,7 +284,7 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertIn("--provision-binding-lane=" + lane, blocks[name])
         self.assertEqual(workflow.count("name: Test complete portfolio review qualification"), 1)
         self.assertIn('"${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2', blocks["frontend"])
-        self.assertEqual(re.search(r"  CI_FRONTEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_disposition_receipt_reobservation.py"])
+        self.assertEqual(re.search(r"  CI_FRONTEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_operator_preview_package.py", "backend/tests/test_disposition_receipt_reobservation.py"])
         self.assertNotIn("backend/tests/test_analysis_cohorts.py", publication_group)
         self.assertEqual(workflow.count("backend/tests/test_analysis_cohorts.py"), 1)
         self.assertIn("backend/tests/test_analysis_cohorts.py", re.search(r"  CI_METADATA_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1])

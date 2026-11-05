@@ -26,7 +26,6 @@ env:
   CI_RECOVERY_INVENTORY_TESTS: >-
     backend/tests/test_recovery_review_inventory.py
   CI_POSTGRES_SOURCE_TESTS: >-
-    backend/tests/test_operator_preview_package.py
     backend/tests/test_ci_authority_trials.py
   CI_HISTORY_BINDING_TESTS: >-
     backend/tests/test_provision_mappings.py
@@ -57,6 +56,7 @@ env:
   # Keep analysis/feedback on their measured x86 pair. The exited history
   # pair runs two bounded serial groups, avoiding a delayed inspection tail.
   CI_FRONTEND_REVIEW_TESTS: >-
+    backend/tests/test_operator_preview_package.py
     backend/tests/test_disposition_receipt_reobservation.py
   # Retain the frozen two-array interface; this file stays in deep recovery.
   CI_HUMAN_REVIEW_GROUP_TESTS: >-
