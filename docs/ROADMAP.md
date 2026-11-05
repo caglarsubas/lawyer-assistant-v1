@@ -10591,8 +10591,8 @@ as qualification or retry the unchanged head.
 Move complete adjudication39/effort31 files and the unchanged preview-final7
 slice into backend, and the unchanged materialization-final20 slice into
 portfolio review. Return the complete analysis-cohort32 file to backend after source-publication
-passed with only27 seconds of reserve. Backend is 3959 selected / 3862 passes / 97 original skips;
-final-release is 13 and portfolio is 47. Preserve all original preview20,
+passed with only27 seconds of reserve. Backend is 4111 selected / 4014 passes / 97 original skips;
+final-release is 13 and portfolio is 81. Preserve all original preview20,
 materialization58 and cohort19 identities exactly once. Existing closed manifests
 and logical slice contents remain byte-exact; only hosting jobs change, guarded
 by explicit placement assertions. The 13 new retention tests and their business
@@ -10607,7 +10607,11 @@ Verify the real supervised console child locally against invented Actions
 metadata; no supervisor policy, source or credential handling changes. A further
 run correctly rejected a duplicated literal path in the placement guard; the
 collection probe now uses the existing declared array, preserving the guard
-against duplicate test execution. Retain both rejected observations.
+against duplicate test execution. Retain both rejected observations. A further run passed PostgreSQL/graph tests
+but retained only25/27 seconds. Move complete public-source94 and temporal58
+files to backend; package34 and the intact restart25 phase use frontend reserve.
+PostgreSQL primary131, graph primary93 and portfolio81 preserve every original
+identity and all real database races. No test bodies or frozen manifests change.
 
 Preserve older source bytes, 1018 deployment IDs and 139 frontend files / 10532
 cases. Keep 13 jobs, the 73-minute aggregate cap, worker counts, deadlines,

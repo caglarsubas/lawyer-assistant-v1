@@ -23,7 +23,6 @@ env:
   CI_RECOVERY_INVENTORY_TESTS: >-
     backend/tests/test_recovery_review_inventory.py
   CI_POSTGRES_SOURCE_TESTS: >-
-    backend/tests/test_public_sources.py
     backend/tests/test_ci_authority_trials.py
   CI_HISTORY_BINDING_TESTS: >-
     backend/tests/test_provision_mappings.py
@@ -54,6 +53,7 @@ env:
   # Keep analysis/feedback on their measured x86 pair. The exited history
   # pair runs two bounded serial groups, avoiding a delayed inspection tail.
   CI_FRONTEND_REVIEW_TESTS: >-
+    backend/tests/test_operator_preview_package.py
     backend/tests/test_verification_reference_readiness.py
     backend/tests/test_disposition_receipt_reobservation.py
   # Retain the frozen two-array interface; this file stays in deep recovery.
@@ -95,8 +95,6 @@ env:
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_release_set_authorization.py
-    backend/tests/test_operator_preview_package.py
-    backend/tests/test_temporal_validity.py
   # Complete expensive review files are disjoint from the backend remainder.
   # Withdrawal retains retention18; the dedicated publication/planning job
   # holds authorization49 and open-validity4. Preserve every complete file, pair/cap and exclusion.
@@ -390,11 +388,7 @@ jobs:
           export PYTHONPATH="$GITHUB_WORKSPACE"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}"
 
-      - name: Test complete disposition restart qualification
-        timeout-minutes: 2
-        run: |
-          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+
 
 
       # The original bounded restart phase follows exited PostgreSQL workers.
@@ -452,6 +446,12 @@ jobs:
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a frontend_review_tests <<< "$CI_FRONTEND_REVIEW_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" "${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+
+      - name: Test complete disposition restart qualification
+        timeout-minutes: 2
+        run: |
+          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   frontend-history:
     # Growing history contracts exceeded the single frontend lane's reserve.
