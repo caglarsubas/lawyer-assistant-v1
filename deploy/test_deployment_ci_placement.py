@@ -45,7 +45,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         for job, lane in [('backend-review-contracts', 'review'),
                           ('frontend', 'frontend'),
                           ('postgres-snapshot-concurrency', 'database'),
-                          ('analysis-recovery-contracts', 'analysis'),
+                          ('publication-planning-contracts', 'planning'),
                           ('final-release-authorization', 'final')]:
             self.assertEqual(blocks[job].count('read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_metadata_capacity --metadata-capacity-lane=' + lane + ' "${metadata_capacity_tests[@]}"'), 1)

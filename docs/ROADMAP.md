@@ -10744,20 +10744,25 @@ inventory rejection,exercise the actual locked scheduler without spawning extra
 workers,and reject skipped/duplicate/same-worker success receipts. Early
 collection-only import checks precede the expensive backend suite.
 
-The same44 metadata IDs use review9,database8,analysis4,frontend6,final17. Move the
+The same44 metadata IDs use review9,database8,planning4,frontend6,final17. Move the
 unchanged package34 file from PostgreSQL to graph,using the newly observed spare
 capacity after authorization routing established final64/graph57second reserves. Groups:
-review190 plus48bindings/effort31; analysis142 plus native10/restart25; graph138
+review190 plus48bindings/effort31; analysis138 plus native10/restart25; graph138
 plus frozen53; final85; portfolio41; history trials20; database139. The unchanged
 17-case re-observation boundary file runs in analysis; source-effort31 moves
-from history to review. Planning retains177 plus15bindings. Use observed
+from history to review. Planning holds181 plus15bindings. Use observed
 analysis74/review49second reserves after PostgreSQL26/final27 rejected the prior
 run; history30 receives the eight seconds freed by the complete effort step. All5907 original Python IDs remain,plus3 guards=5910; retain
 1018 deployment IDs,139frontend files/10532cases,14 existing guards and97 skips.
 Only declared CI guards change ownership assertions; frozen business sources
 and drivers stay byte-exact.
 
-Closed v10 metadata and ten-case authorization manifests retain hosted/local
+Twelve completed siblings at7c84355 run42016910660 passed; analysis31second
+reserve leaves one second above the floor. Supersede that head before merge,
+moving its4 reference cases to planning's observed67second reserve. Retain the
+partial run without qualification credit.
+
+Closed v11 metadata and ten-case authorization manifests retain hosted/local
 source,timing and scheduler commitments. Planning does not qualify runtime.
 Require all13 exact-head checks,original execution receipts,30s job reserve and
 original step floors,then independently fetched equal-main/platform checks.
