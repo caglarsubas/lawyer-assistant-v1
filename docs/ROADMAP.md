@@ -10722,44 +10722,48 @@ decision writing, acknowledgement inference, trust renewal or production/legal
 approval. See the [closed capacity manifest](../deploy/fixtures/metadata_ci_capacity.json).
 
 
-## 313. ARM frontend and complete-job reserve balancing — 2026-11-05
+## 313. ARM frontend and closed CI workload routing — 2026-11-05
 
-Retain rejected mains41992213977/41985956054 and PR candidates973ee0(frontend22
-seconds reserve),6a2c489(analysis21),997777e run41999084136(graph12), and9b70810
-run42001929768(final25). Passing components never qualify the run. Preserve the
-supervisor rejection and owned-child-stop evidence; no unchanged rejected head
-is rerun and no limits are enlarged to pass.
+Retain rejected mains41992213977/41985956054 and candidates973ee0(frontend22s
+reserve),6a2c489(analysis21),997777e(graph12),9b70810(final25),6122e96 run42005341497
+(graph13). Passing component tests never qualify the run. Preserve supervisor
+rejection and owned-child-stop evidence; never rerun an unchanged rejected head
+or enlarge limits to pass.
 
-Use ARM for frontend, matching the other12 jobs. Timing establishes two long
-integration tests dominate final authorization; move its standalone trials20
-block to history's existing exited pair. Keep the frozen53 history pair in graph,
-native slice10 in analysis, and restart25 in graph. Every command, source,
-manifest, lane, step name, deadline and two-worker sequence remains. Swap the
-whole workbench57 and source-review-effort31 files between final/history groups
-to leave room for startup variance; preserve both complete files and identities.
+Use ARM for frontend. Keep frozen53 history pair in graph,native10 in analysis,
+trials20 in history; move restart25 to exited analysis workers. Swap complete
+workbench57/source-effort31 files between final/history groups. Preserve commands,
+sources,manifests,lanes,step names,deadlines and two-worker sequences.
 
-Move frontend metadata7 to PostgreSQL, and history metadata6 plus six analysis
-metadata cases to graph. Final metadata placement: review10, analysis10,
-graph17, database7, totaling the same44 source-bound identities once. Groups:
-review191 plus48bindings; analysis131 plus native10; graph119 plus frozen53 and
-restart25; final44; portfolio35; history57 plus trials20; database172. Package34
-remains PostgreSQL. All5907 Python IDs,1018 deployment IDs,139frontend files/
-10532cases,14guard IDs and97 original skips remain. Existing CI guards describe
-sequential ownership; frozen business sources and drivers never change.
+Add closed source-bound routing for the ten unchanged final-authorization cases:
+eight remain final,two bounded negative/interruption cases use graph's pair.
+The locked xdist3.8.0 load scheduler with maxschedchunk1 starts two-item batches;
+put the two moved cases at positions0/2 and require distinct actual worker IDs.
+No case is omitted,skipped or replaced. Three fast guards validate source and
+inventory rejection,exercise the actual locked scheduler without spawning extra
+workers,and reject skipped/duplicate/same-worker success receipts. Early
+collection-only import checks precede the expensive backend suite.
 
-The closed v6 model retains hosted per-file/individual phase timing, local
-proportions and25percent planning allowance. Whole-job measurements include
-fixed work and setup. Models do not establish hosted qualification. Require all
-13 exact-head checks, original execution receipts,30second job reserve and
-original step floors, then independently fetched equal-main/platform checks.
-Keep13jobs, two workers,73minute aggregate cap, dependencies, isolation,
-deadlines and retry policy. Invoice savings remain unmeasured.
+The same44 metadata IDs use review15,analysis16,frontend6,database7. Groups:
+review196 plus48bindings; analysis137 plus native10/restart25; graph104 plus
+frozen53; final68; portfolio41; history31 plus trials20; database172. Package34
+stays PostgreSQL. All5907 original Python IDs remain,plus3 guards=5910; retain
+1018 deployment IDs,139frontend files/10532cases,14 existing guards and97 skips.
+Only declared CI guards change ownership assertions; frozen business sources
+and drivers stay byte-exact.
+
+Closed v7 metadata and ten-case authorization manifests retain hosted/local
+source,timing and scheduler commitments. Planning does not qualify runtime.
+Require all13 exact-head checks,original execution receipts,30s job reserve and
+original step floors,then independently fetched equal-main/platform checks.
+Keep13jobs,two workers,73minute aggregate cap,dependencies,isolation,deadlines
+and retry policy. Invoice savings remain unmeasured.
 
 All785 feature pins,24 frozen outcomes and264 evidence reports remain byte-exact.
-Originals, evidence versions, credentials, sessions, private case content and
-review history remain untouched. Engineering merge and main qualification stay
-separate from product42/21/24/6, readiness0/9/4/1 and the pending owner review.
+Originals,evidence versions,credentials,sessions,private content and review
+history remain untouched. Merge and main qualification stay separate from
+product42/21/24/6,readiness0/9/4/1 and the pending owner review.
 
 Next: recipient-observation receipt packaging and independently reviewed retention
-planning after qualification; no automatic adoption, trust renewal, production
-or legal approval.
+planning after qualification; no automatic adoption,trust renewal,production or
+legal approval.
