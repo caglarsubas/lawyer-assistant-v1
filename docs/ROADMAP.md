@@ -10637,3 +10637,48 @@ binding exact reviewed proof/reference versions and fresh destination authority.
 Budget new cases against measured reserves before implementation. See
 [adapter contract](RETENTION_AUTHORIZATION_READINESS.md) and
 [frozen report](evidence/retention-authorization-2026-11-05.json).
+
+
+## 311. Metadata-handoff packaging and read-only recipient acceptance — 2026-11-05
+
+Restore CI headroom before adding coverage. PR279 main retained only35 seconds
+in backend,43 in frontend and44 in graph. Rebalance whole temporal58, package34
+and cohort32 files into existing publication, database and analysis/recovery
+capacity respectively. Nine new regressions use the freed graph capacity. Keep
+all original identities, 1018 deployment cases,139 frontend files/10532 cases,
+real PostgreSQL races,13 jobs, two workers,73-minute aggregate cap, deadlines,
+immutable manifests, the source-pinned supervisor and fixed floors unchanged.
+Require actual exact-head and separately fetched equal-main execution/reserve
+qualification; collection and local timings alone do not establish completion.
+
+Package only closed canonical metadata: opaque identifiers, exact reviewed
+proof/proposal/decision/provenance/reference/plan hashes, pinned recipient context
+and original expiry limits. Authenticate the source reviewer before lookup and
+revalidate signed review/reference versions freshly. The read-only service returns
+bytes without publishing them. An explicit external fixture/operator write may
+create a new owner-only transport file; it cannot overwrite history.
+
+Read-only acceptance requires an independently pinned package hash and a distinct
+recipient profile, database and assigned principals. Authenticate the current
+recipient before reading or parsing. Recheck source authority and exact evidence,
+recipient inputs, roles/sessions, inventories, registries and bytes. Missing,
+malformed, linked, staged, changed, revoked, expired or over-budget inputs withhold
+all acceptance metadata, preserving unexpected files. Reopening never renews the
+review, handoff or trust window. No persistent decision or source/recipient
+history is written by acceptance.
+
+Freeze24 disposable outcomes and preserve all781 predecessor source pins within
+785 pins. Retain report-harness failures: the trusted source-pin report needed a
+separate decoder/writer bound from untrusted transport, and account snapshots
+must use the actual sessions table. Keep the4KiB transport bound intact; reports
+have a separate1MiB bound. Original case documents, evidence, runtime credentials
+and review history remain untouched. No genuine key custody, enrollment,
+acknowledgement/channel authenticity, durable retention, atomicity, execution,
+recovery, production or legal qualification is established. Owner analysis-v3
+review remains pending. Checklist42/21/24/6 and readiness0/9/4/1 remain unchanged.
+
+Next: recipient-observation receipt packaging and explicit independently reviewed
+retention planning; first budget coverage against fresh CI reserves. No automatic
+receipt adoption, decision writing, acknowledgement inference or trust renewal.
+See [contract](METADATA_HANDOFF_READINESS.md) and
+[frozen evidence](evidence/metadata-handoff-2026-11-05.json).

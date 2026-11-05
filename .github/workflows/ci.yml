@@ -94,6 +94,7 @@ env:
   # A dedicated bounded job holds complete publication/planning files.
   # Keep remaining graph files complete and the lighter Graph B snapshot in backend.
   CI_GRAPH_RUNTIME_TESTS: >-
+    backend/tests/test_metadata_handoff_readiness.py
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_release_set_authorization.py

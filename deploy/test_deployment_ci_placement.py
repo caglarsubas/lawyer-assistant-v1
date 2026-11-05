@@ -83,6 +83,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${graph_runtime_tests[@]}"', blocks["backend-and-contracts"])
         self.assertEqual(workflow.count("backend/tests/test_native_operator_preview.py"), 1)
         final_group = re.search(r"  CI_BACKEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(workflow.count("backend/tests/test_metadata_handoff_readiness.py"), 1)
+        self.assertIn("backend/tests/test_metadata_handoff_readiness.py", group)
         self.assertEqual(workflow.count("backend/tests/test_ci_reserve_guard.py"), 1)
         self.assertIn("bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard_v2.py -- pytest backend/tests", backend)
         self.assertIn('export PYTHONPATH="$GITHUB_WORKSPACE"', backend)
@@ -185,7 +187,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("--materialization-capacity-lane=final"), 1)
         self.assertNotIn("--materialization-capacity-lane=final", final)
         self.assertNotIn("--operator-preview-lane=final", final)
-        self.assertEqual(group.split(), ["backend/tests/test_graph_b_component_grants.py", "backend/tests/test_declared_graph_assembly.py", "backend/tests/test_release_set_authorization.py"])
+        self.assertEqual(group.split(), ["backend/tests/test_metadata_handoff_readiness.py", "backend/tests/test_graph_b_component_grants.py", "backend/tests/test_declared_graph_assembly.py", "backend/tests/test_release_set_authorization.py"])
         self.assertNotIn("backend/tests/test_planning_journal_reconciliation.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_planning_journal_reconciliation.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
