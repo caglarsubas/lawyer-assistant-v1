@@ -86,7 +86,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_ci_reserve_guard.py"), 1)
         self.assertIn("bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard_v2.py -- pytest backend/tests", backend)
         self.assertIn('export PYTHONPATH="$GITHUB_WORKSPACE"', backend)
-        import_probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest backend/tests/test_operator_inspection_preview.py -p scripts.ci_operator_previews --operator-preview-lane=final --collect-only -q -n 2'
+        import_probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${preview_probe[@]}" -p scripts.ci_operator_previews --operator-preview-lane=final --collect-only -q -n 2'
         self.assertEqual(backend.count(import_probe), 1)
         self.assertLess(backend.index(import_probe), backend.index("run: npm run build"))
         self.assertIn("actions: read", backend)
@@ -267,8 +267,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("name: Test complete portfolio review qualification"), 1)
         self.assertIn('"${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2', blocks["frontend"])
         self.assertEqual(re.search(r"  CI_FRONTEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_verification_reference_readiness.py", "backend/tests/test_disposition_receipt_reobservation.py"])
-        self.assertIn("backend/tests/test_analysis_cohorts.py", publication_group)
-        self.assertEqual(workflow.count("backend/tests/test_analysis_cohorts.py"), 1)
+        self.assertNotIn("backend/tests/test_analysis_cohorts.py", publication_group)
+        self.assertEqual(workflow.count("backend/tests/test_analysis_cohorts.py"), 0)
         self.assertEqual(workflow.count("backend/tests/test_verification_reference_readiness.py"), 1)
         self.assertNotIn("scripts/run_ci_history_review_pair.py", blocks["frontend-history"])
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)

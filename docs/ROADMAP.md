@@ -10590,7 +10590,8 @@ as qualification or retry the unchanged head.
 
 Move complete adjudication39/effort31 files and the unchanged preview-final7
 slice into backend, and the unchanged materialization-final20 slice into
-portfolio review. Backend is 3927 selected / 3830 passes / 97 original skips;
+portfolio review. Return the complete analysis-cohort32 file to backend after source-publication
+passed with only27 seconds of reserve. Backend is 3959 selected / 3862 passes / 97 original skips;
 final-release is 13 and portfolio is 47. Preserve all original preview20,
 materialization58 and cohort19 identities exactly once. Existing closed manifests
 and logical slice contents remain byte-exact; only hosting jobs change, guarded
@@ -10603,7 +10604,10 @@ console child and explicitly set the repository `PYTHONPATH`, matching the
 existing PostgreSQL job. Add a bounded collection-only import probe within the
 existing lint phase, before build/contracts, without executing tests twice.
 Verify the real supervised console child locally against invented Actions
-metadata; no supervisor policy, source or credential handling changes.
+metadata; no supervisor policy, source or credential handling changes. A further
+run correctly rejected a duplicated literal path in the placement guard; the
+collection probe now uses the existing declared array, preserving the guard
+against duplicate test execution. Retain both rejected observations.
 
 Preserve older source bytes, 1018 deployment IDs and 139 frontend files / 10532
 cases. Keep 13 jobs, the 73-minute aggregate cap, worker counts, deadlines,
