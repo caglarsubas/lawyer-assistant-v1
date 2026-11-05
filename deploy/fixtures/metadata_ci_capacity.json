@@ -1,5 +1,5 @@
 {
-  "schema": "metadata-ci-capacity-v15",
+  "schema": "metadata-ci-capacity-v16",
   "source_sha256": {
     "backend/tests/test_analysis_cohorts.py": "dfea8d14b6a8aa161d274f71a3d5aea1c94d109167025a7da84de8f59e7e6c2f",
     "backend/tests/test_verification_reference_readiness.py": "a7d2db9a2c0485a7f433148c1cc9d8a586cbc3faee91df9368fd1d9f44dd884a"
@@ -76,19 +76,16 @@
     ],
     "final": [
       "tests/test_analysis_cohorts.py::test_candidates_and_cohort_lists_are_bounded_and_archived_freeze_is_withheld",
-      "tests/test_analysis_cohorts.py::test_immutable_encrypted_freeze_idempotent_private_export_and_original_draft_preserved",
       "tests/test_analysis_cohorts.py::test_missing_integrity_and_routing_changes_never_silently_substitute_records[corrupt_protocol]",
       "tests/test_analysis_cohorts.py::test_missing_integrity_and_routing_changes_never_silently_substitute_records[move]",
       "tests/test_analysis_cohorts.py::test_missing_integrity_and_routing_changes_never_silently_substitute_records[source_move]",
       "tests/test_analysis_cohorts.py::test_missing_integrity_and_routing_changes_never_silently_substitute_records[substitute_cohort]",
       "tests/test_analysis_cohorts.py::test_preview_change_and_late_save_change_both_reject_with_atomic_rollback",
-      "tests/test_analysis_cohorts.py::test_preview_has_no_writes_calls_or_actor_clock_dependence_and_preserves_unknowns",
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[one]",
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[repeated_reserved]",
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[reserved]",
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[thirteen]",
       "tests/test_verification_reference_readiness.py::test_closed_operations_budgets_and_unavailable_checks_fail_closed",
-      "tests/test_verification_reference_readiness.py::test_missing_acknowledgement_and_missing_pin_do_not_decrypt_retained_bytes",
       "tests/test_verification_reference_readiness.py::test_unknown_staging_links_permissions_and_limits_block_without_cleanup"
     ],
     "planning": [
@@ -106,6 +103,11 @@
     "history": [
       "tests/test_verification_reference_readiness.py::test_explicit_versions_and_entry_selection_never_follow_a_newer_record",
       "tests/test_verification_reference_readiness.py::test_record_namespace_and_registry_races_withhold_metadata"
+    ],
+    "analysis": [
+      "tests/test_analysis_cohorts.py::test_immutable_encrypted_freeze_idempotent_private_export_and_original_draft_preserved",
+      "tests/test_analysis_cohorts.py::test_preview_has_no_writes_calls_or_actor_clock_dependence_and_preserves_unknowns",
+      "tests/test_verification_reference_readiness.py::test_missing_acknowledgement_and_missing_pin_do_not_decrypt_retained_bytes"
     ]
   },
   "case_cost_ms": {
@@ -160,7 +162,8 @@
     "final": 27000,
     "planning": 37000,
     "database": 30000,
-    "history": 16000
+    "history": 16000,
+    "analysis": 20000
   },
   "observed_head": "6a2c48947f9733687086240b280a9f7f4deba67b",
   "observed_run": 41995856870,
@@ -172,5 +175,5 @@
     "backend-review-contracts": "65f1e5c52b5603cb413a64a65cf7450766d52290a3cf63c185bff1a31ca81357",
     "frontend-history": "f8577d63f3c2fd40570cdfcbb4944fb7826cc258a9b19b9070bb3f06e83ced20"
   },
-  "normalization": "Preserve44 IDs; redistribute backend4 into review and one heavy planning case into database. Source-bound99-case spill uses retained99768ba failed-head CPU timings. Estimates do not qualify hosted reserves."
+  "normalization": "Retain44 sources/IDs;488cb76 final9s reserve requires three final cases move to analysis49s reserve. Exact hosted phase and job floors remain mandatory."
 }

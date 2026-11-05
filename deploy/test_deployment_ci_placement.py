@@ -41,18 +41,19 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(re.search(r'  CI_HUMAN_REVIEW_GROUP_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split(), ['backend/tests/test_destination_snapshot_verification.py'])
         metadata = re.search(r'  CI_METADATA_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
         self.assertEqual(metadata, ['backend/tests/test_analysis_cohorts.py', 'backend/tests/test_verification_reference_readiness.py'])
-        self.assertIn('"${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}"; do', blocks['backend-and-contracts'])
+        self.assertIn('"${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}" "${backend_spill_tests[@]}"; do', blocks['backend-and-contracts'])
         for job, lane in [('backend-review-contracts', 'review'),
                           ('frontend', 'frontend'),
                           ('publication-planning-contracts', 'planning'),
                           ('final-release-authorization', 'final'),
                           ('postgres-snapshot-concurrency', 'database'),
-                          ('frontend-history', 'history')]:
+                          ('frontend-history', 'history'),
+                          ('analysis-recovery-contracts', 'analysis')]:
             self.assertEqual(blocks[job].count('read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"'), 2 if lane == 'backend' else 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_metadata_capacity --metadata-capacity-lane=' + lane + ' "${metadata_capacity_tests[@]}"'), 1)
         auth = re.search(r'  CI_FINAL_AUTH_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
         self.assertEqual(auth, ['backend/tests/test_final_release_authorization.py'])
-        self.assertIn('"${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}"; do', blocks['backend-and-contracts'])
+        self.assertIn('"${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}" "${backend_spill_tests[@]}"; do', blocks['backend-and-contracts'])
         for job, lane in [('graph-runtime-contracts', 'graph'), ('final-release-authorization', 'final')]:
             self.assertEqual(blocks[job].count('read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_final_auth_capacity --final-auth-capacity-lane=' + lane), 1)
@@ -82,7 +83,7 @@ class DeploymentPlacementContract(unittest.TestCase):
                 self.assertIn('"${backend_spill_tests[@]}"', blocks[job])
         self.assertEqual(workflow.count('-p scripts.ci_model_trial_capacity'), 2)
         self.assertEqual(workflow.count('-p scripts.ci_final_auth_capacity'), 3)
-        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 7)  # Six executions and one import-only probe.
+        self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 8)  # Seven executions and one import-only probe.
         probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=review --collect-only -q -n 2'
         self.assertEqual(blocks['backend-and-contracts'].count(probe), 1)
         self.assertLess(blocks['backend-and-contracts'].index(probe), blocks['backend-and-contracts'].index('name: Test backend'))
@@ -176,7 +177,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         for job, lane in (("frontend", "frontend"), ("backend-and-contracts", "final"), ("graph-runtime-contracts", "graph")):
             if job == "backend-and-contracts":
                 self.assertIn('-p scripts.ci_operator_previews --operator-preview-lane=final -n 2', blocks[job])
-                self.assertIn('if [[ "$path" != "${preview_tests[0]}" ]]; then', blocks[job])
+                self.assertIn('if [[ "$path" != "${preview_tests[0]}" && "$path" != "${backend_spill_tests[0]}" && "$path" != "${backend_spill_tests[1]}" && "$path" != "${backend_spill_tests[2]}" ]]; then', blocks[job])
             else:
                 self.assertIn("backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=" + lane + ' "${preview_tests[@]}"', blocks[job])
             self.assertIn('read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"', blocks[job])
@@ -306,17 +307,17 @@ class DeploymentPlacementContract(unittest.TestCase):
                     validate_workflow_arrays(workflow.replace(owner, owner.replace(definition, "", 1), 1))
             self.assertRegex(blocks[job], r'"\$\{' + array + r'\[@\]\}"(?: -q)? -n 2')
         self.assertNotIn("provision-binding-lane=history", blocks["frontend-history"])
-        self.assertIn('"${history_binding_tests[@]}" -q -n 2', backend)
+        self.assertIn('"${history_binding_tests[@]}" -q -n 2', review_block)
 
         definition = '          read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"\n'
-        for owner in (backend, blocks["publication-planning-contracts"], blocks["graph-candidate-contracts"]):
-            self.assertEqual(owner.count(definition), 2 if owner == backend else 1)
+        for owner in (backend, blocks["publication-planning-contracts"], blocks["graph-candidate-contracts"], blocks["backend-review-contracts"]):
+            self.assertEqual(owner.count(definition), 1)
             broken = workflow.replace(owner, owner.replace(definition, "", 1), 1)
             with self.assertRaisesRegex(ValueError, "history_binding_tests"):
                 validate_workflow_arrays(broken)
         self.assertIn('"${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["publication-planning-contracts"])
         self.assertEqual(workflow.count("-p scripts.ci_provision_bindings --provision-binding-lane="), 3)
-        for name, lane in (("graph-candidate-contracts", "candidate"), ("backend-and-contracts", "history"), ("publication-planning-contracts", "planning")):
+        for name, lane in (("graph-candidate-contracts", "candidate"), ("backend-review-contracts", "history"), ("publication-planning-contracts", "planning")):
             self.assertIn("--provision-binding-lane=" + lane, blocks[name])
         self.assertEqual(workflow.count("name: Test complete portfolio review qualification"), 1)
         self.assertIn('"${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2', blocks["frontend"])

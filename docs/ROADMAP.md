@@ -10813,37 +10813,40 @@ PostgreSQL28,below the unchanged30-second job floor. Its supervisor stopped the
 backend; none of these heads supplies merge qualification.
 
 Rebalance across measured spare capacity. Retain the99768ba/run42042276367
-backend timeout: the core passed3914 cases with97 unchanged skips in873 seconds,
-and recipient10 and binding48 passed,but the job exceeded its original cap before
-metadata4. It supplies no merge credit. Use its retained per-file CPU totals plus
-fresh local per-case timings to source-bind99 unchanged cases (Graph B
-publication31,disposition receipts27,authority adjudications41). A closed13-lane
-manifest selects zero of those cases in backend and all99 exactly once across
-the other12 existing jobs. Three fast guards refuse altered sources,incomplete
-collection,duplicate execution,skips and xfails. Local execution verifies all99
-once without inherited PYTHONPATH; estimates do not qualify hosted timing.
+backend timeout after3914 core passes/97 skips in873 seconds,recipient10 and
+binding48. Retain488cb76/run42048411310: its existing declaration guard correctly
+rejected an omitted collection-group declaration; capacity28,candidate29,
+publication29 and final9 seconds also failed the unchanged30-second job floor.
+Neither head supplies merge credit. Correct the declaration and qualify all five
+placement/declaration guards before another hosted run. Keep the supervisor intact.
 
-Closed v15 metadata44 uses review11,database3,planning5,frontend8,final15,history2.
-Move backend4 into the review pair and one expensive planning case into database.
-Keep the inventory16 slice in final with its frozen26-case manifest,boundary17 in
-PostgreSQL,the provision-binding history48 slice in backend,and model20 split
-analysis8/history12. New recipient10 stays serial in backend under50s after exited
-pairs. The metadata4 standalone step is removed because its unchanged IDs now
-run in the existing review pair. No body,assertion or earlier evidence is removed.
+Source-bind99 unchanged cases (publication31,disposition receipts27,authority
+adjudications41) using retained file CPU totals and fresh per-case timings. Account
+for fixture startup,retain19 declared cases in backend and place80 across10
+existing pairs. Review and final select none from this99-case inventory; their
+original suites still run. Three guards and actual terminal receipts enforce
+source hashes,complete collection and exactly-once non-skipped execution. Run
+all selected lanes locally without inherited PYTHONPATH before publishing.
+Preserve all99 bodies and assertions. Estimates never qualify hosted reserves.
 
-Full Python inventory is5910 original IDs plus17new=5927: ten integrations,one
-report guard,three model-slice guards and three99-case guards. Core selection3915/
-passes3818/original97skips excludes99 relocated IDs; recipient10 and binding48
-remain separate58. Each receiving group adds its exact declared share to its
-unchanged inventory. Graph138,analysis121,candidate276,planning197,database135,
-final99,portfolio43,review192 plus effort31 remain the base selections. Keep1018
-deployment IDs,139frontend files/10532cases,13jobs,the73-minute aggregate cap,
-the two-worker ceiling,all existing phase deadlines,immutable business manifests,
-supervisor and reserve floors. The model35-second slice retains its60-second cap/
-15-second reserve; recipient120-second step retains30 seconds. Require exact-head
-checks and fixed reserves,then independently fetched equal-main execution and
-preservation receipts. No invoice saving,production readiness or legal acceptance
-is inferred from local timing or green engineering checks.
+Closed v16 metadata44 uses review11,database3,planning5,frontend8,final12,history2,
+analysis3. Keep inventory16 final,boundary17 PostgreSQL,the intact binding48
+history slice in review,and model20 analysis8/history12. Recipient10 remains
+serial in backend under50s after exited pairs; its report guard stays in core.
+The old standalone metadata4 phase is replaced by its exact IDs in the review pair.
+
+Full Python inventory is5910 original IDs plus17new=5927. Backend selection3934/
+passes3837/original97skips includes its declared19-case share; recipient10 stays
+separate. Receiving groups add their exact declared shares to base graph138,
+analysis124,candidate276,planning197,database135,final96,portfolio43 and review192
+plus effort31/binding48. Keep1018 deployment IDs,139frontend files/10532cases,
+13jobs,the73-minute aggregate cap,two-worker ceiling,all existing phase deadlines,
+immutable business manifests,supervisor and reserve floors. The model35-second
+slice retains its60-second cap/15-second reserve; recipient120-second step retains
+30 seconds. Require exact-head checks and fixed reserves,then independently
+fetched equal-main execution and preservation receipts. Local measurements and
+green engineering checks do not establish invoice savings,production readiness
+or legal acceptance.
 
 Originals,evidence versions,credentials,sessions,private cases and review history
 remain unchanged. Actual retention permission,custody,issuer/channel authenticity,

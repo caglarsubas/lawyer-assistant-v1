@@ -64,20 +64,20 @@ Use an existing owner-only directory and a fresh output name. Reports have a
 separate 1 MiB bound; receipt limits remain 4 KiB. No real cases, models, provider
 requests or genuine signing keys are used.
 
-CI reuses existing capacity and retains all rejected attempts. The873-second
-backend core at99768ba passed but the whole job timed out after recipient10 and
-binding48. A new closed source-bound inventory redistributes99 unchanged cases
-(publication31,disposition receipts27,adjudications41) across12 existing jobs;
-backend selects none. Three guards enforce original hashes,complete collection
-and exactly-once non-skipped execution. Local12-lane execution confirms all99
-once. Retained per-file CPU totals and fresh per-case timings are planning inputs;
-actual hosted receipts and reserve floors remain mandatory.
+CI reuses existing capacity and retains all rejected attempts without merge credit.
+Fix the omitted declaration caught by the existing partition guard and run all
+five declaration/placement checks locally. Account for fixture startup as well as
+retained CPU times: a source-bound99-case inventory retains19 cases in backend
+and places80 across10 existing pairs. Review and final select none of those99;
+their original suites remain. Three guards enforce original hashes,complete
+collection and exactly-once non-skipped execution. Run each nonempty lane locally
+with two workers and no inherited repository path before another hosted run.
 
-Metadata44 uses review11/database3/planning5/frontend8/final15/history2,removing
-its standalone backend phase. Preserve inventory16 in final,boundary17 in
-PostgreSQL,binding history48 in backend,and mocked model20 analysis8/history12.
-Recipient10 runs serially in backend under50s after exited pairs. Preserve5910
-previous Python identities plus17new,all1018 deployment IDs,139frontend files/
+Metadata44 uses review11/database3/planning5/frontend8/final12/history2/analysis3.
+Preserve inventory16 final,boundary17 PostgreSQL,binding48 review,and model20
+analysis8/history12. Recipient10 stays serial in backend under50s. Preserve5910
+prior Python identities plus17new,all1018 deployment IDs,139frontend files/
 10532cases,13jobs,the73-minute aggregate cap,existing deadlines,two-worker ceiling,
 supervisor and reserve floors. Independently qualify exact-head checks and fetched
-equal-main execution. Engineering CI does not establish legal or production approval.
+equal-main execution. Estimates and engineering CI establish no legal or
+production approval.
