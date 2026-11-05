@@ -10804,49 +10804,35 @@ session deletions are accounted for. Retain both incomplete campaign attempts.
 Strengthen new fixture identity namespaces and correct malformed-input injection;
 do not change the26 expectations or predecessor implementations.
 
-Address CI capacity before publishing coverage. Retain the initial run42033292507
-at2476635, history23-second rejection42035472783 at04c38dc, and rejected
-42039495341 ate33f0b8. The latter also exposed a missing repository import path
-in the new history command; correct it explicitly and exercise the console command
-without inherited PYTHONPATH. Its reserves were frontend14,review14,final27 and
-PostgreSQL28,below the unchanged30-second job floor. Its supervisor stopped the
-backend; none of these heads supplies merge qualification.
+Preserve CI capacity using the last independently qualified layout at040bba6.
+Restore its metadata placement,model-trial20 group,inventory16 placement and
+all legacy schedulers. Earlier broad redistribution attempts failed their reserve
+or import guards; retain those attempts as negative evidence,without merge credit.
+Avoid spreading shared fixture families across many jobs.
 
-Rebalance across measured spare capacity. Retain the99768ba/run42042276367
-backend timeout after3914 core passes/97 skips in873 seconds,recipient10 and
-binding48. Retain488cb76/run42048411310: its existing declaration guard correctly
-rejected an omitted collection-group declaration; capacity28,candidate29,
-publication29 and final9 seconds also failed the unchanged30-second job floor.
-Neither head supplies merge credit. Retain7b58110/run42051176447: declaration checks pass,but candidate27/planning29/publication30 reserve requires six IDs move into measured spare jobs. No retry or relaxed floor. Correct the declaration and qualify all five
-placement/declaration guards before another hosted run. Keep the supervisor intact.
+Run all ten new recipient cases in the existing PostgreSQL pair. A source-bound
+fixture-affinity rule assigns their complete module to one of the existing two
+workers,so its shared fixture initializes once. Every legacy test remains an
+individual scheduling unit. Require all ten original IDs,one successful execution
+each and a single known worker in the terminal receipt; skipped,duplicated,
+xfailed,missing or split execution cannot qualify. Pin pytest-xdist3.8.0 and the
+existing two-worker load interface. Three fast guards protect these rules.
 
-Source-bind99 unchanged cases (publication31,disposition receipts27,authority
-adjudications41) using retained file CPU totals and fresh per-case timings. Account
-for fixture startup,retain26 declared cases in backend and place73 across9
-existing pairs. Capacity,graph and frontend select none of these99 cases. Their
-original suites still run. Three guards and actual terminal receipts enforce
-source hashes,complete collection and exactly-once non-skipped execution. Run
-all selected lanes locally without inherited PYTHONPATH before publishing.
-Preserve all99 bodies and assertions. Estimates never qualify hosted reserves.
+Move two intact existing files into related spare pools: analysis-feedback50 into
+candidate and retention-authorization13 into frontend. Their bodies and assertions
+stay exact. All other legacy group memberships and phase commands remain intact.
+The original139 PostgreSQL cases plus recipient10 run149; candidate276+50=326;
+portfolio41+13=54; core4007-63+4=3948 with3851passes and97original skips. Full Python
+inventory is5910 original IDs plus14new=5924: ten integrations,one report guard and
+three affinity guards. Preserve1018 deployment IDs,139frontend files/10532cases,
+13jobs,the73-minute aggregate cap,two-worker ceiling,all original deadlines,
+supervisor and reserve floors. No earlier report or original case is removed.
 
-Closed v16 metadata44 uses review11,database3,planning5,frontend8,final12,history2,
-analysis3. Keep inventory16 final,boundary17 PostgreSQL,the intact binding48
-history slice in review,and model20 analysis8/history12. Recipient10 remains
-serial in backend under50s after exited pairs; its report guard stays in core.
-The old standalone metadata4 phase is replaced by its exact IDs in the review pair.
-
-Full Python inventory is5910 original IDs plus17new=5927. Backend selection3941/
-passes3844/original97skips includes its declared26-case share; recipient10 stays
-separate. Receiving groups add their exact declared shares to base graph138,
-analysis124,candidate276,planning197,database135,final96,portfolio43 and review192
-plus effort31/binding48. Keep1018 deployment IDs,139frontend files/10532cases,
-13jobs,the73-minute aggregate cap,two-worker ceiling,all existing phase deadlines,
-immutable business manifests,supervisor and reserve floors. The model35-second
-slice retains its60-second cap/15-second reserve; recipient120-second step retains
-30 seconds. Require exact-head checks and fixed reserves,then independently
-fetched equal-main execution and preservation receipts. Local measurements and
-green engineering checks do not establish invoice savings,production readiness
-or legal acceptance.
+Local qualification must include the real two-worker fixture-affinity path and
+the deployment harness interpreter. Require exact-head checks,reserves,physical
+execution receipts and preservation audit before merge; independently qualify
+fetched equal-tree main. Local durations and green engineering checks establish
+no invoice saving,production readiness or legal acceptance.
 
 Originals,evidence versions,credentials,sessions,private cases and review history
 remain unchanged. Actual retention permission,custody,issuer/channel authenticity,
@@ -10859,8 +10845,13 @@ readiness,with independently provisioned permission/custody inputs. No automatic
 materialization,adoption,decision writing,trust renewal or production/legal approval.
 See [recipient-observation readiness](RECIPIENT_OBSERVATION_READINESS.md).
 
-Retain b1e33e3/run42052860535: capacity reaches its140-second command deadline;
-graph18/frontend22/database28 reserves also reject. Restore those base groups,
-place the seven former capacity IDs in backend,move graph IDs to history and
-spread added frontend/database IDs across existing spare pairs. Guard the unchanged
-140-second capacity deadline with an empty spill selection. No failed head is retried.
+Retain b1e33e3/run42052860535 and4625a25/run42055567327 as rejected
+experiments: the former exhausted the existing capacity-command deadline; the
+latter failed the deployment harness import and multiple reserve floors. Their
+wide redistribution is superseded by the minimal layout above. No failed head
+is retried unchanged.
+
+Local macOS qualification uses a canonical, owner-only temporary directory.
+The default `/var` temporary-path alias violates the existing no-symlink input
+policy; canonical test scratch paths resolve this environment issue without
+weakening product validation or changing any predecessor implementation.

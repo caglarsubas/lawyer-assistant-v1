@@ -64,27 +64,22 @@ Use an existing owner-only directory and a fresh output name. Reports have a
 separate 1 MiB bound; receipt limits remain 4 KiB. No real cases, models, provider
 requests or genuine signing keys are used.
 
-CI reuses existing capacity and retains all rejected attempts without merge credit.
-Fix the omitted declaration caught by the existing partition guard and run all
-five declaration/placement checks locally. Account for fixture startup as well as
-retained CPU times: a source-bound99-case inventory retains26 cases in backend
-and places73 across9 existing pairs. Capacity,graph and frontend select none of those99.
-their original suites remain. Three guards enforce original hashes,complete
-collection and exactly-once non-skipped execution. Run each nonempty lane locally
-with two workers and no inherited repository path before another hosted run.
+CI preserves the independently qualified040bba6 layout. Keep legacy metadata,
+model20,inventory16 and phase commands. Earlier redistribution attempts remain
+negative evidence; their experimental helpers are superseded in this unmerged PR.
+No original5910-case coverage or earlier evidence is removed.
 
-Metadata44 uses review11/database3/planning5/frontend8/final12/history2/analysis3.
-Preserve inventory16 final,boundary17 PostgreSQL,binding48 review,and model20
-analysis8/history12. Recipient10 stays serial in backend under50s. Preserve5910
-prior Python identities plus17new,all1018 deployment IDs,139frontend files/
-10532cases,13jobs,the73-minute aggregate cap,existing deadlines,two-worker ceiling,
-supervisor and reserve floors. Independently qualify exact-head checks and fetched
-equal-main execution. Estimates and engineering CI establish no legal or
-production approval.
+Run recipient10 inside the existing PostgreSQL pair,with its exact shared fixture
+on one worker. Legacy tests retain individual scheduling units. A complete
+source-bound receipt proves all ten IDs passed once on one known worker; three
+guards reject altered sources,incomplete collections,skips,duplicates,xfails and
+split execution. The pinned pytest-xdist3.8.0 interface retains two workers.
 
-Retain7b58110/run42051176447 candidate27/planning29/publication30 reserve.
-Move six exact IDs to observed spare jobs; keep all99 source identities and floors.
-
-Retain b1e33e3/run42052860535 hard140-second capacity termination and
-graph18/frontend22/database28 reserves. Restore their base inventories and enforce
-empty capacity spill without changing its hard deadline. Preserve every99-case ID.
+Move intact analysis-feedback50 to candidate and retention-authorization13 to
+frontend. Preserve all bodies,139 old PostgreSQL IDs,97 original skips,1018
+deployment IDs,139frontend files/10532cases,13jobs,the73-minute aggregate cap,
+all old deadlines,supervisor and reserve floors. Full Python inventory is5924:
+5910 prior IDs plus ten integrations,one report guard and three affinity guards.
+Require exact-head checks,reserves,execution receipts and preservation before
+merge; independently qualify fetched equal-tree main. Engineering checks establish
+no production or legal approval. Owner focused-analysis-v3 review stays pending.

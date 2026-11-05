@@ -1,0 +1,17 @@
+{
+  "schema": "recipient-ci-affinity-v1",
+  "source_path": "backend/tests/test_recipient_observation_readiness.py",
+  "source_sha256": "d99e083d0ed8f12ee544d9a9d03296727f3a3b951773ddf7b2dfdd60b88317f2",
+  "test_ids": [
+    "tests/test_recipient_observation_readiness.py::test_authentication_precedes_registry_lookup_and_all_metadata_reads",
+    "tests/test_recipient_observation_readiness.py::test_exact_receipt_and_independently_reviewed_plan_preserve_versions_and_original_expiry",
+    "tests/test_recipient_observation_readiness.py::test_exact_receipt_proposal_decision_and_signature_versions_cannot_be_replaced",
+    "tests/test_recipient_observation_readiness.py::test_expired_or_revoked_review_keys_and_checked_budget_fail_closed",
+    "tests/test_recipient_observation_readiness.py::test_fresh_receipt_reobservation_does_not_extend_the_original_window",
+    "tests/test_recipient_observation_readiness.py::test_independent_profile_keys_and_host_only_configuration_cannot_be_substituted",
+    "tests/test_recipient_observation_readiness.py::test_metadata_race_withholds_onward_planning_and_preserves_original_histories",
+    "tests/test_recipient_observation_readiness.py::test_missing_linked_staged_and_oversized_metadata_are_retained_without_adoption",
+    "tests/test_recipient_observation_readiness.py::test_missing_review_or_unavailable_recipient_authority_does_not_fill_in_decisions",
+    "tests/test_recipient_observation_readiness.py::test_negative_independent_reviews_withhold_plans_without_source_reads"
+  ]
+}
