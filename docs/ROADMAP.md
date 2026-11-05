@@ -10538,3 +10538,102 @@ provenance readiness, with explicit custody/durability limitations and no
 automatic promotion of retained metadata. See
 [adapter contract](VERIFICATION_REFERENCE_READINESS.md) and
 [frozen report](evidence/verification-reference-2026-11-04.json).
+
+## 310. Independently reviewed retention metadata and signed provenance readiness
+
+**Qualified baseline:** PR #278 is merged as
+`004bba250b368683aee3089fde99d7628db594b1`. Its exact-head run `41870102802`
+and independent main run `41873364495` pass all 13 checks, exact execution
+inventories and fixed reserve floors. Backend retains 108/162 seconds for
+PR/main; minimum job reserves are 32/31 seconds. Engineering starts at
+277 done / 0 open / 0 blocked. All 777 predecessor source pins and earlier
+evidence remain exact.
+
+Add an unregistered read-only adapter for independently reviewed retention
+metadata. Trusted host wiring supplies a distinct private proof directory,
+independent context/directory pins, three distinct public keys/principals and
+explicit proof-set versions. Requests supply only an entry ID and exact hash.
+Authenticate the assigned reviewer before lookup, inventory or parsing.
+
+Verify domain-separated signed issuer provenance, a preparer's proposal binding
+the exact provenance-file hash, and a distinct reviewer's decision binding the
+exact proposal-file hash. All records bind the proof-directory identity, target
+profile, note-store context, original acknowledgement and exact reference/plan.
+Check current sessions, roles, key scopes, revocation, causal ordering and bounded
+validity. Different valid keys or later records cannot substitute for reviewed
+versions. Reject self-review, caller key provisioning and claims of approved
+custody, durability or renewed authority.
+
+Validate cheap mandatory checks first; negative decisions never cause source
+decryption. Accepted metadata requires two fresh source/destination reference
+checks and stable proof bytes, inventories and key/reference registries. Missing
+or failed checks, changed inputs, revoked actors, staging, links, races or
+exhausted budgets withhold all evidence metadata. Preserve originals and both
+histories. Expiry never exceeds the original handoff, signed proof/key windows
+or current verification; reopening cannot renew trust.
+
+The frozen local campaign qualifies 20 outcomes across two pairs/four isolated
+account contexts, two encrypted verification records, six proof sets/18 exact
+signed envelopes and 12 invented keys. Four original input-review records and
+source/review bytes remain exact. Account changes are limited to two declared
+fixture revocations; retain one namespace injection. Fourteen measured service
+reads write nothing. Bind 781 source files, all 777 predecessor pins and the
+preceding report hash. No live case documents, real keys or provider/model
+requests are used.
+
+Thirteen new regression cases use the measured backend reserve and guarded
+shared read-only setup; mutation scenarios keep isolated pairs. Retain the first
+CI rejection: final-release passed but retained only 12 seconds against the fixed
+30-second floor. The supervisor stopped backend early. The preceding 31-second
+baseline was too close to the floor; do not accept the green final test result
+as qualification or retry the unchanged head.
+
+Move complete adjudication39/effort31 files and the unchanged preview-final7
+slice into backend, and the unchanged materialization-final20 slice into
+portfolio review. Return the complete analysis-cohort32 file to backend after source-publication
+passed with only27 seconds of reserve. Backend is 4048 selected / 3951 passes / 97 original skips;
+final-release is 44 and portfolio is 81. Preserve all original preview20,
+materialization58 and cohort19 identities exactly once. Existing closed manifests
+and logical slice contents remain byte-exact; only hosting jobs change, guarded
+by explicit placement assertions. The 13 new retention tests and their business
+bodies remain unchanged.
+
+Retain the subsequent launcher rejection: console `pytest` lacked the repository
+import path for the moved `scripts` plugin. Preserve the supervisor's required
+console child and explicitly set the repository `PYTHONPATH`, matching the
+existing PostgreSQL job. Add a bounded collection-only import probe within the
+existing lint phase, before build/contracts, without executing tests twice.
+Verify the real supervised console child locally against invented Actions
+metadata; no supervisor policy, source or credential handling changes. A further
+run correctly rejected a duplicated literal path in the placement guard; the
+collection probe now uses the existing declared array, preserving the guard
+against duplicate test execution. Retain both rejected observations. A further run passed PostgreSQL/graph tests
+but retained only25/27 seconds. Move complete public-source94 and temporal58
+files to backend; package34 and the intact restart25 phase use frontend reserve.
+PostgreSQL primary131, graph primary125 and portfolio81 preserve every original
+identity and all real database races. No test bodies or frozen manifests change.
+The following run passed4014 with the original97 skips but reached its overall
+job cap during final validation. Move the unchanged39-second contract phase5 to
+frontend; place complete cohort32 in graph and effort31 in final-release. This
+reduces the measured backend pre-suite and suite costs without weakening any
+assertion. Final selections are backend4048/passes3951/skips97, graph125,
+final44 and portfolio81. The ten manifest partitions retain every original ID.
+
+Preserve older source bytes, 1018 deployment IDs and 139 frontend files / 10532
+cases. Keep 13 jobs, the 73-minute aggregate cap, worker counts, deadlines,
+supervisor and floors unchanged.
+Require fresh exact-head and independently fetched equal-main execution,
+fixed-floor and private-preservation evidence before closure. Local timing is
+not hosted CI qualification.
+
+Readiness grants only disposable metadata planning. Real retention permission,
+key ownership/custody, issuer enrollment, acknowledgement-channel authenticity,
+durability, cross-store atomicity, recovery, production and legal approval remain
+unqualified. Product checklist 42/21/24/6 and readiness 0/9/4/1 remain unchanged;
+the owner's focused-analysis-v3 review is pending.
+
+Next: explicit metadata-handoff packaging and read-only destination acceptance,
+binding exact reviewed proof/reference versions and fresh destination authority.
+Budget new cases against measured reserves before implementation. See
+[adapter contract](RETENTION_AUTHORIZATION_READINESS.md) and
+[frozen report](evidence/retention-authorization-2026-11-05.json).
