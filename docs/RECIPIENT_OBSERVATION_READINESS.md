@@ -94,3 +94,10 @@ Require exact-head checks,reserves,execution receipts and preservation before
 merge; independently qualify fetched equal-tree main. Local measurements establish
 no invoice saving,production or legal approval. Owner focused-analysis-v3 review
 stays pending. All rejected attempts remain evidence; none is retried unchanged.
+
+A read-only HTTP/1.1 metadata admission runs first in the existing capacity job.
+All other twelve jobs depend on its success,so a transport or capacity failure
+cannot start the full fanout. Admission checks the actual capacity-job/run/head
+identity and does not claim complete-run qualification or start a test child.
+This adds no job or retry and preserves every original job/command cap. Full
+backend qualification and independent-main evidence remain mandatory.

@@ -49,6 +49,11 @@ class DeploymentPlacementContract(unittest.TestCase):
                           ('final-release-authorization', 'final')]:
             self.assertEqual(blocks[job].count('read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_metadata_capacity --metadata-capacity-lane=' + lane + ' "${metadata_capacity_tests[@]}"'), 1)
+        self.assertEqual(workflow.count("needs: backend-capacity"), 12)
+        self.assertNotIn("needs:", blocks["backend-capacity"])
+        self.assertIn("actions: read", blocks["backend-capacity"])
+        self.assertIn("python scripts/run_ci_reserve_guard_v3.py --admission", blocks["backend-capacity"])
+        self.assertLess(blocks["backend-capacity"].index("--admission"), blocks["backend-capacity"].index("name: Install test dependencies"))
         recipient = re.search(r'  CI_RECIPIENT_OBSERVATION_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
         self.assertEqual(recipient, ['backend/tests/test_recipient_observation_readiness.py'])
         self.assertEqual(workflow.count(recipient[0]), 1)

@@ -10848,6 +10848,15 @@ attempts. Fixed diagnostic categories distinguish transport deadline, client
 rejection and malformed/bounded payload errors without printing transport output
 or credentials. Original v1/v2 sources, child supervision, credential stripping,
 polling, job/step caps and floors stay exact. No added wait or test retry.
+Head e5cc7c4/run42077386218 confirms the timing correction: database61 and
+analysis46 reserves pass,as do all twelve siblings. The backend still rejects an
+eight-second metadata transport deadline. Force HTTP/1.1 for only the read-only
+metadata client. Add bounded metadata admission before dependencies/tests in the
+existing capacity job; the other twelve jobs require that job to succeed. A failed
+admission or capacity test prevents full fanout without creating another job.
+Admission binds the actual capacity-job/run/head identity,can accept only visible
+closed jobs,and explicitly does not qualify the run or start a test child.
+Final backend and independent-main checks remain unchanged and mandatory.
 
 Local qualification includes the real two-worker affinity paths and the deployment
 harness interpreter. Require exact-head checks, physical execution receipts,

@@ -131,6 +131,7 @@ env:
 
 jobs:
   backend-and-contracts:
+    needs: backend-capacity
     permissions:
       contents: read
       actions: read
@@ -288,6 +289,7 @@ jobs:
         run: docker compose --env-file /dev/null --profile research --profile native-provider config --quiet
 
   backend-review-contracts:
+    needs: backend-capacity
     # Isolate measured cohort/review CPU work instead of saturating the remainder.
     # Exactly the same files run once with two workers; existing caps stay intact.
     runs-on: ubuntu-24.04-arm
@@ -349,6 +351,7 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_provision_bindings --provision-binding-lane=history "${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   postgres-snapshot-concurrency:
+    needs: backend-capacity
     # The unchanged CPU-heavy runtime guard exceeded the x86 job budget even
     # after all 95 cases passed. Use the already-qualified native ARM executor,
     # keeping every case, two workers and the original five-minute deadline.
@@ -418,6 +421,7 @@ jobs:
 
 
   frontend:
+    needs: backend-capacity
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 5
     steps:
@@ -475,6 +479,7 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" "${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend "${metadata_capacity_tests[@]}"
 
   frontend-history:
+    needs: backend-capacity
     # Growing history contracts exceeded the single frontend lane's reserve.
     # Built-in hash sharding preserves all files and per-file isolation. Each
     # lane retains two workers and the five-minute cap; build runs only once.
@@ -523,6 +528,7 @@ jobs:
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
   final-release-authorization:
+    needs: backend-capacity
     # Whole-release lifecycle, inspection and real concurrency stay together.
     # The single build uses backend reserve instead of this measured thin tail.
     # Original deadlines, workers, inventories and no-retry policy remain.
@@ -570,6 +576,7 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=final "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=final "${metadata_capacity_tests[@]}"
 
   retained-release-withdrawal:
+    needs: backend-capacity
     # Measured withdrawal reconstruction exhausted the frontend's five-minute
     # cap. Keep this complete group disjoint instead of retrying whole suites or
     # extending existing deadlines. No PostgreSQL service is needed here.
@@ -608,6 +615,7 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${capacity_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   graph-candidate-contracts:
+    needs: backend-capacity
     # The transition and new receipt files reuse the backend pool. Preserve
     # complete candidate files and every assertion within the original
     # twelve jobs, two workers and all existing deadlines without retry.
@@ -639,6 +647,7 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate -p scripts.ci_provision_bindings --provision-binding-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   source-publication-contracts:
+    needs: backend-capacity
     # PostgreSQL races passed in 208s and publication checks in 72s, but setup
     # pushed their shared five-minute job over its cap. Keep both complete groups
     # disjoint; preserve every existing cap, two workers and no automatic retry.
@@ -671,6 +680,7 @@ jobs:
 
 
   graph-runtime-contracts:
+    needs: backend-capacity
     # The 3907-case backend lane exhausted its unchanged 18-minute deadline.
     # Run these four complete files exactly once in a separate bounded lane.
     # Keep all existing job/step caps, native ARM and exactly two workers.
@@ -714,6 +724,7 @@ jobs:
             ::: backend/.venv/bin/python -m pytest -p scripts.ci_serial_history_cohorts --ci-serial-role=inspection "${history_inspection_tests[@]}" -q --maxfail=1
 
   analysis-recovery-contracts:
+    needs: backend-capacity
     # One bounded ARM pair isolates the growing analysis/recovery workload.
     # Every file leaves its former group; no cases or workers are duplicated.
     runs-on: ubuntu-24.04-arm
@@ -753,6 +764,7 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   publication-planning-contracts:
+    needs: backend-capacity
     # Complete files outgrew spare in the frontend and withdrawal jobs.
     # One explicit bounded job replaces those placements; no duplicate coverage.
     runs-on: ubuntu-24.04-arm
@@ -788,6 +800,9 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_provision_bindings --provision-binding-lane=planning "${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   backend-capacity:
+    permissions:
+      contents: read
+      actions: read
     # Complete source-bound135-case group, with no duplicates or retries.
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 3
@@ -800,6 +815,11 @@ jobs:
           cache-dependency-path: |
             backend/uv.lock
             .github/scripts/install-uv.sh
+      - name: Admit bounded read-only workflow metadata before test spending
+        timeout-minutes: 1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/run_ci_reserve_guard_v3.py --admission
       - name: Install test dependencies
         timeout-minutes: 1
         run: |

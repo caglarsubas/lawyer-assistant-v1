@@ -18,7 +18,7 @@ def snapshot(repo, run, env, rejected):
     try:
         response = subprocess.run(["gh", "api", "--hostname", "github.com",
             f"repos/{repo}/actions/runs/{run}/jobs?filter=latest&per_page=100"],
-            env=env, capture_output=True, timeout=8, check=False)
+            env={**env, "GODEBUG": "http2client=0"}, capture_output=True, timeout=8, check=False)
     except subprocess.TimeoutExpired:
         raise rejected("metadata_transport_deadline") from None
     except OSError:
@@ -86,6 +86,19 @@ def load_policy():
     return core
 
 
+def admission(env, core=None):
+    """Read-only transport admission in the existing capacity job, never a verdict."""
+    core = core if core is not None else load_policy()
+    # This isolated policy instance checks the actual admission-job identity.
+    # It never starts a child or issues the backend's final qualification receipt.
+    core.SELF = "backend-capacity"
+    repo, run, sha = core.context(env)
+    core.inspect(core.snapshot(repo, run, env), run, sha)
+    return {"metadata_admission": 1, "run_id": run, "head_sha": sha,
+            "job": core.SELF, "transport": "http1", "request_budget_seconds": 8,
+            "complete_run_qualified": False}
+
+
 def main():
     core = load_policy()
 
@@ -95,6 +108,9 @@ def main():
     signal.signal(signal.SIGTERM, interrupted)
     signal.signal(signal.SIGINT, interrupted)
     try:
+        if sys.argv[1:] == ["--admission"]:
+            print("CI_METADATA_ADMISSION " + json.dumps(admission(dict(os.environ), core)), flush=True)
+            return 0
         if sys.argv[1:2] != ["--"]:
             raise core.Rejected("explicit_command_required")
         return core.supervise(sys.argv[2:], dict(os.environ))

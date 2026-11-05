@@ -89,9 +89,10 @@ def test_partial_snapshots_still_reject_identity_failure_and_exhausted_reserves(
                 with pytest.raises(core.Rejected, match="metadata_"):
                     core.snapshot("invented/repository", RUN, {})
             assert request.call_count == 1 and request.call_args.kwargs["timeout"] == 8
+            assert request.call_args.kwargs["env"]["GODEBUG"] == "http2client=0"
 
 
-def test_supervision_starts_once_on_partial_metadata_and_rejects_incomplete_final(capsys):
+def test_supervision_starts_once_on_partial_metadata_and_rejects_incomplete_final(capsys, tmp_path):
     original_popen = subprocess.Popen
     for complete in (True, False):
         core, children = current.load_policy(), []
@@ -118,3 +119,24 @@ def test_supervision_starts_once_on_partial_metadata_and_rejects_incomplete_fina
         output = capsys.readouterr().out
         assert "INVENTED_ONLY" not in output
         assert ('"complete_backend_exit": 0' in output) == complete
+    event = tmp_path / "event.json"
+    event.write_text(json.dumps({"pull_request": {"head": {"sha": SHA}}}))
+    env = {"GITHUB_ACTIONS": "true", "GITHUB_JOB": "backend-capacity", "GH_TOKEN": "INVENTED_ONLY",
+           "GITHUB_REPOSITORY": "invented/repository", "GITHUB_RUN_ID": str(RUN),
+           "GITHUB_EVENT_PATH": str(event)}
+    core = current.load_policy()
+    visible = {"jobs": [j for j in jobs(core)["jobs"] if j["name"] == "backend-capacity"]}
+    with patch.object(current, "load_policy", return_value=core), \
+            patch.object(core, "snapshot", return_value=visible) as read, \
+            patch.object(core.subprocess, "Popen", side_effect=AssertionError("admission cannot run tests")):
+        value = current.admission(env)
+        assert value["metadata_admission"] == 1 and not value["complete_run_qualified"]
+        assert value["run_id"] == RUN and value["head_sha"] == SHA and value["transport"] == "http1"
+        assert "INVENTED_ONLY" not in json.dumps(value) and read.call_count == 1
+        with pytest.raises(core.Rejected, match="github_context_required"):
+            current.admission({**env, "GITHUB_JOB": "backend-and-contracts"})
+        assert read.call_count == 1
+    with patch.object(current.sys, "argv", ["guard", "--admission"]), \
+            patch.dict(current.os.environ, {}, clear=True), patch.object(current.signal, "signal"):
+        assert current.main() == 1
+    assert capsys.readouterr().out.strip() == 'CI_RESERVE_REJECTED {"reason": "github_context_required"}'
