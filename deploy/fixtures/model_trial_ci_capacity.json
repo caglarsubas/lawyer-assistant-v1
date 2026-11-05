@@ -25,16 +25,6 @@
     "tests/test_authority_model_trials.py::test_two_accounts_unknown_effort_and_disagreement_without_approval"
   ],
   "lanes": {
-    "frontend": [
-      "tests/test_authority_model_trials.py::test_changes_close_run_observation_and_export_and_never_rewrite[model]",
-      "tests/test_authority_model_trials.py::test_changes_close_run_observation_and_export_and_never_rewrite[private]",
-      "tests/test_authority_model_trials.py::test_changes_close_run_observation_and_export_and_never_rewrite[reviewer]",
-      "tests/test_authority_model_trials.py::test_commit_then_late_guard_failure_is_permanently_pending_on_retry",
-      "tests/test_authority_model_trials.py::test_invalid_registration_or_dispatch_never_calls_model[mixed]",
-      "tests/test_authority_model_trials.py::test_invalid_registration_or_dispatch_never_calls_model[supported]",
-      "tests/test_authority_model_trials.py::test_supported_observations_need_complete_links_and_adverse_scope",
-      "tests/test_authority_model_trials.py::test_two_accounts_unknown_effort_and_disagreement_without_approval"
-    ],
     "history": [
       "tests/test_authority_model_trials.py::test_cancellation_and_inflight_revocation_do_not_publish_candidates",
       "tests/test_authority_model_trials.py::test_changes_close_run_observation_and_export_and_never_rewrite[rights]",
@@ -48,6 +38,16 @@
       "tests/test_authority_model_trials.py::test_invalid_registration_or_dispatch_never_calls_model[override]",
       "tests/test_authority_model_trials.py::test_observation_late_failure_stays_withheld_after_recovery",
       "tests/test_authority_model_trials.py::test_rejected_repair_keeps_original_response_pass_without_adoption"
+    ],
+    "analysis": [
+      "tests/test_authority_model_trials.py::test_changes_close_run_observation_and_export_and_never_rewrite[model]",
+      "tests/test_authority_model_trials.py::test_changes_close_run_observation_and_export_and_never_rewrite[private]",
+      "tests/test_authority_model_trials.py::test_changes_close_run_observation_and_export_and_never_rewrite[reviewer]",
+      "tests/test_authority_model_trials.py::test_commit_then_late_guard_failure_is_permanently_pending_on_retry",
+      "tests/test_authority_model_trials.py::test_invalid_registration_or_dispatch_never_calls_model[mixed]",
+      "tests/test_authority_model_trials.py::test_invalid_registration_or_dispatch_never_calls_model[supported]",
+      "tests/test_authority_model_trials.py::test_supported_observations_need_complete_links_and_adverse_scope",
+      "tests/test_authority_model_trials.py::test_two_accounts_unknown_effort_and_disagreement_without_approval"
     ]
   },
   "observed_head": "04c38dcb60648656e63c22f0b82cae258b62d973",

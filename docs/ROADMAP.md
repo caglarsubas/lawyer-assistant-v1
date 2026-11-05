@@ -10805,30 +10805,36 @@ Strengthen new fixture identity namespaces and correct malformed-input injection
 do not change the26 expectations or predecessor implementations.
 
 Address CI capacity before publishing coverage. Retain the initial run42033292507
-at2476635 and the rejected run42035472783 at04c38dc: the latter finished history
-with23 seconds of reserve, below the unchanged30-second job floor. Its supervisor
-stopped the backend; it supplies no merge qualification. Graph and analysis had
-31 seconds, so distribute unchanged work into measured spare capacity before
-publishing another head. Closed v13 metadata placement preserves44 original IDs:
-review9,planning6,frontend12,final17. The intact logical PostgreSQL inventory16
-slice joins final's existing pair, preserving its frozen26-case manifest. Move the
-unchanged boundary17 from analysis to candidate. Split the20 unchanged mocked
-model-trial cases frontend8/history12 using a source-pinned closed inventory and
-three fast execution-receipt guards. No cases are pruned or repeated. Local two-lane
-execution confirms all20 once; hosted headroom remains a separate gate.
+at2476635, history23-second rejection42035472783 at04c38dc, and rejected
+42039495341 ate33f0b8. The latter also exposed a missing repository import path
+in the new history command; correct it explicitly and exercise the console command
+without inherited PYTHONPATH. Its reserves were frontend14,review14,final27 and
+PostgreSQL28,below the unchanged30-second job floor. Its supervisor stopped the
+backend; none of these heads supplies merge qualification.
 
-Run ten new integration IDs serially after PostgreSQL's existing pair exits with
-a50-second hard timeout; the fast retained-report guard uses backend. Full Python
-inventory is5910 original IDs plus14new=5924: ten integrations,one report guard and
-three CI guards. Backend selection4011/passes3914/original97skips,graph138,
-analysis121,candidate293,planning198,database115 plus serial10,final101 and
-portfolio47 retain all prior bodies. Keep1018 deployment IDs,139frontend files/
-10532cases,13jobs,the73-minute aggregate cap,the two-worker ceiling,all existing
-phase deadlines,immutable business manifests,supervisor and reserve floors.
-The added frontend model slice has a35-second hard deadline inside a60-second
-step,with15 seconds of required step reserve. Require all exact-head checks and
-fixed reserves,then separately fetched equal-main execution and preservation
-receipts. Local timing is planning,not hosted acceptance or measured invoice savings.
+Rebalance across measured spare capacity. Closed v14 metadata placement preserves
+44 original IDs: review7,planning6,frontend8,final15,backend4,database2,history2.
+Keep the logical PostgreSQL inventory16 slice in final with its frozen26-case
+manifest. The unchanged boundary17 moves into the PostgreSQL pair. The existing
+48-case provision-binding history slice moves whole from review to backend;
+its source and83-case partition remain exact. The closed mocked model20 inventory
+runs analysis8/history12; three fast guards refuse missing,duplicated,skipped or
+xfailed receipts. History combines its12 model IDs with2 metadata IDs in its
+existing pair. Metadata4 runs in backend with a35-second hard deadline. New
+recipient integrations10 run serially in backend after exited pairs under50s,
+with one fast retained-report guard in the core backend selection.
+
+Full Python inventory is5910 original IDs plus14new=5924. Backend core remains
+4011/passes3914/original97skips,with62 separate IDs (recipient10,binding48,
+metadata4). Graph138,analysis121 plus model8,candidate276,planning198,database134,
+final99,portfolio43 and review188 plus effort31 preserve all original bodies.
+Keep1018 deployment IDs,139frontend files/10532cases,13jobs,the73-minute aggregate
+cap,the two-worker ceiling,all existing phase deadlines,immutable business
+manifests,supervisor and reserve floors. New35-second slices have60-second step
+caps and15 seconds required reserve; recipient120-second step retains30 seconds.
+Require exact-head checks and fixed reserves,then separately fetched equal-main
+execution and preservation receipts. Local timing is planning,not hosted
+acceptance or measured invoice savings.
 
 Originals,evidence versions,credentials,sessions,private cases and review history
 remain unchanged. Actual retention permission,custody,issuer/channel authenticity,

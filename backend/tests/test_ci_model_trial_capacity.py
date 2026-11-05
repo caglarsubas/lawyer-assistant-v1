@@ -14,9 +14,9 @@ from scripts import ci_model_trial_capacity as capacity  # noqa: E402
 
 def test_closed_source_and_complete_inventory_cannot_be_changed_or_omitted(tmp_path):
     c = capacity.load_contract()
-    assert len(c.ids) == 20 and [len(c.lanes[n]) for n in ("frontend", "history")] == [8, 12]
-    assert set(c.lanes["frontend"]).isdisjoint(c.lanes["history"])
-    assert set(c.lanes["frontend"]) | set(c.lanes["history"]) == set(c.ids)
+    assert len(c.ids) == 20 and [len(c.lanes[n]) for n in ("analysis", "history")] == [8, 12]
+    assert set(c.lanes["analysis"]).isdisjoint(c.lanes["history"])
+    assert set(c.lanes["analysis"]) | set(c.lanes["history"]) == set(c.ids)
     for mode in ("source", "missing", "overlap", "unknown"):
         v = json.loads(capacity.MANIFEST.read_bytes())
         if mode == "source":
@@ -24,8 +24,8 @@ def test_closed_source_and_complete_inventory_cannot_be_changed_or_omitted(tmp_p
         elif mode == "missing":
             v["test_ids"].pop()
         elif mode == "overlap":
-            v["lanes"]["frontend"][0] = v["lanes"]["history"][0]
-            v["lanes"]["frontend"].sort()
+            v["lanes"]["analysis"][0] = v["lanes"]["history"][0]
+            v["lanes"]["analysis"].sort()
         else:
             v["lanes"]["third_worker"] = []
         p = tmp_path / "profile.json"
@@ -37,10 +37,10 @@ def test_closed_source_and_complete_inventory_cannot_be_changed_or_omitted(tmp_p
 def test_selection_keeps_other_cases_and_refuses_incomplete_duplicate_or_unknown_collection():
     c = capacity.load_contract()
     other = "tests/other.py::test_retained"
-    assert capacity.select(c, "frontend", [other, *c.ids]) == [other, *c.lanes["frontend"]]
+    assert capacity.select(c, "analysis", [other, *c.ids]) == [other, *c.lanes["analysis"]]
     for ids in (list(c.ids[:-1]), [*c.ids, c.ids[0]]):
         with pytest.raises(ValueError):
-            capacity.select(c, "frontend", ids)
+            capacity.select(c, "analysis", ids)
     with pytest.raises(ValueError):
         capacity.select(c, "unregistered", list(c.ids))
 
@@ -48,8 +48,8 @@ def test_selection_keeps_other_cases_and_refuses_incomplete_duplicate_or_unknown
 def test_only_complete_once_non_xfailed_execution_can_publish_a_receipt():
     c = capacity.load_contract()
     for mode in ("valid", "skipped", "duplicate", "xfail"):
-        p = capacity.Partition(c, "frontend")
-        for i, node in enumerate(c.lanes["frontend"]):
+        p = capacity.Partition(c, "analysis")
+        for i, node in enumerate(c.lanes["analysis"]):
             r = SimpleNamespace(nodeid=node, when="call", passed=not (mode == "skipped" and i == 0),
                                 wasxfail=(mode == "xfail" and i == 0))
             p.pytest_runtest_logreport(r)
@@ -60,6 +60,6 @@ def test_only_complete_once_non_xfailed_execution_can_publish_a_receipt():
         lines = []
         p.pytest_terminal_summary(SimpleNamespace(config=session.config, write_line=lines.append), session.exitstatus)
         if mode == "valid":
-            assert session.exitstatus == 0 and json.loads(lines[0])["selected_ids"] == list(c.lanes["frontend"])
+            assert session.exitstatus == 0 and json.loads(lines[0])["selected_ids"] == list(c.lanes["analysis"])
         else:
             assert session.exitstatus == pytest.ExitCode.TESTS_FAILED and lines == []

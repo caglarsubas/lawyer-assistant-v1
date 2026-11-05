@@ -1,5 +1,5 @@
 {
-  "schema": "metadata-ci-capacity-v13",
+  "schema": "metadata-ci-capacity-v14",
   "source_sha256": {
     "backend/tests/test_analysis_cohorts.py": "dfea8d14b6a8aa161d274f71a3d5aea1c94d109167025a7da84de8f59e7e6c2f",
     "backend/tests/test_verification_reference_readiness.py": "a7d2db9a2c0485a7f433148c1cc9d8a586cbc3faee91df9368fd1d9f44dd884a"
@@ -52,11 +52,9 @@
   ],
   "lanes": {
     "review": [
-      "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[recipe]",
       "tests/test_analysis_cohorts.py::test_missing_integrity_and_routing_changes_never_silently_substitute_records[delete]",
       "tests/test_analysis_cohorts.py::test_pure_reconciliation_keeps_real_synthetic_model_budget_and_feedback_profiles_separate",
       "tests/test_analysis_cohorts.py::test_second_change_to_already_stale_evidence_invalidates_preview_and_rolls_back[fact]",
-      "tests/test_analysis_cohorts.py::test_separate_profiles_family_conflicts_and_different_outcomes_are_retained_not_resolved",
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[duplicate]",
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[override]",
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[raw_capture]",
@@ -64,17 +62,13 @@
     ],
     "frontend": [
       "tests/test_analysis_cohorts.py::test_byte_limit_blocks_preview_save_read_export_without_truncating_retained_data",
-      "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[effort]",
       "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[fact]",
-      "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[participant]",
       "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[provider]",
       "tests/test_analysis_cohorts.py::test_missing_integrity_and_routing_changes_never_silently_substitute_records[corrupt_cohort]",
       "tests/test_analysis_cohorts.py::test_second_change_to_already_stale_evidence_invalidates_preview_and_rolls_back[document]",
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[unknown]",
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[wrong_parent]",
-      "tests/test_analysis_cohorts.py::test_workspace_access_csrf_parent_boundaries_and_revocation",
-      "tests/test_verification_reference_readiness.py::test_current_session_revocation_withholds_retained_metadata[source]",
-      "tests/test_verification_reference_readiness.py::test_tampered_ciphertext_is_retained_without_metadata_or_repair"
+      "tests/test_analysis_cohorts.py::test_workspace_access_csrf_parent_boundaries_and_revocation"
     ],
     "final": [
       "tests/test_analysis_cohorts.py::test_candidates_and_cohort_lists_are_bounded_and_archived_freeze_is_withheld",
@@ -90,9 +84,7 @@
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[reserved]",
       "tests/test_analysis_cohorts.py::test_strict_selection_and_family_bounds_fail_without_partial_capture[thirteen]",
       "tests/test_verification_reference_readiness.py::test_closed_operations_budgets_and_unavailable_checks_fail_closed",
-      "tests/test_verification_reference_readiness.py::test_explicit_versions_and_entry_selection_never_follow_a_newer_record",
       "tests/test_verification_reference_readiness.py::test_missing_acknowledgement_and_missing_pin_do_not_decrypt_retained_bytes",
-      "tests/test_verification_reference_readiness.py::test_record_namespace_and_registry_races_withhold_metadata",
       "tests/test_verification_reference_readiness.py::test_unknown_staging_links_permissions_and_limits_block_without_cleanup"
     ],
     "planning": [
@@ -102,6 +94,20 @@
       "tests/test_verification_reference_readiness.py::test_destination_authentication_precedes_all_record_and_inventory_reads",
       "tests/test_verification_reference_readiness.py::test_expiry_and_a_new_receiver_session_require_fresh_validation_without_rewriting_history",
       "tests/test_verification_reference_readiness.py::test_preview_and_exact_retained_reference_reopen_without_service_writes"
+    ],
+    "backend": [
+      "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[effort]",
+      "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[participant]",
+      "tests/test_verification_reference_readiness.py::test_current_session_revocation_withholds_retained_metadata[source]",
+      "tests/test_verification_reference_readiness.py::test_tampered_ciphertext_is_retained_without_metadata_or_repair"
+    ],
+    "database": [
+      "tests/test_analysis_cohorts.py::test_later_changes_mark_projection_stale_without_rewriting_frozen_report[recipe]",
+      "tests/test_analysis_cohorts.py::test_separate_profiles_family_conflicts_and_different_outcomes_are_retained_not_resolved"
+    ],
+    "history": [
+      "tests/test_verification_reference_readiness.py::test_explicit_versions_and_entry_selection_never_follow_a_newer_record",
+      "tests/test_verification_reference_readiness.py::test_record_namespace_and_registry_races_withhold_metadata"
     ]
   },
   "case_cost_ms": {
@@ -154,7 +160,10 @@
     "review": 12000,
     "frontend": 25000,
     "final": 27000,
-    "planning": 37000
+    "planning": 37000,
+    "backend": 20000,
+    "database": 12000,
+    "history": 16000
   },
   "observed_head": "6a2c48947f9733687086240b280a9f7f4deba67b",
   "observed_run": 41995856870,
@@ -166,5 +175,5 @@
     "backend-review-contracts": "65f1e5c52b5603cb413a64a65cf7450766d52290a3cf63c185bff1a31ca81357",
     "frontend-history": "f8577d63f3c2fd40570cdfcbb4944fb7826cc258a9b19b9070bb3f06e83ced20"
   },
-  "normalization": "Retained costs with1.25 allowance.04c38dc run42035472783 rejected history23s; graph31/analysis31s. Keep44 IDs; move graph2 metadata to planning52s reserve. Frozen source bytes and original hosted floors remain authoritative."
+  "normalization": "Retained costs with1.25 allowance; e33f0b8/run42039495341 rejects frontend14,review14,final27,PostgreSQL28 reserve. Rebalance44 unchanged IDs into seven existing jobs. No runtime qualification from estimates."
 }

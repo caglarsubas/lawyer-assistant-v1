@@ -30,6 +30,7 @@ env:
   CI_RECOVERY_INVENTORY_TESTS: >-
     backend/tests/test_recovery_review_inventory.py
   CI_POSTGRES_SOURCE_TESTS: >-
+    backend/tests/test_disposition_receipt_reobservation_boundary.py
     backend/tests/test_ci_authority_trials.py
   CI_HISTORY_BINDING_TESTS: >-
     backend/tests/test_provision_mappings.py
@@ -72,7 +73,6 @@ env:
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_authority_proposals.py
   CI_GRAPH_CANDIDATE_TESTS: >-
-    backend/tests/test_disposition_receipt_reobservation_boundary.py
     backend/tests/test_final_graph_candidate.py
     backend/tests/test_staged_receipt_adapter.py
     backend/tests/test_native_receipt_stage.py
@@ -286,6 +286,27 @@ jobs:
           LA_EXTRACTION_TOKEN: ci-placeholder-not-a-real-secret-at-least-32
         run: docker compose --env-file /dev/null --profile research --profile native-provider config --quiet
 
+
+      - name: Test recipient observation receipts and independent planning
+        timeout-minutes: 2
+        run: |
+          read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"
+          export PYTHONPATH="$GITHUB_WORKSPACE"
+          timeout --kill-after=2s 50s bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${recipient_observation_tests[@]}" -q -n 0 --maxfail=1 --durations=12 -rA
+
+
+      - name: Test complete provision binding qualification
+        timeout-minutes: 2
+        run: |
+          read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_provision_bindings --provision-binding-lane=history "${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+
+
+      - name: Test retained metadata capacity slice
+        timeout-minutes: 1
+        run: |
+          read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
+          timeout --kill-after=2s 35s bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=backend "${metadata_capacity_tests[@]}"
   backend-review-contracts:
     # Isolate measured cohort/review CPU work instead of saturating the remainder.
     # Exactly the same files run once with two workers; existing caps stay intact.
@@ -340,12 +361,6 @@ jobs:
           read -r -a history_capacity_tests <<< "$CI_HISTORY_CAPACITY_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${history_capacity_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
-
-      - name: Test complete provision binding qualification
-        timeout-minutes: 2
-        run: |
-          read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_provision_bindings --provision-binding-lane=history "${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   postgres-snapshot-concurrency:
     # The unchanged CPU-heavy runtime guard exceeded the x86 job budget even
@@ -403,22 +418,16 @@ jobs:
           print('Disposable PostgreSQL settings:', settings)
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
+          read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           read -r -a postgres_source_tests <<< "$CI_POSTGRES_SOURCE_TESTS"
           export PYTHONPATH="$GITHUB_WORKSPACE"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=database "${metadata_capacity_tests[@]}"
 
 
 
 
       # The original bounded restart phase follows exited PostgreSQL workers.
 
-
-      - name: Test recipient observation receipts and independent planning
-        timeout-minutes: 2
-        run: |
-          read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"
-          export PYTHONPATH="$GITHUB_WORKSPACE"
-          timeout --kill-after=2s 50s bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${recipient_observation_tests[@]}" -q -n 0 --maxfail=1 --durations=12 -rA
 
   frontend:
     runs-on: ubuntu-24.04-arm
@@ -477,13 +486,6 @@ jobs:
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" "${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend "${metadata_capacity_tests[@]}"
 
-      - name: Test model-trial capacity slice
-        timeout-minutes: 1
-        run: |
-          read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
-          export PYTHONPATH="$GITHUB_WORKSPACE"
-          timeout --kill-after=2s 35s bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_model_trial_capacity --model-trial-capacity-lane=frontend
-
   frontend-history:
     # Growing history contracts exceeded the single frontend lane's reserve.
     # Built-in hash sharding preserves all files and per-file isolation. Each
@@ -531,7 +533,9 @@ jobs:
         timeout-minutes: 2
         run: |
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -p scripts.ci_model_trial_capacity --model-trial-capacity-lane=history
+          export PYTHONPATH="$GITHUB_WORKSPACE"
+          read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -p scripts.ci_model_trial_capacity -rA --model-trial-capacity-lane=history -p scripts.ci_metadata_capacity --metadata-capacity-lane=history "${metadata_capacity_tests[@]}"
   final-release-authorization:
     # Whole-release lifecycle, inspection and real concurrency stay together.
     # The single build uses backend reserve instead of this measured thin tail.
@@ -762,6 +766,14 @@ jobs:
         run: |
           read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+
+
+      - name: Test model-trial capacity slice
+        timeout-minutes: 1
+        run: |
+          read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
+          export PYTHONPATH="$GITHUB_WORKSPACE"
+          timeout --kill-after=2s 35s bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_model_trial_capacity --model-trial-capacity-lane=analysis
 
   publication-planning-contracts:
     # Complete files outgrew spare in the frontend and withdrawal jobs.

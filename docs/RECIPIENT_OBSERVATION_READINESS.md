@@ -64,17 +64,19 @@ Use an existing owner-only directory and a fresh output name. Reports have a
 separate 1 MiB bound; receipt limits remain 4 KiB. No real cases, models, provider
 requests or genuine signing keys are used.
 
-CI reuses existing capacity. Metadata44 uses review9/planning6/frontend12/final17.
-The intact sixteen-case logical PostgreSQL inventory slice runs in the final-release
-pair, preserving its original partition manifest. The unchanged boundary17 moves
-from analysis to candidate. A closed source-bound model-trial inventory runs the
-same twenty mocked cases frontend8/history12 and refuses missing, duplicated,
-skipped or xfailed execution receipts; three fast guards verify this contract.
-The new ten-case group runs serially after PostgreSQL's existing two-worker group
-has exited, with a fifty-second hard timeout. The retained-report guard runs in
-backend. All5910 previous Python identities plus fourteen new cases are conserved.
-Thirteen jobs, the seventy-three-minute aggregate cap, existing deadlines,
-two-worker ceiling, supervisor and reserve floors are preserved. Retain the earlier
-history23-second rejection; do not rerun or merge that head. Exact-head and
-independently fetched equal-main receipts and timing qualify delivery; local
-estimates do not qualify hosted CI.
+CI reuses existing capacity. Metadata44 uses review7/planning6/frontend8/final15/
+backend4/database2/history2. Preserve the intact logical PostgreSQL inventory16
+slice in final and move boundary17 into the PostgreSQL pair. Move the unchanged
+provision-binding history48 slice from review to backend; retain the83-case
+manifest. The same mocked model20 runs analysis8/history12 through source-bound
+closed selection with three guards. Explicit repository PYTHONPATH is required
+for the history console entry point; exercise it without inherited environment.
+History combines its12 model IDs with2 metadata IDs in its existing pair.
+Backend serially runs new recipient10 after exited pairs under a fifty-second
+hard timeout,plus metadata4 under thirty-five seconds and the moved binding48
+step. Its fast retained-report guard remains in the core selection. Preserve all
+5910 previous Python identities plus fourteen new cases,thirteen jobs,the
+seventy-three-minute aggregate cap,existing deadlines,two-worker ceiling,
+supervisor and reserve floors. Retain earlier failed or superseded runs without
+qualification credit. Exact-head and independently fetched equal-main receipts
+and timing qualify delivery; local estimates do not qualify hosted CI.
