@@ -10726,7 +10726,7 @@ approval. See the [closed capacity manifest](../deploy/fixtures/metadata_ci_capa
 
 Retain rejected mains41992213977/41985956054 and candidates973ee0(frontend22s
 reserve),6a2c489(analysis21),997777e(graph12),9b70810(final25),6122e96 run42005341497
-(graph13),94c73a8 run42011468201(postgres23/analysis28). Passing component tests never qualify the run. Preserve supervisor
+(graph13),94c73a8 run42011468201(postgres23/analysis28),ffa0247 run42013986134(review18). Passing component tests never qualify the run. Preserve supervisor
 rejection and owned-child-stop evidence; never rerun an unchanged rejected head
 or enlarge limits to pass.
 
@@ -10744,16 +10744,19 @@ inventory rejection,exercise the actual locked scheduler without spawning extra
 workers,and reject skipped/duplicate/same-worker success receipts. Early
 collection-only import checks precede the expensive backend suite.
 
-The same44 metadata IDs use review21,analysis10,frontend6,final7. Move the
+The same44 metadata IDs use review9,database12,frontend6,final17. Move the
 unchanged package34 file from PostgreSQL to graph,using the newly observed spare
 capacity after authorization routing established final64/graph57second reserves. Groups:
-review202 plus48bindings; analysis131 plus native10/restart25; graph138 plus
-frozen53; final75; portfolio41; history31 plus trials20; database131. All5907 original Python IDs remain,plus3 guards=5910; retain
+review190 plus48bindings; analysis121 plus native10/restart25; graph138 plus
+frozen53; final102; portfolio41; history31 plus trials20; database143. Move the
+unchanged17-case re-observation boundary file from planning to final, leaving
+planning177 plus15bindings. This uses measured PostgreSQL87/final67second
+reserves after review18 rejected the prior run. All5907 original Python IDs remain,plus3 guards=5910; retain
 1018 deployment IDs,139frontend files/10532cases,14 existing guards and97 skips.
 Only declared CI guards change ownership assertions; frozen business sources
 and drivers stay byte-exact.
 
-Closed v8 metadata and ten-case authorization manifests retain hosted/local
+Closed v9 metadata and ten-case authorization manifests retain hosted/local
 source,timing and scheduler commitments. Planning does not qualify runtime.
 Require all13 exact-head checks,original execution receipts,30s job reserve and
 original step floors,then independently fetched equal-main/platform checks.
