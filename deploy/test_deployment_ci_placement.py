@@ -76,6 +76,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         spill = re.search(r'  CI_BACKEND_SPILL_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
         self.assertEqual(spill, ['backend/tests/test_graph_b_publication.py', 'backend/tests/test_disposition_reconciliation_receipt.py', 'backend/tests/test_authority_adjudications.py'])
         self.assertEqual(workflow.count('-p scripts.ci_backend_spill_capacity'), 13)
+        from scripts.ci_backend_spill_capacity import load_contract as spill_contract
+        self.assertEqual(spill_contract().lanes['capacity'], ())
+        self.assertIn('timeout --kill-after=2s 140s bash scripts/run_ci_tests.sh', blocks['backend-capacity'])
         for job, lane in [('backend-and-contracts', 'backend'), ('backend-review-contracts', 'review'), ('postgres-snapshot-concurrency', 'database'), ('frontend', 'frontend'), ('frontend-history', 'history'), ('final-release-authorization', 'final'), ('source-publication-contracts', 'publication'), ('graph-candidate-contracts', 'candidate'), ('retained-release-withdrawal', 'withdrawal'), ('analysis-recovery-contracts', 'analysis'), ('publication-planning-contracts', 'planning'), ('backend-capacity', 'capacity'), ('graph-runtime-contracts', 'graph')]:
             self.assertEqual(blocks[job].count('--backend-spill-capacity-lane=' + lane), 1)
             if lane != 'backend':

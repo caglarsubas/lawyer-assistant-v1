@@ -10822,8 +10822,8 @@ placement/declaration guards before another hosted run. Keep the supervisor inta
 
 Source-bind99 unchanged cases (publication31,disposition receipts27,authority
 adjudications41) using retained file CPU totals and fresh per-case timings. Account
-for fixture startup,retain19 declared cases in backend and place80 across11
-existing pairs. Final selects none from this99-case inventory; review selects two. Their
+for fixture startup,retain26 declared cases in backend and place73 across9
+existing pairs. Capacity,graph and frontend select none of these99 cases. Their
 original suites still run. Three guards and actual terminal receipts enforce
 source hashes,complete collection and exactly-once non-skipped execution. Run
 all selected lanes locally without inherited PYTHONPATH before publishing.
@@ -10835,8 +10835,8 @@ history slice in review,and model20 analysis8/history12. Recipient10 remains
 serial in backend under50s after exited pairs; its report guard stays in core.
 The old standalone metadata4 phase is replaced by its exact IDs in the review pair.
 
-Full Python inventory is5910 original IDs plus17new=5927. Backend selection3934/
-passes3837/original97skips includes its declared19-case share; recipient10 stays
+Full Python inventory is5910 original IDs plus17new=5927. Backend selection3941/
+passes3844/original97skips includes its declared26-case share; recipient10 stays
 separate. Receiving groups add their exact declared shares to base graph138,
 analysis124,candidate276,planning197,database135,final96,portfolio43 and review192
 plus effort31/binding48. Keep1018 deployment IDs,139frontend files/10532cases,
@@ -10858,3 +10858,9 @@ Next: exclusive external recipient-receipt retention and fresh read-only reopeni
 readiness,with independently provisioned permission/custody inputs. No automatic
 materialization,adoption,decision writing,trust renewal or production/legal approval.
 See [recipient-observation readiness](RECIPIENT_OBSERVATION_READINESS.md).
+
+Retain b1e33e3/run42052860535: capacity reaches its140-second command deadline;
+graph18/frontend22/database28 reserves also reject. Restore those base groups,
+place the seven former capacity IDs in backend,move graph IDs to history and
+spread added frontend/database IDs across existing spare pairs. Guard the unchanged
+140-second capacity deadline with an empty spill selection. No failed head is retried.

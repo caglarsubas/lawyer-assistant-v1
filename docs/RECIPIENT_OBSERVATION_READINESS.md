@@ -67,8 +67,8 @@ requests or genuine signing keys are used.
 CI reuses existing capacity and retains all rejected attempts without merge credit.
 Fix the omitted declaration caught by the existing partition guard and run all
 five declaration/placement checks locally. Account for fixture startup as well as
-retained CPU times: a source-bound99-case inventory retains19 cases in backend
-and places80 across11 existing pairs. Final selects none of those99; review selects two.
+retained CPU times: a source-bound99-case inventory retains26 cases in backend
+and places73 across9 existing pairs. Capacity,graph and frontend select none of those99.
 their original suites remain. Three guards enforce original hashes,complete
 collection and exactly-once non-skipped execution. Run each nonempty lane locally
 with two workers and no inherited repository path before another hosted run.
@@ -84,3 +84,7 @@ production approval.
 
 Retain7b58110/run42051176447 candidate27/planning29/publication30 reserve.
 Move six exact IDs to observed spare jobs; keep all99 source identities and floors.
+
+Retain b1e33e3/run42052860535 hard140-second capacity termination and
+graph18/frontend22/database28 reserves. Restore their base inventories and enforce
+empty capacity spill without changing its hard deadline. Preserve every99-case ID.
