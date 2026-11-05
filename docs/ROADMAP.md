@@ -10807,7 +10807,11 @@ do not change the26 expectations or predecessor implementations.
 Address CI capacity before publishing coverage. Closed v12 placement preserves
 the44 original metadata IDs: review9,graph2,planning4,frontend12,final17. Move the
 eight former database cases to frontend6/graph2; database core returns to131 and
-graph core becomes140. Run ten new integration IDs serially after PostgreSQL's
+graph core becomes140. Retain run42033292507 at2476635: twelve sibling jobs
+passed,new serial41s,PostgreSQL32s reserve. Supersede before merge to strengthen
+headroom: the unchanged logical PostgreSQL inventory16 slice joins final's existing
+pair,keeping its frozen26-case manifest and lane contents. Database core becomes115
+and final core101. Run ten new integration IDs serially after PostgreSQL's
 existing pair exits, with a50-second hard timeout; one fast retained-report guard
 uses backend. Full Python inventory is5910 original IDs plus11new=5921; backend
 selection4008/passes3911/original97skips and portfolio47 retain all prior bodies.

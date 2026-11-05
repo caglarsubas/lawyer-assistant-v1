@@ -63,6 +63,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('timeout --kill-after=2s 50s bash scripts/run_ci_tests.sh', blocks['postgres-snapshot-concurrency'])
         self.assertIn('"${recipient_observation_tests[@]}" -q -n 0 --maxfail=1', blocks['postgres-snapshot-concurrency'])
         self.assertEqual(blocks['postgres-snapshot-concurrency'].count('Test recipient observation receipts and independent planning'), 1)
+        self.assertNotIn('--recovery-inventory-lane=postgres', blocks['postgres-snapshot-concurrency'])
+        self.assertEqual(workflow.count('--recovery-inventory-lane=postgres'), 1)
+        self.assertIn('-p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}"', blocks['final-release-authorization'])
+        self.assertIn('read -r -a inventory_review_tests <<< "$CI_RECOVERY_INVENTORY_TESTS"', blocks['final-release-authorization'])
         self.assertEqual(workflow.count('-p scripts.ci_final_auth_capacity'), 3)
         self.assertEqual(workflow.count('-p scripts.ci_metadata_capacity'), 6)  # Five executions and one import-only probe.
         probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${metadata_probe[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=review --collect-only -q -n 2'

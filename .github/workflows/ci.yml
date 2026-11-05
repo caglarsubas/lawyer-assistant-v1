@@ -404,9 +404,8 @@ jobs:
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           read -r -a postgres_source_tests <<< "$CI_POSTGRES_SOURCE_TESTS"
-          read -r -a inventory_review_tests <<< "$CI_RECOVERY_INVENTORY_TESTS"
           export PYTHONPATH="$GITHUB_WORKSPACE"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA
 
 
 
@@ -571,7 +570,8 @@ jobs:
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=final "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=final "${metadata_capacity_tests[@]}"
+          read -r -a inventory_review_tests <<< "$CI_RECOVERY_INVENTORY_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=final "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=final "${metadata_capacity_tests[@]}" -p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}"
 
   retained-release-withdrawal:
     # Measured withdrawal reconstruction exhausted the frontend's five-minute

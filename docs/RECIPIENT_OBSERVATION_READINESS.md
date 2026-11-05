@@ -65,7 +65,8 @@ separate 1 MiB bound; receipt limits remain 4 KiB. No real cases, models, provid
 requests or genuine signing keys are used.
 
 CI reuses existing capacity. The unchanged eight database metadata cases move
-to frontend six/graph two. The new ten-case group runs serially after PostgreSQL's
+to frontend six/graph two. The intact sixteen-case logical PostgreSQL inventory
+slice runs in the final-release pair, preserving its original partition manifest. The new ten-case group runs serially after PostgreSQL's
 existing two-worker group has exited, with a fifty-second hard timeout. The
 retained-report guard runs in backend. All previous identities, worker ceilings,
 thirteen jobs, seventy-three-minute aggregate cap, existing deadlines, supervisor
