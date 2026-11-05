@@ -75,6 +75,13 @@ with all 20 preview, 58 materialization and 19 cohort identities executing once.
 Logical slice names and their contents are retained; only their hosting jobs
 change. Placement assertions require the new assignments explicitly.
 
+Retain the next launcher failure: the console `pytest` child could not import
+the moved `scripts` plugin. Preserve the supervisor's required console command
+and set the repository `PYTHONPATH` explicitly, matching the existing PostgreSQL
+job's import setup. A bounded collection-only plugin probe runs in the existing
+lint phase before build/contracts; it executes no tests. Qualify the real console
+child under the unchanged supervisor, using invented Actions metadata locally.
+
 Preserve all older source bytes, cases, 13 jobs, the 73-minute aggregate cap, two
 workers, deadlines, supervisor and reserve floors. Hosted exact-head and
 independent-main execution/reserve/preservation qualification gate closure.

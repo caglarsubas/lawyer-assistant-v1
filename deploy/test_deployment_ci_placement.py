@@ -85,6 +85,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         final_group = re.search(r"  CI_BACKEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(workflow.count("backend/tests/test_ci_reserve_guard.py"), 1)
         self.assertIn("bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard_v2.py -- pytest backend/tests", backend)
+        self.assertIn('export PYTHONPATH="$GITHUB_WORKSPACE"', backend)
+        import_probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest backend/tests/test_operator_inspection_preview.py -p scripts.ci_operator_previews --operator-preview-lane=final --collect-only -q -n 2'
+        self.assertEqual(backend.count(import_probe), 1)
+        self.assertLess(backend.index(import_probe), backend.index("run: npm run build"))
         self.assertIn("actions: read", backend)
         self.assertIn("GH_TOKEN: ${{ github.token }}", backend)
         self.assertEqual(workflow.count("backend/tests/test_native_preview_restart.py"), 1)
@@ -127,7 +131,7 @@ class DeploymentPlacementContract(unittest.TestCase):
             else:
                 self.assertIn("backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=" + lane + ' "${preview_tests[@]}"', blocks[job])
             self.assertIn('read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"', blocks[job])
-        self.assertEqual(workflow.count("--operator-preview-lane=final"), 1)
+        self.assertEqual(workflow.count("--operator-preview-lane=final"), 2)
         withdrawal_group = re.search(r"  CI_RETAINED_WITHDRAWAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_private_inventory_receipts.py", withdrawal_group)
         self.assertIn("backend/tests/test_authority_proposals.py", withdrawal_group)

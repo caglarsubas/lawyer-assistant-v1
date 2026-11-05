@@ -10597,6 +10597,14 @@ and logical slice contents remain byte-exact; only hosting jobs change, guarded
 by explicit placement assertions. The 13 new retention tests and their business
 bodies remain unchanged.
 
+Retain the subsequent launcher rejection: console `pytest` lacked the repository
+import path for the moved `scripts` plugin. Preserve the supervisor's required
+console child and explicitly set the repository `PYTHONPATH`, matching the
+existing PostgreSQL job. Add a bounded collection-only import probe within the
+existing lint phase, before build/contracts, without executing tests twice.
+Verify the real supervised console child locally against invented Actions
+metadata; no supervisor policy, source or credential handling changes.
+
 Preserve older source bytes, 1018 deployment IDs and 139 frontend files / 10532
 cases. Keep 13 jobs, the 73-minute aggregate cap, worker counts, deadlines,
 supervisor and floors unchanged.
