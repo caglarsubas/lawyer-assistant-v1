@@ -11030,3 +11030,10 @@ portfolio cases to graph runtime, which left 69 seconds of reserve on
 that main run. The backend core, all test IDs, both workers, and every
 job and phase cap remain in force. Reconciliation follows an exact
 PR and independent main qualification.
+
+Run 42198810505 restored frontend history reserve to 47 seconds and
+kept 40 seconds in graph runtime. The core step passed but the enclosing
+backend job was cancelled at 1,157 seconds. Move 99 intact cases from
+the core into the existing review, analysis, snapshot and publication
+jobs using their measured reserve. Keep the two-worker limit, all
+assertions, every test ID, and the original caps and reserve floors.

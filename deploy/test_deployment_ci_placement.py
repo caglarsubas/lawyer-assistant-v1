@@ -225,7 +225,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("backend/tests/test_public_sources.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_review_effort.py"), 1)
         self.assertNotIn("backend/tests/test_analysis_workbench.py", workflow)
-        self.assertNotIn("backend/tests/test_analysis_adjudication.py", workflow)
+        self.assertEqual(workflow.count("backend/tests/test_analysis_adjudication.py"), 1)
         self.assertNotIn("backend/tests/test_publication_cli.py", workflow)
         self.assertIn("--materialization-capacity-lane=review", review_block)
         self.assertIn("--materialization-capacity-lane=final", blocks["frontend"])
