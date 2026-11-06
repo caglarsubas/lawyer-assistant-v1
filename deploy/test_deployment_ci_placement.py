@@ -59,8 +59,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count(recipient[0]), 1)
         self.assertIn('read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"', blocks['backend-and-contracts'])
         self.assertIn('"${recipient_observation_tests[@]}"; do', blocks['backend-and-contracts'])
-        self.assertIn('read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"', blocks['postgres-snapshot-concurrency'])
-        self.assertIn('-p scripts.ci_recipient_affinity --fixture-affinity-lane=recipient "${recipient_observation_tests[@]}"', blocks['postgres-snapshot-concurrency'])
+        self.assertNotIn("CI_RECIPIENT_OBSERVATION_TESTS", blocks["postgres-snapshot-concurrency"])
+        self.assertIn('-p scripts.ci_recipient_affinity --fixture-affinity-lane=recipient "${recipient_observation_tests[@]}"', blocks['backend-and-contracts'])
         self.assertEqual(workflow.count('-p scripts.ci_recipient_affinity'), 2)
         self.assertIn("-p scripts.ci_recipient_affinity --fixture-affinity-lane=analysis", blocks["analysis-recovery-contracts"])
         auth = re.search(r'  CI_FINAL_AUTH_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
@@ -293,17 +293,17 @@ class DeploymentPlacementContract(unittest.TestCase):
                     validate_workflow_arrays(workflow.replace(owner, owner.replace(definition, "", 1), 1))
             self.assertRegex(blocks[job], r'"\$\{' + array + r'\[@\]\}"(?: -q)? -n 2')
         self.assertNotIn("provision-binding-lane=history", blocks["frontend-history"])
-        self.assertIn('"${history_binding_tests[@]}" -q -n 2', review_block)
+        self.assertNotIn("provision-binding-lane=history", review_block)
 
         definition = '          read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"\n'
-        for owner in (backend, blocks["publication-planning-contracts"], blocks["graph-candidate-contracts"], blocks["backend-review-contracts"]):
-            self.assertEqual(owner.count(definition), 1)
+        for owner in (backend, blocks["publication-planning-contracts"], blocks["graph-candidate-contracts"]):
+            self.assertEqual(owner.count(definition), 2 if owner is backend else 1)
             broken = workflow.replace(owner, owner.replace(definition, "", 1), 1)
             with self.assertRaisesRegex(ValueError, "history_binding_tests"):
                 validate_workflow_arrays(broken)
         self.assertIn('"${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["publication-planning-contracts"])
         self.assertEqual(workflow.count("-p scripts.ci_provision_bindings --provision-binding-lane="), 3)
-        for name, lane in (("graph-candidate-contracts", "candidate"), ("backend-review-contracts", "history"), ("publication-planning-contracts", "planning")):
+        for name, lane in (("graph-candidate-contracts", "candidate"), ("backend-and-contracts", "history"), ("publication-planning-contracts", "planning")):
             self.assertIn("--provision-binding-lane=" + lane, blocks[name])
         self.assertEqual(workflow.count("name: Test complete portfolio review qualification"), 1)
         self.assertIn('"${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2', blocks["frontend"])

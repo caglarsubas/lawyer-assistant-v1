@@ -10809,7 +10809,8 @@ redistribution experiments as negative evidence. Preserve every original test ID
 body and assertion, the thirteen ARM jobs, two-worker ceiling, 73-minute aggregate
 cap, original command/job deadlines, supervisor and reserve floors.
 
-Run recipient10 in the existing PostgreSQL pair with one shared-fixture worker.
+Run ten recipient cases with the 48 history provision-binding cases in the
+backend provision-binding phase. The recipient cases share one fixture worker.
 Also keep the original destination25 together on one worker in the analysis pair.
 Source-bound manifests pin both complete modules. Every unrelated test remains an
 individual scheduling unit. Require all selected IDs to pass exactly once on one
@@ -10829,7 +10830,7 @@ increments change within existing job/command caps. The cold final-metadata samp
 passes the original17 in9.064 seconds and the new19 in9.863 seconds. Acquisition,
 evidence validation and individual independent test fixtures remain unchanged.
 
-PostgreSQL runs145 cases, candidate326, portfolio43 and final87. Core inventory is
+PostgreSQL runs 135 cases, candidate 326, portfolio 43 and final 87. Core inventory is
 4007-50+7=3964 with3867 passes and97 original skips. Full Python inventory remains
 5910 original IDs plus17 new=5927: ten integrations, one retained-report guard,
 three affinity guards and three inventory guards. Preserve1018 deployment IDs
@@ -10885,3 +10886,11 @@ Local macOS qualification uses a canonical, owner-only temporary directory.
 The default `/var` temporary-path alias violates the existing no-symlink input
 policy; canonical test scratch paths resolve this environment issue without
 weakening product validation or changing any predecessor implementation.
+
+Run 42079753406 confirmed metadata admission and backend polling. PostgreSQL
+and backend review missed the 30-second floor by 2 and 7 seconds despite
+passing their tests. The supervisor stopped backend tests on the PostgreSQL
+breach. Pair the ten recipient cases with the 48 history binding cases in
+the existing 120-second backend provision-binding phase, with the same
+30-second reserve requirement. Qualify the new placement on the PR commit
+and independently on main before recording delivery.

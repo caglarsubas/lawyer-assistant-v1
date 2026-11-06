@@ -64,9 +64,9 @@ Use an existing owner-only directory and a fresh output name. Reports have a
 separate 1 MiB bound; receipt limits remain 4 KiB. No real cases, models, provider
 requests or genuine signing keys are used.
 
-CI retains the independently qualified040bba6 baseline with measured, limited
-changes. Recipient10 shares one fixture worker in PostgreSQL; the original
-read-only destination25 shares one worker in analysis. Source-bound receipts and
+CI uses the qualified 040bba6 baseline. Ten recipient tests share one fixture
+worker during the backend provision-binding phase. The original 25 read-only
+destination tests share one worker in analysis. Source-bound receipts and
 three guards require complete, once-only execution on one known worker for both
 lanes. All unrelated tests stay individual scheduling units. No test body or
 independent mutation fixture changes. The cold138-case analysis comparison is
@@ -101,3 +101,13 @@ cannot start the full fanout. Admission checks the actual capacity-job/run/head
 identity and does not claim complete-run qualification or start a test child.
 This adds no job or retry and preserves every original job/command cap. Full
 backend qualification and independent-main evidence remain mandatory.
+
+Run 42079753406 cleared metadata admission and started the backend tests.
+PostgreSQL and backend review passed their tests with 28 and 23 seconds of
+reserve. The supervisor stopped the backend when PostgreSQL missed the
+30-second floor. The next layout moves all ten recipient cases and all 48
+history provision-binding cases into the backend provision-binding phase.
+The existing scheduler assigns the recipient fixture to one worker and
+can run provision-binding cases on the other. The original 120-second phase
+cap, 30-second reserve floor, and two-worker ceiling apply. PostgreSQL keeps
+its 135 other cases, including its original race tests.
