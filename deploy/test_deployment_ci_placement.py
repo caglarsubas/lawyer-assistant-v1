@@ -126,6 +126,16 @@ class DeploymentPlacementContract(unittest.TestCase):
         import_probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${preview_probe[@]}" -p scripts.ci_operator_previews --operator-preview-lane=final --collect-only -q -n 2'
         self.assertEqual(backend.count(import_probe), 1)
         self.assertLess(backend.index(import_probe), backend.index("run: npm run build"))
+        snapshot_unit_group = re.search(r"  CI_POSTGRES_SNAPSHOT_UNIT_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(snapshot_unit_group.split(), [
+            "backend/tests/test_release_snapshot.py", "backend/tests/test_release_set_promotion.py",
+        ])
+        for path in snapshot_unit_group.split():
+            self.assertEqual(workflow.count(path), 1)
+        for owner in (backend, postgres):
+            self.assertIn('read -r -a snapshot_unit_tests <<< "$CI_POSTGRES_SNAPSHOT_UNIT_TESTS"', owner)
+            self.assertIn('"${snapshot_unit_tests[@]}"', owner)
+        self.assertIn('"${preflight_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1', backend)
         self.assertIn("actions: read", backend)
         self.assertIn("GH_TOKEN: ${{ github.token }}", backend)
         self.assertEqual(workflow.count("backend/tests/test_native_preview_restart.py"), 1)
@@ -146,7 +156,6 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("-p scripts.ci_serial_history_cohorts"), 2)
         self.assertIn("backend/tests/test_temporal_validity.py", re.search(r"  CI_PUBLICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1])
         self.assertNotIn("backend/tests/test_public_sources.py", workflow)
-        self.assertEqual(workflow.count("backend/tests/test_analysis_suggestions.py"), 0)
         history_guards = re.search(r"  CI_HISTORY_GUARD_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         history_inspection = re.search(r"  CI_HISTORY_INSPECTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(history_guards.split(), ["backend/tests/test_ci_authority_partition.py", "backend/tests/test_ci_budgeted_deployment.py", "backend/tests/test_ci_retained_history.py"])
@@ -204,10 +213,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_source_reviews.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
-        self.assertEqual(final_group.split(), ["backend/tests/test_recipient_receipt_retention.py", "backend/tests/test_cold_controller_recovery.py", "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py", "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py"])
+        self.assertEqual(final_group.split(), ["backend/tests/test_analysis_suggestions.py", "backend/tests/test_recipient_receipt_retention.py", "backend/tests/test_cold_controller_recovery.py", "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py", "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py"])
         self.assertIn("backend/tests/test_analysis_focus.py", workflow)
         self.assertEqual(workflow.count("backend/tests/test_analysis_reviews.py"), 1)
-        self.assertEqual(workflow.count("backend/tests/test_analysis_suggestions.py"), 0)
+        self.assertEqual(workflow.count("backend/tests/test_analysis_suggestions.py"), 1)
         self.assertNotIn("backend/tests/test_source_reviews.py", group)
         self.assertNotIn("backend/tests/test_public_sources.py", publication_group)
         self.assertIn('--dist load --maxschedchunk=1', graph)

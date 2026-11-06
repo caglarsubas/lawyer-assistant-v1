@@ -10940,3 +10940,21 @@ adds the new review file to the closed contract and moves the complete
 Candidate scheduling starts the heavy graph file across both workers with
 bounded single-test dispatch. Qualification requires fresh results on the
 revised PR commit and on main.
+
+## 316. Backend CI reserve recovery — 2026-11-06
+
+PR #284's main run 42159790126 completed all checks. The backend job
+took 1,127 seconds against a 1,140-second cap, leaving 13 of the required
+30 seconds. The 833-second core suite was 35 seconds slower than the PR
+suite. The ontology preflight used 31 seconds on one worker.
+
+Run the same complete ontology preflight before the core suite on two
+bounded workers. Move the intact snapshot and promotion test files to
+the existing PostgreSQL snapshot job, and the intact analysis suggestions
+file to the existing review job. Exclude all three from the core suite
+so each case runs exactly once. Preserve test sources, fixture manifests,
+preflight fail-fast behavior, job and phase deadlines, reserve floors and
+the two-worker ceiling.
+
+Require exact PR and independent main checks with measured job and phase
+reserve before starting interrupted recipient retention reconciliation.
