@@ -11137,5 +11137,9 @@ planning. The measured trial restored final authorization to 58 seconds,
 while graph runtime and source publication left 25 and 28 seconds.
 Keep the retention readiness file intact in final authorization and move
 firm administration from source publication to graph candidate.
+The next run left 46 seconds in final authorization, 39 in graph
+runtime and 41 in source publication. Backend review fell to 17
+seconds. Run the complete feedback file in analysis recovery and
+return analysis adjudication to the backend core.
 Keep the original two-worker scheduler, case identities, time caps,
 and 30-second job reserve floor.

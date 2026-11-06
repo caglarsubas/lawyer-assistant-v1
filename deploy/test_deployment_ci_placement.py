@@ -218,7 +218,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(final_group.split(), ["backend/tests/test_cold_controller_recovery.py",
             "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py",
             "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py",
-            "backend/tests/test_journal_materialization.py", "backend/tests/test_analysis_feedback.py"])
+            "backend/tests/test_journal_materialization.py"])
         self.assertIn("backend/tests/test_analysis_focus.py", workflow)
         self.assertEqual(workflow.count("backend/tests/test_analysis_reviews.py"), 1)
         self.assertNotIn("backend/tests/test_source_reviews.py", group)
@@ -228,7 +228,6 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("backend/tests/test_public_sources.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_review_effort.py"), 1)
         self.assertNotIn("backend/tests/test_analysis_workbench.py", workflow)
-        self.assertEqual(workflow.count("backend/tests/test_analysis_adjudication.py"), 1)
         self.assertNotIn("backend/tests/test_publication_cli.py", workflow)
         self.assertIn("--materialization-capacity-lane=review", review_block)
         self.assertIn("--materialization-capacity-lane=final", blocks["frontend"])
@@ -253,7 +252,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_public_sources.py"), 0)
         recovery_group = re.search(r"  CI_RECOVERY_QUALIFICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(recovery_group.split(), ["backend/tests/test_retained_release_withdrawal.py", "backend/tests/test_copy_recovery_disposition.py",
-            "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py"])
+            "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py",
+            "backend/tests/test_analysis_feedback.py"])
+        self.assertNotIn("backend/tests/test_analysis_adjudication.py", workflow)
         self.assertNotIn("backend/tests/test_retained_release_withdrawal.py", withdrawal_group)
         self.assertIn('"${recovery_qualification_tests[@]}"', backend)
         definition = '          read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"\n'
