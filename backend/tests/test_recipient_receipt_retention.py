@@ -15,6 +15,7 @@ import operator_enrollment_evidence as e  # noqa: E402
 import private_inventory_receipts as storage  # noqa: E402
 import recipient_receipt_retention as retention  # noqa: E402
 from operator_recovery_inputs import FLAGS  # noqa: E402
+from qualify_recipient_reconciliation import verify_frozen_report  # noqa: E402
 from retention_authorization_readiness import KeyPin  # noqa: E402
 from test_recipient_observation_readiness import shared  # noqa: E402,F401  (pytest fixture)
 
@@ -141,6 +142,7 @@ def test_cold_reopening_requires_current_review_and_independent_exact_custody(sh
 
 
 def test_create_only_collision_and_postpublication_interruption(tmp_path, monkeypatch):
+    verify_frozen_report()
     root = tmp_path / "store"
     root.mkdir(mode=0o700)
     store = storage.ReceiptStore(root=root, context_id="1" * 32, scope_sha256="2" * 64, key=b"f" * 32)

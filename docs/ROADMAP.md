@@ -11071,3 +11071,36 @@ filesystem states. The worker limit, CI assignments, caps, and reserve
 floors stay in force. Separately authorized operator qualification and
 production deployment remain pending, as does the owner's private
 analysis review.
+
+## 320. Staged operator qualification of retention reconciliation — 2026-11-06
+
+The disposable operator campaign exercises the real recipient review,
+retention and reconciliation entry points. Two writer subprocesses exit
+at the exclusive-link boundary, one immediately before the link and one
+immediately after it. A reconstructed reader checks the same reviewed
+receipt and current reviewer session against a fresh custody signature.
+It distinguishes absent, staged-only, linked, and final-only records.
+
+The campaign also checks a wrong reviewer role, a missing custody pin,
+an incorrect signed state, an expired signed pin, ciphertext from
+another store, and a selected pair that changes during re-observation.
+Each read verifies preservation of the fixture evidence and review
+history. The interruption evidence concerns process exits on the staged
+filesystem. Power-loss durability, production provisioning and
+deployment, and the owner's private analysis review remain pending.
+
+Run the staged campaign with the repository's backend environment and
+an unused output file in an owner-only directory.
+
+```sh
+umask 077
+stage_dir="$(mktemp -d)"
+backend/.venv/bin/python scripts/qualify_recipient_reconciliation.py \
+  --output "$stage_dir/qualification.json"
+```
+
+The frozen report in
+`docs/evidence/staged-recipient-reconciliation-2026-11-06.json`
+records outcomes and 793 source hashes. CI verifies the report and its
+predecessor pins inside an existing regression case. The subprocess
+campaign runs separately and the two-worker CI budget stays in force.
