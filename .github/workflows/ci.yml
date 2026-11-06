@@ -51,7 +51,6 @@ env:
     backend/tests/test_final_authorization_postgres.py
   CI_BACKEND_CAPACITY_TESTS: >-
     backend/tests/test_journal_backup_readiness.py
-    backend/tests/test_firm_admin.py
   CI_AUTHORITY_MODEL_TESTS: >-
     backend/tests/test_authority_model_trials.py
   # Workspace, cohort and human-review groups reuse existing ARM capacity.
@@ -75,7 +74,6 @@ env:
     backend/tests/test_authority_proposals.py
   CI_GRAPH_CANDIDATE_TESTS: >-
     backend/tests/test_final_graph_candidate.py
-    backend/tests/test_staged_receipt_adapter.py
     backend/tests/test_native_receipt_stage.py
     backend/tests/test_native_receipt_http.py
     backend/tests/test_native_receipt_faults.py
@@ -89,6 +87,7 @@ env:
     backend/tests/test_runtime_authorization_integration.py
     backend/tests/test_retained_mixed_assembly.py
     backend/tests/test_analysis_feedback.py
+    backend/tests/test_staged_receipt_adapter.py
   CI_RECOVERY_QUALIFICATION_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_copy_recovery_disposition.py
@@ -134,10 +133,6 @@ env:
     backend/tests/test_portfolio.py
   CI_CORE_RESERVE_PLANNING: >-
     backend/tests/test_calibration_study_cli.py
-  CI_CORE_RESERVE_CANDIDATE: >-
-    backend/tests/test_release_set_promotion.py
-  CI_CORE_RESERVE_WITHDRAWAL: >-
-    backend/tests/test_retained_release_authorization.py
   CI_CORE_RESERVE_REVIEW: >-
     backend/tests/test_analysis_adjudication.py
   CI_CORE_RESERVE_ANALYSIS: >-
@@ -279,7 +274,7 @@ jobs:
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
           read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"
-          read -r -a reserve_tests <<< "$(printf '%s ' "$CI_CORE_RESERVE_CAPACITY" "$CI_CORE_RESERVE_GRAPH" "$CI_CORE_RESERVE_PLANNING" "$CI_CORE_RESERVE_CANDIDATE" "$CI_CORE_RESERVE_WITHDRAWAL" "$CI_CORE_RESERVE_REVIEW" "$CI_CORE_RESERVE_ANALYSIS" "$CI_CORE_RESERVE_POSTGRES" "$CI_CORE_RESERVE_SOURCE")"
+          read -r -a reserve_tests <<< "$(printf '%s ' "$CI_CORE_RESERVE_CAPACITY" "$CI_CORE_RESERVE_GRAPH" "$CI_CORE_RESERVE_PLANNING" "$CI_CORE_RESERVE_REVIEW" "$CI_CORE_RESERVE_ANALYSIS" "$CI_CORE_RESERVE_POSTGRES" "$CI_CORE_RESERVE_SOURCE")"
           ignore_args=()
           for path in "${reserve_tests[@]}" "${inventory_review_tests[@]}" "${authority_trial_tests[@]}" "${preview_tests[@]}" "${history_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${postgres_source_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${human_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}" "${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}"; do
             if [[ "$path" != "${preview_tests[0]}" ]]; then
@@ -619,14 +614,13 @@ jobs:
       - name: Test conjunctive release withdrawal and complete retained budgets
         timeout-minutes: 2
         run: |
-          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_WITHDRAWAL"
           read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"
           read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
           read -r -a withdrawal_tests <<< "$CI_RETAINED_WITHDRAWAL_TESTS"
           read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=withdrawal -p scripts.ci_disposition_reads --disposition-read-lane=withdrawal "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA "${reserve_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=withdrawal -p scripts.ci_disposition_reads --disposition-read-lane=withdrawal "${withdrawal_tests[@]}" "${receipt_retention_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
       # Reuse measured withdrawal spare after its original pair has exited.
-      # Both complete files and the original two-minute step limit are retained.
+      # Keep the complete journal-backup file and the existing step limit.
       - name: Test complete backend capacity group
         timeout-minutes: 2
         run: |
@@ -658,12 +652,11 @@ jobs:
       - name: Test complete final graph candidate contracts
         timeout-minutes: 3
         run: |
-          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_CANDIDATE"
           read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"
           read -r -a candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
           read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
           read -r -a focus_tests <<< "$CI_CANDIDATE_FOCUS_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate -p scripts.ci_provision_bindings --provision-binding-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA "${reserve_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate -p scripts.ci_provision_bindings --provision-binding-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   source-publication-contracts:
     needs: backend-capacity

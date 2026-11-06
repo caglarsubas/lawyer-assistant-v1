@@ -11104,3 +11104,17 @@ The frozen report in
 records outcomes and 793 source hashes. CI verifies the report and its
 predecessor pins inside an existing regression case. The subprocess
 campaign runs separately and the two-worker CI budget stays in force.
+
+## 321. Preserve withdrawal and candidate CI reserve — 2026-11-06
+
+PR #289 passed all 13 checks with two workers. Its tightest job had
+37 seconds of reserve, and the backend had 108 seconds. Independent
+main run 42221635371 passed the withdrawal and graph-candidate tests
+with 29 and 27 seconds of reserve. The backend supervisor stopped
+when it observed the candidate job below the 30-second floor.
+
+Return the complete firm administration, retained authorization and
+release promotion files to the backend core. Run the complete staged
+receipt adapter file in the existing final authorization job. Preserve
+each case, the two-worker limit, all thirteen jobs, and all caps and
+reserve floors. Qualify the new placement on the PR and on main.

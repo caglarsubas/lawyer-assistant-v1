@@ -187,10 +187,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         publication_group = re.search(r"  CI_PUBLICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("-p scripts.ci_recipient_affinity --fixture-affinity-lane=graph", graph)
         capacity_group = re.search(r"  CI_BACKEND_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertIn("backend/tests/test_firm_admin.py", capacity_group)
-        self.assertNotIn("backend/tests/test_firm_admin.py", publication_group)
-        for path in ("backend/tests/test_firm_admin.py", "backend/tests/test_authority_proposals.py"):
-            self.assertEqual(workflow.count(path), 1)
+        for path in ("test_firm_admin.py", "test_retained_release_authorization.py", "test_release_set_promotion.py"):
+            self.assertTrue((ROOT / "backend/tests" / path).is_file())
+            self.assertNotIn("backend/tests/" + path, workflow)
+        self.assertEqual(workflow.count("backend/tests/test_authority_proposals.py"), 1)
         retention_group = re.search(r"  CI_RECEIPT_RETENTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(retention_group.split(), ["backend/tests/test_private_inventory_receipts.py"])
         self.assertIn('"${receipt_retention_tests[@]}"', backend)
@@ -327,7 +327,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
         candidate_group = re.search(r"  CI_GRAPH_CANDIDATE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(candidate_group.split(), ["backend/tests/test_final_graph_candidate.py",
-            "backend/tests/test_staged_receipt_adapter.py", "backend/tests/test_native_receipt_stage.py",
+            "backend/tests/test_native_receipt_stage.py",
             "backend/tests/test_native_receipt_http.py", "backend/tests/test_native_receipt_faults.py",
             "backend/tests/test_receipt_recovery_planning.py"])
         self.assertNotIn("backend/tests/test_graph_b_publication.py", workflow)
@@ -346,7 +346,7 @@ class DeploymentPlacementContract(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "source_review_tests"):
                 validate_workflow_arrays(workflow.replace(owner, owner.replace(definition, "", 1), 1))
         self.assertEqual(backend.count(definition), 1)
-        self.assertIn("backend/tests/test_staged_receipt_adapter.py", candidate_group)
+        self.assertIn("backend/tests/test_staged_receipt_adapter.py", release_group)
         self.assertNotIn("backend/tests/test_staged_receipt_adapter.py", capacity_group)
         self.assertEqual(workflow.count("backend/tests/test_staged_receipt_adapter.py"), 1)
         review = blocks["backend-review-contracts"]
@@ -396,11 +396,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
         self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py",
-            "backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_analysis_feedback.py"])
+            "backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_analysis_feedback.py",
+            "backend/tests/test_staged_receipt_adapter.py"])
         self.assertEqual(frontend_group.split()[-2:], ["backend/tests/test_retained_release_inspection.py", "backend/tests/test_analysis_reviews.py"])
         self.assertEqual(release_group.split()[:2], ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py"])
         self.assertEqual(workflow.count("backend/tests/test_retained_release_inspection.py"), 1)
-        self.assertEqual(set(capacity_group.split()), {"backend/tests/test_journal_backup_readiness.py", "backend/tests/test_firm_admin.py"})
+        self.assertEqual(capacity_group.split(), ["backend/tests/test_journal_backup_readiness.py"])
         for job in ("postgres-snapshot-concurrency", "final-release-authorization"):
             self.assertIn("image: postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74", blocks[job])
             self.assertIn("--tmpfs /var/lib/postgresql/data:rw,nosuid,size=512m", blocks[job])
