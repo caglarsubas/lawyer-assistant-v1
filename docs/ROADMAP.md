@@ -10991,3 +10991,9 @@ deadline. That stage retains exactly two test workers and the same
 87 deployment cases. Job and phase caps, the aggregate runner budget,
 and every reserve floor remain in force. Qualification requires exact
 test receipts and fresh measurements on the PR and on main.
+
+Run 42188431244 passed the combined authenticated stage in 83 seconds.
+Source publication and backend review left 27 and 19 seconds of
+reserve. Restore their earlier intact-file scopes, return 17 preview
+package cases to the core, and keep the graph partition on its
+source-pinned lane. The next run keeps the same two-worker gates.

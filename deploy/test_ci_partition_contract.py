@@ -27,7 +27,8 @@ class PartitionContract(unittest.TestCase):
         reserve = next(line for line in remainder.splitlines() if "read -r -a reserve_tests" in line)
         reserve_groups = re.findall(r'"\$(CI_CORE_RESERVE_[A-Z_]+)"', reserve)
         self.assertEqual(len(reserve_groups), len(set(reserve_groups)))
-        self.assertEqual(set(variables) | set(reserve_groups), {key for key, _ in groups})
+        self.assertEqual(set(variables) | set(reserve_groups) | {"CI_PREVIEW_PACKAGE_TESTS"}, {key for key, _ in groups})
+        self.assertIn("--preview-package-lane=core", remainder)
         self.assertFalse(set(variables) & set(reserve_groups))
         self.assertIn('"${reserve_tests[@]}"', remainder)
         for group in reserve_groups:

@@ -56,7 +56,7 @@
       "tests/test_operator_preview_package.py::test_unapproved_or_mutable_exports_rejected_before_code_execution[unknown_field]",
       "tests/test_operator_preview_package.py::test_unapproved_or_mutable_exports_rejected_before_code_execution[wrong_pin]"
     ],
-    "review": [
+    "core": [
       "tests/test_operator_preview_package.py::test_bound_preview_and_independent_entry_retain_exact_versions_without_history_writes",
       "tests/test_operator_preview_package.py::test_closed_preview_partition_keeps_every_original_identity_and_requires_one_success_each",
       "tests/test_operator_preview_package.py::test_exact_trusted_host_fields_cannot_be_substituted[handoff_sha256-0000000000000000000000000000000000000000000000000000000000000000]",

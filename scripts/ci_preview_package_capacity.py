@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "deploy/fixtures/preview_package_ci_capacity.json"
 SOURCE = "backend/tests/test_operator_preview_package.py"
 PREFIX = SOURCE.removeprefix("backend/") + "::"
-LANES = ("graph", "review")
+LANES = ("graph", "core")
 
 
 def load_contract(path=MANIFEST, root=ROOT):
