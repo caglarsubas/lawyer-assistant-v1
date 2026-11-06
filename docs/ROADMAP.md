@@ -10940,3 +10940,60 @@ adds the new review file to the closed contract and moves the complete
 Candidate scheduling starts the heavy graph file across both workers with
 bounded single-test dispatch. Qualification requires fresh results on the
 revised PR commit and on main.
+
+## 316. Backend CI reserve recovery — 2026-11-06
+
+PR #284's main run 42159790126 completed all checks. The backend job
+took 1,127 seconds against a 1,140-second cap, leaving 13 of the required
+30 seconds. The 833-second core suite was 35 seconds slower than the PR
+suite. The ontology preflight used 31 seconds on one worker.
+
+Run the same complete ontology preflight before the core suite on two
+bounded workers. Move the intact snapshot test file to the PostgreSQL
+snapshot job. Partition the 34 preview package cases between graph
+runtime and backend review using a closed source-pinned manifest. Keep
+all nine metadata handoff cases on one worker to reuse their fixture.
+Preserve one initial final-authorization case on each graph worker.
+Each original test ID runs in its selected lane. Preserve test sources, fixture manifests,
+preflight fail-fast behavior, job and phase deadlines, reserve floors and
+the two-worker ceiling.
+
+Require exact PR and independent main checks with measured job and phase
+reserve before starting interrupted recipient retention reconciliation.
+
+The first PR run 42165607184 cut preflight from 31 to 17 seconds. The
+review job left 27 seconds of reserve and the supervisor stopped the
+backend suite. Restore the previous review scope and route the intact
+files using the revised placement above.
+
+The second run 42166635718 restored review reserve to 44 seconds and
+left 36 seconds in PostgreSQL. Graph runtime left 19 seconds, and the
+supervisor stopped the core suite. Its two workers each built the same
+metadata fixture in roughly 14 seconds. Bind those nine cases to one
+worker to reuse their fixture.
+
+The third run 42168237559 raised graph reserve to 42 seconds. Source
+publication and PostgreSQL left 23 and 25 seconds. Restore the earlier
+source publication scope, keep suggestions in the core suite, and use
+the balanced preview package partition above. The partition preserves
+all 34 cases and records which ones ran in each job.
+
+Run 42169754388 passed all twelve sibling gates and the 3,880-test core
+step, but the enclosing backend job was cancelled. Its 1,204-second
+elapsed time needs a reduction of at least 94 seconds to leave the
+required reserve. The complete isolated Linux baseline passed with the
+same two workers and 97 expected skips.
+
+The next candidate routes intact core files to existing jobs. The core
+excludes each routed file once. The single frontend compile overlaps the
+authenticated deployment stage as a non-test process under a bounded
+deadline. That stage retains exactly two test workers and the same
+87 deployment cases. Job and phase caps, the aggregate runner budget,
+and every reserve floor remain in force. Qualification requires exact
+test receipts and fresh measurements on the PR and on main.
+
+Run 42188431244 passed the combined authenticated stage in 83 seconds.
+Source publication and backend review left 27 and 19 seconds of
+reserve. Restore their earlier intact-file scopes, return 17 preview
+package cases to the core, and keep the graph partition on its
+source-pinned lane. The next run keeps the same two-worker gates.

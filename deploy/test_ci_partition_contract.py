@@ -24,7 +24,20 @@ class PartitionContract(unittest.TestCase):
             seen.update(files)
         remainder = workflow.split("- name: Test backend\n", 1)[1].split("\n      - name:", 1)[0]
         variables = {key: variable for variable, key in re.findall(r'read -r -a (\w+) <<< "\$(CI_[A-Z_]+)"', remainder)}
-        self.assertEqual(set(variables), {key for key, _ in groups})
+        reserve = next(line for line in remainder.splitlines() if "read -r -a reserve_tests" in line)
+        reserve_groups = re.findall(r'"\$(CI_CORE_RESERVE_[A-Z_]+)"', reserve)
+        self.assertEqual(len(reserve_groups), len(set(reserve_groups)))
+        self.assertEqual(set(variables) | set(reserve_groups) | {"CI_PREVIEW_PACKAGE_TESTS"}, {key for key, _ in groups})
+        self.assertIn("--preview-package-lane=core", remainder)
+        self.assertFalse(set(variables) & set(reserve_groups))
+        self.assertIn('"${reserve_tests[@]}"', remainder)
+        for group in reserve_groups:
+            definition = f'read -r -a reserve_tests <<< "${group}"'
+            self.assertEqual(workflow.count(definition), 1)
+            command = next(line for line in workflow.split(definition, 1)[1].splitlines()
+                           if "scripts/run_ci_tests.sh" in line)
+            self.assertIn('"${reserve_tests[@]}"', command)
+            self.assertIn("-n 2", command)
         loop = next(line for line in remainder.splitlines() if "for path in " in line)
         for variable in variables.values():
             self.assertIn('"${' + variable + '[@]}"', loop)
@@ -62,14 +75,16 @@ class PartitionContract(unittest.TestCase):
         self.assertEqual(workflow.count("--maxWorkers=2 --shard=1/2"), 1)
         self.assertEqual(workflow.count("--shard=2/2"), 1)
         self.assertEqual(workflow.count("node scripts/verify_frontend_shards.mjs"), 3)
-        self.assertEqual(workflow.count("- run: npm run build"), 1)
+        self.assertEqual(workflow.count("run: python scripts/run_ci_backend_bootstrap.py"), 1)
         frontend = workflow.split("  frontend:\n", 1)[1].split("  frontend-history:", 1)[0]
         history = workflow.split("  frontend-history:\n", 1)[1].split("  final-release-authorization:", 1)[0]
         self.assertNotIn("npm run build", frontend)
         self.assertNotIn("npm run build", history)
         backend = workflow.split("  backend-and-contracts:\n", 1)[1].split("  backend-review-contracts:\n", 1)[0]
-        self.assertIn("npm run build", backend)
-        self.assertLess(backend.index("npm run build"), backend.index("name: Test backend"))
+        self.assertLess(backend.index("run: python scripts/run_ci_backend_bootstrap.py"), backend.index("name: Test backend"))
+        bootstrap = (ROOT / "scripts/run_ci_backend_bootstrap.py").read_text()
+        self.assertEqual(bootstrap.count('"npm", "run", "build"'), 1)
+        self.assertIn('"--shard=3", "--workers=2"', bootstrap)
         self.assertNotIn("npm run build", workflow.split("  final-release-authorization:\n", 1)[1].split("  retained-release-withdrawal:", 1)[0])
         self.assertIn('"test": "vitest run --pool=threads --maxWorkers=2"', package)
         self.assertIn("node node_modules/vitest/vitest.mjs run --pool=threads --maxWorkers=1 --shard=2/2", workflow)
