@@ -10901,3 +10901,42 @@ passed its tests with 18 seconds of reserve, so the supervisor stopped the
 backend suite. Move the full 57-case workbench file into the backend suite,
 which already loads its seed. The final-authorization run recorded 38.19
 summed setup, call and teardown seconds for that file.
+
+## 315. Exclusive recipient receipt retention and fresh reopening — 2026-11-06
+
+The disposable recipient adapter retains the exact reviewed metadata receipt
+in a separate, owner-only store. Two independently provisioned signing keys
+approve the exact receipt plan, record, store binding, and validity window.
+The store uses its own encryption key. Publication is create-only, with
+exclusive linking and file and directory synchronization. A collision keeps
+the first ciphertext. An interrupted publication reports uncertainty and
+keeps the candidate for inspection.
+
+Read-only reopening requires an independently signed custody pin for the
+exact ciphertext digest, the current reviewer session bound by the retained
+review, and a fresh predecessor plan. The adapter checks the signed review
+and original receipt and transport observations around the read, then
+compares the authenticated plaintext with the exact selected receipt and
+permission. Reopening returns only receipt identifiers, digests, and the
+bounded expiry. Expired or revoked authorization, changed evidence, linked
+files, and mismatched custody withhold the receipt result.
+
+The disposable qualification covers cold reconstruction, denied and forged
+authorization, changed observations, exclusive collision, interrupted
+publication, and preservation of the original versions and review history.
+The two regression cases share the existing backend review shard. Job and
+phase caps, reserve floors, retry policy, and worker limits stay in force.
+
+Next, qualify read-only reconciliation of interrupted or unacknowledged
+recipient retention with a freshly signed custody observation. The private
+analysis review, production operator provisioning, and deployment remain
+pending. Delivery and milestone readiness are tracked separately.
+
+The first PR run exposed two CI issues. The placement contract still expected
+the previous review file list. The graph candidate job passed its 326 cases
+with 28 seconds of reserve against a 30-second floor. The revised placement
+adds the new review file to the closed contract and moves the complete
+50-case analysis feedback file to the existing final authorization job.
+Candidate scheduling starts the heavy graph file across both workers with
+bounded single-test dispatch. Qualification requires fresh results on the
+revised PR commit and on main.

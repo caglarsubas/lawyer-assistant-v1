@@ -204,7 +204,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_source_reviews.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
-        self.assertEqual(final_group.split(), ["backend/tests/test_cold_controller_recovery.py", "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py", "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py"])
+        self.assertEqual(final_group.split(), ["backend/tests/test_recipient_receipt_retention.py", "backend/tests/test_cold_controller_recovery.py", "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py", "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py"])
         self.assertIn("backend/tests/test_analysis_focus.py", workflow)
         self.assertEqual(workflow.count("backend/tests/test_analysis_reviews.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_analysis_suggestions.py"), 0)
@@ -316,14 +316,14 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
         candidate_group = re.search(r"  CI_GRAPH_CANDIDATE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(candidate_group.split(), ["backend/tests/test_analysis_feedback.py", "backend/tests/test_final_graph_candidate.py",
+        self.assertEqual(candidate_group.split(), ["backend/tests/test_final_graph_candidate.py",
             "backend/tests/test_staged_receipt_adapter.py", "backend/tests/test_native_receipt_stage.py",
             "backend/tests/test_native_receipt_http.py", "backend/tests/test_native_receipt_faults.py",
             "backend/tests/test_receipt_recovery_planning.py"])
         self.assertNotIn("backend/tests/test_graph_b_publication.py", workflow)
         self.assertNotIn("backend/tests/test_final_release_transitions.py", workflow)
         self.assertNotIn("backend/tests/test_disposition_reconciliation_receipt.py", workflow)
-        self.assertIn('"${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', blocks["graph-candidate-contracts"])
+        self.assertIn('"${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA', blocks["graph-candidate-contracts"])
         self.assertEqual(workflow.count("-p scripts.ci_source_reviews --source-review-lane="), 3)
         self.assertEqual(re.search(r"  CI_SOURCE_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_source_reviews.py"])
         definition = '          read -r -a source_review_tests <<< "$CI_SOURCE_REVIEW_TESTS"\n'
@@ -385,7 +385,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${capacity_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', withdrawal)
         self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
-        self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py"])
+        self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py",
+            "backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_analysis_feedback.py"])
         self.assertEqual(frontend_group.split()[-2:], ["backend/tests/test_retained_release_inspection.py", "backend/tests/test_analysis_reviews.py"])
         self.assertEqual(release_group.split()[:2], ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py"])
         self.assertEqual(workflow.count("backend/tests/test_retained_release_inspection.py"), 1)

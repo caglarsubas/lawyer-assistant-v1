@@ -72,7 +72,6 @@ env:
   CI_RETAINED_WITHDRAWAL_TESTS: >-
     backend/tests/test_authority_proposals.py
   CI_GRAPH_CANDIDATE_TESTS: >-
-    backend/tests/test_analysis_feedback.py
     backend/tests/test_final_graph_candidate.py
     backend/tests/test_staged_receipt_adapter.py
     backend/tests/test_native_receipt_stage.py
@@ -87,6 +86,7 @@ env:
   CI_FINAL_RELEASE_TESTS: >-
     backend/tests/test_runtime_authorization_integration.py
     backend/tests/test_retained_mixed_assembly.py
+    backend/tests/test_analysis_feedback.py
   CI_RECOVERY_QUALIFICATION_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_copy_recovery_disposition.py
@@ -108,6 +108,7 @@ env:
   CI_AUTHORITY_COHORT_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
   CI_BACKEND_REVIEW_TESTS: >-
+    backend/tests/test_recipient_receipt_retention.py
     backend/tests/test_cold_controller_recovery.py
     backend/tests/test_ci_reserve_guard.py
     backend/tests/test_native_preview_restart.py
@@ -616,9 +617,8 @@ jobs:
 
   graph-candidate-contracts:
     needs: backend-capacity
-    # The transition and new receipt files reuse the backend pool. Preserve
-    # complete candidate files and every assertion within the original
-    # twelve jobs, two workers and all existing deadlines without retry.
+    # Start the heavy graph cases across both workers before the shorter tail.
+    # Keep the complete feedback file in final authorization for job reserve.
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 3
     steps:
@@ -644,7 +644,7 @@ jobs:
           read -r -a candidate_tests <<< "$CI_GRAPH_CANDIDATE_TESTS"
           read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
           read -r -a focus_tests <<< "$CI_CANDIDATE_FOCUS_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate -p scripts.ci_provision_bindings --provision-binding-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate -p scripts.ci_provision_bindings --provision-binding-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   source-publication-contracts:
     needs: backend-capacity
