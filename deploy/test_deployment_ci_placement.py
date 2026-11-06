@@ -128,7 +128,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertLess(backend.index(import_probe), backend.index("run: npm run build"))
         postgres_additional_group = re.search(r"  CI_POSTGRES_ADDITIONAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(postgres_additional_group.split(), [
-            "backend/tests/test_release_snapshot.py", "backend/tests/test_analysis_suggestions.py",
+            "backend/tests/test_release_snapshot.py",
         ])
         for path in postgres_additional_group.split():
             self.assertEqual(workflow.count(path), 1)
@@ -141,6 +141,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_native_preview_restart.py"), 1)
         self.assertIn("backend/tests/test_native_preview_restart.py", final_group)
         self.assertEqual(workflow.count("backend/tests/test_operator_preview_package.py"), 1)
+        package_group = re.search(r"  CI_PREVIEW_PACKAGE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(package_group.split(), ["backend/tests/test_operator_preview_package.py"])
+        self.assertIn('"${preview_package_tests[@]}"', backend)
+        for lane, owner in (("review", blocks["backend-review-contracts"]), ("graph", graph)):
+            self.assertIn('read -r -a preview_package_tests <<< "$CI_PREVIEW_PACKAGE_TESTS"', owner)
+            self.assertIn(f'--preview-package-lane={lane} "${{preview_package_tests[@]}}"', owner)
         self.assertNotIn("backend/tests/test_set_publication_cli.py", final_group)
         self.assertNotIn("backend/tests/test_authority_model_cohorts.py", final_group)
         self.assertNotIn("backend/tests/test_open_validity_publication.py", final_group)
@@ -183,7 +189,6 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(withdrawal_group.split(), ["backend/tests/test_authority_proposals.py"])
         self.assertEqual(workflow.count("backend/tests/test_release_authorization.py"), 1)
         publication_group = re.search(r"  CI_PUBLICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertIn("backend/tests/test_operator_preview_package.py", publication_group)
         self.assertIn("-p scripts.ci_recipient_affinity --fixture-affinity-lane=graph", graph)
         capacity_group = re.search(r"  CI_BACKEND_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("backend/tests/test_firm_admin.py", capacity_group)

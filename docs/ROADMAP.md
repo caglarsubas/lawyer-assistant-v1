@@ -10949,12 +10949,12 @@ took 1,127 seconds against a 1,140-second cap, leaving 13 of the required
 suite. The ontology preflight used 31 seconds on one worker.
 
 Run the same complete ontology preflight before the core suite on two
-bounded workers. Move the intact snapshot and analysis suggestions test files to the
-existing PostgreSQL snapshot job. Run the intact preview package in the
-existing source publication job. Keep all nine metadata handoff cases
-on one worker so the graph job builds their shared fixture once. Preserve
-one initial final-authorization case on each worker. Exclude all three from the core suite
-so each case runs exactly once. Preserve test sources, fixture manifests,
+bounded workers. Move the intact snapshot test file to the PostgreSQL
+snapshot job. Partition the 34 preview package cases between graph
+runtime and backend review using a closed source-pinned manifest. Keep
+all nine metadata handoff cases on one worker to reuse their fixture.
+Preserve one initial final-authorization case on each graph worker.
+Each original test ID runs in its selected lane. Preserve test sources, fixture manifests,
 preflight fail-fast behavior, job and phase deadlines, reserve floors and
 the two-worker ceiling.
 
@@ -10970,4 +10970,10 @@ The second run 42166635718 restored review reserve to 44 seconds and
 left 36 seconds in PostgreSQL. Graph runtime left 19 seconds, and the
 supervisor stopped the core suite. Its two workers each built the same
 metadata fixture in roughly 14 seconds. Bind those nine cases to one
-worker and use the adjusted source publication placement above.
+worker to reuse their fixture.
+
+The third run 42168237559 raised graph reserve to 42 seconds. Source
+publication and PostgreSQL left 23 and 25 seconds. Restore the earlier
+source publication scope, keep suggestions in the core suite, and use
+the balanced preview package partition above. The partition preserves
+all 34 cases and records which ones ran in each job.
