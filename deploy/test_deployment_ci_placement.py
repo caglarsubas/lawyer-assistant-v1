@@ -1,5 +1,6 @@
 """Keep complete contract discovery exactly once within existing CI resources."""
 
+import ast
 import os
 import re
 import shutil
@@ -215,7 +216,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_source_reviews.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
-        self.assertEqual(final_group.split(), ["backend/tests/test_cold_controller_recovery.py", "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py", "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py"])
+        self.assertEqual(final_group.split(), ["backend/tests/test_cold_controller_recovery.py",
+            "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py",
+            "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py",
+            "backend/tests/test_journal_materialization.py", "backend/tests/test_analysis_feedback.py"])
         self.assertIn("backend/tests/test_analysis_focus.py", workflow)
         self.assertEqual(workflow.count("backend/tests/test_analysis_reviews.py"), 1)
         self.assertNotIn("backend/tests/test_source_reviews.py", group)
@@ -232,7 +236,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("--materialization-capacity-lane=final"), 1)
         self.assertNotIn("--materialization-capacity-lane=final", final)
         self.assertNotIn("--operator-preview-lane=final", final)
-        self.assertEqual(group.split(), ["backend/tests/test_metadata_handoff_readiness.py", "backend/tests/test_graph_b_component_grants.py", "backend/tests/test_declared_graph_assembly.py", "backend/tests/test_release_set_authorization.py"])
+        self.assertEqual(group.split(), ["backend/tests/test_metadata_handoff_readiness.py",
+            "backend/tests/test_graph_b_component_grants.py", "backend/tests/test_declared_graph_assembly.py",
+            "backend/tests/test_release_set_authorization.py"])
         self.assertNotIn("backend/tests/test_planning_journal_reconciliation.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_planning_journal_reconciliation.py"), 1)
         self.assertNotIn("backend/tests/test_disposition_receipt_reobservation_boundary.py", release_group)
@@ -396,19 +402,36 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
         self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py",
-            "backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_analysis_feedback.py",
-            "backend/tests/test_retained_release_authorization.py",
-            "backend/tests/test_retention_authorization_readiness.py"])
-        for path in release_group.split()[-2:]:
-            self.assertEqual(workflow.count(path), 1)
+            "backend/tests/test_retained_mixed_assembly.py"])
+        planning_reserve = re.search(r"  CI_CORE_RESERVE_PLANNING: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertIn("backend/tests/test_retained_release_authorization.py", planning_reserve)
+        self.assertEqual(workflow.count("backend/tests/test_retained_release_authorization.py"), 1)
+        source = "backend/tests/test_retention_authorization_readiness.py"
+        tests = [node for node in ast.parse((ROOT / source).read_text()).body
+                 if isinstance(node, ast.FunctionDef) and node.name.startswith("test_")]
+        self.assertEqual(len(tests), 13)
+        self.assertFalse(any(node.decorator_list for node in tests))
+        selected = []
+        for lane, block, count in (("GRAPH", graph, 6), ("FINAL", final, 7)):
+            key = f"CI_RETENTION_AUTH_{lane}_CASES"
+            cases = re.search(rf"  {key}: >-\n((?:    [^\n]+\n)+)", workflow)[1].split()
+            self.assertEqual(len(cases), count)
+            self.assertIn(f'read -r -a retention_auth_cases <<< "${key}"', block)
+            self.assertIn('"${retention_auth_cases[@]}"', block)
+            selected.extend(cases)
+        self.assertCountEqual(selected, [f"{source}::{node.name}" for node in tests])
+        self.assertIn('read -r -a retention_auth_cases <<< "$CI_RETENTION_AUTH_GRAPH_CASES"', backend)
+        self.assertIn('ignore_args=("--ignore=${retention_auth_cases[0]%%::*}")', backend)
         self.assertEqual(frontend_group.split()[-2:], ["backend/tests/test_retained_release_inspection.py", "backend/tests/test_analysis_reviews.py"])
-        self.assertEqual(release_group.split()[:2], ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py"])
         self.assertEqual(workflow.count("backend/tests/test_retained_release_inspection.py"), 1)
         self.assertEqual(capacity_group.split(), ["backend/tests/test_journal_backup_readiness.py",
             "backend/tests/test_release_set_promotion.py", "backend/tests/test_staged_receipt_adapter.py"])
-        for job in ("postgres-snapshot-concurrency", "final-release-authorization"):
-            self.assertIn("image: postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74", blocks[job])
-            self.assertIn("--tmpfs /var/lib/postgresql/data:rw,nosuid,size=512m", blocks[job])
+        self.assertIn("image: postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74", postgres)
+        self.assertIn("--tmpfs /var/lib/postgresql/data:rw,nosuid,size=512m", postgres)
+        self.assertIn("LA_TEST_POSTGRES_URL:", postgres)
+        self.assertIn("backend/tests/test_snapshot_set_postgres.py", postgres)
+        self.assertNotIn("services:", final)
+        self.assertNotIn("LA_TEST_POSTGRES_URL", final)
         self._bootstrap_rejections()
 
     def _bootstrap_rejections(self):

@@ -11126,3 +11126,15 @@ release authorization and retention authorization readiness files from
 backend to final authorization.
 Preserve each case, the two-worker limit, all thirteen jobs, and all
 caps and reserve floors. Qualify the new placement on the PR and on main.
+
+The next final-authorization run completed all 103 cases and left
+two seconds of job reserve. Its selected fixtures used SQLite, while
+an unused PostgreSQL service took 11 seconds to start. Remove that
+service from final authorization and keep the dedicated PostgreSQL
+race job and its durability checks in place. Run the full feedback
+file in backend review and retained release authorization in publication
+planning. Split the 13 retention readiness cases between graph runtime
+and final authorization by exact test ID. The placement contract checks
+that their union covers every case exactly once.
+Keep the original two-worker scheduler, case identities, time caps,
+and 30-second job reserve floor.
