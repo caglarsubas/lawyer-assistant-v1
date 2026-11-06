@@ -1,0 +1,52 @@
+{
+  "schema": "fixture-ci-affinity-v2",
+  "lanes": {
+    "recipient": {
+      "source_path": "backend/tests/test_recipient_observation_readiness.py",
+      "source_sha256": "d99e083d0ed8f12ee544d9a9d03296727f3a3b951773ddf7b2dfdd60b88317f2",
+      "test_ids": [
+        "tests/test_recipient_observation_readiness.py::test_authentication_precedes_registry_lookup_and_all_metadata_reads",
+        "tests/test_recipient_observation_readiness.py::test_exact_receipt_and_independently_reviewed_plan_preserve_versions_and_original_expiry",
+        "tests/test_recipient_observation_readiness.py::test_exact_receipt_proposal_decision_and_signature_versions_cannot_be_replaced",
+        "tests/test_recipient_observation_readiness.py::test_expired_or_revoked_review_keys_and_checked_budget_fail_closed",
+        "tests/test_recipient_observation_readiness.py::test_fresh_receipt_reobservation_does_not_extend_the_original_window",
+        "tests/test_recipient_observation_readiness.py::test_independent_profile_keys_and_host_only_configuration_cannot_be_substituted",
+        "tests/test_recipient_observation_readiness.py::test_metadata_race_withholds_onward_planning_and_preserves_original_histories",
+        "tests/test_recipient_observation_readiness.py::test_missing_linked_staged_and_oversized_metadata_are_retained_without_adoption",
+        "tests/test_recipient_observation_readiness.py::test_missing_review_or_unavailable_recipient_authority_does_not_fill_in_decisions",
+        "tests/test_recipient_observation_readiness.py::test_negative_independent_reviews_withhold_plans_without_source_reads"
+      ]
+    },
+    "analysis": {
+      "source_path": "backend/tests/test_destination_snapshot_verification.py",
+      "source_sha256": "330c0a97defbab7ac920084058677d399a60cf3598ab1d8b7a672306b5233577",
+      "test_ids": [
+        "tests/test_destination_snapshot_verification.py::test_changed_source_versions_are_not_resolved_to_current_after_restart",
+        "tests/test_destination_snapshot_verification.py::test_closed_packet_shape_types_and_missing_fields_never_release_metadata",
+        "tests/test_destination_snapshot_verification.py::test_denied_receiver_never_reads_source_or_target_snapshot",
+        "tests/test_destination_snapshot_verification.py::test_destination_journal_race_is_detected_and_injected_bytes_retained",
+        "tests/test_destination_snapshot_verification.py::test_destination_source_change_between_observations_withholds_everything",
+        "tests/test_destination_snapshot_verification.py::test_every_handoff_field_is_bound_to_the_independent_pins_and_fresh_source",
+        "tests/test_destination_snapshot_verification.py::test_exact_receiver_verification_reopens_without_writes_or_expiry_renewal",
+        "tests/test_destination_snapshot_verification.py::test_exact_reference_versions_are_required_including_missing_acknowledgement",
+        "tests/test_destination_snapshot_verification.py::test_interrupted_destination_staging_blocks_without_cleanup",
+        "tests/test_destination_snapshot_verification.py::test_new_source_ciphertext_invalidates_snapshot_without_adoption",
+        "tests/test_destination_snapshot_verification.py::test_original_expiry_and_both_clocks_cannot_be_renewed_by_a_fresh_receiver",
+        "tests/test_destination_snapshot_verification.py::test_receiver_revocation_during_reobservation_withholds_all_metadata",
+        "tests/test_destination_snapshot_verification.py::test_request_cannot_provision_pins_execute_or_supply_source_credentials",
+        "tests/test_destination_snapshot_verification.py::test_revoked_source_session_withholds_even_an_exact_previously_valid_packet",
+        "tests/test_destination_snapshot_verification.py::test_shorter_receiver_session_limits_result_without_changing_original_handoff",
+        "tests/test_destination_snapshot_verification.py::test_source_and_destination_cookies_are_not_interchangeable",
+        "tests/test_destination_snapshot_verification.py::test_source_and_destination_registries_must_share_the_independent_exact_pin",
+        "tests/test_destination_snapshot_verification.py::test_source_cannot_be_its_own_receiving_namespace",
+        "tests/test_destination_snapshot_verification.py::test_source_revocation_during_reobservation_withholds_all_metadata",
+        "tests/test_destination_snapshot_verification.py::test_total_and_source_execution_budgets_fail_closed",
+        "tests/test_destination_snapshot_verification.py::test_unaccepted_or_unacknowledged_review_cannot_reuse_an_accepted_packet[accept-False]",
+        "tests/test_destination_snapshot_verification.py::test_unaccepted_or_unacknowledged_review_cannot_reuse_an_accepted_packet[changes_required-True]",
+        "tests/test_destination_snapshot_verification.py::test_unaccepted_or_unacknowledged_review_cannot_reuse_an_accepted_packet[reject-True]",
+        "tests/test_destination_snapshot_verification.py::test_unavailable_database_never_leaks_metadata_or_driver_details[destination]",
+        "tests/test_destination_snapshot_verification.py::test_unavailable_database_never_leaks_metadata_or_driver_details[source]"
+      ]
+    }
+  }
+}

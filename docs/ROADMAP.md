@@ -10777,3 +10777,127 @@ product42/21/24/6,readiness0/9/4/1 and the pending owner review.
 Next: recipient-observation receipt packaging and independently reviewed retention
 planning after qualification; no automatic adoption,trust renewal,production or
 legal approval.
+
+## 314. Recipient-observation receipts and independent retention planning — 2026-11-05
+
+Stage an unregistered read-only adapter for exact recipient-observation receipts
+and independently reviewed disposable retention plans. Authenticate the assigned
+recipient or independent reviewer before lookup/parsing. Trusted host pins bind
+the metadata package, receipt specification/context, separate reviewer profile,
+public keys and exact receipt/proposal/decision versions; requests cannot supply
+paths, keys, principals, credentials, decisions or bindings.
+
+Two distinct preparer/reviewer signatures, current roles/sessions and fresh
+predecessor acceptance gate planning. The predecessor still performs two full
+signed-source checks and two recipient observations; the wrapper checks its own
+stable review bytes around that complete call. Negative reviews trigger no source
+inspection. Missing, changed, linked, staged, oversized, expired or revoked inputs
+withhold output and remain untouched. Keep twelve files,4KiB/file,two-second
+checked admission and ten-second checked operation bounds. Original evidence,
+receipt, review, key and session windows cap expiry; replay cannot renew it.
+
+The frozen26-outcome campaign uses eight isolated account contexts,four original
+input reviews,two receipts,ten signed review sets and twenty invented review keys.
+All785 predecessor sources stay exact within790 pins. Twenty service reads and
+zero service writes preserve original versions/history; two declared fixture
+session deletions are accounted for. Retain both incomplete campaign attempts.
+Strengthen new fixture identity namespaces and correct malformed-input injection;
+do not change the26 expectations or predecessor implementations.
+
+Use the independently qualified 040bba6 layout as the CI baseline. Retain failed
+redistribution experiments as negative evidence. Preserve every original test ID,
+body and assertion, the thirteen ARM jobs, two-worker ceiling, 73-minute aggregate
+cap, original command/job deadlines, supervisor and reserve floors.
+
+Run ten recipient cases with the 48 history provision-binding cases in the
+backend provision-binding phase. The recipient cases share one fixture worker.
+Also keep the original destination25 together on one worker in the analysis pair.
+Source-bound manifests pin both complete modules. Every unrelated test remains an
+individual scheduling unit. Require all selected IDs to pass exactly once on one
+known worker; missing, duplicated, skipped, xfailed or split execution cannot
+qualify. Pin pytest-xdist3.8.0 and the existing two-worker load interface. Three
+fast guards cover both lanes. No fixture bodies or independent mutation fixtures
+change. In a cold local comparison all138 analysis IDs pass in both runs: control
+168.446 seconds, affinity154.800 seconds. These are observed local wall times.
+
+Move only the intact feedback50 module into candidate. Keep retention13 in its
+original backend pool after the measured frontend reserve rejection. Move two
+unchanged reference cases from database to final, where the reference fixture is
+already loaded, and two unchanged cohort cases from database to frontend, where
+that fixture is already loaded. All44 metadata IDs remain disjoint and complete;
+review/database/planning/frontend/final counts become9/4/4/8/19. Measured metadata
+increments change within existing job/command caps. The cold final-metadata sample
+passes the original17 in9.064 seconds and the new19 in9.863 seconds. Acquisition,
+evidence validation and individual independent test fixtures remain unchanged.
+
+PostgreSQL runs 135 cases, candidate 326, portfolio 43 and final authorization 30. Backend
+collects 4,021 cases, with 3,924 passes and 97 original skips expected. Full Python inventory remains
+5910 original IDs plus17 new=5927: ten integrations, one retained-report guard,
+three affinity guards and three inventory guards. Preserve1018 deployment IDs
+and139 frontend files/10532 cases. Historical reports are never rewritten.
+
+Head05fc351/run42068985062 stopped before pytest because GitHub exposed only11 of
+13 jobs; its frontend reserve also failed. Head eee3851/run42071256666 stopped on
+unavailable metadata; database17/analysis21 reserves independently reject it.
+The source-pinned v3 adapter accepts only nonempty, monotonically growing subsets
+of the closed thirteen names, including itself. Each visible identity, completed
+phase and completed sibling retains the original checks. Final exit requires all
+thirteen jobs and every original floor; invalid, duplicate, unknown or regressing
+inventories fail closed. Replace two four-second metadata attempts with one
+eight-second request, retaining the aggregate eight-second allowance and reducing
+attempts. Fixed diagnostic categories distinguish transport deadline, client
+rejection and malformed/bounded payload errors without printing transport output
+or credentials. Original v1/v2 sources, child supervision, credential stripping,
+polling, job/step caps and floors stay exact. No added wait or test retry.
+Head e5cc7c4/run42077386218 confirms the timing correction: database61 and
+analysis46 reserves pass,as do all twelve siblings. The backend still rejects an
+eight-second metadata transport deadline. Force HTTP/1.1 for only the read-only
+metadata client. Add bounded metadata admission before dependencies/tests in the
+existing capacity job; the other twelve jobs require that job to succeed. A failed
+admission or capacity test prevents full fanout without creating another job.
+Admission binds the actual capacity-job/run/head identity,can accept only visible
+closed jobs,and explicitly does not qualify the run or start a test child.
+Final backend and independent-main checks remain unchanged and mandatory.
+
+Local qualification includes the real two-worker affinity paths and the deployment
+harness interpreter. Require exact-head checks, physical execution receipts,
+reserves and preservation before merge; independently qualify fetched equal-tree
+main. Local timing or green engineering checks establish no invoice saving,
+production readiness or legal acceptance.
+
+Originals,evidence versions,credentials,sessions,private cases and review history
+remain unchanged. Actual retention permission,custody,issuer/channel authenticity,
+durability,recovery,atomicity,trust renewal,production and legal readiness remain
+unqualified. Product42/21/24/6 and readiness0/9/4/1 remain unchanged; the owner
+focused-analysis-v3 review stays pending.
+
+Next: exclusive external recipient-receipt retention and fresh read-only reopening
+readiness,with independently provisioned permission/custody inputs. No automatic
+materialization,adoption,decision writing,trust renewal or production/legal approval.
+See [recipient-observation readiness](RECIPIENT_OBSERVATION_READINESS.md).
+
+Retain b1e33e3/run42052860535 and4625a25/run42055567327 as rejected
+experiments: the former exhausted the existing capacity-command deadline; the
+latter failed the deployment harness import and multiple reserve floors. Their
+wide redistribution is superseded by the minimal layout above. No failed head
+is retried unchanged.
+
+Local macOS qualification uses a canonical, owner-only temporary directory.
+The default `/var` temporary-path alias violates the existing no-symlink input
+policy; canonical test scratch paths resolve this environment issue without
+weakening product validation or changing any predecessor implementation.
+
+Run 42079753406 confirmed metadata admission and backend polling. PostgreSQL
+and backend review missed the 30-second floor by 2 and 7 seconds despite
+passing their tests. The supervisor stopped backend tests on the PostgreSQL
+breach. Pair the ten recipient cases with the 48 history binding cases in
+the existing 120-second backend provision-binding phase, with the same
+30-second reserve requirement. Qualify the new placement on the PR commit
+and independently on main before recording delivery.
+
+Run 42148179131 passed the combined phase in 50 seconds. PostgreSQL and
+backend review retained 66 and 57 seconds of reserve. Final authorization
+passed its tests with 18 seconds of reserve, so the supervisor stopped the
+backend suite. Move the full 57-case workbench file into the backend suite,
+which already loads its seed. The final-authorization run recorded 38.19
+summed setup, call and teardown seconds for that file.

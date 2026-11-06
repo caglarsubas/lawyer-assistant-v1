@@ -41,7 +41,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(re.search(r'  CI_HUMAN_REVIEW_GROUP_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split(), ['backend/tests/test_destination_snapshot_verification.py'])
         metadata = re.search(r'  CI_METADATA_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
         self.assertEqual(metadata, ['backend/tests/test_analysis_cohorts.py', 'backend/tests/test_verification_reference_readiness.py'])
-        self.assertIn('"${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}"; do', blocks['backend-and-contracts'])
+        self.assertIn('"${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}"; do', blocks['backend-and-contracts'])
         for job, lane in [('backend-review-contracts', 'review'),
                           ('frontend', 'frontend'),
                           ('postgres-snapshot-concurrency', 'database'),
@@ -49,9 +49,23 @@ class DeploymentPlacementContract(unittest.TestCase):
                           ('final-release-authorization', 'final')]:
             self.assertEqual(blocks[job].count('read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_metadata_capacity --metadata-capacity-lane=' + lane + ' "${metadata_capacity_tests[@]}"'), 1)
+        self.assertEqual(workflow.count("needs: backend-capacity"), 12)
+        self.assertNotIn("needs:", blocks["backend-capacity"])
+        self.assertIn("actions: read", blocks["backend-capacity"])
+        self.assertIn("python scripts/run_ci_reserve_guard_v3.py --admission", blocks["backend-capacity"])
+        self.assertLess(blocks["backend-capacity"].index("--admission"), blocks["backend-capacity"].index("name: Install test dependencies"))
+        recipient = re.search(r'  CI_RECIPIENT_OBSERVATION_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
+        self.assertEqual(recipient, ['backend/tests/test_recipient_observation_readiness.py'])
+        self.assertEqual(workflow.count(recipient[0]), 1)
+        self.assertIn('read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"', blocks['backend-and-contracts'])
+        self.assertIn('"${recipient_observation_tests[@]}"; do', blocks['backend-and-contracts'])
+        self.assertNotIn("CI_RECIPIENT_OBSERVATION_TESTS", blocks["postgres-snapshot-concurrency"])
+        self.assertIn('-p scripts.ci_recipient_affinity --fixture-affinity-lane=recipient "${recipient_observation_tests[@]}"', blocks['backend-and-contracts'])
+        self.assertEqual(workflow.count('-p scripts.ci_recipient_affinity'), 2)
+        self.assertIn("-p scripts.ci_recipient_affinity --fixture-affinity-lane=analysis", blocks["analysis-recovery-contracts"])
         auth = re.search(r'  CI_FINAL_AUTH_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)', workflow)[1].split()
         self.assertEqual(auth, ['backend/tests/test_final_release_authorization.py'])
-        self.assertIn('"${auth_capacity_tests[@]}"; do', blocks['backend-and-contracts'])
+        self.assertIn('"${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}"; do', blocks['backend-and-contracts'])
         for job, lane in [('graph-runtime-contracts', 'graph'), ('final-release-authorization', 'final')]:
             self.assertEqual(blocks[job].count('read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"'), 1)
             self.assertEqual(blocks[job].count('-p scripts.ci_final_auth_capacity --final-auth-capacity-lane=' + lane), 1)
@@ -107,7 +121,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_metadata_handoff_readiness.py"), 1)
         self.assertIn("backend/tests/test_metadata_handoff_readiness.py", group)
         self.assertEqual(workflow.count("backend/tests/test_ci_reserve_guard.py"), 1)
-        self.assertIn("bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard_v2.py -- pytest backend/tests", backend)
+        self.assertIn("bash scripts/run_ci_tests.sh python scripts/run_ci_reserve_guard_v3.py -- pytest backend/tests", backend)
         self.assertIn('export PYTHONPATH="$GITHUB_WORKSPACE"', backend)
         import_probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${preview_probe[@]}" -p scripts.ci_operator_previews --operator-preview-lane=final --collect-only -q -n 2'
         self.assertEqual(backend.count(import_probe), 1)
@@ -200,7 +214,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('--dist load --maxschedchunk=1', blocks["source-publication-contracts"])
         self.assertNotIn("backend/tests/test_public_sources.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_review_effort.py"), 1)
-        self.assertIn("backend/tests/test_analysis_workbench.py", release_group)
+        self.assertNotIn("backend/tests/test_analysis_workbench.py", workflow)
         self.assertNotIn("backend/tests/test_analysis_adjudication.py", workflow)
         self.assertNotIn("backend/tests/test_publication_cli.py", workflow)
         self.assertIn("--materialization-capacity-lane=review", review_block)
@@ -219,7 +233,7 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertNotIn(path, final_group)
         self.assertNotIn("CI_DATABASE_CONTEXT_TESTS", workflow)
         self.assertNotIn("CI_PUBLIC_SOURCE_TESTS", workflow)
-        self.assertEqual(workflow.count("backend/tests/test_analysis_feedback.py"), 0)
+        self.assertEqual(workflow.count("backend/tests/test_analysis_feedback.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_temporal_validity.py"), 1)
         self.assertEqual(workflow.count("backend/tests/test_public_sources.py"), 0)
         recovery_group = re.search(r"  CI_RECOVERY_QUALIFICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
@@ -279,17 +293,17 @@ class DeploymentPlacementContract(unittest.TestCase):
                     validate_workflow_arrays(workflow.replace(owner, owner.replace(definition, "", 1), 1))
             self.assertRegex(blocks[job], r'"\$\{' + array + r'\[@\]\}"(?: -q)? -n 2')
         self.assertNotIn("provision-binding-lane=history", blocks["frontend-history"])
-        self.assertIn('"${history_binding_tests[@]}" -q -n 2', review_block)
+        self.assertNotIn("provision-binding-lane=history", review_block)
 
         definition = '          read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"\n'
-        for owner in (backend, blocks["publication-planning-contracts"], blocks["graph-candidate-contracts"], blocks["backend-review-contracts"]):
-            self.assertEqual(owner.count(definition), 1)
+        for owner in (backend, blocks["publication-planning-contracts"], blocks["graph-candidate-contracts"]):
+            self.assertEqual(owner.count(definition), 2 if owner is backend else 1)
             broken = workflow.replace(owner, owner.replace(definition, "", 1), 1)
             with self.assertRaisesRegex(ValueError, "history_binding_tests"):
                 validate_workflow_arrays(broken)
         self.assertIn('"${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["publication-planning-contracts"])
         self.assertEqual(workflow.count("-p scripts.ci_provision_bindings --provision-binding-lane="), 3)
-        for name, lane in (("graph-candidate-contracts", "candidate"), ("backend-review-contracts", "history"), ("publication-planning-contracts", "planning")):
+        for name, lane in (("graph-candidate-contracts", "candidate"), ("backend-and-contracts", "history"), ("publication-planning-contracts", "planning")):
             self.assertIn("--provision-binding-lane=" + lane, blocks[name])
         self.assertEqual(workflow.count("name: Test complete portfolio review qualification"), 1)
         self.assertIn('"${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2', blocks["frontend"])
@@ -302,7 +316,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_private_inventory_receipts.py"), 1)
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
         candidate_group = re.search(r"  CI_GRAPH_CANDIDATE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(candidate_group.split(), ["backend/tests/test_final_graph_candidate.py",
+        self.assertEqual(candidate_group.split(), ["backend/tests/test_analysis_feedback.py", "backend/tests/test_final_graph_candidate.py",
             "backend/tests/test_staged_receipt_adapter.py", "backend/tests/test_native_receipt_stage.py",
             "backend/tests/test_native_receipt_http.py", "backend/tests/test_native_receipt_faults.py",
             "backend/tests/test_receipt_recovery_planning.py"])
@@ -371,7 +385,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${capacity_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=10 -rA', withdrawal)
         self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
-        self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_analysis_workbench.py"])
+        self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py"])
         self.assertEqual(frontend_group.split()[-2:], ["backend/tests/test_retained_release_inspection.py", "backend/tests/test_analysis_reviews.py"])
         self.assertEqual(release_group.split()[:2], ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py"])
         self.assertEqual(workflow.count("backend/tests/test_retained_release_inspection.py"), 1)
