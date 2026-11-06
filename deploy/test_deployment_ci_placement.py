@@ -126,15 +126,15 @@ class DeploymentPlacementContract(unittest.TestCase):
         import_probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${preview_probe[@]}" -p scripts.ci_operator_previews --operator-preview-lane=final --collect-only -q -n 2'
         self.assertEqual(backend.count(import_probe), 1)
         self.assertLess(backend.index(import_probe), backend.index("run: npm run build"))
-        snapshot_unit_group = re.search(r"  CI_POSTGRES_SNAPSHOT_UNIT_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(snapshot_unit_group.split(), [
-            "backend/tests/test_release_snapshot.py", "backend/tests/test_release_set_promotion.py",
+        postgres_additional_group = re.search(r"  CI_POSTGRES_ADDITIONAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(postgres_additional_group.split(), [
+            "backend/tests/test_release_snapshot.py", "backend/tests/test_analysis_suggestions.py",
         ])
-        for path in snapshot_unit_group.split():
+        for path in postgres_additional_group.split():
             self.assertEqual(workflow.count(path), 1)
         for owner in (backend, postgres):
-            self.assertIn('read -r -a snapshot_unit_tests <<< "$CI_POSTGRES_SNAPSHOT_UNIT_TESTS"', owner)
-            self.assertIn('"${snapshot_unit_tests[@]}"', owner)
+            self.assertIn('read -r -a postgres_additional_tests <<< "$CI_POSTGRES_ADDITIONAL_TESTS"', owner)
+            self.assertIn('"${postgres_additional_tests[@]}"', owner)
         self.assertIn('"${preflight_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1', backend)
         self.assertIn("actions: read", backend)
         self.assertIn("GH_TOKEN: ${{ github.token }}", backend)
@@ -184,6 +184,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(withdrawal_group.split(), ["backend/tests/test_authority_proposals.py"])
         self.assertEqual(workflow.count("backend/tests/test_release_authorization.py"), 1)
         publication_group = re.search(r"  CI_PUBLICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertIn("backend/tests/test_release_set_promotion.py", publication_group)
+        self.assertEqual(workflow.count("backend/tests/test_release_set_promotion.py"), 1)
         capacity_group = re.search(r"  CI_BACKEND_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("backend/tests/test_firm_admin.py", capacity_group)
         self.assertNotIn("backend/tests/test_firm_admin.py", publication_group)
@@ -213,10 +215,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_source_reviews.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
-        self.assertEqual(final_group.split(), ["backend/tests/test_analysis_suggestions.py", "backend/tests/test_recipient_receipt_retention.py", "backend/tests/test_cold_controller_recovery.py", "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py", "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py"])
+        self.assertEqual(final_group.split(), ["backend/tests/test_recipient_receipt_retention.py", "backend/tests/test_cold_controller_recovery.py", "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py", "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py"])
         self.assertIn("backend/tests/test_analysis_focus.py", workflow)
         self.assertEqual(workflow.count("backend/tests/test_analysis_reviews.py"), 1)
-        self.assertEqual(workflow.count("backend/tests/test_analysis_suggestions.py"), 1)
         self.assertNotIn("backend/tests/test_source_reviews.py", group)
         self.assertNotIn("backend/tests/test_public_sources.py", publication_group)
         self.assertIn('--dist load --maxschedchunk=1', graph)

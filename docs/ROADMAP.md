@@ -10949,12 +10949,17 @@ took 1,127 seconds against a 1,140-second cap, leaving 13 of the required
 suite. The ontology preflight used 31 seconds on one worker.
 
 Run the same complete ontology preflight before the core suite on two
-bounded workers. Move the intact snapshot and promotion test files to
-the existing PostgreSQL snapshot job, and the intact analysis suggestions
-file to the existing review job. Exclude all three from the core suite
+bounded workers. Move the intact snapshot and analysis suggestions test files to the
+existing PostgreSQL snapshot job, and the intact promotion file to the
+existing source publication job. Exclude all three from the core suite
 so each case runs exactly once. Preserve test sources, fixture manifests,
 preflight fail-fast behavior, job and phase deadlines, reserve floors and
 the two-worker ceiling.
 
 Require exact PR and independent main checks with measured job and phase
 reserve before starting interrupted recipient retention reconciliation.
+
+The first PR run 42165607184 cut preflight from 31 to 17 seconds. The
+review job left 27 seconds of reserve and the supervisor stopped the
+backend suite. Restore the previous review scope and route the intact
+files using the revised placement above.
