@@ -12,18 +12,17 @@ from dataclasses import replace
 from pathlib import Path
 from unittest.mock import patch
 
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
-import operator_enrollment_evidence as e
-import private_inventory_receipts as storage
-import recipient_receipt_retention as retention
-from cryptography.hazmat.primitives.asymmetric.ed25519 import (
-    Ed25519PrivateKey,
-)
-from metadata_handoff_fixture import make as make_metadata
-from operator_recovery_inputs import FLAGS
-from recipient_observation_fixture import make, make_independent_pair
-from retention_authorization_readiness import KeyPin
+import operator_enrollment_evidence as e  # noqa: E402
+import private_inventory_receipts as storage  # noqa: E402
+import recipient_receipt_retention as retention  # noqa: E402
+from metadata_handoff_fixture import make as make_metadata  # noqa: E402
+from operator_recovery_inputs import FLAGS  # noqa: E402
+from recipient_observation_fixture import make, make_independent_pair  # noqa: E402
+from retention_authorization_readiness import KeyPin  # noqa: E402
 
 PRIOR = ROOT / "docs/evidence/recipient-observation-2026-11-05.json"
 REPORT = ROOT / "docs/evidence/staged-recipient-reconciliation-2026-11-06.json"
