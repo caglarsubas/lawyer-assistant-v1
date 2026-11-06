@@ -87,7 +87,6 @@ env:
   CI_FINAL_RELEASE_TESTS: >-
     backend/tests/test_runtime_authorization_integration.py
     backend/tests/test_retained_mixed_assembly.py
-    backend/tests/test_analysis_workbench.py
   CI_RECOVERY_QUALIFICATION_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_copy_recovery_disposition.py

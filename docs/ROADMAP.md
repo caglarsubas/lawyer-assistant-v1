@@ -10830,8 +10830,8 @@ increments change within existing job/command caps. The cold final-metadata samp
 passes the original17 in9.064 seconds and the new19 in9.863 seconds. Acquisition,
 evidence validation and individual independent test fixtures remain unchanged.
 
-PostgreSQL runs 135 cases, candidate 326, portfolio 43 and final 87. Core inventory is
-4007-50+7=3964 with3867 passes and97 original skips. Full Python inventory remains
+PostgreSQL runs 135 cases, candidate 326, portfolio 43 and final authorization 30. Backend
+collects 4,021 cases, with 3,924 passes and 97 original skips expected. Full Python inventory remains
 5910 original IDs plus17 new=5927: ten integrations, one retained-report guard,
 three affinity guards and three inventory guards. Preserve1018 deployment IDs
 and139 frontend files/10532 cases. Historical reports are never rewritten.
@@ -10894,3 +10894,10 @@ breach. Pair the ten recipient cases with the 48 history binding cases in
 the existing 120-second backend provision-binding phase, with the same
 30-second reserve requirement. Qualify the new placement on the PR commit
 and independently on main before recording delivery.
+
+Run 42148179131 passed the combined phase in 50 seconds. PostgreSQL and
+backend review retained 66 and 57 seconds of reserve. Final authorization
+passed its tests with 18 seconds of reserve, so the supervisor stopped the
+backend suite. Move the full 57-case workbench file into the backend suite,
+which already loads its seed. The final-authorization run recorded 38.19
+summed setup, call and teardown seconds for that file.

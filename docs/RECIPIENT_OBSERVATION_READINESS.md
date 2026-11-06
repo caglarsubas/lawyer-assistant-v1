@@ -111,3 +111,7 @@ The existing scheduler assigns the recipient fixture to one worker and
 can run provision-binding cases on the other. The original 120-second phase
 cap, 30-second reserve floor, and two-worker ceiling apply. PostgreSQL keeps
 its 135 other cases, including its original race tests.
+
+The final-authorization tests in run 42148179131 passed with 18 seconds of
+reserve. Its workbench file accounted for 38.19 summed test-seconds. The
+backend suite now runs those same 57 cases using its existing workbench seed.
