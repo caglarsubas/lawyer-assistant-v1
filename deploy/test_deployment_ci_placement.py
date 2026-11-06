@@ -129,15 +129,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         import_probe = 'PYTHONPATH="$GITHUB_WORKSPACE" timeout --kill-after=2s 10s backend/.venv/bin/pytest "${preview_probe[@]}" -p scripts.ci_operator_previews --operator-preview-lane=final --collect-only -q -n 2'
         self.assertEqual(backend.count(import_probe), 1)
         self.assertLess(backend.index(import_probe), backend.index("run: python scripts/run_ci_backend_bootstrap.py"))
-        postgres_additional_group = re.search(r"  CI_POSTGRES_ADDITIONAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(postgres_additional_group.split(), [
-            "backend/tests/test_release_snapshot.py",
-        ])
-        for path in postgres_additional_group.split():
-            self.assertEqual(workflow.count(path), 1)
-        for owner in (backend, postgres):
-            self.assertIn('read -r -a postgres_additional_tests <<< "$CI_POSTGRES_ADDITIONAL_TESTS"', owner)
-            self.assertIn('"${postgres_additional_tests[@]}"', owner)
+        self.assertNotIn("backend/tests/test_release_snapshot.py", workflow)
+        self.assertNotIn("backend/tests/test_mixed_graph_snapshot.py", workflow)
+        self.assertNotIn("backend/tests/test_recipient_receipt_retention.py", workflow)
         self.assertIn('"${preflight_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1', backend)
         self.assertIn("actions: read", backend)
         self.assertIn("GH_TOKEN: ${{ github.token }}", backend)
@@ -221,7 +215,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_source_reviews.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
-        self.assertEqual(final_group.split(), ["backend/tests/test_recipient_receipt_retention.py", "backend/tests/test_cold_controller_recovery.py", "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py", "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py"])
+        self.assertEqual(final_group.split(), ["backend/tests/test_cold_controller_recovery.py", "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py", "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py"])
         self.assertIn("backend/tests/test_analysis_focus.py", workflow)
         self.assertEqual(workflow.count("backend/tests/test_analysis_reviews.py"), 1)
         self.assertNotIn("backend/tests/test_source_reviews.py", group)
@@ -242,7 +236,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("backend/tests/test_planning_journal_reconciliation.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_planning_journal_reconciliation.py"), 1)
         self.assertNotIn("backend/tests/test_disposition_receipt_reobservation_boundary.py", release_group)
-        self.assertEqual(workflow.count("backend/tests/test_disposition_receipt_reobservation_boundary.py"), 1)
+        self.assertNotIn("backend/tests/test_disposition_receipt_reobservation_boundary.py", workflow)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
         for path in history_group:
             self.assertEqual(workflow.count(path), 1)
@@ -254,7 +248,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_public_sources.py"), 0)
         recovery_group = re.search(r"  CI_RECOVERY_QUALIFICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(recovery_group.split(), ["backend/tests/test_retained_release_withdrawal.py", "backend/tests/test_copy_recovery_disposition.py",
-            "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py", "backend/tests/test_disposition_receipt_reobservation_boundary.py"])
+            "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py"])
         self.assertNotIn("backend/tests/test_retained_release_withdrawal.py", withdrawal_group)
         self.assertIn('"${recovery_qualification_tests[@]}"', backend)
         definition = '          read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"\n'

@@ -10997,3 +10997,22 @@ Source publication and backend review left 27 and 19 seconds of
 reserve. Restore their earlier intact-file scopes, return 17 preview
 package cases to the core, and keep the graph partition on its
 source-pinned lane. The next run keeps the same two-worker gates.
+
+## 317. Preserve reserve on the independent two-worker main run — 2026-11-06
+
+PR #285 passed all 13 checks and every reserve floor. Its 990-second
+backend job left 150 seconds of reserve. The fetched main tree matched
+the qualified PR tree. On main run 42192554063, PostgreSQL, analysis
+recovery and final authorization passed their tests and left 17, 24
+and 25 seconds of reserve. The supervisor stopped the core at the
+first breach.
+
+Return the 57 snapshot cases, 13 inventory handoff cases, 40 validity
+cases and 18 practice cases to the recovered backend job. Return the
+17 disposition boundary cases to give analysis recovery more reserve.
+Run the existing cold recipient receipt tests in the core to protect review capacity
+and qualify the upcoming reconciliation against the same fixture.
+Keep the bounded compile overlap, both preview partitions, all test
+identities, both test workers, all thirteen jobs and every deadline
+and reserve floor. Reconciliation still requires fresh exact PR and
+independent main qualification.
