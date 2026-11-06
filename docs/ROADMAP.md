@@ -10977,3 +10977,17 @@ publication and PostgreSQL left 23 and 25 seconds. Restore the earlier
 source publication scope, keep suggestions in the core suite, and use
 the balanced preview package partition above. The partition preserves
 all 34 cases and records which ones ran in each job.
+
+Run 42169754388 passed all twelve sibling gates and the 3,880-test core
+step, but the enclosing backend job was cancelled. Its 1,204-second
+elapsed time needs a reduction of at least 94 seconds to leave the
+required reserve. The complete isolated Linux baseline passed with the
+same two workers and 97 expected skips.
+
+The next candidate routes intact core files to existing jobs. The core
+excludes each routed file once. The single frontend compile overlaps the
+authenticated deployment stage as a non-test process under a bounded
+deadline. That stage retains exactly two test workers and the same
+87 deployment cases. Job and phase caps, the aggregate runner budget,
+and every reserve floor remain in force. Qualification requires exact
+test receipts and fresh measurements on the PR and on main.
