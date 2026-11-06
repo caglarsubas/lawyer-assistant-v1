@@ -187,10 +187,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         publication_group = re.search(r"  CI_PUBLICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("-p scripts.ci_recipient_affinity --fixture-affinity-lane=graph", graph)
         capacity_group = re.search(r"  CI_BACKEND_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertIn("backend/tests/test_firm_admin.py", capacity_group)
-        self.assertNotIn("backend/tests/test_firm_admin.py", publication_group)
-        for path in ("backend/tests/test_firm_admin.py", "backend/tests/test_authority_proposals.py"):
-            self.assertEqual(workflow.count(path), 1)
+        self.assertEqual(workflow.count("backend/tests/test_firm_admin.py"), 1)
+        candidate_reserve = re.search(r"  CI_CORE_RESERVE_CANDIDATE: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertIn("backend/tests/test_firm_admin.py", candidate_reserve)
+        self.assertEqual(workflow.count("backend/tests/test_authority_proposals.py"), 1)
         retention_group = re.search(r"  CI_RECEIPT_RETENTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(retention_group.split(), ["backend/tests/test_private_inventory_receipts.py"])
         self.assertIn('"${receipt_retention_tests[@]}"', backend)
@@ -215,7 +215,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_source_reviews.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
-        self.assertEqual(final_group.split(), ["backend/tests/test_cold_controller_recovery.py", "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py", "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py", "backend/tests/test_journal_materialization.py"])
+        self.assertEqual(final_group.split(), ["backend/tests/test_cold_controller_recovery.py",
+            "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py",
+            "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py",
+            "backend/tests/test_journal_materialization.py"])
         self.assertIn("backend/tests/test_analysis_focus.py", workflow)
         self.assertEqual(workflow.count("backend/tests/test_analysis_reviews.py"), 1)
         self.assertNotIn("backend/tests/test_source_reviews.py", group)
@@ -225,14 +228,15 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("backend/tests/test_public_sources.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_review_effort.py"), 1)
         self.assertNotIn("backend/tests/test_analysis_workbench.py", workflow)
-        self.assertEqual(workflow.count("backend/tests/test_analysis_adjudication.py"), 1)
         self.assertNotIn("backend/tests/test_publication_cli.py", workflow)
         self.assertIn("--materialization-capacity-lane=review", review_block)
         self.assertIn("--materialization-capacity-lane=final", blocks["frontend"])
         self.assertEqual(workflow.count("--materialization-capacity-lane=final"), 1)
         self.assertNotIn("--materialization-capacity-lane=final", final)
         self.assertNotIn("--operator-preview-lane=final", final)
-        self.assertEqual(group.split(), ["backend/tests/test_metadata_handoff_readiness.py", "backend/tests/test_graph_b_component_grants.py", "backend/tests/test_declared_graph_assembly.py", "backend/tests/test_release_set_authorization.py"])
+        self.assertEqual(group.split(), ["backend/tests/test_metadata_handoff_readiness.py",
+            "backend/tests/test_graph_b_component_grants.py", "backend/tests/test_declared_graph_assembly.py",
+            "backend/tests/test_release_set_authorization.py"])
         self.assertNotIn("backend/tests/test_planning_journal_reconciliation.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_planning_journal_reconciliation.py"), 1)
         self.assertNotIn("backend/tests/test_disposition_receipt_reobservation_boundary.py", release_group)
@@ -248,7 +252,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(workflow.count("backend/tests/test_public_sources.py"), 0)
         recovery_group = re.search(r"  CI_RECOVERY_QUALIFICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(recovery_group.split(), ["backend/tests/test_retained_release_withdrawal.py", "backend/tests/test_copy_recovery_disposition.py",
-            "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py"])
+            "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py",
+            "backend/tests/test_analysis_feedback.py"])
+        self.assertNotIn("backend/tests/test_analysis_adjudication.py", workflow)
         self.assertNotIn("backend/tests/test_retained_release_withdrawal.py", withdrawal_group)
         self.assertIn('"${recovery_qualification_tests[@]}"', backend)
         definition = '          read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"\n'
@@ -327,7 +333,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${backend_review_tests[@]}"', blocks["backend-and-contracts"])
         candidate_group = re.search(r"  CI_GRAPH_CANDIDATE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(candidate_group.split(), ["backend/tests/test_final_graph_candidate.py",
-            "backend/tests/test_staged_receipt_adapter.py", "backend/tests/test_native_receipt_stage.py",
+            "backend/tests/test_native_receipt_stage.py",
             "backend/tests/test_native_receipt_http.py", "backend/tests/test_native_receipt_faults.py",
             "backend/tests/test_receipt_recovery_planning.py"])
         self.assertNotIn("backend/tests/test_graph_b_publication.py", workflow)
@@ -346,8 +352,8 @@ class DeploymentPlacementContract(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "source_review_tests"):
                 validate_workflow_arrays(workflow.replace(owner, owner.replace(definition, "", 1), 1))
         self.assertEqual(backend.count(definition), 1)
-        self.assertIn("backend/tests/test_staged_receipt_adapter.py", candidate_group)
-        self.assertNotIn("backend/tests/test_staged_receipt_adapter.py", capacity_group)
+        self.assertNotIn("backend/tests/test_staged_receipt_adapter.py", release_group)
+        self.assertIn("backend/tests/test_staged_receipt_adapter.py", capacity_group)
         self.assertEqual(workflow.count("backend/tests/test_staged_receipt_adapter.py"), 1)
         review = blocks["backend-review-contracts"]
         self.assertLess(review.index("name: Test complete backend review"), review.index("name: Test complete manifest-bound assignment 1"))
@@ -396,14 +402,22 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
         self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py",
-            "backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_analysis_feedback.py"])
+            "backend/tests/test_retained_mixed_assembly.py",
+            "backend/tests/test_retention_authorization_readiness.py"])
+        planning_reserve = re.search(r"  CI_CORE_RESERVE_PLANNING: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertIn("backend/tests/test_retained_release_authorization.py", planning_reserve)
+        self.assertEqual(workflow.count("backend/tests/test_retained_release_authorization.py"), 1)
+        self.assertEqual(workflow.count("backend/tests/test_retention_authorization_readiness.py"), 1)
         self.assertEqual(frontend_group.split()[-2:], ["backend/tests/test_retained_release_inspection.py", "backend/tests/test_analysis_reviews.py"])
-        self.assertEqual(release_group.split()[:2], ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py"])
         self.assertEqual(workflow.count("backend/tests/test_retained_release_inspection.py"), 1)
-        self.assertEqual(set(capacity_group.split()), {"backend/tests/test_journal_backup_readiness.py", "backend/tests/test_firm_admin.py"})
-        for job in ("postgres-snapshot-concurrency", "final-release-authorization"):
-            self.assertIn("image: postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74", blocks[job])
-            self.assertIn("--tmpfs /var/lib/postgresql/data:rw,nosuid,size=512m", blocks[job])
+        self.assertEqual(capacity_group.split(), ["backend/tests/test_journal_backup_readiness.py",
+            "backend/tests/test_release_set_promotion.py", "backend/tests/test_staged_receipt_adapter.py"])
+        self.assertIn("image: postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74", postgres)
+        self.assertIn("--tmpfs /var/lib/postgresql/data:rw,nosuid,size=512m", postgres)
+        self.assertIn("LA_TEST_POSTGRES_URL:", postgres)
+        self.assertIn("backend/tests/test_snapshot_set_postgres.py", postgres)
+        self.assertNotIn("services:", final)
+        self.assertNotIn("LA_TEST_POSTGRES_URL", final)
         self._bootstrap_rejections()
 
     def _bootstrap_rejections(self):

@@ -11104,3 +11104,42 @@ The frozen report in
 records outcomes and 793 source hashes. CI verifies the report and its
 predecessor pins inside an existing regression case. The subprocess
 campaign runs separately and the two-worker CI budget stays in force.
+
+## 321. Preserve withdrawal and candidate CI reserve — 2026-11-06
+
+PR #289 passed all 13 checks with two workers. Its tightest job had
+37 seconds of reserve, and the backend had 108 seconds. Independent
+main run 42221635371 passed the withdrawal and graph-candidate tests
+with 29 and 27 seconds of reserve. The backend supervisor stopped
+when it observed the candidate job below the 30-second floor.
+
+The first correction restored withdrawal and candidate to 50 and 57
+seconds of reserve. Analysis recovery and graph runtime finished with
+16 and 28 seconds, and final authorization finished with 31.
+
+Use the recovered withdrawal reserve for the complete release promotion
+and staged adapter files. Run firm administration with source publication
+and the two portfolio and graph handoff files with graph candidate.
+This layout passed all 13 checks, with 17 seconds of backend reserve and
+77 seconds of final authorization reserve. Move the complete retained
+release authorization and retention authorization readiness files from
+backend to final authorization.
+Preserve each case, the two-worker limit, all thirteen jobs, and all
+caps and reserve floors. Qualify the new placement on the PR and on main.
+
+The next final-authorization run completed all 103 cases and left
+two seconds of job reserve. Its selected fixtures used SQLite, while
+an unused PostgreSQL service took 11 seconds to start. Remove that
+service from final authorization and keep the dedicated PostgreSQL
+race job and its durability checks in place. Run the full feedback
+file in backend review and retained release authorization in publication
+planning. The measured trial restored final authorization to 58 seconds,
+while graph runtime and source publication left 25 and 28 seconds.
+Keep the retention readiness file intact in final authorization and move
+firm administration from source publication to graph candidate.
+The next run left 46 seconds in final authorization, 39 in graph
+runtime and 41 in source publication. Backend review fell to 17
+seconds. Run the complete feedback file in analysis recovery and
+return analysis adjudication to the backend core.
+Keep the original two-worker scheduler, case identities, time caps,
+and 30-second job reserve floor.
