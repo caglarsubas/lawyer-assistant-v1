@@ -11016,3 +11016,24 @@ Keep the bounded compile overlap, both preview partitions, all test
 identities, both test workers, all thirteen jobs and every deadline
 and reserve floor. Reconciliation still requires fresh exact PR and
 independent main qualification.
+
+## 318. Preserve frontend history reserve with two workers — 2026-11-06
+
+PR #286 passed all 13 checks and every reserve floor. Its backend
+job left 44 seconds of reserve. Main run 42197329989 restored
+PostgreSQL to 56 seconds, analysis recovery to 61 seconds and final
+authorization to 53 seconds. Frontend history took 271 seconds
+under its 300-second cap and missed the 30-second floor by one second.
+
+Return frontend history to its earlier scope. Move the same 18 intact
+portfolio cases to graph runtime, which left 69 seconds of reserve on
+that main run. The backend core, all test IDs, both workers, and every
+job and phase cap remain in force. Reconciliation follows an exact
+PR and independent main qualification.
+
+Run 42198810505 restored frontend history reserve to 47 seconds and
+kept 40 seconds in graph runtime. The core step passed but the enclosing
+backend job was cancelled at 1,157 seconds. Move 99 intact cases from
+the core into the existing review, analysis, snapshot and publication
+jobs using their measured reserve. Keep the two-worker limit, all
+assertions, every test ID, and the original caps and reserve floors.
