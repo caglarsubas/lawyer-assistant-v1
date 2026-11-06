@@ -14,21 +14,6 @@ env:
     backend/tests/test_recipient_observation_readiness.py
   CI_FINAL_AUTH_CAPACITY_TESTS: >-
     backend/tests/test_final_release_authorization.py
-  CI_RETENTION_AUTH_GRAPH_CASES: >-
-    backend/tests/test_retention_authorization_readiness.py::test_namespace_and_key_registry_races_withhold_accepted_metadata
-    backend/tests/test_retention_authorization_readiness.py::test_explicit_entries_versions_and_closed_operations_reject_request_provisioning
-    backend/tests/test_retention_authorization_readiness.py::test_real_source_and_destination_session_revocations_withhold_proofs
-    backend/tests/test_retention_authorization_readiness.py::test_staging_links_modes_size_and_inventory_limits_preserve_unexpected_bytes
-    backend/tests/test_retention_authorization_readiness.py::test_valid_signatures_cannot_promote_self_review_wrong_purpose_or_custody
-    backend/tests/test_retention_authorization_readiness.py::test_independent_key_roles_revocation_expiry_and_scope_are_mandatory
-  CI_RETENTION_AUTH_FINAL_CASES: >-
-    backend/tests/test_retention_authorization_readiness.py::test_independent_signed_versions_reopen_exactly_without_writes_or_new_authority
-    backend/tests/test_retention_authorization_readiness.py::test_expired_inputs_new_sessions_and_revoked_preparers_never_renew_review
-    backend/tests/test_retention_authorization_readiness.py::test_authentication_precedes_registry_namespace_and_proof_reads
-    backend/tests/test_retention_authorization_readiness.py::test_tampered_signature_and_exact_hash_mismatch_are_not_repaired
-    backend/tests/test_retention_authorization_readiness.py::test_negative_reviews_remain_negative_without_source_decryption
-    backend/tests/test_retention_authorization_readiness.py::test_provenance_version_and_proof_root_are_bound_to_the_review
-    backend/tests/test_retention_authorization_readiness.py::test_budget_and_unavailable_mandatory_checks_withhold_all_metadata
   CI_METADATA_CAPACITY_TESTS: >-
     backend/tests/test_analysis_cohorts.py
     backend/tests/test_verification_reference_readiness.py
@@ -103,6 +88,7 @@ env:
   CI_FINAL_RELEASE_TESTS: >-
     backend/tests/test_runtime_authorization_integration.py
     backend/tests/test_retained_mixed_assembly.py
+    backend/tests/test_retention_authorization_readiness.py
   CI_RECOVERY_QUALIFICATION_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_copy_recovery_disposition.py
@@ -147,6 +133,7 @@ env:
   CI_CORE_RESERVE_CANDIDATE: >-
     backend/tests/test_decision_graph_handoff.py
     backend/tests/test_portfolio.py
+    backend/tests/test_firm_admin.py
   CI_CORE_RESERVE_PLANNING: >-
     backend/tests/test_calibration_study_cli.py
     backend/tests/test_retained_release_authorization.py
@@ -156,7 +143,6 @@ env:
     backend/tests/test_source_relationships.py
   CI_CORE_RESERVE_SOURCE: >-
     backend/tests/test_analysis_context_budget.py
-    backend/tests/test_firm_admin.py
 
 jobs:
   backend-and-contracts:
@@ -291,8 +277,7 @@ jobs:
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
           read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"
           read -r -a reserve_tests <<< "$(printf '%s ' "$CI_CORE_RESERVE_CAPACITY" "$CI_CORE_RESERVE_CANDIDATE" "$CI_CORE_RESERVE_PLANNING" "$CI_CORE_RESERVE_REVIEW" "$CI_CORE_RESERVE_POSTGRES" "$CI_CORE_RESERVE_SOURCE")"
-          read -r -a retention_auth_cases <<< "$CI_RETENTION_AUTH_GRAPH_CASES"
-          ignore_args=("--ignore=${retention_auth_cases[0]%%::*}")
+          ignore_args=()
           for path in "${reserve_tests[@]}" "${inventory_review_tests[@]}" "${authority_trial_tests[@]}" "${preview_tests[@]}" "${history_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${postgres_source_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${human_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}" "${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}"; do
             if [[ "$path" != "${preview_tests[0]}" ]]; then
               ignore_args+=("--ignore=$path")
@@ -587,8 +572,7 @@ jobs:
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          read -r -a retention_auth_cases <<< "$CI_RETENTION_AUTH_FINAL_CASES"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=final "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=final "${metadata_capacity_tests[@]}" "${retention_auth_cases[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=final "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=final "${metadata_capacity_tests[@]}"
 
   retained-release-withdrawal:
     needs: backend-capacity
@@ -698,7 +682,7 @@ jobs:
   graph-runtime-contracts:
     needs: backend-capacity
     # The 3907-case backend lane exhausted its unchanged 18-minute deadline.
-    # Run the complete graph files and a measured set of retention-readiness cases.
+    # Run the four complete graph files exactly once in a separate bounded lane.
     # Keep all existing job/step caps, native ARM and exactly two workers.
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 6
@@ -725,8 +709,7 @@ jobs:
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
-          read -r -a retention_auth_cases <<< "$CI_RETENTION_AUTH_GRAPH_CASES"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${retention_auth_cases[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}" -p scripts.ci_recipient_affinity --fixture-affinity-lane=graph -p scripts.ci_preview_package_capacity --preview-package-lane=graph "${preview_package_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}" -p scripts.ci_recipient_affinity --fixture-affinity-lane=graph -p scripts.ci_preview_package_capacity --preview-package-lane=graph "${preview_package_tests[@]}"
 
 
       # The main graph pair has exited. Preserve the exact frozen history

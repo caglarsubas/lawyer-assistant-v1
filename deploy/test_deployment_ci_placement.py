@@ -1,6 +1,5 @@
 """Keep complete contract discovery exactly once within existing CI resources."""
 
-import ast
 import os
 import re
 import shutil
@@ -189,8 +188,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("-p scripts.ci_recipient_affinity --fixture-affinity-lane=graph", graph)
         capacity_group = re.search(r"  CI_BACKEND_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(workflow.count("backend/tests/test_firm_admin.py"), 1)
-        source_reserve = re.search(r"  CI_CORE_RESERVE_SOURCE: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertIn("backend/tests/test_firm_admin.py", source_reserve)
+        candidate_reserve = re.search(r"  CI_CORE_RESERVE_CANDIDATE: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertIn("backend/tests/test_firm_admin.py", candidate_reserve)
         self.assertEqual(workflow.count("backend/tests/test_authority_proposals.py"), 1)
         retention_group = re.search(r"  CI_RECEIPT_RETENTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(retention_group.split(), ["backend/tests/test_private_inventory_receipts.py"])
@@ -402,26 +401,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
         self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py",
-            "backend/tests/test_retained_mixed_assembly.py"])
+            "backend/tests/test_retained_mixed_assembly.py",
+            "backend/tests/test_retention_authorization_readiness.py"])
         planning_reserve = re.search(r"  CI_CORE_RESERVE_PLANNING: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("backend/tests/test_retained_release_authorization.py", planning_reserve)
         self.assertEqual(workflow.count("backend/tests/test_retained_release_authorization.py"), 1)
-        source = "backend/tests/test_retention_authorization_readiness.py"
-        tests = [node for node in ast.parse((ROOT / source).read_text()).body
-                 if isinstance(node, ast.FunctionDef) and node.name.startswith("test_")]
-        self.assertEqual(len(tests), 13)
-        self.assertFalse(any(node.decorator_list for node in tests))
-        selected = []
-        for lane, block, count in (("GRAPH", graph, 6), ("FINAL", final, 7)):
-            key = f"CI_RETENTION_AUTH_{lane}_CASES"
-            cases = re.search(rf"  {key}: >-\n((?:    [^\n]+\n)+)", workflow)[1].split()
-            self.assertEqual(len(cases), count)
-            self.assertIn(f'read -r -a retention_auth_cases <<< "${key}"', block)
-            self.assertIn('"${retention_auth_cases[@]}"', block)
-            selected.extend(cases)
-        self.assertCountEqual(selected, [f"{source}::{node.name}" for node in tests])
-        self.assertIn('read -r -a retention_auth_cases <<< "$CI_RETENTION_AUTH_GRAPH_CASES"', backend)
-        self.assertIn('ignore_args=("--ignore=${retention_auth_cases[0]%%::*}")', backend)
+        self.assertEqual(workflow.count("backend/tests/test_retention_authorization_readiness.py"), 1)
         self.assertEqual(frontend_group.split()[-2:], ["backend/tests/test_retained_release_inspection.py", "backend/tests/test_analysis_reviews.py"])
         self.assertEqual(workflow.count("backend/tests/test_retained_release_inspection.py"), 1)
         self.assertEqual(capacity_group.split(), ["backend/tests/test_journal_backup_readiness.py",

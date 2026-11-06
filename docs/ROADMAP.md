@@ -11133,8 +11133,9 @@ an unused PostgreSQL service took 11 seconds to start. Remove that
 service from final authorization and keep the dedicated PostgreSQL
 race job and its durability checks in place. Run the full feedback
 file in backend review and retained release authorization in publication
-planning. Split the 13 retention readiness cases between graph runtime
-and final authorization by exact test ID. The placement contract checks
-that their union covers every case exactly once.
+planning. The measured trial restored final authorization to 58 seconds,
+while graph runtime and source publication left 25 and 28 seconds.
+Keep the retention readiness file intact in final authorization and move
+firm administration from source publication to graph candidate.
 Keep the original two-worker scheduler, case identities, time caps,
 and 30-second job reserve floor.
