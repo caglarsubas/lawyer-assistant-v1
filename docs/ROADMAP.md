@@ -11113,8 +11113,13 @@ main run 42221635371 passed the withdrawal and graph-candidate tests
 with 29 and 27 seconds of reserve. The backend supervisor stopped
 when it observed the candidate job below the 30-second floor.
 
-Return the complete firm administration, retained authorization and
-release promotion files to the backend core. Run the complete staged
-receipt adapter file in the existing final authorization job. Preserve
-each case, the two-worker limit, all thirteen jobs, and all caps and
-reserve floors. Qualify the new placement on the PR and on main.
+The first correction restored withdrawal and candidate to 50 and 57
+seconds of reserve. Analysis recovery and graph runtime finished with
+16 and 28 seconds, and final authorization finished with 31.
+
+Use the recovered withdrawal reserve for the complete release promotion
+and staged adapter files. Run firm administration with source publication
+and the two portfolio and graph handoff files with graph candidate.
+Return both authorization readiness files to the backend core.
+Preserve each case, the two-worker limit, all thirteen jobs, and all
+caps and reserve floors. Qualify the new placement on the PR and on main.
