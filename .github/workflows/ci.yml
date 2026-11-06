@@ -31,8 +31,6 @@ env:
     backend/tests/test_source_review_effort.py
   CI_RECOVERY_INVENTORY_TESTS: >-
     backend/tests/test_recovery_review_inventory.py
-  CI_POSTGRES_ADDITIONAL_TESTS: >-
-    backend/tests/test_release_snapshot.py
   CI_POSTGRES_SOURCE_TESTS: >-
     backend/tests/test_ci_authority_trials.py
   CI_HISTORY_BINDING_TESTS: >-
@@ -96,7 +94,6 @@ env:
     backend/tests/test_copy_recovery_disposition.py
     backend/tests/test_journal_copy_reconciliation.py
     backend/tests/test_disposition_receipt_reobservation_races.py
-    backend/tests/test_disposition_receipt_reobservation_boundary.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
   # A dedicated bounded job holds complete publication/planning files.
   # Keep remaining graph files complete and the lighter Graph B snapshot in backend.
@@ -111,7 +108,6 @@ env:
   CI_AUTHORITY_COHORT_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
   CI_BACKEND_REVIEW_TESTS: >-
-    backend/tests/test_recipient_receipt_retention.py
     backend/tests/test_cold_controller_recovery.py
     backend/tests/test_ci_reserve_guard.py
     backend/tests/test_native_preview_restart.py
@@ -133,18 +129,10 @@ env:
     backend/tests/test_source_context_navigation.py
   CI_CORE_RESERVE_CAPACITY: >-
     backend/tests/test_workspace.py
-  CI_CORE_RESERVE_FRONTEND: >-
-    backend/tests/test_practice.py
   CI_CORE_RESERVE_FRONTEND_HISTORY: >-
     backend/tests/test_portfolio.py
-  CI_CORE_RESERVE_POSTGRES: >-
-    backend/tests/test_mixed_graph_snapshot.py
-  CI_CORE_RESERVE_FINAL: >-
-    backend/tests/test_open_ended_validity.py
   CI_CORE_RESERVE_GRAPH: >-
     backend/tests/test_decision_graph_handoff.py
-  CI_CORE_RESERVE_ANALYSIS: >-
-    backend/tests/test_operator_inventory_handoff.py
   CI_CORE_RESERVE_PLANNING: >-
     backend/tests/test_calibration_study_cli.py
   CI_CORE_RESERVE_CANDIDATE: >-
@@ -266,7 +254,6 @@ jobs:
           read -r -a fast_guard_tests <<< "$CI_FAST_GUARD_TESTS"
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           read -r -a postgres_source_tests <<< "$CI_POSTGRES_SOURCE_TESTS"
-          read -r -a postgres_additional_tests <<< "$CI_POSTGRES_ADDITIONAL_TESTS"
           read -r -a capacity_tests <<< "$CI_BACKEND_CAPACITY_TESTS"
           read -r -a preflight_tests <<< "$CI_ONTOLOGY_PREFLIGHT_TESTS"
           read -r -a publication_tests <<< "$CI_PUBLICATION_TESTS"
@@ -285,9 +272,9 @@ jobs:
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
           read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"
-          read -r -a reserve_tests <<< "$(printf '%s ' "$CI_CORE_RESERVE_CAPACITY" "$CI_CORE_RESERVE_FRONTEND" "$CI_CORE_RESERVE_FRONTEND_HISTORY" "$CI_CORE_RESERVE_POSTGRES" "$CI_CORE_RESERVE_FINAL" "$CI_CORE_RESERVE_GRAPH" "$CI_CORE_RESERVE_ANALYSIS" "$CI_CORE_RESERVE_PLANNING" "$CI_CORE_RESERVE_CANDIDATE" "$CI_CORE_RESERVE_WITHDRAWAL")"
+          read -r -a reserve_tests <<< "$(printf '%s ' "$CI_CORE_RESERVE_CAPACITY" "$CI_CORE_RESERVE_FRONTEND_HISTORY" "$CI_CORE_RESERVE_GRAPH" "$CI_CORE_RESERVE_PLANNING" "$CI_CORE_RESERVE_CANDIDATE" "$CI_CORE_RESERVE_WITHDRAWAL")"
           ignore_args=()
-          for path in "${reserve_tests[@]}" "${inventory_review_tests[@]}" "${authority_trial_tests[@]}" "${preview_tests[@]}" "${history_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${postgres_source_tests[@]}" "${postgres_additional_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${human_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}" "${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}"; do
+          for path in "${reserve_tests[@]}" "${inventory_review_tests[@]}" "${authority_trial_tests[@]}" "${preview_tests[@]}" "${history_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${postgres_source_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${human_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}" "${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}"; do
             if [[ "$path" != "${preview_tests[0]}" ]]; then
               ignore_args+=("--ignore=$path")
             fi
@@ -419,7 +406,6 @@ jobs:
         # Keep all 95 cases, two workers, real row-lock races and the five-minute
         # cap. Temporary storage changes no PostgreSQL durability settings.
         run: |
-          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_POSTGRES"
           backend/.venv/bin/python - <<'PYSQL'
           import os, platform, ssl, psycopg
           assert platform.machine() in {'aarch64', 'arm64'}, platform.machine()
@@ -432,11 +418,10 @@ jobs:
           PYSQL
           read -r -a runtime_tests <<< "$CI_RUNTIME_AUTHORIZATION_TESTS"
           read -r -a postgres_source_tests <<< "$CI_POSTGRES_SOURCE_TESTS"
-          read -r -a postgres_additional_tests <<< "$CI_POSTGRES_ADDITIONAL_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           read -r -a inventory_review_tests <<< "$CI_RECOVERY_INVENTORY_TESTS"
           export PYTHONPATH="$GITHUB_WORKSPACE"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_additional_tests[@]}" "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=database "${metadata_capacity_tests[@]}" "${reserve_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=database "${metadata_capacity_tests[@]}"
 
 
 
@@ -497,11 +482,10 @@ jobs:
       - name: Test complete portfolio review qualification
         timeout-minutes: 2
         run: |
-          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_FRONTEND"
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a frontend_review_tests <<< "$CI_FRONTEND_REVIEW_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" "${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend "${metadata_capacity_tests[@]}" "${reserve_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" "${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend "${metadata_capacity_tests[@]}"
 
   frontend-history:
     needs: backend-capacity
@@ -595,12 +579,11 @@ jobs:
         env:
           LA_TEST_POSTGRES_URL: postgresql+psycopg://snapshot_test:disposable-ci-snapshot-only@127.0.0.1:${{ job.services.postgres.ports['5432'] }}/lawyer_snapshot_test
         run: |
-          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_FINAL"
           read -r -a final_release_tests <<< "$CI_FINAL_RELEASE_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=final "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=final "${metadata_capacity_tests[@]}" "${reserve_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=final "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=final "${metadata_capacity_tests[@]}"
 
   retained-release-withdrawal:
     needs: backend-capacity
@@ -778,10 +761,9 @@ jobs:
       - name: Test complete analysis and recovery qualification
         timeout-minutes: 6
         run: |
-          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_ANALYSIS"
           read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
           read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${recovery_qualification_tests[@]}" "${human_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_recipient_affinity --fixture-affinity-lane=analysis "${reserve_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${recovery_qualification_tests[@]}" "${human_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_recipient_affinity --fixture-affinity-lane=analysis
 
       - name: Test manifest-bound review headroom slice 10
         timeout-minutes: 1
