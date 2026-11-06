@@ -11037,3 +11037,37 @@ backend job was cancelled at 1,157 seconds. Move 99 intact cases from
 the core into the existing review, analysis, snapshot and publication
 jobs using their measured reserve. Keep the two-worker limit, all
 assertions, every test ID, and the original caps and reserve floors.
+
+PR #287 and the independent main run 42204964572 passed all 13 checks.
+The main backend took 1,077 seconds and left 63 seconds of reserve.
+The tightest job left 34 seconds against the 30-second floor. The
+first main attempt stopped after an action-download timeout. The retry
+re-executed the two affected jobs and carried forward eleven completed
+jobs. Exact execution receipts cover the preserved cases and all
+1,018 deployment contract IDs.
+
+## 319. Read-only reconciliation of interrupted recipient retention — 2026-11-06
+
+A disposable recipient operator can reconcile one exact staged and
+final filename using a fresh custody signature. The signature binds the
+original signed permission, the selected staging identifier, the expected
+file state and ciphertext digest, and a validity window of up to 60 seconds.
+The reviewer session, both original signatures, reviewed receipt, and
+fresh predecessor plan must all verify.
+
+The adapter reports absence of the selected pair, a staged-only file, a
+final-only file, or an exact two-link pair. It checks owner-only file
+permissions, inode identity, and authenticated ciphertext against the
+original receipt and permission. It repeats the file observation after
+checking the current predecessor and withholds results for changes,
+unexpected links, invalid custody, or incompatible evidence. The response
+contains only bounded observation metadata. The operation leaves both
+names, ciphertext, evidence, and review history in place. An observation
+of absence applies only to the selected pair.
+
+The two existing regression cases exercise an interrupted hard-link
+publication, a cold read, denial for stale review context, and invalid
+filesystem states. The worker limit, CI assignments, caps, and reserve
+floors stay in force. Separately authorized operator qualification and
+production deployment remain pending, as does the owner's private
+analysis review.

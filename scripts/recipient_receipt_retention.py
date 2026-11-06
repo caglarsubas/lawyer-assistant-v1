@@ -1,7 +1,9 @@
 """Exclusive disposable retention of an independently reviewed recipient receipt."""
 
+import os
 import secrets
 import sqlite3
+import stat
 import time
 from dataclasses import asdict, dataclass, field
 
@@ -18,6 +20,7 @@ from sqlalchemy.exc import SQLAlchemyError
 SCHEMA = "disposable-recipient-receipt-retention-v1"
 PLAN_READY = "ready_for_disposable_recipient_retention_planning"
 BUDGET_SECONDS = 16
+RECONCILIATION_WINDOW_SECONDS = 60
 FAILURES = (ValueError, TypeError, KeyError, InvalidSignature, InvalidTag, OSError,
             sqlite3.Error, SQLAlchemyError)
 
@@ -52,6 +55,78 @@ class ReopenPin:
                          "issued_at": self.issued_at, "expires_at": self.expires_at})
 
 
+@dataclass(frozen=True, kw_only=True)
+class ReconciliationPin:
+    stage_id: str = field(repr=False)
+    state: str
+    ciphertext_sha256: str | None
+    issued_at: int
+    expires_at: int
+    signature: str = field(repr=False)
+
+    def message(self, permission, key_id):
+        claims = asdict(self)
+        del claims["signature"]
+        return e.encode({"schema": SCHEMA, "action": "reconcile",
+                         "permission_sha256": e.sha(e.encode(asdict(permission))),
+                         "key_id": key_id, "claims": claims})
+
+
+@dataclass(frozen=True)
+class _FileVersion:
+    identity: tuple
+    links: int
+
+
+def _named_version(directory, name):
+    try:
+        info = os.stat(name, dir_fd=directory, follow_symlinks=False)
+    except FileNotFoundError:
+        return None
+    return _file_version(info)
+
+
+def _file_version(info):
+    if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o600
+            or not len(storage.MAGIC) + 28 < info.st_size <= storage.MAX_FILE):
+        e.reject()
+    identity = (info.st_dev, info.st_ino, info.st_mode, info.st_uid, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+    return _FileVersion(identity, info.st_nlink)
+
+
+def _observe_retention(store, record_id, pin):
+    names = (".pending-" + e.token(pin.stage_id, 32), e.token(record_id, 32) + ".receipt")
+    directory = storage._directory(store)
+    try:
+        versions = tuple(_named_version(directory, name) for name in names)
+        staged, final = versions
+        state = {(False, False): "absent", (True, False): "staged_only",
+                 (False, True): "final_only", (True, True): "linked"}[(staged is not None, final is not None)]
+        if state != pin.state:
+            e.reject()
+        selected = staged or final
+        raw = None
+        if selected is not None:
+            if selected.links != (2 if state == "linked" else 1) or (state == "linked" and staged != final):
+                e.reject()
+            name = names[0] if staged is not None else names[1]
+            flags = os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC | getattr(os, "O_NOATIME", 0)
+            with os.fdopen(os.open(name, flags, dir_fd=directory), "rb") as stream:
+                info = os.fstat(stream.fileno())
+                if _file_version(info) != selected:
+                    e.reject()
+                raw = stream.read(storage.MAX_FILE + 1)
+                if (len(raw) != info.st_size or _file_version(os.fstat(stream.fileno())) != selected
+                        or not raw.startswith(storage.MAGIC) or e.sha(raw) != pin.ciphertext_sha256):
+                    e.reject()
+        if versions != tuple(_named_version(directory, name) for name in names):
+            e.reject()
+        storage._root(store)
+        return versions, raw
+    finally:
+        os.close(directory)
+
+
 def store_binding(store):
     return e.sha(e.encode({"schema": SCHEMA, "context_id": store.context_id, "scope_sha256": store.scope_sha256,
                            "directory_identity": store.identity, "key_sha256": e.sha(store.key)}))
@@ -71,11 +146,13 @@ class RecipientReceiptRetention:
     issuer: KeyPin
     custodian: KeyPin
     reopen_pin: ReopenPin | None = None
+    reconciliation_pin: ReconciliationPin | None = None
 
     def __post_init__(self):
         if (type(self.observation) is not RecipientObservation or type(self.store) is not storage.ReceiptStore
                 or type(self.permission) is not Permission
-                or (self.reopen_pin is not None and type(self.reopen_pin) is not ReopenPin)):
+                or (self.reopen_pin is not None and type(self.reopen_pin) is not ReopenPin)
+                or (self.reconciliation_pin is not None and type(self.reconciliation_pin) is not ReconciliationPin)):
             e.reject()
         o, parent = self.observation, self.observation.source
         references = parent.source.references
@@ -108,7 +185,7 @@ class RecipientReceiptRetention:
         if self.permission.store_sha256 != store_binding(self.store):
             e.reject()
 
-    def _authorize(self, planner, scope, actor, *, reopen):
+    def _authorize(self, planner, scope, actor, operation):
         now, permit = planner.clock(), self.permission
         planner.authority.recheck(actor, now=now)
         if planner.actor(scope, "reviewer") != actor:
@@ -119,9 +196,24 @@ class RecipientReceiptRetention:
                permit.issued_at, permit.expires_at, now)
         verify(self.custodian, permit.custodian_signature, permit.message("custodian", self.custodian.key_id),
                permit.issued_at, permit.expires_at, now)
-        if reopen:
+        if operation == "reopen":
             pin = self.reopen_pin
             if pin is None or not permit.issued_at <= e.stamp(pin.issued_at) < e.stamp(pin.expires_at) <= permit.expires_at:
+                e.reject()
+            verify(self.custodian, pin.signature, pin.message(permit, self.custodian.key_id),
+                   pin.issued_at, pin.expires_at, now)
+        if operation == "reconcile":
+            pin = self.reconciliation_pin
+            if pin is None or not permit.issued_at <= e.stamp(pin.issued_at) < e.stamp(pin.expires_at) <= min(
+                    permit.expires_at, pin.issued_at + RECONCILIATION_WINDOW_SECONDS):
+                e.reject()
+            e.token(pin.stage_id, 32)
+            if pin.state == "absent":
+                if pin.ciphertext_sha256 is not None:
+                    e.reject()
+            elif pin.state in ("staged_only", "final_only", "linked"):
+                e.token(pin.ciphertext_sha256)
+            else:
                 e.reject()
             verify(self.custodian, pin.signature, pin.message(permit, self.custodian.key_id),
                    pin.issued_at, pin.expires_at, now)
@@ -135,12 +227,13 @@ class RecipientReceiptRetention:
         try:
             actor = planner.actor(scope, "reviewer")
             reopen = operation == "reopen"
+            reconcile = operation == "reconcile"
             fields = {"record_id", "ciphertext_sha256"} if reopen else {"record_id"}
-            if (operation not in {"retain", "reopen"} or set(request) != fields
+            if (operation not in {"retain", "reopen", "reconcile"} or set(request) != fields
                     or e.token(request["record_id"], 32) != permit.record_id):
                 e.reject()
             record_id = permit.record_id
-            now = self._authorize(planner, scope, actor, reopen=reopen)
+            now = self._authorize(planner, scope, actor, operation)
             spec, proof = o.specifications[permit.receipt_id], o.reviews[permit.receipt_id]
             aad = e.encode({"schema": SCHEMA, "record_id": record_id, "store_sha256": permit.store_sha256})
             with o.admission():
@@ -149,11 +242,18 @@ class RecipientReceiptRetention:
             if decision["decision"] != "accept" or permit.issued_at < decision["reviewed_at"]:
                 e.reject()
             plain = e.encode({"schema": SCHEMA, "receipt": receipt, "permission": asdict(permit)})
+            raw = None
             if reopen:
                 digest = e.token(request["ciphertext_sha256"])
                 if digest != self.reopen_pin.ciphertext_sha256:
                     e.reject()
                 raw = storage._read(self.store, record_id, digest)
+            elif reconcile:
+                pin = self.reconciliation_pin
+                observed = _observe_retention(self.store, record_id, pin)
+                raw = observed[1]
+                digest = pin.ciphertext_sha256
+            if raw is not None:
                 offset = len(storage.MAGIC)
                 if AESGCM(self.store.key).decrypt(raw[offset:offset + 12], raw[offset + 12:], aad) != plain:
                     e.reject()
@@ -169,7 +269,7 @@ class RecipientReceiptRetention:
                     or permit.expires_at > plan["expires_at"]):
                 e.reject()
             with o.admission():
-                if not reopen:
+                if operation == "retain":
                     nonce = secrets.token_bytes(12)
                     raw = storage.MAGIC + nonce + AESGCM(self.store.key).encrypt(nonce, plain, aad)
                     digest = e.sha(raw)
@@ -177,19 +277,25 @@ class RecipientReceiptRetention:
                     e.reject()
                 if reopen and storage._read(self.store, record_id, digest) != raw:
                     e.reject()
-                now = self._authorize(planner, scope, actor, reopen=reopen)
+                if reconcile and _observe_retention(self.store, record_id, pin) != observed:
+                    e.reject()
+                now = self._authorize(planner, scope, actor, operation)
                 if o.read(spec, proof, actor, now)[3] != raws:
                     e.reject()
                 o.budget(deadline)
-                if not reopen:
+                if operation == "retain":
                     storage._publish(self.store, record_id, raw)
                     published = True
                     if before != (o.observe(), o.source.observe()):
                         e.reject()
-                    now = self._authorize(planner, scope, actor, reopen=False)
+                    now = self._authorize(planner, scope, actor, operation)
                     if o.read(spec, proof, actor, now)[3] != raws:
                         e.reject()
                     o.budget(deadline)
+            if reconcile:
+                return result("recipient_retention_reconciled", schema=SCHEMA, read_only=True,
+                              reconciliation=pin.state, record_id=record_id, ciphertext_sha256=digest,
+                              receipt_sha256=proof.receipt_sha256, expires_at=pin.expires_at)
             return result("recipient_receipt_reopened" if reopen else "recipient_receipt_retained", schema=SCHEMA,
                           read_only=reopen, record_id=record_id, ciphertext_sha256=digest, receipt_sha256=proof.receipt_sha256,
                           expires_at=self.reopen_pin.expires_at if reopen else permit.expires_at)
