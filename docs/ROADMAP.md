@@ -10931,3 +10931,12 @@ Next, qualify read-only reconciliation of interrupted or unacknowledged
 recipient retention with a freshly signed custody observation. The private
 analysis review, production operator provisioning, and deployment remain
 pending. Delivery and milestone readiness are tracked separately.
+
+The first PR run exposed two CI issues. The placement contract still expected
+the previous review file list. The graph candidate job passed its 326 cases
+with 28 seconds of reserve against a 30-second floor. The revised placement
+adds the new review file to the closed contract and moves the complete
+50-case analysis feedback file to the existing final authorization job.
+Candidate scheduling starts the heavy graph file across both workers with
+bounded single-test dispatch. Qualification requires fresh results on the
+revised PR commit and on main.

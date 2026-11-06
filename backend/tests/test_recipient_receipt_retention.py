@@ -97,10 +97,8 @@ def test_cold_reopening_requires_current_review_and_independent_exact_custody(sh
     assert all(reopened[k] is None for k in ("recipient_receipt", "recipient_retention_plan", "evidence", "review"))
 
     # A freshly observed mismatch prevents even a valid ciphertext and custody pin from reopening.
-    current = cold_observation.current
-    def changed(spec, deadline):
-        return {**current(spec, deadline), "destination_observation_sha256": "f" * 64}
-    monkeypatch.setattr(cold_observation, "current", changed)
+    changed = {**e.decode(receipt)["acceptance"], "destination_observation_sha256": "f" * 64}
+    monkeypatch.setattr(cold_observation, "current", lambda spec, deadline: changed)
     assert cold.dispatch(scope, "reopen", **reopen_request)["state"] == "unverifiable"
     revoked = replace(cold, custodian=replace(cold.custodian, revoked=True))
     assert revoked.dispatch(scope, "reopen", **reopen_request)["state"] == "unverifiable"
