@@ -96,9 +96,43 @@ def test_cold_reopening_requires_current_review_and_independent_exact_custody(sh
         "retention_authorized", "atomic_snapshot", "genuine_acknowledgement_verified", "durability_qualified"})
     assert all(reopened[k] is None for k in ("recipient_receipt", "recipient_retention_plan", "evidence", "review"))
 
+    # A fresh signed observation can read both names left by interruption after linking.
+    stage_id = "9" * 32
+    staged = root / (".pending-" + stage_id)
+    os.link(path, staged)
+    pin = retention.ReconciliationPin(stage_id=stage_id, state="linked", ciphertext_sha256=digest,
+                                      issued_at=adapter.permission.issued_at,
+                                      expires_at=min(adapter.permission.expires_at, adapter.permission.issued_at + 60),
+                                      signature="")
+    request = {"record_id": record_id}
+    assert cold.dispatch(scope, "reconcile", **request)["state"] == "unverifiable"
+    pin = replace(pin, signature=custodian.sign(pin.message(adapter.permission, adapter.custodian.key_id)).hex())
+    reader = replace(cold, reconciliation_pin=pin)
+    assert reader.dispatch({}, "reconcile", **request)["state"] == "denied"
+    assert reader.dispatch(scope, "reconcile", **request, stage_id=stage_id)["state"] == "unverifiable"
+    for changed in (replace(pin, stage_id="8" * 32), replace(pin, signature=cold.reopen_pin.signature),
+                    replace(pin, expires_at=pin.issued_at)):
+        assert replace(cold, reconciliation_pin=changed).dispatch(scope, "reconcile", **request)["state"] == "unverifiable"
+    assert cold.dispatch(scope, "reopen", **reopen_request)["state"] == "unverifiable"
+    before = [(item.stat().st_ino, item.stat().st_nlink, item.stat().st_ctime_ns) for item in (path, staged)]
+    reconciled = reader.dispatch(scope, "reconcile", **request)
+    assert reconciled["state"] == "recipient_retention_reconciled" and reconciled["read_only"]
+    assert reconciled["reconciliation"] == "linked" and reconciled["expires_at"] == pin.expires_at
+    assert reconciled["ciphertext_sha256"] == digest and reconciled["receipt_sha256"] == e.sha(receipt)
+    assert all(not reconciled[k] for k in FLAGS | {
+        "retention_authorized", "atomic_snapshot", "genuine_acknowledgement_verified", "durability_qualified"})
+    assert all(reconciled[k] is None for k in ("recipient_receipt", "recipient_retention_plan", "evidence", "review"))
+    assert stage_id not in repr(reconciled) and str(root) not in repr(reconciled)
+    assert [item.read_bytes() for item in (path, staged)] == [raw, raw]
+    assert [(item.stat().st_ino, item.stat().st_nlink, item.stat().st_ctime_ns) for item in (path, staged)] == before
+    assert frame.protected() == protected
+
     # A freshly observed mismatch prevents even a valid ciphertext and custody pin from reopening.
     changed = {**e.decode(receipt)["acceptance"], "destination_observation_sha256": "f" * 64}
     monkeypatch.setattr(cold_observation, "current", lambda spec, deadline: changed)
+    assert reader.dispatch(scope, "reconcile", **request)["state"] == "unverifiable"
+    assert [(item.stat().st_ino, item.stat().st_nlink, item.stat().st_ctime_ns) for item in (path, staged)] == before
+    staged.unlink()
     assert cold.dispatch(scope, "reopen", **reopen_request)["state"] == "unverifiable"
     revoked = replace(cold, custodian=replace(cold.custodian, revoked=True))
     assert revoked.dispatch(scope, "reopen", **reopen_request)["state"] == "unverifiable"
@@ -137,3 +171,30 @@ def test_create_only_collision_and_postpublication_interruption(tmp_path, monkey
         storage._publish(store, uncertain, values[0])
     assert storage._read(store, uncertain, e.sha(values[0])) == values[0]
     assert sorted(p.name for p in root.iterdir()) == [record_id + ".receipt", uncertain + ".receipt"]
+
+    record_id, stage_id = "5" * 32, "6" * 32
+    staged, final = root / (".pending-" + stage_id), root / (record_id + ".receipt")
+    pin = retention.ReconciliationPin(stage_id=stage_id, state="absent", ciphertext_sha256=None,
+                                      issued_at=1, expires_at=2, signature="")
+    assert retention._observe_retention(store, record_id, pin) == ((None, None), None)
+    pin = replace(pin, state="staged_only", ciphertext_sha256=e.sha(values[0]))
+    staged.write_bytes(values[0])
+    staged.chmod(0o600)
+    assert retention._observe_retention(store, record_id, pin)[1] == values[0]
+    with pytest.raises(ValueError):
+        retention._observe_retention(store, record_id, replace(pin, ciphertext_sha256=e.sha(values[1])))
+    final.write_bytes(values[0])
+    final.chmod(0o600)
+    with pytest.raises(ValueError):
+        retention._observe_retention(store, record_id, replace(pin, state="linked"))
+    staged.unlink()
+    pin = replace(pin, state="final_only")
+    assert retention._observe_retention(store, record_id, pin)[1] == values[0]
+    alias = root / "unexpected-link"
+    os.link(final, alias)
+    with pytest.raises(ValueError):
+        retention._observe_retention(store, record_id, pin)
+    alias.unlink()
+    staged.symlink_to(final)
+    with pytest.raises(ValueError):
+        retention._observe_retention(store, record_id, replace(pin, state="linked"))
