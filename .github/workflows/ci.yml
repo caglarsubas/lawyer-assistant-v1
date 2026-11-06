@@ -108,6 +108,7 @@ env:
   CI_AUTHORITY_COHORT_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
   CI_BACKEND_REVIEW_TESTS: >-
+    backend/tests/test_recipient_receipt_retention.py
     backend/tests/test_cold_controller_recovery.py
     backend/tests/test_ci_reserve_guard.py
     backend/tests/test_native_preview_restart.py
