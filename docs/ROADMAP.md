@@ -10950,8 +10950,10 @@ suite. The ontology preflight used 31 seconds on one worker.
 
 Run the same complete ontology preflight before the core suite on two
 bounded workers. Move the intact snapshot and analysis suggestions test files to the
-existing PostgreSQL snapshot job, and the intact promotion file to the
-existing source publication job. Exclude all three from the core suite
+existing PostgreSQL snapshot job. Run the intact preview package in the
+existing source publication job. Keep all nine metadata handoff cases
+on one worker so the graph job builds their shared fixture once. Preserve
+one initial final-authorization case on each worker. Exclude all three from the core suite
 so each case runs exactly once. Preserve test sources, fixture manifests,
 preflight fail-fast behavior, job and phase deadlines, reserve floors and
 the two-worker ceiling.
@@ -10963,3 +10965,9 @@ The first PR run 42165607184 cut preflight from 31 to 17 seconds. The
 review job left 27 seconds of reserve and the supervisor stopped the
 backend suite. Restore the previous review scope and route the intact
 files using the revised placement above.
+
+The second run 42166635718 restored review reserve to 44 seconds and
+left 36 seconds in PostgreSQL. Graph runtime left 19 seconds, and the
+supervisor stopped the core suite. Its two workers each built the same
+metadata fixture in roughly 14 seconds. Bind those nine cases to one
+worker and use the adjusted source publication placement above.

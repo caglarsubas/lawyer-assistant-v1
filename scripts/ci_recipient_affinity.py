@@ -13,7 +13,11 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = "backend/tests/test_recipient_observation_readiness.py"
 PREFIX = "tests/test_recipient_observation_readiness.py::"
 MANIFEST = ROOT / "deploy/fixtures/recipient_ci_affinity.json"
-LANES = {"recipient": (SOURCE, 10), "analysis": ("backend/tests/test_destination_snapshot_verification.py", 25)}
+LANES = {
+    "recipient": (SOURCE, 10),
+    "analysis": ("backend/tests/test_destination_snapshot_verification.py", 25),
+    "graph": ("backend/tests/test_metadata_handoff_readiness.py", 9),
+}
 
 
 def unique(pairs):
@@ -56,6 +60,16 @@ def validate_collection(ids, expected):
 
 
 class RecipientScheduling(LoadScopeScheduling):
+    initial_cases = ()
+
+    def _assign_work_unit(self, node):
+        if not self.assigned_work[node]:
+            for nodeid in self.initial_cases:
+                if nodeid in self.workqueue:
+                    self.workqueue.move_to_end(nodeid, last=False)
+                    break
+        super()._assign_work_unit(node)
+
     def _split_scope(self, nodeid):
         prefix = getattr(self, "prefix", PREFIX)
         return prefix.removesuffix("::") if nodeid.startswith(prefix) else nodeid
@@ -77,6 +91,12 @@ class Affinity:
     def pytest_xdist_make_scheduler(self, config, log):
         scheduler = RecipientScheduling(config, log)
         scheduler.prefix = self.prefix
+        if self.value["lane"] == "graph":
+            from scripts.ci_final_auth_capacity import MOVED
+
+            # Give each worker its original initial authorization case before
+            # grouping the metadata fixture. The authorization plugin verifies both workers.
+            scheduler.initial_cases = MOVED
         return scheduler
 
     def pytest_runtest_logreport(self, report):
@@ -114,4 +134,4 @@ def pytest_configure(config):
         config.pluginmanager.register(Affinity(contract(lane=config.getoption("fixture_affinity_lane"))),
                                       "source-pinned-fixture-affinity")
     except (ValueError, OSError, TypeError, KeyError):
-        raise pytest.UsageError("Exact recipient fixture and pinned two-worker scheduling required") from None
+        raise pytest.UsageError("Exact fixture and pinned two-worker scheduling required") from None

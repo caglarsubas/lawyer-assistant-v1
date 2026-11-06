@@ -100,7 +100,6 @@ env:
   # A dedicated bounded job holds complete publication/planning files.
   # Keep remaining graph files complete and the lighter Graph B snapshot in backend.
   CI_GRAPH_RUNTIME_TESTS: >-
-    backend/tests/test_operator_preview_package.py
     backend/tests/test_metadata_handoff_readiness.py
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_declared_graph_assembly.py
@@ -124,7 +123,7 @@ env:
   CI_RECEIPT_RETENTION_TESTS: >-
     backend/tests/test_private_inventory_receipts.py
   CI_PUBLICATION_TESTS: >-
-    backend/tests/test_release_set_promotion.py
+    backend/tests/test_operator_preview_package.py
     backend/tests/test_temporal_validity.py
     backend/tests/test_authority_revalidations.py
     backend/tests/test_source_analysis_reviews.py
@@ -714,7 +713,7 @@ jobs:
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}" -p scripts.ci_recipient_affinity --fixture-affinity-lane=graph
 
 
       # The main graph pair has exited. Preserve the exact frozen history

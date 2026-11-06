@@ -47,6 +47,21 @@
         "tests/test_destination_snapshot_verification.py::test_unavailable_database_never_leaks_metadata_or_driver_details[destination]",
         "tests/test_destination_snapshot_verification.py::test_unavailable_database_never_leaks_metadata_or_driver_details[source]"
       ]
+    },
+    "graph": {
+      "source_path": "backend/tests/test_metadata_handoff_readiness.py",
+      "source_sha256": "50b48ff7e6cdabcddec61f6490e3868357b84ed894f77a4b1aa51a922e184f8f",
+      "test_ids": [
+        "tests/test_metadata_handoff_readiness.py::test_canonical_hash_only_package_and_fresh_acceptance_preserve_every_version",
+        "tests/test_metadata_handoff_readiness.py::test_exact_versions_host_pins_and_closed_operations_cannot_be_request_provisioned",
+        "tests/test_metadata_handoff_readiness.py::test_expired_source_session_and_revoked_recipient_are_rechecked",
+        "tests/test_metadata_handoff_readiness.py::test_expired_specification_and_budget_failure_do_not_extend_handoff_windows",
+        "tests/test_metadata_handoff_readiness.py::test_malformed_or_promoting_transport_fails_before_source_decryption",
+        "tests/test_metadata_handoff_readiness.py::test_manifest_and_destination_namespace_races_retain_unexpected_bytes",
+        "tests/test_metadata_handoff_readiness.py::test_missing_linked_staged_or_oversized_transport_is_never_adopted",
+        "tests/test_metadata_handoff_readiness.py::test_negative_review_and_tampered_signed_proof_withhold_all_metadata",
+        "tests/test_metadata_handoff_readiness.py::test_source_and_recipient_authentication_precede_lookup_and_file_reads"
+      ]
     }
   }
 }
