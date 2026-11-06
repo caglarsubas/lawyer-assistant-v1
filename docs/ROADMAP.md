@@ -11120,6 +11120,9 @@ seconds of reserve. Analysis recovery and graph runtime finished with
 Use the recovered withdrawal reserve for the complete release promotion
 and staged adapter files. Run firm administration with source publication
 and the two portfolio and graph handoff files with graph candidate.
-Return both authorization readiness files to the backend core.
+This layout passed all 13 checks, with 17 seconds of backend reserve and
+77 seconds of final authorization reserve. Move the complete retained
+release authorization and retention authorization readiness files from
+backend to final authorization.
 Preserve each case, the two-worker limit, all thirteen jobs, and all
 caps and reserve floors. Qualify the new placement on the PR and on main.

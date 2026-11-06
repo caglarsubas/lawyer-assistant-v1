@@ -187,9 +187,6 @@ class DeploymentPlacementContract(unittest.TestCase):
         publication_group = re.search(r"  CI_PUBLICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("-p scripts.ci_recipient_affinity --fixture-affinity-lane=graph", graph)
         capacity_group = re.search(r"  CI_BACKEND_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        for path in ("test_retained_release_authorization.py", "test_retention_authorization_readiness.py"):
-            self.assertTrue((ROOT / "backend/tests" / path).is_file())
-            self.assertNotIn("backend/tests/" + path, workflow)
         self.assertEqual(workflow.count("backend/tests/test_firm_admin.py"), 1)
         source_reserve = re.search(r"  CI_CORE_RESERVE_SOURCE: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("backend/tests/test_firm_admin.py", source_reserve)
@@ -399,7 +396,11 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(capacity_group.split()[0], "backend/tests/test_journal_backup_readiness.py")
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
         self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py",
-            "backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_analysis_feedback.py"])
+            "backend/tests/test_retained_mixed_assembly.py", "backend/tests/test_analysis_feedback.py",
+            "backend/tests/test_retained_release_authorization.py",
+            "backend/tests/test_retention_authorization_readiness.py"])
+        for path in release_group.split()[-2:]:
+            self.assertEqual(workflow.count(path), 1)
         self.assertEqual(frontend_group.split()[-2:], ["backend/tests/test_retained_release_inspection.py", "backend/tests/test_analysis_reviews.py"])
         self.assertEqual(release_group.split()[:2], ["backend/tests/test_runtime_authorization_integration.py", "backend/tests/test_retained_mixed_assembly.py"])
         self.assertEqual(workflow.count("backend/tests/test_retained_release_inspection.py"), 1)
