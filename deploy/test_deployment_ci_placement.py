@@ -242,11 +242,13 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("backend/tests/test_source_reviews.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
         self.assertEqual(final_group.split(), ["backend/tests/test_host_reconciliation_authority.py",
+            "backend/tests/test_host_reconciliation_trust.py",
             "backend/tests/test_cold_controller_recovery.py",
             "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py",
             "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py",
             "backend/tests/test_journal_materialization.py"])
         self.assertEqual(workflow.count("backend/tests/test_host_reconciliation_authority.py"), 1)
+        self.assertEqual(workflow.count("backend/tests/test_host_reconciliation_trust.py"), 1)
         self.assertIn("backend/tests/test_analysis_focus.py", workflow)
         self.assertEqual(workflow.count("backend/tests/test_analysis_reviews.py"), 1)
         self.assertNotIn("backend/tests/test_source_reviews.py", group)

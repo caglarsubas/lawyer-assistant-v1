@@ -110,6 +110,7 @@ env:
     backend/tests/test_authority_model_cohorts.py
   CI_BACKEND_REVIEW_TESTS: >-
     backend/tests/test_host_reconciliation_authority.py
+    backend/tests/test_host_reconciliation_trust.py
     backend/tests/test_cold_controller_recovery.py
     backend/tests/test_ci_reserve_guard.py
     backend/tests/test_native_preview_restart.py

@@ -2416,3 +2416,16 @@ The gate is unregistered and performs no receipt operations. Supply a separately
 reviewed current trust/enrollment resolver and recipient-observation integration
 before operational qualification. Preserve the original disposable authority
 restrictions and keep directory restore/rebinding and genuine custody separate.
+
+## Signed host trust resolution — 2026-11-07
+
+Use the [signed resolver contract](HOST_RECONCILIATION_TRUST.md) to qualify
+registry/enrollment evidence with three independently pinned public authorities
+and fresh before/after checkpoint challenges. The fixed authorization window
+cannot be renewed by a new challenge. A process-local fence retains observed
+revocation/context changes and retires conflicting same-version state.
+
+The resolver has no IO, signing, provisioning or receipt operation. Genuine
+fingerprint provenance, authoritative current-state/root administration,
+durable continuity and the eventual recipient bridge remain open. Preserve
+the owner's pending private analysis review and all original evidence versions.

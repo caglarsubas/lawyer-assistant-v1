@@ -44,6 +44,11 @@ revoked, expired or otherwise unverified context. The gate checks the supplied
 binding's types, identifiers and validity; a genuine registry integration is
 still a separate implementation and qualification requirement.
 
+The [signed current-trust resolver](HOST_RECONCILIATION_TRUST.md) now verifies
+registry/enrollment proofs against three pinned public authorities and fresh
+checkpoint challenges. It remains an unregistered, isolated verifier; genuine
+authority administration and independent fingerprint provisioning remain open.
+
 `authorize(scope, body)` returns a private, process-local snapshot. It binds the
 exact resolver result to the current principal, firm, session digest/expiry,
 session version and employee/role revisions. Authentication and resolution are
