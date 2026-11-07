@@ -11216,6 +11216,13 @@ Qualify 125 invented-proof and real-authentication integration cases. Reuse the
 existing backend-review pair and retain all original case identities, jobs,
 caps and reserve floors. Require PR and independent main qualification.
 
+The first PR run passed all 170 PostgreSQL-job cases but used 273 of its
+300 seconds, leaving 27 seconds and correctly stopping the backend reserve
+guard. Move the complete 35-case SQLite source-relationship file to existing
+backend-review capacity. Keep every real PostgreSQL test, source hash and
+once-only identity; require fresh measurements of both jobs and all unchanged
+floors before merge.
+
 The resolver remains unregistered and performs no IO or signing. Genuine
 fingerprint/authority provisioning, current-state administration, durable
 continuity, receipt-level integration, directory restore/rebinding, production

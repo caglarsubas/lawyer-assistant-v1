@@ -2429,3 +2429,9 @@ The resolver has no IO, signing, provisioning or receipt operation. Genuine
 fingerprint provenance, authoritative current-state/root administration,
 durable continuity and the eventual recipient bridge remain open. Preserve
 the owner's pending private analysis review and all original evidence versions.
+
+The initial resolver PR run was rejected by the reserve guard: the PostgreSQL
+job passed 170 cases but retained only 27 seconds. Its complete 35-case SQLite
+source-relationship group moves to existing backend-review capacity, leaving
+all real PostgreSQL races unchanged. Qualify both jobs afresh with the same
+two workers, caps and 30-second job reserve floor.

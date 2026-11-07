@@ -290,6 +290,17 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"$CI_CORE_RESERVE_REVIEW"', backend)
         self.assertIn('read -r -a reserve_tests <<< "$CI_CORE_RESERVE_REVIEW"', review_block)
         self.assertIn('"${metadata_capacity_tests[@]}" "${reserve_tests[@]}"', review_block)
+        source_relationship_group = re.search(r"  CI_CORE_RESERVE_POSTGRES: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(source_relationship_group.split(), ["backend/tests/test_source_relationships.py"])
+        self.assertEqual(workflow.count("backend/tests/test_source_relationships.py"), 1)
+        self.assertEqual(review_block.count('read -r -a postgres_reserve_tests <<< "$CI_CORE_RESERVE_POSTGRES"'), 1)
+        self.assertEqual(workflow.count('read -r -a postgres_reserve_tests <<< "$CI_CORE_RESERVE_POSTGRES"'), 1)
+        self.assertEqual(review_block.count('"${postgres_reserve_tests[@]}"'), 1)
+        self.assertNotIn("CI_CORE_RESERVE_POSTGRES", postgres)
+        self.assertNotIn('"${reserve_tests[@]}"', postgres)
+        with self.assertRaisesRegex(ValueError, "postgres_reserve_tests"):
+            validate_workflow_arrays(workflow.replace(
+                '          read -r -a postgres_reserve_tests <<< "$CI_CORE_RESERVE_POSTGRES"\n', "", 1))
         self.assertNotIn("backend/tests/test_retained_release_withdrawal.py", withdrawal_group)
         self.assertIn('"${recovery_qualification_tests[@]}"', backend)
         definition = '          read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"\n'
