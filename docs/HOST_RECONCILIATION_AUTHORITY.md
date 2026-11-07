@@ -70,6 +70,13 @@ binding changes, expiry and guard release. Its complete file runs in the
 existing backend-review CI job with two workers. Existing test identities,
 job caps and reserve floors remain required.
 
+The candidate job's measured 24-second reserve was below the required 30.
+Its complete decision-handoff, portfolio and firm-administration files now run
+on the existing graph-runtime pair. The 53 cases retain their identities and
+single execution; both the source absence and destination membership are
+checked by the closed placement contract. Hosted PR and independent main
+measurements must qualify this layout within the unchanged caps.
+
 This qualification establishes this isolated request boundary. It does not
 establish an atomic cross-store snapshot, a hard cancellation deadline,
 production operating limits or permission to access a retained receipt.

@@ -11187,6 +11187,11 @@ existing backend-review job and preserve every original test identity, two
 workers, thirteen job caps and reserve floors. Require exact-head and independent
 main qualification before recording engineering completion.
 
+The candidate job passed its tests with only 24 seconds of reserve. Move its
+complete 53-case decision-handoff, portfolio and firm-administration group to
+the existing graph-runtime pair, whose measured reserve was 65 seconds.
+Preserve exact once-only placement and require fresh reserve measurements.
+
 The gate has no registered application route, receipt IO, legacy authority
 bridge or provisioning API. Genuine resolver/host identity integration,
 directory-bound restore/rebinding, production qualification and the owner's

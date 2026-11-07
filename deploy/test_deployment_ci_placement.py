@@ -189,7 +189,18 @@ class DeploymentPlacementContract(unittest.TestCase):
         capacity_group = re.search(r"  CI_BACKEND_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(workflow.count("backend/tests/test_firm_admin.py"), 1)
         candidate_reserve = re.search(r"  CI_CORE_RESERVE_CANDIDATE: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertIn("backend/tests/test_firm_admin.py", candidate_reserve)
+        self.assertEqual(candidate_reserve.split(), ["backend/tests/test_decision_graph_handoff.py",
+            "backend/tests/test_portfolio.py", "backend/tests/test_firm_admin.py"])
+        for path in candidate_reserve.split():
+            self.assertEqual(workflow.count(path), 1)
+        candidate = blocks["graph-candidate-contracts"]
+        self.assertNotIn("CI_CORE_RESERVE_CANDIDATE", candidate)
+        self.assertNotIn("reserve_tests", candidate)
+        reserve_definition = '          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_CANDIDATE"\n'
+        self.assertEqual(graph.count(reserve_definition), 1)
+        self.assertEqual(graph.count('"${reserve_tests[@]}"'), 1)
+        self.assertIn('"${preview_package_tests[@]}" "${reserve_tests[@]}"', graph)
+        self.assertEqual(workflow.count(reserve_definition), 1)
         self.assertEqual(workflow.count("backend/tests/test_authority_proposals.py"), 1)
         retention_group = re.search(r"  CI_RECEIPT_RETENTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(retention_group.split(), ["backend/tests/test_private_inventory_receipts.py"])
@@ -204,6 +215,8 @@ class DeploymentPlacementContract(unittest.TestCase):
         sys.path.insert(0, str(ROOT / "scripts"))
         from ci_authority_cohorts import validate_workflow_arrays
         validate_workflow_arrays(workflow)
+        with self.assertRaisesRegex(ValueError, "reserve_tests"):
+            validate_workflow_arrays(workflow.replace(graph, graph.replace(reserve_definition, "", 1), 1))
         review_block = blocks["backend-review-contracts"]
         read_retention = '          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"\n'
         withdrawal_block = blocks["retained-release-withdrawal"]
