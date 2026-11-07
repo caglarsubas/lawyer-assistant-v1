@@ -2433,8 +2433,11 @@ the owner's pending private analysis review and all original evidence versions.
 The initial resolver PR run was rejected by the reserve guard: the PostgreSQL
 job passed 170 cases but retained only 27 seconds. A review placement for the
 35-case SQLite source-relationship group restored PostgreSQL reserve to 58
-seconds but left review at 24 and is rejected. Use existing candidate capacity
-for that complete SQLite file; move the complete 18-case portfolio file to
-graph-runtime capacity. All real PostgreSQL races and deployment assignments
-remain unchanged. Qualify each job afresh with two workers, original caps
-and the 30-second job reserve floor.
+seconds but left review at 24 and is rejected. Candidate/graph redistribution
+left candidate at 31 while the unchanged planning job fell to 28. Restore the
+qualified candidate/graph placement and use the previously verified core job's
+116-second reserve for both complete source-relationship (35) and open-validity
+publication (four) files. They return through ordinary backend discovery,
+with exact source-bound once-only execution checked in PR and main logs.
+All real PostgreSQL races and deployment assignments remain unchanged.
+Keep two workers, original caps and the 30-second job reserve floor.
