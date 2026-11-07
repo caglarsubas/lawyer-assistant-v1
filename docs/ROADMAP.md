@@ -11172,3 +11172,22 @@ authority and production wiring require a separately reviewed implementation.
 Appointment, provisioning and deployment-specific qualification remain open
 gates. The owner's private analysis review remains pending. This delivery
 prepares a reviewable procedure and acceptance plan.
+
+## 324. Isolated host authorization boundary — 2026-11-07
+
+Implement the [host admission contract](HOST_RECONCILIATION_AUTHORITY.md) with
+the application's real authentication and firm permissions. Authenticate before
+parsing an opaque record selection or consulting trusted wiring. Bind the
+result to its exact firm, principal, source, scope, permission, enrollment and
+current trust revision. Fresh recheck rejects session, role, binding or expiry
+changes and cannot renew the selected snapshot.
+
+Qualify the complete 76-case test file with invented host identities. Reuse the
+existing backend-review job and preserve every original test identity, two
+workers, thirteen job caps and reserve floors. Require exact-head and independent
+main qualification before recording engineering completion.
+
+The gate has no registered application route, receipt IO, legacy authority
+bridge or provisioning API. Genuine resolver/host identity integration,
+directory-bound restore/rebinding, production qualification and the owner's
+private analysis review remain pending.

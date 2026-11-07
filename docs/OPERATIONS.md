@@ -2404,3 +2404,15 @@ The available campaign reproduces disposable evidence. Genuine host authority,
 production wiring and deployment-specific qualification are open gates in the
 plan. Keep their decisions linked to exact evidence versions and retain the
 owner's pending private analysis review.
+
+## Isolated host admission boundary — 2026-11-07
+
+The [host authorization contract](HOST_RECONCILIATION_AUTHORITY.md) implements
+authentication before selected-record resolution and exact repeat authorization
+against real application session/RBAC checks. Its complete 76-case file uses
+invented host identities and runs in the existing backend-review job.
+
+The gate is unregistered and performs no receipt operations. Supply a separately
+reviewed current trust/enrollment resolver and recipient-observation integration
+before operational qualification. Preserve the original disposable authority
+restrictions and keep directory restore/rebinding and genuine custody separate.
