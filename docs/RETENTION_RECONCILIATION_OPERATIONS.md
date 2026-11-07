@@ -20,6 +20,12 @@ provisioning command. Production integration requires a separately reviewed
 host authority and wiring implementation. The gates below identify the
 evidence required before that implementation can be approved for operation.
 
+The [isolated host admission gate](HOST_RECONCILIATION_AUTHORITY.md) now checks
+real application sessions and version-bound authorization with invented inputs.
+It remains unregistered, performs no receipt IO and supplies no bridge into the
+disposable planners. The genuine trusted resolver and operational wiring remain
+outstanding.
+
 | Gate | Required evidence in the private review packet | Current state |
 |---|---|---|
 | Deployment and scope | Exact revision, host identity, selected record and approved purpose | Awaiting selection |

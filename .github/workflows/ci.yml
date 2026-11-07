@@ -109,6 +109,7 @@ env:
   CI_AUTHORITY_COHORT_TESTS: >-
     backend/tests/test_authority_model_cohorts.py
   CI_BACKEND_REVIEW_TESTS: >-
+    backend/tests/test_host_reconciliation_authority.py
     backend/tests/test_cold_controller_recovery.py
     backend/tests/test_ci_reserve_guard.py
     backend/tests/test_native_preview_restart.py
@@ -133,6 +134,7 @@ env:
   CI_CORE_RESERVE_CANDIDATE: >-
     backend/tests/test_decision_graph_handoff.py
     backend/tests/test_portfolio.py
+  CI_CORE_RESERVE_GRAPH: >-
     backend/tests/test_firm_admin.py
   CI_CORE_RESERVE_PLANNING: >-
     backend/tests/test_calibration_study_cli.py
@@ -276,7 +278,7 @@ jobs:
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
           read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"
-          read -r -a reserve_tests <<< "$(printf '%s ' "$CI_CORE_RESERVE_CAPACITY" "$CI_CORE_RESERVE_CANDIDATE" "$CI_CORE_RESERVE_PLANNING" "$CI_CORE_RESERVE_REVIEW" "$CI_CORE_RESERVE_POSTGRES" "$CI_CORE_RESERVE_SOURCE")"
+          read -r -a reserve_tests <<< "$(printf '%s ' "$CI_CORE_RESERVE_CAPACITY" "$CI_CORE_RESERVE_CANDIDATE" "$CI_CORE_RESERVE_GRAPH" "$CI_CORE_RESERVE_PLANNING" "$CI_CORE_RESERVE_REVIEW" "$CI_CORE_RESERVE_POSTGRES" "$CI_CORE_RESERVE_SOURCE")"
           ignore_args=()
           for path in "${reserve_tests[@]}" "${inventory_review_tests[@]}" "${authority_trial_tests[@]}" "${preview_tests[@]}" "${history_capacity_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" "${disposition_restart_tests[@]}" "${focus_tests[@]}" "${publication_planning_tests[@]}" "${recovery_qualification_tests[@]}" "${fast_guard_tests[@]}" "${runtime_tests[@]}" "${postgres_source_tests[@]}" "${capacity_tests[@]}" "${preflight_tests[@]}" "${publication_tests[@]}" "${final_release_tests[@]}" "${retained_withdrawal_tests[@]}" "${graph_candidate_tests[@]}" "${frontend_review_tests[@]}" "${history_guard_tests[@]}" "${history_inspection_tests[@]}" "${model_trial_tests[@]}" "${graph_runtime_tests[@]}" "${backend_review_tests[@]}" "${human_review_tests[@]}" "${receipt_retention_tests[@]}" "${authority_cohort_tests[@]}" "${metadata_capacity_tests[@]}" "${auth_capacity_tests[@]}" "${recipient_observation_tests[@]}"; do
             if [[ "$path" != "${preview_tests[0]}" ]]; then
@@ -709,7 +711,8 @@ jobs:
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}" -p scripts.ci_recipient_affinity --fixture-affinity-lane=graph -p scripts.ci_preview_package_capacity --preview-package-lane=graph "${preview_package_tests[@]}"
+          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_GRAPH"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}" -p scripts.ci_recipient_affinity --fixture-affinity-lane=graph -p scripts.ci_preview_package_capacity --preview-package-lane=graph "${preview_package_tests[@]}" "${reserve_tests[@]}"
 
 
       # The main graph pair has exited. Preserve the exact frozen history

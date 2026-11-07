@@ -189,7 +189,30 @@ class DeploymentPlacementContract(unittest.TestCase):
         capacity_group = re.search(r"  CI_BACKEND_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(workflow.count("backend/tests/test_firm_admin.py"), 1)
         candidate_reserve = re.search(r"  CI_CORE_RESERVE_CANDIDATE: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertIn("backend/tests/test_firm_admin.py", candidate_reserve)
+        self.assertEqual(candidate_reserve.split(), ["backend/tests/test_decision_graph_handoff.py",
+            "backend/tests/test_portfolio.py"])
+        graph_reserve = re.search(r"  CI_CORE_RESERVE_GRAPH: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(graph_reserve.split(), ["backend/tests/test_firm_admin.py"])
+        for path in candidate_reserve.split() + graph_reserve.split():
+            self.assertEqual(workflow.count(path), 1)
+        candidate = blocks["graph-candidate-contracts"]
+        self.assertNotIn("CI_CORE_RESERVE_GRAPH", candidate)
+        self.assertNotIn("CI_CORE_RESERVE_CANDIDATE", graph)
+        reserve_definitions = (
+            (candidate, '          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_CANDIDATE"\n'),
+            (graph, '          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_GRAPH"\n'),
+        )
+        for owner, definition in reserve_definitions:
+            self.assertEqual(owner.count(definition), 1)
+            self.assertEqual(workflow.count(definition), 1)
+            self.assertEqual(owner.count('"${reserve_tests[@]}"'), 1)
+        self.assertIn('--durations=10 -rA "${reserve_tests[@]}"', candidate)
+        self.assertIn('"${preview_package_tests[@]}" "${reserve_tests[@]}"', graph)
+        self.assertIn('read -r -a reserve_tests <<< "$(printf \'%s \' "$CI_CORE_RESERVE_CAPACITY" '
+                      '"$CI_CORE_RESERVE_CANDIDATE" "$CI_CORE_RESERVE_GRAPH" "$CI_CORE_RESERVE_PLANNING" '
+                      '"$CI_CORE_RESERVE_REVIEW" "$CI_CORE_RESERVE_POSTGRES" "$CI_CORE_RESERVE_SOURCE")"', backend)
+        self.assertIn('for path in "${reserve_tests[@]}"', backend)
+        self.assertIn('ignore_args+=("--ignore=$path")', backend)
         self.assertEqual(workflow.count("backend/tests/test_authority_proposals.py"), 1)
         retention_group = re.search(r"  CI_RECEIPT_RETENTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(retention_group.split(), ["backend/tests/test_private_inventory_receipts.py"])
@@ -204,6 +227,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         sys.path.insert(0, str(ROOT / "scripts"))
         from ci_authority_cohorts import validate_workflow_arrays
         validate_workflow_arrays(workflow)
+        for owner, definition in reserve_definitions:
+            with self.assertRaisesRegex(ValueError, "reserve_tests"):
+                validate_workflow_arrays(workflow.replace(owner, owner.replace(definition, "", 1), 1))
         review_block = blocks["backend-review-contracts"]
         read_retention = '          read -r -a receipt_retention_tests <<< "$CI_RECEIPT_RETENTION_TESTS"\n'
         withdrawal_block = blocks["retained-release-withdrawal"]
@@ -215,10 +241,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         release_group = re.search(r"  CI_FINAL_RELEASE_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertNotIn("backend/tests/test_source_reviews.py", release_group)
         self.assertEqual(workflow.count("backend/tests/test_source_reviews.py"), 1)
-        self.assertEqual(final_group.split(), ["backend/tests/test_cold_controller_recovery.py",
+        self.assertEqual(final_group.split(), ["backend/tests/test_host_reconciliation_authority.py",
+            "backend/tests/test_cold_controller_recovery.py",
             "backend/tests/test_ci_reserve_guard.py", "backend/tests/test_native_preview_restart.py",
             "backend/tests/test_native_operator_preview.py", "backend/tests/test_authority_trial_cohorts.py",
             "backend/tests/test_journal_materialization.py"])
+        self.assertEqual(workflow.count("backend/tests/test_host_reconciliation_authority.py"), 1)
         self.assertIn("backend/tests/test_analysis_focus.py", workflow)
         self.assertEqual(workflow.count("backend/tests/test_analysis_reviews.py"), 1)
         self.assertNotIn("backend/tests/test_source_reviews.py", group)
