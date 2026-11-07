@@ -16,12 +16,13 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
-from app.auth import authenticate
-from app.db import Employee, EmployeeRole, FirmRole, LoginSession, User, digest
-from app.firm_rbac import permissions_for
 from fastapi import HTTPException
 from sqlalchemy import select
 from starlette.requests import Request
+
+from app.auth import authenticate
+from app.db import Employee, EmployeeRole, FirmRole, LoginSession, User, digest
+from app.firm_rbac import permissions_for
 
 PATH = "/api/v1/firm-admin/retention/reconcile"
 SCHEMA = "isolated-host-reconciliation-binding-v1"
