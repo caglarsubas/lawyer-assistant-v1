@@ -2392,3 +2392,15 @@ Independent public-fingerprint/runtime-pin confirmation remains required; instal
 backend, completion behavior, executed weights and legal/production acceptance stay
 open. See [procedure](ISOLATED_SERVER_HTTP.md) and
 [dated evidence](evidence/server-http-2026-10-24.json).
+
+## Retention reconciliation operating review — 2026-11-07
+
+Use the [operating and qualification plan](RETENTION_RECONCILIATION_OPERATIONS.md)
+to prepare a private deployment review packet. It identifies the required
+operator appointments, host integration, custody and permission evidence,
+recovery checkpoint, operating limits and attributed decision.
+
+The available campaign reproduces disposable evidence. Genuine host authority,
+production wiring and deployment-specific qualification are open gates in the
+plan. Keep their decisions linked to exact evidence versions and retain the
+owner's pending private analysis review.

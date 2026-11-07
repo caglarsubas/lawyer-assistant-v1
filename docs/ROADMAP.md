@@ -11157,3 +11157,18 @@ measured file cost about 29 summed setup, call and teardown seconds in
 the preceding run. Keep feedback in analysis recovery, all original
 test identities, two workers, the thirteen jobs, and every cap and floor.
 Require both the PR and independent main run to pass reserve qualification.
+
+## 323. Retention reconciliation operating review packet — 2026-11-07
+
+Prepare the [operating and qualification plan](RETENTION_RECONCILIATION_OPERATIONS.md)
+for independent review. The packet maps the qualified disposable adapter to
+deployment, identity, custody, permission, backup, operating-limit and decision
+evidence. It includes the existing runnable posture and disposable campaign
+commands, expected read-only outcomes, interruption handling and a private
+review worksheet with all approvals pending.
+
+The predecessor authority accepts disposable identity profiles. Genuine host
+authority and production wiring require a separately reviewed implementation.
+Appointment, provisioning and deployment-specific qualification remain open
+gates. The owner's private analysis review remains pending. This delivery
+prepares a reviewable procedure and acceptance plan.
