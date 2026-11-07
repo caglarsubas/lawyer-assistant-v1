@@ -71,10 +71,11 @@ existing backend-review CI job with two workers. Existing test identities,
 job caps and reserve floors remain required.
 
 The candidate job's measured 24-second reserve was below the required 30.
-Its complete decision-handoff, portfolio and firm-administration files now run
-on the existing graph-runtime pair. The 53 cases retain their identities and
-single execution; both the source absence and destination membership are
-checked by the closed placement contract. Hosted PR and independent main
+Moving its complete 53-case core group gave candidate 60 seconds of reserve
+but left graph-runtime with 29. The balanced layout keeps decision-handoff
+and portfolio's 34 cases in candidate and runs firm-administration's 19 cases
+in graph-runtime. Both inventories, default-backend exclusions and once-only
+placement are checked by the closed contract. Hosted PR and independent main
 measurements must qualify this layout within the unchanged caps.
 
 This qualification establishes this isolated request boundary. It does not
