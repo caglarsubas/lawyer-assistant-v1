@@ -2416,3 +2416,28 @@ The gate is unregistered and performs no receipt operations. Supply a separately
 reviewed current trust/enrollment resolver and recipient-observation integration
 before operational qualification. Preserve the original disposable authority
 restrictions and keep directory restore/rebinding and genuine custody separate.
+
+## Signed host trust resolution — 2026-11-07
+
+Use the [signed resolver contract](HOST_RECONCILIATION_TRUST.md) to qualify
+registry/enrollment evidence with three independently pinned public authorities
+and fresh before/after checkpoint challenges. The fixed authorization window
+cannot be renewed by a new challenge. A process-local fence retains observed
+revocation/context changes and retires conflicting same-version state.
+
+The resolver has no IO, signing, provisioning or receipt operation. Genuine
+fingerprint provenance, authoritative current-state/root administration,
+durable continuity and the eventual recipient bridge remain open. Preserve
+the owner's pending private analysis review and all original evidence versions.
+
+The initial resolver PR run was rejected by the reserve guard: the PostgreSQL
+job passed 170 cases but retained only 27 seconds. A review placement for the
+35-case SQLite source-relationship group restored PostgreSQL reserve to 58
+seconds but left review at 24 and is rejected. Candidate/graph redistribution
+left candidate at 31 while the unchanged planning job fell to 28. Restore the
+qualified candidate/graph placement and use the previously verified core job's
+116-second reserve for both complete source-relationship (35) and open-validity
+publication (four) files. They return through ordinary backend discovery,
+with exact source-bound once-only execution checked in PR and main logs.
+All real PostgreSQL races and deployment assignments remain unchanged.
+Keep two workers, original caps and the 30-second job reserve floor.

@@ -11197,3 +11197,38 @@ The gate has no registered application route, receipt IO, legacy authority
 bridge or provisioning API. Genuine resolver/host identity integration,
 directory-bound restore/rebinding, production qualification and the owner's
 private analysis review remain pending.
+
+## 325. Signed current-trust and enrollment resolver — 2026-11-07
+
+Implement the [signed host resolver](HOST_RECONCILIATION_TRUST.md) for the
+isolated admission gate. Verify registry/enrollment bytes against three fixed
+public-authority pins and fresh challenge-bound current checkpoints. Preserve
+the exact record, firm, principal/profile, scope, source, permission, signed
+window and authority version. Repeated calls return the same binding without
+renewing its expiry.
+
+Retain higher observed current heads before later denial, including revocation
+or changed context. Reject rollback, retire conflicting same-version state and
+require new wiring for unsupported epochs. This in-memory fence does not
+qualify recovery, joint rollback or clock continuity.
+
+Qualify 125 invented-proof and real-authentication integration cases. Reuse the
+existing backend-review pair and retain all original case identities, jobs,
+caps and reserve floors. Require PR and independent main qualification.
+
+The first PR run passed all 170 PostgreSQL-job cases but used 273 of its
+300 seconds, leaving 27 seconds and correctly stopping the backend reserve
+guard. Moving the complete 35-case SQLite source-relationship file to review
+restored PostgreSQL reserve to 58 seconds but left review at 24. That layout
+is also rejected. A candidate/graph redistribution passed with only 31 seconds
+in candidate, while the unchanged planning job fell to 28. Restore the qualified
+candidate/graph placement. Return the complete 35-case source-relationship and
+four-case open-validity-publication files to ordinary backend discovery, using
+the separately verified core job's 116-second reserve. Keep every real
+PostgreSQL test, original source hash, once-only identity and deployment
+assignment. Require fresh PR/main measurements of all unchanged floors.
+
+The resolver remains unregistered and performs no IO or signing. Genuine
+fingerprint/authority provisioning, current-state administration, durable
+continuity, receipt-level integration, directory restore/rebinding, production
+qualification and the owner's private analysis review remain pending.
