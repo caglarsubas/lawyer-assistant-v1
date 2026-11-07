@@ -134,9 +134,9 @@ env:
     backend/tests/test_workspace.py
   CI_CORE_RESERVE_CANDIDATE: >-
     backend/tests/test_decision_graph_handoff.py
-    backend/tests/test_portfolio.py
   CI_CORE_RESERVE_GRAPH: >-
     backend/tests/test_firm_admin.py
+    backend/tests/test_portfolio.py
   CI_CORE_RESERVE_PLANNING: >-
     backend/tests/test_calibration_study_cli.py
     backend/tests/test_retained_release_authorization.py
@@ -344,13 +344,10 @@ jobs:
         timeout-minutes: 5
         run: |
           read -r -a reserve_tests <<< "$CI_CORE_RESERVE_REVIEW"
-          # Reuse review reserve for this complete SQLite-only group. Its former
-          # PostgreSQL placement left only 27s of the required 30s job reserve.
-          read -r -a postgres_reserve_tests <<< "$CI_CORE_RESERVE_POSTGRES"
           read -r -a backend_review_tests <<< "$CI_BACKEND_REVIEW_TESTS"
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_materialization_capacity --materialization-capacity-lane=review -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${authority_cohort_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=review "${metadata_capacity_tests[@]}" "${reserve_tests[@]}" "${postgres_reserve_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_materialization_capacity --materialization-capacity-lane=review -p scripts.ci_authority_cohorts --authority-cohort-lane=review "${authority_cohort_tests[@]}" "${backend_review_tests[@]}" -q -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=review "${metadata_capacity_tests[@]}" "${reserve_tests[@]}"
 
       # Reuse the same pair after review tests; no overlap with the x86 UI.
       - name: Test complete manifest-bound assignment 1
@@ -648,7 +645,9 @@ jobs:
           read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
           read -r -a focus_tests <<< "$CI_CANDIDATE_FOCUS_TESTS"
           read -r -a reserve_tests <<< "$CI_CORE_RESERVE_CANDIDATE"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate -p scripts.ci_provision_bindings --provision-binding-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA "${reserve_tests[@]}"
+          # Reuse candidate reserve; portfolio runs in existing graph capacity.
+          read -r -a postgres_reserve_tests <<< "$CI_CORE_RESERVE_POSTGRES"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_source_reviews --source-review-lane=candidate -p scripts.ci_provision_bindings --provision-binding-lane=candidate "${candidate_tests[@]}" "${focus_tests[@]}" "${source_review_tests[@]}" "${history_binding_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA "${reserve_tests[@]}" "${postgres_reserve_tests[@]}"
 
   source-publication-contracts:
     needs: backend-capacity

@@ -189,10 +189,13 @@ class DeploymentPlacementContract(unittest.TestCase):
         capacity_group = re.search(r"  CI_BACKEND_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(workflow.count("backend/tests/test_firm_admin.py"), 1)
         candidate_reserve = re.search(r"  CI_CORE_RESERVE_CANDIDATE: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(candidate_reserve.split(), ["backend/tests/test_decision_graph_handoff.py",
-            "backend/tests/test_portfolio.py"])
+        self.assertEqual(candidate_reserve.split(), ["backend/tests/test_decision_graph_handoff.py"])
+        admission_reserve = re.search(r"  CI_CORE_RESERVE_CAPACITY: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(admission_reserve.split(), ["backend/tests/test_workspace.py"])
+        self.assertEqual(workflow.count("backend/tests/test_portfolio.py"), 1)
+        self.assertEqual(blocks["backend-capacity"].count('read -r -a reserve_tests <<< "$CI_CORE_RESERVE_CAPACITY"'), 1)
         graph_reserve = re.search(r"  CI_CORE_RESERVE_GRAPH: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(graph_reserve.split(), ["backend/tests/test_firm_admin.py"])
+        self.assertEqual(graph_reserve.split(), ["backend/tests/test_firm_admin.py", "backend/tests/test_portfolio.py"])
         for path in candidate_reserve.split() + graph_reserve.split():
             self.assertEqual(workflow.count(path), 1)
         candidate = blocks["graph-candidate-contracts"]
@@ -293,9 +296,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         source_relationship_group = re.search(r"  CI_CORE_RESERVE_POSTGRES: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(source_relationship_group.split(), ["backend/tests/test_source_relationships.py"])
         self.assertEqual(workflow.count("backend/tests/test_source_relationships.py"), 1)
-        self.assertEqual(review_block.count('read -r -a postgres_reserve_tests <<< "$CI_CORE_RESERVE_POSTGRES"'), 1)
+        self.assertEqual(candidate.count('read -r -a postgres_reserve_tests <<< "$CI_CORE_RESERVE_POSTGRES"'), 1)
         self.assertEqual(workflow.count('read -r -a postgres_reserve_tests <<< "$CI_CORE_RESERVE_POSTGRES"'), 1)
-        self.assertEqual(review_block.count('"${postgres_reserve_tests[@]}"'), 1)
+        self.assertEqual(candidate.count('"${postgres_reserve_tests[@]}"'), 1)
+        self.assertNotIn("CI_CORE_RESERVE_POSTGRES", review_block)
         self.assertNotIn("CI_CORE_RESERVE_POSTGRES", postgres)
         self.assertNotIn('"${reserve_tests[@]}"', postgres)
         with self.assertRaisesRegex(ValueError, "postgres_reserve_tests"):

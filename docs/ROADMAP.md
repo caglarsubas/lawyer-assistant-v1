@@ -11218,10 +11218,13 @@ caps and reserve floors. Require PR and independent main qualification.
 
 The first PR run passed all 170 PostgreSQL-job cases but used 273 of its
 300 seconds, leaving 27 seconds and correctly stopping the backend reserve
-guard. Move the complete 35-case SQLite source-relationship file to existing
-backend-review capacity. Keep every real PostgreSQL test, source hash and
-once-only identity; require fresh measurements of both jobs and all unchanged
-floors before merge.
+guard. Moving the complete 35-case SQLite source-relationship file to review
+restored PostgreSQL reserve to 58 seconds but left review at 24. That layout
+is also rejected. Run the SQLite file in existing candidate capacity and move
+the complete 18-case portfolio file from candidate to graph-runtime capacity.
+Retain every real PostgreSQL test, original source hash, once-only identity
+and deployment assignment. Update both original placement contracts and
+require fresh PR/main measurements of all unchanged floors before merge.
 
 The resolver remains unregistered and performs no IO or signing. Genuine
 fingerprint/authority provisioning, current-state administration, durable

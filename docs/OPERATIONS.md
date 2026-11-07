@@ -2431,7 +2431,10 @@ durable continuity and the eventual recipient bridge remain open. Preserve
 the owner's pending private analysis review and all original evidence versions.
 
 The initial resolver PR run was rejected by the reserve guard: the PostgreSQL
-job passed 170 cases but retained only 27 seconds. Its complete 35-case SQLite
-source-relationship group moves to existing backend-review capacity, leaving
-all real PostgreSQL races unchanged. Qualify both jobs afresh with the same
-two workers, caps and 30-second job reserve floor.
+job passed 170 cases but retained only 27 seconds. A review placement for the
+35-case SQLite source-relationship group restored PostgreSQL reserve to 58
+seconds but left review at 24 and is rejected. Use existing candidate capacity
+for that complete SQLite file; move the complete 18-case portfolio file to
+graph-runtime capacity. All real PostgreSQL races and deployment assignments
+remain unchanged. Qualify each job afresh with two workers, original caps
+and the 30-second job reserve floor.

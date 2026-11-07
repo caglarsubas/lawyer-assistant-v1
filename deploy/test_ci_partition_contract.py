@@ -32,11 +32,12 @@ class PartitionContract(unittest.TestCase):
         self.assertFalse(set(variables) & set(reserve_groups))
         self.assertIn('"${reserve_tests[@]}"', remainder)
         for group in reserve_groups:
-            definition = f'read -r -a reserve_tests <<< "${group}"'
+            variable = "postgres_reserve_tests" if group == "CI_CORE_RESERVE_POSTGRES" else "reserve_tests"
+            definition = f'read -r -a {variable} <<< "${group}"'
             self.assertEqual(workflow.count(definition), 1)
             command = next(line for line in workflow.split(definition, 1)[1].splitlines()
                            if "scripts/run_ci_tests.sh" in line)
-            self.assertIn('"${reserve_tests[@]}"', command)
+            self.assertIn('"${' + variable + '[@]}"', command)
             self.assertIn("-n 2", command)
         loop = next(line for line in remainder.splitlines() if "for path in " in line)
         for variable in variables.values():
