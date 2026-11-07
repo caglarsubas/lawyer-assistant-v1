@@ -11143,3 +11143,17 @@ seconds. Run the complete feedback file in analysis recovery and
 return analysis adjudication to the backend core.
 Keep the original two-worker scheduler, case identities, time caps,
 and 30-second job reserve floor.
+
+## 322. Recover backend reserve on main — 2026-11-07
+
+PR #290 passed every PR check and reserve floor before merge. Independent
+main run 42257496248 passed all 13 checks and verified the complete execution
+receipts. Final authorization retained 36 seconds of job reserve, while
+the backend retained 26 against the required 30. Backend review had
+62 seconds of reserve.
+
+Return the complete 39-case adjudication file to backend review. The
+measured file cost about 29 summed setup, call and teardown seconds in
+the preceding run. Keep feedback in analysis recovery, all original
+test identities, two workers, the thirteen jobs, and every cap and floor.
+Require both the PR and independent main run to pass reserve qualification.

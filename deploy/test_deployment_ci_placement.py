@@ -254,7 +254,12 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(recovery_group.split(), ["backend/tests/test_retained_release_withdrawal.py", "backend/tests/test_copy_recovery_disposition.py",
             "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py",
             "backend/tests/test_analysis_feedback.py"])
-        self.assertNotIn("backend/tests/test_analysis_adjudication.py", workflow)
+        adjudication_group = re.search(r"  CI_CORE_RESERVE_REVIEW: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(adjudication_group.split(), ["backend/tests/test_analysis_adjudication.py"])
+        self.assertEqual(workflow.count("backend/tests/test_analysis_adjudication.py"), 1)
+        self.assertIn('"$CI_CORE_RESERVE_REVIEW"', backend)
+        self.assertIn('read -r -a reserve_tests <<< "$CI_CORE_RESERVE_REVIEW"', review_block)
+        self.assertIn('"${metadata_capacity_tests[@]}" "${reserve_tests[@]}"', review_block)
         self.assertNotIn("backend/tests/test_retained_release_withdrawal.py", withdrawal_group)
         self.assertIn('"${recovery_qualification_tests[@]}"', backend)
         definition = '          read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"\n'
