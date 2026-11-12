@@ -11250,7 +11250,8 @@ directory restore, receipt integration and the owner's review remain pending.
 The first hosted run measured 20 seconds of analysis recovery reserve against
 the 30-second floor. Moving the complete 50-case feedback file to publication
 planning and the 25-case restart step to PostgreSQL restored analysis recovery
-to 53 seconds, but left PostgreSQL at 29. Publication planning retained 61
-seconds with the feedback file. Run the existing restart step there after
-the planning and binding workers exit. Verify each case once under the
-existing worker limit, caps and reserve floors.
+to 53 seconds. PostgreSQL reserve fell to 29 seconds. A subsequent placement
+measured 24 seconds for planning and 27 for PostgreSQL. Run the restart step
+after source publication and move the 16-case SQLite inventory partition to
+analysis recovery. Verify each case once under the existing worker limit,
+caps and reserve floors.

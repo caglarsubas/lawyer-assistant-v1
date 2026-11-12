@@ -316,10 +316,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${publication_planning_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["publication-planning-contracts"])
         self.assertNotIn("CI_PUBLICATION_PLANNING_TESTS", blocks["frontend"])
         restart = "name: Test complete disposition restart qualification\n        timeout-minutes: 2"
-        planning = blocks["publication-planning-contracts"]
+        publication = blocks["source-publication-contracts"]
         self.assertEqual(workflow.count(restart), 1)
-        self.assertLess(planning.index("name: Test complete provision binding qualification"), planning.index(restart))
-        for key, path, array, job in (("CI_DISPOSITION_RESTART_TESTS", "backend/tests/test_disposition_journal_reconciliation.py", "disposition_restart_tests", "publication-planning-contracts"),
+        self.assertLess(publication.index("name: Test manifest-bound review headroom slice 9"), publication.index(restart))
+        for key, path, array, job in (("CI_DISPOSITION_RESTART_TESTS", "backend/tests/test_disposition_journal_reconciliation.py", "disposition_restart_tests", "source-publication-contracts"),
                                       ("CI_CANDIDATE_FOCUS_TESTS", "backend/tests/test_analysis_focus.py", "focus_tests", "graph-candidate-contracts")):
             group = re.search(r"  " + key + r": >-\n((?:    [^\n]+\n)+)", workflow)[1]
             self.assertEqual(group.split(), [path])
@@ -327,7 +327,7 @@ class DeploymentPlacementContract(unittest.TestCase):
             definition = f'          read -r -a {array} <<< "${key}"\n'
             owners = [backend, blocks[job]]
             if key == "CI_DISPOSITION_RESTART_TESTS":
-                owners = [backend, *planning.split(restart, 1), blocks["retained-release-withdrawal"]]
+                owners.extend([blocks["retained-release-withdrawal"], blocks["publication-planning-contracts"]])
             for owner in owners:
                 self.assertEqual(owner.count(definition), 1)
                 broken = workflow.replace(owner, owner.replace(definition, "", 1), 1)
@@ -335,11 +335,18 @@ class DeploymentPlacementContract(unittest.TestCase):
                     validate_workflow_arrays(broken)
             if key != "CI_DISPOSITION_RESTART_TESTS":
                 self.assertNotIn(key, blocks["frontend"])
-        self.assertIn('"${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', planning.split(restart, 1)[1])
+        self.assertIn('"${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', publication.split(restart, 1)[1])
         self.assertEqual(workflow.count("-p scripts.ci_disposition_reads --disposition-read-lane="), 3)
-        for name, lane in (("publication-planning-contracts", "graph"), ("retained-release-withdrawal", "withdrawal"),
+        for name, lane in (("source-publication-contracts", "graph"), ("retained-release-withdrawal", "withdrawal"),
                            ("publication-planning-contracts", "publication")):
             self.assertIn("--disposition-read-lane=" + lane, blocks[name])
+        inventory_definition = '          read -r -a inventory_review_tests <<< "$CI_RECOVERY_INVENTORY_TESTS"\n'
+        self.assertEqual(isolated.count(inventory_definition), 1)
+        self.assertEqual(workflow.count("--recovery-inventory-lane=postgres"), 1)
+        self.assertIn('-p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}"', isolated)
+        self.assertNotIn("CI_RECOVERY_INVENTORY_TESTS", postgres)
+        with self.assertRaisesRegex(ValueError, "inventory_review_tests"):
+            validate_workflow_arrays(workflow.replace(isolated, isolated.replace(inventory_definition, "", 1), 1))
         self.assertNotIn("name: Test complete frontend recovery qualification", workflow)
         history_bindings = re.search(r"  CI_HISTORY_BINDING_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(history_bindings.split(), ["backend/tests/test_provision_mappings.py"])
