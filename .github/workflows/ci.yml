@@ -42,6 +42,7 @@ env:
   CI_PUBLICATION_PLANNING_TESTS: >-
     backend/tests/test_planning_journal_reconciliation.py
     backend/tests/test_release_authorization.py
+    backend/tests/test_analysis_feedback.py
     backend/tests/test_retained_release_inspection.py
     backend/tests/test_analysis_reviews.py
   CI_FAST_GUARD_TESTS: >-
@@ -93,7 +94,6 @@ env:
     backend/tests/test_copy_recovery_disposition.py
     backend/tests/test_journal_copy_reconciliation.py
     backend/tests/test_disposition_receipt_reobservation_races.py
-    backend/tests/test_analysis_feedback.py
   # Complete CPU-heavy files leave the saturated remainder; none are duplicated.
   # A dedicated bounded job holds complete publication/planning files.
   # Keep remaining graph files complete and the lighter Graph B snapshot in backend.
@@ -433,6 +433,11 @@ jobs:
 
 
       # The original bounded restart phase follows exited PostgreSQL workers.
+      - name: Test complete disposition restart qualification
+        timeout-minutes: 2
+        run: |
+          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
 
   frontend:
@@ -757,13 +762,6 @@ jobs:
       - name: Test manifest-bound review headroom slice 10
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_retained_deployment.py --shard=10 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-10.json
-
-
-      - name: Test complete disposition restart qualification
-        timeout-minutes: 2
-        run: |
-          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   publication-planning-contracts:
     needs: backend-capacity

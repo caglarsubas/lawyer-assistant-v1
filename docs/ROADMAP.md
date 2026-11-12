@@ -11246,3 +11246,9 @@ Qualify restart, competing observations, revocation, equivocation, unavailable
 state, write failure and lock contention with disposable identities and files.
 Production authority provisioning, independent rollback and clock controls,
 directory restore, receipt integration and the owner's review remain pending.
+
+The first hosted run measured 20 seconds of analysis recovery reserve against
+the 30-second floor. Move the complete 50-case feedback file to publication
+planning and run the existing 25-case restart step after the PostgreSQL workers
+exit. Verify each case once on the new placement using the existing worker
+limit, caps and reserve floors.
