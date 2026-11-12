@@ -11232,3 +11232,17 @@ The resolver remains unregistered and performs no IO or signing. Genuine
 fingerprint/authority provisioning, current-state administration, durable
 continuity, receipt-level integration, directory restore/rebinding, production
 qualification and the owner's private analysis review remain pending.
+
+## 326. Host trust continuity across process restarts — 2026-11-12
+
+Give the staged [host resolver](HOST_RECONCILIATION_TRUST.md) a private continuity
+store bound to its exact wiring and an independently configured store ID.
+Commit newer authenticated heads and retirement before the resolver can
+release authorization. A restarted resolver can enforce the committed state.
+Use exclusive initialization, bounded directory locking and synchronized
+replacement for cooperating processes on one trusted local filesystem.
+
+Qualify restart, competing observations, revocation, equivocation, unavailable
+state, write failure and lock contention with disposable identities and files.
+Production authority provisioning, independent rollback and clock controls,
+directory restore, receipt integration and the owner's review remain pending.

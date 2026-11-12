@@ -3,8 +3,8 @@
 `scripts/host_reconciliation_trust.py` implements the constructor-owned resolver
 for the [isolated host admission gate](HOST_RECONCILIATION_AUTHORITY.md).
 It verifies signed authorization metadata and returns the existing frozen
-`HostBinding`. It has no filesystem, database, network, signing, provisioning,
-receipt-access or application-registration operation.
+`HostBinding`. Trusted host wiring can supply a private continuity store for
+committed head observations and retirement.
 
 ## Independent inputs
 
@@ -67,22 +67,39 @@ before later evidence or authorization denial. This includes revocation and
 material context changes. Older heads cannot be restored by retrying after
 such a failure. Unrelated identities cannot alter this instance's fence.
 
-The fence includes the complete stable selected state, digests, key IDs and
-statuses. Conflicting statements at the same version, or an authenticated
-unsupported epoch change, retire the instance. A fresh independently reviewed
-configuration is then required; retrying an older active statement cannot
-clear the conflict.
+The fence hashes the complete stable selected state, including digests, key IDs
+and statuses. Conflicting statements at the same version, or an authenticated
+unsupported epoch change, retire the resolver. A configured continuity store
+retains that retirement across restarts.
 
-This fence exists only in memory. It does not establish continuity after
-process loss, joint authority/consumer rollback or clock rollback. A fresh
-nonce proves response binding, not that the authority's latest-state claim
-is true. The operational authority and its durable continuity controls still
-need independent provisioning and qualification.
+## Host-owned continuity store
 
-Lock admission is bounded to two seconds. The ten-second operation budget is
-checked before and after callback/verification work. It cannot interrupt a
-blocked callback; real callback transports need separately qualified deadlines
-and cancellation. Failure diagnostics are withheld at the resolver boundary.
+The default resolver keeps observations in memory. For restart continuity,
+trusted wiring supplies `TrustContinuityStore` as `continuity`. Host setup uses
+the validated resolver's `continuity_binding_sha256` and a separately retained
+store ID to initialize an exclusive record with `TrustContinuityStore.create`.
+Subsequent processes open that same file with the configured ID and binding.
+The digest binds the selected context, public authority pins and minimum head.
+
+The store requires an owner-only directory and file. A directory lock
+serializes cooperating processes. Each advancement or retirement replaces
+one bounded record after synchronizing the new file, then synchronizes the
+directory. The record contains the store ID, wiring digest, sequence, registry
+digest, state digest and retirement status. Unavailable or invalid state
+withholds resolution. A failed write retires the live resolver.
+
+The restart guarantee covers committed observations on the same trusted local
+filesystem. An interrupted commit or restored copy requires operational
+reconciliation. Joint rollback, clock rollback and authoritative latest-state
+administration still require independent controls. A fresh challenge binds the
+checkpoint to the request. The host relies on the configured authority to
+report current state.
+
+Lock admission is bounded to two seconds per lock and the continuity lock also
+respects the remaining operation budget. The ten-second operation budget is
+checked around callback, verification and storage work. Callback transports
+and filesystem operations need operating limits for stalled IO. Failure
+diagnostics are withheld at the resolver boundary.
 
 ## Qualification and remaining gates
 
@@ -98,16 +115,16 @@ workflow inventory changes:
 ```sh
 backend/.venv/bin/ruff check --config backend/pyproject.toml backend/app backend/tests deploy scripts ontology
 backend/.venv/bin/python -m unittest discover -s deploy -p test_deployment_ci_placement.py
-backend/.venv/bin/python -m pytest backend/tests/test_host_reconciliation_trust.py -q
+backend/.venv/bin/python -m pytest backend/tests/test_host_reconciliation_trust.py backend/tests/test_host_trust_continuity.py -q
 ```
 
-The complete new file runs in the existing backend-review job. Original test
-identities, thirteen jobs, two-worker limits, time caps and reserve floors
-remain required. Hosted exact-head and independent-main results qualify the
-engineering slice.
+The backend-review job runs the complete resolver and continuity files. The
+continuity cases exercise a separate process, competing resolvers, retirement,
+unavailable state, an interrupted replacement and bounded lock contention.
+Hosted PR and main results qualify the engineering slice with thirteen jobs,
+two workers, the existing time caps and reserve floors.
 
 Genuine fingerprint confirmation, appointments, authoritative latest-head/root
-revocation administration, durable continuity, clock assurance and operational
-load/cancellation evidence remain separate gates. This verifier does not supply
-receipt-level issuer/custodian permission, a legacy authority bridge, directory
-restore/rebinding, production activation or legal review.
+revocation administration, restore and clock assurance, operating limits and
+receipt-level issuer/custodian integration remain production qualification
+work. The owner's legal review remains pending.

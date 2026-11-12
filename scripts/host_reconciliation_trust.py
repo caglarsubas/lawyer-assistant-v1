@@ -1,12 +1,12 @@
-"""Isolated signed-evidence resolver; no IO, signing, provisioning or activation.
+"""Isolated signed-evidence resolver with optional host-owned continuity.
 
 All three public authorities and the selected context are constructor-owned.
 The independently administered current-head callback must answer fresh challenges
 with its authoritative latest selected state, including root revocation. Signature
 verification cannot establish fingerprint provenance or truth of those statements.
 Genuine independent provisioning, clock assurance and checkpoint-root currentness
-remain external prerequisites. The optional continuity fence here is process-local:
-it provides no restart, joint-rollback or clock-rollback guarantee.
+remain external prerequisites. A configured continuity store retains committed
+observations across process restarts on the same trusted filesystem.
 """
 
 import hashlib
@@ -15,10 +15,12 @@ import re
 import secrets
 import threading
 import time
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 from host_reconciliation_authority import HostBinding
+from host_trust_continuity import SCHEMA as CONTINUITY_SCHEMA
+from host_trust_continuity import HeadFence, TrustContinuityStore
 
 ROLES = ("registry", "enrollment", "checkpoint")
 SCHEMAS = {role: "isolated-host-reconciliation-" + role + "-v1" for role in ROLES}
@@ -125,15 +127,17 @@ class CurrentTrustResolver:
     Neither callback may provision or infer independent authority. Fixed signed
     windows prevent nonce-dependent binding renewal. Unsupported rotation/epochs
     require new independently reviewed wiring. No retained receipt is accessed.
-    Fresh observed heads retain their full stable state in this instance even
-    after failed resolution. Same-version conflicts or an authenticated epoch
-    transition retire this instance; restarting it is not an approved recovery.
+    Fresh observed heads retain a digest of their stable state even after failed
+    resolution. With a configured store, committed observations and retirement
+    survive process restart. Same-version conflicts or authenticated epoch
+    transitions require independently reviewed recovery.
     The 10-second operation budget is checked, with two-second lock admission;
     callbacks still require external transport cancellation/deadlines. These
     checks cannot interrupt a blocked callback or establish a hard timeout.
     """
 
-    def __init__(self, selection, registry, enrollment, checkpoint, minimum_head, *, evidence, current_head, clock=None):
+    def __init__(self, selection, registry, enrollment, checkpoint, minimum_head, *, evidence, current_head,
+                 clock=None, continuity=None):
         if (type(selection) is not SelectedContext or type(minimum_head) is not MinimumHead
                 or not callable(evidence) or not callable(current_head) or (clock is not None and not callable(clock))):
             _reject()
@@ -157,9 +161,27 @@ class CurrentTrustResolver:
         self._evidence, self._current_head = evidence, current_head
         self._clock = clock if clock is not None else lambda: int(time.time())
         self._admission = threading.Lock()
-        self._fence = (minimum_head.sequence, minimum_head.registry_sha256)
-        self._fence_state = None
-        self._retired = False
+        self._minimum_fence = HeadFence(sequence=minimum_head.sequence, registry_sha256=minimum_head.registry_sha256)
+        self._head_fence = self._minimum_fence
+        self._continuity_binding = _sha(_encode({"schema": CONTINUITY_SCHEMA, "selection": asdict(selection),
+            "pins": [{key: value for key, value in asdict(pin).items() if key != "public_key"} for pin in pins],
+            "minimum_head": asdict(minimum_head)}))
+        if continuity is not None and (type(continuity) is not TrustContinuityStore
+                or continuity.binding_sha256 != self._continuity_binding):
+            _reject()
+        self._continuity = continuity
+
+    @property
+    def continuity_binding_sha256(self):
+        return self._continuity_binding
+
+    @property
+    def _retired(self):
+        return self._head_fence.retired
+
+    @property
+    def _fence(self):
+        return self._head_fence.sequence, self._head_fence.registry_sha256
 
     def _now(self):
         return _number(self._clock())
@@ -238,21 +260,23 @@ class CurrentTrustResolver:
                 or any(value != "active" for value in claims["signer_status"].values())):
             _reject()
 
-    def _observe_head(self, claims):
-        if self._retired:
-            _reject()
-        if claims["epoch"] != self._minimum.epoch:
-            self._retired = True  # Authenticated epoch transitions require new wiring.
-            _reject()
-        fence = (claims["sequence"], claims["registry_sha256"])
+    def _observe_head(self, claims, deadline):
         state = _encode({name: claims[name] for name in SELECTION_FIELDS | STATE_FIELDS | {"registry_sha256"}})
-        if fence[0] < self._fence[0]:
+        observed = HeadFence(sequence=claims["sequence"], registry_sha256=claims["registry_sha256"],
+                             state_sha256=_sha(state))
+        epoch_matches = claims["epoch"] == self._minimum.epoch
+        if self._continuity is None:
+            self._head_fence, admitted = self._head_fence.observe(observed, epoch_matches=epoch_matches)
+        else:
+            try:
+                self._head_fence, admitted = self._continuity.observe(self._minimum_fence, self._head_fence,
+                    observed, epoch_matches=epoch_matches, deadline=deadline)
+            except Exception:  # An uncertain write retires this resolver.
+                self._head_fence = replace(self._head_fence, retired=True)
+                raise
+            self._budget(deadline)
+        if not admitted:
             _reject()
-        if fence[0] == self._fence[0]:
-            if fence[1] != self._fence[1] or (self._fence_state is not None and state != self._fence_state):
-                self._retired = True  # Same-version authority equivocation cannot be retried away.
-                _reject()
-        self._fence, self._fence_state = fence, state
 
     def _head(self, challenge, deadline):
         raw = self._checked(deadline, self._current_head, challenge, self._selection)
@@ -274,8 +298,8 @@ class CurrentTrustResolver:
             _reject()
         # A fully verified fresh authority head is observed even when subsequent
         # evidence, active-state or second-head checks fail. Never forget it and
-        # fall back to an older still-signed authorization in this process.
-        self._observe_head(claims)
+        # fall back to an older still-signed authorization.
+        self._observe_head(claims, deadline)
         self._selection_matches(claims)
         self._state(claims)
         return claims
@@ -291,6 +315,11 @@ class CurrentTrustResolver:
             acquired = self._admission.acquire(timeout=ADMISSION_SECONDS)
             if not acquired or self._retired:
                 _reject()
+            if self._continuity is not None:
+                self._head_fence = self._checked(deadline, self._continuity.read, self._minimum_fence,
+                                                 self._head_fence, deadline)
+                if self._retired:
+                    _reject()
             first_challenge = secrets.token_hex(16)
             first = self._head(first_challenge, deadline)
             evidence = self._checked(deadline, self._evidence, self._selection)
