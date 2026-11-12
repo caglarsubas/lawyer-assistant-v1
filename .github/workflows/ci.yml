@@ -89,8 +89,7 @@ env:
   CI_FINAL_RELEASE_TESTS: >-
     backend/tests/test_runtime_authorization_integration.py
     backend/tests/test_retained_mixed_assembly.py
-    backend/tests/test_retention_authorization_readiness.py
-    backend/tests/test_analysis_adjudication.py
+    backend/tests/test_metadata_handoff_readiness.py
   CI_RECOVERY_QUALIFICATION_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_copy_recovery_disposition.py
@@ -143,7 +142,8 @@ env:
     backend/tests/test_calibration_study_cli.py
     backend/tests/test_retained_release_authorization.py
   CI_CORE_RESERVE_REVIEW: >-
-    backend/tests/test_metadata_handoff_readiness.py
+    backend/tests/test_analysis_adjudication.py
+    backend/tests/test_retention_authorization_readiness.py
   CI_CORE_RESERVE_SOURCE: >-
     backend/tests/test_analysis_context_budget.py
 
@@ -577,7 +577,7 @@ jobs:
           read -r -a authority_cohort_tests <<< "$CI_AUTHORITY_COHORT_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=final "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=final "${metadata_capacity_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=final "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=final "${metadata_capacity_tests[@]}" -p scripts.ci_recipient_affinity --fixture-affinity-lane=graph
 
   retained-release-withdrawal:
     needs: backend-capacity
@@ -714,7 +714,7 @@ jobs:
           read -r -a graph_runtime_tests <<< "$CI_GRAPH_RUNTIME_TESTS"
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
           read -r -a reserve_tests <<< "$CI_CORE_RESERVE_GRAPH"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}" -p scripts.ci_recipient_affinity --fixture-affinity-lane=graph -p scripts.ci_preview_package_capacity --preview-package-lane=graph "${preview_package_tests[@]}" "${reserve_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=graph "${preview_tests[@]}" "${graph_runtime_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=graph "${auth_capacity_tests[@]}" -p scripts.ci_preview_package_capacity --preview-package-lane=graph "${preview_package_tests[@]}" "${reserve_tests[@]}"
 
 
       # The main graph pair has exited. Preserve the exact frozen history

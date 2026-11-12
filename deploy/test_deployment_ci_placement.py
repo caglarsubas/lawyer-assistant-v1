@@ -184,7 +184,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(withdrawal_group.split(), ["backend/tests/test_authority_proposals.py"])
         self.assertEqual(workflow.count("backend/tests/test_release_authorization.py"), 1)
         publication_group = re.search(r"  CI_PUBLICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertIn("-p scripts.ci_recipient_affinity --fixture-affinity-lane=graph", graph)
+        metadata_affinity = "-p scripts.ci_recipient_affinity --fixture-affinity-lane=graph"
+        self.assertIn(metadata_affinity, final)
+        self.assertNotIn(metadata_affinity, graph)
         capacity_group = re.search(r"  CI_BACKEND_CAPACITY_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(workflow.count("backend/tests/test_firm_admin.py"), 1)
         candidate_reserve = re.search(r"  CI_CORE_RESERVE_CANDIDATE: >-\n((?:    [^\n]+\n)+)", workflow)[1]
@@ -293,7 +295,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(recovery_group.split(), ["backend/tests/test_retained_release_withdrawal.py", "backend/tests/test_copy_recovery_disposition.py",
             "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py"])
         review_reserve = re.search(r"  CI_CORE_RESERVE_REVIEW: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(review_reserve.split(), ["backend/tests/test_metadata_handoff_readiness.py"])
+        self.assertEqual(review_reserve.split(), [
+            "backend/tests/test_analysis_adjudication.py",
+            "backend/tests/test_retention_authorization_readiness.py",
+        ])
         self.assertEqual(workflow.count("backend/tests/test_analysis_adjudication.py"), 1)
         self.assertIn('"$CI_CORE_RESERVE_REVIEW"', backend)
         self.assertIn('read -r -a reserve_tests <<< "$CI_CORE_RESERVE_REVIEW"', review_block)
@@ -463,8 +468,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("backend/tests/test_retained_release_inspection.py", capacity_group)
         self.assertEqual(release_group.split(), ["backend/tests/test_runtime_authorization_integration.py",
             "backend/tests/test_retained_mixed_assembly.py",
-            "backend/tests/test_retention_authorization_readiness.py",
-            "backend/tests/test_analysis_adjudication.py"])
+            "backend/tests/test_metadata_handoff_readiness.py"])
         planning_reserve = re.search(r"  CI_CORE_RESERVE_PLANNING: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertIn("backend/tests/test_retained_release_authorization.py", planning_reserve)
         self.assertEqual(workflow.count("backend/tests/test_retained_release_authorization.py"), 1)

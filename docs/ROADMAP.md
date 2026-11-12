@@ -11278,9 +11278,10 @@ The continuity PR ran all 13 jobs with at least 34 seconds of job reserve.
 Its first independent main run measured 28 seconds in graph runtime, below
 the 30-second floor. The guard stopped the backend suite.
 
-Move the complete nine-case metadata handoff file from graph runtime to
-backend review. Its measured work was 57.8 worker-seconds. Move the complete
-39-case analysis adjudication file from review to the existing final
-authorization step to make room. The PR and initial main run left 51 and
-64 seconds, respectively, in final authorization. Keep the existing worker
-limit, caps, reserve floors and all exact test identities.
+The nine-case metadata handoff file measured 57.8 worker-seconds in graph
+runtime. The first proposed move to review failed collection because graph
+runtime still required the file through a worker-affinity selector. Run the
+complete file and its selector in the final authorization step. Move the
+complete 13-case retention readiness file to backend review to make room.
+Keep the graph authorization split, existing workers, caps, reserve floors
+and all exact test identities.
