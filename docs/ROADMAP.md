@@ -11262,4 +11262,8 @@ receipt review file to the existing PostgreSQL job, which retained 85 seconds.
 All 13 checks then passed, with 74 seconds of frontend reserve and 23 seconds
 for the backend job. Assign the complete 35-case source relationships file
 to the existing frontend portfolio step, excluding it from core discovery.
+The frontend job retained 63 seconds after the move. Source publication's
+original signed-publication step took 10 seconds longer and job reserve fell
+to 18 seconds. Move the complete 25-case restart step to the exited frontend
+pair and the complete 20-case source review readiness file to planning.
 Verify each case once under the existing worker limit, caps and reserve floors.

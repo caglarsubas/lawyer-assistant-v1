@@ -308,7 +308,11 @@ class DeploymentPlacementContract(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "recovery_qualification_tests"):
                 validate_workflow_arrays(broken)
         frontend_group = re.search(r"  CI_PUBLICATION_PLANNING_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(frontend_group.split(), ["backend/tests/test_planning_journal_reconciliation.py", "backend/tests/test_release_authorization.py", "backend/tests/test_analysis_feedback.py", "backend/tests/test_retained_release_inspection.py", "backend/tests/test_analysis_reviews.py"])
+        self.assertEqual(frontend_group.split(), [
+            "backend/tests/test_planning_journal_reconciliation.py", "backend/tests/test_release_authorization.py",
+            "backend/tests/test_analysis_feedback.py", "backend/tests/test_source_review_readiness.py",
+            "backend/tests/test_retained_release_inspection.py", "backend/tests/test_analysis_reviews.py",
+        ])
         definition = '          read -r -a publication_planning_tests <<< "$CI_PUBLICATION_PLANNING_TESTS"\n'
         for owner in (backend, blocks["publication-planning-contracts"]):
             self.assertEqual(owner.count(definition), 1)
@@ -318,10 +322,10 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('"${publication_planning_tests[@]}" "${source_review_tests[@]}" "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', blocks["publication-planning-contracts"])
         self.assertNotIn("CI_PUBLICATION_PLANNING_TESTS", blocks["frontend"])
         restart = "name: Test complete disposition restart qualification\n        timeout-minutes: 2"
-        publication = blocks["source-publication-contracts"]
+        frontend = blocks["frontend"]
         self.assertEqual(workflow.count(restart), 1)
-        self.assertLess(publication.index("name: Test manifest-bound review headroom slice 9"), publication.index(restart))
-        for key, path, array, job in (("CI_DISPOSITION_RESTART_TESTS", "backend/tests/test_disposition_journal_reconciliation.py", "disposition_restart_tests", "source-publication-contracts"),
+        self.assertLess(frontend.index("name: Test complete portfolio review qualification"), frontend.index(restart))
+        for key, path, array, job in (("CI_DISPOSITION_RESTART_TESTS", "backend/tests/test_disposition_journal_reconciliation.py", "disposition_restart_tests", "frontend"),
                                       ("CI_CANDIDATE_FOCUS_TESTS", "backend/tests/test_analysis_focus.py", "focus_tests", "graph-candidate-contracts")):
             group = re.search(r"  " + key + r": >-\n((?:    [^\n]+\n)+)", workflow)[1]
             self.assertEqual(group.split(), [path])
@@ -337,9 +341,9 @@ class DeploymentPlacementContract(unittest.TestCase):
                     validate_workflow_arrays(broken)
             if key != "CI_DISPOSITION_RESTART_TESTS":
                 self.assertNotIn(key, blocks["frontend"])
-        self.assertIn('"${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', publication.split(restart, 1)[1])
+        self.assertIn('"${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1', frontend.split(restart, 1)[1])
         self.assertEqual(workflow.count("-p scripts.ci_disposition_reads --disposition-read-lane="), 3)
-        for name, lane in (("source-publication-contracts", "graph"), ("retained-release-withdrawal", "withdrawal"),
+        for name, lane in (("frontend", "graph"), ("retained-release-withdrawal", "withdrawal"),
                            ("publication-planning-contracts", "publication")):
             self.assertIn("--disposition-read-lane=" + lane, blocks[name])
         inventory_definition = '          read -r -a inventory_review_tests <<< "$CI_RECOVERY_INVENTORY_TESTS"\n'

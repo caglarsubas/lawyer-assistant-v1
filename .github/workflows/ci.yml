@@ -43,6 +43,7 @@ env:
     backend/tests/test_planning_journal_reconciliation.py
     backend/tests/test_release_authorization.py
     backend/tests/test_analysis_feedback.py
+    backend/tests/test_source_review_readiness.py
     backend/tests/test_retained_release_inspection.py
     backend/tests/test_analysis_reviews.py
   CI_FAST_GUARD_TESTS: >-
@@ -127,7 +128,6 @@ env:
     backend/tests/test_authority_revalidations.py
     backend/tests/test_source_analysis_reviews.py
     backend/tests/test_source_context_renewals.py
-    backend/tests/test_source_review_readiness.py
     backend/tests/test_portfolio_source_reviews.py
     backend/tests/test_source_context_navigation.py
   CI_CORE_RESERVE_CAPACITY: >-
@@ -492,6 +492,12 @@ jobs:
           read -r -a reserve_tests <<< "$CI_CORE_RESERVE_FRONTEND"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend "${metadata_capacity_tests[@]}" "${reserve_tests[@]}"
 
+      - name: Test complete disposition restart qualification
+        timeout-minutes: 2
+        run: |
+          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+
   frontend-history:
     needs: backend-capacity
     # Growing history contracts exceeded the single frontend lane's reserve.
@@ -676,12 +682,6 @@ jobs:
       - name: Test manifest-bound review headroom slice 9
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json
-
-      - name: Test complete disposition restart qualification
-        timeout-minutes: 2
-        run: |
-          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   graph-runtime-contracts:
     needs: backend-capacity
