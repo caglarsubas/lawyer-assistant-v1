@@ -432,14 +432,6 @@ jobs:
 
 
 
-      # The original bounded restart phase follows exited PostgreSQL workers.
-      - name: Test complete disposition restart qualification
-        timeout-minutes: 2
-        run: |
-          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
-
-
   frontend:
     needs: backend-capacity
     runs-on: ubuntu-24.04-arm
@@ -799,6 +791,12 @@ jobs:
         run: |
           read -r -a history_binding_tests <<< "$CI_HISTORY_BINDING_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_provision_bindings --provision-binding-lane=planning "${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
+
+      - name: Test complete disposition restart qualification
+        timeout-minutes: 2
+        run: |
+          read -r -a disposition_restart_tests <<< "$CI_DISPOSITION_RESTART_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_disposition_reads --disposition-read-lane=graph "${disposition_restart_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA
 
   backend-capacity:
     permissions:

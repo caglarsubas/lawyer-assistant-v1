@@ -11248,7 +11248,9 @@ Production authority provisioning, independent rollback and clock controls,
 directory restore, receipt integration and the owner's review remain pending.
 
 The first hosted run measured 20 seconds of analysis recovery reserve against
-the 30-second floor. Move the complete 50-case feedback file to publication
-planning and run the existing 25-case restart step after the PostgreSQL workers
-exit. Verify each case once on the new placement using the existing worker
-limit, caps and reserve floors.
+the 30-second floor. Moving the complete 50-case feedback file to publication
+planning and the 25-case restart step to PostgreSQL restored analysis recovery
+to 53 seconds, but left PostgreSQL at 29. Publication planning retained 61
+seconds with the feedback file. Run the existing restart step there after
+the planning and binding workers exit. Verify each case once under the
+existing worker limit, caps and reserve floors.
