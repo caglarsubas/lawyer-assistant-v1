@@ -487,7 +487,7 @@ jobs:
           read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"
           read -r -a frontend_review_tests <<< "$CI_FRONTEND_REVIEW_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" "${frontend_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend "${metadata_capacity_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=frontend "${preview_tests[@]}" "${frontend_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=frontend "${metadata_capacity_tests[@]}"
 
   frontend-history:
     needs: backend-capacity
@@ -754,7 +754,7 @@ jobs:
           read -r -a human_review_tests <<< "$CI_HUMAN_REVIEW_GROUP_TESTS"
           read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"
           read -r -a inventory_review_tests <<< "$CI_RECOVERY_INVENTORY_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${recovery_qualification_tests[@]}" "${human_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_recipient_affinity --fixture-affinity-lane=analysis -p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${recovery_qualification_tests[@]}" "${human_review_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_recipient_affinity --fixture-affinity-lane=analysis -p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}" -p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py
 
       - name: Test manifest-bound review headroom slice 10
         timeout-minutes: 1

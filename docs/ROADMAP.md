@@ -11253,5 +11253,7 @@ planning and the 25-case restart step to PostgreSQL restored analysis recovery
 to 53 seconds. PostgreSQL reserve fell to 29 seconds. A subsequent placement
 measured 24 seconds for planning and 27 for PostgreSQL. Run the restart step
 after source publication and move the 16-case SQLite inventory partition to
-analysis recovery. Verify each case once under the existing worker limit,
-caps and reserve floors.
+analysis recovery. That placement met the floors for the affected jobs. The
+frontend job then finished with 26 seconds. Move its 20-case journal
+materialization partition to analysis recovery, which finished with 57 seconds.
+Verify each case once under the existing worker limit, caps and reserve floors.
