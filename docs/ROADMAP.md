@@ -11271,3 +11271,16 @@ The next run measured 35 seconds for source publication, 48 for planning and
 frontend history. Use separate disposable credentials and await the fixture's
 cleanup signal before checking the active count. Keep the same contract ID.
 Verify each case once under the existing worker limit, caps and reserve floors.
+
+## 327. Graph runtime reserve after continuity merge — 2026-11-12
+
+The continuity PR ran all 13 jobs with at least 34 seconds of job reserve.
+Its first independent main run measured 28 seconds in graph runtime, below
+the 30-second floor. The guard stopped the backend suite.
+
+Move the complete nine-case metadata handoff file from graph runtime to
+backend review. Its measured work was 57.8 worker-seconds. Move the complete
+39-case analysis adjudication file from review to the existing final
+authorization step to make room. The PR and initial main run left 51 and
+64 seconds, respectively, in final authorization. Keep the existing worker
+limit, caps, reserve floors and all exact test identities.

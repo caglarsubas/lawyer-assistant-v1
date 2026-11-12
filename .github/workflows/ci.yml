@@ -90,6 +90,7 @@ env:
     backend/tests/test_runtime_authorization_integration.py
     backend/tests/test_retained_mixed_assembly.py
     backend/tests/test_retention_authorization_readiness.py
+    backend/tests/test_analysis_adjudication.py
   CI_RECOVERY_QUALIFICATION_TESTS: >-
     backend/tests/test_retained_release_withdrawal.py
     backend/tests/test_copy_recovery_disposition.py
@@ -99,7 +100,6 @@ env:
   # A dedicated bounded job holds complete publication/planning files.
   # Keep remaining graph files complete and the lighter Graph B snapshot in backend.
   CI_GRAPH_RUNTIME_TESTS: >-
-    backend/tests/test_metadata_handoff_readiness.py
     backend/tests/test_graph_b_component_grants.py
     backend/tests/test_declared_graph_assembly.py
     backend/tests/test_release_set_authorization.py
@@ -143,7 +143,7 @@ env:
     backend/tests/test_calibration_study_cli.py
     backend/tests/test_retained_release_authorization.py
   CI_CORE_RESERVE_REVIEW: >-
-    backend/tests/test_analysis_adjudication.py
+    backend/tests/test_metadata_handoff_readiness.py
   CI_CORE_RESERVE_SOURCE: >-
     backend/tests/test_analysis_context_budget.py
 
