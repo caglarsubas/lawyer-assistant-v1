@@ -223,9 +223,10 @@ class BackpressureContracts(unittest.TestCase):
         self.assertEqual(calls, [("timeout", 3), ("connect",), ("close",)])
 
     def test_health_has_headroom_while_five_metadata_lifetimes_overlap(self):
-        release, two_closing = threading.Event(), threading.Event()
+        request_count = 5
+        release, two_closing, all_closed = threading.Event(), threading.Event(), threading.Event()
         lock = threading.Lock()
-        counts = {"active": 0, "peak": 0, "closing": 0}
+        counts = {"active": 0, "peak": 0, "closing": 0, "closed": 0}
 
         class Response:
             status = 200
@@ -261,24 +262,31 @@ class BackpressureContracts(unittest.TestCase):
                 release.wait(2)
                 with lock:
                     counts["active"] -= 1
+                    counts["closed"] += 1
+                    if counts["closed"] == request_count:
+                        all_closed.set()
 
         server = relay.Server(("127.0.0.1", 0), "10.1.2.3", "synthetic-model")
         thread = threading.Thread(target=server.serve_forever, daemon=True)
         thread.start()
         try:
-            with patch.object(relay.http.client, "HTTPConnection", Connection), ThreadPoolExecutor(5) as pool:
-                def metadata(_):
+            with patch.object(relay.http.client, "HTTPConnection", Connection), ThreadPoolExecutor(request_count) as pool:
+                def metadata(index):
                     with httpx.Client(trust_env=False, timeout=4) as client:
                         return client.get(f"http://127.0.0.1:{server.server_port}/v1/models",
-                                          headers={"Authorization": "Bearer fixture-only"}).status_code
-                futures = [pool.submit(metadata, i) for i in range(5)]
+                                          headers={"Authorization": f"Bearer fixture-only-{index}"}).status_code
+                futures = [pool.submit(metadata, i) for i in range(request_count)]
                 try:
                     self.assertTrue(two_closing.wait(1))
                     with httpx.Client(trust_env=False, timeout=1) as client:
                         self.assertEqual(client.get(f"http://127.0.0.1:{server.server_port}/health").status_code, 200)
+                    with lock:
+                        self.assertEqual(counts["active"], 2)
                 finally:
                     release.set()
-                self.assertEqual([f.result(4) for f in futures], [200] * 5)
+                self.assertEqual([f.result(4) for f in futures], [200] * request_count)
+                # A client can read the response before the relay closes upstream.
+                self.assertTrue(all_closed.wait(1))
             self.assertEqual(counts["peak"], 2)
             self.assertEqual(counts["active"], 0)
         finally:

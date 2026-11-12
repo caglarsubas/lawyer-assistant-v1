@@ -11266,4 +11266,8 @@ The frontend job retained 63 seconds after the move. Source publication's
 original signed-publication step took 10 seconds longer and job reserve fell
 to 18 seconds. Move the complete 25-case restart step to the exited frontend
 pair and the complete 20-case source review readiness file to planning.
+The next run measured 35 seconds for source publication, 48 for planning and
+54 for frontend. An independent relay fixture raced connection cleanup in
+frontend history. Use separate disposable credentials and await the fixture's
+cleanup signal before checking the active count. Keep the same contract ID.
 Verify each case once under the existing worker limit, caps and reserve floors.
