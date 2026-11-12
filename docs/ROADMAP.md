@@ -11232,3 +11232,42 @@ The resolver remains unregistered and performs no IO or signing. Genuine
 fingerprint/authority provisioning, current-state administration, durable
 continuity, receipt-level integration, directory restore/rebinding, production
 qualification and the owner's private analysis review remain pending.
+
+## 326. Host trust continuity across process restarts — 2026-11-12
+
+Give the staged [host resolver](HOST_RECONCILIATION_TRUST.md) a private continuity
+store bound to its exact wiring and an independently configured store ID.
+Commit newer authenticated heads and retirement before the resolver can
+release authorization. A restarted resolver can enforce the committed state.
+Use exclusive initialization, bounded directory locking and synchronized
+replacement for cooperating processes on one trusted local filesystem.
+
+Qualify restart, competing observations, revocation, equivocation, unavailable
+state, write failure and lock contention with disposable identities and files.
+Production authority provisioning, independent rollback and clock controls,
+directory restore, receipt integration and the owner's review remain pending.
+
+The first hosted run measured 20 seconds of analysis recovery reserve against
+the 30-second floor. Moving the complete 50-case feedback file to publication
+planning and the 25-case restart step to PostgreSQL restored analysis recovery
+to 53 seconds. PostgreSQL reserve fell to 29 seconds. A subsequent placement
+measured 24 seconds for planning and 27 for PostgreSQL. Run the restart step
+after source publication and move the 16-case SQLite inventory partition to
+analysis recovery. That placement met the floors for the affected jobs. The
+frontend job then finished with 26 seconds. Move its 20-case journal
+materialization partition to analysis recovery, which finished with 57 seconds.
+The next frontend run reduced portfolio time from 64 to 43 seconds. Dependency
+setup rose by 28 seconds, and job reserve fell to 23. Move the complete eight-case
+receipt review file to the existing PostgreSQL job, which retained 85 seconds.
+All 13 checks then passed, with 74 seconds of frontend reserve and 23 seconds
+for the backend job. Assign the complete 35-case source relationships file
+to the existing frontend portfolio step, excluding it from core discovery.
+The frontend job retained 63 seconds after the move. Source publication's
+original signed-publication step took 10 seconds longer and job reserve fell
+to 18 seconds. Move the complete 25-case restart step to the exited frontend
+pair and the complete 20-case source review readiness file to planning.
+The next run measured 35 seconds for source publication, 48 for planning and
+54 for frontend. An independent relay fixture raced connection cleanup in
+frontend history. Use separate disposable credentials and await the fixture's
+cleanup signal before checking the active count. Keep the same contract ID.
+Verify each case once under the existing worker limit, caps and reserve floors.
