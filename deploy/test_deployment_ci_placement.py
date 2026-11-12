@@ -193,7 +193,9 @@ class DeploymentPlacementContract(unittest.TestCase):
             "backend/tests/test_portfolio.py"])
         graph_reserve = re.search(r"  CI_CORE_RESERVE_GRAPH: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(graph_reserve.split(), ["backend/tests/test_firm_admin.py"])
-        for path in candidate_reserve.split() + graph_reserve.split():
+        frontend_reserve = re.search(r"  CI_CORE_RESERVE_FRONTEND: >-\n((?:    [^\n]+\n)+)", workflow)[1]
+        self.assertEqual(frontend_reserve.split(), ["backend/tests/test_source_relationships.py"])
+        for path in candidate_reserve.split() + graph_reserve.split() + frontend_reserve.split():
             self.assertEqual(workflow.count(path), 1)
         candidate = blocks["graph-candidate-contracts"]
         self.assertNotIn("CI_CORE_RESERVE_GRAPH", candidate)
@@ -201,6 +203,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         reserve_definitions = (
             (candidate, '          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_CANDIDATE"\n'),
             (graph, '          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_GRAPH"\n'),
+            (blocks["frontend"], '          read -r -a reserve_tests <<< "$CI_CORE_RESERVE_FRONTEND"\n'),
         )
         for owner, definition in reserve_definitions:
             self.assertEqual(owner.count(definition), 1)
@@ -208,16 +211,15 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertEqual(owner.count('"${reserve_tests[@]}"'), 1)
         self.assertIn('--durations=10 -rA "${reserve_tests[@]}"', candidate)
         self.assertIn('"${preview_package_tests[@]}" "${reserve_tests[@]}"', graph)
+        self.assertIn('"${metadata_capacity_tests[@]}" "${reserve_tests[@]}"', blocks["frontend"])
         self.assertIn('read -r -a reserve_tests <<< "$(printf \'%s \' "$CI_CORE_RESERVE_CAPACITY" '
-                      '"$CI_CORE_RESERVE_CANDIDATE" "$CI_CORE_RESERVE_GRAPH" "$CI_CORE_RESERVE_PLANNING" '
+                      '"$CI_CORE_RESERVE_CANDIDATE" "$CI_CORE_RESERVE_FRONTEND" "$CI_CORE_RESERVE_GRAPH" '
+                      '"$CI_CORE_RESERVE_PLANNING" '
                       '"$CI_CORE_RESERVE_REVIEW" "$CI_CORE_RESERVE_SOURCE")"', backend)
         self.assertIn('for path in "${reserve_tests[@]}"', backend)
         self.assertNotIn("CI_CORE_RESERVE_POSTGRES", workflow)
-        # Returned complete files use ordinary backend/tests discovery, and
-        # cannot remain in any explicit exclusion or secondary job inventory.
-        for returned_file in ("backend/tests/test_source_relationships.py", "backend/tests/test_open_validity_publication.py"):
-            self.assertNotIn(returned_file, workflow)
-            self.assertTrue((ROOT / returned_file).is_file())
+        self.assertNotIn("backend/tests/test_open_validity_publication.py", workflow)
+        self.assertTrue((ROOT / "backend/tests/test_open_validity_publication.py").is_file())
         self.assertIn('ignore_args+=("--ignore=$path")', backend)
         self.assertEqual(workflow.count("backend/tests/test_authority_proposals.py"), 1)
         retention_group = re.search(r"  CI_RECEIPT_RETENTION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]

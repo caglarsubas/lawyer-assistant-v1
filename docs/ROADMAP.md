@@ -11259,4 +11259,7 @@ materialization partition to analysis recovery, which finished with 57 seconds.
 The next frontend run reduced portfolio time from 64 to 43 seconds. Dependency
 setup rose by 28 seconds, and job reserve fell to 23. Move the complete eight-case
 receipt review file to the existing PostgreSQL job, which retained 85 seconds.
+All 13 checks then passed, with 74 seconds of frontend reserve and 23 seconds
+for the backend job. Assign the complete 35-case source relationships file
+to the existing frontend portfolio step, excluding it from core discovery.
 Verify each case once under the existing worker limit, caps and reserve floors.
