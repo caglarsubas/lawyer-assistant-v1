@@ -374,7 +374,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         for name, lane in (("graph-candidate-contracts", "candidate"), ("backend-and-contracts", "history"), ("publication-planning-contracts", "planning")):
             self.assertIn("--provision-binding-lane=" + lane, blocks[name])
         self.assertEqual(workflow.count("name: Test complete portfolio review qualification"), 1)
-        self.assertIn('"${frontend_review_tests[@]}" -q -n 2', blocks["frontend"])
+        self.assertIn('"${frontend_review_tests[@]}" "${postgres_source_tests[@]}" -n 2', postgres)
+        self.assertEqual(postgres.count('read -r -a frontend_review_tests <<< "$CI_FRONTEND_REVIEW_TESTS"'), 1)
+        self.assertNotIn("CI_FRONTEND_REVIEW_TESTS", blocks["frontend"])
         self.assertIn('-p scripts.ci_materialization_capacity --materialization-capacity-lane=final backend/tests/test_journal_materialization.py', isolated)
         self.assertEqual(re.search(r"  CI_FRONTEND_REVIEW_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split(), ["backend/tests/test_disposition_receipt_reobservation.py"])
         self.assertNotIn("backend/tests/test_analysis_cohorts.py", publication_group)

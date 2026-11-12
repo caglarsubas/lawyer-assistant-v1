@@ -11256,4 +11256,7 @@ after source publication and move the 16-case SQLite inventory partition to
 analysis recovery. That placement met the floors for the affected jobs. The
 frontend job then finished with 26 seconds. Move its 20-case journal
 materialization partition to analysis recovery, which finished with 57 seconds.
+The next frontend run reduced portfolio time from 64 to 43 seconds. Dependency
+setup rose by 28 seconds, and job reserve fell to 23. Move the complete eight-case
+receipt review file to the existing PostgreSQL job, which retained 85 seconds.
 Verify each case once under the existing worker limit, caps and reserve floors.
