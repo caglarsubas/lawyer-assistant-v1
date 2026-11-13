@@ -30,7 +30,7 @@ cleanup() {
   [[ -z "$API_PID" ]] || kill "$API_PID" 2>/dev/null || true
 }
 trap cleanup EXIT INT TERM
-PYTHONPATH="$ROOT/backend" backend/.venv/bin/uvicorn app.main:create_app --factory --host 127.0.0.1 --port 8000 --no-access-log &
+PYTHONPATH="$ROOT/backend" backend/.venv/bin/uvicorn app.runtime:create_app --factory --host 127.0.0.1 --port 8000 --no-access-log &
 API_PID=$!
 npm --prefix frontend run dev -- --host 127.0.0.1 --port 5173 --strictPort &
 WEB_PID=$!

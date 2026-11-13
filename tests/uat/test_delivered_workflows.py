@@ -27,8 +27,8 @@ from test_portfolio import customer, workspace
 from app.analysis_proposals import proposal_messages
 from app.config import Settings
 from app.db import Audit, Record
-from app.main import create_app
 from app.provider import ProviderError
+from app.runtime import create_app
 
 API = "/api/v1"
 SOURCE = "UAT kurgu: Ödeme için imzalı teslim tutanağı gerekir."
@@ -670,7 +670,17 @@ def test_buat_07_unconfigured_graph_and_intake_fail_closed(uat, monkeypatch):
 
 
 def test_buat_08_corrupt_private_original_returns_controlled_conflict(uat, monkeypatch):
-    from cryptography.fernet import Fernet
+    from pathlib import Path
+
+    from cryptography.fernet import Fernet, InvalidToken
+
+    from app import runtime
+
+    # The container and disposable acceptance suite must exercise the same factory.
+    root = Path(__file__).resolve().parents[2]
+    dockerfile = root / "deploy/backend.Dockerfile"
+    assert "uvicorn app.runtime:create_app --factory" in (root / "scripts/dev.sh").read_text()
+    assert '"app.runtime:create_app", "--factory"' in dockerfile.read_text()
 
     app, owner, actor = uat
     admin = checked(owner.get(API + "/auth/me")).json()["user"]["id"]
@@ -743,3 +753,19 @@ def test_buat_08_corrupt_private_original_returns_controlled_conflict(uat, monke
     assert checked(owner.get(original)).content == SOURCE.encode()
     assert records() == frozen and len(exports() - exported) == 1
     assert checked(owner.get(reviews, params={"version_id": draft["latest_version_id"]})).json() == [event]
+
+    def unrelated_failure(error):
+        def endpoint():
+            raise error("UAT unrelated failure")
+        return endpoint
+
+    for index, error in enumerate((InvalidToken, OSError)):
+        endpoint = f"/uat-unrelated-original-error-{index}"
+        app.add_api_route(endpoint, unrelated_failure(error), methods=["GET"])
+        with pytest.raises(error):
+            owner.get(endpoint)
+    from fastapi import FastAPI
+    with monkeypatch.context() as patch:
+        patch.setattr(runtime, "create_baseline_app", lambda _settings: FastAPI())
+        with pytest.raises(RuntimeError, match="route identity"):
+            runtime.create_app()

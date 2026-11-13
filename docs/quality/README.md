@@ -26,12 +26,12 @@ retained. Installed-stack, owner and legal qualification remain pending.
 | Read-only deployed checks | Shell/health respond; anonymous private endpoints return 401 | Relay stopped, scanner unavailable; 129/130 compared backend files match main. `context_packing.py` differs. |
 | Authenticated installed-stack and legal UAT | Not qualified | The browser presented sign-in; no owner credentials were retrieved, private cases opened or review decisions made. |
 
-Two executable regressions remain open: the preview returns to the old file
+At the retained audit baseline, two executable regressions were open: the preview returns to the old file
 after upload from a direct file link, and damaged encrypted originals produce a
 generic HTTP 500 instead of a controlled integrity conflict. The latter leaks
-no original bytes in the observed synthetic response. The API test is a narrow
-strict expected failure; the browser test is a TODO. Neither counts as a pass.
-The combined acceptance runner returns nonzero while either remains open,
+no original bytes in the observed synthetic response. The baseline API test was a narrow
+strict expected failure; the browser test was a TODO. Neither counted as a pass.
+The combined acceptance runner returns nonzero whenever either fails,
 even if the underlying test framework exits successfully.
 
 The dated baseline records **295 merged PRs**, **42 done / 21 open / 24 waiting /
@@ -74,14 +74,16 @@ read-only, unauthenticated observations of the local installed stack. It makes
 no provider request and does not restore services or alter Docker volumes.
 
 The default PR workflow adds only the compact audit/API contracts after the
-existing frontend-history workers exit. Existing test assignments, worker
-ceilings, job caps and reserve policies remain unchanged. The on-demand browser
+existing frontend-history workers exit. The repair follow-up moves the intact 40-case recovery-input file to the
+existing backend job with a closed source-bound partition. Full previous
+coverage, worker ceilings, job caps and reserve policies remain enforced. The on-demand browser
 run and full acceptance verdict remain separate; green engineering CI is not
 a UAT pass. Exact PR and independent main evidence are published by the tracker.
 
 ## Corrective work order
 
-1. Repair the two reproduced user-workflow defects with their failure tests.
+1. Source repairs and mandatory passing regressions now cover both reproduced
+   document defects; installed-candidate acceptance remains required.
 2. Restore admitted scanner and approved local relay operation; reconcile the
    intended `context_packing.py` and exact installed candidate.
 3. Run signed-in synthetic intake → analysis → separate review → export on that

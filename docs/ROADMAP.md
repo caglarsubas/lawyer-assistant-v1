@@ -16,19 +16,26 @@ the original URL during upload is also guarded by a navigation counter.
 Authenticated original downloads return controlled 409 responses for unreadable
 or unverifiable ciphertext. Authorization still precedes file access; failures
 return no original bytes, storage path or successful-export audit event. The
-endpoint never repairs, deletes or re-encrypts the source. Successful downloads
+runtime handler never repairs, deletes or re-encrypts the source. Successful downloads
 still require the exact recorded digest. Disposable failure and restoration
 tests preserve original bytes, encrypted records, source revisions and hashes,
-independent review decisions and historical versions.
+independent review decisions and historical versions. The new Docker/development factory
+`app.runtime:create_app` scopes the error translation to the original-download
+route. Unrelated failures retain their existing behavior. The historical
+`app.main` factory and all 757 inputs pinned by its recovery qualification keep
+their exact bytes; the new runtime entry point is qualified by the repair UAT.
 
 The [retained repair run](quality/document-repair-results.json) pins tested source
 `15023c26093d00fecb55df2eabb5c06e133f4549`: all 18 selected API/Chromium journeys
 and 30 audit-tool checks pass, with no expected failures or skipped cases.
 Both defects were reproduced before the fixes. The initial audit and its failed
 results remain retained, and the [interactive report](quality/uat-report.html)
-shows the follow-up separately. Existing CI jobs, assignments, two-worker caps,
-time budgets and reserve floors are unchanged; exact PR and independent main
-qualification are recorded separately in the tracker.
+shows the follow-up separately. The unchanged 40-case recovery-input file moves from the overloaded capacity
+gate to the existing backend job. A closed, source-bound partition proves all
+135 trial/graph/recovery cases run exactly once across the two jobs. All 13
+jobs, full previous coverage, two-worker caps, time budgets and reserve floors
+remain enforced; exact PR and independent main qualification are recorded
+separately in the tracker.
 
 This closes the two source-level repairs, not F00-04's full representative-format
 or installed-system acceptance. Next is F00-06: restore admitted scanner and

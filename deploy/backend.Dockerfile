@@ -23,4 +23,4 @@ RUN chmod -R a+rX /app/scripts /app/ontology /app/qualification /app/deploy \
     /app/backend/app /app/backend/pyproject.toml /app/backend/uv.lock
 USER 10001:10001
 EXPOSE 8000
-CMD ["uvicorn", "app.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]
+CMD ["uvicorn", "app.runtime:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]

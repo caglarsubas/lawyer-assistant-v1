@@ -174,7 +174,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         for job, lane in (("frontend", "frontend"), ("backend-and-contracts", "final"), ("graph-runtime-contracts", "graph")):
             if job == "backend-and-contracts":
                 self.assertIn('-p scripts.ci_operator_previews --operator-preview-lane=final -n 2', blocks[job])
-                self.assertIn('if [[ "$path" != "${preview_tests[0]}" ]]; then', blocks[job])
+                self.assertIn('if [[ "$path" != "${preview_tests[0]}" && "$path" != "${authority_trial_tests[2]}" ]]; then', blocks[job])
             else:
                 self.assertIn("backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=" + lane + ' "${preview_tests[@]}"', blocks[job])
             self.assertIn('read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"', blocks[job])

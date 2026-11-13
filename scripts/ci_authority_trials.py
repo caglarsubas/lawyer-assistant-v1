@@ -12,7 +12,7 @@ SOURCE = ROOT / "backend/tests/test_authority_trials.py"
 MANIFEST = ROOT / "deploy/fixtures/authority_trial_partition.json"
 SOURCES = {"backend/tests/test_authority_trials.py": 37, "backend/tests/test_graph.py": 58,
            "backend/tests/test_operator_recovery_inputs.py": 40}
-COUNTS = {"capacity": 135}
+COUNTS = {"capacity": 95, "core": 40}
 PRIORITY = ("tests/test_graph.py::test_two_hop_expansion_stops_before_third_hop",)
 
 
@@ -38,7 +38,7 @@ def load_contract(path=MANIFEST, source=SOURCE):
     hashes = {p: hashlib.sha256((source if p == "backend/tests/test_authority_trials.py"
                                 else ROOT / p).read_bytes()).hexdigest() for p in SOURCES}
     if (not isinstance(value, dict) or set(value) != {"schema", "sources", "test_ids", "lanes", "priority_ids"}
-            or value["schema"] != "backend-capacity-ci-partition-v2" or value["sources"] != hashes
+            or value["schema"] != "backend-capacity-ci-partition-v3" or value["sources"] != hashes
             or value["priority_ids"] != list(PRIORITY)):
         raise ValueError("Backend capacity sources or manifest changed")
     ids, lanes = value["test_ids"], value["lanes"]
@@ -50,6 +50,10 @@ def load_contract(path=MANIFEST, source=SOURCE):
     for p, count in SOURCES.items():
         if sum(n.startswith(p.removeprefix("backend/") + "::") for n in ids) != count:
             raise ValueError("Backend capacity source inventory differs")
+    # Keep the complete recovery-input file together in the existing core job.
+    core = [n for n in ids if n.startswith("tests/test_operator_recovery_inputs.py::")]
+    if lanes["core"] != core:
+        raise ValueError("Recovery-input qualification must remain intact")
     combined = []
     for lane, count in COUNTS.items():
         rows = lanes[lane]
@@ -64,8 +68,9 @@ def load_contract(path=MANIFEST, source=SOURCE):
 def select(contract, lane, nodeids):
     if lane not in contract.lanes or len(nodeids) != len(set(nodeids)):
         raise ValueError("Unknown backend capacity lane or duplicate collection")
-    if sorted(x for x in nodeids if contract.includes(x)) != list(contract.ids):
-        raise ValueError("Full backend capacity collection differs from its manifest")
+    expected = contract.ids if lane == "capacity" else contract.lanes[lane]
+    if sorted(x for x in nodeids if contract.includes(x)) != list(expected):
+        raise ValueError("Backend capacity collection differs from its manifest")
     wanted = set(contract.lanes[lane])
     kept = [x for x in nodeids if not contract.includes(x) or x in wanted]
     # The measured indivisible13-second case starts before short queued work.
@@ -115,7 +120,7 @@ class Partition:
             terminalreporter.write_line(json.dumps({"backend_capacity_partition": self.lane,
                 "source_sha256": self.contract.source_sha256,
                 "inventory_sha256": self.contract.inventory_sha256,
-                "complete_count": 135,
+                "complete_count": len(self.contract.lanes[self.lane]),
                 "selected_ids_sha256": sorted(hashlib.sha256(n.encode()).hexdigest() for n in self.passed)}))
 
 
