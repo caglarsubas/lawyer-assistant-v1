@@ -5,6 +5,8 @@ import { AnalysisWorkspace } from './AnalysisPanel';
 import { AnalysisEditor } from './AnalysisEditor';
 import { analysisForm, type AnalysisContent, type AnalysisRecord } from './analysisTypes';
 import type { Matter } from '../../types';
+import { SourceExcerpt } from '../../SourceExcerpt';
+import { AnalysisReasoning } from './AnalysisReasoning';
 
 function fixture(): AnalysisContent {
   return {
@@ -122,5 +124,32 @@ describe('lawyer analysis workspace', () => {
     expect(html).not.toContain('<img src');
     expect(html).not.toContain('<details open');
     expect(JSON.stringify(data)).toBe(before);
+  });
+});
+
+describe('evidence reading presentation', () => {
+  it('retains every saved character while offering presentation-only reading modes', () => {
+    const text = '  İhtar\r\n  yapılmadı.\n\nİtiraz\tbelirsiz. <script>özel</script>  ';
+    const html = renderToStaticMarkup(<SourceExcerpt name="SENTETİK.pdf" location="Sayfa 12" text={text} onOpen={() => {}} metadata={<p>version-7 · [4, 80) · exact-hash</p>} />);
+    expect(html).toContain(text.replaceAll('<', '&lt;').replaceAll('>', '&gt;'));
+    expect(html).not.toContain('<script>');
+    expect(html).toContain('aria-pressed="true">Okuma görünümü');
+    expect(html).toContain('aria-pressed="false">Özgün satırlar');
+    expect(html).toContain('version-7 · [4, 80) · exact-hash');
+    expect(html).not.toMatch(/<details[^>]*\sopen/);
+    expect(html).toContain('type="button"');
+  });
+  it('never invents an unavailable quotation or a navigation action for metadata-only sources', () => {
+    const html = renderToStaticMarkup(<SourceExcerpt name="SENTETİK belge" location="Sayfa 2" metadata={<p>Bound version</p>} />);
+    expect(html).not.toContain('<blockquote');
+    expect(html).not.toContain('<button');
+    expect(html).toContain('Bound version');
+  });
+  it('keeps all reasoning steps, unknowns and recorded links in a readable hierarchy', () => {
+    const content = fixture(); const before = JSON.stringify(content);
+    const html = renderToStaticMarkup(<AnalysisReasoning content={content} onSource={() => {}} proposed={false} />);
+    expect(html.match(/class="reasoning-step"/g)).toHaveLength(5);
+    for (const text of ['p1 · Beyan', 'p2 · Varsayım', 'r1', 'c1', 'a1', 'alt1', 'Kabul belirsiz.', 'Bilinmiyor', 'Yazılı kabul']) expect(html).toContain(text);
+    expect(JSON.stringify(content)).toBe(before);
   });
 });

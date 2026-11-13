@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { patch, post, request } from '../../api';
 import { Badge, Empty, Field, Icon, Loading, Notice } from '../../components';
 import type { DocumentRecord, Fact, FactStatus, Matter, Passage } from '../../types';
@@ -24,6 +24,15 @@ function FactForm({ matter, fact, onCancel, onSave }: { matter: Matter; fact?: F
 }
 
 export function EvidenceViewer({ matter, evidenceId, onClose }: { matter: Matter; evidenceId: string; onClose: () => void }) {
+  const region = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const origin = document.activeElement;
+    region.current?.focus({ preventScroll: true });
+    region.current?.scrollIntoView({ block: 'start' });
+    return () => {
+      if (origin instanceof HTMLElement && origin.isConnected && !origin.closest('[hidden]')) origin.focus();
+    };
+  }, [evidenceId]);
   const [docId, setDocId] = useState<string | null>(null); const [loading, setLoading] = useState(true); const [error, setError] = useState('');
   useEffect(() => {
     const controller = new AbortController(); setLoading(true); setError(''); setDocId(null);
@@ -37,5 +46,5 @@ export function EvidenceViewer({ matter, evidenceId, onClose }: { matter: Matter
     find().catch((cause) => { if (cause.name !== 'AbortError') setError(messageOf(cause)); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [matter.id, matter.documents, evidenceId]);
-  return <section className="source-inspector" aria-label="Seçili dayanak"><div className="section-heading"><h3>Dayanağı incele</h3><button className="icon-button" aria-label="Dayanak görünümünü kapat" onClick={onClose}><Icon name="close" size={18} /></button></div>{loading ? <Loading label="Dayanak bulunuyor…" /> : error ? <Notice error>{error}</Notice> : docId && <DocumentViewer matterId={matter.id} documentId={docId} highlightPassageId={evidenceId} />}<p className="reference-id small">{evidenceId}</p></section>;
+  return <section ref={region} tabIndex={-1} className="source-inspector" aria-label="Seçili dayanak"><div className="section-heading"><h3>Dayanağı incele</h3><button className="button secondary" aria-label="Dayanak görünümünü kapat" onClick={onClose}><Icon name="close" size={16} />Dayanağı kapat</button></div>{loading ? <Loading label="Dayanak bulunuyor…" /> : error ? <Notice error>{error}</Notice> : docId && <DocumentViewer matterId={matter.id} documentId={docId} highlightPassageId={evidenceId} />}<p className="reference-id small">{evidenceId}</p></section>;
 }

@@ -36,8 +36,13 @@ export function Empty({ title, children, action }: { title: string; children?: R
   return <div className="empty-state"><span className="empty-drawing" aria-hidden="true"><Icon name="book" size={32} /></span><h3>{title}</h3>{children && <p>{children}</p>}{action}</div>;
 }
 export function Loading({ label = 'Yükleniyor…' }: { label?: string }) { return <div className="loading" role="status"><span className="spinner" />{label}</div>; }
-export function Detail({ title = 'Ayrıntılar', children, open }: { title?: string; children: ReactNode; open?: boolean }) { return <details className="details" open={open}><summary>{title}<Icon name="chevron" size={16} /></summary><div className="details-content">{children}</div></details>; }
-export function JsonDetails({ value, title = 'Teknik ayrıntılar' }: { value: unknown; title?: string }) { return <Detail title={title}><pre className="data-pre">{JSON.stringify(value, null, 2)}</pre></Detail>; }
+export function Detail({ title = 'Ayrıntılar', description, children, open, variant = 'section' }: { title?: string; description?: string; children: ReactNode; open?: boolean; variant?: 'section' | 'technical' }) {
+  return <details className={`details${variant === 'technical' ? ' details-technical' : ''}`} open={open}>
+    <summary><span className="detail-heading"><span>{title}</span>{description && <span className="detail-description">{description}</span>}</span><Icon name="chevron" size={16} /></summary>
+    <div className="details-content">{children}</div>
+  </details>;
+}
+export function JsonDetails({ value, title = 'Teknik ayrıntılar' }: { value: unknown; title?: string }) { return <Detail title={title} variant="technical"><pre className="data-pre">{JSON.stringify(value, null, 2)}</pre></Detail>; }
 export function Field({ label, hint, children, className = '' }: { label: string; hint?: string; children: (id: string) => ReactNode; className?: string }) {
   const id = useId(); return <div className={`field ${className}`}><label htmlFor={id}>{label}</label>{children(id)}{hint && <span className="field-hint">{hint}</span>}</div>;
 }
