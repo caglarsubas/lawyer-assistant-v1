@@ -24,7 +24,7 @@ Model tools load when their section is first opened. Shared notes and comparison
 groups have their own disclosures below the analysis workspace. Local fonts,
 keyboard section navigation and narrow-panel layouts support reading.
 
-This work contributes to R03-17 pilot usability and R07-01 review workflow.
+This work contributes to R03-17 pilot usability and the lawyer-facing review workflow.
 Browser checks cover draft selection, source-section access, empty review guards,
 keyboard navigation and unsaved-text retention. Local frontend qualification
 passes 10,536 tests in 139 files with two workers. The build also passes.
