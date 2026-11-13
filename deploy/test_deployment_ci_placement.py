@@ -26,7 +26,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn("python scripts/run_ci_retained_history_workers.py --executor python scripts/run_ci_history_workers.py", blocks["frontend-history"])
         self.assertIn('run: python scripts/run_ci_backend_bootstrap.py', blocks["backend-and-contracts"])
         self.assertIn('"scripts/run_ci_retained_deployment.py", "--shard=3", "--workers=2"', bootstrap)
-        for name, lane in (("backend-review-contracts", 4), ("frontend", 5), ("backend-and-contracts", 6)):
+        for name, lane in (("backend-review-contracts", 4), ("frontend", 5), ("final-release-authorization", 6)):
             self.assertIn("scripts/run_ci_deployment_shard.py --shard=" + str(lane), blocks[name])
         self.assertLess(blocks["backend-and-contracts"].index("run_ci_backend_bootstrap.py"), blocks["backend-and-contracts"].index("name: Test backend"))
         self.assertIn("--shard=8 --workers=2", blocks["frontend"])
@@ -92,17 +92,21 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('timeout --kill-after=2s 30s bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${fast_guard_tests[@]}"', backend)
         self.assertLess(backend.index('timeout --kill-after=2s 30s'), backend.index('name: Test manifest-bound authenticated qualification'))
 
-        for lane in (6, 7):
+        for lane in (7,):
             self.assertIn("--shard=" + str(lane) + " --workers=2", backend)
             self.assertLess(backend.index("--shard=" + str(lane)), backend.index("name: Test backend"))
         for name in ("graph-candidate-contracts", "retained-release-withdrawal", "postgres-snapshot-concurrency"):
             self.assertNotIn("scripts/run_ci_deployment_shard.py", blocks[name])
         stages = re.findall(r"      - name: Test manifest-bound [^\n]+\n        timeout-minutes: (\d+)\n        run: [^\n]+--shard=(\d+)[^\n]+", backend)
-        self.assertEqual(stages, [("1", "6"), ("1", "7")])
+        self.assertEqual(stages, [("1", "7")])
         self.assertIn('name: Test manifest-bound authenticated qualification\n        timeout-minutes: 2\n'
                       '        run: python scripts/run_ci_backend_bootstrap.py', backend)
         final = blocks["final-release-authorization"]
-        self.assertNotIn("--shard=6", final)
+        self.assertNotIn("--shard=6", backend)
+        self.assertIn("--shard=6 --workers=2", final)
+        self.assertEqual(workflow.count("--shard=6 --workers=2"), 1)
+        self.assertIn("timeout-minutes: 1", final.split("name: Test manifest-bound reader lifecycle slice 6", 1)[1])
+        self.assertLess(final.index("name: Test whole-release permission"), final.index("--shard=6"))
         postgres = blocks["postgres-snapshot-concurrency"]
         self.assertNotIn("CI_WORKSPACE_SECURITY_TESTS", workflow)
         self.assertNotIn("name: Test workspace permission", workflow)
@@ -441,11 +445,13 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("--shard=9", backend)
         self.assertNotIn("--shard=9", blocks["frontend"])
         self.assertIn("timeout-minutes: 1", blocks["source-publication-contracts"].split("name: Test manifest-bound review headroom slice 9", 1)[1])
-        self.assertNotIn("name: Test registered local-model authority trials", blocks["frontend-history"])
+        self.assertNotIn("name: Test registered local-model authority trials", backend)
         self.assertEqual(workflow.count("name: Test registered local-model authority trials"), 1)
-        self.assertIn('"${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', backend)
-        self.assertIn("timeout-minutes: 2", backend.split("name: Test registered local-model authority trials", 1)[1])
-        for name in ("Test registered local-model authority trials", "Check roadmap audit and disposable acceptance contracts"):
+        history = blocks["frontend-history"]
+        self.assertIn('"${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', history)
+        self.assertIn("timeout-minutes: 2", history.split("name: Test registered local-model authority trials", 1)[1])
+        self.assertLess(history.index("name: Verify executed frontend shard"), history.index("name: Test registered local-model authority trials"))
+        for name in ("Check roadmap audit and disposable acceptance contracts",):
             self.assertEqual(workflow.count("name: " + name), 1)
             self.assertLess(backend.index("name: " + name), backend.index("name: Test backend\n"))
             self.assertNotIn("name: " + name, blocks["frontend-history"])

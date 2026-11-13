@@ -210,10 +210,7 @@ jobs:
       - name: Test manifest-bound authenticated qualification
         timeout-minutes: 2
         run: python scripts/run_ci_backend_bootstrap.py "${{ runner.temp }}/deployment-reader-results.json"
-      # Reuse the backend pair sequentially; every former step keeps its cap.
-      - name: Test manifest-bound reader lifecycle slice 6
-        timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
+      # The namespace slice retains its original backend deadline.
       - name: Test manifest-bound reader namespace slice
         timeout-minutes: 1
         run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=7 --workers=2 --report=${{ runner.temp }}/deployment-namespace-results.json
@@ -241,12 +238,6 @@ jobs:
           read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_provision_bindings --provision-binding-lane=history "${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_recipient_affinity --fixture-affinity-lane=recipient "${recipient_observation_tests[@]}"
 
-      # Keep this complete offline model-trial group at its original two-worker cap.
-      - name: Test registered local-model authority trials
-        timeout-minutes: 2
-        run: |
-          read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
       # Run the closed audit/API group after the preceding workers have exited.
       # Selected journeys are required passes; installed/legal acceptance stays separate.
       # Browser UAT remains an explicit on-demand campaign.
@@ -552,6 +543,12 @@ jobs:
       - name: Verify executed frontend shard
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
 
+      # The history pair has exited; run this complete two-worker group once.
+      - name: Test registered local-model authority trials
+        timeout-minutes: 2
+        run: |
+          read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
 
   final-release-authorization:
     needs: backend-capacity
@@ -584,6 +581,10 @@ jobs:
           read -r -a auth_capacity_tests <<< "$CI_FINAL_AUTH_CAPACITY_TESTS"
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_authority_cohorts --authority-cohort-lane=database "${authority_cohort_tests[@]}" "${final_release_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_final_auth_capacity --final-auth-capacity-lane=final "${auth_capacity_tests[@]}" -p scripts.ci_metadata_capacity --metadata-capacity-lane=final "${metadata_capacity_tests[@]}"
+      # Reuse this pair after the authorization tests; retain the 60s slice cap.
+      - name: Test manifest-bound reader lifecycle slice 6
+        timeout-minutes: 1
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=6 --workers=2 --report=${{ runner.temp }}/deployment-reader-lifecycle-6.json
 
   retained-release-withdrawal:
     needs: backend-capacity

@@ -33,6 +33,15 @@ are recorded separately in the live tracker. Product readiness remains
 42 done, 21 open, 24 waiting and 6 deferred. Owner review and representative
 legal-corpus acceptance remain pending.
 
+The first UI qualification run passed all tests but left only four seconds
+of the backend job's 19-minute cap, below the required 30-second reserve.
+The cause was cumulative serial work before the unchanged backend suite.
+The complete local-model trial phase now runs after the frontend-history pair
+has exited; the complete reader lifecycle slice 6 runs after the final-authorization
+pair exits. Commands, test identities, all 13 jobs, two-worker ceilings,
+phase/job deadlines and reserve floors stay unchanged. Both receiving jobs
+must qualify again; timing estimates do not establish successful CI.
+
 ## Document workflow repairs — 13 November 2026
 
 F00-04 now has source fixes for both defects found by the delivery audit. The
