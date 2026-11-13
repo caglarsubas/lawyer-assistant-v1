@@ -74,8 +74,9 @@ read-only, unauthenticated observations of the local installed stack. It makes
 no provider request and does not restore services or alter Docker volumes.
 
 The default PR workflow adds only the compact audit/API contracts after the
-existing frontend-history workers exit. The repair follow-up moves the intact 40-case recovery-input file to the
-existing backend job with a closed source-bound partition. Full previous
+existing frontend-history workers exit. The repair follow-up moves twenty workspace cases and the intact ten-case
+recovery-inventory partition to the existing backend job. The source files and
+closed partition controllers remain unchanged. Full previous
 coverage, worker ceilings, job caps and reserve policies remain enforced. The on-demand browser
 run and full acceptance verdict remain separate; green engineering CI is not
 a UAT pass. Exact PR and independent main evidence are published by the tracker.

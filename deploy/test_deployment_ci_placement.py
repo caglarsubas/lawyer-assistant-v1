@@ -174,7 +174,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         for job, lane in (("frontend", "frontend"), ("backend-and-contracts", "final"), ("graph-runtime-contracts", "graph")):
             if job == "backend-and-contracts":
                 self.assertIn('-p scripts.ci_operator_previews --operator-preview-lane=final -n 2', blocks[job])
-                self.assertIn('if [[ "$path" != "${preview_tests[0]}" && "$path" != "${authority_trial_tests[2]}" ]]; then', blocks[job])
+                self.assertIn('if [[ "$path" != "${preview_tests[0]}" && "$path" != "${inventory_review_tests[0]}" && "$path" != "$CI_CORE_RESERVE_CAPACITY" ]]; then', blocks[job])
             else:
                 self.assertIn("backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=" + lane + ' "${preview_tests[@]}"', blocks[job])
             self.assertIn('read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"', blocks[job])
@@ -347,6 +347,11 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertIn("--disposition-read-lane=" + lane, blocks[name])
         inventory_definition = '          read -r -a inventory_review_tests <<< "$CI_RECOVERY_INVENTORY_TESTS"\n'
         self.assertEqual(isolated.count(inventory_definition), 1)
+        self.assertEqual(workflow.count("--recovery-inventory-lane=capacity"), 1)
+        self.assertIn('-p scripts.ci_recovery_inventory --recovery-inventory-lane=capacity', backend)
+        self.assertNotIn("CI_RECOVERY_INVENTORY_TESTS", blocks["backend-capacity"])
+        self.assertNotIn("CI_CORE_RESERVE_CAPACITY", blocks["backend-capacity"])
+        self.assertIn('timeout --kill-after=2s 140s', blocks["backend-capacity"])
         self.assertEqual(workflow.count("--recovery-inventory-lane=postgres"), 1)
         self.assertIn('-p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}"', isolated)
         self.assertNotIn("CI_RECOVERY_INVENTORY_TESTS", postgres)

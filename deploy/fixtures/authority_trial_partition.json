@@ -1,5 +1,5 @@
 {
-  "schema": "backend-capacity-ci-partition-v3",
+  "schema": "backend-capacity-ci-partition-v2",
   "sources": {
     "backend/tests/test_authority_trials.py": "f49cdf9cb6c2ebdac77c489ecd34ca2fa962b378fbc4bb17902b796935993711",
     "backend/tests/test_graph.py": "7c6ed52eedf4e346f4cf21f159494e18d8dbc6ed3f753720c517b5c727e85008",
@@ -241,9 +241,7 @@
       "tests/test_graph.py::test_transaction_time_cannot_see_not_yet_recorded_assertion",
       "tests/test_graph.py::test_two_hop_expansion_stops_before_third_hop",
       "tests/test_graph.py::test_unavailable_backend_is_not_empty_success_or_fixture_fallback",
-      "tests/test_graph.py::test_unresolved_version_is_not_substituted_with_latest"
-    ],
-    "core": [
+      "tests/test_graph.py::test_unresolved_version_is_not_substituted_with_latest",
       "tests/test_operator_recovery_inputs.py::test_bounded_review_capacity_reserves_room_for_independent_decision",
       "tests/test_operator_recovery_inputs.py::test_changed_inputs_after_prepare_cannot_be_silently_reselected",
       "tests/test_operator_recovery_inputs.py::test_changed_inputs_or_actor_state_withhold_readiness_but_retain_review[expired]",

@@ -18,8 +18,7 @@ def test_complete_inventory_is_disjoint_and_preserves_other_tests():
     other = "tests/test_unrelated.py::test_kept"
     selected = []
     for lane in placement.COUNTS:
-        collected = contract.ids if lane == "capacity" else contract.lanes[lane]
-        ids = placement.select(contract, lane, [other, *collected])
+        ids = placement.select(contract, lane, [other, *contract.ids])
         assert other in ids
         selected.extend(x for x in ids if x != other)
     assert sorted(selected) == list(contract.ids)
@@ -54,68 +53,60 @@ def test_changed_source_or_inventory_fails_closed(tmp_path, change):
 @pytest.mark.parametrize("change", ["missing", "duplicate", "renamed"])
 def test_incomplete_actual_collection_is_rejected(change):
     contract = placement.load_contract()
-    for lane in placement.COUNTS:
-        ids = list(contract.ids if lane == "capacity" else contract.lanes[lane])
-        if change == "missing":
-            ids.pop()
-        elif change == "duplicate":
-            ids.append(ids[0])
-        else:
-            ids[0] += "_renamed"
-        with pytest.raises(ValueError):
-            placement.select(contract, lane, ids)
+    ids = list(contract.ids)
+    if change == "missing":
+        ids.pop()
+    elif change == "duplicate":
+        ids.append(ids[0])
+    else:
+        ids[0] += "_renamed"
     with pytest.raises(ValueError):
-        placement.select(contract, "core", list(contract.ids))
+        placement.select(contract, "capacity", ids)
 
 
 @pytest.mark.parametrize("change", ["missing", "duplicate", "skip", "xfail", "exact"])
 def test_execution_receipt_requires_each_selected_pass_once(change):
     contract = placement.load_contract()
-    for lane in placement.COUNTS:
-        plugin = placement.Partition(contract, lane)
-        ids = list(contract.lanes[lane])
-        if change == "missing":
-            ids.pop()
-        elif change == "duplicate":
-            ids.append(ids[0])
-        for index, nodeid in enumerate(ids):
-            plugin.pytest_runtest_logreport(SimpleNamespace(
-                when="call", passed=not (change == "skip" and index == 0), nodeid=nodeid,
-                wasxfail=change == "xfail" and index == 0))
-        session = SimpleNamespace(config=SimpleNamespace(getoption=lambda _: False), exitstatus=0)
-        plugin.pytest_sessionfinish(session, 0)
-        assert plugin.valid is (change == "exact")
-        assert session.exitstatus == (0 if change == "exact" else pytest.ExitCode.TESTS_FAILED)
-        receipts = []
-        plugin.pytest_terminal_summary(SimpleNamespace(config=SimpleNamespace(), write_line=receipts.append), 0)
-        if change == "exact":
-            record = json.loads(receipts[0])
-            assert record["complete_count"] == placement.COUNTS[lane]
-            assert record["selected_ids_sha256"] == sorted(hashlib.sha256(n.encode()).hexdigest() for n in ids)
-            assert "selected_ids" not in record
-        else:
-            assert not receipts
+    plugin = placement.Partition(contract, "capacity")
+    ids = list(contract.lanes["capacity"])
+    if change == "missing":
+        ids.pop()
+    elif change == "duplicate":
+        ids.append(ids[0])
+    for index, nodeid in enumerate(ids):
+        plugin.pytest_runtest_logreport(SimpleNamespace(
+            when="call", passed=not (change == "skip" and index == 0), nodeid=nodeid,
+            wasxfail=change == "xfail" and index == 0))
+    session = SimpleNamespace(config=SimpleNamespace(getoption=lambda _: False), exitstatus=0)
+    plugin.pytest_sessionfinish(session, 0)
+    assert plugin.valid is (change == "exact")
+    assert session.exitstatus == (0 if change == "exact" else pytest.ExitCode.TESTS_FAILED)
+    receipts = []
+    plugin.pytest_terminal_summary(SimpleNamespace(config=SimpleNamespace(), write_line=receipts.append), 0)
+    if change == "exact":
+        record = json.loads(receipts[0])
+        assert record["complete_count"] == 135
+        assert record["selected_ids_sha256"] == sorted(hashlib.sha256(n.encode()).hexdigest() for n in ids)
+        assert "selected_ids" not in record
+    else:
+        assert not receipts
+
 
 
 def test_workflow_routes_every_lane_once_and_keeps_fixed_resources():
     workflow = (placement.ROOT / ".github/workflows/ci.yml").read_text()
     blocks = dict(re.findall(r"^  ([a-z-]+):\n(.*?)(?=^  [a-z-]+:\n|\Z)",
                              workflow.split("\njobs:\n", 1)[1], re.M | re.S))
-    owners = {"capacity": "backend-capacity", "core": "backend-and-contracts"}
+    owners = {"capacity": "backend-capacity"}
     assert len(blocks) == 13
     assert sum(int(re.search(r"    timeout-minutes: (\d+)", b)[1]) for b in blocks.values()) == 73
     for lane, owner in owners.items():
         option = "-p scripts.ci_authority_trials --authority-trial-lane=" + lane
         assert workflow.count(option) == 1 and option in blocks[owner]
         line = next(x for x in blocks[owner].splitlines() if option in x)
-        assert "-n 2" in line
-        if lane == "capacity":
-            assert '"${authority_trial_tests[@]}"' in line
-        else:
-            assert 'pytest backend/tests "${ignore_args[@]}"' in line
+        assert '"${authority_trial_tests[@]}"' in line and "-n 2" in line
     backend = blocks["backend-and-contracts"]
     assert '"${authority_trial_tests[@]}"' in backend.split("for path in ", 1)[1]
-    assert 'if [[ "$path" != "${preview_tests[0]}" && "$path" != "${authority_trial_tests[2]}" ]]; then' in backend
     group = re.search(r"  CI_AUTHORITY_TRIAL_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1].split()
     assert group == ["backend/tests/test_authority_trials.py", "backend/tests/test_graph.py",
                      "backend/tests/test_operator_recovery_inputs.py"]
