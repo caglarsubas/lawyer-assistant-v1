@@ -4,6 +4,57 @@ Baseline: 4 October 2026; research reconciliation: **5 October 2026**. Original 
 
 This is the canonical delivery plan. [Data and knowledge strategy](DATA_KNOWLEDGE_STRATEGY.md) specifies source families, refresh targets and retrieval requirements. [Research reconciliation](PLAN_RECONCILIATION_2026-10-05.md) records adopted proposals and unresolved claims. The same-day user amendment is specified in [legal analysis and sanitized BYOK deep research](LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md). Those research revisions changed planning only. Subsequent implementation progress is recorded below: R01 offline contracts, evidence verification and extraction comparison are delivered; source approvals, legal review and provider activation are not granted by that work.
 
+## Current audit checkpoint — 13 November 2026
+
+The [comprehensive delivery and UAT audit](quality/README.md) supersedes the
+automatic next-task selection, while preserving every earlier ledger entry.
+Its historical baseline is verified main `d9ff2b16` (PR #296): 93 checklist
+items, 14 milestones and 295 merged engineering PRs. Three GPT-6.1-sol agents
+at xhigh effort examined the roadmap, real disposable API journeys and the
+production frontend with a closed synthetic API router. All checklist items
+have scoped implementation/test references and an explicit remaining gate.
+
+Selected workflow UAT found **16 passing journeys and two known failures**:
+uploading from an older file's direct link can leave the old preview selected;
+damaged encrypted originals return an uncontrolled generic 500 instead of the
+neighboring integrity-conflict response. The failing cases remain executable
+and are excluded from acceptance. A read-only installation observation found
+the scanner unavailable, relay stopped, and one of 130 compared backend Python
+files (`context_packing.py`) different from main. No real documents, credentials,
+reviews, provider calls or installed services were modified by the audit.
+
+**Next engineering sequence:** resolve the two F00-04 document/original defects;
+restore F00-06 scanner/approved-relay readiness and reconcile the exact installed
+candidate; then run signed-in synthetic intake → analysis → separate review →
+export against that candidate. The first product acceptance milestone remains
+R03-17 owner review plus R01/R03 rights-cleared independent corpus qualification.
+Do not resume automatic navigation-depth or recovery-packet growth without a
+specific failed acceptance case or a bounded dependency required by this flow.
+
+The **R08-05 release checklist closure must include** F00-04, F00-06, R03-07,
+R03-08, R04-05, R05-03, R05A-04, R05A-05, R06-04, R06-05 and R07-03 in addition
+to its existing prerequisites. These are declared phase gates previously absent
+from the item-level rollup, not new scope. Optional connected BYOK (R05B) stays
+separate from local release acceptance; deferred items remain outside v1.
+R05A-07 and R07-10 retain their scoped engineering completions despite pending
+downstream human/deployment prerequisites; they grant no acceptance themselves.
+
+R07-07's current CI profile is the **13-job** exact-head workflow, unchanged
+two-worker ceilings and job caps, **30-second job reserve floor**, and each
+existing timed-step floor (the already-defined short one-minute phases retain
+their separate 15-second floor). Verify ordinary protected PR merge and exact
+independent main separately. The small new audit/API group runs only after the
+existing frontend-history workers exit; browser UAT is an explicit on-demand
+campaign. Known UAT failures never become passes because engineering CI is green.
+
+The product checklist remains 42 done / 21 open / 24 waiting / 6 deferred;
+milestones remain 0 ready / 9 partial / 4 waiting / 1 planned. These counts
+describe the audit baseline, not delivery of this audit PR. The interactive
+tracker records actual new merges and progress, and the retained
+[interactive audit](quality/uat-report.html) exposes all 93 evidence mappings.
+The owner's analysis-v3 review remains pending; this engineering audit neither
+supplies that review nor qualifies legal accuracy or production readiness.
+
 ## Current review milestone — 20 October 2026
 
 The complete104 exact-event handoff closes the currently prepared private

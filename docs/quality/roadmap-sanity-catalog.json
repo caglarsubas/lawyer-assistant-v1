@@ -1,0 +1,2478 @@
+{
+  "schema": "lawyer-assistant-roadmap-sanity-v1",
+  "reviewed_source": "d9ff2b16cc91726ffa4fb2f44dc45d18f53aff4c",
+  "source_pins": {
+    "README.md": "17ff3acfb0aef1c1edbc6952e4494ac17478d8fd10ffa69876eeaeea3bc6d65a",
+    "docs/ANALYSIS_CONTEXT_BUDGET.md": "6f8f3f3a27a5451a9fd4f2b25efaad093cce158d25fe8cd3e2fcac09a148de7c",
+    "docs/ANALYSIS_WORKBENCH.md": "bdb09f636f9bfbd85b4b1ab2e567631f4d2ce6872d7af809a9095f7fbac1c11c",
+    "docs/CI_FRONTEND_SHARD_CAPACITY.md": "ef05a622d9af2d0850c6468334c41fbcb8ebcff6484009c625941e3a0dc0281f",
+    "docs/CI_THREAD_HEADROOM.md": "b86e8afc806cb04e5578aea1c1139430cc432ae7c936afc393d3aa6d48504a7a",
+    "docs/COMPLETE_100_DESTINATION_RETURN.md": "96d15717b12b901b7e796bb89c73bc8f40c70e29d6a7c7f07258e123efde97d4",
+    "docs/COMPLETE_101_EXACT_EVENT.md": "fd1f7a9fcadb22307e2687703059547259873ad3609b3a7c1d157b09707a360d",
+    "docs/COMPLETE_103_ARRIVAL_RETURN.md": "0cab2953d04dc6e887d35b514e3c272fdb7f757cd65be4f9889c2307e213f997",
+    "docs/COMPLETE_104_EXACT_EVENT.md": "f6dfa9724df1427d2b89a0b0784a4d18de26769b3eb1328c00d3b400097073c9",
+    "docs/COMPLETE_91_ARRIVAL_RETURN.md": "18775143281b1242a5a0980361c8577e5e838ef3a3c4c86211abf887c0591b27",
+    "docs/COMPLETE_92_EXACT_EVENT.md": "e238abf6a45a3e7917000b08d95b47dec8cb93bd42806e273188d7ee49c0d66c",
+    "docs/COMPLETE_94_DESTINATION_RETURN.md": "bd5bce787bb7f7eef5564a5592d735ad5e33b9ddd4235e5299c570d9f62e7ca7",
+    "docs/COMPLETE_95_EXACT_EVENT.md": "9b767c85de748816d92d21ce593c7bbd0721d7098709b59fa27a8f227f073e0d",
+    "docs/COMPLETE_97_ARRIVAL_RETURN.md": "8537ac024ab704c45a16cc7a722789b0cbf4140999b5e0c0af17ffedcb14fb72",
+    "docs/COMPLETE_98_EXACT_EVENT.md": "efe7df53f5ac43eedee436bfe637edf81489279f029d2c9503b2343cb7ba1db4",
+    "docs/CONTEXT_PACKING.md": "a666ee37b3202674d86322590ea773a4e9aafd9268632b4d25056818cf75a9d9",
+    "docs/DATA_KNOWLEDGE_STRATEGY.md": "d5fccceee437a3f2cbe6a39d2cf835005788554b13bbfb824875d8dc8eec36a0",
+    "docs/DECLARED_GRAPH_ASSEMBLY.md": "7e3695f7d2f82df9dba4fcff98793a1017d14a91ae2b3dd13e646e6ea4574c9c",
+    "docs/DOCUMENT_INTAKE.md": "78c9719044ac30255f112df220699d45b638a01bd2ae6299c6b138aa5dd03605",
+    "docs/EVALUATION.md": "0e366722f0d9387162833859d0f1a86de40bdb712ea357f75a1427c68c202c97",
+    "docs/FIRM_RBAC_AND_SUPERVISION.md": "9a3d278aa3b5cf08cb73ee3aa5245940ac22d84f899f8dca419d7c7c48175327",
+    "docs/FOCUSED_ANALYSIS.md": "20688ea3179889de3c04437109a9dcd7e7d377e8a20feb21a71dcc34606e5018",
+    "docs/GRAPH_B_HANDOFF.md": "eade4d7c47bed46c598f138b25fd3a0e067c91ed3b5c88717c9f419a778bef93",
+    "docs/HUMAN_WORKFLOW.md": "9c785ab70bbea89a9077146e215c5aa60abf36f3f45c6cbfaa764dd6e38c73f8",
+    "docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md": "ae4a5fa3fef4a0e1095ae9cbb7f0e648ba66dc57bef3c3b1cb4d1745b0750c65",
+    "docs/LOCAL_MODEL_OUTPUT_CONTRACT.md": "3add468142aeb8ce76abaf41bc415b8ae1cf87a4961f4ebeee43ffcfc0a4940e",
+    "docs/MILESTONE_REVIEW_2026-10-20.md": "f2b2ecd91a044d7fd49d9ee630fdbe86ae06b096837425d736cf91adea6efede",
+    "docs/MODEL_ASSESSMENT_PREMISES.md": "2cd23b21903bff6fc27ab004221af627a2d9903e8fd37fdc5d25270a4a0d24e1",
+    "docs/OPERATIONS.md": "d3be6f4f3cbe07f07874ae7dabc137daff116af9d484caa8e5d36d1b58f57233",
+    "docs/PRIVATE_SOURCE_ANALYSIS_REVIEW.md": "c534304480e30ac663d2f74d56c0f7b222385f7ff2450fce7d5ab29b3e9c3393",
+    "docs/R01_QUALIFICATION.md": "75871958116979e1f38ca2e26860487cbf0988512dd814d3a3eecbdb82eebdd0",
+    "docs/REGISTERED_ANALYSIS_COMPARISONS.md": "c526745bc3e80500ceca717696d20d8080388d01759447da02b835e7633ff1f9",
+    "docs/REGISTERED_SOURCE_PREPARATION.md": "756dbbaed5e6f84a2c70c2a9c5b0a537e35104bc7a76a3a43244f2864815ebe2",
+    "docs/RETRIEVAL_BENCHMARK.md": "3a60fba4a31847ae43cf73cadd12c47bdd37b69b2755112b4da15bcd49285e7a",
+    "docs/ROADMAP.md": "3ef2f0d74a762cf04957bdcb581f0268918dda4950444e5f6e4ab470eeb7a3ff",
+    "docs/SIGNED_GRAPH_B_REVIEW.md": "eb663b14135f714d908c146c982a0bdd0df65a54e17366e143feef78333660c0",
+    "docs/TURKISH_RETRIEVAL.md": "550d29e23b28e77efb70e073e782138692c0ea19c5238e124f9059bb0298dd73",
+    "docs/VALIDATION.md": "fda04f352d976020ad16da2eaf57233c4c95de7e90f5ec68c12d8df6784ba69a",
+    "docs/evidence/scanner-private-pilot-2026-10-20.json": "da27da8d6a33322d039d221deb3ff67e6f02c6ec475b3301fde06f8dc7e43cdc",
+    "docs/tracker/delivery-views.css": "0cb77e50fed3d298aa1a54342ebe5ad9acd1bb6592059106f53451c519a6f203",
+    "docs/tracker/delivery-views.js": "e4984c7d5e2687962b07bcdbc78574256a2bfda60a912117b5d6c045e7b99db9",
+    "docs/tracker/progress.css": "20007ceb4718319d38bf8ffbaa5b28a4bc66a8205a5a7c87ba4ccd3c07be5d19",
+    "docs/tracker/progress.js": "c73298d44e6eee48841072b6a9b44339240fa269e67494a368e53e04d6a56516",
+    "qualification/asset-catalog.json": "cd85badcf8c55c80bb188a15ebc5b539e1b8851ee12fef574d3699468a33eb45",
+    "qualification/research-dossier.json": "ec34fb3343397ceaca9744bf9c9b2f0d2df4b2a42e11c4afb5b1dcb03fdc3dfc",
+    "qualification/source-catalog.json": "43487d262ffb1c33fb4be4bbc74a565c0a786dd1a3e2ffe7a6e887c650ac8b2e",
+    "scripts/collect_roadmap_delivery.py": "4a6d48ff5f209b4deeeca484fe784ea74d172ec0fc2e9f4003f78508ff19e3e4",
+    "scripts/roadmap_backlog.py": "5c235cfb9fa1792f8937c55830fe4e49838026a7edaf8b09b96ffea06b60094d",
+    "scripts/roadmap_delivery.py": "431f8c6c1061cbcac8b7eff4b5bdbc9993c1e1ac1ddcf1e23e9bb989dc898ec0",
+    "scripts/roadmap_progress.py": "718e1fce9e19369bcab77b919eb6c60ceb960c8b25a7b0cbc01d4b5853d8afa5"
+  },
+  "ci_reserve_profile": [
+    {
+      "kind": "job",
+      "name": "backend-capacity",
+      "cap": 180,
+      "required_margin": 30
+    },
+    {
+      "kind": "job",
+      "name": "final-release-authorization",
+      "cap": 360,
+      "required_margin": 30
+    },
+    {
+      "kind": "job",
+      "name": "backend-and-contracts",
+      "cap": 1140,
+      "required_margin": 30
+    },
+    {
+      "kind": "job",
+      "name": "retained-release-withdrawal",
+      "cap": 120,
+      "required_margin": 30
+    },
+    {
+      "kind": "job",
+      "name": "frontend",
+      "cap": 300,
+      "required_margin": 30
+    },
+    {
+      "kind": "job",
+      "name": "analysis-recovery-contracts",
+      "cap": 360,
+      "required_margin": 30
+    },
+    {
+      "kind": "job",
+      "name": "source-publication-contracts",
+      "cap": 180,
+      "required_margin": 30
+    },
+    {
+      "kind": "job",
+      "name": "publication-planning-contracts",
+      "cap": 240,
+      "required_margin": 30
+    },
+    {
+      "kind": "job",
+      "name": "graph-candidate-contracts",
+      "cap": 180,
+      "required_margin": 30
+    },
+    {
+      "kind": "job",
+      "name": "frontend-history",
+      "cap": 300,
+      "required_margin": 30
+    },
+    {
+      "kind": "job",
+      "name": "backend-review-contracts",
+      "cap": 360,
+      "required_margin": 30
+    },
+    {
+      "kind": "job",
+      "name": "graph-runtime-contracts",
+      "cap": 360,
+      "required_margin": 30
+    },
+    {
+      "kind": "job",
+      "name": "postgres-snapshot-concurrency",
+      "cap": 300,
+      "required_margin": 30
+    },
+    {
+      "kind": "step",
+      "name": "binding-backend-and-contracts",
+      "cap": 120,
+      "required_margin": 30
+    },
+    {
+      "kind": "step",
+      "name": "binding-publication-planning-contracts",
+      "cap": 120,
+      "required_margin": 30
+    },
+    {
+      "kind": "step",
+      "name": "Test backend",
+      "cap": 960,
+      "required_margin": 30
+    },
+    {
+      "kind": "step",
+      "name": "contract-phase-3",
+      "cap": 120,
+      "required_margin": 30
+    },
+    {
+      "kind": "step",
+      "name": "contract-phase-5",
+      "cap": 60,
+      "required_margin": 15
+    },
+    {
+      "kind": "step",
+      "name": "contract-phase-6",
+      "cap": 60,
+      "required_margin": 15
+    },
+    {
+      "kind": "step",
+      "name": "contract-phase-7",
+      "cap": 60,
+      "required_margin": 15
+    },
+    {
+      "kind": "step",
+      "name": "analysis-recovery-step",
+      "cap": 360,
+      "required_margin": 30
+    },
+    {
+      "kind": "step",
+      "name": "publication-planning-step",
+      "cap": 240,
+      "required_margin": 30
+    },
+    {
+      "kind": "step",
+      "name": "frontend-recovery-step",
+      "cap": 120,
+      "required_margin": 30
+    },
+    {
+      "kind": "step",
+      "name": "contract-phase-8",
+      "cap": 60,
+      "required_margin": 15
+    },
+    {
+      "kind": "step",
+      "name": "contract-phase-9",
+      "cap": 60,
+      "required_margin": 15
+    },
+    {
+      "kind": "step",
+      "name": "contract-phase-10",
+      "cap": 60,
+      "required_margin": 15
+    },
+    {
+      "kind": "step",
+      "name": "history-workbench-step",
+      "cap": 120,
+      "required_margin": 30
+    },
+    {
+      "kind": "step",
+      "name": "portfolio-step",
+      "cap": 120,
+      "required_margin": 30
+    }
+  ],
+  "items": [
+    {
+      "id": "F00-01",
+      "title": "Customer ↔ workspace → file organization",
+      "status": "done",
+      "milestone": "F00",
+      "dependencies": [],
+      "source_path": "README.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/portfolio.py",
+        "frontend/src/workbench/portfolio.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_portfolio.py",
+        "frontend/src/workbench/workbench.test.tsx"
+      ],
+      "evidence": [
+        "docs/PORTFOLIO_WORKSPACE.md"
+      ],
+      "remaining_gate": "Signed-in customer role matrix and date filter results on the target release."
+    },
+    {
+      "id": "F00-02",
+      "title": "Three-panel legal workbench",
+      "status": "done",
+      "milestone": "F00",
+      "dependencies": [],
+      "source_path": "README.md",
+      "scope": "synthetic",
+      "code": [
+        "frontend/src/workbench/Workbench.tsx",
+        "frontend/src/workbench/layout.ts"
+      ],
+      "tests": [
+        "frontend/src/workbench/workbench.test.tsx"
+      ],
+      "evidence": [
+        "docs/PORTFOLIO_WORKSPACE.md"
+      ],
+      "remaining_gate": "Current target browser/keyboard, assistive technology and narrow viewport acceptance."
+    },
+    {
+      "id": "F00-03",
+      "title": "Local provider adapter and tenant boundary",
+      "status": "done",
+      "milestone": "F00",
+      "dependencies": [],
+      "source_path": "docs/VALIDATION.md",
+      "scope": "historical_runtime",
+      "code": [
+        "backend/app/provider.py",
+        "deploy/provider/relay.py"
+      ],
+      "tests": [
+        "backend/tests/test_provider_runtime.py",
+        "backend/tests/test_provider_tunnel_relay.py"
+      ],
+      "evidence": [
+        "docs/VALIDATION.md"
+      ],
+      "remaining_gate": "Current target tenant, model, context and no-fallback revalidation plus Turkish legal suitability."
+    },
+    {
+      "id": "F00-04",
+      "title": "Extended document intake and original preview",
+      "status": "in_progress",
+      "milestone": "F00",
+      "dependencies": [],
+      "source_path": "docs/DOCUMENT_INTAKE.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/extract.py",
+        "backend/app/extraction_worker.py",
+        "frontend/src/pages/matter/OriginalPreview.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_extract.py",
+        "backend/tests/test_extraction_worker.py",
+        "frontend/src/pages/matter/OriginalPreview.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/docx-linked-notes-2026-10-22.json",
+        "docs/evidence/mixed-format-load-2026-10-22.json"
+      ],
+      "remaining_gate": "Representative exactness, merged tables, scans, difficult layouts, legacy failures and required UDF support."
+    },
+    {
+      "id": "F00-05",
+      "title": "Portfolio summaries and contextual product guide",
+      "status": "done",
+      "milestone": "F00",
+      "dependencies": [],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/assistant.py",
+        "frontend/src/workbench/AssistantPanel.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_assistant.py",
+        "frontend/src/workbench/workbench.test.tsx"
+      ],
+      "evidence": [
+        "docs/PORTFOLIO_WORKSPACE.md"
+      ],
+      "remaining_gate": "Customer scopes, role denial and useful summaries in signed-in target browser acceptance."
+    },
+    {
+      "id": "F00-06",
+      "title": "Target-host provider and intake qualification",
+      "status": "in_progress",
+      "milestone": "F00",
+      "dependencies": [
+        "F00-03",
+        "F00-04"
+      ],
+      "source_path": "docs/OPERATIONS.md",
+      "scope": "partial",
+      "code": [
+        "scripts/qualify_provider.py",
+        "scripts/qualify_provider_jobs.py",
+        "scripts/host_trust_continuity.py"
+      ],
+      "tests": [
+        "deploy/test_provider_qualification.py",
+        "deploy/test_provider_mixed_workload.py",
+        "backend/tests/test_host_trust_continuity.py"
+      ],
+      "evidence": [
+        "docs/evidence/provider-load-2026-10-22.json",
+        "docs/evidence/signed-provider-contract-2026-10-24.json",
+        "docs/HOST_RECONCILIATION_TRUST.md"
+      ],
+      "remaining_gate": "Actual target readiness, signed representative limits, production trust provisioning, independent restore/clock controls and receipt integration."
+    },
+    {
+      "id": "W01-01",
+      "title": "Firm administration and supported action roles",
+      "status": "done",
+      "milestone": "W01",
+      "dependencies": [],
+      "source_path": "docs/FIRM_RBAC_AND_SUPERVISION.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/firm_admin.py",
+        "backend/app/firm_rbac.py",
+        "frontend/src/pages/FirmAdminPage.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_firm_admin.py",
+        "frontend/src/pages/workflow.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/firm-administration-verification-2026-10-09.json"
+      ],
+      "remaining_gate": "W01-02 field identity, migration and lifecycle acceptance."
+    },
+    {
+      "id": "W01-02",
+      "title": "Firm identity integration and migration acceptance",
+      "status": "waiting",
+      "milestone": "W01",
+      "dependencies": [
+        "W01-01"
+      ],
+      "source_path": "docs/FIRM_RBAC_AND_SUPERVISION.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/firm_admin.py",
+        "backend/app/auth.py"
+      ],
+      "tests": [
+        "backend/tests/test_firm_admin.py",
+        "backend/tests/test_runtime_authorization_integration.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Customer identity/role mapping, migration reconciliation and deactivation with named firm signoff."
+    },
+    {
+      "id": "W02-01",
+      "title": "Explicit client scopes and case responsibilities",
+      "status": "done",
+      "milestone": "W02",
+      "dependencies": [
+        "W01-01"
+      ],
+      "source_path": "docs/FIRM_RBAC_AND_SUPERVISION.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/content_scope.py",
+        "backend/app/access_admin.py",
+        "frontend/src/pages/matter/CaseAccessPanel.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_content_scope.py",
+        "backend/tests/test_content_scope_postgres.py",
+        "frontend/src/pages/workflow.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/client-case-responsibilities-verification-2026-10-09.json"
+      ],
+      "remaining_gate": "W02-02 customer scopes and revocation across real accounts."
+    },
+    {
+      "id": "W02-02",
+      "title": "Field revocation and scope acceptance",
+      "status": "waiting",
+      "milestone": "W02",
+      "dependencies": [
+        "W02-01"
+      ],
+      "source_path": "docs/FIRM_RBAC_AND_SUPERVISION.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/content_scope.py",
+        "backend/app/research_jobs.py"
+      ],
+      "tests": [
+        "backend/tests/test_content_scope_postgres.py",
+        "backend/tests/test_research_jobs_postgres.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Target cross-account suspended/disconnected/reconnected view clearance, job denial and exact migrated grants."
+    },
+    {
+      "id": "W03-01",
+      "title": "Manual deadlines, tasks and tracked human opinions",
+      "status": "done",
+      "milestone": "W03",
+      "dependencies": [
+        "W02-01"
+      ],
+      "source_path": "docs/HUMAN_WORKFLOW.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/human_workflow.py",
+        "frontend/src/pages/HumanWorkPanel.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_human_workflow.py",
+        "backend/tests/test_human_workflow_postgres.py",
+        "frontend/src/pages/workflow.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/human-workflow-verification-2026-10-09.json"
+      ],
+      "remaining_gate": "W03-02 supervised lawyer workflows with actual firm roles and recovery."
+    },
+    {
+      "id": "W03-02",
+      "title": "Supervisory workflow acceptance on customer data",
+      "status": "waiting",
+      "milestone": "W03",
+      "dependencies": [
+        "W01-02",
+        "W02-02",
+        "W03-01"
+      ],
+      "source_path": "docs/FIRM_RBAC_AND_SUPERVISION.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/human_workflow.py",
+        "deploy/manage_backup.py"
+      ],
+      "tests": [
+        "backend/tests/test_human_workflow_postgres.py",
+        "deploy/test_backup_contract.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Distinct customer identities accept assignment, opinion revision, Istanbul dates, history and restored access."
+    },
+    {
+      "id": "R01-01",
+      "title": "Source, asset and research dossier contracts",
+      "status": "done",
+      "milestone": "R01",
+      "dependencies": [],
+      "source_path": "docs/R01_QUALIFICATION.md",
+      "scope": "engineering",
+      "code": [
+        "backend/app/qualification.py",
+        "backend/app/qualification_catalog.py",
+        "qualification/research-dossier.json"
+      ],
+      "tests": [
+        "backend/tests/test_qualification_cli.py",
+        "backend/tests/test_research_qualification.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Accountable approvals and empirical measurements are tracked in R01-02 through R01-07."
+    },
+    {
+      "id": "R01-02",
+      "title": "Lawful source routes and use-specific rights",
+      "status": "waiting",
+      "milestone": "R01",
+      "dependencies": [
+        "R01-01"
+      ],
+      "source_path": "docs/DATA_KNOWLEDGE_STRATEGY.md",
+      "scope": "partial",
+      "code": [
+        "qualification/source-catalog.json",
+        "backend/app/source_reviews.py"
+      ],
+      "tests": [
+        "backend/tests/test_source_reviews.py",
+        "backend/tests/test_qualification_evidence.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Name rights approvers and approve exact source versions, use scopes, audiences, expiry and lawful acquisition for contracts."
+    },
+    {
+      "id": "R01-03",
+      "title": "National ontology and authority-effect review",
+      "status": "waiting",
+      "milestone": "R01",
+      "dependencies": [
+        "R01-01"
+      ],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "partial",
+      "code": [
+        "ontology/catalog.json",
+        "ontology/domains.ttl",
+        "scripts/validate_ontology.py"
+      ],
+      "tests": [
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_temporal_validity.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Accountable Turkish reviewers ratify competence, effect and historical version semantics across mandatory categories."
+    },
+    {
+      "id": "R01-04",
+      "title": "Representative extraction and review calibration",
+      "status": "waiting",
+      "milestone": "R01",
+      "dependencies": [
+        "R01-02"
+      ],
+      "source_path": "docs/R01_QUALIFICATION.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/extraction_calibration.py",
+        "backend/app/calibration_study.py"
+      ],
+      "tests": [
+        "backend/tests/test_extraction_calibration.py",
+        "backend/tests/test_calibration_study.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Approve lawful representative samples and measure independent reference fidelity, disagreements and review effort."
+    },
+    {
+      "id": "R01-05",
+      "title": "Asset licenses and empirical model suitability",
+      "status": "waiting",
+      "milestone": "R01",
+      "dependencies": [
+        "R01-01"
+      ],
+      "source_path": "docs/DATA_KNOWLEDGE_STRATEGY.md",
+      "scope": "partial",
+      "code": [
+        "qualification/asset-catalog.json",
+        "scripts/qualify_provider.py"
+      ],
+      "tests": [
+        "backend/tests/test_qualification_catalog.py",
+        "deploy/test_provider_qualification.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Review each asset license and measure domain fitness, hardware envelope and fallback/replacement qualification."
+    },
+    {
+      "id": "R01-06",
+      "title": "Firm AI-use, privacy and processing review",
+      "status": "waiting",
+      "milestone": "R01",
+      "dependencies": [
+        "R01-01"
+      ],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/policy.py",
+        "qualification/research-dossier.json"
+      ],
+      "tests": [
+        "backend/tests/test_policy_provider.py",
+        "backend/tests/test_research_qualification.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Customer/independent privacy decision on purpose, roles, sensitive-data handling, retention, incidents and export."
+    },
+    {
+      "id": "R01-07",
+      "title": "Freeze evaluation protocol and re-estimate capacity",
+      "status": "waiting",
+      "milestone": "R01",
+      "dependencies": [
+        "R01-03",
+        "R01-04",
+        "R01-05"
+      ],
+      "source_path": "docs/EVALUATION.md",
+      "scope": "partial",
+      "code": [
+        "qualification/research-dossier.json",
+        "backend/app/qualification_scoring.py"
+      ],
+      "tests": [
+        "backend/tests/test_qualification_scoring.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Freeze split, error taxonomy, samples, metrics and protected reviewer capacity based on measured throughput."
+    },
+    {
+      "id": "R02-01",
+      "title": "Immutable multi-source snapshots and publication controls",
+      "status": "done",
+      "milestone": "R02",
+      "dependencies": [],
+      "source_path": "docs/DECLARED_GRAPH_ASSEMBLY.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/release_snapshot_set.py",
+        "backend/app/declared_graph_assembly.py"
+      ],
+      "tests": [
+        "backend/tests/test_snapshot_set_postgres.py",
+        "backend/tests/test_declared_graph_assembly.py"
+      ],
+      "evidence": [
+        "docs/evidence/declared-graph-assembly-2026-10-13.json"
+      ],
+      "remaining_gate": "Exercise mixed lawful source versions and permissions on target in R02-04."
+    },
+    {
+      "id": "R02-02",
+      "title": "Bounded research jobs and concurrency controls",
+      "status": "done",
+      "milestone": "R02",
+      "dependencies": [],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/research_jobs.py"
+      ],
+      "tests": [
+        "backend/tests/test_research_jobs.py",
+        "backend/tests/test_research_jobs_postgres.py"
+      ],
+      "evidence": [
+        "docs/evidence/five-job-drill-2026-10-06.json"
+      ],
+      "remaining_gate": "Representative distinct jobs and cancellation under target resource pressure in R02-04/R07-05."
+    },
+    {
+      "id": "R02-03",
+      "title": "Release-bound lexical/vector index foundations",
+      "status": "done",
+      "milestone": "R02",
+      "dependencies": [],
+      "source_path": "docs/TURKISH_RETRIEVAL.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/search_index.py",
+        "backend/app/search_index_contract.py"
+      ],
+      "tests": [
+        "backend/tests/test_search_index.py",
+        "backend/tests/test_search_index_opensearch.py"
+      ],
+      "evidence": [
+        "docs/evidence/turkish-retrieval-drill-2026-10-06.json"
+      ],
+      "remaining_gate": "Real lawful index bytes, lexical/vector model qualification and frozen retrieval coverage in R04."
+    },
+    {
+      "id": "R02-04",
+      "title": "Representative multi-source and five-job qualification",
+      "status": "waiting",
+      "milestone": "R02",
+      "dependencies": [
+        "R01-02",
+        "R01-04",
+        "R02-01",
+        "R02-02"
+      ],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "partial",
+      "code": [
+        "scripts/qualify_provider_jobs.py",
+        "backend/app/release_snapshot_set.py"
+      ],
+      "tests": [
+        "deploy/test_provider_mixed_workload.py",
+        "backend/tests/test_snapshot_set_postgres.py"
+      ],
+      "evidence": [
+        "docs/evidence/five-job-drill-2026-10-06.json",
+        "docs/evidence/provider-load-2026-10-22.json"
+      ],
+      "remaining_gate": "One declared target and lawful multi-source snapshot tested with realistic concurrent workloads, accepted limits and measured latency."
+    },
+    {
+      "id": "R03-01",
+      "title": "Registered acquisition and source-faithful inspection",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [],
+      "source_path": "docs/REGISTERED_SOURCE_PREPARATION.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/registered_source_preparation.py",
+        "backend/app/registered_pdf_transcription.py"
+      ],
+      "tests": [
+        "backend/tests/test_registered_source_preparation.py",
+        "backend/tests/test_registered_pdf_transcription.py"
+      ],
+      "evidence": [
+        "docs/evidence/registered-domain-intake-2026-10-11.json"
+      ],
+      "remaining_gate": "Actual lawful source acquisition and independent fidelity from R01-02/R01-04."
+    },
+    {
+      "id": "R03-02",
+      "title": "Decision identity, equivalence and signed Graph B handoff",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [],
+      "source_path": "docs/SIGNED_GRAPH_B_REVIEW.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/jurisprudence_candidates.py",
+        "backend/app/graph_b_signing.py"
+      ],
+      "tests": [
+        "backend/tests/test_jurisprudence_candidates.py",
+        "backend/tests/test_graph_b_signing.py"
+      ],
+      "evidence": [
+        "docs/evidence/decision-equivalence-2026-10-12.json",
+        "docs/evidence/qualified-graph-b-signing-2026-10-12.json"
+      ],
+      "remaining_gate": "Signed representative rights and human role/effect decisions remain tracked in R05."
+    },
+    {
+      "id": "R03-03",
+      "title": "Source-qualified retrieval and private independent review",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [],
+      "source_path": "docs/PRIVATE_SOURCE_ANALYSIS_REVIEW.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/source_corpus.py",
+        "backend/app/source_analysis_reviews.py"
+      ],
+      "tests": [
+        "backend/tests/test_source_corpus.py",
+        "backend/tests/test_source_analysis_reviews.py"
+      ],
+      "evidence": [
+        "docs/evidence/source-qualified-corpus-2026-10-13.json"
+      ],
+      "remaining_gate": "Contracts-corpus release and signed-in rights/review workflow on actual approved data."
+    },
+    {
+      "id": "R03-04",
+      "title": "Verified arrival capture preserving91 observations",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [],
+      "source_path": "docs/COMPLETE_91_ARRIVAL_RETURN.md",
+      "scope": "synthetic_navigation",
+      "code": [
+        "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn.ts"
+      ],
+      "tests": [
+        "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalReturn.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/arrival-return91-2026-10-19.json"
+      ],
+      "remaining_gate": "Retained navigation rehearsal. Sample a real reviewer workflow for usability and confidentiality."
+    },
+    {
+      "id": "R03-05",
+      "title": "Complete92 exact-event handoff",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [
+        "R03-04"
+      ],
+      "source_path": "docs/COMPLETE_92_EXACT_EVENT.md",
+      "scope": "synthetic_navigation",
+      "code": [
+        "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent.ts"
+      ],
+      "tests": [
+        "frontend/src/workbench/handoffArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalDestinationArrivalEvent.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/exact-event92-2026-10-19.json"
+      ],
+      "remaining_gate": "Retained navigation rehearsal. Confirm target permissions and support for representative reviewer decisions."
+    },
+    {
+      "id": "R03-09",
+      "title": "Complete94 destination return",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [
+        "R03-05"
+      ],
+      "source_path": "docs/COMPLETE_94_DESTINATION_RETURN.md",
+      "scope": "synthetic_navigation",
+      "code": [
+        "frontend/src/workbench/handoff94DestinationReturn.ts"
+      ],
+      "tests": [
+        "frontend/src/workbench/handoff94DestinationReturn.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/destination-return94-2026-10-19.json"
+      ],
+      "remaining_gate": "Retained navigation rehearsal. Exercise the chosen customer review workflow rather than adding history depth."
+    },
+    {
+      "id": "R03-10",
+      "title": "Complete95 exact-event handoff",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [
+        "R03-09"
+      ],
+      "source_path": "docs/COMPLETE_95_EXACT_EVENT.md",
+      "scope": "synthetic_navigation",
+      "code": [
+        "frontend/src/workbench/handoff95ExactEvent.ts"
+      ],
+      "tests": [
+        "frontend/src/workbench/handoff95ExactEvent.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/exact-event95-2026-10-19.json"
+      ],
+      "remaining_gate": "Retained navigation rehearsal. Observe actual reviewer completion and interpretation."
+    },
+    {
+      "id": "R03-11",
+      "title": "Complete97 arrival return",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [
+        "R03-10"
+      ],
+      "source_path": "docs/COMPLETE_97_ARRIVAL_RETURN.md",
+      "scope": "synthetic_navigation",
+      "code": [
+        "frontend/src/workbench/handoff97ArrivalReturn.ts"
+      ],
+      "tests": [
+        "frontend/src/workbench/handoff97ArrivalReturn.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/arrival-return97-2026-10-19.json"
+      ],
+      "remaining_gate": "Retained navigation rehearsal. Verify authorized current/saved review distinctions in target UAT."
+    },
+    {
+      "id": "R03-12",
+      "title": "Complete98 exact-event handoff",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [
+        "R03-11",
+        "R07-08"
+      ],
+      "source_path": "docs/COMPLETE_98_EXACT_EVENT.md",
+      "scope": "synthetic_navigation",
+      "code": [
+        "frontend/src/workbench/handoff98ExactEvent.ts"
+      ],
+      "tests": [
+        "frontend/src/workbench/handoff98ExactEvent.test.tsx"
+      ],
+      "evidence": [
+        "docs/COMPLETE_98_EXACT_EVENT.md"
+      ],
+      "remaining_gate": "Retained navigation rehearsal. Validate one end-to-end representative reviewer task."
+    },
+    {
+      "id": "R03-13",
+      "title": "Complete100 destination return with101 retained observations",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [
+        "R03-12",
+        "R07-09"
+      ],
+      "source_path": "docs/COMPLETE_100_DESTINATION_RETURN.md",
+      "scope": "synthetic_navigation",
+      "code": [
+        "frontend/src/workbench/handoff100DestinationReturn.ts"
+      ],
+      "tests": [
+        "frontend/src/workbench/handoff100DestinationReturn.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/destination-return100-2026-10-20.json"
+      ],
+      "remaining_gate": "Retained navigation rehearsal. Confirm rejection and recovery make sense to a lawyer."
+    },
+    {
+      "id": "R03-06",
+      "title": "First legally reviewed contracts corpus",
+      "status": "waiting",
+      "milestone": "R03",
+      "dependencies": [
+        "R01-02",
+        "R01-03",
+        "R01-04",
+        "R02-04"
+      ],
+      "source_path": "docs/DATA_KNOWLEDGE_STRATEGY.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/release_set_preparation.py",
+        "backend/app/provision_mappings.py"
+      ],
+      "tests": [
+        "backend/tests/test_release_set_preparation.py",
+        "backend/tests/test_provision_mappings.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Approve and sign exact contracts sources/provisions, temporal applicability and documented coverage gaps."
+    },
+    {
+      "id": "R03-07",
+      "title": "Graph A populated legal and institutional genealogy",
+      "status": "in_progress",
+      "milestone": "R03",
+      "dependencies": [
+        "R01-03",
+        "R03-06"
+      ],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "partial",
+      "code": [
+        "ontology/modules/institutions.ttl",
+        "ontology/modules/norms.ttl",
+        "scripts/assemble_legal_graphs.py"
+      ],
+      "tests": [
+        "backend/tests/test_ontology_syntax.py",
+        "backend/tests/test_declared_graph_assembly.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Populate and independently review source-pinned genealogy and applicable institution/provision versions."
+    },
+    {
+      "id": "R03-08",
+      "title": "Coverage, discrepancy and legal-time reporting",
+      "status": "in_progress",
+      "milestone": "R03",
+      "dependencies": [
+        "R03-06"
+      ],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "partial",
+      "code": [
+        "ontology/catalog.json",
+        "ontology/temporal.py",
+        "backend/app/source_review_readiness.py"
+      ],
+      "tests": [
+        "backend/tests/test_temporal_validity.py",
+        "backend/tests/test_source_review_readiness.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Publish reviewer-approved denominators and time/coverage/discrepancy slices on real corpus releases."
+    },
+    {
+      "id": "R04-01",
+      "title": "Exact-preserving Turkish and literal-citation retrieval",
+      "status": "done",
+      "milestone": "R04",
+      "dependencies": [],
+      "source_path": "docs/TURKISH_RETRIEVAL.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/search_normalization.py",
+        "backend/app/search_index.py"
+      ],
+      "tests": [
+        "backend/tests/test_search_normalization.py",
+        "backend/tests/test_search_index_opensearch.py"
+      ],
+      "evidence": [
+        "docs/evidence/literal-citation-drill-2026-10-07.json"
+      ],
+      "remaining_gate": "Real-corpus exact-ID and citation fidelity evaluation under R04-04."
+    },
+    {
+      "id": "R04-02",
+      "title": "Frozen-snapshot development benchmark tooling",
+      "status": "done",
+      "milestone": "R04",
+      "dependencies": [],
+      "source_path": "docs/RETRIEVAL_BENCHMARK.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/retrieval_benchmark.py",
+        "scripts/benchmark_retrieval.py"
+      ],
+      "tests": [
+        "backend/tests/test_retrieval_benchmark.py"
+      ],
+      "evidence": [
+        "docs/evidence/retrieval-benchmark-drill-2026-10-07.json"
+      ],
+      "remaining_gate": "Approved development and held-out benchmark with source/proceeding/family isolation and uncertainty."
+    },
+    {
+      "id": "R04-03",
+      "title": "Qualified local embeddings and reranker",
+      "status": "planned",
+      "milestone": "R04",
+      "dependencies": [
+        "R01-05",
+        "R03-06",
+        "R04-02"
+      ],
+      "source_path": "docs/DATA_KNOWLEDGE_STRATEGY.md",
+      "scope": "plan",
+      "code": [
+        "backend/app/search_index.py",
+        "qualification/asset-catalog.json"
+      ],
+      "tests": [
+        "backend/tests/test_search_index.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Frozen lawful-corpus comparison selects license-cleared offline embedding/reranking versions and resource limits."
+    },
+    {
+      "id": "R04-04",
+      "title": "Lexical/hybrid/temporal/graph/rerank ablations",
+      "status": "waiting",
+      "milestone": "R04",
+      "dependencies": [
+        "R03-06",
+        "R04-02",
+        "R04-03"
+      ],
+      "source_path": "docs/RETRIEVAL_BENCHMARK.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/retrieval_benchmark.py",
+        "scripts/benchmark_retrieval.py"
+      ],
+      "tests": [
+        "backend/tests/test_retrieval_benchmark.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Run paired lexical/hybrid/temporal/graph/rerank ablations with exact-ID, recall, adverse slices and reviewer effort."
+    },
+    {
+      "id": "R04-05",
+      "title": "Supporting/adverse public and private context packing",
+      "status": "in_progress",
+      "milestone": "R04",
+      "dependencies": [
+        "R04-04",
+        "R05-02"
+      ],
+      "source_path": "docs/CONTEXT_PACKING.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/context_packing.py",
+        "backend/app/evidence_prompt.py"
+      ],
+      "tests": [
+        "backend/tests/test_context_packing.py",
+        "frontend/src/pages/matter/EvidenceContextPanel.test.tsx"
+      ],
+      "evidence": [],
+      "remaining_gate": "Measure omission visibility, independent adverse coverage and exact evidence pinning on approved representative tasks."
+    },
+    {
+      "id": "R05-01",
+      "title": "Historical Graph B decision population",
+      "status": "in_progress",
+      "milestone": "R05",
+      "dependencies": [
+        "R01-02",
+        "R01-03",
+        "R03-02"
+      ],
+      "source_path": "docs/DATA_KNOWLEDGE_STRATEGY.md",
+      "scope": "partial",
+      "code": [
+        "ontology/modules/jurisprudence.ttl",
+        "backend/app/jurisprudence_candidates.py"
+      ],
+      "tests": [
+        "backend/tests/test_jurisprudence_candidates.py",
+        "backend/tests/test_graph_b_review.py"
+      ],
+      "evidence": [
+        "docs/evidence/aym-decision-intake-2026-10-11.json"
+      ],
+      "remaining_gate": "Population, source permission, historical/tribunal coverage and provenance for representative decisions."
+    },
+    {
+      "id": "R05-02",
+      "title": "Passage-role and authority-effect adjudication",
+      "status": "waiting",
+      "milestone": "R05",
+      "dependencies": [
+        "R05-01"
+      ],
+      "source_path": "docs/GRAPH_B_HANDOFF.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/graph_b_review.py",
+        "backend/app/graph_b_qualification.py"
+      ],
+      "tests": [
+        "backend/tests/test_graph_b_review.py",
+        "backend/tests/test_graph_b_signing.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Independent role, treatment and special-effect adjudication with zero critical misattributions and visible disagreement."
+    },
+    {
+      "id": "R05-03",
+      "title": "Independent contrary-authority and comparable-fact search",
+      "status": "planned",
+      "milestone": "R05",
+      "dependencies": [
+        "R04-04",
+        "R05-02"
+      ],
+      "source_path": "docs/DATA_KNOWLEDGE_STRATEGY.md",
+      "scope": "plan",
+      "code": [
+        "backend/app/research_sources.py",
+        "backend/app/retrieval_benchmark.py"
+      ],
+      "tests": [
+        "backend/tests/test_retrieval_benchmark.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Implement and measure an independently nominated adverse/comparable retrieval arm on reviewed ground truth."
+    },
+    {
+      "id": "R05A-01",
+      "title": "Versioned legal rationale, local proposals and reviewable exports",
+      "status": "done",
+      "milestone": "R05A",
+      "dependencies": [],
+      "source_path": "docs/ANALYSIS_WORKBENCH.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/analysis_workbench.py",
+        "backend/app/analysis_proposals.py",
+        "backend/app/exports.py"
+      ],
+      "tests": [
+        "backend/tests/test_analysis_workbench.py",
+        "backend/tests/test_analysis_suggestions.py",
+        "frontend/src/pages/matter/AnalysisPanel.test.tsx"
+      ],
+      "evidence": [],
+      "remaining_gate": "R05A-03 representative end-to-end legal export acceptance plus visible exact version and scope."
+    },
+    {
+      "id": "R05A-02",
+      "title": "Independent findings, revision adjudication and trial capture",
+      "status": "done",
+      "milestone": "R05A",
+      "dependencies": [],
+      "source_path": "docs/REGISTERED_ANALYSIS_COMPARISONS.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/analysis_reviews.py",
+        "backend/app/analysis_adjudication.py",
+        "backend/app/authority_model_trials.py"
+      ],
+      "tests": [
+        "backend/tests/test_analysis_reviews.py",
+        "backend/tests/test_analysis_adjudication.py",
+        "backend/tests/test_authority_model_trials.py"
+      ],
+      "evidence": [
+        "docs/evidence/authority-model-trials-verification-2026-10-10.json"
+      ],
+      "remaining_gate": "Independently adjudicated representative cohorts and recorded disagreement and reviewer effort."
+    },
+    {
+      "id": "R05A-03",
+      "title": "Representative contract-to-analysis-to-export qualification",
+      "status": "waiting",
+      "milestone": "R05A",
+      "dependencies": [
+        "R03-06",
+        "R04-04",
+        "R05-02",
+        "R05A-01"
+      ],
+      "source_path": "docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/analysis_workbench.py",
+        "backend/app/exports.py",
+        "backend/app/qualification_scoring.py"
+      ],
+      "tests": [
+        "backend/tests/test_analysis_workbench.py",
+        "backend/tests/test_qualification_scoring.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Complete lawful representative contract-to-export tasks and score exact premises, applicability, counterarguments, abstention and reviewer corrections."
+    },
+    {
+      "id": "R05A-04",
+      "title": "Semantic correction and bounded multi-step consistency",
+      "status": "in_progress",
+      "milestone": "R05A",
+      "dependencies": [
+        "R05A-03"
+      ],
+      "source_path": "docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/analysis_feedback.py",
+        "backend/app/analysis_adjudication.py"
+      ],
+      "tests": [
+        "backend/tests/test_analysis_feedback.py",
+        "backend/tests/test_analysis_adjudication.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Paired human semantic correction study with recorded new regressions, unresolved findings and limits."
+    },
+    {
+      "id": "R05A-05",
+      "title": "Calibrated Standard/Deep analysis and measured benefit",
+      "status": "waiting",
+      "milestone": "R05A",
+      "dependencies": [
+        "R01-07",
+        "R05A-03",
+        "R05A-04"
+      ],
+      "source_path": "docs/EVALUATION.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/authority_model_trials.py",
+        "backend/app/research_qualification.py"
+      ],
+      "tests": [
+        "backend/tests/test_authority_model_trials.py",
+        "backend/tests/test_research_qualification.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Preregister and measure Standard/Deep effect, wall time, active reviewer effort and critical correctness on fixed cases."
+    },
+    {
+      "id": "R05B-01",
+      "title": "Local privacy-safe scenario abstraction",
+      "status": "planned",
+      "milestone": "R05B",
+      "dependencies": [
+        "R01-06"
+      ],
+      "source_path": "docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md",
+      "scope": "plan",
+      "code": [
+        "backend/app/policy.py"
+      ],
+      "tests": [
+        "backend/tests/test_policy_provider.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Implement local minimization and test Turkish scenario fidelity using consented and invented attack inputs."
+    },
+    {
+      "id": "R05B-02",
+      "title": "Advanced edge privacy, secret and ethical guardrails",
+      "status": "planned",
+      "milestone": "R05B",
+      "dependencies": [
+        "R05B-01"
+      ],
+      "source_path": "docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md",
+      "scope": "plan",
+      "code": [
+        "backend/app/qualification_scoring.py"
+      ],
+      "tests": [
+        "backend/tests/test_qualification_scoring.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Adversarial privacy/secret/ethics probes and safe-task passage with zero prohibited disclosures or critical mutations."
+    },
+    {
+      "id": "R05B-03",
+      "title": "Exact scenario preview and single-use release",
+      "status": "planned",
+      "milestone": "R05B",
+      "dependencies": [
+        "R05B-02"
+      ],
+      "source_path": "docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md",
+      "scope": "plan",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "Exact digest/scope approval UI and single-use release contract tested for changes, replay, expiry and revocation."
+    },
+    {
+      "id": "R05B-04",
+      "title": "Isolated server-side BYOK vault and broker",
+      "status": "planned",
+      "milestone": "R05B",
+      "dependencies": [
+        "R01-06",
+        "R05B-03"
+      ],
+      "source_path": "docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md",
+      "scope": "plan",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "Independently inspect isolated vault/broker boundaries, credential custody, logs, private mounts and no automatic fallback."
+    },
+    {
+      "id": "R05B-05",
+      "title": "OpenAI research adapter and independent qualification",
+      "status": "planned",
+      "milestone": "R05B",
+      "dependencies": [
+        "R05B-04"
+      ],
+      "source_path": "docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md",
+      "scope": "plan",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "Build OpenAI adapter; qualify policy, request/return fidelity, credentials, privacy, citation and cost separately."
+    },
+    {
+      "id": "R05B-06",
+      "title": "Anthropic research adapter and independent qualification",
+      "status": "planned",
+      "milestone": "R05B",
+      "dependencies": [
+        "R05B-04"
+      ],
+      "source_path": "docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md",
+      "scope": "plan",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "Build Anthropic adapter; qualify policy, request/return fidelity, credentials, privacy, citation and cost separately."
+    },
+    {
+      "id": "R05B-07",
+      "title": "Gemini research adapter and independent qualification",
+      "status": "planned",
+      "milestone": "R05B",
+      "dependencies": [
+        "R05B-04"
+      ],
+      "source_path": "docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md",
+      "scope": "plan",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "Build Gemini adapter; qualify policy, request/return fidelity, credentials, privacy, citation and cost separately."
+    },
+    {
+      "id": "R05B-08",
+      "title": "Untrusted return admission and local case application",
+      "status": "planned",
+      "milestone": "R05B",
+      "dependencies": [
+        "R04-04",
+        "R05A-03",
+        "R05B-05",
+        "R05B-06",
+        "R05B-07"
+      ],
+      "source_path": "docs/LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md",
+      "scope": "plan",
+      "code": [
+        "backend/app/source_corpus.py",
+        "backend/app/research_sources.py"
+      ],
+      "tests": [
+        "backend/tests/test_source_corpus.py",
+        "backend/tests/test_research_sources.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Implement untrusted return admission and exact source verification, then prove safe local case application and unsupported-answer abstention."
+    },
+    {
+      "id": "R06-01",
+      "title": "Commercial and employment source intake foundation",
+      "status": "done",
+      "milestone": "R06",
+      "dependencies": [],
+      "source_path": "docs/REGISTERED_SOURCE_PREPARATION.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/registered_source_preparation.py"
+      ],
+      "tests": [
+        "backend/tests/test_registered_source_preparation.py"
+      ],
+      "evidence": [
+        "docs/evidence/registered-domain-intake-2026-10-11.json"
+      ],
+      "remaining_gate": "Reviewed commercial and employment packs tracked in R06-02/R06-03."
+    },
+    {
+      "id": "R06-02",
+      "title": "Reviewed commercial-dispute practice pack",
+      "status": "waiting",
+      "milestone": "R06",
+      "dependencies": [
+        "R03-06",
+        "R05-02",
+        "R05A-03"
+      ],
+      "source_path": "docs/DATA_KNOWLEDGE_STRATEGY.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/practice.py",
+        "backend/app/registered_source_preparation.py"
+      ],
+      "tests": [
+        "backend/tests/test_practice.py",
+        "backend/tests/test_registered_source_preparation.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Lawful reviewed commercial sources and representative disputed-fact/adverse/history tasks."
+    },
+    {
+      "id": "R06-03",
+      "title": "Reviewed employment/social-security practice pack",
+      "status": "waiting",
+      "milestone": "R06",
+      "dependencies": [
+        "R03-06",
+        "R05-02",
+        "R05A-03"
+      ],
+      "source_path": "docs/DATA_KNOWLEDGE_STRATEGY.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/practice.py",
+        "backend/app/registered_source_preparation.py"
+      ],
+      "tests": [
+        "backend/tests/test_practice.py",
+        "backend/tests/test_registered_source_preparation.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Lawful reviewed employment/social-security versions and dated-rule, change-boundary and scenario tests."
+    },
+    {
+      "id": "R06-04",
+      "title": "Auditable legal calculations and parameter histories",
+      "status": "planned",
+      "milestone": "R06",
+      "dependencies": [
+        "R06-02",
+        "R06-03"
+      ],
+      "source_path": "docs/DATA_KNOWLEDGE_STRATEGY.md",
+      "scope": "plan",
+      "code": [
+        "backend/app/practice.py"
+      ],
+      "tests": [
+        "backend/tests/test_practice.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Approved dated parameter/rule histories and reproducible typed calculations with explicit gaps, rounding and cutoffs."
+    },
+    {
+      "id": "R06-05",
+      "title": "Firm playbooks, scenarios and corrections",
+      "status": "in_progress",
+      "milestone": "R06",
+      "dependencies": [
+        "R05A-03"
+      ],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/practice.py",
+        "backend/app/analysis_feedback.py",
+        "frontend/src/pages/matter/PracticePanel.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_practice.py",
+        "backend/tests/test_analysis_feedback.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Representative firm playbooks and conflicts proving authority separation, history and safe scenarios."
+    },
+    {
+      "id": "R07-01",
+      "title": "Guarded install, activation, rollback and retained dependencies",
+      "status": "done",
+      "milestone": "R07",
+      "dependencies": [],
+      "source_path": "docs/DECLARED_GRAPH_ASSEMBLY.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/release_promotion.py",
+        "backend/app/retained_graph_assembly.py"
+      ],
+      "tests": [
+        "backend/tests/test_release_promotion.py",
+        "backend/tests/test_runtime_graph_release.py"
+      ],
+      "evidence": [
+        "docs/evidence/graph-lifecycle-drill-2026-10-06.json"
+      ],
+      "remaining_gate": "Signed representative bundle target recovery, activation and rollback evidence tracked in R07-04."
+    },
+    {
+      "id": "R07-02",
+      "title": "Research admission, revocation and job reconciliation",
+      "status": "done",
+      "milestone": "R07",
+      "dependencies": [],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/research_jobs.py"
+      ],
+      "tests": [
+        "backend/tests/test_research_jobs.py",
+        "backend/tests/test_research_jobs_postgres.py"
+      ],
+      "evidence": [
+        "docs/evidence/five-job-drill-2026-10-06.json"
+      ],
+      "remaining_gate": "Observe target revocation/reconciliation and retry behavior in signed-in R07-05 scenarios."
+    },
+    {
+      "id": "R07-03",
+      "title": "Automatic freshness and dependency-impact queues",
+      "status": "in_progress",
+      "milestone": "R07",
+      "dependencies": [
+        "R03-06",
+        "R05A-03"
+      ],
+      "source_path": "docs/DATA_KNOWLEDGE_STRATEGY.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/source_review_readiness.py",
+        "backend/app/authority_revalidations.py"
+      ],
+      "tests": [
+        "backend/tests/test_source_review_readiness.py",
+        "backend/tests/test_authority_revalidations.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Observe scheduled detection and scoped impact queues at real corpus scale with immutable prior review."
+    },
+    {
+      "id": "R07-04",
+      "title": "Signed offline distribution and target-host recovery",
+      "status": "waiting",
+      "milestone": "R07",
+      "dependencies": [
+        "R02-04",
+        "R07-01"
+      ],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "partial",
+      "code": [
+        "deploy/manage_backup.py",
+        "scripts/graph_releases.py"
+      ],
+      "tests": [
+        "deploy/test_backup_contract.py",
+        "deploy/test_graph_drill_contract.py"
+      ],
+      "evidence": [
+        "docs/evidence/recovery-drill-2026-10-06.json",
+        "docs/evidence/graph-lifecycle-drill-2026-10-06.json"
+      ],
+      "remaining_gate": "Signed full/delta customer release distribution, independent key/restore controls, measured target RPO/RTO and rollback."
+    },
+    {
+      "id": "R07-05",
+      "title": "Five-job resource, latency and isolation qualification",
+      "status": "waiting",
+      "milestone": "R07",
+      "dependencies": [
+        "R02-04",
+        "R04-04",
+        "R05A-03"
+      ],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "partial",
+      "code": [
+        "scripts/qualify_provider_jobs.py",
+        "backend/app/research_jobs.py"
+      ],
+      "tests": [
+        "deploy/test_provider_mixed_workload.py",
+        "backend/tests/test_research_jobs_postgres.py"
+      ],
+      "evidence": [
+        "docs/evidence/provider-load-2026-10-22.json"
+      ],
+      "remaining_gate": "Five simultaneous representative signed-in legal tasks with ratified target p95/resources, isolation, overload and revocation."
+    },
+    {
+      "id": "R07-06",
+      "title": "Retention, legal holds, physical erasure and key lifecycle",
+      "status": "in_progress",
+      "milestone": "R07",
+      "dependencies": [
+        "R01-06"
+      ],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "partial",
+      "code": [
+        "scripts/retention_authorization_readiness.py",
+        "scripts/recipient_receipt_retention.py",
+        "scripts/host_trust_continuity.py"
+      ],
+      "tests": [
+        "backend/tests/test_retention_authorization_readiness.py",
+        "backend/tests/test_recipient_receipt_retention.py",
+        "backend/tests/test_host_trust_continuity.py"
+      ],
+      "evidence": [
+        "docs/evidence/retention-authorization-2026-11-05.json",
+        "docs/evidence/staged-recipient-reconciliation-2026-11-06.json"
+      ],
+      "remaining_gate": "Lawful hold/expiry, physical erasure across declared stores/backups, key lifecycle and authenticated accountable target receipts."
+    },
+    {
+      "id": "R07-07",
+      "title": "Preserve CI headroom and deterministic release evidence",
+      "status": "done",
+      "milestone": "R07",
+      "dependencies": [],
+      "source_path": "docs/COMPLETE_98_EXACT_EVENT.md",
+      "scope": "engineering",
+      "code": [
+        ".github/workflows/ci.yml",
+        "scripts/run_ci_reserve_guard_v3.py"
+      ],
+      "tests": [
+        "deploy/test_deployment_ci_placement.py",
+        "backend/tests/test_ci_reserve_guard.py"
+      ],
+      "evidence": [
+        "docs/CI_RESERVES.md"
+      ],
+      "remaining_gate": "Requalify each exact PR and fetched main under declared per-job and per-step floors and two-worker allocations."
+    },
+    {
+      "id": "R08-01",
+      "title": "Executable extended qualification scorer",
+      "status": "done",
+      "milestone": "R08",
+      "dependencies": [],
+      "source_path": "docs/EVALUATION.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/evaluation.py",
+        "backend/app/qualification_scoring.py",
+        "scripts/evaluate_release.py"
+      ],
+      "tests": [
+        "backend/tests/test_evaluation.py",
+        "backend/tests/test_qualification_scoring.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Independent sample coverage and observed pass rates in R08-02/R08-03."
+    },
+    {
+      "id": "R08-02",
+      "title": "Independent development and held-out legal datasets",
+      "status": "waiting",
+      "milestone": "R08",
+      "dependencies": [
+        "R01-02",
+        "R01-03",
+        "R01-07"
+      ],
+      "source_path": "docs/EVALUATION.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/reference_cases.py",
+        "scripts/qualify_reference_cases.py"
+      ],
+      "tests": [
+        "backend/tests/test_reference_cases.py",
+        "backend/tests/test_retrieval_benchmark.py"
+      ],
+      "evidence": [
+        "docs/evidence/reference-case-intake-verification-2026-10-10.json"
+      ],
+      "remaining_gate": "Preregister independently held-out, nonoverlapping sources, proceedings and case families with sufficient denominators."
+    },
+    {
+      "id": "R08-03",
+      "title": "Legal correctness, retrieval, privacy and usefulness release suite",
+      "status": "waiting",
+      "milestone": "R08",
+      "dependencies": [
+        "R03-06",
+        "R04-04",
+        "R05A-03",
+        "R06-02",
+        "R06-03",
+        "R08-02"
+      ],
+      "source_path": "docs/EVALUATION.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/qualification_scoring.py",
+        "scripts/evaluate_release.py"
+      ],
+      "tests": [
+        "backend/tests/test_qualification_scoring.py",
+        "backend/tests/test_evaluation.py"
+      ],
+      "evidence": [],
+      "remaining_gate": "Run legal correctness, support, adverse recall, abstention, confidentiality, safety and usefulness on held-out reviewed cases."
+    },
+    {
+      "id": "R08-04",
+      "title": "10–20-lawyer pilot and preparation-time study",
+      "status": "waiting",
+      "milestone": "R08",
+      "dependencies": [
+        "W01-02",
+        "W02-02",
+        "W03-02",
+        "R07-04",
+        "R07-05",
+        "R08-03"
+      ],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "plan",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "Obtain 10–20 lawyer pilot acceptance and measure paired total preparation time, privacy, recovery and workflow outcomes."
+    },
+    {
+      "id": "R08-05",
+      "title": "Production release and customer rollout authorization",
+      "status": "waiting",
+      "milestone": "R08",
+      "dependencies": [
+        "R07-06",
+        "R08-04"
+      ],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "plan",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "Separate named legal, rights, privacy, operations and customer rollout approvals on a pinned release and independent BYOK adapters."
+    },
+    {
+      "id": "LATER-1",
+      "title": "Autonomous filing and client communications",
+      "status": "deferred",
+      "milestone": "LATER",
+      "dependencies": [],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "deferred",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "Autonomous filing and client communications would require separate product authorization and consequence-aware acceptance."
+    },
+    {
+      "id": "LATER-2",
+      "title": "Authenticated UYAP/MERSİS synchronization",
+      "status": "deferred",
+      "milestone": "LATER",
+      "dependencies": [],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "deferred",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "Authenticated UYAP/MERSİS integrations would require explicit source authorization and separate access/privacy validation."
+    },
+    {
+      "id": "LATER-3",
+      "title": "Outcome prediction and automatic cross-matter learning",
+      "status": "deferred",
+      "milestone": "LATER",
+      "dependencies": [],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "deferred",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "Outcome prediction and cross-matter learning would require explicit decisions on purpose, lawful data use and measured risks."
+    },
+    {
+      "id": "LATER-4",
+      "title": "Model fine-tuning",
+      "status": "deferred",
+      "milestone": "LATER",
+      "dependencies": [],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "deferred",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "Model fine-tuning would require separately reviewed training rights, provenance and evaluation."
+    },
+    {
+      "id": "LATER-5",
+      "title": "Full Akoma Ntoso conversion and general LegalRuleML engine",
+      "status": "deferred",
+      "milestone": "LATER",
+      "dependencies": [],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "deferred",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "Full Akoma Ntoso and general LegalRuleML work would require scope approval and interoperability qualification."
+    },
+    {
+      "id": "LATER-6",
+      "title": "Separate private graph platform or unqualified embedding compression",
+      "status": "deferred",
+      "milestone": "LATER",
+      "dependencies": [],
+      "source_path": "docs/ROADMAP.md",
+      "scope": "deferred",
+      "code": [],
+      "tests": [],
+      "evidence": [],
+      "remaining_gate": "A private graph platform or embedding compression would require a separate architecture decision and privacy/retrieval evaluation."
+    },
+    {
+      "id": "R07-08",
+      "title": "Qualify isolated-thread CI capacity before the complete98 handoff",
+      "status": "done",
+      "milestone": "R07",
+      "dependencies": [
+        "R07-07"
+      ],
+      "source_path": "docs/CI_THREAD_HEADROOM.md",
+      "scope": "engineering",
+      "code": [
+        ".github/workflows/ci.yml"
+      ],
+      "tests": [
+        "deploy/test_deployment_ci_placement.py"
+      ],
+      "evidence": [
+        "docs/evidence/ci-thread-headroom-2026-10-19.json"
+      ],
+      "remaining_gate": "Retain exact membership, isolation and bounded workers through subsequent workflow changes."
+    },
+    {
+      "id": "R07-09",
+      "title": "Qualify complete disjoint frontend shards before the 101-observation return",
+      "status": "done",
+      "milestone": "R07",
+      "dependencies": [
+        "R07-08"
+      ],
+      "source_path": "docs/CI_FRONTEND_SHARD_CAPACITY.md",
+      "scope": "engineering",
+      "code": [
+        ".github/workflows/ci.yml",
+        "scripts/verify_frontend_shards.mjs"
+      ],
+      "tests": [
+        "deploy/test_deployment_ci_placement.py",
+        "deploy/test_ci_partition_contract.py"
+      ],
+      "evidence": [
+        "docs/evidence/ci-frontend-shards-2026-10-20.json"
+      ],
+      "remaining_gate": "Confirm complete disjoint source membership and bounded jobs on each candidate and main."
+    },
+    {
+      "id": "R03-14",
+      "title": "Complete101 exact-event handoff with103 observations",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [
+        "R03-13",
+        "R07-09"
+      ],
+      "source_path": "docs/COMPLETE_101_EXACT_EVENT.md",
+      "scope": "synthetic_navigation",
+      "code": [
+        "frontend/src/workbench/handoff101ExactEvent.ts"
+      ],
+      "tests": [
+        "frontend/src/workbench/handoff101ExactEvent.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/exact-event101-2026-10-20.json"
+      ],
+      "remaining_gate": "Retained navigation rehearsal. Evaluate user-visible relevance and success on representative review work."
+    },
+    {
+      "id": "R03-15",
+      "title": "Complete103 arrival return with104 observations",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [
+        "R03-14",
+        "R07-09"
+      ],
+      "source_path": "docs/COMPLETE_103_ARRIVAL_RETURN.md",
+      "scope": "synthetic_navigation",
+      "code": [
+        "frontend/src/workbench/handoff103ArrivalReturn.ts"
+      ],
+      "tests": [
+        "frontend/src/workbench/handoff103ArrivalReturn.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/arrival-return103-2026-10-20.json"
+      ],
+      "remaining_gate": "Retained navigation rehearsal. Check that real reviewers can correctly interpret history and current scope."
+    },
+    {
+      "id": "R03-16",
+      "title": "Complete104 exact-event handoff and contracts review package",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [
+        "R03-15",
+        "R07-09"
+      ],
+      "source_path": "docs/COMPLETE_104_EXACT_EVENT.md",
+      "scope": "synthetic_navigation",
+      "code": [
+        "frontend/src/workbench/handoff104ExactEvent.ts"
+      ],
+      "tests": [
+        "frontend/src/workbench/handoff104ExactEvent.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/exact-event104-2026-10-20.json",
+        "docs/evidence/review-milestone-2026-10-20.json"
+      ],
+      "remaining_gate": "Use the completed packet for bounded human contracts review and release qualification."
+    },
+    {
+      "id": "R03-17",
+      "title": "Private pilot analysis — owner review pending",
+      "status": "waiting",
+      "milestone": "R03",
+      "dependencies": [
+        "R03-16",
+        "R01-02",
+        "R01-03",
+        "R01-04"
+      ],
+      "source_path": "docs/MILESTONE_REVIEW_2026-10-20.md",
+      "scope": "partial",
+      "code": [
+        "backend/app/analysis_reviews.py",
+        "frontend/src/pages/matter/AnalysisReviews.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_analysis_reviews.py",
+        "frontend/src/pages/matter/AnalysisReviews.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/review-milestone-2026-10-20.json"
+      ],
+      "remaining_gate": "Actual owner independently examines exact private v3 sources and artifacts and records their own decision and corrections."
+    },
+    {
+      "id": "R03-18",
+      "title": "Restore isolated scanner defaults and private pilot intake",
+      "status": "done",
+      "milestone": "R03",
+      "dependencies": [
+        "R03-16"
+      ],
+      "source_path": "docs/evidence/scanner-private-pilot-2026-10-20.json",
+      "scope": "historical_runtime",
+      "code": [
+        "backend/app/scanner.py",
+        "deploy/scanner/control.py"
+      ],
+      "tests": [
+        "backend/tests/test_scanner.py",
+        "deploy/test_scanner_compose.py"
+      ],
+      "evidence": [
+        "docs/evidence/scanner-private-pilot-2026-10-20.json"
+      ],
+      "remaining_gate": "Recheck scanner health and actual target intake before counting current runtime or workflow acceptance."
+    },
+    {
+      "id": "R05A-06",
+      "title": "Preflight context budgets for source-bound local proposals",
+      "status": "done",
+      "milestone": "R05A",
+      "dependencies": [
+        "R05A-01"
+      ],
+      "source_path": "docs/ANALYSIS_CONTEXT_BUDGET.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/analysis_proposals.py",
+        "frontend/src/pages/matter/AnalysisContextBudget.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_analysis_context_budget.py",
+        "frontend/src/pages/matter/AnalysisContextBudget.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/analysis-context-budget-2026-10-20.json"
+      ],
+      "remaining_gate": "Measure actual model/tokenizer envelope and representative accepted scope; preflight is a conservative bound."
+    },
+    {
+      "id": "R07-10",
+      "title": "Preserve relay reservations during cold-backup recovery",
+      "status": "done",
+      "milestone": "R07",
+      "dependencies": [
+        "R07-04"
+      ],
+      "source_path": "docs/OPERATIONS.md",
+      "scope": "historical_runtime",
+      "code": [
+        "deploy/manage_backup.py"
+      ],
+      "tests": [
+        "deploy/test_backup_restart.py",
+        "deploy/test_backup_contract.py"
+      ],
+      "evidence": [
+        "docs/evidence/backup-restart-preflight-2026-10-22.json"
+      ],
+      "remaining_gate": "Full target recoverability remains R07-04; this packet covers restart order and relay reservation only."
+    },
+    {
+      "id": "R05A-07",
+      "title": "Explicit focus analyses within the configured context budget",
+      "status": "done",
+      "milestone": "R05A",
+      "dependencies": [
+        "R05A-06",
+        "R03-17"
+      ],
+      "source_path": "docs/FOCUSED_ANALYSIS.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/analysis_focus.py",
+        "frontend/src/pages/matter/AnalysisFocus.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_analysis_focus.py",
+        "frontend/src/pages/matter/AnalysisFocus.test.tsx"
+      ],
+      "evidence": [
+        "docs/evidence/focused-analysis-2026-10-21.json"
+      ],
+      "remaining_gate": "The feature is scoped to narrowed drafts. R03-17 exact owner review remains pending."
+    },
+    {
+      "id": "R05A-08",
+      "title": "Bounded structured local analysis output",
+      "status": "done",
+      "milestone": "R05A",
+      "dependencies": [
+        "R05A-01",
+        "R05A-06"
+      ],
+      "source_path": "docs/LOCAL_MODEL_OUTPUT_CONTRACT.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/analysis_output_contract.py",
+        "backend/app/analysis_proposals.py"
+      ],
+      "tests": [
+        "backend/tests/test_analysis_output_contract.py",
+        "backend/tests/test_analysis_suggestions.py"
+      ],
+      "evidence": [
+        "docs/evidence/bounded-analysis-output-2026-10-21.json"
+      ],
+      "remaining_gate": "Qualify representative legal outputs and structural failures under the actual approved model."
+    },
+    {
+      "id": "R05A-09",
+      "title": "Source-qualified references and finished proposal prose",
+      "status": "done",
+      "milestone": "R05A",
+      "dependencies": [
+        "R05A-08"
+      ],
+      "source_path": "docs/LOCAL_MODEL_OUTPUT_CONTRACT.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/analysis_reference_contract.py",
+        "backend/app/analysis_output_contract.py"
+      ],
+      "tests": [
+        "backend/tests/test_analysis_references.py",
+        "backend/tests/test_analysis_output_contract.py"
+      ],
+      "evidence": [
+        "docs/evidence/source-qualified-analysis-prose-2026-10-21.json"
+      ],
+      "remaining_gate": "Independent reviewer checks semantic support, applicability and clarity beyond source labels and prose structure."
+    },
+    {
+      "id": "R05A-10",
+      "title": "Model condition assessments preserve declared premise roles",
+      "status": "done",
+      "milestone": "R05A",
+      "dependencies": [
+        "R05A-09"
+      ],
+      "source_path": "docs/MODEL_ASSESSMENT_PREMISES.md",
+      "scope": "synthetic",
+      "code": [
+        "backend/app/analysis_assessment_contract.py"
+      ],
+      "tests": [
+        "backend/tests/test_analysis_assessment_guard.py"
+      ],
+      "evidence": [
+        "docs/evidence/model-assessment-premises-2026-10-21.json"
+      ],
+      "remaining_gate": "Independent representative role/support adjudication and legal error rate remain open."
+    }
+  ],
+  "milestones": [
+    {
+      "id": "F00",
+      "title": "Platform foundation",
+      "status": "partial",
+      "task_ids": [
+        "F00-01",
+        "F00-02",
+        "F00-03",
+        "F00-04",
+        "F00-05",
+        "F00-06"
+      ],
+      "dependencies": [],
+      "legal_qualified": false,
+      "remaining_gate": "Demonstrate scoped intake-to-export in the target build using representative formats, provider/model provenance and assistive technologies; record health and target limits."
+    },
+    {
+      "id": "W01",
+      "title": "Firm administration",
+      "status": "waiting",
+      "task_ids": [
+        "W01-01",
+        "W01-02"
+      ],
+      "dependencies": [
+        "F00"
+      ],
+      "legal_qualified": false,
+      "remaining_gate": "Customer approves role mapping, migrated identities and real deactivation behavior."
+    },
+    {
+      "id": "W02",
+      "title": "Client scope and case responsibility",
+      "status": "waiting",
+      "task_ids": [
+        "W02-01",
+        "W02-02"
+      ],
+      "dependencies": [
+        "W01"
+      ],
+      "legal_qualified": false,
+      "remaining_gate": "Customer accepts exact client/case grants and target revocation across running work, idle or disconnected browsers and reconnection."
+    },
+    {
+      "id": "W03",
+      "title": "Human work and supervision",
+      "status": "waiting",
+      "task_ids": [
+        "W03-01",
+        "W03-02"
+      ],
+      "dependencies": [
+        "W02"
+      ],
+      "legal_qualified": false,
+      "remaining_gate": "Actual supervisors and lawyers accept a distinct-account assignment/opinion/review journey, manual Istanbul dates and restored records."
+    },
+    {
+      "id": "R01",
+      "title": "Source, asset and semantic qualification",
+      "status": "partial",
+      "task_ids": [
+        "R01-01",
+        "R01-02",
+        "R01-03",
+        "R01-04",
+        "R01-05",
+        "R01-06",
+        "R01-07"
+      ],
+      "dependencies": [],
+      "legal_qualified": false,
+      "remaining_gate": "Name Turkish legal/source/privacy owners, record bounded rights and authority judgments, adjudicate representative extraction and measure capacity before freezing the protocol."
+    },
+    {
+      "id": "R02",
+      "title": "Multi-source platform and capacity",
+      "status": "partial",
+      "task_ids": [
+        "R02-01",
+        "R02-02",
+        "R02-03",
+        "R02-04"
+      ],
+      "dependencies": [
+        "R01"
+      ],
+      "legal_qualified": false,
+      "remaining_gate": "Publish a lawful representative multi-source snapshot and qualify five distinct target research jobs within declared resource and isolation limits."
+    },
+    {
+      "id": "R03",
+      "title": "Reviewed contracts corpus and graph backbone",
+      "status": "partial",
+      "task_ids": [
+        "R03-01",
+        "R03-02",
+        "R03-03",
+        "R03-04",
+        "R03-05",
+        "R03-09",
+        "R03-10",
+        "R03-11",
+        "R03-12",
+        "R03-13",
+        "R03-06",
+        "R03-07",
+        "R03-08",
+        "R03-14",
+        "R03-15",
+        "R03-16",
+        "R03-17",
+        "R03-18"
+      ],
+      "dependencies": [
+        "R01",
+        "R02"
+      ],
+      "legal_qualified": false,
+      "remaining_gate": "Approve a bounded contracts corpus, publish signed source-linked provisions and Graph A genealogy, disclose coverage, and record owner v3 review separately."
+    },
+    {
+      "id": "R04",
+      "title": "Turkish evidence retrieval",
+      "status": "partial",
+      "task_ids": [
+        "R04-01",
+        "R04-02",
+        "R04-03",
+        "R04-04",
+        "R04-05"
+      ],
+      "dependencies": [
+        "R01",
+        "R03"
+      ],
+      "legal_qualified": false,
+      "remaining_gate": "Run a frozen lawful-corpus benchmark for Turkish lexical/exact-ID, temporal, hybrid, graph, reranking and adverse retrieval; report held-out errors and omissions."
+    },
+    {
+      "id": "R05",
+      "title": "Historical jurisprudence and adverse authorities",
+      "status": "partial",
+      "task_ids": [
+        "R05-01",
+        "R05-02",
+        "R05-03"
+      ],
+      "dependencies": [
+        "R01",
+        "R02",
+        "R04"
+      ],
+      "legal_qualified": false,
+      "remaining_gate": "Publish representative reviewed Graph B decisions with role/effect/finality limits and pass independent adverse/comparable retrieval."
+    },
+    {
+      "id": "R05A",
+      "title": "Local legal reasoning and review",
+      "status": "partial",
+      "task_ids": [
+        "R05A-01",
+        "R05A-02",
+        "R05A-03",
+        "R05A-04",
+        "R05A-05",
+        "R05A-06",
+        "R05A-07",
+        "R05A-08",
+        "R05A-09",
+        "R05A-10"
+      ],
+      "dependencies": [
+        "R01",
+        "R03",
+        "R04",
+        "R05"
+      ],
+      "legal_qualified": false,
+      "remaining_gate": "Complete representative exact-version contract-to-export tasks; measure legal support, abstention, correction and paired Standard/Deep benefit with independent reviewers."
+    },
+    {
+      "id": "R05B",
+      "title": "Optional sanitized BYOK research",
+      "status": "planned",
+      "task_ids": [
+        "R05B-01",
+        "R05B-02",
+        "R05B-03",
+        "R05B-04",
+        "R05B-05",
+        "R05B-06",
+        "R05B-07",
+        "R05B-08"
+      ],
+      "dependencies": [
+        "R01",
+        "R04",
+        "R05A"
+      ],
+      "legal_qualified": false,
+      "remaining_gate": "Qualify local scenario minimization, exact release approval, isolated credentials, untrusted returns and each optional provider independently before activation."
+    },
+    {
+      "id": "R06",
+      "title": "Commercial and employment depth",
+      "status": "partial",
+      "task_ids": [
+        "R06-01",
+        "R06-02",
+        "R06-03",
+        "R06-04",
+        "R06-05"
+      ],
+      "dependencies": [
+        "R03",
+        "R04",
+        "R05",
+        "R05A"
+      ],
+      "legal_qualified": false,
+      "remaining_gate": "Approve representative commercial and employment sources, cases and versioned parameters; qualify playbooks, conflict disclosure and dated calculations."
+    },
+    {
+      "id": "R07",
+      "title": "Offline operations and lifecycle",
+      "status": "partial",
+      "task_ids": [
+        "R07-01",
+        "R07-02",
+        "R07-03",
+        "R07-04",
+        "R07-05",
+        "R07-06",
+        "R07-07",
+        "R07-08",
+        "R07-09",
+        "R07-10"
+      ],
+      "dependencies": [
+        "R02",
+        "R03",
+        "R04",
+        "R05A",
+        "R06"
+      ],
+      "legal_qualified": false,
+      "remaining_gate": "Accept signed offline distribution, representative target recovery/rollback, five-job limits, freshness and impact processing, and lawful key/retention/erasure controls."
+    },
+    {
+      "id": "R08",
+      "title": "Independent qualification and lawyer pilot",
+      "status": "waiting",
+      "task_ids": [
+        "R08-01",
+        "R08-02",
+        "R08-03",
+        "R08-04",
+        "R08-05"
+      ],
+      "dependencies": [
+        "W01",
+        "W02",
+        "W03",
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R05A",
+        "R06",
+        "R07"
+      ],
+      "legal_qualified": false,
+      "remaining_gate": "Pass independent held-out legal, security, operations and field acceptance on the target release; obtain authorized production decision and customer rollout."
+    }
+  ],
+  "engineering_completion_dependencies": {
+    "R05A-07": {
+      "R03-17": "Focused drafts shipped without review of the separate exact owner v3 artifact."
+    },
+    "R07-10": {
+      "R07-04": "Restart ordering and relay reservation shipped before signed full distribution and target recovery."
+    }
+  }
+}
