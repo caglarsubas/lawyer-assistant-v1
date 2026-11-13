@@ -26,7 +26,7 @@ route. Unrelated failures retain their existing behavior. The historical
 their exact bytes; the new runtime entry point is qualified by the repair UAT.
 
 The [retained repair run](quality/document-repair-results.json) pins tested source
-`15023c26093d00fecb55df2eabb5c06e133f4549`: all 18 selected API/Chromium journeys
+`0c878c83f0c25da9a56fd000f1d019af7a87038d`: all 18 selected API/Chromium journeys
 and 30 audit-tool checks pass, with no expected failures or skipped cases.
 Both defects were reproduced before the fixes. The initial audit and its failed
 results remain retained, and the [interactive report](quality/uat-report.html)
