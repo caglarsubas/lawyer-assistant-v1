@@ -1,7 +1,7 @@
 {
   "schema": "delivered-workflow-uat-run-v1",
-  "observed_at": "2026-11-13T06:48:58.922087+00:00",
-  "source_commit": "2009bf969f85beb61e46886f98c0643e75482d5d",
+  "observed_at": "2026-11-13T06:58:45.688153+00:00",
+  "source_commit": "15023c26093d00fecb55df2eabb5c06e133f4549",
   "source_worktree_dirty": false,
   "test_workers": 2,
   "phases": [
@@ -9,42 +9,42 @@
       "name": "api-collection",
       "execution": "completed",
       "exit_code": 0,
-      "seconds": 1.043
+      "seconds": 1.895
     },
     {
       "name": "api-quality",
       "execution": "completed",
       "exit_code": 0,
-      "seconds": 6.346
+      "seconds": 8.716
     },
     {
       "name": "frontend-build",
       "execution": "completed",
       "exit_code": 0,
-      "seconds": 14.24
+      "seconds": 18.111
     },
     {
       "name": "browser",
       "execution": "completed",
       "exit_code": 0,
-      "seconds": 14.033
+      "seconds": 14.117
     }
   ],
   "cases": [
     {
-      "id": "tests.quality.test_roadmap_sanity.RoadmapSanityTests::test_rejects_missing_reserve_even_with_successful_ci",
-      "result": "pass",
-      "seconds": 0.001
-    },
-    {
       "id": "tests.quality.test_roadmap_sanity.RoadmapSanityTests::test_accepts_scoped_work_and_preserves_independent_readiness",
       "result": "pass",
-      "seconds": 0.001
+      "seconds": 0.002
+    },
+    {
+      "id": "tests.quality.test_roadmap_sanity.RoadmapSanityTests::test_rejects_missing_reserve_even_with_successful_ci",
+      "result": "pass",
+      "seconds": 0.002
     },
     {
       "id": "tests.quality.test_roadmap_sanity.RoadmapSanityTests::test_rejects_catalog_drift_and_false_rollup",
       "result": "pass",
-      "seconds": 0.0
+      "seconds": 0.001
     },
     {
       "id": "tests.quality.test_roadmap_sanity.RoadmapSanityTests::test_rejects_dependency_cycles",
@@ -54,7 +54,7 @@
     {
       "id": "tests.quality.test_roadmap_sanity.RoadmapSanityTests::test_rejects_omitted_milestone_children",
       "result": "pass",
-      "seconds": 0.0
+      "seconds": 0.001
     },
     {
       "id": "tests.quality.test_roadmap_sanity.RoadmapSanityTests::test_rejects_ready_milestone_with_open_items",
@@ -74,12 +74,7 @@
     {
       "id": "tests.quality.test_runtime_observation::test_observation_redacts_command_failures_and_never_grants_acceptance",
       "result": "pass",
-      "seconds": 0.0
-    },
-    {
-      "id": "tests.quality.test_runtime_observation::test_invalid_target_never_launches_a_command[x-65536]",
-      "result": "pass",
-      "seconds": 0.0
+      "seconds": 0.001
     },
     {
       "id": "tests.quality.test_runtime_observation::test_invalid_target_never_launches_a_command[bad\\nproject-8081]",
@@ -87,17 +82,17 @@
       "seconds": 0.0
     },
     {
+      "id": "tests.quality.test_runtime_observation::test_invalid_target_never_launches_a_command[x-65536]",
+      "result": "pass",
+      "seconds": 0.001
+    },
+    {
       "id": "tests.quality.test_runtime_observation::test_loopback_get_has_no_auth_and_does_not_follow_redirects",
       "result": "pass",
-      "seconds": 0.0
+      "seconds": 0.001
     },
     {
       "id": "tests.quality.test_runtime_observation::test_invalid_target_never_launches_a_command[project;cmd-8081]",
-      "result": "pass",
-      "seconds": 0.0
-    },
-    {
-      "id": "tests.quality.test_runtime_observation::test_scanner_raw_error_text_is_never_forwarded",
       "result": "pass",
       "seconds": 0.0
     },
@@ -107,59 +102,19 @@
       "seconds": 0.0
     },
     {
+      "id": "tests.quality.test_runtime_observation::test_scanner_raw_error_text_is_never_forwarded",
+      "result": "pass",
+      "seconds": 0.0
+    },
+    {
       "id": "tests.quality.test_runtime_observation::test_output_budget_is_enforced_on_the_stream",
       "result": "pass",
-      "seconds": 0.054
+      "seconds": 0.07
     },
     {
       "id": "tests.quality.test_runtime_observation::test_invalid_target_never_launches_a_command[x-80]",
       "result": "pass",
-      "seconds": 0.0
-    },
-    {
-      "id": "tests.quality.test_uat_report::test_repair_summary_keeps_prior_failures_and_deployment_gates_visible",
-      "result": "pass",
       "seconds": 0.001
-    },
-    {
-      "id": "tests.quality.test_uat_report::test_incomplete_failed_unbound_or_unreviewed_run_cannot_claim_repair_acceptance",
-      "result": "pass",
-      "seconds": 0.001
-    },
-    {
-      "id": "tests.quality.test_uat_runner::test_junit_keeps_failed_known_failed_and_skipped_cases_separate",
-      "result": "pass",
-      "seconds": 0.001
-    },
-    {
-      "id": "tests.quality.test_uat_runner::test_missing_command_retains_an_unavailable_phase",
-      "result": "pass",
-      "seconds": 0.013
-    },
-    {
-      "id": "tests.quality.test_uat_runner::test_ambient_pytest_filter_and_plugins_cannot_shrink_acceptance_scope",
-      "result": "pass",
-      "seconds": 0.0
-    },
-    {
-      "id": "tests.quality.test_uat_runner::test_exact_junit_inventory_requires_all_eight_acceptance_journeys",
-      "result": "pass",
-      "seconds": 0.002
-    },
-    {
-      "id": "tests.quality.test_uat_runner::test_browser_inventory_must_match_source_and_junit",
-      "result": "pass",
-      "seconds": 0.002
-    },
-    {
-      "id": "tests.quality.test_uat_runner::test_interrupt_reaps_owned_process_group",
-      "result": "pass",
-      "seconds": 0.001
-    },
-    {
-      "id": "tests.quality.test_uat_runner::test_timeout_terminates_its_process_and_keeps_outcome",
-      "result": "pass",
-      "seconds": 0.16
     },
     {
       "id": "tests.quality.test_runtime_observation::test_remote_docker_context_never_inspects_or_executes",
@@ -179,97 +134,142 @@
     {
       "id": "tests.quality.test_runtime_observation::test_invalid_posture_fields_cannot_leak_raw_child_output",
       "result": "pass",
+      "seconds": 0.001
+    },
+    {
+      "id": "tests.quality.test_uat_runner::test_missing_command_retains_an_unavailable_phase",
+      "result": "pass",
+      "seconds": 0.012
+    },
+    {
+      "id": "tests.quality.test_uat_runner::test_ambient_pytest_filter_and_plugins_cannot_shrink_acceptance_scope",
+      "result": "pass",
       "seconds": 0.0
+    },
+    {
+      "id": "tests.quality.test_uat_runner::test_exact_junit_inventory_requires_all_eight_acceptance_journeys",
+      "result": "pass",
+      "seconds": 0.004
+    },
+    {
+      "id": "tests.quality.test_uat_runner::test_browser_inventory_must_match_source_and_junit",
+      "result": "pass",
+      "seconds": 0.002
+    },
+    {
+      "id": "tests.quality.test_uat_runner::test_interrupt_reaps_owned_process_group",
+      "result": "pass",
+      "seconds": 0.002
+    },
+    {
+      "id": "tests.quality.test_uat_runner::test_timeout_terminates_its_process_and_keeps_outcome",
+      "result": "pass",
+      "seconds": 0.164
+    },
+    {
+      "id": "tests.quality.test_uat_report::test_repair_summary_keeps_prior_failures_and_deployment_gates_visible",
+      "result": "pass",
+      "seconds": 0.001
+    },
+    {
+      "id": "tests.quality.test_uat_report::test_incomplete_failed_unbound_or_unreviewed_run_cannot_claim_repair_acceptance",
+      "result": "pass",
+      "seconds": 0.001
+    },
+    {
+      "id": "tests.quality.test_uat_runner::test_junit_keeps_failed_known_failed_and_skipped_cases_separate",
+      "result": "pass",
+      "seconds": 0.002
     },
     {
       "id": "tests.uat.test_delivered_workflows::test_buat_02_portfolio_comments_and_explicit_access_are_scoped",
       "result": "pass",
-      "seconds": 1.035
+      "seconds": 1.333
     },
     {
       "id": "tests.uat.test_delivered_workflows::test_buat_01_password_and_session_lifecycle_keeps_case_content",
       "result": "pass",
-      "seconds": 0.979
-    },
-    {
-      "id": "tests.uat.test_delivered_workflows::test_buat_03_originals_locators_extraction_failure_and_fact_roles",
-      "result": "pass",
-      "seconds": 1.047
+      "seconds": 1.17
     },
     {
       "id": "tests.uat.test_delivered_workflows::test_buat_04_exact_draft_bounded_revision_and_grounded_review_exports",
       "result": "pass",
-      "seconds": 1.388
+      "seconds": 1.722
     },
     {
-      "id": "tests.uat.test_delivered_workflows::test_buat_05_supervisor_revision_and_recipient_revocation",
+      "id": "tests.uat.test_delivered_workflows::test_buat_03_originals_locators_extraction_failure_and_fact_roles",
       "result": "pass",
-      "seconds": 0.93
+      "seconds": 1.27
     },
     {
       "id": "tests.uat.test_delivered_workflows::test_buat_06_extractive_research_and_reversible_preservation",
       "result": "pass",
-      "seconds": 0.827
+      "seconds": 0.909
+    },
+    {
+      "id": "tests.uat.test_delivered_workflows::test_buat_05_supervisor_revision_and_recipient_revocation",
+      "result": "pass",
+      "seconds": 1.045
     },
     {
       "id": "tests.uat.test_delivered_workflows::test_buat_07_unconfigured_graph_and_intake_fail_closed",
       "result": "pass",
-      "seconds": 0.542
+      "seconds": 0.589
     },
     {
       "id": "tests.uat.test_delivered_workflows::test_buat_08_corrupt_private_original_returns_controlled_conflict",
       "result": "pass",
-      "seconds": 1.036
+      "seconds": 1.136
     },
     {
       "id": "test::desktop panels collapse, resize by mouse and keyboard, maximize, and persist layout",
       "result": "pass",
-      "seconds": 1.178064
+      "seconds": 1.245515
     },
     {
       "id": "test::portfolio OR and inclusive date filters scope the workspace list and assistant request",
       "result": "pass",
-      "seconds": 0.557778
+      "seconds": 0.512566
     },
     {
       "id": "test::workspace tree opens the selected file, separates original from extraction, and refreshes after upload",
       "result": "pass",
-      "seconds": 1.016064
+      "seconds": 1.017124
     },
     {
       "id": "test::upload selects the new file even when opened from a different file’s deep link",
       "result": "pass",
-      "seconds": 1.662977
+      "seconds": 1.895588
     },
     {
       "id": "test::work queue combines workspace scope with due bucket and opens the exact work item",
       "result": "pass",
-      "seconds": 1.924976
+      "seconds": 1.476024
     },
     {
       "id": "test::source-review queue pins both date ranges, retires late scope, and rejects a mismatched echo",
       "result": "pass",
-      "seconds": 2.156955
+      "seconds": 2.201698
     },
     {
       "id": "test::review examples leave the draft untouched and an explicit change request binds to its exact version",
       "result": "pass",
-      "seconds": 1.131121
+      "seconds": 1.232176
     },
     {
       "id": "test::password change requires the current password, clears errors, and requires reauthentication",
       "result": "pass",
-      "seconds": 1.407342
+      "seconds": 1.442883
     },
     {
       "id": "test::401 during session monitoring clears the private workspace and pending assistant state",
       "result": "pass",
-      "seconds": 1.347283
+      "seconds": 1.370867
     },
     {
       "id": "test::narrow viewport exposes one panel, supports keyboard skip, and keeps navigation usable",
       "result": "pass",
-      "seconds": 1.151247
+      "seconds": 1.162756
     }
   ],
   "counts": {
@@ -290,13 +290,19 @@
   "human_legal_review": "not_granted",
   "implementation_sha256": {
     "backend/app/main.py": "15dbdac50b0d5c30d299028e23406aaf0118f55226686d379fc0942295efd0fe",
-    "frontend/src/pages/matter/DocumentsPanel.tsx": "d2b2861adf35ca2a3e9d7c1547ff05ae23e00e22cb9a7e78e7d107fe41b93a39",
+    "frontend/src/pages/matter/DocumentsPanel.tsx": "ab982524d77ebcb7b79590e354440b1091ce27554e711b6d28b3781b1440c99b",
     "scripts/run_delivered_uat.py": "1f861f73c2d3684f1b0c2972f08dc2622b656ffe6f9469e2afc403891c62bdc1",
     "scripts/build_delivered_uat_report.py": "177689c993cab6e0df176252f5035b66fd866c088dfc2ccdc36947021dc79cab",
     "tests/quality/test_uat_report.py": "f595c4e6e4309db3b825e69cec60e34fc2596c9ca9d48d7c69e9211e99063479",
     "tests/uat/test_delivered_workflows.py": "f8c2295d0ba7fee803e5c07c2517fc734b74895be7cc6db1150ac32e3b083068",
     "tests/uat/browser/fixtures.mjs": "cb33b5cb48794f0231407d66184af22174c461815c1b551f5b3470c8e6a3470e",
-    "tests/uat/browser/workbench.test.mjs": "cec790704ddd446e97804fd824c73f03faf251b25daf13d2876c8865c6907838"
+    "tests/uat/browser/workbench.test.mjs": "d0a55f9188766564482aeaca02460ac9aff5f9cd89e321fe6f83e76fe81d6655"
   },
-  "audit_baseline": "d9ff2b16cc91726ffa4fb2f44dc45d18f53aff4c"
+  "audit_baseline": "d9ff2b16cc91726ffa4fb2f44dc45d18f53aff4c",
+  "previous_observation": {
+    "source_commit": "2009bf969f85beb61e46886f98c0643e75482d5d",
+    "receipt_commit": "3e841b72b9742fba51b924059b74db67ada2a9e3",
+    "receipt_path": "docs/quality/document-repair-results.json"
+  },
+  "additional_regression": "Navigation away and back to the original URL during upload was reproduced against the first repair; the navigation counter preserves the newer selection."
 }

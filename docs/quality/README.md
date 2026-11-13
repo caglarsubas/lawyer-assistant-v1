@@ -7,7 +7,7 @@ the roadmap, backend and browser assessments. Their engineering assessments do
 not provide independent legal review or provision real trust identities.
 
 **Repair follow-up:** both observed document defects are fixed in source at
-`2009bf969f85beb61e46886f98c0643e75482d5d`. The [fresh retained run](document-repair-results.json)
+`15023c26093d00fecb55df2eabb5c06e133f4549`. The [fresh retained run](document-repair-results.json)
 passes **18/18 selected journeys and 30 audit-tool checks**. The former expected
 failures are now mandatory passing tests. The interactive report shows this
 follow-up above the historical audit; its original failing results below remain

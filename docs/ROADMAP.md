@@ -10,7 +10,8 @@ F00-04 now has source fixes for both defects found by the delivery audit. The
 file URL owns preview selection through upload, list refresh and browser
 history. Unknown document identifiers remain explicit lookup failures; they do
 not select a different source. A late upload response cannot override newer
-navigation or reopen a workspace the lawyer has left.
+navigation or reopen a workspace the lawyer has left. A reproduced return to
+the original URL during upload is also guarded by a navigation counter.
 
 Authenticated original downloads return controlled 409 responses for unreadable
 or unverifiable ciphertext. Authorization still precedes file access; failures
@@ -21,7 +22,7 @@ tests preserve original bytes, encrypted records, source revisions and hashes,
 independent review decisions and historical versions.
 
 The [retained repair run](quality/document-repair-results.json) pins tested source
-`2009bf969f85beb61e46886f98c0643e75482d5d`: all 18 selected API/Chromium journeys
+`15023c26093d00fecb55df2eabb5c06e133f4549`: all 18 selected API/Chromium journeys
 and 30 audit-tool checks pass, with no expected failures or skipped cases.
 Both defects were reproduced before the fixes. The initial audit and its failed
 results remain retained, and the [interactive report](quality/uat-report.html)
