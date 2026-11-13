@@ -3,6 +3,7 @@
 import json
 from collections import defaultdict
 from contextlib import ExitStack, contextmanager
+from itertools import batched
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import JSONResponse, Response
@@ -113,6 +114,23 @@ def _record_ids(value):
     return result
 
 
+def _dependency_records(store, session, ids, matter_id, firm_id, *, scope_error):
+    records = []
+    # Read every dependency afresh in bounded SQL batches. Preserve missing
+    # identities and reject foreign rows before decrypting any row in a batch.
+    for batch in batched(sorted(ids), 256):
+        rows = {row.id: row for row in session.scalars(
+            select(Record).where(Record.id.in_(batch)).execution_options(populate_existing=True)
+        )}
+        if any(row.firm_id != firm_id or row.matter_id != matter_id for row in rows.values()):
+            raise HTTPException(403, scope_error)
+        for ident in batch:
+            row = rows.get(ident)
+            records.append({"id": ident, "kind": row.kind if row else None,
+                            "sha256": digest(canonical(store.view(row))) if row else None})
+    return records
+
+
 def _entry(app, session, matter_id, selection, user):
     store = app.state.store
     route = _route(store, session, matter_id, selection.trial_id, user)
@@ -138,18 +156,8 @@ def _entry(app, session, matter_id, selection, user):
         )
     if len(ids) > 2048:
         raise HTTPException(409, "Denemenin dayanak envanteri çalışma sınırını aşıyor.")
-    records = []
-    for ident in sorted(ids):
-        row = session.get(Record, ident, populate_existing=True)
-        if row and (row.firm_id != user.firm_id or row.matter_id != matter_id):
-            raise HTTPException(403, "Deneme dayanağının özel çalışma alanı kapsamı değişti.")
-        records.append(
-            {
-                "id": ident,
-                "kind": row.kind if row else None,
-                "sha256": digest(canonical(store.view(row))) if row else None,
-            }
-        )
+    records = _dependency_records(store, session, ids, matter_id, user.firm_id,
+                                  scope_error="Deneme dayanağının özel çalışma alanı kapsamı değişti.")
     people = {
         plan["owner_id"],
         plan["basis"]["baseline_author_id"],

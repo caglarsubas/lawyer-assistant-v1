@@ -1,9 +1,8 @@
-"""Bind immutable identifiers in native RDFS rules, with no global monkeypatch.
+"""Reduce native RDFS rule overhead without patching shared library state.
 
 The rule bytecode, closure cycles, inference writes and SHACL checks stay native.
-Only the repeated DefinedNamespace attribute resolution is replaced with reads
-from immutable tuples of the very same URIRef objects. Unknown programs or graph
-adapters retain the ordinary pySHACL path.
+Use immutable vocabulary bindings and the private scratch graph's live Memory
+indexes. Unknown programs or graph adapters retain the ordinary pySHACL path.
 """
 
 from collections import namedtuple
@@ -14,7 +13,7 @@ from owlrl import DeductiveClosure
 from pyshacl import validate as native_validate
 from pyshacl.inference import CustomRDFSSemantics
 from pyshacl.validator import Validator
-from rdflib import RDF, RDFS
+from rdflib import RDF, RDFS, Literal, URIRef
 
 _RDF_NAMES = ('type', 'Property')
 _RDFS_NAMES = ('Resource', 'domain', 'range', 'subPropertyOf', 'Class', 'subClassOf',
@@ -48,6 +47,42 @@ class IdentifierBoundRDFS(CustomRDFSSemantics):
     rules = _bound_rules or CustomRDFSSemantics.rules
 
 
+class _InferenceIndex:
+    """Read the live scratch graph's indexes during one closure."""
+
+    def __init__(self, graph):
+        self.graph = graph
+        self.store = graph.store
+        self.pos = self.store._Memory__pos
+
+    def triples(self, pattern):
+        subject, predicate, object_ = pattern
+        if self.store._exact is None or subject is not None or type(predicate) is not URIRef:
+            return self.graph.triples(pattern)
+        objects = self.pos.get(predicate, {})
+        if object_ is not None:
+            return ((item, predicate, object_) for item in objects.get(object_, {}))
+        return ((item, predicate, value) for value, subjects in objects.items() for item in subjects)
+
+    def __contains__(self, triple):
+        exact = self.store._exact
+        return triple in (self.graph if exact is None else exact)
+
+    def add(self, triple):
+        self.graph.add(triple)
+
+
+class _IndexedRDFS(IdentifierBoundRDFS):
+    def __init__(self, graph, *args, **kwargs):
+        super().__init__(graph, *args, **kwargs)
+        self.graph = self.destination = _InferenceIndex(graph)
+
+    def store_triple(self, triple):
+        # Both native membership probes target the same single graph.
+        if not isinstance(triple[1], Literal) and triple not in self.destination:
+            self.added_triples.add(triple)
+
+
 def validator_for(graph_type):
     class LocalValidator(Validator):
         @classmethod
@@ -59,7 +94,13 @@ def validator_for(graph_type):
                 # Same CustomRDFSSemantics ancestry and DeductiveClosure defaults
                 # as pySHACL; each call creates a fresh engine over this graph.
                 # Native pySHACL ignores destination identifiers on single graphs.
-                DeductiveClosure(IdentifierBoundRDFS).expand(target_graph.impl)
+                graph = target_graph.impl
+                store = graph.store
+                # Only the pinned RDFLib Memory layout and this invocation's
+                # exact single-context index can back the optimized reads.
+                indexed = (store._exact is not None and store._context is graph
+                           and type(getattr(store, "_Memory__pos", None)) is dict)
+                DeductiveClosure(_IndexedRDFS if indexed else IdentifierBoundRDFS).expand(graph)
                 return
             return super()._run_pre_inference(target_graph, inference_option,
                                                destination_graph_identifier, logger)

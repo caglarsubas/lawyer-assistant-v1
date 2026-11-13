@@ -11285,3 +11285,23 @@ complete file and its selector in the final authorization step. Move the
 complete 13-case retention readiness file to backend review to make room.
 Keep the graph authorization split, existing workers, caps, reserve floors
 and all exact test identities.
+
+### Root-cause CI remediation — 2026-11-13
+
+The test relocation cleared graph runtime but left final authorization,
+backend review, graph candidate and publication planning below the 30-second
+floor. Restore the last complete test layout and reduce the shared work.
+
+One full final-candidate case invoked graph validation 63 times. The local
+profile measured 8.18 seconds in RDFS closure. Use the pinned RDFLib single
+graph's live indexes to avoid repeated context lookup and duplicate membership
+probes during closure. The same profile measured 4.98 seconds in closure
+with all 63 validations. Execute native rules, fresh SHACL queries and every
+existing evidence and signature check. Preserve native fallback outside the
+supported graph and dependency versions.
+
+Read human and model cohort dependency records in bounded batches. Preserve
+fresh reads, sorted identities, missing rows, firm and matter scope checks,
+and exact record digests. Keep the two-worker limit, every existing cap and
+the 30-second job reserve. Verify the complete test inventory on the PR and
+on the merged commit before recording CI qualification.
