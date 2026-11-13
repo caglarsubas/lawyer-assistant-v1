@@ -33,6 +33,13 @@ class PartitionContract(unittest.TestCase):
         self.assertIn('"${reserve_tests[@]}"', remainder)
         for group in reserve_groups:
             definition = f'read -r -a reserve_tests <<< "${group}"'
+            if group == "CI_CORE_RESERVE_CAPACITY":
+                # This complete workspace file now runs in the core suite.
+                # Require its explicit ignore exception and no second owner.
+                self.assertEqual(dict(groups)[group].split(), ["backend/tests/test_workspace.py"])
+                self.assertEqual(workflow.count(definition), 0)
+                self.assertIn('&& "$path" != "$CI_CORE_RESERVE_CAPACITY" ]]; then', remainder)
+                continue
             self.assertEqual(workflow.count(definition), 1)
             command = next(line for line in workflow.split(definition, 1)[1].splitlines()
                            if "scripts/run_ci_tests.sh" in line)
