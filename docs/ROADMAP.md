@@ -11301,6 +11301,11 @@ The same cases completed in 42.77 seconds, down from 64.66. Apply the setting
 only to isolated CI pytest workers using the original Python thresholds.
 Route temporary graph bundle writes to the existing bounded pytest filesystem.
 
+The first CI run with this change retained 77 seconds in graph runtime and
+87 seconds in final authorization. Backend review finished with 26 seconds.
+Assign its complete 39-case analysis adjudication file to the existing graph
+step. The file accounted for 27.1 worker-seconds in the review run.
+
 Retain all 13 jobs, worker limits, deadlines, reserve floors and exact test
 identities. Verify PR and main independently, including frontend and
 deployment assignments. This qualifies CI for the staged feature.

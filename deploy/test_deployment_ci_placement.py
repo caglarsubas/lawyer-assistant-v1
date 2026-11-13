@@ -192,7 +192,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertEqual(candidate_reserve.split(), ["backend/tests/test_decision_graph_handoff.py",
             "backend/tests/test_portfolio.py"])
         graph_reserve = re.search(r"  CI_CORE_RESERVE_GRAPH: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(graph_reserve.split(), ["backend/tests/test_firm_admin.py"])
+        self.assertEqual(graph_reserve.split(), [
+            "backend/tests/test_firm_admin.py", "backend/tests/test_analysis_adjudication.py",
+        ])
         frontend_reserve = re.search(r"  CI_CORE_RESERVE_FRONTEND: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(frontend_reserve.split(), ["backend/tests/test_source_relationships.py"])
         for path in candidate_reserve.split() + graph_reserve.split() + frontend_reserve.split():
@@ -215,7 +217,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertIn('read -r -a reserve_tests <<< "$(printf \'%s \' "$CI_CORE_RESERVE_CAPACITY" '
                       '"$CI_CORE_RESERVE_CANDIDATE" "$CI_CORE_RESERVE_FRONTEND" "$CI_CORE_RESERVE_GRAPH" '
                       '"$CI_CORE_RESERVE_PLANNING" '
-                      '"$CI_CORE_RESERVE_REVIEW" "$CI_CORE_RESERVE_SOURCE")"', backend)
+                      '"$CI_CORE_RESERVE_SOURCE")"', backend)
         self.assertIn('for path in "${reserve_tests[@]}"', backend)
         self.assertNotIn("CI_CORE_RESERVE_POSTGRES", workflow)
         self.assertNotIn("backend/tests/test_open_validity_publication.py", workflow)
@@ -293,12 +295,9 @@ class DeploymentPlacementContract(unittest.TestCase):
         recovery_group = re.search(r"  CI_RECOVERY_QUALIFICATION_TESTS: >-\n((?:    [^\n]+\n)+)", workflow)[1]
         self.assertEqual(recovery_group.split(), ["backend/tests/test_retained_release_withdrawal.py", "backend/tests/test_copy_recovery_disposition.py",
             "backend/tests/test_journal_copy_reconciliation.py", "backend/tests/test_disposition_receipt_reobservation_races.py"])
-        adjudication_group = re.search(r"  CI_CORE_RESERVE_REVIEW: >-\n((?:    [^\n]+\n)+)", workflow)[1]
-        self.assertEqual(adjudication_group.split(), ["backend/tests/test_analysis_adjudication.py"])
         self.assertEqual(workflow.count("backend/tests/test_analysis_adjudication.py"), 1)
-        self.assertIn('"$CI_CORE_RESERVE_REVIEW"', backend)
-        self.assertIn('read -r -a reserve_tests <<< "$CI_CORE_RESERVE_REVIEW"', review_block)
-        self.assertIn('"${metadata_capacity_tests[@]}" "${reserve_tests[@]}"', review_block)
+        self.assertNotIn("CI_CORE_RESERVE_REVIEW", workflow)
+        self.assertNotIn('"${reserve_tests[@]}"', review_block)
         self.assertNotIn("backend/tests/test_retained_release_withdrawal.py", withdrawal_group)
         self.assertIn('"${recovery_qualification_tests[@]}"', backend)
         definition = '          read -r -a recovery_qualification_tests <<< "$CI_RECOVERY_QUALIFICATION_TESTS"\n'
