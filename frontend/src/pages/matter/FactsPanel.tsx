@@ -29,7 +29,9 @@ export function EvidenceViewer({ matter, evidenceId, onClose }: { matter: Matter
     const origin = document.activeElement;
     region.current?.focus({ preventScroll: true });
     region.current?.scrollIntoView({ block: 'start' });
-    return () => { if (origin instanceof HTMLElement && origin.isConnected) origin.focus({ preventScroll: true }); };
+    return () => {
+      if (origin instanceof HTMLElement && origin.isConnected && !origin.closest('[hidden]')) origin.focus();
+    };
   }, [evidenceId]);
   const [docId, setDocId] = useState<string | null>(null); const [loading, setLoading] = useState(true); const [error, setError] = useState('');
   useEffect(() => {
