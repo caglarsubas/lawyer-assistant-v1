@@ -45,4 +45,3 @@ The [document selection effect](../../frontend/src/pages/matter/DocumentsPanel.t
 ## Coverage limits
 
 This run leaves live deployment, password storage and multi-session revocation, backend authorization and persistence, scanner/extractor operation, full source-context handoffs, provider calls, PDF/DOCX rendering, large-portfolio load, cross-browser and physical-device behavior, screen reader testing, and lawyer acceptance unverified. The review scenario exercises a fictional change request. Its historical review fixture supplies the prior conditional decision.
-
