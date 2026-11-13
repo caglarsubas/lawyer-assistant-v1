@@ -4,6 +4,38 @@ Baseline: 4 October 2026; research reconciliation: **5 October 2026**. Original 
 
 This is the canonical delivery plan. [Data and knowledge strategy](DATA_KNOWLEDGE_STRATEGY.md) specifies source families, refresh targets and retrieval requirements. [Research reconciliation](PLAN_RECONCILIATION_2026-10-05.md) records adopted proposals and unresolved claims. The same-day user amendment is specified in [legal analysis and sanitized BYOK deep research](LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md). Those research revisions changed planning only. Subsequent implementation progress is recorded below: R01 offline contracts, evidence verification and extraction comparison are delivered; source approvals, legal review and provider activation are not granted by that work.
 
+## Document workflow repairs — 13 November 2026
+
+F00-04 now has source fixes for both defects found by the delivery audit. The
+file URL owns preview selection through upload, list refresh and browser
+history. Unknown document identifiers remain explicit lookup failures; they do
+not select a different source. A late upload response cannot override newer
+navigation or reopen a workspace the lawyer has left.
+
+Authenticated original downloads return controlled 409 responses for unreadable
+or unverifiable ciphertext. Authorization still precedes file access; failures
+return no original bytes, storage path or successful-export audit event. The
+endpoint never repairs, deletes or re-encrypts the source. Successful downloads
+still require the exact recorded digest. Disposable failure and restoration
+tests preserve original bytes, encrypted records, source revisions and hashes,
+independent review decisions and historical versions.
+
+The [retained repair run](quality/document-repair-results.json) pins tested source
+`2009bf969f85beb61e46886f98c0643e75482d5d`: all 18 selected API/Chromium journeys
+and 30 audit-tool checks pass, with no expected failures or skipped cases.
+Both defects were reproduced before the fixes. The initial audit and its failed
+results remain retained, and the [interactive report](quality/uat-report.html)
+shows the follow-up separately. Existing CI jobs, assignments, two-worker caps,
+time budgets and reserve floors are unchanged; exact PR and independent main
+qualification are recorded separately in the tracker.
+
+This closes the two source-level repairs, not F00-04's full representative-format
+or installed-system acceptance. Next is F00-06: restore admitted scanner and
+approved relay operation, reconcile the exact installed candidate, then qualify
+signed-in intake through separate review and export. Checklist and milestone
+readiness remain unchanged. Owner analysis-v3 review remains pending. No real
+case, original, credential, review or running service was changed by these repairs.
+
 ## Current audit checkpoint — 13 November 2026
 
 The [comprehensive delivery and UAT audit](quality/README.md) supersedes the
