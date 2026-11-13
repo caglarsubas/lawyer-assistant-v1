@@ -6,6 +6,13 @@ verified #296 main commit. Three **GPT‑6.1‑sol agents at xhigh effort** perf
 the roadmap, backend and browser assessments. Their engineering assessments do
 not provide independent legal review or provision real trust identities.
 
+**Repair follow-up:** both observed document defects are fixed in source at
+`a5dd764aa41b29eca92457a02203ea889702c1f7`. The [fresh retained run](document-repair-results.json)
+passes **18/18 selected journeys and 30 audit-tool checks**. The former expected
+failures are now mandatory passing tests. The interactive report shows this
+follow-up above the historical audit; its original failing results below remain
+retained. Installed-stack, owner and legal qualification remain pending.
+
 [Interactive report](uat-report.html) · [Roadmap findings](ROADMAP_SANITY.md) ·
 [API UAT](BACKEND_UAT.md) · [Browser UAT](FRONTEND_UAT.md) ·
 [All requirement mappings](roadmap-sanity-catalog.json) ·
@@ -19,12 +26,12 @@ not provide independent legal review or provision real trust identities.
 | Read-only deployed checks | Shell/health respond; anonymous private endpoints return 401 | Relay stopped, scanner unavailable; 129/130 compared backend files match main. `context_packing.py` differs. |
 | Authenticated installed-stack and legal UAT | Not qualified | The browser presented sign-in; no owner credentials were retrieved, private cases opened or review decisions made. |
 
-Two executable regressions remain open: the preview returns to the old file
+At the retained audit baseline, two executable regressions were open: the preview returns to the old file
 after upload from a direct file link, and damaged encrypted originals produce a
 generic HTTP 500 instead of a controlled integrity conflict. The latter leaks
-no original bytes in the observed synthetic response. The API test is a narrow
-strict expected failure; the browser test is a TODO. Neither counts as a pass.
-The combined acceptance runner returns nonzero while either remains open,
+no original bytes in the observed synthetic response. The baseline API test was a narrow
+strict expected failure; the browser test was a TODO. Neither counted as a pass.
+The combined acceptance runner returns nonzero whenever either fails,
 even if the underlying test framework exits successfully.
 
 The dated baseline records **295 merged PRs**, **42 done / 21 open / 24 waiting /
@@ -66,15 +73,19 @@ executes the actual Chromium interactions. Add `--observe-runtime` only for
 read-only, unauthenticated observations of the local installed stack. It makes
 no provider request and does not restore services or alter Docker volumes.
 
-The default PR workflow adds only the compact audit/API contracts after the
-existing frontend-history workers exit. Existing test assignments, worker
-ceilings, job caps and reserve policies remain unchanged. The on-demand browser
+The default PR workflow runs the compact audit/API and complete local-model
+trial phases sequentially in the backend job before its main suite. Their
+original step caps and worker limits remain enforced. The repair follow-up moves twenty workspace cases and the intact ten-case
+recovery-inventory partition to the existing backend job. The source files and
+closed partition controllers remain unchanged. Full previous
+coverage, worker ceilings, job caps and reserve policies remain enforced. The on-demand browser
 run and full acceptance verdict remain separate; green engineering CI is not
 a UAT pass. Exact PR and independent main evidence are published by the tracker.
 
 ## Corrective work order
 
-1. Repair the two reproduced user-workflow defects with their failure tests.
+1. Source repairs and mandatory passing regressions now cover both reproduced
+   document defects; installed-candidate acceptance remains required.
 2. Restore admitted scanner and approved local relay operation; reconcile the
    intended `context_packing.py` and exact installed candidate.
 3. Run signed-in synthetic intake → analysis → separate review → export on that

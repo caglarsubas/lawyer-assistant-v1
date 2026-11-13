@@ -174,7 +174,7 @@ class DeploymentPlacementContract(unittest.TestCase):
         for job, lane in (("frontend", "frontend"), ("backend-and-contracts", "final"), ("graph-runtime-contracts", "graph")):
             if job == "backend-and-contracts":
                 self.assertIn('-p scripts.ci_operator_previews --operator-preview-lane=final -n 2', blocks[job])
-                self.assertIn('if [[ "$path" != "${preview_tests[0]}" ]]; then', blocks[job])
+                self.assertIn('if [[ "$path" != "${preview_tests[0]}" && "$path" != "${inventory_review_tests[0]}" && "$path" != "$CI_CORE_RESERVE_CAPACITY" ]]; then', blocks[job])
             else:
                 self.assertIn("backend/.venv/bin/python -m pytest -p scripts.ci_operator_previews --operator-preview-lane=" + lane + ' "${preview_tests[@]}"', blocks[job])
             self.assertIn('read -r -a preview_tests <<< "$CI_PREVIEW_PARTITION_TESTS"', blocks[job])
@@ -347,6 +347,11 @@ class DeploymentPlacementContract(unittest.TestCase):
             self.assertIn("--disposition-read-lane=" + lane, blocks[name])
         inventory_definition = '          read -r -a inventory_review_tests <<< "$CI_RECOVERY_INVENTORY_TESTS"\n'
         self.assertEqual(isolated.count(inventory_definition), 1)
+        self.assertEqual(workflow.count("--recovery-inventory-lane=capacity"), 1)
+        self.assertIn('-p scripts.ci_recovery_inventory --recovery-inventory-lane=capacity', backend)
+        self.assertNotIn("CI_RECOVERY_INVENTORY_TESTS", blocks["backend-capacity"])
+        self.assertNotIn("CI_CORE_RESERVE_CAPACITY", blocks["backend-capacity"])
+        self.assertIn('timeout --kill-after=2s 140s', blocks["backend-capacity"])
         self.assertEqual(workflow.count("--recovery-inventory-lane=postgres"), 1)
         self.assertIn('-p scripts.ci_recovery_inventory --recovery-inventory-lane=postgres "${inventory_review_tests[@]}"', isolated)
         self.assertNotIn("CI_RECOVERY_INVENTORY_TESTS", postgres)
@@ -436,10 +441,18 @@ class DeploymentPlacementContract(unittest.TestCase):
         self.assertNotIn("--shard=9", backend)
         self.assertNotIn("--shard=9", blocks["frontend"])
         self.assertIn("timeout-minutes: 1", blocks["source-publication-contracts"].split("name: Test manifest-bound review headroom slice 9", 1)[1])
-        self.assertNotIn("name: Test registered local-model authority trials", backend)
+        self.assertNotIn("name: Test registered local-model authority trials", blocks["frontend-history"])
         self.assertEqual(workflow.count("name: Test registered local-model authority trials"), 1)
-        self.assertIn('"${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', blocks["frontend-history"])
-        self.assertIn("timeout-minutes: 2", blocks["frontend-history"].split("name: Test registered local-model authority trials", 1)[1])
+        self.assertIn('"${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1', backend)
+        self.assertIn("timeout-minutes: 2", backend.split("name: Test registered local-model authority trials", 1)[1])
+        for name in ("Test registered local-model authority trials", "Check roadmap audit and disposable acceptance contracts"):
+            self.assertEqual(workflow.count("name: " + name), 1)
+            self.assertLess(backend.index("name: " + name), backend.index("name: Test backend\n"))
+            self.assertNotIn("name: " + name, blocks["frontend-history"])
+        audit = backend.split("name: Check roadmap audit and disposable acceptance contracts", 1)[1].split("name: Test backend", 1)[0]
+        self.assertIn("timeout-minutes: 1", audit)
+        self.assertIn("timeout --kill-after=2s 30s", audit)
+        self.assertIn("tests/quality tests/uat -n 2 --max-worker-restart=0", audit)
         self.assertLess(review.index("--plan-only"), review.index("name: Test complete backend review"))
         self.assertNotIn("CI_REVIEW_INSPECTION_TESTS", workflow)
         self.assertEqual(workflow.count("backend/tests/test_final_release_inspection.py"), 1)
