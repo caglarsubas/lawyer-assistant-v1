@@ -116,10 +116,18 @@ def _entry(app, session, matter_id, selection, user):
         ids.add(trials._proof_id(event["id"]))
     if len(ids) > 2048:
         raise HTTPException(409, "Model denemesinin dayanak envanteri çalışma sınırını aşıyor.")
-    records = human_cohorts._dependency_records(
-        store, session, ids, matter_id, user.firm_id,
-        scope_error="Model denemesi dayanağının özel çalışma alanı kapsamı değişti.",
-    )
+    records = []
+    for ident in sorted(ids):
+        row = session.get(Record, ident, populate_existing=True)
+        if row and (row.firm_id != user.firm_id or row.matter_id != matter_id):
+            raise HTTPException(403, "Model denemesi dayanağının özel çalışma alanı kapsamı değişti.")
+        records.append(
+            {
+                "id": ident,
+                "kind": row.kind if row else None,
+                "sha256": digest(canonical(store.view(row))) if row else None,
+            }
+        )
     people = {plan["registered_by"], plan["authority_basis"]["reviewer_id"], *plan["reviewer_ids"]}
     version = require_child(session, plan["source_version_id"], "practice_version", matter_id, user)
     people.add(version.owner_id)

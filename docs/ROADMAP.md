@@ -11288,20 +11288,19 @@ and all exact test identities.
 
 ### Root-cause CI remediation — 2026-11-13
 
-The test relocation cleared graph runtime but left final authorization,
-backend review, graph candidate and publication planning below the 30-second
-floor. Restore the last complete test layout and reduce the shared work.
+The test relocation cleared graph runtime but left four other jobs below
+the 30-second floor. Restore the complete original test layout. An initial
+graph and cohort optimization hit immutable source pins in historical
+qualification evidence. Keep those sources and every retained report intact.
 
-One full final-candidate case invoked graph validation 63 times. The local
-profile measured 8.18 seconds in RDFS closure. Use the pinned RDFLib single
-graph's live indexes to avoid repeated context lookup and duplicate membership
-probes during closure. The same profile measured 4.98 seconds in closure
-with all 63 validations. Execute native rules, fresh SHACL queries and every
-existing evidence and signature check. Preserve native fallback outside the
-supported graph and dependency versions.
+In a two-worker run of all 14 final candidate cases, cyclic garbage collection
+spent 26.00 worker-seconds across 142 full-generation scans. Increasing the
+young-generation threshold from 700 to 7,000 kept automatic collection
+active and reduced collection to 7.63 worker-seconds and 17 full scans.
+The same cases completed in 42.77 seconds, down from 64.66. Apply the setting
+only to isolated CI pytest workers using the original Python thresholds.
+Route temporary graph bundle writes to the existing bounded pytest filesystem.
 
-Read human and model cohort dependency records in bounded batches. Preserve
-fresh reads, sorted identities, missing rows, firm and matter scope checks,
-and exact record digests. Keep the two-worker limit, every existing cap and
-the 30-second job reserve. Verify the complete test inventory on the PR and
-on the merged commit before recording CI qualification.
+Retain all 13 jobs, worker limits, deadlines, reserve floors and exact test
+identities. Verify PR and main independently, including frontend and
+deployment assignments. This qualifies CI for the staged feature.

@@ -169,34 +169,6 @@ def test_work_budget_removes_resolution_without_reducing_rules_or_queries(monkey
     assert counts['bound']['resolutions'] == 0
 
 
-def test_inference_index_reads_current_triples_and_falls_back_after_context_change(monkeypatch):
-    graph = validation._ValidationGraph()
-    original = (EX.item, RDF.type, EX.Kind)
-    inferred = (EX.second, RDF.type, EX.Kind)
-    pattern = (None, RDF.type, EX.Kind)
-    graph.add(original)
-    index = identifiers._InferenceIndex(graph)
-    calls = []
-    native = graph.store.triples
-
-    def counted(*args, **kwargs):
-        calls.append(args)
-        return native(*args, **kwargs)
-
-    monkeypatch.setattr(graph.store, 'triples', counted)
-    assert list(index.triples(pattern)) == [original]
-    index.add(inferred)
-    assert set(index.triples(pattern)) == {original, inferred}
-    assert inferred in index and calls == []
-
-    # An unrelated context disables the exact index and restores native reads.
-    other = Graph(store=graph.store)
-    foreign = (EX.foreign, RDF.type, EX.Kind)
-    other.add(foreign)
-    assert set(index.triples(pattern)) == {original, inferred}
-    assert foreign not in index and calls
-
-
 def test_parallel_closures_keep_inferred_state_private():
     barrier = Barrier(4)
 
