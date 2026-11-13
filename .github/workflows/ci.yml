@@ -545,6 +545,14 @@ jobs:
         run: |
           read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+      # Additive audit/API checks run after the existing two workers have exited.
+      # A known UAT failure remains explicitly XFAIL; it is not product acceptance.
+      # Browser UAT runs on demand with its retained non-passing case, outside this job.
+      - name: Check roadmap audit and disposable acceptance contracts
+        timeout-minutes: 1
+        env:
+          PYTHONPATH: backend:backend/tests:.
+        run: timeout --kill-after=2s 30s backend/.venv/bin/python -m pytest -c backend/pyproject.toml --rootdir=. tests/quality tests/uat -n 2 --max-worker-restart=0 --dist load -q -rA --junitxml=${{ runner.temp }}/delivered-uat.xml
   final-release-authorization:
     needs: backend-capacity
     # This selection uses isolated SQLite fixtures. The separate PostgreSQL

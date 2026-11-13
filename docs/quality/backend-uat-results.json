@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "application_revision": "d9ff2b16cc91726ffa4fb2f44dc45d18f53aff4c",
+  "run_started_utc": "2026-11-13T04:07:44Z",
+  "suite": "tests/uat/test_delivered_workflows.py",
+  "scope": "synthetic_asgi_http_acceptance",
+  "environment": {
+    "platform": "macOS",
+    "python": "3.12.11",
+    "pytest": "9.1.1",
+    "workers": 2,
+    "database": "disposable SQLite per case",
+    "provider": "UAT-DETERMINISTIC-FIXTURE",
+    "real_inference": false
+  },
+  "duration_seconds": 6.577,
+  "counts": {
+    "cases": 8,
+    "passed": 7,
+    "known_acceptance_failures": 1,
+    "unexpected_failures": 0,
+    "warnings": 2
+  },
+  "cases": [
+    {"id": "BAUT-01", "name": "test_buat_01_password_and_session_lifecycle_keeps_case_content", "result": "pass", "seconds": 1.184},
+    {"id": "BAUT-02", "name": "test_buat_02_portfolio_comments_and_explicit_access_are_scoped", "result": "pass", "seconds": 1.297},
+    {"id": "BAUT-03", "name": "test_buat_03_originals_locators_extraction_failure_and_fact_roles", "result": "pass", "seconds": 1.303},
+    {"id": "BAUT-04", "name": "test_buat_04_exact_draft_bounded_revision_and_grounded_review_exports", "result": "pass", "seconds": 1.958},
+    {"id": "BAUT-05", "name": "test_buat_05_supervisor_revision_and_recipient_revocation", "result": "pass", "seconds": 1.380},
+    {"id": "BAUT-06", "name": "test_buat_06_extractive_research_and_reversible_preservation", "result": "pass", "seconds": 0.884},
+    {"id": "BAUT-07", "name": "test_buat_07_unconfigured_graph_and_intake_fail_closed", "result": "pass", "seconds": 0.505},
+    {
+      "id": "BAUT-08",
+      "name": "test_buat_08_corrupt_private_original_returns_controlled_conflict",
+      "result": "known_failure",
+      "pytest_outcome": "xfail_strict",
+      "seconds": 0.451,
+      "expected": "HTTP 409 with sanitized integrity conflict",
+      "observed": "HTTP 500 Internal Server Error; uncaught cryptography.fernet.InvalidToken",
+      "code_location": "backend/app/main.py:685"
+    }
+  ]
+}

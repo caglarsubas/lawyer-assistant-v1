@@ -1,0 +1,352 @@
+{
+  "schema": "delivered-product-audit-v1",
+  "observed_on": "2026-11-13",
+  "reviewed_source": "d9ff2b16cc91726ffa4fb2f44dc45d18f53aff4c",
+  "review_model": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "workstreams": [
+      "roadmap sanity",
+      "backend API UAT",
+      "frontend browser UAT"
+    ],
+    "scope": "Engineering assessments; no legal approval or independently provisioned trust"
+  },
+  "verdict": "Not qualified for a production or legal-accuracy release; staged engineering and selected synthetic workflows are evidenced.",
+  "journeys": {
+    "total": 18,
+    "passed": 16,
+    "known_failures": 2,
+    "unexecuted": 0,
+    "scope": "8 disposable API + 10 fixture-backed Chromium scenarios; this is not an overall product completion percentage"
+  },
+  "quality_checks": {
+    "passed": 28,
+    "scope": "Fresh audit-tool and roadmap checks; separate from the 18 user-workflow journeys"
+  },
+  "counts": {
+    "checklist": {
+      "done": 42,
+      "open": 21,
+      "waiting": 24,
+      "deferred": 6
+    },
+    "milestones": {
+      "ready": 0,
+      "partial": 9,
+      "waiting": 4,
+      "planned": 1
+    },
+    "engineering_baseline": {
+      "done": 295,
+      "open": 0,
+      "blocked": 0
+    }
+  },
+  "ci_baseline": {
+    "pr": 43357061062,
+    "main": 43359460603,
+    "jobs": 13,
+    "minimum_main_job_reserve_seconds": 42,
+    "preserved_workers": 2
+  },
+  "runtime": {
+    "schema": "delivered-uat-runtime-v1",
+    "observed_at": "2026-11-13T04:20:56.582594+00:00",
+    "source_commit": "d9ff2b16cc91726ffa4fb2f44dc45d18f53aff4c",
+    "local_docker_socket": true,
+    "read_only": true,
+    "authenticated_workflows": "not_observed",
+    "legal_acceptance": "not_granted",
+    "posture": {
+      "schema": "runtime-posture-v1",
+      "services": [
+        {
+          "health": "healthy",
+          "literal_secret_environment_present": false,
+          "mounted_secret_settings": 6,
+          "read_only_root": true,
+          "running": true,
+          "service": "api"
+        },
+        {
+          "health": "healthy",
+          "literal_secret_environment_present": false,
+          "mounted_secret_settings": 1,
+          "read_only_root": true,
+          "running": true,
+          "service": "extractor"
+        },
+        {
+          "health": "healthy",
+          "literal_secret_environment_present": false,
+          "mounted_secret_settings": 0,
+          "read_only_root": true,
+          "running": true,
+          "service": "fuseki"
+        },
+        {
+          "health": "healthy",
+          "literal_secret_environment_present": false,
+          "mounted_secret_settings": 0,
+          "read_only_root": false,
+          "running": true,
+          "service": "opensearch"
+        },
+        {
+          "health": "healthy",
+          "literal_secret_environment_present": false,
+          "mounted_secret_settings": 1,
+          "read_only_root": false,
+          "running": true,
+          "service": "postgres"
+        },
+        {
+          "health": "unhealthy",
+          "literal_secret_environment_present": false,
+          "mounted_secret_settings": 0,
+          "read_only_root": true,
+          "running": false,
+          "service": "provider-relay"
+        },
+        {
+          "health": "unhealthy",
+          "literal_secret_environment_present": false,
+          "mounted_secret_settings": 0,
+          "read_only_root": true,
+          "running": true,
+          "service": "scanner"
+        },
+        {
+          "health": "healthy",
+          "literal_secret_environment_present": false,
+          "mounted_secret_settings": 0,
+          "read_only_root": true,
+          "running": true,
+          "service": "web"
+        }
+      ]
+    },
+    "routes": [
+      {
+        "id": "web",
+        "expected_http": 200,
+        "observed_http": 200,
+        "result": "pass"
+      },
+      {
+        "id": "health",
+        "expected_http": 200,
+        "observed_http": 200,
+        "result": "pass"
+      },
+      {
+        "id": "anonymous_readiness",
+        "expected_http": 401,
+        "observed_http": 401,
+        "result": "pass"
+      },
+      {
+        "id": "anonymous_matters",
+        "expected_http": 401,
+        "observed_http": 401,
+        "result": "pass"
+      }
+    ],
+    "backend_source": {
+      "status": "differs",
+      "compared_files": 130,
+      "matching_files": 129,
+      "different_or_absent_files": [
+        "backend/app/context_packing.py"
+      ],
+      "scope": "backend Python source blobs in the reported commit"
+    },
+    "scanner": {
+      "status": "unavailable"
+    }
+  },
+  "findings": [
+    {
+      "id": "UAT-01",
+      "priority": "P1",
+      "kind": "product defect",
+      "status": "open",
+      "title": "Uploaded file does not become the preview after opening an older file link",
+      "detail": "Browser UAT reproduces old URL selection overriding the newly uploaded file. Explicitly select the new file as a temporary workaround.",
+      "items": [
+        "F00-01",
+        "F00-04"
+      ],
+      "evidence": [
+        "frontend/src/pages/matter/DocumentsPanel.tsx"
+      ],
+      "acceptance": "Upload from an existing file link and show the new original/extraction while keeping the old file and all exact source IDs intact."
+    },
+    {
+      "id": "UAT-02",
+      "priority": "P1",
+      "kind": "product defect",
+      "status": "open",
+      "title": "Damaged encrypted original returns generic HTTP 500",
+      "detail": "Synthetic corruption fails closed and exposes no source bytes, but misses the controlled integrity/recovery response. BAUT-08 remains a strict known failure.",
+      "items": [
+        "F00-04",
+        "R07-04"
+      ],
+      "evidence": [
+        "backend/app/main.py"
+      ],
+      "acceptance": "Missing, unauthentic ciphertext and authenticated wrong content each produce controlled errors; restored original bytes and review history remain exact."
+    },
+    {
+      "id": "OPS-01",
+      "priority": "P1",
+      "kind": "runtime blocker",
+      "status": "open",
+      "title": "Scanner is unavailable in the deployed stack",
+      "detail": "Allowlisted health/readiness reports the running scanner unhealthy/unavailable. No signatures were refreshed and no upload bypass was used.",
+      "items": [
+        "F00-06",
+        "R03-18"
+      ],
+      "evidence": [
+        "scripts/runtime_diagnostics.py",
+        "backend/app/scanner.py"
+      ],
+      "acceptance": "Verify admitted current offline signatures, scanner/extractor readiness, clean intake and malware rejection without touching case originals."
+    },
+    {
+      "id": "OPS-02",
+      "priority": "P1",
+      "kind": "runtime blocker",
+      "status": "open",
+      "title": "Local provider relay is stopped",
+      "detail": "Read-only posture sees the relay stopped/unhealthy. Fixture completions do not qualify the actual tenant, model or five-job operation.",
+      "items": [
+        "F00-03",
+        "F00-06",
+        "R07-05"
+      ],
+      "evidence": [
+        "deploy/provider/relay.py"
+      ],
+      "acceptance": "Restore the approved local route and verify authenticated identity, no cloud fallback, bounded grounded completion and concurrent workload separately."
+    },
+    {
+      "id": "OPS-03",
+      "priority": "P1",
+      "kind": "deployment identity",
+      "status": "open",
+      "title": "Installed backend is not byte-identical to reviewed main",
+      "detail": "129 of 130 tracked backend Python files match d9ff2b16; context_packing.py differs. No installed code was overwritten. Image, dependencies and frontend identity are not attested.",
+      "items": [
+        "F00-06",
+        "R07-04"
+      ],
+      "evidence": [
+        "backend/app/context_packing.py"
+      ],
+      "acceptance": "Reconcile the intended context-packing change, qualify an exact candidate, and record installed source/image/dependency identities."
+    },
+    {
+      "id": "PLAN-01",
+      "priority": "P1",
+      "kind": "roadmap dependency",
+      "status": "remediation_prepared",
+      "title": "Item-level release prerequisites omit declared phase gates",
+      "detail": "The audited R08-05 transitive checklist graph omits required intake, target-host, graph coverage, evidence, adverse-search, correction/depth, freshness, calculations and playbook gates. Milestone semantics must stay separate from code completion. The audit PR prepares the eleven missing dependencies without altering item or milestone completion states.",
+      "items": [
+        "R08-05"
+      ],
+      "evidence": [
+        "docs/ROADMAP.md"
+      ],
+      "acceptance": "Reconcile all declared mandatory phase gates with the checklist closure, explicitly keeping optional BYOK and deferred features separate."
+    },
+    {
+      "id": "PLAN-02",
+      "priority": "P1",
+      "kind": "sequence",
+      "status": "remediation_prepared",
+      "title": "Engineering focus needs to return to product acceptance",
+      "detail": "89 merged PRs are linked to partial F00-06. Ten completed R03 navigation increments do not supply the first reviewed corpus. Stop automatic depth growth and use a bounded intake-to-reviewed-export acceptance packet. The audit PR selects F00-04 defects followed by F00-06 target operation as the next engineering sequence; the pending owner review remains separate.",
+      "items": [
+        "F00-04",
+        "F00-06",
+        "R03-06",
+        "R03-17"
+      ],
+      "evidence": [
+        "docs/MILESTONE_REVIEW_2026-10-20.md"
+      ],
+      "acceptance": "Select observed user-workflow defects and current pilot readiness as engineering priorities; retain the owner and corpus reviews as independent gates."
+    },
+    {
+      "id": "PLAN-03",
+      "priority": "P2",
+      "kind": "traceability",
+      "status": "open",
+      "title": "194 merged PRs lack an explicit checklist link",
+      "detail": "This is a traceability gap, not a claim that the work is absent. The audit maps all 93 items to scoped code/test references. The current CI row also needs the applicable thirteen-job reserve profile.",
+      "items": [
+        "R07-07"
+      ],
+      "evidence": [
+        "scripts/roadmap_delivery.py"
+      ],
+      "acceptance": "Backfill evidence-based links and current criteria without fabricating acceptance or rewriting past progress snapshots."
+    },
+    {
+      "id": "GATE-01",
+      "priority": "release gate",
+      "kind": "human and legal acceptance",
+      "status": "waiting",
+      "title": "Private owner review and public-corpus approval remain pending",
+      "detail": "The selected private analysis v3 still awaits the owner. Public source rights, independent legal/ontology review and exact historical applicability require their own real evidence; subagents do not grant those approvals.",
+      "items": [
+        "R01-02",
+        "R01-03",
+        "R03-06",
+        "R03-17"
+      ],
+      "evidence": [
+        "docs/MILESTONE_REVIEW_2026-10-20.md"
+      ],
+      "acceptance": "Record actual review decisions against exact source and analysis versions, with accountable eligibility and disclosed coverage."
+    },
+    {
+      "id": "GATE-02",
+      "priority": "release gate",
+      "kind": "unmeasured qualification",
+      "status": "waiting",
+      "title": "End-to-end legal, load, recovery and lawyer usefulness gates are unqualified",
+      "detail": "No present authenticated production UAT session was available. These selected synthetic tests do not establish representative extraction, five-job load, independent recovery, held-out legal correctness, screen-reader/cross-browser acceptance or preparation-time reduction.",
+      "items": [
+        "R07-04",
+        "R07-05",
+        "R08-02",
+        "R08-03",
+        "R08-04"
+      ],
+      "evidence": [
+        "docs/EVALUATION.md",
+        "docs/SECURITY.md"
+      ],
+      "acceptance": "Execute the reviewed release-specific workload, recovery, human and held-out evaluations; retain unknown denominators and record failures."
+    }
+  ],
+  "next_sequence": [
+    "Repair the two observed original/document-selection defects; retain explicit failure tests.",
+    "Restore approved scanner/relay operation and reconcile the exact installed candidate.",
+    "Run signed-in synthetic intake-to-review-to-export UAT on that candidate.",
+    "Record owner v3 review and pursue the first rights-cleared independently reviewed contracts corpus.",
+    "Qualify historical/adverse retrieval, five-job capacity, restore and held-out lawyer outcomes."
+  ],
+  "protection": {
+    "originals_unchanged": true,
+    "private_cases_not_read": true,
+    "review_history_unchanged": true,
+    "production_mutations": false
+  }
+}
