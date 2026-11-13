@@ -11271,3 +11271,41 @@ The next run measured 35 seconds for source publication, 48 for planning and
 frontend history. Use separate disposable credentials and await the fixture's
 cleanup signal before checking the active count. Keep the same contract ID.
 Verify each case once under the existing worker limit, caps and reserve floors.
+
+## 327. Graph runtime reserve after continuity merge — 2026-11-12
+
+The continuity PR ran all 13 jobs with at least 34 seconds of job reserve.
+Its first independent main run measured 28 seconds in graph runtime, below
+the 30-second floor. The guard stopped the backend suite.
+
+The nine-case metadata handoff file measured 57.8 worker-seconds in graph
+runtime. The first proposed move to review failed collection because graph
+runtime still required the file through a worker-affinity selector. Run the
+complete file and its selector in the final authorization step. Move the
+complete 13-case retention readiness file to backend review to make room.
+Keep the graph authorization split, existing workers, caps, reserve floors
+and all exact test identities.
+
+### Root-cause CI remediation — 2026-11-13
+
+The test relocation cleared graph runtime but left four other jobs below
+the 30-second floor. Restore the complete original test layout. An initial
+graph and cohort optimization hit immutable source pins in historical
+qualification evidence. Keep those sources and every retained report intact.
+
+In a two-worker run of all 14 final candidate cases, cyclic garbage collection
+spent 26.00 worker-seconds across 142 full-generation scans. Increasing the
+young-generation threshold from 700 to 7,000 kept automatic collection
+active and reduced collection to 7.63 worker-seconds and 17 full scans.
+The same cases completed in 42.77 seconds, down from 64.66. Apply the setting
+only to isolated CI pytest workers using the original Python thresholds.
+Route temporary graph bundle writes to the existing bounded pytest filesystem.
+
+The first CI run with this change retained 77 seconds in graph runtime and
+87 seconds in final authorization. Backend review finished with 26 seconds.
+Assign its complete 39-case analysis adjudication file to the existing graph
+step. The file accounted for 27.1 worker-seconds in the review run.
+
+Retain all 13 jobs, worker limits, deadlines, reserve floors and exact test
+identities. Verify PR and main independently, including frontend and
+deployment assignments. This qualifies CI for the staged feature.
