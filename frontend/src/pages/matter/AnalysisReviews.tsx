@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { post, request } from '../../api';
-import { Badge, Detail, Field, Notice } from '../../components';
+import { Badge, Detail, Field, Loading, Notice } from '../../components';
 import { formatDate, locatorText, messageOf } from '../../utils';
 import { assessmentPayload, emptyAssessment, permitsPositiveReview, RevisionAssessmentDetails, RevisionAssessmentEditor, RevisionComparisonDetails } from './AnalysisAdjudication';
 import type { AnalysisRecord, AnalysisReviewContext, AnalysisReviewEvent, AnalysisReviewFinding, AnalysisReviewProjection, RevisionAssessment, ReviewCriterionKey, ReviewOutcome } from './analysisTypes';
@@ -49,14 +49,31 @@ export function AnalysisReviewForm({ context, onSource, onSubmit, busy }: { cont
   const validFindings = findings.every((item) => item.text.trim().length >= 3);
   const hasChange = findings.length > 0 || criteria.some((item) => item.outcome === 'needs_change');
   function updateFinding(localId: string, change: Partial<EditableFinding>) { setFindings((old) => old.map((item) => item.localId === localId ? { ...item, ...change } : item)); }
-  return <form onSubmit={(event) => { event.preventDefault(); if (includeAssessment && !linkedAssessment) return; void onSubmit({ decision, note, criteria, findings: findings.map(({ localId: _localId, ...item }) => item), ...(includeAssessment && linkedAssessment ? { revision_assessment: linkedAssessment } : {}) }); }}>
-    <p>Bu karar, gösterilen sürümün koşullu özel taslağıyla sınırlıdır. Kamu mevzuatı, geçmiş sürüm, yetki veya karşı içtihat doğruluğunu onaylamaz. Tüm metin, kaynak seçimi ve belirsizlikleri değerlendirin.</p>
+  const blockers = [
+    !context.can_record && 'Bu sürüme şu anda karar kaydedilemiyor. İnceleme bağını yenileyin.',
+    includeAssessment && !linkedAssessment && 'Eklediğiniz sürüm karşılaştırmasını tamamlayın.',
+    !criteria.length && 'En az bir başlık için değerlendirmenizi seçin.',
+    !explained && 'Düzeltme istediğiniz veya uygulanamaz bulduğunuz başlıkları açıklayın.',
+    !validFindings && 'Eklediğiniz her bulguyu en az 3 karakterle açıklayın.',
+    note.trim().length < 3 && 'Kararınızın genel gerekçesini yazın.',
+    decision === 'reviewed_conditional' && !acceptable && 'Koşullu inceleme için beş başlığı tamamlayın ve esaslı bulguları çözün.',
+    decision === 'changes_requested' && !hasChange && 'Düzeltme istediğiniz bir başlık seçin veya bulgu ekleyin.',
+  ].filter(Boolean);
+  const canSubmit = !busy && blockers.length === 0;
+  return <form className="analysis-review-form" onSubmit={(event) => {
+    event.preventDefault();
+    if (!canSubmit) return;
+    void onSubmit({ decision, note, criteria, findings: findings.map(({ localId: _localId, ...item }) => item), ...(includeAssessment && linkedAssessment ? { revision_assessment: linkedAssessment } : {}) });
+  }}>
+    <div className="review-progress"><div><h4>Değerlendirmeniz</h4><p className="small muted">Uygun bulduğunuz başlıkları işaretleyin. Düzeltme gereken yerde kısa bir açıklama ekleyin.</p></div><span>{criteria.length} / {Object.keys(context.criteria).length} başlık</span><progress aria-label="Değerlendirilen başlıklar" max={Object.keys(context.criteria).length} value={criteria.length} /></div>
     {(!context.can_accept || !context.current_version) && <Notice error>{!context.current_version ? 'Gösterilen sürüm güncel sürüm değil; karar kaydedilemez.' : context.freshness.status === 'stale' ? 'Özel dayanaklar değişti; yalnız değişiklik isteği kaydedilebilir.' : `${context.critical_count} kritik yapısal kontrol var; yalnız değişiklik isteği kaydedilebilir.`}</Notice>}
     <Detail title={`İncelenecek özgün alıntılar (${context.sources.length})`}><p className="small muted">Karar bütün seçime bağlanır; kaynak düğmesine basmak inceleme yaptığınızı kanıtlamaz. Saklanan metni özgün belgenin bağlamıyla karşılaştırın.</p>{context.sources.map((source) => <p key={source.evidence_id}><button type="button" className="source-link" onClick={() => onSource(source.evidence_id)}>{source.name} · {locatorText(source.locator)} · [{source.start}, {source.end})</button><span className="reference-id">Alıntı SHA-256: {source.quote_sha256}</span></p>)}</Detail>
     {comparison && assessment && <Detail title="Önceki sürümle kaynak bağlı değerlendirme"><RevisionComparisonDetails comparison={comparison} onSource={onSource} /><label><input type="checkbox" checked={includeAssessment} disabled={busy || !context.can_record || comparison.freshness.status !== 'current'} onChange={(event) => setIncludeAssessment(event.target.checked)} />Bu incelemeye sürüm değerlendirmesini ekle</label>{includeAssessment && <RevisionAssessmentEditor comparison={comparison} value={assessment} onChange={setAssessment} busy={busy} />}{includeAssessment && !linkedAssessment && <p className="small muted">Tüm boyutları ve önceki bulguları açıklayın; olumlu gözlemleri güncel alıntıya, giderildi beyanını değişen adıma bağlayın.</p>}{includeAssessment && !comparisonAllowsPositive && <Notice error>Değişiklik gerektiren gözlem veya çözülmemiş kritik/esaslı bulgu var; yalnız değişiklik isteği kaydedilebilir.</Notice>}</Detail>}
+
+    {(Object.entries(context.criteria) as [ReviewCriterionKey, string][]).map(([key, description]) => <div className="review-criterion" key={key}><Field label={REVIEW_LABELS[key]} hint={description}>{(id) => <select id={id} disabled={busy || !context.can_record} value={outcomes[key] || ''} onChange={(event) => setOutcomes((old) => ({ ...old, [key]: event.target.value as ReviewOutcome }))}><option value="">Değerlendirme seçin</option><option value="confirmed">Değerlendirdim</option><option value="needs_change">Değişiklik gerekli</option>{key === 'ai_contribution' && !context.ai_contribution_required && <option value="not_applicable">Bu sürümde model katkısı yok</option>}</select>}</Field><Detail title={`${REVIEW_LABELS[key]} — ölçüt notu`} open={outcomes[key] === 'needs_change' || outcomes[key] === 'not_applicable' ? true : undefined}><Field label={`${REVIEW_LABELS[key]} notu`} hint="Değişiklik gerekli veya uygulanamaz değerlendirmesinde en az 3 karakter açıklayın.">{(id) => <textarea id={id} rows={2} maxLength={1000} disabled={busy} value={notes[key] || ''} onChange={(event) => setNotes((old) => ({ ...old, [key]: event.target.value }))} />}</Field></Detail></div>)}
+    <section className="review-findings"><h4>İnceleme bulguları · {findings.length}</h4><p className="small muted">Tek bir cümleye veya dayanağa ilişkin düzeltmelerinizi buraya ekleyebilirsiniz.</p>{findings.map((item) => <div className="practice-record" key={item.localId}><Field label="Bulgunun adımı">{(id) => <select id={id} disabled={busy} value={item.target_id} onChange={(event) => updateFinding(item.localId, { target_id: event.target.value })}>{context.targets.map((target) => <option key={target} value={target}>{target}</option>)}</select>}</Field><Field label="Bulgunun önemi">{(id) => <select id={id} disabled={busy} value={item.severity} onChange={(event) => updateFinding(item.localId, { severity: event.target.value as typeof item.severity })}><option value="critical">Kritik · Sonuç düzeltilmeli</option><option value="major">Esaslı · Düzeltme gerekli</option><option value="note">Not · Koşullu sınırlama</option></select>}</Field><Field label="Bulgu">{(id) => <textarea id={id} rows={3} maxLength={2000} disabled={busy} value={item.text} onChange={(event) => updateFinding(item.localId, { text: event.target.value })} />}</Field><Field label="Önerilen değişiklik (isteğe bağlı)">{(id) => <textarea id={id} rows={2} maxLength={2000} disabled={busy} value={item.suggested_change} onChange={(event) => updateFinding(item.localId, { suggested_change: event.target.value })} />}</Field><fieldset disabled={busy}><legend>Bulgunun özgün dayanakları (isteğe bağlı)</legend>{context.sources.map((source) => <label key={source.evidence_id}><input type="checkbox" checked={item.evidence_ids.includes(source.evidence_id)} onChange={(event) => updateFinding(item.localId, { evidence_ids: event.target.checked ? [...item.evidence_ids, source.evidence_id] : item.evidence_ids.filter((id) => id !== source.evidence_id) })} />{source.name} · [{source.start}, {source.end})</label>)}</fieldset><button type="button" className="text-button" disabled={busy} onClick={() => setFindings((old) => old.filter((finding) => finding.localId !== item.localId))}>Bulgu satırını kaldır</button></div>)}<button type="button" className="text-button" disabled={busy || findings.length >= 20 || !context.can_record} onClick={() => setFindings((old) => [...old, { localId: crypto.randomUUID(), target_id: 'conclusion', severity: 'major', text: '', suggested_change: '', evidence_ids: [] }])}>Bulgu ekle</button></section>
+    <section className="review-decision"><h4>Kararınızı kaydedin</h4>
     <Field label="İnceleme kararı">{(id) => <select id={id} disabled={busy || !context.can_record} value={decision} onChange={(event) => setDecision(event.target.value as typeof decision)}><option value="changes_requested">Değişiklik gerekli</option><option value="reviewed_conditional" disabled={!context.can_accept}>Koşullu özel taslak incelendi</option></select>}</Field>
-    {(Object.entries(context.criteria) as [ReviewCriterionKey, string][]).map(([key, description]) => <div key={key}><Field label={REVIEW_LABELS[key]} hint={description}>{(id) => <select id={id} disabled={busy || !context.can_record} value={outcomes[key] || ''} onChange={(event) => setOutcomes((old) => ({ ...old, [key]: event.target.value as ReviewOutcome }))}><option value="">Değerlendirme seçin</option><option value="confirmed">Değerlendirdim</option><option value="needs_change">Değişiklik gerekli</option>{key === 'ai_contribution' && !context.ai_contribution_required && <option value="not_applicable">Bu sürümde model katkısı yok</option>}</select>}</Field><Detail title={`${REVIEW_LABELS[key]} — ölçüt notu`} open={outcomes[key] === 'needs_change' || outcomes[key] === 'not_applicable' ? true : undefined}><Field label={`${REVIEW_LABELS[key]} notu`} hint="Değişiklik gerekli veya uygulanamaz değerlendirmesinde en az 3 karakter açıklayın.">{(id) => <textarea id={id} rows={2} maxLength={1000} disabled={busy} value={notes[key] || ''} onChange={(event) => setNotes((old) => ({ ...old, [key]: event.target.value }))} />}</Field></Detail></div>)}
-    <Detail title={`İnceleme bulguları (${findings.length})`}>{findings.map((item) => <div className="practice-record" key={item.localId}><Field label="Bulgunun adımı">{(id) => <select id={id} disabled={busy} value={item.target_id} onChange={(event) => updateFinding(item.localId, { target_id: event.target.value })}>{context.targets.map((target) => <option key={target} value={target}>{target}</option>)}</select>}</Field><Field label="Bulgunun önemi">{(id) => <select id={id} disabled={busy} value={item.severity} onChange={(event) => updateFinding(item.localId, { severity: event.target.value as typeof item.severity })}><option value="critical">Kritik · Sonuç düzeltilmeli</option><option value="major">Esaslı · Düzeltme gerekli</option><option value="note">Not · Koşullu sınırlama</option></select>}</Field><Field label="Bulgu">{(id) => <textarea id={id} rows={3} maxLength={2000} disabled={busy} value={item.text} onChange={(event) => updateFinding(item.localId, { text: event.target.value })} />}</Field><Field label="Önerilen değişiklik (isteğe bağlı)">{(id) => <textarea id={id} rows={2} maxLength={2000} disabled={busy} value={item.suggested_change} onChange={(event) => updateFinding(item.localId, { suggested_change: event.target.value })} />}</Field><fieldset disabled={busy}><legend>Bulgunun özgün dayanakları (isteğe bağlı)</legend>{context.sources.map((source) => <label key={source.evidence_id}><input type="checkbox" checked={item.evidence_ids.includes(source.evidence_id)} onChange={(event) => updateFinding(item.localId, { evidence_ids: event.target.checked ? [...item.evidence_ids, source.evidence_id] : item.evidence_ids.filter((id) => id !== source.evidence_id) })} />{source.name} · [{source.start}, {source.end})</label>)}</fieldset><button type="button" className="text-button" disabled={busy} onClick={() => setFindings((old) => old.filter((finding) => finding.localId !== item.localId))}>Bulgu satırını kaldır</button></div>)}<button type="button" className="text-button" disabled={busy || findings.length >= 20 || !context.can_record} onClick={() => setFindings((old) => [...old, { localId: crypto.randomUUID(), target_id: 'conclusion', severity: 'major', text: '', suggested_change: '', evidence_ids: [] }])}>Bulgu ekle</button></Detail>
     <Field label="İnceleme kararının gerekçesi">{(id) => <>
       <p id={`${id}-help`} className="field-hint">Bu taslağı neden uygun bulduğunuzu veya neden değişiklik istediğinizi 2–4 cümleyle açıklayın. Neyi kontrol ettiğinizi, genel değerlendirmenizi ve düzeltme gerektiren ya da belirsiz kalan noktaları yazın.</p>
       <p className="small muted">Tek tek sorunları <strong>İnceleme bulguları → Bulgu ekle</strong> alanına kaydedin. Burada kararınızın genel nedenini özetleyin. Bu gerekçeyi kaydetmek analiz metnini değiştirmez.</p>
@@ -71,15 +88,53 @@ export function AnalysisReviewForm({ context, onSource, onSubmit, busy }: { cont
         <p className="small muted">Ölçütleri ayrıca değerlendirin ve kararınızı bulgularınızla uyumlu seçin. Örnekleri okumak incelemeyi tamamlamaz.</p>
       </Detail>
     </>}</Field>
-    <button className="button secondary" type="submit" disabled={busy || !context.can_record || (includeAssessment && !linkedAssessment) || note.trim().length < 3 || !criteria.length || !explained || !validFindings || (decision === 'reviewed_conditional' ? !acceptable : !hasChange)}>{busy ? 'Kaydediliyor…' : 'İnceleme kararını kaydet'}</button><p className="small muted">Metin ve önceki kararlar korunur. Kritik/esaslı bulgu, değerlendirilmemiş ölçüt veya değişmiş dayanak varken incelendi durumuna geçilemez. Yeni metin sürümü yeniden inceleme gerektirir.</p>
+    <div className="review-save"><button className="button primary" type="submit" disabled={!canSubmit}>{busy ? 'Kaydediliyor…' : 'İnceleme kararını kaydet'}</button>
+      {!!blockers.length && <div className="review-missing" aria-live="polite"><p>Kaydetmek için</p><ul>{blockers.map((message) => <li key={String(message)}>{message}</li>)}</ul></div>}
+    </div>
+    <p className="small muted">Kararınız bu sürüme ve seçilen kaynaklara bağlanır. Önceki kararlar geçmişte saklanır. Yeni metin sürümü yeniden inceleme gerektirir.</p>
+    </section>
   </form>;
 }
 
-export function AnalysisReviews({ matterId, record, onSource, onSaved }: { matterId: string; record: AnalysisRecord; onSource: (id: string) => void; onSaved: () => Promise<void> }) {
-  const [context, setContext] = useState<AnalysisReviewContext | null>(null); const [busy, setBusy] = useState(false); const [error, setError] = useState('');
+export function AnalysisReviews({ matterId, record, onSource, onSaved, inline = false }: { matterId: string; record: AnalysisRecord; onSource: (id: string) => void; onSaved: () => Promise<void>; inline?: boolean }) {
+  const [context, setContext] = useState<AnalysisReviewContext | null>(null);
+  const [busy, setBusy] = useState(inline);
+  const [error, setError] = useState('');
   const pending = useRef<{ key: string; id: string } | null>(null);
+  const generation = useRef(0);
   const base = `/matters/${encodeURIComponent(matterId)}/analyses/${encodeURIComponent(record.id)}/reviews`;
-  async function load() { setBusy(true); setError(''); try { setContext(await request<AnalysisReviewContext>(`${base}/context?version_id=${encodeURIComponent(record.latest_version_id)}`)); } catch (cause) { setContext(null); setError(messageOf(cause)); } finally { setBusy(false); } }
-  async function save(input: ReviewSubmission) { if (!context) return; setBusy(true); setError(''); const payload = { ...input, version_id: context.version_id, expected_revision: context.expected_revision, content_sha256: context.content_sha256, expected_review_id: context.expected_review_id }; const key = JSON.stringify(payload); if (pending.current?.key !== key) pending.current = { key, id: crypto.randomUUID().replaceAll('-', '') }; try { await post(base, { ...payload, request_id: pending.current.id }); pending.current = null; setContext(null); await onSaved(); } catch (cause) { setError(messageOf(cause)); } finally { setBusy(false); } }
-  return <Detail title="Avukat inceleme kararı kaydet"><p>İnceleme, bu sürümün metni, kaynak seçimi ve önceki kararına bağlanır. Model veya yapısal kontrol bir avukat incelemesi yapmış sayılmaz.</p><button className="text-button" disabled={busy} onClick={() => void load()}>{context ? 'İnceleme bağını yenile' : 'Gösterilen sürümün inceleme formunu aç'}</button>{context && <AnalysisReviewForm key={`${context.version_id}:${context.expected_review_id}:${context.recipe}:${context.revision_comparison?.comparison_sha256 || ''}`} context={context} onSource={onSource} onSubmit={save} busy={busy} />}{error && <Notice error>{error}</Notice>}</Detail>;
+  const load = useCallback(async (signal?: AbortSignal) => {
+    const turn = ++generation.current;
+    setBusy(true); setError('');
+    try {
+      const next = await request<AnalysisReviewContext>(`${base}/context?version_id=${encodeURIComponent(record.latest_version_id)}`, { signal });
+      if (generation.current === turn) setContext(next);
+    } catch (cause) {
+      if (generation.current === turn && !signal?.aborted) { setContext(null); setError(messageOf(cause)); }
+    } finally { if (generation.current === turn) setBusy(false); }
+  }, [base, record.latest_version_id]);
+  useEffect(() => {
+    if (!inline) return;
+    const controller = new AbortController();
+    void load(controller.signal);
+    return () => { generation.current++; controller.abort(); };
+  }, [inline, load]);
+  async function save(input: ReviewSubmission) {
+    if (!context) return;
+    setBusy(true); setError('');
+    const payload = { ...input, version_id: context.version_id, expected_revision: context.expected_revision, content_sha256: context.content_sha256, expected_review_id: context.expected_review_id };
+    const key = JSON.stringify(payload);
+    if (pending.current?.key !== key) pending.current = { key, id: crypto.randomUUID().replaceAll('-', '') };
+    try { await post(base, { ...payload, request_id: pending.current.id }); pending.current = null; setContext(null); await onSaved(); }
+    catch (cause) { setError(messageOf(cause)); }
+    finally { setBusy(false); }
+  }
+  const form = <>
+    <div className="analysis-review-intro"><h4>Avukat inceleme kararı</h4><p className="small muted">Sürüm {record.version} için değerlendirmenizi kaydedin. Belge alıntılarına Belgeler bölümünden ulaşabilirsiniz.</p></div>
+    {busy && !context && <Loading label="Bu sürümün inceleme formu açılıyor…" />}
+    {context && <AnalysisReviewForm key={`${context.version_id}:${context.expected_review_id}:${context.recipe}:${context.revision_comparison?.comparison_sha256 || ''}`} context={context} onSource={onSource} onSubmit={save} busy={busy} />}
+    {error && <Notice error>{error}</Notice>}
+    <button className="text-button" disabled={busy} onClick={() => void load()}>{context ? 'İnceleme bağını yenile' : 'Gösterilen sürümün inceleme formunu aç'}</button>
+  </>;
+  return inline ? form : <Detail title="Avukat inceleme kararı kaydet">{form}</Detail>;
 }

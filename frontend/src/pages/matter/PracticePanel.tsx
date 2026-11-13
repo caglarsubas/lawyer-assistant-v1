@@ -39,12 +39,11 @@ export default function PracticePanel({ matter, onChange, userRole, permissions 
   }, [base]);
   useEffect(() => { void load(); }, [load]);
   async function saved() { setEditor(null); setNotice('Yeni kayıt veya sürüm saklandı. Önceki sürümler korunur; mevcut hazırlık çıktılarını yeniden inceleyin.'); await load(); await onChange(); }
-  return <section><div className="section-heading"><div><h2>Avukatın çalışma defteri</h2><p className="small muted">Avukat notları ve ayrı işaretlenmiş model önerileri. Hukuki değerlendirmeyi ve özgün kaynakları inceleyin; öneriyi yeni taslağa almak hukuki onay değildir.</p></div><button className="button secondary" onClick={() => void load()}>Yenile</button></div>
+  return <section className="practice-workspace">
     {notice && <Notice>{notice}</Notice>}
     <AnalysisPanel key={matter.id} matter={matter} onChange={onChange} />
-    <Detail title="Yerel model dayanak denemeleri ve grup incelemesi">{modelCohortsVisible ? <Suspense fallback={<Loading label="Model grubu incelemesi açılıyor…" />}><AuthorityModelCohorts key={matter.id} matterId={matter.id} /></Suspense> : <><p>Aynı girdiyle kayıtlı model denemelerini, farklı ayarları, kaynak örtüşmelerini ve eksik ölçümleri özel bir sabit grupta inceleyin.</p><button className="text-button" onClick={() => setModelCohortsVisible(true)}>Model dayanak grubu incelemesini aç</button></>}</Detail>
-    <Detail title="Dayanak deneme grupları ve eksiklerin incelemesi">{authorityCohortsVisible ? <Suspense fallback={<Loading label="Dayanak grubu incelemesi açılıyor…" />}><AuthorityTrialCohorts key={matter.id} matterId={matter.id} /></Suspense> : <><p>İnsan revizyonu denemelerini, kaynak örtüşmelerini ve ayrı görüşleri özel bir sabit grupta inceleyin.</p><button className="text-button" onClick={() => setAuthorityCohortsVisible(true)}>Dayanak grubu incelemesini aç</button></>}</Detail>
-    <Detail title="Özel deneme grupları ve eksiklerin incelemesi">{cohortsVisible ? <Suspense fallback={<Loading label="Grup incelemesi açılıyor…" />}><AnalysisCohorts key={matter.id} matterId={matter.id} onSource={setSource} /></Suspense> : <><p>Bu çalışma alanındaki açıkça seçilmiş denemeleri, farklı ayarları ve eksikleri özel bir sabit kayıtta inceleyin.</p><button className="text-button" onClick={() => setCohortsVisible(true)}>Özel grup incelemesini aç</button></>}</Detail>
+    <Detail title="Çalışma notları ve kurum rehberleri">
+    <div className="section-heading"><p className="small muted">Senaryolarınızı, argümanlarınızı ve hazırlık notlarınızı yönetin.</p><button className="text-button" onClick={() => void load()}>Notları yenile</button></div>
     {loading ? <Loading label="Çalışma notları açılıyor…" /> : KIND_LIST.map((kind) => <Detail key={kind} title={`${LABELS[kind]} (${data[kind].length})`}>
       <div className="practice-section-intro"><p>{DESCRIPTIONS[kind]}</p><button className="button secondary" onClick={() => { setEditor({ kind }); setNotice(''); }}><Icon name="plus" size={16} />{kind === 'scenarios' ? 'Senaryo ekle' : kind === 'contradictions' ? 'Çelişki bağla' : kind === 'arguments' ? 'Argüman ekle' : 'Taslak yaz'}</button></div>
       {errors[kind] && <Notice error>{errors[kind]}</Notice>}
@@ -61,6 +60,12 @@ export default function PracticePanel({ matter, onChange, userRole, permissions 
       {data[kind].length === 100 && <p className="small muted">En yeni 100 kayıt gösteriliyor.</p>}
     </Detail>)}
     {!loading && <Detail title={`Kurum rehberleri (${data.playbooks.length} benimsenmiş sürüm)`}><Playbooks matterId={matter.id} library={data.library} adopted={data.playbooks} canCurate={['admin', 'curator'].includes(userRole) && (!permissions || permissions.includes('playbook.manage'))} onSave={saved} error={errors.playbooks || errors.library} /></Detail>}
+    </Detail>
+    <Detail title="Gelişmiş karşılaştırma araçları">
+    <Detail title="Yerel model dayanak denemeleri ve grup incelemesi">{modelCohortsVisible ? <Suspense fallback={<Loading label="Model grubu incelemesi açılıyor…" />}><AuthorityModelCohorts key={matter.id} matterId={matter.id} /></Suspense> : <><p>Aynı girdiyle kayıtlı model denemelerini, farklı ayarları, kaynak örtüşmelerini ve eksik ölçümleri özel bir sabit grupta inceleyin.</p><button className="text-button" onClick={() => setModelCohortsVisible(true)}>Model dayanak grubu incelemesini aç</button></>}</Detail>
+    <Detail title="Dayanak deneme grupları ve eksiklerin incelemesi">{authorityCohortsVisible ? <Suspense fallback={<Loading label="Dayanak grubu incelemesi açılıyor…" />}><AuthorityTrialCohorts key={matter.id} matterId={matter.id} /></Suspense> : <><p>İnsan revizyonu denemelerini, kaynak örtüşmelerini ve ayrı görüşleri özel bir sabit grupta inceleyin.</p><button className="text-button" onClick={() => setAuthorityCohortsVisible(true)}>Dayanak grubu incelemesini aç</button></>}</Detail>
+    <Detail title="Özel deneme grupları ve eksiklerin incelemesi">{cohortsVisible ? <Suspense fallback={<Loading label="Grup incelemesi açılıyor…" />}><AnalysisCohorts key={matter.id} matterId={matter.id} onSource={setSource} /></Suspense> : <><p>Bu çalışma alanındaki açıkça seçilmiş denemeleri, farklı ayarları ve eksikleri özel bir sabit kayıtta inceleyin.</p><button className="text-button" onClick={() => setCohortsVisible(true)}>Özel grup incelemesini aç</button></>}</Detail>
+    </Detail>
     {source && <EvidenceViewer key={source} matter={matter} evidenceId={source} onClose={() => setSource(null)} />}
   </section>;
 }
