@@ -34,8 +34,11 @@ shows the follow-up separately. Twenty workspace cases and the intact ten-case
 recovery-inventory partition move from the overloaded capacity gate to the
 existing backend job. These test sources and their closed partition controllers
 remain unchanged; all 135 original
-trial/graph/recovery cases stay together in the capacity job. All 13
-jobs, full previous coverage, two-worker caps, time budgets and reserve floors
+trial/graph/recovery cases stay together in the capacity job. The complete local
+model-trial and audit/API phases move from frontend-history to the backend job
+before the main suite, retaining their two-minute and one-minute caps and the
+audit command’s 30-second limit. All 13 jobs, full previous coverage, two-worker
+caps, time budgets and reserve floors
 remain enforced; exact PR and independent main qualification are recorded
 separately in the tracker.
 

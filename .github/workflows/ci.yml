@@ -241,6 +241,20 @@ jobs:
           read -r -a recipient_observation_tests <<< "$CI_RECIPIENT_OBSERVATION_TESTS"
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest -p scripts.ci_provision_bindings --provision-binding-lane=history "${history_binding_tests[@]}" -q -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=10 -rA -p scripts.ci_recipient_affinity --fixture-affinity-lane=recipient "${recipient_observation_tests[@]}"
 
+      # Keep this complete offline model-trial group at its original two-worker cap.
+      - name: Test registered local-model authority trials
+        timeout-minutes: 2
+        run: |
+          read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
+      # Run the closed audit/API group after the preceding workers have exited.
+      # Selected journeys are required passes; installed/legal acceptance stays separate.
+      # Browser UAT remains an explicit on-demand campaign.
+      - name: Check roadmap audit and disposable acceptance contracts
+        timeout-minutes: 1
+        env:
+          PYTHONPATH: backend:backend/tests:.
+        run: timeout --kill-after=2s 30s backend/.venv/bin/python -m pytest -c backend/pyproject.toml --rootdir=. tests/quality tests/uat -n 2 --max-worker-restart=0 --dist load -q -rA --junitxml=${{ runner.temp }}/delivered-uat.xml
       - name: Test backend
         timeout-minutes: 16
         env:
@@ -539,20 +553,6 @@ jobs:
         run: node scripts/verify_frontend_shards.mjs "${{ runner.temp }}/frontend-results.json" 2
 
 
-      # Keep this complete offline model-trial group at its original two-worker cap.
-      - name: Test registered local-model authority trials
-        timeout-minutes: 2
-        run: |
-          read -r -a model_trial_tests <<< "$CI_AUTHORITY_MODEL_TESTS"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${model_trial_tests[@]}" -n 2 --dist worksteal --max-worker-restart=0 --maxfail=1 --durations=20
-      # Additive audit/API checks run after the existing two workers have exited.
-      # A known UAT failure remains explicitly XFAIL; it is not product acceptance.
-      # Browser UAT runs on demand with its retained non-passing case, outside this job.
-      - name: Check roadmap audit and disposable acceptance contracts
-        timeout-minutes: 1
-        env:
-          PYTHONPATH: backend:backend/tests:.
-        run: timeout --kill-after=2s 30s backend/.venv/bin/python -m pytest -c backend/pyproject.toml --rootdir=. tests/quality tests/uat -n 2 --max-worker-restart=0 --dist load -q -rA --junitxml=${{ runner.temp }}/delivered-uat.xml
   final-release-authorization:
     needs: backend-capacity
     # This selection uses isolated SQLite fixtures. The separate PostgreSQL

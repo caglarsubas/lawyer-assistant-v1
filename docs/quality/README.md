@@ -73,8 +73,9 @@ executes the actual Chromium interactions. Add `--observe-runtime` only for
 read-only, unauthenticated observations of the local installed stack. It makes
 no provider request and does not restore services or alter Docker volumes.
 
-The default PR workflow adds only the compact audit/API contracts after the
-existing frontend-history workers exit. The repair follow-up moves twenty workspace cases and the intact ten-case
+The default PR workflow runs the compact audit/API and complete local-model
+trial phases sequentially in the backend job before its main suite. Their
+original step caps and worker limits remain enforced. The repair follow-up moves twenty workspace cases and the intact ten-case
 recovery-inventory partition to the existing backend job. The source files and
 closed partition controllers remain unchanged. Full previous
 coverage, worker ceilings, job caps and reserve policies remain enforced. The on-demand browser
