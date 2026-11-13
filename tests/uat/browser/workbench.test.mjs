@@ -259,19 +259,35 @@ scenario('upload selects the new file even when opened from a different file’s
   await page.goBack();
   await expect(page.getByRole('heading', { name: filename })).toBeVisible();
 
-  // Completing an upload cannot redirect a user who has opened another workspace.
+  // Returning to the same URL is still a newer user navigation.
   let release;
   state.lateUpload = new Promise(resolve => { release = resolve; });
   await page.getByLabel('Çalışma alanına dosya yükle').setInputFiles({
     name: uploadedFilename, mimeType: 'text/plain', buffer: Buffer.from(uploadedOriginal),
   });
   await expect.poll(() => state.uploadCount).toBe(2);
+  await files.getByRole('button', { name: new RegExp(uploadedFilename) }).click();
+  await expect(page).toHaveURL(/document=uat-uploaded&view_note=unchanged$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/document=uat-document-selected&view_note=unchanged$/);
+  release();
+  await expect.poll(() => state.uploadResponses).toBe(2);
+  await expect(page.getByRole('button', { name: 'Dosya yükle', exact: true })).toBeEnabled();
+  await expect(page).toHaveURL(/document=uat-document-selected&view_note=unchanged$/);
+  await expect(page.getByRole('heading', { name: filename })).toBeVisible();
+
+  // Completing an upload cannot redirect a user who has opened another workspace.
+  state.lateUpload = new Promise(resolve => { release = resolve; });
+  await page.getByLabel('Çalışma alanına dosya yükle').setInputFiles({
+    name: uploadedFilename, mimeType: 'text/plain', buffer: Buffer.from(uploadedOriginal),
+  });
+  await expect.poll(() => state.uploadCount).toBe(3);
   const tree = page.getByRole('region', { name: 'Çalışma alanları ve yüklenen dosyalar' });
   await tree.getByRole('button', { name: workspaces[1].title + ': dosyaları göster' }).click();
   await tree.getByRole('link', { name: 'uat-beta-belgesi.txt' }).click();
   await expect(page.getByRole('heading', { name: 'uat-beta-belgesi.txt' })).toBeVisible();
   release();
-  await expect.poll(() => state.uploadResponses).toBe(2);
+  await expect.poll(() => state.uploadResponses).toBe(3);
   await expect(page).toHaveURL(/uat-case-b\?tab=documents&document=uat-document-beta$/);
   await expect(page.getByRole('heading', { name: 'uat-beta-belgesi.txt' })).toBeVisible();
 });

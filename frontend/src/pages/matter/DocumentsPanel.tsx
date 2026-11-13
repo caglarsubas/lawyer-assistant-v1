@@ -11,7 +11,13 @@ export default function DocumentsPanel({ matter, onChange, selectedDocumentId, d
   // The route owns selection; refreshing the list must not restore an older file.
   const selectedId = selectedDocumentId || matter.documents?.[0]?.id || null;
   const mounted = useRef(true);
-  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
+  const navigation = useRef(0);
+  useEffect(() => {
+    mounted.current = true;
+    const changed = () => { navigation.current++; };
+    window.addEventListener('hashchange', changed);
+    return () => { mounted.current = false; window.removeEventListener('hashchange', changed); };
+  }, []);
   const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [message, setMessage] = useState(''); const [dragging, setDragging] = useState(false);
   const input = useRef<HTMLInputElement>(null);
   const readinessId = useId();
@@ -41,12 +47,14 @@ export default function DocumentsPanel({ matter, onChange, selectedDocumentId, d
     if (!mounted.current || !['matters', 'workspaces'].some(prefix => path === `/${prefix}/${encodeURIComponent(matter.id)}`)) return;
     const params = new URLSearchParams(query);
     if (params.get('tab') !== 'documents') return;
+    navigation.current++;
     params.set('document', documentId);
     window.location.hash = `${path}?${params}`;
   }
   async function upload(files: FileList | File[] | null) {
     if (!files?.length || busy || !canUpload) return;
     const uploadLocation = window.location.hash;
+    const uploadNavigation = navigation.current;
     setBusy(true); setError(''); setMessage(''); const uploaded: DocumentRecord[] = []; const failures: string[] = [];
     for (const file of Array.from(files)) {
       try { const body = new FormData(); body.append('file', file); uploaded.push(await request<DocumentRecord>(`/matters/${encodeURIComponent(matter.id)}/documents`, { method: 'POST', body })); }
@@ -56,7 +64,7 @@ export default function DocumentsPanel({ matter, onChange, selectedDocumentId, d
     try { await onChange(); } catch (cause) { failures.push(messageOf(cause)); }
     if (!mounted.current) return;
     if (uploaded.length) {
-      if (window.location.hash === uploadLocation) selectDocument(uploaded[uploaded.length - 1].id);
+      if (navigation.current === uploadNavigation && window.location.hash === uploadLocation) selectDocument(uploaded[uploaded.length - 1].id);
       setMessage(`${uploaded.length} belge yüklendi. Çıkarılan metni ve uyarıları inceleyin.`);
     }
     if (failures.length) setError(failures.join(' · '));
