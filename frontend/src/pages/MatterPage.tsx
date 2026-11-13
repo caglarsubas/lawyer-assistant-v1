@@ -20,8 +20,8 @@ export default function MatterPage({ matterId, demo, userRole, permissions, tab:
   useEffect(() => { reload().catch((cause) => setError(messageOf(cause))).finally(() => setLoading(false)); }, [reload]);
   if (loading) return <Loading label="Çalışma alanı açılıyor…" />;
   if (!matter) return <Notice error>{error || 'Çalışma alanı bulunamadı.'} <a href="#/matters" className="text-link">Çalışma alanlarına dön</a></Notice>;
-  const tabs = [{ id: 'workflow', label: 'İş takibi' }, { id: 'overview', label: 'Genel bakış' }, { id: 'documents', label: 'Dosyalar', count: matter.documents?.length || 0 }, { id: 'facts', label: 'Olgular', count: matter.facts?.length || 0 }, { id: 'practice', label: 'Çalışma notları' }, { id: 'research', label: 'Araştırma', count: matter.products?.length || 0 }, { id: 'comments', label: 'Yorumlar' }];
-  return <>
+  const tabs = [{ id: 'workflow', label: 'İş takibi' }, { id: 'overview', label: 'Genel bakış' }, { id: 'documents', label: 'Dosyalar', count: matter.documents?.length || 0 }, { id: 'facts', label: 'Olgular', count: matter.facts?.length || 0 }, { id: 'practice', label: 'Analiz ve notlar' }, { id: 'research', label: 'Araştırma', count: matter.products?.length || 0 }, { id: 'comments', label: 'Yorumlar' }];
+  return <div className={tab === 'practice' ? 'matter-page-compact' : undefined}>
     <a href="#/matters" className="back-link"><Icon name="arrow" size={16} />Tüm çalışma alanları</a>
     <PageHeader eyebrow={DOMAIN_LABELS[matter.domain] || matter.domain} title={matter.title} action={<Badge status={matter.status} />} />
     <div className="matter-context"><span><Icon name="clock" size={15} />{formatDate(matter.created_at)}</span>{matter.stage && <span>{matter.stage}</span>}{matter.relevant_date && <span>İlgili tarih: {formatDate(matter.relevant_date)}</span>}</div>
@@ -33,5 +33,5 @@ export default function MatterPage({ matterId, demo, userRole, permissions, tab:
     {tab === 'facts' && <FactsPanel matter={matter} onChange={reload} />}
     {tab === 'practice' && <PracticePanel matter={matter} onChange={reload} userRole={userRole} permissions={permissions} />}
     {tab === 'research' && <ResearchPanel matter={matter} onChange={reload} demo={demo} />}
-  </>;
+  </div>;
 }

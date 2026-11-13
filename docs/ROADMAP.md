@@ -4,6 +4,44 @@ Baseline: 4 October 2026; research reconciliation: **5 October 2026**. Original 
 
 This is the canonical delivery plan. [Data and knowledge strategy](DATA_KNOWLEDGE_STRATEGY.md) specifies source families, refresh targets and retrieval requirements. [Research reconciliation](PLAN_RECONCILIATION_2026-10-05.md) records adopted proposals and unresolved claims. The same-day user amendment is specified in [legal analysis and sanitized BYOK deep research](LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md). Those research revisions changed planning only. Subsequent implementation progress is recorded below: R01 offline contracts, evidence verification and extraction comparison are delivered; source approvals, legal review and provider activation are not granted by that work.
 
+## Analysis reading and review usability — 13 November 2026
+
+The pilot walkthrough exposed an everyday usability gap. Saved analyses were
+hidden below nested disclosures, and review actions competed with advanced
+model and source experiments. The work area now opens the analysis collection
+directly, with an explicit saved-draft selector and five sections for summary,
+documents, review, history and tools. The summary leads with the recorded
+conclusion, uncertainties and next step. Original text and exact source versions
+remain accessible from the full analysis and document sections.
+
+The review form opens when its section is selected. It shows progress across
+the existing five criteria and identifies missing inputs beside the save action.
+Unsubmitted review text survives section and analysis selection changes within
+the loaded collection. A refreshed version/context remounts the form. Submission
+continues to bind the exact version, content digest, prior review and request
+identifier. Existing freshness and acceptance rules govern the saved decision.
+Model tools load when their section is first opened. Shared notes and comparison
+groups have their own disclosures below the analysis workspace. Local fonts,
+keyboard section navigation and narrow-panel layouts support reading.
+
+This work contributes to R03-17 pilot usability and the lawyer-facing review workflow.
+Browser checks cover draft selection, source-section access, empty review guards,
+keyboard navigation and unsaved-text retention. Local frontend qualification
+passes 10,536 tests in 139 files with two workers. The build also passes.
+Protected PR checks, independent main CI and installed-browser verification
+are recorded separately in the live tracker. Product readiness remains
+42 done, 21 open, 24 waiting and 6 deferred. Owner review and representative
+legal-corpus acceptance remain pending.
+
+The first UI qualification run passed all tests but left only four seconds
+of the backend job's 19-minute cap, below the required 30-second reserve.
+The cause was cumulative serial work before the unchanged backend suite.
+The complete local-model trial phase now runs after the frontend-history pair
+has exited; the complete reader lifecycle slice 6 runs after the final-authorization
+pair exits. Commands, test identities, all 13 jobs, two-worker ceilings,
+phase/job deadlines and reserve floors stay unchanged. Both receiving jobs
+must qualify again; timing estimates do not establish successful CI.
+
 ## Document workflow repairs — 13 November 2026
 
 F00-04 now has source fixes for both defects found by the delivery audit. The

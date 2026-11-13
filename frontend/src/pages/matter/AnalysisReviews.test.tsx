@@ -46,6 +46,9 @@ describe('version-bound human review', () => {
     expect(html).not.toContain('value="confirmed" selected');
     expect(html).not.toContain('value="reviewed_conditional" selected');
     expect(html).toMatch(/type="submit" disabled=""/);
+    expect(html).toContain('aria-label="Değerlendirilen başlıklar" max="5" value="0"');
+    expect(html).toContain('Kararınızın genel gerekçesini yazın.');
+    expect(html).toContain('En az bir başlık için değerlendirmenizi seçin.');
     const rationale = html.match(/<textarea[^>]*aria-describedby="([^"]+)"[^>]*>(.*?)<\/textarea>/);
     expect(rationale).not.toBeNull();
     expect(rationale![2]).toBe('');

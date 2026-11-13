@@ -6,7 +6,7 @@ import { formatDate, messageOf } from '../utils';
 import { safeAppHref, usePortfolio } from './portfolio';
 
 const MODE_LABELS: Record<AssistantMode, string> = { guide: 'Kullanım rehberi', chat: 'Asistana sor', daily: 'Günlük özet', weekly: 'Haftalık özet', monthly: 'Aylık özet' };
-const SECTION_LABELS: Record<string, string> = { overview: 'Genel bakış', documents: 'Dosyalar', facts: 'Olgular', practice: 'Çalışma notları', research: 'Araştırma', comments: 'Yorumlar', workflow: 'İş ve görüş takibi', 'source-review': 'Tam kaynak bağlamı · kullanım rehberi' };
+const SECTION_LABELS: Record<string, string> = { overview: 'Genel bakış', documents: 'Dosyalar', facts: 'Olgular', practice: 'Analiz ve notlar', research: 'Araştırma', comments: 'Yorumlar', workflow: 'İş ve görüş takibi', 'source-review': 'Tam kaynak bağlamı · kullanım rehberi' };
 interface Entry { id: number; question: string; response: AssistantResponse; contextLabel: string; revision: number }
 export default function AssistantPanel({ workspaceId, page, section }: { workspaceId: string | null; page: string; section: string }) {
   const { filters, workspaces, customers, revision } = usePortfolio();

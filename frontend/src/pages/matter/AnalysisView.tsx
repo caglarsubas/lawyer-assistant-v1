@@ -1,9 +1,9 @@
 import { sourceBindingReason } from './lineageTypes';
-import { Badge, Detail, Notice } from '../../components';
+import { Badge, Detail, Icon, Notice } from '../../components';
 import { FACT_LABELS, locatorText } from '../../utils';
 import AuthorityProposalSummary from './AuthorityProposalSummary';
 import { FeedbackSummary } from './AnalysisFeedback';
-import { ANALYSIS_LABELS, type AnalysisChecks, type AnalysisContent, type AnalysisFreshness, type AnalysisReviewProjection } from './analysisTypes';
+import { ANALYSIS_LABELS, type AnalysisChecks, type AnalysisContent, type AnalysisRecord, type AnalysisFreshness, type AnalysisReviewProjection } from './analysisTypes';
 
 export function AnalysisCheckPanel({ checks, freshness, review }: { checks: AnalysisChecks; freshness?: AnalysisFreshness; review?: AnalysisReviewProjection }) {
   const changesRequested = review?.latest?.decision === 'changes_requested';
@@ -19,7 +19,7 @@ export function AnalysisCheckPanel({ checks, freshness, review }: { checks: Anal
   </div>;
 }
 
-export function AnalysisContentView({ content, freshness, review, onSource, proposed = false }: { content: AnalysisContent; freshness?: AnalysisFreshness; review?: AnalysisReviewProjection; onSource: (id: string) => void; proposed?: boolean }) {
+export function AnalysisContentView({ content, freshness, review, onSource, proposed = false, includeEvidence = true }: { content: AnalysisContent; freshness?: AnalysisFreshness; review?: AnalysisReviewProjection; onSource: (id: string) => void; proposed?: boolean; includeEvidence?: boolean }) {
   const facts = new Map(content.fact_snapshots.map((fact) => [fact.id, fact]));
   return <>
     <p className="authored-text"><strong>Mesele:</strong> {content.issue}</p>
@@ -36,7 +36,7 @@ export function AnalysisContentView({ content, freshness, review, onSource, prop
     {content.ai_assistance?.review_feedback && <FeedbackSummary feedback={content.ai_assistance.review_feedback} responses={content.ai_assistance.feedback_responses} pass={content.ai_assistance.feedback_response_pass} onSource={onSource} />}
     {!!content.authority_revalidations?.length && <Detail title={`Saklanan kaynak bağı yenilemeleri (${content.authority_revalidations.length})`}><p className="small muted">Bu kayıtlar özgün katkıların yerine geçmez. Güncel gözlemleri yeniden inceleme araçlarından açın; hukuki onay verilmez.</p>{content.authority_revalidations.map(item => <p key={item.id} className="reference-id">{item.id} · SHA-256: {item.sha256}</p>)}</Detail>}
     <AnalysisCheckPanel checks={content.checks} freshness={freshness} review={review} />
-    <Detail title="Öncül → kural → uygulama → alternatif → geçici sonuç">
+    <Detail title="Öncül → kural → uygulama → alternatif → geçici sonuç" open={includeEvidence ? undefined : true}>
       <p className="small muted">{proposed ? 'Modelin onaylanmamış düzenleme önerisi.' : content.authorship === 'user_with_ai_assistance' ? 'Model önerisinden uyarlanmış avukat taslağı.' : 'Avukat tarafından yazılmış gerekçe.'} Otomatik hukuki sonuç veya modelin düşünce kaydı değildir.</p>
       <p><strong>Süreç:</strong> {content.posture || 'Belirtilmedi'} · <strong>Olay tarihi:</strong> {content.event_date || 'Bilinmiyor'}</p>
       <h4>Öncüller</h4>{content.premises.map((item) => { const fact = facts.get(item.fact_id || ''); return <div key={item.id}><p className="authored-text"><strong>{item.id} · {fact ? FACT_LABELS[fact.status as keyof typeof FACT_LABELS] || fact.status : ANALYSIS_LABELS[item.kind]}:</strong> {fact?.text || item.text}</p>{fact?.evidence_id && <button className="source-link" onClick={() => onSource(fact.evidence_id!)}>Öncülün özgün dayanağı</button>}</div>; })}
@@ -46,11 +46,39 @@ export function AnalysisContentView({ content, freshness, review, onSource, prop
       <h4>{proposed ? 'Modelin geçici sonuç önerisi' : 'Avukatın geçici sonuç metni'}</h4><p className="authored-text">{content.conclusion.text}</p><p className="small muted">Talep edilen değerlendirme: {ANALYSIS_LABELS[content.conclusion.requested_disposition]}. Kontrol sonucu yukarıda ayrıca gösterilir.</p><p className="reference-id">Uygulamalar: {content.conclusion.application_ids.join(', ') || 'Bağlanmadı'} · Alternatifler: {content.conclusion.alternative_ids.join(', ') || 'Bağlanmadı'}</p>
       <ul>{content.conclusion.uncertainty.map((item, index) => <li key={index}>{item}</li>)}</ul><p><strong>Sonraki adım:</strong> {content.conclusion.next_step}</p>
     </Detail>
-    <Detail title={`Özgün belge alıntıları (${content.evidence.length})`}>
-      <p className="small muted">Unicode aralıkları sıfırdan başlar; son konum dahil değildir. Bir pasaj bağlamak, yazdığınız yorumun o pasajdan çıktığını kanıtlamaz.</p>
-      <p className="small muted">Alıntılar saklanan sürümdendir. Kaynak düğmesi belgenin güncel görünümünü açar; değişmişse saklanan metinle karşılaştırın.</p>
-      {content.evidence.map((item) => <div key={item.evidence_id}><button className="source-link" onClick={() => onSource(item.evidence_id)}>{item.name} · {locatorText(item.locator)} · Özgün pasajı aç</button><p className="small muted">[{item.start}, {item.end}) / {item.full_passage_length}</p><p className="authored-text">{item.text}</p></div>)}
-    </Detail>
+    {includeEvidence && <Detail title={`Özgün belge alıntıları (${content.evidence.length})`}><AnalysisEvidence content={content} onSource={onSource} /></Detail>}
     {content.revision_comparison.previous_version_id && <Detail title="Önceki sürüme göre değişiklikler"><p>Değişen bölümler: {content.revision_comparison.changed_sections.join(', ') || 'Yok'} · Değişen dayanak grupları: {content.revision_comparison.changed_dependency_groups.join(', ') || 'Yok'}</p><p>{content.revision_comparison.checks_no_longer_triggered.length} kontrol artık tetiklenmiyor; {content.revision_comparison.new_check_ids.length} yeni kontrol.</p><p className="small muted">Bu karşılaştırma, bir hukuki kusurun düzeltildiğini veya kaldırılan bir adımın gereksiz olduğunu doğrulamaz.</p></Detail>}
   </>;
+}
+
+export function AnalysisEvidence({ content, onSource }: { content: AnalysisContent; onSource: (id: string) => void }) {
+  return <div className="analysis-evidence">
+    <p className="small muted">Alıntılar analiz kaydedilirken seçilen belge sürümüne aittir. Özgün pasajı açtığınızda belgenin güncel görünümüyle karşılaştırabilirsiniz.</p>
+    {!content.evidence.length && <p className="practice-empty">Bu analize henüz belge alıntısı bağlanmamış.</p>}
+    {content.evidence.map((item) => <article className="analysis-source" key={item.evidence_id}>
+      <div className="analysis-source-heading"><Icon name="file" size={20} /><div><h4>{item.name}</h4><p className="small muted">{locatorText(item.locator)} · Belge sürümü {item.document_revision}</p></div>
+        <button type="button" className="button secondary" onClick={() => onSource(item.evidence_id)}>Özgün pasajı aç</button>
+      </div>
+      <Detail title="Kaydedilmiş alıntıyı oku"><blockquote className="authored-text">{item.text}</blockquote></Detail>
+      <Detail title="Sürüm ve alıntı bilgileri"><p className="small muted">Unicode aralığı [{item.start}, {item.end}) / {item.full_passage_length}. Son konum dahil değildir.</p>
+        <p className="reference-id">Belge SHA-256 · {item.document_sha256 || 'Kaydedilmedi'}</p>
+        <p className="reference-id">Pasaj SHA-256 · {item.passage_sha256}</p>
+        <p className="reference-id">Alıntı SHA-256 · {item.quote_sha256}</p>
+      </Detail>
+    </article>)}
+  </div>;
+}
+
+export function AnalysisOverview({ record, onSource, onReview }: { record: AnalysisRecord; onSource: (id: string) => void; onReview: () => void }) {
+  return <div className="analysis-overview">
+    <section className="analysis-conclusion" aria-label="Taslağın özeti">
+      <h4>Geçici değerlendirme</h4>
+      <p className="authored-text">{record.conclusion.text || 'Bu taslakta henüz bir sonuç metni yok.'}</p>
+    </section>
+    {record.focus_lineage && <p className="analysis-scope">{record.focus_lineage.limitation}</p>}
+    {!!record.conclusion.uncertainty.length && <section className="analysis-questions"><h4>Netleştirilmesi gerekenler</h4><ul>{record.conclusion.uncertainty.map((item, index) => <li key={index}>{item}</li>)}</ul></section>}
+    {record.conclusion.next_step && <section className="analysis-next"><h4>Taslaktaki sonraki adım</h4><p className="authored-text">{record.conclusion.next_step}</p></section>}
+    <div className="analysis-review-action"><p>Değerlendirmenizi bu sürüme kaydedin. Düzeltme istediğiniz noktaları ayrıca belirtebilirsiniz.</p><button type="button" className="button primary" onClick={onReview}>İncelemeye geç <Icon name="arrow" size={16} /></button></div>
+    <Detail title="Analizin tamamını oku"><AnalysisContentView content={record} freshness={record.freshness} review={record.review} onSource={onSource} includeEvidence={false} /></Detail>
+  </div>;
 }

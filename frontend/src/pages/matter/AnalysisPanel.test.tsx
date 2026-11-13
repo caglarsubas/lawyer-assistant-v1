@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { AnalysisCheckPanel, AnalysisContentView } from './AnalysisView';
+import { AnalysisCheckPanel, AnalysisContentView, AnalysisOverview, AnalysisEvidence } from './AnalysisView';
+import { AnalysisWorkspace } from './AnalysisPanel';
 import { AnalysisEditor } from './AnalysisEditor';
-import { analysisForm, type AnalysisContent } from './analysisTypes';
+import { analysisForm, type AnalysisContent, type AnalysisRecord } from './analysisTypes';
 import type { Matter } from '../../types';
 
 function fixture(): AnalysisContent {
@@ -72,5 +73,54 @@ describe('private rationale review', () => {
     const html = renderToStaticMarkup(<AnalysisEditor matter={matter} onCancel={() => {}} onSave={async () => {}} />);
     for (const text of ['Yapıyı kontrol et', 'Analiz taslağını kaydet', 'Öncüller (0/20)', 'Kural veya sözleşme maddesi adayları (0/12)']) expect(html).toContain(text);
     expect(html).not.toContain('value="Teslim');
+  });
+});
+
+
+describe('lawyer analysis workspace', () => {
+  function record(): AnalysisRecord {
+    return { ...fixture(), id: 'a1', version: 3, latest_version_id: 'v3', revision: 3, created_at: '2026-11-13', freshness: { status: 'current', reasons: [], scope: 'selected_private_dependencies_only' } };
+  }
+  const matter: Matter = { id: 'm1', title: 'SYNTHETIC', domain: 'contracts', objective: '', represented_party: '', stage: 'Hazırlık', status: 'draft', document_count: 0, created_at: '' };
+  it('leads with the saved conclusion and uncertainties without rewriting its evidence or claiming a review', () => {
+    const data = record(); const before = JSON.stringify(data);
+    const html = renderToStaticMarkup(<AnalysisOverview record={data} onSource={() => {}} onReview={() => {}} />);
+    expect(html.indexOf(data.conclusion.text)).toBeLessThan(html.indexOf('Analizin tamamını oku'));
+    expect(html.indexOf(data.conclusion.uncertainty[0])).toBeLessThan(html.indexOf('Analizin tamamını oku'));
+    expect(html).toContain('İncelemeye geç');
+    expect(html).not.toContain('Koşullu olarak incelendi');
+    expect(JSON.stringify(data)).toBe(before);
+  });
+  it('keeps five keyboard-addressable sections and defers review context and model tools until opened', () => {
+    const html = renderToStaticMarkup(<AnalysisWorkspace matter={matter} record={record()} onSource={() => {}} onEdit={() => {}} onRefresh={async () => {}} onFailure={() => {}} />);
+    expect(html.match(/role="tab"/g)).toHaveLength(5);
+    expect(html.match(/role="tabpanel"/g)).toHaveLength(5);
+    expect(html).toContain('aria-selected="true"');
+    expect(html.match(/role="tabpanel"[^>]*hidden=""/g)).toHaveLength(4);
+    expect(html).toContain('İncelemeniz bekleniyor');
+    expect(html).toContain('Sürüm 3');
+    expect(html).not.toContain('İnceleme kararının gerekçesi');
+    expect(html).not.toContain('Yerel modelden düzenleme önerisi');
+  });
+  it('keeps stale and change-requested drafts withheld even if a prior structural result was conditional', () => {
+    const data = record(); data.checks.effective_disposition = 'conditional';
+    data.freshness.status = 'stale';
+    const html = renderToStaticMarkup(<AnalysisWorkspace matter={matter} record={data} onSource={() => {}} onEdit={() => {}} onRefresh={async () => {}} onFailure={() => {}} />);
+    expect(html).toContain('Yeniden inceleme gerekli');
+    expect(html).toContain('Sonuç bekletiliyor');
+    expect(html).not.toContain('Koşullu olarak incelendi');
+    expect(data.checks.effective_disposition).toBe('conditional');
+  });
+  it('retains the exact saved quotation, revision and provenance in the document section', () => {
+    const data = fixture(); const before = JSON.stringify(data);
+    const html = renderToStaticMarkup(<AnalysisEvidence content={data} onSource={() => {}} />);
+    expect(html).toContain('Belge sürümü 1');
+    expect(html).toContain('[2, 60)');
+    expect(html).toContain('b'.repeat(64));
+    expect(html).toContain('c'.repeat(64));
+    expect(html).toContain('&lt;img');
+    expect(html).not.toContain('<img src');
+    expect(html).not.toContain('<details open');
+    expect(JSON.stringify(data)).toBe(before);
   });
 });
