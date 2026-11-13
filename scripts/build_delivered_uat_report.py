@@ -4,15 +4,44 @@
 import argparse
 import html
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def render(audit, catalog):
+def followup_summary(followup, baseline):
+    if followup is None:
+        return ""
+    cases = followup["cases"]
+    api = [case for case in cases if case["id"].startswith("tests.uat.test_delivered_workflows::test_buat_")]
+    browser = [case for case in cases if case["id"].startswith("test::")]
+    if (followup.get("audit_baseline") != baseline or not re.fullmatch(r"[0-9a-f]{40}", followup["source_commit"])
+            or not followup["selected_checks_passed"] or followup["source_worktree_dirty"]
+            or not followup["inventory"]["api_complete"] or not followup["inventory"]["browser_complete"]
+            or len(api) != 8 or len(browser) != 10 or len({case["id"] for case in cases}) != len(cases)
+            or any(case["result"] != "pass" for case in cases)
+            or followup["counts"] != {"pass": len(cases), "fail": 0, "known_failure": 0, "not_passed": 0}
+            or followup["production_uat"] != "not_qualified" or followup["human_legal_review"] != "not_granted"):
+        raise ValueError("Invalid repair follow-up; cannot present acceptance as passed")
+    source = followup["source_commit"]
+    return f'''<section class="notice" id="repair-followup"><h2>Document repair follow-up · 18/18 selected journeys pass</h2>
+<p>The two initial UAT defects are fixed in source at <code>{source[:12]}</code>.
+All 8 disposable API and 10 fixture-backed Chromium journeys pass (100%, previously 16/18 or 88.9%);
+{len(cases) - 18} audit-tool checks also pass. Upload selection follows the exact file URL through refresh and history,
+and a late upload cannot replace newer navigation. Failed original reads return controlled conflicts without
+changing original bytes, evidence versions or review records.</p>
+<p>These are source-level and synthetic results. Installed-stack qualification, scanner/relay recovery and owner review
+remain pending. The initial audit distributions and findings below are retained as historical evidence.</p>
+<p><a href="https://github.com/caglarsubas/lawyer-assistant-v1/tree/{source}">Tested source</a> ·
+<a href="https://github.com/caglarsubas/lawyer-assistant-v1/blob/main/docs/quality/document-repair-results.json">Complete follow-up receipt</a></p></section>'''
+
+
+def render(audit, catalog, followup=None):
     if audit["reviewed_source"] != catalog["reviewed_source"]:
         raise ValueError("Audit and catalog sources differ")
     esc = html.escape
+    latest = followup_summary(followup, audit["reviewed_source"])
     def distribution(title, values):
         total = sum(values.values())
         bars = ''.join(f'<div class="bar {esc(k)}" style="flex-grow:{v}" title="{esc(k)} {v}"></div>'
@@ -20,7 +49,7 @@ def render(audit, catalog):
         rows = ''.join(f'<li><span>{esc(k.replace("_", " "))}</span><b>{v}</b><span>{v / total:.1%}</span></li>'
                        for k, v in values.items())
         return f'<article class="metric"><h2>{esc(title)}</h2><div class="stack">{bars}</div><ul>{rows}</ul></article>'
-    charts = distribution("Selected synthetic journeys", {"passed": audit["journeys"]["passed"],
+    charts = distribution("Initial audit synthetic journeys", {"passed": audit["journeys"]["passed"],
                           "known_failure": audit["journeys"]["known_failures"]})
     charts += distribution("Product checklist · 93 items", audit["counts"]["checklist"])
     charts += distribution("Milestone readiness · 14", audit["counts"]["milestones"])
@@ -48,7 +77,7 @@ def render(audit, catalog):
 <h1>What has shipped, what works, and what still blocks acceptance</h1>
 <p>Reviewed by three GPT‑6.1‑sol agents at xhigh effort. Audit baseline <code>{base[:12]}</code>; this is a historical, source-bound assessment.</p>
 <div class="notice"><strong>{esc(audit['verdict'])}</strong><p>The selected tests use synthetic cases. No client originals, private case records or review decisions were changed. Neither green CI nor an engineering completion grants legal or production approval.</p></div>
-{charts}<p class="muted">The three distributions have different denominators. They are not interchangeable completion percentages. Engineering baseline: 295 merged PRs, 0 open PRs, 0 labelled blocked PRs.</p>
+{latest}{charts}<p class="muted">The three distributions have different denominators. They are not interchangeable completion percentages. Engineering baseline: 295 merged PRs, 0 open PRs, 0 labelled blocked PRs.</p>
 <nav><a href="/">Current roadmap</a><a href="#findings">Findings</a><a href="#sequence">Next delivery sequence</a><a href="#coverage">All 93 checklist mappings</a><a href="https://github.com/caglarsubas/lawyer-assistant-v1/tree/main/docs/quality">Reports and executable checks</a></nav>
 <label for="filter">Filter findings and checklist by ID, status, domain or source file</label><input id="filter" type="search" placeholder="For example: F00, waiting, evidence, review"><p id="count" aria-live="polite"></p>
 <section id="findings"><h2>Observed defects, blockers and planning gaps</h2>{findings}</section>
@@ -67,7 +96,9 @@ def main():
     args = parser.parse_args()
     audit = json.loads((ROOT / "docs/quality/delivered-audit.json").read_text())
     catalog = json.loads((ROOT / "docs/quality/roadmap-sanity-catalog.json").read_text())
-    args.output.write_text(render(audit, catalog))
+    followup_path = ROOT / "docs/quality/document-repair-results.json"
+    followup = json.loads(followup_path.read_text()) if followup_path.exists() else None
+    args.output.write_text(render(audit, catalog, followup))
     print(json.dumps({"output": str(args.output), "checklist_items": len(catalog["items"]),
                       "findings": len(audit["findings"]), "reviewed_source": audit["reviewed_source"]}))
 

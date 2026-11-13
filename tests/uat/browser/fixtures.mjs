@@ -17,6 +17,7 @@ export const customers = [
 const timestamp = '2026-10-21T12:00:00Z';
 export const filename = 'uat-sentetik-dayanak.txt';
 export const uploadedFilename = 'uat-yeni-belge.txt';
+export const uploadedOriginal = 'UAT sentetik dosya';
 export const original = 'UAT özgün belge içeriği.';
 export const extracted = 'UAT çıkarılan pasaj.';
 
@@ -173,7 +174,7 @@ export async function fixture(context, origin, { signedIn = true } = {}) {
   const state = {
     signedIn, blocked: false, activePassword: password, calls: [], unexpected: [],
     workspaces: structuredClone(workspaces), review: null, lateGuide: null,
-    lateQueue: null, mismatchedQueue: false,
+    lateQueue: null, mismatchedQueue: false, lateUpload: null, uploadResponses: 0, uploadCount: 0,
   };
 
   function respond(call, route) {
@@ -215,17 +216,22 @@ export async function fixture(context, origin, { signedIn = true } = {}) {
     if (method === 'POST' && path === '/matters/' + alpha.id + '/documents') {
       assert.match(route.request().headers()['content-type'], /^multipart\/form-data; boundary=/);
       assert.ok(route.request().postData().includes(uploadedFilename));
-      const uploaded = document('uat-uploaded', uploadedFilename, 'UAT yeni çıkarılan pasaj.');
+      assert.ok(route.request().postData().includes(uploadedOriginal));
+      state.uploadCount++;
+      const id = state.uploadCount === 1 ? 'uat-uploaded' : 'uat-uploaded-' + state.uploadCount;
+      const uploaded = document(id, uploadedFilename, 'UAT yeni çıkarılan pasaj.');
       state.workspaces[0].documents.push(uploaded);
       state.workspaces[0].document_count++;
-      return json(uploaded, 201);
+      const reply = () => json(uploaded, 201).then(() => { state.uploadResponses++; });
+      return state.lateUpload ? state.lateUpload.then(reply) : reply();
     }
     const fileRoute = /^\/matters\/([^/]+)\/documents\/([^/]+)(\/original)?$/.exec(path);
     if (method === 'GET' && fileRoute) {
       const [, matterId, documentId, suffix] = fileRoute;
       const found = state.workspaces.find(item => item.id === matterId)?.documents.find(item => item.id === documentId);
       if (!found) return json({ detail: 'UAT: Belge bulunamadı.' }, 404);
-      return suffix ? route.fulfill({ contentType: 'text/plain; charset=utf-8', body: original }) : json(found);
+      return suffix ? route.fulfill({ contentType: 'text/plain; charset=utf-8',
+        body: documentId.startsWith('uat-uploaded') ? uploadedOriginal : original }) : json(found);
     }
     if (method === 'POST' && path === '/assistant/respond') {
       const reply = () => json({

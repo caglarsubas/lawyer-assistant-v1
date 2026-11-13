@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Literal
 
 import httpx
+from cryptography.fernet import InvalidToken
 from fastapi import Depends, FastAPI, File, HTTPException, Request, Response, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -680,9 +681,14 @@ def create_app(settings=None):
                 raise HTTPException(404, "Bu örnek için özgün dosya yok")
             # Paths are generated from document IDs, never supplied by documents or users.
             path = settings.data_dir / "documents" / (record.id + ".enc")
-            if not path.is_file():
-                raise HTTPException(409, "Özgün kaynak kullanılamıyor")
-            content = store.cipher.decrypt(path.read_bytes())
+            try:
+                encrypted = path.read_bytes()
+            except OSError:
+                raise HTTPException(409, "Özgün kaynak kullanılamıyor") from None
+            try:
+                content = store.cipher.decrypt(encrypted)
+            except InvalidToken:
+                raise HTTPException(409, "Özgün kaynak bütünlüğü doğrulanamadı") from None
             if digest(content) != data["sha256"]:
                 raise HTTPException(409, "Özgün kaynak bütünlüğü doğrulanamadı")
             audit(session, user, "original_exported", record.id, matter_id)

@@ -8,7 +8,10 @@ import { formatDate, locatorText, messageOf, slugId } from '../../utils';
 const OriginalPreview = lazy(() => import('./OriginalPreview'));
 
 export default function DocumentsPanel({ matter, onChange, selectedDocumentId, demo = false }: { matter: Matter; onChange: () => Promise<void>; selectedDocumentId?: string | null; demo?: boolean }) {
-  const [selectedId, setSelectedId] = useState<string | null>(matter.documents?.[0]?.id || null);
+  // The route owns selection; refreshing the list must not restore an older file.
+  const selectedId = selectedDocumentId || matter.documents?.[0]?.id || null;
+  const mounted = useRef(true);
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [message, setMessage] = useState(''); const [dragging, setDragging] = useState(false);
   const input = useRef<HTMLInputElement>(null);
   const readinessId = useId();
@@ -33,16 +36,29 @@ export default function DocumentsPanel({ matter, onChange, selectedDocumentId, d
     void checkIntake(controller.signal);
     return () => controller.abort();
   }, [demo, checkIntake]);
-  useEffect(() => { if (selectedDocumentId && matter.documents?.some(document => document.id === selectedDocumentId)) setSelectedId(selectedDocumentId); }, [selectedDocumentId, matter.documents]);
+  function selectDocument(documentId: string) {
+    const [path, query = ''] = window.location.hash.slice(1).split('?');
+    if (!mounted.current || !['matters', 'workspaces'].some(prefix => path === `/${prefix}/${encodeURIComponent(matter.id)}`)) return;
+    const params = new URLSearchParams(query);
+    if (params.get('tab') !== 'documents') return;
+    params.set('document', documentId);
+    window.location.hash = `${path}?${params}`;
+  }
   async function upload(files: FileList | File[] | null) {
     if (!files?.length || busy || !canUpload) return;
+    const uploadLocation = window.location.hash;
     setBusy(true); setError(''); setMessage(''); const uploaded: DocumentRecord[] = []; const failures: string[] = [];
     for (const file of Array.from(files)) {
       try { const body = new FormData(); body.append('file', file); uploaded.push(await request<DocumentRecord>(`/matters/${encodeURIComponent(matter.id)}/documents`, { method: 'POST', body })); }
       catch (cause) { failures.push(`${file.name}: ${messageOf(cause)}`); }
     }
+    if (!mounted.current) return;
     try { await onChange(); } catch (cause) { failures.push(messageOf(cause)); }
-    if (uploaded.length) { setSelectedId(uploaded[uploaded.length - 1].id); setMessage(`${uploaded.length} belge yüklendi. Çıkarılan metni ve uyarıları inceleyin.`); }
+    if (!mounted.current) return;
+    if (uploaded.length) {
+      if (window.location.hash === uploadLocation) selectDocument(uploaded[uploaded.length - 1].id);
+      setMessage(`${uploaded.length} belge yüklendi. Çıkarılan metni ve uyarıları inceleyin.`);
+    }
     if (failures.length) setError(failures.join(' · '));
     setBusy(false); if (input.current) input.current.value = '';
   }
@@ -61,7 +77,7 @@ export default function DocumentsPanel({ matter, onChange, selectedDocumentId, d
     </div>
     {error && <Notice error>{error}</Notice>}{message && <Notice>{message}</Notice>}
     <div className={`upload-zone ${dragging ? 'dragging' : ''} ${busy || !canUpload ? 'busy' : ''}`} aria-disabled={busy || !canUpload} onDragOver={(event) => { event.preventDefault(); if (canUpload && !busy) setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={(event) => { event.preventDefault(); setDragging(false); void upload(event.dataTransfer.files); }}><Icon name="upload" size={22} /><div><button className="text-button" disabled={busy || !canUpload} aria-describedby={readinessId} onClick={() => input.current?.click()}>{busy ? 'Belgeler yükleniyor…' : 'Dosya seçin veya buraya bırakın'}</button><p>PDF, Office, OpenDocument, görsel, e-posta, HTML, RTF, Markdown ve metin. Çıkarım kısmi olabilir; uyarıları kontrol edin. UDF henüz desteklenmiyor.</p></div></div>
-    {!matter.documents?.length ? <Empty title="Henüz bir dayanak eklenmedi.">Belge yükleyerek başlayın. Düşük kalitede veya çıkarılamayan içerikler ayrıca işaretlenir.</Empty> : <div className="document-workspace"><div className="document-list" aria-label="Çalışma alanındaki dosyalar">{matter.documents.map((document) => <button key={document.id} className={`document-item ${selectedId === document.id ? 'selected' : ''}`} onClick={() => setSelectedId(document.id)} aria-pressed={selectedId === document.id}><Icon name="file" size={20} /><span><strong>{document.name}</strong><span className="document-item-meta">{document.page_count ? `${document.page_count} sayfa · ` : ''}{formatDate(document.created_at)}</span><Badge status={document.status} /></span><Icon name="chevron" size={16} /></button>)}</div>{selectedId && <DocumentViewer key={selectedId} matterId={matter.id} documentId={selectedId} />}</div>}
+    {!matter.documents?.length ? <Empty title="Henüz bir dayanak eklenmedi.">Belge yükleyerek başlayın. Düşük kalitede veya çıkarılamayan içerikler ayrıca işaretlenir.</Empty> : <div className="document-workspace"><div className="document-list" aria-label="Çalışma alanındaki dosyalar">{matter.documents.map((document) => <button key={document.id} className={`document-item ${selectedId === document.id ? 'selected' : ''}`} onClick={() => selectDocument(document.id)} aria-pressed={selectedId === document.id}><Icon name="file" size={20} /><span><strong>{document.name}</strong><span className="document-item-meta">{document.page_count ? `${document.page_count} sayfa · ` : ''}{formatDate(document.created_at)}</span><Badge status={document.status} /></span><Icon name="chevron" size={16} /></button>)}</div>{selectedId && <DocumentViewer key={selectedId} matterId={matter.id} documentId={selectedId} />}</div>}
   </section>;
 }
 

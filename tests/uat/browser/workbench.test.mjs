@@ -7,7 +7,7 @@ import { after, before, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import {
   analysisTitle, customers, extracted, filename, fixture, historicalNote, jobs, original, password, rationale,
-  replacement, reviewsPath, session, sourceContextId, uploadedFilename, version1, version2, version2Hash, workspaces,
+  replacement, reviewsPath, session, sourceContextId, uploadedFilename, uploadedOriginal, version1, version2, version2Hash, workspaces,
 } from './fixtures.mjs';
 
 const require = createRequire(import.meta.url);
@@ -190,7 +190,7 @@ async function uploadFile(page) {
   const chooser = page.waitForEvent('filechooser');
   await upload.click();
   await (await chooser).setFiles({
-    name: uploadedFilename, mimeType: 'text/plain', buffer: Buffer.from('UAT sentetik dosya'),
+    name: uploadedFilename, mimeType: 'text/plain', buffer: Buffer.from(uploadedOriginal),
   });
   await expect(page.getByText(/1 belge yüklendi/)).toBeVisible();
 }
@@ -231,13 +231,50 @@ scenario('workspace tree opens the selected file, separates original from extrac
   await expect(page.getByRole('main').getByText(uploadedFilename)).toHaveCount(0);
 });
 
-scenario('upload selects the new file even when opened from a different file’s deep link', async page => {
+scenario('upload selects the new file even when opened from a different file’s deep link', async (page, state) => {
   await openTreeFile(page);
+  await page.evaluate(() => { window.location.hash += '&view_note=unchanged'; });
   await expect(page.getByText(original)).toBeVisible();
   await expect(page.getByRole('button', { name: 'Dosya yükle', exact: true })).toBeEnabled();
   await uploadFile(page);
-  await expect(page.getByRole('heading', { name: uploadedFilename })).toBeVisible({ timeout: 1_500 });
-}, { todo: 'Known regression: refreshing the file list reapplies the previous URL document selection' });
+  await expect(page.getByRole('heading', { name: uploadedFilename })).toBeVisible();
+  await expect(page).toHaveURL(/document=uat-uploaded&view_note=unchanged$/);
+  await expect(page.getByText(uploadedOriginal, { exact: true })).toBeVisible();
+  await expect(page.getByText(original, { exact: true })).toHaveCount(0);
+  await page.reload();
+  await expect(page.getByRole('heading', { name: uploadedFilename })).toBeVisible();
+  const files = page.getByLabel('Çalışma alanındaki dosyalar');
+  await files.getByRole('button', { name: new RegExp(filename) }).click();
+  await expect(page).toHaveURL(/document=uat-document-selected&view_note=unchanged$/);
+  await expect(page.getByText(original, { exact: true })).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole('heading', { name: uploadedFilename })).toBeVisible();
+  await page.goForward();
+  await expect(page.getByRole('heading', { name: filename })).toBeVisible();
+
+  // An invalid exact identifier must not silently substitute the first source.
+  await page.evaluate(() => { window.location.hash = window.location.hash.replace('uat-document-selected', 'uat-missing'); });
+  await expect(page.getByText('UAT: Belge bulunamadı.')).toBeVisible();
+  await expect(page.getByRole('main').getByText(original, { exact: true })).toHaveCount(0);
+  await page.goBack();
+  await expect(page.getByRole('heading', { name: filename })).toBeVisible();
+
+  // Completing an upload cannot redirect a user who has opened another workspace.
+  let release;
+  state.lateUpload = new Promise(resolve => { release = resolve; });
+  await page.getByLabel('Çalışma alanına dosya yükle').setInputFiles({
+    name: uploadedFilename, mimeType: 'text/plain', buffer: Buffer.from(uploadedOriginal),
+  });
+  await expect.poll(() => state.uploadCount).toBe(2);
+  const tree = page.getByRole('region', { name: 'Çalışma alanları ve yüklenen dosyalar' });
+  await tree.getByRole('button', { name: workspaces[1].title + ': dosyaları göster' }).click();
+  await tree.getByRole('link', { name: 'uat-beta-belgesi.txt' }).click();
+  await expect(page.getByRole('heading', { name: 'uat-beta-belgesi.txt' })).toBeVisible();
+  release();
+  await expect.poll(() => state.uploadResponses).toBe(2);
+  await expect(page).toHaveURL(/uat-case-b\?tab=documents&document=uat-document-beta$/);
+  await expect(page.getByRole('heading', { name: 'uat-beta-belgesi.txt' })).toBeVisible();
+});
 
 scenario('work queue combines workspace scope with due bucket and opens the exact work item', async (page, state) => {
   await workQueue(page).click();

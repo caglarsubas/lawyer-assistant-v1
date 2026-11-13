@@ -14,6 +14,7 @@ from fastapi.testclient import TestClient
 from http_test_clients import attach_case_transport, peer_client
 from pypdf import PdfReader
 from reportlab.pdfgen import canvas
+from sqlalchemy import select
 from test_analysis_reviews import review_request
 from test_analysis_suggestions import adopt, finished
 from test_content_scope import assignments, team
@@ -25,7 +26,7 @@ from test_portfolio import customer, workspace
 
 from app.analysis_proposals import proposal_messages
 from app.config import Settings
-from app.db import Record
+from app.db import Audit, Record
 from app.main import create_app
 from app.provider import ProviderError
 
@@ -668,44 +669,77 @@ def test_buat_07_unconfigured_graph_and_intake_fail_closed(uat, monkeypatch):
     assert checked(owner.get(base + "/documents/" + retained["id"] + "/original")).content == SOURCE.encode()
 
 
-class KnownCorruptOriginalFailure(AssertionError):
-    """Precisely matches BAUT-08's verified failure; unexpected outcomes fail."""
+def test_buat_08_corrupt_private_original_returns_controlled_conflict(uat, monkeypatch):
+    from cryptography.fernet import Fernet
 
-
-@pytest.mark.xfail(
-    strict=True, raises=KnownCorruptOriginalFailure,
-    reason="BAUT-08: corrupt encrypted private original returns generic HTTP 500, not controlled 409",
-)
-def test_buat_08_corrupt_private_original_returns_controlled_conflict(uat):
-    from cryptography.fernet import InvalidToken
-
-    app, owner, _ = uat
+    app, owner, actor = uat
+    admin = checked(owner.get(API + "/auth/me")).json()["user"]["id"]
+    reviewer_record = create_employee(owner, "uat-integrity-reviewer")
+    create_employee(owner, "uat-integrity-outsider")
     case = workspace(owner, "UAT encrypted original corruption")
+    other = workspace(owner, "UAT separate integrity case")
+    team(owner, case["id"], [{"user_id": admin}, {"user_id": reviewer_record["id"]}])
+    reviewer, outsider, guest = actor("uat-integrity-reviewer"), actor("uat-integrity-outsider"), actor()
     base = API + "/matters/" + case["id"]
     source, path = document(owner, base, "uat-corruption.txt", SOURCE.encode())
+    fact = checked(owner.post(base + "/facts", json={
+        "text": "UAT kurgu teslim koşulu", "status": "documented", "evidence_id": source["passages"][0]["id"],
+    }), 201).json()
+    draft = checked(owner.post(base + "/analyses", json=analysis_input(source["passages"][0], source, fact)), 201).json()
+    reviews = base + "/analyses/" + draft["id"] + "/reviews"
+    body, _ = review_request(reviewer, reviews, draft, decision="changes_requested")
+    event = checked(reviewer.post(reviews, json=body), 201).json()
+
+    def records():
+        with app.state.store.session() as session:
+            return {record.id: (record.revision, record.payload) for record in session.scalars(select(Record))}
+
+    def exports():
+        with app.state.store.session() as session:
+            return set(session.scalars(select(Audit.id).where(Audit.action == "original_exported")))
+
+    frozen, exported = records(), exports()
     vault_file = app.state.settings.data_dir / "documents" / (source["id"] + ".enc")
     ciphertext = vault_file.read_bytes()
     original = path + "/original"
-    vault_file.unlink()
-    assert checked(owner.get(original), 409).json()["detail"] == "Özgün kaynak kullanılamıyor"
-    vault_file.write_bytes(app.state.store.cipher.encrypt(b"UAT authenticated wrong original"))
-    assert checked(owner.get(original), 409).json()["detail"] == "Özgün kaynak bütünlüğü doğrulanamadı"
-    vault_file.write_bytes(b"!" + ciphertext[1:])
+
+    def conflict(detail):
+        observed = checked(owner.get(original), 409)
+        assert observed.json() == {"detail": detail}
+        assert observed.headers["cache-control"] == "no-store"
+        assert "content-disposition" not in observed.headers
+        assert SOURCE not in observed.text and str(vault_file) not in observed.text
+        assert records() == frozen and exports() == exported
+        assert checked(owner.get(path)).json() == source
+        assert checked(owner.get(reviews, params={"version_id": draft["latest_version_id"]})).json() == [event]
+
     try:
-        # The already running fixture owns lifespan; this client shares only
-        # the ASGI portal and receives the actual serialized HTTP error.
-        wire = TestClient(app, raise_server_exceptions=False)
-        wire.portal = owner.portal
-        try:
-            wire.cookies.update(owner.cookies)
-            observed = wire.get(original)
-        finally:
-            wire.close()
-        if observed.status_code == 500 and observed.text == "Internal Server Error":
-            with pytest.raises(InvalidToken):
-                owner.get(original)
-            raise KnownCorruptOriginalFailure("expected controlled 409; observed generic 500 caused by InvalidToken")
-        assert checked(observed, 409).json()["detail"] == "Özgün kaynak bütünlüğü doğrulanamadı"
-        assert SOURCE not in observed.text
+        vault_file.unlink()
+        conflict("Özgün kaynak kullanılamıyor")
+        assert not vault_file.exists()
+        for damaged in (
+            app.state.store.cipher.encrypt(b"UAT authenticated wrong original"),
+            b"!" + ciphertext[1:], ciphertext[:24], b"", Fernet(Fernet.generate_key()).encrypt(SOURCE.encode()),
+        ):
+            vault_file.write_bytes(damaged)
+            conflict("Özgün kaynak bütünlüğü doğrulanamadı")
+            assert vault_file.read_bytes() == damaged
+            assert guest.get(original).status_code == 401
+            assert outsider.get(original).status_code == 404
+            assert owner.get(original.replace(case["id"], other["id"])).status_code == 404
+        vault_file.write_bytes(ciphertext)
+        read_bytes = type(vault_file).read_bytes
+        for error in (FileNotFoundError, PermissionError):
+            with monkeypatch.context() as patch:
+                def inaccessible(file, error=error):
+                    if file == vault_file:
+                        raise error(str(file))
+                    return read_bytes(file)
+                patch.setattr(type(vault_file), "read_bytes", inaccessible)
+                conflict("Özgün kaynak kullanılamıyor")
+            assert vault_file.read_bytes() == ciphertext
     finally:
         vault_file.write_bytes(ciphertext)
+    assert checked(owner.get(original)).content == SOURCE.encode()
+    assert records() == frozen and len(exports() - exported) == 1
+    assert checked(owner.get(reviews, params={"version_id": draft["latest_version_id"]})).json() == [event]
