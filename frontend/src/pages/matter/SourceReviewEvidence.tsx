@@ -1,16 +1,15 @@
 import { Badge, Detail, Notice } from '../../components';
+import { SourceExcerpt } from '../../SourceExcerpt';
 import { formatDate } from '../../utils';
 import { AUTHORITY_ROLES } from './authorityTypes';
 import { currentView, DIMENSION_LABELS, OUTCOMES, occurrenceKey, type ContextView, type Manifest, type Quote } from './sourceReviewTypes';
 import { SourceRenewalComparison } from './SourceRenewalMapping';
 
 export function SourceQuote({ quote }: { quote: Quote }) {
-  return <><p className="small"><strong>{quote.locator}</strong> · [{quote.start_offset}, {quote.end_offset}) · Unicode karakterleri</p>
-    <p className="source-passage-text">{quote.text}</p>
-    <Detail title="Özgün kaynak ve tam sürüm"><dl className="coverage-fields">{Object.entries({ 'Pasaj': quote.passage_id, 'Belge': quote.document_id,
+  return <SourceExcerpt name="Kaynak alıntısı" location={quote.locator} text={quote.text} metadataTitle="Özgün kaynak ve tam sürüm" metadata={<><p className="small">[{quote.start_offset}, {quote.end_offset}) · Unicode karakterleri</p><dl className="provenance-list">{Object.entries({ 'Pasaj': quote.passage_id, 'Belge': quote.document_id,
       'Metin sürümü': quote.source_version_id, 'Alıntı SHA-256': quote.quote_sha256, 'Kaynak SHA-256': quote.source_sha256,
       'Metin SHA-256': quote.text_sha256, 'Konum haritası SHA-256': quote.locator_map_sha256, 'Yayın sürümü': quote.release_id }).map(([label, value]) =>
-      <div key={label}><dt>{label}</dt><dd className="reference-id">{value}</dd></div>)}</dl></Detail></>;
+      <div key={label}><dt>{label}</dt><dd className="reference-id">{value}</dd></div>)}</dl></>} />;
 }
 export function SourceManifest({ manifest }: { manifest: Manifest }) {
   return <><h4>{manifest.title}</h4><p className="authored-text">{manifest.purpose}</p>

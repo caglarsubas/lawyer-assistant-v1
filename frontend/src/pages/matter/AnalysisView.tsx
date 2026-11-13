@@ -1,6 +1,8 @@
 import { sourceBindingReason } from './lineageTypes';
 import { Badge, Detail, Icon, Notice } from '../../components';
-import { FACT_LABELS, locatorText } from '../../utils';
+import { locatorText } from '../../utils';
+import { SourceExcerpt } from '../../SourceExcerpt';
+import { AnalysisReasoning } from './AnalysisReasoning';
 import AuthorityProposalSummary from './AuthorityProposalSummary';
 import { FeedbackSummary } from './AnalysisFeedback';
 import { ANALYSIS_LABELS, type AnalysisChecks, type AnalysisContent, type AnalysisRecord, type AnalysisFreshness, type AnalysisReviewProjection } from './analysisTypes';
@@ -14,14 +16,13 @@ export function AnalysisCheckPanel({ checks, freshness, review }: { checks: Anal
     {changesRequested && <Notice error>Avukat değişiklik istedi; sonuç değerlendirmesi yeniden incelemeye kadar bekletilir. Yapısal kontrollerin özgün sonucu değiştirilmez.</Notice>}
     <Detail title={`Kontrol ayrıntıları (${checks.defects.length})`}>
       <p className="small muted">Kontroller beyan edilen bağlantıları ve koşulları inceler. Pasajın yorumu, çıkarımın doğruluğu ve hukuki uygulanabilirlik avukat incelemesi gerektirir.</p>
-      <ul>{checks.defects.map((defect) => <li key={defect.id}><strong>{defect.severity === 'critical' ? 'Kritik' : 'İnceleme'} · {defect.target_id}:</strong> {defect.message}</li>)}</ul>
+      <ul className="check-findings">{checks.defects.map((defect) => <li key={defect.id}><span className="check-finding-kind">{defect.severity === 'critical' ? 'Kritik' : 'İnceleme'} · {defect.target_id}</span><p>{defect.message}</p></li>)}</ul>
     </Detail>
   </div>;
 }
 
 export function AnalysisContentView({ content, freshness, review, onSource, proposed = false, includeEvidence = true }: { content: AnalysisContent; freshness?: AnalysisFreshness; review?: AnalysisReviewProjection; onSource: (id: string) => void; proposed?: boolean; includeEvidence?: boolean }) {
-  const facts = new Map(content.fact_snapshots.map((fact) => [fact.id, fact]));
-  return <>
+  return <div className="analysis-content">
     <p className="authored-text"><strong>Mesele:</strong> {content.issue}</p>
     {content.focus_lineage && <Detail title="Odak kapsamı, dışarıda kalanlar ve ana sürüm bağı">
       <p>{content.focus_lineage.limitation}</p><p>{content.focus_lineage.omission_note}</p>
@@ -37,35 +38,21 @@ export function AnalysisContentView({ content, freshness, review, onSource, prop
     {!!content.authority_revalidations?.length && <Detail title={`Saklanan kaynak bağı yenilemeleri (${content.authority_revalidations.length})`}><p className="small muted">Bu kayıtlar özgün katkıların yerine geçmez. Güncel gözlemleri yeniden inceleme araçlarından açın; hukuki onay verilmez.</p>{content.authority_revalidations.map(item => <p key={item.id} className="reference-id">{item.id} · SHA-256: {item.sha256}</p>)}</Detail>}
     <AnalysisCheckPanel checks={content.checks} freshness={freshness} review={review} />
     <Detail title="Öncül → kural → uygulama → alternatif → geçici sonuç" open={includeEvidence ? undefined : true}>
-      <p className="small muted">{proposed ? 'Modelin onaylanmamış düzenleme önerisi.' : content.authorship === 'user_with_ai_assistance' ? 'Model önerisinden uyarlanmış avukat taslağı.' : 'Avukat tarafından yazılmış gerekçe.'} Otomatik hukuki sonuç veya modelin düşünce kaydı değildir.</p>
-      <p><strong>Süreç:</strong> {content.posture || 'Belirtilmedi'} · <strong>Olay tarihi:</strong> {content.event_date || 'Bilinmiyor'}</p>
-      <h4>Öncüller</h4>{content.premises.map((item) => { const fact = facts.get(item.fact_id || ''); return <div key={item.id}><p className="authored-text"><strong>{item.id} · {fact ? FACT_LABELS[fact.status as keyof typeof FACT_LABELS] || fact.status : ANALYSIS_LABELS[item.kind]}:</strong> {fact?.text || item.text}</p>{fact?.evidence_id && <button className="source-link" onClick={() => onSource(fact.evidence_id!)}>Öncülün özgün dayanağı</button>}</div>; })}
-      <h4>Kural adayları ve koşullar</h4>{content.rules.map((rule) => <div key={rule.id}><p className="authored-text"><strong>{rule.id} · {ANALYSIS_LABELS[rule.kind]}:</strong> {rule.text}</p><ul>{rule.conditions.map((item) => <li key={item.id}>{item.id} · {ANALYSIS_LABELS[item.kind]}: {item.text} · Gereken durum: {ANALYSIS_LABELS[item.required_status]}</li>)}</ul><p className="reference-id">Dayanaklar: {rule.evidence_ids.join(', ') || 'Bağlanmadı'}</p></div>)}
-      <h4>Uygulama</h4>{content.applications.map((item) => <div key={item.id}><p className="authored-text"><strong>{item.id} · {item.rule_id} / {item.premise_ids.join(', ') || 'Öncül yok'}:</strong> {item.rationale}</p><ul>{item.assessments.map((assessment) => <li key={assessment.condition_id}>{assessment.condition_id}: {ANALYSIS_LABELS[assessment.status]} · Öncüller: {assessment.premise_ids.join(', ') || 'Bağlanmadı'}</li>)}</ul></div>)}
-      <h4>Alternatifler</h4>{content.alternatives.map((item) => <p className="authored-text" key={item.id}><strong>{item.id} · {ANALYSIS_LABELS[item.kind]}:</strong> {item.text} <span className="reference-id">{item.evidence_ids.join(', ')}</span></p>)}
-      <h4>{proposed ? 'Modelin geçici sonuç önerisi' : 'Avukatın geçici sonuç metni'}</h4><p className="authored-text">{content.conclusion.text}</p><p className="small muted">Talep edilen değerlendirme: {ANALYSIS_LABELS[content.conclusion.requested_disposition]}. Kontrol sonucu yukarıda ayrıca gösterilir.</p><p className="reference-id">Uygulamalar: {content.conclusion.application_ids.join(', ') || 'Bağlanmadı'} · Alternatifler: {content.conclusion.alternative_ids.join(', ') || 'Bağlanmadı'}</p>
-      <ul>{content.conclusion.uncertainty.map((item, index) => <li key={index}>{item}</li>)}</ul><p><strong>Sonraki adım:</strong> {content.conclusion.next_step}</p>
+      <AnalysisReasoning content={content} onSource={onSource} proposed={proposed} />
     </Detail>
     {includeEvidence && <Detail title={`Özgün belge alıntıları (${content.evidence.length})`}><AnalysisEvidence content={content} onSource={onSource} /></Detail>}
     {content.revision_comparison.previous_version_id && <Detail title="Önceki sürüme göre değişiklikler"><p>Değişen bölümler: {content.revision_comparison.changed_sections.join(', ') || 'Yok'} · Değişen dayanak grupları: {content.revision_comparison.changed_dependency_groups.join(', ') || 'Yok'}</p><p>{content.revision_comparison.checks_no_longer_triggered.length} kontrol artık tetiklenmiyor; {content.revision_comparison.new_check_ids.length} yeni kontrol.</p><p className="small muted">Bu karşılaştırma, bir hukuki kusurun düzeltildiğini veya kaldırılan bir adımın gereksiz olduğunu doğrulamaz.</p></Detail>}
-  </>;
+  </div>;
 }
 
 export function AnalysisEvidence({ content, onSource }: { content: AnalysisContent; onSource: (id: string) => void }) {
   return <div className="analysis-evidence">
     <p className="small muted">Alıntılar analiz kaydedilirken seçilen belge sürümüne aittir. Özgün pasajı açtığınızda belgenin güncel görünümüyle karşılaştırabilirsiniz.</p>
     {!content.evidence.length && <p className="practice-empty">Bu analize henüz belge alıntısı bağlanmamış.</p>}
-    {content.evidence.map((item) => <article className="analysis-source" key={item.evidence_id}>
-      <div className="analysis-source-heading"><Icon name="file" size={20} /><div><h4>{item.name}</h4><p className="small muted">{locatorText(item.locator)} · Belge sürümü {item.document_revision}</p></div>
-        <button type="button" className="button secondary" onClick={() => onSource(item.evidence_id)}>Özgün pasajı aç</button>
-      </div>
-      <Detail title="Kaydedilmiş alıntıyı oku"><blockquote className="authored-text">{item.text}</blockquote></Detail>
-      <Detail title="Sürüm ve alıntı bilgileri"><p className="small muted">Unicode aralığı [{item.start}, {item.end}) / {item.full_passage_length}. Son konum dahil değildir.</p>
-        <p className="reference-id">Belge SHA-256 · {item.document_sha256 || 'Kaydedilmedi'}</p>
-        <p className="reference-id">Pasaj SHA-256 · {item.passage_sha256}</p>
-        <p className="reference-id">Alıntı SHA-256 · {item.quote_sha256}</p>
-      </Detail>
-    </article>)}
+    {content.evidence.map((item) => <SourceExcerpt key={item.evidence_id} name={item.name} location={`${locatorText(item.locator)} · Belge sürümü ${item.document_revision}`} text={item.text} onOpen={() => onSource(item.evidence_id)} metadata={<>
+      <p className="small muted">Unicode aralığı [{item.start}, {item.end}) / {item.full_passage_length}. Son konum dahil değildir.</p>
+      <dl className="provenance-list"><div><dt>Belge SHA-256</dt><dd>{item.document_sha256 || 'Kaydedilmedi'}</dd></div><div><dt>Pasaj SHA-256</dt><dd>{item.passage_sha256}</dd></div><div><dt>Alıntı SHA-256</dt><dd>{item.quote_sha256}</dd></div></dl>
+    </>} />)}
   </div>;
 }
 

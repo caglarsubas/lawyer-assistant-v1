@@ -4,6 +4,29 @@ Baseline: 4 October 2026; research reconciliation: **5 October 2026**. Original 
 
 This is the canonical delivery plan. [Data and knowledge strategy](DATA_KNOWLEDGE_STRATEGY.md) specifies source families, refresh targets and retrieval requirements. [Research reconciliation](PLAN_RECONCILIATION_2026-10-05.md) records adopted proposals and unresolved claims. The same-day user amendment is specified in [legal analysis and sanitized BYOK deep research](LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md). Those research revisions changed planning only. Subsequent implementation progress is recorded below: R01 offline contracts, evidence verification and extraction comparison are delivered; source approvals, legal review and provider activation are not granted by that work.
 
+## Shared subsection design and evidence readability — 13 November 2026
+
+A [design review](DESIGN_REVIEW.md) extends the analysis redesign into expanded
+reasoning, quotations, historical versions, review source lists and comparisons.
+A shared excerpt component separates source identity, quoted text and technical
+provenance. Its reading/original-line controls change only presentation; exact
+saved characters, evidence versions and review history are retained. Five numbered
+reasoning sections preserve all recorded steps, conditions, unknowns and links.
+Shared disclosures, field groups, checkboxes and source controls now have consistent
+hierarchy, spacing, contrast and narrow-panel behavior. Opening an original source
+brings its inspector into view and closing restores focus to the originating control.
+
+The supplied screenshot also exposed a previously cached application shell. HTML
+and API responses now have an explicit no-store policy; only successful fingerprinted
+assets have long caching. Missing assets cannot fall back to cached navigation HTML.
+Existing open tabs require a refresh after preserving unsaved input.
+
+The full frontend suite passes 10,539 tests across the unchanged 139 test files,
+with two workers. Build, browser checks and exact-text regression checks pass.
+PR/main reserve qualification and web-only installation remain separately verified
+delivery states in the tracker. This contributes to R05A-01 and R03-17 without
+changing broader readiness (42 done, 21 open, 24 waiting, 6 deferred) or owner review.
+
 ## Analysis reading and review usability — 13 November 2026
 
 The pilot walkthrough exposed an everyday usability gap. Saved analyses were
