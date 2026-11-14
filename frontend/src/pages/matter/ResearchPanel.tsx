@@ -1,18 +1,31 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { downloadProduct, post, request } from '../../api';
 import { Badge, Detail, Empty, Field, Icon, JsonDetails, Loading, Notice, SectionIndex } from '../../components';
-import type { AuthorityCandidates, Claim, GatewayEvaluation, Matter, Product, ResearchRun } from '../../types';
+import type { AuthorityCandidates, Claim, GatewayEvaluation, Matter, ResearchRun } from '../../types';
 import { formatDate, isRunning, locatorText, messageOf, statusLabel } from '../../utils';
 import { EvidenceViewer } from './FactsPanel';
 import { EvidenceContextPanel } from './EvidenceContextPanel';
 import { SourceCandidatesPanel } from './SourceCandidatesPanel';
 import { SourceExcerpt } from '../../SourceExcerpt';
 import { ValidityDetails } from '../../ValidityDetails';
+import { createProductReader, productSelectionKey, type ProductRead } from './researchProductRead';
+import { ResearchOutputPicker } from './ResearchOutputPicker';
 
 export default function ResearchPanel({ matter, onChange, demo }: { matter: Matter; onChange: () => Promise<void>; demo: boolean }) {
+  return <ResearchWorkspace key={matter.id} matter={matter} onChange={onChange} demo={demo} />;
+}
+
+function ResearchWorkspace({ matter, onChange, demo }: { matter: Matter; onChange: () => Promise<void>; demo: boolean }) {
   const [question, setQuestion] = useState(''); const [asOf, setAsOf] = useState(matter.relevant_date || ''); const [busy, setBusy] = useState(false); const [error, setError] = useState('');
   const [runs, setRuns] = useState<ResearchRun[]>(matter.research_runs || []); const [pollError, setPollError] = useState('');
-  const [selectedId, setSelectedId] = useState(matter.products?.[0]?.id || ''); const [product, setProduct] = useState<Product | null>(null); const [productLoading, setProductLoading] = useState(false);
+  const [selectedId, setSelectedId] = useState(matter.products?.[0]?.id || '');
+  const [productState, setProductState] = useState<ProductRead | null>(null);
+  const productReader = useRef<ReturnType<typeof createProductReader> | null>(null);
+  const expectedVersion = matter.products?.find(item => item.id === selectedId)?.version;
+  const selectionKey = productSelectionKey({ matterId: matter.id, productId: selectedId, version: expectedVersion });
+  const selectedRead = productState?.key === selectionKey ? productState : null;
+  const product = selectedRead?.status === 'ready' ? selectedRead.value : null;
+  const productLoading = Boolean(selectedId && (!selectedRead || selectedRead.status === 'loading'));
   const [source, setSource] = useState<string | null>(null); const [exporting, setExporting] = useState('');
   const base = `/matters/${encodeURIComponent(matter.id)}`;
   useEffect(() => { setRuns(matter.research_runs || []); if (!selectedId && matter.products?.length) setSelectedId(matter.products[0].id); }, [matter.research_runs, matter.products, selectedId]);
@@ -34,17 +47,24 @@ export default function ResearchPanel({ matter, onChange, demo }: { matter: Matt
     return () => { alive = false; window.clearInterval(timer); };
   }, [runs, base, onChange]);
   useEffect(() => {
-    if (!selectedId) { setProduct(null); return; }
-    const controller = new AbortController(); setProductLoading(true);
-    request<Product>(`${base}/products/${encodeURIComponent(selectedId)}`, { signal: controller.signal }).then(setProduct).catch((cause) => { if (cause.name !== 'AbortError') setError(messageOf(cause)); }).finally(() => { if (!controller.signal.aborted) setProductLoading(false); });
-    return () => controller.abort();
-  }, [selectedId, base, matter.products]);
+    setSource(null);
+    if (!selectedId) { setProductState(null); productReader.current = null; return; }
+    const reader = createProductReader({ matterId: matter.id, productId: selectedId, version: expectedVersion }, state => {
+      if (state.status !== 'ready') setSource(null);
+      setProductState(state);
+    });
+    productReader.current = reader; void reader.load();
+    return () => { reader.close(); if (productReader.current === reader) productReader.current = null; };
+  }, [selectedId, matter.id, expectedVersion, matter.products]);
   async function start(event: FormEvent) { event.preventDefault(); setBusy(true); setError(''); try { const run = await post<ResearchRun>(`${base}/research`, { question, as_of: asOf || null }); setRuns((prev) => [run, ...prev]); if (run.product_id) setSelectedId(run.product_id); await onChange(); setQuestion(''); } catch (cause) { setError(messageOf(cause)); } finally { setBusy(false); } }
   async function cancel(run: ResearchRun) { setError(''); try { const updated = await post<ResearchRun>(`${base}/research/${encodeURIComponent(run.id)}/cancel`, {}); setRuns((old) => old.map((item) => item.id === updated.id ? updated : item)); await onChange(); } catch (cause) { setError(messageOf(cause)); } }
   async function review(claimId: string, decision: 'approve' | 'reject', note: string) {
-    if (!product) return;
+    const reader = productReader.current;
+    if (!product || !reader?.active || reader.key !== selectionKey) return;
     await post(`${base}/products/${encodeURIComponent(product.id)}/review`, { claim_id: claimId, decision, note });
-    setProduct(await request<Product>(`${base}/products/${encodeURIComponent(product.id)}`)); await onChange();
+    if (productReader.current !== reader || !reader.active) return;
+    await reader.load();
+    if (productReader.current === reader && reader.active) await onChange();
   }
   async function exportFile(format: 'docx' | 'pdf') { if (!product) return; setExporting(format); setError(''); try { await downloadProduct(matter.id, product.id, format); } catch (cause) { setError(messageOf(cause)); } finally { setExporting(''); } }
   return <section className="research-workspace">
@@ -56,8 +76,8 @@ export default function ResearchPanel({ matter, onChange, demo }: { matter: Matt
     {runs.length > 0 && <Detail title={`Araştırma çalışmaları (${runs.length})`} open={runs.some((run) => isRunning(run.status))}><div className="run-list">{runs.map((run) => <div className="run-row" key={run.id}><div><strong>{run.question}</strong><span className="small muted">{formatDate(run.created_at, true)}</span>{run.error && <p className="error-text">{run.error}</p>}{run.status === 'cancelling' && <p className="small muted" role="status">İptal isteği alındı. Devam eden işlemin bitmesi bekleniyor; yeni çıktı kaydedilmeyecek.</p>}</div><Badge status={run.status} />{isRunning(run.status) ? <button className="text-button" disabled={run.status === 'cancelling'} onClick={() => void cancel(run)}>{run.status === 'cancelling' ? 'Durduruluyor…' : 'İptal et'}</button> : run.product_id ? <button className="text-button" onClick={() => setSelectedId(run.product_id!)}>Çıktıyı aç<Icon name="arrow" size={15} /></button> : null}</div>)}</div></Detail>}
     {!runs.length && <p className="small muted">Henüz araştırma çalışması yok. Yeni çalışma başlatıldığında durumu burada izleyebilirsiniz.</p>}</section>
     <section id="research-output" tabIndex={-1} aria-label="Kayıtlı hazırlık çıktısı"><div className="section-heading"><h2>Kayıtlı hazırlık çıktısı</h2></div>
-    {(matter.products?.length || 0) > 1 && <div className="product-selector"><label htmlFor="product-select">Hazırlık çıktısı</label><select id="product-select" value={selectedId} onChange={(event) => setSelectedId(event.target.value)}>{matter.products?.map((item) => <option key={item.id} value={item.id}>{item.title} · Sürüm {item.version} · {formatDate(item.created_at)}</option>)}</select></div>}
-    {productLoading ? <Loading label="Hazırlık çıktısı açılıyor…" /> : product ? <article className="preparation-product"><header className="product-heading"><div><p className="eyebrow">HAZIRLIK ÇIKTISI · SÜRÜM {product.version}</p><h2>{product.title}</h2><span className="small muted">{formatDate(product.created_at, true)}</span></div><Badge status={product.status} /></header>{['stale', 'invalidated'].includes(product.status) && <Notice error>Bu çalışmanın dayanakları değişti. Önceki inceleme durumu güncel kabul edilmemelidir; çalışmayı yeniden oluşturup inceleyin.</Notice>}<p className="product-summary">{product.summary}</p>
+    <ResearchOutputPicker products={matter.products || []} selectedId={selectedId} onSelect={setSelectedId} />
+    {productLoading ? <Loading label="Hazırlık çıktısı açılıyor…" /> : selectedRead?.status === 'failed' ? <Notice error><strong>Seçili çıktı açılamadı.</strong><p>{selectedRead.message}</p><p>Önceki çıktı gösterilmiyor. Seçiminizi koruyarak yeniden deneyebilirsiniz.</p><button className="button secondary" onClick={() => void productReader.current?.load()}>Seçili çıktıyı yeniden aç</button></Notice> : product ? <article className="preparation-product"><header className="product-heading"><div><p className="eyebrow">HAZIRLIK ÇIKTISI · SÜRÜM {product.version}</p><h2>{product.title}</h2><span className="small muted">{formatDate(product.created_at, true)}</span></div><Badge status={product.status} /></header>{['stale', 'invalidated'].includes(product.status) && <Notice error>Bu çalışmanın dayanakları değişti. Önceki inceleme durumu güncel kabul edilmemelidir; çalışmayı yeniden oluşturup inceleyin.</Notice>}<p className="product-summary">{product.summary}</p>
     <div className="section-heading compact"><h3>İddialar ve dayanaklar</h3><span className="small muted">{product.claims.filter((claim) => claim.review_status === 'approved').length} / {product.claims.length} uygun bulundu</span></div>{product.claims.length ? <div className="claim-list">{product.claims.map((claim, index) => <ClaimReview key={claim.id} claim={claim} index={index} onReview={review} onSource={setSource} stale={['stale', 'invalidated'].includes(product.status)} />)}</div> : <Empty title="İncelenecek iddia oluşturulmadı.">Mevcut veriyle desteklenebilir bir sonuç bulunmamış olabilir. Kapsam ve eksik bilgi bölümünü inceleyin.</Empty>}
     {product.issues.length > 0 && <Detail title={`Hukuki meseleler ve eksik bilgiler (${product.issues.length})`}><div className="issue-list">{product.issues.map((issue, index) => <section key={index}><h4>{issue.label}</h4>{issue.missing_facts.length > 0 && <><span className="small-label">EKSİK OLGULAR</span><ul>{issue.missing_facts.map((item, itemIndex) => <li key={itemIndex}>{item}</li>)}</ul></>}{issue.counterarguments.length > 0 && <><span className="small-label">KARŞI ARGÜMANLAR</span><ul>{issue.counterarguments.map((item, itemIndex) => <li key={itemIndex}>{item}</li>)}</ul></>}</section>)}</div></Detail>}
     <Detail title="Bu çalışmanın kaynak kapsamı" open={product.coverage.gaps.length > 0}><div className="two-column-details"><div><h4>Aranan kaynaklar</h4>{product.coverage.searched.length ? <ul>{product.coverage.searched.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>Aranan kaynak kaydı bulunmuyor.</p>}</div><div><h4>Kapsam ve bilgi eksikleri</h4>{product.coverage.gaps.length ? <ul>{product.coverage.gaps.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>Bildirilen boşluk yok. Bu durum kapsamın eksiksiz olduğunu göstermez.</p>}</div></div></Detail>
@@ -68,7 +88,7 @@ export default function ResearchPanel({ matter, onChange, demo }: { matter: Matt
     <JsonDetails value={product.snapshots} title="Çalışmada kullanılan sürümler" />
     <div className="export-bar"><div><strong>Çalışmanızı dışa aktarın.</strong><p className="small muted">İnceleme durumu ve kaynaklar çıktıyla birlikte korunur.</p></div><div className="button-group"><button className="button secondary" disabled={Boolean(exporting)} onClick={() => void exportFile('docx')}><Icon name="download" size={17} />{exporting === 'docx' ? 'Hazırlanıyor…' : 'Word'}</button><button className="button secondary" disabled={Boolean(exporting)} onClick={() => void exportFile('pdf')}><Icon name="download" size={17} />{exporting === 'pdf' ? 'Hazırlanıyor…' : 'PDF'}</button></div></div>
     </article> : <Empty title="Hazırlık çıktınız burada oluşacak.">Sorunuzu belirlediğinizde çalışma durumu, dayanaklar, eksikler ve inceleme adımları bu alanda görünür.</Empty>}</section>
-    {source && <EvidenceViewer key={source} matter={matter} evidenceId={source} onClose={() => setSource(null)} />}
+    {product && source && <EvidenceViewer key={`${selectionKey}:${source}`} matter={matter} evidenceId={source} onClose={() => setSource(null)} />}
     <section id="research-gateway" tabIndex={-1} aria-label="Dış kaynak denetimi"><GatewayPanel matterId={matter.id} /></section>
   </section>;
 }
