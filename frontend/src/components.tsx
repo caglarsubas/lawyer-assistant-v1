@@ -49,3 +49,8 @@ export function Field({ label, hint, children, className = '' }: { label: string
 export function PageHeader({ eyebrow, title, description, action }: { eyebrow: string; title: string; description?: string; action?: ReactNode }) {
   return <header className="page-header"><div><p className="eyebrow">{eyebrow}</p><h1>{title}</h1>{description && <p className="page-description">{description}</p>}</div>{action && <div className="page-action">{action}</div>}</header>;
 }
+
+/** In-page navigation deliberately preserves the application route and filters. */
+export function SectionIndex({ items }: { items: { id: string; label: string }[] }) {
+  return <nav className="section-index" aria-label="Bu sayfada"><p className="small-label">Bu sayfada</p><div>{items.map(item => <button type="button" key={item.id} onClick={() => { const target = document.getElementById(item.id); target?.focus({ preventScroll: true }); target?.scrollIntoView({ block: 'start' }); }}>{item.label}<Icon name="arrow" size={14} /></button>)}</div></nav>;
+}
