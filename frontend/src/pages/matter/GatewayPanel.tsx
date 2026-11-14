@@ -18,6 +18,7 @@ export default function GatewayPanel({ matterId }: { matterId: string }) {
   const [evaluation, setEvaluation] = useState<GatewayEvaluation | null>(null);
   const [approved, setApproved] = useState(false);
   const [result, setResult] = useState<unknown>(null);
+  const [submitted, setSubmitted] = useState<Pick<GatewayEvaluation, 'request_id' | 'payload_digest'> | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
   const inFlight = useRef(false);
@@ -49,6 +50,7 @@ export default function GatewayPanel({ matterId }: { matterId: string }) {
     event.preventDefault();
     void perform(async () => {
       clearDecision();
+      setSubmitted(null);
       setEvaluation(await post<GatewayEvaluation>(`${base}/evaluate`, { query, destination, query_type: queryType }));
     });
   }
@@ -74,12 +76,18 @@ export default function GatewayPanel({ matterId }: { matterId: string }) {
     void perform(async () => {
       // Requests are single-use. An error response may arrive after dispatch.
       clearDecision();
+      setSubmitted({ request_id: evaluation.request_id, payload_digest: evaluation.payload_digest });
       setResult(await post(`${base}/execute`, { request_id: evaluation.request_id }));
     }, cause => {
-      const rejected = cause instanceof ApiError && [401, 403, 404, 409, 422, 502, 503].includes(cause.status);
-      return rejected
-        ? `${cause.message} Yeni bir istek için sorguyu yeniden denetleyin.`
-        : 'Gönderimin sonucu doğrulanamadı. Yeni bir istek oluşturmadan önce mevcut işlemin sonucunu kontrol edin.';
+      if (cause instanceof ApiError && [401, 403, 404, 422].includes(cause.status)) {
+        setSubmitted(null);
+        return `${cause.message} Yeni bir istek için sorguyu yeniden denetleyin.`;
+      }
+      if (cause instanceof ApiError && (
+        (cause.status === 502 && cause.message === 'Kaynak güvenle alınamadı; istek yeniden kullanılmaz')
+        || (cause.status === 503 && cause.message === 'Dış kaynak geçidi yapılandırılmadı')
+      )) return `${cause.message}. Yeni bir istek için sorguyu yeniden denetleyin.`;
+      return 'Gönderimin sonucu doğrulanamadı. Geçit kayıtlarının kontrolü için aşağıdaki istek kimliğini kullanın.';
     });
   }
 
@@ -113,5 +121,9 @@ export default function GatewayPanel({ matterId }: { matterId: string }) {
       {approved && <p className="small muted">Onay yalnızca yukarıdaki tam sorgu ve hedef için geçerlidir.</p>}
     </div>}
     {result !== null && <JsonDetails value={result} title="Dış kaynak isteğinin sonucu" />}
+    {submitted && <Detail title="Son gönderim için istek bilgileri">
+      <dl className="definition-grid"><div><dt>İstek kimliği</dt><dd className="reference-id">{submitted.request_id}</dd></div>
+        <div><dt>İçerik özeti</dt><dd className="reference-id">{submitted.payload_digest}</dd></div></dl>
+    </Detail>}
   </Detail>;
 }

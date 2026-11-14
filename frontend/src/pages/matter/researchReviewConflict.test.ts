@@ -9,7 +9,11 @@ const saved = { outcome: 'committed_needs_revalidation', needs_revalidation: tru
 describe('research review recovery', () => {
   it('distinguishes a matching committed receipt from a rejected and an ambiguous write', () => {
     expect(researchReviewConflict(new ApiError('test', 409, saved), 'p1')).toEqual({ kind: 'saved', revision: 5 });
-    expect(researchReviewConflict(new ApiError('test', 409, { detail: 'test' }), 'p1')).toEqual({ kind: 'rejected', message: 'test' });
+    const rejection = 'Bu sürüm değiştirilemez; yeni araştırma başlatın';
+    expect(researchReviewConflict(new ApiError(rejection, 409, { detail: rejection }), 'p1')).toEqual({ kind: 'rejected', message: rejection });
+    expect(researchReviewConflict(new ApiError('Unreadable 409', 409, null), 'p1')).toEqual({ kind: 'unknown' });
+    expect(researchReviewConflict(new TypeError('Body stream closed'), 'p1')).toEqual({ kind: 'unknown' });
+    expect(researchReviewConflict(new ApiError('test', 409, saved), 'p1', 5)).toEqual({ kind: 'unknown' });
     expect(researchReviewConflict(new ApiError('test', 0), 'p1')).toEqual({ kind: 'unknown' });
     expect(researchReviewConflict(new ApiError('test', 500), 'p1')).toEqual({ kind: 'unknown' });
     expect(researchReviewConflict(new ApiError('test', 422), 'p1')).toBeNull();

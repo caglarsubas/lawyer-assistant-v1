@@ -63,8 +63,6 @@ function ResearchWorkspace({ matter, onChange, demo }: { matter: Matter; onChang
   const canReview = product && !['stale', 'invalidated', 'reviewed'].includes(product.status);
   const productLoading = Boolean(selectedId && (!selectedRead || selectedRead.status === 'loading'));
   const [source, setSource] = useState<string | null>(null); const [exporting, setExporting] = useState('');
-  const listedRevision = listedProduct?.revision;
-  const listedStatus = listedProduct?.status;
   const base = `/matters/${encodeURIComponent(matter.id)}`;
   useEffect(() => { setRuns(matter.research_runs || []); if (!selectedId && matter.products?.length) setSelectedId(matter.products[0].id); }, [matter.research_runs, matter.products, selectedId]);
   useEffect(() => {
@@ -98,7 +96,8 @@ function ResearchWorkspace({ matter, onChange, demo }: { matter: Matter; onChang
     });
     productReader.current = reader; void reader.load();
     return () => { reader.close(); if (productReader.current === reader) productReader.current = null; };
-  }, [selectedId, matter.id, expectedVersion, listedRevision, listedStatus]);
+  // The matter list carries stored status. Re-read to catch source authorization changes.
+  }, [selectedId, matter.id, expectedVersion, matter.products]);
   async function start(event: FormEvent) { event.preventDefault(); setBusy(true); setError(''); try { const run = await post<ResearchRun>(`${base}/research`, { question, as_of: asOf || null }); setRuns((prev) => [run, ...prev]); if (run.product_id) setSelectedId(run.product_id); await onChange(); setQuestion(''); } catch (cause) { setError(messageOf(cause)); } finally { setBusy(false); } }
   async function cancel(run: ResearchRun) { setError(''); try { const updated = await post<ResearchRun>(`${base}/research/${encodeURIComponent(run.id)}/cancel`, {}); setRuns((old) => old.map((item) => item.id === updated.id ? updated : item)); await onChange(); } catch (cause) { setError(messageOf(cause)); } }
   async function review(claimId: string, decision: 'approve' | 'reject', note: string) {
@@ -112,7 +111,7 @@ function ResearchWorkspace({ matter, onChange, demo }: { matter: Matter; onChang
         await post(`${base}/products/${encodeURIComponent(product.id)}/review`, { claim_id: claimId, decision, note });
       } catch (cause) {
         const accessError = cause instanceof ApiError && [401, 403, 404].includes(cause.status);
-        const conflict = accessError ? { kind: 'rejected' as const, message: cause.message } : researchReviewConflict(cause, product.id);
+        const conflict = accessError ? { kind: 'rejected' as const, message: cause.message } : researchReviewConflict(cause, product.id, product.revision);
         if (!conflict) throw cause;
         setRecovering(records => ({ ...records, [product.id]: { conflict, version: product.version, claimId, note: accessError ? '' : note, reopened: false } }));
         if (accessError && productReader.current === reader && reader.active) await reader.load();
