@@ -80,13 +80,22 @@ describe('source review evidence and permissions', () => {
     const draft = structuredClone(accepted); const payload = assessmentPayload(draft, 4);
     fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({ detail: 'Revision conflict' }), { status: 409 })).mockResolvedValueOnce(new Response(JSON.stringify({ ...state, revision: 5 })));
     const result = await writeSourceReview(sourceId, 'assessments', payload);
-    expect(result.conflict).toBe(true); expect(result.state.revision).toBe(5); expect(draft).toEqual(accepted);
+    expect(result.conflict).toBe(true); expect(result.state?.revision).toBe(5); expect(draft).toEqual(accepted);
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(fetchMock.mock.calls[0][0]).toBe(`/api/v1/public-sources/${sourceId}/review/assessments`);
     expect(fetchMock.mock.calls[0][1]?.method).toBe('POST'); expect(new Headers(fetchMock.mock.calls[0][1]?.headers).get('X-CSRF-Token')).toBe('test-csrf');
     expect(JSON.parse(fetchMock.mock.calls[0][1]?.body as string).expected_revision).toBe(4);
     expect(fetchMock.mock.calls[1][0]).toBe(`/api/v1/public-sources/${sourceId}/review`);
     expect(fetchMock.mock.calls[1][1]?.method).toBeUndefined();
+  });
+
+  it('keeps a rejected update distinct from a failed reread', async () => {
+    fetchMock
+      .mockResolvedValueOnce(new Response(JSON.stringify({ detail: 'Review changed' }), { status: 409 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ detail: 'Read unavailable' }), { status: 503 }));
+    await expect(writeSourceReview(sourceId, 'assessments', assessmentPayload(accepted, 4)))
+      .resolves.toEqual({ conflict: true, state: null, reason: 'Review changed', refreshError: 'Read unavailable' });
+    expect(fetchMock.mock.calls.map(([, options]) => options?.method || 'GET')).toEqual(['POST', 'GET']);
   });
 
   it('fails a conflict refresh closed if permission changed and never resubmits', async () => {

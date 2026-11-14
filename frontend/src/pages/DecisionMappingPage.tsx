@@ -9,7 +9,8 @@ import type { PublicSourceOriginalText, PublicSourcePassages, SourceReviewDecisi
 import { formatDate, messageOf } from '../utils';
 import { canReviewSource, fetchOriginalSourceText, SourcePassageList, sourceReviewPath } from './SourceReviewPage';
 import { fetchOriginalSourcePdf, mappedPdfPage, type PdfInspection } from './SourcePdfInspection';
-import { decisionPath, decisionReviewPayload, emptyResolution, fetchDecisionDossier, fetchDecisionOccurrences, KIND_LABELS, type DecisionDossier, type DecisionOccurrence, type DecisionOccurrences, type DecisionResolution, type DecisionState } from './decisionMapping';
+import { canResumeDecisionDraft, decisionPath, decisionReviewPayload, emptyResolution, fetchDecisionDossier, fetchDecisionOccurrences, findDecisionMapping, KIND_LABELS, type DecisionDossier, type DecisionOccurrence, type DecisionOccurrences, type DecisionResolution, type DecisionState } from './decisionMapping';
+import { sameCuratorSource, writeCuratorReview } from './curatorReviewBinding';
 
 export default function DecisionMappingPage({ sourceId, user }: { sourceId: string; user: User }) {
   if (!canReviewSource(user)) return <Notice error>İnceleme yetkisi gerekli.</Notice>;
@@ -28,10 +29,11 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
   const [reference, setReference] = useState(''); const [sha256, setSha256] = useState('');
   const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [message, setMessage] = useState('');
   const [dossier, setDossier] = useState<DecisionDossier | null>(null);
+  const [conflict, setConflict] = useState<{ before: DecisionState; reason: string; refreshed: boolean } | null>(null);
   const urls = useRef(new Set<string>());
   const [denied, setDenied] = useState(false); const controller = useRef<AbortController | null>(null);
   function begin() { controller.current?.abort(); const next = new AbortController(); controller.current = next; setBusy(true); setError(''); setMessage(''); return next; }
-  function clearSelection() { setDossier(null); setOccurrences(null); setSelected(null); setMappingId(null); setResolution(null); setRationale(''); setReference(''); setSha256(''); setDecision('needs_changes'); }
+  function clearSelection() { setConflict(null); setDossier(null); setOccurrences(null); setSelected(null); setMappingId(null); setResolution(null); setRationale(''); setReference(''); setSha256(''); setDecision('needs_changes'); }
   function failure(cause: unknown, operation: AbortController) {
     if (operation.signal.aborted) return;
     setError(messageOf(cause));
@@ -41,7 +43,9 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
     const operation = begin(); setState(null); setPassages(null); setOriginal(null); clearSelection(); setOffset(nextOffset);
     try {
       const [s, p] = await Promise.all([request<DecisionState>(decisionPath(sourceId), { signal: operation.signal }), request<PublicSourcePassages>(`${sourceReviewPath(sourceId)}/passages?offset=${nextOffset}&limit=20`, { signal: operation.signal })]);
-      if (s.source.id !== sourceId || p.source_id !== sourceId || s.source.source_version_id !== p.source_version_id || s.publication_eligible !== false) throw new Error('Kaynak kimliği doğrulanamadı.');
+      if (s.source.id !== sourceId || p.source_id !== sourceId || s.source.source_version_id !== p.source_version_id
+        || s.source.artifacts['raw.bin']?.sha256 !== p.raw_sha256 || s.source.artifacts['text.txt']?.sha256 !== p.text_sha256
+        || s.publication_eligible !== false) throw new Error('Kaynak kimliği doğrulanamadı.');
       if (!operation.signal.aborted) { setState(s); setPassages(p); }
     } catch (cause) { failure(cause, operation); } finally { if (!operation.signal.aborted) setBusy(false); }
   }
@@ -64,28 +68,66 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
     finally { if (!operation.signal.aborted) setBusy(false); }
   }
   function select(item: DecisionOccurrence, id: string | null = null, value: DecisionResolution | null = null) {
-    setSelected(item); setMappingId(id); setResolution(value || emptyResolution(item)); setDecision('needs_changes'); setRationale(''); setReference(''); setSha256(''); setError('');
+    setSelected(item); setMappingId(id); setResolution(value || emptyResolution(item)); setDecision('needs_changes'); setRationale(''); setReference(''); setSha256(''); setConflict(null); setError('');
+  }
+  function checkLatest(before: DecisionState, latest: DecisionState) {
+    if (!sameCuratorSource(before.source, latest.source) || latest.publication_eligible !== false
+      || !Number.isSafeInteger(latest.revision) || latest.revision < before.revision
+      || !Number.isSafeInteger(latest.source_review_revision) || latest.source_review_revision < before.source_review_revision) {
+      throw new Error('Güncel eşleme aynı kaynak sürümü ve dosyalarla doğrulanamadı.');
+    }
+  }
+  async function refreshMappings(before: DecisionState, reason: string, operation: AbortController, rejected: boolean) {
+    try {
+      const latest = await request<DecisionState>(decisionPath(sourceId), { signal: operation.signal });
+      if (operation.signal.aborted) return;
+      checkLatest(before, latest);
+      setState(latest); setDossier(null);
+      const revisionsChanged = before.revision !== latest.revision || before.source_review_revision !== latest.source_review_revision;
+      if (rejected || (selected && revisionsChanged)) setConflict({ before, reason, refreshed: true });
+    } catch (cause) {
+      if (!operation.signal.aborted) setConflict({ before, reason, refreshed: false });
+      failure(cause, operation);
+    }
+  }
+  async function reread() {
+    if (busy) return;
+    if (!state) { await load(); return; }
+    const operation = begin();
+    try { await refreshMappings(conflict?.before || state, conflict?.reason || 'Eşleme kaydı değişti.', operation, Boolean(conflict)); }
+    finally { if (!operation.signal.aborted) setBusy(false); }
   }
   async function save(event: FormEvent) {
-    event.preventDefault(); if (!state || !selected || !resolution || !occurrences) return;
+    event.preventDefault(); if (!state || !selected || !resolution || !occurrences || busy || conflict || !owner) return;
     const operation = begin(); setDossier(null);
     try {
       const payload = mappingId ? decisionReviewPayload(state, decision, rationale, resolution, reference, sha256) : {
         expected_revision: state.revision, expected_source_review_revision: state.source_review_revision,
         passage_id: occurrences.passage_id, candidate_id: selected.id, rationale: rationale.trim(),
       };
-      const result = await request<DecisionState>(mappingId ? `${decisionPath(sourceId)}/${mappingId}/review` : decisionPath(sourceId), { method: 'POST', body: JSON.stringify(payload), signal: operation.signal });
-      if (result.source.id !== sourceId || result.publication_eligible !== false) throw new Error('İnceleme yanıtı kaynağa bağlı değil.');
-      if (!operation.signal.aborted) { setState(result); setMappingId(result.items.find(item => item.candidate.id === selected.id)?.id || null); setMessage('İnceleme kaydedildi. Graf yayımlanmadı.'); setRationale(''); }
-    } catch (cause) {
-      if (cause instanceof ApiError && cause.status === 409 && !operation.signal.aborted) {
-        try { const updated = await request<DecisionState>(decisionPath(sourceId), { signal: operation.signal }); if (!operation.signal.aborted) { setState(updated); setMappingId(updated.items.find(item => item.candidate.id === selected.id)?.id || null); setMessage('Kayıt değişti. Taslağınız korundu; güncel revizyonu inceleyip yeniden gönderin.'); } }
-        catch (refreshCause) { failure(refreshCause, operation); }
-      } else failure(cause, operation);
-    } finally { if (!operation.signal.aborted) setBusy(false); }
+      const path = decisionPath(sourceId);
+      const write = await writeCuratorReview<DecisionState>(mappingId ? `${path}/${mappingId}/review` : path, path, payload, operation.signal);
+      if (operation.signal.aborted) return;
+      if (write.conflict) {
+        setConflict({ before: state, reason: write.reason, refreshed: false });
+        if (!write.state) { setError(write.refreshError || 'Güncel kayıt okunamadı.'); return; }
+        checkLatest(state, write.state);
+        setState(write.state); setConflict({ before: state, reason: write.reason, refreshed: true });
+        return;
+      }
+      const result = write.state;
+      setConflict({ before: state, reason: 'Kaydetme yanıtının doğrulanması gerekiyor.', refreshed: false });
+      checkLatest(state, result);
+      const saved = findDecisionMapping(result, selected, occurrences.passage_id);
+      if (!saved || (mappingId !== null && saved.id !== mappingId) || result.revision !== state.revision + 1
+        || result.source_review_revision !== state.source_review_revision) throw new Error('Kaydedilen eşleme taslağın dayanağıyla doğrulanamadı. Güncel kaydı yenileyin.');
+      setConflict(null); setState(result); setMappingId(saved.id);
+      setMessage('İnceleme kaydedildi. Graf yayımlanmadı.'); setRationale('');
+    } catch (cause) { failure(cause, operation); }
+    finally { if (!operation.signal.aborted) setBusy(false); }
   }
   async function downloadDossier() {
-    if (!state || busy) return;
+    if (!state || busy || conflict) return;
     const operation = begin(); setDossier(null);
     try {
       const result = await fetchDecisionDossier(state, user, operation.signal);
@@ -99,24 +141,35 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
     finally { if (!operation.signal.aborted) setBusy(false); }
   }
   const owner = state?.assigned_to?.id === user.id;
+  const latestMapping = state && selected && occurrences ? findDecisionMapping(state, selected, occurrences.passage_id) : undefined;
+  const mayResume = state && conflict?.refreshed && owner && (!selected || (occurrences && canResumeDecisionDraft(state, selected, occurrences.passage_id, mappingId)));
   return <div className="source-review-page"><a className="text-link" href={`#/sources/${sourceId}`}>Kaynak ve özgün belge incelemesine dön</a>
     <PageHeader eyebrow="KARAR EŞLEŞTİRME" title="Karar eşleştirmeleri" description="Seçili pasajdaki numara, tarih ve atıfları inceleyin; belge kimliğini alıntılanan kararlardan ayrı değerlendirin." />
     <Notice>Bu ekran büroya özel inceleme kaydıdır. Referanslar insan beyanıdır; kesinleşme, bağlayıcılık ve hukuki etki bilinmiyor. Graf ve kaynak tarihleri değişmez.</Notice>
     {busy && <Loading label="İnceleme işlemi sürüyor…" />}{error && <Notice error>{error}</Notice>}{message && <Notice>{message}</Notice>}
-    {!denied && <button className="button secondary" disabled={busy} onClick={() => void load()}>Güncel kaydı yenile</button>}
+    {!denied && <button className="button secondary" disabled={busy} onClick={() => void reread()}>Güncel kaydı yenile</button>}
+    {conflict && state && <Notice error>
+      <h2>Eşleme işlemi bekliyor</h2>
+      <p>{conflict.reason}{selected ? ' Taslağınız bu ekranda duruyor.' : ''}</p>
+      <p>Taslak: eşleme {conflict.before.revision} · kaynak inceleme {conflict.before.source_review_revision}</p>
+      <p>{conflict.refreshed ? `Güncel: eşleme ${state.revision} · kaynak inceleme ${state.source_review_revision}` : 'Güncel kayıt doğrulanamadı'}</p>
+      {conflict.refreshed && mappingId === null && latestMapping && <p>Bu anma eşleme listesinde. Kayıt ve geçmişi inceleyin. Yeni bir insan incelemesi başlatmak için anmayı yeniden seçin.</p>}
+      {conflict.refreshed && mappingId !== null && latestMapping?.id !== mappingId && <p>Güncel kayıt taslağın eşlemesiyle eşleşmiyor. İnceleyeceğiniz anmayı yeniden seçin.</p>}
+      {mayResume && <button type="button" className="button secondary" disabled={busy} onClick={() => { setConflict(null); setError(''); }}>Güncel kaydı inceledim, taslağı düzenle</button>}
+    </Notice>}
     {state && <><SectionIndex items={[{id:'decision-passages',label:'Belge ve pasajlar'},{id:'decision-history',label:'Kayıtlar ve geçmiş'},{id:'decision-identity',label:'Bağımsız kimlik incelemesi'}]} /><p>{state.assigned_to?.name || 'Sorumlu atanmadı'} · Eşleme revizyonu {state.revision} · Kaynak inceleme revizyonu {state.source_review_revision}</p>
       {!owner && <Notice>Anma eşlemelerini değiştirmek için kaynak incelemesini üstlenin. Bağımsız kimlik incelemesi ayrı hesapla yapılır.</Notice>}{!state.source_review_ready && <Notice>Kabul için haklar, kaynak kimliği, metin çıkarımı ve hukuki inceleme tamamlanmalıdır.</Notice>}
-      <button className="button secondary" disabled={busy || !state.export_allowed} onClick={() => void downloadDossier()}>Tam gizli inceleme dosyasını indir (JSON)</button>
+      <button className="button secondary" disabled={busy || Boolean(conflict) || !state.export_allowed} onClick={() => void downloadDossier()}>Tam gizli inceleme dosyasını indir (JSON)</button>
       {!state.export_allowed && <p className="small muted">Dayanak pasajlarını indirmek için hak incelemesinde açık dışa aktarma izni gerekir.</p>}
       {dossier && <DossierSummary data={dossier} />}
       <p className="small muted">İnceleme kayıtları: {state.handoff_ready ? 'Güncel kabuller var; tam dosyanın devir kontrollerini inceleyin' : 'Bekliyor'} · Yayımlanmadı</p>
-      <section className="source-review-section" id="decision-passages" tabIndex={-1} aria-label="Belge ve pasajlar"><h2>Pasajı seçin</h2>{passages && <SourcePassageList data={passages} offset={offset} selected={[]} canSelect={false} onSelect={() => undefined} onPage={next => { if (!busy) void load(next); }} onCandidates={id => { if (!busy) void inspect(id); }} candidatesDisabled={busy} original={original} onOriginal={(id, next) => { void inspectOriginal(id, next); }} onCloseOriginal={() => { if (!busy) setOriginal(null); }} />}</section>
+      <section className="source-review-section" id="decision-passages" tabIndex={-1} aria-label="Belge ve pasajlar"><h2>Pasajı seçin</h2>{passages && <SourcePassageList data={passages} offset={offset} selected={[]} canSelect={false} onSelect={() => undefined} onPage={next => { if (!busy && (!conflict || conflict.refreshed)) void load(next); }} onCandidates={id => { if (!busy && (!conflict || conflict.refreshed)) void inspect(id); }} candidatesDisabled={busy || conflict?.refreshed === false} original={original} onOriginal={(id, next) => { void inspectOriginal(id, next); }} onCloseOriginal={() => { if (!busy) setOriginal(null); }} />}</section>
       {occurrences && <section className="source-review-section"><h2>Seçili pasajdaki anmalar · {occurrences.count}</h2><p className="small muted">{occurrences.passage_id} · Yalnızca bu pasaj; otomatik adaylar henüz çözümlenmedi.</p>
-        {occurrences.items.length ? <OccurrenceList items={occurrences.items} selectedId={selected?.id || null} disabled={busy} onSelect={item => { const existing = state.items.find(value => value.candidate.id === item.id); select(item, existing?.id || null, existing?.resolution || null); }} /> : <Notice>Bu pasajda tanınan yazım biçimi bulunamadı. Bu sonuç kararın atıf içermediğini göstermez.</Notice>}
+        {occurrences.items.length ? <OccurrenceList items={occurrences.items} selectedId={selected?.id || null} disabled={busy || conflict?.refreshed === false} onSelect={item => { const existing = findDecisionMapping(state, item, occurrences.passage_id); select(item, existing?.id || null, existing?.resolution || null); }} /> : <Notice>Bu pasajda tanınan yazım biçimi bulunamadı. Bu sonuç kararın atıf içermediğini göstermez.</Notice>}
         <Detail title="Tarama sınırları">{occurrences.limitations.map(text => <p key={text}>{text}</p>)}</Detail>
       </section>}
       {selected && resolution && <section className="source-review-section"><h2>{mappingId ? 'İnsan incelemesi' : 'Anmayı inceleme listesine ekleyin'}</h2><p className="source-passage-text">{selected.text}</p><p className="small muted">Unicode [{selected.start}, {selected.end}) · {selected.sha256}</p>
-        <form onSubmit={event => void save(event)}><fieldset disabled={!owner || busy}>
+        <form onSubmit={event => void save(event)}><fieldset disabled={!owner || busy || Boolean(conflict)}>
           {mappingId && <><Field label="İnceleme kararı">{id => <select id={id} value={decision} onChange={event => setDecision(event.target.value as SourceReviewDecision)}><option value="needs_changes">Düzeltme iste</option><option value="rejected">Reddet</option><option value="accepted">Kabul et</option></select>}</Field>
             {decision === 'accepted' && <ResolutionFields value={resolution} onChange={setResolution} />}
             <Field label="Dayanak referansı">{id => <input id={id} value={reference} onChange={event => setReference(event.target.value)} maxLength={1000} />}</Field><Field label="Dayanak SHA256">{id => <input id={id} value={sha256} onChange={event => setSha256(event.target.value)} maxLength={64} />}</Field>
@@ -126,7 +179,7 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
         </fieldset></form>
       </section>}
       <section id="decision-history" tabIndex={-1} aria-label="Kayıtlar ve geçmiş"><DecisionHistory state={state} /></section>
-      <section id="decision-identity" tabIndex={-1} aria-label="Bağımsız kimlik incelemesi"><DecisionIdentityReview key={`${state.revision}:${state.source_review_revision}`} source={state} user={user} onDenied={() => { setDenied(true); setState(null); setPassages(null); setOriginal(null); clearSelection(); }} /></section>
+      <section id="decision-identity" tabIndex={-1} aria-label="Bağımsız kimlik incelemesi"><fieldset className="source-review-fieldset" disabled={conflict?.refreshed === false}><legend className="visually-hidden">Kimlik incelemesi</legend><DecisionIdentityReview key={`${state.revision}:${state.source_review_revision}`} source={state} user={user} onDenied={() => { controller.current?.abort(); setDenied(true); setState(null); setPassages(null); setOriginal(null); setBusy(false); clearSelection(); }} /></fieldset></section>
     </>}
   </div>;
 }

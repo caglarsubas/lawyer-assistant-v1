@@ -37,6 +37,17 @@ export interface DecisionState {
   handoff_ready: boolean; publication_eligible: false; limitations: string[];
 }
 export function decisionPath(id: string) { return `${sourceReviewPath(id)}/decision-mappings`; }
+export function findDecisionMapping(state: DecisionState, candidate: DecisionOccurrence, passageId: string) {
+  return state.items.find(item => item.passage_id === passageId && item.candidate.id === candidate.id
+    && item.candidate.sha256 === candidate.sha256 && item.candidate.start === candidate.start && item.candidate.end === candidate.end);
+}
+
+export function canResumeDecisionDraft(state: DecisionState, candidate: DecisionOccurrence, passageId: string, mappingId: string | null) {
+  const current = findDecisionMapping(state, candidate, passageId);
+  if (mappingId === null) return !state.items.some(item => item.candidate.id === candidate.id);
+  return current?.id === mappingId;
+}
+
 export const KIND_LABELS: Record<string, string> = { application_number: 'Başvuru numarası', case_number: 'Esas numarası', decision_number: 'Karar numarası', decision_date: 'Karar tarihi', publication_date: 'Yayım tarihi', instrument_number_reference: 'Sayılı belge anması', article_number_reference: 'Madde anması' };
 export function emptyResolution(candidate: DecisionOccurrence): DecisionResolution {
   return { start: candidate.start, end: candidate.end, occurrence_role: 'unknown', proceeding_ref: null, decision_ref: null,

@@ -5,6 +5,7 @@ import { Badge, Detail, Empty, Field, Icon, Loading, Notice, PageHeader, Section
 import type { ProvisionCandidate, ProvisionCandidates, ProvisionKind, ProvisionMapping, ProvisionMappingEvent, ProvisionMappingState, ProvisionResolution, ProvisionSpanPreview, SourceReviewDecision, User } from '../types';
 import { formatDate, messageOf } from '../utils';
 import { canReviewSource, sourceReviewPath } from './SourceReviewPage';
+import { sameCuratorSource, writeCuratorReview } from './curatorReviewBinding';
 
 const KINDS: Record<ProvisionKind, string> = { article: 'Madde', temporary_article: 'Geçici madde', additional_article: 'Ek madde' };
 const DECISIONS: Record<SourceReviewDecision, string> = { accepted: 'Kabul et', needs_changes: 'Düzeltme iste', rejected: 'Reddet' };
@@ -33,9 +34,13 @@ export function spanCoordinates(start: string, end: string) {
 export function matchesPreview(preview: ProvisionSpanPreview | null, sourceId: string, start: string, end: string) {
   try { const coordinates = spanCoordinates(start, end); return Boolean(preview && preview.source_id === sourceId && preview.span.start === coordinates.start && preview.span.end === coordinates.end); } catch { return false; }
 }
+function matchesSourcePreview(preview: ProvisionSpanPreview | null, source: ProvisionMappingState['source'], start: string, end: string) {
+  return preview?.source_version_id === source.source_version_id && preview?.text_sha256 === source.artifacts['text.txt']?.sha256
+    && matchesPreview(preview, source.id, start, end);
+}
 function rationale(value: string) { const text = value.trim(); if (text.length < 3 || text.length > 4000) throw new Error('Gerekçe 3–4000 karakter olmalı.'); return text; }
 export function proposalPayload(draft: ProposalDraft, state: ProvisionMappingState, preview: ProvisionSpanPreview | null) {
-  if (!matchesPreview(preview, state.source.id, draft.start, draft.end)) throw new Error('Kaydetmeden önce bu aralığın tam metnini önizleyin.');
+  if (!matchesSourcePreview(preview, state.source, draft.start, draft.end)) throw new Error('Kaydetmeden önce bu kaynak sürümündeki aralığın tam metnini önizleyin.');
   const label = draft.label.trim(); if (!label || label.length > 200) throw new Error('Madde etiketi 1–200 karakter olmalı.');
   return { expected_revision: state.revision, expected_source_review_revision: state.source_review_revision, candidate_id: draft.candidate_id, ...spanCoordinates(draft.start, draft.end), kind: draft.kind, label, rationale: rationale(draft.rationale) };
 }
@@ -52,7 +57,7 @@ export function mappingReviewPayload(draft: MappingReviewDraft, state: Provision
   if (draft.decision === 'accepted') {
     if (!state.source_review_ready) throw new Error('Kabul için dört kaynak incelemesi ve gerekli yerel kullanım izinleri tamamlanmalı.');
     if (!reference) throw new Error('Kabul kararı için dayanak referansı ve içerik özeti gerekli.');
-    if (!matchesPreview(preview, state.source.id, draft.start, draft.end) || !preview?.non_whitespace_covered) throw new Error('Kabul için bu aralığı önizleyin; metnin tamamı doğrulanmış pasajlarla kapsanmalı.');
+    if (!matchesSourcePreview(preview, state.source, draft.start, draft.end) || !preview?.non_whitespace_covered) throw new Error('Kabul için bu aralığı önizleyin; metnin tamamı doğrulanmış pasajlarla kapsanmalı.');
     const refs = { instrument_ref: draft.instrument_ref.trim(), provision_ref: draft.provision_ref.trim(), provision_version_ref: draft.provision_version_ref.trim() };
     if (Object.values(refs).some(value => value.length < 3 || value.length > 300)) throw new Error('Düzenleme, hüküm ve hüküm sürümü referanslarını ayrı ayrı 3–300 karakter olarak girin.');
     const valid_from = calendarDate(draft.valid_from); const valid_until = calendarDate(draft.valid_until);
@@ -63,18 +68,17 @@ export function mappingReviewPayload(draft: MappingReviewDraft, state: Provision
     if (draft.validity_end_mode === 'open_ended') {
       const checked = calendarDate(draft.checked_through);
       if (!valid_from || !checked || checked < valid_from || checked > new Date().toISOString().slice(0, 10)) throw new Error('Açık uçlu inceleme için başlangıç ve denetim tarihi gerekli; denetim başlangıçtan önce veya gelecekte olamaz.');
-      if (!matchesPreview(validityPreview, state.source.id, draft.validity_evidence_start, draft.validity_evidence_end) || !validityPreview?.non_whitespace_covered) throw new Error('Açık uçlu yürürlük dayanağını bu kaynakta önizleyin; pasaj kapsamı tam olmalı.');
+      if (!matchesSourcePreview(validityPreview, state.source, draft.validity_evidence_start, draft.validity_evidence_end) || !validityPreview?.non_whitespace_covered) throw new Error('Açık uçlu yürürlük dayanağını bu kaynakta önizleyin; pasaj kapsamı tam olmalı.');
       const support = spanCoordinates(draft.validity_evidence_start, draft.validity_evidence_end);
       resolution.open_ended_validity = { checked_through: checked, evidence_start: support.start, evidence_end: support.end };
     }
   }
   return { expected_revision: state.revision, expected_source_review_revision: state.source_review_revision, decision: draft.decision, rationale: rationale(draft.rationale), evidence_refs: reference ? [{ reference, sha256 }] : [], resolution };
 }
-export async function writeProvisionMapping(sourceId: string, mappingId: string | null, payload: unknown, signal?: AbortSignal): Promise<{ state: ProvisionMappingState; conflict: boolean }> {
+export async function writeProvisionMapping(sourceId: string, mappingId: string | null, payload: unknown, signal?: AbortSignal) {
   const path = provisionPath(sourceId);
   if (mappingId !== null && !/^[a-f0-9]{32}$/.test(mappingId)) throw new Error('Eşleştirme kimliği geçersiz.');
-  try { return { state: await request<ProvisionMappingState>(mappingId ? `${path}/${mappingId}/review` : path, { method: 'POST', body: JSON.stringify(payload), signal }), conflict: false }; }
-  catch (cause) { if (cause instanceof ApiError && cause.status === 409) return { state: await request<ProvisionMappingState>(path, { signal }), conflict: true }; throw cause; }
+  return writeCuratorReview<ProvisionMappingState>(mappingId ? `${path}/${mappingId}/review` : path, path, payload, signal);
 }
 export async function fetchProvisionSpan(sourceId: string, sourceVersion: string, textSha256: string, start: string, end: string, signal?: AbortSignal) {
   const coordinates = spanCoordinates(start, end);
@@ -106,12 +110,16 @@ function MappingWorkspace({ sourceId, user }: { sourceId: string; user: User }) 
   const [validityPreview, setValidityPreview] = useState<ProvisionSpanPreview | null>(null);
   const [busy, setBusy] = useState(false); const [previewing, setPreviewing] = useState<'proposal' | 'review' | 'validity' | null>(null); const [downloading, setDownloading] = useState(false);
   const [message, setMessage] = useState(''); const [error, setError] = useState('');
+  const [conflict, setConflict] = useState<{
+    before: ProvisionMappingState; mappingId: string | null; reason: string; refreshed: boolean;
+  } | null>(null);
   const reads = useRef<{ state?: AbortController; candidates?: AbortController; preview?: AbortController; mutation?: AbortController; download?: AbortController }>({});
   const urls = useRef(new Set<string>()); const path = sourceReviewPath(sourceId);
   const deny = useCallback((cause: unknown) => {
     if (cause instanceof ApiError && [401, 403].includes(cause.status)) {
       Object.values(reads.current).forEach(controller => controller?.abort()); setState(fail(cause)); setCandidates(fail(cause));
-      setProposal({ ...EMPTY_PROPOSAL }); setReview({ ...EMPTY_MAPPING_REVIEW }); setProposalPreview(null); setReviewPreview(null); setValidityPreview(null); setSelectedId(null); setBusy(false); setPreviewing(null); setDownloading(false);
+      setProposal({ ...EMPTY_PROPOSAL }); setReview({ ...EMPTY_MAPPING_REVIEW }); setProposalPreview(null); setReviewPreview(null); setValidityPreview(null); setSelectedId(null); setConflict(null); setBusy(false); setPreviewing(null); setDownloading(false);
+      urls.current.forEach(url => URL.revokeObjectURL(url)); urls.current.clear();
     }
   }, []);
   const loadState = useCallback(() => {
@@ -125,12 +133,20 @@ function MappingWorkspace({ sourceId, user }: { sourceId: string; user: User }) 
   useEffect(() => { loadState(); loadCandidates(0); const objectUrls = urls.current; return () => { Object.values(reads.current).forEach(controller => controller?.abort()); objectUrls.forEach(url => URL.revokeObjectURL(url)); objectUrls.clear(); }; }, [loadState, loadCandidates]);
   const data = state.status === 'loaded' ? state.value : null; const owns = data?.assigned_to?.id === user.id;
   const selected = data?.items.find(item => item.id === selectedId) || null;
+  const missingConflictTarget = Boolean(conflict?.refreshed && conflict.mappingId !== null && !data?.items.some(item => item.id === conflict.mappingId));
   function chooseCandidate(candidate: ProvisionCandidate) {
+    if (!data || conflict || candidates.status !== 'loaded') return;
+    if (candidates.value.source_id !== data.source.id || candidates.value.source_version_id !== data.source.source_version_id
+      || candidates.value.text_sha256 !== data.source.artifacts['text.txt']?.sha256) {
+      setError('Başlık adayı açık kaynak sürümüyle eşleşmiyor.');
+      return;
+    }
     reads.current.preview?.abort(); setPreviewing(null); setError('');
     setProposal(previous => ({ ...previous, candidate_id: candidate.id, start: String(candidate.proposed_span.start), end: String(candidate.proposed_span.end), kind: candidate.kind, label: candidate.label }));
-    setProposalPreview(candidates.status === 'loaded' ? { source_id: sourceId, source_version_id: candidates.value.source_version_id, text_sha256: candidates.value.text_sha256, span: candidate.proposed_span, passage_ids: candidate.passage_ids, non_whitespace_covered: candidate.non_whitespace_covered } : null);
+    setProposalPreview({ source_id: sourceId, source_version_id: candidates.value.source_version_id, text_sha256: candidates.value.text_sha256, span: candidate.proposed_span, passage_ids: candidate.passage_ids, non_whitespace_covered: candidate.non_whitespace_covered });
   }
   function chooseMapping(mapping: ProvisionMapping) {
+    if (conflict) return;
     reads.current.preview?.abort(); setPreviewing(null); setSelectedId(mapping.id); setError('');
     setReview(mappingReviewDraft(mapping)); setValidityPreview(null);
     setReviewPreview(data ? { source_id: sourceId, source_version_id: data.source.source_version_id, text_sha256: data.source.artifacts['text.txt']?.sha256 || '', span: mapping.span, passage_ids: mapping.passage_ids, non_whitespace_covered: mapping.non_whitespace_covered } : null);
@@ -146,26 +162,82 @@ function MappingWorkspace({ sourceId, user }: { sourceId: string; user: User }) 
   }
   async function preview(target: 'proposal' | 'review' | 'validity') {
     setError(''); const draft = target === 'proposal' ? proposal : target === 'validity' ? { start: review.validity_evidence_start, end: review.validity_evidence_end } : review;
-    if (!data) return;
+    if (!data || conflict) return;
     try { spanCoordinates(draft.start, draft.end); } catch (cause) { setError(messageOf(cause)); return; }
     reads.current.preview?.abort(); const controller = new AbortController(); reads.current.preview = controller; setPreviewing(target); if (target === 'proposal') setProposalPreview(null); else if (target === 'validity') setValidityPreview(null); else setReviewPreview(null);
     try { const value = await fetchProvisionSpan(sourceId, data.source.source_version_id, data.source.artifacts['text.txt']?.sha256 || '', draft.start, draft.end, controller.signal); if (!controller.signal.aborted) { if (target === 'proposal') setProposalPreview(value); else if (target === 'validity') setValidityPreview(value); else setReviewPreview(value); } }
     catch (cause) { if (!controller.signal.aborted) { setError(messageOf(cause)); deny(cause); } }
     finally { if (!controller.signal.aborted) setPreviewing(null); }
   }
+  function checkLatest(before: ProvisionMappingState, latest: ProvisionMappingState) {
+    if (!sameCuratorSource(before.source, latest.source) || latest.publication_eligible !== false
+      || !Number.isSafeInteger(latest.revision) || latest.revision < before.revision
+      || !Number.isSafeInteger(latest.source_review_revision) || latest.source_review_revision < before.source_review_revision) {
+      throw new Error('Güncel madde eşleştirmesi aynı kaynak sürümü ve dosyalarla doğrulanamadı.');
+    }
+  }
+  async function reread() {
+    if (busy) return;
+    if (!data) { loadState(); return; }
+    const before = conflict?.before || data;
+    const reason = conflict?.reason || 'Madde eşleştirme kaydı değişti.';
+    const mappingId = conflict ? conflict.mappingId : selectedId;
+    reads.current.state?.abort();
+    const controller = new AbortController(); reads.current.state = controller;
+    setBusy(true); setError(''); setMessage('');
+    try {
+      const latest = await request<ProvisionMappingState>(provisionPath(sourceId), { signal: controller.signal });
+      if (controller.signal.aborted) return;
+      checkLatest(before, latest);
+      setState({ status: 'loaded', value: latest });
+      if (conflict || latest.revision !== before.revision || latest.source_review_revision !== before.source_review_revision) {
+        setConflict({ before, mappingId, reason, refreshed: true });
+      }
+    } catch (cause) {
+      if (!controller.signal.aborted) {
+        setConflict({ before, mappingId, reason, refreshed: false }); setError(messageOf(cause)); deny(cause);
+      }
+    } finally { if (!controller.signal.aborted) setBusy(false); }
+  }
   async function mutate(mappingId: string | null, payload: unknown) {
-    if (busy) return; setBusy(true); setError(''); setMessage(''); reads.current.state?.abort();
+    if (!data || busy || conflict) return; setBusy(true); setError(''); setMessage(''); reads.current.state?.abort();
     const controller = new AbortController(); reads.current.mutation = controller;
-    try { const result = await writeProvisionMapping(sourceId, mappingId, payload, controller.signal); if (controller.signal.aborted) return;
-      setState({ status: 'loaded', value: result.state });
-      if (result.conflict) setError('Kaynak incelemesi veya eşleştirmeler değişti. Güncel kayıt yüklendi; girdileriniz korundu. Karşılaştırıp yeniden kaydedin. Otomatik tekrar yapılmadı.');
-      else { setMessage(mappingId ? 'İnsan incelemesi kaydedildi. Eşleştirme yayımlanmadı.' : 'Metin aralığı inceleme önerisi olarak kaydedildi.'); if (mappingId) setReview(previous => ({ ...previous, rationale: '', reference: '', sha256: '' })); else { setProposal(previous => ({ ...previous, rationale: '' })); const added = result.state.items.find(item => !data?.items.some(previous => previous.id === item.id)); if (added) { setSelectedId(added.id); setValidityPreview(null); setReview({ ...EMPTY_MAPPING_REVIEW, start: String(added.span.start), end: String(added.span.end) }); setReviewPreview({ source_id: sourceId, source_version_id: result.state.source.source_version_id, text_sha256: result.state.source.artifacts['text.txt']?.sha256 || '', span: added.span, passage_ids: added.passage_ids, non_whitespace_covered: added.non_whitespace_covered }); } } }
-    } catch (cause) { if (!controller.signal.aborted) { setError(messageOf(cause)); if (cause instanceof ApiError && cause.status === 409) setState(fail(cause)); deny(cause); } }
+    try {
+      const result = await writeProvisionMapping(sourceId, mappingId, payload, controller.signal);
+      if (controller.signal.aborted) return;
+      if (result.conflict) {
+        setConflict({ before: data, mappingId, reason: result.reason, refreshed: false });
+        if (!result.state) { setError(result.refreshError || 'Güncel kayıt okunamadı.'); return; }
+        checkLatest(data, result.state);
+        setState({ status: 'loaded', value: result.state });
+        setConflict({ before: data, mappingId, reason: result.reason, refreshed: true });
+        return;
+      }
+      setConflict({ before: data, mappingId, reason: 'Kaydetme yanıtının doğrulanması gerekiyor.', refreshed: false });
+      const latest = result.state;
+      checkLatest(data, latest);
+      if (latest.revision !== data.revision + 1 || latest.source_review_revision !== data.source_review_revision) {
+        throw new Error('Kaydedilen eşleştirme revizyonu doğrulanamadı.');
+      }
+      setConflict(null); setState({ status: 'loaded', value: latest });
+      setMessage(mappingId ? 'İnsan incelemesi kaydedildi. Eşleştirme yayımlanmadı.' : 'Metin aralığı inceleme önerisi olarak kaydedildi.');
+      if (mappingId) setReview(previous => ({ ...previous, rationale: '', reference: '', sha256: '' }));
+      else {
+        setProposal(previous => ({ ...previous, rationale: '' }));
+        const added = latest.items.find(item => !data.items.some(previous => previous.id === item.id));
+        if (added) {
+          setSelectedId(added.id); setValidityPreview(null);
+          setReview({ ...EMPTY_MAPPING_REVIEW, start: String(added.span.start), end: String(added.span.end) });
+          setReviewPreview({ source_id: sourceId, source_version_id: latest.source.source_version_id, text_sha256: latest.source.artifacts['text.txt']?.sha256 || '',
+            span: added.span, passage_ids: added.passage_ids, non_whitespace_covered: added.non_whitespace_covered });
+        }
+      }
+    } catch (cause) { if (!controller.signal.aborted) { setError(messageOf(cause)); deny(cause); } }
     finally { if (!controller.signal.aborted) setBusy(false); }
   }
-  function submitProposal(event: FormEvent) { event.preventDefault(); if (!data || !owns || busy) return; try { void mutate(null, proposalPayload(proposal, data, proposalPreview)); } catch (cause) { setError(messageOf(cause)); } }
-  function submitReview(event: FormEvent) { event.preventDefault(); if (!data || !selected || !owns || busy) return; try { void mutate(selected.id, mappingReviewPayload(review, data, reviewPreview, validityPreview)); } catch (cause) { setError(messageOf(cause)); } }
-  async function download() { if (downloading) return; setDownloading(true); setError(''); const controller = new AbortController(); reads.current.download = controller;
+  function submitProposal(event: FormEvent) { event.preventDefault(); if (!data || !owns || busy || conflict) return; try { void mutate(null, proposalPayload(proposal, data, proposalPreview)); } catch (cause) { setError(messageOf(cause)); } }
+  function submitReview(event: FormEvent) { event.preventDefault(); if (!data || !selected || !owns || busy || conflict) return; try { void mutate(selected.id, mappingReviewPayload(review, data, reviewPreview, validityPreview)); } catch (cause) { setError(messageOf(cause)); } }
+  async function download() { if (downloading || conflict) return; setDownloading(true); setError(''); const controller = new AbortController(); reads.current.download = controller;
     try { const blob = await fetchMappingDossier(sourceId, controller.signal); if (controller.signal.aborted) return; const url = URL.createObjectURL(blob); urls.current.add(url); const link = document.createElement('a'); link.href = url; link.download = `gizli-madde-eslestirmeleri-${sourceId.slice(0, 16)}.json`; document.body.append(link); link.click(); link.remove(); window.setTimeout(() => { URL.revokeObjectURL(url); urls.current.delete(url); }, 1000); }
     catch (cause) { if (!controller.signal.aborted) { setError(messageOf(cause)); deny(cause); } } finally { if (!controller.signal.aborted) setDownloading(false); }
   }
@@ -174,26 +246,43 @@ function MappingWorkspace({ sourceId, user }: { sourceId: string; user: User }) 
     <PageHeader eyebrow="HUKUK KÜLLİYATINI HAZIRLAMA" title="Madde eşleştirmeleri" description="Metin sınırlarını inceleyin; düzenleme, hüküm ve sürüm referanslarını ayrı kaydedin." />
     <Notice>Başlık adayları otomatik öneridir. Eşleştirmeler büroya özeldir; insan kabulü bile kaynağı yayımlamaz veya araştırmada kullanıma açmaz.</Notice>
     {error && <Notice error>{error}</Notice>}{message && <Notice>{message}</Notice>}
+    {data && conflict && <Notice error>
+      <h2>Madde eşleştirme taslağı bekliyor</h2>
+      <p>{conflict.reason} Taslağınız bu ekranda duruyor.</p>
+      <p>Taslak: eşleme {conflict.before.revision} · kaynak inceleme {conflict.before.source_review_revision}</p>
+      <p>{conflict.refreshed ? `Güncel: eşleme ${data.revision} · kaynak inceleme ${data.source_review_revision}` : 'Güncel kayıt doğrulanamadı'}</p>
+      {conflict.mappingId !== null && !selected && <p className="source-review-rationale">{review.rationale}</p>}
+      <div className="button-group">
+        <button type="button" className="button secondary" disabled={busy} onClick={() => void reread()}>Güncel kaydı tekrar oku</button>
+        {conflict.refreshed && !missingConflictTarget && <button type="button" className="button secondary" disabled={busy} onClick={() => { setConflict(null); setError(''); }}>
+          Güncel kaydı inceledim, taslağı düzenle
+        </button>}
+        {missingConflictTarget && <button type="button" className="button secondary" disabled={busy} onClick={() => {
+          setSelectedId(null); setReview({ ...EMPTY_MAPPING_REVIEW }); setReviewPreview(null); setValidityPreview(null);
+          setConflict(null); setError('');
+        }}>Eski inceleme taslağını bırak ve yeniden seç</button>}
+      </div>
+    </Notice>}
     {state.status === 'loading' ? <Loading label="Eşleştirme kaydı yükleniyor…" /> : state.status === 'failed' ? <ReadFailure state={state} retry={loadState} /> : data && <>
       <SectionIndex items={[{id:'provision-overview',label:'İnceleme durumu'},{id:'provision-proposal',label:'Metin aralığı önerisi'},{id:'provision-review',label:'Kayıt ve insan incelemesi'}]} /><section id="provision-overview" tabIndex={-1} aria-label="İnceleme durumu"><MappingSummary state={data} user={user} /></section>
-      <div className="button-group source-review-actions"><a className="button secondary" href={`#/sources/${sourceId}`}>Kaynak incelemesi ve görevlendirme</a><button className="button secondary" disabled={downloading || busy} onClick={() => void download()}><Icon name="download" size={16} />{downloading ? 'Dosya hazırlanıyor…' : 'Eşleştirme dosyasını indir (JSON)'}</button><button className="text-button" disabled={busy} onClick={loadState}>Kaydı yenile</button></div>
+      <div className="button-group source-review-actions"><a className="button secondary" href={`#/sources/${sourceId}`}>Kaynak incelemesi ve görevlendirme</a><button className="button secondary" disabled={downloading || busy || Boolean(conflict)} onClick={() => void download()}><Icon name="download" size={16} />{downloading ? 'Dosya hazırlanıyor…' : 'Eşleştirme dosyasını indir (JSON)'}</button><button className="text-button" disabled={busy} onClick={() => void reread()}>Kaydı yenile</button></div>
       <section className="source-review-section" id="provision-proposal" tabIndex={-1} aria-label="Metin aralığı önerisi"><h2>1. Metin aralığı önerin</h2><p className="small muted">Bir başlık seçin veya Unicode konumlarını elle girin. Tam metni önizledikten sonra inceleme önerisi oluşturun.</p>
-        {candidates.status === 'loading' ? <Loading label="Başlık adayları aranıyor…" /> : candidates.status === 'failed' ? <ReadFailure state={candidates} retry={() => loadCandidates(offset)} /> : <ProvisionCandidateList data={candidates.value} offset={offset} selectedId={proposal.candidate_id} disabled={busy} onSelect={chooseCandidate} onPage={loadCandidates} />}
-        <form onSubmit={submitProposal} className="provision-proposal-form"><fieldset className="source-review-fieldset" disabled={!owns || busy}><legend className="visually-hidden">Yeni metin aralığı önerisi</legend>
+        {candidates.status === 'loading' ? <Loading label="Başlık adayları aranıyor…" /> : candidates.status === 'failed' ? <ReadFailure state={candidates} retry={() => loadCandidates(offset)} /> : <ProvisionCandidateList data={candidates.value} offset={offset} selectedId={proposal.candidate_id} disabled={busy || Boolean(conflict)} onSelect={chooseCandidate} onPage={loadCandidates} />}
+        <form onSubmit={submitProposal} className="provision-proposal-form"><fieldset className="source-review-fieldset" disabled={!owns || busy || Boolean(conflict)}><legend className="visually-hidden">Yeni metin aralığı önerisi</legend>
           <div className="provision-form-heading"><h3>{proposal.candidate_id ? 'Seçili başlığın önerisi' : 'Elle seçilen metin aralığı'}</h3>{proposal.candidate_id && <button className="text-button" type="button" onClick={() => { reads.current.preview?.abort(); setPreviewing(null); setProposal(previous => ({ ...EMPTY_PROPOSAL, rationale: previous.rationale })); setProposalPreview(null); }}>Elle aralık gir</button>}</div>
           <div className="form-grid"><Field label="Madde türü">{id => <select id={id} value={proposal.kind} disabled={Boolean(proposal.candidate_id)} onChange={event => setProposal(previous => ({ ...previous, kind: event.target.value as ProvisionKind }))}>{Object.entries(KINDS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>}</Field><Field label="Madde etiketi">{id => <input id={id} required maxLength={200} readOnly={Boolean(proposal.candidate_id)} value={proposal.label} onChange={event => setProposal(previous => ({ ...previous, label: event.target.value }))} />}</Field></div>
           <SpanFields start={proposal.start} end={proposal.end} onChange={(field, value) => changeSpan('proposal', field, value)} /><button type="button" className="button secondary" disabled={previewing !== null} onClick={() => void preview('proposal')}>{previewing === 'proposal' ? 'Metin okunuyor…' : 'Öneri aralığını önizle'}</button>
           {proposalPreview && <ProvisionQuote preview={proposalPreview} title="Önerilen aralığın tam metni" />}
           <Field label="Öneri gerekçesi">{id => <textarea id={id} required minLength={3} maxLength={4000} rows={3} value={proposal.rationale} onChange={event => setProposal(previous => ({ ...previous, rationale: event.target.value }))} />}</Field>
-          <button className="button primary" disabled={!matchesPreview(proposalPreview, sourceId, proposal.start, proposal.end) || previewing !== null}>İnceleme önerisi olarak kaydet</button>
+          <button className="button primary" disabled={!matchesSourcePreview(proposalPreview, data.source, proposal.start, proposal.end) || previewing !== null}>İnceleme önerisi olarak kaydet</button>
         </fieldset></form>
       </section>
       <section className="source-review-section" id="provision-review" tabIndex={-1} aria-label="Kayıt ve insan incelemesi"><h2>2. Eşleştirmeyi insan incelemesinden geçirin</h2>
         {!data.items.length ? <Empty title="Henüz eşleştirme önerisi yok.">Üstteki kaynak başlıklarından başlayın veya tam bir metin aralığı önerin.</Empty> : <>
-          <div className="provision-mapping-list" aria-label="Kayıtlı eşleştirmeler">{data.items.map(mapping => <button key={mapping.id} className={`provision-mapping-item ${mapping.id === selectedId ? 'selected' : ''}`} aria-pressed={mapping.id === selectedId} disabled={busy} onClick={() => chooseMapping(mapping)}><span><strong>{mapping.label}</strong><span className="small muted">[{mapping.span.start}, {mapping.span.end})</span></span><span><Badge status={mapping.stale ? 'stale' : mapping.status === 'accepted' ? 'reviewed' : mapping.status}>{mapping.stale ? 'Kaynak incelemesi değişti · yeniden inceleyin' : STATUS[mapping.status]}</Badge></span></button>)}</div>
+          <div className="provision-mapping-list" aria-label="Kayıtlı eşleştirmeler">{data.items.map(mapping => <button key={mapping.id} className={`provision-mapping-item ${mapping.id === selectedId ? 'selected' : ''}`} aria-pressed={mapping.id === selectedId} disabled={busy || Boolean(conflict)} onClick={() => chooseMapping(mapping)}><span><strong>{mapping.label}</strong><span className="small muted">[{mapping.span.start}, {mapping.span.end})</span></span><span><Badge status={mapping.stale ? 'stale' : mapping.status === 'accepted' ? 'reviewed' : mapping.status}>{mapping.stale ? 'Kaynak incelemesi değişti · yeniden inceleyin' : STATUS[mapping.status]}</Badge></span></button>)}</div>
           {!selected ? <p className="small muted">Kaydını ve tam metnini görmek için bir eşleştirme seçin.</p> : <>
             <MappingRecord mapping={selected} />
-            <form onSubmit={submitReview}><fieldset className="source-review-fieldset" disabled={!owns || busy}><legend className="visually-hidden">Seçili eşleştirme incelemesi</legend>
+            <form onSubmit={submitReview}><fieldset className="source-review-fieldset" disabled={!owns || busy || Boolean(conflict)}><legend className="visually-hidden">Seçili eşleştirme incelemesi</legend>
               <Field label="Eşleştirme kararı">{id => <select id={id} value={review.decision} onChange={event => setReview(previous => ({ ...previous, decision: event.target.value as SourceReviewDecision }))}>{Object.entries(DECISIONS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>}</Field>
               {review.decision === 'accepted' && <>
                 {!data.source_review_ready && <Notice>Önce dört kaynak incelemesini ve yerel işleme / kurum içi gösterim izinlerini tamamlayın.</Notice>}
@@ -219,7 +308,7 @@ function MappingWorkspace({ sourceId, user }: { sourceId: string; user: User }) 
               <Field label="İnceleme gerekçesi">{id => <textarea id={id} required minLength={3} maxLength={4000} rows={3} value={review.rationale} onChange={event => setReview(previous => ({ ...previous, rationale: event.target.value }))} />}</Field>
               <Field label="Dayanak referansı" hint="Kabul için gerekli. Referans otomatik açılmaz; dayanağın gerçekliğini inceleyen kişi doğrular.">{id => <input id={id} maxLength={1000} required={review.decision === 'accepted'} value={review.reference} onChange={event => setReview(previous => ({ ...previous, reference: event.target.value }))} />}</Field>
               <Field label="Dayanağın SHA256 içerik özeti">{id => <input id={id} autoComplete="off" spellCheck={false} pattern="[a-f0-9]{64}" maxLength={64} required={review.decision === 'accepted' || Boolean(review.reference)} value={review.sha256} onChange={event => setReview(previous => ({ ...previous, sha256: event.target.value }))} />}</Field>
-              <button className="button primary" disabled={review.decision === 'accepted' && (!data.source_review_ready || !matchesPreview(reviewPreview, sourceId, review.start, review.end) || !reviewPreview?.non_whitespace_covered || previewing !== null || (review.validity_end_mode === 'open_ended' && (!matchesPreview(validityPreview, sourceId, review.validity_evidence_start, review.validity_evidence_end) || !validityPreview?.non_whitespace_covered)))}>İnsan incelemesini kaydet</button>
+              <button className="button primary" disabled={review.decision === 'accepted' && (!data.source_review_ready || !matchesSourcePreview(reviewPreview, data.source, review.start, review.end) || !reviewPreview?.non_whitespace_covered || previewing !== null || (review.validity_end_mode === 'open_ended' && (!matchesSourcePreview(validityPreview, data.source, review.validity_evidence_start, review.validity_evidence_end) || !validityPreview?.non_whitespace_covered)))}>İnsan incelemesini kaydet</button>
             </fieldset></form>
           </>}
         </>}
