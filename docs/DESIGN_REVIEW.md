@@ -71,3 +71,29 @@ qualify the graph service, grant legal approval, or certify every populated cura
 and administrator workflow. No case, original, evidence version or review was saved
 or changed during the walkthrough. Remaining visual qualification includes populated
 curation, exceptional administration states and richer research/review workflows.
+
+
+## Curator, administration and research — 14 November 2026
+
+| Finding | Delivered correction |
+|---|---|
+| Long curator pages mixed assignment, passages, proposals, decisions and history. | Source, provision and decision pages now have named section indexes and focusable destinations. Existing ownership, exact-version and independent-review gates remain intact. |
+| Administration compressed employee identity, role information and editing into tables. | Readable registers, Turkish-aware name/username search, separate editor sections and inspectable starter-role permissions. Draft assignment changes are clearly distinguished from saved access. |
+| Research mixed new work, running jobs, saved output and external-query controls. | Named sections, clearer empty states/date guidance, wrapped actions and readable original-source quotation controls. |
+| Section navigation moved the outer page and hid the application header. | Focus is restored without automatic document scrolling; only the containing pane scrolls. Positioned pane boundaries contain hidden accessibility labels. |
+| Narrow forms and registers crowded labels and actions. | Forms, roles, assignment rows and research actions adapt to work-pane width, including 390px screens. |
+
+Validation: all **10,549 frontend tests in 142 files** pass with two workers;
+TypeScript/Vite production build passes. Tests cover Turkish-aware lookup,
+inactive/duplicate-name identity retention, starter/custom-role boundaries,
+escaped labels and pane-local focus. Browser checks cover admin search,
+unsaved draft retention, curator assignment guards and section navigation,
+research question retention, desktop and 390px layouts without horizontal
+overflow or outer-page jumps. No permission change, source acceptance,
+research job or legal decision was submitted.
+
+The observed source is unassigned; its disabled review controls are intentional.
+These checks do not certify every populated administrative or curator state,
+or establish corpus, graph-service or legal-research readiness. Exact source
+content, request payloads, evidence versions and review history are unchanged.
+All PR/main checks and the 30-second reserve gate must pass before web installation.

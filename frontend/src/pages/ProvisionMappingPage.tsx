@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { sessionPrincipalKey } from '../sessionMonitor';
 import { ApiError, request } from '../api';
-import { Badge, Detail, Empty, Field, Icon, Loading, Notice, PageHeader } from '../components';
+import { Badge, Detail, Empty, Field, Icon, Loading, Notice, PageHeader, SectionIndex } from '../components';
 import type { ProvisionCandidate, ProvisionCandidates, ProvisionKind, ProvisionMapping, ProvisionMappingEvent, ProvisionMappingState, ProvisionResolution, ProvisionSpanPreview, SourceReviewDecision, User } from '../types';
 import { formatDate, messageOf } from '../utils';
 import { canReviewSource, sourceReviewPath } from './SourceReviewPage';
@@ -171,13 +171,13 @@ function MappingWorkspace({ sourceId, user }: { sourceId: string; user: User }) 
   }
   return <div className="provision-mapping-page source-review-page">
     <a className="text-link" href={`#/sources/${sourceId}`}><Icon name="layers" size={16} />Kaynak incelemesine dön</a>
-    <PageHeader eyebrow="HUKUK KÜLLİYATINI HAZIRLAMA" title="Maddeyi kaynağıyla eşleştirin." description="Metin sınırlarını inceleyin; düzenleme, hüküm ve sürüm referanslarını ayrı kaydedin." />
+    <PageHeader eyebrow="HUKUK KÜLLİYATINI HAZIRLAMA" title="Madde eşleştirmeleri" description="Metin sınırlarını inceleyin; düzenleme, hüküm ve sürüm referanslarını ayrı kaydedin." />
     <Notice>Başlık adayları otomatik öneridir. Eşleştirmeler büroya özeldir; insan kabulü bile kaynağı yayımlamaz veya araştırmada kullanıma açmaz.</Notice>
     {error && <Notice error>{error}</Notice>}{message && <Notice>{message}</Notice>}
     {state.status === 'loading' ? <Loading label="Eşleştirme kaydı yükleniyor…" /> : state.status === 'failed' ? <ReadFailure state={state} retry={loadState} /> : data && <>
-      <MappingSummary state={data} user={user} />
+      <SectionIndex items={[{id:'provision-overview',label:'İnceleme durumu'},{id:'provision-proposal',label:'Metin aralığı önerisi'},{id:'provision-review',label:'Kayıt ve insan incelemesi'}]} /><section id="provision-overview" tabIndex={-1} aria-label="İnceleme durumu"><MappingSummary state={data} user={user} /></section>
       <div className="button-group source-review-actions"><a className="button secondary" href={`#/sources/${sourceId}`}>Kaynak incelemesi ve görevlendirme</a><button className="button secondary" disabled={downloading || busy} onClick={() => void download()}><Icon name="download" size={16} />{downloading ? 'Dosya hazırlanıyor…' : 'Eşleştirme dosyasını indir (JSON)'}</button><button className="text-button" disabled={busy} onClick={loadState}>Kaydı yenile</button></div>
-      <section className="source-review-section"><h2>1. Metin aralığı önerin</h2><p className="small muted">Bir başlık seçin veya Unicode konumlarını elle girin. Tam metni önizledikten sonra inceleme önerisi oluşturun.</p>
+      <section className="source-review-section" id="provision-proposal" tabIndex={-1} aria-label="Metin aralığı önerisi"><h2>1. Metin aralığı önerin</h2><p className="small muted">Bir başlık seçin veya Unicode konumlarını elle girin. Tam metni önizledikten sonra inceleme önerisi oluşturun.</p>
         {candidates.status === 'loading' ? <Loading label="Başlık adayları aranıyor…" /> : candidates.status === 'failed' ? <ReadFailure state={candidates} retry={() => loadCandidates(offset)} /> : <ProvisionCandidateList data={candidates.value} offset={offset} selectedId={proposal.candidate_id} disabled={busy} onSelect={chooseCandidate} onPage={loadCandidates} />}
         <form onSubmit={submitProposal} className="provision-proposal-form"><fieldset className="source-review-fieldset" disabled={!owns || busy}><legend className="visually-hidden">Yeni metin aralığı önerisi</legend>
           <div className="provision-form-heading"><h3>{proposal.candidate_id ? 'Seçili başlığın önerisi' : 'Elle seçilen metin aralığı'}</h3>{proposal.candidate_id && <button className="text-button" type="button" onClick={() => { reads.current.preview?.abort(); setPreviewing(null); setProposal(previous => ({ ...EMPTY_PROPOSAL, rationale: previous.rationale })); setProposalPreview(null); }}>Elle aralık gir</button>}</div>
@@ -188,7 +188,7 @@ function MappingWorkspace({ sourceId, user }: { sourceId: string; user: User }) 
           <button className="button primary" disabled={!matchesPreview(proposalPreview, sourceId, proposal.start, proposal.end) || previewing !== null}>İnceleme önerisi olarak kaydet</button>
         </fieldset></form>
       </section>
-      <section className="source-review-section"><h2>2. Eşleştirmeyi insan incelemesinden geçirin</h2>
+      <section className="source-review-section" id="provision-review" tabIndex={-1} aria-label="Kayıt ve insan incelemesi"><h2>2. Eşleştirmeyi insan incelemesinden geçirin</h2>
         {!data.items.length ? <Empty title="Henüz eşleştirme önerisi yok.">Üstteki kaynak başlıklarından başlayın veya tam bir metin aralığı önerin.</Empty> : <>
           <div className="provision-mapping-list" aria-label="Kayıtlı eşleştirmeler">{data.items.map(mapping => <button key={mapping.id} className={`provision-mapping-item ${mapping.id === selectedId ? 'selected' : ''}`} aria-pressed={mapping.id === selectedId} disabled={busy} onClick={() => chooseMapping(mapping)}><span><strong>{mapping.label}</strong><span className="small muted">[{mapping.span.start}, {mapping.span.end})</span></span><span><Badge status={mapping.stale ? 'stale' : mapping.status === 'accepted' ? 'reviewed' : mapping.status}>{mapping.stale ? 'Kaynak incelemesi değişti · yeniden inceleyin' : STATUS[mapping.status]}</Badge></span></button>)}</div>
           {!selected ? <p className="small muted">Kaydını ve tam metnini görmek için bir eşleştirme seçin.</p> : <>

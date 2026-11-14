@@ -1,11 +1,12 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { downloadProduct, post, request } from '../../api';
-import { Badge, Detail, Empty, Field, Icon, JsonDetails, Loading, Notice } from '../../components';
+import { Badge, Detail, Empty, Field, Icon, JsonDetails, Loading, Notice, SectionIndex } from '../../components';
 import type { AuthorityCandidates, Claim, GatewayEvaluation, Matter, Product, ResearchRun } from '../../types';
 import { formatDate, isRunning, locatorText, messageOf, statusLabel } from '../../utils';
 import { EvidenceViewer } from './FactsPanel';
 import { EvidenceContextPanel } from './EvidenceContextPanel';
 import { SourceCandidatesPanel } from './SourceCandidatesPanel';
+import { SourceExcerpt } from '../../SourceExcerpt';
 import { ValidityDetails } from '../../ValidityDetails';
 
 export default function ResearchPanel({ matter, onChange, demo }: { matter: Matter; onChange: () => Promise<void>; demo: boolean }) {
@@ -46,12 +47,15 @@ export default function ResearchPanel({ matter, onChange, demo }: { matter: Matt
     setProduct(await request<Product>(`${base}/products/${encodeURIComponent(product.id)}`)); await onChange();
   }
   async function exportFile(format: 'docx' | 'pdf') { if (!product) return; setExporting(format); setError(''); try { await downloadProduct(matter.id, product.id, format); } catch (cause) { setError(messageOf(cause)); } finally { setExporting(''); } }
-  return <section>
+  return <section className="research-workspace">
     <div className="section-heading"><div><h2>Araştırma ve hazırlık</h2><p className="small muted">Sorunuzu, kullanılacak tarihi ve beklediğiniz çıktıyı tanımlayın.</p></div>{demo && <Badge>Örnek çıktı modu</Badge>}</div>
+    <SectionIndex items={[{id:'research-question',label:'Yeni araştırma'},{id:'research-runs',label:'Çalışmalar'},{id:'research-output',label:'Kayıtlı çıktı'},{id:'research-gateway',label:'Dış kaynak denetimi'}]} />
     {error && <Notice error>{error}</Notice>}
-    <form className="research-form" onSubmit={start}><Field label="Çalışma sorunuz">{(id) => <textarea id={id} required rows={3} placeholder="Örn. Belgelerdeki ödeme yükümlülüklerini ve eksik dayanakları inceleyerek bir hazırlık notu oluştur." value={question} onChange={(event) => setQuestion(event.target.value)} />}</Field><div className="research-form-bottom"><Field label="Hukukun uygulanacağı tarih">{(id) => <input id={id} type="date" value={asOf} onChange={(event) => setAsOf(event.target.value)} />}</Field><button className="button primary" disabled={busy}>{busy ? 'Başlatılıyor…' : 'Hazırlığı başlat'}<Icon name="arrow" size={17} /></button></div>{demo && <p className="small muted">Demo çalışması arayüz akışını gösterir. Üretilen örnek metin bir hukuki değerlendirme veya canlı model kanıtı değildir.</p>}</form>
-    {pollError && <Notice error>Çalışma durumu yenilenemedi: {pollError} <button className="text-button" onClick={() => { setPollError(''); onChange().catch((cause) => setPollError(messageOf(cause))); }}>Durumu yenile</button></Notice>}
+    <section id="research-question" tabIndex={-1} aria-label="Yeni araştırma"><form className="research-form" onSubmit={start}><Field label="Çalışma sorunuz">{(id) => <textarea id={id} required rows={3} placeholder="Örn. Belgelerdeki ödeme yükümlülüklerini ve eksik dayanakları inceleyerek bir hazırlık notu oluştur." value={question} onChange={(event) => setQuestion(event.target.value)} />}</Field><div className="research-form-bottom"><Field label="Hukukun uygulanacağı tarih" hint="Araştırılacak hukuk tarihi; belgenin yüklenme tarihi değildir.">{(id) => <input id={id} type="date" value={asOf} onChange={(event) => setAsOf(event.target.value)} />}</Field><button className="button primary" disabled={busy}>{busy ? 'Başlatılıyor…' : 'Hazırlığı başlat'}<Icon name="arrow" size={17} /></button></div>{demo && <p className="small muted">Demo çalışması arayüz akışını gösterir. Üretilen örnek metin bir hukuki değerlendirme veya canlı model kanıtı değildir.</p>}</form></section>
+    <section id="research-runs" tabIndex={-1} aria-label="Araştırma çalışmaları">{pollError && <Notice error>Çalışma durumu yenilenemedi: {pollError} <button className="text-button" onClick={() => { setPollError(''); onChange().catch((cause) => setPollError(messageOf(cause))); }}>Durumu yenile</button></Notice>}
     {runs.length > 0 && <Detail title={`Araştırma çalışmaları (${runs.length})`} open={runs.some((run) => isRunning(run.status))}><div className="run-list">{runs.map((run) => <div className="run-row" key={run.id}><div><strong>{run.question}</strong><span className="small muted">{formatDate(run.created_at, true)}</span>{run.error && <p className="error-text">{run.error}</p>}{run.status === 'cancelling' && <p className="small muted" role="status">İptal isteği alındı. Devam eden işlemin bitmesi bekleniyor; yeni çıktı kaydedilmeyecek.</p>}</div><Badge status={run.status} />{isRunning(run.status) ? <button className="text-button" disabled={run.status === 'cancelling'} onClick={() => void cancel(run)}>{run.status === 'cancelling' ? 'Durduruluyor…' : 'İptal et'}</button> : run.product_id ? <button className="text-button" onClick={() => setSelectedId(run.product_id!)}>Çıktıyı aç<Icon name="arrow" size={15} /></button> : null}</div>)}</div></Detail>}
+    {!runs.length && <p className="small muted">Henüz araştırma çalışması yok. Yeni çalışma başlatıldığında durumu burada izleyebilirsiniz.</p>}</section>
+    <section id="research-output" tabIndex={-1} aria-label="Kayıtlı hazırlık çıktısı"><div className="section-heading"><h2>Kayıtlı hazırlık çıktısı</h2></div>
     {(matter.products?.length || 0) > 1 && <div className="product-selector"><label htmlFor="product-select">Hazırlık çıktısı</label><select id="product-select" value={selectedId} onChange={(event) => setSelectedId(event.target.value)}>{matter.products?.map((item) => <option key={item.id} value={item.id}>{item.title} · Sürüm {item.version} · {formatDate(item.created_at)}</option>)}</select></div>}
     {productLoading ? <Loading label="Hazırlık çıktısı açılıyor…" /> : product ? <article className="preparation-product"><header className="product-heading"><div><p className="eyebrow">HAZIRLIK ÇIKTISI · SÜRÜM {product.version}</p><h2>{product.title}</h2><span className="small muted">{formatDate(product.created_at, true)}</span></div><Badge status={product.status} /></header>{['stale', 'invalidated'].includes(product.status) && <Notice error>Bu çalışmanın dayanakları değişti. Önceki inceleme durumu güncel kabul edilmemelidir; çalışmayı yeniden oluşturup inceleyin.</Notice>}<p className="product-summary">{product.summary}</p>
     <div className="section-heading compact"><h3>İddialar ve dayanaklar</h3><span className="small muted">{product.claims.filter((claim) => claim.review_status === 'approved').length} / {product.claims.length} uygun bulundu</span></div>{product.claims.length ? <div className="claim-list">{product.claims.map((claim, index) => <ClaimReview key={claim.id} claim={claim} index={index} onReview={review} onSource={setSource} stale={['stale', 'invalidated'].includes(product.status)} />)}</div> : <Empty title="İncelenecek iddia oluşturulmadı.">Mevcut veriyle desteklenebilir bir sonuç bulunmamış olabilir. Kapsam ve eksik bilgi bölümünü inceleyin.</Empty>}
@@ -63,20 +67,19 @@ export default function ResearchPanel({ matter, onChange, demo }: { matter: Matt
     {product.source_candidates && <SourceCandidatesPanel candidates={product.source_candidates} />}
     <JsonDetails value={product.snapshots} title="Çalışmada kullanılan sürümler" />
     <div className="export-bar"><div><strong>Çalışmanızı dışa aktarın.</strong><p className="small muted">İnceleme durumu ve kaynaklar çıktıyla birlikte korunur.</p></div><div className="button-group"><button className="button secondary" disabled={Boolean(exporting)} onClick={() => void exportFile('docx')}><Icon name="download" size={17} />{exporting === 'docx' ? 'Hazırlanıyor…' : 'Word'}</button><button className="button secondary" disabled={Boolean(exporting)} onClick={() => void exportFile('pdf')}><Icon name="download" size={17} />{exporting === 'pdf' ? 'Hazırlanıyor…' : 'PDF'}</button></div></div>
-    </article> : <Empty title="Hazırlık çıktınız burada oluşacak.">Sorunuzu belirlediğinizde çalışma durumu, dayanaklar, eksikler ve inceleme adımları bu alanda görünür.</Empty>}
+    </article> : <Empty title="Hazırlık çıktınız burada oluşacak.">Sorunuzu belirlediğinizde çalışma durumu, dayanaklar, eksikler ve inceleme adımları bu alanda görünür.</Empty>}</section>
     {source && <EvidenceViewer key={source} matter={matter} evidenceId={source} onClose={() => setSource(null)} />}
-    <GatewayPanel matterId={matter.id} />
+    <section id="research-gateway" tabIndex={-1} aria-label="Dış kaynak denetimi"><GatewayPanel matterId={matter.id} /></section>
   </section>;
 }
 
-function AuthorityCandidatesPanel({ candidates }: { candidates: AuthorityCandidates }) {
+export function AuthorityCandidatesPanel({ candidates }: { candidates: AuthorityCandidates }) {
   return <section className="authority-candidates">
     <Detail title="Kamu kaynak adayları">
       <p className="small muted">Yerel kamu kaynaklarında bulunan bu pasajlar araştırma adayıdır. Bir pasajın bulunması veya kaynak inceleme durumu, bu dosyaya hukuken uygulanabilir olduğunu göstermez.</p>
       {candidates.hits.length > 0 ? <div className="authority-candidate-list">{candidates.hits.map((hit) => <article className="authority-candidate" key={`${hit.source_version_id}:${hit.passage_id}`}>
         <div className="section-heading compact"><h3>{hit.title || 'Başlıksız kaynak'}</h3><Badge status={hit.review_status} /></div>
-        <p className="passage-label">{locatorText(hit.locator)}</p>
-        <blockquote>{hit.text}</blockquote>
+        <SourceExcerpt name={hit.title || 'Başlıksız kaynak'} location={locatorText(hit.locator)} text={hit.text} label="Araştırma adayı" />
         <Detail title="Kaynak ve sürüm bilgileri"><dl className="definition-grid">
           <div><dt>Kaynak kimliği</dt><dd className="reference-id">{hit.authority_id || 'Belirtilmedi'}</dd></div>
           <div><dt>Pasaj kimliği</dt><dd className="reference-id">{hit.passage_id}</dd></div>

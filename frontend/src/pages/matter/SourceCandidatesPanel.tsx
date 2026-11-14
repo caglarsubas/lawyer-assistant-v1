@@ -1,5 +1,6 @@
 import { Badge, Detail, JsonDetails } from '../../components';
 import type { SourceCandidates } from '../../types';
+import { SourceExcerpt } from '../../SourceExcerpt';
 import { locatorText } from '../../utils';
 
 export function SourceCandidatesPanel({ candidates }: { candidates: SourceCandidates }) {
@@ -11,7 +12,7 @@ export function SourceCandidatesPanel({ candidates }: { candidates: SourceCandid
       {candidates.coverage.status === 'unavailable' && <p className="small muted">Kaynak izni veya sürümü doğrulanamadı; kaynak pasajları gösterilmiyor.</p>}
       {candidates.hits.length ? <div className="authority-candidate-list">{candidates.hits.map((hit) => <article className="authority-candidate" key={`${hit.source_version_id}:${hit.passage_id}`}>
         <div className="section-heading compact"><h3>{locatorText(hit.locator)}</h3><Badge>Kaynak alıntısı</Badge></div>
-        <blockquote>{hit.text}</blockquote>
+        <SourceExcerpt name="Kamu kaynağı pasajı" location={locatorText(hit.locator)} text={hit.text} label="Uygulanabilirlik değerlendirilmedi" />
         <Detail title="Alıntının kaynağı ve sürümü"><dl className="definition-grid">
           <div><dt>Pasaj kimliği</dt><dd className="reference-id">{hit.passage_id}</dd></div>
           <div><dt>Kaynak kimliği</dt><dd className="reference-id">{hit.document_id}</dd></div>

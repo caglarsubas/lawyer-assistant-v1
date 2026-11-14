@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { sessionPrincipalKey } from '../sessionMonitor';
 import DecisionIdentityReview from './DecisionIdentityReview';
 import { ApiError, request } from '../api';
-import { Detail, Field, Loading, Notice, PageHeader } from '../components';
+import { Detail, Field, Loading, Notice, PageHeader, SectionIndex } from '../components';
 import type { PublicSourceOriginalText, PublicSourcePassages, SourceReviewDecision, User } from '../types';
 import { formatDate, messageOf } from '../utils';
 import { canReviewSource, fetchOriginalSourceText, SourcePassageList, sourceReviewPath } from './SourceReviewPage';
@@ -98,17 +98,17 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
   }
   const owner = state?.assigned_to?.id === user.id;
   return <div className="source-review-page"><a className="text-link" href={`#/sources/${sourceId}`}>Kaynak ve özgün belge incelemesine dön</a>
-    <PageHeader eyebrow="KARAR EŞLEŞTİRME" title="Anmadan hesap verebilir incelemeye." description="Seçili pasajdaki numara, tarih ve atıfları inceleyin; belge kimliğini alıntılanan kararlardan ayrı değerlendirin." />
+    <PageHeader eyebrow="KARAR EŞLEŞTİRME" title="Karar eşleştirmeleri" description="Seçili pasajdaki numara, tarih ve atıfları inceleyin; belge kimliğini alıntılanan kararlardan ayrı değerlendirin." />
     <Notice>Bu ekran büroya özel inceleme kaydıdır. Referanslar insan beyanıdır; kesinleşme, bağlayıcılık ve hukuki etki bilinmiyor. Graf ve kaynak tarihleri değişmez.</Notice>
     {busy && <Loading label="İnceleme işlemi sürüyor…" />}{error && <Notice error>{error}</Notice>}{message && <Notice>{message}</Notice>}
     {!denied && <button className="button secondary" disabled={busy} onClick={() => void load()}>Güncel kaydı yenile</button>}
-    {state && <><p>{state.assigned_to?.name || 'Sorumlu atanmadı'} · Eşleme revizyonu {state.revision} · Kaynak inceleme revizyonu {state.source_review_revision}</p>
+    {state && <><SectionIndex items={[{id:'decision-passages',label:'Belge ve pasajlar'},{id:'decision-history',label:'Kayıtlar ve geçmiş'},{id:'decision-identity',label:'Bağımsız kimlik incelemesi'}]} /><p>{state.assigned_to?.name || 'Sorumlu atanmadı'} · Eşleme revizyonu {state.revision} · Kaynak inceleme revizyonu {state.source_review_revision}</p>
       {!owner && <Notice>Anma eşlemelerini değiştirmek için kaynak incelemesini üstlenin. Bağımsız kimlik incelemesi ayrı hesapla yapılır.</Notice>}{!state.source_review_ready && <Notice>Kabul için haklar, kaynak kimliği, metin çıkarımı ve hukuki inceleme tamamlanmalıdır.</Notice>}
       <button className="button secondary" disabled={busy || !state.export_allowed} onClick={() => void downloadDossier()}>Tam gizli inceleme dosyasını indir (JSON)</button>
       {!state.export_allowed && <p className="small muted">Dayanak pasajlarını indirmek için hak incelemesinde açık dışa aktarma izni gerekir.</p>}
       {dossier && <DossierSummary data={dossier} />}
       <p className="small muted">İnceleme kayıtları: {state.handoff_ready ? 'Güncel kabuller var; tam dosyanın devir kontrollerini inceleyin' : 'Bekliyor'} · Yayımlanmadı</p>
-      <section className="source-review-section"><h2>Pasajı seçin</h2>{passages && <SourcePassageList data={passages} offset={offset} selected={[]} canSelect={false} onSelect={() => undefined} onPage={next => { if (!busy) void load(next); }} onCandidates={id => { if (!busy) void inspect(id); }} candidatesDisabled={busy} original={original} onOriginal={(id, next) => { void inspectOriginal(id, next); }} onCloseOriginal={() => { if (!busy) setOriginal(null); }} />}</section>
+      <section className="source-review-section" id="decision-passages" tabIndex={-1} aria-label="Belge ve pasajlar"><h2>Pasajı seçin</h2>{passages && <SourcePassageList data={passages} offset={offset} selected={[]} canSelect={false} onSelect={() => undefined} onPage={next => { if (!busy) void load(next); }} onCandidates={id => { if (!busy) void inspect(id); }} candidatesDisabled={busy} original={original} onOriginal={(id, next) => { void inspectOriginal(id, next); }} onCloseOriginal={() => { if (!busy) setOriginal(null); }} />}</section>
       {occurrences && <section className="source-review-section"><h2>Seçili pasajdaki anmalar · {occurrences.count}</h2><p className="small muted">{occurrences.passage_id} · Yalnızca bu pasaj; otomatik adaylar henüz çözümlenmedi.</p>
         {occurrences.items.length ? <OccurrenceList items={occurrences.items} selectedId={selected?.id || null} disabled={busy} onSelect={item => { const existing = state.items.find(value => value.candidate.id === item.id); select(item, existing?.id || null, existing?.resolution || null); }} /> : <Notice>Bu pasajda tanınan yazım biçimi bulunamadı. Bu sonuç kararın atıf içermediğini göstermez.</Notice>}
         <Detail title="Tarama sınırları">{occurrences.limitations.map(text => <p key={text}>{text}</p>)}</Detail>
@@ -123,8 +123,8 @@ function DecisionWorkspace({ sourceId, user }: { sourceId: string; user: User })
           <button className="button" disabled={mappingId !== null && decision === 'accepted' && !state.source_review_ready}>{mappingId ? 'İncelemeyi kaydet' : 'İnceleme önerisi kaydet'}</button>
         </fieldset></form>
       </section>}
-      <DecisionHistory state={state} />
-      <DecisionIdentityReview key={`${state.revision}:${state.source_review_revision}`} source={state} user={user} onDenied={() => { setDenied(true); setState(null); setPassages(null); setOriginal(null); clearSelection(); }} />
+      <section id="decision-history" tabIndex={-1} aria-label="Kayıtlar ve geçmiş"><DecisionHistory state={state} /></section>
+      <section id="decision-identity" tabIndex={-1} aria-label="Bağımsız kimlik incelemesi"><DecisionIdentityReview key={`${state.revision}:${state.source_review_revision}`} source={state} user={user} onDenied={() => { setDenied(true); setState(null); setPassages(null); setOriginal(null); clearSelection(); }} /></section>
     </>}
   </div>;
 }
