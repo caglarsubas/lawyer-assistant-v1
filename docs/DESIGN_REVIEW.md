@@ -47,3 +47,27 @@ The living roadmap records those delivery states separately from broader readine
 
 This review does not certify every populated administrative data state or complete
 legal UAT. The owner's saved pilot review remains pending.
+
+## Remaining browse and status screens — 14 November 2026
+
+| Finding | Delivered correction |
+|---|---|
+| Coverage mixed a long register with narrow nested columns and repeated generic disclosures. | Added a keyboard-focusable section index that preserves the route; records stack to the available work-pane width; nested disclosures name their field. |
+| The graph offered only a diagram with shortened labels. | Added a keyboard-operable list of exactly the same bounded results, with full labels, review status and identity-based selection. |
+| An unavailable graph was described as an empty search. | Service/version failures now have a distinct explanation and retry action. Known service diagnostics use Turkish labels; unknown messages remain visible. No substitute legal data is introduced. |
+| Client records exposed IDs prominently and offered no name lookup. | Added Turkish-aware local name search, a clear no-match state and an optional assignment-reference disclosure. Workspace navigation keeps the existing date filters. |
+| Work view selection and filters lacked hierarchy; narrow registers cramped actions. | Added visible selected-view styling, readable filter controls and stacked actions at narrow pane widths. |
+| Decorative page titles made navigation less direct. | Coverage, graph, clients and system screens now use the same names as navigation. System metadata wraps without crowding values. |
+
+Validation: 10,543 frontend tests in 140 files pass with two workers; the production
+build passes. Read-only browser checks cover client search/reset, preservation of
+customer/date selection, coverage focus/route preservation, unavailable graph
+feedback, and all five screens at desktop and 390px widths. A disposable synthetic
+list verifies duplicate-name identity selection by keyboard and long labels.
+
+The live graph currently reports unavailable access; populated graph records were
+therefore tested with synthetic data only. This UI delivery does not repair or
+qualify the graph service, grant legal approval, or certify every populated curator
+and administrator workflow. No case, original, evidence version or review was saved
+or changed during the walkthrough. Remaining visual qualification includes populated
+curation, exceptional administration states and richer research/review workflows.

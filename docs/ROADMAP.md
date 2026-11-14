@@ -1,5 +1,24 @@
 # Approved product roadmap and implementation ledger
 
+## Remaining browse and status screen usability — 14 November 2026
+
+Engineering delivery contributes to **R05A-01** and **R03-17**: direct coverage
+section navigation, full-label graph list browsing, distinct graph-unavailable
+feedback, Turkish-aware client search, readable work filters, and responsive
+status/register layouts. Existing customer/date filters, authorization, evidence
+versions and review decisions retain their original semantics.
+
+The complete frontend suite passes 10,543 tests with two workers. Desktop and
+390px browser checks and a disposable synthetic graph-list check are recorded.
+PR/main CI, the 30-second reserve gate and preservation-checked web installation
+remain separate delivery checks. No CI caps, workers, cases or workflows change.
+
+The live graph reports unavailable access; this UI work does not establish graph
+runtime or legal readiness. Owner review remains pending. Broader checklist
+statuses do not advance from presentation changes alone. Populated curator/admin
+states and richer research workflows remain in the UI qualification backlog.
+
+
 Baseline: 4 October 2026; research reconciliation: **5 October 2026**. Original planning envelope: **30–36 weeks**; the 9 October firm-workflow amendment adds an estimated **4–6 weeks** to the application critical path (provisional combined envelope **34–42 weeks**), conditional on approximately eight FTE, lawful source access and protected Turkish legal-editor capacity. This is a delivery sequence, not a claim that elapsed weeks, legal reviews or corpus acquisition have occurred. Re-estimate from representative acquisition/review throughput before committing a pilot date; the attachments' shorter fixed calendar and longer staffing estimates are inputs to that check, not replacement promises.
 
 This is the canonical delivery plan. [Data and knowledge strategy](DATA_KNOWLEDGE_STRATEGY.md) specifies source families, refresh targets and retrieval requirements. [Research reconciliation](PLAN_RECONCILIATION_2026-10-05.md) records adopted proposals and unresolved claims. The same-day user amendment is specified in [legal analysis and sanitized BYOK deep research](LEGAL_ANALYSIS_AND_DEEP_RESEARCH.md). Those research revisions changed planning only. Subsequent implementation progress is recorded below: R01 offline contracts, evidence verification and extraction comparison are delivered; source approvals, legal review and provider activation are not granted by that work.

@@ -37,7 +37,7 @@ export function servingReleaseFromCoverage(data: unknown): GraphServingRelease |
 export function ServingRelease({ release }: { release: GraphServingRelease | null }) {
   const verified = release?.status === 'verified';
   const title = !release ? 'Sürüm durumu bilinmiyor' : verified ? 'Sürüm bütünlüğü doğrulandı' : release.status === 'unconfigured' ? 'Etkin sürüm tanımlanmadı' : 'Sürüm doğrulanamadı';
-  return <section className="coverage-section" aria-labelledby="serving-release-title">
+  return <section id="serving-release" tabIndex={-1} className="coverage-section" aria-labelledby="serving-release-title">
     <div className="coverage-section-title"><h2 id="serving-release-title">Etkin graf sürümü</h2></div>
     <div><Badge status={verified ? 'ready' : 'unreviewed'}>{title}</Badge>
       <p className="small source-summary">{verified ? 'Graf hizmetinin değiştirilemez sürüm kaydı doğrulandı. Kaynak kapsamı ve hukuki inceleme ayrı değerlendirilir.' : !release ? 'Etkin sürüme ilişkin kayıt alınamadı. Kapsam verisini yenileyerek yeniden deneyin.' : release.status === 'unconfigured' ? 'Graf hizmeti için doğrulanacak bir sürüm seçilmemiş. Kaynak hazırlık kayıtları etkin bir hukuk derlemi oluşturmaz.' : 'Graf hizmetinin seçili sürümü doğrulanamadı. Bu durumdan kapsam veya hukuki yeterlilik sonucu çıkarılamaz.'}</p>

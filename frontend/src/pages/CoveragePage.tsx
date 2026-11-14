@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { request } from '../api';
-import { Detail, Icon, JsonDetails, Loading, Notice, PageHeader } from '../components';
+import { Detail, SectionIndex, Icon, JsonDetails, Loading, Notice, PageHeader } from '../components';
 import { messageOf, statusLabel } from '../utils';
 import { fetchSourceCatalog, servingReleaseFromCoverage, ServingRelease, SourceCatalog, type SourceCatalogState } from './SourceReadiness';
 
@@ -38,13 +38,13 @@ export default function CoveragePage() {
   useEffect(() => { loadCoverage(); loadSources(); return () => { coverageRequest.current?.abort(); sourceRequest.current?.abort(); }; }, [loadCoverage, loadSources]);
   const sections = data && typeof data === 'object' && !Array.isArray(data) ? Object.entries(data).filter(([key]) => key !== 'serving_release') : [];
   return <>
-    <PageHeader eyebrow="BİLDİKLERİMİZ VE SINIRLARI" title="Kapsamı bilerek çalışın." description="Bir hukuk alanının haritada bulunması, tüm kaynaklarının edinildiği veya iş akışının doğrulandığı anlamına gelmez." action={<button className="button secondary" onClick={() => { loadCoverage(); loadSources(); }} disabled={loading || sources.status === 'loading'}>Durumu yenile</button>} />
+    <PageHeader eyebrow="BİLDİKLERİMİZ VE SINIRLARI" title="Kaynak kapsamı" description="Bir hukuk alanının haritada bulunması, tüm kaynaklarının edinildiği veya iş akışının doğrulandığı anlamına gelmez." action={<button className="button secondary" onClick={() => { loadCoverage(); loadSources(); }} disabled={loading || sources.status === 'loading'}>Durumu yenile</button>} />
     <div className="coverage-intro"><Icon name="layers" size={26} /><p><strong>Beş ayrı değerlendirme.</strong> Yapısal harita, kaynak edinimi, tarihsel sürümler, ilişki incelemesi ve iş akışı doğrulaması ayrı izlenir. Bilinmeyen alanlar tamamlanmış kabul edilmez.</p></div>
-    <a className="text-link coverage-jump" href="#public-source-catalog" onClick={(event) => { event.preventDefault(); const target = document.getElementById('public-source-catalog'); target?.focus({ preventScroll: true }); target?.scrollIntoView({ block: 'start' }); }}>Kaynak kabul kaydına git<Icon name="arrow" size={15} /></a>
+    <SectionIndex items={[...(!loading && data !== null ? [{ id: 'serving-release', label: 'Etkin graf sürümü' }, ...sections.map(([key], index) => ({ id: `coverage-section-${index}`, label: labels[key] || key.replaceAll('_', ' ') }))] : []), { id: 'public-source-catalog', label: 'Kaynak kabul kaydı' }]} />
     {error && <Notice error>{error}</Notice>}
     {loading ? <Loading label="Kapsam kaydı yükleniyor…" /> : <>
       <ServingRelease release={servingReleaseFromCoverage(data)} />
-      <div className="coverage-register">{sections.map(([key, value], index) => <section key={key} className="coverage-section"><div className="coverage-section-title"><span className="matter-number">{String(index + 1).padStart(2, '0')}</span><h2>{labels[key] || key.replaceAll('_', ' ')}</h2></div><CoverageValue value={value} /></section>)}</div>
+      <div className="coverage-register">{sections.map(([key, value], index) => <section key={key} id={`coverage-section-${index}`} tabIndex={-1} className="coverage-section"><div className="coverage-section-title"><span className="matter-number">{String(index + 1).padStart(2, '0')}</span><h2>{labels[key] || key.replaceAll('_', ' ')}</h2></div><CoverageValue value={value} /></section>)}</div>
       {data !== null && <JsonDetails value={data} title="Kapsam kaydının tüm alanları" />}
     </>}
     <SourceCatalog state={sources} onRetry={loadSources} />
@@ -56,5 +56,5 @@ function CoverageValue({ value }: { value: unknown }) {
   if (typeof value === 'boolean') return <span>{value ? 'Evet' : 'Hayır'}</span>;
   if (typeof value === 'string' || typeof value === 'number') return <p>{typeof value === 'string' ? statusLabel(value) : value}</p>;
   if (Array.isArray(value)) return value.length ? <ul className="coverage-values">{value.map((item, index) => <li key={index}><CoverageValue value={item} /></li>)}</ul> : <p className="muted">Kayıt bulunmuyor.</p>;
-  return <dl className="coverage-fields">{Object.entries(value).map(([key, entry]) => <div key={key}><dt>{labels[key] || key.replaceAll('_', ' ')}</dt><dd>{entry !== null && typeof entry === 'object' ? <Detail title="Ayrıntıları göster"><CoverageValue value={entry} /></Detail> : <CoverageValue value={entry} />}</dd></div>)}</dl>;
+  return <dl className="coverage-fields">{Object.entries(value).map(([key, entry]) => <div key={key}><dt>{labels[key] || key.replaceAll('_', ' ')}</dt><dd>{entry !== null && typeof entry === 'object' ? <Detail title={`${labels[key] || key.replaceAll('_', ' ')} ayrıntıları`}><CoverageValue value={entry} /></Detail> : <CoverageValue value={entry} />}</dd></div>)}</dl>;
 }

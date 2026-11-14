@@ -21,7 +21,7 @@ export default function SystemPage({ status, onStatus }: { status: SystemStatus 
     setBusy(false);
   }
   return <>
-    <PageHeader eyebrow="KURULUM VE HİZMETLER" title="Görünür durum, açık sınırlar." description="Hizmet bağlantılarını denetleyin ve çalışmaya başlamadan önce eksikleri görün." action={<button className="button secondary" disabled={busy} onClick={() => void refresh()}>{busy ? 'Denetleniyor…' : 'Bağlantıları denetle'}</button>} />
+    <PageHeader eyebrow="KURULUM VE HİZMETLER" title="Sistem durumu" description="Hizmet bağlantılarını denetleyin ve çalışmaya başlamadan önce eksikleri görün." action={<button className="button secondary" disabled={busy} onClick={() => void refresh()}>{busy ? 'Denetleniyor…' : 'Bağlantıları denetle'}</button>} />
     {error && <Notice error>{error}</Notice>}
     <div className="system-layout"><section>
       <div className="section-heading"><h2>Dil modeli sağlayıcısı</h2>{!readiness && <Badge>Henüz denetlenmedi</Badge>}</div>

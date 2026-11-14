@@ -189,7 +189,7 @@ export interface GraphCatalog {
 }
 export interface GraphNode { id: string; label: string; type: string; graph: string; review_status: string }
 export interface GraphEdge extends ValidityMetadata { id: string; source: string; target: string; label: string; status: string; evidence_id?: string }
-export interface GraphResult { nodes: GraphNode[]; edges: GraphEdge[]; limitations: string[]; snapshot: unknown }
+export interface GraphResult { mode?: string; nodes: GraphNode[]; edges: GraphEdge[]; limitations: string[]; snapshot: unknown }
 export interface GatewayEvaluation {
   decision: string; reason_codes: string[]; policy_version: string; payload_digest: string; request_id: string;
 }
