@@ -1,5 +1,32 @@
 # Approved product roadmap and implementation ledger
 
+## Populated curator, assignment and research records — 14 November 2026
+
+Engineering work contributes to **R05A-01** and **R03-17**. Saved research outputs
+now show title, exact version, date and review state together. Loading another
+output clears the previous result; failures offer a retry for the same selection.
+Selection-bound reads reject mismatched identities/versions and late responses,
+including review refreshes after navigation. Switching matters resets local input.
+
+Curator histories show each saved rationale, reviewer, revision and evidence
+references separately. Decision fields have readable labels; their exact recorded
+values remain available. Account assignments and manager choices distinguish
+same-name employees by username, retaining identity-based operations and existing
+inactive/professional-role restrictions. No API payload or authorization changes.
+
+Validation: **10,560 frontend tests in 144 files**, two workers, production build,
+and disposable populated browser checks at desktop and 390px. Failed-read retry,
+out-of-order selection, stale review controls, duplicate-account keyboard removal
+from an unsaved synthetic list, historical disagreement and exact quotation text
+were checked. No real source, permission, research job or legal decision was saved.
+
+All 13 CI jobs, coverage, caps and the **30-second reserve floor** remain unchanged.
+PR checks, main checks and web-only installation remain separate gates. Owner legal
+review is pending; milestone readiness stays **42 done, 21 open, 24 waiting and
+6 deferred**. Live write/conflict workflows, complete research acceptance and
+unavailable graph-service qualification remain open. Engineering completion does
+not advance those gates.
+
 ## Curator, administration and research usability — 14 November 2026
 
 Engineering work contributes to **R05A-01** and **R03-17**. Curator source,

@@ -1,3 +1,5 @@
+import { ReviewRecord } from './ReviewRecord';
+import { DecisionResolutionView } from './DecisionResolutionView';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { sessionPrincipalKey } from '../sessionMonitor';
 import DecisionIdentityReview from './DecisionIdentityReview';
@@ -141,8 +143,22 @@ function ResolutionFields({ value, onChange }: { value: DecisionResolution; onCh
   </>;
 }
 export function DecisionHistory({ state }: { state: DecisionState }) {
-  return <section className="source-review-section"><h2>Kayıtlar ve inceleme geçmişi</h2>{state.items.map(item => <article className="source-passage" key={item.id}><p className="source-passage-text">{item.candidate.text}</p><p>{item.status === 'machine_proposed' ? 'İnceleme bekliyor' : item.status === 'accepted' ? 'İnsan incelemesi kabul edildi' : item.status === 'rejected' ? 'Reddedildi' : 'Düzeltme gerekli'}{item.stale ? ' · Yeniden inceleme gerekli' : ''}</p>{item.resolution && <Detail title="İnsan tarafından girilen çözümleme"><dl>{Object.entries(item.resolution).map(([key, value]) => <div key={key}><dt>{{ start: 'Dayanak başlangıcı', end: 'Dayanak bitişi', occurrence_role: 'Anma rolü', proceeding_ref: 'Yargılama referansı', decision_ref: 'Karar referansı', institution_ref: 'Kurum referansı', target_ref: 'Atıf hedefi', target_version_ref: 'Hedef sürümü', event_role: 'Tarih rolü', event_date: 'Tarih', authority_treatment: 'Atfın kullanımı' }[key as keyof DecisionResolution]}</dt><dd>{value ?? 'Bilinmiyor'}</dd></div>)}</dl></Detail>}<p className="small">{item.last_event.reviewer.name} · {formatDate(item.last_event.created_at, true)}</p></article>)}
-    <Detail title="Önceki görüşler korunur">{state.history.map(event => <article key={event.id}><p>Revizyon {event.revision} · {event.reviewer.name} · {formatDate(event.created_at, true)} · {event.decision ? { accepted: 'Kabul edildi', rejected: 'Reddedildi', needs_changes: 'Düzeltme gerekli' }[event.decision] : 'Öneri'}</p><p>{event.rationale}</p>{event.snapshot.resolution && <pre className="source-passage-text">{JSON.stringify(event.snapshot.resolution, null, 2)}</pre>}{event.evidence_refs.map(ref => <p key={`${ref.reference}:${ref.sha256}`}>{ref.reference} · {ref.sha256}</p>)}</article>)}{state.history_truncated && <Notice>Bu görünüm yalnızca son 50 olayı içerir. Eski olaylar silinmedi.</Notice>}</Detail>
+  return <section className="source-review-section"><h2>Kayıtlar ve inceleme geçmişi</h2>
+    {!state.items.length && <p className="small muted">Henüz kaydedilmiş anma eşleştirmesi yok.</p>}
+    {state.items.map(item => <article className="source-passage" key={item.id}>
+      <h3>{KIND_LABELS[item.candidate.kind] || item.candidate.kind}</h3>
+      <p>{item.status === 'machine_proposed' ? 'İnceleme bekliyor' : item.status === 'accepted' ? 'İnsan incelemesi kabul edildi' : item.status === 'rejected' ? 'Reddedildi' : 'Düzeltme gerekli'}{item.stale ? ' · Yeniden inceleme gerekli' : ''}</p>
+      <p className="small muted">Kaydedilen anma · {item.passage_id}</p><p className="source-passage-text">{item.candidate.text}</p>
+      {item.resolution && <Detail title="İnsan tarafından girilen çözümleme"><DecisionResolutionView resolution={item.resolution} /></Detail>}
+      <p className="small">{item.last_event.reviewer.name} · {formatDate(item.last_event.created_at, true)}</p>
+    </article>)}
+    <Detail title="Önceki görüşler korunur"><p className="small muted">Her olay kendi gerekçesi, dayanakları ve o sırada kaydedilen çözümlemesiyle gösterilir. Önceki karar güncel kabul anlamına gelmez.</p>
+      <ol className="source-review-history">{state.history.map(event => <li key={event.id}><ReviewRecord event={event} label={event.decision ? { accepted: 'Kabul edildi', rejected: 'Reddedildi', needs_changes: 'Düzeltme gerekli' }[event.decision] : 'Öneri'}>
+        <p className="small muted">Kaynak inceleme revizyonu {event.source_review_revision} · Pasaj {event.snapshot.passage_id}</p>
+        {event.snapshot.resolution && <Detail title="Bu olaydaki çözümleme"><DecisionResolutionView resolution={event.snapshot.resolution} /></Detail>}
+      </ReviewRecord></li>)}</ol>{!state.history.length && <p className="small muted">Henüz geçmiş olayı yok.</p>}
+      {state.history_truncated && <Notice>Bu görünüm yalnızca son 50 olayı içerir. Eski olaylar silinmedi.</Notice>}
+    </Detail>
   </section>;
 }
 

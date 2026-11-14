@@ -97,3 +97,25 @@ These checks do not certify every populated administrative or curator state,
 or establish corpus, graph-service or legal-research readiness. Exact source
 content, request payloads, evidence versions and review history are unchanged.
 All PR/main checks and the 30-second reserve gate must pass before web installation.
+
+
+## Populated records and asynchronous selection — 14 November 2026
+
+| Finding | Correction and boundary |
+|---|---|
+| A failed research-output load could redisplay the prior output beneath the new selection; late reads could overwrite it. | Clear the prior body/actions immediately, bind every response to matter/output/version, discard closed or superseded reads, and expose same-selection retry. Review refreshes cannot replace another selected output. |
+| Native output choices obscured repeated titles, versions and stale state. | A keyboard-operable register shows title, version, date, status and selection; it stacks at narrow pane widths. |
+| Curator decision history mixed prose, raw fields and long hashes. | Read-only event records separate saved rationale, reviewer, revision and evidence. Labeled decision fields retain unknowns and zero offsets; original field values remain inspectable. |
+| Same-name accounts were ambiguous in assignments and manager choices. | Include usernames while keeping user-ID operations, inactive-account restrictions and draft-versus-saved scope unchanged. |
+
+All **10,560 tests in 144 frontend files** and the production build pass with two
+workers. Disposable real-component browser checks cover failure/retry, delayed
+responses, stale controls, exact quotations, historical disagreements, duplicate
+account keyboard selection and desktop/390px layouts. These synthetic records
+contain no private cases; the harness blocks all writes and never forwards reads.
+No actual source acceptance, assignment, research run or legal decision was made.
+
+This is populated presentation/selection qualification, not acceptance of live
+curation mutations or legal research. Existing owner review and operational
+qualification remain pending. CI workers, complete coverage and reserve gates
+are unchanged; PR/main and installed verification remain separate.

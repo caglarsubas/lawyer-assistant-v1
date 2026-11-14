@@ -1,3 +1,4 @@
+import { ReviewRecord } from './ReviewRecord';
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { ApiError, request } from '../api';
 import { Badge, Detail, Field, Icon, Loading, Notice, PageHeader, SectionIndex } from '../components';
@@ -279,5 +280,5 @@ export function SourcePassageList({ data, offset, selected, canSelect, onSelect,
 
 function ReviewEvent({ event }: { event: SourceReviewEvent }) {
   const label = event.event_type === 'claim' ? 'İnceleme üstlenildi' : event.event_type === 'release' ? 'Görevlendirme kaldırıldı' : `${event.category ? CATEGORIES[event.category] : 'İnceleme'} · ${event.decision ? DECISIONS[event.decision] : 'Karar belirtilmedi'}`;
-  return <div><p><strong>{label}</strong> · Revizyon {event.revision}</p><p className="small muted">{event.reviewer.name} · {formatDate(event.created_at, true)}</p>{event.event_type === 'assessment' && <p className="small">{event.effort ? `Aktif süre: ${event.effort.active_seconds} saniye · ${event.effort.basis === 'self_reported_timer' ? 'Zamanlayıcı beyanı' : 'Tahmin'}` : 'Aktif süre: bilinmiyor'}</p>}<p className="source-review-rationale">{event.rationale}</p>{event.evidence_refs.length > 0 && <ul>{event.evidence_refs.map((reference, index) => <li key={index}><span>{reference.reference}</span><p className="reference-id">{reference.sha256}</p></li>)}</ul>}{event.passage_ids.length > 0 && <p className="small">İncelenen pasajlar: {event.passage_ids.join(', ')}</p>}{event.permitted_uses.length > 0 && <p className="small">İzin kapsamı: {event.permitted_uses.map(value => USES[value]).join(', ')}</p>}</div>;
+  return <ReviewRecord event={event} label={label}>{event.event_type === 'assessment' && <p className="small">{event.effort ? `Aktif süre: ${event.effort.active_seconds} saniye · ${event.effort.basis === 'self_reported_timer' ? 'Zamanlayıcı beyanı' : 'Tahmin'}` : 'Aktif süre: bilinmiyor'}</p>}{event.passage_ids.length > 0 && <p className="small">İncelenen pasajlar: {event.passage_ids.join(', ')}</p>}{event.permitted_uses.length > 0 && <p className="small">İzin kapsamı: {event.permitted_uses.map(value => USES[value]).join(', ')}</p>}</ReviewRecord>;
 }
