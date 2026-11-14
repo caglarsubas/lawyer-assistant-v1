@@ -156,6 +156,7 @@ export interface SourceCandidates {
 }
 export interface Product {
   id: string; title: string; status: string; version: number; summary: string;
+  revision?: number; stale_reason?: string;
   claims: Claim[]; issues: { label: string; missing_facts: string[]; counterarguments: string[] }[];
   coverage: { searched: string[]; gaps: string[] }; snapshots: unknown; graph_paths?: unknown;
   authority_candidates?: AuthorityCandidates; created_at: string;

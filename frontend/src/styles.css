@@ -79,6 +79,8 @@ svg { flex-shrink: 0; }
 .notice.error { color: var(--danger); background: oklch(96% .018 50); border-color: oklch(83% .035 50); }
 .notice .text-button { padding-block: 0; margin-inline-start: 8px; }
 .notice ul { margin-bottom: 0; }
+.conflict-state { margin-block: 16px; padding-inline-start: 16px; border-inline-start: 2px solid oklch(77% .06 50); min-width: 0; }
+.conflict-state > .form-actions { justify-content: flex-start; padding-block: 8px; }
 .loading { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 64px 20px; font-size: .87rem; color: var(--muted); }
 .spinner { height: 17px; width: 17px; border: 2px solid var(--line); border-top-color: var(--green); border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }

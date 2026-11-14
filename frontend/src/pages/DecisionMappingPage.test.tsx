@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import DecisionMappingPage, { DecisionHistory, OccurrenceList } from './DecisionMappingPage';
-import { decisionPath, decisionReviewPayload, emptyResolution, fetchDecisionOccurrences, type DecisionOccurrences, type DecisionState } from './decisionMapping';
+import { canResumeDecisionDraft, decisionPath, decisionReviewPayload, emptyResolution, fetchDecisionOccurrences, type DecisionMapping, type DecisionOccurrences, type DecisionState } from './decisionMapping';
 import { comparisonHash } from './sourceComparison';
 import type { PublicSourceDetail, PublicSourcePassages, User } from '../types';
 const sourceId = 'a'.repeat(64); const text = 'Karar Tarihi: 12/1/2021'; const full = `😀 ${text} <script>x</script>`;
@@ -29,6 +29,16 @@ describe('accountable decision UI', () => {
     fetchMock.mockResolvedValue(change === 'hash' ? new Response(JSON.stringify({ evidence_json: JSON.stringify(data), evidence_sha256: 'd'.repeat(64) })) : await response(data)); await expect(fetchDecisionOccurrences(source, passage)).rejects.toThrow();
   });
   it('does not return cancelled evidence', async () => { const { source, passage, data } = await fixture(); fetchMock.mockResolvedValue(await response(data)); const controller = new AbortController(); controller.abort(); await expect(fetchDecisionOccurrences(source, passage, controller.signal)).rejects.toThrow(); });
+  it('retains a rejected proposal and only resumes reviews of the same exact mapping and passage', async () => {
+    const { item, passage } = await fixture();
+    const mapping = { id: 'existing', candidate: item, passage_id: passage.id } as DecisionMapping;
+    const refreshed = { ...state, revision: 5, items: [mapping] };
+    expect(canResumeDecisionDraft(refreshed, item, passage.id, null)).toBe(false);
+    expect(canResumeDecisionDraft(refreshed, item, passage.id, 'existing')).toBe(true);
+    expect(canResumeDecisionDraft(refreshed, item, passage.id, 'different')).toBe(false);
+    expect(canResumeDecisionDraft(refreshed, item, 'another-passage', 'existing')).toBe(false);
+    expect(canResumeDecisionDraft(refreshed, { ...item, sha256: 'd'.repeat(64) }, passage.id, 'existing')).toBe(false);
+  });
   it('escapes candidate text and shows unknown roles', async () => { const { item } = await fixture(); const markup = renderToStaticMarkup(<OccurrenceList items={[{ ...item, text: '<script>x</script>' }]} selectedId={item.id} disabled onSelect={() => undefined} />); expect(markup).toContain('&lt;script&gt;'); expect(markup).not.toContain('<script>'); expect(markup).toContain('kimlik ve rol bilinmiyor'); expect(markup).toContain('aria-pressed="true"'); expect(markup).toContain('disabled=""'); });
   it('retains disagreeing historical interpretations as inert text', async () => {
     const { item } = await fixture(); const event = { id: 'e1', revision: 2, mapping_id: 'm1', event_type: 'review', reviewer: { id: user.id, name: '<img src=x>' }, created_at: '2026-10-11T12:00:00Z', rationale: '<script>historical</script>', decision: 'accepted' as const, evidence_refs: [], source_review_revision: 3, snapshot: { passage_id: 'p1', candidate: item, status: 'accepted' as const, resolution: { ...emptyResolution(item), decision_ref: '<a href="javascript:x">' }, reviewed_source_revision: 3 } };

@@ -1,5 +1,26 @@
 # Approved product roadmap and implementation ledger
 
+## Conflict recovery in review and administration — 15 November 2026
+
+This delivery contributes to **W01**, **W02**, **R03-17** and **R05A-01**.
+Employee, role and assignment conflicts keep the unsaved draft alongside the
+latest authorized record. Opening that record starts a new edit. Source
+assessments and decision and provision mappings check the source version,
+artifact digests and review revisions before the curator can resume the draft.
+A duplicate proposal requires selecting the existing mapping again to start
+a review.
+
+Research distinguishes a rejected review, a saved review awaiting source
+authorization and a submission whose outcome is unknown. A saved receipt
+binds the reread to the selected output and its recorded revision. Single-use
+external research requests require a new evaluation before they can be sent
+again. A background job completing leaves the current output selected.
+
+Two-worker frontend validation and isolated browser checks cover the retained
+draft, the newer saved record, a reread older than the committed review and an
+expired external request. Conflict exercises use synthetic records. The owner's
+legal review and live workflow qualification remain open.
+
 ## Populated curator, assignment and research records — 14 November 2026
 
 Engineering work contributes to **R05A-01** and **R03-17**. Saved research outputs

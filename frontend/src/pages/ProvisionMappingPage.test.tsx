@@ -66,6 +66,11 @@ describe('provision mapping review controls', () => {
     expect(payload).not.toHaveProperty('text'); expect(payload).not.toHaveProperty('reviewer');
     expect(proposalPayload({ ...draft, candidate_id: null }, state, { ...preview, non_whitespace_covered: false }).candidate_id).toBeNull();
   });
+  it('rejects a preview from a different source version or text digest at the same coordinates', () => {
+    const draft = { ...EMPTY_PROPOSAL, label: 'MADDE 1', start: '7', end: '20', rationale: 'Sınırlar kontrol edildi.' };
+    expect(() => proposalPayload(draft, state, { ...preview, source_version_id: 'another-version' })).toThrow();
+    expect(() => mappingReviewPayload(accepted, state, { ...preview, text_sha256: 'a'.repeat(64) })).toThrow();
+  });
   it('requires accepted source review, complete preview coverage and independent identity refs for acceptance', () => {
     expect(() => mappingReviewPayload(accepted, { ...state, source_review_ready: false }, preview)).toThrow('dört kaynak');
     expect(() => mappingReviewPayload(accepted, state, { ...preview, non_whitespace_covered: false })).toThrow('pasajlarla kapsanmalı');
@@ -122,7 +127,7 @@ describe('provision mapping review controls', () => {
     const draft = structuredClone(accepted); const payload = mappingReviewPayload(draft, state, preview);
     fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({ detail: 'Conflict' }), { status: 409 })).mockResolvedValueOnce(new Response(JSON.stringify({ ...state, revision: 3, source_review_revision: 6 })));
     const result = await writeProvisionMapping(sourceId, mappingId, payload);
-    expect(result.conflict).toBe(true); expect(result.state.source_review_revision).toBe(6); expect(draft).toEqual(accepted); expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(result.conflict).toBe(true); expect(result.state?.source_review_revision).toBe(6); expect(draft).toEqual(accepted); expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(fetchMock.mock.calls[0][0]).toBe(`/api/v1/public-sources/${sourceId}/provision-mappings/${mappingId}/review`);
     expect(JSON.parse(fetchMock.mock.calls[0][1]?.body as string)).toMatchObject({ expected_revision: 2, expected_source_review_revision: 5 });
     expect(new Headers(fetchMock.mock.calls[0][1]?.headers).get('X-CSRF-Token')).toBe('test-csrf'); expect(fetchMock.mock.calls[1][1]?.method).toBeUndefined();

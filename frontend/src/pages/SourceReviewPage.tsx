@@ -6,6 +6,7 @@ import type { PublicSourceOriginalText, PublicSourcePassages, SourcePermittedUse
 import { sessionPrincipalKey } from '../sessionMonitor';
 import { formatDate, messageOf, statusLabel } from '../utils';
 import SourcePdfView, { fetchOriginalSourcePdf, mappedPdfPage, type PdfInspection } from './SourcePdfInspection';
+import { sameCuratorSource, writeCuratorReview } from './curatorReviewBinding';
 
 const CATEGORIES: Record<SourceReviewCategory, string> = { rights: 'Kullanım hakları', source_identity: 'Kaynak kimliği', extraction: 'Metin çıkarımı', legal: 'Hukuki inceleme' };
 const DECISIONS: Record<SourceReviewDecision, string> = { accepted: 'Kabul edildi', needs_changes: 'Düzeltme gerekli', rejected: 'Reddedildi' };
@@ -61,15 +62,18 @@ export function assessmentPayload(draft: AssessmentDraft, revision: number) {
     permitted_uses: draft.category === 'rights' ? draft.permitted_uses : [], ...(effort ? { effort } : {}) };
 }
 
-// A conflict always refreshes the server projection. The caller retains its draft;
-// this helper never retries a write against a newer revision.
-export async function writeSourceReview(sourceId: string, action: 'assignment' | 'assessments', payload: unknown, signal?: AbortSignal): Promise<{ state: SourceReviewState; conflict: boolean }> {
-  const path = `${sourceReviewPath(sourceId)}/review`;
-  try { return { state: await request<SourceReviewState>(`${path}/${action}`, { method: 'POST', body: JSON.stringify(payload), signal }), conflict: false }; }
-  catch (cause) {
-    if (cause instanceof ApiError && cause.status === 409) return { state: await request<SourceReviewState>(path, { signal }), conflict: true };
-    throw cause;
+function validateReviewState(value: SourceReviewState, sourceId: string, before?: SourceReviewState) {
+  if (value?.source?.id !== sourceId || value.publication_eligible !== false
+    || !Number.isSafeInteger(value.revision) || value.revision < 0
+    || (before && (!sameCuratorSource(before.source, value.source) || value.revision < before.revision))) {
+    throw new Error('İnceleme kaydı seçili kaynak sürümü ve dosyalarla doğrulanamadı.');
   }
+  return value;
+}
+
+export function writeSourceReview(sourceId: string, action: 'assignment' | 'assessments', payload: unknown, signal?: AbortSignal) {
+  const path = `${sourceReviewPath(sourceId)}/review`;
+  return writeCuratorReview<SourceReviewState>(`${path}/${action}`, path, payload, signal);
 }
 
 export async function fetchSourceAttachment(sourceId: string, kind: 'original' | 'export', signal?: AbortSignal): Promise<Blob> {
@@ -101,6 +105,7 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
   const [assignmentRationale, setAssignmentRationale] = useState('');
   const [busy, setBusy] = useState(false); const [downloading, setDownloading] = useState(false);
   const [message, setMessage] = useState(''); const [error, setError] = useState('');
+  const [conflict, setConflict] = useState<{ before: SourceReviewState; reason: string; refreshed: boolean } | null>(null);
   const reviewController = useRef<AbortController | null>(null); const passageController = useRef<AbortController | null>(null);
   const mutationController = useRef<AbortController | null>(null); const downloadController = useRef<AbortController | null>(null);
   const objectUrls = useRef(new Set<string>()); const path = sourceReviewPath(sourceId);
@@ -110,15 +115,18 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
       originalController.current?.abort(); setOriginal(null);
       mutationController.current?.abort(); downloadController.current?.abort();
       setReview(failed(cause)); setPassages(failed(cause));
-      setDraft({ ...EMPTY_ASSESSMENT }); setAssignmentRationale(''); setBusy(false); setDownloading(false);
+      setDraft({ ...EMPTY_ASSESSMENT }); setAssignmentRationale(''); setConflict(null); setBusy(false); setDownloading(false);
+      objectUrls.current.forEach(url => URL.revokeObjectURL(url)); objectUrls.current.clear();
     }
   }, []);
   const loadReview = useCallback(() => {
     originalController.current?.abort(); setOriginal(null);
     reviewController.current?.abort(); const controller = new AbortController(); reviewController.current = controller;
     setReview({ status: 'loading' });
-    void request<SourceReviewState>(`${path}/review`, { signal: controller.signal }).then(value => { if (!controller.signal.aborted) setReview({ status: 'loaded', value }); }).catch(cause => { if (!controller.signal.aborted) { setReview(failed(cause)); denyAccess(cause); } });
-  }, [path, denyAccess]);
+    void request<SourceReviewState>(`${path}/review`, { signal: controller.signal }).then(value => {
+      if (!controller.signal.aborted) setReview({ status: 'loaded', value: validateReviewState(value, sourceId) });
+    }).catch(cause => { if (!controller.signal.aborted) { setReview(failed(cause)); denyAccess(cause); } });
+  }, [sourceId, path, denyAccess]);
   const loadPassages = useCallback((nextOffset: number) => {
     originalController.current?.abort(); setOriginal(null);
     passageController.current?.abort(); const controller = new AbortController(); passageController.current = controller;
@@ -133,30 +141,66 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
   const state = review.status === 'loaded' ? review.value : null;
   const owns = state?.assigned_to?.id === user.id;
   const canRelease = state?.assigned_to && (owns || (user.permissions ? user.permissions.includes('source.assign') : user.role === 'admin'));
+  const assignmentChanged = Boolean(conflict && conflict.before.assigned_to?.id !== state?.assigned_to?.id);
+  async function refreshReview() {
+    if (!state || busy) return;
+    const before = conflict?.before || state;
+    const reason = conflict?.reason || 'İnceleme kaydı değişti.';
+    reviewController.current?.abort();
+    const controller = new AbortController(); reviewController.current = controller;
+    setBusy(true); setError(''); setMessage('');
+    try {
+      const latest = await request<SourceReviewState>(`${path}/review`, { signal: controller.signal });
+      if (controller.signal.aborted) return;
+      validateReviewState(latest, sourceId, before);
+      setReview({ status: 'loaded', value: latest });
+      if (conflict || before.revision !== latest.revision) setConflict({ before, reason, refreshed: true });
+    } catch (cause) {
+      if (!controller.signal.aborted) {
+        setConflict({ before, reason, refreshed: false });
+        setError(messageOf(cause));
+        denyAccess(cause);
+      }
+    } finally { if (!controller.signal.aborted) setBusy(false); }
+  }
   async function mutate(action: 'assignment' | 'assessments', payload: unknown) {
-    if (busy) return; setBusy(true); setError(''); setMessage('');
+    if (!state || busy || conflict) return;
+    setBusy(true); setError(''); setMessage('');
     const controller = new AbortController(); mutationController.current = controller;
     reviewController.current?.abort();
     try {
       const result = await writeSourceReview(sourceId, action, payload, controller.signal);
       if (controller.signal.aborted) return;
-      setReview({ status: 'loaded', value: result.state });
-      if (result.conflict) setError('İnceleme başka bir işlemde değişti. Güncel kayıt yüklendi; yazdıklarınız korundu. Değişiklikleri karşılaştırıp yeniden kaydedin. Otomatik tekrar yapılmadı.');
-      else { setMessage('İnceleme kaydı kaydedildi. Kaynak yayımlanmadı.'); if (action === 'assignment') setAssignmentRationale(''); else setDraft(previous => ({ ...EMPTY_ASSESSMENT, category: previous.category })); }
+      if (result.conflict) {
+        setConflict({ before: state, reason: result.reason, refreshed: false });
+        if (!result.state) { setError(result.refreshError || 'Güncel kayıt okunamadı.'); return; }
+        validateReviewState(result.state, sourceId, state);
+        setReview({ status: 'loaded', value: result.state });
+        setConflict({ before: state, reason: result.reason, refreshed: true });
+      } else {
+        setConflict({ before: state, reason: 'Kaydetme yanıtının doğrulanması gerekiyor.', refreshed: false });
+        validateReviewState(result.state, sourceId, state);
+        if (result.state.revision !== state.revision + 1) throw new Error('Kaydedilen incelemenin revizyonu doğrulanamadı.');
+        setConflict(null);
+        setReview({ status: 'loaded', value: result.state });
+        setMessage('İnceleme kaydı kaydedildi. Kaynak yayımlanmadı.');
+        if (action === 'assignment') setAssignmentRationale('');
+        else setDraft(previous => ({ ...EMPTY_ASSESSMENT, category: previous.category }));
+      }
     } catch (cause) { if (!controller.signal.aborted) { setError(messageOf(cause)); denyAccess(cause); } }
     finally { if (!controller.signal.aborted) setBusy(false); }
   }
   function assign(action: 'claim' | 'release') {
-    if (!state) return;
+    if (!state || busy || conflict) return;
     if (assignmentRationale.trim().length < 3 || assignmentRationale.trim().length > 4000) { setError('Görevlendirme gerekçesi 3–4000 karakter olmalı.'); return; }
     void mutate('assignment', { action, expected_revision: state.revision, rationale: assignmentRationale.trim() });
   }
   function assess(event: FormEvent) {
-    event.preventDefault(); if (!state || !owns || busy) return;
+    event.preventDefault(); if (!state || !owns || busy || conflict) return;
     try { void mutate('assessments', assessmentPayload(draft, state.revision)); } catch (cause) { setError(messageOf(cause)); }
   }
   async function download(kind: 'original' | 'export') {
-    if (downloading) return; setDownloading(true); setError('');
+    if (downloading || (kind === 'export' && conflict)) return; setDownloading(true); setError('');
     const controller = new AbortController(); downloadController.current = controller;
     try {
       const blob = await fetchSourceAttachment(sourceId, kind, controller.signal); if (controller.signal.aborted) return;
@@ -188,18 +232,35 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
     <PageHeader eyebrow="KAYNAK İNCELEMESİ" title={state?.source.title || 'Kaynağı inceleyin.'} description="Özgün belgeyi ve çıkarılan pasajları karşılaştırın; her değerlendirmeyi gerekçesi ve dayanağıyla kaydedin." />
     <Notice>İnceleme notları ve görevlendirmeler şifreli, büroya özel kayıtlardır. Bu ekran kaynağı otomatik yayımlamaz, araştırmada kullanıma açmaz veya güncel hukuk olduğunu onaylamaz.</Notice>
     {error && <Notice error>{error}</Notice>}{message && <Notice>{message}</Notice>}
+    {conflict && state && <Notice error>
+      <h2>İnceleme işlemi bekliyor</h2>
+      <p>{conflict.reason} Taslağınız bu ekranda duruyor.</p>
+      <p>Taslak revizyonu {conflict.before.revision} · {conflict.refreshed ? `Güncel revizyon ${state.revision}` : 'Güncel kayıt doğrulanamadı'}</p>
+      {conflict.refreshed && assignmentChanged && <p>Sorumlu: {conflict.before.assigned_to?.name || 'Atanmamış'} → {state.assigned_to?.name || 'Atanmamış'}</p>}
+      {conflict.refreshed && assignmentChanged && assignmentRationale && <>
+        <p>Sorumluluk değişti. Önceki görevlendirme gerekçeniz:</p>
+        <p className="source-review-rationale">{assignmentRationale}</p>
+      </>}
+      <div className="button-group">
+        <button type="button" className="button secondary" disabled={busy} onClick={() => void refreshReview()}>Güncel kaydı tekrar oku</button>
+        {conflict.refreshed && <button type="button" className="button secondary" disabled={busy} onClick={() => {
+          if (assignmentChanged) setAssignmentRationale('');
+          setConflict(null); setError('');
+        }}>{assignmentChanged && assignmentRationale ? 'Taslağı düzenle ve eski görev gerekçesini temizle' : 'Güncel kaydı inceledim, taslağı düzenle'}</button>}
+      </div>
+    </Notice>}
     {review.status === 'loading' ? <Loading label="İnceleme kaydı yükleniyor…" /> : review.status === 'failed' ? <ReadFailure state={review} retry={loadReview} /> : state && <>
       <SectionIndex items={[{id:'source-overview',label:'İnceleme durumu'},{id:'source-assignment',label:'Sorumluluk'},{id:'source-passages',label:'Belge ve pasajlar'},{id:'source-assessment',label:'Değerlendirme'},{id:'source-history',label:'Geçmiş'}]} />
       <section id="source-overview" tabIndex={-1} aria-label="İnceleme durumu"><SourceReviewSummary state={state} /></section>
-      <div className="button-group source-review-actions" role="group" aria-label="Kaynak inceleme araçları"><a className="button secondary" href={`#/sources/${sourceId}/compare`}>Başka kaynak temsiliyle karşılaştır</a><a className="button secondary" href={`#/sources/${sourceId}/provisions`}><Icon name="book" size={16} />Madde eşleştirmelerini aç</a><a className="button secondary" href={`#/sources/${sourceId}/decisions`}>Karar eşleştirmelerini aç</a></div><Detail title="Dosya indirme ve kaydı yenileme" variant="technical"><div className="button-group source-review-actions"><button className="button secondary" disabled={downloading || busy} onClick={() => void download('original')}><Icon name="download" size={16} />Özgün dosyayı indir</button><button className="button secondary" disabled={downloading || busy} onClick={() => void download('export')}><Icon name="download" size={16} />İnceleme dosyasını indir (JSON)</button><button className="text-button" disabled={busy} onClick={loadReview}>İnceleme kaydını yenile</button></div></Detail>
+      <div className="button-group source-review-actions" role="group" aria-label="Kaynak inceleme araçları"><a className="button secondary" href={`#/sources/${sourceId}/compare`}>Başka kaynak temsiliyle karşılaştır</a><a className="button secondary" href={`#/sources/${sourceId}/provisions`}><Icon name="book" size={16} />Madde eşleştirmelerini aç</a><a className="button secondary" href={`#/sources/${sourceId}/decisions`}>Karar eşleştirmelerini aç</a></div><Detail title="Dosya indirme ve kaydı yenileme" variant="technical"><div className="button-group source-review-actions"><button className="button secondary" disabled={downloading || busy} onClick={() => void download('original')}><Icon name="download" size={16} />Özgün dosyayı indir</button><button className="button secondary" disabled={downloading || busy || Boolean(conflict)} onClick={() => void download('export')}><Icon name="download" size={16} />İnceleme dosyasını indir (JSON)</button><button className="text-button" disabled={busy} onClick={() => void refreshReview()}>İnceleme kaydını yenile</button></div></Detail>
       {downloading && <p role="status" className="small muted">Dosya eki hazırlanıyor…</p>}
       <section className="source-review-section" id="source-assignment" tabIndex={-1} aria-labelledby="source-assignment-title"><h2 id="source-assignment-title">İnceleme sorumluluğu</h2><p className="small">{state.assigned_to ? <><strong>{state.assigned_to.name}</strong> bu kaydın inceleme sorumlusu.</> : 'Henüz bir inceleme sorumlusu yok.'} Revizyon: {state.revision}.</p>
         <p className="small muted">İşlemler oturumunuzdaki {user.name} adına kaydedilir. Yalnızca sorumlu kişi değerlendirme ekleyebilir.</p>
-        {(!state.assigned_to || canRelease) && <div className="source-assignment-form"><Field label="Görevlendirme gerekçesi" hint="İncelemeyi neden üstlendiğinizi veya bıraktığınızı belirtin. Bu açıklama karar geçmişinde saklanır.">{id => <textarea id={id} maxLength={4000} rows={2} value={assignmentRationale} disabled={busy} onChange={event => setAssignmentRationale(event.target.value)} />}</Field><button className="button secondary" disabled={busy} onClick={() => assign(state.assigned_to ? 'release' : 'claim')}>{state.assigned_to ? owns ? 'Sorumluluğu bırak' : 'Görevlendirmeyi gerekçeyle kaldır' : 'İncelemeyi üstlen'}</button></div>}
+        {(!state.assigned_to || canRelease) && <div className="source-assignment-form"><Field label="Görevlendirme gerekçesi" hint="İncelemeyi neden üstlendiğinizi veya bıraktığınızı belirtin. Bu açıklama karar geçmişinde saklanır.">{id => <textarea id={id} maxLength={4000} rows={2} value={assignmentRationale} disabled={busy || Boolean(conflict)} onChange={event => setAssignmentRationale(event.target.value)} />}</Field><button className="button secondary" disabled={busy || Boolean(conflict)} onClick={() => assign(state.assigned_to ? 'release' : 'claim')}>{state.assigned_to ? owns ? 'Sorumluluğu bırak' : 'Görevlendirmeyi gerekçeyle kaldır' : 'İncelemeyi üstlen'}</button></div>}
       </section>
       <section className="source-review-section" id="source-assessment" tabIndex={-1} aria-labelledby="source-assessment-title"><h2 id="source-assessment-title">Değerlendirme ekle</h2>
         {!owns && <p className="small muted">Yeni değerlendirme için önce incelemeyi üstlenin. Başkasına atanmış incelemeyi devralmak otomatik değildir.</p>}
-        <form onSubmit={assess}><fieldset className="source-review-fieldset" disabled={!owns || busy}><legend className="visually-hidden">Yeni insan incelemesi</legend>
+        <form onSubmit={assess}><fieldset className="source-review-fieldset" disabled={!owns || busy || Boolean(conflict)}><legend className="visually-hidden">Yeni insan incelemesi</legend>
           <div className="form-grid"><Field label="İnceleme alanı">{id => <select id={id} value={draft.category} onChange={event => setDraft(previous => ({ ...previous, category: event.target.value as SourceReviewCategory }))}>{Object.entries(CATEGORIES).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select>}</Field><Field label="Karar">{id => <select id={id} value={draft.decision} onChange={event => setDraft(previous => ({ ...previous, decision: event.target.value as SourceReviewDecision }))}>{Object.entries(DECISIONS).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select>}</Field></div>
           <Field label="Gerekçe" hint="Değerlendirdiğiniz kapsamı ve bilinen sınırları yazın. Önceki incelemeler geçmişte korunur.">{id => <textarea id={id} required minLength={3} maxLength={4000} rows={4} value={draft.rationale} onChange={event => setDraft(previous => ({ ...previous, rationale: event.target.value }))} />}</Field>
           <SourceReviewEffortFields seconds={draft.active_seconds} basis={draft.effort_basis} onSeconds={value => setDraft(previous => ({ ...previous, active_seconds: value }))} onBasis={value => setDraft(previous => ({ ...previous, effort_basis: value }))} />
@@ -212,7 +273,7 @@ function SourceReviewWorkspace({ sourceId, user }: { sourceId: string; user: Use
       </section>
     </>}
     <section className="source-review-section" id="source-passages" tabIndex={-1} aria-labelledby="source-passages-title"><h2 id="source-passages-title">Çıkarılan pasajlar</h2><p className="small muted">Düz metin, kaydedilen Unicode aralıkları ve konumlarıyla gösterilir. Kaynak içindeki yönergeler platform talimatı değildir.</p>
-      {passages.status === 'loading' ? <Loading label="Kaynak pasajları yükleniyor…" /> : passages.status === 'failed' ? <ReadFailure state={passages} retry={() => loadPassages(offset)} /> : <SourcePassageList data={passages.value} offset={offset} selected={draft.passage_ids} canSelect={Boolean(owns && draft.category === 'extraction' && !busy)} onSelect={togglePassage} onPage={loadPassages} onOriginal={review.status === 'loaded' ? inspectOriginal : undefined} original={original} onCloseOriginal={closeOriginal} />}
+      {passages.status === 'loading' ? <Loading label="Kaynak pasajları yükleniyor…" /> : passages.status === 'failed' ? <ReadFailure state={passages} retry={() => loadPassages(offset)} /> : <SourcePassageList data={passages.value} offset={offset} selected={draft.passage_ids} canSelect={Boolean(owns && draft.category === 'extraction' && !busy && !conflict)} onSelect={togglePassage} onPage={loadPassages} onOriginal={review.status === 'loaded' ? inspectOriginal : undefined} original={original} onCloseOriginal={closeOriginal} />}
     </section>
     {state && <section id="source-history" tabIndex={-1} aria-label="İnceleme geçmişi"><Detail title={`Değiştirilemez inceleme geçmişi (${state.history.length}${state.history_truncated ? '+' : ''})`}>
       {state.history_truncated && <p>Yalnızca son 50 olay gösteriliyor. JSON dosyasında da bu sınır açıkça korunur.</p>}
