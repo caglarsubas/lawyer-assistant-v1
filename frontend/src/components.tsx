@@ -51,6 +51,15 @@ export function PageHeader({ eyebrow, title, description, action }: { eyebrow: s
 }
 
 /** In-page navigation deliberately preserves the application route and filters. */
+export function focusSection(id: string) {
+  const target = document.getElementById(id);
+  if (!target) return;
+  target.focus({ preventScroll: true });
+  const pane = target.closest<HTMLElement>('.frame-content');
+  if (pane) pane.scrollTo({ top: Math.max(0, pane.scrollTop + target.getBoundingClientRect().top - pane.getBoundingClientRect().top - 24), behavior: 'auto' });
+  else target.scrollIntoView({ block: 'nearest' });
+}
+
 export function SectionIndex({ items }: { items: { id: string; label: string }[] }) {
-  return <nav className="section-index" aria-label="Bu sayfada"><p className="small-label">Bu sayfada</p><div>{items.map(item => <button type="button" key={item.id} onClick={() => { const target = document.getElementById(item.id); target?.focus({ preventScroll: true }); target?.scrollIntoView({ block: 'start' }); }}>{item.label}<Icon name="arrow" size={14} /></button>)}</div></nav>;
+  return <nav className="section-index" aria-label="Bu sayfada"><p className="small-label">Bu sayfada</p><div>{items.map(item => <button type="button" key={item.id} onClick={() => focusSection(item.id)}>{item.label}<Icon name="arrow" size={14} /></button>)}</div></nav>;
 }

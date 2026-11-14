@@ -1,5 +1,30 @@
 # Approved product roadmap and implementation ledger
 
+## Curator, administration and research usability — 14 November 2026
+
+Engineering work contributes to **R05A-01** and **R03-17**. Curator source,
+provision and decision screens now have direct section navigation. Administration
+uses readable employee/role registers, Turkish-aware employee search, inspectable
+read-only starter permissions and separated draft assignments. Research separates
+new questions, work status, saved output and external-query controls. Quotation
+reading/original-line views retain exact text and version metadata.
+
+Section navigation now scrolls only its work pane. Containing hidden accessibility
+labels prevents the outer page from growing and hiding the application header.
+Forms remain mounted; navigation preserves unsaved text and the route.
+
+The full frontend suite passes **10,549 tests in 142 files** with two workers;
+the production build passes. Read-only browser checks cover desktop and 390px
+layouts, source assignment guards, curator section focus, admin search and draft
+retention, read-only role inspection and research draft retention. No permission,
+source review, research job or case mutation was submitted.
+
+All existing CI jobs, coverage, caps and the 30-second reserve floor remain
+unchanged. PR checks, independent main checks and preservation-checked web-only
+installation are separate delivery gates. Owner review remains pending; broader
+readiness stays 42 done, 21 open, 24 waiting and 6 deferred. Populated exceptional
+curator/admin states and end-to-end legal research acceptance remain open.
+
 ## Remaining browse and status screen usability — 14 November 2026
 
 Engineering delivery contributes to **R05A-01** and **R03-17**: direct coverage
