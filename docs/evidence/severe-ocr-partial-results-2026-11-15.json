@@ -1,0 +1,274 @@
+{
+  "schema": "synthetic-severe-pdf-recovery-and-partial-warning-v1",
+  "synthetic_only": true,
+  "candidate_image_id": "sha256:e61ef37dd9ccedf69480a6bed10bd83960633e09c8e1400e6ef52e66c8f64e51",
+  "baseline_image_id": "sha256:cfde7336ad4cf2120844cbe7fd756471369e48380667d3574095a4055977c470",
+  "network_disabled_read_only_originals": true,
+  "identical_repeats_per_image": 2,
+  "retained": {
+    "before_sha256": "f500dd6e1effceb460df53ba040f8628192f5daa9621539e30ffb1c8b5e35653",
+    "after_sha256": "338d9f86e798915fa1e0269a3f32d5647b7a8e7f9748cbe031a921f5d6ee6523",
+    "freeze_sha256": "79500d09b0303bd486af6c0f67583580842fb483357be92e32bf5ca2a0fc7a37",
+    "reference_sha256": "15e85e984c36f6fb0bb31cc3101e510cb181cb4d45b26eb8be2d0f80fd4c1848",
+    "source_sha256": {
+      "extract.py": "9a0efb28a1afa52eed4aa503bafdeb3eaebbf939df2ac838b6335cd3c9c496f7",
+      "extraction_client.py": "5ddfe5c5357370ae00f9f5831afeb1f889dafb1ee28e093c610b3443eab21d66",
+      "extraction_worker.py": "abe30d4c02a811aa2da305c6f03429a0e222fce0de4192787d967155cdac0c12",
+      "extraction_runtime.py": "09394d55e664cf0c734b28e78a117b8b28d22f8d7f9867bdfd51c7656340ac51",
+      "pdf_extract.py": "753e5c40c5b2f5601de6f4035645738bcacd27562c33a99e1db800a824060c14",
+      "pdf_image_coverage.py": "772396a986229e89d110d535c218d26d4b448f2e61ed0ebe3a33bf59aa7c6938",
+      "pdf_scan_extract.py": "ffec2b548f5e3d449caa3f7902071f300e9299505aef7a5b72f0f972cba12f74",
+      "pdf_severe_extract.py": "b013123e3a4dc0b05b51a1a0ac9b9b7e35ec6acad13c067af47451e47113ab64"
+    },
+    "before_exact_critical_fields": 10,
+    "after_exact_critical_fields": 22,
+    "critical_fields": 24,
+    "before_exact_lines": 7,
+    "after_exact_lines": 19,
+    "source_lines": 24,
+    "pages_recovered": 3,
+    "pages_with_partial_warnings": 5,
+    "page_budget_control_unchanged": true,
+    "pages": [
+      {
+        "scan": "very-faint-blur",
+        "locator": "Sayfa 1",
+        "before_exact_lines": 3,
+        "after_exact_lines": 3,
+        "before_exact_fields": {
+          "date": true,
+          "amount": true,
+          "currency": true,
+          "negation": true
+        },
+        "after_exact_fields": {
+          "date": true,
+          "amount": true,
+          "currency": true,
+          "negation": true
+        },
+        "expected_lines": 4,
+        "recovered": false,
+        "omitted_after": false,
+        "exact_partial_warning": true,
+        "before_text_sha256": "4f02157e5ee60a1dc9ebe66247cd4494d42199181dec228499c42ecf694f0e80",
+        "after_text_sha256": "4f02157e5ee60a1dc9ebe66247cd4494d42199181dec228499c42ecf694f0e80",
+        "source_sha256": "2015cef37098268cc9df6c503c9805a44e7ca859a03183ba2094bc1d3bfccd2a"
+      },
+      {
+        "scan": "uneven-mottle-and-skew",
+        "locator": "Sayfa 2",
+        "before_exact_lines": 0,
+        "after_exact_lines": 4,
+        "before_exact_fields": {
+          "date": false,
+          "amount": false,
+          "currency": false,
+          "negation": false
+        },
+        "after_exact_fields": {
+          "date": true,
+          "amount": true,
+          "currency": true,
+          "negation": true
+        },
+        "expected_lines": 4,
+        "recovered": true,
+        "omitted_after": false,
+        "exact_partial_warning": true,
+        "before_text_sha256": null,
+        "after_text_sha256": "9116a46e84b6287dc681b4ac4a120fedbed85a836666fd0aa02efdd7822e1838",
+        "source_sha256": "2015cef37098268cc9df6c503c9805a44e7ca859a03183ba2094bc1d3bfccd2a"
+      },
+      {
+        "scan": "severe-low-resolution-blur",
+        "locator": "Sayfa 3",
+        "before_exact_lines": 4,
+        "after_exact_lines": 4,
+        "before_exact_fields": {
+          "date": true,
+          "amount": true,
+          "currency": true,
+          "negation": true
+        },
+        "after_exact_fields": {
+          "date": true,
+          "amount": true,
+          "currency": true,
+          "negation": true
+        },
+        "expected_lines": 4,
+        "recovered": false,
+        "omitted_after": false,
+        "exact_partial_warning": false,
+        "before_text_sha256": "4e71cba63e91782dd5780f92145e3f56c1d805de913afbd5f2552e78d941fdd7",
+        "after_text_sha256": "4e71cba63e91782dd5780f92145e3f56c1d805de913afbd5f2552e78d941fdd7",
+        "source_sha256": "2015cef37098268cc9df6c503c9805a44e7ca859a03183ba2094bc1d3bfccd2a"
+      },
+      {
+        "scan": "uneven-diagonal-illumination",
+        "locator": "Sayfa 1",
+        "before_exact_lines": 0,
+        "after_exact_lines": 4,
+        "before_exact_fields": {
+          "date": false,
+          "amount": false,
+          "currency": false,
+          "negation": false
+        },
+        "after_exact_fields": {
+          "date": true,
+          "amount": true,
+          "currency": true,
+          "negation": true
+        },
+        "expected_lines": 4,
+        "recovered": true,
+        "omitted_after": false,
+        "exact_partial_warning": true,
+        "before_text_sha256": null,
+        "after_text_sha256": "78eade1bea890272c8e2fea09b08239d5f62d9f10291ba937117b63f5b3c4b44",
+        "source_sha256": "b9086180987da33eee2c080813474b78ea08987f93e684d9ffcaaacdac1fe22a"
+      },
+      {
+        "scan": "severe-edge-shadow-and-speckle",
+        "locator": "Sayfa 2",
+        "before_exact_lines": 0,
+        "after_exact_lines": 0,
+        "before_exact_fields": {
+          "date": true,
+          "amount": false,
+          "currency": true,
+          "negation": false
+        },
+        "after_exact_fields": {
+          "date": true,
+          "amount": false,
+          "currency": true,
+          "negation": false
+        },
+        "expected_lines": 4,
+        "recovered": false,
+        "omitted_after": false,
+        "exact_partial_warning": true,
+        "before_text_sha256": "4dd56b2a01ee9245b3e22575d3dc46d2e73153aaeec36da19f3ca64f70174854",
+        "after_text_sha256": "4dd56b2a01ee9245b3e22575d3dc46d2e73153aaeec36da19f3ca64f70174854",
+        "source_sha256": "b9086180987da33eee2c080813474b78ea08987f93e684d9ffcaaacdac1fe22a"
+      },
+      {
+        "scan": "severe-lossy-recopy",
+        "locator": "Sayfa 3",
+        "before_exact_lines": 0,
+        "after_exact_lines": 4,
+        "before_exact_fields": {
+          "date": false,
+          "amount": false,
+          "currency": false,
+          "negation": false
+        },
+        "after_exact_fields": {
+          "date": true,
+          "amount": true,
+          "currency": true,
+          "negation": true
+        },
+        "expected_lines": 4,
+        "recovered": true,
+        "omitted_after": false,
+        "exact_partial_warning": true,
+        "before_text_sha256": null,
+        "after_text_sha256": "3afa8f1361aa5c83600fc23267786879c85eb7794f6ee9249b284d0cc38ccc3d",
+        "source_sha256": "b9086180987da33eee2c080813474b78ea08987f93e684d9ffcaaacdac1fe22a"
+      }
+    ]
+  },
+  "held_out": {
+    "qualification_sha256": "703fd83569758cc67ad19f1cfd0cae7101769208f7de4702ce692434a3f9359f",
+    "freeze_sha256": "e88e4f95ca9de596f4606f9ca3ff5632307293be930f6ed2ca03524ef145ebf5",
+    "original_sha256": {
+      "fixture-a.pdf": "5173bcb1c6bea73b34ae1bb39f942c44a33d637d0381990b16b62df35f407e06",
+      "fixture-b.pdf": "527f72b82f0fe9725a43a2d2a1feeeb9681a848873339b4f204f33d1d9749ad0",
+      "fixture-guard.pdf": "97928346d7c2be2ea87a231a27565629f19dd756bcbc066bfa31d3205e62bf7e"
+    },
+    "observation_sha256": {
+      "baseline": "4a919dc7531c77eb70cb755152863050ed6b0388bdaa2bf4013f8d598432f984",
+      "candidate": "19b1a18268bb92e9731517a858e02fc1ae1691574b61dcedb030b111c0add763"
+    },
+    "severe": {
+      "pages": 6,
+      "exact_lines": {
+        "before": 5,
+        "after": 16,
+        "possible": 24
+      },
+      "exact_fields": {
+        "before": 7,
+        "after": 19,
+        "possible": 24
+      },
+      "warning_kinds": {
+        "before": {
+          "generic-ocr": 3,
+          "omission": 3
+        },
+        "after": {
+          "partial": 5,
+          "generic-ocr": 1
+        }
+      },
+      "omissions": {
+        "before": 3,
+        "after": 0
+      },
+      "field_losses": 0,
+      "field_gains": 12,
+      "line_losses": 0,
+      "line_gains": 11
+    },
+    "guards": {
+      "pages": 3,
+      "exact_lines": {
+        "before": 8,
+        "after": 12,
+        "possible": 12
+      },
+      "exact_fields": {
+        "before": 8,
+        "after": 12,
+        "possible": 12
+      },
+      "warning_kinds": {
+        "before": {
+          "none": 1,
+          "generic-ocr": 1,
+          "omission": 1
+        },
+        "after": {
+          "none": 1,
+          "generic-ocr": 1,
+          "partial": 1
+        }
+      },
+      "omissions": {
+        "before": 1,
+        "after": 0
+      },
+      "field_losses": 0,
+      "field_gains": 4,
+      "line_losses": 0,
+      "line_gains": 4
+    },
+    "existing_nonempty_text_exact": true,
+    "budget_omission_preserved": true,
+    "elapsed_three_pdfs_with_startup_seconds": {
+      "baseline": [
+        7.31,
+        7.379
+      ],
+      "candidate": [
+        11.718,
+        19.081
+      ]
+    }
+  }
+}

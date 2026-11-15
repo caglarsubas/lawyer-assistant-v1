@@ -109,6 +109,31 @@ inspection are reported at document level. Use the original view to inspect
 both sides of the change. The synthetic comparison preserves all sixteen
 exact DOCX passage bindings and identifies the affected deadline passage.
 
+### Severe and uneven PDF scans
+
+When an eligible degraded raster yields no text, the isolated worker tries
+two locally normalized and deskewed views. It returns a recovery when both
+reads agree on the ordered words and line grouping and meet the native
+confidence checks. The primary OCR read and both attempts share the existing
+page deadline. The existing textless-page limit applies across all reads.
+The worker keeps the primary text when present.
+
+A recognized page with signs of faint or uneven scan quality carries a
+partial-result warning alongside its exact extracted passage. Pages with
+no accepted text retain their omission warnings. Compare dates, amounts,
+currency and negation with the original page. The recovery operates on
+temporary raster views. Saved originals, extracted evidence versions and
+review history keep their recorded bytes.
+
+The [native comparison](evidence/severe-ocr-partial-results-2026-11-15.json)
+records the retained six-page severe set improving from 10 to 22 of 24
+exact date, amount, currency and negation fields. A separately frozen
+six-page severe set improved from 7 to 19 of 24. Previously emitted text
+matched on both synthetic sets. Some critical fields still require visual
+verification, including partial text retained from the primary read.
+
+### DOCX structure
+
 New DOCX extraction uses the declared `docx-textboxes-v5` profile. A table stays
 between its surrounding body paragraphs. Rows containing nested tables retain
 each cell's paragraph/table sequence, including paragraphs following an inner
