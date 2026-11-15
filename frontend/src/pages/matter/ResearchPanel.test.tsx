@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import ResearchPanel from './ResearchPanel';
+import ResearchPanel, { ClaimReviewHistory } from './ResearchPanel';
 import type { Matter } from '../../types';
 import { isRunning, statusLabel } from '../../utils';
 
@@ -24,4 +24,19 @@ describe('research cancellation acknowledgement', () => {
     expect(html).not.toContain('İptal et');
     expect(html).not.toContain('Devam eden işlemin');
   });
+});
+
+it('shows the earlier decision and exact note as read-only claim history', () => {
+  const html = renderToStaticMarkup(<ClaimReviewHistory history={[{
+    product_revision: 8,
+    review_status: 'rejected',
+    review_note: 'Özgün not\nİkinci satır <örnek>',
+    reviewed_by: 'reviewer-1',
+    reviewed_at: '2026-11-15T10:00:00Z',
+  }]} />);
+  expect(html).toContain('Önceki inceleme kararları (1)');
+  expect(html).toContain('Karar değiştirilmeden önceki çıktı revizyonu 8');
+  expect(html).toContain('Düzeltme gerekli');
+  expect(html).toContain('Özgün not\nİkinci satır &lt;örnek&gt;');
+  expect(html).not.toContain('<button');
 });

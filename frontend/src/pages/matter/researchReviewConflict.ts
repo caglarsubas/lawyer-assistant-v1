@@ -1,7 +1,9 @@
 import { ApiError } from '../../api';
+import { isProductRevision } from './researchProductRead';
 
 export type ReviewConflict =
   | { kind: 'saved'; revision: number }
+  | { kind: 'revision'; revision: number }
   | { kind: 'rejected'; message: string }
   | { kind: 'unknown' };
 
@@ -18,9 +20,13 @@ export function researchReviewConflict(cause: unknown, productId: string, before
   if (cause.status === 0 || cause.status >= 500) return { kind: 'unknown' };
   if (cause.status !== 409) return null;
 
-  const data = cause.data as { outcome?: unknown; needs_revalidation?: unknown; product_id?: unknown; revision?: unknown } | null;
+  const data = cause.data as { outcome?: unknown; needs_revalidation?: unknown; product_id?: unknown; revision?: unknown; current_revision?: unknown } | null;
+  if (data?.outcome === 'revision_conflict' && data.product_id === productId
+    && isProductRevision(data.current_revision) && data.current_revision !== beforeRevision) {
+    return { kind: 'revision', revision: data.current_revision };
+  }
   if (data?.outcome === 'committed_needs_revalidation' && data.needs_revalidation === true
-    && data.product_id === productId && typeof data.revision === 'number' && Number.isSafeInteger(data.revision) && data.revision > beforeRevision) {
+    && data.product_id === productId && isProductRevision(data.revision) && data.revision > beforeRevision) {
     return { kind: 'saved', revision: data.revision };
   }
   if (data && !('outcome' in Object(data)) && !('needs_revalidation' in Object(data)) && rejectedBeforeCommit.has(cause.message)) {

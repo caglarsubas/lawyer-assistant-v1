@@ -2,6 +2,10 @@ import { ApiError, request } from '../../api';
 import type { Product } from '../../types';
 import { messageOf } from '../../utils';
 
+export function isProductRevision(value: unknown): value is number {
+  return typeof value === 'number' && Number.isSafeInteger(value) && value > 0;
+}
+
 export interface ProductSelection { matterId: string; productId: string; version?: number }
 export type ProductRead = { key: string } & (
   { status: 'loading' } | { status: 'ready'; value: Product } | { status: 'failed'; message: string; accessUnavailable?: boolean }
@@ -19,18 +23,19 @@ export function createProductReader(selection: ProductSelection, publish: (state
     key,
     get active() { return !closed; },
     close() { closed = true; generation++; controller?.abort(); },
-    async load(minimumRevision?: number) {
+    async load(minimumRevision?: number, retainedVersion?: number) {
       if (closed) return false;
       const current = ++generation; controller?.abort(); controller = new AbortController();
       publish({ key, status: 'loading' });
       try {
         const value = await fetchProduct(`/matters/${encodeURIComponent(selection.matterId)}/products/${encodeURIComponent(selection.productId)}`, controller.signal);
         if (closed || current !== generation) return false;
-        if (value.id !== selection.productId || (selection.version !== undefined && value.version !== selection.version)) {
+        if (value.id !== selection.productId || (selection.version !== undefined && value.version !== selection.version)
+          || (retainedVersion !== undefined && value.version !== retainedVersion)) {
           throw new Error('Çıktının kimliği veya sürümü seçiminizle eşleşmiyor. Çalışma alanını yenileyip yeniden seçin.');
         }
-        if (minimumRevision !== undefined && (!Number.isSafeInteger(value.revision) || value.revision! < minimumRevision)) {
-          throw new Error('Okunan kayıt, incelemenin kaydedildiği revizyondan eski. Seçili çıktıyı yeniden okuyun.');
+        if (minimumRevision !== undefined && (!isProductRevision(value.revision) || value.revision < minimumRevision)) {
+          throw new Error('Okunan kaydın revizyonu yeterince güncel değil. Seçili sürümü yeniden okuyun.');
         }
         publish({ key, status: 'ready', value }); return true;
       } catch (cause) {

@@ -104,6 +104,11 @@ def test_matter_and_evidence_isolation_even_same_firm_admin(workspace, firm_id):
         "/products/" + product["id"] + "/export",
     ]:
         assert client.get(f"/api/v1/matters/{matter}" + suffix).status_code == 404
+    unauthorized = client.post(f"/api/v1/matters/{matter}/products/{product['id']}/review", json={
+        "expected_revision": product["revision"] + 1, "decision": "approve",
+    })
+    assert unauthorized.status_code == 404
+    assert "current_revision" not in unauthorized.json()
     assert (
         client.post(
             f"/api/v1/matters/{matter}/research", json={"question": "unauthorized request"}
@@ -146,7 +151,9 @@ def test_ingestion_encryption_evidence_corrections_and_staleness(workspace):
     assert product["status"] == "needs_review"
     assert "legal_corpus_unqualified" in product["critical_gaps"]
     assert (
-        client.post(base + "/products/" + product["id"] + "/review", json={"decision": "approve"}).status_code
+        client.post(base + "/products/" + product["id"] + "/review", json={
+            "expected_revision": product["revision"], "decision": "approve",
+        }).status_code
         == 409
     )
     corrected = client.patch(

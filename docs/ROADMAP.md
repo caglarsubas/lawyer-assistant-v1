@@ -1,5 +1,21 @@
 # Approved product roadmap and implementation ledger
 
+## Research review revision checks — 15 November 2026
+
+Research claim and whole-output reviews require the revision from the selected
+saved output. The server checks it after authorizing access and uses the existing
+database revision constraint at commit. A stale request returns the current
+revision without writing a decision or audit event. The browser reopens the same
+output version before offering a new review. A deliberately replaced claim
+review keeps its previous decision and note in encrypted history. Existing
+review records remain readable with no migration.
+
+A disposable two-session PostgreSQL test verifies the race, a later stale retry,
+an intentional revision, and exact evidence preservation. Existing graph
+revalidation and workspace authorization tests still exercise their original
+conditions. This advances **R05A-01** and **R03-17** engineering delivery. The
+owner review and live legal workflow qualification remain open.
+
 ## Conflict recovery in review and administration — 15 November 2026
 
 This delivery contributes to **W01**, **W02**, **R03-17** and **R05A-01**.
