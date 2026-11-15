@@ -1,6 +1,7 @@
 import { request } from '../api';
 import type { SourceReviewDecision, User } from '../types';
 import type { DecisionState } from './decisionMapping';
+import { sameCuratorSource } from './curatorReviewBinding';
 import { sourceReviewPath } from './SourceReviewPage';
 import { comparisonHash } from './sourceComparison';
 
@@ -50,14 +51,21 @@ export async function fetchIdentities(source: DecisionState, signal?: AbortSigna
   return validateIdentityState(state, source);
 }
 export function validateIdentityState(state: IdentityState, source: DecisionState) {
-  if (state.schema_version !== 'decision-identity-review-v1' || state.source?.id !== source.source.id
-    || state.source.source_version_id !== source.source.source_version_id
+  if (state.schema_version !== 'decision-identity-review-v1' || !sameCuratorSource(source.source, state.source)
     || state.mapping_revision !== source.revision || state.source_review_revision !== source.source_review_revision
     || [state.global_registry_qualified, state.legal_effect_verified, state.publication_eligible].some(value => value !== false)
     || !Number.isSafeInteger(state.revision) || state.revision < 0 || state.revision > 100
     || !Array.isArray(state.history) || state.history.length !== state.revision
     || state.history.some((event, index) => event.revision !== state.revision - index)
     || (state.revision === 0 ? state.current !== null : JSON.stringify(state.current) !== JSON.stringify(state.history[0]))) throw new Error('Kimlik incelemesi seçili kaynak ve güncel revizyonlarla eşleşmiyor. Yenileyin.');
+  return state;
+}
+export function validateIdentityContinuation(state: IdentityState, before: IdentityState, saved = false) {
+  const delta = state.revision - before.revision;
+  if (delta < 0 || (saved && delta !== 1)
+    || sortedJson(state.history.slice(delta)) !== sortedJson(before.history)) {
+    throw new Error('Kimlik incelemesinin güncel revizyonu ve geçmişi doğrulanamadı.');
+  }
   return state;
 }
 export function mayIndependentlyReview(state: IdentityState, user: User) {

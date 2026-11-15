@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { RelationshipSummary, relationshipPath, relationshipPayload, validateRelationshipState, type RelationshipDraft, type RelationshipState } from './SourceRelationshipPanel';
+import { RelationshipSummary, relationshipPath, relationshipPayload, relationshipRevisionChanged, validateRelationshipState, type RelationshipDraft, type RelationshipState } from './SourceRelationshipPanel';
 import type { ComparisonEvidence } from './sourceComparison';
 
 const a = 'a'.repeat(64), b = 'b'.repeat(64), hash = 'c'.repeat(64);
@@ -43,6 +43,15 @@ describe('firm-confidential pair review', () => {
   it('allows unresolved opinions without fabricated work or version identity', () => {
     const body = relationshipPayload({ ...draft, classification: 'unresolved', reference: '', sha256: '' }, { ...state, identity_reviews_ready: false }, evidence);
     expect(body.identities).toEqual([]); expect(body.evidence_refs).toEqual([]);
+  });
+  it('requires re-review when either source head moves and accepts only the submitted successor', () => {
+    const sourceMoved = { ...state, source_reviews: { ...state.source_reviews, [b]: { ...state.source_reviews[b], revision: 9 } } };
+    expect(relationshipRevisionChanged(state, sourceMoved)).toBe(true);
+    expect(relationshipRevisionChanged(state, state)).toBe(false);
+    expect(relationshipRevisionChanged(state, { ...state, revision: 3 }, true)).toBe(true);
+    expect(() => relationshipRevisionChanged(state, { ...sourceMoved, revision: 3 }, true)).toThrow('revizyonları');
+    expect(() => relationshipRevisionChanged(sourceMoved, state)).toThrow('revizyonları');
+    expect(() => relationshipRevisionChanged(state, { ...state, pair_id: hash })).toThrow('revizyonları');
   });
   it.each(['sources', 'pins', 'publication', 'independence', 'current_law', 'signed', 'revision', 'confidentiality'])('rejects mismatched identity and unsafe response scope: %s', kind => {
     const s = structuredClone(state);

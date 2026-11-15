@@ -44,6 +44,15 @@ export function validateRelationshipState(state: RelationshipState, evidence: Co
     || state.history.some(event => !event || !Object.hasOwn(RELATIONSHIPS, event.input?.classification))) throw new Error('İlişki kaydı seçili kaynaklar veya inceleme kapsamıyla eşleşmiyor.');
   return state;
 }
+export function relationshipRevisionChanged(before: RelationshipState, current: RelationshipState, saved = false) {
+  const delta = current.revision - before.revision;
+  const peerDeltas = before.source_ids.map(id => current.source_reviews[id].revision - before.source_reviews[id].revision);
+  if (current.pair_id !== before.pair_id || delta < 0 || peerDeltas.some(value => value < 0)
+    || (saved && (delta !== 1 || peerDeltas.some(value => value !== 0)))) {
+    throw new Error('İlişkinin ve iki kaynak incelemesinin revizyonları doğrulanamadı.');
+  }
+  return delta !== 0 || peerDeltas.some(value => value !== 0);
+}
 export function relationshipPayload(draft: RelationshipDraft, state: RelationshipState, evidence: ComparisonEvidence) {
   validateRelationshipState(state, evidence);
   if (!state.can_record) throw new Error('Önce iki kaynak incelemesini de üstlenin.');
@@ -74,42 +83,65 @@ export function relationshipPayload(draft: RelationshipDraft, state: Relationshi
 
 export default function SourceRelationshipPanel({ evidence, onError }: { evidence: ComparisonEvidence; onError: (cause: unknown) => void }) {
   const [state, setState] = useState<RelationshipState | null>(null), [draft, setDraft] = useState<RelationshipDraft>(EMPTY);
+  const [reviewBase, setReviewBase] = useState<RelationshipState | null>(null);
   const [busy, setBusy] = useState(false), [error, setError] = useState(''), [refresh, setRefresh] = useState(0);
   const operation = useRef<AbortController | null>(null);
+  const observed = useRef<RelationshipState | null>(null);
   const urls = useRef(new Set<string>());
   const path = relationshipPath(evidence);
+  function observe(value: RelationshipState, saved = false) {
+    const fresh = validateRelationshipState(value, evidence);
+    const before = observed.current;
+    if (before && relationshipRevisionChanged(before, fresh, saved) && !saved) setReviewBase(previous => previous || before);
+    observed.current = fresh;
+    setState(fresh);
+  }
   useEffect(() => {
     const controller = new AbortController(); operation.current = controller; setState(null); setError(''); setBusy(true);
     const timeout = setTimeout(() => { controller.abort(); setBusy(false); setError('İlişki kaydı zamanında doğrulanamadı. Elle yeniden doğrulayın.'); }, 30000);
     void request<RelationshipState>(path, { signal: controller.signal }).then(value => {
-      if (!controller.signal.aborted) setState(validateRelationshipState(value, evidence));
+      if (!controller.signal.aborted) observe(value);
     }).catch(cause => { if (!controller.signal.aborted) { setError(messageOf(cause)); if (cause instanceof ApiError && [401, 403].includes(cause.status)) onError(cause); } })
       .finally(() => { clearTimeout(timeout); if (!controller.signal.aborted) setBusy(false); });
     return () => { clearTimeout(timeout); controller.abort(); };
   }, [path, evidence.evidence_sha256, refresh, onError]); // A new selection mounts a fresh panel.
   function change<K extends keyof RelationshipDraft>(key: K, value: RelationshipDraft[K]) { setDraft(current => ({ ...current, [key]: value })); }
   async function save() {
-    if (!state || busy) return;
+    if (!state || busy || reviewBase) return;
     const controller = new AbortController(); operation.current?.abort(); operation.current = controller;
-    const timeout = setTimeout(() => { controller.abort(); setState(null); setBusy(false); setError('Kaydetme sonucu doğrulanamadı. İşlemi tekrarlamadan önce güncel ilişki kaydını açın.'); }, 30000);
+    let submitted = false;
+    function rereadRequired() { setState(null); setReviewBase(state); }
+    const timeout = setTimeout(() => { controller.abort(); rereadRequired(); setBusy(false); setError('Kaydetme sonucu doğrulanamadı. İşlemi tekrarlamadan önce güncel ilişki kaydını açın.'); }, 30000);
     try {
       const payload = relationshipPayload(draft, state, evidence); setBusy(true); setError('');
+      submitted = true;
       const value = await request<RelationshipState>(path, { method: 'POST', body: JSON.stringify(payload), signal: controller.signal });
-      if (!controller.signal.aborted) { setState(validateRelationshipState(value, evidence)); setDraft(EMPTY); }
-    } catch (cause) { if (!controller.signal.aborted) { if (cause instanceof ApiError) setState(null); setError(messageOf(cause)); if (cause instanceof ApiError && [401, 403].includes(cause.status)) onError(cause); } }
+      if (!controller.signal.aborted) {
+        if (value.latest?.comparison_evidence.evidence_sha256 !== evidence.evidence_sha256 || value.latest.revision !== value.revision) {
+          throw new Error('Kaydedilen ilişki seçili karşılaştırma dayanağıyla doğrulanamadı.');
+        }
+        observe(value, true); setDraft(EMPTY);
+      }
+    } catch (cause) {
+      if (!controller.signal.aborted) {
+        if (submitted) rereadRequired();
+        setError(messageOf(cause));
+        if (cause instanceof ApiError && [401, 403].includes(cause.status)) onError(cause);
+      }
+    }
     finally { clearTimeout(timeout); if (!controller.signal.aborted) setBusy(false); }
   }
   async function download() {
-    if (busy) return;
+    if (busy || reviewBase) return;
     const controller = new AbortController(); operation.current?.abort(); operation.current = controller; setBusy(true); setError('');
     const timeout = setTimeout(() => { controller.abort(); setState(null); setBusy(false); setError('İnceleme dosyası zamanında doğrulanamadı; yeniden açın.'); }, 30000);
     try {
       const dossier = await request<{ schema_version: string; review: RelationshipState }>(path.replace('/relationship?', '/relationship/export?'), { signal: controller.signal });
       if (controller.signal.aborted) return;
       if (dossier.schema_version !== 'source-relationship-dossier-v1') throw new Error('İnceleme dosyası doğrulanamadı.');
-      const fresh = validateRelationshipState(dossier.review, evidence); setState(fresh);
+      observe(dossier.review);
       const url = URL.createObjectURL(new Blob([JSON.stringify(dossier)], { type: 'application/json' })); urls.current.add(url);
-      const link = document.createElement('a'); link.href = url; link.download = `kuruma-ozel-kaynak-iliskisi-${fresh.pair_id.slice(0, 16)}.json`; document.body.append(link); link.click(); link.remove();
+      const link = document.createElement('a'); link.href = url; link.download = `kuruma-ozel-kaynak-iliskisi-${dossier.review.pair_id.slice(0, 16)}.json`; document.body.append(link); link.click(); link.remove();
       window.setTimeout(() => { URL.revokeObjectURL(url); urls.current.delete(url); }, 1000);
     } catch (cause) { if (!controller.signal.aborted) { setState(null); setError(messageOf(cause)); if (cause instanceof ApiError && [401, 403].includes(cause.status)) onError(cause); } }
     finally { clearTimeout(timeout); if (!controller.signal.aborted) setBusy(false); }
@@ -118,11 +150,16 @@ export default function SourceRelationshipPanel({ evidence, onError }: { evidenc
   return <section className="source-review-section"><h2>Kaynaklar arasındaki insan incelemesi</h2>
     <Notice>Kararı kurumunuza özel kaydedin. İki kaynağı birleştirmez, bağımsız örnek veya güncel hukuk onayı vermez. Önce her iki kaynağın kimlik incelemesini tamamlayın.</Notice>
     {error && <Notice error>{error}</Notice>}<button className="text-button" onClick={() => { operation.current?.abort(); setRefresh(value => value + 1); }}>İlişki kaydını yeniden doğrula</button>
+    {reviewBase && <Notice error>
+      <p>Taslak ilişki revizyonu {reviewBase.revision}. {state ? `Güncel ilişki revizyonu ${state.revision}.` : 'Güncel kayıt henüz doğrulanmadı.'} Taslağınız korunuyor.</p>
+      {state && <dl>{state.source_ids.map(id => <div key={id}><dt>Kaynak {id.slice(0, 12)}</dt><dd>İnceleme revizyonu {reviewBase.source_reviews[id].revision} → {state.source_reviews[id].revision}</dd></div>)}</dl>}
+      {state && <button type="button" className="button secondary" disabled={busy} onClick={() => { setReviewBase(null); setError(''); }}>Güncel ilişki kaydını inceledim, yeni incelemeye başla</button>}
+    </Notice>}
     {!state ? busy ? <Loading label="İlişki kaydı doğrulanıyor…" /> : <p>Güncel ilişki kaydını yeniden doğrulayarak devam edin.</p> : <>
       <RelationshipSummary state={state} />
-      <button className="button secondary" disabled={busy} onClick={() => void download()}>Kuruma özel inceleme dosyasını doğrula ve indir</button>
+      <button className="button secondary" disabled={busy || Boolean(reviewBase)} onClick={() => void download()}>Kuruma özel inceleme dosyasını doğrula ve indir</button>
       {!state.can_record && <p>Karar kaydetmek için her iki kaynak incelemesini de üstlenmelisiniz. Kaynak inceleme sayfalarından devam edin.</p>}
-      <form onSubmit={event => { event.preventDefault(); void save(); }}><fieldset className="source-review-fieldset" disabled={!state.can_record || busy}>
+      <form onSubmit={event => { event.preventDefault(); void save(); }}><fieldset className="source-review-fieldset" disabled={!state.can_record || busy || Boolean(reviewBase)}>
         <legend>Yeni ilişki görüşü · Revizyon {state.revision}</legend>
         <Field label="İlişki">{id => <select id={id} value={draft.classification} onChange={event => change('classification', event.target.value as Classification)}>{Object.entries(RELATIONSHIPS).map(([value, label]) => <option key={value} value={value} disabled={value !== 'unresolved' && !state.identity_reviews_ready}>{label}</option>)}</select>}</Field>
         {draft.classification !== 'unresolved' && <div className="form-grid">{(['leftWork', 'leftVersion', 'rightWork', 'rightVersion'] as const).map((key, index) => <Field key={key} label={['Birinci hukuki eser referansı', 'Birinci sürüm referansı', 'İkinci hukuki eser referansı', 'İkinci sürüm referansı'][index]}>{id => <input id={id} maxLength={300} value={draft[key]} onChange={event => change(key, event.target.value)} />}</Field>)}</div>}

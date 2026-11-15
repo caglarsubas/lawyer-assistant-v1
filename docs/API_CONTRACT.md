@@ -115,6 +115,19 @@ optimistic revisions and an unsigned dossier export. Reviewer identity and time
 are server-generated, and accepted assessments do not promote the source. See
 [source-review contract](SOURCE_REVIEW_CONTRACT.md) and [offline source intake](PUBLIC_SOURCES.md).
 
+The served API rechecks each bound staged package before committing a source
+review event, a provision or decision mapping event, or a source relationship
+event. A package that fails verification returns a confidential `409` and the
+event and updated ledger head roll back together.
+
+`PUT /firm-admin/employees/{user_id}` requires the employee's `revision`,
+`expected_active` from the employee read, and `expected_role_revisions` with
+one positive integer revision per selected `role_ids` entry. Use an empty
+object when clearing all role assignments. Account, employee or role revision
+drift returns `409` with `outcome: revision_conflict`, `target: employee` and
+`target_id` after firm and target authorization. Reopen the authorized record
+and inspect the current role permissions before deciding again.
+
 `GET /public-sources/{SHA256}/provision-candidates` returns bounded heading
 proposals; `GET .../provision-span?start=&end=` previews exact Unicode spans.
 `GET/POST .../provision-mappings` reads the firm-local mapping ledger or proposes

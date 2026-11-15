@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import AccessAssignments from './AccessAssignments';
-import { AdminRevisionConflict, isAdminAccessDenied, isAdminRevisionConflict } from './AdminRevisionConflict';
+import { AdminRevisionConflict, conflictRevision, isAdminAccessDenied, isAdminRevisionConflict } from './AdminRevisionConflict';
 import { EmployeeRegister, RoleRegister } from './FirmDirectory';
 import { request } from '../api';
 import { Detail, Field, focusSection, Loading, Notice, PageHeader, SectionIndex } from '../components';
@@ -13,6 +13,16 @@ interface Change { id: string; action: string; target_id: string; actor_id: stri
 
 const emptyEmployee = { name: '', username: '', password: '', professional_role: 'lawyer', active: true, manager_id: null as string | null, role_ids: [] as string[] };
 
+export function employeeRolePins(roleIds: string[], roles: FirmRole[]) {
+  const entries: [string, number][] = [];
+  for (const id of roleIds) {
+    const role = roles.find(item => item.id === id);
+    if (!role || !Number.isSafeInteger(role.revision) || role.revision < 1) return null;
+    entries.push([id, role.revision]);
+  }
+  return Object.fromEntries(entries);
+}
+
 export default function FirmAdminPage() {
   const [query, setQuery] = useState('');
   const [data, setData] = useState<FirmData | null>(null);
@@ -21,8 +31,9 @@ export default function FirmAdminPage() {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<Employee | null>(null);
   const [employee, setEmployee] = useState(emptyEmployee);
+  const [employeeRoles, setEmployeeRoles] = useState<FirmRole[]>([]);
   const [employeeError, setEmployeeError] = useState('');
-  const [employeeConflict, setEmployeeConflict] = useState(false);
+  const [employeeConflict, setEmployeeConflict] = useState<number | null>(null);
   const [role, setRole] = useState<FirmRole | null>(null);
   const [roleName, setRoleName] = useState('');
   const [permissions, setPermissions] = useState<string[]>([]);
@@ -35,9 +46,19 @@ export default function FirmAdminPage() {
 
   const observedEmployee = data?.employees.find(item => item.id === selected?.id && item.username === selected?.username);
   const observedRole = data?.roles.find(item => item.id === role?.id && !item.starter);
-  const currentEmployee = !loading && !error && selected && observedEmployee && observedEmployee.revision > selected.revision ? observedEmployee : undefined;
+  const expectedRoleRevisions = employeeRolePins(employee.role_ids, employeeRoles);
+  const observedRoleRevisions = employeeRolePins(employee.role_ids, data?.roles ?? []);
+  const revisedRoles = Object.entries(expectedRoleRevisions ?? {}).filter(([id, revision]) =>
+    observedRoleRevisions?.[id] !== revision);
+  const currentRolesVerified = Boolean(observedRoleRevisions && expectedRoleRevisions
+    && revisedRoles.every(([id, revision]) => observedRoleRevisions[id] >= revision));
+  const employeeBaseChanged = Boolean(selected && observedEmployee && (
+    observedEmployee.revision > selected.revision || observedEmployee.active !== selected.active || revisedRoles.length));
+  const currentEmployee = !loading && !error && selected && observedEmployee && employeeBaseChanged && currentRolesVerified
+    && Number.isSafeInteger(observedEmployee.revision)
+    && observedEmployee.revision >= (employeeConflict ?? selected.revision) ? observedEmployee : undefined;
   const currentRole = !loading && !error && role && observedRole && observedRole.revision > role.revision ? observedRole : undefined;
-  const staleEmployee = Boolean(selected && (employeeConflict || observedEmployee?.revision !== selected.revision));
+  const staleEmployee = Boolean(selected && (employeeConflict !== null || employeeBaseChanged || observedEmployee?.revision !== selected.revision));
   const staleRole = Boolean(role && (roleConflict || observedRole?.revision !== role.revision));
   const availableManagers = data?.employees.filter(item => item.active && item.id !== selected?.id) ?? [];
 
@@ -48,7 +69,8 @@ export default function FirmAdminPage() {
     setChanges([]);
     setSelected(null);
     setEmployee(emptyEmployee);
-    setEmployeeConflict(false);
+    setEmployeeRoles([]);
+    setEmployeeConflict(null);
     setEmployeeError('');
     setRole(null);
     setRoleName('');
@@ -97,12 +119,13 @@ export default function FirmAdminPage() {
 
   function selectEmployee(value: Employee | null) {
     setSelected(value);
+    setEmployeeRoles(value ? data?.roles ?? [] : []);
     setEmployee(value ? {
       ...emptyEmployee, name: value.name, username: value.username, professional_role: value.professional_role,
       active: value.active, manager_id: value.manager_id, role_ids: value.role_ids,
     } : emptyEmployee);
     setEmployeeError('');
-    setEmployeeConflict(false);
+    setEmployeeConflict(null);
     setNotice('');
   }
 
@@ -125,9 +148,11 @@ export default function FirmAdminPage() {
     setNotice('');
     try {
       if (selected) {
+        if (!expectedRoleRevisions) throw new Error('Seçilen rollerin revizyonları doğrulanamadı.');
         await request(`/firm-admin/employees/${encodeURIComponent(selected.id)}`, { method: 'PUT', signal: controller.signal, body: JSON.stringify({
           name: employee.name, role_ids: employee.role_ids, manager_id: employee.manager_id,
-          active: employee.active, revision: selected.revision,
+          active: employee.active, revision: selected.revision, expected_active: selected.active,
+          expected_role_revisions: expectedRoleRevisions,
         }) });
       } else {
         await request('/firm-admin/employees', { method: 'POST', signal: controller.signal, body: JSON.stringify({
@@ -143,8 +168,8 @@ export default function FirmAdminPage() {
       if (controller.signal.aborted) return;
       setEmployee(previous => ({ ...previous, password: '' }));
       if (isAdminAccessDenied(cause)) clearAuthorizedData(cause);
-      else if (selected && isAdminRevisionConflict(cause, 'employee')) {
-        setEmployeeConflict(true);
+      else if (selected && isAdminRevisionConflict(cause, 'employee', selected.id)) {
+        setEmployeeConflict(conflictRevision(cause, selected.revision));
         await load();
       } else setEmployeeError(messageOf(cause));
     } finally {
@@ -201,6 +226,12 @@ export default function FirmAdminPage() {
             <div><dt>Organizasyon yöneticisi</dt><dd>{data.employees.find(item => item.id === currentEmployee.manager_id)?.username || currentEmployee.manager_id || 'Atanmamış'}</dd></div>
             <div><dt>İşlem rolleri</dt><dd>{currentEmployee.role_ids.map(id => data.roles.find(item => item.id === id)?.name || id).join(', ') || 'İzin yok'}</dd></div>
           </dl>}
+          {currentEmployee && revisedRoles.length > 0 && <ul>{revisedRoles.map(([id, revision]) => {
+            const latest = data.roles.find(item => item.id === id);
+            const permissions = latest?.permissions.map(permission => data.permissions.find(item => item.id === permission)?.label || permission);
+            return <li key={id}>{latest?.name || id} · taslak rol sürümü {revision} · {latest ? `güncel rol sürümü ${latest.revision}` : 'güncel rol bulunamadı'}
+              {permissions && <p>Güncel izinler · {permissions.join(', ') || 'İzin yok'}</p>}</li>;
+          })}</ul>}
         </AdminRevisionConflict>}
         {selected && staleEmployee && <p className="small muted">Kaydedilmemiş çalışan taslağı · sürüm {selected.revision}</p>}
         <div className="form-grid"><div className="field"><label htmlFor="employee-name">Ad soyad</label><input id="employee-name" disabled={busy || staleEmployee} value={employee.name} maxLength={100} required onChange={e => setEmployee({ ...employee, name: e.target.value })} /></div>
@@ -210,7 +241,7 @@ export default function FirmAdminPage() {
           {employee.manager_id && !availableManagers.some(item => item.id === employee.manager_id) && <option value={employee.manager_id} disabled>{data.employees.find(item => item.id === employee.manager_id)?.username || employee.manager_id} · seçilemiyor</option>}
           {availableManagers.map(item => <option key={item.id} value={item.id}>{item.name} · {item.username}</option>)}
         </select><small>En fazla bir yönetici; bu ilişki dosya erişimi sağlamaz.</small></div></div>
-        <fieldset disabled={busy || staleEmployee}><legend>İşlem rolleri</legend>{data.roles.map(item => <label className="check-option" key={item.id}><input type="checkbox" checked={employee.role_ids.includes(item.id)} onChange={e => setEmployee({ ...employee, role_ids: e.target.checked ? [...employee.role_ids, item.id] : employee.role_ids.filter(id => id !== item.id) })} />{item.name}</label>)}
+        <fieldset disabled={busy || staleEmployee}><legend>İşlem rolleri</legend>{(selected ? employeeRoles : data.roles).map(item => <label className="check-option" key={item.id}><input type="checkbox" checked={employee.role_ids.includes(item.id)} onChange={e => setEmployee({ ...employee, role_ids: e.target.checked ? [...employee.role_ids, item.id] : employee.role_ids.filter(id => id !== item.id) })} />{item.name}</label>)}
           {employee.role_ids.filter(id => !data.roles.some(item => item.id === id)).map(id => <label className="check-option" key={id}><input type="checkbox" checked onChange={() => setEmployee(previous => ({ ...previous, role_ids: previous.role_ids.filter(old => old !== id) }))} />{id} · rol bulunamadı</label>)}
         </fieldset>
         {selected && <><label className="check-option"><input type="checkbox" disabled={busy || staleEmployee} checked={employee.active} onChange={e => setEmployee({ ...employee, active: e.target.checked })} />Hesap aktif</label><Detail title={staleEmployee ? 'Taslağın dayandığı etkin işlem izinleri' : 'Mevcut etkin işlem izinleri'} variant="technical"><ul>{selected.permissions.map(id => <li key={id}>{data.permissions.find(item => item.id === id)?.label || id}</li>)}</ul><p>Kaydedilen yeni roller bir sonraki girişte uygulanır. İçerik atamaları ayrıca gereklidir.</p></Detail></>}

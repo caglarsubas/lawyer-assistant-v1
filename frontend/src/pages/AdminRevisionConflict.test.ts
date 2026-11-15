@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ApiError } from '../api';
 import { requestAssignments } from './AccessAssignments';
-import { isAdminRevisionConflict } from './AdminRevisionConflict';
+import { conflictRevision, isAdminRevisionConflict } from './AdminRevisionConflict';
+import { employeeRolePins } from './FirmAdminPage';
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -27,5 +28,24 @@ describe('administration conflicts', () => {
     vi.stubGlobal('fetch', fetchMock);
     await expect(requestAssignments('workspaces', 'synthetic-workspace', {})).rejects.toThrow('seçili hedefle eşleşmiyor');
     await expect(requestAssignments('workspaces', 'synthetic-workspace', {})).rejects.toThrow('seçili hedefle eşleşmiyor');
+  });
+
+  it('associates a typed revision conflict with its exact authorized employee', () => {
+    const conflict = new ApiError('Çalışan değişti; yenileyin', 409, {
+      outcome: 'revision_conflict', target: 'employee', target_id: 'employee-1', current_revision: 4,
+    });
+    expect(isAdminRevisionConflict(conflict, 'employee', 'employee-1')).toBe(true);
+    expect(isAdminRevisionConflict(conflict, 'employee', 'employee-2')).toBe(false);
+    expect(isAdminRevisionConflict(conflict, 'role', 'employee-1')).toBe(false);
+    expect(conflictRevision(conflict, 3)).toBe(4);
+  });
+
+  it('pins only the selected roles from the originally opened directory', () => {
+    const original = [{ id: 'selected', revision: 4 }, { id: 'other', revision: 9 }].map(role => ({ ...role, name: role.id, permissions: [], starter: false }));
+    const current = original.map(role => ({ ...role, revision: role.revision + 1 }));
+    expect(employeeRolePins(['selected'], original)).toEqual({ selected: 4 });
+    expect(employeeRolePins(['selected'], current)).toEqual({ selected: 5 });
+    expect(employeeRolePins(['missing'], original)).toBeNull();
+    expect(employeeRolePins([], original)).toEqual({});
   });
 });
