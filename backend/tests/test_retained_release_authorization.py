@@ -45,18 +45,10 @@ def pinned_product(workspace, monkeypatch):
     return permit, product['id'], f'/api/v1/matters/{matter}/products/{product["id"]}'
 
 
-def review_current(client, url, decision):
-    current = client.get(url)
-    assert current.status_code == 200
-    return client.post(url + '/review', json={
-        'expected_revision': current.json()['revision'], 'decision': decision,
-    })
-
-
 def test_retained_approved_work_becomes_effectively_stale_without_rewriting(workspace, monkeypatch):
     app, client, matter = workspace
     permit, product_id, url = pinned_product(workspace, monkeypatch)
-    approved = review_current(client, url, 'approve')
+    approved = client.post(url + '/review', json={'decision': 'approve'})
     assert approved.status_code == 200 and approved.json()['status'] == 'reviewed'
     with app.state.store.session() as session:
         record = session.get(Record, product_id)
@@ -68,7 +60,7 @@ def test_retained_approved_work_becomes_effectively_stale_without_rewriting(work
     assert shown.json()['summary'] == approved.json()['summary']
     listed = client.get(f'/api/v1/matters/{matter}').json()['products']
     assert next(item for item in listed if item['id'] == product_id)['status'] == 'stale'
-    assert review_current(client, url, 'reject').status_code == 409
+    assert client.post(url + '/review', json={'decision': 'reject'}).status_code == 409
     assert client.get(url + '/export').status_code == 409
     assert 'PRIVATE-REVIEW' not in shown.text
     with app.state.store.session() as session:
@@ -113,7 +105,7 @@ def test_legacy_public_candidates_without_pin_cannot_be_reviewed_or_exported(wor
         app.state.store.update(record, data)
         session.commit()
     assert client.get(url).json()['status'] == 'stale'
-    assert review_current(client, url, 'approve').status_code == 409
+    assert client.post(url + '/review', json={'decision': 'approve'}).status_code == 409
     assert client.get(url + '/export').status_code == 409
 
 
@@ -122,7 +114,6 @@ def test_review_post_commit_failure_returns_truthful_receipt_and_persistent_stal
     from app import main
     app, client, _ = workspace
     permit, product_id, url = pinned_product(workspace, monkeypatch)
-    revision = client.get(url).json()['revision']
     observed = []
     def fail_after_commit():
         with app.state.store.session() as session:
@@ -140,7 +131,7 @@ def test_review_post_commit_failure_returns_truthful_receipt_and_persistent_stal
         monkeypatch.setattr(app.state.graph.release, 'current_guard', failing_guard)
     else:
         monkeypatch.setattr(main, 'finalize_product_authorization', lambda *args: fail_after_commit())
-    response = client.post(url + '/review', json={'expected_revision': revision, 'decision': 'approve'})
+    response = client.post(url + '/review', json={'decision': 'approve'})
     assert response.status_code == 409 and len(observed) == 1
     body = response.json()
     assert body['outcome'] == 'committed_needs_revalidation' and body['needs_revalidation'] is True
@@ -151,7 +142,7 @@ def test_review_post_commit_failure_returns_truthful_receipt_and_persistent_stal
     shown = client.get(url).json()
     assert shown['status'] == 'stale' and shown['stored_status'] == 'reviewed'
     assert shown['authorization_revalidation']['operation'] == 'review'
-    assert review_current(client, url, 'approve').status_code == 409
+    assert client.post(url + '/review', json={'decision': 'approve'}).status_code == 409
     assert client.get(url + '/export').status_code == 409
 
 

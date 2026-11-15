@@ -10,6 +10,10 @@ output version before offering a new review. A deliberately replaced claim
 review keeps its previous decision and note in encrypted history. Existing
 review records remain readable with no migration.
 
+Docker and the development launcher use the runtime factory. It replaces the
+single historical review route with the guarded route while preserving the
+byte-pinned factory and original qualification reports.
+
 A disposable two-session PostgreSQL test verifies the race, a later stale retry,
 an intentional revision, and exact evidence preservation. Existing graph
 revalidation and workspace authorization tests still exercise their original

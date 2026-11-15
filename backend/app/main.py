@@ -145,7 +145,6 @@ class CorpusSearch(Input):
 
 
 class ReviewInput(Input):
-    expected_revision: int = Field(strict=True, ge=1)
     claim_id: str | None = None
     decision: Literal["approve", "reject"]
     note: str = Field(default="", max_length=2000)
@@ -172,15 +171,6 @@ def valid_date(value):
 
 def audit(session, user, action, object_id, matter_id=None):
     session.add(Audit(actor_id=user.id, action=action, object_id=object_id, matter_id=matter_id))
-
-
-def product_review_conflict(record):
-    return JSONResponse(status_code=409, headers={"Cache-Control": "no-store"}, content={
-        "detail": "Çıktı başka bir inceleme veya işlemde değişti. Güncel kaydı açın.",
-        "outcome": "revision_conflict",
-        "product_id": record.id,
-        "current_revision": record.revision,
-    })
 
 
 def invalidate(store, session, matter, reason):
@@ -842,8 +832,6 @@ def create_app(settings=None):
         try:
             with store.session() as session:
                 record = require_child(session, product_id, "product", matter_id, user)
-                if record.revision != body.expected_revision:
-                    return product_review_conflict(record)
                 data = store.decode(record)
                 with product_guard(data):
                     if data["status"] in ("stale", "reviewed"):
@@ -852,13 +840,6 @@ def create_app(settings=None):
                         claim = next((c for c in data["claims"] if c["id"] == body.claim_id), None)
                         if not claim:
                             raise HTTPException(404, "Bulgu bulunamadı")
-                        if claim.get("review_status") in ("approved", "rejected"):
-                            prior = {key: claim[key] for key in (
-                                "review_status", "review_note", "reviewed_by", "reviewed_at",
-                            ) if key in claim}
-                            claim.setdefault("review_history", []).append({
-                                **prior, "product_revision": record.revision,
-                            })
                         claim.update(
                             review_status="approved" if body.decision == "approve" else "rejected",
                             review_note=body.note,
@@ -883,13 +864,8 @@ def create_app(settings=None):
                                  'recorded_status': data['status']}
 
             return finalize_product_authorization(store, committed['product_id'], committed['revision'])
-        except Exception as exc:
+        except Exception:
             if committed is None:
-                if isinstance(exc, StaleDataError):
-                    # The ORM compare-and-swap lost after admission. The write and its audit
-                    # insert rolled back together. Reauthorize before returning metadata.
-                    with store.session() as session:
-                        return product_review_conflict(require_child(session, product_id, "product", matter_id, user))
                 raise
             return JSONResponse(status_code=409, content={
                 'detail': 'İnceleme kaydedildi; son yayın izni kontrolü tamamlanamadı. Kaydedilen sürümü inceleyip yeni araştırma başlatın.',
