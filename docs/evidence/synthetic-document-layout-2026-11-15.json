@@ -1,0 +1,208 @@
+{
+  "observation": {
+    "schema": "synthetic-document-layout-observation-v1",
+    "matches_declared_observation": true,
+    "synthetic_only": true,
+    "transport": "authenticated_isolated_extraction",
+    "parser_source_sha256": {
+      "extract.py": "9a0efb28a1afa52eed4aa503bafdeb3eaebbf939df2ac838b6335cd3c9c496f7",
+      "extraction_client.py": "5ddfe5c5357370ae00f9f5831afeb1f889dafb1ee28e093c610b3443eab21d66",
+      "extraction_worker.py": "abe30d4c02a811aa2da305c6f03429a0e222fce0de4192787d967155cdac0c12",
+      "docx_textboxes.py": "43c49aed095ce5859709c66cca9e72abe304bbb2ae7db2817f01bc17337983a0"
+    },
+    "fixture_source_sha256": "6c1094256d9331ba185828dc282c8cdbb94a16ccba699ab55c9fbe5dccc6c801",
+    "font_sha256": "b85c38ecea8a7cfb39c24e395a4007474fa5a4fc864f6ee33309eb4948d232d5",
+    "versions": {
+      "python": "3.12.11",
+      "architecture": "aarch64",
+      "pypdf": "6.19.0",
+      "Pillow": "12.3.0",
+      "reportlab": "4.5.1",
+      "python-docx": "1.2.0",
+      "pytesseract": "0.3.13",
+      "tesseract": "tesseract 5.3.0",
+      "pdftoppm": "pdftoppm version 22.12.0"
+    },
+    "cases": [
+      {
+        "filename": "sentetik-karisik-tarama.pdf",
+        "original_sha256": "4d184cd8d1f57d07d250ab3bcb824a6e3b46311b645c8755b48aa90c74f3cd0d",
+        "media_bytes": 58324,
+        "page_count": 6,
+        "extraction_profile": null,
+        "expected_passages": [
+          {
+            "locator": "Sayfa 1",
+            "text_sha256": "a82dfaa6032a77a5824b35e4988d76cb667dad963b1b7eb162ec45f555fdbdae"
+          },
+          {
+            "locator": "Sayfa 2",
+            "text_sha256": "5305adce27e815f5e001f571f52dd110b2c90d1a781cd6c3aa79c47991abd92e"
+          },
+          {
+            "locator": "Sayfa 3",
+            "text_sha256": "310d0868e7e09d896858e50ab1f03294d7440aae4a1b42c281152dca71aab6a0"
+          },
+          {
+            "locator": "Sayfa 4",
+            "text_sha256": "6ca378b4dd5e8a68aec8b457af4d43e26bf06b24d3007fc00902db37fdcde7b0"
+          },
+          {
+            "locator": "Sayfa 5",
+            "text_sha256": "7b1c2b650a9e4335ee15a0f3dd5235f542562a4787cbbb4eed924f71c44d05ea"
+          }
+        ],
+        "observed_passages": [
+          {
+            "locator": "Sayfa 1",
+            "text_sha256": "a82dfaa6032a77a5824b35e4988d76cb667dad963b1b7eb162ec45f555fdbdae"
+          },
+          {
+            "locator": "Sayfa 2",
+            "text_sha256": "5305adce27e815f5e001f571f52dd110b2c90d1a781cd6c3aa79c47991abd92e"
+          },
+          {
+            "locator": "Sayfa 3",
+            "text_sha256": "310d0868e7e09d896858e50ab1f03294d7440aae4a1b42c281152dca71aab6a0"
+          },
+          {
+            "locator": "Sayfa 4",
+            "text_sha256": "6ca378b4dd5e8a68aec8b457af4d43e26bf06b24d3007fc00902db37fdcde7b0"
+          },
+          {
+            "locator": "Sayfa 5",
+            "text_sha256": "7b1c2b650a9e4335ee15a0f3dd5235f542562a4787cbbb4eed924f71c44d05ea"
+          }
+        ],
+        "expected_text_and_locators_match": true,
+        "omitted_reference_passages": [
+          {
+            "locator": "Sayfa 2",
+            "reference_text_sha256": "63b82f75e854ddffea6d74aa393abc438063c1407cd872931c0dada1d7ce99a6",
+            "reference_text_found": false,
+            "page_warning": false
+          },
+          {
+            "locator": "Sayfa 6",
+            "reference_text_sha256": "a26f5b468c230d2492985e0fd63474c07f7bd81c89529fa20e81e79d508cc93c",
+            "reference_text_found": false,
+            "page_warning": true
+          }
+        ],
+        "warnings": [
+          "Sayfa 3: OCR kullanıldı; görüntüyle doğrulayın.",
+          "Sayfa 4: OCR kullanıldı; görüntüyle doğrulayın.",
+          "Sayfa 5: OCR kullanıldı; görüntüyle doğrulayın.",
+          "Sayfa 6: içerik işlenemedi; bu çalışmaya dahil edilmedi.",
+          "PDF okuma sırası ve tablo düzeni insan incelemesi gerektirir."
+        ]
+      },
+      {
+        "filename": "sentetik-sozlesme-eki.docx",
+        "original_sha256": "ea29ae21685c330f9f95be9723736ae865a965de399ee15876803ce94f95df14",
+        "media_bytes": 38340,
+        "page_count": null,
+        "extraction_profile": "docx-textboxes-v5",
+        "expected_passages": [
+          {
+            "locator": "Paragraf 1",
+            "text_sha256": "87fb91be5bd7d49f9d23dded7addf8a1887b238e03947abaa9b775e6e06e3445"
+          },
+          {
+            "locator": "Tablo 1, satır 1",
+            "text_sha256": "f4b2fef59aca54146122e35ed4e56f9f4473168d1ba90a0403da57cac226cc5a"
+          },
+          {
+            "locator": "Tablo 1, satır 2, hücre 1, paragraf 1",
+            "text_sha256": "95bdc5cf265c39cc6cce25165e34d8abd13ecede9a378862f7d4b4cc6e87c816"
+          },
+          {
+            "locator": "Tablo 1, satır 2, hücre 1, tablo 1, satır 1",
+            "text_sha256": "04d37ed48056ec01453bd64bcb2350fd228f82ca777629701e889b65b07b78f1"
+          },
+          {
+            "locator": "Tablo 1, satır 2, hücre 1, paragraf 3",
+            "text_sha256": "777a49721bdc13326bc500c8bb5c0e57fd849146dffe8ae20886fd735a60b3a2"
+          },
+          {
+            "locator": "Tablo 1, satır 2, hücre 2, paragraf 1",
+            "text_sha256": "02fb71b6d3efe47458ede357942258ae74a9475cd7c252765b0ebfe8ccdb0fcb"
+          },
+          {
+            "locator": "Paragraf 2",
+            "text_sha256": "1376aef8cebbc8a28bd4d3e2bca7852ca384e8af01121eab40845eb0a66efbe0"
+          },
+          {
+            "locator": "Bölüm 1, üstbilgi tanımı (varsayılan; kaynak bölüm 1), paragraf 1",
+            "text_sha256": "b44f6429cc40694664ff81013eef373791c955b0dba944d9d41791df290938c3"
+          },
+          {
+            "locator": "Bölüm 1, altbilgi tanımı (varsayılan; kaynak bölüm 1), paragraf 1",
+            "text_sha256": "6ddd6d0d33f0916facdb4959b252bc5807718877ed338ba39c4abf932f4e4046"
+          },
+          {
+            "locator": "Dipnot kimlik 7, başvuru 1 (Tablo 1, satır 2, hücre 1, paragraf 3), paragraf 1",
+            "text_sha256": "4ca12ddb40142af7973716f482a37c81dbaae0b5b44adf2506012f90f4896fd1"
+          }
+        ],
+        "observed_passages": [
+          {
+            "locator": "Paragraf 1",
+            "text_sha256": "87fb91be5bd7d49f9d23dded7addf8a1887b238e03947abaa9b775e6e06e3445"
+          },
+          {
+            "locator": "Tablo 1, satır 1",
+            "text_sha256": "f4b2fef59aca54146122e35ed4e56f9f4473168d1ba90a0403da57cac226cc5a"
+          },
+          {
+            "locator": "Tablo 1, satır 2, hücre 1, paragraf 1",
+            "text_sha256": "95bdc5cf265c39cc6cce25165e34d8abd13ecede9a378862f7d4b4cc6e87c816"
+          },
+          {
+            "locator": "Tablo 1, satır 2, hücre 1, tablo 1, satır 1",
+            "text_sha256": "04d37ed48056ec01453bd64bcb2350fd228f82ca777629701e889b65b07b78f1"
+          },
+          {
+            "locator": "Tablo 1, satır 2, hücre 1, paragraf 3",
+            "text_sha256": "777a49721bdc13326bc500c8bb5c0e57fd849146dffe8ae20886fd735a60b3a2"
+          },
+          {
+            "locator": "Tablo 1, satır 2, hücre 2, paragraf 1",
+            "text_sha256": "02fb71b6d3efe47458ede357942258ae74a9475cd7c252765b0ebfe8ccdb0fcb"
+          },
+          {
+            "locator": "Paragraf 2",
+            "text_sha256": "1376aef8cebbc8a28bd4d3e2bca7852ca384e8af01121eab40845eb0a66efbe0"
+          },
+          {
+            "locator": "Bölüm 1, üstbilgi tanımı (varsayılan; kaynak bölüm 1), paragraf 1",
+            "text_sha256": "b44f6429cc40694664ff81013eef373791c955b0dba944d9d41791df290938c3"
+          },
+          {
+            "locator": "Bölüm 1, altbilgi tanımı (varsayılan; kaynak bölüm 1), paragraf 1",
+            "text_sha256": "6ddd6d0d33f0916facdb4959b252bc5807718877ed338ba39c4abf932f4e4046"
+          },
+          {
+            "locator": "Dipnot kimlik 7, başvuru 1 (Tablo 1, satır 2, hücre 1, paragraf 3), paragraf 1",
+            "text_sha256": "4ca12ddb40142af7973716f482a37c81dbaae0b5b44adf2506012f90f4896fd1"
+          }
+        ],
+        "expected_text_and_locators_match": true,
+        "omitted_reference_passages": [],
+        "warnings": [
+          "Dipnot/sonnot paket kimliği ve XML başvuru konumu korunur; başvuru sırası gösterilen not numarası değildir. Notlar ayrı ekte tanım sırasıyla, her başvuru bağlamında işlenir.",
+          "Üstbilgi/altbilgi tanımları gövdeden sonra bölüm ve kaynak bölüm bilgisiyle işlendi; miras alınan tanım her ilgili bölümde ayrı gösterilir. Gerçek sayfa yerleşimi, ilk/çift sayfa etkinliği ve alan değerleri doğrulanmadı.",
+          "Tablolar XML satır/hücre sırasıyla işlendi; hücre numarası fiziksel XML hücresidir. Birleştirilmiş hücrelerin anlamı, görsel sütun hizası ve okuma düzeni doğrulanmadı.",
+          "Belgedeki dipnot/sonnot sayfa yerleşimi, gösterilen numaralar ve çizim/görünüm tamlığı doğrulanmadı."
+        ]
+      }
+    ]
+  },
+  "parser_source_commit": "80522511c0fd280bf95984a2424d46a8d6958e5d",
+  "local_image_id": "sha256:3538d018f30ce91d08caeb758336b5cbba6a7e03d6afd3ec5a37233f7e3f1470",
+  "qualification_script_sha256": "73b5b0c8a20df4d081d9ee94f7316635cf1c0470111fb150ac1259cca33ed171",
+  "network_disabled": true,
+  "read_only_root": true,
+  "repeated_observations": 2,
+  "observation_sha256": "5d0957b5b9961ebacceadcd36563259629f54fea5e87ece424c85c4f0ac6b407"
+}
