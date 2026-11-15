@@ -1,5 +1,22 @@
 # Approved product roadmap and implementation ledger
 
+## Degraded PDF OCR and DOCX passage warnings — 15 November 2026
+
+F00-04 now includes bounded contrast and deskew for moderately faint PDF
+scans and exact-locator warnings for affected DOCX passages. New intake
+retains original files, exact native-text passages and OCR scope warnings.
+The DOCX warning keeps both revision acceptance and original-page review
+explicit. No saved evidence version or review event is rewritten.
+
+Disconnected native comparison improved the retained scan set from five to
+seven of twelve exact lines. The separate frozen scan set stayed at six of
+twelve. Very faint and uneven scans still had omissions. The tracked deadline
+now has a passage-specific warning with all sixteen original DOCX bindings
+intact. The authenticated intake test checks exact downloads, cross-matter
+denial and existing encrypted evidence and review history. Authorized
+representative source-page review and broader degraded-scan qualification
+remain open.
+
 ## Mixed PDF coverage warning — 15 November 2026
 
 The isolated Compose extractor now adds a page-specific warning when a

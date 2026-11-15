@@ -118,10 +118,41 @@ export function DocumentViewer({ matterId, documentId, highlightPassageId }: { m
     </div>
     <div id={`${viewId}-content`} role="region" aria-labelledby={`${viewId}-${view}`}>
       {view === 'original' ? document.synthetic ? <Empty title="Bu örneğin özgün dosyası yok.">Sentetik örnek pasajlarını Çıkarılan metin sekmesinde inceleyebilirsiniz.</Empty> : <Suspense fallback={<Loading label="Özgün dosya açılıyor…" />}><OriginalPreview key={`${matterId}/${documentId}`} matterId={matterId} document={document} initialPage={initialPage} /></Suspense> : <>
-        <p className="preview-caption">Analiz için çıkarılan metin. Belgenin sayfa düzenini ve görsellerini Özgün belge sekmesinde inceleyebilirsiniz.</p>
-        {document.extraction_warnings?.length > 0 && <Notice><strong>Çıkarım uyarıları</strong><ul>{document.extraction_warnings.map((warning, index) => <li key={index}>{warning}</li>)}</ul></Notice>}
-        {document.passages?.length ? <div className="passages">{document.passages.map((passage) => <article key={passage.id} id={`passage-${slugId(passage.id)}`} className={`passage ${passage.id === highlightPassageId ? 'highlighted' : ''}`}><div className="passage-label">{locatorText(passage.locator)}{passage.id === highlightPassageId && <Badge>Seçili dayanak</Badge>}</div><p>{passage.text}</p><Detail title="Pasaj kimliği"><span className="reference-id">{passage.id}</span></Detail></article>)}</div> : <Empty title="Görüntülenebilir metin yok.">Belgenin çıkarım durumunu ve uyarılarını kontrol edin. Metin olmadan belge içeriği doğrulanmış sayılmaz.</Empty>}
+        <ExtractedDocumentText document={document} highlightPassageId={highlightPassageId} />
       </>}
     </div>
   </>}</div>;
+}
+
+const trackedChangeText = 'İzlenen değişiklik var; özgün pasajı inceleyin.';
+
+export function ExtractedDocumentText({ document, highlightPassageId }: { document: DocumentRecord; highlightPassageId?: string }) {
+  const passages = document.passages ?? [];
+  const warnings: string[] = [];
+  const trackedPassages = new Set<string>();
+  const locatorCounts = new Map<string, number>();
+  if (document.name.toLowerCase().endsWith('.docx')) {
+    for (const { locator } of passages) {
+      if (typeof locator === 'string') locatorCounts.set(locator, (locatorCounts.get(locator) ?? 0) + 1);
+    }
+  }
+  const suffix = `: ${trackedChangeText}`;
+  for (const warning of document.extraction_warnings ?? []) {
+    const locator = warning.endsWith(suffix) ? warning.slice(0, -suffix.length) : '';
+    if (locatorCounts.get(locator) === 1) trackedPassages.add(locator);
+    else warnings.push(warning);
+  }
+
+  return <>
+    <p className="preview-caption">Analiz için çıkarılan metin. Belgenin sayfa düzenini ve görsellerini Özgün belge sekmesinde inceleyebilirsiniz.</p>
+    {warnings.length > 0 && <Notice><strong>Çıkarım uyarıları</strong><ul>{warnings.map((warning, index) => <li key={index}>{warning}</li>)}</ul></Notice>}
+    {passages.length ? <div className="passages">{passages.map((passage) =>
+      <article key={passage.id} id={`passage-${slugId(passage.id)}`} className={`passage ${passage.id === highlightPassageId ? 'highlighted' : ''}`}>
+        <div className="passage-label">{locatorText(passage.locator)}{passage.id === highlightPassageId && <Badge>Seçili dayanak</Badge>}</div>
+        {typeof passage.locator === 'string' && trackedPassages.has(passage.locator) && <p className="passage-warning">{trackedChangeText}</p>}
+        <p>{passage.text}</p>
+        <Detail title="Pasaj kimliği"><span className="reference-id">{passage.id}</span></Detail>
+      </article>
+    )}</div> : <Empty title="Görüntülenebilir metin yok.">Belgenin çıkarım durumunu ve uyarılarını kontrol edin. Metin olmadan belge içeriği doğrulanmış sayılmaz.</Empty>}
+  </>;
 }

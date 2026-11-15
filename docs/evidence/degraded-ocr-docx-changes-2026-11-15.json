@@ -1,0 +1,77 @@
+{
+  "observation": {
+    "schema": "synthetic-degraded-ocr-docx-differential-v1",
+    "synthetic_only": true,
+    "authenticated_worker": true,
+    "source_sha256": {
+      "extraction_runtime.py": "a1842a8c05d35da83df1e0a19dcead64d0553153b9abef80e060822331284762",
+      "extraction_worker.py": "abe30d4c02a811aa2da305c6f03429a0e222fce0de4192787d967155cdac0c12",
+      "extraction_client.py": "5ddfe5c5357370ae00f9f5831afeb1f889dafb1ee28e093c610b3443eab21d66",
+      "extract.py": "9a0efb28a1afa52eed4aa503bafdeb3eaebbf939df2ac838b6335cd3c9c496f7",
+      "pdf_extract.py": "753e5c40c5b2f5601de6f4035645738bcacd27562c33a99e1db800a824060c14",
+      "pdf_image_coverage.py": "772396a986229e89d110d535c218d26d4b448f2e61ed0ebe3a33bf59aa7c6938",
+      "pdf_scan_extract.py": "ffec2b548f5e3d449caa3f7902071f300e9299505aef7a5b72f0f972cba12f74",
+      "docx_extract.py": "082df18ca9551360ec3911a94557b925438e698953fea4f02398dcf5a17a798f"
+    },
+    "pdf": {
+      "original_sha256": "c49998c6aaadf2ddd09cdcad5ac296fe70dcebc74fca7001a4d3e00555533100",
+      "reference_sha256": "9d5be7b1ae9f60d607855c77dea3b1ecc9975153a8d9d53825b2ac7e4c2a9d3f",
+      "before_observation_sha256": "5e53dc3532500d1d76efb386dd18988a21f9a460ee70b9c064e5f917a3c6eddc",
+      "exact_native_and_clean_scan": true,
+      "unchanged_scope_warnings": true,
+      "ocr": [
+        {
+          "page": 3,
+          "expected_lines": 4,
+          "before_exact": 3,
+          "after_exact": 3,
+          "before_text_sha256": "a95876c0fbeeda146776ebb0da77806797056a010c895a01baea0f5ed086e6b6",
+          "after_text_sha256": "a95876c0fbeeda146776ebb0da77806797056a010c895a01baea0f5ed086e6b6"
+        },
+        {
+          "page": 4,
+          "expected_lines": 4,
+          "before_exact": 2,
+          "after_exact": 4,
+          "before_text_sha256": "14199e02fc29d98d34da03ca1edecc4cc1293583fcc929e56de171e1f09c6978",
+          "after_text_sha256": "1e3258bb3bf3ae081b6cdb9af5657dfd9f27355abbc468d3534b5a9c7e752ac9"
+        },
+        {
+          "page": 5,
+          "expected_lines": 4,
+          "before_exact": 0,
+          "after_exact": 0,
+          "before_text_sha256": null,
+          "after_text_sha256": null
+        }
+      ]
+    },
+    "docx": {
+      "original_sha256": "cb57d62e0cee87e75e134bacc1bdb99b3f18070f1f66b0a5cba3fe5e410c4374",
+      "before_observation_sha256": "4d76bc71010c50dcbb28d38d21125448c6f850bec56fe0573d5fcee338d60a01",
+      "exact_passage_bindings": 16,
+      "additional_warning": "Paragraf 5: İzlenen değişiklik var; özgün pasajı inceleyin."
+    }
+  },
+  "candidate_image_id": "sha256:cfde7336ad4cf2120844cbe7fd756471369e48380667d3574095a4055977c470",
+  "network_disabled": true,
+  "read_only_root_and_originals": true,
+  "identical_candidate_runs_per_fixture": 2,
+  "observation_sha256": "4e75f83f0d6393dfe578b966273f92b32da2f0eb52576bee752b32d14abf6d83",
+  "held_out": {
+    "original_sha256": "73ccb1c5c0d11515a4486ddb3810879bec324739e460cfd53136472f8d3d2ed9",
+    "reference_sha256": "0e163df0de6f46f322d146852ffe21692998c2740c3a2fbe664125f396e18057",
+    "freeze_sha256": "662a48d1f5b710130ff6d2984b0371265737f06df29607475f8282025aeea58f",
+    "before_observation_sha256": "2a3cf9e720c814585cbe50031f616c4f0d60d477e5745e0e4e97de5ca86db7db",
+    "after_observation_sha256": "15070be40bf2f0a5e5e19a3026791cf4b9bc7bbffb9f9b6f7baf60674490bd26",
+    "exact_reported_text_and_warnings_unchanged": true,
+    "exact_source_lines_before_and_after": 6,
+    "attempted_source_lines": 12,
+    "exact_critical_lines_before_and_after": 4,
+    "critical_source_lines": 9,
+    "omitted_locators": [
+      "Sayfa 3",
+      "Sayfa 4"
+    ]
+  }
+}
