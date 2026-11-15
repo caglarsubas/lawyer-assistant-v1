@@ -1,0 +1,35 @@
+{
+  "observation": {
+    "schema": "synthetic-mixed-pdf-warning-differential-v1",
+    "synthetic_only": true,
+    "baseline_sha256": "52c5535086b66033c7e7f74796cfce02dc771c01b6fac03e82b83eb482366493",
+    "sources_sha256": {
+      "extraction_runtime.py": "b15e79f16f11b41c18eda67064347ae9f1fa57df47594828c596a3f88c90c760",
+      "pdf_extract.py": "753e5c40c5b2f5601de6f4035645738bcacd27562c33a99e1db800a824060c14",
+      "pdf_image_coverage.py": "772396a986229e89d110d535c218d26d4b448f2e61ed0ebe3a33bf59aa7c6938",
+      "extract.py": "9a0efb28a1afa52eed4aa503bafdeb3eaebbf939df2ac838b6335cd3c9c496f7",
+      "extraction_worker.py": "abe30d4c02a811aa2da305c6f03429a0e222fce0de4192787d967155cdac0c12"
+    },
+    "results": [
+      {
+        "format": "pdf",
+        "original_sha256": "4d184cd8d1f57d07d250ab3bcb824a6e3b46311b645c8755b48aa90c74f3cd0d",
+        "exact_passages_preserved": 5,
+        "new_warning": "Sayfa 2: Görsel içerik OCR ile işlenmedi. Özgün sayfayı kontrol edin.",
+        "budget_omission_warning_preserved": true
+      },
+      {
+        "format": "docx",
+        "original_sha256": "ea29ae21685c330f9f95be9723736ae865a965de399ee15876803ce94f95df14",
+        "exact_passages_preserved": 10,
+        "baseline_observation_exact": true
+      }
+    ],
+    "authorized_native_worker": true
+  },
+  "local_image_id": "sha256:da6b0525fc78c0096fd53db1c818a84aa9c0d8ded987782051148912fde2d412",
+  "network_disabled": true,
+  "read_only_root": true,
+  "repeated_observations": 2,
+  "observation_sha256": "c1384e59a5bcd1a2edabc7ee2d9c9f8e338039dfc225a3a2cd784f26c0d6517b"
+}
