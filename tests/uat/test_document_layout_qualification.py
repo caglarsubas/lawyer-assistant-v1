@@ -3,11 +3,16 @@
 import json
 import subprocess
 import sys
+from dataclasses import replace
+from io import BytesIO
 from pathlib import Path
 from types import SimpleNamespace
+from zipfile import ZipFile
 
 import pytest
+from docx.oxml.ns import qn
 from fastapi.testclient import TestClient
+from lxml import etree
 from sqlalchemy import select
 from test_analysis_reviews import review_request
 from test_content_scope import team
@@ -48,7 +53,7 @@ def rasterize(command, *, check, capture_output, timeout):
     return subprocess.CompletedProcess(command, 0, b"", b"")
 
 def transcribe(picture, *, lang, timeout):
-    assert lang == "tur+eng" and timeout == 6
+    assert lang == "tur+eng" and 0 < timeout <= 6
     page = picture.getpixel((0, 0))
     transcribed.append(page)
     return expected[page]
@@ -58,7 +63,7 @@ ocr.image_to_string = transcribe
 sys.modules["pytesseract"] = ocr
 subprocess.run = rasterize
 try:
-    runpy.run_module("app.pdf_extract", run_name="__main__")
+    runpy.run_module("app.pdf_scan_extract", run_name="__main__")
 except SystemExit as exc:
     if exc.code not in (None, 0):
         raise
@@ -70,7 +75,7 @@ def stub_pdf_tools(monkeypatch, case):
     # Keep the real parser subprocess, PDF reader and worker response. Substitute
     # only the two native OCR programs, which are absent on CI hosts.
     popen = subprocess.Popen
-    argv = [sys.executable, "-m", "app.pdf_extract"]
+    argv = [sys.executable, "-m", "app.pdf_scan_extract"]
     admitted = {page: dict(case.expected_passages)[f"Sayfa {page}"] for page in (3, 4, 5)}
 
     def with_test_tools(command, **kwargs):
@@ -82,6 +87,26 @@ def stub_pdf_tools(monkeypatch, case):
         return popen(command, **kwargs)
 
     monkeypatch.setattr(subprocess, "Popen", with_test_tools)
+
+
+def with_tracked_opening(case):
+    stream = BytesIO()
+    with ZipFile(BytesIO(case.content)) as source, ZipFile(stream, "w") as target:
+        for member in source.infolist():
+            data = source.read(member)
+            if member.filename == "word/document.xml":
+                body = etree.fromstring(data).find(qn("w:body"))
+                paragraph = body.find(qn("w:p"))
+                for marker, text_tag, text in (
+                    ("w:del", "w:delText", "Silinen sentetik ifade."),
+                    ("w:ins", "w:t", "Eklenen sentetik ifade."),
+                ):
+                    revision = etree.SubElement(paragraph, qn(marker))
+                    run = etree.SubElement(revision, qn("w:r"))
+                    etree.SubElement(run, qn(text_tag)).text = text
+                data = etree.tostring(body.getparent())
+            target.writestr(member, data)
+    return replace(case, content=stream.getvalue())
 
 
 @pytest.fixture
@@ -143,7 +168,7 @@ def test_mixed_layouts_preserve_exact_originals_and_prior_review(uat, monkeypatc
 
     # The app bundles this font. No environment fonts or case documents are used.
     font = Path(__file__).resolve().parents[2] / "backend/app/assets/NotoSans-Regular.ttf"
-    pdf, docx = make_pdf_case(font), make_docx_case()
+    pdf, docx = make_pdf_case(font), with_tracked_opening(make_docx_case())
     scanned = []
 
     def scan_synthetic(content, host, **kwargs):
@@ -182,6 +207,10 @@ def test_mixed_layouts_preserve_exact_originals_and_prior_review(uat, monkeypatc
             assert {locator for locator, _ in case.omitted_passages} == {"Sayfa 2", "Sayfa 6"}
         else:
             assert source["extraction_profile"] == "docx-textboxes-v5"
+            assert [warning for warning in source["extraction_warnings"] if "özgün pasajı" in warning] == [
+                "Paragraf 1: İzlenen değişiklik var; özgün pasajı inceleyin.",
+            ]
+            assert "İzlenen değişiklikler var; kabul edilmiş sürüm doğrulanmadı." in source["extraction_warnings"]
         for suffix in ("", "/original"):
             for denied in (outsider.get(path + suffix), owner.get(path.replace(matter, unrelated) + suffix)):
                 assert denied.status_code == 404

@@ -81,8 +81,33 @@ synthetic-only container with `--network none`, a read-only root and disposable
 `/tmp`. Run `python /qualification/qualify_document_layouts.py --font
 /app/backend/app/assets/NotoSans-Regular.ttf`. Compare input digests within
 the recorded native toolchain because rendering libraries can produce different
-PDF bytes on other hosts. Representative layouts, OCR under degraded scans and
+PDF bytes on other hosts. Representative layouts, OCR on severely degraded scans and
 lawyer source-page review remain open.
+
+### Degraded scans and tracked changes
+
+New PDF intake can compare native OCR with one contrast and deskew pass on
+moderately faint scans. Both reads share the same six-second recognition
+budget for an admitted page. The three-page cap still applies. The alternate
+must retain line grouping and numeric tokens and meet native confidence
+checks before it replaces the first reading. The original page and existing
+OCR verification and omission warnings remain available.
+
+The [synthetic comparison](evidence/degraded-ocr-docx-changes-2026-11-15.json)
+records seven of twelve exact source lines after NFC and whitespace
+normalization, up from five. On the moderately degraded page the amount and
+currency line and the date label now match the original. The clean and
+digital pages stayed exact. A separate frozen scan set retained the same
+six of twelve lines. Severely faint or uneven scans still require review of
+the original.
+
+New DOCX intake displays tracked-change warnings beside the affected
+extracted passage when its exact locator can be verified. This adds a warning
+without accepting a revision or changing the passage text, locator, or
+extraction profile. Revised content with no matching passage and inconclusive
+inspection are reported at document level. Use the original view to inspect
+both sides of the change. The synthetic comparison preserves all sixteen
+exact DOCX passage bindings and identifies the affected deadline passage.
 
 New DOCX extraction uses the declared `docx-textboxes-v5` profile. A table stays
 between its surrounding body paragraphs. Rows containing nested tables retain

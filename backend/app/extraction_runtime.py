@@ -1,4 +1,4 @@
-"""Current extractor service with a PDF coverage-aware parser entry point."""
+"""Current extractor service with format-specific parser entry points."""
 
 import subprocess
 import sys
@@ -8,10 +8,14 @@ import uvicorn
 
 from . import extraction_worker
 
+_PARSERS = {".pdf": "app.pdf_scan_extract", ".docx": "app.docx_extract"}
+
 
 def _start_parser(command, **kwargs):
-    if len(command) == 5 and command[:3] == [sys.executable, "-m", "app.extract"] and command[-1] == ".pdf":
-        command = [sys.executable, "-m", "app.pdf_extract", *command[3:]]
+    if len(command) == 5 and command[:3] == [sys.executable, "-m", "app.extract"]:
+        parser = _PARSERS.get(command[-1])
+        if parser:
+            command = [sys.executable, "-m", parser, *command[3:]]
     return subprocess.Popen(command, **kwargs)
 
 
