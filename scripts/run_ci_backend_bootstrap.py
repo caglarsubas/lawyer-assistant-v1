@@ -21,7 +21,7 @@ def main():
     signal.signal(signal.SIGINT, stop)
     build = ["timeout", "--kill-after=2s", "60s", "npm", "run", "build"]
     contracts = ["bash", "scripts/run_ci_contracts.sh", "backend/.venv/bin/python",
-                 "scripts/run_ci_retained_deployment.py", "--shard=3", "--workers=2",
+                 "scripts/run_ci_authenticated_headroom.py", "--shard=3", "--workers=2",
                  "--report=" + sys.argv[1]]
     status = run(build, contracts, node_cwd=ROOT / "frontend", contract_cwd=ROOT)
     if status == 0:
