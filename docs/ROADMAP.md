@@ -1,5 +1,21 @@
 # Approved product roadmap and implementation ledger
 
+## Mixed PDF coverage warning — 15 November 2026
+
+The isolated Compose extractor now adds a page-specific warning when a
+text-bearing PDF page invokes raster content and OCR was skipped. A bounded
+inspection also reports pages whose image coverage could not be determined.
+The extracted-text view identifies the page to inspect in the original.
+The existing limit of three OCR attempts on textless
+pages remains in force.
+
+The native comparison uses the retained synthetic F00-04 originals. The
+mixed page gains a warning with identical extracted text and locators. The
+production-path intake test verifies scoped reads, exact originals and the
+earlier encrypted evidence version and independent decision. The before-fix
+observation remains part of the record. F00-04 continues with representative
+layout and OCR source-page review.
+
 ## Synthetic document layout and OCR qualification — 15 November 2026
 
 F00-04 now has retained, reproducible observations for a mixed PDF and compound

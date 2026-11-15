@@ -29,7 +29,7 @@ The extractor has a dedicated internal network shared only with the API, no data
 
 | Formats | Implemented extraction | Explicit limitations |
 |---|---|---|
-| PDF | Page text; bounded local Turkish/English OCR fallback | Up to 500 pages, OCR attempts at most three textless pages; unread pages remain listed; no layout or signature validation |
+| PDF | Page text, bounded local Turkish/English OCR fallback, and page-specific image coverage warnings | Up to 500 pages, with OCR attempts on at most three textless pages. Review the original for unread pages, image content and layout. |
 | DOCX | Body/nested tables, section header/footer definitions, linked footnote/endnote appendices and standalone text boxes | Four table levels and 50,000 shared structural units; exact source contexts and historical profiles; rendered layout/numbering, fields, chained/group shapes, embedded objects and legal completeness unverified |
 | XLSX | Sheet/row/cell locators, literal formulas | Formulas and links never executed; charts, objects, formatting and calculated-value correctness unverified |
 | PNG, JPEG, TIFF, BMP, WebP, GIF | Local Turkish/English OCR | 30 million pixel bound; first frame only, remaining frames explicitly omitted; OCR requires visual review |
@@ -48,7 +48,7 @@ Office/OpenDocument archives have member-count and expanded-size bounds; duplica
 
 ### Synthetic layout and OCR observations
 
-The [retained observation](evidence/synthetic-document-layout-2026-11-15.json)
+The [before-fix observation](evidence/synthetic-document-layout-2026-11-15.json)
 records two identical runs of the authenticated extraction worker in a
 network-disabled, read-only container. It binds the exact parser code, fixture
 generator, bundled font, generated original bytes and extracted text hashes.
@@ -57,9 +57,22 @@ The compound DOCX produced ten exact XML locators across a merged cell, nested
 table, section definitions and a linked footnote. The PDF produced five exact
 passages, including Turkish OCR on pages 3–5. Page 6 was the fourth raster-only
 page and received an explicit omission warning. Page 2 had a digital header
-and a raster-only body. The worker extracted the header and omitted the body
-without a page-specific warning even though OCR capacity was still available.
-The original page is required to assess its full content.
+and a raster-only body. In that baseline the worker extracted the header and
+omitted the body without a page-specific warning.
+
+The current isolated Compose extractor checks pages whose extracted text came
+from the PDF text layer. It follows images invoked by page content and bounded
+Form XObject streams, including inline images. It can identify those image
+operators without decoding the raster samples or running OCR again. A page with
+an invoked image gets an explicit OCR coverage warning. If inspection is
+inconclusive, the warning asks the reviewer to open the original. The original
+page remains the source for rendered layout, annotations and image content.
+The warning is recorded for new intake. Existing original files, exact
+passages and review histories retain their recorded versions.
+The [native comparison](evidence/mixed-pdf-warning-2026-11-15.json) records
+two identical disconnected runs. The page 2 warning was the only PDF result
+change, and all five exact passages and the page 6 warning were preserved.
+The DOCX result also matched the baseline.
 
 Use [the qualification runner](../scripts/qualify_document_layouts.py) and
 [fixture generator](../scripts/document_layout_cases.py) in the exact local
