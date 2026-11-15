@@ -1,5 +1,23 @@
 # Approved product roadmap and implementation ledger
 
+## Severe PDF recovery and partial page warnings — 15 November 2026
+
+F00-04 adds a bounded recovery for degraded or uneven PDF scans with blank
+OCR. Two normalized reads must agree and meet confidence checks within the
+existing six-second page budget. The reader shows a partial OCR warning next
+to the exact emitted page when the worker detects signs of degradation.
+The existing three-page cap and omission warnings remain in force.
+
+The retained severe and uneven scan set improved from 7 to 19 of 24 exact
+lines and from 10 to 22 of 24 exact critical fields. The independently frozen
+severe set improved from 5 to 16 of 24 exact lines and from 7 to 19 of 24
+exact critical fields. All prior nonempty text in the comparisons stayed
+exact. The shadowed page still misreads the amount separator and omits the
+negation. It now carries a page-specific warning. Source-page review by
+an authorized lawyer and qualification on representative legal originals
+remain open. The upload test retains original bytes, scope guards, existing
+evidence versions and review history.
+
 ## Degraded PDF OCR and DOCX passage warnings — 15 November 2026
 
 F00-04 now includes bounded contrast and deskew for moderately faint PDF

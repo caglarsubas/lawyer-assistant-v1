@@ -125,21 +125,27 @@ export function DocumentViewer({ matterId, documentId, highlightPassageId }: { m
 }
 
 const trackedChangeText = 'İzlenen değişiklik var; özgün pasajı inceleyin.';
+const partialOcrText = 'OCR sonucu kısmi olabilir; önemli bilgileri özgün sayfada doğrulayın.';
 
 export function ExtractedDocumentText({ document, highlightPassageId }: { document: DocumentRecord; highlightPassageId?: string }) {
   const passages = document.passages ?? [];
+  const filename = document.name.toLowerCase();
+  const isPdf = filename.endsWith('.pdf');
+  const passageWarning = isPdf ? partialOcrText : filename.endsWith('.docx') ? trackedChangeText : undefined;
   const warnings: string[] = [];
-  const trackedPassages = new Set<string>();
+  const warnedLocators = new Set<string>();
   const locatorCounts = new Map<string, number>();
-  if (document.name.toLowerCase().endsWith('.docx')) {
+  if (passageWarning) {
     for (const { locator } of passages) {
-      if (typeof locator === 'string') locatorCounts.set(locator, (locatorCounts.get(locator) ?? 0) + 1);
+      if (typeof locator === 'string' && (!isPdf || /^Sayfa [1-9]\d*$/.test(locator))) {
+        locatorCounts.set(locator, (locatorCounts.get(locator) ?? 0) + 1);
+      }
     }
   }
-  const suffix = `: ${trackedChangeText}`;
+  const suffix = passageWarning ? `: ${passageWarning}` : undefined;
   for (const warning of document.extraction_warnings ?? []) {
-    const locator = warning.endsWith(suffix) ? warning.slice(0, -suffix.length) : '';
-    if (locatorCounts.get(locator) === 1) trackedPassages.add(locator);
+    const locator = suffix && warning.endsWith(suffix) ? warning.slice(0, -suffix.length) : '';
+    if (locator && locatorCounts.get(locator) === 1) warnedLocators.add(locator);
     else warnings.push(warning);
   }
 
@@ -149,7 +155,7 @@ export function ExtractedDocumentText({ document, highlightPassageId }: { docume
     {passages.length ? <div className="passages">{passages.map((passage) =>
       <article key={passage.id} id={`passage-${slugId(passage.id)}`} className={`passage ${passage.id === highlightPassageId ? 'highlighted' : ''}`}>
         <div className="passage-label">{locatorText(passage.locator)}{passage.id === highlightPassageId && <Badge>Seçili dayanak</Badge>}</div>
-        {typeof passage.locator === 'string' && trackedPassages.has(passage.locator) && <p className="passage-warning">{trackedChangeText}</p>}
+        {typeof passage.locator === 'string' && warnedLocators.has(passage.locator) && <p className="passage-warning">{passageWarning}</p>}
         <p>{passage.text}</p>
         <Detail title="Pasaj kimliği"><span className="reference-id">{passage.id}</span></Detail>
       </article>

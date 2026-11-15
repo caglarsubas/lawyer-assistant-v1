@@ -8,7 +8,7 @@ import uvicorn
 
 from . import extraction_worker
 
-_PARSERS = {".pdf": "app.pdf_scan_extract", ".docx": "app.docx_extract"}
+_PARSERS = {".pdf": "app.pdf_severe_extract", ".docx": "app.docx_extract"}
 
 
 def _start_parser(command, **kwargs):

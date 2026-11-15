@@ -30,12 +30,12 @@ WORKER_TOKEN = "synthetic-layout-qualification-token-only"
 
 PDF_PARSER_WITH_OCR_STUBS = """
 import json
-import runpy
 import subprocess
 import sys
 from types import ModuleType
 
 from PIL import Image
+from app import pdf_severe_extract as worker
 
 expected = {int(page): text for page, text in json.loads(sys.argv.pop()).items()}
 attempted = []
@@ -62,20 +62,19 @@ ocr = ModuleType("pytesseract")
 ocr.image_to_string = transcribe
 sys.modules["pytesseract"] = ocr
 subprocess.run = rasterize
-try:
-    runpy.run_module("app.pdf_scan_extract", run_name="__main__")
-except SystemExit as exc:
-    if exc.code not in (None, 0):
-        raise
+worker._is_degraded_scan = lambda picture: picture.getpixel((0, 0)) == 4
+status = worker.main()
+assert status == 0
 assert attempted == transcribed == sorted(expected)
 """
 
 
 def stub_pdf_tools(monkeypatch, case):
-    # Keep the real parser subprocess, PDF reader and worker response. Substitute
-    # only the two native OCR programs, which are absent on CI hosts.
+    # Keep the real parser subprocess, PDF reader and worker response. Replace
+    # the native tools and mark one synthetic raster as degraded to exercise
+    # binding the partial-read warning to its exact page.
     popen = subprocess.Popen
-    argv = [sys.executable, "-m", "app.pdf_scan_extract"]
+    argv = [sys.executable, "-m", "app.pdf_severe_extract"]
     admitted = {page: dict(case.expected_passages)[f"Sayfa {page}"] for page in (3, 4, 5)}
 
     def with_test_tools(command, **kwargs):
@@ -200,6 +199,9 @@ def test_mixed_layouts_preserve_exact_originals_and_prior_review(uat, monkeypatc
                 "Sayfa 2: Görsel içerik OCR ile işlenmedi. Özgün sayfayı kontrol edin."
             ]
             assert not any(warning.startswith("Sayfa 1:") for warning in warnings)
+            assert [warning for warning in warnings if "OCR sonucu kısmi" in warning] == [
+                "Sayfa 4: OCR sonucu kısmi olabilir; önemli bilgileri özgün sayfada doğrulayın."
+            ]
             assert "Sayfa 6: içerik işlenemedi; bu çalışmaya dahil edilmedi." in warnings
             assert "PDF okuma sırası ve tablo düzeni insan incelemesi gerektirir." in warnings
             # Page 2's raster body is skipped even with all three OCR slots

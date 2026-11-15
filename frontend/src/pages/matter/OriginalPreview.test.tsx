@@ -47,3 +47,40 @@ describe('extracted DOCX passage warnings', () => {
     expect(markup).not.toContain(`<li>Paragraf 1: ${warning}</li>`);
   });
 });
+
+describe('extracted PDF passage warnings', () => {
+  it('binds a partial OCR warning to one exact page and retains other warnings', () => {
+    const warning = 'OCR sonucu kısmi olabilir; önemli bilgileri özgün sayfada doğrulayın.';
+    const document = {
+      id: 'pdf',
+      name: 'sentetik.docx.PDF',
+      passages: [
+        { id: 'first', locator: 'Sayfa 1', text: 'Ödeme metni.' },
+        { id: 'tenth', locator: 'Sayfa 10', text: 'Teslim metni.' },
+        { id: 'third-a', locator: 'Sayfa 3', text: 'İlk bölüm.' },
+        { id: 'third-b', locator: 'Sayfa 3', text: 'İkinci bölüm.' },
+      ],
+      extraction_warnings: [
+        'OCR doğrulanmalıdır.',
+        `Sayfa 1: ${warning}`,
+        `Sayfa 2: ${warning}`,
+        `Sayfa 3: ${warning}`,
+        'Sayfa 4: Belge görüntüsü işlenemedi.',
+      ],
+    } as DocumentRecord;
+    const markup = renderToStaticMarkup(<ExtractedDocumentText document={document} highlightPassageId="first" />);
+    const first = markup.match(/<article id="passage-first"[^>]*>.*?<\/article>/)?.[0];
+    const tenth = markup.match(/<article id="passage-tenth"[^>]*>.*?<\/article>/)?.[0];
+    expect(first).toContain(`class="passage-warning">${warning}`);
+    expect(first).toContain('Ödeme metni.');
+    expect(first).toContain('Seçili dayanak');
+    expect(tenth).toContain('Teslim metni.');
+    expect(tenth).not.toContain('passage-warning');
+    expect(markup.match(/class="passage-warning"/g)).toHaveLength(1);
+    expect(markup).not.toContain(`<li>Sayfa 1: ${warning}</li>`);
+    expect(markup).toContain(`<li>Sayfa 2: ${warning}</li>`);
+    expect(markup).toContain(`<li>Sayfa 3: ${warning}</li>`);
+    expect(markup).toContain('<li>OCR doğrulanmalıdır.</li>');
+    expect(markup).toContain('<li>Sayfa 4: Belge görüntüsü işlenemedi.</li>');
+  });
+});
