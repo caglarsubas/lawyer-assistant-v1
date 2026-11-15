@@ -122,6 +122,9 @@ export interface Fact {
 }
 export interface Claim {
   id: string; text: string; kind: string; evidence_ids: string[]; review_status: string; review_note?: string;
+  review_history?: {
+    product_revision: number; review_status: string; review_note?: string; reviewed_by?: string; reviewed_at?: string;
+  }[];
 }
 export interface ValidityEvidence {
   id: string; artifact_id: string; locator: string; text: string; sha256: string;

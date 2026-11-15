@@ -8,21 +8,26 @@ import { EvidenceContextPanel } from './EvidenceContextPanel';
 import { SourceCandidatesPanel } from './SourceCandidatesPanel';
 import { SourceExcerpt } from '../../SourceExcerpt';
 import { ValidityDetails } from '../../ValidityDetails';
-import { createProductReader, productSelectionKey, type ProductRead } from './researchProductRead';
+import { createProductReader, isProductRevision, productSelectionKey, type ProductRead } from './researchProductRead';
 import { ResearchOutputPicker } from './ResearchOutputPicker';
 import GatewayPanel from './GatewayPanel';
 import { researchReviewConflict, type ReviewConflict } from './researchReviewConflict';
 
-type RecoveringReview = { conflict: ReviewConflict; version: number; claimId: string; note: string; reopened: boolean };
+type RecoveringReview = { conflict: ReviewConflict; version: number; beforeRevision: number; claimId: string; note: string; reopened: boolean };
 
 function ResearchReviewRecovery({ review, reading, canRestart, onRead, onRestart }: {
   review: RecoveringReview; reading: boolean; canRestart: boolean; onRead: () => void; onRestart: () => void;
 }) {
   const { conflict } = review;
-  const title = conflict.kind === 'saved' ? 'İnceleme kaydedildi, kaynak izni yeniden doğrulanmalı.'
-    : conflict.kind === 'rejected' ? 'İnceleme kaydedilemedi.' : 'İncelemenin kaydedilip kaydedilmediği doğrulanamadı.';
+  const title = {
+    saved: 'İnceleme kaydedildi, kaynak izni yeniden doğrulanmalı.',
+    revision: 'Çıktı inceleme sırasında değişti. İnceleme kaydedilmedi.',
+    rejected: 'İnceleme kaydedilemedi.',
+    unknown: 'İncelemenin kaydedilip kaydedilmediği doğrulanamadı.',
+  }[conflict.kind];
   return <div className="conflict-state"><Notice error><strong>{title}</strong>
     <p>Sürüm {review.version}{conflict.kind === 'saved' ? ` · kaydedilen revizyon ${conflict.revision}` : ''}</p>
+    {conflict.kind === 'revision' && <p>İncelenen revizyon {review.beforeRevision} · Sunucunun bildirdiği revizyon {conflict.revision}</p>}
     {conflict.kind === 'rejected' && <p>{conflict.message}</p>}
     {review.reopened
       ? <p>Aşağıda bu sürümün son kaydı gösteriliyor. İnceleme durumunu ve kayıtlı notu kontrol edin.</p>
@@ -56,11 +61,15 @@ function ResearchWorkspace({ matter, onChange, demo }: { matter: Matter; onChang
   const selectedRead = productState?.key === selectionKey ? productState : null;
   const fetchedProduct = selectedRead?.status === 'ready' ? selectedRead.value : null;
   const recovery = recovering[selectedId];
-  const minimumRevision = recovery?.conflict.kind === 'saved' ? recovery.conflict.revision : undefined;
-  const behindReceipt = fetchedProduct && minimumRevision !== undefined && (fetchedProduct.revision ?? 0) < minimumRevision;
+  const conflict = recovery?.conflict;
+  const minimumRevision = recovery && Math.max(recovery.beforeRevision,
+    conflict?.kind === 'saved' || conflict?.kind === 'revision' ? conflict.revision : 0);
+  const behindReceipt = fetchedProduct && minimumRevision !== undefined
+    && (!isProductRevision(fetchedProduct.revision) || fetchedProduct.revision < minimumRevision);
   const wrongRecoveryVersion = fetchedProduct && recovery && fetchedProduct.version !== recovery.version;
   const product = behindReceipt || wrongRecoveryVersion || (recovery && !recovery.reopened) ? null : fetchedProduct;
-  const canReview = product && !['stale', 'invalidated', 'reviewed'].includes(product.status);
+  const reviewRevision = isProductRevision(product?.revision) ? product.revision : undefined;
+  const canReview = product && reviewRevision !== undefined && !['stale', 'invalidated', 'reviewed'].includes(product.status);
   const productLoading = Boolean(selectedId && (!selectedRead || selectedRead.status === 'loading'));
   const [source, setSource] = useState<string | null>(null); const [exporting, setExporting] = useState('');
   const base = `/matters/${encodeURIComponent(matter.id)}`;
@@ -102,23 +111,24 @@ function ResearchWorkspace({ matter, onChange, demo }: { matter: Matter; onChang
   async function cancel(run: ResearchRun) { setError(''); try { const updated = await post<ResearchRun>(`${base}/research/${encodeURIComponent(run.id)}/cancel`, {}); setRuns((old) => old.map((item) => item.id === updated.id ? updated : item)); await onChange(); } catch (cause) { setError(messageOf(cause)); } }
   async function review(claimId: string, decision: 'approve' | 'reject', note: string) {
     const reader = productReader.current;
-    if (!product || !canReview || recovery || reviewInFlight.current || !reader?.active || reader.key !== selectionKey) return;
+    if (!product || reviewRevision === undefined || !canReview || recovery || reviewInFlight.current || !reader?.active || reader.key !== selectionKey) return;
     reviewInFlight.current = true;
     setReviewing(true);
     setError('');
     try {
       try {
-        await post(`${base}/products/${encodeURIComponent(product.id)}/review`, { claim_id: claimId, decision, note });
+        await post(`${base}/products/${encodeURIComponent(product.id)}/review`, { claim_id: claimId, decision, note, expected_revision: reviewRevision });
       } catch (cause) {
         const accessError = cause instanceof ApiError && [401, 403, 404].includes(cause.status);
-        const conflict = accessError ? { kind: 'rejected' as const, message: cause.message } : researchReviewConflict(cause, product.id, product.revision);
+        const conflict = accessError ? { kind: 'rejected' as const, message: cause.message } : researchReviewConflict(cause, product.id, reviewRevision);
         if (!conflict) throw cause;
-        setRecovering(records => ({ ...records, [product.id]: { conflict, version: product.version, claimId, note: accessError ? '' : note, reopened: false } }));
+        setRecovering(records => ({ ...records, [product.id]: { conflict, version: product.version, beforeRevision: reviewRevision,
+          claimId, note: accessError ? '' : note, reopened: false } }));
         if (accessError && productReader.current === reader && reader.active) await reader.load();
         return;
       }
       if (productReader.current !== reader || !reader.active) return;
-      await reader.load();
+      await reader.load(reviewRevision + 1, product.version);
       if (productReader.current === reader && reader.active) {
         try { await onChange(); }
         catch { if (productReader.current === reader && reader.active) setError('İnceleme kaydedildi. Çalışma alanı listesi yenilenemedi.'); }
@@ -131,7 +141,7 @@ function ResearchWorkspace({ matter, onChange, demo }: { matter: Matter; onChang
   async function reopenReview() {
     const reader = productReader.current;
     if (!recovery || !reader?.active || reader.key !== selectionKey) return;
-    const reopened = await reader.load(minimumRevision);
+    const reopened = await reader.load(minimumRevision, recovery.version);
     if (reopened && productReader.current === reader && reader.active) {
       setRecovering(records => records[selectedId] === recovery
         ? { ...records, [selectedId]: { ...recovery, reopened: true } } : records);
@@ -159,7 +169,7 @@ function ResearchWorkspace({ matter, onChange, demo }: { matter: Matter; onChang
     } catch (cause) {
       if (productReader.current !== reader || !reader.active) return;
       setError(messageOf(cause));
-      if (cause instanceof ApiError && [401, 403, 404, 409].includes(cause.status)) await reader.load(minimumRevision);
+      if (cause instanceof ApiError && [401, 403, 404, 409].includes(cause.status)) await reader.load(minimumRevision, recovery?.version);
     } finally {
       setExporting('');
     }
@@ -177,8 +187,22 @@ function ResearchWorkspace({ matter, onChange, demo }: { matter: Matter; onChang
     {recovery && !(selectedRead?.status === 'failed' && selectedRead.accessUnavailable) && <ResearchReviewRecovery review={recovery} reading={productLoading}
       canRestart={Boolean(recovery.reopened && canReview && product?.claims.some(claim => claim.id === recovery.claimId))}
       onRead={() => void reopenReview()} onRestart={restartReview} />}
-    {productLoading ? <Loading label="Hazırlık çıktısı açılıyor…" /> : selectedRead?.status === 'failed' ? <Notice error><strong>Seçili çıktı açılamadı.</strong><p>{selectedRead.message}</p><p>Önceki çıktı gösterilmiyor. Seçiminizi koruyarak yeniden deneyebilirsiniz.</p><button className="button secondary" onClick={() => void productReader.current?.load(minimumRevision)}>Seçili çıktıyı yeniden aç</button></Notice> : product ? <article className="preparation-product"><header className="product-heading"><div><p className="eyebrow">HAZIRLIK ÇIKTISI · SÜRÜM {product.version}</p><h2>{product.title}</h2><span className="small muted">{formatDate(product.created_at, true)}</span></div><Badge status={product.status} /></header>{['stale', 'invalidated'].includes(product.status) && <Notice error>{product.stale_reason || 'Bu çalışmanın dayanakları değişti. Güncel dayanaklarla yeni bir araştırma başlatın.'}</Notice>}<p className="product-summary">{product.summary}</p>
-    <div className="section-heading compact"><h3>İddialar ve dayanaklar</h3><span className="small muted">{product.claims.filter((claim) => claim.review_status === 'approved').length} / {product.claims.length} uygun bulundu</span></div>{product.claims.length ? <div className="claim-list">{product.claims.map((claim, index) => <ClaimReview key={`${selectionKey}:${claim.id}`} claim={claim} index={index} onReview={review} onSource={setSource} stale={!canReview || Boolean(recovery) || reviewing} />)}</div> : <Empty title="İncelenecek iddia oluşturulmadı.">Mevcut veriyle desteklenebilir bir sonuç bulunmamış olabilir. Kapsam ve eksik bilgi bölümünü inceleyin.</Empty>}
+    {productLoading ? <Loading label="Hazırlık çıktısı açılıyor…" /> : selectedRead?.status === 'failed' ? <Notice error>
+      <strong>Seçili çıktı açılamadı.</strong>
+      <p>{selectedRead.message}</p>
+      {!recovery && <button className="button secondary" onClick={() => void productReader.current?.load()}>Seçili çıktıyı yeniden aç</button>}
+    </Notice> : product ? <article className="preparation-product">
+      <header className="product-heading"><div>
+        <p className="eyebrow">HAZIRLIK ÇIKTISI · SÜRÜM {product.version}{reviewRevision !== undefined && ` · REVİZYON ${reviewRevision}`}</p>
+        <h2>{product.title}</h2>
+        <span className="small muted">{formatDate(product.created_at, true)}</span>
+      </div><Badge status={product.status} /></header>
+      {['stale', 'invalidated'].includes(product.status) && <Notice error>{product.stale_reason || 'Bu çalışmanın dayanakları değişti. Güncel dayanaklarla yeni bir araştırma başlatın.'}</Notice>}
+      {reviewRevision === undefined && <Notice error><p>İnceleme için çıktı revizyonu doğrulanamadı.</p>
+        <button className="button secondary" onClick={() => void productReader.current?.load()}>Seçili sürümü yeniden oku</button>
+      </Notice>}
+      <p className="product-summary">{product.summary}</p>
+    <div className="section-heading compact"><h3>İddialar ve dayanaklar</h3><span className="small muted">{product.claims.filter((claim) => claim.review_status === 'approved').length} / {product.claims.length} uygun bulundu</span></div>{product.claims.length ? <div className="claim-list">{product.claims.map((claim, index) => <ClaimReview key={`${selectionKey}:${reviewRevision}:${claim.id}`} claim={claim} index={index} onReview={review} onSource={setSource} stale={!canReview || Boolean(recovery) || reviewing} />)}</div> : <Empty title="İncelenecek iddia oluşturulmadı.">Mevcut veriyle desteklenebilir bir sonuç bulunmamış olabilir. Kapsam ve eksik bilgi bölümünü inceleyin.</Empty>}
     {product.issues.length > 0 && <Detail title={`Hukuki meseleler ve eksik bilgiler (${product.issues.length})`}><div className="issue-list">{product.issues.map((issue, index) => <section key={index}><h4>{issue.label}</h4>{issue.missing_facts.length > 0 && <><span className="small-label">EKSİK OLGULAR</span><ul>{issue.missing_facts.map((item, itemIndex) => <li key={itemIndex}>{item}</li>)}</ul></>}{issue.counterarguments.length > 0 && <><span className="small-label">KARŞI ARGÜMANLAR</span><ul>{issue.counterarguments.map((item, itemIndex) => <li key={itemIndex}>{item}</li>)}</ul></>}</section>)}</div></Detail>}
     <Detail title="Bu çalışmanın kaynak kapsamı" open={product.coverage.gaps.length > 0}><div className="two-column-details"><div><h4>Aranan kaynaklar</h4>{product.coverage.searched.length ? <ul>{product.coverage.searched.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>Aranan kaynak kaydı bulunmuyor.</p>}</div><div><h4>Kapsam ve bilgi eksikleri</h4>{product.coverage.gaps.length ? <ul>{product.coverage.gaps.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>Bildirilen boşluk yok. Bu durum kapsamın eksiksiz olduğunu göstermez.</p>}</div></div></Detail>
     {product.context_pack && <EvidenceContextPanel pack={product.context_pack} evidence={product.evidence || []} onSource={setSource} />}
@@ -217,8 +241,70 @@ export function AuthorityCandidatesPanel({ candidates }: { candidates: Authority
   </section>;
 }
 
-function ClaimReview({ claim, index, onReview, onSource, stale }: { claim: Claim; index: number; onReview: (id: string, decision: 'approve' | 'reject', note: string) => Promise<void>; onSource: (id: string) => void; stale: boolean }) {
-  const [editing, setEditing] = useState(false); const [note, setNote] = useState(claim.review_note || ''); const [busy, setBusy] = useState(false); const [error, setError] = useState('');
-  async function decide(decision: 'approve' | 'reject') { setBusy(true); setError(''); try { await onReview(claim.id, decision, note); setEditing(false); } catch (cause) { setError(messageOf(cause)); } finally { setBusy(false); } }
-  return <section className="claim"><span className="claim-number">{String(index + 1).padStart(2, '0')}</span><div className="claim-content"><div className="claim-meta"><span className="small-label">{statusLabel(claim.kind)}</span><Badge status={claim.review_status} /></div><p>{claim.text}</p><div className="claim-sources">{claim.evidence_ids.length ? claim.evidence_ids.map((id, sourceIndex) => <button key={id} className="source-link" onClick={() => onSource(id)}><Icon name="file" size={14} />Dayanak {sourceIndex + 1}</button>) : <span className="small error-text">Kaynak bağlantısı yok</span>}</div>{claim.review_note && !editing && <p className="review-note"><strong>İnceleme notu:</strong> {claim.review_note}</p>}{error && <Notice error>{error}</Notice>}{editing && <Field label="İnceleme notunuz">{(id) => <textarea id={id} autoFocus rows={2} maxLength={2000} disabled={busy || stale} value={note} onChange={(event) => setNote(event.target.value)} placeholder="Düzeltilmesi gereken noktayı ve gerekçesini belirtin." />}</Field>}<div className="claim-actions"><button className="text-button" disabled={busy || stale || claim.review_status === 'approved'} onClick={() => void decide('approve')}><Icon name="check" size={16} />{busy ? 'Kaydediliyor…' : 'Uygun bul'}</button>{editing ? <><button className="text-button danger" disabled={busy || !note.trim() || stale} onClick={() => void decide('reject')}>Düzeltme notunu kaydet</button><button className="text-button" disabled={busy} onClick={() => setEditing(false)}>Vazgeç</button></> : <button className="text-button" disabled={busy || stale} onClick={() => setEditing(true)}>Düzeltme iste</button>}</div></div></section>;
+export function ClaimReviewHistory({ history }: { history: NonNullable<Claim['review_history']> }) {
+  if (history.length === 0) return null;
+  return <Detail title={`Önceki inceleme kararları (${history.length})`}>
+    <ol className="source-review-history">
+      {history.map(entry => <li key={entry.product_revision}>
+        <Badge status={entry.review_status} />
+        <p className="small muted">Karar değiştirilmeden önceki çıktı revizyonu {entry.product_revision}</p>
+        {entry.reviewed_at && <p className="small muted">{formatDate(entry.reviewed_at, true)}</p>}
+        {entry.reviewed_by && <p className="small reference-id">İnceleyen kullanıcı kaydı {entry.reviewed_by}</p>}
+        {entry.review_note && <p className="source-review-rationale">{entry.review_note}</p>}
+      </li>)}
+    </ol>
+  </Detail>;
+}
+
+function ClaimReview({ claim, index, onReview, onSource, stale }: {
+  claim: Claim;
+  index: number;
+  onReview: (id: string, decision: 'approve' | 'reject', note: string) => Promise<void>;
+  onSource: (id: string) => void;
+  stale: boolean;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [note, setNote] = useState(claim.review_note || '');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+
+  async function decide(decision: 'approve' | 'reject') {
+    setBusy(true);
+    setError('');
+    try {
+      await onReview(claim.id, decision, note);
+      setEditing(false);
+    } catch (cause) {
+      setError(messageOf(cause));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return <section className="claim">
+    <span className="claim-number">{String(index + 1).padStart(2, '0')}</span>
+    <div className="claim-content">
+      <div className="claim-meta"><span className="small-label">{statusLabel(claim.kind)}</span><Badge status={claim.review_status} /></div>
+      <p>{claim.text}</p>
+      <div className="claim-sources">
+        {claim.evidence_ids.length ? claim.evidence_ids.map((id, sourceIndex) =>
+          <button key={id} className="source-link" onClick={() => onSource(id)}><Icon name="file" size={14} />Dayanak {sourceIndex + 1}</button>,
+        ) : <span className="small error-text">Kaynak bağlantısı yok</span>}
+      </div>
+      {claim.review_note && <p className="review-note source-review-rationale"><strong>Kaydedilen inceleme notu:</strong> {claim.review_note}</p>}
+      {claim.review_history && <ClaimReviewHistory history={claim.review_history} />}
+      {error && <Notice error>{error}</Notice>}
+      {editing && <Field label="İnceleme notunuz">{id => <textarea id={id} autoFocus rows={2} maxLength={2000} disabled={busy || stale}
+        value={note} onChange={event => setNote(event.target.value)} placeholder="Düzeltilmesi gereken noktayı ve gerekçesini belirtin." />}</Field>}
+      <div className="claim-actions">
+        <button className="text-button" disabled={busy || stale || claim.review_status === 'approved'} onClick={() => void decide('approve')}>
+          <Icon name="check" size={16} />{busy ? 'Kaydediliyor…' : 'Uygun bul'}
+        </button>
+        {editing ? <>
+          <button className="text-button danger" disabled={busy || !note.trim() || stale} onClick={() => void decide('reject')}>Düzeltme notunu kaydet</button>
+          <button className="text-button" disabled={busy} onClick={() => setEditing(false)}>Vazgeç</button>
+        </> : <button className="text-button" disabled={busy || stale} onClick={() => setEditing(true)}>Düzeltme iste</button>}
+      </div>
+    </div>
+  </section>;
 }

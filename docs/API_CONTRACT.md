@@ -35,8 +35,14 @@ review_note?}],issues:[{label,missing_facts:string[],counterarguments:string[]}]
 coverage:{searched:string[],gaps:string[]},snapshots,created_at}`.
 Products additionally retain `evidence`, `graph_paths`, `authority_candidates`, `critical_gaps` and source hashes/revisions.
 Unqualified legal corpus is a critical gap and prevents whole-product Reviewed status.
-`GET /matters/{id}/products/{product_id}` -> product.
-`POST /matters/{id}/products/{product_id}/review` accepts `{claim_id?,decision:approve|reject,note}`.
+`GET /matters/{id}/products/{product_id}` returns the product, its evidence version and its mutable `revision`.
+`POST /matters/{id}/products/{product_id}/review` requires
+`{expected_revision,claim_id?,decision:approve|reject,note}`. Send the positive integer `revision` from
+the product read before deciding. A mismatched revision returns `409` with `outcome: revision_conflict`,
+`product_id` and `current_revision` after authorization. Reopen the same product before submitting a new decision.
+A review that was saved but needs source revalidation instead returns `outcome: committed_needs_revalidation`
+and the committed revision. An accepted replacement retains the previous claim decision, note and available
+reviewer/time in the claim's encrypted `review_history`, with the product revision it replaced.
 `GET /matters/{id}/products/{product_id}/export?format=docx|pdf` -> download, draft marked.
 
 ## Lawyer-authored practice records

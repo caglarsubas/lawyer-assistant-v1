@@ -573,7 +573,8 @@ def test_buat_06_extractive_research_and_reversible_preservation(uat):
     for claim in result["claims"]:
         assert any(claim["text"] in evidence[eid]["text"] for eid in claim["evidence_ids"])
     assert any(e["text"] == SOURCE and e["document_sha256"] == sha(SOURCE) for e in evidence.values())
-    assert owner.post(product + "/review", json={"decision": "approve"}).status_code == 409
+    review = owner.post(product + "/review", json={"expected_revision": result["revision"], "decision": "approve"})
+    assert review.status_code == 409 and review.json().get("outcome") != "revision_conflict"
     assert outsider.get(product).status_code == outsider.get(product + "/export").status_code == 404
 
     hold = checked(owner.post(base + "/legal-holds", json={

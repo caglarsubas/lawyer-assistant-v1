@@ -11,6 +11,7 @@ from fastapi.routing import APIRoute
 
 from .config import Settings
 from .main import create_app as create_baseline_app
+from .research_reviews import PRODUCT_REVIEW_PATH, review_product
 
 
 def create_app(settings: Settings | None = None):
@@ -21,6 +22,13 @@ def create_app(settings: Settings | None = None):
     if len(originals) != 1:
         raise RuntimeError("Original-download route identity is unavailable")
     original_endpoint = originals[0].endpoint
+
+    reviews = [route for route in app.routes if isinstance(route, APIRoute)
+               and route.path == PRODUCT_REVIEW_PATH and "POST" in route.methods]
+    if len(reviews) != 1 or reviews[0].methods != {"POST"} or reviews[0].name != "review":
+        raise RuntimeError("Research review route identity is unavailable")
+    app.router.routes.remove(reviews[0])
+    app.add_api_route(PRODUCT_REVIEW_PATH, review_product, methods=["POST"], name="review")
 
     async def original_unavailable(request: Request, error: Exception):
         # Other routes must retain their original error semantics. Authorization,
