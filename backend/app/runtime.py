@@ -9,7 +9,9 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 from fastapi.routing import APIRoute
 
+from .admin_revision_guard import install_admin_revision_guard
 from .config import Settings
+from .curator_review_guard import install_curator_review_source_guard
 from .main import create_app as create_baseline_app
 from .research_reviews import PRODUCT_REVIEW_PATH, review_product
 
@@ -42,4 +44,6 @@ def create_app(settings: Settings | None = None):
 
     app.add_exception_handler(InvalidToken, original_unavailable)
     app.add_exception_handler(OSError, original_unavailable)
+    install_admin_revision_guard(app)
+    install_curator_review_source_guard(app)
     return app

@@ -9,9 +9,19 @@ const revisionMessages = {
   workspaces: 'Ekip değişti; yeniden yükleyin',
 };
 
-export function isAdminRevisionConflict(cause: unknown, target: keyof typeof revisionMessages) {
+export function isAdminRevisionConflict(cause: unknown, target: keyof typeof revisionMessages, targetId?: string) {
   // The API also returns 409 for rejected business rules that leave the revision current.
-  return cause instanceof ApiError && cause.status === 409 && cause.message === revisionMessages[target];
+  if (!(cause instanceof ApiError) || cause.status !== 409) return false;
+  const data = cause.data as { outcome?: string; target?: string; target_id?: string } | null;
+  if (data?.outcome === 'revision_conflict') {
+    return data.target === target && targetId !== undefined && data.target_id === targetId;
+  }
+  return cause.message === revisionMessages[target];
+}
+
+export function conflictRevision(cause: unknown, fallback: number) {
+  const current = cause instanceof ApiError ? (cause.data as { current_revision?: number } | null)?.current_revision : undefined;
+  return typeof current === 'number' && Number.isSafeInteger(current) && current >= fallback ? current : fallback;
 }
 
 export function isAdminAccessDenied(cause: unknown) {

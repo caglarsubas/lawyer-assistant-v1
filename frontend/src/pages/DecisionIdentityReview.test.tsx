@@ -1,11 +1,19 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { IdentitySummary } from './DecisionIdentityReview';
-import { evidence, fetchIdentities, identityProposalPayload, mayIndependentlyReview, validateIdentityState, type IdentityState } from './decisionIdentity';
+import { evidence, fetchIdentities, identityProposalPayload, mayIndependentlyReview, validateIdentityContinuation, validateIdentityState, type IdentityState } from './decisionIdentity';
 import type { DecisionState } from './decisionMapping';
 import type { User } from '../types';
 const id = 'a'.repeat(64);
-const source = { source: { id, source_version_id: 'v1' }, revision: 2, source_review_revision: 5 } as DecisionState;
+const source: DecisionState = {
+  source: { id, source_version_id: 'v1', title: 'Synthetic decision source', source_url: 'https://example.test/decision', domain: 'civil',
+    acquired_at: null, rights_status: 'rights_pending', review_status: 'legal_review_pending', publication_status: 'staged', passage_count: 0,
+    dates: { published_on: null, effective_from: null, effective_until: null }, artifacts: { 'raw.bin': { sha256: 'a'.repeat(64), bytes: 512 } },
+    integrity_scope: 'all_artifacts_verified', limitations: [], injection_risk_hints: [],
+    review_evidence: { rights_supplied: false, identity_supplied: false, trust: 'unreviewed' } },
+  revision: 2, source_review_revision: 5, assigned_to: null, source_review_ready: true, export_allowed: false,
+  items: [], history: [], history_truncated: false, handoff_ready: true, publication_eligible: false, limitations: [],
+};
 const identity = { institution_id: 'urn:tr-law:institution:test', proceeding_id: 'urn:tr-law:proceeding:test', decision_id: 'urn:tr-law:decision:test',
   identity_evidence: evidence('Synthetic identity register', 'b'.repeat(64)), institution_evidence: evidence('Synthetic institution register', 'c'.repeat(64)) };
 function fixture() {
@@ -34,11 +42,21 @@ describe('canonical identity review', () => {
     const mock = vi.fn().mockResolvedValue(new Response(JSON.stringify(fixture()))); vi.stubGlobal('fetch', mock);
     expect(await fetchIdentities(source)).toEqual(fixture()); expect(mock.mock.calls[0][0]).toContain(`${id}/decision-identities`);
   });
-  it.each(['source', 'mapping', 'review', 'publication', 'history', 'head'])('withholds mismatched %s state', change => {
+  it.each(['source', 'artifact', 'mapping', 'review', 'publication', 'history', 'head'])('withholds mismatched %s state', change => {
     const state = structuredClone(fixture());
     if (change === 'source') state.source.id = 'f'.repeat(64); if (change === 'mapping') state.mapping_revision++; if (change === 'review') state.source_review_revision++;
+    if (change === 'artifact') state.source.artifacts['raw.bin'].sha256 = 'f'.repeat(64);
     if (change === 'publication') Object.assign(state, { publication_eligible: true }); if (change === 'history') state.history = []; if (change === 'head') state.current = { ...state.current!, rationale: 'forged' };
     expect(() => validateIdentityState(state, source)).toThrow();
+  });
+  it('validates exact append-only history before reopening a changed revision', () => {
+    const previous = fixture();
+    const nextEvent = { ...previous.current!, id: 'next-event', revision: 2, rationale: 'New decision' };
+    const current = { ...previous, revision: 2, current: nextEvent, history: [nextEvent, ...previous.history] };
+    expect(validateIdentityContinuation(current, previous, true)).toBe(current);
+    expect(() => validateIdentityContinuation(previous, current)).toThrow('geçmişi');
+    expect(() => validateIdentityContinuation(previous, previous, true)).toThrow('geçmişi');
+    expect(() => validateIdentityContinuation({ ...current, history: [nextEvent, { ...previous.current!, rationale: 'Rewritten' }] }, previous)).toThrow('geçmişi');
   });
   it('escapes all historical evidence and exposes unqualified legal effects', () => {
     const markup = renderToStaticMarkup(<IdentitySummary state={{ ...fixture(), stale: true }} />);

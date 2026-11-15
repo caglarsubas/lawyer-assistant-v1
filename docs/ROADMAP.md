@@ -1,5 +1,23 @@
 # Approved product roadmap and implementation ledger
 
+## Curator and employee review preconditions — 15 November 2026
+
+Curator decisions that write source assessments, provision mappings, decision
+mappings or source relationships verify their exact staged packages again before
+the decision and its history commit. Existing ledger revision checks still
+apply. A failed package check rolls back the proposed event. Previously recorded
+decisions retain their original evidence bindings.
+
+Employee edits check the account state and the individual revisions of selected
+roles alongside the employee revision. An administrator can reopen a conflict
+and review the current role permissions and account state before starting a new
+edit. Identity and source relationship forms require explicit review of a newer
+revision before a new submission.
+
+This advances **W01**, **W02** and **R05A-01**. Historical qualification evidence
+stays bound to its original code. Owner review and live legal qualification
+remain pending.
+
 ## Research review revision checks — 15 November 2026
 
 Research claim and whole-output reviews require the revision from the selected
