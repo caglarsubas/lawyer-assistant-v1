@@ -204,9 +204,8 @@ jobs:
         run: npm ci --prefer-offline --no-audit --no-fund --fetch-retries=1 --fetch-timeout=15000 --fetch-retry-mintimeout=1000 --fetch-retry-maxtimeout=3000
         working-directory: frontend
       # Authenticated contracts run once before pytest, with at most two workers.
-      # Retained-worker overlap and measured exceptions remove the serial tail.
-      # Keep the frontend lanes' timing reserve, with no additional executor,
-      # concurrent worker or longer job/test deadline.
+      # The same manifest assigns three measured cases to the existing publication
+      # step so the slower authenticated worker has reserve before the backend suite.
       - name: Test manifest-bound authenticated qualification
         timeout-minutes: 2
         run: python scripts/run_ci_backend_bootstrap.py "${{ runner.temp }}/deployment-reader-results.json"
@@ -342,7 +341,7 @@ jobs:
           UV_HTTP_TIMEOUT=10 UV_HTTP_RETRIES=0 timeout --kill-after=2s 20s "$uv_path" sync --project backend --frozen --extra dev
       - name: Validate closed deployment inventory and measured budgets
         run: |
-          backend/.venv/bin/python scripts/run_ci_retained_deployment.py --plan-only
+          backend/.venv/bin/python scripts/run_ci_authenticated_headroom.py --plan-only
           backend/.venv/bin/python scripts/ci_authority_cohorts.py --check-workflow-arrays
       - name: Test complete backend review and cohort files
         timeout-minutes: 5
@@ -688,7 +687,7 @@ jobs:
           bash scripts/run_ci_tests.sh backend/.venv/bin/python -m pytest "${publication_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA "${reserve_tests[@]}"
       - name: Test manifest-bound review headroom slice 9
         timeout-minutes: 1
-        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_deployment_shard.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json
+        run: bash scripts/run_ci_contracts.sh backend/.venv/bin/python scripts/run_ci_authenticated_headroom.py --shard=9 --workers=2 --report=${{ runner.temp }}/deployment-review-headroom-9.json
 
   graph-runtime-contracts:
     needs: backend-capacity

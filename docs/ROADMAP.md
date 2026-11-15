@@ -1,5 +1,21 @@
 # Approved product roadmap and implementation ledger
 
+## Backend contract reserve — 15 November 2026
+
+PR #306's first main run completed all 87 authenticated contracts in 94 seconds
+and stopped before the full backend suite because only 26 seconds remained.
+Both workers ran slower across the recorded cases. The slower worker spent
+87.1 seconds in test bodies, leaving too little margin for startup and result
+verification within the two-minute step.
+
+The active CI plan moves three complete destination and journal contracts to
+the existing source-publication contract step. The original timing sample
+projects approximately 86 seconds for authenticated qualification and
+27 seconds for its destination. CI still launches two workers per step and
+uses the existing exact execution receipts for all 1,018 deployment contracts.
+Job and step timeouts and their reserve checks stay in force. This advances
+**R07-07** engineering delivery. The legal readiness gates remain pending.
+
 ## Curator and employee review preconditions — 15 November 2026
 
 Curator decisions that write source assessments, provision mappings, decision
