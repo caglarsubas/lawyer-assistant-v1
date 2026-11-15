@@ -46,6 +46,31 @@ The extractor has a dedicated internal network shared only with the API, no data
 
 Office/OpenDocument archives have member-count and expanded-size bounds; duplicate members and known macro containers are rejected. Parser responses have independent byte, text, passage, warning and time bounds. An extension never establishes authenticity or complete extraction. Representative Turkish legal-document testing, including large scans and complex tables, remains required before claiming format qualification.
 
+### Synthetic layout and OCR observations
+
+The [retained observation](evidence/synthetic-document-layout-2026-11-15.json)
+records two identical runs of the authenticated extraction worker in a
+network-disabled, read-only container. It binds the exact parser code, fixture
+generator, bundled font, generated original bytes and extracted text hashes.
+
+The compound DOCX produced ten exact XML locators across a merged cell, nested
+table, section definitions and a linked footnote. The PDF produced five exact
+passages, including Turkish OCR on pages 3–5. Page 6 was the fourth raster-only
+page and received an explicit omission warning. Page 2 had a digital header
+and a raster-only body. The worker extracted the header and omitted the body
+without a page-specific warning even though OCR capacity was still available.
+The original page is required to assess its full content.
+
+Use [the qualification runner](../scripts/qualify_document_layouts.py) and
+[fixture generator](../scripts/document_layout_cases.py) in the exact local
+image identified in the observation. Bind those two scripts read-only in a
+synthetic-only container with `--network none`, a read-only root and disposable
+`/tmp`. Run `python /qualification/qualify_document_layouts.py --font
+/app/backend/app/assets/NotoSans-Regular.ttf`. Compare input digests within
+the recorded native toolchain because rendering libraries can produce different
+PDF bytes on other hosts. Representative layouts, OCR under degraded scans and
+lawyer source-page review remain open.
+
 New DOCX extraction uses the declared `docx-textboxes-v5` profile. A table stays
 between its surrounding body paragraphs. Rows containing nested tables retain
 each cell's paragraph/table sequence, including paragraphs following an inner

@@ -1,5 +1,22 @@
 # Approved product roadmap and implementation ledger
 
+## Synthetic document layout and OCR qualification — 15 November 2026
+
+F00-04 now has retained, reproducible observations for a mixed PDF and compound
+DOCX. Native Turkish and English OCR recovered the expected text on three
+raster-only pages. The fourth raster-only page was omitted with a warning.
+A mixed page with native header text omitted its raster body before the OCR
+budget was reached and had no page-specific warning. Ten DOCX passages matched
+independent text and locator references covering merged and nested tables,
+section definitions and a linked footnote.
+
+Disposable application acceptance checks authorized originals and exact
+passage hashes, cross-matter denial, and preservation of the previous encrypted
+original, analysis version and independent review. CI uses controlled native
+OCR substitutes. Two disconnected native-worker runs provide the separate OCR
+observation. Next, address the missing disclosure on mixed PDF pages and
+qualify representative layouts and OCR with source-page review.
+
 ## Backend contract reserve — 15 November 2026
 
 PR #306's first main run completed all 87 authenticated contracts in 94 seconds
