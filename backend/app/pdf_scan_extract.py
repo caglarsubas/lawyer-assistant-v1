@@ -60,7 +60,8 @@ def _ocr_lines(text, tsv):
     line = ()
     rows = csv.DictReader(tsv.splitlines(), delimiter="\t", quoting=csv.QUOTE_NONE)
     for row in rows:
-        if row.get("level") != "5" or not (word := row.get("text")):
+        # Tesseract can emit level-5 layout rows containing only spaces.
+        if row.get("level") != "5" or not (word := row.get("text")) or not word.strip():
             continue
         key = (row["block_num"], row["par_num"], row["line_num"])
         score = float(row["conf"])

@@ -45,6 +45,20 @@ def test_blank_recovery_requires_native_agreement_on_amount_and_negation(monkeyp
     assert result == expected
 
 
+@pytest.mark.parametrize(("layout_token", "accepted"), [(" ", True), ("İtiraz", False)], ids=("space", "word"))
+def test_blank_recovery_ignores_only_native_whitespace_rows(monkeypatch, layout_token, accepted):
+    text = "Tutar: 2.510,50 TL\nİtiraz edilmedi."
+    raw_text, scores = _native_read(text)
+    reads = iter(((raw_text + "\n\n", scores + f"\n5\t2\t1\t1\t95\t{layout_token}"), _native_read(text)))
+    monkeypatch.setattr(severe, "_level_and_deskew", lambda picture, *_: picture.copy())
+    engine = SimpleNamespace(run_and_get_multiple_output=lambda *args, **kwargs: next(reads))
+
+    with Image.new("L", (128, 128), 200) as picture:
+        result = severe._recover_blank(engine, picture, lang="tur+eng", deadline=severe.time.monotonic() + 6)
+
+    assert result == (raw_text + "\n\n" if accepted else "")
+
+
 def test_recovery_cannot_accept_a_late_second_score(monkeypatch):
     timer = SimpleNamespace(now=10.0, scores=0)
     text = "İtiraz edilmedi."

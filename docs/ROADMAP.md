@@ -1,5 +1,26 @@
 # Approved product roadmap and implementation ledger
 
+## Uneven PDF scan recovery — 16 November 2026
+
+The OCR score reader ignores Tesseract word-level rows that contain only
+whitespace. These layout rows could previously cause an empty primary read
+to remain omitted even when both recovery views agreed on the visible text.
+The exact word sequence and confidence checks still apply to every real
+word. The existing OCR time and page limits remain in force.
+
+The isolated native comparison recovered all four visible lines on the
+frozen uneven scan and reported partial OCR for that page. The other
+pages and warnings matched exactly, including the mixed-page and calibrated
+partial-scan controls. The comparison used three synthetic PDFs.
+
+An authorized read-only investigation traced one inconclusive mixed-page
+warning to the bounded PDF decoder. Independent inspection confirmed raster
+content. A synthetic two-page comparison reproduced the limit and retained
+the exact passages on both pages, with the inconclusive warning on the
+over-limit page and the definite raster warning on the neighboring page.
+
+Seven fields from the earlier private review still await clearer scans.
+
 ## Bounded inspection for large PDF annotation lists — 16 November 2026
 
 F00-04 checks up to 256 annotation references per page and 4,096 per
