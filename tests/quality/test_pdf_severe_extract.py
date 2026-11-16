@@ -85,8 +85,8 @@ def test_existing_partial_text_survives_and_new_reads_share_deadline(monkeypatch
     context = SimpleNamespace()
     known_partial = "Bakiye tutarı: 37 815,26 TL\nadı."
 
-    def existing(_, picture, *, lang, timeout):
-        assert picture is context and lang == "tur+eng"
+    def existing(_, picture, *, lang, timeout, allow_terminal_period):
+        assert picture is context and lang == "tur+eng" and allow_terminal_period
         assert timeout == pytest.approx(5.8)
         return known_partial
 

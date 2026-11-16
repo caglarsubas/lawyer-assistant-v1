@@ -1,5 +1,20 @@
 # Approved product roadmap and implementation ledger
 
+## Source-confirmed final periods on uneven PDF scans — 17 November 2026
+
+The PDF worker can retry the last OCR line on eligible uneven scans within
+the existing page deadline. It restores a final period only when the
+line retry preserves the words, agrees with their source positions, and
+confirms a separate period-shaped mark at the end of the source line.
+The existing partial OCR warning remains on recovered passages.
+
+A repeated disconnected comparison covered seven synthetic PDFs and 32
+pages. It restored the final period on the frozen uneven scan and matched
+all 29 critical readings and 11 holdout controls. The other passages,
+spacing, locators, and warnings matched the installed baseline exactly.
+
+Seven fields from the earlier private review still await clearer scans.
+
 ## Source-confirmed Turkish dotted İ in PDF OCR — 16 November 2026
 
 The PDF worker can retry uppercase Turkish text on eligible scanned pages

@@ -12,7 +12,7 @@ from itertools import groupby
 from pathlib import Path
 from types import FunctionType, SimpleNamespace
 
-from PIL import Image, ImageOps
+from PIL import Image, ImageDraw, ImageOps
 
 from .extract import extract
 from .pdf_image_coverage import add_pdf_coverage_warnings
@@ -200,6 +200,115 @@ def _recover_dotted_i(ocr, picture, baseline, original_tsv, *, lang, deadline):
     return baseline
 
 
+def _word_edges(row, origin=(0, 0)):
+    left, top, width, height = _word_box(row)
+    left += origin[0]
+    top += origin[1]
+    return left, top, left + width, top + height
+
+
+def _terminal_period_ink(picture, word_box):
+    _, top, right, bottom = word_box
+    height = bottom - top
+    right_limit = min(picture.width, right + height // 2)
+    bottom_limit = min(picture.height, bottom + height // 5)
+    if right_limit - right < 6:
+        return None
+    with picture.crop((right, top, right_limit, bottom_limit)) as strip, strip.convert("L") as gray:
+        dark, light = gray.getextrema()
+        if light - dark < 64:
+            return None
+        boxes = []
+        # A real compact mark survives nearby thresholds. Detached noise,
+        # stroke fragments and ambiguous neighboring ink are insufficient.
+        for ratio in (0.45, 0.60):
+            threshold = round(dark + (light - dark) * ratio)
+            with gray.point([255 if value < threshold else 0 for value in range(256)]) as mask:
+                box = mask.getbbox()
+                if box is None:
+                    return None
+                left, mark_top, mark_right, mark_bottom = box
+                width, mark_height = mark_right - left, mark_bottom - mark_top
+                if not (
+                    2 <= left <= height // 3 and mark_right < gray.width
+                    and 2 <= width <= height // 3 and 2 <= mark_height <= height // 3
+                    and mark_height * 0.75 <= width <= mark_height * 1.33
+                    and mark_top >= height // 2
+                    and height - height // 4 <= mark_bottom <= height + height // 10
+                ):
+                    return None
+                with mask.crop(box) as mark:
+                    if mark.histogram()[255] < width * mark_height * 0.65:
+                        return None
+                    seed = mark.tobytes().index(255)
+                    ImageDraw.floodfill(mark, (seed % width, seed // width), 128)
+                    if mark.getextrema()[1] != 128:
+                        return None
+                boxes.append(box)
+    if any(abs(a - b) > 2 for a, b in zip(*boxes, strict=True)):
+        return None
+    left, mark_top, mark_right, mark_bottom = boxes[-1]
+    return right + left, top + mark_top, right + mark_right, top + mark_bottom
+
+
+def _recover_terminal_period(ocr, picture, baseline, original_tsv, *, lang, deadline):
+    text = baseline.rstrip()
+    remaining = deadline - time.monotonic()
+    if not text or not text[-1].isalpha() or remaining < 0.25:
+        return baseline
+    lines = _word_lines(original_tsv)
+    words = text.splitlines()[-1].split()
+    if len(words) < 2 or not words[-1].isalpha() or not lines or words != [word for _, word in lines[-1]]:
+        return baseline
+    before = lines[-1]
+    bounds = [_word_edges(row) for row, _ in before]
+    if any(not (0 <= left < right <= picture.width and 0 <= top < bottom <= picture.height)
+           for left, top, right, bottom in bounds):
+        return baseline
+    if any(first[2] > second[0] for first, second in zip(bounds, bounds[1:])):
+        return baseline
+    left, right = bounds[0][0], bounds[-1][2]
+    top = min(box[1] for box in bounds)
+    bottom = max(box[3] for box in bounds)
+    height = bottom - top
+    if not 16 <= height <= 160 or not 95 <= float(before[-1][0]["conf"]) <= 100:
+        return baseline
+    period = _terminal_period_ink(picture, bounds[-1])
+    if period is None:
+        return baseline
+
+    # Read only the original last line. Whole-page segmentation can omit a
+    # terminal period on a skewed scan even when its source ink is visible.
+    pad = round(height * 0.4)
+    crop = (left - pad, top - pad, right + pad, bottom + pad)
+    if not (0 <= crop[0] < crop[2] <= picture.width and 0 <= crop[1] < crop[3] <= picture.height
+            and period[2] + 2 <= crop[2]):
+        return baseline
+    remaining = deadline - time.monotonic()
+    if remaining < 0.25:
+        return baseline
+    with picture.crop(crop) as strip:
+        tsv = ocr.image_to_data(strip, lang=lang, config="--psm 7", timeout=min(2, remaining))
+    result = _word_lines(tsv)
+    if len(result) != 1 or [word for _, word in result[0]] != [*words[:-1], words[-1] + "."]:
+        return baseline
+    if not 95 <= float(result[0][-1][0]["conf"]) <= 100:
+        return baseline
+    for index, ((row, _), original) in enumerate(zip(result[0], bounds, strict=True)):
+        observed = _word_edges(row, crop[:2])
+        allowance = max(2, (original[3] - original[1]) // 8)
+        intended = original
+        if index == len(bounds) - 1:
+            if observed[2] < period[2] or not (observed[1] <= period[1] < period[3] <= observed[3]):
+                return baseline
+            intended = (*original[:2], period[2], original[3])
+        if any(abs(old - new) > allowance for old, new in zip(intended, observed, strict=True)):
+            return baseline
+    if time.monotonic() >= deadline:
+        return baseline
+    return text + "." + baseline[len(text):]
+
+
 def _prefer_enhanced(baseline, enhanced):
     if not baseline[0].strip() or not enhanced[0].strip() or baseline[0].split() == enhanced[0].split():
         return False
@@ -228,7 +337,7 @@ def _prefer_enhanced(baseline, enhanced):
     return score_gain >= 2 * token_count
 
 
-def _recognize(ocr, picture, *, lang, timeout):
+def _recognize(ocr, picture, *, lang, timeout, allow_terminal_period=False):
     deadline = time.monotonic() + timeout
     candidate = _enhance_scan(picture)
     with candidate if candidate is not None else nullcontext():
@@ -240,7 +349,10 @@ def _recognize(ocr, picture, *, lang, timeout):
         baseline = ocr.run_and_get_multiple_output(picture, ["txt", "tsv"], lang=lang, timeout=remaining)
         if candidate is None:
             try:
-                return _recover_dotted_i(ocr, picture, *baseline, lang=lang, deadline=deadline)
+                dotted = _recover_dotted_i(ocr, picture, *baseline, lang=lang, deadline=deadline)
+                if dotted != baseline[0] or not allow_terminal_period:
+                    return dotted
+                return _recover_terminal_period(ocr, picture, *baseline, lang=lang, deadline=deadline)
             except (RuntimeError, OSError, KeyError, ValueError, TypeError, IndexError, AttributeError, csv.Error):
                 # A failed or inconclusive retry keeps the baseline.
                 return baseline[0]

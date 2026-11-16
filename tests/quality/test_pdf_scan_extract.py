@@ -146,3 +146,66 @@ def test_dotted_i_retry_requires_source_dots_and_only_preserves_exact_aligned_te
         assert got == ("KIR  000783\n\n  İKİ.\n" if change == "none" else baseline)
         assert picture.tobytes() == before
     assert calls == [(["txt", "tsv"], "tur+eng", 6), ("tur+eng", "--psm 6", 1.5)]
+
+
+@pytest.mark.parametrize("case", [
+    "confirmed", "missing", "multiple", "elongated", "raised", "low", "touching", "already",
+    "clean", "numeric_tail", "moved_box", "changed_number", "separate_period", "late",
+])
+def test_terminal_period_requires_compact_source_ink_and_exact_bounded_line_read(monkeypatch, case):
+    last_word = "741" if case == "numeric_tail" else "tamamlandı"
+    end = "." if case == "already" else ""
+    text = f"Belge 000741\n\n  Kayıt 741 {last_word}{end}"
+    whitespace = "  \r\n\n\t"
+    baseline = text + whitespace
+    calls = []
+    now = [100.0]
+    monkeypatch.setattr(parser.time, "monotonic", lambda: now[0])
+    monkeypatch.setattr(parser, "_enhance_scan", lambda _: None)
+
+    def tsv(*lines):
+        header = "level\tblock_num\tpar_num\tline_num\tleft\ttop\twidth\theight\tconf\ttext\n"
+        return header + "".join(
+            f"5\t1\t1\t{number}\t{x}\t{y}\t{w}\t{h}\t97\t{word}\n"
+            for number, words in enumerate(lines, 1) for x, y, w, h, word in words
+        )
+
+    def primary(_, outputs, *, lang, timeout):
+        calls.append((outputs, lang, timeout))
+        now[0] += 4.75
+        return baseline, tsv([(30, 5, 25, 25, "Belge"), (63, 5, 30, 25, "000741")],
+                             [(30, 46, 25, 29, "Kayıt"), (63, 46, 15, 29, "741"),
+                              (94, 45, 46, 30, last_word + end)])
+
+    def alternate(strip, *, lang, config, timeout):
+        assert strip.size == (134, 54)
+        calls.append((lang, config, timeout))
+        if case == "late":
+            now[0] += 1.26
+        words = [(12, 13, 25, 29, "Kayıt"), (45, 13, 15, 29, "742" if case == "changed_number" else "741"),
+                 (83 if case == "moved_box" else 76, 12, 55, 30,
+                  last_word if case == "separate_period" else last_word + ".")]
+        if case == "separate_period":
+            words.append((126, 37, 5, 5, "."))
+        return tsv(words)
+
+    with Image.new("L", (220, 120), 255) as picture:
+        draw = ImageDraw.Draw(picture)
+        draw.rectangle((94, 45, 139, 74), fill=10)
+        if case != "missing":
+            shape = {
+                "elongated": (143, 72, 151, 74), "raised": (144, 50, 148, 54),
+                "low": (144, 76, 148, 80), "touching": (139, 70, 148, 74),
+            }.get(case, (144, 70, 148, 74))
+            draw.rectangle(shape, fill=10)
+        if case == "multiple":
+            draw.point((149, 75), fill=10)  # Disconnected with contiguous row and column projections.
+        original = picture.tobytes()
+        engine = SimpleNamespace(run_and_get_multiple_output=primary, image_to_data=alternate)
+        got = parser._recognize(engine, picture, lang="tur+eng", timeout=6, allow_terminal_period=case != "clean")
+        assert got == (text + "." + whitespace if case == "confirmed" else baseline)
+        assert picture.tobytes() == original
+    expected = [(["txt", "tsv"], "tur+eng", 6)]
+    if case in {"confirmed", "moved_box", "changed_number", "separate_period", "late"}:
+        expected.append(("tur+eng", "--psm 7", 1.25))
+    assert calls == expected

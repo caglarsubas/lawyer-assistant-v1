@@ -97,7 +97,7 @@ def _read_scan(ocr, picture, *, lang, timeout):
     remaining = deadline - time.monotonic()
     if remaining <= 0:
         raise RuntimeError("OCR time budget exhausted")
-    text = _recognize(ocr, picture, lang=lang, timeout=remaining)
+    text = _recognize(ocr, picture, lang=lang, timeout=remaining, allow_terminal_period=degraded)
     if degraded and not text.strip():
         text = _recover_blank(ocr, picture, lang=lang, deadline=deadline)
     return text, degraded
