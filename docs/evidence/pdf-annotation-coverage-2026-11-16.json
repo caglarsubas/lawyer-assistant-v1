@@ -1,0 +1,78 @@
+{
+  "schema": "synthetic-pdf-annotation-coverage-v1",
+  "synthetic_only": true,
+  "baseline_source": "a3438e2ed07cb0f84042c108bdcc86394f4ea83d",
+  "extractor_base_image": "sha256:e61ef37dd9ccedf69480a6bed10bd83960633e09c8e1400e6ef52e66c8f64e51",
+  "candidate_scope": "existing image with candidate pdf_image_coverage.py mounted read-only",
+  "network_disabled": true,
+  "authenticated_extract_repeats_per_parser": 2,
+  "unauthorized_extract_status": 401,
+  "versions": {
+    "arch": "aarch64",
+    "poppler": "pdftoppm version 22.12.0",
+    "pypdf": "6.19.0"
+  },
+  "frozen_fixture_sha256": "9b3115ba6ea03c1b78fbe82e265af90fb584c43d18ee163dde59474b9393ad4c",
+  "original_sha256": "6245099dd91cf2e2ed325324c0bae2bec46d0c4a7509b6938a51a1bacee0d522",
+  "qualification_source_sha256": "961ff7021b84b77fbf8efeeb3699e278ea44e3ae1e743cda14c16e93d7e3bb30",
+  "baseline_coverage_source_sha256": "772396a986229e89d110d535c218d26d4b448f2e61ed0ebe3a33bf59aa7c6938",
+  "candidate_coverage_source_sha256": "6a0f5afc6f783c3653ccff6739976b65da84a09c71a6f92782e30f91e2e8bc0a",
+  "exact_passage_hashes_in_both": {
+    "Sayfa 1": "aaa8cded7fbd6176fcea02916b81c6f0c978d67f3311c21a07bff7ef886dcc57",
+    "Sayfa 2": "f6a8b52edbd2edbb3104e49b691d734f21aae70006d102c76fb604a6afa79d89",
+    "Sayfa 3": "5022673c7337cebddf50ccdaecd59773e66e11e8a57a60976a02fe8e2087f95c",
+    "Sayfa 4": "14eef8224d802fe53a76f63bf7d6cc0e5fa715e59d9b6cee6296b732577c2483",
+    "Sayfa 5": "81c4385a66c5f2bbd623e77f199f413aba4cfd78df60520029336b6ffd4df43c",
+    "Sayfa 6": "b45351632e2ecbc52785b5885d6f498a082e1be81026f80c721efe2d64731bb6",
+    "Sayfa 7": "984a6b8359edd82060e65600e03fef3fccf17c3ecabd58d6a1c307ce9256b9ec",
+    "Sayfa 8": "7b1c2b650a9e4335ee15a0f3dd5235f542562a4787cbbb4eed924f71c44d05ea"
+  },
+  "poppler_annotation_visibility_differences": [
+    {
+      "page": 1,
+      "visible_annotation_pixels": 0
+    },
+    {
+      "page": 2,
+      "visible_annotation_pixels": 4703
+    },
+    {
+      "page": 3,
+      "visible_annotation_pixels": 21780
+    },
+    {
+      "page": 4,
+      "visible_annotation_pixels": 0
+    },
+    {
+      "page": 5,
+      "visible_annotation_pixels": 0
+    },
+    {
+      "page": 6,
+      "visible_annotation_pixels": 0
+    },
+    {
+      "page": 7,
+      "visible_annotation_pixels": 4703
+    },
+    {
+      "page": 8,
+      "visible_annotation_pixels": 160
+    }
+  ],
+  "baseline_warnings": [
+    "Sayfa 8: OCR kullanıldı; görüntüyle doğrulayın.",
+    "PDF okuma sırası ve tablo düzeni insan incelemesi gerektirir.",
+    "Sayfa 7: Görsel içerik OCR ile işlenmedi. Özgün sayfayı kontrol edin."
+  ],
+  "candidate_warnings": [
+    "Sayfa 8: OCR kullanıldı; görüntüyle doğrulayın.",
+    "PDF okuma sırası ve tablo düzeni insan incelemesi gerektirir.",
+    "Sayfa 2: PDF ek açıklamaları ve form alanları çıkarımda doğrulanmadı. Özgün sayfayı kontrol edin.",
+    "Sayfa 3: PDF ek açıklamaları ve form alanları çıkarımda doğrulanmadı. Özgün sayfayı kontrol edin.",
+    "Sayfa 6: PDF ek açıklamaları ve form alanları çıkarımda doğrulanmadı. Özgün sayfayı kontrol edin.",
+    "Sayfa 7: Görsel içerik OCR ile işlenmedi. PDF ek açıklamaları ve form alanları çıkarımda doğrulanmadı. Özgün sayfayı kontrol edin.",
+    "Sayfa 8: PDF ek açıklamaları ve form alanları çıkarımda doğrulanmadı. Özgün sayfayı kontrol edin."
+  ]
+}

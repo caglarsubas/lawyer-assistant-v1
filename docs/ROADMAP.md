@@ -1,5 +1,21 @@
 # Approved product roadmap and implementation ledger
 
+## PDF annotation and form coverage — 16 November 2026
+
+F00-04 reports page-specific annotation and form coverage limits on PDF
+pages with extracted text. These include stored stamps, ink annotations
+and interactive fields, including on pages processed with OCR. Mixed
+pages combine their annotation and raster limitations in one warning.
+Malformed or over-budget lists leave an explicit inspection warning.
+
+The [native comparison](evidence/pdf-annotation-coverage-2026-11-16.json)
+uses a frozen eight-page synthetic PDF and two authenticated, disconnected
+runs per parser. All eight passage texts and locators match the baseline.
+Original bytes match throughout. The candidate warns on the visible stamp,
+widget, mixed raster with stamp, OCR page with ink and hidden stored stamp.
+Plain, empty-list and navigation-only controls have no annotation warning.
+Representative format and source-page qualification remains in progress.
+
 ## Severe PDF recovery and partial page warnings — 15 November 2026
 
 F00-04 adds a bounded recovery for degraded or uneven PDF scans with blank
