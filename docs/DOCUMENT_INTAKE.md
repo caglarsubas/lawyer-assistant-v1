@@ -29,7 +29,7 @@ The extractor has a dedicated internal network shared only with the API, no data
 
 | Formats | Implemented extraction | Explicit limitations |
 |---|---|---|
-| PDF | Page text, bounded local Turkish/English OCR fallback, and page-specific image coverage warnings | Up to 500 pages, with OCR attempts on at most three textless pages. Review the original for unread pages, image content and layout. |
+| PDF | Page text, bounded local Turkish/English OCR fallback, and page-specific image and annotation coverage warnings | Up to 500 pages, with OCR attempts on at most three textless pages. Review the original for unread pages, images, annotations, form values and layout. |
 | DOCX | Body/nested tables, section header/footer definitions, linked footnote/endnote appendices and standalone text boxes | Four table levels and 50,000 shared structural units; exact source contexts and historical profiles; rendered layout/numbering, fields, chained/group shapes, embedded objects and legal completeness unverified |
 | XLSX | Sheet/row/cell locators, literal formulas | Formulas and links never executed; charts, objects, formatting and calculated-value correctness unverified |
 | PNG, JPEG, TIFF, BMP, WebP, GIF | Local Turkish/English OCR | 30 million pixel bound; first frame only, remaining frames explicitly omitted; OCR requires visual review |
@@ -73,6 +73,16 @@ The [native comparison](evidence/mixed-pdf-warning-2026-11-15.json) records
 two identical disconnected runs. The page 2 warning was the only PDF result
 change, and all five exact passages and the page 6 warning were preserved.
 The DOCX result also matched the baseline.
+
+Pages with extracted text also report PDF annotations and form fields that
+need original-page review. This includes stamps, handwritten annotations,
+comments and widgets on digital and OCR pages. The worker checks for their
+annotation records without reading appearance streams, form values or
+actions. A page with an empty annotation array or only navigation links
+needs no annotation warning. Where the annotation list is malformed or
+exceeds the inspection budget, the warning reports that inspection was
+inconclusive. Pages with both raster and annotation limitations report them
+together. The warning remains separate from the passage text and locator.
 
 Use [the qualification runner](../scripts/qualify_document_layouts.py) and
 [fixture generator](../scripts/document_layout_cases.py) in the exact local
