@@ -1,5 +1,21 @@
 # Approved product roadmap and implementation ledger
 
+## Source-confirmed Turkish dotted İ in PDF OCR — 16 November 2026
+
+The PDF worker can retry uppercase Turkish text on eligible scanned pages
+with single-block layout within the existing OCR deadline. It accepts a
+restored capital dot when the two reads agree on word positions and all
+other characters, and the source raster shows a detached dot over the
+corresponding stem. Baseline spacing, identifiers, and amounts are preserved.
+
+A disconnected comparison ran the baseline and candidate twice on four
+synthetic PDFs covering 17 pages. It restored the dots in the frozen
+negated line. All 12 critical readings matched the source, and the other
+passages, locators, and warnings matched the baseline exactly.
+
+The seven fields from the earlier private review remain pending clearer
+scans.
+
 ## Uneven PDF scan recovery — 16 November 2026
 
 The OCR score reader ignores Tesseract word-level rows that contain only

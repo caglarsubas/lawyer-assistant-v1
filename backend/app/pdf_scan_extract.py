@@ -3,10 +3,12 @@
 import builtins
 import csv
 import json
+import re
 import resource
 import sys
 import time
 from contextlib import nullcontext
+from itertools import groupby
 from pathlib import Path
 from types import FunctionType, SimpleNamespace
 
@@ -58,11 +60,7 @@ def _ocr_lines(text, tsv):
     # exactly to the reported text before its scores can support a switch.
     lines = []
     line = ()
-    rows = csv.DictReader(tsv.splitlines(), delimiter="\t", quoting=csv.QUOTE_NONE)
-    for row in rows:
-        # Tesseract can emit level-5 layout rows containing only spaces.
-        if row.get("level") != "5" or not (word := row.get("text")) or not word.strip():
-            continue
+    for row, word in _word_rows(tsv):
         key = (row["block_num"], row["par_num"], row["line_num"])
         score = float(row["conf"])
         if not 0 <= score <= 100:
@@ -74,6 +72,132 @@ def _ocr_lines(text, tsv):
     if [word for group in lines for word, _ in group] != text.split():
         raise ValueError("Inconsistent OCR text and scores")
     return lines
+
+
+def _word_rows(tsv):
+    rows = csv.DictReader(tsv.splitlines(), delimiter="\t", quoting=csv.QUOTE_NONE)
+    for row in rows:
+        # Tesseract can emit level-5 layout rows containing only spaces.
+        if row.get("level") == "5" and (word := row.get("text")) and word.strip():
+            yield row, word
+
+
+def _runs(projection):
+    start = 0
+    for ink, band in groupby(projection):
+        stop = start + sum(1 for _ in band)
+        if ink:
+            yield start, stop
+        start = stop
+
+
+def _has_detached_dot(glyph):
+    _, rows = glyph.getprojection()
+    runs = list(_runs(rows))
+    if len(runs) != 2:
+        return False
+    (dot_top, dot_bottom), (stem_top, stem_bottom) = runs
+    with glyph.crop((0, dot_top, glyph.width, dot_bottom)) as dot:
+        dot_left, _, dot_right, _ = dot.getbbox()
+    with glyph.crop((0, stem_top, glyph.width, stem_bottom)) as stem:
+        stem_left, _, stem_right, _ = stem.getbbox()
+    stem_height = stem_bottom - stem_top
+    return (
+        stem_height >= 12
+        and 2 <= dot_bottom - dot_top <= stem_height / 3
+        and 2 <= dot_right - dot_left <= stem_height / 3
+        and max(2, stem_height / 20) <= stem_top - dot_bottom <= stem_height / 3
+        and stem_left <= dot_left <= dot_right <= stem_right
+        and abs((dot_left + dot_right) - (stem_left + stem_right)) <= (stem_right - stem_left) / 2
+        and stem_right - stem_left <= stem_height * 0.65
+    )
+
+
+def _word_box(row):
+    return tuple(int(row[key]) for key in ("left", "top", "width", "height"))
+
+
+def _confirm_source_dots(picture, box, word, positions):
+    left, top, width, height = box
+    right, bottom = left + width, top + height
+    if not (0 <= left < right <= picture.width and 0 <= top < bottom <= picture.height):
+        return False
+    with picture.crop((left, top, right, bottom)) as crop, crop.convert("L") as gray:
+        dark, light = gray.getextrema()
+        if light - dark < 64:
+            return False
+        midpoint = (dark + light) // 2
+        with gray.point([255 if shade < midpoint else 0 for shade in range(256)]) as mask:
+            columns, _ = mask.getprojection()
+            glyphs = list(_runs(columns))
+            # Require identifiable glyph slots in source pixels. Connected
+            # letters, touching accents or dust can make alignment ambiguous.
+            if len(glyphs) != len(word):
+                return False
+            for position in positions:
+                a, b = glyphs[position]
+                with mask.crop((a, 0, b, height)) as glyph:
+                    if not _has_detached_dot(glyph):
+                        return False
+    return True
+
+
+def _word_lines(tsv):
+    def line(entry):
+        row, _ = entry
+        return row["block_num"], row["par_num"], row["line_num"]
+
+    return [list(group) for _, group in groupby(_word_rows(tsv), key=line)]
+
+
+def _recover_dotted_i(ocr, picture, baseline, original_tsv, *, lang, deadline):
+    raw_lines = baseline.splitlines(keepends=True)
+    tokens = [list(re.finditer(r"\S+", line)) for line in raw_lines]
+    if not any("I" in token[0] and token[0].isupper() for line in tokens for token in line):
+        return baseline
+    remaining = deadline - time.monotonic()
+    if remaining < 0.25:
+        return baseline
+    # Single-block segmentation can retain dots that automatic layout misses.
+    # Its text is never used wholesale: preserve the original layout verbatim.
+    tsv = ocr.image_to_data(picture, lang=lang, config="--psm 6", timeout=min(2, remaining))
+    original = _word_lines(original_tsv)
+    candidate = _word_lines(tsv)
+    if list(map(len, original)) != list(map(len, candidate)) or list(map(len, candidate)) != [
+        len(line) for line in tokens if line
+    ]:
+        return baseline
+
+    repairs = []
+    offset = 0
+    aligned = iter(zip(original, candidate, strict=True))
+    for raw_line, row_tokens in zip(raw_lines, tokens, strict=True):
+        if row_tokens:
+            first, second = next(aligned)
+            for token, (prior_row, before), (row, after) in zip(row_tokens, first, second, strict=True):
+                box = _word_box(row)
+                if token[0] != before or _word_box(prior_row) != box:
+                    return baseline
+                if before == after:
+                    continue
+                if not (
+                    len(before) == len(after) and before.isupper() and not any(c.isnumeric() for c in before)
+                    and 95 <= float(row["conf"]) <= 100 and time.monotonic() < deadline
+                ):
+                    return baseline
+                differences = [(i, a, b) for i, (a, b) in enumerate(zip(before, after, strict=True)) if a != b]
+                if any((a, b) != ("I", "İ") for _, a, b in differences):
+                    return baseline
+                positions = [i for i, _, _ in differences]
+                if not _confirm_source_dots(picture, box, after, positions):
+                    return baseline
+                repairs.append((offset + token.start(), offset + token.end(), after))
+        offset += len(raw_line)
+    if time.monotonic() >= deadline:
+        return baseline
+    for start, end, replacement in reversed(repairs):
+        baseline = baseline[:start] + replacement + baseline[end:]
+    return baseline
 
 
 def _prefer_enhanced(baseline, enhanced):
@@ -111,9 +235,15 @@ def _recognize(ocr, picture, *, lang, timeout):
         remaining = deadline - time.monotonic()
         if remaining <= 0:
             raise RuntimeError("OCR time budget exhausted")
-        if candidate is None:
+        if candidate is None and ("tur" not in lang.split("+") or max(picture.size) > 2000):
             return ocr.image_to_string(picture, lang=lang, timeout=remaining)
         baseline = ocr.run_and_get_multiple_output(picture, ["txt", "tsv"], lang=lang, timeout=remaining)
+        if candidate is None:
+            try:
+                return _recover_dotted_i(ocr, picture, *baseline, lang=lang, deadline=deadline)
+            except (RuntimeError, OSError, KeyError, ValueError, TypeError, IndexError, AttributeError, csv.Error):
+                # A failed or inconclusive retry keeps the baseline.
+                return baseline[0]
         remaining = deadline - time.monotonic()
         if not baseline[0].strip() or remaining < 0.25:
             return baseline[0]
