@@ -9,6 +9,7 @@ from pypdf.generic import (
     DecodedStreamObject,
     DictionaryObject,
     EncodedStreamObject,
+    IndirectObject,
     NameObject,
     NullObject,
     NumberObject,
@@ -94,6 +95,14 @@ def _resources(**objects):
     })})
 
 
+def _annotation(writer, subtype, **properties):
+    return writer._add_object(DictionaryObject({
+        NameObject("/Type"): NameObject("/Annot"),
+        NameObject("/Subtype"): NameObject(subtype),
+        **{NameObject(f"/{name}"): value for name, value in properties.items()},
+    }))
+
+
 def test_form_local_namespace_shadows_unused_page_image(tmp_path):
     writer = PdfWriter()
     page = writer.add_blank_page(width=100, height=100)
@@ -140,50 +149,93 @@ def test_unverified_objects_budgets_and_cycles_get_page_specific_warning(tmp_pat
 def test_annotations_and_fields_report_their_exact_pages(tmp_path, monkeypatch):
     writer = PdfWriter()
     contents, annots = NameObject("/Contents"), NameObject("/Annots")
-    pages = [writer.add_blank_page(width=100, height=100) for _ in range(10)]
+    pages = [writer.add_blank_page(width=100, height=100) for _ in range(15)]
     for page in pages:
         page[contents] = writer._add_object(_stream(b"0 0 m 10 10 l S\n"))
 
-    def annotation(subtype, **properties):
-        return writer._add_object(DictionaryObject({
-            NameObject("/Type"): NameObject("/Annot"),
-            NameObject("/Subtype"): NameObject(subtype),
-            **{NameObject(f"/{name}"): value for name, value in properties.items()},
-        }))
-
-    link = annotation("/Link", Dest=NameObject("/Navigation"))
+    link = _annotation(writer, "/Link", Dest=NameObject("/Navigation"))
     appearance = writer._add_object(_stream(b"0 0 m 15 15 l S\n", "/Form"))
-    visible_link = annotation("/Link", AP=DictionaryObject({NameObject("/N"): appearance}))
-    widget = annotation("/Widget", V=TextStringObject("Synthetic field value"))
-    stamp = annotation("/Stamp", AP=DictionaryObject({NameObject("/N"): appearance}))
+    visible_link = _annotation(writer, "/Link", AP=DictionaryObject({NameObject("/N"): appearance}))
+    widget = _annotation(writer, "/Widget", V=TextStringObject("Synthetic field value"))
+    stamp = _annotation(writer, "/Stamp", AP=DictionaryObject({NameObject("/N"): appearance}))
     for page, items in zip(pages[1:7], ([], [link], [visible_link], [widget], [stamp], [stamp]), strict=True):
         page[annots] = writer._add_object(ArrayObject(items))
     pages[5][NameObject("/Resources")] = _resources(Image=writer._add_object(_stream(b"\x00", "/Image")))
     pages[5][contents] = writer._add_object(_stream(b"/Image Do\n"))
     pages[7][annots] = ArrayObject([NumberObject(1)])
-    pages[8][annots] = ArrayObject([link] * (coverage.MAX_ANNOTATIONS_PER_PAGE + 1))
+    cap = coverage.MAX_ANNOTATIONS_PER_PAGE
+    pages[8][annots] = ArrayObject([link] * (cap + 1))
     pages[9][annots] = ArrayObject([stamp])
+    pages[10][annots] = ArrayObject([link] * 65)
+    pages[11][annots] = ArrayObject([link] * cap)
+    pages[12][annots] = ArrayObject([link] * (cap - 1) + [stamp, link])
+    pages[13][annots] = ArrayObject([link] * cap + [widget])
+    pages[14][annots] = ArrayObject([NumberObject(1), widget])
     path = tmp_path / "annotation-coverage.pdf"
     writer.write(path)
     original = path.read_bytes()
-    earlier = baseline(10, [coverage._OCR_USED.format(page=7), "Sayfa 10: içerik işlenemedi."])
-    earlier["passages"].pop()
+    earlier = baseline(15, [coverage._OCR_USED.format(page=7), "Sayfa 10: içerik işlenemedi."])
+    earlier["passages"].pop(9)
     earlier["passage_count"] -= 1
-    read_operations = coverage._operations
+    appearance_reads = []
+    decode = DecodedStreamObject.get_data
 
-    def only_page_content(stream, *args):
-        assert stream.get("/Subtype") not in ("/Form", "/Image")
-        return read_operations(stream, *args)
+    def observe_decode(stream):
+        if stream.get("/Subtype") == "/Form":
+            appearance_reads.append(stream)
+        return decode(stream)
 
-    monkeypatch.setattr(coverage, "_operations", only_page_content)
+    monkeypatch.setattr(DecodedStreamObject, "get_data", observe_decode)
     result = coverage.add_pdf_coverage_warnings(path, earlier)
     limited = "PDF ek açıklamaları ve form alanları çıkarımda doğrulanmadı."
     unknown = "PDF ek açıklamaları ve form alanları denetlenemedi."
     expected = {4: limited, 5: limited, 6: f"Görsel içerik OCR ile işlenmedi. {limited}",
-                7: limited, 8: unknown, 9: unknown}
+                7: limited, 8: unknown, 9: unknown, 13: limited, 14: unknown, 15: limited}
     assert result["warnings"] == earlier["warnings"] + [
         f"Sayfa {page}: {note} Özgün sayfayı kontrol edin." for page, note in expected.items()
     ]
     assert {**result, "warnings": earlier["warnings"]} == earlier
     assert coverage.add_pdf_coverage_warnings(path, result) == result
+    assert appearance_reads == []
+    assert path.read_bytes() == original
+
+
+def test_annotation_reference_budget_is_shared_without_consuming_raster_coverage(tmp_path, monkeypatch):
+    writer = PdfWriter()
+    contents, annots = NameObject("/Contents"), NameObject("/Annots")
+    pages = [writer.add_blank_page(width=100, height=100) for _ in range(4)]
+    for page in pages:
+        page[contents] = writer._add_object(_stream(b"0 0 m 10 10 l S\n"))
+    first = _annotation(writer, "/Link", Dest=NameObject("/First"))
+    second = _annotation(writer, "/Link", Dest=NameObject("/Second"))
+    widget = _annotation(writer, "/Widget")
+    deferred = _annotation(writer, "/Stamp")
+    pages[0][annots] = ArrayObject([first, second])
+    pages[1][annots] = ArrayObject([widget])
+    pages[2][annots] = ArrayObject([deferred])
+    pages[2][NameObject("/Resources")] = _resources(Image=writer._add_object(_stream(b"\x00", "/Image")))
+    pages[2][contents] = writer._add_object(_stream(b"/Image Do\n"))
+    path = tmp_path / "annotation-document-budget.pdf"
+    writer.write(path)
+    original = path.read_bytes()
+    monkeypatch.setattr(coverage, "MAX_ANNOTATIONS_PER_DOCUMENT", 3)
+    budgeted = {reference.idnum for reference in (first, second, widget, deferred)}
+    visited = []
+    get_object = IndirectObject.get_object
+
+    def visit(reference):
+        if reference.idnum in budgeted:
+            visited.append(reference.idnum)
+        return get_object(reference)
+
+    monkeypatch.setattr(IndirectObject, "get_object", visit)
+    earlier = baseline(4)
+    result = coverage.add_pdf_coverage_warnings(path, earlier)
+    assert visited == [first.idnum, second.idnum, widget.idnum]
+    assert result["warnings"] == [
+        "Sayfa 2: PDF ek açıklamaları ve form alanları çıkarımda doğrulanmadı. Özgün sayfayı kontrol edin.",
+        "Sayfa 3: Görsel içerik OCR ile işlenmedi. PDF ek açıklamaları ve form alanları denetlenemedi. "
+        "Özgün sayfayı kontrol edin.",
+    ]
+    assert {**result, "warnings": earlier["warnings"]} == earlier
     assert path.read_bytes() == original

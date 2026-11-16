@@ -3,6 +3,7 @@
 import re
 import time
 from dataclasses import dataclass, field
+from itertools import islice
 
 from pypdf import PdfReader, apply_configuration
 from pypdf.generic import ArrayObject, ContentStream, DictionaryObject, NameObject, StreamObject
@@ -21,7 +22,8 @@ MAX_CONTENT_BYTES = 512_000
 MAX_CONTENT_PARTS = 64
 MAX_FORM_DEPTH = 8
 MAX_FILTERS = 4
-MAX_ANNOTATIONS_PER_PAGE = 64
+MAX_ANNOTATIONS_PER_PAGE = 256
+MAX_ANNOTATIONS_PER_DOCUMENT = 4_096
 _INSPECTION_SECONDS = 2
 _CONTENT_FILTERS = {"/FlateDecode", "/LZWDecode", "/ASCII85Decode", "/ASCIIHexDecode", "/RunLengthDecode",
                     "/Fl", "/LZW", "/A85", "/AHx", "/RL"}
@@ -36,6 +38,7 @@ class _InspectionBudget:
     bytes_left: int = 16_000_000
     operations_left: int = 200_000
     streams_left: int = 2_000
+    annotations_left: int = field(default_factory=lambda: MAX_ANNOTATIONS_PER_DOCUMENT)
     deadline: float = field(default_factory=lambda: time.monotonic() + _INSPECTION_SECONDS)
 
     def check_time(self):
@@ -57,6 +60,12 @@ class _InspectionBudget:
         self.operations_left -= count
         if self.operations_left < 0:
             raise ValueError("PDF inspection operation budget reached")
+
+    def take_annotation(self):
+        self.check_time()
+        if self.annotations_left <= 0:
+            raise ValueError("PDF inspection annotation budget reached")
+        self.annotations_left -= 1
 
 
 def _operations(content, reader, budget):
@@ -131,18 +140,28 @@ def _annotation_limitation(page, budget):
         return None
     try:
         budget.check_time()
-        annotations = page["/Annots"]
-        if not isinstance(annotations, ArrayObject) or len(annotations) > MAX_ANNOTATIONS_PER_PAGE:
+        if budget.annotations_left <= 0:
             return _ANNOTATIONS_UNKNOWN
-        for reference in annotations:
-            budget.check_time()
-            annotation = reference.get_object()
-            if not isinstance(annotation, DictionaryObject) or not isinstance(annotation.get("/Subtype"), NameObject):
-                return _ANNOTATIONS_UNKNOWN
-            # Metadata alone discloses the limitation. Never inspect appearance
-            # streams, form values, attachments or actions.
-            if annotation.get("/Subtype") != "/Link" or not annotation.keys() <= _LINK_NAVIGATION_KEYS:
+        annotations = page["/Annots"]
+        if not isinstance(annotations, ArrayObject):
+            return _ANNOTATIONS_UNKNOWN
+        incomplete = len(annotations) > MAX_ANNOTATIONS_PER_PAGE
+        for reference in islice(annotations, MAX_ANNOTATIONS_PER_PAGE):
+            budget.take_annotation()
+            try:
+                annotation = reference.get_object()
+            except Exception:
+                incomplete = True
+                continue
+            subtype = annotation.get("/Subtype") if isinstance(annotation, DictionaryObject) else None
+            if not isinstance(subtype, NameObject):
+                incomplete = True
+            elif subtype != "/Link" or not annotation.keys() <= _LINK_NAVIGATION_KEYS:
+                # A confirmed entry is enough to ask the reader to review the
+                # original page. Keep the inspection metadata-only.
                 return _ANNOTATIONS_UNVERIFIED
+        if incomplete:
+            return _ANNOTATIONS_UNKNOWN
     except Exception:
         return _ANNOTATIONS_UNKNOWN
     return None
