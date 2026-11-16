@@ -1,5 +1,20 @@
 # Approved product roadmap and implementation ledger
 
+## Bounded inspection for large PDF annotation lists — 16 November 2026
+
+F00-04 checks up to 256 annotation references per page and 4,096 per
+document within the existing inspection timer. Confirmed non-navigation
+metadata can trigger a page review warning on a longer list. A partial
+inspection without a confirmed entry still reports an inconclusive result.
+The worker retains its existing raster coverage and metadata-only access.
+
+The [disconnected native comparison](evidence/bounded-pdf-annotations-2026-11-16.json)
+preserved all original bytes and passage bindings across four synthetic PDFs
+and 537 pages. The boundary fixture reduced inconclusive warnings from ten
+pages to three. The 4,096th reference could support a review warning and the
+next unresolved page received the inconclusive notice. Mixed/OCR warnings
+and the 500-page admission limit matched the baseline.
+
 ## Engineering tasks before a pull request — 16 November 2026
 
 Engineering work lists planned and in-progress checklist tasks before a

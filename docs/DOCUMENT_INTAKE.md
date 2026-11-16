@@ -76,13 +76,16 @@ The DOCX result also matched the baseline.
 
 Pages with extracted text also report PDF annotations and form fields that
 need original-page review. This includes stamps, handwritten annotations,
-comments and widgets on digital and OCR pages. The worker checks for their
-annotation records without reading appearance streams, form values or
-actions. A page with an empty annotation array or only navigation links
-needs no annotation warning. Where the annotation list is malformed or
-exceeds the inspection budget, the warning reports that inspection was
-inconclusive. Pages with both raster and annotation limitations report them
-together. The warning remains separate from the passage text and locator.
+comments and widgets on digital and OCR pages. The worker checks annotation
+metadata without opening appearance streams, form values, attachments or
+actions. It processes up to 256 annotation references per page and 4,096
+per document within the existing inspection timer. A confirmed non-navigation
+entry is enough to trigger a review warning, including on a page with a longer
+list. A fully inspected list with only navigation links needs no annotation
+warning. Partial or malformed lists without a confirmed entry receive an
+inspection-inconclusive warning. Pages with both raster and annotation
+limitations report them together. The warning stays separate from the passage
+text and locator.
 
 Use [the qualification runner](../scripts/qualify_document_layouts.py) and
 [fixture generator](../scripts/document_layout_cases.py) in the exact local

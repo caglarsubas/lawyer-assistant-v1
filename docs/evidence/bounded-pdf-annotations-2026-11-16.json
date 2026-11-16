@@ -1,0 +1,83 @@
+{
+  "schema": "synthetic-native-bounded-annotations-comparison-v1",
+  "base_image_id": "sha256:3e25642479707171f5ce1472c23b0e2832fab7dde886606e8b85e4d010774324",
+  "candidate_method": "Read-only module bind in the same disconnected image",
+  "base_parser_sha256": "6a0f5afc6f783c3653ccff6739976b65da84a09c71a6f92782e30f91e2e8bc0a",
+  "candidate_parser_sha256": "b18c3eb78a21f3c7628d653b05d3037c196c7f852b08a679836c64a43fbc2694",
+  "synthetic_only": true,
+  "network_none": true,
+  "cpu_limit": 2,
+  "native_auth_gate_preserved": true,
+  "case_count": 4,
+  "exact_originals_and_passages": true,
+  "exact_pages_total": 537,
+  "unchanged_mixed_ocr_warnings": true,
+  "page_guard_500_passages_exact": 500,
+  "page_guard_501_controlled_status": 422,
+  "expected_page_reference_cap": 256,
+  "expected_document_reference_cap": 4096,
+  "boundary_reference_fixture": {
+    "base": {
+      "annotation_review_pages": [],
+      "annotation_unknown_pages": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "candidate": {
+      "annotation_review_pages": [
+        4,
+        5,
+        8,
+        10,
+        11
+      ],
+      "annotation_unknown_pages": [
+        6,
+        7,
+        9
+      ]
+    }
+  },
+  "document_reference_fixture": {
+    "base": {
+      "annotation_review_pages": [
+        17
+      ],
+      "annotation_unknown_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    "candidate": {
+      "annotation_review_pages": [
+        16
+      ],
+      "annotation_unknown_pages": [
+        17
+      ]
+    }
+  }
+}
