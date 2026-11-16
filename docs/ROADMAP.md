@@ -1,5 +1,17 @@
 # Approved product roadmap and implementation ledger
 
+## Engineering tasks before a pull request — 16 November 2026
+
+Engineering work lists planned and in-progress checklist tasks before a
+linked PR opens. It keeps each task's next action, required owner, evidence
+requirements and dependencies. A linked open or blocked PR appears in the
+PR list. Earlier merges remain visible in PR history while further work on
+the same checklist item can stay in the task queue.
+
+The current task queue, PR histories and milestone readiness retain their
+own counts. The task queue uses the curated checklist and observed PR links
+at the roadmap's source snapshot.
+
 ## PDF annotation and form coverage — 16 November 2026
 
 F00-04 reports page-specific annotation and form coverage limits on PDF

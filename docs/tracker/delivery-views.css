@@ -5,3 +5,7 @@
 @media(max-width:650px){.delivery-overview{grid-template-columns:1fr}.delivery-view-card{padding:18px}.delivery-view-card>strong{font-size:21px}.engineering-row summary{grid-template-columns:42px minmax(0,1fr) 70px 12px;gap:8px}.engineering-row .row-detail{padding-left:0}.progress-view-switch{display:flex}.progress-view-switch button{flex:1;padding:10px 8px;font-size:11px}.readiness-totals{gap:10px 16px}}
 
 .backlog-counts{display:flex;flex-wrap:wrap;gap:12px 28px;padding:16px 0;border-block:1px solid var(--line)}.backlog-counts button{display:flex;align-items:baseline;gap:8px;background:transparent;border:0;padding:8px 0;text-align:left;color:var(--ink)}.backlog-counts strong{font-size:24px;font-weight:500;font-variant-numeric:tabular-nums}.backlog-counts button:focus-visible{outline:2px solid var(--ink);outline-offset:4px}.backlog-link p{max-width:70ch}
+.engineering-section-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 20px}
+.engineering-section-head h3{margin:0}
+[aria-labelledby="engineering-task-title"] .group-heading h4{font-size:13px;margin:0}
+.engineering-pr-section{border-block-start:1px solid var(--line);margin-block-start:32px;padding-block-start:24px}

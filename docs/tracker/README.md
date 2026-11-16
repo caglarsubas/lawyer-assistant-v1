@@ -26,7 +26,13 @@ data and cannot authorize provider calls, legal decisions or production actions.
 
 ## Delivery and readiness views
 
-Engineering subtasks are repository PR records. A completed record requires an
+Engineering work shows tasks before a PR and a separate list of repository PRs.
+The task list uses planned and in-progress checklist items. An explicit link to
+an open or blocked PR puts the item's current PR work in the PR list.
+Earlier merged PRs can still leave checklist work to do. Task counts describe
+the current checklist and verified PR inventory in this snapshot.
+
+A completed PR record requires an
 actual GitHub merge and a merge commit in the inspected source ancestry. Open PRs
 remain open even when GitHub provides a synthetic merge SHA. Only explicit
 `blocked` / `status:blocked` labels classify a PR as blocked; pending checks do not.
@@ -73,14 +79,14 @@ Currently 51 unfinished items comprise 21 open (in progress + not started),
 24 waiting and six deferred. Waiting includes human review and dependent gates;
 it is not interchangeable with an explicitly blocked GitHub PR.
 
-The Engineering PR deliveries view remains a repository delivery inventory.
-Zero open PRs after a merge does not mean the work backlog is empty. Its direct
-backlog link clears the PR-specific search, workstream and status filters. The
-backlog has its own filters and an explicit full-backlog empty-state action.
-Rows retain the original next action, owner, acceptance evidence and dependencies.
-No planned item is fabricated, completed by a PR count or dropped from the catalog.
+The Engineering work view shares search and workstream filters between tasks
+and PRs. The PR status filter applies to the PR list. Exact PR-number queries
+look up the PR record. Task rows retain the checklist next action, owner,
+acceptance evidence and dependencies. The full backlog also shows waiting and
+deferred work and clears the engineering filters when opened.
 
 The local generator imports `project` from `roadmap_backlog`, sets
 `state['backlog']` from the unchanged item inventory, pins that module as a source,
 and compares the projection during `--check`. Existing progress histories remain
-append-only; opening or filtering the backlog never advances readiness or review.
+append-only. Checklist statuses and milestone readiness depend on the curated
+project evidence and review gates.
