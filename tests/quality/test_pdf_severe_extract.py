@@ -124,7 +124,9 @@ def test_failed_raster_does_not_shift_partial_warning_locator(tmp_path, monkeypa
     monkeypatch.setattr(subprocess, "run", rasterize)
     monkeypatch.setattr(severe, "_is_degraded_scan", lambda picture: picture.getpixel((0, 0)) == 2)
     monkeypatch.setitem(sys.modules, "pytesseract", SimpleNamespace(
-        image_to_string=lambda picture, **kwargs: "Sentetik kısmi belge." if picture.getpixel((0, 0)) == 2 else "",
+        run_and_get_multiple_output=lambda picture, *args, **kwargs: (
+            "Sentetik kısmi belge." if picture.getpixel((0, 0)) == 2 else "", "",
+        ),
     ))
     result = validate_result(severe._extract_pdf(path), ".pdf")
     assert visited == [1, 2, 3] and path.read_bytes() == before

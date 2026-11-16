@@ -52,14 +52,14 @@ def rasterize(command, *, check, capture_output, timeout):
     Image.new("L", (16, 16), color=page).save(command[-1] + ".png")
     return subprocess.CompletedProcess(command, 0, b"", b"")
 
-def transcribe(picture, *, lang, timeout):
-    assert lang == "tur+eng" and 0 < timeout <= 6
+def transcribe(picture, outputs, *, lang, timeout):
+    assert outputs == ["txt", "tsv"] and lang == "tur+eng" and 0 < timeout <= 6
     page = picture.getpixel((0, 0))
     transcribed.append(page)
-    return expected[page]
+    return expected[page], ""
 
 ocr = ModuleType("pytesseract")
-ocr.image_to_string = transcribe
+ocr.run_and_get_multiple_output = transcribe
 sys.modules["pytesseract"] = ocr
 subprocess.run = rasterize
 worker._is_degraded_scan = lambda picture: picture.getpixel((0, 0)) == 4
