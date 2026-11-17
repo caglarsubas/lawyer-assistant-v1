@@ -1,5 +1,22 @@
 # Approved product roadmap and implementation ledger
 
+## Source-line checks for severe PDF scans — 17 November 2026
+
+The PDF worker can check a disputed reading against the corresponding
+source line within the existing OCR deadline. It preserves readable
+section digits and requires corroboration for recovered dates, identifiers,
+amounts, negation, and punctuation. The partial OCR warning still prompts
+review against the original.
+
+Repeated disconnected tests corrected the five previously failing
+passages. They recovered both numbered headings and clipped text and
+punctuation, and removed a false period caused by a scuff. All 15 pages and six
+punctuation-line checks passed on the latest synthetic set. Across 13
+PDFs and 62 pages, 69 critical readings and 11 holdout controls passed.
+The other 57 pages and all warnings matched the installed baseline.
+
+Seven fields from the earlier private review still await clearer scans.
+
 ## Corroborated severe-scan segmentation and punctuation — 17 November 2026
 
 Uneven PDF scans can leave visible lines out of the first OCR read. The

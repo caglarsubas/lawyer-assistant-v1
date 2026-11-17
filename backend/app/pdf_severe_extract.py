@@ -7,6 +7,7 @@ import resource
 import subprocess
 import sys
 import time
+import unicodedata
 from pathlib import Path
 from types import FunctionType, SimpleNamespace
 from typing import NamedTuple
@@ -15,7 +16,7 @@ from PIL import Image, ImageChops, ImageFilter, ImageOps
 
 from .extract import extract
 from .pdf_image_coverage import add_pdf_coverage_warnings
-from .pdf_scan_extract import _ocr_lines, _percentile, _recognize, _word_edges, _word_lines
+from .pdf_scan_extract import _ocr_lines, _percentile, _recognize, _runs, _word_edges, _word_lines
 
 PARTIAL_WARNING = "Sayfa {n}: OCR sonucu kısmi olabilir; önemli bilgileri özgün sayfada doğrulayın."
 _MAX_RASTER_EDGE = 2_000
@@ -94,10 +95,10 @@ def _same_existing_word(first, second):
     return min(cover) >= 0.72 or (min(cover) >= 0.55 and max(cover) >= 0.90)
 
 
-def _visible_word(gray, word, second):
+def _visible_word(gray, word, second, *, minimum=94):
     # Require exact agreement and substantial raw ink, since contrast leveling
     # can otherwise turn faint paper texture into plausible letters or digits.
-    if not (min(word.confidence, second.confidence) >= 94 and any(c.isalnum() for c in word.text)):
+    if not (min(word.confidence, second.confidence) >= minimum and any(c.isalnum() for c in word.text)):
         return False
     with gray.crop(word.box) as crop:
         tones = crop.histogram()
@@ -202,7 +203,7 @@ def _reconcile_partial(gray, baseline, original, first, second):
     if scuff:
         primary.pop()
         confirmation.pop()
-        first[-1].pop()
+        first = [*first[:-1], first[-1][:-1]]
 
     next_word = 0
     for index, old in enumerate(original):
@@ -229,6 +230,218 @@ def _reconcile_partial(gray, baseline, original, first, second):
     return "\n".join(" ".join(word.text for word in line) for line in first)
 
 
+def _line_bounds(words):
+    return (min(word.box[0] for word in words), min(word.box[1] for word in words),
+            max(word.box[2] for word in words), max(word.box[3] for word in words))
+
+
+def _source_read(ocr, gray, bounds, *, mode, lang, deadline):
+    left, top, right, bottom = bounds
+    if mode in (8, 13):
+        # Isolated word segmentation must not pull in neighboring glyphs.
+        x_pad = max(8, min(16, (right - left) // 3))
+        y_pad = max(12, min(24, (bottom - top) // 4))
+    else:
+        x_pad = y_pad = max(12, min(38, (bottom - top) // 3))
+    region = (max(0, left - x_pad), max(0, top - y_pad),
+              min(gray.width, right + x_pad), min(gray.height, bottom + y_pad))
+    remaining = deadline - time.monotonic()
+    if remaining < _MIN_RECOVERY_SECONDS:
+        return []
+    with gray.crop(region) as strip:
+        tsv = ocr.image_to_data(strip, lang=lang, config=f"--psm {mode}", timeout=min(1.5, remaining))
+    rows = _partial_words(tsv, gray, region[:2])
+    return rows[0] if len(rows) == 1 and time.monotonic() < deadline else []
+
+
+def _flatten_marks(text):
+    return tuple("".join(c for c in unicodedata.normalize("NFD", char.casefold())
+                        if not unicodedata.combining(c)) for char in text)
+
+
+def _verify_short_diacritics(ocr, gray, word, target, *, lang, deadline):
+    # Independent word and raw-line segmentation must see the same glyphs on
+    # the original crop. Require detached ink as well as the reported marks.
+    if not (2 <= len(word.text) <= 4 and word.text.isalpha() and target.text.isalpha()
+            and _flatten_marks(word.text) == _flatten_marks(target.text)):
+        return None
+    marks = sum(bool(unicodedata.combining(char)) for char in unicodedata.normalize("NFD", target.text))
+    if not marks:
+        return None
+    for mode in (8, 13):
+        observed = _source_read(ocr, gray, word.box, mode=mode, lang=lang, deadline=deadline)
+        if (len(observed) != 1 or observed[0].text != target.text or observed[0].confidence < 94
+                or not _same_ink(observed[0].box, word.box)):
+            return None
+    with gray.crop(target.box) as glyphs:
+        dark, light = glyphs.getextrema()
+        if light - dark < 80:
+            return None
+        threshold = (dark + light) // 2
+        with glyphs.point([255 if shade < threshold else 0 for shade in range(256)]) as mask:
+            _, rows = mask.getprojection()
+            if len(list(_runs(rows))) < 1 + marks:
+                return None
+    return target.text
+
+
+def _registered_lines(first, second):
+    pairs = []
+    next_line = 0
+    for i, line in enumerate(first):
+        for j in range(next_line, len(second)):
+            other = second[j]
+            if [word.text for word in line] == [word.text for word in other] and all(
+                _same_ink(word.box, reread.box) for word, reread in zip(line, other, strict=True)
+            ):
+                pairs.append((i, j, line, other))
+                next_line = j + 1
+                break
+    if not pairs:
+        return []
+    # Layout can emit a second, inconsistent row from only the top strokes of
+    # a word. It supplies no additional ink region or independent reading.
+    for side, capture in enumerate((first, second)):
+        used = {pair[side] for pair in pairs}
+        for index, line in enumerate(capture):
+            if index in used:
+                continue
+            for fragment in line:
+                if not any(fragment.box[3] - fragment.box[1] <= (word.box[3] - word.box[1]) / 3
+                           and _fraction_covered(fragment.box, word.box) >= 0.75
+                           for pair in pairs for word in pair[2 + side]):
+                    return []
+    return [(line, reread) for _, _, line, reread in pairs]
+
+
+def _same_line(first, second):
+    _, top, _, bottom = first
+    _, newer_top, _, newer_bottom = second
+    overlap = min(bottom, newer_bottom) - max(top, newer_top)
+    return overlap >= 0.72 * min(bottom - top, newer_bottom - newer_top)
+
+
+def _source_aligned_fragment(previous, candidate):
+    if any(char.isnumeric() for char in previous.text):
+        return False
+    if _restored_prefix(previous, candidate):
+        return True
+    # A surviving short prefix can clip on either edge of the source word.
+    # The original crop confirms continuation into visibly present ink.
+    if previous.text.isalpha() and candidate.text.startswith(previous.text) and previous.text != candidate.text:
+        left, top, right, bottom = previous.box
+        x1, y1, x2, y2 = candidate.box
+        return (x2 > right and abs(x1 - left) <= max(4, (y2 - y1) // 6)
+                and (min(bottom, y2) - max(top, y1) >= 0.64 * (bottom - top)
+                     or (bottom - top <= 3 and y1 - bottom in range(0, 4))))
+    return (previous.confidence < 90 and previous.text.isalpha() and candidate.text.isalpha()
+            and len(previous.text) == len(candidate.text)
+            and sum(a != b for a, b in zip(previous.text, candidate.text, strict=True)) == 1
+            and _same_existing_word(previous.box, candidate.box))
+
+
+def _line_matches_source(ocr, gray, line, *, lang, deadline):
+    source = _source_read(ocr, gray, _line_bounds(line), mode=7, lang=lang, deadline=deadline)
+    if len(source) != len(line) or any(
+        _flatten_marks(old.text) != _flatten_marks(new.text) or not _same_existing_word(old.box, new.box)
+        for old, new in zip(line, source, strict=True)
+    ):
+        return []
+    return source
+
+
+def _reconcile_source_lines(ocr, gray, baseline, original, first, second, *, lang, deadline):
+    if [word.text for line in original for word in line] != baseline.split():
+        return baseline
+    pairs = _registered_lines(first, second)
+    if not pairs or len(pairs) > 18:
+        return baseline
+    regions = [_line_bounds(line) for line, _ in pairs]
+    predecessors = [[] for _ in pairs]
+    current = 0
+    for line in original:
+        positions = [index for index in range(current, len(regions)) if _same_line(_line_bounds(line), regions[index])]
+        if len(positions) != 1:
+            return baseline
+        current = positions[0]
+        predecessors[current].extend(line)
+
+    result = []
+    for (line, reread), earlier in zip(pairs, predecessors, strict=True):
+        registered = {word for word in line if any(
+            word.text == prior.text and _same_existing_word(prior.box, word.box) for prior in earlier
+        )}
+        needs_source = (any(word not in registered and not _visible_word(gray, word, other)
+                            for word, other in zip(line, reread, strict=True))
+                        or any(not any(prior.text == word.text and _same_existing_word(prior.box, word.box)
+                                       or _restored_prefix(prior, word) for word in line) for prior in earlier))
+        source = _line_matches_source(ocr, gray, line, lang=lang, deadline=deadline) if needs_source else []
+        if needs_source and not source:
+            return baseline
+
+        index = 0
+        tokens = []
+        for position, (word, other) in enumerate(zip(line, reread, strict=True)):
+            prior = earlier[index] if index < len(earlier) else None
+            unchanged = prior and prior.text == word.text and _same_existing_word(prior.box, word.box)
+            prefix = prior and _restored_prefix(prior, word)
+            # A marginal score can support a word only with an identical
+            # registered raw-line reading and strong combined evidence.
+            corroborated = bool(source and source[position].text == word.text and source[position].confidence >= 85
+                                and word.confidence + other.confidence + source[position].confidence >= 270)
+            if not unchanged and not (_visible_word(gray, word, other) or (
+                corroborated and _visible_word(gray, word, other, minimum=85)
+            )):
+                return baseline
+            extended = (prior and corroborated and _source_aligned_fragment(prior, word))
+            if unchanged or prefix or extended:
+                index += 1
+                if extended and word.text.startswith(prior.text):
+                    while index < len(earlier) and earlier[index].confidence < 50 and not any(
+                        char.isnumeric() for char in earlier[index].text
+                    ) and _fraction_covered(earlier[index].box, word.box) >= 0.8:
+                        index += 1
+            token = word.text
+            if unchanged and source and source[position].text != token:
+                token = _verify_short_diacritics(ocr, gray, word, source[position], lang=lang, deadline=deadline)
+                if token is None:
+                    return baseline
+            tokens.append(token)
+        if index != len(earlier):
+            return baseline
+        result.append(" ".join(tokens))
+    text = "\n".join(result)
+    return text if text.split() != baseline.split() else baseline
+
+
+def _remove_blank_recovery_scuff(ocr, picture, baseline, *, lang, deadline):
+    text = baseline.rstrip()
+    if not text.endswith(" .") or len(text.splitlines()[-1].split()) < 3:
+        return baseline
+    with picture.convert("L") as gray:
+        bounds = _partial_crop(gray)
+        if bounds is None:
+            return baseline
+        left, top, right, _ = bounds
+        with gray.crop(bounds) as cropped:
+            tones = cropped.histogram()
+            threshold = min(158, (_percentile(tones, 0.003) + _percentile(tones, 0.85)) // 2)
+            with cropped.point([255 if shade < threshold else 0 for shade in range(256)]) as mask:
+                _, rows = mask.getprojection()
+                bands = list(_runs(rows))
+        if not bands:
+            return baseline
+        start, stop = bands[-1]
+        for earlier_start, earlier_stop in reversed(bands[:-1]):
+            if start - earlier_stop > 26 or stop - earlier_start > 170:
+                break
+            start = earlier_start
+        line = _source_read(ocr, gray, (left, top + start, right, top + stop), mode=7, lang=lang, deadline=deadline)
+        if [word.text for word in line] == text.splitlines()[-1].split() and _elongated_scuff(gray, line[-1], line[-2]):
+            return text[:-2] + baseline[len(text):]
+    return baseline
+
+
 def _recover_partial(ocr, picture, baseline, original_tsv, *, lang, deadline):
     if deadline - time.monotonic() < 0.5:
         return baseline
@@ -244,6 +457,8 @@ def _recover_partial(ocr, picture, baseline, original_tsv, *, lang, deadline):
             return baseline
         second = _read_leveled(ocr, gray, region, radius=18, gain=2, lang=lang, deadline=deadline)
         result = _reconcile_partial(gray, baseline, original, first, second)
+        if result == baseline:
+            result = _reconcile_source_lines(ocr, gray, baseline, original, first, second, lang=lang, deadline=deadline)
     return result if time.monotonic() < deadline else baseline
 
 
@@ -309,7 +524,10 @@ def _recover_blank(ocr, picture, *, lang, deadline):
         if first is not None:
             _, second = observe(_RECOVERY_PROFILES[1])
             if first == second and time.monotonic() < deadline:
-                return primary
+                try:
+                    return _remove_blank_recovery_scuff(ocr, picture, primary, lang=lang, deadline=deadline)
+                except (RuntimeError, OSError, KeyError, ValueError, TypeError, IndexError, AttributeError, csv.Error):
+                    return primary
     except (RuntimeError, OSError, KeyError, ValueError, TypeError, IndexError, AttributeError, csv.Error):
         # An invalid or timed-out alternate is insufficient to recover text.
         pass
