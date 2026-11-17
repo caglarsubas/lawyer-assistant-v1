@@ -195,3 +195,63 @@ def test_only_an_elongated_source_scuff_can_remove_a_separate_false_period(shape
         reconciled = severe._reconcile_partial(picture, previous, before, [[first_word, tail, mark]],
                                                 [[first_word, tail, mark]])
     assert reconciled == ("İşlem kapanmadı" if shape == "scuff" else previous)
+
+
+@pytest.mark.parametrize("case", ["corroborated", "source_disagrees", "prior_number_changes"])
+def test_source_line_corroboration_for_low_score_missing_amount_preserves_prior_numbers(monkeypatch, case):
+    word = severe._Word
+    old = [word("Dosya", 96, (35, 20, 95, 51)), word("005726", 96, (110, 20, 173, 51))]
+    primary = old if case != "prior_number_changes" else [old[0], old[1]._replace(text="005725")]
+    missing = [word("Tutar", 92, (35, 86, 95, 112)), word("640,75", 91, (112, 85, 185, 112)),
+               word("TL", 95, (193, 86, 225, 113))]
+    baseline = "Dosya 005726"
+
+    def source(ocr, gray, line, **limits):
+        assert limits["deadline"] == 6
+        verified = [entry._replace(confidence=92) for entry in line]
+        if case == "source_disagrees":
+            verified[1] = verified[1]._replace(text="640,57")
+        return verified
+
+    monkeypatch.setattr(severe, "_line_matches_source", source)
+    with Image.new("L", (280, 160), 255) as raster:
+        draw = ImageDraw.Draw(raster)
+        for token in [*primary, *missing]:
+            x, y, _, bottom = token.box
+            draw.rectangle((x + 3, y + 3, x + 11, bottom - 3), fill=16)
+        output = severe._reconcile_source_lines(None, raster, baseline, [old], [primary, missing],
+                                                [primary, missing], lang="tur+eng", deadline=6)
+    assert output == (baseline + "\nTutar 640,75 TL" if case == "corroborated" else baseline)
+
+
+@pytest.mark.parametrize("overlapping", [True, False], ids=("shared_stroke", "separate_line"))
+def test_disagreeing_layout_fragments_must_be_inside_registered_word(overlapping):
+    word = severe._Word
+    registered = [word("İnceleme", 96, (20, 52, 200, 100))]
+    top = 51 if overlapping else 25
+    first = [[word("0,0", 69, (80, top, 125, top + 12))], registered]
+    second = [[word("e", 91, (84, top, 127, top + 12))], registered]
+    assert severe._registered_lines(first, second) == ([(registered, registered)] if overlapping else [])
+
+
+@pytest.mark.parametrize("case", ["confirmed", "missing_mark", "second_read_disagrees"])
+def test_short_diacritic_repair_requires_local_ocr_and_both_visible_marks(monkeypatch, case):
+    previous = severe._Word("is", 93, (27, 19, 69, 73))
+    expected = severe._Word("İş", 96, previous.box)
+    modes = []
+
+    def read(ocr, gray, bounds, *, mode, lang, deadline):
+        assert bounds == previous.box and deadline == 6
+        modes.append(mode)
+        return [previous if case == "second_read_disagrees" and mode == 13 else expected]
+
+    monkeypatch.setattr(severe, "_source_read", read)
+    with Image.new("L", (130, 95), 250) as picture:
+        paint = ImageDraw.Draw(picture)
+        for box in ((32, 21, 38, 26), (32, 34, 39, 58), (48, 37, 61, 59)):
+            paint.rectangle(box, fill=11)
+        if case != "missing_mark":
+            paint.rectangle((52, 64, 57, 69), fill=11)
+        text = severe._verify_short_diacritics(None, picture, previous, expected, lang="tur+eng", deadline=6)
+    assert text == ("İş" if case == "confirmed" else None)
+    assert modes == [8, 13]
