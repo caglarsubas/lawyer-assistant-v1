@@ -18,18 +18,32 @@ privilege=()
 if [[ "$EUID" -ne 0 ]]; then
   privilege=(sudo)
 fi
+unmount_scratch() {
+  for attempt in 1 2 3 4 5; do
+    if "${privilege[@]}" umount "$scratch" 2>/dev/null; then
+      return 0
+    fi
+    sleep 0.1
+  done
+  "${privilege[@]}" umount "$scratch"
+}
 cleanup() {
   status=$?
   trap - EXIT
-  if [[ "$mounted" == true ]] && ! "${privilege[@]}" umount "$scratch"; then
-    status=1
+  if [[ "$mounted" == true ]] && ! unmount_scratch; then
+    if [[ "$status" -eq 0 ]]; then
+      status=1
+    fi
+    exit "$status"
   fi
-  if ! rmdir "$scratch"; then
+  if ! rmdir "$scratch" && [[ "$status" -eq 0 ]]; then
     status=1
   fi
   exit "$status"
 }
 trap cleanup EXIT
+trap 'exit 143' TERM
+trap 'exit 130' INT
 "${privilege[@]}" mount -t tmpfs -o size=1024m,mode=1777,nosuid,nodev tmpfs "$scratch"
 mounted=true
 # Preserve strict filesystem checks and give temporary bundle writes the same
@@ -43,4 +57,4 @@ if [[ "${GITHUB_ACTIONS:-}" == true ]]; then
   fi
 fi
 # Exec intentionally remains enabled: fake relay executables are real contracts.
-TMPDIR="$scratch" "$@" --basetemp="$scratch/pytest"
+TMPDIR="$scratch" python3 "$(dirname -- "${BASH_SOURCE[0]}")/run_ci_test_process.py" "$@" --basetemp="$scratch/pytest"
