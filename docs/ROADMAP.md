@@ -1,5 +1,23 @@
 # Approved product roadmap and implementation ledger
 
+## Corroborated severe-scan segmentation and punctuation — 17 November 2026
+
+Uneven PDF scans can leave visible lines out of the first OCR read. The
+worker compares two bounded reads of contrast-adjusted views and checks
+the corresponding source word boxes before accepting a recovery. Existing
+dates, identifiers, and amounts must agree. A numeral-like fragment is
+discarded only when its ink is clipped inside a corroborated word.
+The worker checks source ink before changing punctuation and retains
+passage locations and the partial OCR warning.
+
+Repeated disconnected runs matched all 15 pages of the recent synthetic
+set, up from 11, and all six punctuation-line checks, up from three.
+Across ten synthetic PDFs and 47 pages, all 48 critical readings and 11
+holdout controls matched. The four corrected passages matched the authored
+words and punctuation. The other 43 pages and all warnings stayed exact.
+
+Seven fields from the earlier private review still await clearer scans.
+
 ## Source-confirmed final periods on uneven PDF scans — 17 November 2026
 
 The PDF worker can retry the last OCR line on eligible uneven scans within
