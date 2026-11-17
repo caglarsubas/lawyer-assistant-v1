@@ -5,7 +5,7 @@ import sys
 from types import SimpleNamespace
 
 import pytest
-from PIL import Image
+from PIL import Image, ImageDraw
 from pypdf import PdfWriter
 
 from app import pdf_severe_extract as severe
@@ -85,8 +85,9 @@ def test_existing_partial_text_survives_and_new_reads_share_deadline(monkeypatch
     context = SimpleNamespace()
     known_partial = "Bakiye tutarı: 37 815,26 TL\nadı."
 
-    def existing(_, picture, *, lang, timeout, allow_terminal_period):
+    def existing(_, picture, *, lang, timeout, allow_terminal_period, recover_partial):
         assert picture is context and lang == "tur+eng" and allow_terminal_period
+        assert recover_partial is severe._recover_partial
         assert timeout == pytest.approx(5.8)
         return known_partial
 
@@ -137,3 +138,60 @@ def test_failed_raster_does_not_shift_partial_warning_locator(tmp_path, monkeypa
     assert "Sayfa 1: yerel OCR kullanılamadı." in result["warnings"]
     assert all(f"Sayfa {page}: içerik işlenemedi; bu çalışmaya dahil edilmedi." in result["warnings"]
                for page in (1, 3, 4))
+
+
+@pytest.mark.parametrize("variation", ["exact", "existing_amount", "disagree", "moved", "faint"])
+def test_partial_repair_preserves_prior_numbers_and_requires_two_registered_ink_reads(variation):
+    word = severe._Word
+    previous = "ar 300,25 TL\n\nBorç kapanmadı."
+    old = [[word("ar", 68, (100, 44, 130, 70)), word("300,25", 96, (145, 42, 201, 70)),
+            word("TL", 96, (209, 42, 225, 70))],
+           [word("Borç", 96, (60, 94, 119, 122)), word("kapanmadı.", 96, (129, 94, 239, 122))]]
+    first = [[word("Tarih", 96, (59, 5, 109, 35)), word("18.02.2020", 97, (125, 5, 215, 34))],
+             [word("Tutar", 96, (58, 42, 131, 70)),
+              old[0][1]._replace(text="900,25") if variation == "existing_amount" else old[0][1], old[0][2]], old[1]]
+    second = [line.copy() for line in first]
+    if variation == "disagree":
+        second[0][1] = second[0][1]._replace(text="18.02.2028")
+    if variation == "moved":
+        second[0][1] = second[0][1]._replace(box=(125, 150, 215, 174))
+    with Image.new("L", (300, 200), 255) as picture:
+        paint = ImageDraw.Draw(picture)
+        paint.rectangle((62, 9, 79, 28), fill=10)
+        paint.rectangle((63, 46, 85, 65), fill=10)
+        paint.rectangle((132, 9, 161, 28), fill=223 if variation == "faint" else 10)
+        result = severe._reconcile_partial(picture, previous, old, first, second)
+    assert result == ("Tarih 18.02.2020\nTutar 300,25 TL\nBorç kapanmadı." if variation == "exact" else previous)
+
+
+@pytest.mark.parametrize("real_digit", (False, True), ids=("clipped_trace", "visible_digit"))
+def test_clipped_prefix_preserves_a_visible_digit(real_digit):
+    word = severe._Word
+    previous = "4 leme başlığı:"
+    anchor = word("başlığı:", 96, (170, 36, 238, 73))
+    old = [[word("4", 73, (54, 12, 72, 52)), word("leme", 67, (79, 42, 158, 74)), anchor]]
+    restored = word("İnceleme", 97, (43, 34, 158, 73))
+    with Image.new("L", (300, 150), 255) as picture:
+        draw = ImageDraw.Draw(picture)
+        draw.rectangle((56 if real_digit else 54, 31 if real_digit else 48, 65, 51), fill=8)
+        draw.rectangle((81, 42, 105, 67), fill=8)
+        reconciled = severe._reconcile_partial(picture, previous, old, [[restored, anchor]], [[restored, anchor]])
+    assert reconciled == (previous if real_digit else "İnceleme başlığı:")
+
+
+@pytest.mark.parametrize("shape", ("scuff", "period"))
+def test_only_an_elongated_source_scuff_can_remove_a_separate_false_period(shape):
+    word = severe._Word
+    previous = "İşlem kapanmadı."
+    first_word = word("İşlem", 96, (50, 40, 120, 81))
+    before = [[first_word, word("kapanmadı.", 81, (129, 40, 257, 81))]]
+    tail = word("kapanmadı", 85, (129, 40, 228, 81))
+    mark = word(".", 77, (235, 72, 255 if shape == "scuff" else 240, 77))
+    with Image.new("L", (300, 150), 255) as picture:
+        corners = (mark.box[0], mark.box[1], mark.box[2] - 1, mark.box[3] - 1)
+        ImageDraw.Draw(picture).rectangle(corners, fill=8)
+        # Keep antialiasing/background inside the claimed punctuation bounds.
+        picture.putpixel((mark.box[0], mark.box[1]), 255)
+        reconciled = severe._reconcile_partial(picture, previous, before, [[first_word, tail, mark]],
+                                                [[first_word, tail, mark]])
+    assert reconciled == ("İşlem kapanmadı" if shape == "scuff" else previous)

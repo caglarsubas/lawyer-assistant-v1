@@ -207,7 +207,7 @@ def _word_edges(row, origin=(0, 0)):
     return left, top, left + width, top + height
 
 
-def _terminal_period_ink(picture, word_box):
+def _terminal_punctuation_ink(picture, word_box):
     _, top, right, bottom = word_box
     height = bottom - top
     right_limit = min(picture.width, right + height // 2)
@@ -218,7 +218,7 @@ def _terminal_period_ink(picture, word_box):
         dark, light = gray.getextrema()
         if light - dark < 64:
             return None
-        boxes = []
+        observations = []
         # A real compact mark survives nearby thresholds. Detached noise,
         # stroke fragments and ambiguous neighboring ink are insufficient.
         for ratio in (0.45, 0.60):
@@ -232,26 +232,35 @@ def _terminal_period_ink(picture, word_box):
                 if not (
                     2 <= left <= height // 3 and mark_right < gray.width
                     and 2 <= width <= height // 3 and 2 <= mark_height <= height // 3
-                    and mark_height * 0.75 <= width <= mark_height * 1.33
                     and mark_top >= height // 2
                     and height - height // 4 <= mark_bottom <= height + height // 10
                 ):
                     return None
+                aspect = width / mark_height
+                if 0.75 <= aspect <= 1.33:
+                    punctuation = "."
+                elif 0.30 <= aspect <= 0.68:
+                    punctuation = ","
+                else:
+                    return None
                 with mask.crop(box) as mark:
-                    if mark.histogram()[255] < width * mark_height * 0.65:
+                    # A tapered comma leaves more background inside its box.
+                    density = 0.65 if punctuation == "." else 0.50
+                    if mark.histogram()[255] < width * mark_height * density:
                         return None
                     seed = mark.tobytes().index(255)
                     ImageDraw.floodfill(mark, (seed % width, seed // width), 128)
                     if mark.getextrema()[1] != 128:
                         return None
-                boxes.append(box)
-    if any(abs(a - b) > 2 for a, b in zip(*boxes, strict=True)):
+                observations.append((punctuation, box))
+    (kind, first), (other_kind, second) = observations
+    if kind != other_kind or any(abs(a - b) > 2 for a, b in zip(first, second, strict=True)):
         return None
-    left, mark_top, mark_right, mark_bottom = boxes[-1]
-    return right + left, top + mark_top, right + mark_right, top + mark_bottom
+    left, mark_top, mark_right, mark_bottom = second
+    return kind, (right + left, top + mark_top, right + mark_right, top + mark_bottom)
 
 
-def _recover_terminal_period(ocr, picture, baseline, original_tsv, *, lang, deadline):
+def _recover_terminal_punctuation(ocr, picture, baseline, original_tsv, *, lang, deadline, allow_comma=False):
     text = baseline.rstrip()
     remaining = deadline - time.monotonic()
     if not text or not text[-1].isalpha() or remaining < 0.25:
@@ -273,8 +282,11 @@ def _recover_terminal_period(ocr, picture, baseline, original_tsv, *, lang, dead
     height = bottom - top
     if not 16 <= height <= 160 or not 95 <= float(before[-1][0]["conf"]) <= 100:
         return baseline
-    period = _terminal_period_ink(picture, bounds[-1])
-    if period is None:
+    mark = _terminal_punctuation_ink(picture, bounds[-1])
+    if mark is None:
+        return baseline
+    punctuation, mark_box = mark
+    if punctuation == "," and not allow_comma:
         return baseline
 
     # Read only the original last line. Whole-page segmentation can omit a
@@ -282,7 +294,7 @@ def _recover_terminal_period(ocr, picture, baseline, original_tsv, *, lang, dead
     pad = round(height * 0.4)
     crop = (left - pad, top - pad, right + pad, bottom + pad)
     if not (0 <= crop[0] < crop[2] <= picture.width and 0 <= crop[1] < crop[3] <= picture.height
-            and period[2] + 2 <= crop[2]):
+            and mark_box[2] + 2 <= crop[2]):
         return baseline
     remaining = deadline - time.monotonic()
     if remaining < 0.25:
@@ -290,7 +302,7 @@ def _recover_terminal_period(ocr, picture, baseline, original_tsv, *, lang, dead
     with picture.crop(crop) as strip:
         tsv = ocr.image_to_data(strip, lang=lang, config="--psm 7", timeout=min(2, remaining))
     result = _word_lines(tsv)
-    if len(result) != 1 or [word for _, word in result[0]] != [*words[:-1], words[-1] + "."]:
+    if len(result) != 1 or [word for _, word in result[0]] != [*words[:-1], words[-1] + punctuation]:
         return baseline
     if not 95 <= float(result[0][-1][0]["conf"]) <= 100:
         return baseline
@@ -299,14 +311,14 @@ def _recover_terminal_period(ocr, picture, baseline, original_tsv, *, lang, dead
         allowance = max(2, (original[3] - original[1]) // 8)
         intended = original
         if index == len(bounds) - 1:
-            if observed[2] < period[2] or not (observed[1] <= period[1] < period[3] <= observed[3]):
+            if observed[2] < mark_box[2] or not (observed[1] <= mark_box[1] < mark_box[3] <= observed[3]):
                 return baseline
-            intended = (*original[:2], period[2], original[3])
+            intended = (*original[:2], mark_box[2], original[3])
         if any(abs(old - new) > allowance for old, new in zip(intended, observed, strict=True)):
             return baseline
     if time.monotonic() >= deadline:
         return baseline
-    return text + "." + baseline[len(text):]
+    return text + punctuation + baseline[len(text):]
 
 
 def _prefer_enhanced(baseline, enhanced):
@@ -337,7 +349,7 @@ def _prefer_enhanced(baseline, enhanced):
     return score_gain >= 2 * token_count
 
 
-def _recognize(ocr, picture, *, lang, timeout, allow_terminal_period=False):
+def _recognize(ocr, picture, *, lang, timeout, allow_terminal_period=False, recover_partial=None):
     deadline = time.monotonic() + timeout
     candidate = _enhance_scan(picture)
     with candidate if candidate is not None else nullcontext():
@@ -352,7 +364,12 @@ def _recognize(ocr, picture, *, lang, timeout, allow_terminal_period=False):
                 dotted = _recover_dotted_i(ocr, picture, *baseline, lang=lang, deadline=deadline)
                 if dotted != baseline[0] or not allow_terminal_period:
                     return dotted
-                return _recover_terminal_period(ocr, picture, *baseline, lang=lang, deadline=deadline)
+                punctuation = _recover_terminal_punctuation(
+                    ocr, picture, *baseline, lang=lang, deadline=deadline, allow_comma=recover_partial is not None,
+                )
+                if punctuation != baseline[0] or recover_partial is None or not punctuation.strip():
+                    return punctuation
+                return recover_partial(ocr, picture, *baseline, lang=lang, deadline=deadline)
             except (RuntimeError, OSError, KeyError, ValueError, TypeError, IndexError, AttributeError, csv.Error):
                 # A failed or inconclusive retry keeps the baseline.
                 return baseline[0]

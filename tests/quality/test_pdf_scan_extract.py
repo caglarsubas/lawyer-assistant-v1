@@ -151,6 +151,7 @@ def test_dotted_i_retry_requires_source_dots_and_only_preserves_exact_aligned_te
 @pytest.mark.parametrize("case", [
     "confirmed", "missing", "multiple", "elongated", "raised", "low", "touching", "already",
     "clean", "numeric_tail", "moved_box", "changed_number", "separate_period", "late",
+    "comma", "comma_disagrees",
 ])
 def test_terminal_period_requires_compact_source_ink_and_exact_bounded_line_read(monkeypatch, case):
     last_word = "741" if case == "numeric_tail" else "tamamlandı"
@@ -184,7 +185,7 @@ def test_terminal_period_requires_compact_source_ink_and_exact_bounded_line_read
             now[0] += 1.26
         words = [(12, 13, 25, 29, "Kayıt"), (45, 13, 15, 29, "742" if case == "changed_number" else "741"),
                  (83 if case == "moved_box" else 76, 12, 55, 30,
-                  last_word if case == "separate_period" else last_word + ".")]
+                  last_word if case == "separate_period" else last_word + ("," if case == "comma" else "."))]
         if case == "separate_period":
             words.append((126, 37, 5, 5, "."))
         return tsv(words)
@@ -196,16 +197,24 @@ def test_terminal_period_requires_compact_source_ink_and_exact_bounded_line_read
             shape = {
                 "elongated": (143, 72, 151, 74), "raised": (144, 50, 148, 54),
                 "low": (144, 76, 148, 80), "touching": (139, 70, 148, 74),
+                "comma": (144, 67, 148, 74), "comma_disagrees": (144, 67, 148, 74),
             }.get(case, (144, 70, 148, 74))
             draw.rectangle(shape, fill=10)
         if case == "multiple":
             draw.point((149, 75), fill=10)  # Disconnected with contiguous row and column projections.
         original = picture.tobytes()
         engine = SimpleNamespace(run_and_get_multiple_output=primary, image_to_data=alternate)
-        got = parser._recognize(engine, picture, lang="tur+eng", timeout=6, allow_terminal_period=case != "clean")
-        assert got == (text + "." + whitespace if case == "confirmed" else baseline)
+        def preserve_baseline(_, picture, original, tsv, **options):
+            return original
+
+        got = parser._recognize(
+            engine, picture, lang="tur+eng", timeout=6, allow_terminal_period=case != "clean",
+            recover_partial=preserve_baseline if case in {"comma", "comma_disagrees"} else None,
+        )
+        repaired = {"confirmed": ".", "comma": ","}
+        assert got == (text + repaired[case] + whitespace if case in repaired else baseline)
         assert picture.tobytes() == original
     expected = [(["txt", "tsv"], "tur+eng", 6)]
-    if case in {"confirmed", "moved_box", "changed_number", "separate_period", "late"}:
+    if case in {"confirmed", "moved_box", "changed_number", "separate_period", "late", "comma", "comma_disagrees"}:
         expected.append(("tur+eng", "--psm 7", 1.25))
     assert calls == expected
