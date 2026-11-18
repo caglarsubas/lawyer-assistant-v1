@@ -10,7 +10,10 @@ that its image coverage could not be verified.
 
 The frozen mixed-page replay restored the missing warning on page 6 while
 leaving the text, locators, and existing warnings exact across all six pages.
-Four severe-scan discrepancies and seven private OCR fields remain open.
+Offline regional OCR matched the source text on three of four severe-scan
+failures across the raw and both contrast-adjusted views. One date still had
+conflicting readings. These experiments used a separate diagnostic run. The
+four severe-scan discrepancies and seven private OCR fields remain open.
 
 ## Source-line checks for severe PDF scans — 17 November 2026
 

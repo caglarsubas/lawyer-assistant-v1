@@ -33,6 +33,8 @@ _DEVICE_COLORS = {"/DeviceGray", "/DeviceRGB", "/DeviceCMYK"}
 _FILL_PATH = {b"f", b"F", b"f*"}
 _STROKE_PATH = {b"S", b"s"}
 _FILL_STROKE_PATH = {b"B", b"B*", b"b", b"b*"}
+_PAINT_PATH = _FILL_PATH | _STROKE_PATH | _FILL_STROKE_PATH
+_DRAW_SEGMENT = {b"l", b"c", b"v", b"y", b"re"}
 _SHOW_TEXT = {b"Tj", b"TJ", b"'", b'"'}
 _LINK_NAVIGATION_KEYS = {
     "/Type", "/Subtype", "/Rect", "/Border", "/BS", "/C", "/H", "/A", "/Dest",
@@ -201,7 +203,18 @@ def _has_raster(content, resources, reader, budget, path, initial=_PaintState())
         raise ValueError("Invalid PDF resource dictionary")
     state = initial
     stack = []
+    has_segments = False
     for operands, operator in _operations(content, reader, budget):
+        if operator in _DRAW_SEGMENT:
+            has_segments = True
+            continue
+        if operator == b"n":
+            has_segments = False
+            continue
+        if operator in _PAINT_PATH:
+            if not has_segments:
+                continue
+            has_segments = False
         if operator == b"INLINE IMAGE":
             return True
         if operator == b"Do":

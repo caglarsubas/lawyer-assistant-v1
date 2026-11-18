@@ -218,9 +218,10 @@ def test_pattern_colors_follow_fill_stroke_and_saved_state(tmp_path):
     text_start = b"/Pattern cs /Tile scn BT /F1 10 Tf 10 20 Td "
     _pattern_page(writer, text_start + b"0 Tr (Synthetic) Tj ET\n", text_resources)
     _pattern_page(writer, text_start + b"3 Tr (Synthetic) Tj ET\n", text_resources)
+    _pattern_page(writer, b"/Pattern cs /Tile scn f 0 0 30 30 re n f\n", resources)
     path = tmp_path / "pattern-state.pdf"
     writer.write(path)
-    earlier = baseline(7)
+    earlier = baseline(8)
     actual = coverage.add_pdf_coverage_warnings(path, earlier)
     assert actual["warnings"] == [coverage.UNPROCESSED_IMAGE.format(page=page) for page in (1, 4, 6)]
     assert actual["passages"] == earlier["passages"]
