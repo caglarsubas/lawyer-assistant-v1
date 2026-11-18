@@ -1,8 +1,10 @@
 """Disclose raster and annotation limitations on pages with extracted text."""
 
+from __future__ import annotations
+
 import re
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from itertools import islice
 
 from pypdf import PdfReader, apply_configuration
@@ -27,6 +29,11 @@ MAX_ANNOTATIONS_PER_DOCUMENT = 4_096
 _INSPECTION_SECONDS = 2
 _CONTENT_FILTERS = {"/FlateDecode", "/LZWDecode", "/ASCII85Decode", "/ASCIIHexDecode", "/RunLengthDecode",
                     "/Fl", "/LZW", "/A85", "/AHx", "/RL"}
+_DEVICE_COLORS = {"/DeviceGray", "/DeviceRGB", "/DeviceCMYK"}
+_FILL_PATH = {b"f", b"F", b"f*"}
+_STROKE_PATH = {b"S", b"s"}
+_FILL_STROKE_PATH = {b"B", b"B*", b"b", b"b*"}
+_SHOW_TEXT = {b"Tj", b"TJ", b"'", b'"'}
 _LINK_NAVIGATION_KEYS = {
     "/Type", "/Subtype", "/Rect", "/Border", "/BS", "/C", "/H", "/A", "/Dest",
     "/F", "/P", "/StructParent", "/QuadPoints", "/NM", "/M",
@@ -68,6 +75,28 @@ class _InspectionBudget:
         self.annotations_left -= 1
 
 
+@dataclass(frozen=True)
+class _SelectedPattern:
+    name: NameObject
+    resources: DictionaryObject | None
+    parent_initial: _PaintState
+
+
+@dataclass(frozen=True)
+class _PaintColor:
+    # A colored pattern takes just its name. An uncolored one takes color
+    # components followed by its name.
+    space: str | None = None
+    pattern: _SelectedPattern | None = None
+
+
+@dataclass(frozen=True)
+class _PaintState:
+    fill: _PaintColor = _PaintColor()
+    stroke: _PaintColor = _PaintColor()
+    text_mode: int = 0
+
+
 def _operations(content, reader, budget):
     parts = content if isinstance(content, ArrayObject) else (content,)
     if len(parts) > MAX_CONTENT_PARTS:
@@ -95,32 +124,129 @@ def _operations(content, reader, budget):
     return operations
 
 
-def _has_raster(content, resources, reader, budget, path):
+def _resource(resources, kind, name):
+    if resources is None or not isinstance(resources[kind], DictionaryObject):
+        raise ValueError("Invalid PDF named resource dictionary")
+    return resources[kind][name]
+
+
+def _pattern_space(operands, resources):
+    if len(operands) != 1 or not isinstance(operands[0], NameObject):
+        raise ValueError("Invalid PDF color space selection")
+    name = operands[0]
+    if name == "/Pattern":
+        return "colored"
+    if name in _DEVICE_COLORS:
+        return None
+    space = _resource(resources, "/ColorSpace", name)
+    if space == "/Pattern":
+        return "colored"
+    if isinstance(space, ArrayObject) and space and space[0] == "/Pattern":
+        if len(space) != 2:
+            raise ValueError("Invalid PDF uncolored pattern space")
+        return "uncolored"
+    return None
+
+
+def _select_pattern(color, operands, resources, initial):
+    named = operands and isinstance(operands[-1], NameObject)
+    if color.space is None:
+        if named:
+            raise ValueError("PDF pattern selected outside a pattern color space")
+        return color
+    if (not named or (len(operands) == 1) != (color.space == "colored")
+            or any(not isinstance(value, (int, float)) for value in operands[:-1])):
+        raise ValueError("Invalid PDF pattern color")
+    return replace(color, pattern=_SelectedPattern(operands[-1], resources, initial))
+
+
+def _painted_colors(operator, state):
+    if operator in _FILL_PATH or (operator in _SHOW_TEXT and state.text_mode in (0, 4)):
+        return (state.fill,)
+    if operator in _STROKE_PATH or (operator in _SHOW_TEXT and state.text_mode in (1, 5)):
+        return (state.stroke,)
+    if operator in _FILL_STROKE_PATH or (operator in _SHOW_TEXT and state.text_mode in (2, 6)):
+        return (state.fill, state.stroke)
+    return ()
+
+
+def _follow_content(invoked, resources, reader, budget, path, initial):
+    if id(invoked) in path or len(path) >= MAX_FORM_DEPTH:
+        raise ValueError("PDF content nesting or cycle limit reached")
+    return _has_raster(invoked, resources, reader, budget, path | {id(invoked)}, initial)
+
+
+def _pattern_has_raster(color, reader, budget, path):
+    selection = color.pattern
+    budget.check_time()
+    pattern = _resource(selection.resources, "/Pattern", selection.name)
+    if not isinstance(pattern, DictionaryObject):
+        raise ValueError("Invalid PDF pattern dictionary")
+    pattern_type = pattern["/PatternType"]
+    if pattern_type == 2 and color.space == "colored" and not isinstance(pattern, StreamObject):
+        if not isinstance(pattern["/Shading"], DictionaryObject):
+            raise ValueError("Invalid PDF shading pattern")
+        return False
+    paint_type = 1 if color.space == "colored" else 2
+    if pattern_type != 1 or not isinstance(pattern, StreamObject) or pattern["/PaintType"] != paint_type:
+        raise ValueError("Invalid PDF tiling pattern")
+    # Cells start with the initial state of the content that declared the
+    # selection, rather than the state that is using the pattern as a color.
+    initial = selection.parent_initial if paint_type == 1 else _PaintState()
+    return _follow_content(pattern, pattern["/Resources"], reader, budget, path, initial)
+
+
+def _has_raster(content, resources, reader, budget, path, initial=_PaintState()):
     if resources is not None and not isinstance(resources, DictionaryObject):
         raise ValueError("Invalid PDF resource dictionary")
+    state = initial
+    stack = []
     for operands, operator in _operations(content, reader, budget):
         if operator == b"INLINE IMAGE":
             return True
-        if operator != b"Do":
-            continue
-        budget.check_time()
-        if len(operands) != 1 or not isinstance(operands[0], NameObject) or resources is None:
-            raise ValueError("Invalid PDF object invocation")
-        objects = resources["/XObject"]
-        if not isinstance(objects, DictionaryObject):
-            raise ValueError("Invalid PDF object dictionary")
-        invoked = objects[operands[0]]
-        if not isinstance(invoked, StreamObject):
-            raise ValueError("Invoked PDF object is not a stream")
-        subtype = invoked["/Subtype"]
-        if subtype == "/Image":
-            # Recognition needs only the object type. Do not decode its samples.
+        if operator == b"Do":
+            budget.check_time()
+            if len(operands) != 1 or not isinstance(operands[0], NameObject):
+                raise ValueError("Invalid PDF object invocation")
+            invoked = _resource(resources, "/XObject", operands[0])
+            if not isinstance(invoked, StreamObject):
+                raise ValueError("Invoked PDF object is not a stream")
+            subtype = invoked["/Subtype"]
+            if subtype == "/Image":
+                # Recognition needs only the object type. Do not decode its samples.
+                return True
+            if subtype != "/Form":
+                raise ValueError("Unsupported PDF object invocation")
+            child_resources = invoked["/Resources"] if "/Resources" in invoked else resources
+            if _follow_content(invoked, child_resources, reader, budget, path, state):
+                return True
+        elif operator == b"q":
+            stack.append(state)
+        elif operator == b"Q":
+            state = stack.pop()
+        elif operator == b"cs":
+            state = replace(state, fill=_PaintColor(_pattern_space(operands, resources)))
+        elif operator == b"CS":
+            state = replace(state, stroke=_PaintColor(_pattern_space(operands, resources)))
+        elif operator == b"scn":
+            state = replace(state, fill=_select_pattern(state.fill, operands, resources, initial))
+        elif operator == b"SCN":
+            state = replace(state, stroke=_select_pattern(state.stroke, operands, resources, initial))
+        elif operator in (b"g", b"rg", b"k"):
+            state = replace(state, fill=_PaintColor())
+        elif operator in (b"G", b"RG", b"K"):
+            state = replace(state, stroke=_PaintColor())
+        elif operator in (b"sc", b"SC"):
+            if (state.fill if operator == b"sc" else state.stroke).space is not None:
+                raise ValueError("Invalid PDF operator for a pattern color")
+        elif operator == b"Tr":
+            if len(operands) != 1 or not isinstance(operands[0], int) or not 0 <= operands[0] <= 7:
+                raise ValueError("Invalid PDF text rendering mode")
+            state = replace(state, text_mode=operands[0])
+        elif any(color.pattern is not None and _pattern_has_raster(color, reader, budget, path)
+                 for color in _painted_colors(operator, state)):
             return True
-        if subtype != "/Form" or id(invoked) in path or len(path) >= MAX_FORM_DEPTH:
-            raise ValueError("Unsupported or cyclic PDF form invocation")
-        form_resources = invoked["/Resources"] if "/Resources" in invoked else resources
-        if _has_raster(invoked, form_resources, reader, budget, path | {id(invoked)}):
-            return True
+    budget.check_time()
     return False
 
 
