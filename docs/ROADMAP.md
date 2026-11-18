@@ -1,5 +1,20 @@
 # Approved product roadmap and implementation ledger
 
+## Raster tiling warnings on mixed PDF pages — 18 November 2026
+
+The PDF worker inspects tiling patterns used to paint native-text pages. A cell
+that draws raster content triggers the original-page review warning. Inspection
+preserves the native passages and uses the existing stream, nesting, and time
+budgets. A damaged or over-budget painted pattern leaves an explicit warning
+that its image coverage could not be verified.
+
+The frozen mixed-page replay restored the missing warning on page 6 while
+leaving the text, locators, and existing warnings exact across all six pages.
+Offline regional OCR matched the source text on three of four severe-scan
+failures across the raw and both contrast-adjusted views. One date still had
+conflicting readings. These experiments used a separate diagnostic run. The
+four severe-scan discrepancies and seven private OCR fields remain open.
+
 ## Source-line checks for severe PDF scans — 17 November 2026
 
 The PDF worker can check a disputed reading against the corresponding

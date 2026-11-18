@@ -6,6 +6,7 @@ from PIL import Image
 from pypdf import PdfWriter
 from pypdf.generic import (
     ArrayObject,
+    BooleanObject,
     DecodedStreamObject,
     DictionaryObject,
     EncodedStreamObject,
@@ -93,6 +94,158 @@ def _resources(**objects):
     return DictionaryObject({NameObject("/XObject"): DictionaryObject({
         NameObject(f"/{name}"): obj for name, obj in objects.items()
     })})
+
+
+def _patterns(resources, **patterns):
+    resources[NameObject("/Pattern")] = DictionaryObject({
+        NameObject(f"/{name}"): pattern for name, pattern in patterns.items()
+    })
+    return resources
+
+
+def _dictionary(**entries):
+    return DictionaryObject({NameObject(f"/{name}"): value for name, value in entries.items()})
+
+
+def _numbers(*values):
+    return ArrayObject([NumberObject(value) for value in values])
+
+
+def _tiling_pattern(writer, data, resources=None, paint_type=1):
+    tile = _stream(data)
+    tile.update(_dictionary(
+        Type=NameObject("/Pattern"), PatternType=NumberObject(1), PaintType=NumberObject(paint_type),
+        TilingType=NumberObject(1), BBox=_numbers(0, 0, 10, 10), XStep=NumberObject(10),
+        YStep=NumberObject(10), Resources=resources if resources is not None else DictionaryObject(),
+    ))
+    return writer._add_object(tile)
+
+
+def _pattern_page(writer, content, resources):
+    page = writer.add_blank_page(width=100, height=100)
+    page[NameObject("/Resources")] = resources
+    page[NameObject("/Contents")] = writer._add_object(_stream(content))
+
+
+def _shading_pattern(writer):
+    function = _dictionary(
+        FunctionType=NumberObject(2), Domain=_numbers(0, 1), C0=_numbers(0, 0, 0),
+        C1=_numbers(1, 1, 1), N=NumberObject(1),
+    )
+    shading = _dictionary(
+        ShadingType=NumberObject(2), ColorSpace=NameObject("/DeviceRGB"),
+        Coords=_numbers(0, 0, 30, 30), Function=function,
+    )
+    return writer._add_object(_dictionary(
+        Type=NameObject("/Pattern"), PatternType=NumberObject(2), Shading=shading,
+    ))
+
+
+def test_painted_tiling_patterns_detect_raster_without_decoding_images(tmp_path, monkeypatch):
+    writer = PdfWriter()
+    picture = _stream(b"\x00", "/Image")
+    picture.update(_dictionary(Width=NumberObject(1), Height=NumberObject(1),
+                               ColorSpace=NameObject("/DeviceGray"), BitsPerComponent=NumberObject(8)))
+    raster = writer._add_object(picture)
+    vector = writer._add_object(_stream(b"0 0 m 10 10 l S\n", "/Form"))
+    raster_tile = _tiling_pattern(writer, b"q 10 0 0 10 0 0 cm /Pixels Do Q\n", _resources(Pixels=raster))
+    vector_tile = _tiling_pattern(writer, b"0 0 10 10 re f\n")
+    paint = b"/Pattern cs /Tile scn 0 0 30 30 re f\n"
+    _pattern_page(writer, paint, _patterns(_resources(Pixels=vector), Tile=raster_tile))
+    _pattern_page(writer, paint, _patterns(_resources(Pixels=raster), Tile=vector_tile))
+
+    unused = b"q /Pattern cs /Tile scn 0 0 30 30 re n Q 0 0 40 40 re f\n"
+    _pattern_page(writer, unused, _patterns(DictionaryObject(), Tile=raster_tile))
+
+    form = _stream(b"/Pattern CS /Tile SCN 0 0 m 30 30 l S\n", "/Form")
+    form.update(_dictionary(BBox=_numbers(0, 0, 40, 40), Resources=_patterns(DictionaryObject(), Tile=raster_tile)))
+    _pattern_page(writer, b"/Child Do\n", _patterns(_resources(Child=writer._add_object(form)), Tile=vector_tile))
+
+    mask = _stream(b"\x80", "/Image")
+    mask.update(_dictionary(Width=NumberObject(1), Height=NumberObject(1), ImageMask=BooleanObject(True),
+                            BitsPerComponent=NumberObject(1)))
+    uncolored = _tiling_pattern(
+        writer, b"/Mask Do\n", _resources(Mask=writer._add_object(mask)), paint_type=2,
+    )
+    alias = _patterns(_dictionary(ColorSpace=_dictionary(
+        WithGray=ArrayObject([NameObject("/Pattern"), NameObject("/DeviceGray")])
+    )), Tile=uncolored)
+    _pattern_page(writer, b"/WithGray cs 0 /Tile scn 0 0 30 30 re f*\n", alias)
+    _pattern_page(writer, paint, _patterns(DictionaryObject(), Tile=_shading_pattern(writer)))
+    _pattern_page(writer, paint, _patterns(DictionaryObject(), Tile=raster_tile))
+
+    path = tmp_path / "raster-tiling.pdf"
+    writer.write(path)
+    original = path.read_bytes()
+    sampled = []
+    decode = DecodedStreamObject.get_data
+
+    def observe_decode(stream):
+        if stream.get("/Subtype") == "/Image":
+            sampled.append(stream)
+        return decode(stream)
+
+    monkeypatch.setattr(DecodedStreamObject, "get_data", observe_decode)
+    earlier = baseline(7, [coverage._OCR_USED.format(page=7), "Earlier extraction warning"])
+    actual = coverage.add_pdf_coverage_warnings(path, earlier)
+    assert actual["warnings"] == earlier["warnings"] + [
+        coverage.UNPROCESSED_IMAGE.format(page=page) for page in (1, 4, 5)
+    ]
+    assert {**actual, "warnings": earlier["warnings"]} == earlier
+    assert coverage.add_pdf_coverage_warnings(path, actual) == actual
+    assert sampled == []
+    assert path.read_bytes() == original
+
+
+def test_pattern_colors_follow_fill_stroke_and_saved_state(tmp_path):
+    writer = PdfWriter()
+    image = writer._add_object(_stream(b"\x00", "/Image"))
+    raster = _tiling_pattern(writer, b"/Image Do\n", _resources(Image=image))
+    vector = _tiling_pattern(writer, b"0 0 10 10 re f\n")
+    form = _stream(b"0 0 30 30 re f\n", "/Form")
+    form.update(_dictionary(BBox=_numbers(0, 0, 40, 40), Resources=_patterns(DictionaryObject(), Tile=vector)))
+    child = writer._add_object(form)
+    resources = _patterns(_resources(Child=child), Tile=raster)
+    _pattern_page(writer, b"/Pattern cs /Tile scn /Child Do\n", resources)
+    _pattern_page(writer, b"/Pattern cs /Tile scn 0 0 m 30 30 l S\n", resources)
+    _pattern_page(writer, b"/Pattern CS /Tile SCN 0 0 30 30 re f\n", resources)
+    _pattern_page(writer, b"/Pattern cs /Tile scn q 0 g Q 0 0 30 30 re f\n", resources)
+    _pattern_page(writer, b"/Pattern cs /Tile scn 0 g 0 0 30 30 re f\n", resources)
+
+    font = writer._add_object(_dictionary(Type=NameObject("/Font"), Subtype=NameObject("/Type1"),
+                                          BaseFont=NameObject("/Helvetica")))
+    text_resources = _patterns(_dictionary(Font=_dictionary(F1=font)), Tile=raster)
+    text_start = b"/Pattern cs /Tile scn BT /F1 10 Tf 10 20 Td "
+    _pattern_page(writer, text_start + b"0 Tr (Synthetic) Tj ET\n", text_resources)
+    _pattern_page(writer, text_start + b"3 Tr (Synthetic) Tj ET\n", text_resources)
+    _pattern_page(writer, b"/Pattern cs /Tile scn f 0 0 30 30 re n f\n", resources)
+    path = tmp_path / "pattern-state.pdf"
+    writer.write(path)
+    earlier = baseline(8)
+    actual = coverage.add_pdf_coverage_warnings(path, earlier)
+    assert actual["warnings"] == [coverage.UNPROCESSED_IMAGE.format(page=page) for page in (1, 4, 6)]
+    assert actual["passages"] == earlier["passages"]
+
+
+def test_painted_patterns_report_missing_malformed_recursive_and_over_budget_streams(tmp_path, monkeypatch):
+    writer = PdfWriter()
+    content = b"/Pattern cs /Tile scn 0 0 30 30 re f\n"
+    _pattern_page(writer, content, _patterns(DictionaryObject()))
+    malformed = writer._add_object(_dictionary(PatternType=NumberObject(1), PaintType=NumberObject(1)))
+    _pattern_page(writer, content, _patterns(DictionaryObject(), Tile=malformed))
+    recursive = _tiling_pattern(writer, content)
+    recursive.get_object()[NameObject("/Resources")] = _patterns(DictionaryObject(), Tile=recursive)
+    _pattern_page(writer, content, _patterns(DictionaryObject(), Tile=recursive))
+    larger = _tiling_pattern(writer, b"q Q\n" * 130)
+    _pattern_page(writer, content, _patterns(DictionaryObject(), Tile=larger))
+    _pattern_page(writer, b"0 0 30 30 re f\n", _patterns(DictionaryObject(), Tile=larger))
+    path = tmp_path / "unsafe-patterns.pdf"
+    writer.write(path)
+    monkeypatch.setattr(coverage, "MAX_CONTENT_BYTES", 512)
+    earlier = baseline(5)
+    actual = coverage.add_pdf_coverage_warnings(path, earlier)
+    assert actual["warnings"] == [coverage.INSPECTION_UNKNOWN.format(page=page) for page in (1, 2, 3, 4)]
+    assert actual["passages"] == earlier["passages"]
 
 
 def _annotation(writer, subtype, **properties):
