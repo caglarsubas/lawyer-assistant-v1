@@ -4,7 +4,7 @@ import type { PunctuationCaptureRun, PunctuationEvent, PunctuationObservation, P
 const READERS = ['raw', 'locally_leveled'];
 const COMMON_KEYS = ['id', 'created_at', 'analysis_id', 'version_id', 'evidence_id', 'content_sha256', 'quote_sha256',
   'document_id', 'document_revision', 'document_sha256', 'page', 'page_count', 'raster_sha256', 'width', 'height',
-  'producer_sha256', 'producer_recipe', 'run_sha256', 'scope', 'status', 'canonical_usable', 'immutable'];
+  'producer_sha256', 'producer_recipe', 'assessment', 'run_sha256', 'scope', 'status', 'canonical_usable', 'immutable'];
 const SHA256_FIELDS = ['content_sha256', 'quote_sha256', 'document_sha256', 'raster_sha256', 'producer_sha256', 'run_sha256'] as const;
 export const PUNCTUATION_LABELS: Record<PunctuationEvent['status'], string> = {
   punctuation_disagreement: 'Noktalama okumaları uyuşmuyor', field_unavailable: 'Okuma bölgesi belirlenemedi',
@@ -51,8 +51,30 @@ function verifySource(value: PunctuationObservation | PunctuationCaptureRun, pin
     && value.document_id === pins.documentId && value.document_revision === pins.documentRevision
     && value.document_sha256 === pins.documentSha256 && value.page === pins.page && value.page_count === pins.pageCount
     && SHA256_FIELDS.every(key => isHash(value[key])) && positive(value.width) && positive(value.height)
-    && value.width * value.height <= 4_000_000 && typeof value.producer_recipe === 'string'
-    && value.producer_recipe.length > 0 && value.producer_recipe.length <= 100);
+    && value.width * value.height <= 4_000_000
+    && ['native-pdf-punctuation-v1', 'native-pdf-punctuation-v2'].includes(value.producer_recipe));
+}
+
+function verifyAssessment(value: PunctuationObservation | PunctuationCaptureRun, eventCount: number, event?: PunctuationEvent) {
+  if (value.producer_recipe === 'native-pdf-punctuation-v1') {
+    requireThat(!Object.hasOwn(value, 'assessment'));
+    return;
+  }
+  const assessment = value.assessment;
+  requireThat(assessment && typeof assessment === 'object' && !Array.isArray(assessment)
+    && same(Object.keys(assessment).sort(), ['reason', 'stage', 'status'])
+    && ['nomination_raw', 'nomination_contrast', 'currency_fields'].includes(assessment.stage)
+    && (eventCount === 0 || assessment.stage === 'currency_fields'));
+  if (assessment.status === 'complete') {
+    requireThat(assessment.stage === 'currency_fields'
+      && ['checked', 'no_currency_scope'].includes(assessment.reason)
+      && (assessment.reason !== 'no_currency_scope' || eventCount === 0)
+      && (!event || event.status === 'punctuation_disagreement'));
+  } else {
+    requireThat(assessment.status === 'incomplete'
+      && ['page_budget', 'reader_error', 'reader_unavailable', 'source_scope_unverified'].includes(assessment.reason)
+      && (assessment.reason !== 'source_scope_unverified' || assessment.stage === 'currency_fields'));
+  }
 }
 
 export function verifyPunctuationEvent(event: PunctuationEvent, width: number, height: number): void {
@@ -98,6 +120,7 @@ export async function verifyPunctuationObservation(value: PunctuationObservation
     && /^pco-[a-f0-9]{60}$/.test(value.id) && value.status === 'review_required' && /^pcr-[a-f0-9]{60}$/.test(value.run_id)
     && isHash(value.event_sha256) && isHash(value.observation_sha256));
   verifyPunctuationEvent(value.event, value.width, value.height);
+  verifyAssessment(value, 1, value.event);
   const { id: _id, created_at: _created, observation_sha256: _digest, ...metadata } = value;
   const [observationDigest, eventDigest, quoteDigest] = await Promise.all([
     punctuationDigest(canonicalPunctuationJson(metadata)), punctuationDigest(canonicalPunctuationJson(value.event)), punctuationDigest(pins.quote),
@@ -111,7 +134,9 @@ export async function verifyPunctuationRun(value: PunctuationCaptureRun, pins: P
   verifySource(value, pins);
   requireThat(Object.keys(value).every(key => [...COMMON_KEYS, 'event_count', 'receipt_sha256'].includes(key))
     && /^pcr-[a-f0-9]{60}$/.test(value.id) && Number.isSafeInteger(value.event_count) && value.event_count >= 0 && value.event_count <= 8 && isHash(value.receipt_sha256)
-    && value.status === (value.event_count === 0 ? 'captured_no_alternatives' : 'captured_review_observations'));
+    && value.status === (value.assessment?.status === 'incomplete' ? 'captured_incomplete'
+      : value.event_count === 0 ? 'captured_no_alternatives' : 'captured_review_observations'));
+  verifyAssessment(value, value.event_count);
   const { id: _id, created_at: _created, receipt_sha256: _digest, ...metadata } = value;
   const [digest, quoteDigest] = await Promise.all([punctuationDigest(canonicalPunctuationJson(metadata)), punctuationDigest(pins.quote)]);
   signal.throwIfAborted();
@@ -138,6 +163,11 @@ export async function loadPunctuationPage(pins: PunctuationSourcePins, offset: n
     Promise.all(page.runs.map(run => verifyPunctuationRun(run, pins, signal))),
   ]);
   signal.throwIfAborted();
+  for (const item of items) {
+    const run = runs.find(candidate => candidate.id === item.run_id);
+    if (run) requireThat(run.producer_recipe === item.producer_recipe
+      && canonicalPunctuationJson(run.assessment ?? null) === canonicalPunctuationJson(item.assessment ?? null));
+  }
   return { items, runs, has_more: page.has_more, runs_has_more: page.runs_has_more };
 }
 

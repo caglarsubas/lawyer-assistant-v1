@@ -46,6 +46,10 @@ The extractor has a dedicated internal network shared only with the API, no data
 
 Office/OpenDocument archives have member-count and expanded-size bounds; duplicate members and known macro containers are rejected. Parser responses have independent byte, text, passage, warning and time bounds. An extension never establishes authenticity or complete extraction. Representative Turkish legal-document testing, including large scans and complex tables, remains required before claiming format qualification.
 
+The saved-analysis OCR sidecar also records bounded-reader completion separately
+from literal observations; see [OCR admission and incomplete captures](quality/OCR_BUDGET_ADMISSION.md).
+Legacy receipts remain unchanged and the seven private fields stay pending.
+
 ### Synthetic layout and OCR observations
 
 The [before-fix observation](evidence/synthetic-document-layout-2026-11-15.json)

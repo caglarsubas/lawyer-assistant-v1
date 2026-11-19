@@ -19,6 +19,7 @@ from .db import Record, digest
 from .evidence_prompt import canonical
 from .firm_rbac import require_permission
 from .practice import _audit
+from .punctuation_assessment import valid_assessment
 
 KIND = "punctuation_observation"
 RUN_KIND = "punctuation_capture"
@@ -113,11 +114,20 @@ def _png(raw):
 
 
 def capture_run_sha256(capture):
-    return digest(canonical({
+    identity = {
         "source_sha256": capture["source_sha256"], "page": capture["page"], "page_count": capture["page_count"],
         "producer_sha256": capture["producer_sha256"], "producer_recipe": capture["producer_recipe"],
         "raster_sha256": digest(capture["png"]), "events": capture["events"],
-    }))
+    }
+    if "assessment" in capture:
+        identity["assessment"] = capture["assessment"]
+    return digest(canonical(identity))
+
+
+def _run_status(events, assessment=None):
+    if assessment is not None and assessment["status"] == "incomplete":
+        return "captured_incomplete"
+    return "captured_review_observations" if events else "captured_no_alternatives"
 
 
 def _metadata_sha(metadata):
@@ -137,6 +147,12 @@ def _context_prefix(prefix, firm_id, matter_id, metadata):
 
 
 def _validate_common(metadata):
+    # Historical receipts retain their exact original metadata, IDs and digests.
+    # Completion was not recorded by v1; absence never establishes completion.
+    _require(metadata.get("producer_recipe") in {"native-pdf-punctuation-v1", "native-pdf-punctuation-v2"})
+    _require(("assessment" in metadata) == (metadata["producer_recipe"] == "native-pdf-punctuation-v2"))
+    if "assessment" in metadata:
+        _require(valid_assessment(metadata["assessment"]))
     _require(all(_sha(metadata[key]) for key in ("content_sha256", "quote_sha256", "document_sha256",
                                                 "raster_sha256", "producer_sha256", "run_sha256")))
     _require(metadata["canonical_usable"] is False and metadata["immutable"] is True
@@ -151,7 +167,7 @@ def _validate_common(metadata):
 
 
 def _validate_metadata(metadata):
-    _require(isinstance(metadata, dict) and set(metadata) == META_KEYS)
+    _require(isinstance(metadata, dict) and set(metadata) in (META_KEYS, META_KEYS | {"assessment"}))
     _validate_common(metadata)
     _require(metadata["status"] == "review_required" and metadata["canonical_usable"] is False
              and _sha(metadata["event_sha256"]) and metadata["event_sha256"] == digest(canonical(metadata["event"]))
@@ -180,23 +196,29 @@ def _read_run(store, row, scope, binding):
                  and data["schema"] == SCHEMA + "-capture")
         metadata, events = data["metadata"], data["events"]
         _require(isinstance(metadata, dict)
-                 and set(metadata) == ((META_KEYS - {"event", "event_sha256", "run_id"}) | {"event_count"}))
+                 and set(metadata) in (((META_KEYS - {"event", "event_sha256", "run_id"}) | {"event_count"}),
+                                      ((META_KEYS - {"event", "event_sha256", "run_id"}) | {"event_count", "assessment"})))
         _validate_common(metadata)
         _source_matches(metadata, scope, binding)
         _require(row.id == _run_ident(row.firm_id, row.matter_id, metadata) and row.revision == 1
                  and metadata["scope"] == "source_page_context" and metadata["canonical_usable"] is False
                  and metadata["immutable"] is True and isinstance(events, list)
                  and type(metadata["event_count"]) is int and 0 <= metadata["event_count"] == len(events) <= MAX_EVENTS
-                 and metadata["status"] == ("captured_review_observations" if events else "captured_no_alternatives"))
+                 and metadata["status"] == _run_status(events, metadata.get("assessment")))
+        if "assessment" in metadata:
+            _require(valid_assessment(metadata["assessment"], events))
         encoded = data["raster_base64"]
         _require(isinstance(encoded, str) and len(encoded) <= 4 * ((MAX_PNG_BYTES + 2) // 3))
         png = b64decode(encoded, validate=True)
         _require(digest(png) == metadata["raster_sha256"] and _png(png) == (metadata["width"], metadata["height"]))
         for event in events:
             validate_event(event, metadata["width"], metadata["height"])
-        actual_run = capture_run_sha256({"source_sha256": metadata["document_sha256"], "page": metadata["page"],
+        capture = {"source_sha256": metadata["document_sha256"], "page": metadata["page"],
                                         "page_count": metadata["page_count"], "png": png, "events": events,
-                                        "producer_sha256": metadata["producer_sha256"], "producer_recipe": metadata["producer_recipe"]})
+                                        "producer_sha256": metadata["producer_sha256"], "producer_recipe": metadata["producer_recipe"]}
+        if "assessment" in metadata:
+            capture["assessment"] = metadata["assessment"]
+        actual_run = capture_run_sha256(capture)
         _require(actual_run == metadata["run_sha256"])
         return {**metadata, "id": row.id, "created_at": row.created_at,
                 "receipt_sha256": _metadata_sha(metadata)}, png, events
@@ -218,6 +240,7 @@ def _read_record(store, session, row, scope, binding):
         receipt, png, events = _read_run(store, run, scope, binding)
         _require(metadata["event"] in events and all(metadata[key] == receipt[key]
                  for key in META_KEYS - {"event", "event_sha256", "run_id", "status"}))
+        _require(metadata.get("assessment") == receipt.get("assessment"))
         return {**metadata, "id": row.id, "created_at": row.created_at,
                 "observation_sha256": _metadata_sha(metadata)}, png
     except (InvalidToken, KeyError, TypeError, ValueError, UnicodeError, json.JSONDecodeError) as error:
@@ -264,7 +287,7 @@ def retain_capture(store, settings, user, *, matter_id, analysis_id, version_id,
     original = _original(store, settings, binding)
     user = _fresh_actor(user, actor_identity, reauthorize)
     _require(isinstance(capture, dict) and set(capture) == {
-        "source_sha256", "page", "page_count", "png", "producer_sha256", "producer_recipe", "run_sha256", "events",
+        "source_sha256", "page", "page_count", "png", "producer_sha256", "producer_recipe", "run_sha256", "events", "assessment",
     })
     _require(capture["producer_sha256"] == PRODUCER_SHA256 and capture["producer_recipe"] == PRODUCER_RECIPE
              and capture["source_sha256"] == binding.document_sha256 == digest(original)
@@ -272,6 +295,7 @@ def retain_capture(store, settings, user, *, matter_id, analysis_id, version_id,
              and type(capture["page_count"]) is int and capture["page_count"] == binding.page_count)
     width, height = _png(capture["png"])
     _require(isinstance(capture["events"], list) and len(capture["events"]) <= MAX_EVENTS)
+    _require(valid_assessment(capture["assessment"], capture["events"]))
     for event in capture["events"]:
         validate_event(event, width, height)
     _require(len({digest(canonical(event)) for event in capture["events"]}) == len(capture["events"]))
@@ -285,9 +309,9 @@ def retain_capture(store, settings, user, *, matter_id, analysis_id, version_id,
               "raster_sha256": raster_sha256, "width": width, "height": height,
               "producer_sha256": capture["producer_sha256"], "producer_recipe": capture["producer_recipe"],
               "run_sha256": capture["run_sha256"], "scope": "source_page_context", "canonical_usable": False,
-              "immutable": True}
+              "immutable": True, "assessment": json.loads(canonical(capture["assessment"]))}
     run_metadata = {**common, "event_count": len(events),
-                    "status": "captured_review_observations" if events else "captured_no_alternatives"}
+                    "status": _run_status(events, common["assessment"])}
     run_id = _run_ident(user.firm_id, matter_id, run_metadata)
     metadata = [{**common, "event": event, "event_sha256": digest(canonical(event)), "run_id": run_id,
                  "status": "review_required"} for event in events]

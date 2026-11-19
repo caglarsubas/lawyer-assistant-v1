@@ -2,9 +2,9 @@ import { createHash, webcrypto } from 'node:crypto';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { onUnauthorized, setCsrfToken } from '../../api';
-import { PunctuationReadings } from './PunctuationObservations';
+import { PunctuationReadings, PunctuationRunSummary, PunctuationRunWarning } from './PunctuationObservations';
 import { canonicalPunctuationJson, capturePunctuationPage, loadPunctuationPage, loadPunctuationRaster, verifyPunctuationObservation, verifyPunctuationRun } from './punctuationReview';
-import type { PunctuationCaptureRun, PunctuationEvent, PunctuationObservation, PunctuationSourcePins } from './punctuationTypes';
+import type { PunctuationAssessment, PunctuationCaptureRun, PunctuationEvent, PunctuationObservation, PunctuationSourcePins } from './punctuationTypes';
 
 const sha = (data: string | Uint8Array) => createHash('sha256').update(data).digest('hex');
 const quote = 'Saklanan alıntı değişmez.';
@@ -30,15 +30,22 @@ function fixture(overrides = {}): PunctuationObservation {
     content_sha256: pins.contentSha256, quote_sha256: pins.quoteSha256, document_id: pins.documentId,
     document_revision: pins.documentRevision, document_sha256: pins.documentSha256, page: pins.page, page_count: pins.pageCount,
     width: 200, height: 100, raster_sha256: 'd'.repeat(64), event: event(), event_sha256: '',
-    producer_recipe: 'local-punctuation-v1', producer_sha256: 'e'.repeat(64), run_sha256: 'f'.repeat(64), run_id: 'pcr-' + '1'.repeat(60),
+    producer_recipe: 'native-pdf-punctuation-v1', producer_sha256: 'e'.repeat(64), run_sha256: 'f'.repeat(64), run_id: 'pcr-' + '1'.repeat(60),
     scope: 'source_page_context', status: 'review_required', canonical_usable: false, immutable: true, observation_sha256: '', ...overrides });
+}
+function sealRun(value: PunctuationCaptureRun): PunctuationCaptureRun {
+  const { id: _id, created_at: _created, receipt_sha256: _receipt, ...body } = value;
+  return { ...value, receipt_sha256: sha(canonicalPunctuationJson(body)) };
+}
+function assessedFixture(assessment: PunctuationAssessment = { status: 'complete', reason: 'checked', stage: 'currency_fields' }) {
+  return fixture({ producer_recipe: 'native-pdf-punctuation-v2', assessment });
 }
 function run(observation = fixture(), count = 1): PunctuationCaptureRun {
   const { event: _event, event_sha256: _eventSha, run_id, observation_sha256: _sha, ...metadata } = observation;
   const value = { ...metadata, id: run_id, event_count: count,
-    status: count ? 'captured_review_observations' : 'captured_no_alternatives', receipt_sha256: '' } as PunctuationCaptureRun;
-  const { id: _id, created_at: _created, receipt_sha256: _receipt, ...body } = value;
-  return { ...value, receipt_sha256: sha(canonicalPunctuationJson(body)) };
+    status: observation.assessment?.status === 'incomplete' ? 'captured_incomplete'
+      : count ? 'captured_review_observations' : 'captured_no_alternatives', receipt_sha256: '' } as PunctuationCaptureRun;
+  return sealRun(value);
 }
 const png = new Uint8Array(Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==', 'base64'));
 function rasterFixture() {
@@ -110,6 +117,120 @@ describe('immutable source-page punctuation review', () => {
     expect(await verifyPunctuationRun(receipt, pins, signal())).toBe(receipt);
     await expect(verifyPunctuationRun(run(fixture(), 9), pins, signal())).rejects.toMatchObject({ status: 409 });
     await expect(verifyPunctuationRun(receipt, { ...pins, versionId: 'current' }, signal())).rejects.toMatchObject({ status: 409 });
+  });
+
+  it('keeps historical completion unknown without rewriting its metadata or readings', async () => {
+    const observation = fixture(); const before = canonicalPunctuationJson(observation);
+    const receipt = run(observation, 0);
+    await verifyPunctuationObservation(observation, pins, signal());
+    await verifyPunctuationRun(receipt, pins, signal());
+    const html = renderToStaticMarkup(<PunctuationRunSummary run={receipt} />);
+    expect(html).toContain('denetimin tamamlanma durumu bilinmiyor');
+    expect(html).not.toContain('tamamlandı'); expect(html).not.toContain('noktalama farkı kaydedilmedi');
+    expect(canonicalPunctuationJson(observation)).toBe(before);
+    expect(Object.hasOwn(observation, 'assessment')).toBe(false);
+  });
+
+  it('binds the complete v2 assessment into observation and run digests', async () => {
+    const observation = assessedFixture(); const receipt = run(observation);
+    expect(await verifyPunctuationObservation(observation, pins, signal())).toBe(observation);
+    expect(await verifyPunctuationRun(receipt, pins, signal())).toBe(receipt);
+    const changed = { status: 'incomplete', reason: 'page_budget', stage: 'currency_fields' } as const;
+    await expect(verifyPunctuationObservation({ ...observation, assessment: changed }, pins, signal())).rejects.toMatchObject({ status: 409 });
+    await expect(verifyPunctuationRun({ ...receipt, assessment: changed, status: 'captured_incomplete' }, pins, signal())).rejects.toMatchObject({ status: 409 });
+    expect(renderToStaticMarkup(<PunctuationRunSummary run={receipt} />)).toContain('Hedeflenen tutar denetimi tamamlandı.');
+  });
+
+  it('requires v2 assessment and forbids adding a completion verdict to legacy records', async () => {
+    for (const observation of [fixture({ producer_recipe: 'native-pdf-punctuation-v2' }),
+      fixture({ producer_recipe: 'unknown-v1' }), fixture({ assessment: assessedFixture().assessment })]) {
+      await expect(verifyPunctuationObservation(observation, pins, signal())).rejects.toMatchObject({ status: 409 });
+      await expect(verifyPunctuationRun(run(observation, 0), pins, signal())).rejects.toMatchObject({ status: 409 });
+    }
+  });
+
+  it.each([
+    ['extra assertion', { status: 'complete', reason: 'checked', stage: 'currency_fields', approved: true }],
+    ['missing stage', { status: 'complete', reason: 'checked' }],
+    ['unknown status', { status: 'accepted', reason: 'checked', stage: 'currency_fields' }],
+    ['unknown reason', { status: 'incomplete', reason: 'other', stage: 'currency_fields' }],
+    ['unknown stage', { status: 'incomplete', reason: 'page_budget', stage: 'other' }],
+    ['complete nomination', { status: 'complete', reason: 'checked', stage: 'nomination_raw' }],
+    ['complete error', { status: 'complete', reason: 'reader_error', stage: 'currency_fields' }],
+    ['incomplete checked', { status: 'incomplete', reason: 'checked', stage: 'currency_fields' }],
+    ['unverified nomination scope', { status: 'incomplete', reason: 'source_scope_unverified', stage: 'nomination_contrast' }],
+    ['null assessment', null],
+    ['array assessment', []],
+  ])('refuses re-hashed assessment with %s', async (_label, assessment) => {
+    const observation = fixture({ producer_recipe: 'native-pdf-punctuation-v2', assessment });
+    await expect(verifyPunctuationObservation(observation, pins, signal())).rejects.toMatchObject({ status: 409 });
+    await expect(verifyPunctuationRun(run(observation, 0), pins, signal())).rejects.toMatchObject({ status: 409 });
+  });
+
+  it('accepts no currency scope only for an empty completed run', async () => {
+    const observation = assessedFixture({ status: 'complete', reason: 'no_currency_scope', stage: 'currency_fields' });
+    const receipt = run(observation, 0);
+    await verifyPunctuationRun(receipt, pins, signal());
+    await expect(verifyPunctuationRun(run(observation, 1), pins, signal())).rejects.toMatchObject({ status: 409 });
+    await expect(verifyPunctuationObservation(observation, pins, signal())).rejects.toMatchObject({ status: 409 });
+    expect(renderToStaticMarkup(<PunctuationRunSummary run={receipt} />)).toContain('Sınırlı taramada desteklenen bir tutar alanı belirlenemedi.');
+  });
+
+  it.each(['page_budget', 'reader_error', 'reader_unavailable', 'source_scope_unverified'] as const)(
+    'shows zero-event %s as incomplete and rejects a successful status relabel', async reason => {
+      const receipt = run(assessedFixture({ status: 'incomplete', reason, stage: 'currency_fields' }), 0);
+      await verifyPunctuationRun(receipt, pins, signal());
+      const html = renderToStaticMarkup(<PunctuationRunSummary run={receipt} />);
+      expect(html).toContain('Denetim tamamlanmadı'); expect(html).toContain('İnceleme gözlemi saklanmadı.');
+      expect(html).not.toContain('noktalama farkı kaydedilmedi'); expect(html).not.toContain('denetimi tamamlandı');
+      await expect(verifyPunctuationRun(sealRun({ ...receipt, status: 'captured_no_alternatives' }), pins, signal())).rejects.toMatchObject({ status: 409 });
+    });
+
+  it.each(['nomination_raw', 'nomination_contrast', 'currency_fields'] as const)(
+    'accepts bounded interruption during %s without promoting the run', async stage => {
+      const receipt = run(assessedFixture({ status: 'incomplete', reason: 'page_budget', stage }), 0);
+      expect(await verifyPunctuationRun(receipt, pins, signal())).toBe(receipt);
+    });
+
+  it.each(['nomination_raw', 'nomination_contrast'] as const)(
+    'rejects re-hashed field observations attributed to unfinished %s', async stage => {
+      const observation = assessedFixture({ status: 'incomplete', reason: 'page_budget', stage });
+      await expect(verifyPunctuationObservation(observation, pins, signal())).rejects.toMatchObject({ status: 409 });
+      await expect(verifyPunctuationRun(run(observation), pins, signal())).rejects.toMatchObject({ status: 409 });
+    });
+
+  it('surfaces incomplete visible history above the accordion without claiming it is the latest run', () => {
+    const incomplete = run(assessedFixture({ status: 'incomplete', reason: 'page_budget', stage: 'nomination_raw' }), 0);
+    const html = renderToStaticMarkup(<PunctuationRunWarning runs={[incomplete, run(assessedFixture(), 0)]} />);
+    expect(html).toContain('role="status"');
+    expect(html).toContain('Gösterilen denetimler arasında tamamlanmayan kayıt var.');
+    expect(html).toContain('Gözlem kaydı bulunmaması, denetimin tamamlandığını göstermez');
+    expect(html).not.toContain('son denetim');
+    expect(renderToStaticMarkup(<PunctuationRunWarning runs={[run(fixture(), 0)]} />)).toBe('');
+    expect(renderToStaticMarkup(<PunctuationRunWarning runs={[run(assessedFixture(), 0)]} />)).toBe('');
+  });
+
+  it('retains a partial raw reading, labels it and rejects a complete diagnostic event', async () => {
+    const observation = assessedFixture({ status: 'incomplete', reason: 'reader_unavailable', stage: 'currency_fields' });
+    observation.event.status = 'contrast_unavailable'; observation.event.readings.pop();
+    observation.event.missing_readers = ['locally_leveled'];
+    const value = seal(observation); const before = canonicalPunctuationJson(value);
+    await verifyPunctuationObservation(value, pins, signal());
+    await verifyPunctuationRun(run(value), pins, signal());
+    const html = renderToStaticMarkup(<PunctuationReadings observation={value} />);
+    expect(html).toContain('Kısmi okuma.'); expect(html).toContain('Denetim tamamlanmadı');
+    expect(html).toContain('16500.'); expect(html).not.toContain('16,500');
+    expect(html.match(/<blockquote/g)).toHaveLength(1);
+    expect(canonicalPunctuationJson(value)).toBe(before);
+    await expect(verifyPunctuationObservation(seal({ ...value, assessment: {
+      status: 'complete', reason: 'checked', stage: 'currency_fields',
+    } }), pins, signal())).rejects.toMatchObject({ status: 409 });
+  });
+
+  it('rejects different re-hashed assessments on an observation and its returned run', async () => {
+    const item = assessedFixture(); const receipt = run(assessedFixture({ status: 'incomplete', reason: 'page_budget', stage: 'currency_fields' }));
+    fetchMock.mockResolvedValueOnce(Response.json({ items: [item], runs: [receipt], has_more: false, runs_has_more: false }));
+    await expect(loadPunctuationPage(pins, 0, 0, signal())).rejects.toMatchObject({ status: 409 });
   });
 
   it('lists historical records using bounded independent offsets and refuses duplicate record identities', async () => {

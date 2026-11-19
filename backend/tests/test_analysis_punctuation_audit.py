@@ -51,7 +51,8 @@ def synthetic_capture(original):
     }
     capture = {"source_sha256": digest(original), "page": 2, "page_count": 2,
                "png": output.getvalue(), "producer_sha256": PRODUCER_SHA256,
-               "producer_recipe": PRODUCER_RECIPE, "events": [event]}
+               "producer_recipe": PRODUCER_RECIPE, "events": [event],
+               "assessment": {"status": "complete", "reason": "checked", "stage": "currency_fields"}}
     capture["run_sha256"] = capture_run_sha256(capture)
     return capture
 
