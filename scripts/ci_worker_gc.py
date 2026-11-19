@@ -3,6 +3,8 @@
 import gc
 import os
 
+pytest_plugins = ("scripts.ci_case_diagnostics",)
+
 
 def pytest_sessionstart(session):
     if os.environ.get("GITHUB_ACTIONS") != "true" or not hasattr(session.config, "workerinput"):

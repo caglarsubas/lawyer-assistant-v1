@@ -93,5 +93,8 @@ and cleanup restores the original thresholds. Application and master-process
 settings remain unchanged. Passive CI case start/end records use hashed case
 identities and bounded repository-relative filenames, with a clock bound before
 test mocks. They expose no test parameters and do not supply a test verdict.
+They run through a separate CI plugin; retained fixture source pins and the
+shared test conftest remain byte-exact. A capacity-gate attempt that detected
+that frozen-source boundary also remains recorded without qualification credit.
 Fresh exact-head PR and independent main runs must still pass the original time
 caps, two-worker limit, complete coverage and reserve floors before publication.

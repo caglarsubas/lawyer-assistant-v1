@@ -12,7 +12,7 @@ import pytest
 
 @pytest.fixture
 def diagnostic(monkeypatch):
-    source = Path(__file__).with_name("conftest.py")
+    source = Path(__file__).resolve().parents[2] / "scripts" / "ci_case_diagnostics.py"
     spec = importlib.util.spec_from_file_location("disposable_ci_case_diagnostics", source)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -60,20 +60,18 @@ def test_case_start_end_hash_parameters_and_preserve_exact_case_identity(diagnos
     assert diagnostic._ci_active == {}
 
 
-def test_teardown_report_closes_the_case_without_changing_existing_timings(diagnostic, capsys):
+def test_teardown_report_closes_the_case_without_changing_the_test_verdict(diagnostic, capsys):
     nodeid = "tests/test_safe.py::test_case"
-    diagnostic._ci_completed = 99
+    report = SimpleNamespace(nodeid=nodeid, when="call", duration=0.25, outcome="passed", longrepr=None)
     diagnostic.pytest_runtest_logstart(nodeid, None)
-    diagnostic.pytest_runtest_logreport(SimpleNamespace(nodeid=nodeid, when="teardown", duration=0.25))
-    output = capsys.readouterr()
-    assert not output.err
-    lines = [line for line in output.out.splitlines() if line]
-    cases = [json.loads(line.removeprefix("CI_CASE ")) for line in lines if line.startswith("CI_CASE ")]
-    timings = [json.loads(line.removeprefix("CI_TIMINGS ")) for line in lines if line.startswith("CI_TIMINGS ")]
-    assert len(lines) == 3 and [row["event"] for row in cases] == ["start", "end"]
-    assert timings[0]["completed"] == 100
-    assert diagnostic._ci_active == {} and diagnostic._ci_completed == 100
-    assert diagnostic._ci_times["tests/test_safe.py"]["teardown"] == 0.25
+    before = vars(report).copy()
+    diagnostic.pytest_runtest_logreport(report)
+    assert vars(report) == before and len(diagnostic._ci_active) == 1
+    report.when = "teardown"
+    before = vars(report).copy()
+    diagnostic.pytest_runtest_logreport(report)
+    assert vars(report) == before and diagnostic._ci_active == {}
+    assert [row["event"] for row in messages(capsys)] == ["start", "end"]
 
 
 @pytest.mark.parametrize("nodeid", [
