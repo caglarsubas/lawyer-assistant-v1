@@ -151,3 +151,5 @@ export interface RevisionComparison {
   dimensions: Record<SemanticDimension, string>; freshness: { status: 'current' | 'stale'; reasons: string[] };
   public_adverse_authority_qualified: false; benefit_established: false;
 }
+
+export type ComparisonSourceOpener = (comparison: RevisionComparison, source: RevisionComparison["sources"][number]) => void;

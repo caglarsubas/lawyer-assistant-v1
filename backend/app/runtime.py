@@ -10,6 +10,9 @@ from fastapi.responses import JSONResponse
 from fastapi.routing import APIRoute
 
 from .admin_revision_guard import install_admin_revision_guard
+from .analysis_original_source import router as analysis_original_router
+from .analysis_punctuation import router as analysis_punctuation_router
+from .analysis_punctuation_capture import router as analysis_punctuation_capture_router
 from .config import Settings
 from .curator_review_guard import install_curator_review_source_guard
 from .main import create_app as create_baseline_app
@@ -44,6 +47,9 @@ def create_app(settings: Settings | None = None):
 
     app.add_exception_handler(InvalidToken, original_unavailable)
     app.add_exception_handler(OSError, original_unavailable)
+    app.include_router(analysis_original_router)
+    app.include_router(analysis_punctuation_router)
+    app.include_router(analysis_punctuation_capture_router)
     install_admin_revision_guard(app)
     install_curator_review_source_guard(app)
     return app

@@ -21,7 +21,7 @@ export function AnalysisCheckPanel({ checks, freshness, review }: { checks: Anal
   </div>;
 }
 
-export function AnalysisContentView({ content, freshness, review, onSource, proposed = false, includeEvidence = true }: { content: AnalysisContent; freshness?: AnalysisFreshness; review?: AnalysisReviewProjection; onSource: (id: string) => void; proposed?: boolean; includeEvidence?: boolean }) {
+export function AnalysisContentView({ content, freshness, review, onSource, onFeedbackSource = onSource, proposed = false, includeEvidence = true }: { content: AnalysisContent; freshness?: AnalysisFreshness; review?: AnalysisReviewProjection; onSource: (id: string) => void; onFeedbackSource?: (id: string) => void; proposed?: boolean; includeEvidence?: boolean }) {
   return <div className="analysis-content">
     <p className="authored-text"><strong>Mesele:</strong> {content.issue}</p>
     {content.focus_lineage && <Detail title="Odak kapsamı, dışarıda kalanlar ve ana sürüm bağı">
@@ -34,7 +34,7 @@ export function AnalysisContentView({ content, freshness, review, onSource, prop
     </Detail>}
     {content.ai_assistance && <Detail title="Model katkısı ve kayıt sınırları"><p>Model: {content.ai_assistance.provider.model} · {content.ai_assistance.passes} geçiş · Hukuki inceleme değildir.</p><p className="reference-id">Öneri: {content.ai_assistance.job_id} · Kaynak sürüm: {content.ai_assistance.source_version_id}</p><p className="small muted">Alınan önerinin doğrulanmamış notları; sonraki avukat değişikliklerini ayrıca inceleyin.</p><ul>{content.ai_assistance.review_notes?.map((note, index) => <li key={index}>{note.target_id} · Geçiş {note.pass}: {note.text}</li>)}</ul></Detail>}
     {content.authority_contributions?.map((item, index) => <Detail key={item.job_id} title={`Saklanan kamu katkısı ${index + 1}`}><p className="small">Model: {item.provider_pin.model} · Önceki katkı, güncel model yanıtı değildir.</p><p className="reference-id">Öneri: {item.job_id} · Kaynak sürüm: {item.source_version_id}</p><AuthorityProposalSummary feedback={item.feedback} responses={item.responses} pass={item.response_pass} /></Detail>)}
-    {content.ai_assistance?.review_feedback && <FeedbackSummary feedback={content.ai_assistance.review_feedback} responses={content.ai_assistance.feedback_responses} pass={content.ai_assistance.feedback_response_pass} onSource={onSource} />}
+    {content.ai_assistance?.review_feedback && <FeedbackSummary feedback={content.ai_assistance.review_feedback} responses={content.ai_assistance.feedback_responses} pass={content.ai_assistance.feedback_response_pass} onSource={onFeedbackSource} />}
     {!!content.authority_revalidations?.length && <Detail title={`Saklanan kaynak bağı yenilemeleri (${content.authority_revalidations.length})`}><p className="small muted">Bu kayıtlar özgün katkıların yerine geçmez. Güncel gözlemleri yeniden inceleme araçlarından açın; hukuki onay verilmez.</p>{content.authority_revalidations.map(item => <p key={item.id} className="reference-id">{item.id} · SHA-256: {item.sha256}</p>)}</Detail>}
     <AnalysisCheckPanel checks={content.checks} freshness={freshness} review={review} />
     <Detail title="Öncül → kural → uygulama → alternatif → geçici sonuç" open={includeEvidence ? undefined : true}>
@@ -47,7 +47,7 @@ export function AnalysisContentView({ content, freshness, review, onSource, prop
 
 export function AnalysisEvidence({ content, onSource }: { content: AnalysisContent; onSource: (id: string) => void }) {
   return <div className="analysis-evidence">
-    <p className="small muted">Alıntılar analiz kaydedilirken seçilen belge sürümüne aittir. Özgün pasajı açtığınızda belgenin güncel görünümüyle karşılaştırabilirsiniz.</p>
+    <p className="small muted">Alıntılar analiz kaydedilirken seçilen belge sürümüne aittir.</p>
     {!content.evidence.length && <p className="practice-empty">Bu analize henüz belge alıntısı bağlanmamış.</p>}
     {content.evidence.map((item) => <SourceExcerpt key={item.evidence_id} name={item.name} location={`${locatorText(item.locator)} · Belge sürümü ${item.document_revision}`} text={item.text} onOpen={() => onSource(item.evidence_id)} metadata={<>
       <p className="small muted">Unicode aralığı [{item.start}, {item.end}) / {item.full_passage_length}. Son konum dahil değildir.</p>
@@ -56,7 +56,7 @@ export function AnalysisEvidence({ content, onSource }: { content: AnalysisConte
   </div>;
 }
 
-export function AnalysisOverview({ record, onSource, onReview }: { record: AnalysisRecord; onSource: (id: string) => void; onReview: () => void }) {
+export function AnalysisOverview({ record, onSource, onFeedbackSource, onReview }: { record: AnalysisRecord; onSource: (id: string) => void; onFeedbackSource?: (id: string) => void; onReview: () => void }) {
   return <div className="analysis-overview">
     <section className="analysis-conclusion" aria-label="Taslağın özeti">
       <h4>Geçici değerlendirme</h4>
@@ -66,6 +66,6 @@ export function AnalysisOverview({ record, onSource, onReview }: { record: Analy
     {!!record.conclusion.uncertainty.length && <section className="analysis-questions"><h4>Netleştirilmesi gerekenler</h4><ul>{record.conclusion.uncertainty.map((item, index) => <li key={index}>{item}</li>)}</ul></section>}
     {record.conclusion.next_step && <section className="analysis-next"><h4>Taslaktaki sonraki adım</h4><p className="authored-text">{record.conclusion.next_step}</p></section>}
     <div className="analysis-review-action"><p>Değerlendirmenizi bu sürüme kaydedin. Düzeltme istediğiniz noktaları ayrıca belirtebilirsiniz.</p><button type="button" className="button primary" onClick={onReview}>İncelemeye geç <Icon name="arrow" size={16} /></button></div>
-    <Detail title="Analizin tamamını oku"><AnalysisContentView content={record} freshness={record.freshness} review={record.review} onSource={onSource} includeEvidence={false} /></Detail>
+    <Detail title="Analizin tamamını oku"><AnalysisContentView content={record} freshness={record.freshness} review={record.review} onSource={onSource} onFeedbackSource={onFeedbackSource} includeEvidence={false} /></Detail>
   </div>;
 }

@@ -41,7 +41,11 @@ export default function OriginalPreview({ matterId, document, initialPage = 1 }:
   </div>;
 }
 
-function PdfPreview({ blob, name, initialPage }: { blob: Blob; name: string; initialPage: number }) {
+export function PdfPreview({ blob, name, initialPage, exactPageCount }: {
+  blob: Blob; name: string; initialPage: number; exactPageCount?: number;
+}) {
+  const exact = exactPageCount !== undefined;
+  const exactError = 'Kaydedilen PDF sayfası ve sayfa düzeni doğrulanamadı.';
   const [pdf, setPdf] = useState<PDFDocumentProxy | null>(null);
   const [page, setPage] = useState(initialPage);
   const [zoom, setZoom] = useState(1);
@@ -59,19 +63,31 @@ function PdfPreview({ blob, name, initialPage }: { blob: Blob; name: string; ini
         if (disposed) return;
         // A versioned URL also avoids cached octet-stream headers from older nginx builds.
         library.GlobalWorkerOptions.workerSrc = `${pdfWorker}?module=1`;
-        task = library.getDocument({ data: new Uint8Array(data),
+        task = library.getDocument({ data: new Uint8Array(data), ...(exact ? { isEvalSupported: false } : {}),
           cMapUrl: '/pdfjs-assets/cmaps/', cMapPacked: true,
           standardFontDataUrl: '/pdfjs-assets/standard_fonts/', wasmUrl: '/pdfjs-assets/wasm/',
           iccUrl: '/pdfjs-assets/iccs/' });
         const loaded = await task.promise;
         if (disposed) return;
-        setPage(Math.min(Math.max(1, initialPage), loaded.numPages));
+        if (exact) {
+          if (loaded.numPages !== exactPageCount || !Number.isInteger(initialPage)
+              || initialPage < 1 || initialPage > loaded.numPages) {
+            setError(exactError); setRendering(false);
+            const rejected = task;
+            task = undefined;
+            void rejected.destroy().catch(() => {});
+            return;
+          }
+          setPage(initialPage);
+        } else {
+          setPage(Math.min(Math.max(1, initialPage), loaded.numPages));
+        }
         setPdf(loaded);
-      } catch { if (!disposed) { setError('PDF önizlemesi açılamadı. Özgün dosyayı indirerek inceleyebilirsiniz.'); setRendering(false); } }
+      } catch { if (!disposed) { setError(exact ? exactError : 'PDF önizlemesi açılamadı. Özgün dosyayı indirerek inceleyebilirsiniz.'); setRendering(false); } }
     }
     void open();
-    return () => { disposed = true; void task?.destroy(); };
-  }, [blob, initialPage]);
+    return () => { disposed = true; void task?.destroy().catch(() => {}); };
+  }, [blob, initialPage, exact, exactPageCount]);
   useEffect(() => {
     if (!stage.current) return;
     const observer = new ResizeObserver(([entry]) => setWidth(Math.max(1, entry.contentRect.width - 32)));
@@ -88,6 +104,16 @@ function PdfPreview({ blob, name, initialPage }: { blob: Blob; name: string; ini
         const source = await pdf!.getPage(page);
         if (disposed || !canvas.current) return;
         const natural = source.getViewport({ scale: 1 });
+        if (exact) {
+          const [left, bottom, right, top] = source.view;
+          // The PDF viewport establishes page geometry. Extracted quote offsets provide no coordinates in that viewport.
+          if (source.pageNumber !== initialPage || ![0, 90, 180, 270].includes(source.rotate)
+              || ![left, bottom, right, top, natural.width, natural.height].every(Number.isFinite)
+              || right <= left || top <= bottom || natural.width <= 0 || natural.height <= 0) {
+            setError(exactError);
+            return;
+          }
+        }
         // Bound oversized page dimensions and HiDPI canvas allocation.
         const outputScale = Math.min(window.devicePixelRatio || 1, 2);
         const scale = Math.min(width / natural.width * zoom, 4096 / (Math.max(natural.width, natural.height) * outputScale));
@@ -98,23 +124,23 @@ function PdfPreview({ blob, name, initialPage }: { blob: Blob; name: string; ini
         target.style.width = `${viewport.width}px`; target.style.height = `${viewport.height}px`;
         task = source.render({ canvas: target, viewport, transform: [outputScale, 0, 0, outputScale, 0, 0] });
         await task.promise;
-      } catch { if (!disposed) setError('Bu PDF sayfası görüntülenemedi. Özgün dosyayı indirerek inceleyebilirsiniz.'); }
+      } catch { if (!disposed) setError(exact ? exactError : 'Bu PDF sayfası görüntülenemedi. Özgün dosyayı indirerek inceleyebilirsiniz.'); }
       finally { if (!disposed) setRendering(false); }
     }
     void render();
     return () => { disposed = true; task?.cancel(); };
-  }, [pdf, page, zoom, width]);
+  }, [pdf, page, zoom, width, exact, initialPage]);
   return <>
     <div className="preview-toolbar" aria-label="PDF sayfa kontrolleri">
-      <div className="preview-pages"><button className="button secondary" disabled={!pdf || page <= 1} onClick={() => setPage(page - 1)} aria-label="Önceki sayfa">‹</button>
+      {exact ? <span className="preview-pages">Sayfa {page} / {pdf?.numPages || '…'}</span> : <div className="preview-pages"><button className="button secondary" disabled={!pdf || page <= 1} onClick={() => setPage(page - 1)} aria-label="Önceki sayfa">‹</button>
         <label>Sayfa <input aria-label="PDF sayfası" type="number" min={1} max={pdf?.numPages || 1} value={page} disabled={!pdf} onChange={(event) => { const value = Number(event.target.value); if (pdf && Number.isInteger(value) && value >= 1 && value <= pdf.numPages) setPage(value); }} /> / {pdf?.numPages || '…'}</label>
-        <button className="button secondary" disabled={!pdf || page >= pdf.numPages} onClick={() => setPage(page + 1)} aria-label="Sonraki sayfa">›</button></div>
-      <label className="preview-zoom">Görünüm <select aria-label="PDF yakınlaştırma" value={zoom} onChange={(event) => setZoom(Number(event.target.value))}><option value={1}>Genişliğe sığdır</option><option value={1.25}>%125</option><option value={1.5}>%150</option><option value={2}>%200</option></select></label>
+        <button className="button secondary" disabled={!pdf || page >= pdf.numPages} onClick={() => setPage(page + 1)} aria-label="Sonraki sayfa">›</button></div>}
+      <label className="preview-zoom">Görünüm <select aria-label="PDF yakınlaştırma" disabled={exact && !pdf} value={zoom} onChange={(event) => setZoom(Number(event.target.value))}><option value={1}>Genişliğe sığdır</option><option value={1.25}>%125</option><option value={1.5}>%150</option><option value={2}>%200</option></select></label>
     </div>
     {error && <Notice error>{error}</Notice>}
     <div className="pdf-stage" ref={stage} aria-busy={rendering}>
       {rendering && <Loading label="Özgün sayfa görüntüleniyor…" />}
-      <canvas ref={canvas} style={{ visibility: rendering || error ? 'hidden' : 'visible' }} role="img" aria-label={`${name} · Sayfa ${page}${pdf ? ` / ${pdf.numPages}` : ''}`} />
+      <canvas ref={canvas} style={{ visibility: rendering || error ? 'hidden' : 'visible' }} aria-hidden={rendering || !!error} role="img" aria-label={`${name} · Sayfa ${page}${pdf ? ` / ${pdf.numPages}` : ''}`} />
     </div>
   </>;
 }

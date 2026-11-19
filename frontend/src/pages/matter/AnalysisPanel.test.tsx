@@ -94,7 +94,7 @@ describe('lawyer analysis workspace', () => {
     expect(JSON.stringify(data)).toBe(before);
   });
   it('keeps five keyboard-addressable sections and defers review context and model tools until opened', () => {
-    const html = renderToStaticMarkup(<AnalysisWorkspace matter={matter} record={record()} onSource={() => {}} onEdit={() => {}} onRefresh={async () => {}} onFailure={() => {}} />);
+    const html = renderToStaticMarkup(<AnalysisWorkspace matter={matter} record={record()} onSource={() => {}} onSavedSource={() => {}} onEdit={() => {}} onRefresh={async () => {}} onFailure={() => {}} />);
     expect(html.match(/role="tab"/g)).toHaveLength(5);
     expect(html.match(/role="tabpanel"/g)).toHaveLength(5);
     expect(html).toContain('aria-selected="true"');
@@ -107,7 +107,7 @@ describe('lawyer analysis workspace', () => {
   it('keeps stale and change-requested drafts withheld even if a prior structural result was conditional', () => {
     const data = record(); data.checks.effective_disposition = 'conditional';
     data.freshness.status = 'stale';
-    const html = renderToStaticMarkup(<AnalysisWorkspace matter={matter} record={data} onSource={() => {}} onEdit={() => {}} onRefresh={async () => {}} onFailure={() => {}} />);
+    const html = renderToStaticMarkup(<AnalysisWorkspace matter={matter} record={data} onSource={() => {}} onSavedSource={() => {}} onEdit={() => {}} onRefresh={async () => {}} onFailure={() => {}} />);
     expect(html).toContain('Yeniden inceleme gerekli');
     expect(html).toContain('Sonuç bekletiliyor');
     expect(html).not.toContain('Koşullu olarak incelendi');

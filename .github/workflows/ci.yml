@@ -431,7 +431,7 @@ jobs:
           read -r -a metadata_capacity_tests <<< "$CI_METADATA_CAPACITY_TESTS"
           read -r -a frontend_review_tests <<< "$CI_FRONTEND_REVIEW_TESTS"
           export PYTHONPATH="$GITHUB_WORKSPACE"
-          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_research_review_revisions_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py "${frontend_review_tests[@]}" "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=database "${metadata_capacity_tests[@]}"
+          bash scripts/run_ci_tests.sh backend/.venv/bin/pytest "${runtime_tests[@]}" backend/tests/test_set_authorization_postgres.py backend/tests/test_declared_assembly_postgres.py backend/tests/test_snapshot_set_postgres.py backend/tests/test_mixed_graph_snapshot_postgres.py backend/tests/test_research_jobs_postgres.py backend/tests/test_research_review_revisions_postgres.py backend/tests/test_content_scope_postgres.py backend/tests/test_human_workflow_postgres.py backend/tests/test_analysis_punctuation_postgres.py "${frontend_review_tests[@]}" "${postgres_source_tests[@]}" -n 2 --dist load --maxschedchunk=1 --max-worker-restart=0 --maxfail=1 --durations=20 -rA -p scripts.ci_metadata_capacity --metadata-capacity-lane=database "${metadata_capacity_tests[@]}"
 
 
 
