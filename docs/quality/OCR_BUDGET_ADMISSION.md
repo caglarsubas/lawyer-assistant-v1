@@ -68,3 +68,30 @@ coverage, existing job caps and the 30-second reserve floor. Exact-head PR CI,
 merge, independent main CI and local deployment remain separate evidence states.
 The live roadmap advances only after the new main commit is independently
 qualified. F00-04 readiness and the pending owner review remain unchanged.
+
+### CI overhead qualification
+
+The first hosted PR attempt reached its existing backend job cap and receives no
+qualification credit. Collection grew by 83 cases, while the 82 new OCR cases
+completed early. Comparison did not substantiate a collection or initial worker
+split problem. The precise hosted slowdown remains unidentified.
+
+A complete local comparison retained the same 4,032 case IDs and identical
+3,925 passed / 107 skipped outcomes. The expected opt-in and local platform skips
+do not replace dedicated PostgreSQL or hosted Linux qualification. Increasing
+only CI workers' generation-zero GC threshold from 7,000 to 14,000 reduced
+measured worker wall time from 327.00 to 299.49 seconds and GC time from 115.96 to
+80.61 seconds. Maximum worker memory increased from 1,003 to 1,346 MiB, below the
+prospective 2 GiB guard. A 28,000 candidate exceeded that guard and was rejected.
+This single sequential pair, with random hash seeds and a different local Python
+patch release, establishes an observed optimization rather than the cause of the
+hosted cancellation or a guaranteed hosted runtime.
+
+The adjustment applies only to disposable CI workers with the standard original
+thresholds. Every generation remains automatic, explicit collection still works,
+and cleanup restores the original thresholds. Application and master-process
+settings remain unchanged. Passive CI case start/end records use hashed case
+identities and bounded repository-relative filenames, with a clock bound before
+test mocks. They expose no test parameters and do not supply a test verdict.
+Fresh exact-head PR and independent main runs must still pass the original time
+caps, two-worker limit, complete coverage and reserve floors before publication.

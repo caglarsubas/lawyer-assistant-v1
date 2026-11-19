@@ -10,7 +10,9 @@ def pytest_sessionstart(session):
     original = gc.get_threshold()
     if original == (700, 10, 10):
         # Retain automatic collection in every generation. RDF validation
-        # produces many short-lived objects, so scan less often within this
-        # disposable worker. Explicit gc.collect() retains its normal behavior.
-        gc.set_threshold(7_000, *original[1:])
+        # produces many short-lived objects. The complete paired suite
+        # qualified this bounded CI-only increase with automatic collection
+        # active in every generation; scan less often in this disposable worker.
+        # Explicit gc.collect() retains its normal behavior.
+        gc.set_threshold(14_000, *original[1:])
         session.config.add_cleanup(lambda: gc.set_threshold(*original))
