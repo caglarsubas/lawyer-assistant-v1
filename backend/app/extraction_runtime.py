@@ -7,6 +7,8 @@ from types import FunctionType, SimpleNamespace
 import uvicorn
 
 from . import extraction_worker
+from .punctuation_service import install_capture_route
+from .runtime_secrets import secret_from_environment
 
 _PARSERS = {".pdf": "app.pdf_severe_extract", ".docx": "app.docx_extract"}
 
@@ -29,11 +31,14 @@ def _bind(function, **dependencies):
 
 
 def create_app(token=None):
+    token = secret_from_environment("LA_EXTRACTION_TOKEN") if token is None else token
     launcher = SimpleNamespace(Popen=_start_parser, DEVNULL=subprocess.DEVNULL,
                                TimeoutExpired=subprocess.TimeoutExpired)
     parse = _bind(extraction_worker.parse_document, subprocess=launcher)
     factory = _bind(extraction_worker.create_app, parse_document=parse)
-    return factory(token)
+    app = factory(token)
+    install_capture_route(app, token)
+    return app
 
 
 if __name__ == "__main__":

@@ -10,7 +10,8 @@ import { AnalysisSuggestions } from './AnalysisSuggestions';
 import { AnalysisFocus } from './AnalysisFocus';
 import { AnalysisComparisons } from './AnalysisComparisons';
 import { AnalysisReviews, ReviewHistory, ReviewSummary } from './AnalysisReviews';
-import type { AnalysisRecord, AnalysisVersion } from './analysisTypes';
+import type { SavedAnalysisSourceSelection } from './SavedAnalysisSource';
+import type { AnalysisContent, AnalysisRecord, AnalysisVersion, ComparisonSourceOpener } from './analysisTypes';
 
 const AuthorityModelTrials = lazy(() => import('./AuthorityModelTrials'));
 function ModelTrialPanel({ matterId, record }: { matterId: string; record: AnalysisRecord }) {
@@ -43,21 +44,38 @@ function AnalysisDownloads({ matterId, recordId, versionId, onFailure }: { matte
   return <><button className="text-button" disabled={busy} onClick={() => void download('docx')}>DOCX</button><button className="text-button" disabled={busy} onClick={() => void download('pdf')}>PDF</button>{error && <Notice error>{error}</Notice>}</>;
 }
 
-function AnalysisHistory({ matter, record, onSource, onFailure }: { matter: Matter; record: AnalysisRecord; onSource: (id: string) => void; onFailure?: () => void }) {
+const SavedAnalysisSource = lazy(() => import('./SavedAnalysisSource'));
+type OpenVersionSource = (versionId: string, version: number, content: AnalysisContent, evidenceId: string) => void;
+
+function AnalysisHistory({ matter, record, onVersionSource, onComparisonSource, onFeedbackSource, onFailure }: { matter: Matter; record: AnalysisRecord; onVersionSource: OpenVersionSource; onComparisonSource: ComparisonSourceOpener; onFeedbackSource: (id: string) => void; onFailure?: () => void }) {
   const [history, setHistory] = useState<AnalysisVersion[]>([]); const [more, setMore] = useState(true); const [busy, setBusy] = useState(false); const [error, setError] = useState('');
   async function load() { setBusy(true); setError(''); try { const page = await request<AnalysisVersion[]>(`/matters/${encodeURIComponent(matter.id)}/analyses/${encodeURIComponent(record.id)}/versions?limit=20&offset=${history.length}`); setHistory((old) => [...old, ...page]); setMore(page.length === 20); } catch (cause) { setHistory([]); setError(messageOf(cause)); onFailure?.(); } finally { setBusy(false); } }
   return <Detail title="Değiştirilemez sürüm geçmişi">
-    {history.map((version) => <Detail key={version.id} title={`Sürüm ${version.version} · ${formatDate(version.created_at, true)}`}><p><strong>Değişiklik gerekçesi:</strong> {version.change_note || 'İlk kayıt'}</p><ReviewSummary review={version.review} onSource={onSource} /><AnalysisContentView content={version.content} freshness={version.freshness} review={version.review} onSource={onSource} /><AnalysisDownloads matterId={matter.id} recordId={record.id} versionId={version.id} onFailure={onFailure} /><ReviewHistory matterId={matter.id} analysisId={record.id} versionId={version.id} onSource={onSource} /></Detail>)}
+    {history.map((version) => {
+      const onSource = (evidenceId: string) => onVersionSource(version.id, version.version, version.content, evidenceId);
+      return <Detail key={version.id} title={`Sürüm ${version.version} · ${formatDate(version.created_at, true)}`}>
+        <p><strong>Değişiklik gerekçesi:</strong> {version.change_note || 'İlk kayıt'}</p>
+        <ReviewSummary review={version.review} onSource={onSource} onComparisonSource={onComparisonSource} />
+        <AnalysisContentView content={version.content} freshness={version.freshness} review={version.review} onSource={onSource} onFeedbackSource={onFeedbackSource} />
+        <AnalysisDownloads matterId={matter.id} recordId={record.id} versionId={version.id} onFailure={onFailure} />
+        <ReviewHistory matterId={matter.id} analysisId={record.id} versionId={version.id} onSource={onSource} onComparisonSource={onComparisonSource} />
+      </Detail>;
+    })}
     {more && <button className="text-button" disabled={busy} onClick={() => void load()}>{busy ? 'Yükleniyor…' : history.length ? 'Önceki sürümleri getir' : 'Sürümleri getir'}</button>}{error && <Notice error>{error}</Notice>}
   </Detail>;
 }
 
+type OpenedSource = { matterId: string; analysisId: string; opening: number } & (
+  { kind: 'current'; evidenceId: string } | { kind: 'saved'; selection: SavedAnalysisSourceSelection }
+);
+
 export default function AnalysisPanel({ matter, onChange }: { matter: Matter; onChange: () => Promise<void> }) {
-  const [records, setRecords] = useState<AnalysisRecord[]>([]); const [editor, setEditor] = useState<AnalysisRecord | 'new' | null>(null); const [source, setSource] = useState<string | null>(null);
+  const [records, setRecords] = useState<AnalysisRecord[]>([]); const [editor, setEditor] = useState<AnalysisRecord | 'new' | null>(null); const [source, setSource] = useState<OpenedSource | null>(null);
   const [busy, setBusy] = useState(true); const [more, setMore] = useState(false); const [error, setError] = useState(''); const [notice, setNotice] = useState('');
   const [freshnessRead, setFreshnessRead] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const generation = useRef(0);
+  const sourceOpening = useRef(0);
   const base = `/matters/${encodeURIComponent(matter.id)}/analyses`;
   const load = useCallback(async (signal?: AbortSignal) => { const turn = ++generation.current; setBusy(true); setError(''); try { const page = await request<AnalysisRecord[]>(`${base}?limit=20`, { signal }); if (generation.current === turn) { setRecords(page); setMore(page.length === 20); setFreshnessRead((value) => value + 1); } } catch (cause) { if (generation.current === turn && !signal?.aborted) { setError(messageOf(cause)); setRecords([]); setEditor(null); } } finally { if (generation.current === turn) setBusy(false); } }, [base]);
   useEffect(() => { const controller = new AbortController(); void load(controller.signal); return () => { generation.current++; controller.abort(); }; }, [load, matter.facts]);
@@ -69,15 +87,23 @@ export default function AnalysisPanel({ matter, onChange }: { matter: Matter; on
       <div><h2>Analizler</h2><p className="small muted">Taslağı okuyun, dayanaklarını açın ve değerlendirmenizi kaydedin.</p></div>
       <div className="button-group"><button className="text-button" disabled={busy} onClick={() => void refresh()}>Yenile</button><button className="button secondary" onClick={() => { setEditor('new'); setNotice(''); }}><Icon name="plus" size={16} />Yeni analiz</button></div>
     </div>
-    {!!records.length && <Field label={`Kayıtlı analizler · ${records.length}${more ? '+' : ''}`} className="analysis-picker">{(id) => <select id={id} value={selected?.id || ''} onChange={(event) => setSelectedId(event.target.value)}>{records.map((record) => <option key={record.id} value={record.id}>{record.title} · Sürüm {record.version}</option>)}</select>}</Field>}
+    {!!records.length && <Field label={`Kayıtlı analizler · ${records.length}${more ? '+' : ''}`} className="analysis-picker">{(id) => <select id={id} value={selected?.id || ''} onChange={(event) => { setSelectedId(event.target.value); setSource(null); }}>{records.map((record) => <option key={record.id} value={record.id}>{record.title} · Sürüm {record.version}</option>)}</select>}</Field>}
     {notice && <Notice>{notice}</Notice>}{error && <Notice error>{error}</Notice>}
     {editor && <AnalysisEditor key={editor === 'new' ? 'new' : editor.latest_version_id} matter={matter} record={editor === 'new' ? undefined : editor} onCancel={() => setEditor(null)} onSave={async () => { setEditor(null); setNotice('Analiz sürümü saklandı. Önceki içerik korunur; hukuki onay verilmez.'); await load(); await onChange(); }} />}
     {!records.length && !editor && !busy && <p className="practice-empty">Henüz analiz taslağı yok.</p>}{busy && !records.length && <Loading label="Analiz taslakları açılıyor…" />}
     {records.map((record) => <div key={`${record.latest_version_id}:${freshnessRead}`} hidden={record.id !== selected?.id}>
-      <AnalysisWorkspace matter={matter} record={record} onSource={setSource} onEdit={() => setEditor(record)} onRefresh={refresh} onFailure={() => void load()} />
+      <AnalysisWorkspace matter={matter} record={record}
+        onSource={(evidenceId) => setSource({ kind: 'current', matterId: matter.id, analysisId: record.id, opening: ++sourceOpening.current, evidenceId })}
+        onSavedSource={(selection) => setSource({ kind: 'saved', matterId: matter.id, analysisId: record.id, opening: ++sourceOpening.current, selection })}
+        onEdit={() => setEditor(record)} onRefresh={refresh} onFailure={() => void load()} />
     </div>)}
     {more && <button className="button secondary" disabled={busy} onClick={() => void nextPage()}>Daha fazla analiz getir</button>}
-    {source && <EvidenceViewer key={source} matter={matter} evidenceId={source} onClose={() => setSource(null)} />}
+    {source && source.matterId === matter.id && source.analysisId === selected?.id && (source.kind === 'saved' ?
+      <Suspense fallback={<Loading label="Kaydedilen özgün dayanak açılıyor…" />}>
+        <SavedAnalysisSource key={source.opening}
+          matterId={matter.id} selection={source.selection} onClose={() => setSource(null)} />
+      </Suspense> :
+      <EvidenceViewer key={source.evidenceId} matter={matter} evidenceId={source.evidenceId} onClose={() => setSource(null)} />)}
   </section>;
 }
 
@@ -90,8 +116,9 @@ const ANALYSIS_SECTIONS = [
 ] as const;
 type AnalysisSection = typeof ANALYSIS_SECTIONS[number]['id'];
 
-export function AnalysisWorkspace({ matter, record, onSource, onEdit, onRefresh, onFailure }: {
+export function AnalysisWorkspace({ matter, record, onSource, onSavedSource, onEdit, onRefresh, onFailure }: {
   matter: Matter; record: AnalysisRecord; onSource: (id: string) => void;
+  onSavedSource: (selection: SavedAnalysisSourceSelection) => void;
   onEdit: () => void; onRefresh: () => Promise<void>; onFailure: () => void;
 }) {
   const id = useId();
@@ -104,6 +131,28 @@ export function AnalysisWorkspace({ matter, record, onSource, onEdit, onRefresh,
     if (next === 'review') setReviewOpened(true);
     if (next === 'tools') setToolsOpened(true);
   }
+  const openVersionSource: OpenVersionSource = (versionId, version, content, evidenceId) => {
+    const evidence = content.evidence.find((item) => item.evidence_id === evidenceId);
+    if (evidence?.name.toLowerCase().endsWith('.pdf')) {
+      onSavedSource({ analysisId: record.id, versionId, version, evidence });
+    } else {
+      onSource(evidenceId);
+    }
+  };
+  const openComparisonSource: ComparisonSourceOpener = (comparison, evidence) => {
+    if (!evidence.name.toLowerCase().endsWith('.pdf')) {
+      onSource(evidence.evidence_id);
+      return;
+    }
+    if (evidence.source_ref === `before:${evidence.evidence_id}`) {
+      onSavedSource({ analysisId: record.id, versionId: comparison.base_version_id, version: comparison.base_version,
+        contentSha256: comparison.base_content_sha256, evidence });
+    } else if (evidence.source_ref === `after:${evidence.evidence_id}` && !comparison.candidate_kind && comparison.candidate_version !== null) {
+      onSavedSource({ analysisId: record.id, versionId: comparison.candidate_version_id, version: comparison.candidate_version,
+        contentSha256: comparison.candidate_content_sha256, evidence });
+    }
+  };
+  const openSavedSource = (evidenceId: string) => openVersionSource(record.latest_version_id, record.version, record, evidenceId);
   const stale = record.status === 'stale' || record.freshness.status === 'stale' || record.review?.effective_state === 'stale';
   const changes = record.review?.latest?.decision === 'changes_requested';
   const reviewed = record.review?.effective_state === 'reviewed_conditional';
@@ -122,18 +171,18 @@ export function AnalysisWorkspace({ matter, record, onSource, onEdit, onRefresh,
     </nav>
     <section id={`${id}-overview-panel`} role="tabpanel" aria-labelledby={`${id}-overview-tab`} hidden={section !== 'overview'} tabIndex={0}>
       <div className="analysis-disposition"><span>{stale || changes || record.checks.effective_disposition === 'withheld' ? 'Sonuç bekletiliyor' : 'Koşullu taslak'}</span><span>{record.checks.critical_count > 0 ? `${record.checks.critical_count} kritik kontrol` : 'Hukuki değerlendirme incelemeye bağlı'}</span></div>
-      <AnalysisOverview record={record} onSource={onSource} onReview={() => { selectSection('review'); nav.current?.querySelector<HTMLButtonElement>(`[id="${id}-review-tab"]`)?.focus(); }} />
+      <AnalysisOverview record={record} onSource={openSavedSource} onFeedbackSource={onSource} onReview={() => { selectSection('review'); nav.current?.querySelector<HTMLButtonElement>(`[id="${id}-review-tab"]`)?.focus(); }} />
     </section>
     <section id={`${id}-evidence-panel`} role="tabpanel" aria-labelledby={`${id}-evidence-tab`} hidden={section !== 'evidence'} tabIndex={0}>
-      <h4 className="analysis-section-title">Analizde kullanılan belgeler</h4><AnalysisEvidence content={record} onSource={onSource} />
+      <h4 className="analysis-section-title">Analizde kullanılan belgeler</h4><AnalysisEvidence content={record} onSource={openSavedSource} />
     </section>
     <section id={`${id}-review-panel`} role="tabpanel" aria-labelledby={`${id}-review-tab`} hidden={section !== 'review'} tabIndex={0}>
-      {reviewOpened && <><ReviewSummary review={record.review} onSource={onSource} /><AnalysisReviews matterId={matter.id} record={record} onSource={onSource} onSaved={onRefresh} inline /></>}
+      {reviewOpened && <><ReviewSummary review={record.review} onSource={openSavedSource} onComparisonSource={openComparisonSource} /><AnalysisReviews matterId={matter.id} record={record} onSource={openSavedSource} onComparisonSource={openComparisonSource} onSaved={onRefresh} inline /></>}
     </section>
     <section id={`${id}-history-panel`} role="tabpanel" aria-labelledby={`${id}-history-tab`} hidden={section !== 'history'} tabIndex={0}>
       <h4 className="analysis-section-title">Sürümler ve inceleme kararları</h4>
-      <ReviewHistory matterId={matter.id} analysisId={record.id} versionId={record.latest_version_id} onSource={onSource} />
-      <AnalysisHistory matter={matter} record={record} onSource={onSource} onFailure={onFailure} />
+      <ReviewHistory matterId={matter.id} analysisId={record.id} versionId={record.latest_version_id} onSource={openSavedSource} onComparisonSource={openComparisonSource} />
+      <AnalysisHistory matter={matter} record={record} onVersionSource={openVersionSource} onComparisonSource={openComparisonSource} onFeedbackSource={onSource} onFailure={onFailure} />
     </section>
     <section id={`${id}-tools-panel`} role="tabpanel" aria-labelledby={`${id}-tools-tab`} hidden={section !== 'tools'} tabIndex={0}>
       {toolsOpened && <><h4 className="analysis-section-title">Analizi geliştirme araçları</h4>

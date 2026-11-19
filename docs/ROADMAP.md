@@ -1,5 +1,32 @@
 # Approved product roadmap and implementation ledger
 
+## Source-bound saved-analysis punctuation history — 19 November 2026
+
+Saved-analysis source review can retain literal raw and contrast OCR readings
+for bounded currency fields. Each encrypted, append-only capture binds the
+matter, analysis version, selected quote, original PDF revision and page, raster,
+and producer recipe. Identical retries reuse the existing receipt. A capture
+with no alternatives still retains an honest history entry. Readings remain
+review-only and never replace document text or constitute a legal review decision.
+
+The browser verifies the saved original, metadata, event and raster identities
+before showing both readings and the exact native crop. Navigation clears stale
+content. The capture API accepts source pins only and delegates the server-owned
+PDF to the authenticated isolated extractor using its existing two-slot limit.
+The initiating actor, session, write permissions and exact source are rechecked
+through retention. Reassigned or revoked sessions cannot append a capture.
+
+Disposable PostgreSQL qualification exercises real row-lock contention,
+idempotent concurrent capture, permission revocation and atomic rollback while
+preserving original ciphertext, exact saved versions and existing review history.
+Its tests run in the existing PostgreSQL CI job with two workers. Full CI retains
+its current job caps and 30-second reserve floor. Local and hosted qualification,
+merge, main verification and deployment are separate evidence states.
+
+The native source recipe, synthetic browser proof and earlier OCR experiments
+remain separate from a legal or broad OCR acceptance result. The seven private
+OCR fields still await clearer scans. See [the implementation contract](SAVED_ANALYSIS_PUNCTUATION.md).
+
 ## Raster tiling warnings on mixed PDF pages — 18 November 2026
 
 The PDF worker inspects tiling patterns used to paint native-text pages. A cell

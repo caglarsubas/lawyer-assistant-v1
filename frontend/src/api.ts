@@ -58,6 +58,78 @@ export async function fetchOriginal(matterId: string, documentId: string, signal
   return response.blob();
 }
 
+export async function fetchSavedAnalysisOriginal(path: string, pins: {
+  contentSha256: string; quoteSha256: string; documentSha256: string; documentRevision: number; page: number;
+}, signal: AbortSignal): Promise<{ blob: Blob; pageCount: number }> {
+  let response: Response;
+  const headers = { 'X-Analysis-Content-SHA256': pins.contentSha256, 'X-Quote-SHA256': pins.quoteSha256 };
+  try {
+    response = await fetch(`${BASE}${path}`, { headers, credentials: 'same-origin', cache: 'no-store', redirect: 'error', signal });
+  } catch {
+    signal.throwIfAborted();
+    throw new ApiError('Kaydedilen özgün sayfa açılamadı. Yerel hizmete bağlantıyı kontrol edin.', 0);
+  }
+  signal.throwIfAborted();
+  if (!response.ok) {
+    if (response.status === 401) unauthorizedHandler?.();
+    throw new ApiError(errorText(await response.json().catch(() => null)), response.status);
+  }
+
+  const refused = () => new ApiError('Özgün sayfanın kimliği veya dosya bütünlüğü doğrulanamadı.', 409);
+  const pageCount = Number(response.headers.get('X-Source-Page-Count'));
+  const expected = { ...headers, 'X-Source-SHA256': pins.documentSha256,
+    'X-Source-Revision': String(pins.documentRevision), 'X-Source-Page': String(pins.page) };
+  if (response.status !== 200 || response.headers.get('content-type') !== 'application/pdf'
+      || !Number.isInteger(pageCount) || pageCount < pins.page || pageCount > 999999
+      || response.headers.get('X-Source-Page-Count') !== String(pageCount)
+      || Object.entries(expected).some(([name, value]) => response.headers.get(name) !== value)
+      || !globalThis.crypto?.subtle) {
+    void response.body?.cancel().catch(() => {});
+    throw refused();
+  }
+  const bytes = await response.arrayBuffer();
+  signal.throwIfAborted();
+  const hash = await crypto.subtle.digest('SHA-256', bytes);
+  signal.throwIfAborted();
+  const hex = Array.from(new Uint8Array(hash), (byte) => byte.toString(16).padStart(2, '0')).join('');
+  if (hex !== pins.documentSha256) throw refused();
+  return { blob: new Blob([bytes], { type: 'application/pdf' }), pageCount };
+}
+
+export async function fetchPunctuationRaster(path: string, expectedHeaders: Record<string, string>, signal: AbortSignal): Promise<Blob> {
+  let response: Response;
+  const headers = {
+    'X-Analysis-Content-SHA256': expectedHeaders['X-Analysis-Content-SHA256'],
+    'X-Quote-SHA256': expectedHeaders['X-Quote-SHA256'],
+  };
+  try {
+    response = await fetch(`${BASE}${path}`, { headers, credentials: 'same-origin', cache: 'no-store', redirect: 'error', signal });
+  } catch {
+    signal.throwIfAborted();
+    throw new ApiError('Kaydedilen OCR görüntüsü açılamadı. Yerel bağlantıyı kontrol edin.', 0);
+  }
+  signal.throwIfAborted();
+  if (!response.ok) {
+    if (response.status === 401) unauthorizedHandler?.();
+    throw new ApiError(errorText(await response.json().catch(() => null)), response.status);
+  }
+  const unavailable = () => new ApiError('Kaydedilen OCR görüntüsünün sürüm bağı doğrulanamadı.', 409);
+  if (response.status !== 200 || response.headers.get('Content-Type') !== 'image/png'
+      || Object.entries(expectedHeaders).some(([name, expected]) => response.headers.get(name) !== expected)
+      || Number(response.headers.get('Content-Length')) > 4_000_000 || !globalThis.crypto?.subtle) {
+    void response.body?.cancel().catch(() => {});
+    throw unavailable();
+  }
+  const bytes = await response.arrayBuffer();
+  signal.throwIfAborted();
+  if (bytes.byteLength > 4_000_000) throw unavailable();
+  const hash = await crypto.subtle.digest('SHA-256', bytes);
+  signal.throwIfAborted();
+  const hex = Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, '0')).join('');
+  if (hex !== expectedHeaders['X-Source-Raster-SHA256']) throw unavailable();
+  return new Blob([bytes], { type: 'image/png' });
+}
+
 export async function downloadOriginal(matterId: string, documentId: string, filename: string) {
   const url = URL.createObjectURL(await fetchOriginal(matterId, documentId));
   const link = document.createElement('a'); link.href = url; link.download = filename;
