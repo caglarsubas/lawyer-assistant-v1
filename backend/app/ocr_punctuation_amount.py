@@ -26,7 +26,13 @@ MAX_FIELD_WIDTH = 640
 MAX_FIELD_HEIGHT = 150
 GLYPH_MAX_SECONDS = .65
 GLYPH_EDGE_PADDING = 7
-MIN_GLYPH_MARGIN_SECONDS = .35
+MIN_NATIVE_GLYPH_SECONDS = .35
+GLYPH_POSTPROCESS_RESERVE_SECONDS = .12
+MIN_GLYPH_MARGIN_SECONDS = MIN_NATIVE_GLYPH_SECONDS + GLYPH_POSTPROCESS_RESERVE_SECONDS
+MIN_NATIVE_ROW_SECONDS = .25
+ROW_POSTPROCESS_RESERVE_SECONDS = .05
+MIN_ROW_MARGIN_SECONDS = MIN_NATIVE_ROW_SECONDS + ROW_POSTPROCESS_RESERVE_SECONDS
+ROW_MAX_SECONDS = 1.20
 GLYPH_UNVERIFIED = "amount_glyph_ink_unverified"
 UNCLAIMED_INK = "unaccounted_currency_field_ink"
 LAYOUT_CONFLICT = "conflicting_amount_layout_review_only"
@@ -36,6 +42,28 @@ READ_PROFILES = (
     ("locally_leveled_line", 7, (30, 7, 1)),
     ("locally_leveled_block", 6, (18, 3, 9)),
 )
+
+
+class OcrBudgetExhausted(RuntimeError):
+    """The source reader cannot complete inside its admitted page budget."""
+
+
+class GlyphBudgetExhausted(OcrBudgetExhausted):
+    """The glyph reader cannot meet its native minimum and processing reserve."""
+
+
+class GlyphVectorInvalid(ValueError):
+    """Native output cannot form a bounded source-coordinate glyph vector."""
+
+
+def _glyph_timeout(deadline):
+    remaining = deadline - time.monotonic()
+    if remaining < MIN_GLYPH_MARGIN_SECONDS:
+        raise GlyphBudgetExhausted
+    timeout = min(GLYPH_MAX_SECONDS, remaining - GLYPH_POSTPROCESS_RESERVE_SECONDS)
+    if timeout < MIN_NATIVE_GLYPH_SECONDS:
+        raise GlyphBudgetExhausted
+    return timeout
 
 
 def currency(token):
@@ -86,15 +114,26 @@ def expanded(box, size):
 
 
 def read_rows(gray, bounds, *, mode, profile, deadline):
-    if deadline - time.monotonic() < .30:
-        return []
+    if deadline - time.monotonic() < MIN_ROW_MARGIN_SECONDS:
+        raise OcrBudgetExhausted
 
     def recognize(view):
         remaining = deadline - time.monotonic()
-        if remaining < .25:
-            return []
-        tsv = pytesseract.image_to_data(view, lang=LANG, config=f"--psm {mode}", timeout=min(1.20, remaining))
-        return severe._partial_words(tsv, gray, bounds[:2]) if time.monotonic() < deadline else []
+        timeout = min(ROW_MAX_SECONDS, remaining - ROW_POSTPROCESS_RESERVE_SECONDS)
+        if remaining < MIN_ROW_MARGIN_SECONDS or timeout < MIN_NATIVE_ROW_SECONDS:
+            raise OcrBudgetExhausted
+        try:
+            tsv = pytesseract.image_to_data(view, lang=LANG, config=f"--psm {mode}", timeout=timeout)
+        except FAILURES:
+            if time.monotonic() >= deadline:
+                raise OcrBudgetExhausted from None
+            raise
+        if time.monotonic() >= deadline:
+            raise OcrBudgetExhausted
+        rows = severe._partial_words(tsv, gray, bounds[:2])
+        if time.monotonic() >= deadline:
+            raise OcrBudgetExhausted
+        return rows
 
     with gray.crop(bounds) as crop:
         if profile is None:
@@ -107,15 +146,24 @@ def read_rows(gray, bounds, *, mode, profile, deadline):
 
 def source_cells(gray, regional, deadline):
     if deadline - time.monotonic() < .45:
-        return []
+        raise OcrBudgetExhausted
     with gray.filter(ImageFilter.GaussianBlur(18)) as paper, ImageChops.subtract(paper, gray) as detail:
         first = regional.locate(detail, 16)
-        if deadline - time.monotonic() < .35 or len(first) > CELL_LIMIT:
+        if time.monotonic() >= deadline:
+            raise OcrBudgetExhausted
+        if len(first) > CELL_LIMIT:
             return []
+        if deadline - time.monotonic() < .35:
+            raise OcrBudgetExhausted
         second = regional.locate(detail, 20)
+    if time.monotonic() >= deadline:
+        raise OcrBudgetExhausted
     if len(second) > CELL_LIMIT:
         return []
-    return [cell for cell in first if sum(regional.overlap(cell, view) >= .72 for view in second) == 1]
+    cells = [cell for cell in first if sum(regional.overlap(cell, view) >= .72 for view in second) == 1]
+    if time.monotonic() >= deadline:
+        raise OcrBudgetExhausted
+    return cells
 
 
 def printed_columns(detail, height, threshold):
@@ -212,34 +260,45 @@ def glyph_shape(text):
 
 def read_amount_character_boxes(gray, bounds, deadline, *, contrast=False):
     """Localize source characters with native OCR, without a numeric whitelist."""
-    if deadline - time.monotonic() < MIN_GLYPH_MARGIN_SECONDS:
-        return []
+    _glyph_timeout(deadline)
     x1, y1, x2, y2 = bounds
     width, height = x2 - x1, y2 - y1
     if not (0 < width <= MAX_FIELD_WIDTH and 0 < height <= MAX_FIELD_HEIGHT
             and 0 <= x1 < x2 <= gray.width and 0 <= y1 < y2 <= gray.height):
-        return []
+        raise GlyphVectorInvalid
     padding = GLYPH_EDGE_PADDING
 
     def read(view):
-        remaining = deadline - time.monotonic()
-        if remaining < MIN_GLYPH_MARGIN_SECONDS:
-            return []
         with ImageOps.expand(view, border=padding, fill=255) as bordered:
-            native_boxes = pytesseract.image_to_boxes(
-                bordered, lang=LANG, config="--psm 8", timeout=min(GLYPH_MAX_SECONDS, remaining - .12),
-            )
-        if time.monotonic() >= deadline or len(native_boxes) > 2000:
-            return []
+            # Cropping, contrast preparation and padding all consume the same
+            # deadline. Admit native work only after that preparation finishes.
+            timeout = _glyph_timeout(deadline)
+            try:
+                native_boxes = pytesseract.image_to_boxes(
+                    bordered, lang=LANG, config="--psm 8", timeout=timeout,
+                )
+            except FAILURES:
+                if time.monotonic() >= deadline:
+                    raise GlyphBudgetExhausted from None
+                raise
+        if time.monotonic() >= deadline:
+            raise GlyphBudgetExhausted
+        if not isinstance(native_boxes, str) or len(native_boxes) > 2000:
+            raise GlyphVectorInvalid
         glyphs = []
         for entry in native_boxes.splitlines():
-            char, a, b, c, d, page = entry.split()
-            a, b, c, d = map(int, (a, b, c, d))
+            try:
+                char, a, b, c, d, page = entry.split()
+                a, b, c, d = map(int, (a, b, c, d))
+            except (TypeError, ValueError) as error:
+                raise GlyphVectorInvalid from error
             left, top, right, bottom = a - padding, height + padding - d, c - padding, height + padding - b
             if (len(char) != 1 or page != "0" or len(glyphs) >= MAX_GLYPHS
                     or not (0 <= left < right <= width and 0 <= top < bottom <= height)):
-                return []
+                raise GlyphVectorInvalid
             glyphs.append((char, (x1 + left, y1 + top, x1 + right, y1 + bottom)))
+        if time.monotonic() >= deadline:
+            raise GlyphBudgetExhausted
         return glyphs
 
     with gray.crop(bounds) as original:
@@ -397,7 +456,10 @@ def locate_amount_ink(gray, span, deadline, *, nominal_box=None, on_punctuation=
         report("page_budget")
         return (GLYPH_UNVERIFIED, "", ())
     try:
-        raw = read_amount_character_boxes(gray, bounds, deadline)
+        candidate_raw = read_amount_character_boxes(gray, bounds, deadline)
+        if time.monotonic() >= deadline:
+            raise GlyphBudgetExhausted
+        raw = candidate_raw
         if not raw:
             report("raw_unavailable")
             return (GLYPH_UNVERIFIED, "", ())
@@ -415,6 +477,8 @@ def locate_amount_ink(gray, span, deadline, *, nominal_box=None, on_punctuation=
             report("page_budget")
             return (GLYPH_UNVERIFIED, "", ())
         leveled = read_amount_character_boxes(gray, bounds, deadline, contrast=True)
+        if time.monotonic() >= deadline:
+            raise GlyphBudgetExhausted
         native_leveled = leveled
         # Preserve the actual native vectors before the existing stray-mark handling.
         if not leveled:
@@ -428,19 +492,27 @@ def locate_amount_ink(gray, span, deadline, *, nominal_box=None, on_punctuation=
             leveled = leveled[1:]
         raw_marks = [(index, char) for index, (char, _) in enumerate(raw) if char in ".,"]
         leveled_marks = [(index, char) for index, (char, _) in enumerate(leveled) if char in ".,"]
-        if not glyph_shape("".join(char for char, _ in leveled)):
+        leveled_shape = glyph_shape("".join(char for char, _ in leveled))
+        same_layout = leveled_shape == shape and all(
+            severe._fraction_covered(first[1], second[1]) >= .65
+            for first, second in zip(raw, leveled, strict=True)
+        )
+        if time.monotonic() >= deadline:
+            raise GlyphBudgetExhausted
+        if not leveled_shape:
             report("invalid_glyph_vector")
         elif raw_marks != leveled_marks:
             report("punctuation_disagreement")
-        if glyph_shape("".join(char for char, _ in leveled)) != shape or any(
-            severe._fraction_covered(first[1], second[1]) < .65 for first, second in zip(raw, leveled, strict=True)
-        ):
+        if not same_layout:
             return (GLYPH_UNVERIFIED, "", ())
-        if time.monotonic() >= deadline:
-            report("page_budget")
-            return (GLYPH_UNVERIFIED, "", ())
+    except GlyphBudgetExhausted:
+        report("page_budget")
+        return (GLYPH_UNVERIFIED, "", ())
+    except GlyphVectorInvalid:
+        report("invalid_glyph_vector")
+        return (GLYPH_UNVERIFIED, "", ())
     except FAILURES:
-        report("reader_error")
+        report("page_budget" if time.monotonic() >= deadline else "reader_error")
         return (GLYPH_UNVERIFIED, "", ())
     return ("source_registered", shape, tuple(box for _, box in raw))
 
@@ -566,8 +638,8 @@ def observe_region(gray, region, original, key, reader, regional, deadline, *, o
         return findings, None
     crop = expanded(region, gray.size)
     for label, mode, profile in READ_PROFILES:
-        if deadline - time.monotonic() < .30:
-            break
+        if deadline - time.monotonic() < MIN_ROW_MARGIN_SECONDS:
+            raise OcrBudgetExhausted
         try:
             rows = read_rows(gray, crop, mode=mode, profile=profile, deadline=deadline)
             readings = [(line, current) for line in rows if (current := field([word.text for word in line]))
@@ -577,6 +649,8 @@ def observe_region(gray, region, original, key, reader, regional, deadline, *, o
                 recorded.append((label, line, current))
                 findings.append(qualify(label, line, current, ink_registration(gray, region, line, current)))
                 continue
+        except OcrBudgetExhausted:
+            raise
         except FAILURES:
             findings.append({"reader": label, "status": "reader_error", "region": region,
                              "canonical_usable": False})
@@ -610,7 +684,9 @@ def observe_disputed_amounts(gray, original, baseline, regional, deadline, *, on
             else:
                 # Multiple original readings in one physical cell need layout review.
                 return outcome("ambiguous_currency_geometry")
-        if not by_region and cells and deadline - time.monotonic() >= .65:
+        if not by_region and cells:
+            if deadline - time.monotonic() < .65:
+                raise OcrBudgetExhausted
             # Re-register an OCR amount in original coordinates when the selected
             # passage came from a later pass without authoritative raw boxes.
             rows = read_rows(gray, (0, 0, gray.width, gray.height), mode=3, profile=(18, 7, 2), deadline=deadline)
@@ -618,6 +694,8 @@ def observe_disputed_amounts(gray, original, baseline, regional, deadline, *, on
                 if cell in by_region:
                     return outcome("ambiguous_currency_geometry")
                 by_region[cell] = (line, key, "leveled_page_nomination")
+    except OcrBudgetExhausted:
+        return outcome("page_budget")
     except FAILURES:
         return outcome("source_currency_geometry_unverified")
     if not by_region:
@@ -626,7 +704,10 @@ def observe_disputed_amounts(gray, original, baseline, regional, deadline, *, on
         return outcome("too_many_currency_regions")
     regions, observations = [], []
     for bounds, (line, key, reader) in sorted(by_region.items(), key=lambda item: (item[0][1], item[0][0])):
-        found, conflict = observe_region(gray, bounds, line, key, reader, regional, deadline, on_punctuation=on_punctuation)
+        try:
+            found, conflict = observe_region(gray, bounds, line, key, reader, regional, deadline, on_punctuation=on_punctuation)
+        except OcrBudgetExhausted:
+            return outcome("page_budget", regions, observations)
         observations.extend(found)
         registered = found[0]["status"] == "source_registered"
         retained, amount = baseline_binding(lines, line, key) if registered else ("", "")
@@ -644,7 +725,7 @@ def observe_disputed_amounts(gray, original, baseline, regional, deadline, *, on
         if conflict:
             regions[-1]["layout_conflict"] = conflict
     if time.monotonic() >= deadline:
-        return outcome("page_budget")
+        return outcome("page_budget", regions, observations)
     if any(region["status"] == LAYOUT_CONFLICT for region in regions):
         decision = LAYOUT_CONFLICT
     elif any(region["status"] == "conflicting_amount_observations" for region in regions):

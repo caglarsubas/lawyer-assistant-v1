@@ -3,7 +3,33 @@ import { ApiError } from '../../api';
 import { Detail, Icon, Loading, Notice } from '../../components';
 import { formatDate, messageOf } from '../../utils';
 import { capturePunctuationPage, loadPunctuationPage, loadPunctuationRaster, PUNCTUATION_LABELS } from './punctuationReview';
-import type { PunctuationCaptureRun, PunctuationObservation, PunctuationSourcePins } from './punctuationTypes';
+import type { PunctuationAssessment, PunctuationCaptureRun, PunctuationObservation, PunctuationSourcePins } from './punctuationTypes';
+
+function assessmentLabel(assessment?: PunctuationAssessment) {
+  if (!assessment) return 'Eski kayıt: denetimin tamamlanma durumu bilinmiyor.';
+  if (assessment.status === 'complete') return assessment.reason === 'no_currency_scope'
+    ? 'Sınırlı taramada desteklenen bir tutar alanı belirlenemedi.' : 'Hedeflenen tutar denetimi tamamlandı.';
+  const reasons: Partial<Record<PunctuationAssessment['reason'], string>> = {
+    page_budget: 'zaman sınırına ulaşıldı', reader_error: 'OCR okuması hata verdi',
+    reader_unavailable: 'OCR okuması kullanılamadı', source_scope_unverified: 'kaynak bölgesi doğrulanamadı',
+  };
+  const stages: Record<PunctuationAssessment['stage'], string> = {
+    nomination_raw: 'ham görüntüde alan araması', nomination_contrast: 'kontrastlı görüntüde alan araması', currency_fields: 'tutar alanı okumaları',
+  };
+  return `Denetim tamamlanmadı: ${reasons[assessment.reason]}. Aşama: ${stages[assessment.stage]}.`;
+}
+
+export function PunctuationRunSummary({ run }: { run: PunctuationCaptureRun }) {
+  return <>{assessmentLabel(run.assessment)} {' '}{run.event_count
+    ? `${run.event_count} inceleme gözlemi saklandı.`
+    : run.assessment?.status === 'complete' && run.assessment.reason === 'checked'
+      ? 'Hedeflenen alanlarda noktalama farkı kaydedilmedi.' : 'İnceleme gözlemi saklanmadı.'}</>;
+}
+
+export function PunctuationRunWarning({ runs }: { runs: PunctuationCaptureRun[] }) {
+  if (!runs.some(run => run.assessment?.status === 'incomplete')) return null;
+  return <p className="small muted" role="status">Gösterilen denetimler arasında tamamlanmayan kayıt var. Gözlem kaydı bulunmaması, denetimin tamamlandığını göstermez; ayrıntılar denetim geçmişindedir.</p>;
+}
 
 function mergeImmutable<T extends { id: string }>(old: T[], incoming: T[]): T[] {
   const byId = new Map(old.map(item => [item.id, item]));
@@ -58,11 +84,12 @@ export function PunctuationReadings({ observation }: { observation: PunctuationO
   return <>
     <div className="details-content" style={{ paddingInline: 'clamp(18px, 3vw, 24px)' }}>
     <p className="small muted">{PUNCTUATION_LABELS[observation.event.status]}. Okumaları kaynak sayfasıyla karşılaştırarak inceleyin.</p>
+    <p className="small muted">{assessmentLabel(observation.assessment)}</p>
     <div className="revision-columns" style={{ marginTop: 16 }}>{observation.event.readings.map(reading => <section key={reading.reader}>
       <h4>{reading.reader === 'raw' ? 'Ham görüntü okuması' : 'Kontrastlı görüntü okuması'}</h4>
       <blockquote className="source-quotation original">{reading.text}</blockquote>
     </section>)}</div>
-    {!!observation.event.missing_readers.length && <p className="small muted">{observation.event.missing_readers.map(reader => reader === 'raw' ? 'Ham görüntü okuması' : 'Kontrastlı görüntü okuması').join(' ve ')} kaydedilemedi. Yerine alternatif okuma üretilmedi.</p>}
+    {!!observation.event.missing_readers.length && <p className="small muted"><strong>Kısmi okuma.</strong> {observation.event.missing_readers.map(reader => reader === 'raw' ? 'Ham görüntü okuması' : 'Kontrastlı görüntü okuması').join(' ve ')} kaydedilemedi. Yerine alternatif okuma üretilmedi.</p>}
     </div>
     <Detail title="Gözlemin kaynak ve sürüm bilgileri" variant="technical">
       <dl className="provenance-list">
@@ -151,6 +178,7 @@ function PunctuationObservationScope({ pins }: { pins: PunctuationSourcePins }) 
     </div>
     {notice && <Notice>{notice}</Notice>}{error && <Notice error>{error}</Notice>}
     {busy && <Loading label="Sayfaya bağlı noktalama kayıtları açılıyor…" />}
+    {loaded && <PunctuationRunWarning runs={runs} />}
     {loaded && !items.length && <p className="small muted">Bu sayfa için saklanan noktalama gözlemi yok. Bu durum, sayfadaki tüm noktalamanın doğru olduğunu göstermez; özgün sayfayı inceleyin.</p>}
     {items.map(item => <button key={item.id} type="button" className={`document-item${selectedId === item.id ? ' selected' : ''}`}
       aria-pressed={selectedId === item.id} disabled={busy} onClick={() => setSelectedId(item.id)}>
@@ -162,7 +190,7 @@ function PunctuationObservationScope({ pins }: { pins: PunctuationSourcePins }) 
     </div></header><PunctuationRaster key={selected.observation_sha256} pins={pins} observation={selected} /></article>}
     {!!runs.length && <Detail title="Noktalama denetim geçmişi">
       <p className="small muted">Her kayıt yalnız bu analiz sürümü ve kaynak sayfasındaki denetimi gösterir.</p>
-      <ul>{runs.map(run => <li key={run.id}>{formatDate(run.created_at, true)} · {run.event_count === 0 ? 'Hedeflenen tutar alanlarında yeni gözlem oluşmadı' : `${run.event_count} inceleme gözlemi saklandı`}</li>)}</ul>
+      <ul>{runs.map(run => <li key={run.id}>{formatDate(run.created_at, true)} · <PunctuationRunSummary run={run} /></li>)}</ul>
       {moreRuns && <button type="button" className="text-button" disabled={busy} onClick={() => void load(0, runs.length, 'runs')}>Diğer denetimleri getir</button>}
     </Detail>}
   </section>;

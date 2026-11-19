@@ -34,7 +34,8 @@ def retained_source(saved_source):
                  {"reader": "locally_leveled", "text": "8", "glyphs": [["8", [20, 20, 35, 45]]]},
              ]}
     capture = {"source_sha256": digest(original), "page": 2, "page_count": 2, "png": image.getvalue(),
-               "producer_sha256": PRODUCER_SHA256, "producer_recipe": PRODUCER_RECIPE, "events": [event]}
+               "producer_sha256": PRODUCER_SHA256, "producer_recipe": PRODUCER_RECIPE, "events": [event],
+               "assessment": {"status": "complete", "reason": "checked", "stage": "currency_fields"}}
     capture["run_sha256"] = punctuation.capture_run_sha256(capture)
 
     def retain(value=None):

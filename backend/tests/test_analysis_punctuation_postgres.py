@@ -5,6 +5,7 @@ and drops a unique child database for each test, never application data.
 """
 
 from concurrent.futures import ThreadPoolExecutor
+from copy import deepcopy
 from threading import Event, local
 
 import pytest
@@ -192,6 +193,53 @@ def test_post_flush_failure_rolls_back_capture_events_and_audits_then_allows_fre
     assert case["retain"]() == [saved]
     rows, audits = _retained_rows_and_audits(case)
     assert len(rows) == len(audits) == 2
+    assert _protected(case) == before
+
+
+def test_incomplete_admission_and_partial_reader_receipts_preserve_exact_postgres_history(retained_source):
+    case = retained_source
+    before = _protected(case)
+    empty = {**deepcopy(case["capture"]), "events": [], "assessment": {
+        "status": "incomplete", "reason": "page_budget", "stage": "nomination_raw",
+    }}
+    empty["run_sha256"] = punctuation.capture_run_sha256(empty)
+    assert case["retain"](empty) == [] and case["retain"](empty) == []
+    first = case["client"].get(case["url"], headers=case["headers"])
+    assert first.status_code == 200 and first.json()["items"] == []
+    [empty_receipt] = first.json()["runs"]
+    assert empty_receipt["status"] == "captured_incomplete" and empty_receipt["event_count"] == 0
+    assert empty_receipt["assessment"] == empty["assessment"]
+
+    partial = deepcopy(case["capture"])
+    event = partial["events"][0]
+    event.update(status="page_budget", readings=event["readings"][:1], missing_readers=["locally_leveled"])
+    partial["assessment"] = {"status": "incomplete", "reason": "page_budget", "stage": "currency_fields"}
+    partial["run_sha256"] = punctuation.capture_run_sha256(partial)
+    [saved] = case["retain"](partial)
+    assert case["retain"](partial) == [saved]
+    response = case["client"].get(case["url"], headers=case["headers"])
+    assert response.status_code == 200 and response.headers["cache-control"] == "no-store"
+    history = response.json()
+    assert history["items"] == [saved] and len(history["runs"]) == 2
+    assert history["runs"][0] == empty_receipt
+    receipt = history["runs"][1]
+    assert receipt["id"] == saved["run_id"] and receipt["id"] != empty_receipt["id"]
+    assert receipt["status"] == "captured_incomplete" and receipt["event_count"] == 1
+    assert receipt["assessment"] == saved["assessment"] == partial["assessment"]
+    assert receipt["run_sha256"] == saved["run_sha256"] == partial["run_sha256"] != empty["run_sha256"]
+    for value in (empty_receipt, receipt, saved):
+        assert value["version_id"] == case["pins"]["version_id"]
+        assert value["quote_sha256"] == case["pins"]["quote_sha256"]
+        assert value["document_sha256"] == case["document"]["sha256"] and value["canonical_usable"] is False
+    assert saved["event"] == event and saved["event"]["readings"] == [case["capture"]["events"][0]["readings"][0]]
+    detail_url = case["url"] + "/" + saved["id"]
+    assert case["client"].get(detail_url, headers=case["headers"]).json() == saved
+    raster = case["client"].get(detail_url + "/raster", headers=case["headers"])
+    assert raster.status_code == 200 and raster.content == partial["png"]
+    assert raster.headers["x-punctuation-observation-sha256"] == saved["observation_sha256"]
+    assert case["client"].get(case["url"], headers=case["headers"]).json() == history
+    rows, audits = _retained_rows_and_audits(case)
+    assert len(rows) == len(audits) == 3 and all(row.revision == 1 for row in rows)
     assert _protected(case) == before
 
 
